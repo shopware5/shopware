@@ -25,10 +25,10 @@
     {* The configurator selection is checked at this early point
        to use it in different included files in the detail template. *}
     {block name='frontend_detail_index_configurator_settings'}
-
+    
         {* Variable for tracking active user variant selection *}
         {$activeConfiguratorSelection = true}
-
+    
         {if $sArticle.sConfigurator && ($sArticle.sConfiguratorSettings.type == 1 || $sArticle.sConfiguratorSettings.type == 2)}
             {* If user has no selection in this group set it to false *}
             {foreach $sArticle.sConfigurator as $configuratorGroup}
@@ -38,7 +38,7 @@
             {/foreach}
         {/if}
     {/block}
-
+    
     {* Product navigation - Previous and next arrow button *}
     {block name="frontend_detail_index_navigation"}
         {if !{config name=disableArticleNavigation}}
@@ -47,7 +47,7 @@
             </nav>
         {/if}
     {/block}
-
+    
     {* Product header *}
     {block name='frontend_detail_index_header'}
         <header class="product--header block-group">
@@ -105,31 +105,31 @@
                 {block name="frontend_detail_rich_snippets_brand"}
                     <meta itemprop="brand" content="{$sArticle.supplierName|escape}" />
                 {/block}
-
+    
                 {block name="frontend_detail_rich_snippets_weight"}
                     {if $sArticle.weight}
                         <meta itemprop="weight" content="{$sArticle.weight} kg" />
                     {/if}
                 {/block}
-
+    
                 {block name="frontend_detail_rich_snippets_height"}
                     {if $sArticle.height}
                         <meta itemprop="height" content="{$sArticle.height} cm" />
                     {/if}
                 {/block}
-
+    
                 {block name="frontend_detail_rich_snippets_width"}
                     {if $sArticle.width}
                         <meta itemprop="width" content="{$sArticle.width} cm" />
                     {/if}
                 {/block}
-
+    
                 {block name="frontend_detail_rich_snippets_depth"}
                     {if $sArticle.length}
                         <meta itemprop="depth" content="{$sArticle.length} cm" />
                     {/if}
                 {/block}
-
+    
                 {block name="frontend_detail_rich_snippets_release_date"}
                     {if $sArticle.sReleasedate}
                         <meta itemprop="releaseDate" content="{$sArticle.sReleasedate}" />
@@ -146,14 +146,14 @@
                 {* Product data *}
                 {block name='frontend_detail_index_buy_container_inner'}
                     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
-
+    
                         {block name='frontend_detail_index_data'}
                             <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
                             {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                         {/block}
-
+    
                         {block name='frontend_detail_index_after_data'}{/block}
-
+    
                         {* Configurator drop down menu's *}
                         {block name="frontend_detail_index_configurator"}
                             {if $sArticle.sConfigurator}
@@ -166,12 +166,12 @@
                                 {/if}
                             {/if}
                         {/block}
-
+    
                         {* Include buy button and quantity box *}
                         {block name="frontend_detail_index_buybox"}
                             {include file="frontend/detail/buy.tpl"}
                         {/block}
-
+    
                         {* Product actions *}
                         {block name="frontend_detail_index_actions"}
                             <nav class="product--actions">
@@ -247,32 +247,32 @@
 
     {* Product bundle hook point *}
     {block name="frontend_detail_index_bundle"}{/block}
-
+    
     {block name="frontend_detail_index_detail"}
-
+    
         {* Tab navigation *}
         {block name="frontend_detail_index_tabs"}
             <div class="additional-info--tabs" data-tab-content="true">
                 {include file="frontend/detail/tabs.tpl"}
-
+    
                 {* Tab content *}
                 {block name="frontend_detail_index_outer_tabs"}
                     <div class="tabs--content-container tab--content panel--body has--border">
                         {block name="frontend_detail_index_inner_tabs"}
                             {block name='frontend_detail_index_before_tabs'}{/block}
-
+    
                             {* Product description *}
                             {block name="frontend_detail_index_tabs_description"}
                                 {include file="frontend/detail/tabs/description.tpl"}
                             {/block}
-
+    
                             {* Article rating *}
                             {block name="frontend_detail_index_tabs_rating"}
                                 {if !{config name=VoteDisable}}
                                     {include file="frontend/detail/tabs/comment.tpl"}
                                 {/if}
                             {/block}
-
+    
                             {block name='frontend_detail_index_after_tabs'}{/block}
                         {/block}
                     </div>
@@ -285,10 +285,10 @@
     {block name="frontend_detail_index_related_similiar_tabs"}
         {if ($sArticle.sRelatedArticles && !$sArticle.crossbundlelook) || $sArticle.sSimilarArticles}
             <div class="related-slider--tabs" data-tab-content="true">
-
+    
                 {block name="frontend_detail_index_related_similiar_tabs_navigation"}
                     <ul class="tab--navigation panel--tab-nav">
-
+    
                         {* Tab navigation - Related products *}
                         {block name="frontend_detail_tabs_entry_related"}
                             {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
@@ -299,7 +299,7 @@
                                 </li>
                             {/if}
                         {/block}
-
+    
                         {* Similar products *}
                         {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
                             {if $sArticle.sSimilarArticles}
@@ -312,17 +312,17 @@
                         {/block}
                     </ul>
                 {/block}
-
+    
                 {block name="frontend_detail_index_related_similiar_tab_content_container"}
                     <div class="tab--content panel--body has--border">
-
+    
                         {* Related articles *}
                         {block name="frontend_detail_index_tabs_related"}
                             <div class="content--related-products">
                                 {include file="frontend/detail/tabs/related.tpl"}
                             </div>
                         {/block}
-
+    
                         {* Similar products slider *}
                         {block name="frontend_detail_index_similar_slider"}
                             <div class="content--similar-products">
@@ -339,11 +339,11 @@
     {block name="frontend_detail_index_recommendation_tabs"}
         {if {config name=alsoBoughtShow} || {config name=similarViewedShow}}
             <div class="recommendation-slider--tabs" data-tab-content="true">
-
+    
                 {* Tab navigation *}
                 {block name="frontend_detail_index_recommendation_tabs_navigation"}
                     <ul class="tab--navigation panel--tab-nav">
-
+    
                         {* Customer also bought *}
                         {block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
                             {if {config name=alsoBoughtShow}}
@@ -354,7 +354,7 @@
                                 </li>
                             {/if}
                         {/block}
-
+    
                         {* Customer also viewed *}
                         {block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
                             {if {config name=similarViewedShow}}
@@ -367,11 +367,11 @@
                         {/block}
                     </ul>
                 {/block}
-
+    
                 {* Tab content container *}
                 {block name="frontend_detail_index_recommendation_tab_content_container"}
                     <div class="tab--content panel--body has--border">
-
+    
                         {* "Customers bought also" slider *}
                         {block name="frontend_detail_index_also_bought_slider"}
                             {if {config name=alsoBoughtShow}}
@@ -380,7 +380,7 @@
                                 </div>
                             {/if}
                         {/block}
-
+    
                         {* "Customers similar viewed" slider *}
                         {block name="frontend_detail_index_similar_viewed_slider"}
                             {if {config name=similarViewedShow}}
