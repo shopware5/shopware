@@ -25,7 +25,7 @@
         defaults = {
 
             /** @string wrapSelector Selector for the content wrapper */
-            wrapSelector: 'body',
+            wrapSelector: '.page-wrap',
 
             /** @string offCanvasSelector Selector of the off-canvas element */
             offCanvasSelector: '.sidebar-main',
@@ -120,6 +120,9 @@
         me.$swipe = $(opts.swipeContainerSelector);
         me.$offCanvas = $(opts.offCanvasSelector);
         me.$closeButton = $(opts.closeButtonSelector);
+        me.$overlay = $(opts.wrapSelector + ':before');
+
+        console.log(me.$overlay);
 
         me.$offCanvas.addClass(opts.offCanvasElementCls)
                      .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
@@ -198,6 +201,7 @@
             opts = me.opts;
 
         me.$offCanvas.removeClass(opts.offCanvasElementCls)
+                     .removeClass(opts.activeMenuCls)
                      .removeClass(opts.disableTransitionCls)
                      .removeAttr('style');
 
