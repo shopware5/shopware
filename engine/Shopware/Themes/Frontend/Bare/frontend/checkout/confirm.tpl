@@ -106,7 +106,7 @@
                                 {block name='frontend_checkout_confirm_agb_checkbox'}
                                     <div class="block column--checkbox">
                                         {if !{config name='IgnoreAGB'}}
-                                            <input type="checkbox" id="sAGB" name="sAGB"{if $sAGBChecked} checked="checked"{/if} />
+                                            <input type="checkbox" required="required" aria-required="true" id="sAGB" name="sAGB"{if $sAGBChecked} checked="checked"{/if} />
                                         {/if}
                                     </div>
                                 {/block}
