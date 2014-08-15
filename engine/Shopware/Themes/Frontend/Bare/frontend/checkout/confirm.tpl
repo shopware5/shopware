@@ -106,7 +106,7 @@
                                 {block name='frontend_checkout_confirm_agb_checkbox'}
                                     <div class="block column--checkbox">
                                         {if !{config name='IgnoreAGB'}}
-                                            <input type="checkbox" id="sAGB" name="sAGB"{if $sAGBChecked} checked="checked"{/if} />
+                                            <input type="checkbox" required="required" aria-required="true" id="sAGB" name="sAGB"{if $sAGBChecked} checked="checked"{/if} />
                                         {/if}
                                     </div>
                                 {/block}
@@ -272,9 +272,10 @@
         {* Payment method *}
         {block name='frontend_checkout_confirm_payment_method_panel'}
             <div class="panel has--border block">
+
                 {block name='frontend_checkout_confirm_left_payment_method_headline'}
                     <div class="panel--title is--underline">
-                        {s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}
+                        {s name="ConfirmHeaderPaymentShipping" namespace="frontend/checkout/confirm_left"}{/s}
                     </div>
                 {/block}
 
@@ -283,10 +284,15 @@
                         <strong>{$sUserData.additional.payment.description}</strong><br />
 
                         {if !$sUserData.additional.payment.esdactive}
-                            {s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}
+                            <p>{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
                         {/if}
                     {/block}
 
+                    {block name='frontend_checkout_confirm_left_shipping_method'}
+                        <p>
+                            <strong>{s name="ConfirmHeadDispatch"}{/s}</strong> {$sDispatch.name}
+                        </p>
+                    {/block}
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
                         <div class="panel--actions">
