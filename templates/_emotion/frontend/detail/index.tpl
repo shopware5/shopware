@@ -12,7 +12,24 @@
 {block name='frontend_index_content'}
 	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
 
-		{block name="frontend_detail_index_navigation"}{/block}
+	{* The configurator selection is checked at this early point
+   	   to use it in different included files in the detail template. *}
+	{block name='frontend_detail_index_configurator_settings'}
+
+		{* Variable for tracking active user variant selection *}
+		{$activeConfiguratorSelection = true}
+
+		{if $sArticle.sConfigurator && ($sArticle.sConfiguratorSettings.type == 1 || $sArticle.sConfiguratorSettings.type == 2)}
+			{* If user has no selection in this group set it to false *}
+			{foreach $sArticle.sConfigurator as $configuratorGroup}
+				{if !$configuratorGroup.selected_value}
+					{$activeConfiguratorSelection = false}
+				{/if}
+			{/foreach}
+		{/if}
+	{/block}
+
+	{block name="frontend_detail_index_navigation"}{/block}
 
 		{* General detailbox *}
 		<div id="detailbox"><!-- detailbox -->
@@ -75,7 +92,7 @@
 				{* Detailbox right *}
 
 				{* Configurator table // div buybox *}
-				{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}<div class="grid_16 first last" id="buybox">{else}<div class="right" id="buybox">{/if}
+				<div class="right" id="buybox">
 					<div id="detail_more"></div>
 
 					{* Article notification *}
@@ -87,13 +104,15 @@
 
 					{* Configurator drop down menu *}
 					{block name="frontend_detail_index_configurator"}
-					{if $sArticle.sConfigurator}
-						{if $sArticle.sConfiguratorSettings.type eq 1}
-							{include file="frontend/detail/config_step.tpl"}
-						{elseif $sArticle.sConfiguratorSettings.type != 2}
-							{include file="frontend/detail/config_upprice.tpl"}
+						{if $sArticle.sConfigurator}
+							{if $sArticle.sConfiguratorSettings.type == 1}
+								{include file="frontend/detail/config_step.tpl"}
+							{elseif $sArticle.sConfiguratorSettings.type == 2}
+								{include file="frontend/detail/config_variant.tpl"}
+							{else}
+								{include file="frontend/detail/config_upprice.tpl"}
+							{/if}
 						{/if}
-					{/if}
 					{/block}
 
 					{* Supplier name *}

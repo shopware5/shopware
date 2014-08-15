@@ -49,6 +49,7 @@ In this document you will find a changelog of the important changes related to t
 * The sBasket::sGetNotes function is refactored with the new shopware service classes and calls no more the sGetPromotionById function.
 * The article slider now supports sorting by price (asc and desc) and category filtering
 * Removed `table` and `table_factory` from container.
+* The old table configurator was removed and replaced by the new image configurator in the emotion and responsive template.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

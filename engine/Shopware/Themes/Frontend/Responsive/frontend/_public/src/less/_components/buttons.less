@@ -39,6 +39,16 @@
 		.linear-gradient(@backgroundGradientStart, #fff);
 	}
 
+    &:disabled,
+    &.is--disabled {
+        .opacity(0.5);
+        cursor: not-allowed;
+
+        &:hover {
+            color: @primaryTextColor;
+        }
+    }
+
 	&:hover {
 		color: @primaryColor;
 	}
