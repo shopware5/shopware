@@ -22,6 +22,7 @@
 				var $el = $(el);
 				if($el.attr('href') == '#comments') {
 					commentTabIndex = i;
+                    return false;
 				}
 			});
 			commentTabIndex = commentTabIndex - 1;
@@ -29,8 +30,9 @@
 			{if $sAction == 'ratingAction'}
 				$.tabNavi.tabs('select', commentTabIndex);
 			{/if}
-			
-			if(window.location.hash == '#bewertung') {
+
+			if(window.location.hash == '#comments') {
+                window.location.hash = '';
 				$.tabNavi.tabs('select', commentTabIndex);
 			}
 			
