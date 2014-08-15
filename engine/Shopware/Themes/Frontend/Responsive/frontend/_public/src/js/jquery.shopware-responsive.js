@@ -20,10 +20,6 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            var pageWrap = $('.page-wrap');
-            //$('.sidebar-main').insertBefore(pageWrap);
-            $('.action--filter-options').insertBefore(pageWrap);
-            $('.blog--filter-options').insertBefore(pageWrap);
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
@@ -57,10 +53,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-
-            //$('.sidebar-main').prependTo($('.content-main--inner'));
-            $('.action--filter-options').insertAfter($('.action--per-page'));
-            $('.blog--filter-options').insertBefore($('.blog--listing'));
             
             var teaserText = $('.category--teaser .hero--text');
             if (teaserText.length) teaserText.data('plugin_collapseText').destroy();
@@ -81,7 +73,6 @@ $(function() {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
@@ -106,8 +97,6 @@ $(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
 
-            $('nav.product--actions').insertAfter($('.buybox--form'));
-
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
 
@@ -124,7 +113,6 @@ $(function() {
         type: 'tabletLandscape',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
@@ -148,8 +136,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-
-            $('nav.product--actions').insertAfter($('.buybox--form'));
 
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
