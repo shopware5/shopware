@@ -218,6 +218,9 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet->addElement($this->createColorPickerField('errorBackground', 'errorBackground', '#f2dede'));
         $fieldSet->addElement($this->createColorPickerField('errorBorderColor', 'errorBorderColor', '#ebccd1'));
 
+	$fieldSet->addElement($this->createColorPickerField('inputErrorColor', 'inputErrorColor', '#ff0000'));
+	$fieldSet->addElement($this->createColorPickerField('inputErrorBackground', 'inputErrorBackground', '#fff0f0'));
+
         return $fieldSet;
     }
 

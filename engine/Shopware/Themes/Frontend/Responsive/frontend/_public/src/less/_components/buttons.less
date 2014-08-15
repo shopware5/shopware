@@ -1,12 +1,12 @@
 .btn {
 	@backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
-    .linear-gradient(#fff, @primaryBackgroundColor);
+	.linear-gradient(#fff, @primaryBackgroundColor);
 	.unitize-padding(10, 16, 10, 16, 16);
 	.border-radius(4px);
 	.appearance();
 	.unitize(16, 16, font-size);
-    -webkit-font-smoothing: inherit;
-    display: inline-block;
+	-webkit-font-smoothing: inherit;
+	display: inline-block;
 	position: relative;
 	font-weight: bold;
 	text-decoration: none;
@@ -14,7 +14,7 @@
 	line-height: normal;
 	cursor: pointer;
 	border: 1px solid @lightDarkBorderColor;
-    border-bottom-color: lighten(@darkBorderColor, 40%);
+	border-bottom-color: lighten(@darkBorderColor, 40%);
 	color: @primaryTextColor;
 
 	[class^="icon--"] {
@@ -50,7 +50,7 @@
     }
 
 	&:hover {
-	    background: #fff;
+		background: #fff;
 		color: @primaryColor;
 	}
 
@@ -78,12 +78,12 @@
 		border-bottom: 1px solid @primaryContrastColor;
 		color: #fff;
 
-	&:hover {
-	    background: @secondaryColor;
-	    text-shadow: 0 1px 1px @primaryContrastColor;
-	    border: 0 none;
-	    border-bottom: 1px solid @primaryContrastColor;
-	}
+		&:hover {
+			background: @secondaryColor;
+			text-shadow: 0 1px 1px @primaryContrastColor;
+			border: 0 none;
+			border-bottom: 1px solid @primaryContrastColor;
+		}
 	}
 
 	/** Type: Secondary button */
