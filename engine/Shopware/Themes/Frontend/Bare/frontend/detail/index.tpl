@@ -22,6 +22,23 @@
 {block name='frontend_index_content'}
 <div class="content product--details" itemscope itemtype="http://schema.org/Product">
 
+	{* The configurator selection is checked at this early point
+	   to use it in different included files in the detail template. *}
+	{block name='frontend_detail_index_configurator_settings'}
+
+		{* Variable for tracking active user variant selection *}
+		{$activeConfiguratorSelection = true}
+
+		{if $sArticle.sConfigurator && ($sArticle.sConfiguratorSettings.type == 1 || $sArticle.sConfiguratorSettings.type == 2)}
+			{* If user has no selection in this group set it to false *}
+			{foreach $sArticle.sConfigurator as $configuratorGroup}
+				{if !$configuratorGroup.selected_value}
+					{$activeConfiguratorSelection = false}
+				{/if}
+			{/foreach}
+		{/if}
+	{/block}
+
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
 		<nav class="product--navigation">
@@ -131,9 +148,11 @@
 						{* Configurator drop down menu's *}
 						{block name="frontend_detail_index_configurator"}
 							{if $sArticle.sConfigurator}
-								{if $sArticle.sConfiguratorSettings.type eq 1}
+								{if $sArticle.sConfiguratorSettings.type == 1}
 									{include file="frontend/detail/config_step.tpl"}
-								{elseif $sArticle.sConfiguratorSettings.type != 2}
+								{elseif $sArticle.sConfiguratorSettings.type == 2}
+									{include file="frontend/detail/config_variant.tpl"}
+								{else}
 									{include file="frontend/detail/config_upprice.tpl"}
 								{/if}
 							{/if}

@@ -21,6 +21,15 @@
     });
 })(jQuery);
 
+/* Auto submit form for new configurator */
+(function($) {
+    $(document).ready(function() {
+        $('*[data-auto-submit="true"]').bind('change', function(event) {
+            this.form.submit();
+        });
+    });
+})(jQuery);
+
 /* Add class to the searchfield */
 (function($) {
 

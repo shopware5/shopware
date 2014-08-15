@@ -6,22 +6,13 @@
 			{/foreach}
 		{/if}
 
-		{* Configurator Table *}
-		{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}
-			{block name='frontend_detail_buy_config_table'}
-				{include file="frontend/detail/config_table.tpl"}
-			{/block}
-		{/if}
-
 		<input type="hidden" name="sActionIdentifier" value="{$sUniqueRand}"/>
 		<input type="hidden" name="sAddAccessories" id="sAddAccessories" value=""/>
 
 		{* @deprecated - Product variants block *}
 		{block name='frontend_detail_buy_variant'}{/block}
 
-		{if !$sArticle.sConfigurator || $sArticle.sConfiguratorSettings.type!=2}
-			<input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
-		{/if}
+		<input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
 
 		{* Article accessories *}
 		{if $sArticle.sAccessories}
@@ -89,8 +80,8 @@
 
 					{* "Buy now" button *}
 					{block name="frontend_detail_buy_button"}
-						{if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
-							<button class="buybox--button block is--transparent btn btn--primary" disabled="disabled" aria-disabled="true" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
+						{if $sArticle.sConfigurator && !$activeConfiguratorSelection}
+							<button class="buybox--button block btn btn--grey is--disabled" disabled="disabled" aria-disabled="true" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
 								{s name="DetailBuyActionAdd"}{/s} <i class="icon--arrow-right"></i>
 							</button>
 						{else}

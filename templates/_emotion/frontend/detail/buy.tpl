@@ -6,13 +6,6 @@
 			{/foreach}
 		{/if}
 
-		{* Configurator Table *}
-		{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}
-			{block name='frontend_detail_buy_config_table'}
-				{include file="frontend/detail/config_table.tpl"}
-			{/block}
-		{/if}
-
 		<input type="hidden" name="sActionIdentifier" value="{$sUniqueRand}"/>
 		<input type="hidden" name="sAddAccessories" id="sAddAccessories" value=""/>
 
@@ -38,7 +31,7 @@
 					{/foreach}
 				</select>
 			{/block}
-		{elseif !$sArticle.sConfigurator || $sArticle.sConfiguratorSettings.type!=2}
+		{else}
 			<input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
 		{/if}
 
@@ -110,7 +103,7 @@
 					{* Cart button *}
 					{block name='frontend_detail_buy_button'}
 						<input type="submit"
-							   id="basketButton"{if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
+							   id="basketButton"{if $sArticle.sConfigurator && !$activeConfiguratorSelection}
 							   class="transparent" disabled="disabled"
 							   {/if}title="{$sArticle.articleName} {s name="DetailBuyActionAdd"}{/s}"
 							   name="{s name="DetailBuyActionAdd"}{/s}" value="{s name="DetailBuyActionAdd"}{/s}"
