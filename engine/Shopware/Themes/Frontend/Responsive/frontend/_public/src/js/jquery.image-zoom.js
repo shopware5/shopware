@@ -294,15 +294,6 @@
                 me.zoomImage.onload = function() {
                     me.factor = me.zoomImage.width / me.$activeImage.innerWidth();
 
-                    /**
-                     * Don't show the lens for small
-                     * images where the original size
-                     * is smaller as the lens.
-                     */
-                    if (me.factor <= 1.2) {
-                        return;
-                    }
-
                     me.setLensSize(me.factor);
                     me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0px 0px no-repeat #fff');
                 };
