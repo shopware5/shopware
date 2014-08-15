@@ -273,7 +273,7 @@ class ProductService implements Service\ProductServiceInterface
      */
     private function isProductValid(Struct\Product $product, Struct\Context $context)
     {
-        return in_array(
+        return !in_array(
             $context->getCurrentCustomerGroup()->getId(),
             $product->getBlockedCustomerGroupIds()
         );

@@ -179,7 +179,7 @@ class ListProductService implements Service\ListProductServiceInterface
      */
     private function isProductValid(Struct\ListProduct $product, Struct\Context $context)
     {
-        return in_array(
+        return !in_array(
             $context->getCurrentCustomerGroup()->getId(),
             $product->getBlockedCustomerGroupIds()
         );
