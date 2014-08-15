@@ -1,20 +1,7 @@
 // Will be used for the off canvas animation
 body {
-	.transition(all, 0.25s, ease-in-out);
-    min-height: 100%;
-
-    &::before {
-        .transition(opacity, 0.25s, ease-in-out);
-        content: '';
-        display: block;
-        visibility: hidden;
-        position: fixed;
-        opacity: 0;
-        top: 0; left: 0;
-        right: 0; bottom: 0;
-        background: rgba(0, 0, 0, .5);
-        z-index: 99999;
-    }
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 // Is used for the necessary styling of an off-canvas menu
@@ -25,9 +12,10 @@ body {
     position: fixed;
     top: 0;
     height: 100%;
-    z-index: 998;
+    z-index: 9999;
     overflow-y: auto;
     overflow-x: hidden;
+    background: @primaryBackgroundColor;
 
     &.is--left {
         .unitize(-300, 16, left);
@@ -35,7 +23,11 @@ body {
 
     &.is--right {
         .unitize(-300, 16, right);
-        //.translate(~"@{emValue}rem", 0);
+    }
+
+    &.is--active {
+        left: 0;
+        right: 0;
     }
 
     &.js--no-transition {
@@ -43,21 +35,37 @@ body {
     }
 }
 
-body {
+.page-wrap {
+    .transition(all, 0.25s, ease-in-out);
+    position: relative;
+    left: 0; right: 0;
+
     &.is--moved-left {
-        .unitize-variable(300, 16);
-        .translate(~"@{emValue}rem", 0);
-    }
-    &.is--moved-right {
-        .unitize-variable(300, 16);
-        .translate(~"-@{emValue}rem", 0);
-    }
-    &.is--moved-left::before,
-    &.is--moved-right::before {
-        visibility: visible;
-        opacity: 1;
+        .unitize(300, 16, left);
     }
 
+    &.is--moved-right {
+        .unitize(300, 16, right);
+    }
+
+    &::before {
+        .transition(opacity, 0.25s, ease-in-out);
+        .opacity(0);
+        content: '';
+        display: block;
+        visibility: hidden;
+        position: fixed;
+        top: 0; left: 0;
+        right: 0; bottom: 0;
+        background: rgba(0, 0, 0, .5);
+        z-index: 9998;
+    }
+
+    &.is--moved-left::before,
+    &.is--moved-right::before {
+        .opacity(1);
+        visibility: visible;
+    }
 }
 
 .navigation--smartphone {
@@ -125,6 +133,7 @@ body {
     .off-canvas {
         .translate(0, 0);
         .transition(none);
+        background: transparent;
         width: auto;
         height: auto;
         position: relative;
