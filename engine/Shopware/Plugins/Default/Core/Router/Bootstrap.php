@@ -85,6 +85,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     public function onRouteStartup(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
+        $response = $args->getResponse();
 
         if (strpos($request->getPathInfo(), '/backend') === 0
             || strpos($request->getPathInfo(), '/api') === 0
@@ -132,6 +133,24 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $shop->setTemplate($main->getTemplate());
             $shop->setHost($main->getHost());
             $shop->setSecureHost($main->getSecureHost() ?: $main->getHost());
+        }
+
+        if ($shop->getAlwaysSecure() && !$request->isSecure()) {
+            $url = sprintf('https://%s%s%s',
+                $shop->getSecureHost(),
+                $shop->getSecureBaseUrl(),
+                '/'
+            );
+            $response->setRedirect($url, 301);
+            return;
+        } elseif (!$shop->getSecure() && $request->isSecure()) {
+            $url = sprintf('http://%s%s%s',
+                $shop->getHost(),
+                $shop->getBaseUrl(),
+                '/'
+            );
+            $response->setRedirect($url, 301);
+            return;
         }
 
         // Read original base path for resources
