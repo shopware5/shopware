@@ -2772,6 +2772,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         Shopware()->Models()->persist($template);
         Shopware()->Models()->flush();
+
+        $this->createConfiguratorTemplateTranslations($template);
+    }
+
+    /**
+     * Copies all translations from an article into the respective configurator template
+     *
+     * @param \Shopware\Models\Article\Configurator\Template\Template $template
+     */
+    protected function createConfiguratorTemplateTranslations(\Shopware\Models\Article\Configurator\Template\Template $template)
+    {
+        $articleTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $template->getArticle()->getId());
+
+        foreach ($articleTranslations as &$articleTranslation) {
+            unset($articleTranslation['objectdata']['metaTitle']);
+            unset($articleTranslation['objectdata']['name']);
+            unset($articleTranslation['objectdata']['description']);
+            unset($articleTranslation['objectdata']['descriptionLong']);
+            unset($articleTranslation['objectdata']['keywords']);
+            $articleTranslation['objectkey'] = $template->getId();
+            $articleTranslation['objecttype'] = 'configuratorTemplate';
+        }
+
+        $this->getTranslationComponent()->writeBatch($articleTranslations);
     }
 
     /**
