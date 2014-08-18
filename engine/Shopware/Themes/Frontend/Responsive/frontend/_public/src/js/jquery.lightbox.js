@@ -17,40 +17,106 @@
      */
     $.lightbox = {
 
+        /**
+         * Holds the object of the modal plugin.
+         *
+         * @type {Boolean | Object}
+         */
+        modal: false,
+
+        /**
+         * Opens the image from the given image url
+         * in a lightbox window.
+         *
+         * @param imageURL
+         */
         open: function(imageURL) {
-            var me = this,
-                width, height,
-                maxWidth = window.innerWidth * 0.9,
-                maxHeight = window.innerHeight * 0.9;
+            var me = this, size;
 
             me.image =  new Image();
-            me.imageEl = $('<img>', {
-                'src': imageURL
-            });
+            me.content = me.createContent(imageURL);
 
             me.image.onload = function() {
-                width = me.image.width;
-                height = me.image.height;
+                size = me.getOptimizedSize(me.image.width, me.image.height);
 
-                me.aspect = me.image.width / me.image.height;
+                me.modal = $.modal.open(me.content, {
+                    'width': size.width,
+                    'height': size.height
+                });
 
-                if (width > maxWidth) {
-                    width = maxWidth;
-                    height = width / me.aspect;
-                }
+                $(window).on('resize.lightbox', function() {
+                    me.setSize(me.image.width, me.image.height);
+                });
 
-                if (height > maxHeight) {
-                    height = maxHeight;
-                    width = height * me.aspect;
-                }
-
-                $.modal.open(me.imageEl, {
-                    'width': width,
-                    'height': height
-                })
+                $.subscribe('plugin/modal/onClose', function() {
+                    $(window).off('resize.lightbox');
+                });
             };
 
             me.image.src = imageURL;
+        },
+
+        /**
+         * Creates the content for the lightbox.
+         *
+         * @param imageURL
+         * @returns {*|HTMLElement}
+         */
+        createContent: function(imageURL) {
+            return $('<div>', {
+                'class': 'lightbox--container',
+                'html':  $('<img>', {
+                    'src': imageURL,
+                    'class': 'lightbox--image'
+                })
+            });
+        },
+
+        /**
+         * Set the size of the modal window.
+         *
+         * @param width
+         * @param height
+         */
+        setSize: function(width, height) {
+            var me = this,
+                size = me.getOptimizedSize(width, height);
+
+            if (!me.modal) {
+                return;
+            }
+
+            me.modal.setWidth(size.width);
+            me.modal.setHeight(size.height);
+        },
+
+        /**
+         * Computes the optimal size for the lightbox
+         * based on the measurements of the shown image.
+         *
+         * @param width
+         * @param height
+         * @returns {{width: *, height: *}}
+         */
+        getOptimizedSize: function(width, height) {
+            var aspect = width / height,
+                maxWidth = Math.round(window.innerWidth * 0.9),
+                maxHeight = Math.round(window.innerHeight * 0.9);
+
+            if (width > maxWidth) {
+                width = maxWidth;
+                height = Math.round(width / aspect);
+            }
+
+            if (height > maxHeight) {
+                height = maxHeight;
+                width = Math.round(height * aspect);
+            }
+
+            return {
+                'width': width,
+                'height': height
+            }
         }
     }
 })(jQuery);

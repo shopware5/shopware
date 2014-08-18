@@ -88,6 +88,10 @@
 								{/block}
 							</span>
 						{/block}
+
+						{block name='frontend_detail_data_pseudo_price_discount_icon'}
+							<span class="price--discount-icon">%</span>
+						{/block}
 					{/if}
 				{/block}
 

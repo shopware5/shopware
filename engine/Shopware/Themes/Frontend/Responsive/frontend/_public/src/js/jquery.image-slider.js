@@ -35,6 +35,9 @@
             // Turn thumbnail support on and off.
             thumbnails: true,
 
+            // Turn support for a small dot navigation on and off.
+            dotNavigation: true,
+
             // Turn arrow controls on and off.
             arrowControls: true,
 
@@ -61,6 +64,12 @@
 
             // The selector for the slide element which slides inside the thumbnail container.
             thumbnailSlideSelector: '.image-slider--thumbnails-slide',
+
+            // The selector for the dot navigation container.
+            dotNavSelector: '.image-slider--dots',
+
+            // The selector for each dot link in the dot navigation.
+            dotLinkSelector: '.dot--link',
 
             // The css class for the left slider arrow.
             leftArrowCls: 'arrow is--left',
@@ -103,6 +112,11 @@
                 me.createThumbnailArrows();
             }
 
+            if (me.opts.dotNavigation) {
+                me.$dotNav = me.$el.find(me.opts.dotNavSelector);
+                me.$dots = me.$dotNav.find(me.opts.dotLinkSelector);
+            }
+
             me.trackItems();
             me.setSizes();
 
@@ -132,6 +146,8 @@
                 me.$images.each(function(index, el) {
                     me._on($(el), 'click', $.proxy(me.onSliderClick, me));
                 });
+
+                $.subscribe('plugin/imageZoom/onLensClick', $.proxy(me.onSliderClick, me));
             }
 
             if (me.opts.touchControls) {
@@ -153,12 +169,7 @@
             }
 
             if (me.opts.thumbnails) {
-                me.$thumbnails.each(function(index, el) {
-                    me._on($(el), 'click', function(event) {
-                        event.preventDefault();
-                        me.slide(index);
-                    });
-                });
+                me.$thumbnails.each($.proxy(me.applyClickEventHandler, me));
 
                 me._on(me.$thumbnailArrowNext, 'click', $.proxy(me.slideThumbnailsNext, me));
                 me._on(me.$thumbnailArrowPrev, 'click', $.proxy(me.slideThumbnailsPrev, me));
@@ -169,12 +180,33 @@
                 }
             }
 
+            if (me.opts.dotNavigation && me.$dots) {
+                me.$dots.each($.proxy(me.applyClickEventHandler, me));
+            }
+
             if (me.opts.autoSlide) {
                 me.startAutoSlide();
 
                 me._on(me.$el, 'mouseenter', $.proxy(me.stopAutoSlide, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.startAutoSlide, me));
             }
+        },
+
+        /**
+         * Applies a click event handler to the element
+         * to slide the slider to the index of that element.
+         *
+         * @param index
+         * @param el
+         */
+        applyClickEventHandler: function(index, el) {
+            var me = this, $el = $(el),
+                i = index || $el.index();
+
+            me._on($el, 'click', function(event) {
+                event.preventDefault();
+                me.slide(i);
+            });
         },
 
         /**
@@ -341,6 +373,22 @@
         },
 
         /**
+         * Sets the active state for the dot
+         * at the given index position.
+         *
+         * @param index
+         */
+        setActiveDot: function(index) {
+            var me = this,
+                i = index || me.slideIndex;
+
+            if (me.opts.dotNavigation && me.$dots) {
+                me.$dots.removeClass(me.opts.activeStateClass);
+                me.$dots.eq(i).addClass(me.opts.activeStateClass);
+            }
+        },
+
+        /**
          * Checks which thumbnail arrow controls have to be shown.
          */
         trackThumbnailControls: function() {
@@ -425,7 +473,7 @@
 
             me.thumbnailSlideIndex = index;
 
-            me.$thumbnailSlide[method](param, me.opts.animationSpeed, 'ease', function() {
+            me.$thumbnailSlide[method](param, me.opts.animationSpeed, function() {
                 me.trackThumbnailControls();
             });
         },
@@ -445,7 +493,9 @@
 
             if (me.opts.thumbnails) me.setActiveThumbnail(index);
 
-            me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, 'ease', $.proxy(callback, me));
+            if (me.opts.dotNavigation && me.$dots) me.setActiveDot(index);
+
+            me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, $.proxy(callback, me));
 
             me.trackThumbnailControls();
         },
@@ -536,19 +586,16 @@
 
             $(window).off('resize.imageSlider');
 
-            if (me.opts.arrowControls) {
-                me.$arrowLeft.remove();
-                me.$arrowRight.remove();
-            }
+            if (me.opts.thumbnails) me.setActiveThumbnail(0);
+            if (me.opts.dotNavigation && me.$dots) me.setActiveDot(0);
 
-            if (me.thumbnailControls) {
-                me.$thumbnailArrowPrev.remove();
-                me.$thumbnailArrowNext.remove();
-            }
+            if (me.$arrowLeft.length) me.$arrowLeft.remove();
+            if (me.$arrowRight.length) me.$arrowRight.remove();
 
-            if (me.opts.autoSlide) {
-                me.stopAutoSlide();
-            }
+            if (me.$thumbnailArrowPrev.length) me.$thumbnailArrowPrev.remove();
+            if (me.$thumbnailArrowNext.length) me.$thumbnailArrowNext.remove();
+
+            if (me.opts.autoSlide) me.stopAutoSlide();
 
             me._destroy();
         }

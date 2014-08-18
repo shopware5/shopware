@@ -5,6 +5,7 @@
 		{include file="frontend/detail/images.tpl"}
 	{/block}
 
+	{* Product image - Gallery *}
 	{block name="frontend_detail_image_box"}
 		<div class="image-slider--container">
 			<div class="image-slider--slide">
@@ -64,5 +65,17 @@
 				{/foreach}
 			</div>
 		</div>
+	{/block}
+
+	{* Product image - Dot navigation *}
+	{block name='frontend_detail_image_box_dots'}
+		{if $sArticle.images}
+			<div class="image--dots image-slider--dots panel--dot-nav">
+				<a href="#" class="dot--link is--active">&nbsp;</a>
+				{foreach $sArticle.images as $image}
+					<a href="#" class="dot--link">&nbsp;</a>
+				{/foreach}
+			</div>
+		{/if}
 	{/block}
 {/block}
