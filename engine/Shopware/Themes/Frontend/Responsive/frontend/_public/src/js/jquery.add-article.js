@@ -90,7 +90,7 @@
             me._on(me.$el, me.opts.eventName, $.proxy(me.sendSerializedForm, me));
 
             // Close modal on continue shopping button
-            $('body').delegate('.link--back', 'click', $.proxy(me.closeModal, me));
+            $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
         },
 
         /**
