@@ -389,6 +389,8 @@ $(function() {
 
     $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
 
+    $('*[data-add-article="true"]').addArticle();
+
     $('body').httpCacheFilters();
 
     $('*[data-menu-scroller="true"]').menuScroller();

@@ -15,14 +15,15 @@
     max-height: 100%;
     max-width: 100%;
     z-index: 10000;
+    overflow: auto;
 
     .header {
         .unitize-padding(10, 10, 10, 10);
         .unitize-height(42, 16);
+        border-bottom: 1px solid @borderColor;
 
         .title {
             .unitize(16, 16, font-size);
-
             font-weight: 700;
         }
     }
@@ -36,15 +37,10 @@
     }
 
     .content {
-        .unitize(42, 16, top);
-
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
+        position: relative;
         overflow-y: overlay;
 
-        iframe {
+        .content--iframe {
             .unitize-padding(10, 10, 10, 10);
 
             width: 100%;
@@ -54,23 +50,26 @@
         }
     }
 
-    &.is--fullscreen {
+    &.sizing--auto.is--fullscreen {
         height: 100% !important;
         width: 100% !important;
     }
 
-    &.fixed {
+    &.sizing--fixed {
         max-height: none !important;
         max-width: none !important;
+    }
+
+    &.sizing--content {
+        position: relative;
+        bottom: auto;
+        top: auto;
+        height: auto;
     }
 
     &.no--header {
         .header {
             display: none;
-        }
-
-        .content {
-            top: 0;
         }
     }
 }

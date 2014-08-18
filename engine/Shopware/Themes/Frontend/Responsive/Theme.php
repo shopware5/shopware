@@ -85,6 +85,7 @@ class Theme extends \Shopware\Components\Theme
 	    'src/js/jquery.newsletter.js',
 	    'src/js/jquery.menu-scroller.js',
         'src/js/jquery.shipping-payment.js',
+        'src/js/jquery.add-article.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
 
