@@ -69,51 +69,49 @@
 {* Register content *}
 {block name='frontend_index_content'}
     {block name='frontend_register_index_registration'}
-        <div class="register--content panel content block has--border{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}"
-             id="registration"
-             data-register="true">
-    
+        <div class="register--content panel content block has--border{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}" id="registration" data-register="true">
+
             {block name='frontend_register_index_dealer_register'}
                 {* Included for compatibility reasons *}
             {/block}
-    
+
             {block name='frontend_register_index_cgroup_header'}
                 {if $register.personal.form_data.sValidation}
                     {* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
                     <div class="panel register--supplier">
                         <h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
-    
+
                         <div class="panel--body is--wide">
                             <p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
-    
+
                             <h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>
                             <p>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}</p>
-    
+
                             <h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>
                             <p>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}</p>
                         </div>
                     </div>
                 {/if}
             {/block}
-    
+
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
-    
+
                     {block name='frontend_register_index_form_personal_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
                         {include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
                     {/block}
-    
+
                     {block name='frontend_register_index_form_billing_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
                         {include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
                     {/block}
-    
+
                     {block name='frontend_register_index_form_shipping_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
                         {include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
                     {/block}
-    
+
                     {* Privacy checkbox *}
                     {if !$update}
                         {if {config name=ACTDPRCHECK}}
@@ -125,14 +123,14 @@
                             {/block}
                         {/if}
                     {/if}
-    
+
                     {block name='frontend_register_index_form_required'}
                         {* Required fields hint *}
                         <div class="register--required-info required_fields">
                             {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
                         </div>
                     {/block}
-    
+
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}
                         <div class="register--action">
