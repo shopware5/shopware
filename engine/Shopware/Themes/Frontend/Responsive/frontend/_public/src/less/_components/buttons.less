@@ -1,104 +1,104 @@
 .btn {
-	@backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
-	.linear-gradient(#fff, @primaryBackgroundColor);
-	.unitize-padding(10, 16, 10, 16, 16);
-	.border-radius(4px);
-	.appearance();
-	.unitize(16, 16, font-size);
-	-webkit-font-smoothing: inherit;
-	display: inline-block;
-	position: relative;
-	font-weight: bold;
-	text-decoration: none;
-	text-align: left;
-	line-height: normal;
-	cursor: pointer;
-	border: 1px solid @lightDarkBorderColor;
-	border-bottom-color: lighten(@darkBorderColor, 40%);
-	color: @primaryTextColor;
+    @backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
+    .linear-gradient(#fff, @primaryBackgroundColor);
+    .unitize-padding(10, 16, 10, 16, 16);
+    .border-radius(4px);
+    .appearance();
+    .unitize(16, 16, font-size);
+    -webkit-font-smoothing: inherit;
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: left;
+    line-height: normal;
+    cursor: pointer;
+    border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
+    color: @primaryTextColor;
 
-	[class^="icon--"] {
-		.unitize-margin(0, 16, 0, 0);
+    [class^="icon--"] {
+	.unitize-margin(0, 16, 0, 0);
 
-		&.is--right {
-			display: block;
-			position: absolute;
-			top: 50%;
-			.unitize-height(16);
-			.unitize-margin(-8, 0, 0, 0);
-			.unitize(16, 16, line-height);
-			.unitize(16, 16, right);
-		}
-
-		&.is--small {
-			.unitize(10, 16, font-size);
-		}
+	&.is--right {
+	    display: block;
+	    position: absolute;
+	    top: 50%;
+	    .unitize-height(16);
+	    .unitize-margin(-8, 0, 0, 0);
+	    .unitize(16, 16, line-height);
+	    .unitize(16, 16, right);
 	}
 
-	&:active {
-		.linear-gradient(@backgroundGradientStart, #fff);
+	&.is--small {
+	    .unitize(10, 16, font-size);
 	}
+    }
 
-	&:disabled,
-	&.is--disabled {
-		.opacity(0.5);
-		cursor: not-allowed;
+    &:active {
+	.linear-gradient(@backgroundGradientStart, #fff);
+    }
 
-		&:hover {
-			color: @primaryTextColor;
-		}
-	}
+    &:disabled,
+    &.is--disabled {
+	.opacity(0.5);
+	cursor: not-allowed;
 
 	&:hover {
-		background: #fff;
-		color: @primaryColor;
+	    color: @primaryTextColor;
 	}
+    }
 
-	&:focus {
-		outline: none;
+    &:hover {
+	background: #fff;
+	color: @primaryColor;
+    }
+
+    &:focus {
+	outline: none;
+    }
+
+    /** State: Small button */
+    &.is--small {
+	.unitize-padding(5, 16, 5, 16, 12);
+	.unitize(12, 16, font-size);
+    }
+
+    /** Type: Light grey button */
+    &.btn--grey {
+	.linear-gradient(#fff, @primaryBackgroundColor);
+	border-color: @lightDarkBorderColor;
+    }
+
+    /** Type: Primary button */
+    &.btn--primary {
+	.primary-gradient();
+	text-shadow: 0 1px 1px @primaryContrastColor;
+	border: 0 none;
+	border-bottom: 1px solid @primaryContrastColor;
+	color: #fff;
+
+	&:hover {
+	    background: @secondaryColor;
+	    text-shadow: 0 1px 1px @primaryContrastColor;
+	    border: 0 none;
+	    border-bottom: 1px solid @primaryContrastColor;
 	}
+    }
 
-	/** State: Small button */
-	&.is--small {
-		.unitize-padding(5, 16, 5, 16, 12);
-		.unitize(12, 16, font-size);
+    /** Type: Secondary button */
+    &.btn--secondary {
+	.secondary-gradient();
+	text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
+	color: #fff;
+	border: 0 none;
+	border-bottom: 1px solid @darkBorderColor;
+
+	&:hover {
+	    background: @primaryTextColor;
 	}
-
-	/** Type: Light grey button */
-	&.btn--grey {
-		.linear-gradient(#fff, @primaryBackgroundColor);
-		border-color: @lightDarkBorderColor;
+	&:active {
+	    .linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
 	}
-
-	/** Type: Primary button */
-	&.btn--primary {
-		.primary-gradient();
-		text-shadow: 0 1px 1px @primaryContrastColor;
-		border: 0 none;
-		border-bottom: 1px solid @primaryContrastColor;
-		color: #fff;
-
-		&:hover {
-			background: @secondaryColor;
-			text-shadow: 0 1px 1px @primaryContrastColor;
-			border: 0 none;
-			border-bottom: 1px solid @primaryContrastColor;
-		}
-	}
-
-	/** Type: Secondary button */
-	&.btn--secondary {
-		.secondary-gradient();
-		text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
-		color: #fff;
-		border: 0 none;
-		border-bottom: 1px solid @darkBorderColor;
-
-		&:hover {
-			background: @primaryTextColor;
-		}
-		&:active {
-			.linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
-		}
-	}
+    }
 }

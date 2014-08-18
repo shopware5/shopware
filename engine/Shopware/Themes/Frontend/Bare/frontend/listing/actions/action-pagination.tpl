@@ -23,7 +23,7 @@
                     {if $page.markup AND (!$sOffers OR $sPage)}
                         <a title="{$sCategoryInfo.name|escape}" class="btn pagination--link is--active">{$page.value}</a>
                     {else}
-                        <a href="{$page.link|rewrite:$sCategoryInfo.name}" class="btn pagination--link">{$page.value}</a>
+                       <a href="{$page.link|rewrite:$sCategoryInfo.name}" class="btn pagination--link">{$page.value}</a>
                     {/if}
                 {elseif $page.value==$sPage+4 OR $page.value==$sPage-4}
                     <span class="pagination--link pagination--more">...</span>

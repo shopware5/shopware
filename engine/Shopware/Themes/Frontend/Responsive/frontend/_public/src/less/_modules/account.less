@@ -264,20 +264,20 @@
     .unitize(8, 16, top);
     display: inline-block;
     position: relative;
-
+    
     &.status--0,  //The order has not been processed yet.
     &.status--1,  //The order is in process
     &.status--3,  //Partially completed
     &.status--6 { //The order has been sent in part
         background: @deliveryInfoText;
     }
-
+    
     &.status--2,  //Completed
     &.status--5,  //Ready for shipping
     &.status--7 { //The order has been sent
         background: @deliveryAvailableText;
     }
-
+    
     &.status--4,  //The order has been cancelled
     &.status--8 { //Clarification needed
         background: @deliveryNotAvailableText;
@@ -667,7 +667,7 @@
     .account--error,
     .account--success {
         .unitize-margin(0, 0, 20, 0);
-    }
+}
 
     .is--act-partnerStatistic {
         .content-main--inner {

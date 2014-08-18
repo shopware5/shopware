@@ -6,179 +6,179 @@ input[type="password"],
 input[type="number"],
 input[type="email"],
 input[type="tel"] {
-	@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
-	.appearance(none);
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
-	.unitize-padding(9, 10, 10, 10);
-	.box-shadow(inset 0 1px 1px @boxShadowColor);
-	background: @lightGradientEnd;
-	border: 1px solid @borderColor;
-	border-top-color: darken(@borderColor, 5%);
-	color: @lightTextColor;
+    @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+    .appearance(none);
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
+    .unitize-padding(9, 10, 10, 10);
+    .box-shadow(inset 0 1px 1px @boxShadowColor);
+    background: @lightGradientEnd;
+    border: 1px solid @borderColor;
+    border-top-color: darken(@borderColor, 5%);
+    color: @lightTextColor;
 
-	&:focus {
-		.box-shadow(0 0 0 transparent);
-		outline: none;
-		border-color: @primaryColor;
-		background: #fff;
-		color: @primaryTextColor;
+    &:focus {
+	.box-shadow(0 0 0 transparent);
+	outline: none;
+	border-color: @primaryColor;
+	background: #fff;
+	color: @primaryTextColor;
+    }
+
+    &.has--error {
+	color: @inputErrorColor;
+	background: @inputErrorBackground;
+	border-color: @inputErrorColor;
+    }
+
+    // Input field spacing
+    &.input--field {
+	.unitize(10, 16, margin-bottom);
+	width: 100%;
+
+	&.input--field-zipcode {
+	    margin-right: 2%;
+	    width: 30%;
+	    float: left;
 	}
 
-	&.has--error {
-		color: @inputErrorColor;
-		background: @inputErrorBackground;
-		border-color: @inputErrorColor;
+	&.input--field-city {
+	    width: 68%;
+	    float: left;
 	}
-
-	// Input field spacing
-	&.input--field {
-		.unitize(10, 16, margin-bottom);
-		width: 100%;
-
-		&.input--field-zipcode {
-			margin-right: 2%;
-			width: 30%;
-			float: left;
-		}
-
-		&.input--field-city {
-			width: 68%;
-			float: left;
-		}
-	}
+    }
 
 }
 
 textarea {
-	resize: vertical; // Just allow vertical resizing of the text area
+    resize: vertical; // Just allow vertical resizing of the text area
 }
 
 label.has--error {
-	color: @errorText;
-	background: @errorBackground;
+    color: @errorText;
+    background: @errorBackground;
 }
 
 .js--fancy-select {
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
-	.unitize(44, 16, line-height);
-	.linear-gradient(@lightGradientStart, @primaryBackgroundColor);
-	.clearfix();
-	display: inline-block;
-	position: relative;
-	border: 1px solid @lightDarkBorderColor;
-	border-bottom-color: lighten(@darkBorderColor, 40%);
-	overflow: hidden;
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
+    .unitize(44, 16, line-height);
+    .linear-gradient(@lightGradientStart, @primaryBackgroundColor);
+    .clearfix();
+    display: inline-block;
+    position: relative;
+    border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+	color: @primaryColor;
+	background: #fff;
+    }
+
+    &.js--is--focused {
+	border-color: @primaryColor;
+    }
+
+    select {
+	.unitize-height(44);
+	.appearance(none);
+	.opacity(0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display: block;
 	cursor: pointer;
+	z-index: 1000;
 
-	&:hover {
-		color: @primaryColor;
-		background: #fff;
+	// Removes the blue glow around the select field
+	// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
+	&:focus {
+	    outline: none;
 	}
+    }
 
-	&.js--is--focused {
-		border-color: @primaryColor;
-	}
+    .js--fancy-select-text {
+	.unitize-padding(0, 40, 0, 10);
+	border-right: 1px solid #fff;
+	width: 100%;
+
+	// CSS truncating
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+    }
+
+    .js--fancy-select-trigger {
+	.unitize-width(30);
+	position: absolute;
+	right: 0;
+	top: 0;
+	border-left: 1px solid @borderColor;
+	text-align: center;
+	text-shadow: 0 1px 0 #fff;
+	font-weight: bold;
+    }
+
+    // State disabled
+    &.is--disabled {
+	.opacity(.5);
 
 	select {
-		.unitize-height(44);
-		.appearance(none);
-		.opacity(0);
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		display: block;
-		cursor: pointer;
-		z-index: 1000;
+	    cursor: not-allowed;
+	}
+    }
 
-		// Removes the blue glow around the select field
-		// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
-		&:focus {
-			outline: none;
-		}
+    // Error state
+    &.has--error {
+	color: @inputErrorColor;
+	border-color: @inputErrorColor;
+	background: @inputErrorBackground;
+
+	.js--fancy-select-trigger {
+	    border-color: @inputErrorColor;
 	}
 
 	.js--fancy-select-text {
-		.unitize-padding(0, 40, 0, 10);
-		border-right: 1px solid #fff;
-		width: 100%;
-
-		// CSS truncating
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	    border-color: lighten(@inputErrorColor, 40%);
 	}
-
-	.js--fancy-select-trigger {
-		.unitize-width(30);
-		position: absolute;
-		right: 0;
-		top: 0;
-		border-left: 1px solid @borderColor;
-		text-align: center;
-		text-shadow: 0 1px 0 #fff;
-		font-weight: bold;
-	}
-
-	// State disabled
-	&.is--disabled {
-		.opacity(.5);
-
-		select {
-			cursor: not-allowed;
-		}
-	}
-
-	// Error state
-	&.has--error {
-		color: @inputErrorColor;
-		border-color: @inputErrorColor;
-		background: @inputErrorBackground;
-
-		.js--fancy-select-trigger {
-			border-color: @inputErrorColor;
-		}
-
-		.js--fancy-select-text {
-			border-color: lighten(@inputErrorColor, 40%);
-		}
-	}
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-	/* Standard input fields. */
-	.input--field {
-		.unitize(15, 16, margin-bottom);
+    /* Standard input fields. */
+    .input--field {
+	.unitize(15, 16, margin-bottom);
 
-		.input--field-zipcode {
-			margin-right: 2%;
-			width: 20%;
-		}
-		.input--field-city {
-			width: 78%;
-		}
+	.input--field-zipcode {
+	    margin-right: 2%;
+	    width: 20%;
 	}
+	.input--field-city {
+	    width: 78%;
+	}
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
-	// Input field styling
-	.input--field {
-		.unitize(15, 16, margin-bottom);
-	}
+    // Input field styling
+    .input--field {
+	.unitize(15, 16, margin-bottom);
+    }
 
-	.js--fancy-select {
-		.unitize-width(290);
-		.unitize(34, 16, line-height);
+    .js--fancy-select {
+	.unitize-width(290);
+	.unitize(34, 16, line-height);
 
-		select {
-			.unitize-height(34);
-		}
+	select {
+	    .unitize-height(34);
 	}
+    }
 
 }

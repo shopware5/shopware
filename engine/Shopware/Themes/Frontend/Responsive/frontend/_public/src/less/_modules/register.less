@@ -1,411 +1,411 @@
 // Register Content
 .register--content {
-	.unitize-margin(10, 0);
-	.border-radius();
-	.clearfix();
+    .unitize-margin(10, 0);
+    .border-radius();
+    .clearfix();
+    width: 100%;
+    display: none;
+
+    &.is--collapsed {
+	display: block;
+    }
+
+    .has--border {
+	.border-radius(4px);
+    }
+
+    .alert {
+	.unitize-margin(20, 18, 20, 18, 16);
+    }
+
+    .register--check {
+	.unitize(8, 16, padding-bottom);
+    }
+
+    .register--action {
+	.unitize-margin(20, 20);
+
+	.btn--primary {
+	    width: 100%;
+	    text-align: center;
+
+	    & [class^=icon] {
+		.unitize(10, 16, font-size);
+		.unitize-margin(-2, 0, 0, 16);
+	    }
+	}
+    }
+
+    .register--required-info {
+	.unitize-margin(0, 26, 16);
+	.unitize(14, 16, font-size);
+    }
+
+    .js--fancy-select {
+	.unitize(10, 16, margin-bottom);
 	width: 100%;
-	display: none;
+    }
 
-	&.is--collapsed {
-		display: block;
+    .register--field {
+	.unitize(10, 16, margin-bottom);
+	width: 100%;
+    }
+
+    .register--customertype {
+	display: block;
+    }
+
+    .register--zip-city {
+
+	.register--field-zipcode {
+	    margin-right: 2%;
+	    width: 28%;
+	    float: left;
 	}
 
-	.has--border {
-		.border-radius(4px);
+	.register--field-city {
+	    .clearfix();
+	    width: 70%;
+	    float: left;
 	}
 
-	.alert {
-		.unitize-margin(20, 18, 20, 18, 16);
-	}
+    }
 
-	.register--check {
-		.unitize(8, 16, padding-bottom);
-	}
+    .birthday--label {
+	.clearfix();
+	.unitize-margin(0, 0, 5, 0);
+	display: block;
+	font-weight: bold;
+    }
 
-	.register--action {
-		.unitize-margin(20, 20);
+    .register--password-description {
+	.unitize(20, 16, padding-bottom);
+    }
 
-		.btn--primary {
-			width: 100%;
-			text-align: center;
-
-			& [class^=icon] {
-				.unitize(10, 16, font-size);
-				.unitize-margin(-2, 0, 0, 16);
-			}
-		}
-	}
-
-	.register--required-info {
-		.unitize-margin(0, 26, 16);
-		.unitize(14, 16, font-size);
-	}
+    .register--birthdate {
 
 	.js--fancy-select {
-		.unitize(10, 16, margin-bottom);
-		width: 100%;
+	    .unitize(15, 16, margin-bottom);
+	    width: 100%;
+	    float: left;
 	}
 
-	.register--field {
-		.unitize(10, 16, margin-bottom);
-		width: 100%;
+	.register--birthyear,
+	.register--birthyear .js--fancy-select {
+	    .unitize(0, 16, margin-right);
 	}
 
-	.register--customertype {
-		display: block;
+    }
+
+    .register--privacy {
+	.unitize-padding(20, 20);
+	.unitize-margin(0, 20, 20);
+	.unitize(14, 16, font-size);
+	border: 1px solid @borderColor;
+
+	input[type="checkbox"] {
+	    .unitize-margin(0, 10, 0, 0);
 	}
+    }
 
-	.register--zip-city {
-
-		.register--field-zipcode {
-			margin-right: 2%;
-			width: 28%;
-			float: left;
-		}
-
-		.register--field-city {
-			.clearfix();
-			width: 70%;
-			float: left;
-		}
-
-	}
-
-	.birthday--label {
-		.clearfix();
-		.unitize-margin(0, 0, 5, 0);
-		display: block;
-		font-weight: bold;
-	}
-
-	.register--password-description {
-		.unitize(20, 16, padding-bottom);
-	}
-
-	.register--birthdate {
-
-		.js--fancy-select {
-			.unitize(15, 16, margin-bottom);
-			width: 100%;
-			float: left;
-		}
-
-		.register--birthyear,
-		.register--birthyear .js--fancy-select {
-			.unitize(0, 16, margin-right);
-		}
-
-	}
-
-	.register--privacy {
-		.unitize-padding(20, 20);
-		.unitize-margin(0, 20, 20);
-		.unitize(14, 16, font-size);
-		border: 1px solid @borderColor;
-
-		input[type="checkbox"] {
-			.unitize-margin(0, 10, 0, 0);
-		}
-	}
-
-	// Personal information fieldset
-	.register--personal {
-		.unitize(10, 16, padding-bottom);
-		.clearfix();
-	}
+    // Personal information fieldset
+    .register--personal {
+	.unitize(10, 16, padding-bottom);
+	.clearfix();
+    }
 }
 
 // Register Login
 .register--login {
-	.clearfix();
+    .clearfix();
 
-	.panel {
-		.border-radius(4px);
+    .panel {
+	.border-radius(4px);
+    }
+
+    .register--new-customer {
+	.unitize-margin(20, 0);
+
+	.btn {
+	    display: block;
+	    width: 100%;
+	    text-align: center;
 	}
+    }
 
-	.register--new-customer {
-		.unitize-margin(20, 0);
+    .register--login-field {
+	.unitize(10, 16, margin-bottom);
+	width: 100%;
+    }
 
-		.btn {
-			display: block;
-			width: 100%;
-			text-align: center;
-		}
+    .register--login-description {
+	.unitize(20, 16, padding-bottom);
+    }
+
+    .register--login-lostpassword {
+	.unitize(20, 16, padding-bottom);
+    }
+
+    .register--login-action {
+
+	& [class^=icon] {
+	    .unitize(10, 16, font-size);
+	    .unitize-margin(-2, 0, 0, 16);
 	}
-
-	.register--login-field {
-		.unitize(10, 16, margin-bottom);
-		width: 100%;
-	}
-
-	.register--login-description {
-		.unitize(20, 16, padding-bottom);
-	}
-
-	.register--login-lostpassword {
-		.unitize(20, 16, padding-bottom);
-	}
-
-	.register--login-action {
-
-		& [class^=icon] {
-			.unitize(10, 16, font-size);
-			.unitize-margin(-2, 0, 0, 16);
-		}
-	}
+    }
 }
 
 // Register Advantages
 .register--advantages {
-	display: none;
+    display: none;
 }
 
 .password--success {
-	.unitize-margin(10, 0, 20, 0);
+    .unitize-margin(10, 0, 20, 0);
 }
 
 // Register Steps
 .steps--container {
-	background: transparent;
+    background: transparent;
 }
 
 .steps--content {
-	.unitize(16, 16, padding-top);
-	display: table;
-	border-top: 1px solid @borderColor;
-	width: 100%;
+    .unitize(16, 16, padding-top);
+    display: table;
+    border-top: 1px solid @borderColor;
+    width: 100%;
 
-	.steps--list {
-		.clearfix();
-		display: table-row;
+    .steps--list {
+	.clearfix();
+	display: table-row;
+    }
+
+    .steps--entry {
+	.unitize-padding(0, 10);
+	display: table-cell;
+	list-style: none;
+	vertical-align: top;
+	text-align: center;
+    }
+
+    .steps--spacer {
+	display: none;
+	vertical-align: middle;
+    }
+
+    .steps--entry .icon {
+	.secondary-gradient();
+	.border-radius(22px);
+	.unitize-padding(10, 16);
+	.box-shadow();
+	.unitize-width(46, 16);
+	.unitize(20, 16, font-size);
+	display: inline-block;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+    }
+
+    .is--active .icon {
+	.primary-gradient();
+	color: #fff;
+    }
+
+    // Text
+    .steps--entry .text {
+	.unitize-margin(0, 0, 0, 10);
+	.unitize-height(52);
+	position: relative;
+	top: -2px;
+	display: none;
+	vertical-align: middle;
+
+	&::after {
+	    content: '';
+	    height: 100%;
 	}
+    }
 
-	.steps--entry {
-		.unitize-padding(0, 10);
-		display: table-cell;
-		list-style: none;
-		vertical-align: top;
-		text-align: center;
-	}
+    .is--active .text {
+	color: @primaryColor;
+	display: inline-block;
+	font-weight: bold;
+    }
 
-	.steps--spacer {
-		display: none;
-		vertical-align: middle;
-	}
-
-	.steps--entry .icon {
-		.secondary-gradient();
-		.border-radius(22px);
-		.unitize-padding(10, 16);
-		.box-shadow();
-		.unitize-width(46, 16);
-		.unitize(20, 16, font-size);
-		display: inline-block;
-		text-align: center;
-		color: #fff;
-		font-weight: bold;
-	}
-
-	.is--active .icon {
-		.primary-gradient();
-		color: #fff;
-	}
-
-	// Text
-	.steps--entry .text {
-		.unitize-margin(0, 0, 0, 10);
-		.unitize-height(52);
-		position: relative;
-		top: -2px;
-		display: none;
-		vertical-align: middle;
-
-		&::after {
-			content: '';
-			height: 100%;
-		}
-	}
-
-	.is--active .text {
-		color: @primaryColor;
-		display: inline-block;
-		font-weight: bold;
-	}
-
-	.steps--entry .text--inner, .steps--entry .text::after {
-		display: inline-block;
-		vertical-align: middle;
-	}
+    .steps--entry .text--inner, .steps--entry .text::after {
+	display: inline-block;
+	vertical-align: middle;
+    }
 
 }
 
 .account--change-payment {
-	.payment--method {
-		.unitize-padding(0, 0, 10, 0);
-		.unitize-margin(0, 0, 10, 0);
+    .payment--method {
+	.unitize-padding(0, 0, 10, 0);
+	.unitize-margin(0, 0, 10, 0);
 
-		&:last-child {
-			padding: 0;
-			margin: 0;
-		}
+	&:last-child {
+	    padding: 0;
+	    margin: 0;
 	}
+    }
 
-	.payment--selection-input {
-		.unitize-width(40);
-		float: left;
-		text-align: center;
-	}
+    .payment--selection-input {
+	.unitize-width(40);
+	float: left;
+	text-align: center;
+    }
 
-	.payment--selection-label,
-	.payment--description,
-	.payment--content {
-		.unitize-padding(0, 0, 0, 40);
-		width: 100%;
-	}
+    .payment--selection-label,
+    .payment--description,
+    .payment--content {
+	.unitize-padding(0, 0, 0, 40);
+	width: 100%;
+    }
 
-	.payment--content input {
-		max-width: 100%;
-	}
+    .payment--content input {
+	max-width: 100%;
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-	// General Register Form
-	.register--content {
-		.unitize(50, 16, margin-top);
-		width: 49%;
-		float: right;
-		display: block;
+    // General Register Form
+    .register--content {
+	.unitize(50, 16, margin-top);
+	width: 49%;
+	float: right;
+	display: block;
 
-		.js--fancy-select {
-			.unitize(15, 16, margin-bottom);
+	.js--fancy-select {
+	    .unitize(15, 16, margin-bottom);
 
-			.register--birthday {
-				margin-right: 2%;
-			}
-		}
-
-		.register--field {
-			.unitize(15, 16, margin-bottom);
-		}
-
-		.register--check {
-			.unitize(8, 16, padding-bottom);
-		}
-
-		.register--birthdate {
-			.js--fancy-select {
-				width: 32%;
-				margin-right: 2%;
-			}
-		}
-
-		.register--action {
-			text-align: right;
-
-			.btn--primary {
-				width: auto;
-			}
-		}
+	    .register--birthday {
+		margin-right: 2%;
+	    }
 	}
 
-	// Register Steps
-	.steps--content {
-		.unitize-padding(30, 0, 24, 0, 16);
-		background: transparent;
-		border: none;
-
-		.steps--spacer {
-			.unitize-width(80);
-			display: table-cell;
-			text-align: center;
-		}
-
-		.steps--entry {
-			.text {
-				.unitize-margin(0, 10, 0, 10);
-				display: inline-block;
-				font-weight: bold;
-			}
-		}
+	.register--field {
+	    .unitize(15, 16, margin-bottom);
 	}
 
-	// Register Login
-	.register--login {
-		.unitize(50, 16, margin-top);
-		width: 49%;
-		float: left;
-
-		.register--new-customer {
-			display: none;
-		}
-
-		.register--login-field {
-			.unitize(15, 16, margin-bottom);
-		}
+	.register--check {
+	    .unitize(8, 16, padding-bottom);
 	}
 
-	// Register advantages
-	.register--advantages {
-		.clearfix();
-		display: block;
-		width: 49%;
-		float: left;
-
-		.register--advantages-list {
-			list-style: none;
-			float: left;
-		}
-
-		.panel--title {
-			.unitize-margin(0, 0, 10, 0, 16);
-		}
-
-		li {
-			.unitize(5, 16, padding-bottom);
-			.unitize(14, 16, font-size);
-			display: block;
-			float: left;
-			width: 100%;
-		}
-
-		i[class^=icon] {
-			.unitize(10, 16, font-size);
-			.unitize(10, 16, margin-right);
-		}
+	.register--birthdate {
+	    .js--fancy-select {
+		width: 32%;
+		margin-right: 2%;
+	    }
 	}
+
+	.register--action {
+	    text-align: right;
+
+	    .btn--primary {
+		width: auto;
+	    }
+	}
+    }
+
+    // Register Steps
+    .steps--content {
+	.unitize-padding(30, 0, 24, 0, 16);
+	background: transparent;
+	border: none;
+
+	.steps--spacer {
+	    .unitize-width(80);
+	    display: table-cell;
+	    text-align: center;
+	}
+
+	.steps--entry {
+	    .text {
+		.unitize-margin(0, 10, 0, 10);
+		display: inline-block;
+		font-weight: bold;
+	    }
+	}
+    }
+
+    // Register Login
+    .register--login {
+	.unitize(50, 16, margin-top);
+	width: 49%;
+	float: left;
+
+	.register--new-customer {
+	    display: none;
+	}
+
+	.register--login-field {
+	    .unitize(15, 16, margin-bottom);
+	}
+    }
+
+    // Register advantages
+    .register--advantages {
+	.clearfix();
+	display: block;
+	width: 49%;
+	float: left;
+
+	.register--advantages-list {
+	    list-style: none;
+	    float: left;
+	}
+
+	.panel--title {
+	    .unitize-margin(0, 0, 10, 0, 16);
+	}
+
+	li {
+	    .unitize(5, 16, padding-bottom);
+	    .unitize(14, 16, font-size);
+	    display: block;
+	    float: left;
+	    width: 100%;
+	}
+
+	i[class^=icon] {
+	    .unitize(10, 16, font-size);
+	    .unitize(10, 16, margin-right);
+	}
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
-	// Header Support Info
-	.is--ctl-register {
-		.unitize(48, 16, margin-bottom);
+    // Header Support Info
+    .is--ctl-register {
+	.unitize(48, 16, margin-bottom);
+    }
+
+    .register--content {
+	.js--fancy-select {
+	    .unitize-width(290);
+	}
+    }
+
+    // Register Steps
+    .steps--content {
+
+	.steps--entry {
+	    &.step--payment {
+		width: 30%;
+	    }
+
+	    .text {
+		.unitize-margin(0, 0, 0, 10);
+		width: 70%;
+		text-align: left;
+	    }
 	}
 
-	.register--content {
-		.js--fancy-select {
-			.unitize-width(290);
-		}
+	.steps--spacer {
+	    width: 15%
 	}
-
-	// Register Steps
-	.steps--content {
-
-		.steps--entry {
-			&.step--payment {
-				width: 30%;
-			}
-
-			.text {
-				.unitize-margin(0, 0, 0, 10);
-				width: 70%;
-				text-align: left;
-			}
-		}
-
-		.steps--spacer {
-			width: 15%
-		}
-	}
+    }
 }
