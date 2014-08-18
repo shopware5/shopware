@@ -21,11 +21,11 @@
 {* Main content *}
 {block name='frontend_index_content'}
     <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
-    
+
         {* The configurator selection is checked at this early point
            to use it in different included files in the detail template. *}
         {block name='frontend_detail_index_configurator_settings'}
-              
+    
             {* Variable for tracking active user variant selection *}
             {$activeConfiguratorSelection = true}
     
@@ -83,7 +83,7 @@
                             </div>
                         {/if}
                     {/block}
-
+    
                 </div>
             </header>
         {/block}
@@ -103,36 +103,36 @@
                 <div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
     
                     {block name="frontend_detail_rich_snippets_brand"}
-                        <meta itemprop="brand" content="{$sArticle.supplierName|escape}" />
+                        <meta itemprop="brand" content="{$sArticle.supplierName|escape}"/>
                     {/block}
     
                     {block name="frontend_detail_rich_snippets_weight"}
                         {if $sArticle.weight}
-                            <meta itemprop="weight" content="{$sArticle.weight} kg" />
+                            <meta itemprop="weight" content="{$sArticle.weight} kg"/>
                         {/if}
                     {/block}
     
                     {block name="frontend_detail_rich_snippets_height"}
                         {if $sArticle.height}
-                            <meta itemprop="height" content="{$sArticle.height} cm" />
+                            <meta itemprop="height" content="{$sArticle.height} cm"/>
                         {/if}
                     {/block}
     
                     {block name="frontend_detail_rich_snippets_width"}
                         {if $sArticle.width}
-                            <meta itemprop="width" content="{$sArticle.width} cm" />
+                            <meta itemprop="width" content="{$sArticle.width} cm"/>
                         {/if}
                     {/block}
     
                     {block name="frontend_detail_rich_snippets_depth"}
                         {if $sArticle.length}
-                            <meta itemprop="depth" content="{$sArticle.length} cm" />
+                            <meta itemprop="depth" content="{$sArticle.length} cm"/>
                         {/if}
                     {/block}
     
                     {block name="frontend_detail_rich_snippets_release_date"}
                         {if $sArticle.sReleasedate}
-                            <meta itemprop="releaseDate" content="{$sArticle.sReleasedate}" />
+                            <meta itemprop="releaseDate" content="{$sArticle.sReleasedate}"/>
                         {/if}
                     {/block}
     
@@ -148,7 +148,7 @@
                         <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
     
                             {block name='frontend_detail_index_data'}
-                                <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
+                                <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                                 {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                             {/block}
     
@@ -198,7 +198,7 @@
     
                                     {* Product SKU - Content *}
                                     {block name='frontend_detail_data_ordernumber_content'}
-                                        <meta itemprop="productID" content="{$sArticle.articleDetailsID}" />
+                                        <meta itemprop="productID" content="{$sArticle.articleDetailsID}"/>
                                         <span class="entry--content" itemprop="sku">
                                             {$sArticle.ordernumber}
                                         </span>
@@ -294,7 +294,8 @@
                                 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
                                     <li class="navigation--entry">
                                         <a href="#content--related-products" class="navigation--link">
-                                            {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s} ({$sArticle.sRelatedArticles|@count})
+                                            {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                            ({$sArticle.sRelatedArticles|@count})
                                         </a>
                                     </li>
                                 {/if}

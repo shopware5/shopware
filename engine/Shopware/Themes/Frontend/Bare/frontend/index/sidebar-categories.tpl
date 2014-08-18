@@ -5,20 +5,20 @@
         {block name="frontend_index_categories_left_ul"}{/block}
 
         {block name="frontend_index_categories_left_before"}{/block}
-            {foreach $categories as $category}
-                {block name="frontend_index_categories_left_entry"}
-                    <li class="navigation--entry{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" role="menuitem">
-                        <a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" title="{$category.description|escape}">
-                            {$category.description}
-                        </a>
-                        {block name="frontend_index_categories_left_entry_subcategories"}
-                            {if $category.subcategories}
-                                {call name=categories categories=$category.subcategories level=$level+1}
-                            {/if}
-                        {/block}
-                    </li>
-                {/block}
-            {/foreach}
+        {foreach $categories as $category}
+            {block name="frontend_index_categories_left_entry"}
+                <li class="navigation--entry{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" role="menuitem">
+                    <a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" title="{$category.description|escape}">
+                        {$category.description}
+                    </a>
+                    {block name="frontend_index_categories_left_entry_subcategories"}
+                        {if $category.subcategories}
+                            {call name=categories categories=$category.subcategories level=$level+1}
+                        {/if}
+                    {/block}
+                </li>
+            {/block}
+        {/foreach}
         {block name="frontend_index_categories_left_after"}{/block}
     </ul>
 {/function}
