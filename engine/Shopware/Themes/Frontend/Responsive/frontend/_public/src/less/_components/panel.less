@@ -130,7 +130,7 @@ See the documentation of the child elements for additional information.
     display: block;
 
     &.has--border {
-        .unitize-margin(10, 0 , 0, 0);
+        .unitize-margin(10, 0, 0, 0);
         .unitize-padding(10, 0, 0, 0);
         border-top: 1px solid @borderColor;
     }
@@ -576,7 +576,9 @@ See the documentation of the child elements for additional information.
 }
 
 .js--mobile-tab-panel {
-    .tab--content { display: none; }
+    .tab--content {
+        display: none;
+    }
     .navigation--entry {
         .unitize-margin(0, 0, 6, 0);
         display: block;
@@ -604,7 +606,10 @@ See the documentation of the child elements for additional information.
             font-weight: bold;
         }
 
-        &.is--active { top: 0; cursor: default }
+        &.is--active {
+            top: 0;
+            cursor: default
+        }
 
         &.is--active:after,
         &.is--active::after {
