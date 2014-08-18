@@ -367,6 +367,159 @@
     }
 }
 
+.js--modal .modal--checkout-add-article {
+
+    .link--article-image img {
+        margin: 0 auto;
+    }
+
+    .modal--title {
+        .unitize-padding(10, 40, 10, 20);
+        .unitize(16, 16, font-size);
+        font-weight: 700;
+        border-bottom: 1px solid @borderColor;
+    }
+
+    .modal--error {
+        .unitize-padding(20, 20);
+    }
+
+    .modal--article {
+        .unitize(20, 16, padding);
+    }
+
+    .article--image {
+        .unitize(5, 16, padding);
+        .border-radius();
+        width: 25%;
+        border: 1px solid @borderColor;
+    }
+
+    .article--name {
+        width: 75%;
+    }
+
+    .list--name {
+        .unitize(15, 16, margin-left);
+
+        .entry--name {
+            .unitize(10, 16, margin-bottom);
+        }
+
+        .link--name {
+            color: @primaryTextColor;
+            font-weight: 700;
+        }
+    }
+
+    .article--price {
+        .unitize(15, 16, margin-top);
+        .unitize(15, 16, margin-left);
+        width: 30%;
+    }
+
+    .list--price .entry--price {
+        .unitize(10, 16, margin-bottom);
+        color: @primaryTextColor;
+        font-weight: 700;
+    }
+
+    .modal--actions {
+        .unitize-margin(0, 0, 20, 0);
+        .unitize-padding(10, 20, 0, 20);
+        .clearfix();
+
+        .btn {
+            width: 100%;
+        }
+
+        .btn:last-child {
+            .unitize(20, 16, margin-top);
+        }
+
+        .is--left {
+            .unitize(35, 16, padding-left);
+        }
+
+        .icon--arrow-right {
+            .unitize-margin(6, 0, 0, 0);
+            .unitize(10, 16, font-size);
+            float: right;
+        }
+
+        .icon--arrow-left {
+            position: absolute;
+            .unitize(15, 16, left);
+            .unitize-margin(6, 0, 0, 0);
+            .unitize(10, 16, font-size);
+            float: left;
+        }
+    }
+
+    .modal--cross-selling {
+        .unitize-margin(0, 0, 0, 0);
+        .unitize-padding(0, 20, 20, 20);
+
+        .product-slider {
+            .unitize-height(270);
+        }
+
+        .product-slider--container {
+            padding: 0;
+        }
+
+        .item--image {
+            .unitize(10, 16, padding-bottom);
+            .unitize-height(170);
+            border-bottom: 1px solid @borderColor;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .link--image,
+        .link--image span {
+            overflow: hidden;
+            display: block;
+            height: 100%;
+        }
+
+        .link--image img{
+            margin: 0 auto;
+        }
+
+        .image--slider-item,
+        .image--no-picture {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .link--name {
+            color: @darkTextColor;
+            font-weight: 700;
+        }
+
+        .item--price-unit {
+            .unitize(11, 16, font-size);
+        }
+
+        .price--normal {
+            .unitize(17, 16, font-size);
+            color: @secondaryColor;
+            font-weight: 700;
+        }
+
+        .price--reduced {
+            color: @primaryContrastColor;
+        }
+
+        .price--pseudo {
+            .unitize(10, 16, font-size);
+            text-decoration: line-through;
+        }
+    }
+}
+
 // Checkout Confirm
 .content--confirm {
 
@@ -562,7 +715,6 @@
 			.clearfix();
 			border-top: 1px solid @borderColor;
 			background: @primaryLightBackgroundColor;
-
 		}
 
 		.aggregation--list,
@@ -610,6 +762,34 @@
         .unitize(14, 16, font-size);
         .unitize-padding(0, 20, 0, 20);
         width: 33.33332%;
+    }
+
+    .js--modal .modal--checkout-add-article {
+
+        .article--image {
+            width: 15%;
+        }
+
+        .article--name {
+            width: 55%;
+        }
+
+        .article--price {
+            margin-top: 0;
+            margin-left: 0;
+            width: 30%;
+        }
+
+        .modal--actions {
+            .btn {
+                width: 35%;
+                margin-bottom: 0;
+            }
+
+            .btn:last-child {
+                margin-top: 0;
+            }
+        }
     }
 
     // Payment & Shipping Method Confirmation
