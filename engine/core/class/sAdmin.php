@@ -2196,7 +2196,7 @@ class sAdmin
         $register = $this->session->offsetGet('sRegister');
         foreach ($register["billing"] as $key => $value) {
             if ($key == "salutation") {
-                $value = ($value == "ms") ? $namespace->get('AccountSalutationMrs', 'Ms') : $namespace->get('AccountSalutationMr', 'Mr');
+                $value = ($value == "ms") ? $namespace->get('AccountSalutationMs', 'Ms') : $namespace->get('AccountSalutationMr', 'Mr');
             }
 
             $context[$key] = $value;
