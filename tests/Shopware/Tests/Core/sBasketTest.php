@@ -1727,7 +1727,6 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'releasedate',
             'sReleaseDate',
             'stockmin',
-            'itemUnit',
             'ob_attr1',
             'ob_attr2',
             'ob_attr3',
