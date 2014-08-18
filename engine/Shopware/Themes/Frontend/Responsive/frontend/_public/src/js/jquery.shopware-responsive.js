@@ -81,7 +81,6 @@ $(function() {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
@@ -106,8 +105,6 @@ $(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
 
-            $('nav.product--actions').insertAfter($('.buybox--form'));
-
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
 
@@ -124,7 +121,6 @@ $(function() {
         type: 'tabletLandscape',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
@@ -148,8 +144,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-
-            $('nav.product--actions').insertAfter($('.buybox--form'));
 
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();

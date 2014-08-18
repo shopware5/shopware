@@ -27,17 +27,19 @@
 	{include file="frontend/_includes/messages.tpl" type=$messageType content=$messageContent}
 
 	{block name="frontend_detail_index_notification_form"}
-		<form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" class="notification--form block-group">
-			<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" />
-			{block name="frontend_detail_index_notification_field"}
-				<input name="sNotificationEmail" type="email" class="notification--field block" placeholder="{s name='DetailNotifyLabelMail'}{/s}" />
-			{/block}
+		{if !$NotifyAlreadyRegistered}
+			<form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" class="notification--form block-group">
+				<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" />
+				{block name="frontend_detail_index_notification_field"}
+					<input name="sNotificationEmail" type="email" class="notification--field block" placeholder="{s name='DetailNotifyLabelMail'}{/s}" />
+				{/block}
 
-			{block name="frontend_detail_index_notification_button"}
-				<button type="submit" class="btn btn--primary notification--button block">
-					<i class="icon--mail"></i>
-				</button>
-			{/block}
-		</form>
+				{block name="frontend_detail_index_notification_button"}
+					<button type="submit" class="btn btn--primary notification--button block">
+						<i class="icon--mail"></i>
+					</button>
+				{/block}
+			</form>
+		{/if}
 	{/block}
 </div>

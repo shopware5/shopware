@@ -51,6 +51,8 @@
             }
 
             me.productSlider.trackItems();
+            me.productSlider.checkActiveState();
+            me.productSlider.trackArrows();
             me.productSlider.setSizes();
         },
 

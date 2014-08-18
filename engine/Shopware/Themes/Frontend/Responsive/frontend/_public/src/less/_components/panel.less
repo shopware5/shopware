@@ -333,10 +333,9 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--dot-nav {
-	.unitize(12, 16, bottom);
-    position: absolute;
+    position: relative;
 
-    a {
+    .dot--link, a {
         .unitize-variable(21, 16);
         .border-radius(11px);
         .unitize-margin(0, 5);
@@ -390,6 +389,7 @@ See the documentation of the child elements for additional information.
         border-width: 1px 1px 0 1px;
         border-style: solid;
         border-color: @borderColor;
+        white-space: nowrap;
 
         &.is--active {
             .unitize(1, 16, top);

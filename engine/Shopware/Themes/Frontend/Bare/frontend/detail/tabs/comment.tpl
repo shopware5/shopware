@@ -42,6 +42,8 @@
 
 	{* Publish product review *}
 	{block name='frontend_detail_comment_post'}
-		{include file="frontend/detail/comment/form.tpl"}
+		<div class="review--form-container">
+			{include file="frontend/detail/comment/form.tpl"}
+		</div>
 	{/block}
 </div>

@@ -42,11 +42,13 @@
      *
      * @returns {Void}
      */
-    Plugin.prototype.init = function () {
+    Plugin.prototype.init = function() {
         var me = this;
 
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
+
+        me.currentState = StateManager.getCurrent();
 
         me.$additionalTriggers = $('*[data-show-tab="true"]');
 
@@ -58,12 +60,19 @@
             me.createDesktopView();
         }
 
-	    $(window).on('resize', function () {
+	    $(window).on('resize.' + pluginName, function () {
+
+            if (StateManager.getCurrent() == me.currentState) {
+                return;
+            }
+
             if (StateManager.isSmartphone()) {
-                    me.createMobileView();
-                } else {
-                    me.createDesktopView();
-                }
+                me.createMobileView();
+            } else {
+                me.createDesktopView();
+            }
+
+            me.currentState = StateManager.getCurrent();
         });
 
         me.$additionalTriggers.each(function() {
@@ -208,7 +217,9 @@
 
         me.$additionalTriggers.off(clickEvt + '.' + pluginName);
 
-        me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
+        $(window).off('resize.' + pluginName);
+
+        me.$nav.find('.navigation--link').off(clickEvt + '.' + pluginName);
     };
 
     $.fn[pluginName] = function (options) {
