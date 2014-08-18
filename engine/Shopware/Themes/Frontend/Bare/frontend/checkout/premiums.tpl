@@ -43,13 +43,15 @@
                                                         </div>
                                                     {/if}
 
-                                                    {if $premium.sArticle.image.src}
-                                                        <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}"
-                                                             title="{$premium.sArticle.articleName}">
-                                                    {else}
-                                                        <img src="{link file='frontend/_resources/images/no_picture.jpg'}"
-                                                             alt="{s name="PremiumInfoNoPicture"}{/s}">
-                                                    {/if}
+													{block name='frontend_checkout_premium_image_element'}
+														<span class="image--element">
+															{if $premium.sArticle.image.src}
+																<img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}" title="{$premium.sArticle.articleName}">
+															{else}
+																<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name="PremiumInfoNoPicture"}{/s}">
+															{/if}
+														</span>
+													{/block}
                                                 </a>
                                             {/block}
 

@@ -6,8 +6,7 @@
     .account--change-billing,
     .account--billing-address,
     .account--change-shipping,
-    .account--shipping-address
-    {
+    .account--shipping-address {
         width: 100% !important;
     }
 }
@@ -279,7 +278,7 @@
     .unitize-margin(10, 0);
 }
 .premium-product--content {
-    .unitize-height(360);
+    .unitize-height(390);
 
     .product-slider--container {
         padding: 0;
@@ -288,7 +287,7 @@
 .premium-product {
 
     p {
-        .unitize-margin(0, 0, 16);
+        .unitize-margin(0, 0, 16, 0);
     }
 
     .premium-product--difference {
@@ -311,20 +310,13 @@
         .unitize-margin(0, 0, 10);
 
         .product--image {
-            .border-radius();
+            .border-radius(3px);
             .unitize(175, 16, min-height);
             .unitize-margin(0, 0, 15, 0);
             display: block;
             border: 1px solid @borderColor;
             position: relative;
             text-align: center;
-
-            &::before {
-                content: '';
-                display: inline-block;
-                height: 100%;
-                vertical-align: middle;
-            }
         }
 
         .premium-product--badge {
@@ -598,6 +590,7 @@
 		}
 
         .premium-product--content {
+            .unitize-height(320);
             border: 0 none;
         }
 
