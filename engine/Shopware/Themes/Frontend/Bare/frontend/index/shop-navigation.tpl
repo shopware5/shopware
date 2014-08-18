@@ -1,6 +1,6 @@
 <nav class="shop--navigation block-group">
     <ul class="navigation--list block-group" role="menubar">
-    
+
         {* Menu (Off canvas left) trigger *}
         {block name='frontend_index_offcanvas_left_trigger'}
             <li class="navigation--entry entry--menu-left block" role="menuitem">
@@ -9,30 +9,30 @@
                 </a>
             </li>
         {/block}
-    
+
         {* Spacer *}
         {block name="frontend_index_shop_navigation_spacer"}
             <li class="navigation--entry entry--spacer block"></li>
         {/block}
-    
+
         {* Search form *}
         {block name='frontend_index_search'}
             <li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true">
                 <a class="btn entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}"|escape}">
                     <i class="icon--search"></i>
-    
+
                     {block name='frontend_index_search_display'}
                         <span class="search--display">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
                     {/block}
                 </a>
-    
+
                 {* Include of the search form *}
                 {block name='frontend_index_search_include'}
                     {include file="frontend/index/search.tpl"}
                 {/block}
             </li>
         {/block}
-    
+
         {* My account entry *}
         {block name="frontend_index_checkout_actions_my_options"}
             <li class="navigation--entry entry--account block" role="menuitem">
@@ -43,14 +43,14 @@
                 {/block}
             </li>
         {/block}
-    
+
         {* Cart entry *}
         {block name='frontend_index_checkout_actions'}
             <li class="navigation--entry entry--cart block" role="menuitem">
                 <a class="entry--link entry--trigger" href="{url controller='checkout' action='cart'}" title="{"{s name="IndexTitleCartToggle"}Warenkorb anzeigen / ausblenden{/s}"|escape}">
                     <i class="icon--basket"></i>
                 </a>
-    
+
                 {* Include of the cart *}
                 {block name='frontend_index_checkout_actions_include'}
                     {action module=widgets controller=checkout action=info}

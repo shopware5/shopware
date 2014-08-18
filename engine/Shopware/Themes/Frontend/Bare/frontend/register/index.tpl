@@ -143,12 +143,12 @@
             {/block}
         </div>
     {/block}
-    
+
     {* Register Login *}
     {block name='frontend_register_index_login'}
         {include file="frontend/register/login.tpl"}
     {/block}
-    
+
     {* Register advantages *}
     {block name='frontend_register_index_advantages'}
         <div class="register--advantages block">
@@ -161,21 +161,21 @@
                             {s name='RegisterInfoAdvantagesEntry1'}{/s}
                         </li>
                     {/block}
-    
+
                     {block name='frontend_index_content_advantages_entry2'}
                         <li class="register--advantages-entry">
                             <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry2'}{/s}
                         </li>
                     {/block}
-    
+
                     {block name='frontend_index_content_advantages_entry3'}
                         <li class="register--advantages-entry">
                             <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry3'}{/s}
                         </li>
                     {/block}
-    
+
                     {block name='frontend_index_content_advantages_entry4'}
                         <li class="register--advantages-entry">
                             <i class="icon--check"></i>
@@ -188,7 +188,3 @@
     {/block}
 
 {/block}
-
-
-
-

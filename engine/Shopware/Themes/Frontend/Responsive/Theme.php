@@ -37,41 +37,41 @@ class Theme extends \Shopware\Components\Theme
      */
     protected $license = '__license__';
 
-	/**
-	 * Javascript files which will be used in the theme
-	 *
-	 * @var array
-	 */
-	protected $javascript = array(
+    /**
+     * Javascript files which will be used in the theme
+     *
+     * @var array
+     */
+    protected $javascript = array(
 
         // Third party plugins / libraries
-		'vendors/jquery/dist/jquery.min.js',
-		'vendors/picturefill/picturefill.js',
-		'vendors/jquery.transit/jquery.transit.js',
-		'vendors/jquery.event.move/js/jquery.event.move.js',
-		'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
-		'vendors/glidejs/dist/jquery.glide.min.js',
+        'vendors/jquery/dist/jquery.min.js',
+        'vendors/picturefill/picturefill.js',
+        'vendors/jquery.transit/jquery.transit.js',
+        'vendors/jquery.event.move/js/jquery.event.move.js',
+        'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
+        'vendors/glidejs/dist/jquery.glide.min.js',
 
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',
         'src/js/jquery.plugin-base.js',
-		'src/js/jquery.state-manager.js',
-		'src/js/jquery.storage-manager.js',
-		'src/js/jquery.emotions.js',
-		'src/js/jquery.off-canvas-menu.js',
-		'src/js/jquery.search-field.js',
-		'src/js/jquery.slide-panel.js',
-		'src/js/jquery.tab-navigation.js',
-		'src/js/jquery.image-slider.js',
-		'src/js/jquery.image-zoom.js',
-		'src/js/jquery.collapse-panel.js',
-		'src/js/jquery.collapse-text.js',
-		'src/js/jquery.auto-submit.js',
-		'src/js/jquery.scroll.js',
-		'src/js/jquery.product-slider.js',
-		'src/js/jquery.register.js',
-		'src/js/jquery.modal.js',
-		'src/js/jquery.selectbox-replacement.js',
+        'src/js/jquery.state-manager.js',
+        'src/js/jquery.storage-manager.js',
+        'src/js/jquery.emotions.js',
+        'src/js/jquery.off-canvas-menu.js',
+        'src/js/jquery.search-field.js',
+        'src/js/jquery.slide-panel.js',
+        'src/js/jquery.tab-navigation.js',
+        'src/js/jquery.image-slider.js',
+        'src/js/jquery.image-zoom.js',
+        'src/js/jquery.collapse-panel.js',
+        'src/js/jquery.collapse-text.js',
+        'src/js/jquery.auto-submit.js',
+        'src/js/jquery.scroll.js',
+        'src/js/jquery.product-slider.js',
+        'src/js/jquery.register.js',
+        'src/js/jquery.modal.js',
+        'src/js/jquery.selectbox-replacement.js',
         'src/js/jquery.captcha.js',
         'src/js/jquery.drop-down-menu.js',
         'src/js/jquery.live-search.js',
@@ -82,13 +82,13 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.last-seen-products.js',
         'src/js/jquery.lightbox.js',
         'src/js/jquery.ajax-product-navigation.js',
-	    'src/js/jquery.newsletter.js',
-	    'src/js/jquery.menu-scroller.js',
+        'src/js/jquery.newsletter.js',
+        'src/js/jquery.menu-scroller.js',
         'src/js/jquery.shipping-payment.js',
         'src/js/jquery.add-article.js',
         'src/js/jquery.ui.datepicker.js',
-		'src/js/jquery.shopware-responsive.js'
-	);
+        'src/js/jquery.shopware-responsive.js'
+    );
 
     /**
      * @param Form\Container\TabContainer $container
@@ -218,8 +218,8 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet->addElement($this->createColorPickerField('errorBackground', 'errorBackground', '#f2dede'));
         $fieldSet->addElement($this->createColorPickerField('errorBorderColor', 'errorBorderColor', '#ebccd1'));
 
-	$fieldSet->addElement($this->createColorPickerField('inputErrorColor', 'inputErrorColor', '#ff0000'));
-	$fieldSet->addElement($this->createColorPickerField('inputErrorBackground', 'inputErrorBackground', '#fff0f0'));
+        $fieldSet->addElement($this->createColorPickerField('inputErrorColor', 'inputErrorColor', '#ff0000'));
+        $fieldSet->addElement($this->createColorPickerField('inputErrorBackground', 'inputErrorBackground', '#fff0f0'));
 
         return $fieldSet;
     }

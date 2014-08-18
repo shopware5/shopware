@@ -10,7 +10,7 @@
         .unitize-padding(10, 10, 10, 10, 16);
     }
     .logo--shop { width: 50% }
-    }
+}
 
 .logo--supportinfo {
     display: none;
@@ -102,14 +102,14 @@
     .entry--search {
         font-weight: bold;
 
-    [class^="icon--"] {
-        margin: 0;
-    }
+        [class^="icon--"] {
+            margin: 0;
+        }
 
-    .entry--trigger {
-        background: none;
-        border: 0 none;
-    }
+        .entry--trigger {
+            background: none;
+            border: 0 none;
+        }
 
         &.is--active {
             background: #fff;
@@ -337,7 +337,7 @@
             width: 35%;
         }
         .logo--shop { width: 82% }
-    }   
+    }
 
     // Header Support Info
     .is--ctl-checkout.is--minimal-header,
@@ -451,7 +451,7 @@
             .white-gradient();
             .unitize-margin(0, 10, 0, 10, 16);
             .border-radius();
-        border: 0 none;
+            border: 0 none;
             width: auto;
             float: none;
             display: inline-block;
@@ -487,44 +487,44 @@
             i { .unitize(10, 16, margin-right); }
         }
 
-    .entry--search .entry--trigger {
-        @backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
-        .linear-gradient(#fff, @primaryBackgroundColor);
-        border: 1px solid @lightDarkBorderColor;
-        border-bottom-color: lighten(@darkBorderColor, 40%);
+        .entry--search .entry--trigger {
+            @backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
+            .linear-gradient(#fff, @primaryBackgroundColor);
+            border: 1px solid @lightDarkBorderColor;
+            border-bottom-color: lighten(@darkBorderColor, 40%);
 
-        &:hover {
-        color: @primaryColor;
-        background: #fff;
+            &:hover {
+                color: @primaryColor;
+                background: #fff;
+            }
         }
-    }
 
         .cart--quantity { color: #fff; font-weight: normal }
 
         // Search entry
         .entry--search {
-          .unitize(14, 16, font-size);
-          margin-right: 7%;
-          background: #fff;
-          padding: 0;
-          border: 0 none;
-          width: 30%;
-          position: relative;
+            .unitize(14, 16, font-size);
+            margin-right: 7%;
+            background: #fff;
+            padding: 0;
+            border: 0 none;
+            width: 30%;
+            position: relative;
 
-          .icon--search {
-            .unitize(14, 16, top);
-            .unitize(14, 16, left);
-          }
+            .icon--search {
+                .unitize(14, 16, top);
+                .unitize(14, 16, left);
+            }
 
-          .entry--trigger { display: none }
+            .entry--trigger { display: none }
         }
 
         // Search form
         .main-search--form {
-          .box-shadow(0 0 0 transparent);
-          display: block;
-          padding: 0;
-          border: 0 none;
+            .box-shadow(0 0 0 transparent);
+            display: block;
+            padding: 0;
+            border: 0 none;
         }
     }
 
@@ -664,12 +664,12 @@
             .unitize-padding(9, 16, 9, 16, 16);
             margin-right: 0;
         }
-    .entry--link {
-        .unitize(14, 16, font-size);
-    }
-    .entry--trigger {
-        .unitize(14, 16, margin-right);
-    }
+        .entry--link {
+            .unitize(14, 16, font-size);
+        }
+        .entry--trigger {
+            .unitize(14, 16, margin-right);
+        }
 
         // Search entry
         .entry--search {
