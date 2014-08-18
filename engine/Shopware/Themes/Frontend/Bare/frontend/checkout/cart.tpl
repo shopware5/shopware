@@ -103,7 +103,7 @@
                     {* Premium products *}
                     {block name='frontend_checkout_cart_premium'}
                         {if $sPremiums}
-    
+
                             {* Actual listing *}
                             {block name='frontend_checkout_cart_premium_products'}
                                 {include file='frontend/checkout/premiums.tpl'}
@@ -139,7 +139,7 @@
                                         {/block}
                                     {/if}
                                 </div>
-    
+
                                 {if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
                                     {block name="frontend_checkout_actions_inquiry"}
                                         <a href="{$sInquiryLink}"
@@ -159,7 +159,7 @@
                     {/block}
                 </div>
             {/block}
-    
+
         {else}
             {* Empty basket *}
             {block name='frontend_basket_basket_is_empty'}
