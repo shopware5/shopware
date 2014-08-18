@@ -164,6 +164,10 @@ class Installer
      */
     private function synchronizeTemplates()
     {
+        if (!is_dir($this->pathResolver->getDefaultTemplateDirectory())) {
+            return;
+        }
+
         $directories = new \DirectoryIterator(
             $this->pathResolver->getDefaultTemplateDirectory()
         );
