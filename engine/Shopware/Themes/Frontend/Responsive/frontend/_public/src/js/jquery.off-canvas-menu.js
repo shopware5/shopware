@@ -122,8 +122,6 @@
         me.$closeButton = $(opts.closeButtonSelector);
         me.$overlay = $(opts.wrapSelector + ':before');
 
-        console.log(me.$overlay);
-
         me.$offCanvas.addClass(opts.offCanvasElementCls)
                      .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
                      .removeAttr('style');
