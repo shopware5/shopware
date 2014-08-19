@@ -135,21 +135,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $shop->setSecureHost($main->getSecureHost() ?: $main->getHost());
         }
 
+        // Redirect to secure URL is `alwaysSecure` is set
         if ($shop->getAlwaysSecure() && !$request->isSecure()) {
-            $url = sprintf('https://%s%s%s',
-                $shop->getSecureHost(),
-                $shop->getSecureBaseUrl(),
-                '/'
-            );
+            $url = $this->buildUrl('https', $shop->getSecureHost(), $shop->getSecureBaseUrl(), $request);
             $response->setRedirect($url, 301);
-            return;
-        } elseif (!$shop->getSecure() && $request->isSecure()) {
-            $url = sprintf('http://%s%s%s',
-                $shop->getHost(),
-                $shop->getBaseUrl(),
-                '/'
-            );
-            $response->setRedirect($url, 301);
+
             return;
         }
 
@@ -176,6 +166,34 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         $shop->registerResources(Shopware()->Bootstrap());
     }
+
+    /**
+     * Builds a new URL using an existing $request.
+     *
+     * @param string $scheme http or https
+     * @param string $hostname
+     * @param string $baseUrl
+     * @param Zend_Controller_Request_Http $request
+     * @return string
+     */
+    private function buildUrl($scheme, $hostname, $baseUrl, Zend_Controller_Request_Http $request)
+    {
+        $url = sprintf(
+            '%s://%s%s%s',
+            $scheme,
+            $hostname,
+            $baseUrl,
+            $request->getPathInfo()
+        );
+
+        $query = $request->getQuery();
+        if (!empty($query)) {
+            $url .= '?'.http_build_query($query);
+        }
+
+        return $url;
+    }
+
 
     /**
      * Event listener method
