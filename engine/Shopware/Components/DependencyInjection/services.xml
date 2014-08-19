@@ -146,6 +146,11 @@
             <argument>%shopware.db%</argument>
         </service>
 
+        <service id="guzzle_http_client" class="GuzzleHttp\Client" scope="prototype" />
+        <service id="http_client"   class="Shopware\Components\HttpClient\GuzzleHttpClient" scope="prototype">
+            <argument type="service" id="guzzle_http_client"/>
+        </service>
+
         <service id="cache_zend"
                  class="Zend_Cache_Core"
                  factory-class="Zend_Cache"
