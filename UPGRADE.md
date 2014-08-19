@@ -56,7 +56,8 @@ In this document you will find a changelog of the important changes related to t
     * Can be fetched from the container using the key `http_client`.
 * Deprecated Zend Framework components `Zend_Rest` and `Zend_Http`.
     * Will be removed in the next minor release.
-    * Use `http_client` from container instead
+    * Use `http_client` from container instead.
+* Increased minimum required PHP version to PHP >= 5.4.0.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

@@ -17,7 +17,7 @@ Visit the forum at <http://forum.shopware.de/>
 
 ### Shopware Server Requirements
 
-- PHP 5.3.2 or above
+- PHP 5.4.0 or above
 - PHP's `cURL` and `GD` library
 - An Apache web server
 - Apache's `mod_rewrite` module
