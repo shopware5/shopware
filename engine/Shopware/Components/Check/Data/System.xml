@@ -2,7 +2,7 @@
 <shopware>
 <requirements>
 	<requirement>
-	 	<name>php</name><group>core</group><required>5.3.2</required>
+	 	<name>php</name><group>core</group><required>5.4.0</required>
 	</requirement>
 	<requirement>
 	 	<name>Zend Optimizer</name><group>core</group><required>3.3.0</required>
