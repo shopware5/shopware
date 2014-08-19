@@ -3,7 +3,8 @@
 	<div class="product--delivery">
 		{if $sArticle.shippingfree}
 			<p class="delivery--shipping-free">
-				<strong>{s name="DetailDataInfoShippingfree"}{/s}</strong>
+				<span class="delivery--shipping-free-icon"><i class="icon--truck"></i></span>
+                <strong>{s name="DetailDataInfoShippingfree"}{/s}</strong>
 			</p>
 		{/if}
 		{if isset($sArticle.active )&& !$sArticle.active}
