@@ -12,6 +12,9 @@
 
         defaults: {
 
+            /* Setting for showing the image title in the zoom view */
+            showTitle: true,
+
             /* The css class for the container element which contains the image */
             containerCls: 'js--img-zoom--container',
 
@@ -20,6 +23,9 @@
 
             /* The css class for the container where the zoomed image is viewed */
             flyoutCls: 'js--img-zoom--flyout',
+
+            /* The css class for the container if the image title */
+            titleContainerCls: 'js--img-zoom--title',
 
             /* The selector for identifying the active image */
             activeSelector: '.is--active',
@@ -45,6 +51,10 @@
 
             me.$flyout = me.createFlyoutElement();
             me.$lens = me.createLensElement();
+
+            if (me.opts.showTitle) {
+                me.$title = me.createTitleContainer();
+            }
 
             me.zoomImage = false;
 
@@ -76,6 +86,7 @@
 
         /**
          * Creates the dom element for the lens.
+         *
          * @returns {*}
          */
         createLensElement: function() {
@@ -99,6 +110,24 @@
             return $('<div>', {
                 'class': me.opts.flyoutCls
             }).appendTo(me.$el);
+        },
+
+        /**
+         * Creates the container element
+         * for the image title in the zoom view.
+         *
+         * @returns {*}
+         */
+        createTitleContainer: function() {
+            var me = this;
+
+            if (!me.$flyout.length || !me.opts.showTitle) {
+                return;
+            }
+
+            return $('<div>', {
+                'class': me.opts.titleContainerCls
+            }).appendTo(me.$flyout);
         },
 
         /**
@@ -223,6 +252,22 @@
         },
 
         /**
+         * Sets the title of the zoom view.
+         *
+         * @param title
+         */
+        setImageTitle: function(title) {
+            var me = this,
+                title = title || me.imageTitle;
+
+            if (!me.opts.showTitle || !me.$title.length) {
+                return;
+            }
+
+            me.$title.html('<span>' + title + '</span>');
+        },
+
+        /**
          * Eventhandler for handling the
          * mouse movement on the image container.
          *
@@ -272,6 +317,7 @@
             me.$activeImageElement = me.getActiveImageElement();
             me.$activeImage = me.$activeImageElement.find('img');
 
+            me.imageTitle = me.$activeImageElement.attr('data-alt');
             me.imageWidth = me.$activeImage.innerWidth();
             me.imageHeight = me.$activeImage.innerHeight();
             me.imageOffset = me.$activeImage.offset();
@@ -296,6 +342,10 @@
 
                     me.setLensSize(me.factor);
                     me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0px 0px no-repeat #fff');
+
+                    if (me.opts.showTitle) {
+                        me.setImageTitle(me.title);
+                    }
                 };
 
                 me.zoomImage.src = me.zoomImageUrl;
