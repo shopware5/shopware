@@ -66,7 +66,7 @@ return array_merge($customConfig, array(
     'template' => array_merge(array(
         'compileCheck' => true,
         'compileLocking' => true,
-        'useSubDirs' => !ini_get('safe_mode'),
+        'useSubDirs' => true,
         'forceCompile' => false,
         'useIncludePath' => true,
         'charset' => 'utf-8',
@@ -98,10 +98,9 @@ return array_merge($customConfig, array(
         'save_handler' => 'db'
     ), $customConfig['session']),
     'phpSettings' => array_merge(array(
-        'error_reporting' => E_ALL | E_STRICT,
+        'error_reporting' => E_ALL,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
-        'zend.ze1_compatibility_mode' => 0
     ), $customConfig['phpSettings']),
     'cache' => array(
         'frontendOptions' => array_merge(array(
@@ -113,7 +112,7 @@ return array_merge($customConfig, array(
         'backendOptions' => array_merge(array(
             'hashed_directory_perm' => 0771,
             'cache_file_perm' => 0644,
-            'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
+            'hashed_directory_level' => 3,
             'cache_dir' => $this->DocPath('cache_general'),
             'file_name_prefix' => 'shopware'
         ), $customConfig['cache']['backendOptions']),
