@@ -71,9 +71,6 @@
 	 	<name>include_path</name><group>config</group><required>1</required>
 	</requirement>
 	<requirement>
-	 	<name>register_globals</name><group>config</group><required>0</required>
-	</requirement>
-	<requirement>
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
@@ -89,16 +86,10 @@
 	 	<name>post_max_size</name><group>config</group><required>8M</required>
 	</requirement>
 	<requirement>
-	 	<name>magic_quotes_gpc</name><group>config</group><required>0</required>
-	</requirement>
-	<requirement>
 	 	<name>allow_url_fopen</name><group>config</group><required>1</required>
 	</requirement>
 	<requirement>
 	 	<name>file_uploads</name><group>config</group><required>1</required>
-	</requirement>
-	<requirement>
-	 	<name>zend.ze1_compatibility_mode</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
 	 	<name>suhosin.session.cryptua</name><group>config</group><required>0</required>
@@ -107,9 +98,6 @@
         <name>suhosin.get.max_value_length</name><group>config</group><required>2000</required>
         <notice>When the "suhosin" PHP extension is loaded and the "get.max_value_length" is less than 2000, the Ext JS files cannot be loaded via GET request in the Shopware backend. This means that the Shopware backend can be partially uncached.</notice>
     </requirement>
-	<requirement>
-	 	<name>safe_mode</name><group>config</group><required>0</required>
-	</requirement>
 	<requirement>
 	 	<name>zip</name><group>other</group><required>1</required>
 	</requirement>

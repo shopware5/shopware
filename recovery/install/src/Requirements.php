@@ -301,22 +301,6 @@ class Requirements implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Checks the magic quotes config
-     *
-     * @return bool|string
-     */
-    public function checkMagicQuotes()
-    {
-        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-            return true;
-        } elseif (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Checks the disk free space
      *
      * @return bool|string
