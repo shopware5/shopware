@@ -85,12 +85,16 @@ class AdditionalTextService implements AdditionalTextServiceInterface
             }
         }
 
+        if (empty($required)) {
+            return $products;
+        }
+
         $configurations = $this->configuratorService->getProductsConfigurations(
             $required,
             $context
         );
 
-        foreach($required as $product) {
+        foreach($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;
             }
@@ -104,13 +108,13 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     }
 
     /**
-     * @param Group $configuration
+     * @param Group[] $configurations
      * @return string
      */
-    private function buildTextDynamic(Group $configuration)
+    private function buildTextDynamic($configurations)
     {
         $text = array();
-        foreach($configuration as $group) {
+        foreach($configurations as $group) {
             foreach($group->getOptions() as $option) {
                 $text[] = $option->getName();
             }
