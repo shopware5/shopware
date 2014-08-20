@@ -16,6 +16,7 @@ In this document you will find a changelog of the important changes related to t
 * Calling certain widget urls without the required parameters will no longer trigger a server error (returns 404 instead)
 * `Overview` and `Statistics` backend modules were adjusted to have matching data and differentiate between new users and new customers.
 * `Shopping worlds` pages without assigned categories now support SEO urls
+* The query passed in the `Shopware_Modules_Basket_GetBasket_FilterSQL` event will no longer include `s_core_units` join and fields
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

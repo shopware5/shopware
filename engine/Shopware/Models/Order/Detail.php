@@ -167,6 +167,20 @@ class Detail extends ModelEntity
     private $config = '';
 
     /**
+     * @var string $ean
+     *
+     * @ORM\Column(name="ean", type="string", length=255, nullable=true)
+     */
+    private $ean;
+
+    /**
+     * @var string $unit
+     *
+     * @ORM\Column(name="unit", type="string", length=255, nullable=true)
+     */
+    private $unit;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      * @var \Shopware\Models\Order\Order
@@ -706,5 +720,37 @@ class Detail extends ModelEntity
     public function getTaxRate()
     {
         return $this->taxRate;
+    }
+
+    /**
+     * @param string $ean
+     */
+    public function setEan($ean)
+    {
+        $this->ean = $ean;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEan()
+    {
+        return $this->ean;
+    }
+
+    /**
+     * @param string $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
     }
 }
