@@ -31,7 +31,6 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
-        'zend.ze1_compatibility_mode' => 0,
         'max_execution_time' => 0
     )
 ));
