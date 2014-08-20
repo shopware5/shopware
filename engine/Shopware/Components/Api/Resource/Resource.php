@@ -24,11 +24,12 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 
@@ -54,7 +55,7 @@ abstract class Resource
     /**
      * Contains the shopware model manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager = null;
 
@@ -116,19 +117,24 @@ abstract class Resource
         $name = ucfirst($name);
         $class = __NAMESPACE__ . '\\' . $name;
 
-        /** @var $resource Resource\Resource */
+        /** @var $resource \Shopware\Components\Api\Resource\Resource */
         $resource = new $class();
-
         $resource->setManager($this->getManager());
-        $resource->setAcl($this->getAcl());
-        $resource->setRole($this->getRole());
+
+        if ($this->getAcl()) {
+            $resource->setAcl($this->getAcl());
+        }
+
+        if ($this->getRole()) {
+            $resource->setRole($this->getRole());
+        }
 
         return $resource;
     }
 
     /**
      * @param string $privilege
-     * @throws \Shopware\Components\Api\Exception\PrivilegeException
+     * @throws ApiException\PrivilegeException
      */
     public function checkPrivilege($privilege)
     {
@@ -158,15 +164,15 @@ abstract class Resource
     }
 
     /**
-     * @param \Shopware\Components\Model\ModelManager $manager
+     * @param ModelManager $manager
      */
-    public function setManager(\Shopware\Components\Model\ModelManager $manager)
+    public function setManager(ModelManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getManager()
     {
@@ -267,13 +273,13 @@ abstract class Resource
      * If the data property contains the "__options_$optionName" value and this value contains
      * the "replace" parameter the collection will be cleared.
      *
-     * @param ArrayCollection $collection
+     * @param Collection $collection
      * @param $data
      * @param $optionName
      * @param $defaultReplace
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\Collection
      */
-    protected function checkDataReplacement(ArrayCollection $collection, $data, $optionName, $defaultReplace)
+    protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
     {
         $key = '__options_' . $optionName;
         if (isset($data[$key])) {
@@ -288,13 +294,13 @@ abstract class Resource
     }
 
     /**
-     * @param ArrayCollection $collection
+     * @param Collection $collection
      * @param $property
      * @param $value
      * @throws \Exception
      * @return null
      */
-    protected function getCollectionElementByProperty(ArrayCollection $collection, $property, $value)
+    protected function getCollectionElementByProperty(Collection $collection, $property, $value)
     {
         foreach ($collection as $entity) {
             $method = 'get' . ucfirst($property);
@@ -313,11 +319,11 @@ abstract class Resource
     }
 
     /**
-     * @param ArrayCollection $collection
+     * @param Collection $collection
      * @param array $conditions
      * @return null
      */
-    protected function getCollectionElementByProperties(ArrayCollection $collection, array $conditions)
+    protected function getCollectionElementByProperties(Collection $collection, array $conditions)
     {
         foreach ($conditions as $property => $value) {
             $entity = $this->getCollectionElementByProperty(
@@ -372,14 +378,14 @@ abstract class Resource
      * If no property is set, the function creates a new entity and adds the instance into the
      * passed collection and persist the entity.
      *
-     * @param ArrayCollection $collection
+     * @param Collection $collection
      * @param $data
      * @param $entityType
      * @param array $conditions
      * @return null|object
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
-    protected function getOneToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = array('id'))
     {
         foreach ($conditions as $property) {
             if (!isset($data[$property])) {
@@ -414,14 +420,14 @@ abstract class Resource
      * In case that the findOneBy statement finds no entity, the function throws an exception.
      * Otherwise the item will be
      *
-     * @param ArrayCollection $collection
+     * @param Collection $collection
      * @param $data
      * @param $entityType
      * @param array $conditions
      * @return null|object
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
-    protected function getManyToManySubElement(ArrayCollection $collection, $data, $entityType, $conditions = array('id'))
+    protected function getManyToManySubElement(Collection $collection, $data, $entityType, $conditions = array('id'))
     {
         $repo = $this->getManager()->getRepository($entityType);
         foreach ($conditions as $property) {
@@ -496,8 +502,8 @@ abstract class Resource
      * The resource needs to implement BatchInterface for that.
      *
      * @param $data
+     * @throws BatchInterfaceNotImplementedException
      * @return array
-     * @throws \RuntimeException
      */
     public function batch($data)
     {

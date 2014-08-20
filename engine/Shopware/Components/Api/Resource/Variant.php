@@ -25,8 +25,10 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
@@ -544,11 +546,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param ArrayCollection $options
+     * @param Collection $options
      * @param Image $image
      * @return Image\Mapping
      */
-    public function createImageMappingForOptions(ArrayCollection $options, Image $image)
+    public function createImageMappingForOptions(Collection $options, Image $image)
     {
         $mapping = new Image\Mapping();
         $mapping->setImage($image);
@@ -564,11 +566,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param ArrayCollection $availableImages
+     * @param Collection $availableImages
      * @param $mediaId
      * @return bool|Image
      */
-    private function getAvailableMediaImage(ArrayCollection $availableImages, $mediaId)
+    private function getAvailableMediaImage(Collection $availableImages, $mediaId)
     {
         /**@var $image Image*/
         foreach ($availableImages as $image) {
@@ -613,9 +615,15 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
             }
 
-            if (!isset($priceData['from'])) {
-                $priceData['from'] = 1;
-            }
+            // setup default values
+            $priceData += array(
+                'price'       => 0,
+                'basePrice'   => 0,
+                'pseudoPrice' => 0,
+                'percent'     => 0,
+                'from'        => '1',
+                'to'          => 'beliebig',
+            );
 
             $priceData['from'] = intval($priceData['from']);
             $priceData['to']   = intval($priceData['to']);
@@ -657,7 +665,7 @@ class Variant extends Resource implements BatchInterface
      * @param array $data
      * @param ArticleModel $article
      * @param Detail $variant
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
@@ -713,11 +721,11 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
      *
-     * @param ArrayCollection $availableGroups
+     * @param Collection $availableGroups
      * @param array $groupData
      * @return bool|Group
      */
-    private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
+    private function getAvailableGroup(Collection $availableGroups, array $groupData)
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
@@ -735,11 +743,11 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed option data is already existing in the passed array collection.
      * The option data are checked for "id" and "name".
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $availableOptions
+     * @param \Doctrine\Common\Collections\Collection $availableOptions
      * @param array $optionData
      * @return bool
      */
-    private function getAvailableOption(ArrayCollection $availableOptions, array $optionData)
+    private function getAvailableOption(Collection $availableOptions, array $optionData)
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
