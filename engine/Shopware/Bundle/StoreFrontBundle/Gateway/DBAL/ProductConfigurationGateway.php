@@ -86,6 +86,10 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
      */
     public function getList($products, Struct\Context $context)
     {
+        if (empty($products)) {
+            return array();
+        }
+
         $ids = array();
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
