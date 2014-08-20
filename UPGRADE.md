@@ -21,6 +21,7 @@ In this document you will find a changelog of the important changes related to t
     * Exceptions will no longer be shown in the store front
     * Exceptions are logged in a logfile since 4.2.0 (/logs)
     * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
+* Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
@@ -197,3 +198,4 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
+
