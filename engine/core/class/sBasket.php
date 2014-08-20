@@ -2079,26 +2079,32 @@ class sBasket
     private function loadBasketArticles()
     {
         $sql = "
-        SELECT s_order_basket.*, ad.packunit, ad.minpurchase, taxID, ad.instock AS instock,
-                suppliernumber,
-                ad.maxpurchase,
-                ad.purchasesteps,
-                ad.purchaseunit,
-                ad.unitID,
-                laststock,
-                ad.shippingtime,
-                ad.releasedate,
-                ad.releasedate AS sReleaseDate,stockmin, su.description AS itemUnit,
-               s_order_basket_attributes.attribute1 as ob_attr1,
-               s_order_basket_attributes.attribute2 as ob_attr2,
-               s_order_basket_attributes.attribute3 as ob_attr3,
-               s_order_basket_attributes.attribute4 as ob_attr4,
-               s_order_basket_attributes.attribute5 as ob_attr5,
-               s_order_basket_attributes.attribute6 as ob_attr6
+        SELECT
+            s_order_basket.*,
+            ad.packunit,
+            ad.minpurchase,
+            taxID,
+            ad.instock AS instock,
+            suppliernumber,
+            ad.maxpurchase,
+            ad.purchasesteps,
+            ad.purchaseunit,
+            ad.unitID,
+            laststock,
+            ad.shippingtime,
+            ad.releasedate,
+            ad.releasedate AS sReleaseDate,
+            ad.ean,
+            stockmin,
+            s_order_basket_attributes.attribute1 as ob_attr1,
+            s_order_basket_attributes.attribute2 as ob_attr2,
+            s_order_basket_attributes.attribute3 as ob_attr3,
+            s_order_basket_attributes.attribute4 as ob_attr4,
+            s_order_basket_attributes.attribute5 as ob_attr5,
+            s_order_basket_attributes.attribute6 as ob_attr6
         FROM s_order_basket
         LEFT JOIN s_articles_details AS ad ON ad.ordernumber = s_order_basket.ordernumber
         LEFT JOIN s_articles a ON (a.id = ad.articleID)
-        LEFT JOIN s_core_units su ON su.id = ad.unitID
         LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
