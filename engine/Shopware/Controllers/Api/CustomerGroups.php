@@ -70,7 +70,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
     /**
      * Create new customerGroup
      *
-     * POST /api/customerGroup
+     * POST /api/customerGroups
      */
     public function postAction()
     {
