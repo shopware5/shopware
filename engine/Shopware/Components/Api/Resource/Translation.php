@@ -567,7 +567,7 @@ class Translation extends Resource implements BatchInterface
     protected function getLinkIdByNumber($number)
     {
         throw new ApiException\CustomValidationException(
-            "Article links can not be founded over an alphanumeric key"
+            "Article links can not be found via an alphanumeric key"
         );
     }
 
@@ -582,7 +582,7 @@ class Translation extends Resource implements BatchInterface
     protected function getDownloadIdByNumber($number)
     {
         throw new ApiException\CustomValidationException(
-            "Article downloads can not be founded over an alphanumeric key"
+            "Article downloads can not be found via an alphanumeric key"
         );
     }
 
