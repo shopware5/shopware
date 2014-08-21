@@ -13,7 +13,7 @@
 {block name='frontend_listing_box_article_actions_buy_now' prepend}
 	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
 	   rel="nofollow"
-	   title="{s name='ListingBoxLinkCompare'}vergleichen{/s}"
+	   title="{"{s name='ListingBoxLinkCompare'}vergleichen{/s}"|escape}"
 	   class="product--action action--compare btn btn--secondary">
 		{se name='ListingBoxLinkCompare'}{/se}
 		<i class="icon--arrow-right is--right is--small"></i>
@@ -33,14 +33,14 @@
 
 {* Compare button 2 *}
 {block name='frontend_detail_actions_notepad' prepend}
-	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}" class="action--link action--compare">
+	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{"{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}"|escape}" class="action--link action--compare">
 		<i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
 	</a>
 {/block}
 
 {* Compare button note *}
 {block name='frontend_note_item_actions_compare'}
-	<a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="product--action action--compare btn btn--secondary" title="{s name='ListingBoxLinkCompare'}{/s}" rel="nofollow">
+	<a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="product--action action--compare btn btn--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
 		{s name='ListingBoxLinkCompare'}{/s}
 	</a>
 {/block}

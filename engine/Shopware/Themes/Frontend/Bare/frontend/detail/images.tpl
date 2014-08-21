@@ -28,7 +28,7 @@
 						   title="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
 
 							{block name='frontend_detail_image_thumbs_images_img'}
-								<img class="thumbnail--image" src="{$image.src.1}" alt="{if $image.res.description}{$image.res.description}{else}{$sArticle.articleName|escape:"html"}{/if}">
+								<img class="thumbnail--image" src="{$image.src.1}" alt="{if $image.res.description}{$image.res.description|escape}{else}{$sArticle.articleName|escape:"html"}{/if}">
 							{/block}
 						</a>
 					{/block}

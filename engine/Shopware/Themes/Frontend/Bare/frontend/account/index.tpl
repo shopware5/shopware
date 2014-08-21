@@ -106,9 +106,11 @@
 				{/block}
 
 				{block name="frontend_account_index_payment_method_actions"}
+					{$paymentMethodTitle = {"{s name='AccountLinkChangePayment'}{/s}"|escape}}
+					
 					<div class="panel--actions is--wide">
 						<a href="{url controller='account' action='payment'}"
-						   title="{s name='AccountLinkChangePayment'}{/s}"
+						   title="{$paymentMethodTitle|escape}"
 						   class="btn btn--secondary is--small">
 							{s name='AccountLinkChangePayment'}{/s}
 						</a>
@@ -244,10 +246,10 @@
 
 				{block name="frontend_account_index_primary_billing_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectBilling}" title="{s name='AccountLinkSelectBilling'}{/s}" class="btn btn--secondary is--small">
+						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn btn--secondary is--small">
 							{s name="AccountLinkSelectBilling"}{/s}
 						</a>
-						<a href="{url action=billing}" title="{s name='AccountLinkChangeBilling'}{/s}" class="btn btn--secondary is--small">
+						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn btn--secondary is--small">
 							{s name="AccountLinkChangeBilling"}{/s}
 						</a>
 					</div>
@@ -285,10 +287,10 @@
 
 				{block name="frontend_account_index_primary_shipping_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectShipping}" title="{s name='AccountLinkSelectShipping'}{/s}" class="btn btn--secondary is--small">
+						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn btn--secondary is--small">
 							{se name="AccountLinkSelectShipping"}{/se}
 						</a>
-						<a href="{url action=shipping}" title="{s name='AccountLinkChangeShipping'}{/s}" class="btn btn--secondary is--small">
+						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn btn--secondary is--small">
 							{se name="AccountLinkChangeShipping"}{/se}
 						</a>
 					</div>

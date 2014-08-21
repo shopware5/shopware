@@ -49,7 +49,7 @@
                             {* Contiune shopping *}
                             {if $sBasket.sLastActiveArticle.link}
                                 {block name="frontend_checkout_actions_link_last"}
-                                    <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                    <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left">
                                         {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                     </a>
                                 {/block}
@@ -60,7 +60,7 @@
                                 {* Forward to the checkout *}
                                 {if !$sMinimumSurcharge && !$sDispatchNoOrder}
                                     {block name="frontend_checkout_actions_checkout"}
-                                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+                                        <a href="{url action=confirm}" title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--primary right">
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
                                         </a>
                                     {/block}
@@ -115,7 +115,7 @@
                                 {* Contiune shopping *}
                                 {if $sBasket.sLastActiveArticle.link}
                                     {block name="frontend_checkout_actions_link_last_bottom"}
-                                        <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                        <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left">
                                             {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                         </a>
                                     {/block}
@@ -124,7 +124,7 @@
                                 {* Forward to the checkout *}
                                 {if !$sMinimumSurcharge && !$sDispatchNoOrder}
                                     {block name="frontend_checkout_actions_confirm_bottom_checkout"}
-                                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+                                        <a href="{url action=confirm}" title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--primary right">
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
                                         </a>
                                     {/block}
@@ -133,7 +133,7 @@
 
                             {if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
                                 {block name="frontend_checkout_actions_inquiry"}
-                                    <a href="{$sInquiryLink}" title="{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary btn--inquiry">
+                                    <a href="{$sInquiryLink}" title="{"{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary btn--inquiry">
                                         {s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
                                     </a>
                                 {/block}

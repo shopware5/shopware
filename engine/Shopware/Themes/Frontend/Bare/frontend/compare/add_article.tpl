@@ -5,7 +5,7 @@
 		<h2>{s name="CompareHeaderTitle"}{/s}</h2>
 		
 
-		<a href="#" class="modal_close" title="{s name='LoginActionClose'}{/s}">
+		<a href="#" class="modal_close" title="{"{s name='LoginActionClose'}{/s}"|escape}">
 			{s name='CompareActionClose'}{/s}
 		</a>
 	</div>

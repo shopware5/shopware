@@ -9,8 +9,8 @@
 			{block name='frontend_listing_box_article_actions_buy_now'}
 				{if !$sArticle.priceStartingFrom &&!$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
 					<a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}"
-					   title="{s name='ListingBoxLinkBuy'}{/s}"
-                       class="product--action action--buynow btn btn--secondary"
+					   title="{"{s name='ListingBoxLinkBuy'}{/s}"|escape}"
+					   class="product--action action--buynow btn btn--secondary"
                        data-add-article="true"
                        data-addArticleUrl="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}">
 						{s name='ListingBoxLinkBuy'}{/s}
@@ -31,8 +31,6 @@
 
 			{* @deprecated: misleading name *}
 			{block name="frontend_listing_box_article_actions_inline"}{/block}
-
 		</div>
-
     {/block}
 </div>

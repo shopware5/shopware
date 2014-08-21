@@ -18,7 +18,7 @@
 		</p>
 		{/s}
 	</div>
-	<a href="{url controller='index'}" title="{s name='PalpalPendingLinkHomepage'}{/s}" class="button-left large modal_close">
+	<a href="{url controller='index'}" title="{"{s name='PalpalPendingLinkHomepage'}{/s}"|escape}" class="button-left large modal_close">
 		{se name="PalpalPendingLinkHomepage"}{/se}
 	</a>
 </div>

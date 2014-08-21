@@ -19,10 +19,10 @@
 						{if $supplier.image}
 							<li id="n{$supKey+1}" class="filter--entry entry--image{if $sSupplierInfo.name eq $supplier.name} is--active{/if}">
 								{if $sSupplierInfo.name eq $supplier.name}
-									<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name}">
+									<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name|escape}">
 								{else}
-									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name}">
-										<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name}">
+									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name|escape}">
+										<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name|escape}">
 									</a>
 								{/if}
 							</li>
@@ -31,7 +31,7 @@
 								{if $sSupplierInfo.name eq $supplier.name}
 									{$supplier.name} ({$supplier.countSuppliers})
 								{else}
-									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name}">
+									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name|escape}">
                                         {$supplier.name}
 										({$supplier.countSuppliers})
                                     </a>
@@ -44,7 +44,7 @@
 				{if $sSupplierInfo.name}
 					<ul class="filter--list">
 						<li class="filter--entry">
-							<a class="filter--link link--close" href="{$sSupplierInfo.link|escape}" title="{s name='FilterLinkDefault'}Alle Anzeigen{/s}">
+							<a class="filter--link link--close" href="{$sSupplierInfo.link|escape}" title="{"{s name='FilterLinkDefault'}Alle Anzeigen{/s}"|escape}">
 								{se name='FilterLinkDefault'}Alle Anzeigen{/se}
 							</a>
 						</li>

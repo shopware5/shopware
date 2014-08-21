@@ -13,7 +13,7 @@
 
 			<div class="panel">
 				<form name="formSiegel" method="post" action="https://www.trustedshops.com/shop/certificate.php" target="_blank">
-					<input type="image" src="{link file='frontend/_public/src/img/logos/logo--trusted-shops-big.gif'}" title="{s name='WidgetsTrustedShopsHeadline'}{/s}" />
+					<input type="image" src="{link file='frontend/_public/src/img/logos/logo--trusted-shops-big.gif'}" title="{"{s name='WidgetsTrustedShopsHeadline'}{/s}"|escape}" />
 					<input name="shop_id" type="hidden" value="{config name=TSID}" />
 				</form>
 			</div>

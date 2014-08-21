@@ -32,7 +32,7 @@
 
 					{block name='frontend_tellafriend_headline'}
 						<h2 class="panel--title is--underline">
-							<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">{$sArticle.articleName}</a> {s name='TellAFriendHeadline'}{/s}
+							<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">{$sArticle.articleName}</a> {s name='TellAFriendHeadline'}{/s}
 						</h2>
 					{/block}
 

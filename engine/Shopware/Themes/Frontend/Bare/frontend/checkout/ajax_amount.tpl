@@ -1,5 +1,5 @@
 <div class="grid_2 last icon">
-    <a href="{url controller='checkout' action='cart'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}">
+    <a href="{url controller='checkout' action='cart'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}"|escape}">
         {if $sUserLoggedIn}{s name='IndexLinkCheckout'}{/s}{else}{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}{/if}
     </a>
 </div>
@@ -7,13 +7,13 @@
 <div class="grid_5 first display">
     <div class="basket_left">
         <span>
-            <a href="{url controller='checkout' action='cart'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}">
+            <a href="{url controller='checkout' action='cart'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}"|escape}">
                 {s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}
             </a>
         </span>
     </div>
     <div class="basket_right">
-        <span class="amount">{$sBasketAmount|currency}*</span>
+        <span class="amount">{$sBasketAmount|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
     </div>
 </div>
 

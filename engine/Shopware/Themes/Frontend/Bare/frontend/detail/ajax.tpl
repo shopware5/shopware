@@ -85,9 +85,9 @@
     <div class="upper-content">
         <div class="image">
             {if $sArticle.image.src.4}
-                <img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" />
+                <img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName|escape}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articleName|escape}{/if}" />
             {else}
-                <img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName}" />
+                <img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName|escape}" />
             {/if}
         </div>
         <div class="main-details">

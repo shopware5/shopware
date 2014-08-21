@@ -6,7 +6,7 @@
         {foreach $customPages as $item}
             {block name='frontend_index_left_menu_entry'}
                 <li class="navigation--entry{if $item.active} is--active{/if}" role="menuitem">
-                    <a class="navigation--link{if $item.active} is--active{/if}" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description}" {if $item.target}target="{$item.target}"{/if}>
+                    <a class="navigation--link{if $item.active} is--active{/if}" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description|escape}" {if $item.target}target="{$item.target}"{/if}>
                         {$item.description}
                     </a>
                     {block name="frontend_index_categories_left_entry_subcategories"}

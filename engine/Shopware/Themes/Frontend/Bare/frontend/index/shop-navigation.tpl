@@ -18,7 +18,7 @@
 		{* Search form *}
 		{block name='frontend_index_search'}
 			<li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true">
-				<a class="entry--link entry--trigger" href="#show-hide--search" title="{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}">
+				<a class="entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}"|escape}">
 					<i class="icon--search"></i>
 
 					{block name='frontend_index_search_display'}
@@ -37,7 +37,7 @@
 		{block name="frontend_index_checkout_actions_my_options"}
 			<li class="navigation--entry entry--account block" role="menuitem">
 				{block name="frontend_index_checkout_actions_account"}
-					<a href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}" class="entry--link">
+					<a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="entry--link">
 						<i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
 					</a>
 				{/block}
@@ -47,7 +47,7 @@
 		{* Cart entry *}
 		{block name='frontend_index_checkout_actions'}
 			<li class="navigation--entry entry--cart block" role="menuitem">
-				<a class="entry--link entry--trigger" href="{url controller='checkout' action='cart'}" title="{s name="IndexTitleCartToggle"}Warenkorb anzeigen / ausblenden{/s}">
+				<a class="entry--link entry--trigger" href="{url controller='checkout' action='cart'}" title="{"{s name="IndexTitleCartToggle"}Warenkorb anzeigen / ausblenden{/s}"|escape}">
 					<i class="icon--basket"></i>
 				</a>
 
