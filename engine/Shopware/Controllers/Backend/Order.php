@@ -1320,12 +1320,50 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
+        $articleDetails = null;
         // Add articleId if it's not provided by the client
         if ($data['articleId'] == 0 && !empty($data['articleNumber'])) {
             $detailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+            /** @var \Shopware\Models\Article\Detail $articleDetails */
             $articleDetails = $detailRepo->findOneBy(array('number' => $data['articleNumber']));
             if ($articleDetails) {
                 $data['articleId'] = $articleDetails->getArticle()->getId();
+            }
+        }
+        if (!$articleDetails && $data['articleId']) {
+            /** @var \Shopware\Models\Article\Detail $articleDetails */
+            $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
+                ->findOneBy(array('number' => $data['articleNumber']));
+        }
+
+        //Load ean, unit and pack unit (translate if needed)
+        if ($articleDetails) {
+            $data['ean'] = $articleDetails->getEan();
+            $data['packunit'] = $articleDetails->getPackUnit();
+
+            if ($articleDetails->getUnit()) {
+                $row = Shopware()->Db()->fetchRow(
+                    'SELECT s_core_shops.default, s_order.subshopID AS languageId
+                    FROM s_core_shops
+                    INNER JOIN s_order ON s_order.subshopID = s_core_shops.id
+                    WHERE s_order.id = :orderId
+                    LIMIT 1',
+                    array(
+                        'orderId' => $data['orderId']
+                    )
+                );
+
+                if ($row['default']) {
+                    $data['unit'] = $articleDetails->getUnit()->getName();
+                } else {
+                    $translator = new Shopware_Components_Translation();
+                    $unitTranslation = $translator->read(
+                        $row['languageId'],
+                        'config_units',
+                        1
+                    );
+                    $data['unit'] = $unitTranslation[$articleDetails->getUnit()->getId()]['description'] ? : $articleDetails->getUnit()->getName();
+                }
             }
         }
 
