@@ -87,12 +87,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $limit = $this->Request()->getParam('limit', null);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filter', null);
-        if (!empty($filter)) {
-            $filter = $filter[0]['value'];
-        }
+        $filter = $this->Request()->getParam('filterBy', null);
+        $categoryId = $this->Request()->getParam('categoryId', null);
 
-        $query = $this->getRepository()->getListQuery($filter, $sort, $offset, $limit);
+
+        $query = $this->getRepository()->getListQuery($filter, $sort, $offset, $limit, $categoryId);
         $count = Shopware()->Models()->getQueryCount($query);
         $emotions = $query->getArrayResult();
         foreach ($emotions as &$emotion) {
@@ -398,6 +397,29 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     public function duplicateAction()
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
+        $device = (int) $this->Request()->getParam('forDevice');
+
+        if(!$emotionId) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        /** @var \Shopware\Models\Emotion\Emotion $emotion */
+        $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
+
+        if(!$emotion) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        $new = clone $emotion;
+
+        $new->setDevice($device);
+        $new->setCreateDate(new \DateTime());
+        $new->setModified(new \DateTime());
+
+        Shopware()->Models()->persist($new);
+        Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => array()));
     }

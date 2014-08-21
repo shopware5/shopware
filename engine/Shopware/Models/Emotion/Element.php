@@ -337,4 +337,22 @@ class Element extends ModelEntity
         $this->component = $component;
     }
 
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $dataArray = array();
+        foreach($this->data as $data) {
+            $newData = clone $data;
+
+            $newData->setElement($this);
+
+            $dataArray[] = $newData;
+        }
+
+        $this->data = $dataArray;
+    }
 }

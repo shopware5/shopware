@@ -106,6 +106,13 @@ class Emotion extends ModelEntity
     private $containerWidth;
 
     /**
+     * @var integer $device
+     *
+     * @ORM\Column(name="device", type="integer", nullable=false)
+     */
+    private $device;
+
+    /**
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
@@ -630,5 +637,51 @@ class Emotion extends ModelEntity
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @param int $device
+     */
+    public function setDevice($device)
+    {
+        $this->device = $device;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $categories = array();
+        foreach($this->getCategories() as $category) {
+            $categories[] = $category;
+        }
+
+        $elements = array();
+        /**@var $element Element*/
+        foreach($this->getElements() as $element) {
+
+            $newElement = clone $element;
+            $newElement->setEmotion($this);
+
+            if ($newElement->getData()) {
+                /**@var $data Data*/
+                foreach($newElement->getData() as $data) {
+                    $data->setEmotion($this);
+                }
+            }
+
+            $elements[] = $newElement;
+        }
+
+        $this->elements = $elements;
+        $this->categories = $categories;
     }
 }

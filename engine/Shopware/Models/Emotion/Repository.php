@@ -41,11 +41,12 @@ class Repository extends ModelRepository
      * @param array $orderBy
      * @param integer $offset
      * @param integer $limit
+     * @param integer $categoryId
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($filter = null, $orderBy = null, $offset = null, $limit = null)
+    public function getListQuery($filter = null, $orderBy = null, $offset = null, $limit = null, $categoryId = null)
     {
-        $builder = $this->getListQueryBuilder($filter, $orderBy);
+        $builder = $this->getListQueryBuilder($filter, $orderBy, $categoryId);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
@@ -60,22 +61,55 @@ class Repository extends ModelRepository
      *
      * @param  array $filter
      * @param  array $orderBy
+     * @param  int $categoryId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($filter = null, $orderBy = null)
+    public function getListQueryBuilder($filter = null, $orderBy = null, $categoryId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('emotions', 'categories'))
                 ->from('Shopware\Models\Emotion\Emotion', 'emotions')
                 ->leftJoin('emotions.categories', 'categories');
 
-        //filter the displayed columns with the passed filter string
-        if (!empty($filter)) {
-            $builder->where('categories.name LIKE ?2')
-                    ->orWhere('emotions.name LIKE ?2')
-                    ->orWhere('emotions.modified LIKE ?2')
-                    ->setParameter(2, '%' . $filter . '%');
+        // filter by desktop devices
+        if (isset($filter) && $filter == 'onlyDesktop') {
+            $builder->andWhere('emotions.device = 0');
         }
+
+        // filter by tablet devices
+        if (isset($filter) && $filter == 'onlyTablet') {
+            $builder->andWhere('emotions.device = 1');
+        }
+
+        // filter by mobile devices
+        if (isset($filter) && $filter == 'onlyMobile') {
+            $builder->andWhere('emotions.device = 2');
+        }
+
+        // filter by active emotion worlds
+        if (isset($filter) && $filter == 'active') {
+            $builder->andWhere('emotions.active = 1');
+        }
+
+        // filter by landingpages
+        if (isset($filter) && $filter == 'onlyLandingpage') {
+            $builder->andWhere('emotions.isLandingPage = 1');
+        }
+
+        // filter by shopping worlds
+        if (isset($filter) && $filter == 'onlyWorld') {
+            $builder->andWhere('emotions.isLandingPage = 0');
+        }
+
+        // filter by categoryId
+        if (!empty($categoryId) && $categoryId != 'NaN') {
+            $path = '%|' . $categoryId . '|%';
+
+            $builder->andWhere('categories.path LIKE :category OR categories.id = :categoryId')
+                ->setParameter('category', $path)
+                ->setParameter('categoryId', $categoryId);
+        }
+
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         }
