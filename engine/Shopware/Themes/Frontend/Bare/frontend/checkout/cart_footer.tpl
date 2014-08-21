@@ -67,7 +67,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_sum_label'}
                             <div class="entry--label block">
-                                {s name="CartFooterSum"}{/s}
+                                {s name="CartFooterLabelSum"}{/s}
                             </div>
                         {/block}
 
@@ -85,7 +85,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_shipping_label'}
                             <div class="entry--label block">
-                                {s name="CartFooterShipping"}{/s}
+                                {s name="CartFooterLabelShipping"}{/s}
                             </div>
                         {/block}
 
@@ -103,7 +103,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_total_label'}
                             <div class="entry--label block">
-                                {s name="CartFooterTotal"}{/s}
+                                {s name="CartFooterLabelTotal"}{/s}
                             </div>
                         {/block}
 
