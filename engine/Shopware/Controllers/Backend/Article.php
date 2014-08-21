@@ -428,6 +428,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     Shopware()->Models()->persist($variant);
                 }
                 Shopware()->Models()->flush();
+                if ($data['translations']) {
+                    $this->overrideVariantTranslations($articleId, $variants);
+                }
             }
             $this->View()->assign(array('success' => true));
         } catch (Exception $e) {
@@ -541,6 +544,49 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Replaces the variant's translations with the article's.
+     * @param $articleId
+     * @param $variants array
+     */
+    protected function overrideVariantTranslations($articleId, $variants)
+    {
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
+
+        foreach ($variants as $variant) {
+            $this->getTranslationComponent()->delete(null, 'variant', $variant->getId());
+
+            foreach ($coreTranslations as &$coreTranslation) {
+                unset($coreTranslation['objectdata']['metaTitle']);
+                unset($coreTranslation['objectdata']['name']);
+                unset($coreTranslation['objectdata']['description']);
+                unset($coreTranslation['objectdata']['descriptionLong']);
+                unset($coreTranslation['objectdata']['keywords']);
+                $coreTranslation['objectkey'] = $variant->getId();
+                $coreTranslation['objecttype'] = 'variant';
+            }
+
+            $this->getTranslationComponent()->writeBatch($coreTranslations);
+        }
+    }
+
+    /**
+     * Copies translations from a configurator template into a variant
+     * @param $template The configurator template
+     * @param $detail \Shopware\Models\Article\Detail Variant
+     */
+    protected function copyConfigurationTemplateTranslations($template, $detail)
+    {
+        $templateTranslations = $this->getTranslationComponent()->readBatch(null, 'configuratorTemplate', $template['id']);
+
+        foreach ($templateTranslations as &$templateTranslation) {
+            $templateTranslation['objectkey'] = $detail->getId();
+            $templateTranslation['objecttype'] = 'variant';
+        }
+
+        $this->getTranslationComponent()->writeBatch($templateTranslations);
+    }
+
+    /**
      * Event listener function of the article backend module. Fired when the user clicks the "duplicate article" button
      * on the detail page to duplicate the whole article configuration for a new article.
      */
@@ -574,6 +620,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->duplicateArticleCustomerGroups($articleId, $newArticleId);
             $this->duplicateArticleRelated($articleId, $newArticleId);
             $this->duplicateArticleSimilar($articleId, $newArticleId);
+            $this->duplicateArticleTranslations($articleId, $newArticleId);
             $this->duplicateArticleDetails($articleId, $newArticleId, $mailDetailId);
             $this->duplicateArticleLinks($articleId, $newArticleId);
             $this->duplicateArticleImages($articleId, $newArticleId);
@@ -716,6 +763,23 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($link);
         }
         Shopware()->Models()->flush();
+    }
+
+    /**
+     * Internal helper function to duplicate the article translations from the passed article
+     * to the new article.
+     * @param $articleId
+     * @param $newArticleId
+     */
+    protected function duplicateArticleTranslations($articleId, $newArticleId)
+    {
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
+
+        foreach ($coreTranslations as &$coreTranslation) {
+            $coreTranslation['objectkey'] = $newArticleId;
+        }
+
+        $this->getTranslationComponent()->writeBatch($coreTranslations);
     }
 
     /**
@@ -870,7 +934,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             $data['prices'] = $prices;
 
-            // unset configuratorOptions and images. These are variantspecific and are going to be recreated later
+            // unset configuratorOptions and images. These are variant specific and are going to be recreated later
             unset($data['images']);
             unset($data['configuratorOptions']);
 
@@ -888,6 +952,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $detail->fromArray($data);
             Shopware()->Models()->persist($detail);
+            if ($detail->getAttribute()) {
+                Shopware()->Models()->persist($detail->getAttribute());
+            }
         }
         Shopware()->Models()->flush();
 
@@ -2243,7 +2310,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareGeneratorData($groups, $offset, $limit)
     {
-
         //we have to iterate all passed groups to check the activated options.
         $activeGroups = array();
         //we need a second array with all group ids to iterate them easily in the sql generation
@@ -2426,10 +2492,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
                 $detail->fromArray($data);
                 $detail->setArticle($article);
+                Shopware()->Models()->flush();
+
+                $this->copyConfigurationTemplateTranslations($detailData, $detail);
                 $offset++;
             }
 
-            Shopware()->Models()->flush();
             Shopware()->Models()->clear();
 
             $article = $this->getRepository()->find($articleId);
@@ -2704,6 +2772,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         Shopware()->Models()->persist($template);
         Shopware()->Models()->flush();
+
+        $this->createConfiguratorTemplateTranslations($template);
+    }
+
+    /**
+     * Copies all translations from an article into the respective configurator template
+     *
+     * @param \Shopware\Models\Article\Configurator\Template\Template $template
+     */
+    protected function createConfiguratorTemplateTranslations(\Shopware\Models\Article\Configurator\Template\Template $template)
+    {
+        $articleTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $template->getArticle()->getId());
+
+        foreach ($articleTranslations as &$articleTranslation) {
+            unset($articleTranslation['objectdata']['metaTitle']);
+            unset($articleTranslation['objectdata']['name']);
+            unset($articleTranslation['objectdata']['description']);
+            unset($articleTranslation['objectdata']['descriptionLong']);
+            unset($articleTranslation['objectdata']['keywords']);
+            $articleTranslation['objectkey'] = $template->getId();
+            $articleTranslation['objecttype'] = 'configuratorTemplate';
+        }
+
+        $this->getTranslationComponent()->writeBatch($articleTranslations);
     }
 
     /**

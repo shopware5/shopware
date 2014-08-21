@@ -428,7 +428,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return \Shopware\Models\Article\Article
      */
     public function getArticle()
     {
@@ -438,7 +438,7 @@ class Template extends ModelEntity
     /**
      * @param $article
      *
-     * @return Template
+     * @return \Shopware\Models\Article\Article
      */
     public function setArticle($article)
     {

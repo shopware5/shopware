@@ -40,8 +40,8 @@
  * @subpackage Detail
  */
 //{namespace name=backend/article/view/main}
-//{block name="backend/article/view/variant/configurator/mapping"}
-Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
+//{block name="backend/article/view/variant/configurator/option_edit"}
+Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
     /**
      * Define that the order main window is an extension of the enlight application window
      * @string
@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-mapping-window',
+    cls:Ext.baseCSSPrefix + 'article-option-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-mapping-window',
+    alias:'widget.article-option-window',
     /**
      * Set no border for the window
      * @boolean
@@ -76,13 +76,12 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      * Define window width
      * @integer
      */
-    width:400,
+    width:500,
     /**
      * Define window height
      * @integer
      */
-    height:300,
-
+    height:150,
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
@@ -91,25 +90,21 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-mapping-window',
+    stateId:'shopware-article-option-window',
     footerButton: false,
     minimizable: false,
     maximizable: false,
     modal: true,
+
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        title: '{s name=variant/configurator/mapping/title}Take over master data{/s}',
-        notice: '{s name=variant/configurator/mapping/notice}In this area you have the option to transfer selectable article information to the selected variant articles. If there is no selected variant article, the selected article information will be applied to all variant articles.{/s}',
-        attribute: '{s name=variant/configurator/mapping/attribute}Apply attribute configuration{/s}',
-        prices: '{s name=variant/configurator/mapping/prices}Apply price configuration{/s}',
-        basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
-        settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
-        translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
-        save: '{s name=variant/configurator/mapping/save}Save{/s}',
-        cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}'
+        title: '{s name=variant/configurator/option_edit/save_title}Edit option:{/s}',
+        save: '{s name=variant/configurator/sets/save}Save{/s}',
+        cancel: '{s name=variant/configurator/sets/cancel}Cancel{/s}',
+        nameField: '{s name=variant/configurator/option_edit/name_field}Option name{/s}'
     },
 
     /**
@@ -125,71 +120,65 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
     initComponent:function () {
         var me = this;
         me.registerEvents();
+        me.items = me.createItems();
         me.title = me.snippets.title;
-        me.items = me.createFormPanel();
         me.dockedItems = [ me.createToolbar() ];
         me.callParent(arguments);
-        if (me.record) {
-            me.formPanel.loadRecord(me.record);
-        }
+        me.formPanel.loadRecord(me.record);
     },
 
     /**
-     * Registers additional component events
+     * Registers additional component events.
      */
     registerEvents: function() {
         this.addEvents(
-            'acceptBaseData',
+            /**
+             * Event will be fired when the user clicks the save button.
+             *
+             * @event
+             * @param [Ext.data.Model] The option record.
+             * @param [object] This component
+             */
+            'saveOption',
+            /**
+             * Event will be fired when the user clicks the cancel button.
+             *
+             * @event
+             * @param [object] This component
+             */
             'cancel'
         );
     },
 
-    createFormPanel: function() {
+    /**
+     * Creates the form panel for the edit window.
+     * @return
+     */
+    createItems: function() {
         var me = this;
+
+        var nameField = Ext.create('Ext.form.field.Text', {
+            name: 'name',
+            allowBlank: false,
+            fieldLabel: me.snippets.nameField
+        });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',
             bodyPadding: 10,
             defaults: {
-                anchor: '100%',
-                labelWidth: 250,
-                xtype: 'checkbox',
-                checked: true,
-                inputValue: true,
-                uncheckedValue: false
+                anchor: '100%'
             },
-            items: me.createItems()
+            items: [ nameField ]
         });
+
         return [ me.formPanel ];
     },
 
-    createItems: function() {
-        var me = this;
-        var notice = Ext.create('Ext.container.Container', {
-            html: me.snippets.notice,
-            margin: '0 0 10',
-            cls: Ext.baseCSSPrefix + 'global-notice-text'
-        });
-
-        return [notice,
-        {
-            name: 'prices',
-            fieldLabel: me.snippets.prices
-        } , {
-            name: 'basePrice',
-            fieldLabel: me.snippets.basePrice
-        } , {
-            name: 'settings',
-            fieldLabel: me.snippets.settings
-        } , {
-            name: 'attributes',
-            fieldLabel: me.snippets.attribute
-        } , {
-            name: 'translations',
-            fieldLabel: me.snippets.translations
-        }];
-    },
-
+    /**
+     * Creates the toolbar for the window.
+     * @return
+     */
     createToolbar: function() {
         var me = this;
 
@@ -202,11 +191,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
                     cls:'primary',
                     text: me.snippets.save,
                     handler: function() {
-                        me.fireEvent('acceptBaseData', me);
-                        //mapping window opened over the detail window?
-                        if (me.detailWindow) {
-                            me.detailWindow.destroy();
-                        }
+                        me.fireEvent('saveOption', me.record, me.formPanel, me);
                     }
                 },
                 {
@@ -220,5 +205,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
             ]
         });
     }
+
 });
 //{/block}
