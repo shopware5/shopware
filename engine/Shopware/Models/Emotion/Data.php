@@ -106,6 +106,12 @@ class Data extends ModelEntity
     protected $element;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     */
+    protected $emotion;
+
+    /**
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Component")
      * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
      */
@@ -233,5 +239,32 @@ class Data extends ModelEntity
     public function setEmotionId($emotionId)
     {
         $this->emotionId = $emotionId;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $this->elementId = null;
+
+        $this->fieldId = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmotion()
+    {
+        return $this->emotion;
+    }
+
+    /**
+     * @param mixed $emotion
+     */
+    public function setEmotion($emotion)
+    {
+        $this->emotion = $emotion;
     }
 }

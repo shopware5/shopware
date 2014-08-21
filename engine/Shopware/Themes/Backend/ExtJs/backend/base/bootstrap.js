@@ -169,6 +169,7 @@
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}
 {include file='backend/base/component/Shopware.color.Window.js'}
+{include file='backend/base/component/Shopware.grid.ButtonColumn.js'}
 
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/boolean_select.js'}

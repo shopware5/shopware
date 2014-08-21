@@ -41,6 +41,12 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 	extend: 'Ext.grid.Panel',
     alias: 'widget.emotion-list-grid',
 
+    deviceWidth: {
+        desktop: 1024,
+        tablet: 768,
+        mobile: 320
+    },
+
     /**
      * Initializes the component and builds up the main interface
      *
@@ -104,18 +110,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             renderer: me.nameColumn
         }, {
             header: '{s name=grid/column/type}Type{/s}',
-            flex: 1,
-            renderer: function(view, meta, record) {
-                if(!record) {
-                    return false;
-                }
-
-                if(record.get('isLandingPage')) {
-                    return '{s name=grid/renderer/landingpage}Landingpage{/s}'
-                } else {
-                    return '{s name=grid/renderer/emotion}Emotion{/s}'
-                }
-            }
+            flex: 2,
+            renderer: me.typeColumn
         }, {
             header: '{s name=grid/column/container_width}Container width{/s}',
             dataIndex: 'emotions.containerWidth',
@@ -128,13 +124,23 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             flex: 1,
             renderer: me.modifiedColumn
         }, {
+            header: '{s name=grid/column/active}Active{/s}',
+            dataIndex: 'emotions.status',
+            flex: 1,
+            sortable: false,
+            renderer: me.statusColumn
+        },
+        {
             xtype: 'actioncolumn',
             header: '{s name=grid/column/action}Actions{/s}',
-            width: 75,
+            width: 80,
+            border: 0,
+            sortable: false,
             items: [
 			/*{if {acl_is_allowed privilege=delete}}*/
 			{
                 iconCls: 'sprite-minus-circle',
+                tooltip:'{s name=list/action_column/delete}Delete shopping world{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteemotion', record);
                 }
@@ -143,18 +149,109 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 			/*{if {acl_is_allowed privilege=update}}*/
 			{
                 iconCls: 'sprite-pencil',
+                tooltip:'{s name=list/action_column/edit}Edit shopping world{/s}',
                 handler: function(view, rowIndex, colIndex) {
                     me.fireEvent('editemotion', me, view, rowIndex, colIndex);
                 }
-            }
+            },
             /*{/if}*/
+            {
+                iconCls: 'sprite-globe--arrow',
+                tooltip:'{s name=list/action_column/preview}Preview shopping world{/s}',
+                handler: function(view, rowIndex, colIndex, record) {
+
+                    var listStore = view.getStore(),
+                        deviceId = listStore.getAt(rowIndex).get('device'),
+                        emotionId = listStore.getAt(rowIndex).get('id'),
+                        emotionName = listStore.getAt(rowIndex).get('name'),
+                        width = me.deviceWidth.desktop,
+                        device = 'Desktop';
+
+                    if(deviceId == 1) {
+                        device = 'Tablet';
+                        width = me.deviceWidth.tablet;
+                    } else if(deviceId == 2) {
+                        device = 'Mobile';
+                        width = me.deviceWidth.mobile;
+                    }
+
+                    me.previewWindow = Ext.create('Ext.window.Window', {
+                        title : "{s name=window/preview/title}Shopping world Preview{/s}: " + emotionName + ' (' + device + ')',
+                        width : width,
+                        height: '90%',
+                        layout : 'fit',
+                        items : [{
+                            xtype : "component",
+                            autoEl : {
+                                tag : "iframe",
+                                src : '{url module=widgets controller=emotion action=preview}/?emotionId=' + emotionId
+                            }
+                        }]
+                    }).show();
+
+                }
+            }
 			]
-        }];
+        },
+        me.createCopyDropdown(),
+        ];
 
         return columns;
     },
 
     /**
+     * Creates the copy split button with the
+     * device copy options.
+     */
+    createCopyDropdown: function() {
+        var me = this;
+        return {
+            xtype: 'buttoncolumn',
+                width: 50,
+            header: '',
+            sortable: false,
+            borderLeftWidth: 0,
+            iconCls: 'sprite-document-copy',
+            buttonText: '',
+            tooltip: 'Einkaufswelt kopieren',
+            handler: function (view, rowIndex, colIndex) {
+            var listStore = view.getStore();
+            var record = listStore.getAt(rowIndex);
+            var device = record.get('device');
+
+            me.fireEvent('duplicateemotion', me, record, device);
+        },
+            stopSelection: true,        //don't select record on button click
+                items: [
+            {
+                iconCls: 'sprite-television',
+                text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 0);
+                }
+            },
+            {
+                iconCls: 'sprite-media-player-phone-horizontal',
+                text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 1);
+                }
+            },
+            {
+                iconCls: 'sprite-media-player-phone',
+                text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 2);
+                }
+            }
+        ]
+        }
+    },
+
+    /** 
      * Column renderer function for the category name column.
      * @param [string] value    - The field value
      * @param [string] metaData - The model meta data
@@ -179,6 +276,37 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
     nameColumn: function(value, metaData, record) {
         return record.get('name');
     },
+
+
+    /**
+     * Column renderer function for the emotion type column.
+     * @param [string] value    - The field value
+     * @param [string] metaData - The model meta data
+     * @param [string] record   - The whole data model
+     */
+    typeColumn: function(value, metaData, record) {
+        if(!record) {
+            return false;
+        }
+
+        var type = '{s name=grid/renderer/emotion}Emotion{/s}',
+            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
+
+        // Type detection
+        if(record.get('isLandingPage')) {
+            type = '{s name=grid/renderer/landingpage}Landingpage{/s}'
+        }
+
+        // Device detection
+        if(record.get('device') == 1) {
+            device = '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Tablets sichtbar">&nbsp;</div>';
+        } else if(record.get('device') == 2) {
+            device = '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
+        }
+
+        return device + type;
+    },
+
     /**
      * Column renderer function for the category name column.
      * @param [string] value    - The field value
@@ -196,9 +324,20 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      */
     modifiedColumn: function(value, metaData, record) {
        return Ext.util.Format.date(record.get('modified')) + ' ' + Ext.util.Format.date(record.get('modified'), 'H:i:s');
+    },
+
+    /**
+     * Column renderer function for the emotion status column.
+     * @param [string] value    - The field value
+     * @param [string] metaData - The model meta data
+     * @param [string] record   - The whole data model
+     */
+    statusColumn: function(value, metaData, record) {
+        if (record.get('active')) {
+            return '<div class="sprite-tick-small"  style="width: 25px; height: 25px">&nbsp;</div>';
+        } else {
+            return '<div class="sprite-cross-small" style="width: 25px; height: 25px">&nbsp;</div>';
+        }
     }
-
-
-
 });
 //{/block}

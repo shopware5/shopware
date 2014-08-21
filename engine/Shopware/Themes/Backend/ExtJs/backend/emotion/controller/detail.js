@@ -382,13 +382,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     },
 
-    onDuplicateEmotion: function(scope, record) {
+    onDuplicateEmotion: function(grid, record, device) {
         var me = this;
 
         Ext.Ajax.request({
             'url': '{url controller=emotion action=duplicate}',
             'params': {
-                emotionId: ~~(1 * record.get('id'))
+                emotionId: ~~(1 * record.get('id')),
+                forDevice: device
             },
             callback: function(operation, success, response) {
                 var response = Ext.decode(response.responseText);
@@ -400,7 +401,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, '{s name=duplicate/success_msg}The selected emotion was successful duplicated.{/s}');
                 }
 
-                me.getStore('Detail').load();
+                me.getListing().getStore().load();
             }
         })
     }
