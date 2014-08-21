@@ -6,15 +6,15 @@
             <div class="article_box">
             <!-- article 1 -->
             {if $image}
-            <a class="article-thumb-wrapper" title="{$article.articleName}" href="{$article.linkDetails}">
-                <img src="{$image}" title="{$article.articleName}" />
+            <a class="article-thumb-wrapper" title="{$article.articleName|escape}" href="{$article.linkDetails}">
+                <img src="{$image}" title="{$article.articleName|escape}" />
             </a>
             {else}
-            <a class="article-thumb-wrapper" title="{$article.articleName}" href="{$article.linkDetails}">
-                <img src="{link file="frontend/_resources/images/no_picture.jpg"}" title="{$article.articleName}" />
+            <a class="article-thumb-wrapper" title="{$article.articleName|escape}" href="{$article.linkDetails}">
+                <img src="{link file="frontend/_resources/images/no_picture.jpg"}" title="{$article.articleName|escape}" />
             </a>
             {/if}
-            <a title="{$article.articleName}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>
+            <a title="{$article.articleName|escape}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>
 
             {if $article.purchaseunit && $article.purchaseunit != 0}
                 <p class="article-purchase-unit">

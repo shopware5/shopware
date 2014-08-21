@@ -3,11 +3,11 @@
 	{* Picture *}
 	<div class="picture">
 		{block name="frontend_compare_article_picture"}
-		<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">
+		<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">
 			{if $sArticle.image.src}
-				<img src="{$sArticle.image.src.2}" alt="{$sArticle.articleName}" />
+				<img src="{$sArticle.image.src.2}" alt="{$sArticle.articleName|escape}" />
 			{else}
-				<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName}" />
+				<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName|escape}" />
 			{/if}
 		</a>
 		{/block}
@@ -16,10 +16,10 @@
 	{* Name *}
 	<div class="name">
 		{block name='frontend_compare_article_name'}
-			<h3><a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a></h3>
+			<h3><a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">{$sArticle.articleName|truncate:47}</a></h3>
 
 			{* More informations button *}
-			<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="button-right small_right">
+			<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="button-right small_right">
 				{s name='ListingBoxLinkDetails' namespace="frontend/listing/box_article"}{/s}
 			</a>
 		{/block}

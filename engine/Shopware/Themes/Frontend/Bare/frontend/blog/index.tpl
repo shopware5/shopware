@@ -12,7 +12,7 @@
 		{block name='frontend_blog_listing_filter_button'}
 			<div class="blog--filter-btn">
 				<a href="#"
-				   title="{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}"
+				   title="{"{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}"|escape}"
 				   class="filter--trigger btn btn--primary"
 				   data-collapseTarget=".blog--filter-options"
 				   data-offcanvas="true"

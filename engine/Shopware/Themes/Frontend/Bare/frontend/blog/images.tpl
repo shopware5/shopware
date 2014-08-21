@@ -7,13 +7,13 @@
 			<div class="blog--detail-images block">
 				<a href="{$sArticle.preview.media.path}"
                    data-lightbox="true"
-				   title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title|escape}{/if}"
+				   title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description|escape}{else}{$sArticle.title|escape}{/if}"
 				   class="link--blog-image">
 
                     <img src="{$sArticle.preview.thumbNails.3}"
                          class="blog--image panel has--border is--rounded"
                          alt="{$sArticle.title|escape}"
-                         title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title|escape}{/if}" />
+                         title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description|escape}{else}{$sArticle.title|escape}{/if}" />
 				</a>
 			</div>
 		{/block}
@@ -27,7 +27,7 @@
 							<a href="{link file=$sArticleMedia.media.path}" data-lightbox="true"
                                class="blog--thumbnail panel has--border is--rounded block"
                                data-lightbox="true"
-							   title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title|escape}{/if}">
+							   title="{if $sArticleMedia.description}{$sArticleMedia.description|escape}{else}{$sArticle.title|escape}{/if}">
 
                                <img class="blog--thumbnail-image" src="{link file=$sArticleMedia.thumbNails.1}" />
 							</a>

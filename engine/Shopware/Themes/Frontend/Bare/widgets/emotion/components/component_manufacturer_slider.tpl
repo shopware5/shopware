@@ -45,10 +45,10 @@
             <div class="inner-slide">
             {foreach $suppliers as $supplier}
                 <div class="supplier">
-                    <a href="{$supplier.link}" title="{$supplier.name}" class="image-wrapper{if !$supplier.image} text{/if}">
+                    <a href="{$supplier.link}" title="{$supplier.name|escape}" class="image-wrapper{if !$supplier.image} text{/if}">
                     {if $supplier.image}
                             <span class="vertical-center"></span>
-                            <img src="{$supplier.image}" alt="{$supplier.name}" />
+                            <img src="{$supplier.image}" alt="{$supplier.name|escape}" />
                     {else}
                         {$supplier.name}
                     {/if}

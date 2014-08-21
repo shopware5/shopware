@@ -10,7 +10,7 @@
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
             <li class="breadcrumb--button">
-                <a class="btn btn--grey" href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">
+                <a class="btn btn--grey" href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName|escape}">
                     <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
                 </a>
             </li>
@@ -63,9 +63,9 @@
 					{if $sArticle.supplierImg}
 						<div class="product--supplier block">
 							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}"
-							   title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"
+							   title="{"{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"|escape}"
 							   class="product--supplier-link">
-								<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
+								<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName|escape}">
 							</a>
 						</div>
 					{/if}

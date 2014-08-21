@@ -17,12 +17,12 @@
 							{if !$date.removeProperty}
 								{if $smarty.get.sFilterDate==$date.dateFormatDate}
 									{$filterDateActive=true}
-									<li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
+									<li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
 								{else}
-									<li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
+									<li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
 								{/if}
 							{elseif $filterDateActive}
-								<li class="filter--entry close"><a href="{$date.link}" class="filter--entry-link" title="{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+								<li class="filter--entry close"><a href="{$date.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
 							{/if}
 						{/foreach}
 					</ul>
@@ -51,12 +51,12 @@
 							{if !$author.removeProperty}
 								{if $smarty.get.sFilterAuthor==$author.name|urlencode}
 									{$filterAuthorActive=true}
-									<li class="is--active"><a href="{$author.link}" title="{$author.name}" class="filter--entry-link is--active is--bold">{$author.name} ({$author.authorCount})</a></li>
+									<li class="is--active"><a href="{$author.link}" title="{$author.name|escape}" class="filter--entry-link is--active is--bold">{$author.name} ({$author.authorCount})</a></li>
 								{else}
-									<li class="filter--entry{if $author@last} is--last{/if}"><a href="{$author.link}" class="filter--entry-link" title="{$author.name}">{$author.name} ({$author.authorCount})</a></li>
+									<li class="filter--entry{if $author@last} is--last{/if}"><a href="{$author.link}" class="filter--entry-link" title="{$author.name|escape}">{$author.name} ({$author.authorCount})</a></li>
 								{/if}
 							{elseif $filterAuthorActive}
-								<li class="filter--entry close"><a href="{$author.link}" class="filter--entry-link" title="{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+								<li class="filter--entry close"><a href="{$author.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
 							{/if}
 						{/foreach}
 					</ul>
@@ -85,12 +85,12 @@
 							{if !$tag.removeProperty}
 								{if $smarty.get.sFilterTags==$tag.name|urlencode}
 									{$filterTagsActive=true}
-									<li class="filter--entry is--active"><a href="{$tag.link}" title="{$tag.name}" class="filter--entry-link is--active is--bold">{$tag.name} ({$tag.tagsCount})</a></li>
+									<li class="filter--entry is--active"><a href="{$tag.link}" title="{$tag.name|escape}" class="filter--entry-link is--active is--bold">{$tag.name} ({$tag.tagsCount})</a></li>
 								{else}
-									<li class="filter--entry{if $tag@last} is--last{/if}"><a href="{$tag.link}" class="filter--entry-link" title="{$tag.name}">{$tag.name} ({$tag.tagsCount})</a></li>
+									<li class="filter--entry{if $tag@last} is--last{/if}"><a href="{$tag.link}" class="filter--entry-link" title="{$tag.name|escape}">{$tag.name} ({$tag.tagsCount})</a></li>
 								{/if}
 							{elseif $filterTagsActive}
-								<li class="filter--entry close"><a href="{$tag.link}" class="filter--entry-link" title="{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+								<li class="filter--entry close"><a href="{$tag.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
 							{/if}
 						{/foreach}
 					</ul>

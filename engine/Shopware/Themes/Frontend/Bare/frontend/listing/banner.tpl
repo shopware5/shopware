@@ -12,14 +12,14 @@
 
 				{* Image only banner *}
 				{block name='frontend_listing_image_only_banner'}
-					<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description}" title="{$sBanner.description}" />
+					<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description|escape}" title="{$sBanner.description|escape}" />
 				{/block}
 			{else}
 
 				{* Normal banner *}
 				{block name='frontend_listing_normal_banner'}
-					<a href="{if $sBanner.link}{$sBanner.link}{else}#{/if}" class="banner--link" {if $sBanner.link_target}target="{$sBanner.link_target}"{/if} title="{$sBanner.description}">
-						<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description}" title="{$sBanner.description}" />
+					<a href="{if $sBanner.link}{$sBanner.link}{else}#{/if}" class="banner--link" {if $sBanner.link_target}target="{$sBanner.link_target}"{/if} title="{$sBanner.description|escape}">
+						<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description|escape}" title="{$sBanner.description|escape}" />
 					</a>
 				{/block}
 			{/if}

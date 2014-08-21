@@ -6,16 +6,16 @@
             	<div class="blog-entry-inner{if $entry@last} last{/if}">
                     <div class="blog_img">
                        {if $image}
-                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({link file=$image}) no-repeat center center;" title="{$entry.title}">&nbsp;</a>
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background:url({link file=$image}) no-repeat center center;" title="{$entry.title|escape}">&nbsp;</a>
                        {else}
-                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">
+                            <a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title|escape}">
                                 {se name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/se}
                             </a>
                        {/if}
                     </div>
 	                
 	                <h2>
-	                	<a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title}">{$entry.title|truncate:40}</a>
+	                	<a href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title|escape}">{$entry.title|truncate:40}</a>
 	                </h2>
 	                {if $entry.shortDescription}
 	                    <p>{$entry.shortDescription|truncate:105}</p>

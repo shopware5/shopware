@@ -29,7 +29,7 @@
 	{* Banner mapping, similar to a image map *}
 	{if $Data.bannerMapping}
 		{foreach $Data.bannerMapping as $mapping}
-			<a href="{$mapping.link}"{if $mapping.linkLocation eq "external"} target="_blank"{/if} class="element-banner--mapping" style="width:{$mapping.width}px;height:{$mapping.height}px;left:{$mapping.x}px;top:{$mapping.y}px"{if $mapping.title} title="{$mapping.title}"{/if}></a>
+			<a href="{$mapping.link}"{if $mapping.linkLocation eq "external"} target="_blank"{/if} class="element-banner--mapping" style="width:{$mapping.width}px;height:{$mapping.height}px;left:{$mapping.x}px;top:{$mapping.y}px"{if $mapping.title} title="{$mapping.title|escape}"{/if}></a>
 			</a>
 		{/foreach}
 	{/if}

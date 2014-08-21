@@ -12,13 +12,13 @@
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
 <link rel="canonical" href="{if $sCategoryContent.sSelfCanonical}{$sCategoryContent.sSelfCanonical}{else}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/if}"
-      title="{if $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}"/>
+      title="{if $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}"/>
 {/block}
 
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}
-<link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description} RSS"
+<link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description|escape} RSS"
       href="{$sCategoryContent.rssFeed}"/>
-<link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description} ATOM"
+<link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description|escape} ATOM"
       href="{$sCategoryContent.atomFeed}"/>
 {/block}

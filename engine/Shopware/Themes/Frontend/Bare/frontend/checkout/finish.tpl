@@ -49,7 +49,7 @@
     {if $theme.checkoutHeader}
         <a href="{url controller='index'}"
            class="btn btn--grey is--small btn--back-top-shop"
-           title="{s name='FinishButtonBackToShop'}{/s}">
+           title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
             <i class="icon--arrow-left is--small"></i>
             {s name="FinishButtonBackToShop"}{/s}
         </a>
@@ -76,12 +76,12 @@
 							<p class="teaser--actions">
 
 								{* Back to the shop button *}
-								<a href="{url controller='index'}" class="btn btn--secondary teaser--btn-back" title="{s name='FinishButtonBackToShop'}{/s}">
+								<a href="{url controller='index'}" class="btn btn--secondary teaser--btn-back" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
 									<i class="icon--arrow-left"></i> {s name="FinishButtonBackToShop"}{/s}
 								</a>
 
 								{* Print button *}
-								<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
+								<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
 									{s name="FinishLinkPrint"}{/s}
 								</a>
 							</p>

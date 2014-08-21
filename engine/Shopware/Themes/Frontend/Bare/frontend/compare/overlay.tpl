@@ -2,7 +2,7 @@
 	{* Headline *}
 	<h2>{se name='CompareHeader'}{/se}</h2>
 
-	<a href="#close_compare" onclick="$.compare.hideCompareList()" class="modal_close" title="{s name='LoginActionClose'}{/s}">
+	<a href="#close_compare" onclick="$.compare.hideCompareList()" class="modal_close" title="{"{s name='LoginActionClose'}{/s}"|escape}">
 		{s name='CompareActionClose'}{/s}
 	</a>
 </div>

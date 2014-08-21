@@ -8,7 +8,7 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle}{elseif $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
+<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
 {/block}
 
 {* Title *}
@@ -18,6 +18,6 @@
 
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}
-<link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description}" href="{$sCategoryContent.rssFeed}" />
-<link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description}" href="{$sCategoryContent.atomFeed}" />
+<link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.rssFeed}" />
+<link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.atomFeed}" />
 {/block}

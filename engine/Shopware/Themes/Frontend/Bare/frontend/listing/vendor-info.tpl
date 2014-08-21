@@ -13,7 +13,7 @@
             <div class="hero--content panel--body is--wide">
                 {if $sSupplierInfo.description}
                     {if $sSupplierInfo.image}
-                        <img class="hero--image" src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}">
+                        <img class="hero--image" src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name|escape}">
                     {/if}
 
                     <div class="hero--text">
@@ -21,13 +21,13 @@
 					</div>
                 {else}
                     {if $sSupplierInfo.image}
-                        <img class="hero--image" src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}">
+                        <img class="hero--image" src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name|escape}">
                     {/if}
                 {/if}
 
                 {* Clear vendor filtering *}
                 {block name="frontend_listing_list_filter_supplier_clearing_link"}
-                    <a class="hero--link" href="{$sSupplierInfo.link}" title="{s name='ListingLinkAllSuppliers'}{/s}">
+                    <a class="hero--link" href="{$sSupplierInfo.link}" title="{"{s name='ListingLinkAllSuppliers'}{/s}"|escape}">
                         {s name='ListingLinkAllSuppliers'}{/s}
                     </a>
                 {/block}

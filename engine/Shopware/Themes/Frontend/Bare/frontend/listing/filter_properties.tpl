@@ -4,7 +4,7 @@
 		{block name="frontend_listing_filter_properties_box"}
 			{if $sPropertiesGrouped|@count > 1 && $sCategoryContent.showFilterGroups}
 				{foreach from=$sPropertiesGrouped item=sPropertyGroup key=name}
-					<a class="filter--link" href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryInfo.name}">
+					<a class="filter--link" href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryInfo.name|escape}">
 						<span{if $activeFilterGroup == $name} class="filter--indicator is--active"{/if}>{$name}</span>
 					</a>
 					{if $activeFilterGroup == $name}
@@ -20,7 +20,7 @@
 											</li>
 										{else}
 											<li class="filter--entry">
-                                                <a class="filter--link" href="{$optionValue.link}" title="{$sCategoryInfo.name}">
+                                                <a class="filter--link" href="{$optionValue.link}" title="{$sCategoryInfo.name|escape}">
                                                     {if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
                                                 </a>
 											</li>
@@ -28,7 +28,7 @@
 									{/foreach}
 									{if $value.properties.active}
 										<li class="filter--entry">
-                                            <a class="filter--link link--close" href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">
+                                            <a class="filter--link link--close" href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name|escape}">
                                                 {s name='FilterLinkDefault'}{/s}
                                             </a>
 										</li>
@@ -64,7 +64,7 @@
 										</li>
 									{else}
 										<li class="filter--entry">
-											<a class="filter--link" href="{$optionValue.link}" title="{$sCategoryInfo.name}">
+											<a class="filter--link" href="{$optionValue.link}" title="{$sCategoryInfo.name|escape}">
 												{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
 											</a>
 										</li>
@@ -72,7 +72,7 @@
 								{/foreach}
 								{if $value.properties.active}
 									<li class="filter--entry">
-										<a class="filter--link link--close" href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">
+										<a class="filter--link link--close" href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name|escape}">
 											{s name='FilterLinkDefault'}{/s}
 										</a>
 									</li>
