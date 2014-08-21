@@ -34,7 +34,9 @@
 					{* Descriptiontext *}
 					<p>{s name='WidgetsTrustedShopsText'}{/s}</p>
 
-					<input type="submit" class="btn btn--secondary" name="btnProtect" value="{s name='WidgetsTrustedShopsInfo'}{/s}" />
+					<button type="submit" class="btn btn--secondary" name="btnProtect">
+                        {s name='WidgetsTrustedShopsInfo'}{/s}
+                    </button>
 				</form>
 			</div>
 		</div>

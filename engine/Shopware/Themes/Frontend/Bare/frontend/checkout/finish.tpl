@@ -27,10 +27,20 @@
     {/if}
 {/block}
 
-{* Hide footer *}
+{* Footer *}
 {block name='frontend_index_footer'}
     {if !$theme.checkoutHeader}
         {$smarty.block.parent}
+    {else}
+        <div class="container footer-vat">
+            <div class="footer--vat-info">
+                {if $sOutputNet}
+                    <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
+                {else}
+                    <p>{s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
+                {/if}
+            </div>
+        </div>
     {/if}
 {/block}
 
@@ -165,7 +175,7 @@
 						{* @deprecated block *}
 						{block name='frontend_checkout_finish_header_items'}
 							{block name='frontend_checkout_finish_details_title'}
-								<h2 class="panel--title is--underline">{s name="FinishHeaderItems"}{/s}</h2>
+								<h2 class="panel--title is--underline">{s name="FinishHeaderInformation"}{/s}</h2>
 							{/block}
 						{/block}
 
@@ -189,14 +199,14 @@
 								{* Payment method *}
 								{block name='frontend_checkout_finish_payment_method'}
 									{if $sPayment.description}
-										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}</span> {$sPayment.description}<br />
+										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}:</span> {$sPayment.description}<br />
 									{/if}
 								{/block}
 
 								{* Dispatch method *}
 								{block name='frontend_checkout_finish_dispatch_method'}
 									{if $sDispatch.name}
-										<span class="is--bold">{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}</span> {$sDispatch.name}
+										<span class="is--bold">{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</span> {$sDispatch.name}
 									{/if}
 								{/block}
 							</div>
