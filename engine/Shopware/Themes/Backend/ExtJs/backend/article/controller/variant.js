@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantRemove: '{s name=variant/failure/variant_removed}An error occurred while removing the article variant [0]:{/s}',
             variantsRemove: '{s name=variant/failure/variants_removed}The article variants removed{/s}',
             fieldsViolation: '{s name=variant/failure/fields_violation}The following fields are not valid:{/s}',
-            generateNumbers: '{s name=variant/failure/generate_number}An error occured while regenerate the order number:{/s}',
+            generateNumbers: '{s name=variant/failure/generate_number}An error occurred while regenerate the order number:{/s}'
         },
         messages: {
             tableConfigurator: '{s name=variant/message/notice}A table configurator can only have two active groups!{/s}',
@@ -152,6 +152,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 cancel: me.onCancelEdit,
                 saveGroup: me.onSaveGroup
             },
+            'article-option-window': {
+                cancel: me.onCancelEdit,
+                saveOption: me.onSaveOption
+            },
             'article-sets-window': {
                 saveSet: me.onSaveConfiguratorSet,
                 cancel: me.onCancelEdit,
@@ -185,6 +189,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 deleteGroup: me.onDeleteGroup,
                 deleteOption: me.onDeleteOption,
                 editGroup: me.onEditGroup,
+                editOption: me.onEditOption,
                 defineDependency: me.onDefineDependency,
                 defineConfiguratorTemplate: me.onDefineConfiguratorTemplate,
                 definePriceSurcharge: me.onDefinePriceSurcharge
@@ -347,6 +352,20 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         window.show();
     },
 
+    /**
+     * Event listener function of the option grid. Fired over the edit action column
+     */
+    onEditOption: function(record) {
+        var me = this;
+
+        if (!record) {
+            return false;
+        }
+        var window = me.getView('variant.configurator.OptionEdit').create({
+            record: record
+        });
+        window.show();
+    },
 
     /**
      * Internal helper function to find all active groups.
@@ -394,6 +413,41 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                     message = Ext.String.format(me.snippets.failure.groupSave, name) + '<br>' + message;
                 } else {
                     message = Ext.String.format(me.snippets.failure.groupSave, name) + '<br>' + me.snippets.failure.noMoreInformation;
+                }
+                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+            }
+        });
+    },
+
+    /**
+     * Event listener function of the option edit window, fired over the save button.
+     * @param group
+     * @param form
+     * @param window
+     */
+    onSaveOption: function(option, form, window) {
+        var me = this;
+
+        if (!form.getForm().isValid()) {
+            return;
+        }
+        form.getForm().updateRecord(option);
+        window.destroy();
+        var name = option.get('name');
+        option.save({
+            success: function(record, operation) {
+                var message = Ext.String.format(me.snippets.success.optionSave, name);
+                Shopware.Notification.createGrowlMessage(me.snippets.success.title, message, me.snippets.growlMessage);
+                me.getConfiguratorOptionListing().reconfigure(me.getConfiguratorOptionListing().getStore());
+            },
+            failure: function(record, operation) {
+                var rawData = record.getProxy().getReader().rawData,
+                    message = rawData.message;
+
+                if (Ext.isString(message) && message.length > 0) {
+                    message = Ext.String.format(me.snippets.failure.optionSave, name) + '<br>' + message;
+                } else {
+                    message = Ext.String.format(me.snippets.failure.optionSave, name) + '<br>' + me.snippets.failure.noMoreInformation;
                 }
                 Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
             }
@@ -1986,7 +2040,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         if (record.get('prices') === false &&
             record.get('basePrice') === false &&
             record.get('attributes') === false &&
-            record.get('settings') === false) {
+            record.get('settings') === false &&
+            record.get('translations') === false) {
             return;
         }
 

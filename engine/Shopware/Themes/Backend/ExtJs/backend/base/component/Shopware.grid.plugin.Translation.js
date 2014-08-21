@@ -42,7 +42,8 @@
  *
  * @example Ext.create('Shopware.grid.plugin.Translation');
  */
-//{literal}
+//{namespace name=backend/base/grid_translation}
+//{block name="backend/base/grid_translation"}
 Ext.define('Shopware.grid.plugin.Translation', {
     /** @lends Ext.AbstractPlugin# */
 
@@ -122,6 +123,10 @@ Ext.define('Shopware.grid.plugin.Translation', {
      */
     actionColumnItemGetClassCallback: Ext.emptyFn,
 
+    snippets: {
+        tooltip: '{s name=translate_tooltip}Translate{/s}'
+    },
+
     /**
      * Class constructor.
      */
@@ -150,7 +155,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * Event listener function of grid panel which contains the translation plugin.
      * Fired when the grid reconfigured. The reconfigure event will be fired when a store
      * or columns configured for the grid panel.
-     * @return {Boolean}
+     * @return { Boolean }
      */
     onGridReconfigure: function() {
         var me = this;
@@ -204,7 +209,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
     /**
      * Internal helper function to check if the translation action item already added in the
      * grid panel.
-     * @return {Boolean}
+     * @return { Boolean }
      */
     hasGridTranslationColumn: function() {
         var me = this, translationItemExist = false;
@@ -229,7 +234,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * Helper function to check if the translation action item already added in the passed
      * action column.
      * @param column
-     * @return {Boolean}
+     * @return { Boolean }
      */
     hasActionColumnTranslationItem: function(column) {
         var me = this,
@@ -252,7 +257,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * Creates a new action column for the grid panel.
      * The passed actionColumn parameter can contains an already existing action column.
      *
-     * @return {Ext.grid.column.Action}
+     * @return { Ext.grid.column.Action }
      */
     createTranslationActionColumn: function(actionColumn) {
         var me = this, items = [], width = 0;
@@ -277,14 +282,14 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * Creates the action column item.
      * If the grid already has an action column, we don't need to create a own action column,
      * so we need only the item.
-     * @return {Object}
+     * @return { Object }
      */
     createTranslationActionColumnItem: function() {
         var me = this;
 
         return {
             iconCls: 'sprite-globe-green',
-            tooltip: 'Translate',
+            tooltip: me.snippets.tooltip,
             name: 'grid-translation-plugin',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.actionColumnClick(record);
@@ -298,7 +303,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * Iterates the grid column configuration and check for each column
      * if a translationEditor was passed. If a column has a translationEditor
      * configuration, it will be push in the internal property.
-     * @return {Boolean}
+     * @return { Boolean }
      */
     getTranslatableFields: function() {
         var me = this, field;
@@ -378,4 +383,4 @@ Ext.define('Shopware.grid.plugin.Translation', {
 
 });
 
-//{/literal}
+//{/block}
