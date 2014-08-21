@@ -48,7 +48,8 @@ body {
         .unitize(300, 16, right);
     }
 
-    &::before {
+    &:after,
+    &::after {
         .transition(opacity, 0.25s, ease-in-out);
         .opacity(0);
         content: '';
@@ -60,12 +61,12 @@ body {
         background: rgba(0, 0, 0, .5);
         z-index: 9998;
     }
+}
 
-    &.is--moved-left::before,
-    &.is--moved-right::before {
-        .opacity(1);
-        visibility: visible;
-    }
+.is--moved-left .page-wrap::after,
+.is--moved-right .page-wrap::after {
+    .opacity(1);
+    visibility: visible;
 }
 
 .navigation--smartphone {
@@ -140,5 +141,4 @@ body {
         top: 0;
         left: 0;
     }
-
 }
