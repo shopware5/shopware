@@ -588,9 +588,10 @@ class sOrder
                 taxID,
                 tax_rate,
                 ean,
-                unit
+                unit,
+                pack_unit
                 )
-                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s)
+                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s)
             ";
 
             $sql = sprintf($preparedQuery,
@@ -608,7 +609,8 @@ class sOrder
                 $basketRow["taxID"],
                 $basketRow["tax_rate"],
                 $this->db->quote((string) $basketRow["ean"]),
-                $this->db->quote((string) $basketRow["itemUnit"])
+                $this->db->quote((string) $basketRow["itemUnit"]),
+                $this->db->quote((string) $basketRow["packunit"])
             );
 
 
