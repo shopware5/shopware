@@ -16,10 +16,6 @@
         width: 100%;
     }
 
-    .newsletter--error-messages {
-        .unitize(20, 16, margin-bottom);
-    }
-
     .newsletter--form {
         .border-radius();
     }
@@ -119,6 +115,11 @@
     }
 }
 
+// Padding Newsletter Error Message Tablet
+.newsletter--error-messages {
+	.unitize(30, 16, padding-top);
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     .newsletter--content .js--fancy-select {
@@ -159,6 +160,11 @@
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
+
+	// Padding Newsletter Error Message Desktop
+	.newsletter--error-messages {
+		.unitize(0, 16, padding-top);
+	}
 
     .newsletter--content {
         .unitize(45, 16, margin-top);

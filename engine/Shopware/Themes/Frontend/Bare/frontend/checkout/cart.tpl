@@ -9,18 +9,7 @@
 {block name='frontend_index_breadcrumb'}{/block}
 
 {* Step Box *}
-{block name="frontend_index_content_top"}
-	{* Empty basket *}
-	{if !$sBasket.content}
-        {block name='frontend_basket_basket_is_empty'}
-			<div class="panel">
-				<div class="panel--body">
-					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
-				</div>
-			</div>
-        {/block}
-	{/if}
-{/block}
+{block name="frontend_index_content_top"}{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
@@ -159,6 +148,14 @@
                 {/block}
             </div>
         {/block}
+
+	{else}
+		{* Empty basket *}
+		{block name='frontend_basket_basket_is_empty'}
+			<div class="basket--info-messages">
+				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+			</div>
+		{/block}
 	{/if}
 </div>
 {/block}
