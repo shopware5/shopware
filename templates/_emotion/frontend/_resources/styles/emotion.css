@@ -3911,6 +3911,8 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     background-clip: padding-box;
 }
 #buybox .configurator--variant .option--label img {
-    margin: 0 auto;
-    vertical-align: middle;
+    position: absolute;
+    margin: auto;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
 }
