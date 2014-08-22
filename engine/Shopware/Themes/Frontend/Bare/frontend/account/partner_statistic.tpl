@@ -1,11 +1,36 @@
 {extends file='frontend/account/index.tpl'}
 
 {block name="frontend_index_header_javascript_inline" append}
-    {* Configuration of the Partner Chart *}
+    {* Configuration of the partner chart *}
     jQuery.partnerChart =  {ldelim}
-    'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
-    'netAmountLabel': '{s name='PartnerStatisticLabelNetTurnover'}{/s}'
+        'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
+        'netAmountLabel': '{s name='PartnerStatisticLabelNetTurnover'}{/s}'
     {rdelim};
+
+    jQuery.datePickerRegional = {ldelim}
+        closeText: "{s name='PartnerDatePickerCloseText'}{/s}",
+        prevText: "{s name='PartnerDatePickerPrevText'}{/s}",
+        nextText: "{s name='PartnerDatePickerNextText'}{/s}",
+        currentText: "{s name='PartnerDatePickerCurrentText'}{/s}",
+        monthNames: [{s name='PartnerDatePickerMonthNames'}{/s}],
+        monthNamesShort: [{s name='PartnerDatePickerMonthShortNames'}{/s}],
+        dayNames: [{s name='PartnerDatePickerDayNames'}{/s}],
+        dayNamesShort: [{s name='PartnerDatePickerDayShortNames'}{/s}],
+        dayNamesMin: [{s name='PartnerDatePickerDayMinNames'}{/s}],
+        weekHeader: "{s name='PartnerDatePickerWeekHeader'}{/s}",
+        dateFormat: "{s name='PartnerDatePickerDateFormat'}{/s}",
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: "",
+        showOn: "button",
+        buttonText:"",
+        onSelect: function (dateText, inst) {ldelim}
+            $(this).parents('form').submit();
+        {rdelim}
+    {rdelim};
+
+    $('*[data-datepicker="true"]').datepicker(jQuery.datePickerRegional);
 {/block}
 
 {block name="frontend_index_header_javascript" append}
@@ -46,7 +71,7 @@
                             </div>
                         </div>
                         <div class="date-filter">
-                            <label class="date-filter--label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
+                            <label class="date-filter--label" for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
                             <div class="date-filter--input">
                                 <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                             </div>
