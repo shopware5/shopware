@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration302 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $statement = $this->getConnection()->prepare(
             "SELECT * FROM s_core_plugins WHERE name = 'Cron' AND installation_date IS NOT NULL"

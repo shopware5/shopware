@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration353 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
 	    // Add template
 	    $sql = <<<'EOD'

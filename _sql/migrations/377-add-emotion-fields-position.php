@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration377 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $this->addSql("ALTER TABLE s_library_component_field ADD position INT NOT NULL;");
         $this->addSql("UPDATE s_library_component_field SET position = id;");

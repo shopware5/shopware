@@ -5,7 +5,7 @@ class Migrations_Migration308 Extends Shopware\Components\Migrations\AbstractMig
      * Increase the lenght of all fields that contain the session id
      * to allow usage of secure/long session hashes like session.hash_function="sha512"
      */
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE s_core_sessions_backend MODIFY id VARCHAR(128);

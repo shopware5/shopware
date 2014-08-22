@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration352 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 CREATE TABLE IF NOT EXISTS `s_core_templates_config_elements` (

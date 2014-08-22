@@ -2,7 +2,7 @@
 
 class Migrations_Migration372 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $this->createTables();
         $this->addAcl();

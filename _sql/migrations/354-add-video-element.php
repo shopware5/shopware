@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration354 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
 	    $sql = <<<'EOD'
 INSERT INTO `s_library_component` (`name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`) VALUES
