@@ -475,6 +475,7 @@ class sBasket
 
         $premium = $this->db->fetchRow('
             SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
+              article.main_detail_id,
               detail.id as variantID, detail.additionaltext, premium.ordernumber_export,
               article.configurator_set_id
             FROM
@@ -497,9 +498,20 @@ class sBasket
             return false;
         }
 
-        $premium = $this->moduleManager->Articles()->sGetTranslation(
-            $premium, $premium["articleID"], "article"
-        );
+        // Load translations for article or variant
+        if ($premium['main_detail_id'] != $premium['variantID']) {
+            $premium = $this->moduleManager->Articles()->sGetTranslation(
+                $premium,
+                $premium['variantID'],
+                "variant"
+            );
+        } else {
+            $premium = $this->moduleManager->Articles()->sGetTranslation(
+                $premium,
+                $premium['articleID'],
+                "article"
+            );
+        }
 
         if ($premium['configurator_set_id'] > 0) {
             $premium = $this->moduleManager->Articles()->sGetTranslation(
@@ -2487,7 +2499,7 @@ class sBasket
     private function getArticleForAddArticle($id)
     {
         $sql = "
-            SELECT s_articles.id AS articleID, name AS articleName, taxID,
+            SELECT s_articles.id AS articleID, s_articles.main_detail_id, name AS articleName, taxID,
               additionaltext, s_articles_details.shippingfree, laststock, instock,
               s_articles_details.id as articledetailsID, ordernumber,
               s_articles.configurator_set_id
@@ -2520,11 +2532,22 @@ class sBasket
             return false;
         }
 
-        if ($article['configurator_set_id'] > 0) {
+        // Load translations for article or variant
+        if ($article['main_detail_id'] != $article['articledetailsID']) {
             $article = $this->moduleManager->Articles()->sGetTranslation(
-                $article, $article["variantID"], "variant"
+                $article,
+                $article['articledetailsID'],
+                "variant"
             );
+        } else {
+            $article = $this->moduleManager->Articles()->sGetTranslation(
+                $article,
+                $article['articleID'],
+                "article"
+            );
+        }
 
+        if ($article['configurator_set_id'] > 0) {
             $product = new StoreFrontBundle\Struct\ListProduct();
             $product->setAdditional($article['additionaltext']);
             $product->setVariantId($article["articledetailsID"]);
