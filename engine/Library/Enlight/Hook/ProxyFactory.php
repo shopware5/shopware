@@ -46,7 +46,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     protected $proxyNamespace;
 
     /**
-     * @var directory of the proxy
+     * @var string directory of the proxy
      */
     protected $proxyDir;
 
@@ -62,11 +62,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         '<?php
 class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_Proxy
 {
-    public function excuteParent($method, $args = array())
-    {
-        return $this->executeParent($method, $args);
-    }
-
     public function executeParent($method, $args = array())
     {
         return call_user_func_array(array($this, \'parent::\' . $method), $args);
@@ -97,9 +92,10 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * If no namespace is given, the default namespace _Proxies is used.
      * If no proxy directory is given, the default directory Proxies is used.
      *
-     * @param Enlight_Hook_HookManager $hookManager
-     * @param string $proxyNamespace
-     * @param string $proxyDir
+     * @param  Enlight_Hook_HookManager $hookManager
+     * @param  string                   $proxyNamespace
+     * @param  string                   $proxyDir
+     * @throws InvalidArgumentException
      */
     public function __construct($hookManager, $proxyNamespace, $proxyDir)
     {
@@ -125,7 +121,8 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * If the proxy is already created it is drawn by the
      * Enlight_Application::Instance()->Hooks()->getHooks($class) method.
      *
-     * @param string $class
+     * @param  string    $class
+     * @throws Exception
      * @return string
      */
     public function getProxy($class)
@@ -149,7 +146,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
     /**
      * Returns proxy class name
      *
-     * @param string $class
+     * @param  string $class
      * @return string
      */
     public function getProxyClassName($class)
@@ -160,7 +157,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
     /**
      * Formats the given class name.
      *
-     * @param string $class
+     * @param  string $class
      * @return string
      */
     public function formatClassName($class)
@@ -171,12 +168,13 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
     /**
      * Returns proxy file name for the given class.
      *
-     * @param string $class
+     * @param  string $class
      * @return string
      */
     public function getProxyFileName($class)
     {
         $proxyClassName = $this->formatClassName($class);
+
         return $this->proxyDir . $proxyClassName . $this->fileExtension;
     }
 
@@ -184,7 +182,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * This function creates the proxy class for the given class name.
      * The proxy class extends the original class and implements the Enlight_Hook_Proxy.
      *
-     * @param string $class
+     * @param  string       $class
      * @return mixed|string
      */
     protected function generateProxyClass($class)
@@ -216,9 +214,9 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
     /**
      * This function writes the generated proxy class to the file system.
      *
-     * @param string $fileName
-     * @param string $content
-     * @return bool
+     * @param  string            $fileName
+     * @param  string            $content
+     * @throws Enlight_Exception
      */
     protected function writeProxyClass($fileName, $content)
     {
@@ -226,7 +224,6 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
         if (!file_put_contents($fileName, $content)) {
             umask($oldMask);
             throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
-            return false;
         }
         chmod($fileName, 0644);
         umask($oldMask);
@@ -240,8 +237,8 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * the parameter definition. At last all hooked methods are implemented by the
      * $proxyMethodTemplate.
      *
-     * @param unknown_type $class
-     * @return unknown
+     * @param  string $class
+     * @return array
      */
     protected function generateMethods($class)
     {
@@ -302,6 +299,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             $method = str_replace($search, $replace, $method);
             $methods .= $method;
         }
+
         return array('array' => $methodsArray, 'methods' => $methods);
     }
 

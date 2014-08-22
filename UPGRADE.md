@@ -62,6 +62,7 @@ In this document you will find a changelog of the important changes related to t
 * When applying main data to variants, translations will also be overwritten, if selected
 * It is now possible to rename variant configurator options
 * It is now possible to add translations to configurator templates, which will then be used when generating variants
+* Removed legacy `excuteParent` method alias from generated hook proxy files
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
