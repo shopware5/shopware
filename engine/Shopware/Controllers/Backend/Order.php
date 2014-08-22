@@ -1343,9 +1343,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             if ($articleDetails->getUnit()) {
                 $row = Shopware()->Db()->fetchRow(
-                    'SELECT s_core_shops.default, s_order.subshopID AS languageId
+                    'SELECT s_core_shops.default, s_order.language AS languageId
                     FROM s_core_shops
-                    INNER JOIN s_order ON s_order.subshopID = s_core_shops.id
+                    INNER JOIN s_order ON s_order.language = s_core_shops.id
                     WHERE s_order.id = :orderId
                     LIMIT 1',
                     array(
