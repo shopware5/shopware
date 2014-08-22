@@ -3847,7 +3847,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     font-weight: bold;
 }
 #buybox .configurator--variant .variant--option {
-    width: 63px;
+    line-height: 57px;
     margin: 0 10px 10px 0;
     display: block;
     position: relative;
@@ -3892,11 +3892,11 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 }
 #buybox .configurator--variant .option--label {
     display: block;
+    height: 57px;
     width: 57px;
-    height: 26px;
     padding: 3px;
     margin: 0;
-    line-height: 26px;
+    line-height: 57px;
     position: relative;
     z-index: 1;
     border: 1px solid #DFDFDF;
@@ -3909,10 +3909,6 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box;
-}
-#buybox .configurator--variant .is--image .option--label {
-    height: 57px;
-    line-height: 57px;
 }
 #buybox .configurator--variant .option--label img {
     margin: 0 auto;
