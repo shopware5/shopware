@@ -8,7 +8,7 @@ if (file_exists($this->DocPath()."/config.php")){
 
 $stagingConfig = array(
     'db' => array_merge($defaultConfig["db"],array(
-        'dbname' => $defaultConfig["custom"]["staging_cache_general"]
+        'dbname' => $defaultConfig["custom"]["staging_database"]
     )),
     'custom' => array_merge($defaultConfig["custom"],array(
         'is_staging' => true,
@@ -35,4 +35,5 @@ $stagingConfig = array(
         'proxyNamespace' => $this->App() . '\ProxiesStaging'
     )
 );
+
 return $stagingConfig;
