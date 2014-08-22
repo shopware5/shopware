@@ -3909,6 +3909,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box;
+    overflow: hidden;
 }
 #buybox .configurator--variant .option--label img {
     position: absolute;
