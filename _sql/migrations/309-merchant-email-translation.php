@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration309 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
             UPDATE s_cms_static SET description = 'Merchant login' WHERE description = 'Reseller-Login';

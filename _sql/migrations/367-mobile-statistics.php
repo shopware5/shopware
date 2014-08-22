@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration367 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $statement = $this->getConnection()->query(
             "SHOW INDEX FROM s_statistics_article_impression WHERE KEY_NAME = 'articleId_2'"

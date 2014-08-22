@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration374 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         // Check if the table from the plugin is available
         try {

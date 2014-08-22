@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration128 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`) VALUES

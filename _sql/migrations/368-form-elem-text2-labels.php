@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration368 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         UPDATE s_cms_support_fields SET label = 'Straße ; Hausnummer' WHERE label = 'Straße / Hausnummer' AND typ = 'text2';

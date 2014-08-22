@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration113 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_core_config_elements`

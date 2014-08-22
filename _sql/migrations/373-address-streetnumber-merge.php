@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration373 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         /**
          * For each table that has street number info, we need to:

@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration365 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $this->addSql("UPDATE s_core_plugins SET version = '2.0.0' WHERE name = 'Google';");
 

@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration231 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
             ALTER TABLE  `s_core_config_elements` CHANGE  `description`  `description` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ;
