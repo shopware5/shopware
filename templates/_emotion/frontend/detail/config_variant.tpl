@@ -18,7 +18,7 @@
 								{foreach $configuratorGroup.values as $option}
 
 									{block name='frontend_detail_configurator_variant_group_option'}
-										<div class="variant--option{if $option.media} is--image{/if}">
+										<div class="variant--option">
 
 											{block name='frontend_detail_configurator_variant_group_option_input'}
 												<input type="radio"
@@ -28,7 +28,7 @@
 													   value="{$option.optionID}"
 													   data-auto-submit="true"
 													   {if !$option.selectable}disabled="disabled"{/if}
-													   {if $option.selected}checked="checked"{/if} />
+													   {if $option.selected && $option.selectable}checked="checked"{/if} />
 											{/block}
 
 											{block name='frontend_detail_configurator_variant_group_option_label'}
