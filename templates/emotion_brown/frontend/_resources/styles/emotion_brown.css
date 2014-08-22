@@ -767,3 +767,8 @@ div#notes .table_row a.zoom_picture {background-image: url(../images/icons/ico_z
 }
 
 .small {background: url(../../../../_emotion/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
+
+#buybox .configurator--variant .option--input:checked ~ label {
+    color: #613400;
+    border-color: #613400;
+}
