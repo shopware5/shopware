@@ -31,6 +31,9 @@ namespace Shopware\Components\Migrations;
  */
 abstract class AbstractMigration
 {
+    const MODUS_UPDATE = 'update';
+    const MODUS_INSTALL = 'install';
+
     /**
      * @var \PDO
      */
@@ -100,9 +103,10 @@ abstract class AbstractMigration
     }
 
     /**
+     * @param string $modus
      * @return void
      */
-    abstract public function up();
+    abstract public function up($modus);
 
     /**
      * @param string $sql

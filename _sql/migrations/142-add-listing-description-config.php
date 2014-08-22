@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration142 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $statement = $this->getConnection()->prepare("SELECT id FROM s_core_config_elements WHERE name = 'useShortDescriptionInListing'");
         $statement->execute();

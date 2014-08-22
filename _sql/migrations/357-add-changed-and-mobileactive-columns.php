@@ -2,7 +2,7 @@
 
 class Migrations_Migration357 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $dateTime = new DateTime();
         $date = $dateTime->format('Y-m-d H:i:s');

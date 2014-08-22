@@ -65,6 +65,6 @@ require $shopPath . '/engine/Shopware/Components/Migrations/AbstractMigration.ph
 require $shopPath . '/engine/Shopware/Components/Migrations/Manager.php';
 
 $migrationManger = new Shopware\Components\Migrations\Manager($conn, $shopPath . '/_sql/migrations');
-$migrationManger->run();
+$migrationManger->run(\Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL);
 
 exit(0);

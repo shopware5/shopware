@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration208 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         ALTER TABLE  `s_core_snippets`
