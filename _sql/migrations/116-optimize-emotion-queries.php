@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration116 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE  `s_blog` ADD INDEX  `emotion_get_blog_entry` (  `display_date` );

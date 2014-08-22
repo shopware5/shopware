@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration217 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         ALTER TABLE `s_order_shippingaddress`

@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration139 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         SET @formId = (SELECT id FROM `s_core_config_forms` WHERE `name` = 'Plugin' AND `label` = 'Plugins' LIMIT 1);
