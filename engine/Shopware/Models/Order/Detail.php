@@ -181,6 +181,13 @@ class Detail extends ModelEntity
     private $unit;
 
     /**
+     * @var string $packUnit
+     *
+     * @ORM\Column(name="pack_unit", type="string", length=255, nullable=true)
+     */
+    private $packUnit;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      * @var \Shopware\Models\Order\Order
@@ -752,5 +759,21 @@ class Detail extends ModelEntity
     public function getUnit()
     {
         return $this->unit;
+    }
+
+    /**
+     * @param string $packUnit
+     */
+    public function setPackUnit($packUnit)
+    {
+        $this->packUnit = $packUnit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPackUnit()
+    {
+        return $this->packUnit;
     }
 }
