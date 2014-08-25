@@ -1,21 +1,43 @@
 {extends file='frontend/account/index.tpl'}
 
-
 {block name="frontend_index_header_javascript_inline" append}
-    {* Configuration of the Partner Chart *}
+    {* Configuration of the partner chart *}
     jQuery.partnerChart =  {ldelim}
-    'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
-    'netAmountLabel': '{s name='PartnerStatisticLabelNetTurnover'}{/s}'
+        'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
+        'netAmountLabel': '{s name='PartnerStatisticLabelNetTurnover'}{/s}'
     {rdelim};
-{/block}
 
+    jQuery.datePickerRegional = {ldelim}
+        closeText: "{s name='PartnerDatePickerCloseText'}{/s}",
+        prevText: "{s name='PartnerDatePickerPrevText'}{/s}",
+        nextText: "{s name='PartnerDatePickerNextText'}{/s}",
+        currentText: "{s name='PartnerDatePickerCurrentText'}{/s}",
+        monthNames: [{s name='PartnerDatePickerMonthNames'}{/s}],
+        monthNamesShort: [{s name='PartnerDatePickerMonthShortNames'}{/s}],
+        dayNames: [{s name='PartnerDatePickerDayNames'}{/s}],
+        dayNamesShort: [{s name='PartnerDatePickerDayShortNames'}{/s}],
+        dayNamesMin: [{s name='PartnerDatePickerDayMinNames'}{/s}],
+        weekHeader: "{s name='PartnerDatePickerWeekHeader'}{/s}",
+        dateFormat: "{s name='PartnerDatePickerDateFormat'}{/s}",
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: "",
+        showOn: "button",
+        buttonText:"",
+        onSelect: function (dateText, inst) {ldelim}
+            $(this).parents('form').submit();
+        {rdelim}
+    {rdelim};
+
+    $('*[data-datepicker="true"]').datepicker(jQuery.datePickerRegional);
+{/block}
 
 {block name="frontend_index_header_javascript" append}
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/raphael.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/popup.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/analytics.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/analytics.js'}"></script>
 {/block}
-
 
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
@@ -25,93 +47,101 @@
 {* Main content *}
 {block name='frontend_index_content'}
 
-
 {* Partner Provision overview *}
-<div class="grid_16 partner_statistic" id="center">
-    <h1>{se name="PartnerStatisticHeader"}{/se}</h1>
-    <div class="listing_actions normal">
+<div class="content block account--content">
+    {* Welcome text *}
+    {block name="frontend_account_orders_welcome"}
+        <div class="account--welcome panel">
+            {block name="frontend_account_orders_welcome_headline"}
+                <h1 class="panel--title">{s name="PartnerStatisticHeader"}{/s}</h1>
+            {/block}
+        </div>
+    {/block}
+    <div class="listing--actions block-group is--advanced">
         {block name='frontend_account_partner_statistic_listing_actions_top'}
             <div class="top">
                 {block name="frontend_account_partner_statistic_listing_date"}
                     <form method="post" action="{url controller='account' action='partnerStatistic'}">
                         <div class="date-filter">
-                            <label>{s name='PartnerStatisticLabelFromDate'}{/s}</label>
-                            <input id="datePickerFrom" class="datePicker" name="fromDate" type="text" value="{$partnerStatisticFromDate}" class="text" />
+                            <label class="date-filter--label" for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
+                            <div class="date-filter--input">
+                                <input id="datePickerFrom" class="datepicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                            </div>
                         </div>
                         <div class="date-filter">
-                            <label>{s name='PartnerStatisticLabelToDate'}{/s}</label>
-                            <input id="datePickerTo" class="datePicker" name="toDate" type="text" value="{$partnerStatisticToDate}" class="text" />
+                            <label class="date-filter--label" for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
+                            <div class="date-filter--input">
+                                <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                            </div>
                         </div>
-                        <input type="submit" class="button-right small_right partner_statistic"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
-
+                        <input type="submit" class="btn btn--primary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
                     </form>
                 {/block}
             </div>
         {/block}
     </div>
-    <div class="clear"></div>
-    <div>
-        <table id="data">
+    {if $sPartnerOrders}
+        <table id="data" class="is--hidden">
             <tbody>
                 <tr>
-                    {foreach from=$sPartnerOrderChartData item=chartItem}
-                        <td>{$chartItem.netTurnOver}</td>
+                    {foreach $sPartnerOrderChartData as $chartItem}
+                        <td>{$chartItem.netTurnOver|number_format:2:".":""}</td>
                     {/foreach}
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    {foreach from=$sPartnerOrderChartData item=chartItem}
-                    <th>{$chartItem.timeScale}</th>
+                    {foreach $sPartnerOrderChartData as $chartItem}
+                        <th>{$chartItem.timeScale}</th>
                     {/foreach}
                 </tr>
             </tfoot>
         </table>
-        <div id="holder" style="width: 780px"></div>
-    </div>
-    {if !$sPartnerOrders}
-        {block name="frontend_account_partner_statistic_info_empty"}
-            <fieldset>
-				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='PartnerStatisticInfoEmpty'}{/s}"}
-            </fieldset>
-        {/block}
-        {else}
+        <div id="holder" class="chart--holder"></div>
 
-        <div class="partner_statistic_overview_active">
+        <div class="partner_statistic_overview_active panel">
 
-            <div class="table grid_16">
-                {block name="frontend_account_partner_statistic_table_head"}
-                    <div class="table_head">
+            {block name="frontend_account_statistic_overview_table"}
+                <div class="panel--table">
+                    {block name="frontend_account_partner_statistic_table_head"}
+                        <div class="orders--table-header panel--tr">
 
-                        <div class="grid_4">
-                            {se name="PartnerStatisticColumnDate"}{/se}
+                            <div class="panel--th">
+                                {s name="PartnerStatisticColumnDate"}{/s}
+                            </div>
+
+                            <div class="panel--th">
+                                {s name="PartnerStatisticColumnId"}{/s}
+                            </div>
+
+                            <div class="panel--th column--price">
+                                {s name="PartnerStatisticColumnNetAmount"}{/s}
+                            </div>
+
+                            <div class="panel--th column--total">
+                                {s name="PartnerStatisticColumnProvision"}{/s}
+                            </div>
                         </div>
+                    {/block}
 
-                        <div class="grid_4">
-                            {se name="PartnerStatisticColumnId"}{/se}
-                        </div>
-
-                        <div class="grid_4">
-                            {se name="PartnerStatisticColumnNetAmount"}{/se}
-                        </div>
-
-                        <div class="grid_3">
-                            {se name="PartnerStatisticColumnProvision"}{/se}
-                        </div>
-
-                    </div>
-                {/block}
-                {foreach name=partnerStatisticList from=$sPartnerOrders item=partnerOrder}
-                    {if $smarty.foreach.partnerStatisticList.last}
-                        {assign var=lastitem value=1}
+                    {foreach $sPartnerOrders as $partnerOrder}
+                        {if $partnerOrder@last}
+                            {$lastitem=1}
                         {else}
-                        {assign var=lastitem value=0}
-                    {/if}
-                {include file="frontend/account/partner_statistic_item.tpl" lastitem=$lastitem}
-                {/foreach}
-            </div>
+                            {$lastitem=0}
+                        {/if}
+
+                        {include file="frontend/account/partner_statistic_item.tpl" lastitem=$lastitem}
+                    {/foreach}
+                </div>
+            {/block}
         </div>
-        <div class="space">&nbsp;</div>
+    {else}
+        {block name="frontend_account_partner_statistic_info_empty"}
+            <div class="account--no-orders-info">
+                {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='PartnerStatisticInfoEmpty'}{/s}"}
+            </div>
+        {/block}
     {/if}
 </div>
 {/block}

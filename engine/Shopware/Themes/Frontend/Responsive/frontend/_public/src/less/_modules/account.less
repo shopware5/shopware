@@ -145,6 +145,119 @@
     }
 }
 
+.is--act-partnerStatistic {
+    .content-main--inner {
+        .unitize-padding(0, 0, 16, 0);
+    }
+
+    .account--welcome {
+        .unitize-padding(0, 0, 0, 10);
+    }
+
+    .listing--actions {
+        .unitize-padding(10, 18, 24, 18);
+        border-bottom: 1px solid @borderColor;
+    }
+
+    .date-filter {
+        .unitize(14, 16, font-size);
+        .unitize-height(50);
+        display: block;
+        width: 100%;
+    }
+
+    .date-filter--label {
+        .unitize-padding(9, 0, 10, 0);
+        .unitize-width(40);
+        display: block;
+        float: left;
+    }
+
+    .date-filter--input {
+        .unitize-margin(0, 0, 0, 40);
+        width: auto;
+    }
+
+    .datepicker {
+        .unitize(35, 16, padding-right);
+        width: 100%;
+        float: left;
+    }
+
+    .ui-datepicker-trigger {
+        .unitize-width(20);
+        .unitize-height(20);
+        .unitize-margin(10, 0, 0, -30);
+        display: inline;
+        border: 0;
+        background: transparent;
+        text-align: center;
+        color: @primaryTextColor;
+        padding: 0;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
+
+    .chart--holder {
+        display: none;
+    }
+
+    .panel--th,
+    .panel--td {
+        .unitize-padding(8, 10, 7, 10);
+        width:25%;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    .panel--th {
+        .unitize-padding(3, 10, 2, 10);
+        .unitize(12, 16, font-size);
+        color: @primaryTextColor;
+    }
+
+    .is--odd {
+        .unitize-padding(0, 0, 9, 0);
+        border-bottom: 1px solid @borderColor;
+
+        .column--price,
+        .column--total {
+            .unitize-padding(10, 10, 10, 10);
+            width:100%;
+        }
+    }
+
+    .column--label {
+        text-align: left;
+    }
+
+    .column--value {
+        text-align: right;
+    }
+
+    .column--label,
+    .column--value {
+        width: 50%;
+        float: left;
+    }
+
+    .column--item-sum {
+        .column--label {
+            .is--block;
+        }
+    }
+}
+
 .order--status-icon {
     .unitize-width(8);
     .unitize-height(8);
@@ -552,14 +665,88 @@
         }
     }
 
-	// Account error message margin
+    // Account error message margin
 	.account--error,
 	.account--success {
 		.unitize-margin(0, 0, 20, 0);
 	}
+
+    .is--act-partnerStatistic {
+        .content-main--inner {
+            .unitize-padding(0, 20, 16, 20);
+        }
+
+        .account--welcome {
+            .unitize-padding(0, 0, 0, 0);
+        }
+
+        .listing--actions {
+            .unitize-padding(10, 10, 10, 10);
+            .border-radius(3px);
+            border: 1px solid @borderColor;
+            background: @primaryBackgroundColor;
+        }
+
+        .date-filter {
+            .unitize-padding(0, 10, 0, 10);
+            width: 40%;
+            float: left;
+            height: auto;
+        }
+
+        .date-filter--label {
+            width:10%;
+        }
+
+        .btn {
+            width: 20%;
+            float: left;
+            height:40px;
+        }
+
+        .chart--holder {
+            .is--align-center;
+            .is--block;
+            width: 100%;
+        }
+
+        .panel--th,
+        .panel--td {
+            .unitize-padding(10, 10, 10, 10);
+        }
+
+        .column--item-sum {
+            width: 75% !important;
+
+            .column--label,
+            .column--value {
+                float: left;
+                width: 50%;
+            }
+        }
+
+        .is--odd {
+            border: 0;
+            padding: 0;
+        }
+
+        .is--odd .column--total {
+            width: 25%;
+            float: left !important;
+
+            .column--value {
+                width:100%;
+            }
+        }
+    }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
+    .is--act-partnerStatistic {
+        .content-main--inner {
+            .unitize-padding(0, 45, 45, 45);
+        }
+    }
 
     .account--content {
         .unitize-margin(45, 0, 0, 0);
