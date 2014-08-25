@@ -757,6 +757,7 @@ class sExport
                 a.name,
                 a.description,
                 a.description_long,
+                a.main_detail_id,
                 d.shippingtime,
                 d.shippingfree,
                 a.topseller,
@@ -959,9 +960,15 @@ class sExport
             }
             if (!empty($row['article_translation'])) {
                 $translation = $this->sMapTranslation('article', $row['article_translation']);
+                if ($row['main_detail_id'] != $row['articledetailsID']) {
+                    unset($translation['additionaltext']);
+                }
                 $row = array_merge($row, $translation);
             } elseif (!empty($row['article_translation_fallback'])) {
                 $translation = $this->sMapTranslation('article', $row['article_translation_fallback']);
+                if ($row['main_detail_id'] != $row['articledetailsID']) {
+                    unset($translation['additionaltext']);
+                }
                 $row = array_merge($row, $translation);
             }
             if (!empty($row['detail_translation'])) {
