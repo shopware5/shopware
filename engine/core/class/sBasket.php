@@ -1896,12 +1896,32 @@ class sBasket
             }
 
             if (!empty($getArticles[$key]["packunit"])) {
-                $getPackUnit = $this->moduleManager->Articles()->sGetTranslation(
-                    array(),
-                    $getArticles[$key]["articleID"],
-                    "article",
-                    $this->sSYSTEM->sLanguage
-                );
+                $getPackUnit = array();
+
+                // If we are loading a variant, look for a translation in the variant translation set
+                if ($getArticles[$key]['mainDetailId'] != $getArticles[$key]['articleDetailId']) {
+                    $getPackUnit = $this->moduleManager->Articles()->sGetTranslation(
+                        array(),
+                        $getArticles[$key]["articleDetailId"],
+                        "variant",
+                        $this->sSYSTEM->sLanguage
+                    );
+                }
+
+                // If we are using the main variant or the variant has no translation
+                // look for translation in the article translation set
+                if (
+                    $getArticles[$key]['mainDetailId'] == $getArticles[$key]['articleDetailId']
+                    || empty($getPackUnit["packunit"])
+                ) {
+                    $getPackUnit = $this->moduleManager->Articles()->sGetTranslation(
+                        array(),
+                        $getArticles[$key]["articleID"],
+                        "article",
+                        $this->sSYSTEM->sLanguage
+                    );
+                }
+
                 if (!empty($getPackUnit["packunit"])) {
                     $getArticles[$key]["packunit"] = $getPackUnit["packunit"];
                 }
@@ -2081,21 +2101,23 @@ class sBasket
         $sql = "
         SELECT
             s_order_basket.*,
-            ad.packunit,
+            COALESCE (NULLIF(ad.packunit, ''), mad.packunit) AS packunit,
+            a.main_detail_id AS mainDetailId,
+            ad.id AS articleDetailId,
             ad.minpurchase,
-            taxID,
+            a.taxID,
             ad.instock AS instock,
-            suppliernumber,
+            ad.suppliernumber,
             ad.maxpurchase,
             ad.purchasesteps,
             ad.purchaseunit,
-            ad.unitID,
-            laststock,
+            COALESCE (ad.unitID, mad.unitID) AS unitID,
+            a.laststock,
             ad.shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
-            ad.ean,
-            stockmin,
+            COALESCE (ad.ean, mad.ean) AS ean,
+            ad.stockmin,
             s_order_basket_attributes.attribute1 as ob_attr1,
             s_order_basket_attributes.attribute2 as ob_attr2,
             s_order_basket_attributes.attribute3 as ob_attr3,
@@ -2105,6 +2127,7 @@ class sBasket
         FROM s_order_basket
         LEFT JOIN s_articles_details AS ad ON ad.ordernumber = s_order_basket.ordernumber
         LEFT JOIN s_articles a ON (a.id = ad.articleID)
+        LEFT JOIN s_articles_details AS mad ON mad.id = a.main_detail_id
         LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
