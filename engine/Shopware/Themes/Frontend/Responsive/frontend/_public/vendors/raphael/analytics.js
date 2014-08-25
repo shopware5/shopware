@@ -60,7 +60,7 @@ window.onload = function () {
 
     // Draw
     var width = 900,
-        height = 250,
+        height = 300,
         leftgutter = 0,
         bottomgutter = 35,
         topgutter = 20,
@@ -136,12 +136,12 @@ window.onload = function () {
                     anim = Raphael.animation({
                         path: ppp.path,
                         transform: ["t", ppp.dx, ppp.dy]
-                    }, 200 * is_label_visible);
+                    }, 350 * is_label_visible);
                 lx = label[0].transform()[0][1] + ppp.dx;
                 ly = label[0].transform()[0][2] + ppp.dy;
                 frame.show().stop().animate(anim);
-                label[0].attr({ text: data + " " + jQuery.partnerChart.netAmountLabel }).show().stop().animateWith(frame, anim, { transform: ["t", lx, ly] }, 200 * is_label_visible);
-                label[1].attr({ text: jQuery.partnerChart.timeUnit + " " + lbl }).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly] }, 200 * is_label_visible);
+                label[0].attr({ text: data + " " + jQuery.partnerChart.netAmountLabel }).show().stop().animateWith(frame, anim, { transform: ["t", lx, ly] }, 350 * is_label_visible);
+                label[1].attr({ text: jQuery.partnerChart.timeUnit + " " + lbl }).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly] }, 350 * is_label_visible);
                 dot.attr("r", 6);
                 is_label_visible = true;
             }, function () {
