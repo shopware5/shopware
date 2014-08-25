@@ -75,15 +75,17 @@
 						{block name='frontend_checkout_finish_teaser_actions'}
 							<p class="teaser--actions">
 
+                                {strip}
 								{* Back to the shop button *}
 								<a href="{url controller='index'}" class="btn btn--secondary teaser--btn-back" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
-									<i class="icon--arrow-left"></i> {s name="FinishButtonBackToShop"}{/s}
+									<i class="icon--arrow-left"></i>&nbsp;{"{s name="FinishButtonBackToShop"}{/s}"|replace:' ':'&nbsp;'}
 								</a>
 
 								{* Print button *}
 								<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
 									{s name="FinishLinkPrint"}{/s}
 								</a>
+                                {/strip}
 							</p>
 						{/block}
 					</div>
