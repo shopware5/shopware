@@ -242,6 +242,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     /**
      * Creates or updates a new Product Feed
      *
+     * @throws RuntimeException
      * @return void
      */
     public function saveFeedAction()
@@ -293,8 +294,18 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $productFeed->setLastChange(new DateTime());
 
         // Clear feed cache
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir .= '/productexport/';
+        if (!is_dir($cacheDir)) {
+            if (false === @mkdir($cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+            }
+        } elseif (!is_writable($cacheDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+        }
+
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
-        $filePath = Shopware()->DocPath() . 'cache/productexport/' . $fileName;
+        $filePath = $cacheDir . $fileName;
         if (file_exists($filePath) && $productFeed->getInterval() != -1) {
             unlink($filePath);
         }

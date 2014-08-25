@@ -1,20 +1,6 @@
 #!/bin/bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo $DIR
+echo "Clearing caches"
+find $DIR -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -R
 
-echo "Clearing regular caches"
-rm -rf $DIR/html/*
-rm -rf $DIR/general/*
-rm -rf $DIR/templates/*
-rm -rf $DIR/proxies/*
-rm -rf $DIR/doctrine/filecache/*
-rm -rf $DIR/doctrine/proxies/*
-rm -rf $DIR/mpdf/tmp/*
-rm -rf $DIR/mpdf/ttfontdata/*
-rm -rf $DIR/../web/cache/*
-
-if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
-    echo "Clearing attributes"
-    rm -rf $DIR/doctrine/attributes/*
-fi

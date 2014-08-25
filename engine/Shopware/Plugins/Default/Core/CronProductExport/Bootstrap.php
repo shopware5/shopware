@@ -58,6 +58,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
     /**
      * starts all product export for all active product feeds
      *
+     * @throws RuntimeException
      * @return string
      */
     public function exportProductFiles()
@@ -72,6 +73,16 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $export->sDB = Shopware()->AdoDb();
         $sSmarty = Shopware()->Template();
 
+        $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
+        $cacheDir .= '/productexport/';
+        if (!is_dir($cacheDir)) {
+            if (false === @mkdir($cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+            }
+        } elseif (!is_writable($cacheDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+        }
+
         foreach ($activeFeeds as $feedModel) {
             /** @var $feedModel Shopware\Models\ProductFeed\ProductFeed */
             if ($feedModel->getInterval() == 0) {
@@ -84,7 +95,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             $export->sInitSmarty();
 
             $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
-            $handleResource = fopen(Shopware()->DocPath() . 'cache/productexport/' . $fileName, 'w');
+            $handleResource = fopen($cacheDir . $fileName, 'w');
             $export->executeExport($handleResource);
         }
 
