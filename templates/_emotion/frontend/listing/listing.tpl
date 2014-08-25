@@ -46,17 +46,15 @@
 {/block}
 
 {* Hide actual listing if a promotion is active *}
-{if !$sOffers} 
-	<div class="listing" id="{$sTemplate}">
-	{block name="frontend_listing_list_inline"}
-		{* Actual listing *}
-		{if $showListing}
-			{foreach $sArticles as $sArticle}
-				{include file="frontend/listing/box_article.tpl" sTemplate=$sTemplate lastitem=$sArticle@last firstitem=$sArticle@first}
-			{/foreach}
-		{/if}
-	{/block}
-	</div>
+{if !$sOffers}
+    <div class="listing" id="{$sTemplate}">
+        {block name="frontend_listing_list_inline"}
+            {* Actual listing *}
+            {if $showListing}
+                {include file="frontend/listing/listing_articles.tpl"}
+            {/if}
+        {/block}
+    </div>
 {/if}
 
 {* Paging *}

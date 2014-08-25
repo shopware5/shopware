@@ -7,6 +7,19 @@
     top: 50%;
     border: 1px solid black;
     z-index: 6000;
+
+    &.indicator--relative {
+        .unitize-width(30);
+        .unitize-height(30);
+        .unitize(50, 16, padding-top);
+        .unitize(50, 16, padding-bottom);
+        background: none;
+        position: relative;
+        display: block;
+        left: 50%;
+        top: auto;
+        border: 0 none;
+    }
 }
 
 .has--cssanimations {

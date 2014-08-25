@@ -9,6 +9,16 @@
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
 <link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
+
+{* Previous rel tag for infinite scrolling *}
+{if $theme.infiniteScrolling && $sPages.previous}
+<link rel="prev" href="{$sPages.previous|rewrite:$sCategoryInfo.name}">
+{/if}
+
+{* Next rel tag for infinite scrolling *}
+{if $theme.infiniteScrolling && $sPages.next}
+<link rel="next" href="{$sPages.next|rewrite:$sCategoryInfo.name}">
+{/if}
 {/block}
 
 {* Title *}
