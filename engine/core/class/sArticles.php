@@ -179,8 +179,8 @@ class sArticles
         SearchBundle\ProductSearchInterface $searchService = null,
         Enlight_Event_EventManager $eventManager = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter,
-        \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager
+        \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter = null,
+        \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null
     ) {
         $this->category = ($category) ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
