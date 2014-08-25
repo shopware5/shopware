@@ -46,18 +46,6 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
 
             $this->View()->assign('emotionId', intval($this->Request()->getParam('emotionId')));
             $this->View()->assign('isEmotionLandingPage', true);
-        } else {
-            // @deprecated - support for shopware 3.x campaigns
-            $campaignId = (int) $this->Request()->sCampaign;
-            if (empty($campaignId)) {
-                return $this->forward('index', 'index');
-            }
-            $campaign = Shopware()->Modules()->Marketing()->sCampaignsGetDetail($campaignId);
-            if (empty($campaign['id'])) {
-                return $this->forward('index', 'index');
-            }
-            $this->View()->loadTemplate("frontend/campaign/old.tpl");
-            $this->View()->sCampaign = $campaign;
         }
     }
 }
