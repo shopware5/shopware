@@ -174,8 +174,8 @@
         $('.' + opts.offCanvasElementCls).removeClass(opts.activeMenuCls);
 
         me.$offCanvas.addClass(opts.activeMenuCls);
+        me.$pageWrap.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
         me.$body.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
-        me.$offCanvas.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
 
         me.$pageWrap.on('scroll.' + pluginName, function(e) {
             e.preventDefault();
