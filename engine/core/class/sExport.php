@@ -987,20 +987,23 @@ class sExport
             if ($row['configurator'] > 0) {
                 if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
                     $row['group_additionaltext'] = array();
-                    foreach ($row['group_ordernumber'] as $orderNumber) {
-                        $product = new StoreFrontBundle\Struct\ListProduct();
-                        $product->setAdditional($row['additionaltext']);
-                        $product->setVariantId($row["articledetailsID"]);
-                        $product->setNumber($orderNumber);
 
-                        $context = $this->contextService->get();
-                        $product = $this->additionalTextService->buildAdditionalText($product, $context);
+                    if (!empty($row['group_ordernumber'])) {
+                        foreach ($row['group_ordernumber'] as $orderNumber) {
+                            $product = new StoreFrontBundle\Struct\ListProduct();
+                            $product->setAdditional($row['additionaltext']);
+                            $product->setVariantId($row["articledetailsID"]);
+                            $product->setNumber($orderNumber);
 
-                        if (array_key_exists($orderNumber, $row['group_additionaltext'])) {
-                            $row['group_additionaltext'][$orderNumber] = $product->getAdditional();
-                        }
-                        if ($orderNumber == $row['ordernumber']) {
-                            $row['additionaltext'] = $product->getAdditional();
+                            $context = $this->contextService->get();
+                            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+
+                            if (array_key_exists($orderNumber, $row['group_additionaltext'])) {
+                                $row['group_additionaltext'][$orderNumber] = $product->getAdditional();
+                            }
+                            if ($orderNumber == $row['ordernumber']) {
+                                $row['additionaltext'] = $product->getAdditional();
+                            }
                         }
                     }
                 }

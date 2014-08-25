@@ -105,7 +105,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
 
         $customerGroups = array();
         foreach ($data as $group) {
-            $key = $group['groupkey'];
+            $key = $group['__customerGroup_groupkey'];
 
             $customerGroups[$key] = $this->customerGroupHydrator->hydrate($group);
         }

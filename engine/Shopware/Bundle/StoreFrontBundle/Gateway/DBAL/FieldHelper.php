@@ -68,7 +68,7 @@ class FieldHelper
     {
         $key = $table . '_' . $alias;
 
-        if ($this->attributeFields[$key] !== null) {
+        if (isset($this->attributeFields[$key]) && $this->attributeFields[$key] !== null) {
             return $this->attributeFields[$key];
         }
 
