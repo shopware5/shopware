@@ -218,6 +218,8 @@
                     .removeClass(opts.disableTransitionCls)
                     .removeAttr('style');
 
+        me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
+
         me.$closeButton.off(clickEvt + '.' + pluginName);
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
