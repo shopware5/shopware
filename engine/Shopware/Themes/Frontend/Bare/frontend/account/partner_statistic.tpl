@@ -39,7 +39,6 @@
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/analytics.js'}"></script>
 {/block}
 
-
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
     {$sBreadcrumb[] = ['name'=>"{s name='Provisions'}{/s}", 'link'=>{url}]}
@@ -47,7 +46,6 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-
 
 {* Partner Provision overview *}
 <div class="content block account--content">
@@ -83,62 +81,61 @@
         {/block}
     </div>
     {if $sPartnerOrders}
-    <div>
         <table id="data" class="is--hidden">
             <tbody>
                 <tr>
-                    {foreach from=$sPartnerOrderChartData item=chartItem}
-                        <td>{$chartItem.netTurnOver|number_format:2:".":""}</td>
+                    {foreach $sPartnerOrderChartData as $chartItem}
+                        <td>{$chartItem.netTurnOver|number_format:2:",":"."}</td>
                     {/foreach}
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    {foreach from=$sPartnerOrderChartData item=chartItem}
-                    <th>{$chartItem.timeScale}</th>
+                    {foreach $sPartnerOrderChartData as $chartItem}
+                        <th>{$chartItem.timeScale}</th>
                     {/foreach}
                 </tr>
             </tfoot>
         </table>
         <div id="holder" class="chart--holder"></div>
-    </div>
 
-    <div class="partner_statistic_overview_active panel">
+        <div class="partner_statistic_overview_active panel">
 
-        {block name="frontend_account_statistic_overview_table"}
-        <div class="panel--table">
-            {block name="frontend_account_partner_statistic_table_head"}
-                <div class="orders--table-header panel--tr">
+            {block name="frontend_account_statistic_overview_table"}
+                <div class="panel--table">
+                    {block name="frontend_account_partner_statistic_table_head"}
+                        <div class="orders--table-header panel--tr">
 
-                    <div class="panel--th">
-                        {s name="PartnerStatisticColumnDate"}{/s}
-                    </div>
+                            <div class="panel--th">
+                                {s name="PartnerStatisticColumnDate"}{/s}
+                            </div>
 
-                    <div class="panel--th">
-                        {s name="PartnerStatisticColumnId"}{/s}
-                    </div>
+                            <div class="panel--th">
+                                {s name="PartnerStatisticColumnId"}{/s}
+                            </div>
 
-                    <div class="panel--th column--price">
-                        {s name="PartnerStatisticColumnNetAmount"}{/s}
-                    </div>
+                            <div class="panel--th column--price">
+                                {s name="PartnerStatisticColumnNetAmount"}{/s}
+                            </div>
 
-                    <div class="panel--th column--total">
-                        {s name="PartnerStatisticColumnProvision"}{/s}
-                    </div>
+                            <div class="panel--th column--total">
+                                {s name="PartnerStatisticColumnProvision"}{/s}
+                            </div>
+                        </div>
+                    {/block}
 
+                    {foreach $sPartnerOrders as $partnerOrder}
+                        {if $partnerOrder@last}
+                            {$lastitem=1}
+                        {else}
+                            {$lastitem=0}
+                        {/if}
+
+                        {include file="frontend/account/partner_statistic_item.tpl" lastitem=$lastitem}
+                    {/foreach}
                 </div>
             {/block}
-            {foreach $sPartnerOrders as $partnerOrder}
-                {if $partnerOrder@last}
-                    {assign var=lastitem value=1}
-                    {else}
-                    {assign var=lastitem value=0}
-                {/if}
-            {include file="frontend/account/partner_statistic_item.tpl" lastitem=$lastitem}
-            {/foreach}
         </div>
-        {/block}
-    </div>
     {else}
         {block name="frontend_account_partner_statistic_info_empty"}
             <div class="account--no-orders-info">
