@@ -297,6 +297,14 @@
                 zoomLeft = -(lensLeft - minX) * me.factor,
                 zoomTop = -(lensTop - minY) * me.factor;
 
+            if (minX >= maxX) {
+                zoomLeft = zoomLeft + (me.flyoutWidth / 2) - (me.zoomImage.width / 2);
+            }
+
+            if (minY >= maxY) {
+                zoomTop = zoomTop + (me.flyoutHeight / 2) - (me.zoomImage.height / 2);
+            }
+
             if (mouseX > me.imageOffset.left && mouseX < me.imageOffset.left + me.imageWidth &&
                 mouseY > me.imageOffset.top && mouseY < me.imageOffset.top + me.imageHeight) {
                 me.showLens();
