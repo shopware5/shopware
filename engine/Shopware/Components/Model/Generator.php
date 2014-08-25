@@ -764,6 +764,9 @@ class %className% extends ModelEntity
             //preg match for the model class name!
             $matches = array();
             preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
             $className = $matches[1];
 
             //preg match for the model namespace!
