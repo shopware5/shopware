@@ -1338,31 +1338,62 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         //Load ean, unit and pack unit (translate if needed)
         if ($articleDetails) {
-            $data['ean'] = $articleDetails->getEan();
-            $data['packunit'] = $articleDetails->getPackUnit();
+            $data['ean'] = $articleDetails->getEan() ? : $articleDetails->getArticle()->getMainDetail()->getEan();
+            $unit = $articleDetails->getUnit() ? : $articleDetails->getArticle()->getMainDetail()->getUnit();
+            $data['unit'] = $unit->getName();
+            $data['packunit'] = $articleDetails->getPackUnit() ? : $articleDetails->getArticle()->getMainDetail()->getPackUnit();
 
-            if ($articleDetails->getUnit()) {
-                $row = Shopware()->Db()->fetchRow(
-                    'SELECT s_core_shops.default, s_order.language AS languageId
-                    FROM s_core_shops
-                    INNER JOIN s_order ON s_order.language = s_core_shops.id
-                    WHERE s_order.id = :orderId
-                    LIMIT 1',
-                    array(
-                        'orderId' => $data['orderId']
-                    )
-                );
+            $languageData = Shopware()->Db()->fetchRow(
+                'SELECT s_core_shops.default, s_order.language AS languageId
+                FROM s_core_shops
+                INNER JOIN s_order ON s_order.language = s_core_shops.id
+                WHERE s_order.id = :orderId
+                LIMIT 1',
+                array(
+                    'orderId' => $data['orderId']
+                )
+            );
 
-                if ($row['default']) {
-                    $data['unit'] = $articleDetails->getUnit()->getName();
-                } else {
-                    $translator = new Shopware_Components_Translation();
+            if (!$languageData['default']) {
+                $translator = new Shopware_Components_Translation();
+
+                // Translate unit
+                if ($articleDetails->getUnit()) {
                     $unitTranslation = $translator->read(
-                        $row['languageId'],
+                        $languageData['languageId'],
                         'config_units',
                         1
                     );
-                    $data['unit'] = $unitTranslation[$articleDetails->getUnit()->getId()]['description'] ? : $articleDetails->getUnit()->getName();
+                    if (!empty($unitTranslation[$unit->getId()]['description'])) {
+                        $data['unit'] = $unitTranslation[$unit->getId()]['description'];
+                    }
+                }
+
+                $articleTranslation = array();
+
+                // Load variant translations if we are adding a variant to the order
+                if ($articleDetails->getId() != $articleDetails->getArticle()->getMainDetail()->getId()) {
+                    $articleTranslation = $translator->read(
+                        $languageData['languageId'],
+                        'variant',
+                        $articleDetails->getId()
+                    );
+                }
+
+                // Load article translations if we are adding a main article or the variant translation is incomplete
+                if (
+                    $articleDetails->getId() == $articleDetails->getArticle()->getMainDetail()->getId()
+                    || empty($articleTranslation['packUnit'])
+                ) {
+                    $articleTranslation = $translator->read(
+                        $languageData['languageId'],
+                        'article',
+                        $articleDetails->getArticle()->getId()
+                    );
+                }
+
+                if (!empty($articleTranslation['packUnit'])) {
+                    $data['packUnit'] = $articleTranslation['packUnit'];
                 }
             }
         }
