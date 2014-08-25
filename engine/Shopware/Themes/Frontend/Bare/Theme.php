@@ -48,6 +48,7 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
         $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
         $fieldSet->addElement($this->createCheckboxField('showCategoriesLeft', '__show_categories_left__', false, $this->getLabelAttribute('show_categories_left_description')));
+        $fieldSet->addElement($this->createCheckboxField('infiniteScrolling', '__enable_infinite_scrolling__', true, $this->getLabelAttribute('enable_infinite_scrolling_description')));
         $tab->addElement($fieldSet);
 
         $fieldSet = $this->createFieldSet('bareLogos', '__logos__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));

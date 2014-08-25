@@ -133,7 +133,8 @@
                 'checkout': '{url controller="checkout"}',
                 'ajax_logout': '{url controller="account" action="ajax_logout"}',
                 'ajax_validate': '{url controller="register"}',
-                'ajax_add_article': '{url controller="checkout" action="addArticle"}'
+                'ajax_add_article': '{url controller="checkout" action="addArticle"}',
+                'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}'
             {rdelim};
 
             var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
