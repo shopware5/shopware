@@ -253,7 +253,8 @@ class Kernel implements HttpKernelInterface
     protected function initializeConfig()
     {
         $configLoader = new ConfigLoader(
-            $this->getRootDir() . '/',
+            $this->getRootDir(),
+            $this->getCacheDir(),
             $this->environment,
             $this->name
         );
@@ -263,8 +264,8 @@ class Kernel implements HttpKernelInterface
         );
 
         // Set up mpdf cache dirs
-        define("_MPDF_TEMP_PATH", $this->getRootDir() .'/cache/mpdf/tmp/');
-        define("_MPDF_TTFONTDATAPATH", $this->getRootDir() .'/cache/mpdf/ttfontdata/');
+        define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
+        define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
     }
 
     /**
@@ -308,7 +309,7 @@ class Kernel implements HttpKernelInterface
         $class = $this->getContainerClass();
 
         $cache = new ConfigCache(
-            $this->getCacheDir() . '/' . $class . '.php',
+            $this->config['hook']['proxyDir'] . '/' . $class . '.php',
             true //always check for file modified time
         );
 
@@ -359,14 +360,6 @@ class Kernel implements HttpKernelInterface
     /**
      * @return string
      */
-    public function getCacheDir()
-    {
-        return $this->config['hook']['proxyDir'];
-    }
-
-    /**
-     * @return string
-     */
     protected function getConfigPath()
     {
         return __DIR__  . '/Configs/Default.php';
@@ -378,6 +371,14 @@ class Kernel implements HttpKernelInterface
     public function getRootDir()
     {
         return realpath(__DIR__ . '/../../');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->getRootDir().'/cache/'.$this->environment.'_'.\Shopware::REVISION;
     }
 
     /**
@@ -419,9 +420,18 @@ class Kernel implements HttpKernelInterface
      *
      * @throws \RuntimeException
      */
+
     protected function buildContainer()
     {
-        foreach (array('cache' => $this->getCacheDir(), 'logs' => $this->getLogDir()) as $name => $dir) {
+        $runtimeDirectories = array(
+            'cache'              => $this->getCacheDir(),
+            'coreCache'          => $this->config['cache']['backendOptions']['cache_dir'],
+            'mpdfTemp'           => _MPDF_TEMP_PATH,
+            'mpdfFontData'       => _MPDF_TTFONTDATAPATH,
+            'logs'               => $this->getLogDir()
+        );
+
+        foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
                 if (false === @mkdir($dir, 0777, true)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
@@ -547,12 +557,11 @@ class Kernel implements HttpKernelInterface
     /**
      * Gets the container class.
      *
-     * @param string $nameSuffix
      * @return string The container class
      */
-    protected function getContainerClass($nameSuffix = null)
+    protected function getContainerClass()
     {
-        return $this->name . \Shopware::REVISION . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+        return $this->name.ucfirst($this->environment).($this->debug ? 'Debug' : '').'ProjectContainer';
     }
 
     /**

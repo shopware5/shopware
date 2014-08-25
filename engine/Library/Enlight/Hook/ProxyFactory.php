@@ -95,7 +95,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * @param  Enlight_Hook_HookManager $hookManager
      * @param  string                   $proxyNamespace
      * @param  string                   $proxyDir
-     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function __construct($hookManager, $proxyNamespace, $proxyDir)
     {
@@ -103,11 +103,11 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
         $this->proxyNamespace = $proxyNamespace;
 
         if (!is_dir($proxyDir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $proxyDir));
-        }
-
-        if (!is_writable($proxyDir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $proxyDir));
+            if (false === @mkdir($proxyDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Proxy", $proxyDir));
+            }
+        } elseif (!is_writable($proxyDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Proxy", $proxyDir));
         }
 
         $proxyDir = rtrim(realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;

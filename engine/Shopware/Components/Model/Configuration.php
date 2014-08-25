@@ -207,17 +207,17 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @return Configuration
      */
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
@@ -237,17 +237,17 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @return Configuration
      */
     public function setFileCacheDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine filecache directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine filecache directory (%s)\n", $dir));
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
@@ -269,25 +269,16 @@ class Configuration extends BaseConfiguration
      * Sets the directory where Doctrine generates any necessary proxy class files.
      *
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR . \Shopware::REVISION;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775);
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine proxy directory (%s)\n", $dir));
         }
 
         parent::setProxyDir($dir);

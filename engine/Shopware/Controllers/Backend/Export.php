@@ -86,7 +86,9 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
          */
         $productFeed = Shopware()->Models()->ProductFeed()->find((int) $this->Request()->feedID);
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
-        $dirName = Shopware()->DocPath() . 'cache/productexport/';
+
+        $dirName = $this->container->getParameter('kernel.cache_dir');
+        $dirName .= '/productexport/';
         if (!file_exists($dirName)) {
             mkdir($dirName, 0777);
         }
