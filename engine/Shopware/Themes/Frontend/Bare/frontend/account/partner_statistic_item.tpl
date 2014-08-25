@@ -1,19 +1,16 @@
-<div class="table_row{if $lastitem} lastrow{/if}">
+<div class="panel--tr">
 
 	{block name='frontend_account_partner_statistic_item_overview_row'}
-	<div class="grid_3">
-		{$partnerOrder.orderTime|date:datetime}
+	<div class="panel--td column--date">
+        {$partnerOrder.orderTime|date:datetime}
+    </div>
+    <div class="panel--td column--id is--bold">
+        {$partnerOrder.number}
+    </div>
+    <div class="panel--td column--price">
+        {$partnerOrder.netTurnOver|currency}
 	</div>
-	
-	<div class="grid_2 prefix_1 bold">
-		{$partnerOrder.number}
-	</div>
-
-    <div class="grid_2 prefix_2">
-		{$partnerOrder.netTurnOver|currency}
-	</div>
-
-    <div class="grid_2 prefix_2">
+    <div class="panel--td column--total">
         {$partnerOrder.provision|currency}
     </div>
 
@@ -21,29 +18,26 @@
 </div>
 
 {if $lastitem}
-<div class="table_foot">
+<div class="panel--tr is--odd is--bold">
     {block name='frontend_account_partner_statistic_item_overview_row'}
 
-        <div class="grid_2 bold textright">
-            <div class="textright">
-                <strong>
-                    {se name="PartnerStatisticItemSum"}{/se}
-                </strong>
+        <div class="panel--td column--item-sum column--price">
+            <div class="column--label">
+                {s name="PartnerStatisticItemSum"}{/s}
+            </div>
+            <div class="column--value">
+                {$sTotalPartnerAmount.netTurnOver|currency}
             </div>
         </div>
 
-        <div class="grid_4 prefix_6">
-            <strong>
-            {$sTotalPartnerAmount.netTurnOver|currency}
-            </strong>
+        <div class="panel--td column--total">
+            <div class="column--label">
+                {s name="PartnerStatisticColumnProvision" namespace="frontend/account/partner_statistic"}{/s}
+            </div>
+            <div class="column--value">
+                {$sTotalPartnerAmount.provision|currency}
+            </div>
         </div>
-
-        <div class="grid_1">
-            <strong>
-            {$sTotalPartnerAmount.provision|currency}
-            </strong>
-        </div>
-
     {/block}
 </div>
 {/if}
