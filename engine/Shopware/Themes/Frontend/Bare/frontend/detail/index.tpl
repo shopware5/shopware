@@ -75,7 +75,7 @@
 				{block name="frontend_detail_comments_overview"}
                     {if !{config name=VoteDisable}}
                         <div class="product--rating-container">
-                            <a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">
+                            <a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{"{s name='DetailLinkReview'}{/s}"|escape}">
 					            {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverange.averange type="aggregated" count=$sArticle.sVoteAverange.count}
                             </a>
                         </div>
