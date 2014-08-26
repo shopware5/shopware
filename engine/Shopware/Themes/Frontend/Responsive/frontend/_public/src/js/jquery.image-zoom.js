@@ -72,7 +72,7 @@
         registerEvents: function() {
             var me = this;
 
-            $('.page-wrap').on('scroll.imageZoom', $.proxy(me.stopZoom, me));
+            $('body').on('scroll.imageZoom', $.proxy(me.stopZoom, me));
 
             me._on(me.$container, 'mousemove', $.proxy(me.onMouseMove, me));
             me._on(me.$container, 'mouseout', $.proxy(me.stopZoom, me));
@@ -414,7 +414,7 @@
             me.$flyout.remove();
             me.$container.removeClass(me.opts.containerCls);
 
-            $('.page-wrap').off('scroll.imageZoom');
+            $('body').off('scroll.imageZoom');
 
             me._destroy();
         }
