@@ -35,18 +35,19 @@ class ShippingFreeFacetTest extends TestCase
     {
         $facet = new ShippingFreeFacet();
         $result = $this->search(
-            $facet,
             array(
                 'first' => true,
                 'second' => false,
                 'third' => true
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array($facet)
         );
 
         $this->assertCount(1, $result->getFacets());
-
-        $this->assertEquals(2, $facet->getTotal());
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
     }
 
 
@@ -54,47 +55,17 @@ class ShippingFreeFacetTest extends TestCase
     {
         $facet = new ShippingFreeFacet();
         $result = $this->search(
-            $facet,
             array(
                 'first' => false,
                 'second' => false,
                 'third' => false
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array($facet)
         );
 
-        $this->assertCount(1, $result->getFacets());
-        $this->assertEquals(0, $facet->getTotal());
-    }
-
-    /**
-     * @param FacetInterface $facet
-     * @param $products
-     * @param $expectedNumbers
-     * @return ProductNumberSearchResult
-     */
-    private function search(
-        FacetInterface $facet,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $shippingFree) {
-            $data = $this->getProduct($number, $context, $category, $shippingFree);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
+        $this->assertCount(0, $result->getFacets());
     }
 }

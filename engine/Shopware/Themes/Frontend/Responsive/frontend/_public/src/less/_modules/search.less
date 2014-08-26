@@ -1,67 +1,72 @@
-.search--results {
+.search--content {
+    .unitize-padding(40, 0, 0, 0);
+}
 
-    .results-headline {
-        text-align: center;
-    }
+.search--headline {
+    .unitize-margin(0, 0, 40, 0);
+    text-align: center;
+}
 
-    .alert {
-        .unitize(30, 16, margin-top);
-    }
+.search--cat-filter {
+    .unitize-margin(0, 0, 20, 0);
 
-    // Filter search results by category
-    .results--filter {
-        .unitize(20, 16, margin-top);
-    }
+	.cat-filter--headline {
+		.unitize-padding(0, 0, 5, 0);
+		.unitize-margin(0, 0, 10, 0);
+		.unitize(16, 16, font-size);
+		.unitize(24, 16, line-height);
+		border-bottom: 1px solid @border-color;
 
-    .filter--types {
-        .unitize-padding(20, 20);
-        width: 100%;
-        display: block;
-    }
+		.icon--arrow-right {
+			.unitize(10, 16, font-size);
+			.unitize-margin(0, 10);
+		}
+	}
 
-    .types--list {
-        .unitize(10, 16, margin-top);
-        width: 100%;
-        list-style: none;
-    }
+	.cat-filter--title {
+		display: none;
+	}
 
-    .list--headline {
-        margin-top: 0;
-    }
+	.cat-filter--link {
+		display: block;
+	}
 
-    .link--reset { display: block }
+	.cat-filter--sub-cat {
+		.unitize(14, 16, font-size);
+		.unitize(24, 16, line-height);
+		.unitize-margin(0, 10);
 
-
-    // Paginator, table view and sort switcher
-    .results--paging {
-        .unitize(20, 16, margin-top)
-    }
-
-    .results--articles {
-        .unitize(25, 16, margin-top);
-        width: 100%;
-
-    }
+		[class^="icon--"] {
+			.unitize(10, 16, font-size);
+			.unitize(5, 16, margin-right);
+		}
+	}
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
-    .search--results .types--list {
-        width: 50%;
 
-        &:last-child {
-            .unitize(10, 16, margin-top);
+    .is--ctl-search {
+        .sidebar-main {
+            display: none;
         }
     }
-}
 
-@media screen and (min-width: @tabletLandscapeViewportWidth) {
-    .search--results .types--list {
-        width: 50%;
-    }
+	.search--cat-filter {
+		.unitize-margin(0, 0, 40, 0);
+
+		.cat-filter--title {
+			display: inline;
+		}
+
+		.cat-filter--link {
+			display: inline;
+			white-space: nowrap;
+		}
+	}
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-    .is--ctl-search .sidebar-main {
-        display: none;
+    .search--content {
+        .unitize-padding(45, 0, 0, 0);
     }
 }

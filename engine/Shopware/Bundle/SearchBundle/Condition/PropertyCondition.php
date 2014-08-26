@@ -34,6 +34,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 class PropertyCondition implements ConditionInterface
 {
     /**
+     * Each value id is combined via OR expression to restrict the criteria.
+     *
      * @var array
      */
     private $valueIds = array();
@@ -51,7 +53,7 @@ class PropertyCondition implements ConditionInterface
      */
     public function getName()
     {
-        return 'property';
+        return 'property_' . implode('_', $this->getValueIds());
     }
 
     /**
@@ -69,4 +71,14 @@ class PropertyCondition implements ConditionInterface
     {
         return get_object_vars($this);
     }
+
+    /**
+     * @param array $data
+     * @return ConditionInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self($data['valueIds']);
+    }
+
 }

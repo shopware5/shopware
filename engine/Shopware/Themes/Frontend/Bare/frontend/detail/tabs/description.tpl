@@ -67,7 +67,11 @@
 						{* Vendor landing page link *}
 						{block name='frontend_detail_description_links_supplier'}
 							<li class="list--entry">
-								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier" title="{"{s name="DetailDescriptionLinkInformation"}{/s}"|escape}">
+								<a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
+								   target="{$information.target}"
+								   class="content--link link--supplier"
+								   title="{"{s name="DetailDescriptionLinkInformation"}{/s}"|escape}">
+
                                     <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkInformation"}{/s}
 								</a>
 							</li>

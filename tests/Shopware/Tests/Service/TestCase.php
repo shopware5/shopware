@@ -2,13 +2,17 @@
 
 namespace Shopware\Tests\Service;
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SearchProduct;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
 
 class TestCase extends \Enlight_Components_Test_TestCase
 {
@@ -33,6 +37,149 @@ class TestCase extends \Enlight_Components_Test_TestCase
     {
         $this->helper->cleanUp();
         parent::tearDown();
+    }
+
+    /**
+     * @param Category $category
+     * @param array $products
+     * @param array $expectedNumbers
+     * @param ConditionInterface[] $conditions
+     * @param FacetInterface[] $facets
+     * @param SortingInterface[] $sortings
+     * @param null $context
+     * @return ProductNumberSearchResult
+     */
+    protected function search(
+        $products,
+        $expectedNumbers,
+        $category = null,
+        $conditions = array(),
+        $facets = array(),
+        $sortings = array(),
+        $context = null
+    ) {
+        if ($context === null) {
+            $context = $this->getContext();
+        }
+
+        if ($category === null) {
+            $category = $this->helper->createCategory();
+        }
+
+        $this->createProducts($products, $context, $category);
+
+        $criteria = new Criteria();
+
+        $this->addCategoryBaseCondition($criteria, $category, $conditions, $context);
+
+        $this->addConditions($criteria, $conditions);
+
+        $this->addFacets($criteria, $facets);
+
+        $this->addSortings($criteria, $sortings);
+
+        $criteria->offset(0)->limit(4000);
+
+        $result = Shopware()->Container()->get('product_number_search_dbal')
+            ->search($criteria, $context);
+
+        $this->assertSearchResult($result, $expectedNumbers);
+
+        return $result;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param Category $category
+     * @param $conditions
+     * @param Context $context
+     */
+    protected function addCategoryBaseCondition(
+        Criteria $criteria,
+        Category $category,
+        $conditions,
+        Context $context
+    ) {
+        if ($category) {
+            $criteria->addBaseCondition(
+                new CategoryCondition(array($category->getId()))
+            );
+        }
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param ConditionInterface[] $conditions
+     */
+    protected function addConditions(Criteria $criteria, $conditions)
+    {
+        foreach($conditions as $condition) {
+            $criteria->addCondition($condition);
+        }
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param FacetInterface[] $facets
+     */
+    protected function addFacets(Criteria $criteria, $facets)
+    {
+        foreach($facets as $facet) {
+            $criteria->addFacet($facet);
+        }
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param SortingInterface[] $sortings
+     */
+    protected function addSortings(Criteria $criteria, $sortings)
+    {
+        foreach($sortings as $sorting) {
+            $criteria->addSorting($sorting);
+        }
+    }
+
+    /**
+     * @param $products
+     * @param Context $context
+     * @param Category $category
+     * @return Article[]
+     */
+    public function createProducts($products, Context $context, Category $category)
+    {
+        $articles = array();
+        foreach($products as $number => $additionally) {
+            $articles[] = $this->createProduct(
+                $number,
+                $context,
+                $category,
+                $additionally
+            );
+        }
+        return $articles;
+    }
+
+    /**
+     * @param $number
+     * @param Context $context
+     * @param Category $category
+     * @param $additionally
+     * @return \Shopware\Models\Article\Article
+     */
+    protected function createProduct(
+        $number,
+        Context $context,
+        Category $category,
+        $additionally
+    ) {
+        $data = $this->getProduct(
+            $number,
+            $context,
+            $category,
+            $additionally
+        );
+        return $this->helper->createArticle($data);
     }
 
     /**
@@ -76,7 +223,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return TestContext
+     * @return Context
      */
     protected function getContext()
     {
@@ -94,14 +241,16 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param Category $category
      * @param Context $context
+     * @param Category $category
+     * @param $additionally
      * @return array
      */
     protected function getProduct(
         $number,
         Context $context,
-        Category $category = null
+        Category $category = null,
+        $additionally
     ) {
         $product = $this->helper->getSimpleProduct(
             $number,

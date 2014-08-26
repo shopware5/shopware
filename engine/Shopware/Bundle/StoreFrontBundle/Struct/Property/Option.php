@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Property;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 /**
  * @category  Shopware
@@ -42,6 +43,11 @@ class Option extends Extendable implements \JsonSerializable
      * @var string
      */
     protected $name;
+
+    /**
+     * @var Media
+     */
+    protected $media;
 
     /**
      * @param int $id
@@ -87,5 +93,21 @@ class Option extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
     }
 }

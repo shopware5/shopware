@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+
 /**
  * Defines the search result of the search gateway.
  *
@@ -44,20 +46,27 @@ class ProductNumberSearchResult implements \JsonSerializable
     protected $totalCount;
 
     /**
-     * @var FacetInterface[]
+     * @var FacetResultInterface[]
      */
     protected $facets;
 
     /**
+     * @var Attribute
+     */
+    protected $attribute;
+
+    /**
      * @param SearchProduct[] $products Indexed by the product order number
      * @param int $totalCount
-     * @param FacetInterface[] $facets
+     * @param FacetResultInterface[] $facets
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Attribute $attribute
      */
-    public function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets, Attribute $attribute = null)
     {
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;
+        $this->attribute = $attribute;
     }
 
     /**
@@ -69,7 +78,7 @@ class ProductNumberSearchResult implements \JsonSerializable
     }
 
     /**
-     * @return FacetInterface[]
+     * @return FacetResultInterface[]
      */
     public function getFacets()
     {

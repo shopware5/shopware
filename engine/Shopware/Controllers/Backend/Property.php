@@ -66,7 +66,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         return $this->manager;
     }
 
-
     /**
      * returns the groups for the sets grids
      */
@@ -89,7 +88,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         );
     }
 
-
     /**
      * returns the groups for the sets grids
      */
@@ -108,7 +106,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             )
         );
     }
-
 
     public function createSetAction()
     {
@@ -130,34 +127,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
                      ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-    }
-
-    /**
-     * Internal helper function to save the dynamic attributes of an article price.
-     * @param $group
-     * @param $attributeData
-     * @return mixed
-     */
-    private function saveGroupAttributes($group, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($group->getId() > 0) {
-            $result = $this->getPropertyRepository()
-                           ->getAttributesQuery($group->getId())
-                           ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\PropertyGroup();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\PropertyGroup();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setPropertyGroup($group);
-        $this->getManager()->persist($attributes);
     }
 
     /**
@@ -402,8 +371,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-
-
         $values = $this->getPropertyRepository()
                        ->getPropertyValueByOptionIdQuery($optionId)
                        ->getArrayResult();
@@ -460,6 +427,13 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         $value->setValue($this->Request()->getPost('value'));
 
+        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId', null)) {
+            $media = $this->get('models')->find('Shopware\Models\Media\Media', $this->Request()->getPost('mediaId'));
+            $value->setMedia($media);
+        } else {
+            $value->setMedia(null);
+        }
+
         try {
             Shopware()->Models()->flush();
         } catch (Exception $e) {
@@ -467,7 +441,11 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        $data = Shopware()->Models()->toArray($value);
+        $query = $this->getPropertyRepository()->getPropertyValueByOptionIdQueryBuilder(1);
+        $query->where('value.id = ?0')
+            ->setParameter(0, $value->getId());
+
+        $data = $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
 

@@ -6,67 +6,80 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content block listing--content">
+	<div class="content block listing--content">
 
-	{* Banner *}
-	{block name="frontend_listing_index_banner"}
-		{include file='frontend/listing/banner.tpl'}
-	{/block}
-	
-	{* Category headline *}
-	{block name="frontend_listing_index_text"}
-		{if !$hasEmotion && !$sSupplierInfo}
-			{include file='frontend/listing/text.tpl'}
-		{/if}
+		{* Banner *}
+		{block name="frontend_listing_index_banner"}
+			{include file='frontend/listing/banner.tpl'}
+		{/block}
+
+		{* Category headline *}
+		{block name="frontend_listing_index_text"}
+			{if !$hasEmotion && !$sSupplierInfo}
+				{include file='frontend/listing/text.tpl'}
+			{/if}
+		{/block}
 
 		{* Topseller *}
-		{if !$hasEmotion && !$sSupplierInfo && {config name=topSellerActive}}
-			{action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
-		{/if}
-	{/block}
-	
-	{* Remap the template names to the new syntax *}
-	{if $sCategoryContent.template eq "article_listing_1col.tpl"}
-		{assign var="sTemplate" value="listing-1col"}
-		{assign var="sBoxMode" value="list"}
-	{elseif $sCategoryContent.template eq "article_listing_2col.tpl"}
-		{assign var="sTemplate" value="listing-2col"}
-		{assign var="sBoxMode" value="table"}
-	{elseif $sCategoryContent.template eq "article_listing_3col.tpl"}
-		{assign var="sTemplate" value="listing-3col"}
-		{assign var="sBoxMode" value="table"}
-	{elseif $sCategoryContent.template eq "article_listing_4col.tpl"}
-		{assign var="sTemplate" value="listing"}
-		{assign var="sBoxMode" value="table"}
-	{else}
-		{assign var="sTemplate" value="listing-3col"}
-		{assign var="sBoxMode" value="table"}
-	{/if}
+		{block name="frontend_listing_index_topseller"}
+			{if !$hasEmotion && !$sSupplierInfo && {config name=topSellerActive}}
+				{action module=widgets controller=listing action=top_seller sCategory=$sCategoryContent.id}
+			{/if}
+		{/block}
 
-	{* Listing *}
-	{block name="frontend_listing_index_listing"}
-		{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
+		{* Define all necessary template variables for the listing *}
+		{block name="frontend_listing_index_layout_variables"}
+			{if $showListing && !$sOffers}
 
-	    {if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
+				{* Count of available product pages *}
+				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
 
-            {* Further products in the category *}
-            {block name="frontend_listing_index_listing_further_products"}
-                <div class="further-products">
-                    <a class="further-products--link" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
-                        {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
-                    </a>
-                </div>
-            {/block}
-	    {/if}
-	{/block}
-	
-	{* Tagcloud *}
-	{block name="frontend_listing_index_tagcloud"}
-		{if {config name=show namespace=TagCloud }}
-		    {action module=widgets controller=listing action=tag_cloud sController=listing sCategory=$sCategoryContent.id}
-		{/if}
-	{/block}
-</div>
+				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" sCategory=$sCategoryContent.id fullPath}"}
+
+				{* Remap the template names to the new syntax *}
+				{if $sCategoryContent.template eq "article_listing_1col.tpl"}
+					{assign var="sTemplate" value="listing-1col"}
+					{assign var="sBoxMode" value="list"}
+				{elseif $sCategoryContent.template eq "article_listing_2col.tpl"}
+					{assign var="sTemplate" value="listing-2col"}
+					{assign var="sBoxMode" value="table"}
+				{elseif $sCategoryContent.template eq "article_listing_3col.tpl"}
+					{assign var="sTemplate" value="listing-3col"}
+					{assign var="sBoxMode" value="table"}
+				{elseif $sCategoryContent.template eq "article_listing_4col.tpl"}
+					{assign var="sTemplate" value="listing"}
+					{assign var="sBoxMode" value="table"}
+				{else}
+					{assign var="sTemplate" value="listing-3col"}
+					{assign var="sBoxMode" value="table"}
+				{/if}
+			{/if}
+		{/block}
+
+		{* Listing *}
+		{block name="frontend_listing_index_listing"}
+			{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
+
+			{if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
+
+				{* Further products in the category *}
+				{block name="frontend_listing_index_listing_further_products"}
+					<div class="further-products">
+						<a class="further-products--link" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
+							{s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
+						</a>
+					</div>
+				{/block}
+			{/if}
+		{/block}
+
+		{* Tagcloud *}
+		{block name="frontend_listing_index_tagcloud"}
+			{if {config name=show namespace=TagCloud }}
+				{action module=widgets controller=listing action=tag_cloud sController=listing sCategory=$sCategoryContent.id}
+			{/if}
+		{/block}
+	</div>
 {/block}
 
 {* Sidebar right *}

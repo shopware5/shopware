@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
      */
     alias:'widget.performance-main-window',
 
+    cls: 'performance-main-window',
+
     /**
      * Set no border for the window
      * @boolean

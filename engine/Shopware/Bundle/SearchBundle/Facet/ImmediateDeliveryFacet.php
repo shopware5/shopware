@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -34,53 +35,11 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 class ImmediateDeliveryFacet implements FacetInterface
 {
     /**
-     * @var int
-     */
-    private $total;
-
-    /**
-     * @var bool
-     */
-    private $filtered = false;
-
-    /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'immediate_delivery_facet';
-    }
-
-    /**
-     * @param $filtered
-     */
-    public function setIsFiltered($filtered)
-    {
-        $this->filtered = $filtered;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFiltered()
-    {
-        return $this->filtered;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param int $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
+        return 'immediate_delivery';
     }
 
     /**
@@ -89,5 +48,14 @@ class ImmediateDeliveryFacet implements FacetInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param array $data
+     * @return FacetInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self();
     }
 }

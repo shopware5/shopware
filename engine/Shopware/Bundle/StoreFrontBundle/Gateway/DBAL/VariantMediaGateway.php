@@ -168,14 +168,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
             ->addSelect($this->fieldHelper->getImageFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());
 
-        $this->fieldHelper->addImageTranslation($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addImageTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
+        $this->fieldHelper->addImageTranslation($query, $context);
 
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
@@ -188,5 +181,4 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
 
         return $query;
     }
-
 }

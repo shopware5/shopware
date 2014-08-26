@@ -43,7 +43,7 @@ class ProductSearchResult extends ProductNumberSearchResult implements \JsonSeri
     /**
      * @param ListProduct[] $products Indexed by the product order number
      * @param int $totalCount
-     * @param FacetInterface[] $facets
+     * @param FacetResultInterface[] $facets
      */
     public function __construct($products, $totalCount, $facets)
     {

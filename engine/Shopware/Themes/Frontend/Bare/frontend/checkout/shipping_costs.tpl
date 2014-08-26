@@ -8,7 +8,7 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_country_selection'}
-                <select id="basket_country_list" name="sCountry" data-auto-submit-form="true">
+                <select id="basket_country_list" name="sCountry" data-auto-submit="true">
                     {foreach $sCountryList as $country}
                         <option value="{$country.id}"{if $country.id eq $sCountry.id} selected="selected"{/if}>
                             {$country.countryname}
@@ -29,7 +29,7 @@
                         {/block}
 
                         {block name='frontend_checkout_shipping_costs_state_selection'}
-                            <select name="sState" id="country_{$country.id}_states" data-auto-submit-form="true"{if $country.id != $sCountry.id} disabled="disabled"{/if}>
+                            <select name="sState" id="country_{$country.id}_states" data-auto-submit="true"{if $country.id != $sCountry.id} disabled="disabled"{/if}>
                                 <option value="" selected="selected">{s name='StateSelection'}{/s}</option>
 
                                 {foreach $country.states as $state}
@@ -53,7 +53,7 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_payment_selection'}
-                <select id="basket_payment_list" name="sPayment" data-auto-submit-form="true">
+                <select id="basket_payment_list" name="sPayment" data-auto-submit="true">
                     {foreach $sPayments as $payment}
                         <option value="{$payment.id}"{if $payment.id eq $sPayment.id} selected="selected"{/if}>
                             {$payment.description}
@@ -72,7 +72,7 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_dispatch_selection'}
-                <select id="basket_dispatch_list" name="sDispatch" data-auto-submit-form="true">
+                <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
                 {if $sDispatches}
                     {foreach $sDispatches as $dispatch}
                         <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>

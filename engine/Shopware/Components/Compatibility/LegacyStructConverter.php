@@ -164,6 +164,10 @@ class LegacyStructConverter
             $promotion['image'] = $this->convertMediaStruct($product->getCover());
         }
 
+        if ($product->getVoteAverage()) {
+            $promotion['sVoteAverange'] = $this->convertVoteAverageStruct($product->getVoteAverage());
+        }
+
         $promotion["linkBasket"] = $this->config->get('baseFile') .
             "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
 
@@ -253,6 +257,11 @@ class LegacyStructConverter
         //convert product voting
         foreach ($product->getVotes() as $vote) {
             $data['sVoteComments'][] = $this->convertVoteStruct($vote);
+        }
+
+        $data['sVoteAverange'] = array('averange' => 0, 'count' => 0);
+        if ($product->getVoteAverage()) {
+            $data['sVoteAverange'] = $this->convertVoteAverageStruct($product->getVoteAverage());
         }
 
         if ($product->getPropertySet()) {
@@ -453,9 +462,7 @@ class LegacyStructConverter
      */
     public function getSupplierListingLink(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
-        return $this->config->get('baseFile') .
-        "sViewport=supplier&sSupplier=" . $manufacturer->getId() .
-        "&sSearchText=" . urlencode($manufacturer->getName());
+        return 'controller=listing&action=manufacturer&sSupplier=' . (int) $manufacturer->getId();
     }
 
     /**

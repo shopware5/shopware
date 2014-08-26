@@ -35,54 +35,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class CategoryFacet implements FacetInterface
 {
     /**
-     * Flag if the facet is filtered with a condition
-     * @var bool
-     */
-    private $filtered = false;
-
-    /**
-     * @var Struct\Category[]
-     */
-    private $categories;
-
-    /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'category_facet';
-    }
-
-    /**
-     * @param bool $filtered
-     */
-    public function setFiltered($filtered)
-    {
-        $this->filtered = $filtered;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFiltered()
-    {
-        return $this->filtered;
-    }
-
-    /**
-     * @return Struct\Category[]
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * @param Struct\Category[] $categories
-     */
-    public function setCategories($categories)
-    {
-        $this->categories = $categories;
+        return 'category';
     }
 
     /**
@@ -91,5 +48,14 @@ class CategoryFacet implements FacetInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param array $data
+     * @return FacetInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self();
     }
 }

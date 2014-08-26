@@ -2,10 +2,10 @@
 
 namespace Shopware\Tests\Service\Search\Facet;
 
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -26,7 +26,6 @@ class PropertyFacetTest extends TestCase
     public function testPropertyFacet()
     {
         $properties = $this->helper->getProperties(2, 3);
-        $values = $properties['propertyValues'];
 
         $firstCombination = $this->createPropertyCombination(
             $properties,
@@ -43,61 +42,68 @@ class PropertyFacetTest extends TestCase
             array(2, 3, 4, 5)
         );
 
-        $facet = new PropertyFacet();
-
         $result = $this->search(
-            $facet,
             array(
                 'first' => $firstCombination,
                 'second' => $secondCombination,
                 'third' => $thirdCombination,
                 'fourth' => array()
             ),
-            array('first', 'second', 'third', 'fourth')
+            array('first', 'second', 'third', 'fourth'),
+            null,
+            array(),
+            array(new PropertyFacet())
         );
 
         $this->assertCount(1, $result->getFacets());
 
-        $this->assertCount(1, $facet->getProperties());
+        /**@var $facet FacetResultGroup*/
+        $facet = $result->getFacets()[0];
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
-        /**@var $set Set*/
-        $set = array_shift($facet->getProperties());
+        $this->assertCount(2, $facet->getFacetResults());
+        foreach($facet->getFacetResults() as $result) {
+            /**@var $result ValueListFacetResult*/
+            $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+            $this->assertCount(3, $result->getValues());
+        }
+    }
 
-        $this->assertCount(2, $set->getGroups());
-        foreach ($set->getGroups() as $group) {
+    public function testMultiplePropertySets()
+    {
+        $properties = $this->helper->getProperties(2, 3);
+        $first = $this->createPropertyCombination($properties, array(0, 1, 2));
+        $second = $this->createPropertyCombination($properties, array(3, 4, 5));
 
-            $this->assertCount(3, $group->getOptions());
+        $properties = $this->helper->getProperties(2, 3, 'PHP');
+        $third = $this->createPropertyCombination($properties, array(0, 1, 2));
+        $fourth = $this->createPropertyCombination($properties, array(3, 4, 5));
 
-            foreach ($group->getOptions() as $option) {
 
-                $this->assertTrue($option->hasAttribute('facet'));
-                $attribute = $option->getAttribute('facet');
+        $result = $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second', 'third', 'fourth'),
+            null,
+            array(),
+            array(new PropertyFacet())
+        );
 
-                switch ($option->getId()) {
-                    case $values[0]['id']:
-                        $this->assertEquals(1, $attribute->get('total'));
-                        break;
+        $this->assertCount(2, $result->getFacets());
 
-                    case $values[1]['id']:
-                        $this->assertEquals(2, $attribute->get('total'));
-                        break;
+        /**@var $facet FacetResultGroup*/
+        foreach($result->getFacets() as $facet) {
+            $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
-                    case $values[2]['id']:
-                        $this->assertEquals(3, $attribute->get('total'));
-                        break;
-
-                    case $values[3]['id']:
-                        $this->assertEquals(2, $attribute->get('total'));
-                        break;
-
-                    case $values[4]['id']:
-                        $this->assertEquals(1, $attribute->get('total'));
-                        break;
-
-                    case $values[5]['id']:
-                        $this->assertEquals(1, $attribute->get('total'));
-                        break;
-                }
+            $this->assertCount(2, $facet->getFacetResults());
+            foreach($facet->getFacetResults() as $result) {
+                /**@var $result ValueListFacetResult*/
+                $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+                $this->assertCount(3, $result->getValues());
             }
         }
     }
@@ -116,36 +122,4 @@ class PropertyFacetTest extends TestCase
         $combination['propertyValues'] = $values;
         return $combination;
     }
-
-    /**
-     * @param PropertyFacet $facet
-     * @param $products
-     * @param $expectedNumbers
-     * @return \Shopware\Bundle\SearchBundle\ProductNumberSearchResult
-     */
-    private function search(
-        PropertyFacet $facet,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $properties) {
-            $data = $this->getProduct($number, $context, $category, $properties);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
-    }
-
 }

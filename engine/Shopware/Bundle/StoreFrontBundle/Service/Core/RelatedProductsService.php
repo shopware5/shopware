@@ -87,6 +87,10 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
 
         $result = array();
         foreach ($products as $product) {
+            if (!isset($numbers[$product->getId()])) {
+                continue;
+            }
+
             $result[$product->getNumber()] = $this->getProductsByNumbers(
                 $listProducts,
                 $numbers[$product->getId()]

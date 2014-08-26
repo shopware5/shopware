@@ -16,7 +16,7 @@
 
 		{* Configurator drop down *}
 		{block name='frontend_detail_group_selection'}
-			<select name="group[{$sConfigurator.groupID}]" data-auto-submit-form="true">
+			<select name="group[{$sConfigurator.groupID}]" data-auto-submit="true">
 				{foreach $sConfigurator.values as $configValue}
 					<option{if $configValue.selected} selected="selected"{/if} value="{$configValue.optionID}">
 						{$configValue.optionname}{if $configValue.upprice} {if $configValue.upprice > 0}{/if}{/if}
