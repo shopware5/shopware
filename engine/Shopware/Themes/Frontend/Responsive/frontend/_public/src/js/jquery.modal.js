@@ -475,7 +475,7 @@
             $window.on('resize.modal', $.proxy(me.onWindowResize, me));
 
             StateManager.registerListener({
-                type: 'smartphone',
+                type: 'xs',
                 enter: function() {
                     me._$modalBox.addClass('is--fullscreen');
                 },

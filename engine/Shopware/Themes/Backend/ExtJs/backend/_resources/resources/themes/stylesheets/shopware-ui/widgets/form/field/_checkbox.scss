@@ -41,8 +41,10 @@ table[id^=checkboxfield] {
 		padding: 2px 0;
 
         .#{$prefix}form-cb-label {
+            color: $font-color;
             position: relative;
-            top: 3px;
+            top: -2px;
+            font-size: 11px;
         }
 	}
 }

@@ -51,7 +51,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $emotions = $query->getArrayResult();
 
         foreach ($emotions as &$emotion) {
-            $emotion['rows'] = $emotion['grid']['rows'];
             $emotion['cols'] = $emotion['grid']['cols'];
             $emotion['elements'] = $repository->getEmotionElementsQuery($emotion['id'])->getQuery()->getArrayResult();
 
@@ -59,6 +58,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
             $emotion['gutter'] = $emotion['grid']['gutter'];
         }
+
         return $emotions;
     }
 
@@ -624,8 +624,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function previewAction()
     {
         $emotionId = $this->Request()->getParam('emotionId');
+        $showShopLayout = $this->Request()->getParam('showShopLayout');
 
         $this->View()->emotionId = $emotionId;
+        $this->View()->showShopLayout = $showShopLayout;
 
         //fake to prevent rendering the templates with the widgets module.
         //otherwise the template engine don't accept to load templates of the `frontend` module

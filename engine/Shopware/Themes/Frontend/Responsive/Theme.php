@@ -51,12 +51,14 @@ class Theme extends \Shopware\Components\Theme
         'vendors/jquery.event.move/js/jquery.event.move.js',
         'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
         'vendors/glidejs/dist/jquery.glide.min.js',
+        'vendors/masonry/dist/masonry.pkgd.min.js',
+
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',
+        'src/js/jquery.data-initialization.js',
         'src/js/jquery.plugin-base.js',
         'src/js/jquery.state-manager.js',
         'src/js/jquery.storage-manager.js',
-        'src/js/jquery.emotions.js',
         'src/js/jquery.off-canvas-menu.js',
         'src/js/jquery.search-field.js',
         'src/js/jquery.slide-panel.js',
@@ -90,6 +92,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.listing-actions.js',
         'src/js/jquery.ui.datepicker.js',
         'src/js/jquery.collapse-cart.js',
+        'src/js/jquery.emotion.js',
         'src/js/jquery.product-compare-add.js',
         'src/js/jquery.product-compare-menu.js',
         'src/js/jquery.infinite-scrolling.js',

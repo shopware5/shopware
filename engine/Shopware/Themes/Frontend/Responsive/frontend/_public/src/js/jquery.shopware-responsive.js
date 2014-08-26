@@ -1,24 +1,24 @@
 $(function() {
     StateManager.init([{
-        type: 'smartphone',
+        type: 'xs',
         enter: '0px',
         exit: '767px'
     }, {
-        type: 'tablet',
+        type: 'm',
         enter: '768px',
         exit: '1023px'
     }, {
-        type: 'tabletLandscape',
+        type: 'l',
         enter: '1024px',
         exit: '1259px'
     }, {
-        type: 'desktop',
+        type: 'xl',
         enter: '1260px',
         exit: '5160px'
     }]);
 
     StateManager.registerListener([{
-        type: 'smartphone',
+        type: 'xs',
         enter: function() {
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
@@ -53,9 +53,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-            
-            var teaserText = $('.category--teaser .hero--text');
-            if (teaserText.length) teaserText.data('plugin_collapseText').destroy();
 
             var btnPassword = $('.btn--password');
             if (btnPassword.length) btnPassword.data('plugin_scroll').destroy();
@@ -70,7 +67,7 @@ $(function() {
             if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
-        type: 'tablet',
+        type: 'm',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('.btn--password').collapsePanel();
@@ -106,7 +103,7 @@ $(function() {
             if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
-        type: 'tabletLandscape',
+        type: 'l',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('.btn--password').collapsePanel();
@@ -142,7 +139,7 @@ $(function() {
             if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
-        type: 'desktop',
+        type: 'xl',
         enter: function() {
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
@@ -208,7 +205,7 @@ $(function() {
 
         $.each(window.widgets, function(index, widget) {
             StateManager.registerListener([{
-                type: 'smartphone',
+                type: 'xs',
                 enter: function() {
                     $(widget.selector)[widget.plugin](widget.smartphone);
                 },
@@ -216,7 +213,7 @@ $(function() {
                     exitWidget(widget);
                 }
             }, {
-                type: 'tablet',
+                type: 'm',
                 enter: function() {
                     $(widget.selector)[widget.plugin](widget.tablet);
                 },
@@ -224,7 +221,7 @@ $(function() {
                     exitWidget(widget);
                 }
             }, {
-                type: 'tabletLandscape',
+                type: 'l',
                 enter: function() {
                     $(widget.selector)[widget.plugin](widget.tabletLandscape);
                 },
@@ -232,7 +229,7 @@ $(function() {
                     exitWidget(widget);
                 }
             }, {
-                type: 'desktop',
+                type: 'xl',
                 enter: function() {
                     $(widget.selector)[widget.plugin](widget.desktop);
                 },
@@ -244,16 +241,19 @@ $(function() {
     }
 
     $('*[data-tab-content="true"]').tabContent();
-    $('*[data-emotions="true"]').emotions();
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
     $('*[data-pseudo-text="true"]').pseudoText();
+
+    $('*[data-collapse-text="true"]').collapseText();
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
+
     $('body').ajaxProductNavigation();
+    $('*[data-emotion="true"]').emotion();
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();

@@ -1,47 +1,33 @@
-<script type="text/javascript">
-(function($) {
-    $(document).ready(function() {
-        {$sliderHeight = $sElementHeight}
-        {if $Data.article_slider_title}
-            {$sliderHeight = $sliderHeight - 36};
-        {/if}
-        {$perPage = $sColWidth }
-        var config  = {
-            'url': '{$Data.ajaxFeed}',
-            'title': "{$Data.article_slider_title}",
-            'headline': {if $Data.article_slider_title}true{else}false{/if},
-            'scrollSpeed': ~~(1 * '{$Data.article_slider_scrollspeed}'),
-            'rotateSpeed': ~~(1 * '{$Data.article_slider_rotatespeed}'),
-            'rotate': {if $Data.article_slider_rotation}true{else}false{/if},
-            'layout': 'horizontal',
-            'showNumbers': {if $Data.article_slider_numbers}true{else}false{/if},
-            'navigation': {if $Data.article_slider_type == 'selected_article'}true{else}false{/if},
-            'showArrows': {if $Data.article_slider_arrows}true{else}false{/if},
-            'scrollWidth': ~~(1 * '{$sElementWidth}'),
-            'scrollHeight': ~~(1 * '{$sElementHeight}'),
-            'skipInitalRendering': true,
-            'maxPages': ~~(1 * '{$Data.pages}'),
-            'extraParams': {
-                'category': ~~(1 * '{$Data.categoryId}'),
-                'start': 0,
-                'limit': ~~(1 * '{$perPage}'),
-                'elementWidth': ~~(1 * '{$sElementWidth}'),
-                'elementHeight': ~~(1 * '{$sliderHeight-5}'),
-                'max': ~~(1 * '{$Data.article_slider_max_number}')
-            }
-        };
+{$dataXsConfig="{ perPage: 1, perSlide: 1, touchControl: true, ajaxMaxShow: {$Data.article_slider_max_number}, controllerUrl: '{$Data.ajaxFeed}', mode: '{if $Data.article_slider_type == 'selected_article'}local{else}ajax{/if}', categoryID: {$sCategoryId} }"}
+{$dataMConfig="{ perPage: 3, perSlide: 1, touchControl: true, ajaxMaxShow: {$Data.article_slider_max_number}, controllerUrl: '{$Data.ajaxFeed}', mode: '{if $Data.article_slider_type == 'selected_article'}local{else}ajax{/if}', categoryID: {$sCategoryId} }"}
+{$dataLConfig="{ perPage: 3, perSlide: 1, touchControl: true, ajaxMaxShow: {$Data.article_slider_max_number}, controllerUrl: '{$Data.ajaxFeed}', mode: '{if $Data.article_slider_type == 'selected_article'}local{else}ajax{/if}', categoryID: {$sCategoryId} }"}
+{$dataXlConfig="{ perPage: 4, perSlide: 4, ajaxMaxShow: {$Data.article_slider_max_number}, controllerUrl: '{$Data.ajaxFeed}', mode: '{if $Data.article_slider_type == 'selected_article'}local{else}ajax{/if}', categoryID: {$sCategoryId} }"}
 
-        var slider = $('.slider_article_{$Data.objectId}').ajaxSlider({if $Data.article_slider_type == 'selected_article'}'locale'{else}'ajax'{/if}, config);
-        slider.find('.sliding_outer, .sliding_container').css('height', {$sliderHeight});
-        slider.find('.ajaxSlider').css('height', {$sElementHeight-2});
-    });
+{* Slider panel *}
+{block name="widget_emotion_component_product_slider"}
+    <div class="panel has--border">
 
-})(jQuery);
-</script>
-<div class="slider_article_{$Data.objectId} article-slider-emotion" style="height:{$sElementHeight}px">
-{if $Data.article_slider_type == 'selected_article'}
-    {foreach $Data.values|array_chunk:$perPage as $articles}
-        {include file="widgets/emotion/slide_articles.tpl" articles=$articles sElementWidth=$sElementWidth sPerPage=$perPage sElementHeight=$sliderHeight-5}
-    {/foreach}
-{/if}
-</div>
+        {* Title *}
+        {block name="widget_emotion_component_product_slider_title"}
+            {if $Data.article_slider_title}
+                <div class="panel--title article-slider--title is--underline">{$Data.article_slider_title}</div>
+            {/if}
+        {/block}
+
+        {* Slider content based on the configuration *}
+        {block name="widget_emotion_component_product_slider_content"}
+            <div class="panel--body is--wide product-slider" data-all="productSlider" data-xs-config="{$dataXsConfig}" data-m-config="{$dataMConfig}" data-xl-config="{$dataXlConfig}">
+                <div class="product-slider--container">
+                    {if $Data.article_slider_type == 'selected_article'}
+                        {$articles = $Data.values}
+
+                        {* Products inside the slider *}
+                        {block name="widget_emotion_component_product_slider"}
+                            {include file="widgets/emotion/slide_articles.tpl" articles=$articles sElementWidth=$sElementWidth sPerPage=$perPage sElementHeight=$sliderHeight-5}
+                        {/block}
+                    {/if}
+                </div>
+            </div>
+        {/block}
+    </div>
+{/block}

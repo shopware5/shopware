@@ -45,11 +45,24 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     border: 0,
     bodyBorder: 0,
     autoScroll: true,
+    style: 'background: #f9fafa',
 
     // Default settings for all underlying items
     defaults: {
-        labelWidth: 200,
+        labelWidth: 155,
         anchor: '100%'
+    },
+
+    snippets: {
+        fields: {
+            responsive_adjustments: '{s name=grids/settings/responsive_adjustments}Responsive Design adjustments{/s}',
+            masonry_effect: '{s name=grids/settings/masonry_effect}Masonry effect{/s}',
+            resize_effect: '{s name=grids/settings/resize_effect}Resize of the elements{/s}'
+        },
+        support: {
+            masonry_effect: '{s name=grid/settings/support/masonry_effect}The mansonry effects rearranges the elements to use available space as efficient as possible based on the viewport size.{/s}',
+            resize_effect: '{s name=grid/settings/support/resize_effect}The elements are scaled based on the available viewport size. This mode is recommend when device-specific shopping worlds are defined.{/s}'
+        }
     },
 
     /**
@@ -64,12 +77,25 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.categoryPathStore.getProxy().extraParams.parents = true;
         me.categoryPathStore.load();
 
-        var gridStore = Ext.create('Shopware.apps.Emotion.store.Grids').load();
+        me.timingFieldSet =  me.createTimingFieldSet();
+        me.generalFieldSet = me.createGeneralFieldSet();
+        me.categoryFieldSet = me.createCategoryFieldSet();
+        me.landingPageFieldSet = me.createLandingpageFieldset();
 
         me.nameField = Ext.create('Ext.form.field.Text', {
             fieldLabel: '{s name=settings/emotion_name_field}Emotion name{/s}',
             emptyText: '{s name=settings/emotion_name_empty}My new emotion{/s}',
-            name: 'name'
+            name: 'name',
+            labelWidth: me.defaults.labelWidth
+        });
+
+        me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: '{s name=settings/active}Active{/s}',
+            boxLabel: '{s name=settings/active_box_label}Emotion will be visible in the store front{/s}',
+            name: 'active',
+            inputValue: true,
+            uncheckedValue:false,
+            labelWidth: me.defaults.labelWidth
         });
 
         me.landingPageCheckbox = Ext.create('Ext.form.field.Checkbox', {
@@ -78,23 +104,43 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'isLandingPage',
             inputValue: true,
             uncheckedValue: false,
+            labelWidth: me.defaults.labelWidth,
             listeners: {
                 scope: me,
                 change: function(field, value) {
+
                     if(value) {
                         me.containerWidthField.setValue(1008);
                         me.categoryNameField.hide().setDisabled(true);
-                        me.listingCheckbox.hide();
+                        me.categoryFieldSet.hide();
                         me.landingPageFieldSet.show();
                     } else {
                         me.containerWidthField.setValue(808);
                         me.categoryNameField.show().setDisabled(false);
                         me.landingPageFieldSet.hide();
-                        me.listingCheckbox.show();
+                        me.categoryFieldSet.show();
                     }
                 }
             }
         });
+
+        me.items = [
+            me.nameField,
+            me.landingPageCheckbox,
+            me.activeComboBox,
+            me.generalFieldSet,
+            me.categoryFieldSet,
+            me.timingFieldSet,
+            me.landingPageFieldSet
+        ];
+
+        me.callParent(arguments);
+
+        me.loadRecord(me.emotion);
+    },
+
+    createCategoryFieldSet: function() {
+        var me = this;
 
         me.categoryNameField = Ext.create('Shopware.form.field.PagingComboBox', {
             anchor: '100%',
@@ -105,8 +151,32 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/select_category_field}Select a category{/s}',
             store: me.categoryPathStore,
             valueField: 'id',
-            displayField: 'name'
+            displayField: 'name',
+            labelWidth: me.defaults.labelWidth - 20
         });
+
+        me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: '{s name=settings/listing}Listing{/s}',
+            boxLabel: '{s name=settings/listing_box_label}Listing will be visible under the emotion{/s}',
+            name: 'showListing',
+            inputValue: true,
+            uncheckedValue: false,
+            labelWidth: me.defaults.labelWidth - 20
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            xtype: 'fieldset',
+            title: '{s name=settings/fieldset/category_settings}{/s}',
+            margin: '20 0 0',
+            items: [
+                me.categoryNameField,
+                me.listingCheckbox
+            ]
+        });
+    },
+
+    createGeneralFieldSet: function() {
+        var me = this;
 
         me.gridComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: '{s name=settings/select_grid_field}Select a grid{/s}',
@@ -114,10 +184,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             allowBlank: false,
             editable: false,
             queryMode: 'remote',
-            store: gridStore,
+            store: Ext.create('Shopware.apps.Emotion.store.Grids').load(),
             displayField: 'name',
             valueField: 'id',
-            emptyText: '{s name=settings/select_grid_empty}Please select...{/s}'
+            emptyText: '{s name=settings/select_grid_empty}Please select...{/s}',
+            labelWidth: me.defaults.labelWidth - 20,
+            anchor: '100%'
         });
 
         var tplComboBox = Ext.create('Ext.form.field.ComboBox', {
@@ -127,18 +199,45 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             displayField: 'name',
             queryMode: 'remote',
             store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
-            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
+            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}',
+            labelWidth: me.defaults.labelWidth - 20,
+            anchor: '100%'
         });
 
         me.containerWidthField = Ext.create('Ext.form.field.Number', {
             fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
             name: 'containerWidth',
-            supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}'
+            supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}',
+            anchor: '100%',
+            width: '100%',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
-        var devicesStore = Ext.create('Ext.data.Store', {
-            fields: ['abbr', 'name'],
-            data : me.createDeviceData()
+        var responsiveModeStore = Ext.create('Ext.data.Store', {
+            fields: [ 'display', 'value', 'supportText' ],
+            data: [
+                { 'display': me.snippets.fields.masonry_effect, 'value': 'masonry', 'supportText': me.snippets.support.masonry_effect },
+                { 'display': me.snippets.fields.resize_effect, 'value': 'resize', 'supportText': me.snippets.support.resize_effect }
+            ]
+        });
+
+        var responsiveMode = Ext.create('Ext.form.field.ComboBox', {
+            name: 'mode',
+            store: responsiveModeStore,
+            queryMode: 'local',
+            displayField: 'display',
+            valueField: 'value',
+            fieldLabel: me.snippets.fields.responsive_adjustments,
+            allowBlank: false,
+            labelWidth: me.defaults.labelWidth - 20,
+            anchor: '100%',
+            tpl: Ext.create('Ext.XTemplate',
+                '{literal}<tpl for=".">',
+                '<div class="x-boundlist-item">',
+                '<h1>{display}</h1>{supportText}',
+                '</div>',
+                '</tpl>{/literal}'
+            )
         });
 
         var deviceComboBox = Ext.create('Ext.form.field.ComboBox', {
@@ -146,59 +245,68 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'device',
             valueField: 'id',
             displayField: 'name',
-            store: devicesStore,
+            store: Ext.create('Ext.data.Store', {
+                fields: [ 'name' ],
+                data : me.createDeviceData()
+            }),
             queryMode: 'local',
-            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
+            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}',
+            labelWidth: me.defaults.labelWidth - 20,
+            anchor: '100%'
         });
 
-        me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: '{s name=settings/active}Active{/s}',
-            boxLabel: '{s name=settings/active_box_label}Emotion will be visible in the store front{/s}',
-            name: 'active',
-            inputValue: true,
-            uncheckedValue:false
+        var fullscreen = Ext.create('Ext.form.field.Checkbox', {
+            inputValue: 1,
+            uncheckedValue: 0,
+            fieldLabel: '{s name=settings/label/fullscreen}{/s}',
+            boxLabel: '{s name=settings/boxlabel/fullscreen}{/s}',
+            name: 'fullscreen',
+            labelWidth: me.defaults.labelWidth - 20,
+            anchor: '100%'
         });
 
-        me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: '{s name=settings/listing}Listing{/s}',
-            boxLabel: '{s name=settings/listing_box_label}Listing will be visible under the emotion{/s}',
-            name: 'showListing',
-            inputValue: true,
-            uncheckedValue: false
+        return Ext.create('Ext.form.FieldSet', {
+            title: '{s name=settings/fieldset/general_settings}{/s}',
+            layout: 'column',
+            margin: '20 0 0',
+            items: [
+                {
+                    xtype: 'container',
+                    columnWidth: 1,
+                    layout: 'anchor',
+                    items: [ me.containerWidthField, responsiveMode ]
+                }, {
+                    xtype: 'container',
+                    columnWidth: .5,
+                    margin: '0 10 0 0',
+                    layout: 'anchor',
+                    items: [ me.gridComboBox ]
+                }, {
+                    xtype: 'container',
+                    columnWidth: .5,
+                    layout: 'anchor',
+                    margin: '0 0 0 10',
+                    items: [ tplComboBox ]
+                }, {
+                    xtype: 'container',
+                    columnWidth: 1,
+                    layout: 'anchor',
+                    items: [ deviceComboBox, fullscreen ]
+                }
+            ]
         });
-
-        me.timingFieldSet =  me.createTimingFieldSet();
-        me.landingPageFieldSet = me.createLandingpageFieldset();
-
-        me.items = [
-            me.nameField,
-            me.landingPageCheckbox,
-            me.categoryNameField,
-            me.gridComboBox,
-            tplComboBox,
-            me.containerWidthField,
-            deviceComboBox,
-            me.activeComboBox,
-            me.listingCheckbox,
-            me.timingFieldSet,
-            me.landingPageFieldSet
-        ];
-
-        me.callParent(arguments);
-
-        me.loadRecord(me.emotion);
     },
 
     createDeviceData: function() {
         return [{
             "id" : 0,
-            "name" : "Desktop"
+            "name" : "Desktop (1260px)"
         }, {
             "id" : 1,
-            "name" : "Tablet"
+            "name" : "Tablet (768px - 1260px)"
         }, {
             "id" : 2,
-            "name" : "Mobile"
+            "name" : "Mobile (320px - 767px)"
         }];
     },
 
@@ -209,14 +317,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             anchor: '100%',
             submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/start_date}Start date{/s}',
-            name: 'validFrom'
+            name: 'validFrom',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
         var validTo = Ext.create('Ext.form.field.Date', {
             anchor: '100%',
             submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/end_date}End date{/s}',
-            name: 'validTo'
+            name: 'validTo',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
         var validFromTime = Ext.create('Ext.form.field.Time', {
@@ -225,7 +335,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             increment: 30,
             validationEvent: false,
             submitFormat: 'H:i',
-            anchor: '100%'
+            anchor: '100%',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
         var validToTime = Ext.create('Ext.form.field.Time', {
@@ -233,13 +344,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/time_control/end_time}End time{/s}',
             increment: 30,
             submitFormat: 'H:i',
-            anchor: '100%'
+            anchor: '100%',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
         return {
             xtype: 'fieldset',
             title: '{s name=settings/time_control/title}Time-controlled activation{/s}',
             layout: 'column',
+            margin: '20 0 0',
             items: [{
                 xtype: 'container',
                 columnWidth: 1,

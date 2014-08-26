@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     autoShow: true,
     layout: 'fit',
     height: '90%',
-    width: 800,
+    width: 815,
     stateful: true,
     stateId: 'emotion-detail-window',
 
@@ -78,7 +78,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         settings = me.emotion.data;
         if (me.emotion.getGrid() instanceof Ext.data.Store && me.emotion.getGrid().first() instanceof Ext.data.Model) {
             var gridModel = me.emotion.getGrid().first();
-            settings.rows = gridModel.get('rows');
             settings.cols = gridModel.get('cols');
             settings.cellHeight = gridModel.get('cellHeight');
             settings.articleHeight = gridModel.get('articleHeight');
