@@ -20,10 +20,6 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            var pageWrap = $('.page-wrap');
-            $('.sidebar-main').insertBefore(pageWrap);
-            $('.action--filter-options').insertBefore(pageWrap);
-            $('.blog--filter-options').insertBefore(pageWrap);
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
@@ -57,10 +53,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-
-            $('.sidebar-main').prependTo($('.content-main--inner'));
-            $('.action--filter-options').insertAfter($('.action--per-page'));
-            $('.blog--filter-options').insertBefore($('.blog--listing'));
             
             var teaserText = $('.category--teaser .hero--text');
             if (teaserText.length) teaserText.data('plugin_collapseText').destroy();

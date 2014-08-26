@@ -120,6 +120,8 @@
         me.$swipe = $(opts.swipeContainerSelector);
         me.$offCanvas = $(opts.offCanvasSelector);
         me.$closeButton = $(opts.closeButtonSelector);
+        me.$overlay = $(opts.wrapSelector + ':before');
+        me.$body = $('body');
 
         me.$offCanvas.addClass(opts.offCanvasElementCls)
                      .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
@@ -165,13 +167,19 @@
      */
     Plugin.prototype.openMenu = function() {
         var me = this,
-            opts = me.opts;
+            opts = me.opts,
+            deltaX = 0;
 
         // Close all other opened off-canvas menus
         $('.' + opts.offCanvasElementCls).removeClass(opts.activeMenuCls);
 
         me.$offCanvas.addClass(opts.activeMenuCls);
         me.$pageWrap.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
+        me.$body.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
+
+        me.$pageWrap.on('scroll.' + pluginName, function(e) {
+            e.preventDefault();
+        });
     };
 
     /**
@@ -182,8 +190,11 @@
         var me = this,
             opts = me.opts;
 
-        me.$offCanvas.removeClass(opts.activeMenuCls);
+        me.$offCanvas.removeClass(opts.activeMenuCls).removeAttr('style');
         me.$pageWrap.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
+        me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
+
+        me.$pageWrap.off('scroll.' + pluginName);
     };
 
     /**
@@ -198,6 +209,7 @@
             opts = me.opts;
 
         me.$offCanvas.removeClass(opts.offCanvasElementCls)
+                     .removeClass(opts.activeMenuCls)
                      .removeClass(opts.disableTransitionCls)
                      .removeAttr('style');
 
@@ -205,6 +217,8 @@
                     .removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls)
                     .removeClass(opts.disableTransitionCls)
                     .removeAttr('style');
+
+        me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
 
         me.$closeButton.off(clickEvt + '.' + pluginName);
 
