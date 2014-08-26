@@ -80,20 +80,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
         $mail->setSubject('PHPUnit test "' . $name . '" failed.');
         $mail->setBodyText($message);
 
-        if($test instanceof Enlight_Components_Test_Selenium_TestCase
-          && $e instanceof PHPUnit_Framework_ExpectationFailedException
-          && $screenshot = $test->getFullScreenshot()) {
-            $filename = basename($test->getFullScreenshotUrl());
-            /** @var $test Enlight_Components_Test_Selenium_TestCase */
-            $mail->createAttachment(
-                $screenshot,
-                Zend_Mime::TYPE_OCTETSTREAM,
-                Zend_Mime::DISPOSITION_ATTACHMENT,
-                Zend_Mime::ENCODING_BASE64,
-                $filename
-            );
-        }
-
         $mail->send($this->mailTransport);
     }
 
