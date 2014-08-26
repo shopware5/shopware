@@ -166,6 +166,10 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         foreach ($products as $product) {
             $number = $product->getNumber();
 
+            if (!isset($media[$product->getId()])) {
+                continue;
+            }
+
             $productMedia = $media[$product->getId()];
 
             if (!$productMedia) {
@@ -190,14 +194,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
             ->addSelect($this->fieldHelper->getImageFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());
 
-        $this->fieldHelper->addImageTranslation($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addImageTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
+        $this->fieldHelper->addImageTranslation($query, $context);
 
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')

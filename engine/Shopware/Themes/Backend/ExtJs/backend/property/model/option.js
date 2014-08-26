@@ -38,7 +38,13 @@ Ext.define('Shopware.apps.Property.model.Option', {
      * Extends the standard ExtJS 4
      * @string
      */
-    extend: 'Ext.data.Model',
+    extend: 'Shopware.data.Model',
+
+    configure: function() {
+        return {
+            detail: 'Shopware.apps.Property.view.detail.OptionContainer'
+        }
+    },
 
     /**
      * The fields used for this model
@@ -47,7 +53,8 @@ Ext.define('Shopware.apps.Property.model.Option', {
      */
     fields : [
 		//{block name="backend/property/model/option/fields"}{/block}
-        { name: 'id',    type: 'integer' },
+        { name: 'id', type: 'integer' },
+        { name: 'mediaId', type: 'integer' },
         { name: 'value', type: 'string' }
     ],
 
@@ -78,6 +85,16 @@ Ext.define('Shopware.apps.Property.model.Option', {
             type: 'json',
             root: 'data'
         }
-    }
+    },
+
+    associations: [{
+        relation: 'ManyToOne',
+        field: 'mediaId',
+
+        type: 'hasMany',
+        model: 'Shopware.apps.Base.model.Media',
+        name: 'getMedia',
+        associationKey: 'media'
+    }]
 });
 //{/block}

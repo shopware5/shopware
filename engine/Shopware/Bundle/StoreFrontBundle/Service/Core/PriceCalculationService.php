@@ -167,7 +167,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
 
         /**@var $highest Struct\Product\PriceDiscount*/
         $highest = null;
-        foreach($priceGroup->getDiscounts() as $discount) {
+        foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity) {
                 continue;
             }

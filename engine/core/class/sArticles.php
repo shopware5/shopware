@@ -23,7 +23,6 @@
  */
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use SearchBundle\DBAL\ProductNumberSearch;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\QueryAliasMapper;
@@ -171,9 +170,21 @@ class sArticles
     private $queryAliasMapper;
 
     /**
-     * @var ProductNumberSearch
+     * @var SearchBundle\ProductNumberSearchInterface
      */
     private $productNumberSearch;
+    /**
+     * @var SearchBundle\CriteriaFactory
+     */
+    private $criteriaFactory;
+    /**
+     * @var Enlight_Components_Session_Namespace
+     */
+    private $session;
+    /**
+     * @var SearchBundle\StoreFrontCriteriaFactory
+     */
+    private $storeFrontCriteriaFactory;
 
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
@@ -193,7 +204,10 @@ class sArticles
         \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter = null,
         \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null,
         QueryAliasMapper $queryAliasMapper = null,
-        ProductNumberSearch $productNumberSearch = null
+        SearchBundle\ProductNumberSearchInterface $productNumberSearch = null,
+        SearchBundle\CriteriaFactory $criteriaFactory,
+        SearchBundle\StoreFrontCriteriaFactory $storeFrontCriteriaFactory,
+        Enlight_Components_Session_Namespace $session
     ) {
         $container = Shopware()->Container();
 
@@ -201,8 +215,11 @@ class sArticles
         $this->categoryId = $this->category->getId();
         $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
         $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
-        $this->contextService = $contextService ?: $container->get('context_service');
         $this->config = $config ?: $container->get('config');
+        $this->db = $db ?: $container->get('db');
+        $this->eventManager = $eventManager ?: $container->get('events');
+
+        $this->contextService = $contextService ?: $container->get('context_service');
         $this->listProductService = $listProductService ?: $container->get('list_product_service');
         $this->productService = $productService ?: $container->get('product_service');
         $this->productNumberSearch = $productNumberSearch ?: $container->get('product_number_search');
@@ -211,11 +228,14 @@ class sArticles
         $this->propertyService = $propertyService ?: $container->get('property_service');
         $this->additionalTextService = $additionalTextService ?: $container->get('additional_text_service');
         $this->searchService = $searchService ?: $container->get('product_search');
-        $this->db = $db ?: $container->get('db');
-        $this->eventManager = $eventManager ?: $container->get('events');
+        $this->queryAliasMapper = $queryAliasMapper ?: $container->get('query_alias_mapper');
+
+
         $this->legacyStructConverter = $legacyStructConverter ?: $container->get('legacy_struct_converter');
         $this->legacyEventManager = $legacyEventManager ?: $container->get('legacy_event_manager');
-        $this->queryAliasMapper = $queryAliasMapper ?: $container->get('query_alias_mapper');
+        $this->criteriaFactory = $criteriaFactory ?: $container->get('criteria_factory');
+        $this->session = $session ?: $container->get('session');
+        $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory ?: $container->get('store_front_criteria_factory');
     }
 
     /**
@@ -887,12 +907,28 @@ class sArticles
     }
 
     /**
-     * Get all articles from a specific category
-     *
-     * @param int $categoryId category id
-     * @return array
+     * @return bool
      */
-    public function sGetArticlesByCategory($categoryId = null)
+    private function isHttpCacheActive()
+    {
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+        if (!$httpCache instanceof Shopware_Components_Plugin_Bootstrap) {
+            return false;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $httpCache->getId());
+
+        return $plugin->getActive() && $plugin->getInstalled();
+    }
+
+    /**
+     * @param null $categoryId
+     * @param SearchBundle\Criteria $criteria
+     * @throws Enlight_Exception
+     * @return array|bool|mixed
+     */
+    public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
                 'subject' => $this,
@@ -901,7 +937,7 @@ class sArticles
             return false;
         }
 
-        $result = $this->getListing($categoryId);
+        $result = $this->getListing($categoryId, $criteria);
 
         $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
 
@@ -1802,16 +1838,14 @@ class sArticles
     {
         $this->queryAliasMapper->replaceShortRequestQueries($request);
 
-        $config = $this->loadCategoryConfig($categoryId);
-        unset($config['sPage']);
-        unset($config['sPerPage']);
+        $criteria = $this->criteriaFactory->createCriteriaFromJson(
+            $this->session->offsetGet('category_config_' . $categoryId)
+        );
+
+        $criteria->offset(null)
+            ->limit(null);
 
         $context = $this->contextService->getProductContext();
-        $criteria = $this->getListingCriteria(
-            $categoryId,
-            $config,
-            $context
-        );
 
         $searchResult = $this->productNumberSearch->search(
             $criteria,
@@ -1834,14 +1868,14 @@ class sArticles
      * @param SearchBundle\ProductNumberSearchResult $searchResult
      * @param $orderNumber
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\Context $context
+     * @param StoreFrontBundle\Struct\ProductContextInterface $context
      * @return array
      */
     private function buildNavigation(
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Struct\Context $context
+        StoreFrontBundle\Struct\ProductContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2460,7 +2494,7 @@ class sArticles
      * Round article price
      *
      * @param float $moneyFloat price
-     * @r e
+     * @return float price
      */
     public function sRound($moneyfloat = null)
     {
@@ -3681,16 +3715,6 @@ class sArticles
             $promotion["linkDetails"] .= "&sCategory=$category";
         }
 
-        /**@var $average StoreFrontBundle\Struct\Product\VoteAverage */
-        $average = $this->voteService->getAverage(
-            $product,
-            $context
-        );
-
-        if ($average && $average->getCount()) {
-            $promotion['sVoteAverange'] = $this->legacyStructConverter->convertVoteAverageStruct($average);
-        }
-
         //check if the product has a configured property set which stored in s_filter.
         //the mini product doesn't contains this data so we have to load this lazy.
         if (!$product->hasProperties()) {
@@ -3718,19 +3742,23 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
+     * @param SearchBundle\Criteria $criteria
+     * @throws Exception
      * @return array
      */
-    private function getListing($categoryId)
+    private function getListing($categoryId, SearchBundle\Criteria $criteria)
     {
         $context = $this->contextService->getProductContext();
 
-        $config = $this->loadCategoryConfig($categoryId);
+        $request = Shopware()->Container()->get('front')->Request();
 
-        $criteria = $this->getListingCriteria(
-            $categoryId,
-            $config,
-            $context
-        );
+        if (!$criteria) {
+            $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($request, $context);
+            $this->session->offsetSet(
+                'category_config_' . $categoryId,
+                json_encode($criteria)
+            );
+        }
 
         $searchResult = $this->searchService->search(
             $criteria,
@@ -3738,11 +3766,6 @@ class sArticles
         );
 
         $articles = array();
-
-        $averages = $this->voteService->getAverages(
-            $searchResult->getProducts(),
-            $context
-        );
 
         /**@var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
@@ -3752,11 +3775,7 @@ class sArticles
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
 
-            if (array_key_exists($product->getNumber(), $averages)) {
-                $article['sVoteAverange'] = $this->legacyStructConverter->convertVoteAverageStruct(
-                    $averages[$product->getNumber()]
-                );
-
+            if ($article['sVoteAverange']) {
                 // the listing pages use a 0 - 5 based average
                 $article['sVoteAverageOriginal']['average'] = $article['sVoteAverange']['averange'];
                 $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
@@ -3770,66 +3789,20 @@ class sArticles
             $articles[] = $article;
         }
 
-        $result = array();
-        foreach ($searchResult->getFacets() as $facet) {
-            switch (true) {
-                case ($facet instanceof SearchBundle\Facet\PropertyFacet):
-                    $properties = $this->getFacetProperties($facet, $config);
-                    $result = array_merge($result, $properties);
-                    break;
+        $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
 
-                case ($facet instanceof SearchBundle\Facet\ManufacturerFacet):
-                    $suppliers = $this->getFacetManufacturers($facet, $config);
-                    $result['sSupplierInfo'] = $this->getActiveListingSupplier($suppliers, $config);
-                    $result['sSuppliers'] = array_values($suppliers);
-                    break;
-
-                case ($facet instanceof SearchBundle\Facet\PriceFacet):
-                    $result['priceFacet'] = $this->getPriceFacet($facet, $config);
-                    break;
-
-                case ($facet instanceof SearchBundle\Facet\ShippingFreeFacet):
-                    $result['shippingFreeFacet'] = $this->getShippingFreeFacet($facet, $config);
-                    break;
-
-                case ($facet instanceof SearchBundle\Facet\ImmediateDeliveryFacet):
-                    $result['immediateDeliveryFacet'] = $this->getImmediateDeliveryFacet($facet, $config);
-                    break;
-                default:
-                    $result['facets'][$facet->getName()] = $facet;
-            }
-        }
-
-        $result = array_merge(
-            $result,
-            array(
-                'sArticles' => $articles,
-                'sNumberArticles' => $searchResult->getTotalCount(),
-                'sPages' => $this->createListingPageLinks($searchResult->getTotalCount(), $config),
-                'sPerPage' => $this->createListingPerPageLinks($config),
-                'sPage' => $config['sPage']
-            )
+        return array(
+            'sArticles'       => $articles,
+            'criteria'        => $criteria,
+            'facets'          => $searchResult->getFacets(),
+            'sPage'           => $request->getParam('sPage', 1),
+            'pageSizes'       => $pageSizes,
+            'sPerPage'        => $criteria->getLimit(),
+            'sNumberArticles' => $searchResult->getTotalCount(),
+            'shortParameters' => $this->queryAliasMapper->getQueryAliases(),
+            'sTemplate'       => $request->getParam('sTemplate'),
+            'sSort'           => $request->getParam('sSort', $this->config->get('defaultListingSorting'))
         );
-
-        $shortParameters = $this->queryAliasMapper->getQueryAliases();
-        $params = $this->getListingLinkParameters($config);
-        $params = $this->queryAliasMapper->replaceLongParams($params);
-        ksort($params);
-
-        $result['categoryParams'] = $params;
-        $result['shortParameters'] = $shortParameters;
-
-        $result['sNumberPages'] = count($result['sPages']['numbers']);
-
-        if ($config['sTemplate']) {
-            $result['sTemplate'] = $config['sTemplate'];
-        }
-
-        if ($config['sSort']) {
-            $result['sSort'] = $config['sSort'];
-        }
-
-        return $result;
     }
 
     /**
@@ -3875,12 +3848,6 @@ class sArticles
 
         $data['categoryID'] = $categoryId;
 
-        $average = $this->voteService->getAverage($product, $context);
-
-        if ($average instanceof StoreFrontBundle\Struct\Product\VoteAverage) {
-            $data['sVoteAverange'] = $this->legacyStructConverter->convertVoteAverageStruct($average);
-        }
-
         $configurator = $this->configuratorService->getProductConfigurator(
             $product,
             $context,
@@ -3901,535 +3868,6 @@ class sArticles
         );
 
         return $data;
-    }
-
-    /**
-     * @param $categoryId
-     * @param array $config
-     * @param StoreFrontBundle\Struct\Context $context
-     * @return SearchBundle\Criteria
-     */
-    private function getListingCriteria($categoryId, array $config, StoreFrontBundle\Struct\Context $context)
-    {
-        $criteria = new SearchBundle\Criteria();
-
-        $criteria->addCategoryCondition(array($categoryId));
-
-        $criteria->addCustomerGroupCondition(
-            array($context->getCurrentCustomerGroup()->getId())
-        );
-
-        $criteria->limit($config['sPerPage']);
-
-        $criteria->offset(($config['sPage'] - 1) * $config['sPerPage']);
-
-        if (!empty($config['sFilterProperties'])) {
-            $criteria->addPropertyCondition(
-                explode('|', $config['sFilterProperties'])
-            );
-        }
-
-        if ($config['shippingFree']) {
-            $criteria->addShippingFreeCondition();
-        }
-
-        if ($config['immediateDelivery']) {
-            $criteria->addImmediateDeliveryCondition();
-        }
-
-        if (!empty($config['sSupplier'])) {
-            $criteria->addManufacturerCondition(
-                array($config['sSupplier'])
-            );
-        }
-
-        if ($config['priceMax'] || $config['priceMin']) {
-            $criteria->addPriceCondition(
-                (float) $config['priceMin'],
-                (float) $config['priceMax']
-            );
-        }
-
-        switch ($config['sSort']) {
-            case 1:
-                $criteria->sortByReleaseDate(SearchBundle\SortingInterface::SORT_DESC);
-                break;
-            case 2:
-                $criteria->sortByPopularity(SearchBundle\SortingInterface::SORT_DESC);
-                break;
-            case 3:
-                $criteria->sortByCheapestPrice();
-                break;
-            case 4:
-                $criteria->sortByHighestPrice();
-                break;
-            case 5:
-                $criteria->sortByProductName();
-                break;
-            case 6:
-                $criteria->sortByProductName(SearchBundle\SortingInterface::SORT_DESC);
-                break;
-            default:
-                $criteria->sortByReleaseDate(SearchBundle\SortingInterface::SORT_DESC);
-        }
-
-        $criteria->addPriceFacet()
-            ->addShippingFreeFacet()
-            ->addImmediateDeliveryFacet()
-            ->addManufacturerFacet();
-
-        if ($this->config->get('displayFiltersInListings', true)) {
-            $criteria->addPropertyFacet();
-        }
-
-        return $this->eventManager->filter('Shopware_Listing_Filter_Criteria', $criteria, array(
-            'categoryConfig' => $config,
-            'context' => $context
-        ));
-    }
-
-    private function getImmediateDeliveryFacet(SearchBundle\Facet\ImmediateDeliveryFacet $facet, $config)
-    {
-        $params = $this->getListingLinkParameters($config);
-        $params['immediateDelivery'] = 1;
-        $link = $this->buildListingLink($params);
-
-        unset($params['immediateDelivery']);
-
-        return array(
-            'active' => ($config['immediateDelivery']),
-            'removeLink' => $this->buildListingLink($params),
-            'link' => $link,
-            'total' => $facet->getTotal()
-        );
-    }
-
-    private function getShippingFreeFacet(SearchBundle\Facet\ShippingFreeFacet $facet, $config)
-    {
-        $params = $this->getListingLinkParameters($config);
-        $params['shippingFree'] = 1;
-        $link = $this->buildListingLink($params);
-
-        unset($params['shippingFree']);
-
-        return array(
-            'active' => ($config['shippingFree']),
-            'removeLink' => $this->buildListingLink($params),
-            'link' => $link,
-            'total' => $facet->getTotal()
-        );
-    }
-
-    private function getPriceFacet(SearchBundle\Facet\PriceFacet $facet, $config)
-    {
-        $params = $this->getListingLinkParameters($config);
-        unset($params['priceMin']);
-        unset($params['priceMax']);
-
-        return array(
-            'active' => (isset($config['priceMax']) && $config['priceMax'] > 0),
-            'removeLink' => $this->buildListingLink($params),
-            'range' => array(
-                'min' => $facet->getMinPrice(),
-                'max' => $facet->getMaxPrice()
-            )
-        );
-    }
-
-    private function getFacetManufacturers(
-        SearchBundle\Facet\ManufacturerFacet $facet,
-        array $config
-    ) {
-        $manufacturers = $facet->getManufacturers();
-
-        $data = array();
-        $params = $this->getListingLinkParameters($config);
-
-        $filteredManufacturer = null;
-        foreach ($manufacturers as $struct) {
-
-            $params = array_merge($params, array('sSupplier' => $struct->getId()));
-
-            $manufacturer = $this->legacyStructConverter->convertManufacturerStruct($struct);
-            $manufacturer['supplier_link'] = $manufacturer['link'];
-            $manufacturer['link'] = $this->buildListingLink($params);
-
-            $attribute = $struct->getAttribute('facet');
-            $manufacturer['countSuppliers'] = $attribute->get('total');
-
-            $data[$struct->getId()] = $manufacturer;
-        }
-        $limit = 30;
-        if ($this->config->get('maxSuppliersCategory')) {
-            $limit = (int) $this->config->get('maxSuppliersCategory');
-        }
-
-        return array_slice($data, 0, $limit);
-    }
-
-    private function getActiveListingSupplier($suppliers, $config)
-    {
-        if (!$config['sSupplier']) {
-            return array();
-        }
-
-        $activeSupplier = array();
-        foreach ($suppliers as $supplier) {
-            if ($supplier['id'] == $config['sSupplier']) {
-                $activeSupplier = $supplier;
-            }
-        }
-
-        $params = $this->getListingLinkParameters($config);
-
-        unset($params['sSupplier']);
-
-        $activeSupplier['link'] = $this->buildListingLink($params);
-
-        return $activeSupplier;
-    }
-
-    private function getFacetProperties(
-        SearchBundle\Facet\PropertyFacet $facet,
-        array $config
-    ) {
-
-        $properties = $facet->getProperties();
-
-        $data = array();
-        foreach ($properties as $propertySet) {
-            $data[] = $this->legacyStructConverter->convertPropertySetStruct(
-                $propertySet,
-                $properties,
-                $config
-            );
-        }
-
-        $filteredOptions = explode('|', $config['sFilterProperties']);
-        $params = $this->getListingLinkParameters($config);
-
-        $grouped = array();
-        $flat = array();
-
-        foreach ($data as &$set) {
-            $activeSetGroups = array();
-
-            $groups = array();
-            foreach ($set['groups'] as &$group) {
-
-                $activeGroupOptions = array();
-                $options = array();
-
-                foreach ($group['options'] as &$option) {
-                    $currentFilters = array_merge(
-                        $filteredOptions,
-                        array($option['id'])
-                    );
-
-                    $params = array_merge(
-                        $params,
-                        array(
-                            'sFilterProperties' => implode('|', $currentFilters)
-                        )
-                    );
-
-                    $option['link'] = $this->buildListingLink($params);
-
-                    $option['active'] = $option['attributes']['facet']['active'];
-
-                    $option['total'] = $option['attributes']['facet']['total'];
-
-                    if ($option['active']) {
-                        $activeGroupOptions[] = $option['id'];
-                    }
-
-                    //legacy convert
-                    $options[$option['name']] = array(
-                        'name' => $group['name'],
-                        'value' => $option['name'],
-                        'count' => $option['total'],
-                        'group' => $set['name'],
-                        'optionID' => $group['id'],
-                        'link' => $option['link'],
-                        'active' => $option['active']
-                    );
-                }
-
-                $group['active'] = (bool) (!empty($activeGroupOptions));
-
-                if ($group['active']) {
-                    $activeSetGroups[] = $group['id'];
-
-                    $removeOptions = array_diff($filteredOptions, $activeGroupOptions);
-
-                    $params = array_merge($params, array(
-                        'sFilterProperties' => implode('|', $removeOptions)
-                    ));
-
-                    $group['removeLink'] = $this->buildListingLink($params);
-                }
-
-                $set['active'] = (bool) (!empty($activeSetGroups));
-
-                //legacy convert
-                $groups[$group['name']] = $options;
-                $flat[$group['name']] = array(
-                    'properties' => array(
-                        'active' => $group['active'],
-                        'group' => $set['name'],
-                        'linkRemoveProperty' => $group['removeLink']
-                    ),
-                    'values' => $options
-                );
-            }
-
-            //legacy convert
-            $params = $this->getListingLinkParameters($config);
-            unset($params['sFilterProperties']);
-            $params['sFilterGroup'] = $set['name'];
-            $grouped[$set['name']] = array(
-                'options' => $groups,
-                'default' => array(
-                    'linkSelect' => $this->buildListingLink($params)
-                )
-            );
-        }
-
-        $result = array(
-            'sPropertiesOptionsOnly' => $flat,
-            'sPropertiesGrouped' => $grouped
-        );
-
-        return $result;
-    }
-
-    /**
-     * Helper function which builds the listing links with all required parameters.
-     *
-     * @param $params
-     * @return string
-     */
-    private function buildListingLink($params)
-    {
-        return $this->sSYSTEM->sCONFIG['sBASEFILE'] .
-        Shopware()->Modules()->Core()->sBuildLink($params);
-    }
-
-    /**
-     * Helper function which returns all category listing configurations
-     * which are required for the listing links like "add filter", "next page", ...
-     *
-     * @param $config
-     * @return array
-     */
-    private function getListingLinkParameters($config)
-    {
-        $params = array();
-        $shopwareConfig = Shopware()->Config();
-
-        $default = 1;
-        if ($config['sSort'] && $config['sSort'] != $default) {
-            $params['sSort'] = $config['sSort'];
-        }
-
-        if ($config['sFilterProperties']) {
-            $params['sFilterProperties'] = $config['sFilterProperties'];
-        }
-        if ($config['sSupplier']) {
-            $params['sSupplier'] = $config['sSupplier'];
-        }
-
-        $default = $shopwareConfig->get('articlesPerPage');
-        if ($config['sPerPage'] && $config['sPerPage'] != $default) {
-            $params['sPerPage'] = $config['sPerPage'];
-        }
-
-        if ($config['priceMin']) {
-            $params['priceMin'] = $config['priceMin'];
-        }
-
-        if ($config['priceMax']) {
-            $params['priceMax'] = $config['priceMax'];
-        }
-
-        if ($config['sTemplate']) {
-            $params['sTemplate'] = $config['sTemplate'];
-        }
-
-        if ($config['shippingFree']) {
-            $params['shippingFree'] = $config['shippingFree'];
-        }
-
-        if ($config['immediateDelivery']) {
-            $params['immediateDelivery'] = $config['immediateDelivery'];
-        }
-
-        return $this->eventManager->filter('Shopware_Listing_Filter_Listing_Link_Parameters', $params, array(
-            'config' => $config
-        ));
-    }
-
-    /**
-     * Generates the template array for the different page sizes of a listing.
-     *
-     * Returns an array for each configured pages size of the settings backend module.
-     *
-     * The sizes are stored in the configuration field sNumberArticlesToShow.
-     *
-     * Each size array contains a field "value" with the page size,
-     * a field "markup" if the size is currently selected and a field
-     * "link" which contains a link to change the page size.
-     *
-     * @param $config
-     * @return array
-     */
-    private function createListingPerPageLinks($config)
-    {
-        $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
-
-        $sizes = array();
-
-        $params = $this->getListingLinkParameters($config);
-
-        $currentSize = $config['sPerPage'];
-
-        foreach ($pageSizes as $size) {
-            $params = array_merge($params, array('sPerPage' => $size));
-
-            $sizeData = array(
-                'markup' => (int) ($size == $currentSize),
-                'value' => $size,
-                'link' => $this->buildListingLink($params)
-            );
-
-            $sizes[] = $sizeData;
-        }
-        return $sizes;
-    }
-
-    /**
-     * Generates the template array for the different listing pages.
-     *
-     * Returns an array for each available listing page.
-     * The listing page count can be limit over the shopware configuration field "sMaxPages"
-     *
-     * Each page array contains a field "value" with the page number,
-     * a field "markup" if the page is currently selected and a field
-     * "link" which contains a link to change the page.
-     *
-     * @param $totalCount
-     * @param $config
-     * @return array
-     */
-    private function createListingPageLinks($totalCount, $config)
-    {
-        $currentPage = $config['sPage'];
-
-        $count = ceil($totalCount / $config['sPerPage']);
-
-        if ((int) $this->config->get('maxPages') > 0 && (int) $this->config->get('maxPages') < $count) {
-            $count = (int) $this->config->get('maxPages');
-        }
-
-        $params = $this->getListingLinkParameters($config);
-
-        $pages = array();
-        $nextIndex = 1;
-        $previousIndex = 0;
-
-        for ($i = 1; $i <= $count; $i++) {
-            $params = array_merge($params, array('sPage' => $i));
-
-            $page = array(
-                'markup' => (int) ($i == $currentPage),
-                'value' => $i,
-                'link' => $this->buildListingLink($params)
-            );
-
-            if ($currentPage == $i) {
-                $nextIndex = $i + 1;
-                $previousIndex = $i - 1;
-            }
-
-            $pages[$i] = $page;
-        }
-
-        return array(
-            'numbers' => $pages,
-            'previous' => $pages[$previousIndex]['link'],
-            'next' => $pages[$nextIndex]['link']
-        );
-    }
-
-    /**
-     * Loads the listing configuration for the passed category id.
-     *
-     * @param $categoryId
-     * @return array
-     */
-    private function loadCategoryConfig($categoryId)
-    {
-        $setup = array(
-            'sSort' => 0,
-            'sPerPage' => (int) $this->config->get('articlesPerPage'),
-            'sSupplier' => null,
-            'sFilterProperties' => null,
-            'sTemplate' => null,
-            'priceMin' => null,
-            'priceMax' => null,
-            'shippingFree' => false,
-            'immediateDelivery' => false,
-            'sPage' => 1
-        );
-
-        $setup = $this->eventManager->filter('Shopware_Listing_Filter_Config_Setup', $setup, array(
-            'categoryId' => $categoryId
-        ));
-
-        $config = array();
-        foreach($setup as $key => $default) {
-            $config[$key] = $this->getConfigParameter($key, $default);
-        }
-
-        if (!empty($config['sFilterProperties'])) {
-            $filters = explode('|', $config['sFilterProperties']);
-            if ($filters[0] == 0) {
-                unset($filters[0]);
-            }
-            $config['sFilterProperties'] = implode('|', $filters);
-        }
-
-        Shopware()->Session()->offsetSet('sCategoryConfig' . $categoryId, $config);
-
-        return $config;
-    }
-
-    /**
-     * Helper function which checks the different sources for the category config.
-     *
-     * @param $parameter
-     * @param $default
-     * @return null
-     */
-    private function getConfigParameter($parameter, $default)
-    {
-        $value = null;
-
-        $get = $this->sSYSTEM->_GET;
-        $post = $this->sSYSTEM->_POST;
-
-        // Order List by
-        if (isset($post[$parameter])) {
-            $value = $post[$parameter];
-
-        } elseif (isset($get[$parameter])) {
-            $value = $get[$parameter];
-
-        } else {
-            $value = $default;
-        }
-
-        return $value;
     }
 
     /**
@@ -4471,8 +3909,8 @@ class sArticles
         $string = (strip_tags(html_entity_decode($longDescription, null, 'UTF-8')));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
-        $badwords = explode(",", $this->config->get('badwords'));
-        $words = array_diff($words, $badwords);
+        $badWords = explode(",", $this->config->get('badwords'));
+        $words = array_diff($words, $badWords);
         $words = array_count_values($words);
         foreach (array_keys($words) as $word) {
             if (strlen($word) < 2) {

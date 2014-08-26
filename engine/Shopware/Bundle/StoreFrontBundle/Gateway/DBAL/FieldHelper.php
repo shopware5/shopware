@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -655,18 +656,17 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addPropertySetTranslation(QueryBuilder $query)
+    public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addPropertySetTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addPropertySetTranslationFallback(QueryBuilder $query)
-    {
-        $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
@@ -718,18 +718,17 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addImageTranslation(QueryBuilder $query)
+    public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addImageTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addImageTranslationFallback(QueryBuilder $query)
-    {
-        $this->addImageTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addImageTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
@@ -757,18 +756,17 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addConfiguratorTranslation(QueryBuilder $query)
+    public function addConfiguratorTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addConfiguratorTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addConfiguratorTranslationFallback(QueryBuilder $query)
-    {
-        $this->addConfiguratorTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addConfiguratorTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
@@ -808,18 +806,17 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addUnitTranslation(QueryBuilder $query)
+    public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addUnitTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addUnitTranslationFallback(QueryBuilder $query)
-    {
-        $this->addUnitTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addUnitTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
@@ -845,18 +842,17 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addVariantTranslation(QueryBuilder $query)
+    public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addVariantTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addVariantTranslationFallback(QueryBuilder $query)
-    {
-        $this->addVariantTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addVariantTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
@@ -882,18 +878,18 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addCountryTranslation(QueryBuilder $query)
+    public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addCountryTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addCountryTranslationFallback(QueryBuilder $query)
-    {
-        $this->addCountryTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addCountryTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
+
     }
 
     /**
@@ -918,25 +914,24 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addCountryStateTranslation(QueryBuilder $query)
+    public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addCountryStateTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addCountryStateTranslationFallback(QueryBuilder $query)
-    {
-        $this->addCountryStateTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addCountryStateTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
      * @param QueryBuilder $query
      * @param string $suffix
      */
-    public function addCountryStateTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    private function addCountryStateTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
@@ -955,25 +950,25 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addProductTranslation(QueryBuilder $query)
+    public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addProductTranslationWithSuffix($query);
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if ($context->getShop()->getFallbackId()) {
+            $this->addProductTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addProductTranslationFallback(QueryBuilder $query)
-    {
-        $this->addProductTranslationWithSuffix($query, 'Fallback');
-    }
 
     /**
      * @param QueryBuilder $query
      * @param string $suffix
      */
-    public function addProductTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    private function addProductTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
@@ -992,25 +987,24 @@ class FieldHelper
 
     /**
      * @param QueryBuilder $query
+     * @param ShopContextInterface $context
      */
-    public function addManufacturerTranslation(QueryBuilder $query)
+    public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addManufacturerTranslationWithSuffix($query);
-    }
+        $query->setParameter(':language', $context->getShop()->getId());
 
-    /**
-     * @param QueryBuilder $query
-     */
-    public function addManufacturerTranslationFallback(QueryBuilder $query)
-    {
-        $this->addManufacturerTranslationWithSuffix($query, 'Fallback');
+        if ($context->getShop()->getFallbackId()) {
+            $this->addManufacturerTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
     }
 
     /**
      * @param QueryBuilder $query
      * @param string $suffix
      */
-    public function addManufacturerTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    private function addManufacturerTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
@@ -1025,5 +1019,4 @@ class FieldHelper
         $query->addSelect(array('manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix))
             ->setParameter(':manufacturerType', 'supplier');
     }
-
 }

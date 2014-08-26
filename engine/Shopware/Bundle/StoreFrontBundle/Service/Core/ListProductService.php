@@ -65,6 +65,11 @@ class ListProductService implements Service\ListProductServiceInterface
     private $marketingService;
 
     /**
+     * @var Service\VoteServiceInterface
+     */
+    private $voteService;
+
+    /**
      * @var \Enlight_Event_EventManager
      */
     private $eventManager;
@@ -76,6 +81,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\PriceCalculationServiceInterface $priceCalculationService
      * @param Service\MediaServiceInterface $mediaService
      * @param Service\MarketingServiceInterface $marketingService
+     * @param Service\VoteServiceInterface $voteService
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
@@ -85,6 +91,7 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\PriceCalculationServiceInterface $priceCalculationService,
         Service\MediaServiceInterface $mediaService,
         Service\MarketingServiceInterface $marketingService,
+        Service\VoteServiceInterface $voteService,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->productGateway = $productGateway;
@@ -94,6 +101,7 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->mediaService = $mediaService;
         $this->eventManager = $eventManager;
         $this->marketingService = $marketingService;
+        $this->voteService = $voteService;
     }
 
     /**
@@ -113,17 +121,13 @@ class ListProductService implements Service\ListProductServiceInterface
     {
         $products = $this->productGateway->getList($numbers, $context);
 
-        $products = $this->filterValidProducts($products, $context);
-
-        if (empty($products)) {
-            return array();
-        }
-
         $covers = $this->mediaService->getCovers($products, $context);
 
         $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
 
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
+
+        $voteAverages = $this->voteService->getAverages($products, $context);
 
         $result = array();
         foreach ($numbers as $number) {
@@ -132,11 +136,21 @@ class ListProductService implements Service\ListProductServiceInterface
             }
             $product = $products[$number];
 
-            $product->setCover($covers[$number]);
+            if (isset($covers[$number])) {
+                $product->setCover($covers[$number]);
+            }
 
-            $product->setPriceRules($graduatedPrices[$number]);
+            if (isset($graduatedPrices[$number])) {
+                $product->setPriceRules($graduatedPrices[$number]);
+            }
 
-            $product->setCheapestPriceRule($cheapestPrices[$number]);
+            if (isset($cheapestPrices[$number])) {
+                $product->setCheapestPriceRule($cheapestPrices[$number]);
+            }
+
+            if (isset($voteAverages[$number])) {
+                $product->setVoteAverage($voteAverages[$number]);
+            }
 
             $product->addAttribute(
                 'marketing',
@@ -145,29 +159,14 @@ class ListProductService implements Service\ListProductServiceInterface
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $result[$number] = $product;
+            if ($this->isProductValid($product, $context)) {
+                $result[$number] = $product;
+            }
         }
 
         return $result;
     }
 
-
-    /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\ProductContextInterface $context
-     * @return Struct\ListProduct[]
-     */
-    private function filterValidProducts($products, Struct\ProductContextInterface $context)
-    {
-        $valid = array();
-        foreach($products as $product) {
-            if ($this->isProductValid($product, $context)) {
-                $valid[$product->getNumber()] = $product;
-            }
-        }
-
-        return $valid;
-    }
 
     /**
      * Checks if the provided product is allowed to display in the store front for
@@ -179,9 +178,15 @@ class ListProductService implements Service\ListProductServiceInterface
      */
     private function isProductValid(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
-        return !in_array(
-            $context->getCurrentCustomerGroup()->getId(),
-            $product->getBlockedCustomerGroupIds()
-        );
+        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+            return false;
+        }
+
+        $prices = $product->getPrices();
+        if (empty($prices)) {
+            return false;
+        }
+
+        return true;
     }
 }

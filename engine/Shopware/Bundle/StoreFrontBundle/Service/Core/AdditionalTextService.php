@@ -51,7 +51,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      * @param ConfiguratorServiceInterface $configuratorService
      * @param \Shopware_Components_Config $config
      */
-    function __construct(
+    public function __construct(
         ConfiguratorServiceInterface $configuratorService,
         \Shopware_Components_Config $config
     ) {
@@ -75,7 +75,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
         $required = array();
-        foreach($products as &$product) {
+        foreach ($products as &$product) {
             if (!$product->getAdditional()) {
                 $required[] = $product;
             }
@@ -91,7 +91,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
         );
 
         /**@var $required ListProduct[]*/
-        foreach($required as &$product) {
+        foreach ($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;
             }
@@ -111,8 +111,8 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     private function buildTextDynamic($configurations)
     {
         $text = array();
-        foreach($configurations as $group) {
-            foreach($group->getOptions() as $option) {
+        foreach ($configurations as $group) {
+            foreach ($group->getOptions() as $option) {
                 $text[] = $option->getName();
             }
         }

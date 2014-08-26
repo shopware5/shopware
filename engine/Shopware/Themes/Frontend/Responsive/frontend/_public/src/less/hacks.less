@@ -48,6 +48,39 @@
     }
 }
 
+// List items in the menu scroller are not allowed to float or have another display mode then inline-block.
+// This is because we allow items to overflow the list itself and do not have cropping issues.
+.js--menu-scroller--item {
+    float: none !important;
+    display: inline-block !important;
+}
+
+// Changing the appearance of the scrollbar in filter panels.
+.filter-panel--content {
+
+    // IE styles
+    scrollbar-arrow-color: @text-color;
+    scrollbar-base-color: @body-bg;
+    scrollbar-track-color: @body-bg;
+    scrollbar-face-color: @border-color;
+    scrollbar-highlight-color: @body-bg;
+    scrollbar-3dlight-color: @body-bg;
+    scrollbar-darkshadow-color: @body-bg;
+    scrollbar-shadow-color: @body-bg;
+
+    // WebKit styles
+    &::-webkit-scrollbar {
+        width: 14px;
+        background: @body-bg;
+    }
+    &::-webkit-scrollbar-track {
+        background: @body-bg;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: @border-color;
+    }
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     // We need to hide the sidebar using CSS due to the fact that the sidebar is neccessary for smartphone

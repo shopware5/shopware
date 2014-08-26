@@ -152,7 +152,8 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
             'property-main-optionGrid': {
                 deleteOption: me.onDeleteOption,
-                edit:        me.onEditOption
+                edit:        me.onEditOption,
+                editOption:  me.editOption
             },
 
             'property-main-optionGrid dataview': {
@@ -645,6 +646,17 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         });
     },
 
+    editOption: function(record) {
+        var me = this;
+
+        me.getView('detail.OptionWindow').create({
+            record: record
+        }).show();
+
+        Shopware.app.Application.on('option-save-successfully', function(controller, result, detailWindow) {
+            detailWindow.destroy();
+        });
+    },
 
     /**
      * Fired after a row is edited and passes validation. This event is fired

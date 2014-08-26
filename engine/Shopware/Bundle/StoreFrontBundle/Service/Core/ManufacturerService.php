@@ -54,7 +54,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     {
         $manufacturers = $this->getList(array($id), $context);
 
-        return $manufacturers;
+        return array_shift($manufacturers);
     }
 
     /**

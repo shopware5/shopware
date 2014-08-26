@@ -110,6 +110,8 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sLanguageData` were removed. Please use Shopware()->Shop() instead
     * `sSystem::sLanguage` were removed. Please use Shopware()->Shop()->getId() instead
 * Remove unused `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` and `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
+* Removed support for `engine/Shopware/Configs/Custom.php`
+    * Use `config.php` or `config_$environment.php` e.g. `config_production.php`
 * Deprecated `s_core_multilanguage` table
     * `s_core_multilanguage` table is kept up to date, but will be fully removed in SW 5.1
     * Removed unused `sExport::sGetLanguage()` and deprecated `sExport::sGetMultishop()`, `sExport::$sLanguage` and `sExport::$sMultishop`
@@ -129,6 +131,60 @@ In this document you will find a changelog of the important changes related to t
         + `getArticlePriceSurcharges`
         + `getSurchargeByOptionId`
     * `Shopware\Models\Article\Configurator\PriceSurcharged` replaced by `Shopware\Models\Article\Configurator\PriceVariation`
+* Replace orderbydefault configuration by defaultListingSorting. The orderbydefault configuration worked with a plain sql input which is no longer possible. The defaultListingSorting contains now one of the default sSort parameters of a listing.
+* Add configuration for each listing facet, which allows to disable each facet.
+* Move performace filter configuration into the category navigation item.
+* Uniform the sorting identifier in the search and listing. Search relevance id changed from 6 to 7 and search rating sorting changed from 2 to 7.
+* Generated listing links in the sGetArticlesByCategory function removed. The listing parameters are build now over a html form.
+    * sNumberPages value removed
+    * categoryParams value removed
+    * sPerPage contains now the page limit
+    * sPages value removed
+* The listing filters are now selected in the sArticles::getListingFacets and assigned to the template as Structs.
+* Replaced "evaluation" sorting of the search result with the listing "popularity" sorting.
+* The search filters are now selected in the `getFacets` function of the frontend search controller.
+* The search filters are now assigned as structs to the template.
+* Shopware_Components_Search_Adapter_Default is now deprecated, use \Shopware\Bundle\SearchBundle\ProductNumberSearch.
+    * The search term is handled in the SearchTermConditionHandler.
+    * This handler can be overwritten by an own handler. Own handlers can be registered over the Shopware_Search_Gateway_DBAL_Collect_Condition_Handlers event.
+* sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
+* sConfigurator class exist no more. The configurator data can now selected over the Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService.php. To modify the configurator data you can use the sGetArticleById events.
+* The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
+    * sGetPromotionById events
+        * Shopware_Modules_Articles_GetPromotionById_FilterSql
+    * sGetPromotionById functions
+        * sGetTranslation
+        * sGetArticleProperties
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+        * getArticleListingCover
+    * sGetAritcleById events
+        * Shopware_Modules_Articles_GetArticleById_FilterSQL
+    * sGetAritcleById functions
+        * sGetTranslation
+        * sGetPricegroupDiscount
+        * sGetPromotionById (for similar and related products)
+        * sCheckIfEsd
+        * sGetPricegroupDiscount
+        * sCalculatingPrice
+        * sGetCheapestPrice
+        * sGetArticleConfig
+        * calculateReferencePrice
+        * sGetArticlePictures
+        * sGetArticlesVotes
+        * sGetArticlesAverangeVote
+        * sGetArticleProperties
+    * sGetArticlesByCategory events
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd
+    * sGetArticlesByCategory functions
+        * sGetSupplierById
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
@@ -151,6 +207,7 @@ In this document you will find a changelog of the important changes related to t
     * Exceptions are logged in a logfile since 4.2.0 (/logs)
     * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
 * Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
+
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
@@ -246,45 +303,6 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated `Shopware\Models\Widget\Widget::label` variable, getter and setter, and correspondent `s_core_widgets::label` database column
 * Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
 * Removed desktop switcher from the `Shopware.container.Viewport` base component.
-* sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
-* sConfigurator class exist no more. The configurator data can now selected over the Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService.php. To modify the configurator data you can use the sGetArticleById events.
-* The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
-    * sGetPromotionById events
-        * Shopware_Modules_Articles_GetPromotionById_FilterSql
-    * sGetPromotionById functions
-        * sGetTranslation
-        * sGetArticleProperties
-        * sGetCheapestPrice
-        * sCalculatingPrice
-        * calculateCheapestBasePriceData
-        * getArticleListingCover
-    * sGetAritcleById events
-        * Shopware_Modules_Articles_GetArticleById_FilterSQL
-    * sGetAritcleById functions
-        * sGetTranslation
-        * sGetPricegroupDiscount
-        * sGetPromotionById (for similar and related products)
-        * sCheckIfEsd
-        * sGetPricegroupDiscount
-        * sCalculatingPrice
-        * sGetCheapestPrice
-        * sGetArticleConfig
-        * calculateReferencePrice
-        * sGetArticlePictures
-        * sGetArticlesVotes
-        * sGetArticlesAverangeVote
-        * sGetArticleProperties
-    * sGetArticlesByCategory events
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd
-    * sGetArticlesByCategory functions
-        * sGetSupplierById
-        * sGetCheapestPrice
-        * sCalculatingPrice
-        * calculateCheapestBasePriceData
-* Removed support for `engine/Shopware/Configs/Custom.php`
-    * Use `config.php` or `config_$environment.php` e.g. `config_production.php`
 
 ## 4.2.2
 

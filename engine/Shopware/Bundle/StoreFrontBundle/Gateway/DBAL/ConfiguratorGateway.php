@@ -97,14 +97,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         );
 
         $query->where('products.id = :id')
-            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':id', $product->getId());
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addConfiguratorTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -161,7 +154,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         $media = $this->mediaGateway->getList($data, $context);
 
         $result = array();
-        foreach($data as $optionId => $mediaId) {
+        foreach ($data as $optionId => $mediaId) {
             if (!isset($media[$mediaId])) {
                 continue;
             }

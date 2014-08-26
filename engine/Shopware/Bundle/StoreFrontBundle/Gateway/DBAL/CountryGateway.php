@@ -137,17 +137,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
         $query->from('s_core_countries', 'country')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id');
 
-        $this->fieldHelper->addCountryTranslation($query);
+        $this->fieldHelper->addCountryTranslation($query, $context);
 
         $query->where('country.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':language', $context->getShop()->getId());
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addCountryTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -173,18 +166,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
         $query->from('s_core_countries_states', 'countryState')
             ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
 
-        $this->fieldHelper->addCountryStateTranslation($query);
+        $this->fieldHelper->addCountryStateTranslation($query, $context);
 
         $query->where('countryState.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':language', $context->getShop()->getId())
         ;
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addCountryStateTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -351,7 +351,7 @@ class ProductHydrator extends Hydrator
                 $translation,
                 $this->unserializeTranslation($data['__product_translation_fallback'])
             );
-            if ($data['__product_main_detail_id'] != $data['__variant_id'] ) {
+            if ($data['__product_main_detail_id'] != $data['__variant_id']) {
                 unset($translation['txtzusatztxt']);
             }
         }
@@ -360,7 +360,7 @@ class ProductHydrator extends Hydrator
                 $translation,
                 $this->unserializeTranslation($data['__product_translation'])
             );
-            if ($data['__product_main_detail_id'] != $data['__variant_id'] ) {
+            if ($data['__product_main_detail_id'] != $data['__variant_id']) {
                 unset($translation['txtzusatztxt']);
             }
         }

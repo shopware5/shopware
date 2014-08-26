@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
+use Shopware\Bundle\SearchBundle\SortingInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundle\Sorting
@@ -68,5 +70,14 @@ class ProductAttributeSorting extends Sorting
     public function getField()
     {
         return $this->field;
+    }
+
+    /**
+     * @param array $data
+     * @return SortingInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self($data['field'], $data['direction']);
     }
 }

@@ -1,0 +1,56 @@
+.range-slider {
+    .touch-callout(none);
+}
+
+.range-slider--container {
+    .unitize-height(12);
+    .border-radius(6px);
+    display: block;
+    width: 100%;
+    background: @body-bg;
+    box-shadow: inset 0 1px 1px #f0f0f0;
+    border: 1px solid @border-color;
+}
+
+.range-slider--range-bar {
+    .user-select(none);
+    .touch-callout(none);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
+    .box-shadow(inset 0 0 3px @brand-secondary);
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: @brand-primary;
+}
+
+.range-slider--handle {
+    .unitize-width(20);
+    .unitize-height(20);
+    .border-radius(3px);
+    .linear-gradient(#FFF, @body-bg);
+    .user-select(none);
+    .touch-callout(none);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
+    position: absolute;
+    border: 1px solid @border-color;
+    cursor: pointer;
+
+    &.is--min {
+        .unitize(-10, 16, left);
+        .unitize(-4, 16, top);
+    }
+
+    &.is--max {
+        .unitize(-10, 16, right);
+        .unitize(-4, 16, top);
+    }
+
+    &:hover,
+    &.is--dragging {
+        border-color: @brand-primary;
+    }
+}
+
+.range-slider--currency {
+    display: none;
+}

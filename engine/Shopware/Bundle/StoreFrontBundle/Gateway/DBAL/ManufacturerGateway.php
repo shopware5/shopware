@@ -101,14 +101,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $query->where('manufacturer.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $this->fieldHelper->addManufacturerTranslation($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addManufacturerTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
+        $this->fieldHelper->addManufacturerTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

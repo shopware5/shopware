@@ -55,7 +55,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
 
         comboSortModeAlphabetical:  '{s name=set/cobo_sort_mode_alphabetical}Alphabetical{/s}',
         comboSortModeNumeric:       '{s name=set/cobo_sort_mode_numeric}Numeric{/s}',
-        comboSortModeNumber:        '{s name=set/cobo_sort_mode_number}Number{/s}',
         comboSortModePosition:      '{s name=set/cobo_sort_mode_postition}Position{/s}',
         search:                     '{s name=set/empty_text_search}Search...{/s}'
     },
@@ -77,7 +76,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
                 data: [
                     [0, me.snippets.comboSortModeAlphabetical],
                     [1, me.snippets.comboSortModeNumeric],
-                    [2, me.snippets.comboSortModeNumber],
                     [3, me.snippets.comboSortModePosition]
                 ]
             }),

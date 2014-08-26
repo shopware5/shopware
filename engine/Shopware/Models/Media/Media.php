@@ -23,6 +23,7 @@
  */
 
 namespace   Shopware\Models\Media;
+use Doctrine\Common\Collections\ArrayCollection;
 use         Shopware\Components\Model\ModelEntity,
             Doctrine\ORM\Mapping AS ORM,
             Symfony\Component\HttpFoundation\File\UploadedFile,
@@ -207,6 +208,12 @@ class Media extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $blogMedia;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Property\Value", mappedBy="media")
+     */
+    protected $properties;
 
     /****************************************************************
      *                  Property Getter & Setter                    *
@@ -930,6 +937,22 @@ class Media extends ModelEntity
             'jpg' => $this->getThumbnailDir() . $jpgName,
             'original' => $this->getThumbnailDir() . $originalName
         );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
     }
 
     /**

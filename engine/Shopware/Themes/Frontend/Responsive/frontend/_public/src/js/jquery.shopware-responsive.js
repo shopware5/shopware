@@ -73,7 +73,6 @@ $(function() {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
             $('.blog-filter--trigger').collapsePanel();
@@ -97,9 +96,6 @@ $(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
 
-            var filterTrigger = $('.filter--trigger');
-            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
-
             var btnPassword = $('.btn--password');
             if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
 
@@ -113,7 +109,6 @@ $(function() {
         type: 'tabletLandscape',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
             $('.blog-filter--trigger').collapsePanel();
@@ -137,9 +132,6 @@ $(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
 
-            var filterTrigger = $('.filter--trigger');
-            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
-
             var btnPassword = $('.btn--password');
             if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
 
@@ -152,7 +144,6 @@ $(function() {
     }, {
         type: 'desktop',
         enter: function() {
-            $('.filter--trigger').collapsePanel();
             $('.btn--password').collapsePanel();
             $('.btn--email').collapsePanel();
             $('.product--image-zoom').imageZoom();
@@ -169,9 +160,6 @@ $(function() {
             $('*[data-image-slider="true"]').each(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
-
-            var filterTrigger = $('.filter--trigger');
-            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
 
             var btnPassword = $('.btn--password');
             if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
@@ -258,13 +246,14 @@ $(function() {
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-collapse-panel="true"]').collapsePanel();
+    $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
     $('*[data-pseudo-text="true"]').pseudoText();
-
+    $('*[data-filter-type]').filterComponent();
+    $('*[data-listing-actions="true"]').listingActions();
     $('body').ajaxProductNavigation();
-
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
@@ -286,11 +275,6 @@ $(function() {
 
     // Deferred loading of the captcha
     $('div.captcha--placeholder[data-src]').captcha();
-
-    // Auto submitting form
-    $('select[data-auto-submit-form="true"]').on('change', function() {
-        $(this).parents('form').submit();
-    });
 
     $('*[data-modal="true"] a').on('click.modal', function() {
         event.preventDefault();

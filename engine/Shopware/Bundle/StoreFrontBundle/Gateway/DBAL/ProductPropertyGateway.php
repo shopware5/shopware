@@ -98,6 +98,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
             ->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
             ->addSelect($this->fieldHelper->getPropertyOptionFields())
+            ->addSelect($this->fieldHelper->getMediaFields())
         ;
 
         $query->addSelect('
@@ -153,17 +154,24 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
             'propertyGroup.id = propertyOption.optionID AND relations.optionID = propertyGroup.id'
         );
 
+        $query->leftJoin(
+            'propertyOption',
+            's_media',
+            'media',
+            'propertyOption.media_id = media.id'
+        );
+
+        $query->leftJoin(
+            'media',
+            's_media_attributes',
+            'mediaAttribute',
+            'mediaAttribute.mediaID = media.id'
+        );
+
         $this->fieldHelper->addPropertySetTranslation($query, $context);
 
         $query->where('products.id IN (:ids)')
-            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addPropertySetTranslationFallback($query, $context);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
 
         $query->orderBy('filterArticles.articleID')
             ->addOrderBy('relations.position')
@@ -183,6 +191,9 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
 
         $result = array();
         foreach ($products as $product) {
+            if (!isset($properties[$product->getId()])) {
+                continue;
+            }
             $sets = $properties[$product->getId()];
             $result[$product->getNumber()] = array_shift($sets);
         }

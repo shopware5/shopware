@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
             },
             {
                 xtype: 'fieldset',
-                defaults: me.defaults,
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
                     {
@@ -88,36 +87,85 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                         title: '{s name=fieldset/categories/repair}Rebuild cagtegory tree{/s}'
                     },
                     {
-                        fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
-                        helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
-                        name: 'categories[articlesperpage]',
-                        xtype: 'numberfield',
-                        minValue: 1
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/categories/text/sort}Default sort order for listing{/s}',
-                        helpText: '{s name=fieldset/categories/help/sort}In which order do you want to sort articles in category listing?{/s}',
-                        supportText: '{s name=fieldset/categories/support/sort}Warnhinweis:<br>Achten Sie darauf, dass auf die Sortierspalte ein Index in der Datenbank gesetzt ist.{/s}',
-                        name: 'categories[orderbydefault]',
-                        xtype: 'textfield'
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/categories/text/showSupplier}Hersteller Filter in Kategorien anzeigen{/s}',
-                        helpText: '',
-                        name: 'categories[showSupplierInCategories]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
                         fieldLabel: '{s name=fieldset/categories/text/moveBatchModeEnabled}Move categories in batch-mode{/s}',
                         helpText: '',
                         name: 'categories[moveBatchModeEnabled]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
-                        inputValue: true
+                        inputValue: true,
+                        labelWidth: 300
                     }
                 ]
+            }, {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/listings}Listings{/s}',
+                items: [{
+                    fieldLabel: 'Default listing sorting',
+                    helpText: '',
+                    name: 'categories[defaultListingSorting]',
+                    xtype: 'combo',
+                    valueField: 'id',
+                    value: 1,
+                    editable: false,
+                    displayField: 'name',
+                    store: Ext.create('Shopware.apps.Performance.store.ListingSorting').load()
+                }, {
+                    name: 'categories[articlesperpage]',
+                    fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
+                    helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
+
+                    xtype: 'numberfield',
+                    minValue: 1
+                }, {
+                    name: 'categories[showSupplierInCategories]',
+                    fieldLabel: '{s name=fieldset/categories/text/showManufacturerFacet}Hersteller Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showManufacturerFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Herstellern zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'categories[showImmediateDeliveryFacet]',
+                    fieldLabel: '{s name=fieldset/categories/text/showImmediateDeliveryFacet}Sofort lieferbar Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showImmediateDeliveryFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, die sofort lieferbar sind.{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'categories[showShippingFreeFacet]',
+                    fieldLabel: '{s name=fieldset/categories/text/showShippingFreeFacet}Versandkostenfrei Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showShippingFreeFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, welche als Versandkostenfrei markiert wurden{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'categories[showPriceFacet]',
+                    fieldLabel: '{s name=fieldset/categories/text/showPriceFacet}Preis Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showPriceFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Preisen zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'categories[showVoteAverageFacet]',
+                    fieldLabel: '{s name=fieldset/categories/text/showVoteAverageFacet}Bewertungs Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showVoteAverageFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Durchschnitts-Bewertungen zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'categories[displayFiltersInListings]',
+                    fieldLabel: '{s name=fieldset/categories/text/showPropertyFacet}Eigenschaften Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/categories/text/showPropertyFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Eigenschaften zu filtern{/s}',
+                    cls: 'property-facet',
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }]
             }
         ];
     }

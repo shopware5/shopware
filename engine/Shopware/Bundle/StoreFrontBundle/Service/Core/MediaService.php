@@ -160,6 +160,9 @@ class MediaService implements Service\MediaServiceInterface
                 $variantMedia = $specifyMedia[$product->getNumber()];
             }
 
+            if (!isset($globalMedia[$product->getNumber()])) {
+                continue;
+            }
             $productMedia = $globalMedia[$product->getNumber()];
 
             $result[$product->getNumber()] = array_merge(

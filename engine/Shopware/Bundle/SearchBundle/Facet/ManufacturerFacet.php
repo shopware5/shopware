@@ -35,54 +35,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ManufacturerFacet implements FacetInterface
 {
     /**
-     * Flag if the facet is filtered with a condition
-     * @var bool
-     */
-    private $filtered = false;
-
-    /**
-     * @var Struct\Product\Manufacturer[]
-     */
-    private $manufacturers = array();
-
-    /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'manufacturer_facet';
-    }
-
-    /**
-     * @return Struct\Product\Manufacturer[]
-     */
-    public function getManufacturers()
-    {
-        return $this->manufacturers;
-    }
-
-    /**
-     * @param Struct\Product\Manufacturer[] $manufacturers
-     */
-    public function setManufacturers(array $manufacturers)
-    {
-        $this->manufacturers = $manufacturers;
-    }
-
-    /**
-     * @param bool $filtered
-     */
-    public function setFiltered($filtered)
-    {
-        $this->filtered = $filtered;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFiltered()
-    {
-        return $this->filtered;
+        return 'manufacturer';
     }
 
     /**
@@ -91,5 +48,14 @@ class ManufacturerFacet implements FacetInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param array $data
+     * @return FacetInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self();
     }
 }
