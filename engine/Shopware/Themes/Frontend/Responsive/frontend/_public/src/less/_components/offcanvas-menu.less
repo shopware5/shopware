@@ -1,25 +1,7 @@
 // Will be used for the off canvas animation
-.page-wrap {
-	.transition(all, 0.25s, ease-in-out);
-	.transform-style(preverse-3d);
-    min-height: 100%;
-
-    &:before,
-    &::before {
-		.unitize(-8, 16, left);
-		.unitize-width(8, 16);
-		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
-		content: '';
-		display: block;
-		height: 100%;
-		position: absolute;
-		top: 0;
-	}
-
-	// Disables the transition, so the user can slide
-	&.js--no-transition {
-		.transition(none, 0s, linear);
-	}
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 // Is used for the necessary styling of an off-canvas menu
@@ -27,27 +9,25 @@
     .unitize-width(300);
     .unitize-variable(300, 16);
     .transition(all, 0.25s, ease-in-out);
-    .transform-style(preverse-3d);
     position: fixed;
     top: 0;
     height: 100%;
-    z-index: 998;
+    z-index: 9999;
     overflow-y: auto;
     overflow-x: hidden;
+    background: @primaryBackgroundColor;
 
     &.is--left {
-        left: 0;
-        .translate(~"-@{emValue}rem", 0);
+        .unitize(-300, 16, left);
     }
 
     &.is--right {
-        right: 0;
-        .translate(~"@{emValue}rem", 0);
+        .unitize(-300, 16, right);
     }
 
     &.is--active {
-        .translate(0, 0);
-        z-index: 999;
+        left: 0;
+        right: 0;
     }
 
     &.js--no-transition {
@@ -56,14 +36,37 @@
 }
 
 .page-wrap {
+    .transition(all, 0.25s, ease-in-out);
+    position: relative;
+    left: 0; right: 0;
+
     &.is--moved-left {
-        .unitize-variable(300, 16);
-        .translate(~"@{emValue}rem", 0);
+        .unitize(300, 16, left);
     }
+
     &.is--moved-right {
-        .unitize-variable(300, 16);
-        .translate(~"-@{emValue}rem", 0);
+        .unitize(300, 16, right);
     }
+
+    &:after,
+    &::after {
+        .transition(opacity, 0.25s, ease-in-out);
+        .opacity(0);
+        content: '';
+        display: block;
+        visibility: hidden;
+        position: fixed;
+        top: 0; left: 0;
+        right: 0; bottom: 0;
+        background: rgba(0, 0, 0, .5);
+        z-index: 9998;
+    }
+}
+
+.is--moved-left .page-wrap::after,
+.is--moved-right .page-wrap::after {
+    .opacity(1);
+    visibility: visible;
 }
 
 .navigation--smartphone {
@@ -131,11 +134,11 @@
     .off-canvas {
         .translate(0, 0);
         .transition(none);
+        background: transparent;
         width: auto;
         height: auto;
         position: relative;
         top: 0;
         left: 0;
     }
-
 }

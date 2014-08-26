@@ -6,7 +6,6 @@
 html, body {
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 body {
 	font-family: @bodyFontStack;
@@ -87,18 +86,6 @@ blockquote {
   margin: 0;
 }
 
-// Actual body proxy element for the content
-.page-wrap {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    overflow-x: hidden;
-    overflow-y: scroll;
-
-	// Momentum scrolling for iOS devices, see: http://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements/
-	-webkit-overflow-scrolling: touch;
-}
-
 .list--unstyled { list-style: none }
 
 .content-main--inner {
@@ -153,7 +140,7 @@ blockquote {
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-	.page-wrap {
+	body {
 		.unitize(14, 16, font-size);
 	}
     .content-main {
