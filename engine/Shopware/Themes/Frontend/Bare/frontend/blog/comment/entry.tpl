@@ -22,22 +22,8 @@
 
 									{* Stars *}
 									{block name='frontend_blog_comments_comment_rating'}
-										<div class="blog--comments-rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-											{$average = $vote.points * 2|round:0}
-
-											<meta itemprop="worstRating" content="1">
-											<meta itemprop="ratingValue" content="{$vote.points}">
-											<meta itemprop="bestRating" content="5">
-
-											{for $value=1 to 5}
-												{$cls = 'icon--star'}
-
-												{if $value > $average}
-													{$cls = 'icon--star-empty'}
-												{/if}
-
-												<i class="{$cls}"></i>
-											{/for}
+										<div class="blog--comments-rating">
+                                            {include file="frontend/_includes/rating.tpl" points=$vote.points}
 										</div>
 									{/block}
 
