@@ -87,6 +87,13 @@
 								</a>
                                 {/strip}
 							</p>
+
+                            {* Print notice *}
+                            {block name='frontend_checkout_finish_teaser_print_notice'}
+                                <p class="print--notice">
+                                    {s name="FinishPrintNotice"}Bitte beachten Sie dass die Druck-Funktion nicht auf allen verfügbaren Endgeräten zur Verfügung steht.{/s}
+                                </p>
+                            {/block}
 						{/block}
 					</div>
 				{/block}
