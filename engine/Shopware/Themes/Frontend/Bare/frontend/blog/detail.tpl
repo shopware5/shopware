@@ -52,24 +52,8 @@
 								{* Rating *}
 								{block name='frontend_blog_detail_rating'}
 									<span class="blog--metadata-rating blog--metadata is--last">
-										<a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='DetailLinkReview'}{/s}"|escape}" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-											{$average = $sArticle.sVoteAverage / 2|round:0}
-											<meta itemprop="ratingValue" content="{$average}">
-
-											{for $value=1 to 5}
-												{$cls = 'icon--star'}
-
-												{if $value > $average}
-													{$cls = 'icon--star-empty'}
-												{/if}
-
-												<i class="{$cls}"></i>
-											{/for}
-
-											{* Product rating - Comment counter *}
-											{block name="frontend_blog_detail_rating_label"}
-												(<span itemprop="ratingCount">{$sArticle.comments|count}</span>)
-											{/block}
+										<a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='DetailLinkReview'}{/s}"|escape}">
+                                            {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" count=$sArticle.comments|count}
 										</a>
 									</span>
 								{/block}

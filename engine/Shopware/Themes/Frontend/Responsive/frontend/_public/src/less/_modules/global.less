@@ -37,6 +37,12 @@ ul {
 	padding: 0;
 }
 
+// Star rating
+.product--rating {
+    i[class^=icon] { color: @reviewStarColor; }
+    i.icon--star-empty { color: @borderColor; }
+}
+
 // Font
 h1, h2, h3, h4, h5, h6 {
     .unitize(26, 16, line-height);

@@ -51,7 +51,6 @@
         // Star icon styling
         [class^="icon"] {
             .unitize(16, 16, font-size);
-            color: @reviewStarColor;
         }
     }
 
@@ -314,7 +313,8 @@
 
 	.product--rating {
 		.unitize(16, 16, font-size);
-		color: @reviewStarColor;
+        .clearfix();
+        display: block;
 	}
 
 	.content--label {
