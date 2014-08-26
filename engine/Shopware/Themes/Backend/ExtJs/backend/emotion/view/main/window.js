@@ -66,10 +66,10 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         filter: {
             title: '{s name=list/filter/title}Filter{/s}',
             noFilter: '{s name=list/no_filter}No filter{/s}',
-            onlyDesktop: '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
-            onlyTablet: '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
-            onlyMobile: '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
-            onlyActive: '<div class="sprite-tick-small" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}',
+            onlyDesktop: '<div class="sprite-imac-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
+            onlyTablet: '<div class="sprite-ipad-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
+            onlyMobile: '<div class="sprite-iphone-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
+            onlyActive: '<div class="sprite-ui-check-box" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}',
             onlyLandingpage: '{s name=list/only_landingpage}Only landingpages{/s}',
             onlyWorld: '{s name=list/only_world}Only shopping worlds{/s}'
         }

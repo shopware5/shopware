@@ -219,6 +219,4 @@ class Grid extends ModelEntity
     {
         return $this->gutter;
     }
-
-
 }

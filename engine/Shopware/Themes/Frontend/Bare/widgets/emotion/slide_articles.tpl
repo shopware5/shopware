@@ -1,50 +1,23 @@
-{$width = $sElementWidth-61}
-<div class="slide" style="width:{$width|round:0}px;height:{$sElementHeight}px">
-	{foreach from=$articles item=article}
-		{assign var=image value=$article.image.src.4}
-        <div class="outer-article-box" style="width:{'100' / $sPerPage}%">
-            <div class="article_box">
-            <!-- article 1 -->
-            {if $image}
-            <a class="article-thumb-wrapper" title="{$article.articleName|escape}" href="{$article.linkDetails}">
-                <img src="{$image}" title="{$article.articleName|escape}" />
-            </a>
-            {else}
-            <a class="article-thumb-wrapper" title="{$article.articleName|escape}" href="{$article.linkDetails}">
-                <img src="{link file="frontend/_public/src/img/no-picture.jpg"}" title="{$article.articleName|escape}" />
-            </a>
-            {/if}
-            <a title="{$article.articleName|escape}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>
+{foreach $articles as $article}
+    {block name="frontend_widgets_slide_articles_item"}
+        <div class="product-slider--item article-slider--item">
+            <div class="is--centered">
 
-            {if $article.purchaseunit && $article.purchaseunit != 0}
-                <p class="article-purchase-unit">
-                    <span class="purchaseunit">
-                        <strong>{se name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/se}:</strong> {$article.purchaseunit} {$article.sUnit.description}
-                    </span>
-            {/if}
-            {if $article.purchaseunit != $article.referenceunit}
-                    {if $article.referenceunit}
-                        <span class="referenceunit">
-                         ({$article.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$article.referenceunit} {$article.sUnit.description})
+                {block name="frontend_widgets_slide_articles_item_image"}
+                    <a href="{$article.linkDetails|rewrite:$article.articleName}" title="{$article.articleName|escape:'html'}" class="product--image">
+                        <span data-picture data-alt="{$article.articleName|escape:'html'}" class="image--element">
+                            <span class="image--media" data-src="{if isset($article.image.src)}{$article.image.src.3}{else}{link file='frontend/_public/src/img/no_picture.jpg'}{/if}"></span>
+                            <span class="image--media" data-src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_public/src/img/no_picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
+
+                            <noscript>
+                                <img src="{if isset($article.image.src)}{$article.image.src.2}{else}{link file='frontend/_public/src/img/no_picture.jpg'}{/if}" alt="{$article.articleName}" />
+                            </noscript>
                         </span>
-                    {/if}
-                </p>
-            {/if}
+                    </a>
+                {/block}
 
-            <p class="price">
-                {if $article.pseudoprice}
-                    <span class="pseudo">
-                    <em>
-                    	{s name="reducedPrice"}Statt:{/s} {$article.pseudoprice|currency} {s name="Star"}*{/s}
-                    </em>
-                    </span>
-                {/if}
-                <span class="price{if $article.pseudoprice} pseudo{/if}">{if $article.priceStartingFrom && !$article.liveshoppingData}{s namespace="frontend/plugins/recommendation/slide_articles" name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} *</span>
-            </p>
+                <a title="{$article.articleName|escape:'html'}" class="product--title" href="{$article.linkDetails}">{$article.articleName|truncate:26}</a>
             </div>
         </div>
-	{/foreach}
-</div>
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}
+    {/block}
+{/foreach}

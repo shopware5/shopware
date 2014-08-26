@@ -61,7 +61,7 @@
             event.preventDefault();
             event.stopPropagation();
 
-            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isSmartphone()) {
+            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isXs()) {
                 return;
             }
 

@@ -426,6 +426,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
 
         return ['->', {
             xtype: 'button',
+            cls: 'secondary',
             text: 'Abbrechen',
             action: 'emotion-detail-settings-window-cancel',
             handler: function(button) {

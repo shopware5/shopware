@@ -16,12 +16,14 @@
 			{block name="frontend_listing_text_content"}
 				{if $sCategoryContent.cmstext}
 					<div class="hero--text panel--body is--wide"
-						 data-collapse-show-more="{s name='ListingCategoryTeaserShowMore'}{/s}"
-						 data-collapse-show-less="{s name='ListingCategoryTeaserShowLess'}{/s}">
-						{$sCategoryContent.cmstext}
-					</div>
-				{/if}
-			{/block}
-		</div>
+                     data-collapse-text="true"
+                     data-lines="3"
+					 data-readMoreText="{s name='ListingCategoryTeaserShowMore'}{/s}"
+					 data-readLessText="{s name='ListingCategoryTeaserShowLess'}{/s}">
+                    {$sCategoryContent.cmstext}
+                </div>
+            {/if}
+        {/block}
+	</div>
 	{/if}
 {/block}
