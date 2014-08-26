@@ -47,6 +47,11 @@ class ConfigLoader
     protected $documentRoot;
 
     /**
+     * @var string
+     */
+    protected $cacheDir;
+
+    /**
      * Contains the environment name.
      *
      * @var string
@@ -61,12 +66,14 @@ class ConfigLoader
 
     /**
      * @param string $documentRoot
+     * @param string $cacheDir
      * @param string $environment
      * @param string $applicationName
      */
-    public function __construct($documentRoot, $environment, $applicationName)
+    public function __construct($documentRoot, $cacheDir, $environment, $applicationName)
     {
-        $this->documentRoot    = $documentRoot;
+        $this->documentRoot    = rtrim($documentRoot, '/') . '/';
+        $this->cacheDir        = $cacheDir;
         $this->environment     = $environment;
         $this->applicationName = $applicationName;
     }
@@ -166,5 +173,13 @@ class ConfigLoader
     public function App()
     {
         return $this->applicationName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
     }
 }

@@ -71,8 +71,8 @@ return array_merge($customConfig, array(
         'useIncludePath' => true,
         'charset' => 'utf-8',
         'forceCache' => false,
-        'cacheDir' => $this->DocPath('cache_templates'),
-        'compileDir' => $this->DocPath('cache_templates')
+        'cacheDir' => $this->getCacheDir().'/templates',
+        'compileDir' => $this->getCacheDir().'/templates',
     ), $customConfig['template']),
     'mail' => array_merge(array(
         'charset' => 'utf-8'
@@ -86,7 +86,7 @@ return array_merge($customConfig, array(
         'allow_revalidate' => false,
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_html')
+        'cache_dir' => $this->getCacheDir().'/html',
     ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
@@ -113,19 +113,19 @@ return array_merge($customConfig, array(
             'hashed_directory_perm' => 0771,
             'cache_file_perm' => 0644,
             'hashed_directory_level' => 3,
-            'cache_dir' => $this->DocPath('cache_general'),
+            'cache_dir' => $this->getCacheDir().'/general',
             'file_name_prefix' => 'shopware'
         ), $customConfig['cache']['backendOptions']),
     ),
     'hook' => array_merge(array(
-        'proxyDir' => $this->DocPath('cache_proxies'),
+        'proxyDir' => $this->getCacheDir().'/proxies',
         'proxyNamespace' => $this->App() . '_Proxies'
     ), $customConfig['hook']),
     'model' => array_merge(array(
         'autoGenerateProxyClasses' => false,
-        'fileCacheDir'     => $this->DocPath('cache_doctrine_filecache'),
-        'attributeDir' => $this->DocPath('cache_doctrine_attributes'),
-        'proxyDir' => $this->DocPath('cache_doctrine_proxies'),
+        'fileCacheDir' => $this->getCacheDir().'/doctrine/filecache',
+        'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
+        'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
         'cacheProvider' => 'auto' // supports null, auto, Apc, Array, Wincache and Xcache
     ), $customConfig['model']),
