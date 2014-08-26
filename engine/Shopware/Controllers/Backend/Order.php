@@ -1340,7 +1340,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if ($articleDetails) {
             $data['ean'] = $articleDetails->getEan() ? : $articleDetails->getArticle()->getMainDetail()->getEan();
             $unit = $articleDetails->getUnit() ? : $articleDetails->getArticle()->getMainDetail()->getUnit();
-            $data['unit'] = $unit->getName();
+            $data['unit'] = $unit ? $unit->getName() : null;
             $data['packunit'] = $articleDetails->getPackUnit() ? : $articleDetails->getArticle()->getMainDetail()->getPackUnit();
 
             $languageData = Shopware()->Db()->fetchRow(
@@ -1358,7 +1358,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $translator = new Shopware_Components_Translation();
 
                 // Translate unit
-                if ($articleDetails->getUnit()) {
+                if ($unit) {
                     $unitTranslation = $translator->read(
                         $languageData['languageId'],
                         'config_units',
@@ -1366,7 +1366,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     );
                     if (!empty($unitTranslation[$unit->getId()]['description'])) {
                         $data['unit'] = $unitTranslation[$unit->getId()]['description'];
+                    } elseif ($unit) {
+                        $data['unit'] = $unit->getName();
                     }
+
                 }
 
                 $articleTranslation = array();
