@@ -181,15 +181,11 @@
         <exec executable="chmod" os="Linux">
             <arg value="-R"/>
             <arg value="0777"/>
-            <arg value="${cache.dir}/templates/"/>
-            <arg value="${cache.dir}/general/"/>
-            <arg value="${cache.dir}/proxies/"/>
+            <arg value="${cache.dir}/"/>
         </exec>
 
         <delete includeEmptyDirs="true">
-            <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
-            <fileset dir="${cache.dir}/general/"   includes="**/*"/>
-            <fileset dir="${cache.dir}/proxies"    includes="**/*.*"/>
+            <fileset dir="${cache.dir}/" includes="**/*.*"/>
             <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
         </delete>
     </target>

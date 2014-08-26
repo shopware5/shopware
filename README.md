@@ -36,6 +36,7 @@ In case you wish to contribute to Shopware, fork the master tree rather than clo
 2.) Set the correct directory permissions:
 
     chmod 755 config.php
+    chmod 755 -R logs
     chmod 755 -R cache
     chmod 755 -R files
     chmod 755 -R media

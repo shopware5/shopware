@@ -29,6 +29,17 @@
  */
 class Shopware_Tests_Components_Api_CacheTest extends Shopware_Tests_Components_Api_TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpCache.cache_dir');
+        $templateCacheDir   = Shopware()->Container()->getParameter('shopware.template.cacheDir');
+
+        @mkdir($httpCacheDir, 0777, true);
+        @mkdir($templateCacheDir, 0777, true);
+    }
+
     /**
      * @return \Shopware\Components\Api\Resource\Cache
      */
