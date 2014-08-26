@@ -164,6 +164,9 @@
 		{/if}
 	{/block}
 
+    {if $theme.additionalJsLibraries}
+        {$theme.additionalJsLibraries}
+    {/if}
 {/block}
 
 {* TODO@STP - Remove before release *}

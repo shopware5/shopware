@@ -68,6 +68,10 @@
 	{foreach $lessFiles as $stylesheet}
 		<link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
 	{/foreach}
+
+    {if $theme.additionalCssData}
+        {$theme.additionalCssData}
+    {/if}
 {/block}
 
 {* Print Stylesheets *}
