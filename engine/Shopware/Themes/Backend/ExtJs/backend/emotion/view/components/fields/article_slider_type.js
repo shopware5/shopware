@@ -44,8 +44,10 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
         },
         store: {
             'selected_article': '{s name=article_slider_type/store/selected_article}Selected article(s){/s}',
-            'newcomer': '{s name=article_slider_type/store/newcomer}Newcomer articles{/s}',
-            'topseller': '{s name=article_slider_type/store/topseller}Topseller articles{/s}'
+            'newcomer': '{s name=article_slider_type/store/newcomer}Newer articles{/s}',
+            'topseller': '{s name=article_slider_type/store/topseller}Top selling articles{/s}',
+            'price_asc': '{s name=article_slider_type/store/price_asc}Price (low to high){/s}',
+            'price_desc': '{s name=article_slider_type/store/price_desc}Price (high to low){/s}'
         }
     },
 
@@ -92,6 +94,12 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
             }, {
                 value: 'topseller',
                 display: snippets.topseller
+            }, {
+                value: 'price_asc',
+                display: snippets.price_asc
+            }, {
+                value: 'price_desc',
+                display: snippets.price_desc
             }]
         });
     }

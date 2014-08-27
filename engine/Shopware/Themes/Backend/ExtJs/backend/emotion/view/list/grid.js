@@ -290,7 +290,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }
 
         var type = '{s name=grid/renderer/emotion}Emotion{/s}',
-            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/desktop}Nur für Desktop Computer sichtbar{/s}">&nbsp;</div>';
 
         // Type detection
         if(record.get('isLandingPage')) {
@@ -299,9 +299,9 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 
         // Device detection
         if(record.get('device') == 1) {
-            device = '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Tablets sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/tablet}Nur für Tablets sichtbar{/s}">&nbsp;</div>';
         } else if(record.get('device') == 2) {
-            device = '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/mobile}Nur für mobile Geräte sichtbar{/s}">&nbsp;</div>';
         }
 
         return device + type;
