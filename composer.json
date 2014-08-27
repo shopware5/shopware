@@ -29,9 +29,9 @@
         "monolog/monolog": "1.6.0",
         "ircmaxell/password-compat": "1.0.3",
         "rhumsaa/array_column": "~1.1",
-        "doctrine/common": "2.4.1",
-        "doctrine/dbal": "2.4.1",
-        "doctrine/orm": "2.4.1",
+        "doctrine/common": "2.4.2",
+        "doctrine/dbal": "2.4.2",
+        "doctrine/orm": "2.4.4",
         "oyejorge/less.php": "~1.5",
         "mobiledetect/mobiledetectlib": "2.8.0",
         "guzzlehttp/guzzle": "~4.2"
@@ -48,6 +48,7 @@
     },
     "autoload": {
         "psr-0": {
+            "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
             "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
