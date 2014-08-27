@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
      * Define window height
      * @integer
      */
-    height:590,
+    height:660,
 
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.

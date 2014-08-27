@@ -33,10 +33,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
     layout: 'fit',
     autoScroll: true,
 
-
-
     initComponent: function() {
         var me = this;
+
+        me.buttons = [
+            Ext.create('Ext.Button', {
+                text: '{s name=fieldset/buttons/refresh}Refresh{/s}',
+                cls: 'secondary',
+                scope: me,
+                handler:function () {
+                    me.refreshCacheData();
+                }}
+            )
+        ];
 
         Ext.applyIf(me, {
             columns: me.getColumns()
@@ -44,6 +53,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
 
         me.callParent(arguments);
         me.store.load();
+    },
+
+    /**
+     * Reloads cache data from server
+     */
+    refreshCacheData: function() {
+        var me = this;
+
+        me.store.reload();
     },
 
     /**

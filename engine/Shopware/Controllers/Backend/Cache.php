@@ -63,6 +63,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getConfigCacheInfo(),
             $this->cacheManager->getHttpCacheInfo($this->Request()),
             $this->cacheManager->getTemplateCacheInfo(),
+            $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
             $this->cacheManager->getDoctrineFileCacheInfo(),
             $this->cacheManager->getDoctrineProxyCacheInfo()
@@ -123,6 +124,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
         if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearTemplateCache();
+        }
+        if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
+            $this->cacheManager->clearThemeCache();
         }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearHttpCache();

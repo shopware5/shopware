@@ -75,6 +75,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
             },{
                 xtype: 'performance-tabs-settings-http-cache'
             },{
+                xtype: 'performance-tabs-settings-theme-cache'
+            },{
                 xtype: 'performance-tabs-settings-search'
             },{
                 xtype: 'performance-tabs-settings-topseller'

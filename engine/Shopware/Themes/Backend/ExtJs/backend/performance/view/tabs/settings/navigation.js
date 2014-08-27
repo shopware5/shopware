@@ -64,6 +64,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 leaf: true,
                 internalName: 'performance-tabs-settings-http-cache'
             }, {
+                text: "{s name=navigation/theme_cache}Theme cache{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-theme-cache'
+            }, {
                 text: "{s name=navigation/seo}SEO{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-seo'
