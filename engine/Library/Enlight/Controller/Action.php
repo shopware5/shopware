@@ -385,7 +385,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function __call($name, $value = null)
     {
         if ('Action' == substr($name, -6)) {
-            $action = substr($name, 0, strlen($name) - 6);
             throw new Enlight_Controller_Exception(
                 'Action "' . $this->controller_name . '_' . $name . '" not found failure',
                 Enlight_Controller_Exception::ActionNotFound

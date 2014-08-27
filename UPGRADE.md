@@ -81,6 +81,9 @@ In this document you will find a changelog of the important changes related to t
         * `Enlight_Extensions_Router_Bootstrap`
         * `Enlight_Extensions_RouterSymfony_Bootstrap`
         * `Enlight_Extensions_Site_Bootstrap`
+* `useDefaultControllerAlways` configuration option was removed
+    * `PageNotFoundDestination` (backend `Basic settings`) extends the previous behaviour by adding support for Shopping worlds pages
+    * `PageNotFoundCode` (backend `Basic settings`) added to configure the 404 HTTP error when requesting non-existent pages
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

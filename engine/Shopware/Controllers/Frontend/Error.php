@@ -65,45 +65,100 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
         $this->front->setResponse($response);
     }
 
+    /**
+     * Controller action that handles all error rendering
+     * either by itself or by delegating specific scenarios to other actions
+     */
     public function errorAction()
     {
         $error = $this->Request()->getParam('error_handler');
 
         if (!empty($error)) {
-            if ($this->Front()->getParam('showException')) {
-                $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
-                $replace = array('', Enlight()->App() . '/', '');
-
-                $exception = $error->exception;
-                $error_file = $exception->getFile();
-                $error_file = str_replace($paths, $replace, $error_file);
-
-                $error_trace = $error->exception->getTraceAsString();
-                $error_trace = str_replace($paths, $replace, $error_trace);
-                $this->View()->assign(array(
-                    'exception' => $exception,
-                    'error_message' => $exception->getMessage(),
-                    'error_file' => $error_file,
-                    'error_trace' => $error_trace
-                ));
-            }
-
             $code = $error->exception->getCode();
             switch ($code) {
+                case Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found:
+                case Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route:
+                case Enlight_Controller_Exception::ActionNotFound:
                 case 404:
+                    $this->forward('pageNotFoundError');
+                    break;
                 case 401:
-                    $this->Response()->setHttpResponseCode($code);
+                    $this->forward('genericError', null, null, array('code' => $code));
                     break;
                 default:
-                    $this->Response()->setHttpResponseCode(503);
+                    $this->forward('genericError', null, null, array('code' => 503));
                     break;
             }
+        }
+    }
 
-            if ($this->View()->getAssign('success') !== null) {
-                $this->Response()->setHttpResponseCode(200);
-                $this->View()->clearAssign('exception');
-                $this->View()->assign('message', $error->exception->getMessage());
-            }
+    /**
+     * Handles "Page Not Found" errors
+     */
+    public function pageNotFoundErrorAction()
+    {
+        $response = $this->Response();
+
+        $targetEmotionId = Shopware()->Config()->get('PageNotFoundDestination');
+        $targetErrorCode = Shopware()->Config()->get('PageNotFoundCode', 404);
+
+        $response->setHttpResponseCode($targetErrorCode);
+
+        switch ($targetEmotionId) {
+            case -2:
+            case null:
+                $response->unsetExceptions();
+                $this->forward(
+                    Shopware()->Front()->Dispatcher()->getDefaultAction(),
+                    Shopware()->Front()->Dispatcher()->getDefaultControllerName()
+                );
+                break;
+            case -1:
+                $this->forward('genericError', null, null, array('code' => $targetErrorCode));
+                break;
+            default:
+                $response->unsetExceptions();
+                $this->forward('index', 'campaign', 'frontend', array('emotionId' => $targetEmotionId));
+        }
+    }
+
+    /**
+     * Generic error handling controller action
+     */
+    public function genericErrorAction()
+    {
+        $response = $this->Response();
+        $errorCode = $this->Request()->getParam('code', 503);
+        $response->setHttpResponseCode($errorCode);
+
+        $error = $this->Request()->getParam('error_handler');
+
+        /**
+         * If the system is configured to display the exception data, we need
+         * to pass it to the template
+        */
+        if ($this->Front()->getParam('showException')) {
+            $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
+            $replace = array('', Enlight()->App() . '/', '');
+
+            $exception = $error->exception;
+            $error_file = $exception->getFile();
+            $error_file = str_replace($paths, $replace, $error_file);
+
+            $error_trace = $error->exception->getTraceAsString();
+            $error_trace = str_replace($paths, $replace, $error_trace);
+            $this->View()->assign(array(
+                'exception' => $exception,
+                'error_message' => $exception->getMessage(),
+                'error_file' => $error_file,
+                'error_trace' => $error_trace
+            ));
+        }
+
+        if ($this->View()->getAssign('success') !== null) {
+            $this->Response()->setHttpResponseCode(200);
+            $this->View()->clearAssign('exception');
+            $this->View()->assign('message', $error->exception->getMessage());
         }
     }
 

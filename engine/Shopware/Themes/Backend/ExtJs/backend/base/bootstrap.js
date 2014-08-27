@@ -116,6 +116,7 @@
 {include file='backend/base/model/position_status.js'}
 {include file='backend/base/model/doc_type.js'}
 {include file='backend/base/model/password_encoder.js'}
+{include file='backend/base/model/page_not_found_destination_options.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -141,6 +142,7 @@
 {include file='backend/base/store/form.js'}
 {include file='backend/base/store/position_status.js'}
 {include file='backend/base/store/password_encoder.js'}
+{include file='backend/base/store/page_not_found_destination_options.js'}
 
 
 {* Include shopware related components *}
