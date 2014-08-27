@@ -138,17 +138,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             ", array($categoryId));
             $hasEmotion = !empty($emotion['id']);
             $showListing = !$hasEmotion || !empty($emotion['show_listing']);
-
-            /**
-             * @deprecated
-             */
-            if (empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
-                $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
-                $viewAssignments['sOffers'] = $offers;
-                if (!empty($offers)) {
-                    $showListing = false;
-                }
-            }
         }
 
         $viewAssignments['showListing'] = $showListing;

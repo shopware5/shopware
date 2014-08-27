@@ -349,11 +349,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        // Do not cache if shop(template) is not esi-enabled
-        if (!Shopware()->Shop()->get('esi')) {
-            return;
-        }
-
         $this->setNoCacheCookie();
 
         // do not cache if doNotCache-flag is set

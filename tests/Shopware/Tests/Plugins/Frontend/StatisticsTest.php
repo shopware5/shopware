@@ -72,41 +72,6 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     /**
      * Test case method
      */
-    public function testDispatchLoopShutdown()
-    {
-        $request = $this->Request()
-            ->setModuleName('frontend')
-            ->setDispatched(true)
-            ->setClientIp('127.0.0.1', false)
-            ->setRequestUri('/');
-
-        $response = $this->Response();
-
-        $action = $this->getMock('Enlight_Controller_Action',
-            null,
-            array($request, $response)
-        );
-
-        Shopware()->Session()->Bot = false;
-        Shopware()->Config()->BlockIP = null;
-
-        $eventArgs = new Enlight_Controller_EventArgs(array(
-            'subject' => $action,
-            'request' => $request,
-            'response' => $response,
-        ));
-
-        $e = null;
-           try {
-            $this->Plugin()->onDispatchLoopShutdown($eventArgs);
-           } catch (Exception $e) { }
-
-           $this->assertEquals(null, $e);
-    }
-
-    /**
-     * Test case method
-     */
     public function testRefreshCurrentUsers()
     {
         $request = $this->Request()
