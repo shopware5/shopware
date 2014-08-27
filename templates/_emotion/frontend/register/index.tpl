@@ -92,9 +92,5 @@
 		<div class="register_info">
 			{s name='RegisterInfoAdvantages'}{/s}
 		</div>
-
-	    {if {config name=TSID}}
-	        {include file='frontend/plugins/trusted_shops/logo.tpl'}
-	    {/if}
 	</div>
 {/block}
