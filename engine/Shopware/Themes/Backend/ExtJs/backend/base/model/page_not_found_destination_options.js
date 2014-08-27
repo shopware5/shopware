@@ -1,7 +1,6 @@
-<?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 4.0
+ * Copyright © 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,28 +19,28 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @version    $Id$
+ * @author shopware AG
  */
 
 /**
- * @category  Shopware
- * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Shopware "Page Not Found" Destination Options Model
+ *
+ * The "Page Not Found" destination options model contains the possible options for a 404 page.
+ * It always has the 2 default options, plus emotion landing pages.
  */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
-{
-    public function preDispatch()
-    {
-        if ($this->Request()->getActionName() != 'index') {
-            $this->forward('index'); return;
-        }
-        $this->View()->loadTemplate('frontend/home/index.tpl');
-    }
+//{block name="backend/base/model/page_not_found_destination_options"}
+Ext.define('Shopware.apps.Base.model.PageNotFoundDestinationOptions', {
+    extend: 'Ext.data.Model',
 
-    public function indexAction()
-    {
-        $category = Shopware()->Shop()->get('parentID');
-
-        $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
-        $this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
-    }
-}
+    alternateClassName: 'Shopware.model.PageNotFoundDestinationOptions',
+    fields: [
+		//{block name="backend/base/model/page_not_found_destination_options/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'name', type: 'string' }
+    ]
+});
+//{/block}

@@ -56,7 +56,6 @@ return array_merge($customConfig, array(
     'front' => array_merge(array(
         'noErrorHandler' => false,
         'throwExceptions' => false,
-        'useDefaultControllerAlways' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
         'charset' => 'utf-8'
