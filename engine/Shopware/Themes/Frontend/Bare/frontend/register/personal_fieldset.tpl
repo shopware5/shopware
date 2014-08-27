@@ -7,11 +7,20 @@
 				<input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escape}" />
 			{else}
 				<div class="register--customertype">
+				{if {config name=showCompanySelectField}}
 					<select id="register_personal_customer_type" name="register[personal][customer_type]" required="required" class="is--required{if $error_flags.customer_type} has--error{/if}">
 						<option value="" disabled="disabled"{if $form_data.customer_type eq ""} selected="selected"{/if}>{s name='RegisterPersonalLabelType'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 						<option value="private"{if $form_data.customer_type eq "private" or (!$form_data.company and $sUserLoggedIn)} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
 					</select>
+				{else}
+					{* Always register as a private customer*}
+					<div class="is--hidden">
+						<select id="register_personal_customer_type" name="register[personal][customer_type]">
+							<option value="private" selected="selected">{s name='RegisterPersonalLabelPrivate'}{/s}</option>
+						</select>
+					</div>
+				{/if}
 				</div>
 			{/if}
 		{/block}
