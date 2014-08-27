@@ -55,8 +55,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $response = $args->getSubject()->Response();
         $view = $args->getSubject()->View();
 
-
-        if(!$request->isDispatched() || $response->isException()
+        if (!$request->isDispatched() || $response->isException()
           || $request->getModuleName() != 'frontend'
           || !$view->hasTemplate()) {
             return;
@@ -66,44 +65,10 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->Controller = $args->getSubject()->Request()->getControllerName();
         $view->Shopware = Shopware();
 
-        if (!$shop->get('esi')) {
-            $view->sBasketQuantity = Shopware()->Modules()->Basket()->sCountBasket();
-            $view->sBasketAmount = $this->getBasketAmount();
-            $view->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
-            $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
-            $categoryContent = $view->sCategoryContent;
-
-            $topSellerActive = $this->Application()->Config()->get(
-                'topSellerActive',
-                true
-            );
-
-            if (!empty($categoryContent) && $categoryContent['level'] <= 2 && $topSellerActive) {
-                $view->sCharts = Shopware()->Modules()->Articles()->sGetArticleCharts(
-                    $categoryContent['id']
-                );
-            }
-            if (!empty($view->sCompareShow)) {
-                $view->sComparisons = Shopware()->Modules()->Articles()->sGetComparisons();
-            }
-            if (!empty($view->sLastArticlesShow)) {
-                $view->sLastArticles = Shopware()->Modules()->Articles()->sGetLastArticles();
-            }
-            if (!empty($view->sCloudShow)) {
-                $view->sCloud = Shopware()->Modules()->Marketing()->sBuildTagCloud();
-            }
-            if (empty($view->sBlog) && $view->Controller == "index") {
-                $view->sBlog = $this->getBlog();
-            }
-
-            $view->sLanguages = $this->getLanguages();
-            $view->sCurrencies = $this->getCurrencies();
-        } else {
-            $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
-            $view->sBasketAmount = $view->sBasketAmount ?: 0;
-            $view->sNotesQuantity = $view->sNotesQuantity ?: 0;
-            $view->sUserLoggedIn = $view->sUserLoggedIn ?: false;
-        }
+        $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
+        $view->sBasketAmount = $view->sBasketAmount ?: 0;
+        $view->sNotesQuantity = $view->sNotesQuantity ?: 0;
+        $view->sUserLoggedIn = $view->sUserLoggedIn ?: false;
 
         $view->Shop = $shop;
         $view->Locale = $shop->getLocale()->getLocale();
@@ -117,9 +82,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
         $view->sMenu = $this->getMenu($shop->getId(), $activePage);
 
-        if (!Shopware()->Shop()->get('esi')) {
-           $view->sCampaigns = $this->getCampaigns($view->sCategoryCurrent);
-        }
         $view->sShopname = Shopware()->Config()->shopName;
     }
 

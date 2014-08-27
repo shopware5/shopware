@@ -34,11 +34,6 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
      */
     public function install()
     {
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_DispatchLoopShutdown',
-            'onDispatchLoopShutdown'
-        );
-
         $form = $this->Form();
 
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
@@ -95,30 +90,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         return array(
             'label' => 'Statistiken'
         );
-    }
-
-    /**
-     * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
-     */
-    public function onDispatchLoopShutdown(Enlight_Controller_EventArgs $args)
-    {
-        $request = $args->getRequest();
-        $response = $args->getResponse();
-
-        if ($response->isException()
-            || $request->isXmlHttpRequest()
-            || $request->getModuleName() != 'frontend'
-            || $request->getControllerName() == 'captcha'
-        ) {
-            return;
-        }
-
-        $statisticDisabled = Shopware()->Config()->get('disableShopwareStatistics', false);
-        if (!Shopware()->Shop()->get('esi') && !$statisticDisabled) {
-            $this->updateLog($request, $response);
-        }
     }
 
     /**
