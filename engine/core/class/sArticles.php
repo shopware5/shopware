@@ -903,14 +903,14 @@ class sArticles
 
                 break;
             case 2:
-                $groupBy = "aDetails.sales, sai.impressions, aDetails.articleID";
-                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
+                $groupBy = "atop.sales, aDetails.articleID";
+                $orderBy = "atop.sales DESC, aDetails.articleID DESC";
                 //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
                 $sqlFromPath = "
-                    FROM s_articles_details aDetails FORCE INDEX (articles_by_category_sort_popularity)
+                    FROM s_articles_details aDetails
                     INNER JOIN s_articles a
                         ON aDetails.id = a.main_detail_id
-                    LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId
+                    LEFT JOIN s_articles_top_seller_ro atop ON a.id = atop.article_id
                 ";
                 break;
             case 3:
@@ -2306,8 +2306,8 @@ class sArticles
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
-                $joinImpressions = "LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId";
+                $orderBy = "atop.sales DESC, aDetails.articleID DESC";
+                $joinImpressions = "LEFT JOIN s_articles_top_seller_ro atop ON a.id = atop.article_id";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
