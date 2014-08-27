@@ -197,8 +197,8 @@
         me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
 
 	    if (scroll) {
-            $('.page-wrap').animate({
-                'scrollTop':  me.$nav[0].offsetTop
+            $('html, body').animate({
+                'scrollTop':  me.$nav[0].offsetTop + 'px'
             }, 500);
         }
 
