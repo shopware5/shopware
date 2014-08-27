@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         var me = this;
 
         me.sidebarPanel = Ext.create('Ext.panel.Panel', {
-            title: 'Kategorien',
+            title: '{s name=sidebar/title}Kategorien{/s}',
             collapsible: true,
             width: 230,
             layout: {

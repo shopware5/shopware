@@ -96,7 +96,7 @@
              * Set the controller url which returns the products loaded via ajax.
              * @string
              */
-            controllerUrl: '/widgets/emotion/emotionTopSeller',
+            controllerUrl: '/widgets/emotion/emotionArticleSlider',
 
             /**
              * An additional css class for the wrapper element.
