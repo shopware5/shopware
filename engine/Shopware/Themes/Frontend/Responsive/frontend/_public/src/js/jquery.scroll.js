@@ -5,7 +5,7 @@
         defaults = {
 
             // The selector of the container which should be scrolled.
-            scrollContainerSelector: '.page-wrap',
+            scrollContainerSelector: 'body',
 
             // The selector of the target element or the position in px where the container should be scrolled to.
             scrollTarget: 0,
