@@ -2,6 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.4.0
+
 * Merged `_default` template into the `_emotion` template
 * Removed the template directory `_default` and all it's dependencies
 * Added the ability to show campaign banners in blog categories
@@ -206,8 +207,27 @@ In this document you will find a changelog of the important changes related to t
 * Removed methods
     * `\Shopware\Models\Banner\Banner::setLiveShoppingId()`
     * `\Shopware\Models\Banner\Banner::getLiveShoppingId()`
+* Removed the following methods from `sArtcles`
+    * `sArticles::sGetArticlesAverangeVote`
+    * `sArticles::getCategoryFilters` event `Shopware_Modules_Article_GetCategoryFilters`
+    * `sArticles::getFilterSortMode` event `Shopware_Modules_Article_GetFilterSortMode`
+    * `sArticles::addFilterTranslation`
+    * `sArticles::sGetArticleConfigTranslation`
+    * `sArticles::sGetArticlesByName`
+    * `sArticles::sGetConfiguratorImage`
+    * `sArticles::sCheckIfConfig`
+    * `sArticles::getCheapestVariant`
+    * `sArticles::calculateCheapestBasePriceData`
+    * `sArticles::displayFiltersOnArticleDetailPage`
+    * `sArticles::getFilterQuery` event `Shopware_Modules_Articles_GetFilterQuery`
+    * `sArticles::addArticleCountSelect`
+    * `sArticles::addActiveFilterCondition`
+    * `sArticles::displayFilterArticleCount`
+    * `sArticles::sGetLastArticles`
+    * `sArticles::sGetCategoryProperties`
 
 ## 4.3.1
+
 * Fixed name used as reference when setting attributes of an order document.
 * Added new event `Shopware_Modules_Articles_sGetArticlesByCategory_FilterCountSql`
 * `Forgotten password` feature now takes into account the configured minimum password length when generating new passwords
@@ -229,8 +249,8 @@ In this document you will find a changelog of the important changes related to t
     * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
 * Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
 
-
 ## 4.3.0
+
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:
     * `Zend_Amf`
