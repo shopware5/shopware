@@ -128,13 +128,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
 
         $config = $this->Config();
 
-        if ($request->getControllerName() == 'detail'
-            && !Shopware()->Session()->Bot
-            && Shopware()->Shop()->getTemplate()->getVersion() == 1
-        ) {
-            $this->setLastArticleById($view->sArticle["articleID"]);
-        }
-
         if (rand(0, 100) === 0) {
             $time = $config->time > 0 ? (int) $config->time : 15;
             $sql = '

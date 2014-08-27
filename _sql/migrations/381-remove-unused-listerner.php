@@ -21,31 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-/**
- * @category  Shopware
- * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
+class Migrations_Migration381 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function preDispatch()
+    public function up($modus)
     {
-        if ($this->Request()->getActionName() != 'index') {
-            $this->forward('index'); return;
-        }
-        $this->View()->loadTemplate('frontend/home/index.tpl');
-    }
-
-    public function indexAction()
-    {
-        $category = Shopware()->Shop()->get('parentID');
-
-        $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
-        $this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
-
-        if ($this->Request()->getPathInfo() != '/') {
-             $this->Response()->setHttpResponseCode(404);
-        }
+        $this->addSql('DELETE FROM s_core_subscribes WHERE listener LIKE "Shopware_Plugins_Frontend_Statistics_Bootstrap::onDispatchLoopShutdown"');
     }
 }
+
+
