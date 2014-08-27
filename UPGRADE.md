@@ -64,6 +64,24 @@ In this document you will find a changelog of the important changes related to t
 * It is now possible to add translations to configurator templates, which will then be used when generating variants
 * Removed legacy `excuteParent` method alias from generated hook proxy files
 * Restructured cache directories. The whole `/cache` directory should be writable now
+* Removed the following unused Enlight classes:
+        * `Enlight_Components_Currency`
+        * `Enlight_Components_Form` and subclasses
+        * `Enlight_Components_Locale`
+        * `Enlight_Components_Menu` and subclasses
+        * `Enlight_Components_Site` and subclasses
+        * `Enlight_Components_Test_Constraint_ArrayCount`
+        * `Enlight_Components_Test_Database_TestCase`
+        * `Enlight_Components_Test_Selenium_TestCase`
+        * `Enlight_Components_Test_TestSuite`
+        * `Enlight_Extensions_Benchmark_Bootstrap`
+        * `Enlight_Extensions_Debug_Bootstrap`
+        * `Enlight_Extensions_ErrorHandler_Bootstrap`
+        * `Enlight_Extensions_Log_Bootstrap`
+        * `Enlight_Extensions_Router_Bootstrap`
+        * `Enlight_Extensions_RouterSymfony_Bootstrap`
+        * `Enlight_Extensions_Site_Bootstrap`
+
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:
