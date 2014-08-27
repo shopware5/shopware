@@ -755,4 +755,47 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'total' => $totalResult,
         ));
     }
+
+    /**
+     * Loads options for the 404 page config options.
+     * Returns an array of all defined emotion pages, plus the 2 default options.
+     *
+     * @return array
+     */
+    public function getPageNotFoundDestinationOptionsAction()
+    {
+        $limit = $this->Request()->getParam('limit', null);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', null);
+
+        $namespace = Shopware()->Snippets()->getNamespace('backend/base/page_not_found_destination_options');
+
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getNameListQuery(true, $sort, $offset, $limit);
+        $count = Shopware()->Models()->getQueryCount($query);
+        $emotions = $query->getArrayResult();
+        foreach ($emotions as &$emotion) {
+            $emotion['name'] = $namespace->get('emotion_page_prefix', 'Shopping world') . ': ' . $emotion['name'];
+        }
+
+        $options = array_merge(
+            array(
+                array(
+                    'id' => '-2',
+                    'name' => $namespace->get('show_homepage', 'Show homepage')
+                ),
+                array(
+                    'id' => '-1',
+                    'name' => $namespace->get('show_error_page', 'Show default error page')
+                )
+            ),
+            $emotions
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $options,
+            'total' => $count+2
+        ));
+    }
 }

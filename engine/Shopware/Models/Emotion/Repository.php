@@ -120,6 +120,52 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object
      *
+     * @param null $filter
+     * @param array $orderBy
+     * @param integer $offset
+     * @param integer $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getNameListQuery($filter = null, $orderBy = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getNameListQueryBuilder($filter, $orderBy);
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getLandingPageListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param  array $filter
+     * @param  array $orderBy
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getNameListQueryBuilder($filter = null, $orderBy = null)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('emotions.id', 'emotions.name'))
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions');
+
+        if (!empty($filter)) {
+            $builder->where('emotions.isLandingPage = :isLandingPage')
+                ->setParameter('isLandingPage', $filter ? 1 : 0);
+        }
+
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object
+     *
      * @param integer $emotionId
      * @return \Doctrine\ORM\Query
      */
