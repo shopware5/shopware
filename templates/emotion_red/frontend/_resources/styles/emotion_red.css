@@ -34,10 +34,9 @@ div.ico_new, div.ico_tipp, div.ico_esd {color: #fff;}
 input.text {background: #fff; border-color: #bbb;}
 div#article_details p.red {color:#264409}
 
-#trustedShopsLogo, #paypalLogo, #paypalLogo_noborder {border-color: #dfdfdf;background-color: #f5f5f5;}
-#trustedShopsLogo .inner_container, #paypalLogo .inner_container, #paypalLogo_noborder .inner_container {border-color:#dfdfdf;background: #fff;}
-#trustedShopsLogo p, #paypalLogo p, #paypalLogo_noborder p {color: #777;}
-.trustedshops_form {border-color:#dfdfdf;}
+#paypalLogo, #paypalLogo_noborder {border-color: #dfdfdf;background-color: #f5f5f5;}
+#paypalLogo .inner_container, #paypalLogo_noborder .inner_container {border-color:#dfdfdf;background: #fff;}
+#paypalLogo p, #paypalLogo_noborder p {color: #777;}
 
 /* Lines */
 hr.line {color: #be0a30;background-color: #be0a30; border-color: #be0a30}

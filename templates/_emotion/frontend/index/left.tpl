@@ -14,13 +14,6 @@
 		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
 	{/block}
 
-	{* Trusted shops logo *}
-	{block name='frontend_index_left_trustedshops'}
-		{if {config name=TSID}}
-			{include file='frontend/plugins/trusted_shops/logo.tpl'}
-		{/if}
-	{/block}
-
 	{* Static sites *}
 	{block name='frontend_index_left_menu'}
 		{include file='frontend/index/menu_left.tpl'}

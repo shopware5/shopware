@@ -69,17 +69,15 @@ a.basket {background: url(../images/ico_basket.gif) no-repeat;display: inline-bl
 /* Flags */ 
 #topbar .flag {display: block;width: 16px; height: 11px;text-indent: -9999px;margin: 8px 5px 0 0;float:left;}
 
-/*	TRUSTED SHOPS, PAYPAL
+/*	PAYPAL
 	------------------------ */
-#trustedShopsLogo, #paypalLogo, #paypalLogo_noborder {padding: 10px;border-right: 1px solid;border-bottom: 1px solid;}
+#paypalLogo, #paypalLogo_noborder {padding: 10px;border-right: 1px solid;border-bottom: 1px solid;}
 #paypalLogo_noborder {border-bottom: 0px none;padding: 10px 10px 0;}
-#trustedShopsLogo .inner_container, #paypalLogo .inner_container, #paypalLogo_noborder .inner_container {padding: 5px 10px;border: 1px solid;}
+#paypalLogo .inner_container, #paypalLogo_noborder .inner_container {padding: 5px 10px;border: 1px solid;}
 
-#trustedShopsLogo a, #paypalLogo a, #paypalLogo_noborder a {display: block;text-align: center;}
-#trustedShopsLogo a img, #paypalLogo a img, #paypalLogo_noborder a img {display: block;margin: 0 auto;}
-#trustedShopsLogo p, #paypalLogo p, #paypalLogo_noborder p {margin: 10px 0 0 0;}
-.trustedshops_form {border: 1px solid;padding: 10px;width: 939px;} 
-#trustedShopsLogo a { display: inline; }
+#paypalLogo a, #paypalLogo_noborder a {display: block;text-align: center;}
+#paypalLogo a img, #paypalLogo_noborder a img {display: block;margin: 0 auto;}
+#paypalLogo p, #paypalLogo_noborder p {margin: 10px 0 0 0;}
 
 /*	HEADER
 	------------------------ */
