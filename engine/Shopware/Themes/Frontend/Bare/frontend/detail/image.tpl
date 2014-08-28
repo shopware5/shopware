@@ -20,8 +20,8 @@
 
 						{*Image based on our default media queries *}
 						{block name='frontend_detail_image_default_queries'}
-							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
+							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
+							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
 						{/block}
 
 						{*Block to add additional image based on media queries *}
@@ -30,7 +30,7 @@
 						{*If the browser doesn't support JS, the following image will be used *}
 						{block name='frontend_detail_image_fallback'}
 							<noscript>
-								<img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
+								<img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
 							</noscript>
 						{/block}
 					</span>
@@ -47,8 +47,8 @@
 
 							{*Image based on our default media queries *}
 							{block name='frontend_detail_image_default_queries'}
-								<span class="image--media" data-src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-								<span class="image--media" data-src="{if isset($image.src)}{$image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
+								<span class="image--media" data-src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
+								<span class="image--media" data-src="{if isset($image.src)}{$image.src.5}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
 							{/block}
 
 							{*Block to add additional image based on media queries *}
@@ -57,7 +57,7 @@
 							{*If the browser doesn't support JS, the following image will be used *}
 							{block name='frontend_detail_image_fallback'}
 								<noscript>
-									<img itemprop="image" src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
+									<img itemprop="image" src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
 								</noscript>
 							{/block}
 						</span>

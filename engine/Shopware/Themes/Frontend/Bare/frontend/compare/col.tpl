@@ -7,7 +7,7 @@
 			{if $sArticle.image.src}
 				<img src="{$sArticle.image.src.2}" alt="{$sArticle.articleName|escape}" />
 			{else}
-				<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName|escape}" />
+				<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape}" />
 			{/if}
 		</a>
 		{/block}

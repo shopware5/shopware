@@ -21,7 +21,7 @@
                                 <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
                             </a>
                         {else}
-                            <img class="table--media" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
+                            <img class="table--media" src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
                         {/if}
                     </div>
                 {/block}

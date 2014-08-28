@@ -24,7 +24,7 @@
 	    {if $sArticle.image.src}
 		<img src="{$sArticle.image.src.2}"  border="0">
 	    {else}
-		<img src="{link file='frontend/_resources/images/no_picture.jpg' fullPath}" alt="Kein Bild vorhanden" border="0" />
+		<img src="{link file='frontend/_public/src/img/no-picture.jpg' fullPath}" alt="Kein Bild vorhanden" border="0" />
 	   {/if}
 	   </a>
 	</div>
