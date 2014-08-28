@@ -10,11 +10,11 @@
 
 		{* Content *}
 		{block name='frontend_blog_detail_content'}
-			<div class="blog--detail-content blog--box block">
+			<div class="blog--detail-content blog--box block"  itemscope itemtype="https://schema.org/BlogPosting">
 
 				{* Detail Box Header *}
 				{block name='frontend_blog_detail_box_header'}
-					<div class="blog--detail-header" itemscope itemtype="https://schema.org/BlogPosting">
+					<div class="blog--detail-header">
 
 						{* Article name *}
 						{block name='frontend_blog_detail_title'}
@@ -69,7 +69,7 @@
 
 				{* Detail Box Content *}
 				{block name='frontend_blog_detail_box_content'}
-					<div class="blog--detail-box-content panel--body is--wide block" itemscope itemtype="http://schema.org/BlogPosting">
+					<div class="blog--detail-box-content panel--body is--wide block">
 
 						{* Description *}
 						{block name='frontend_blog_detail_description'}
