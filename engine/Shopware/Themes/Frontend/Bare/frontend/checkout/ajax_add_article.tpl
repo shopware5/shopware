@@ -29,7 +29,7 @@
                         <span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
                             {*Image based on our default media queries*}
                             {block name='frontend_detail_image_default_queries'}
-                                <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+                                <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
                             {/block}
 
                             {*Block to add additional image based on media queries*}
@@ -38,7 +38,7 @@
                             {*If the browser doesn't support JS, the following image will be used*}
                             {block name='frontend_detail_image_fallback'}
                                 <noscript>
-                                    <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
+                                    <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
                                 </noscript>
                             {/block}
                         </span>

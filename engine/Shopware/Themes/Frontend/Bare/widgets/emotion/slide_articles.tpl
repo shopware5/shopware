@@ -11,7 +11,7 @@
             </a>
             {else}
             <a class="article-thumb-wrapper" title="{$article.articleName|escape}" href="{$article.linkDetails}">
-                <img src="{link file="frontend/_resources/images/no_picture.jpg"}" title="{$article.articleName|escape}" />
+                <img src="{link file="frontend/_public/src/img/no-picture.jpg"}" title="{$article.articleName|escape}" />
             </a>
             {/if}
             <a title="{$article.articleName|escape}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>
