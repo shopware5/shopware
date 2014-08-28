@@ -14,8 +14,15 @@
     .unitize-margin(0, 0, 20, 0);
 }
 
-.teaser--btn-print {
+.teaser--btn-print,
+.teaser--btn-back {
     text-align: center;
+    width: 100%;
+
+    *[class^="icon--"] {
+        .unitize-margin(4, 0, 0, 0);
+        float: left;
+    }
 }
 
 .finish--info {
@@ -49,7 +56,7 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .teaser--btn-print { text-align: left }
+    .teaser--btn-print { text-align: left; width: auto; }
 
     .is--act-finish .content-main {
         .unitize(40, 16, margin-top);
@@ -61,6 +68,7 @@
 
     .teaser--btn-back {
         .unitize-margin(0, 20, 0, 0);
+        width: auto;
     }
 
     .finish--info {
