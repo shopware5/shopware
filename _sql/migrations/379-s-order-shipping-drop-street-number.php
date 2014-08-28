@@ -4,7 +4,7 @@ class Migrations_Migration379 Extends Shopware\Components\Migrations\AbstractMig
     public function up($modus)
     {
         $sql = <<<'EOD'
-       ALTER TABLE `s_emotion` ADD `device` INT( 1 ) NOT NULL;
+        ALTER TABLE `s_order_shippingaddress` DROP `streetnumber`;
 EOD;
         $this->addSql($sql);
     }
