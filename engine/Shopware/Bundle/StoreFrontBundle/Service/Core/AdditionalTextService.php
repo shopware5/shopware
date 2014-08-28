@@ -74,10 +74,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalTextLists($products, Context $context)
     {
-        if (!$this->config->get('dynamicAdditionalTextValues', true)) {
-            return $products;
-        }
-
         $required = array();
         foreach($products as &$product) {
             if (!$product->getAdditional()) {
