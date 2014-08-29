@@ -10,7 +10,7 @@
 
 		{* Content *}
 		{block name='frontend_blog_detail_content'}
-			<div class="blog--detail-content blog--box block"  itemscope itemtype="https://schema.org/BlogPosting">
+			<div class="blog--detail-content blog--box block" itemscope itemtype="https://schema.org/BlogPosting">
 
 				{* Detail Box Header *}
 				{block name='frontend_blog_detail_box_header'}
