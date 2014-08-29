@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use SearchBundle\DBAL\ProductNumberSearch;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\QueryAliasMapper;
@@ -169,6 +170,11 @@ class sArticles
      */
     private $queryAliasMapper;
 
+    /**
+     * @var ProductNumberSearch
+     */
+    private $productNumberSearch;
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
@@ -186,7 +192,8 @@ class sArticles
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter = null,
         \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null,
-        QueryAliasMapper $queryAliasMapper = null
+        QueryAliasMapper $queryAliasMapper = null,
+        ProductNumberSearch $productNumberSearch = null
     ) {
         $container = Shopware()->Container();
 
@@ -198,6 +205,7 @@ class sArticles
         $this->config = $config ?: $container->get('config');
         $this->listProductService = $listProductService ?: $container->get('list_product_service');
         $this->productService = $productService ?: $container->get('product_service');
+        $this->productNumberSearch = $productNumberSearch ?: $container->get('product_number_search');
         $this->voteService = $voteService ?: $container->get('vote_service');
         $this->configuratorService = $configuratorService ?: $container->get('configurator_service');
         $this->propertyService = $propertyService ?: $container->get('property_service');
@@ -1798,171 +1806,93 @@ class sArticles
     /**
      * Read the id from all articles that are in the same category as the article specified by parameter (For article navigation in top of detailpage)
      *
-     * @param int $article s_articles.id
-     * @param null $categoryId
+     * @param string $orderNumber
+     * @param int $categoryId
+     * @param Enlight_Controller_Request_RequestHttp $request
      * @return array
      */
-    public function sGetAllArticlesInCategory($article, $categoryId = null)
+    public function getProductNavigation($orderNumber, $categoryId, Enlight_Controller_Request_RequestHttp $request)
     {
-        $article = (int) $article;
+        $this->queryAliasMapper->replaceShortRequestQueries($request);
 
-        if ($categoryId === null) {
-            $categoryId = (int) $this->sSYSTEM->_GET['sCategory'];
-        }
+        $config = $this->loadCategoryConfig($categoryId);
+        unset($config['sPage']);
+        unset($config['sPerPage']);
 
-        if (empty($categoryId)) {
-            return;
-        }
-
-        if (!$this->isHttpCacheActive() && isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
-            $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
-        } else {
-            $sCategoryConfig = array();
-        }
-
-        // Order List by
-        if (isset($this->sSYSTEM->_POST['sSort'])) {
-            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_POST['sSort'];
-        } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
-            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_GET['sSort'];
-        }
-        if (!empty($sCategoryConfig['sSort'])) {
-            $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
-        }
-
-        $joinImpressions = '';
-        switch ($this->sSYSTEM->_POST['sSort']) {
-            case 1:
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
-                break;
-            case 2:
-                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
-                $joinImpressions = "LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId";
-                break;
-            case 3:
-                $orderBy = "price ASC, a.id";
-                break;
-            case 4:
-                $orderBy = "price DESC, a.id DESC";
-                break;
-            case 5:
-                $orderBy = "articleName ASC, a.id";
-                break;
-            case 6:
-                $orderBy = "articleName DESC, a.id DESC";
-                break;
-            default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
-        }
-
-        if (strpos($orderBy, 'price') !== false) {
-            $select_price = "
-                (
-                    SELECT IFNULL(p.price, p2.price) as min_price
-                    FROM s_articles_details d
-
-                    LEFT JOIN s_articles_prices p
-                    ON p.articleDetailsID=d.id
-                    AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
-                    AND p.to='beliebig'
-
-                    LEFT JOIN s_articles_prices p2
-                    ON p2.articledetailsID=d.id
-                    AND p2.pricegroup='EK'
-                    AND p2.to='beliebig'
-
-                    WHERE d.articleID=a.id
-
-                    ORDER BY min_price
-                    LIMIT 1
-                ) * ((100 - IFNULL(cd.discount, 0)) / 100)
-            ";
-            $join_price = "
-                LEFT JOIN s_core_customergroups cg
-                ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
-
-                LEFT JOIN s_core_pricegroups_discounts cd
-                ON a.pricegroupActive=1
-                AND cd.groupID=a.pricegroupID
-                AND cd.customergroupID=cg.id
-                AND cd.discountstart=(
-                    SELECT MAX(discountstart)
-                    FROM s_core_pricegroups_discounts
-                    WHERE groupID=a.pricegroupID
-                    AND customergroupID=cg.id
-                )
-            ";
-        } else {
-            $select_price = '0';
-            $join_price = '';
-        }
-
-        $sql = "
-            SELECT a.id, name AS articleName,
-                $select_price as price
-
-            FROM s_articles a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = $categoryId
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-
-            JOIN s_articles_details AS aDetails
-            ON aDetails.articleID=a.id AND aDetails.kind=1
-
-            $joinImpressions
-
-            JOIN s_articles_attributes AS aAttributes
-            ON aAttributes.articledetailsID = aDetails.id
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=ac.articleID
-            AND ag.customergroupID={$this->customerGroupId}
-
-            $join_price
-
-            WHERE a.active=1
-            AND ag.articleID IS NULL
-
-            GROUP BY a.id
-            ORDER BY $orderBy
-        ";
-
-        $getAllArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-            $this->sSYSTEM->sCONFIG['sCACHECATEGORY'], $sql,
-            false, "category_" . $categoryId
+        $context = $this->contextService->get();
+        $criteria = $this->getListingCriteria(
+            $categoryId,
+            $config,
+            $context
         );
 
-        // Get articles position and previous, next article
-        if (!empty($getAllArticles))
-            foreach ($getAllArticles as $allArticlesKey => $allArticlesValue) {
-                if ($allArticlesValue["id"] == $article) {
-                    if ($getAllArticles[$allArticlesKey - 1]["id"]) {
-                        // Previous article
-                        $sNavigation["sPrevious"]["id"] = $getAllArticles[$allArticlesKey - 1]["id"];
-                        $sNavigation["sPrevious"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sPrevious"]["id"] . "&sCategory=" . $categoryId;
-                        $sNavigation["sPrevious"]["name"] = $getAllArticles[$allArticlesKey - 1]["articleName"];
+        $searchResult = $this->productNumberSearch->search(
+            $criteria,
+            $context
+        );
 
-                    }
-                    if ($getAllArticles[$allArticlesKey + 1]["id"]) {
-                        // Next article
-                        $sNavigation["sNext"]["id"] = $getAllArticles[$allArticlesKey + 1]["id"];
-                        $sNavigation["sNext"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $sNavigation["sNext"]["id"] . "&sCategory=" . $categoryId;
-                        $sNavigation["sNext"]["name"] = $getAllArticles[$allArticlesKey + 1]["articleName"];
-                    }
-                    $sNavigation["sCurrent"]["position"] = $allArticlesKey+1;
-                    $sNavigation["sCurrent"]["count"] = count($getAllArticles);
-                    $sNavigation["sCurrent"]["sCategory"] = $this->sSYSTEM->_GET["sCategory"];
-                    $sNavigation["sCurrent"]["sCategoryLink"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=cat&sCategory=" . $categoryId;
-                    $getCategoryName = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryContent($categoryId);
-                    $sNavigation["sCurrent"]["sCategoryName"] = $getCategoryName["description"];
-                }
+        $navigation = $this->buildNavigation(
+            $searchResult,
+            $orderNumber,
+            $categoryId,
+            $context
+        );
+
+        return $navigation;
+    }
+
+    /**
+     * @param SearchBundle\ProductNumberSearchResult $searchResult
+     * @param $orderNumber
+     * @param $categoryId
+     * @param StoreFrontBundle\Struct\Context $context
+     * @return array
+     */
+    private function buildNavigation(
+        SearchBundle\ProductNumberSearchResult $searchResult,
+        $orderNumber,
+        $categoryId,
+        StoreFrontBundle\Struct\Context $context
+    ) {
+        $products = $searchResult->getProducts();
+        $products = array_values($products);
+
+        if (empty($products)) {
+            return array();
+        }
+
+        /** @var $currentProduct SearchBundle\SearchProduct */
+        foreach ($products as $index => $currentProduct) {
+            if ($currentProduct->getNumber() != $orderNumber) {
+                continue;
             }
 
-        return $sNavigation;
+            $previousProduct = isset($products[$index - 1]) ? $products[$index - 1] : null;
+            $nextProduct     = isset($products[$index + 1]) ? $products[$index + 1] : null;
+
+            $navigation = array();
+
+            if ($previousProduct) {
+                $previousProduct = $this->listProductService->get($previousProduct->getNumber(), $context);
+                $navigation["previousProduct"]["orderNumber"] = $previousProduct->getNumber();
+                $navigation["previousProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
+                $navigation["previousProduct"]["name"] = $previousProduct->getName();
+            }
+
+            if ($nextProduct) {
+                $nextProduct = $this->listProductService->get($nextProduct->getNumber(), $context);
+
+                $navigation["nextProduct"]["orderNumber"] = $nextProduct->getNumber();
+                $navigation["nextProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
+                $navigation["nextProduct"]["name"] = $nextProduct->getName();
+            }
+
+            return $navigation;
+        }
+
+        return array();
     }
+
 
     /**
      * Get translations for multidimensional groups and options for a certain article
@@ -3940,10 +3870,6 @@ class sArticles
         $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
             $data["description_long"]
         );
-
-        if ($this->showArticleNavigation()) {
-            $data["sNavigation"] = $this->sGetAllArticlesInCategory($product->getId());
-        }
 
         return $data;
     }
