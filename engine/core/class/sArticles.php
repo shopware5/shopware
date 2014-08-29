@@ -2371,6 +2371,10 @@ class sArticles
      */
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
     {
+        if ($sCategoryID === null) {
+            $sCategoryID = Shopware()->Front()->Request()->getParam('sCategory', null);
+        };
+
         /**
          * Validates the passed configuration array for the configurator selection
          */
