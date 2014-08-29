@@ -300,21 +300,48 @@
 
 /**
  * Overview button progressive enhancement
- * using the { @link sessionStorage } to provide a personalized link with the currently active
+ * using the {@link window.sessionStorage} to provide a personalized link with the currently active
  * filter properties for the HTTP cache.
  *
- * Copyright (c) 2013, shopware AG
+ * Copyright (c) 2014, shopware AG
  */
 ;(function($, window, undefined) {
      /*global jQuery:false */
     "use strict";
 
-    var pluginName = 'httpCacheFilters',
-        sessionStorage = window.sessionStorage,
-        hasSessionStorageSupport = false,
-        defaults = {
-            mode: 'listing'
-        };
+    var pluginName = 'ajaxProductNavigation',
+        listingSelectors = [
+            '.artbox .title',
+            '.artbox .artbox_thumb',
+            '.artbox .actions .more'
+        ];
+
+    var isNumeric = function(obj) {
+        return !$.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
+    };
+
+    var parseQueryString = function(url) {
+        var qparams = {},
+            parts = (url || '').split('?'),
+            qparts, qpart,
+            i=0;
+
+        if(parts.length <= 1){
+            return qparams;
+        }
+
+        qparts = parts[1].split('&');
+        for (i in qparts) {
+            var key, value;
+
+            qpart = qparts[i].split('=');
+            key = decodeURIComponent(qpart[0])
+            value = decodeURIComponent(qpart[1] || '');
+            qparams[key] = (isNumeric(value) ? parseFloat(value, 10) : value);
+        }
+
+        return qparams;
+    };
 
     /**
      * Plugin constructor which merges the default settings
@@ -322,145 +349,91 @@
      *
      * @param { HTMLElement } element
      * @param { Object } options
-     * @returms { Void }
+     * @returns { Void }
      * @constructor
      */
-    function Plugin(element, options) {
+    function Plugin(element) {
         var me = this;
 
-        me.element = element;
-        me.opts = $.extend({}, defaults, options);
-        me._defaults = defaults;
+        me.$el = $(element);
         me._name = pluginName;
 
         me.init();
     }
 
-    /**
-     * Initializes the plugin.
-     * If the user is on the listing page, listeners for the detail links will be set.
-     * When one of them was clicked, the current listing url with all applied filters will be saved into the session storage.
-     * If the user is on a detail page, the listing url will be set in the back button.
-     *
-     * @returns { Boolean } initialisation status
-     */
     Plugin.prototype.init = function() {
-        var me = this,
-            mode;
-
-        // Terminate if we're on the category listing or on the detail page
-        mode = $(me.element).hasClass('ctl_detail') ? 'detail' : 'listing';
-        if(mode === 'listing') {
-            $('.artbox .artbox_thumb, .artbox .title, .artbox .buynow').on('click.' + pluginName, $.proxy(me.onOpenDetailPage, me));
-            $('.filter_properties .close a').on('click.' + pluginName, $.proxy(me.onResetFilterOptions, me));
-        } else {
-            me.restoreState();
-        }
-
-        return true;
-    };
-
-    /**
-     * Event callback which will be fired when the user wants to open up
-     * the detail page.
-     *
-     * The method just proxies the method { @link #saveCurrentState }.
-     *
-     * @event `click`
-     * @returns { Void }
-     */
-    Plugin.prototype.onOpenDetailPage = function() {
         var me = this;
-        me.saveCurrentState();
-    };
 
-    /**
-     * Event callback which will be fired when the user wants to
-     * reset a filter property group.
-     *
-     * The method reads out the url of the reset link and save it
-     * to the { @link sessionStorage }.
-     *
-     * @param { Event } event
-     * @return { Void }
-     */
-    Plugin.prototype.onResetFilterOptions = function(event) {
-        var me = this,
-            $this = $(event.currentTarget),
-            url = $this.attr('href');
+        me._mode = (function() {
+            if(me.$el.hasClass('ctl_listing')) {
+                return 'listing';
+            } else if(me.$el.hasClass('ctl_detail')) {
+                return 'detail';
+            }
+            return undefined;
+        })();
 
-        me.saveCurrentState(url);
-    };
-
-    /**
-     * Saves the passed url to the { @link sessionStorage } using
-     * the { @link pluginName } as the key of the entry.
-     *
-     * @param { String } [url] - URL, which should be saved.
-     * @returns { Boolean }
-     */
-    Plugin.prototype.saveCurrentState = function(url) {
-        var itemValue = url || window.location.href;
-
-        if (hasSessionStorageSupport) {
-            sessionStorage.setItem(pluginName, itemValue);
-        }
-
-        return true;
-    };
-
-    /**
-     * Restores a state from the `sessionStorage` on the
-     * detail page and removes the entry to prevent
-     * strange behaviors of the overview link.
-     *
-     * @returns { Boolean } Truthy, if all went well, otherwise falsy
-     */
-    Plugin.prototype.restoreState = function() {
-        var item = hasSessionStorageSupport && sessionStorage.getItem(pluginName);
-
-        if(!item) {
+        if(!me._mode) {
             return false;
         }
 
-        var detailItem = sessionStorage.getItem(pluginName + '-detail');
-
-        if (!detailItem) {
-            detailItem = window.location.href;
-            sessionStorage.setItem(pluginName + '-detail', window.location.href);
+        if(me._mode === 'listing') {
+            me.registerListingEventListeners(listingSelectors);
         }
-
-        if(detailItem === window.location.href) {
-            $('.article_overview a').attr('href', item);
-        } else {
-            sessionStorage.removeItem(pluginName);
-            sessionStorage.removeItem(pluginName + '-detail');
-        }
-
-        return true;
     };
 
-    /**
-     * Checks if the session storage is available and ready to save data.
-     * If not, the poly fill will be set so the data will be saved into session cookies.
-     */
-    $(document).ready(function() {
-        if(!$.isSessionStorageSupported) {
-            sessionStorage = new StoragePolyFill('session');
-            hasSessionStorageSupport = true;
+    Plugin.prototype.registerListingEventListeners = function(selectors) {
+        var me = this;
+
+        selectors = selectors.join(', ');
+        me.$el.find(selectors).bind('click.' + pluginName, $.proxy(me.onProductLinkInListing, me));
+    };
+
+    Plugin.prototype.onProductLinkInListing = function(event) {
+        var me = this,
+            params = parseQueryString(window.location.href),
+            $target = $(event.target),
+            $parent = $target.parents('.artbox'),
+            categoryId = parseInt($parent.attr('data-category-id'), 10),
+            orderNumber = $parent.attr('data-ordernumber');
+
+        if(categoryId && isNumeric(categoryId) && !isNaN(categoryId)) {
+            params.categoryId = categoryId;
         }
 
-        /** Lightweight plugin starter */
-        $.fn[pluginName] = function ( options ) {
-            return this.each(function () {
-                if (!$.data(this, 'plugin_' + pluginName)) {
-                    $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-                }
-            });
-        };
+        if(orderNumber && orderNumber.length) {
+            params.ordernumber = orderNumber;
+        }
 
-        /** Fire up the plugin */
-        $('body').httpCacheFilters();
+        me.saveCurrentProductState(params);
+    };
+
+    Plugin.prototype.saveCurrentProductState = function(params) {
+        try {
+            window.sessionStorage.setItem('lastProductState', JSON.stringify(params));
+            return true;
+        } catch(err) {
+            return false;
+        }
+    };
+
+    Plugin.prototype.restoreCurrentProductState = function() {
+        try {
+            return JSON.parse(window.sessionStorage.getItem('lastProductState'));
+        } catch(err) {
+            return {};
+        }
+    };
+
+    $.fn[pluginName] = function () {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName, new Plugin( this ));
+            }
+        });
+    };
+
+    $(function() {
+        $('body').ajaxProductNavigation();
     });
 })(jQuery, window);
