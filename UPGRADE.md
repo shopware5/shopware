@@ -87,6 +87,8 @@ In this document you will find a changelog of the important changes related to t
     * `PageNotFoundCode` (backend `Basic settings`) added to configure the 404 HTTP error when requesting non-existent pages
 * `Enlight_Components_Adodb` (also accessed as `Shopware()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
 * Removed `Trusted Shops` from the basic settings. Functionality can now be found in `Trusted Shops Excellence` plugin
+* Removed `sArticles::sGetAllArticlesInCategory` and smarty variable `$sArticle.sNavigation` for product detail page
+* Added `sArticles::getProductNavigation`, product navigation is rendered asynchronous via ajax call to `\Shopware_Controllers_Frontend_Detail::productNavigationAction`
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
