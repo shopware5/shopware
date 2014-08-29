@@ -261,7 +261,7 @@ Ext.define('Shopware.apps.PluginManager.view.store.View', {
                     }
                     // No picture image
                     if(!images.length) {
-                        ret += '<div class="inner-thumb" style="background-image: url({link file="frontend/_resources/images/no_picture.jpg"})">'+values.name+'</div>';
+                        ret += '<div class="inner-thumb" style="background-image: url({link file="frontend/_public/src/img/no-picture.jpg"})">'+values.name+'</div>';
                         return ret;
                     }
 
