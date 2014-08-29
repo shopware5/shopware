@@ -60,6 +60,15 @@
 	<script type="text/javascript">
 	//<![CDATA[
 	{block name="frontend_index_header_javascript_inline"}
+        {* Article compare *}
+        var compareCount = '{$sComparisons|count}';
+        var compareMaxCount = '{config name="MaxComparisons"}';
+        {literal}
+        jQuery(document).ready(function() {
+            jQuery.compare.setup();
+        });
+        {/literal}
+
 		var timeNow = {time() nocache};
 
 		jQuery.controller =  {ldelim}
