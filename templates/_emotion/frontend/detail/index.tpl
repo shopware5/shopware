@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
+	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product" data-product-navigation="{url controller="detail" action="productNavigation" fullPath}">
 
 	{* The configurator selection is checked at this early point
    	   to use it in different included files in the detail template. *}

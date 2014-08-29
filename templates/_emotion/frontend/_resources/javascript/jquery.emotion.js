@@ -379,6 +379,8 @@
 
         if(me._mode === 'listing') {
             me.registerListingEventListeners(listingSelectors);
+        } else {
+            me.getProductNavigation();
         }
     };
 
@@ -423,6 +425,26 @@
         } catch(err) {
             return {};
         }
+    };
+
+    Plugin.prototype.getProductNavigation = function() {
+        var me = this,
+            params = me.restoreCurrentProductState(),
+            url;
+
+        if($.isEmptyObject(params)) {
+            return false;
+        }
+        url = me.$el.find('#detail').attr('data-product-navigation');
+
+        $.ajax({
+            'url': url,
+            'data': params,
+            'method': 'GET',
+            'success': function(response) {
+                console.log(response);
+            }
+        })
     };
 
     $.fn[pluginName] = function () {
