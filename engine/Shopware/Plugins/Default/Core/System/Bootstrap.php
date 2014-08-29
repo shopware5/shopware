@@ -162,6 +162,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Event listener method
      *
+     * @deprecated Since SW 5.0, will be removed in SW 5.1
      * @param Enlight_Event_EventArgs $args
      * @return \Enlight_Components_Adodb
      */
