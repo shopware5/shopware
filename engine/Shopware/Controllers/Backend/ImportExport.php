@@ -3289,31 +3289,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param int $articleId
-     * @param array $imageIds
-     * @return bool
-     */
-    public function deleteOtherArticleImages($articleId, $imageIds = null)
-    {
-        if (empty($articleId)) {
-            return false;
-        }
-
-        if (!empty($imageIds)) {
-            $sql = 'DELETE FROM s_articles_img WHERE id NOT IN (?) AND articleID = ?';
-        } else {
-            $sql = 'DELETE FROM s_articles_img WHERE articleID = ?';
-        }
-
-        $result = $this->sDB->Execute($sql);
-        if ($result === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * @return int
      */
     protected function deleteEmptyCategories()
