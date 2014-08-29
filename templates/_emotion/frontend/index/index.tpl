@@ -58,10 +58,10 @@
 			{/block}
 			
 			{block name='frontend_index_navigation_inline'}
-				{if $sCompareShow}
-				<div id="compareContainerAjax">
-				    {action module=widgets controller=compare}
-				</div>
+				{if {config name="compareShow"}}
+                    <div id="compareContainerAjax">
+                        {action module=widgets controller=compare}
+                    </div>
 				{/if}
 			{/block}
 			

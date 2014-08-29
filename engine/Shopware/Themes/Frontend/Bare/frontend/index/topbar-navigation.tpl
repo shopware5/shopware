@@ -13,16 +13,16 @@
 			<nav class="top-bar--navigation block">
 				<ul class="navigation--list" role="menubar">
 
-					{* Compare - TODO - Check syntax *}
-					{block name='frontend_index_navigation_inline'}
-						{if $sCompareShow}
-							<li class="navigation--entry entry--compare" role="menuitem" aria-haspopup="true">
-								{block name='frontend_index_navigation_compare'}
-									{action module=widgets controller=compare}
-								{/block}
-							</li>
-						{/if}
-					{/block}
+                    {* Article Compare *}
+                    {block name='frontend_index_navigation_inline'}
+                        {if {config name="compareShow"}}
+                            <li class="navigation--entry entry--compare" role="menuitem" aria-haspopup="true" data-drop-down-menu="true">
+                                {block name='frontend_index_navigation_compare'}
+                                    {action module=frontend controller=compare}
+                                {/block}
+                            </li>
+                        {/if}
+                    {/block}
 
 					{* Notepad *}
 					{block name="frontend_index_checkout_actions_notepad"}

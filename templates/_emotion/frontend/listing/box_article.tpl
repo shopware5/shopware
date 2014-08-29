@@ -104,7 +104,10 @@
 				{/block}
 
 				{block name='frontend_listing_box_article_actions_inline'}
-					{* More informations button *}
+                    {* Compare button *}
+                    <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='ListingBoxLinkCompare'}vergleichen{/s}" class="compare_add_article hide_script">{se name='ListingBoxLinkCompare'}{/se}</a>
+
+                    {* More informations button *}
 					<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="more">{s name='ListingBoxLinkDetails'}{/s}</a>
 				{/block}
 			</div>
