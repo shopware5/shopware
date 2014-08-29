@@ -17,7 +17,7 @@
  *	   {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange type="aggregated"}
  *	```
  *
- *  After choosing the the options for the points, the ```base``` is needed to display the right ratings.
+ *  After choosing the option for the points, the ```base``` is needed to display the right ratings.
  *  - Average ratings: base=10 (default)
  *  - Single ratings: base=5
  *
@@ -25,7 +25,7 @@
  *	   {include file="frontend/_includes/rating.tpl" points=$vote.points base=5}
  *	```
  *
- *  The parameters ```label``` provides the ability to display or to hide the rating count. If the type "aggregated" is given and the ```count```
+ *  The parameter ```label``` provides the ability to display or to hide the rating count. If the type "aggregated" is given and the ```count```
  *  is set, the label will be shown. The ```count``` option depends on the rating and could be eg. ``$sArticle.comments|count``.
  *  To hide the label use "label=false".
  *
