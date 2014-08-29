@@ -44,7 +44,7 @@ Ext.define('Shopware.form.field.Media', {
      * This image is displayed when the media field contains no value.
      * @type { String }
      */
-    noMedia: '{link file="templates/_emotion/frontend/_resources/images/no_picture.jpg"}',
+    noMedia: '{link file="engine/Shopware/Themes/Frontend/Responsive/frontend/_public/src/img/no-picture.jpg"}',
 
     /**
      * Current value of the media field.
