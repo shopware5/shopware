@@ -452,9 +452,22 @@
         }
     };
 
+    Plugin.prototype.refreshCurrentProductState = function() {
+        var me = this,
+            orderNumber = me.$el.find('#detail').attr('data-ordernumber'),
+            params = me.restoreCurrentProductState();
+
+        if(orderNumber && orderNumber.length) {
+            params.ordernumber = orderNumber;
+        }
+        me.saveCurrentProductState(params);
+
+        return params;
+    };
+
     Plugin.prototype.getProductNavigation = function() {
         var me = this,
-            params = me.restoreCurrentProductState(),
+            params = me.refreshCurrentProductState(),
             url;
 
         if($.isEmptyObject(params)) {
