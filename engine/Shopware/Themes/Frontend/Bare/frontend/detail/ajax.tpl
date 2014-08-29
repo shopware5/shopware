@@ -2,7 +2,6 @@
 
 {* Change the styling a bit *}
 {block name="frontend_index_header_css_screen"}
-<link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/framework.css'}" />
 {block name="frontend_detail_header_css"}
 <style type="text/css">
     .container_20, #content .inner { width: 580px; border-color: transparent }
