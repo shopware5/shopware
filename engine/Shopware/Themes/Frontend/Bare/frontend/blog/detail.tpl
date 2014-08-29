@@ -53,7 +53,7 @@
 								{block name='frontend_blog_detail_rating'}
                                     <span class="blog--metadata-rating blog--metadata is--last">
                                         {if $sArticle.sVoteAverage|round != "0"}
-                                            <a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='DetailLinkReview'}{/s}"|escape}">
+                                            <a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='BlogHeaderRating'}{/s}"|escape}">
                                                 {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" count=$sArticle.comments|count}
                                             </a>
                                         {else}
