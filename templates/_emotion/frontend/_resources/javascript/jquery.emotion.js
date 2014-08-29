@@ -310,6 +310,9 @@
     "use strict";
 
     var pluginName = 'ajaxProductNavigation',
+        defaults = {
+            arrowAnimSpeed: 500
+        },
         listingSelectors = [
             '.artbox .title',
             '.artbox .artbox_thumb',
@@ -377,11 +380,33 @@
             return false;
         }
 
+        me.registerCustomEasing();
+
         if(me._mode === 'listing') {
             me.registerListingEventListeners(listingSelectors);
         } else {
             me.getProductNavigation();
         }
+    };
+
+    Plugin.prototype.registerCustomEasing = function() {
+        var me = this;
+
+        $.extend($.easing, {
+            easeOutBounce: function (x, t, b, c, d) {
+                if ((t/=d) < (1/2.75)) {
+                    return c*(7.5625*t*t) + b;
+                } else if (t < (2/2.75)) {
+                    return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+                } else if (t < (2.5/2.75)) {
+                    return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+                } else {
+                    return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+                }
+            }
+        });
+
+        return me;
     };
 
     Plugin.prototype.registerListingEventListeners = function(selectors) {
@@ -441,10 +466,45 @@
             'url': url,
             'data': params,
             'method': 'GET',
-            'success': function(response) {
-                console.log(response);
-            }
+            'dataType': 'json',
+            'success': $.proxy(me.setProductNavigation, me)
         })
+    };
+
+    Plugin.prototype.setProductNavigation = function(response) {
+        var me = this,
+            prevLink = me.$el.find('a.article_back'),
+            nextLink = me.$el.find('a.article_next');
+
+        if(response.hasOwnProperty('previousProduct')) {
+            var previousProduct = response.previousProduct;
+
+            prevLink
+                .attr('href', previousProduct.href)
+                .attr('title', previousProduct.name)
+                .parents('div.article_back')
+                .animate({
+                    'left': 5
+                }, defaults.arrowAnimSpeed, 'easeOutBounce');
+        } else {
+            prevLink.remove();
+        }
+
+        if(response.hasOwnProperty('nextProduct')) {
+            var nextProduct = response.nextProduct;
+
+            nextLink
+                .attr('href', nextProduct.href)
+                .attr('title', nextProduct.name)
+                .parents('div.article_next')
+                .animate({
+                    'right': 5
+                }, defaults.arrowAnimSpeed, 'easeOutBounce');
+        } else {
+            nextLink.remove();
+        }
+
+        return true;
     };
 
     $.fn[pluginName] = function () {
