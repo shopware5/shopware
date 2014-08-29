@@ -70,7 +70,6 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
 
         $export = Shopware()->Modules()->Export();
         $export->sSYSTEM = Shopware()->System();
-        $export->sDB = Shopware()->AdoDb();
         $sSmarty = Shopware()->Template();
 
         $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
