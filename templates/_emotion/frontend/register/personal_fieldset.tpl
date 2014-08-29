@@ -5,7 +5,7 @@
 	{block name='frontend_register_personal_fieldset_customer_type'}
 		{if $form_data.sValidation}
 			<input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escape}" />
-		{else}
+		{elseif {config name=showCompanySelectField}}
 			<div>
 				<label for="register_personal_customer_type">{s name='RegisterPersonalLabelType'}{/s}*:</label>
 				<select id="register_personal_customer_type" name="register[personal][customer_type]">
@@ -13,6 +13,8 @@
 					<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
 				</select>
 			</div>
+		{else}
+			<input type="hidden" id="register_personal_customer_type" name="register[personal][customer_type]" value="private" />
 		{/if}
 	{/block}
 	
