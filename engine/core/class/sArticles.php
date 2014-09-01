@@ -31,7 +31,7 @@ use Shopware\Components\QueryAliasMapper;
  *
  * @category  Shopware
  * @package   Shopware\Core\Class
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sArticles
 {
@@ -41,7 +41,6 @@ class sArticles
      * @var sSystem
      */
     public $sSYSTEM;
-
     /**
      * @var \Shopware\Models\Category\Category
      */
@@ -146,6 +145,7 @@ class sArticles
      * @var Enlight_Components_Session_Namespace
      */
     private $session;
+    
     /**
      * @var SearchBundle\StoreFrontCriteriaFactory
      */
@@ -213,7 +213,7 @@ class sArticles
     {
         $article = (int) $article;
         if ($article) {
-            $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->Execute("
+            $checkForArticle = $this->db->executeUpdate("
             DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?
             ", array($this->sSYSTEM->sSESSION_ID, $article));
         }
@@ -227,7 +227,7 @@ class sArticles
         $sql = "
           DELETE FROM s_order_comparisons WHERE sessionID=?
         ";
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->sSESSION_ID));
+        $checkForArticle = $this->db->executeUpdate($sql, array($this->sSYSTEM->sSESSION_ID));
     }
 
     /**
@@ -240,11 +240,12 @@ class sArticles
         $article = (int) $article;
         if ($article) {
             // Check if this article is already noted
-            $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            $checkForArticle = $this->db->fetchRow("
             SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?
             ", array($this->sSYSTEM->sSESSION_ID, $article));
+
             // Check if max. numbers of articles for one comparison-session is reached
-            $checkNumberArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            $checkNumberArticles = $this->db->fetchRow("
             SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?
             ", array($this->sSYSTEM->sSESSION_ID));
 
@@ -254,7 +255,8 @@ class sArticles
 
             //
             if (!$checkForArticle["id"]) {
-                $articleName = $this->sSYSTEM->sDB_CONNECTION->GetOne("
+
+                $articleName = $this->db->fetchOne("
                 SELECT s_articles.name AS articleName FROM s_articles WHERE
                 id = ?
                 ", array($article));
@@ -266,8 +268,7 @@ class sArticles
                 VALUES (?,?,?,?,now())
                 ";
 
-
-                $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+                $queryNewPrice = $this->db->executeUpdate($sql, array(
                     $this->sSYSTEM->sSESSION_ID,
                     empty($this->sSYSTEM->_SESSION["sUserId"]) ? 0 : $this->sSYSTEM->_SESSION["sUserId"],
                     $articleName,
@@ -292,7 +293,7 @@ class sArticles
         if (!$this->sSYSTEM->sSESSION_ID) return array();
 
         // Get all comparisons for this user
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+        $checkForArticle = $this->db->fetchAll("
             SELECT * FROM s_order_comparisons WHERE sessionID=?
             ", array($this->sSYSTEM->sSESSION_ID));
 
@@ -320,7 +321,7 @@ class sArticles
         if (!$this->sSYSTEM->sSESSION_ID) return array();
 
         // Get all comparisons for this user
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+        $checkForArticle = $this->db->fetchAll("
             SELECT * FROM s_order_comparisons WHERE sessionID=?
             ", array($this->sSYSTEM->sSESSION_ID));
 
@@ -358,7 +359,7 @@ class sArticles
                     WHERE relations.groupID = ?
                     AND filter.comparable = 1
                     ORDER BY relations.position ASC";
-            $articleProperties = Shopware()->Db()->fetchPairs($sql, array($article["filtergroupID"]));
+            $articleProperties = $this->db->fetchPairs($sql, array($article["filtergroupID"]));
 
             foreach ($articleProperties as $articlePropertyKey => $articleProperty) {
                 if (!in_array($articlePropertyKey, array_keys($properties))) {
@@ -458,7 +459,7 @@ class sArticles
               fv.value
         ";
 
-        $getProperties = Shopware()->Db()->fetchAll($sql, array(
+        $getProperties = $this->db->fetchAll($sql, array(
             $filterGroupId,
             $language,
             $language,
@@ -534,7 +535,7 @@ class sArticles
             $sql = '
                 DELETE FROM s_articles_vote WHERE id=?
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+            $this->db->executeUpdate($sql, array(
                 $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article]
             ));
         }
@@ -543,7 +544,7 @@ class sArticles
             INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ';
-        $insertComment = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+        $insertComment = $this->db->executeUpdate($sql, array(
             $article,
             $this->sSYSTEM->_POST["sVoteName"],
             $this->sSYSTEM->_POST["sVoteSummary"],
@@ -557,7 +558,7 @@ class sArticles
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
-        $insertId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
+        $insertId = $this->db->lastInsertId();
         if (!isset($this->sSYSTEM->_SESSION['sArticleCommentInserts'])) {
             $this->sSYSTEM->_SESSION['sArticleCommentInserts'] = new ArrayObject();
         }
@@ -577,7 +578,7 @@ class sArticles
         if (!$this->sSYSTEM->_GET['sSearch']) return;
         $sSearch = intval($this->sSYSTEM->_GET['sSearch']);
 
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHESEARCH'], "
+        $getArticles = $this->db->fetchAll("
         SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC
         ", array($sSearch));
 
@@ -614,7 +615,6 @@ class sArticles
 
         return $result;
     }
-
 
     /**
      * Get supplier by id
@@ -683,7 +683,7 @@ class sArticles
             ORDER BY s.name ASC
             LIMIT 0, $limit
         ";
-        $getSupplier = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHESUPPLIER'], $sql, array(
+        $getSupplier = $this->db->fetchAll($sql, array(
             $id
         ));
 
@@ -787,16 +787,16 @@ class sArticles
 
         $parameters = array($taxId,$areaId,$countryId,$stateId,$customerGroupId);
 
-        $getTax = Shopware()->Db()->fetchRow($sql,$parameters);
+        $getTax = $this->db->fetchRow($sql,$parameters);
 
         if (empty($getTax["id"])) {
-            $getTax["tax"] = Shopware()->Db()->fetchOne("SELECT tax FROM s_core_tax WHERE id = ?",array($taxId));
+            $getTax["tax"] = $this->db->fetchOne("SELECT tax FROM s_core_tax WHERE id = ?",array($taxId));
         }
 
         $result[$taxId] = $getTax["tax"];
 
-        /*$params = (Shopware()->Db()->getProfiler()->getLastQueryProfile()->getQueryParams());
-        $query = (Shopware()->Db()->getProfiler()->getLastQueryProfile()->getQuery());
+        /*$params = ($this->db->getProfiler()->getLastQueryProfile()->getQueryParams());
+        $query = ($this->db->getProfiler()->getLastQueryProfile()->getQuery());
         foreach ($params as $par) {
             $query = preg_replace('/\\?/', "'" . $par . "'", $query, 1);
         }*/
@@ -908,7 +908,7 @@ class sArticles
         ";
 
 
-        $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
+        $queryChart = $this->db->fetchAssoc($sql, array(
             'categoryId'      => $category,
             'customerGroupId' => $this->customerGroupId
         ));
@@ -954,8 +954,8 @@ class sArticles
             ";
         }
 
-        $getEsd = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetEsd);
-        if (!empty($getEsd["id"])) {
+        $getEsd = $this->db->fetchRow($sqlGetEsd);
+        if (isset($getEsd["id"])) {
             return true;
         } else {
             return false;
@@ -1094,13 +1094,13 @@ class sArticles
         if (isset($cache[$id])) {
             return $cache[$id];
         }
-        $unit = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
+        $unit = $this->db->fetchRow("
           SELECT unit, description FROM s_core_units WHERE id=?
         ", array($id));
 
         if (!empty($unit) && !Shopware()->Shop()->get('skipbackend')) {
             $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_units' AND objectlanguage=" . Shopware()->Shop()->getId();
-            $translation = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql);
+            $translation = $this->db->fetchOne($sql);
             if (!empty($translation)) {
                 $translation = unserialize($translation);
             }
@@ -1147,7 +1147,7 @@ class sArticles
         ORDER BY discountstart ASC
         ";
 
-        $getGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, array($customergroup));
+        $getGroups = $this->db->fetchAll($sql, array($customergroup));
 
         if (count($getGroups)) {
             foreach ($getGroups as $group) {
@@ -1258,9 +1258,10 @@ class sArticles
             ";
         }
 
-        $queryCheapestPrice = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEPRICES'], $sql, array(
-            $fetchGroup, $article
-        ), "article_$article");
+        $queryCheapestPrice = $this->db->fetchAll(
+            $sql,
+            array($fetchGroup, $article)
+        );
 
         if (count($queryCheapestPrice) > 1) {
             $cheapestPrice = $queryCheapestPrice[0]["price"];
@@ -1279,7 +1280,7 @@ class sArticles
                 LIMIT 2
                 ";
 
-                $queryCheapestPrice = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEPRICES'], $sql, false, "article_$article");
+                $queryCheapestPrice = $this->db->fetchAll($sql);
                 if (count($queryCheapestPrice) > 1) {
                     $cheapestPrice = $queryCheapestPrice[0]["price"];
                 } else {
@@ -1306,7 +1307,7 @@ class sArticles
         ORDER BY discountstart ASC
         ";
 
-        $getGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, array($pricegroup, $this->sSYSTEM->sUSERGROUP));
+        $getGroups = $this->db->fetchAll($sql, array($pricegroup, $this->sSYSTEM->sUSERGROUP));
 
         //if there are no discounts for this customergroup don't show "ab:"
         if (empty($getGroups)) {
@@ -1568,7 +1569,7 @@ class sArticles
             array('subject' => $this, 'value' => $ordernumber)
         );
 
-        $getPromotionResult = Shopware()->Db()->fetchRow($sql, array($this->sSYSTEM->sUSERGROUP, $ordernumber));
+        $getPromotionResult = $this->db->fetchRow($sql, array($this->sSYSTEM->sUSERGROUP, $ordernumber));
 
         if (empty($getPromotionResult)) {
             return false;
@@ -1716,7 +1717,7 @@ class sArticles
             return false;
         }
 
-        $number = Shopware()->Db()->fetchOne(
+        $number = $this->db->fetchOne(
             "SELECT ordernumber
              FROM s_articles_details
                 INNER JOIN s_articles
@@ -1734,7 +1735,7 @@ class sArticles
 
     private function getPremiumArticle($mode, $category = 0, $value = 0)
     {
-        $value = $this->sSYSTEM->sDB_CONNECTION->qstr($value);
+        $value = $this->db->quote($value);
 
         $sql = "
                 SELECT a.active AS active, a.id as articleID, ordernumber,datum,sales, topseller,
@@ -1754,7 +1755,7 @@ class sArticles
             'subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value
         ));
 
-        $data = Shopware()->Db()->fetchRow($sql);
+        $data = $this->db->fetchRow($sql);
 
         return $data['ordernumber'];
     }
@@ -1787,7 +1788,7 @@ class sArticles
 
         if ($mode == 'top') {
             $promotionTime = !empty($this->sSYSTEM->sCONFIG['sPROMOTIONTIME']) ? (int) $this->sSYSTEM->sCONFIG['sPROMOTIONTIME'] : 30;
-            $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
+            $now = $this->db->quote(date('Y-m-d H:00:00'));
             $sql = "
                 SELECT od.articleID
                 FROM s_order as o, s_order_details od, s_articles a $withImageJoin
@@ -1825,7 +1826,7 @@ class sArticles
             $sql,
             array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value)
         );
-        $articleIDs = Shopware()->Db()->fetchCol($sql);
+        $articleIDs = $this->db->fetchCol($sql);
 
         if ($mode == 'random') {
             $value = array_rand($articleIDs);
@@ -2117,11 +2118,11 @@ class sArticles
      */
     public function sGetArticleIdByOrderNumber($ordernumber)
     {
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $checkForArticle = $this->db->fetchRow("
         SELECT articleID AS id FROM s_articles_details WHERE ordernumber=?
         ", array($ordernumber));
 
-        if ($checkForArticle["id"]) {
+        if (isset($checkForArticle["id"])) {
             return $checkForArticle["id"];
         } else {
             return false;
@@ -2136,7 +2137,7 @@ class sArticles
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false)
     {
-        $article = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $article = $this->db->fetchRow("
             SELECT
                 s_articles.id,
                 s_articles.main_detail_id,
@@ -2152,7 +2153,7 @@ class sArticles
             )
         );
 
-        if (empty($article)) {
+        if (!$article) {
             return false;
         }
 
@@ -2202,9 +2203,10 @@ class sArticles
      */
     public function sGetArticleNameByArticleId($articleId, $returnAll = false)
     {
-        $ordernumber = $this->sSYSTEM->sDB_CONNECTION->GetOne("
+        $ordernumber = $this->db->fetchOne("
             SELECT ordernumber FROM s_articles_details WHERE kind=1 AND articleID=?
         ", array($articleId));
+
         return $this->sGetArticleNameByOrderNumber($ordernumber, $returnAll);
     }
 
@@ -2215,12 +2217,12 @@ class sArticles
      */
     public function sGetArticleTaxById($id)
     {
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $checkForArticle = $this->db->fetchRow("
         SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND
         s_articles.taxID = s_core_tax.id
         ", array($id));
 
-        if ($checkForArticle["tax"]) {
+        if (isset($checkForArticle["tax"])) {
             return $checkForArticle["tax"];
         } else {
             return false;
@@ -2246,7 +2248,7 @@ class sArticles
         ";
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetPromotions_FilterSQL', $sql, array('subject' => $this, 'category' => $category));
 
-        $getAffectedPromitions = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $getAffectedPromitions = $this->db->fetchAll($sql);
 
         if (count($getAffectedPromitions)) {
             foreach ($getAffectedPromitions as $promotion) {
@@ -2290,9 +2292,7 @@ class sArticles
     /**
      * Read translation for one or more articles
      * @param $data
-     * @param $ids
      * @param $object
-     * @param $language
      * @return array
      */
     public function sGetTranslations($data, $object)
@@ -2302,8 +2302,7 @@ class sArticles
         }
         $language = Shopware()->Shop()->getId();
         $fallback = Shopware()->Shop()->get('fallback');
-        $cacheTime = Shopware()->Config()->get('cacheTranslations');
-        $ids = Shopware()->Db()->quote(array_keys($data));
+        $ids = $this->db->quote(array_keys($data));
 
         switch ($object) {
             case 'article':
@@ -2326,7 +2325,7 @@ class sArticles
                 return $data;
         }
 
-        $object = Shopware()->Db()->quote($object);
+        $object = $this->db->quote($object);
 
         $sql = '';
         if (!empty($fallback)) {
@@ -2353,7 +2352,7 @@ class sArticles
                 s.objectlanguage = '$language'
         ";
 
-        $translations = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($cacheTime, $sql);
+        $translations = $this->db->fetchAll($sql);
 
         if (empty($translations)) {
             return $data;
@@ -2393,7 +2392,6 @@ class sArticles
         $id = (int) $id;
         $language = $language ? : Shopware()->Shop()->getId();
         $fallback = Shopware()->Shop()->get('fallback');
-        $cacheTime = Shopware()->Config()->get('cacheTranslations');
 
         switch ($object) {
             case 'article':
@@ -2440,9 +2438,7 @@ class sArticles
             AND objectkey = ?
             AND objectlanguage = '$language'
         ";
-        $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-            $cacheTime, $sql, array($id)
-        );
+        $objectData = $this->db->fetchOne($sql, array($id));
         if (!empty($objectData)) {
             $objectData = unserialize($objectData);
         } else {
@@ -2455,9 +2451,7 @@ class sArticles
                 AND objectkey = $id
                 AND objectlanguage = '$fallback'
             ";
-            $objectFallback = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-                $cacheTime, $sql
-            );
+            $objectFallback = $this->db->fetchOne($sql);
             if (!empty($objectFallback)) {
                 $objectFallback = unserialize($objectFallback);
                 $objectData = array_merge($objectFallback, $objectData);
