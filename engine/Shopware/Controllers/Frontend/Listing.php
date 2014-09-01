@@ -48,6 +48,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
 
+
+        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+        $mapper->replaceShortRequestQueries($this->Request());
+
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
         if (!empty($categoryContent['external'])) {

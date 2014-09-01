@@ -25,6 +25,7 @@
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\QueryAliasMapper;
 
 /**
  * Deprecated Shopware Class that handle articles
@@ -163,6 +164,10 @@ class sArticles
      */
     private $legacyEventManager;
 
+    /**
+     * @var QueryAliasMapper
+     */
+    private $queryAliasMapper;
 
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
@@ -180,80 +185,29 @@ class sArticles
         Enlight_Event_EventManager $eventManager = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter = null,
-        \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null
+        \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null,
+        QueryAliasMapper $queryAliasMapper = null
     ) {
-        $this->category = ($category) ?: Shopware()->Shop()->getCategory();
+        $container = Shopware()->Container();
+
+        $this->category = $category ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-
-        $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
+        $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
         $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
-
-        $this->contextService = $contextService;
-        $this->config = $config;
-        $this->listProductService = $listProductService;
-        $this->productService = $productService;
-        $this->voteService = $voteService;
-        $this->configuratorService = $configuratorService;
-        $this->propertyService = $propertyService;
-        $this->additionalTextService = $additionalTextService;
-        $this->searchService = $searchService;
-        $this->eventManager = $eventManager;
-        $this->db = $db;
-
-        $this->legacyEventManager = $legacyEventManager;
-        $this->legacyStructConverter = $legacyStructConverter;
-
-        if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('context_service');
-        }
-
-        if ($this->config == null) {
-            $this->config = Shopware()->Container()->get('config');
-        }
-
-        if ($this->listProductService == null) {
-            $this->listProductService = Shopware()->Container()->get('list_product_service');
-        }
-
-        if ($this->productService == null) {
-            $this->productService = Shopware()->Container()->get('product_service');
-        }
-
-        if ($this->voteService == null) {
-            $this->voteService = Shopware()->Container()->get('vote_service');
-        }
-
-        if ($this->configuratorService == null) {
-            $this->configuratorService = Shopware()->Container()->get('configurator_service');
-        }
-
-        if ($this->propertyService == null) {
-            $this->propertyService = Shopware()->Container()->get('property_service');
-        }
-
-        if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
-        }
-
-        if ($this->searchService == null) {
-            $this->searchService = Shopware()->Container()->get('product_search');
-        }
-
-        if ($this->db == null) {
-            $this->db = Shopware()->Container()->get('db');
-        }
-
-        if ($this->eventManager == null) {
-            $this->eventManager = Shopware()->Container()->get('events');
-        }
-
-        if ($this->legacyStructConverter == null) {
-            $this->legacyStructConverter = Shopware()->Container()->get('legacy_struct_converter');
-        }
-
-        if ($this->legacyEventManager == null) {
-            $this->legacyEventManager = Shopware()->Container()->get('legacy_event_manager');
-        }
+        $this->contextService = $contextService ?: $container->get('context_service');
+        $this->config = $config ?: $container->get('config');
+        $this->listProductService = $listProductService ?: $container->get('list_product_service');
+        $this->productService = $productService ?: $container->get('product_service');
+        $this->voteService = $voteService ?: $container->get('vote_service');
+        $this->configuratorService = $configuratorService ?: $container->get('configurator_service');
+        $this->propertyService = $propertyService ?: $container->get('property_service');
+        $this->additionalTextService = $additionalTextService ?: $container->get('additional_text_service');
+        $this->searchService = $searchService ?: $container->get('product_search');
+        $this->db = $db ?: $container->get('db');
+        $this->eventManager = $eventManager ?: $container->get('events');
+        $this->legacyStructConverter = $legacyStructConverter ?: $container->get('legacy_struct_converter');
+        $this->legacyEventManager = $legacyEventManager ?: $container->get('legacy_event_manager');
+        $this->queryAliasMapper = $queryAliasMapper ?: $container->get('query_alias_mapper');
     }
 
     /**
@@ -3898,13 +3852,9 @@ class sArticles
             )
         );
 
-        $shortParameters = $this->getShortParameters();
+        $shortParameters = $this->queryAliasMapper->getQueryAliases();
         $params = $this->getListingLinkParameters($config);
-
-        $params = $this->replaceParameters(
-            $params,
-            $shortParameters
-        );
+        $params = $this->queryAliasMapper->replaceLongParams($params);
         ksort($params);
 
         $result['categoryParams'] = $params;
@@ -4525,35 +4475,6 @@ class sArticles
         }
 
         return $value;
-    }
-
-    private function getShortParameters()
-    {
-        $config = $this->config->get('seoQueryAlias');
-        $config = explode(',', $config);
-
-        $params = array();
-        foreach ($config as $alias) {
-            $alias = explode('=', $alias);
-
-            $key = trim($alias[0]);
-            $value = trim($alias[1]);
-
-            $params[$key] = $value;
-        }
-        return $params;
-    }
-
-    private function replaceParameters($params, $shortParameters)
-    {
-        foreach ($shortParameters as $key => $value) {
-            if (array_key_exists($key, $params)) {
-                $params[$value] = $params[$key];
-                unset($params[$key]);
-            }
-        }
-
-        return $params;
     }
 
     /**

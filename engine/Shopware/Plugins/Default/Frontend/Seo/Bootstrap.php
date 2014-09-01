@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\QueryAliasMapper;
 
 /**
  * Shopware SEO Plugin
@@ -77,6 +78,9 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $config = Shopware()->Config();
 
+        /** @var $mapper QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+
         $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);
         $controllerBlacklist = explode(',', $controllerBlacklist);
 
@@ -105,11 +109,12 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $controller = $request->getControllerName();
 
         if ($request->getQuery('sViewport') === 'supplier' || $request->getQuery('controller') === 'supplier') {
-            $alias = $this->sGetQueryAliasList();
+            $alias = $mapper->getQueryAliases();
 
             if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
                 unset($queryBlacklist[$index]);
             }
+
             if ($index = array_search('sSupplier', $queryBlacklist, true)) {
                 unset($queryBlacklist[$index]);
             }
@@ -139,23 +144,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
-    }
-
-    /**
-     * Returns the query alias list as an array.
-     *
-     * @return array
-     */
-    public function sGetQueryAliasList()
-    {
-        $sQueryAliasList = array();
-        if (!empty(Shopware()->Config()->SeoQueryAlias)) {
-            foreach (explode(',', Shopware()->Config()->SeoQueryAlias) as $alias) {
-                list($key, $value) = explode('=', trim($alias));
-                $sQueryAliasList[$key] = $value;
-            }
-        }
-        return $sQueryAliasList;
     }
 
     /**
