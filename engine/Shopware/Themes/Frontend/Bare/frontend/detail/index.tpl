@@ -10,7 +10,7 @@
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
             <li class="breadcrumb--button">
-                <a class="btn btn--grey" href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName|escape}">
+                <a class="btn btn--grey" href="#" title="#">
                     <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
                 </a>
             </li>
