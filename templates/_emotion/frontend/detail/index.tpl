@@ -37,7 +37,7 @@
 			{* Previous article *}
 			{block name='frontend_detail_article_back'}
                 <div class="article_back">
-                    <a href="#" title="{$sArticle.sNavigation.sPrevious.name}" class="article_back">{s name='DetailNavPrevious'}Zurück{/s}</a>
+                    <a href="#" class="article_back">{s name='DetailNavPrevious'}Zurück{/s}</a>
                 </div>
 			{/block}
 
