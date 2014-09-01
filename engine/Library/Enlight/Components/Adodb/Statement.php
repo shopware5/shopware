@@ -26,6 +26,7 @@
  * The Enlight_Components_Adodb_Statement class is the interface for adodb statements,
  * which grants an easy access to sql statement results.
  *
+ * @deprecated Will be removed in SW 5.1
  * @category   Enlight
  * @package    Enlight_Adodb
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)

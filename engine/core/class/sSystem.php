@@ -59,7 +59,7 @@ class sSystem
      * Current database connection
      *
      * @var Enlight_Components_Adodb
-     * @deprecated Use Shopware()->Db()
+     * @deprecated Use Shopware()->Db(), will be removed in SW 5.1
      */
     public $sDB_CONNECTION;
 

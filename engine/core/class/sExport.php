@@ -23,6 +23,8 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
  * Deprecated Shopware Class to provide article export feeds
@@ -70,33 +72,35 @@ class sExport
     protected $articleMediaAlbum = null;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
     /**
-     * Class constructor.
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
+     * @param ContextServiceInterface $contextService
+     * @param AdditionalTextServiceInterface $additionalTextService
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      */
     public function __construct(
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
-    )
-    {
-        $this->contextService = $contextService;
-        $this->additionalTextService = $additionalTextService;
+        ContextServiceInterface $contextService = null,
+        AdditionalTextServiceInterface $additionalTextService = null,
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null
+    ) {
+        $container = Shopware()->Container();
 
-        if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('context_service');
-        }
-
-        if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
-        }
+        $this->contextService = $contextService ?: $container->get('context_service');
+        $this->additionalTextService = $container->get('additional_text_service');
+        $this->db = $db ?: $container->get('db');
     }
 
     public function sGetCurrency($currency)
@@ -109,7 +113,7 @@ class sExport
         if(is_numeric($currency))
             $sql = "id=".$currency;
         elseif(is_string($currency))
-            $sql = "currency=".$this->sDB->qstr(trim($currency));
+            $sql = "currency=".$this->db->quote(trim($currency));
         else
             return false;
         $sql = "
@@ -117,7 +121,7 @@ class sExport
             FROM s_core_currencies
             WHERE $sql
         ";
-        return $cache[$currency] = $this->sDB->GetRow($sql);
+        return $cache[$currency] = $this->db->fetchRow($sql);
     }
 
     public function sGetCustomergroup($customergroup)
@@ -130,15 +134,16 @@ class sExport
         if(is_int($customergroup))
             $sql = "id=".$customergroup;
         elseif(is_string($customergroup))
-            $sql = "groupkey=".$this->sDB->qstr(trim($customergroup));
+            $sql = "groupkey=".$this->db->quote(trim($customergroup));
         else
+
             return false;
         $sql = "
             SELECT *
             FROM s_core_customergroups
             WHERE $sql
         ";
-        return $cache[$customergroup] = $this->sDB->GetRow($sql);
+        return $cache[$customergroup] = $this->db->fetchRow($sql);
     }
 
     public function sGetMultishop($language)
@@ -151,14 +156,14 @@ class sExport
         elseif(is_numeric($language))
             $sql = "id=".$language;
         elseif(is_string($language))
-            $sql = "name=".$this->sDB->qstr(trim($language));
+            $sql = "name=".$this->db->quote(trim($language));
 
         $sql = "
             SELECT *
             FROM s_core_multilanguage
             WHERE $sql
         ";
-        return $cache[$language] = $this->sDB->GetRow($sql);
+        return $cache[$language] = $this->db->fetchRow($sql);
     }
 
     public function sGetLanguage($language)
@@ -171,7 +176,7 @@ class sExport
         elseif(is_numeric($language))
             $sql = "id=".$language;
         elseif(is_string($language))
-            $sql = "isocode=".$this->sDB->qstr(trim($language));
+            $sql = "isocode=".$this->db->quote(trim($language));
 
         $sql = "
             SELECT *
@@ -179,7 +184,7 @@ class sExport
             WHERE $sql
             ORDER BY skipbackend
         ";
-        return $cache[$language] = $this->sDB->GetRow($sql);
+        return $cache[$language] = $this->db->fetchRow($sql);
     }
 
     /**
@@ -209,7 +214,7 @@ class sExport
 
     public function sInitSettings()
     {
-        $hash = $this->sDB->qstr($this->sHash);
+        $hash = $this->db->quote($this->sHash);
 
         /** @var $shopRepository \Shopware\Models\Shop\Repository */
         $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
@@ -226,7 +231,7 @@ class sExport
             AND
                 `active`=1
         ";
-        $this->sSettings = $this->sDB->GetRow($sql);
+        $this->sSettings = $this->db->fetchRow($sql);
 
         if(empty($this->sSettings))
             die();
@@ -620,7 +625,7 @@ class sExport
         $sql_add_where  = array();
 
         if (empty($this->sLanguage["skipbackend"]) && !empty($this->sLanguage["isocode"])) {
-            $sql_isocode = $this->sDB->qstr($this->sLanguage["isocode"]);
+            $sql_isocode = $this->db->quote($this->sLanguage["isocode"]);
             $sql_add_join[] = "
                 LEFT JOIN s_core_translations as ta
                 ON ta.objectkey=a.id AND ta.objecttype='article' AND ta.objectlanguage=$sql_isocode
@@ -633,7 +638,7 @@ class sExport
 
             //read the fallback for the case the translation is not going to be set
             if (!empty($this->sLanguage["fallback"])) {
-                $sqlFallbackLanguageId = $this->sDB->qstr($this->sLanguage["fallback"]);
+                $sqlFallbackLanguageId = $this->db->quote($this->sLanguage["fallback"]);
                 $sql_add_join[] = "
                 LEFT JOIN s_core_translations as taf
                     ON taf.objectkey=a.id AND taf.objecttype='article' AND taf.objectlanguage=$sqlFallbackLanguageId
@@ -907,7 +912,7 @@ class sExport
 
         $sql = $this->sCreateSql();
 
-        $result = Shopware()->Db()->query($sql);
+        $result = $this->db->query($sql);
 
         if ($result === false) {
             return;
@@ -915,7 +920,7 @@ class sExport
 
         // Update db with the latest values
         $count = (int) $result->rowCount();
-        Shopware()->Db()->update(
+        $this->db->update(
             's_export',
             array(
                 'last_export' => new Zend_Date(),
@@ -1066,7 +1071,7 @@ class sExport
         if(is_numeric($country))
             $sql = "c.id=".$country;
         elseif(is_string($country))
-            $sql = "c.countryiso=".$this->sDB->qstr($country);
+            $sql = "c.countryiso=".$this->db->quote($country);
         else
             return false;
         $sql = "
@@ -1077,7 +1082,7 @@ class sExport
             FROM s_core_countries c
             WHERE $sql
         ";
-        return $cache[$country] = $this->sDB->GetRow($sql);
+        return $cache[$country] = $this->db->fetchRow($sql);
     }
 
     public function sGetPaymentmean($payment)
@@ -1090,14 +1095,14 @@ class sExport
         if(is_numeric($payment))
             $sql = "id=".$payment;
         elseif(is_string($payment))
-            $sql = "name=".$this->sDB->qstr($payment);
+            $sql = "name=".$this->db->quote($payment);
         else
             return false;
         $sql = "
             SELECT * FROM s_core_paymentmeans
             WHERE $sql
         ";
-        $cache[$payment] = $this->sDB->GetRow($sql);
+        $cache[$payment] = $this->db->fetchRow($sql);
 
         $cache[$payment]["country_surcharge"] = array();
         if (!empty($cache[$payment]["surchargestring"])) {
@@ -1120,7 +1125,7 @@ class sExport
         elseif(is_numeric($dispatch))
             $sql_order = "IF(sd.id=".(int) $dispatch.",0,1),";
         elseif(is_string($dispatch))
-            $sql_order = "IF(name=".$this->sDB->qstr($dispatch).",0,1),";
+            $sql_order = "IF(name=".$this->db->quote($dispatch).",0,1),";
         else
             $sql_order = "";
 
@@ -1129,7 +1134,7 @@ class sExport
         elseif(is_numeric($country))
             $sql_where = "c.id=".$country;
         elseif(is_string($country))
-            $sql_where = "c.countryiso=".$this->sDB->qstr($country);
+            $sql_where = "c.countryiso=".$this->db->quote($country);
         else
             $sql_where = "";
 
@@ -1153,7 +1158,7 @@ class sExport
             $sql_where
             ORDER BY $sql_order sd.position ASC LIMIT 1
         ";
-        return $cache[$sql_order."|".$sql_where] = $this->sDB->GetRow($sql);
+        return $cache[$sql_order."|".$sql_where] = $this->db->fetchRow($sql);
     }
 
     public function sGetDispatchBasket($article, $countryID=null, $paymentID = null)
@@ -1163,10 +1168,10 @@ class sExport
             $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
-        $calculations = $this->sDB->GetAssoc($sql);
+        $calculations = $this->db->fetchPairs($sql);
         if(!empty($calculations))
         foreach ($calculations as $dispatchID => $calculation) {
-            if(empty($calculation)) $calculation = $this->sSYSTEM->sDB_CONNECTION->qstr($calculation);
+            if(empty($calculation)) $calculation = $this->db->quote($calculation);
             $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
         }
 
@@ -1231,7 +1236,7 @@ class sExport
         ";
 
         try {
-        $basket = $this->sDB->GetRow($sql,array(
+        $basket = $this->db->fetchRow($sql,array(
             $article["articleID"],
             $article["ordernumber"],
             $article["shippingfree"],
@@ -1277,7 +1282,7 @@ class sExport
         elseif(is_numeric($dispatch))
             $sql_order = "IF(d.id=".(int) $dispatch.",0,1),";
         elseif(is_string($dispatch))
-            $sql_order = "IF(d.name=".$this->sDB->qstr($dispatch).",0,1),";
+            $sql_order = "IF(d.name=".$this->db->quote($dispatch).",0,1),";
         else
             $sql_order = "";
 
@@ -1298,7 +1303,8 @@ class sExport
         }
 
         $sql = "SELECT id, bind_sql FROM s_premium_dispatch WHERE type IN (0) AND bind_sql IS NOT NULL";
-        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+        $statements = $this->db->fetchPairs($sql);
+
         $sql_where = "";
         foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
@@ -1308,7 +1314,7 @@ class sExport
 
         $sql_basket = array();
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->sDB->qstr($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
@@ -1357,7 +1363,7 @@ class sExport
             ORDER BY $sql_order d.position, d.name
             LIMIT 1
         ";
-        $dispatch = $this->sDB->GetRow($sql);
+        $dispatch = $this->db->fetchRow($sql);
         if (empty($dispatch)) {
             $sql = "
                 SELECT
@@ -1377,7 +1383,7 @@ class sExport
                 ORDER BY d.position, d.name
                 LIMIT 1
             ";
-            $dispatch = $this->sDB->GetRow($sql);
+            $dispatch = $this->db->fetchRow($sql);
         }
         return $dispatch;
     }
@@ -1387,7 +1393,8 @@ class sExport
         if(empty($basket)) return false;
 
         $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=2 AND bind_sql IS NOT NULL';
-        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+        $statements = $this->db->fetchPairs($sql);
+
         $sql_where = '';
         foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
@@ -1396,7 +1403,7 @@ class sExport
         }
         $sql_basket = array();
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->sSYSTEM->sDB_CONNECTION->qstr($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
@@ -1461,7 +1468,7 @@ class sExport
             $sql_where
             GROUP BY d.id
         ";
-        $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $dispatches = $this->db->fetchAll($sql);
         $surcharge = 0;
         if(!empty($dispatches))
         foreach ($dispatches as $dispatch) {
@@ -1483,8 +1490,8 @@ class sExport
                 ORDER BY `from` DESC
                 LIMIT 1
             ";
-            $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
-            if(empty($result)) continue;
+            $result = $this->db->fetchRow($sql);
+            if(!$result) continue;
             $surcharge += $result['value'];
             if(!empty($result['factor']))
                 $surcharge +=  $result['factor']/100*$from;
@@ -1529,7 +1536,7 @@ class sExport
             ORDER BY `from` DESC
             LIMIT 1
         ";
-        $result = $this->sDB->GetRow($sql);
+        $result = $this->db->fetchRow($sql);
 
         if(empty($result)) return false;
 

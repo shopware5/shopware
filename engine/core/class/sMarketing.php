@@ -69,6 +69,11 @@ class sMarketing
     public $customerGroupId;
 
     /**
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
      * Class constructor.
      */
     public function __construct(
@@ -90,6 +95,8 @@ class sMarketing
         if ($this->additionalTextService == null) {
             $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
         }
+
+        $this->db = Shopware()->Db();
     }
 
     public function sGetSimilaryShownArticles($articleId, $limit = 0)
@@ -278,7 +285,7 @@ class sMarketing
             ORDER BY esdarticle DESC
         ";
 
-        $checkForEsdOnly = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $checkForEsdOnly = $this->db->fetchAll($sql);
 
         foreach ($checkForEsdOnly as $esdCheck) {
             if ($esdCheck["esdarticle"]) {
@@ -309,7 +316,7 @@ class sMarketing
             ORDER BY p.startprice ASC
         ";
 
-        $premiums = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->sSubShop["id"]));
+        $premiums = $this->db->fetchAll($sql, array($this->sSYSTEM->sSubShop["id"]));
 
         foreach ($premiums as &$premium) {
 
@@ -447,7 +454,12 @@ class sMarketing
             ORDER BY COUNT(r.articleID) DESC
             LIMIT $tagSize
         ";
-        $articles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql);
+
+        $articles = $this->db->fetchAssoc($sql);
+        array_walk($articles, function(&$article) {
+            unset($article['articleID']);
+        });
+
         if (empty($articles)) {
             return array();
         }
@@ -530,7 +542,7 @@ class sMarketing
             ORDER BY relevance DESC
             LIMIT $limit
         ";
-        $similarArticleIds = $this->sSYSTEM->sDB_CONNECTION->CacheGetCol($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql);
+        $similarArticleIds = $this->db->fetchCol($sql);
 
         $similarArticles = array();
         if (!empty($similarArticleIds))
@@ -555,10 +567,7 @@ class sMarketing
 
         $id = intval($id);
 
-        $licenceAdd = "";
-
-
-        $getCampaigns = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(3600, "
+        $getCampaigns = $this->db->fetchAll("
         SELECT id, image, description, link, linktarget FROM s_emarketing_promotion_main
         WHERE parentID=$id AND active=1
         $sqlGroup
@@ -566,7 +575,6 @@ class sMarketing
         TO_DAYS(end) >= TO_DAYS('$sToday')) OR
         (start='0000-00-00' AND end='0000-00-00'))
         ORDER BY position
-        $licenceAdd
         ");
 
         foreach ($getCampaigns as $campaignKey => $campaignValue) {
@@ -600,9 +608,9 @@ class sMarketing
         ORDER BY position
         ";
 
-        $getCampaigns = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($sql);
+        $getCampaigns = $this->db->fetchRow($sql);
 
-        if (!$getCampaigns["id"]) {
+        if (!isset($getCampaigns["id"])) {
             return false;
         } else {
             // Fetch all positions
@@ -612,13 +620,13 @@ class sMarketing
             ORDER BY position
             ";
 
-            $getCampaignContainers = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($sql);
+            $getCampaignContainers = $this->db->fetchAll($sql);
 
             foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
                 switch ($campaignValue["type"]) {
                     case "ctBanner":
                         // Query Banner
-                        $getBanner = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(3600, "
+                        $getBanner = $this->db->fetchRow("
                         SELECT image, link, linkTarget, description FROM s_emarketing_promotion_banner
                         WHERE parentID={$campaignValue["id"]}
                         ");
@@ -636,7 +644,7 @@ class sMarketing
                         break;
                     case "ctLinks":
                         // Query links
-                        $getLinks = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(3600, "
+                        $getLinks = $this->db->fetchAll("
                         SELECT description, link, target FROM s_emarketing_promotion_links
                         WHERE parentID={$campaignValue["id"]}
                         ORDER BY position
@@ -644,7 +652,7 @@ class sMarketing
                         $getCampaignContainers[$campaignKey]["data"] = $getLinks;
                         break;
                     case "ctArticles":
-                        $getArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(3600, "
+                        $getArticles = $this->db->fetchAll("
                         SELECT * FROM s_emarketing_promotion_articles
                         WHERE parentID={$campaignValue["id"]}
                         ORDER BY position
@@ -674,7 +682,7 @@ class sMarketing
                         $getCampaignContainers[$campaignKey]["data"] = $articleData;
                         break;
                     case "ctText":
-                        $getText = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(3600, "
+                        $getText = $this->db->fetchRow("
                         SELECT headline, html FROM s_emarketing_promotion_html
                         WHERE parentID={$campaignValue["id"]}
                         ");
@@ -697,9 +705,9 @@ class sMarketing
         SELECT * FROM s_campaigns_mailings
         WHERE id=$id
         ";
-        $getCampaigns = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        $getCampaigns = $this->db->fetchRow($sql);
 
-        if (!$getCampaigns["id"]) {
+        if (!$getCampaigns) {
             return false;
         } else {
             // Fetch all positions
@@ -715,13 +723,13 @@ class sMarketing
                 )
             );
 
-            $getCampaignContainers = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            $getCampaignContainers = $this->db->fetchAll($sql);
 
             foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
                 switch ($campaignValue["type"]) {
                     case "ctBanner":
                         // Query Banner
-                        $getBanner = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+                        $getBanner = $this->db->fetchRow("
                         SELECT image, link, linkTarget, description FROM s_campaigns_banner
                         WHERE parentID={$campaignValue["id"]}
                         ");
@@ -739,7 +747,7 @@ class sMarketing
                         break;
                     case "ctLinks":
                         // Query links
-                        $getLinks = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+                        $getLinks = $this->db->fetchAll("
                         SELECT description, link, target FROM s_campaigns_links
                         WHERE parentID={$campaignValue["id"]}
                         ORDER BY position
@@ -753,7 +761,7 @@ class sMarketing
                         ORDER BY position
                         ";
 
-                        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+                        $getArticles = $this->db->fetchAll($sql);
                         unset($articleData);
                         foreach ($getArticles as $article) {
                             if ($article["type"]) {
@@ -771,7 +779,7 @@ class sMarketing
                         break;
                     case "ctText":
                     case "ctVoucher":
-                        $getText = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+                        $getText = $this->db->fetchRow("
                             SELECT headline, html,image,alignment,link FROM s_campaigns_html
                             WHERE parentID={$campaignValue["id"]}
                         ");
