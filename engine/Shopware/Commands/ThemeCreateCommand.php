@@ -31,6 +31,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -67,27 +68,27 @@ class ThemeCreateCommand extends ShopwareCommand
             )
             ->addOption(
                 'description',
-                'd',
+                null,
                 InputOption::VALUE_REQUIRED,
                 'Description of the theme to be created.'
             )
             ->addOption(
                 'author',
-                'a',
+                null,
                 InputOption::VALUE_REQUIRED,
                 'Author of the theme to be created.'
             )
             ->addOption(
                 'license',
-                'l',
+                null,
                 InputOption::VALUE_REQUIRED,
                 'Licence of the theme to be created.'
             )
-            ->setHelp(<<<EOF
-The <info>%command.name%</info> creates a theme.
+            ->setHelp(
+                <<<EOF
+                The <info>%command.name%</info> creates a theme.
 EOF
             );
-        ;
     }
 
     /**
@@ -95,7 +96,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $arguments = array_merge($input->getArguments(), $input->getOptions());
+        $arguments = $input->getArguments();
 
         // Disable error reporting for shopware menu legacy hack
         $this->registerErrorHandler($output);
@@ -113,19 +114,29 @@ EOF
         $parent = $this->getRepository()->findOneByTemplate($arguments['parent']);
 
         if (!$parent instanceof Template) {
-            $output->writeln(sprintf('Shop template by template name "%s" not found',
-                $arguments['parent']));
+            $output->writeln(
+                sprintf(
+                    'Shop template by template name "%s" not found',
+                    $arguments['parent']
+                )
+            );
             return 1;
         }
 
         if ($parent->getVersion() < 3) {
-            $output->writeln(sprintf('Shop template by template name "%s" is not a Shopware 5 Theme!',
-                    $arguments['parent']));
+            $output->writeln(
+                sprintf(
+                    'Shop template by template name "%s" is not a Shopware 5 Theme!',
+                    $arguments['parent']
+                )
+            );
             return 1;
         }
 
+        $arguments = array_merge($arguments, $this->dialog($input, $output));
+
         /** @var Generator $themeGenerator */
-        $themeGenerator  = $this->container->get('theme_generator');
+        $themeGenerator = $this->container->get('theme_generator');
         $themeGenerator->generateTheme($arguments, $parent);
 
         $output->writeln(sprintf('Theme "%s" has been created successfully.', $arguments['name']));
@@ -141,5 +152,42 @@ EOF
             $this->repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Template');
         }
         return $this->repository;
+    }
+
+    /**
+     * Helper function to ask for optional data
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return array
+     */
+    private function dialog(InputInterface $input, OutputInterface $output)
+    {
+        $options = array();
+
+        $options['description'] = $this->askForOptionalData($input, $output, 'description');
+        $options['author'] = $this->askForOptionalData($input, $output, 'author');
+        $options['license'] = $this->askForOptionalData($input, $output, 'license');
+
+        return $options;
+    }
+
+    /**
+     * Helper function to ask the user a question
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param $optionKey
+     * @return mixed
+     */
+    private function askForOptionalData(InputInterface $input, OutputInterface $output, $optionKey)
+    {
+        $optionValue = $input->getOption($optionKey);
+
+        if (empty($optionValue)) {
+            $helper = $this->getHelper('dialog');
+            $question = sprintf('Please enter the %s: ', $optionKey);
+            $optionValue = $helper->ask($output, $question);
+        }
+
+        return $optionValue;
     }
 }
