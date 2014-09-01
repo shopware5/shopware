@@ -75,8 +75,10 @@ class GenerateProductFeedCommand extends ShopwareCommand
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
         $export->sSYSTEM = $this->container->get('system');
-        $export->sDB = Shopware()->AdoDb();
         $sSmarty = $this->container->get('template');
+
+        // prevent notices to clutter generated files
+        $this->registerErrorHandler($output);
 
         foreach ($activeFeeds as $feedModel) {
             /** @var $feedModel ProductFeed */

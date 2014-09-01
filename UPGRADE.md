@@ -84,6 +84,7 @@ In this document you will find a changelog of the important changes related to t
 * `useDefaultControllerAlways` configuration option was removed
     * `PageNotFoundDestination` (backend `Basic settings`) extends the previous behaviour by adding support for Shopping worlds pages
     * `PageNotFoundCode` (backend `Basic settings`) added to configure the 404 HTTP error when requesting non-existent pages
+* `Enlight_Components_Adodb` (also accessed as `Shopware()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

@@ -500,7 +500,7 @@ class sShopwareExport
         }
 
         if(isset($order['comment']))
-            $upset = ", comment=".$this->sDB->qstr((string) $order['comment']);
+            $upset = ", comment=".Shopware()->Db()->quote((string) $order['comment']);
         else
             $upset = "";
         $sql = "
@@ -783,7 +783,7 @@ class sShopwareExport
     {
         if(empty($userID)||empty($customernumber))
             return false;
-        $customernumber = $this->sDB->qstr((string) $customernumber);
+        $customernumber = Shopware()->Db()->quote((string) $customernumber);
         $userID = intval($userID);
         $sql = "UPDATE s_user_billingaddress SET customernumber=$customernumber	WHERE userID=$userID";
         if($this->sDB->Execute($sql)===false)
@@ -810,12 +810,12 @@ class sShopwareExport
         elseif(!is_array($order))
             return false;
         if(!empty($order['orderID']))
-            $where = "id=".$this->sDB->qstr((int) $order['orderID']);
+            $where = "id=".Shopware()->Db()->quote((int) $order['orderID']);
         elseif(!empty($order['ordernumber']))
-            $where = "ordernumber=".$this->sDB->qstr((string) $order['ordernumber']);
+            $where = "ordernumber=".Shopware()->Db()->quote((string) $order['ordernumber']);
         else
             return false;
-        $trackingcode = $this->sDB->qstr((string) $trackingcode);
+        $trackingcode = Shopware()->Db()->quote((string) $trackingcode);
         $sql = "UPDATE s_order SET trackingcode=$trackingcode WHERE $where";
         if($this->sDB->Execute($sql)===false)
             return false;

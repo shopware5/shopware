@@ -59,7 +59,6 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         $export->sSYSTEM = Shopware()->System();
         $export->sFeedID = (int) $this->Request()->feedID;
         $export->sHash = $this->Request()->hash;
-        $export->sDB = Shopware()->Adodb();
 
         $export->sInitSettings();
 
