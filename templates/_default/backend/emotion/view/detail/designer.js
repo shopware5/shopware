@@ -526,6 +526,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                    x = e.getX(),
                    y = e.getY(),
                    id = me.getId(),
+                   scroll = me.body.getScroll(),
                    colHeight = 44,
                    colWidth = (Ext.get(id).getWidth() - 40) / me.dataviewStore.getAt(0).data.settings.cols,
                    startCol, startRow, record = data.draggedRecord, endRow, endCol,
@@ -616,7 +617,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     });
                 }
 
+                // Refresh dataView and restore scroll offset
                 me.dataView.refresh();
+                me.body.scrollTo('top', scroll.top);
 
                 // Remove class from the sourceEl element
                 Ext.get(data.sourceEl).removeCls('dragged');
