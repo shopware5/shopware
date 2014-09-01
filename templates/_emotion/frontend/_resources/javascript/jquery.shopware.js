@@ -923,10 +923,8 @@ jQuery(document).ready(function ($) {
                     config._articlePerPage = config.extraParams.limit;
                 }
 
-                if(slideNumber > 1) {
-                    config.extraParams.start = slideNumber * config._articlePerPage;
-                    config.extraParams.limit = config._articlePerPage;
-                }
+                config.extraParams.start = (slideNumber - 1 ) * config._articlePerPage;
+                config.extraParams.limit = config._articlePerPage;
 
                 $.extend(requestParams, config.extraParams);
             }
