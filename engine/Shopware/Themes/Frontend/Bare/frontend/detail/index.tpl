@@ -20,7 +20,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content product--details" itemscope itemtype="http://schema.org/Product">
+<div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url controller="detail" action="productNavigation" fullPath}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 
 	{* The configurator selection is checked at this early point
 	   to use it in different included files in the detail template. *}
@@ -41,9 +41,11 @@
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
-		<nav class="product--navigation">
-			{include file="frontend/detail/navigation.tpl"}
-		</nav>
+        {if !{config name=disableArticleNavigation}}
+            <nav class="product--navigation">
+                {include file="frontend/detail/navigation.tpl"}
+            </nav>
+        {/if}
 	{/block}
 
 	{* Product header *}
