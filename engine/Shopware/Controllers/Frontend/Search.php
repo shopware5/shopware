@@ -110,6 +110,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function defaultSearchAction()
     {
+        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+        $mapper->replaceShortRequestQueries($this->Request());
+
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($this->Request()->sSearch))));
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
         $term = str_replace("/","",$term);
