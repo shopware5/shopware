@@ -1,4 +1,4 @@
-<div class="artbox{if $lastitem} last{/if}{if $firstitem} first{/if}" data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}">
+<div class="artbox{if $lastitem} last{/if}{if $firstitem} first{/if}"{if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 	<div class="inner">
 
 		{* Top *}
