@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\QueryAliasMapper;
 
 /**
  *  Shopware Router Rewrite Plugin
@@ -160,14 +161,10 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             $shop->getId()
         ));
         if (!empty($result)) {
-            $alias_list = $this->sGetQueryAliasList();
-            foreach ($alias_list as $key => $alias) {
-                $value = $request->getQuery($alias);
-                if ($value !== null) {
-                    $request->setQuery($key, $value);
-                    $request->setQuery($alias, null);
-                }
-            }
+            /** @var $mapper QueryAliasMapper */
+            $mapper = $this->get('query_alias_mapper');
+            $mapper->replaceShortRequestQueries($request);
+
             parse_str($result['org_path'], $query);
             if (empty($result['main'])) {
                 $request->setParam('rewriteAlias', true);
@@ -287,45 +284,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     }
 
     /**
-     * The query alias list.
-     *
-     * @var array
-     */
-    protected $sQueryAliasList;
-
-    /**
-     * Returns the query alias list as an array.
-     *
-     * @return array
-     */
-    public function sGetQueryAliasList()
-    {
-        if (!isset($this->sQueryAliasList)) {
-            $this->sQueryAliasList = array();
-            if (!empty(Shopware()->Config()->SeoQueryAlias))
-                foreach (explode(',', Shopware()->Config()->SeoQueryAlias) as $alias) {
-                    list($key, $value) = explode('=', trim($alias));
-                    $this->sQueryAliasList[$key] = $value;
-                }
-        }
-        return $this->sQueryAliasList;
-    }
-
-    /**
-     * Returns an alias of the list by name.
-     *
-     * @param string $key
-     * @return string
-     */
-    public function sGetQueryAlias($key)
-    {
-        if (!isset($this->sQueryAliasList)) {
-            $this->sGetQueryAliasList();
-        }
-        return isset($this->sQueryAliasList[$key]) ? $this->sQueryAliasList[$key] : null;
-    }
-
-    /**
      * Creates a url query based on the parameters.
      *
      * @param array $query
@@ -333,18 +291,10 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
      */
     public function sRewriteQuery($query)
     {
-        if (!empty($query)) {
-            $tmp = array();
-            foreach ($query as $key => $value) {
-                if ($alias = $this->sGetQueryAlias($key)) {
-                    $tmp[$alias] = $value;
-                } else {
-                    $tmp[$key] = $value;
-                }
-            }
-            $query = $tmp;
-            unset($tmp);
-        }
+        /** @var $mapper QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+        $query = $mapper->replaceLongParams($query);
+
         return http_build_query($query, '', '&');
     }
 }

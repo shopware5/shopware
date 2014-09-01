@@ -330,5 +330,11 @@
             <argument type="service" id="context_service" />
         </service>
 
+        <service id="query_alias_mapper"
+                 class="Shopware\Components\QueryAliasMapper"
+                 factory-class="Shopware\Components\QueryAliasMapper"
+                 factory-method="createFromConfig">
+            <argument type="service" id="config" />
+        </service>
     </services>
 </container>
