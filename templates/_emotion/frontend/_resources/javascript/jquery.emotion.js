@@ -385,6 +385,14 @@
         if(me._mode === 'listing') {
             me.registerListingEventListeners(listingSelectors);
         } else {
+            var params = parseQueryString(window.location.href);
+
+            // ...the url wasn't called through the listing
+            if(!params.hasOwnProperty('c')) {
+                me.clearCurrentProductState();
+                return;
+            }
+
             me.getProductNavigation();
         }
     };
@@ -465,6 +473,15 @@
         return params;
     };
 
+    Plugin.prototype.clearCurrentProductState = function() {
+        try {
+            window.sessionStorage.removeItem('lastProductState');
+            return true;
+        } catch(err) {
+            return false;
+        }
+    };
+
     Plugin.prototype.getProductNavigation = function() {
         var me = this,
             params = me.refreshCurrentProductState(),
@@ -474,6 +491,10 @@
             return false;
         }
         url = me.$el.find('#detail').attr('data-product-navigation');
+
+        if(!url || !url.length) {
+            return false;
+        }
 
         $.ajax({
             'url': url,
