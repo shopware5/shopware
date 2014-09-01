@@ -63,21 +63,24 @@ class ThemeCreateCommand extends ShopwareCommand
             ->addArgument(
                 'name',
                 InputArgument::REQUIRED,
-                'Name of the theme to be created.'
+                'Name of the theme readable in theme manager.'
             )
-            ->addArgument(
+            ->addOption(
                 'description',
-                InputArgument::OPTIONAL,
+                'd',
+                InputOption::VALUE_REQUIRED,
                 'Description of the theme to be created.'
             )
-            ->addArgument(
+            ->addOption(
                 'author',
-                InputArgument::OPTIONAL,
+                'a',
+                InputOption::VALUE_REQUIRED,
                 'Author of the theme to be created.'
             )
-            ->addArgument(
+            ->addOption(
                 'license',
-                InputArgument::OPTIONAL,
+                'l',
+                InputOption::VALUE_REQUIRED,
                 'Licence of the theme to be created.'
             )
             ->setHelp(<<<EOF
@@ -92,9 +95,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Generator $themeGenerator */
-        $themeGenerator  = $this->container->get('theme_generator');
-        $arguments = $input->getArguments();
+        $arguments = array_merge($input->getArguments(), $input->getOptions());
 
         // Disable error reporting for shopware menu legacy hack
         $this->registerErrorHandler($output);
@@ -102,7 +103,6 @@ EOF
         /** @var Installer $themeInstaller */
         $themeInstaller = $this->container->get('theme_installer');
         $themeInstaller->synchronize();
-
 
         if ($this->getRepository()->findOneByTemplate($arguments['template'])) {
             $output->writeln('A theme with that name already exists');
@@ -113,14 +113,22 @@ EOF
         $parent = $this->getRepository()->findOneByTemplate($arguments['parent']);
 
         if (!$parent instanceof Template) {
-            $output->writeln(sprintf('Shop template by template name %s not found',
+            $output->writeln(sprintf('Shop template by template name "%s" not found',
                 $arguments['parent']));
             return 1;
         }
 
+        if ($parent->getVersion() < 3) {
+            $output->writeln(sprintf('Shop template by template name "%s" is not a Shopware 5 Theme!',
+                    $arguments['parent']));
+            return 1;
+        }
+
+        /** @var Generator $themeGenerator */
+        $themeGenerator  = $this->container->get('theme_generator');
         $themeGenerator->generateTheme($arguments, $parent);
 
-        $output->writeln(sprintf('Theme %s has been created successfully.', $arguments['name']));
+        $output->writeln(sprintf('Theme "%s" has been created successfully.', $arguments['name']));
     }
 
     /**
