@@ -65,7 +65,8 @@
             productBoxSelector: '.product--box',
             productDetailsSelector: '.product--details',
             prevLinkSelector: 'a.navigation--link.link--prev',
-            nextLinkSelector: 'a.navigation--link.link--next'
+            nextLinkSelector: 'a.navigation--link.link--next',
+            breadcrumbButtonSelector: '.breadcrumb--button .btn'
         },
 
         /**
@@ -100,26 +101,17 @@
                 }
 
                 me.getProductNavigation();
-                me.mapBackButton();
             }
         },
 
         /**
          * Adds an event listener to the back button which uses {@link window.history.back}.
          */
-        mapBackButton: function() {
+        mapBackButton: function(response) {
             var me = this,
-                backBtn = me.$el.find('.breadcrumb--button .btn');
+                backBtn = me.$el.find(me.opts.breadcrumbButtonSelector);
 
-            if(!window.history.length) {
-                backBtn.remove();
-                return;
-            }
-
-            backBtn.on(me.getEventName('click'), function() {
-                event.preventDefault();
-                window.history.back();
-            })
+            backBtn.attr('href', response.href);
         },
 
         /**
@@ -256,6 +248,10 @@
             var me = this,
                 prevLink = me.$el.find(me.opts.prevLinkSelector),
                 nextLink = me.$el.find(me.opts.nextLinkSelector);
+
+            if(response.hasOwnProperty('currentListing')) {
+                me.mapBackButton(response.currentListing);
+            }
 
             if(response.hasOwnProperty('previousProduct')) {
                 var previousProduct = response.previousProduct;
