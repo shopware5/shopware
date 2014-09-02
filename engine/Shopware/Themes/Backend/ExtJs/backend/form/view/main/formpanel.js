@@ -158,6 +158,15 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             height: 350,
             xtype:'tinymce'
         }, {
+            fieldLabel: '{s name=label_metatitle}Meta title{/s}',
+            name: 'metaTitle'
+        }, {
+            fieldLabel: '{s name=label_metakeywords}Meta keywords{/s}',
+            name: 'metaKeywords'
+        }, {
+            fieldLabel: '{s name=label_metadescription}Meta description{/s}',
+            name: 'metaDescription'
+        }, {
             xtype: 'hidden',
             name: 'id'
         }];

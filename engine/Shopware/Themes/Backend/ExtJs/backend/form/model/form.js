@@ -73,7 +73,10 @@ Ext.define('Shopware.apps.Form.model.Form', {
         { name : 'emailSubject', type : 'string' },
         { name : 'emailTemplate', type : 'string' },
         { name : 'text', type : 'string' },
-        { name : 'text2', type : 'string' }
+        { name : 'text2', type : 'string' },
+        { name : 'metaTitle', type : 'string' },
+        { name : 'metaKeywords', type : 'string' },
+        { name : 'metaDescription', type : 'string' }
     ],
 
     validations: [

@@ -182,4 +182,33 @@ class Repository extends ModelRepository
                 ->setParameter(1, $siteId);
         return $builder;
     }
+
+    /**
+     * Returns a query with all site objects with an empty link
+     *
+     * @param $offset
+     * @param $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSitesWithoutLinkQuery($offset, $limit)
+    {
+        $builder = $this->getSitesWithoutLinkQueryBuilder();
+        $builder->setFirstResult($offset)
+            ->setMaxResults($limit);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Returns the querybuilder object for getSitesWithoutLinkQuery
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSitesWithoutLinkQueryBuilder()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('site'))
+            ->from('Shopware\Models\Site\Site', 'site')
+            ->where('site.link = \'\'');
+        return $builder;
+    }
 }
