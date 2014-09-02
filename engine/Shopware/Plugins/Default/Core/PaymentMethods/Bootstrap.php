@@ -146,7 +146,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     {
         $module = $arguments->getRequest()->getParam('module');
 
-        if ($module !== 'backend' && Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+        if (!in_array($module , array('backend', 'api')) && Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
             $template = 'responsive';
         } else {
             $template = 'emotion';
