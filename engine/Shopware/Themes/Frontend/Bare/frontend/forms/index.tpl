@@ -10,6 +10,10 @@
 	{include file="frontend/index/sidebar.tpl"}
 {/block}
 
+{block name="frontend_index_header"}
+	{include file="frontend/forms/header.tpl"}
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
 	<div class="forms--content content block panel right">

@@ -16,16 +16,12 @@
 	{block name='frontend_index_header_meta_tags_schema_webpage'}
 		<meta itemprop="copyrightHolder" content="{config name=sShopname}" />
 		<meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}2014{/s}" />
-		<meta itemprop="isFamilyFriendly" content="{s name='IndexMetaIsFamilyFriendly'}true{/s}" />
-
-		{* @TODO - Replace with config option *}
-		<meta itemprop="image" content="{link file='frontend/_public/src/img/logo.png'}" />
+		<meta itemprop="isFamilyFriendly" content="{if {config name=metaIsFamilyFriendly}}True{else}False{/if}" />
+		<meta itemprop="image" content="{link file=$theme.desktopLogo}" />
 	{/block}
 
 	{block name='frontend_index_header_meta_tags_mobile'}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-		{* @TODO - Add snippets or config options here *}
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
