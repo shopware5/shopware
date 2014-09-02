@@ -75,6 +75,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
         }
 
+        $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);
+
         $body = json_encode($navigation, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
         $this->Response()->setBody($body);
         $this->Response()->setHeader('Content-type', 'application/json', true);

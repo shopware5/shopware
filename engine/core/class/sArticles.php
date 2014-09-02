@@ -1838,6 +1838,8 @@ class sArticles
             $context
         );
 
+        $navigation["currentListing"]["link"] = $this->buildCategoryLink($categoryId, $request);
+
         return $navigation;
     }
 
@@ -1887,10 +1889,42 @@ class sArticles
                 $navigation["nextProduct"]["name"] = $nextProduct->getName();
             }
 
+            $navigation["currentListing"]["position"] = $index + 1;
+            $navigation["currentListing"]["totalCount"] = $searchResult->getTotalCount();
+
             return $navigation;
         }
 
         return array();
+    }
+
+    /**
+     * @param $categoryId
+     * @param Enlight_Controller_Request_RequestHttp $request
+     * @return string
+     */
+    private function buildCategoryLink($categoryId, Enlight_Controller_Request_RequestHttp $request)
+    {
+        $params = $this->queryAliasMapper->replaceLongParams($request->getParams());
+
+        unset($params['ordernumber']);
+        unset($params['categoryId']);
+        unset($params['module']);
+        unset($params['controller']);
+        unset($params['action']);
+
+        $params = array_merge(
+            $params,
+            [
+                'sViewport' => 'cat',
+                'sCategory' => $categoryId
+            ]
+        );
+
+        $queryPrams = http_build_query($params);
+        $listingLink = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?" . $queryPrams;
+
+        return $listingLink;
     }
 
 
