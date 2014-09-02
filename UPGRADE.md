@@ -48,6 +48,7 @@ In this document you will find a changelog of the important changes related to t
 * Variant's `additional text` field is now automatically generated using the configurator group options. This can be optionally disabled
 * The sBasket::sGetNotes function is refactored with the new shopware service classes and calls no more the sGetPromotionById function.
 * The article slider now supports sorting by price (asc and desc) and category filtering
+    * `Shopware_Controllers_Widgets_Emotion::emotionTopSellerAction` and `Shopware_Controllers_Widgets_Emotion::emotionNewcomerAction` are now deprecated and should be replaced by `Shopware_Controllers_Widgets_Emotion::emotionArticleSliderAction`
 * Removed `table` and `table_factory` from container.
 * The old table configurator was removed and replaced by the new image configurator in the emotion and responsive template.
 * Template inheritance using `{extends file="[default]backend/..."}` is no longer supported and should be replaced by `{extends file="parent:backend/..."}`
