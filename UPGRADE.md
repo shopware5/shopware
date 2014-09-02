@@ -17,6 +17,10 @@ In this document you will find a changelog of the important changes related to t
 * `Overview` and `Statistics` backend modules were adjusted to have matching data and differentiate between new users and new customers.
 * `Shopping worlds` pages without assigned categories now support SEO urls
 * The query passed in the `Shopware_Modules_Basket_GetBasket_FilterSQL` event will no longer include `s_core_units` join and fields
+* The config option `showException` is `false` by default (`engine/Shopware/Configs/Default.php`)
+    * Exceptions will no longer be shown in the store front
+    * Exceptions are logged in a logfile since 4.2.0 (/logs)
+    * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
