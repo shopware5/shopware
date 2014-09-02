@@ -4,26 +4,10 @@
 
 	<div class="entry--author block">
 
-		{* Star rating *}
-		{block name="frontend_detail_comment_star_rating"}
-			<div class="product--rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-				{$average = $vote.points * 2|round:0}
-
-                <meta itemprop="worstRating" content="1">
-                <meta itemprop="ratingValue" content="{$vote.points}">
-                <meta itemprop="bestRating" content="5">
-
-				{for $value=1 to 5}
-					{$cls = 'icon--star'}
-
-					{if $value > $average}
-						{$cls = 'icon--star-empty'}
-					{/if}
-
-					<i class="{$cls}"></i>
-				{/for}
-			</div>
-		{/block}
+        {* Star rating *}
+        {block name="frontend_detail_comment_star_rating"}
+            {include file="frontend/_includes/rating.tpl" points=$vote.points base=5}
+        {/block}
 
 		{* Review author *}
 		{block name='frontend_detail_comment_author'}

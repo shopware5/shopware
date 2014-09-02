@@ -46,17 +46,8 @@
 						{* Reviews *}
 						{block name="frontend_note_item_rating"}
 							{if !{config name=VoteDisable}}
-								<div class="note--rating product--rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-									{$average = $sBasketItem.sVoteAverange.averange|round:0}
-									{for $value=1 to 5}
-										{$cls = 'icon--star'}
-										{if $value > $average}
-											{$cls = 'icon--star-empty'}
-										{/if}
-										<i class="{$cls}"></i>
-									{/for}
-								</div>
-							{/if}
+                                {include file="frontend/_includes/rating.tpl" points=$sBasketItem.sVoteAverange.averange type="aggregated" base=5}
+                            {/if}
 						{/block}
 
 						{* Supplier name *}
