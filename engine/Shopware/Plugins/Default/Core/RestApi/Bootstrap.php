@@ -107,7 +107,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         $result = $auth->authenticate();
 
         if (!$result->isValid()) {
-            $request->setControllerName('index');
+            $request->setControllerName('error');
             $request->setActionName('noauth');
 
             return;
@@ -136,7 +136,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         } catch (Zend_Json_Exception $e) {
             $response->setHttpResponseCode(400);
 
-            $request->setControllerName('index');
+            $request->setControllerName('error');
             $request->setActionName('invalid');
 
             return;

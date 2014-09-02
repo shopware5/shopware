@@ -25,9 +25,9 @@
 use Shopware\Components\Api\Exception as ApiException;
 
 /**
- * REST-API Error Handler
+ * REST API Error Handler
  */
-class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
+class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
 {
     public function invalidAction()
     {
