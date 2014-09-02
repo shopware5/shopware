@@ -10,7 +10,7 @@
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
             <li class="breadcrumb--button">
-                <a class="btn btn--grey" href="#" title="#">
+                <a class="btn btn--grey" href="#" title="{s name="DetailNavIndex"}{/s}">
                     <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
                 </a>
             </li>
