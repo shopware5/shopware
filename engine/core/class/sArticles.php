@@ -513,19 +513,17 @@ class sArticles
     {
         $request = $this->frontController->Request();
 
-        // Permit Injects
-        $request->setPost('sVoteName', strip_tags($request->getPost('sVoteName')));
-        $request->setPost('sVoteSummary', strip_tags($request->getPost('sVoteSummary')));
-        $request->setPost('sVoteComment', strip_tags($request->getPost('sVoteComment')));
-        $request->setPost('sVoteStars', doubleval($request->getPost('sVoteStars')));
+        $sVoteName    = strip_tags($request->getPost('sVoteName'));
+        $sVoteSummary = strip_tags($request->getPost('sVoteSummary'));
+        $sVoteComment = strip_tags($request->getPost('sVoteComment'));
+        $sVoteStars   = doubleval($request->getPost('sVoteStars'));
+        $sVoteMail    = strip_tags($request->getPost('sVoteMail'));
 
-        if ($request->getPost('sVoteStars') < 1 || $request->getPost('sVoteStars') > 10) {
-            $request->setPost('sVoteStars', 0);
+        if ($sVoteStars < 1 || $sVoteStars > 10) {
+            $sVoteStars = 0;
         }
 
-        $request->setPost('sVoteStars', $request->getPost('sVoteStars') / 2);
-
-        $datum = date("Y-m-d H:i:s");
+        $sVoteStars = $sVoteStars / 2;
 
         if ($this->config['sVOTEUNLOCK']) {
             $active = 0;
@@ -534,7 +532,7 @@ class sArticles
         }
 
         $sBADWORDS = "#sex|porn|viagra|url\=|src\=|link\=#i";
-        if (preg_match($sBADWORDS, $this->frontController->Request()->getPost("sVoteComment"))) {
+        if (preg_match($sBADWORDS, $sVoteComment)) {
             return false;
         }
 
@@ -547,20 +545,24 @@ class sArticles
             ));
         }
 
+        $date = date("Y-m-d H:i:s");
+
         $sql = '
             INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ';
+
         $insertComment = $this->db->executeUpdate($sql, array(
             $article,
-            $this->frontController->Request()->getPost("sVoteName"),
-            $this->frontController->Request()->getPost("sVoteSummary"),
-            $this->frontController->Request()->getPost("sVoteComment"),
-            $this->frontController->Request()->getPost("sVoteStars"),
-            $datum,
+            $sVoteName,
+            $sVoteSummary,
+            $sVoteComment,
+            $sVoteStars,
+            $date,
             $active,
-            $this->sSYSTEM->_POST["sVoteMail"]
+            $sVoteMail
         ));
+
         if (empty($insertComment)) {
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
