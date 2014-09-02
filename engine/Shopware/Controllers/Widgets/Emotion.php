@@ -31,7 +31,6 @@ use Shopware\Components\Model\Query\SqlWalker;
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
-
     /**
      * Get emotion by category
      * @param $repository \Shopware\Models\Emotion\Repository
@@ -63,46 +62,36 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     }
 
     /**
-     * Action that will be triggered by product slider type topseller
+     * Action that will be triggered by product slider type top seller
+     * @deprecated use emotionArticleSliderAction instead
      */
     public function emotionTopSellerAction()
     {
-        $category = (int) $this->Request()->getParam("category");
-        $limit = (int) $this->Request()->getParam("limit");
-        $elementHeight = $this->Request()->getParam("elementHeight");
-        $elementWidth = $this->Request()->getParam("elementWidth");
-        $sort = $this->Request()->getParam("sort");
-        $pages = $this->Request()->getParam("pages");
-        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
-
-        $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
-
-        $max = $this->Request()->getParam("max");
-        $maxPages = round($max / $limit);
-
-        $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
-
-        $sort = array('popularity', $sort);
-        $values = $this->getProductSliderData($category, $userGroupKey, $offset, $limit, $sort);
-
-        $this->View()->assign('articles', $values["values"]);
-        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
-        $this->View()->assign('sPerPage', $limit);
-        $this->View()->assign('sElementWidth', $elementWidth);
-        $this->View()->assign('sElementHeight', $elementHeight);
+        $this->Request()->set('sort', 'topseller');
+        $this->emotionArticleSliderAction();
     }
 
     /**
      * Action that will be triggered by product slider type newcomer
+     * @deprecated use emotionArticleSliderAction instead
      */
     public function emotionNewcomerAction()
+    {
+        $this->Request()->set('sort', 'newcommer');
+        $this->emotionArticleSliderAction();
+    }
+
+    /**
+     * Action that will be triggered by product slider type top seller
+     */
+    public function emotionArticleSliderAction()
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
         $category = (int) $this->Request()->getParam("category");
         $limit = (int) $this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-        $sort = $this->Request()->getParam("sort");
+        $sort = $this->Request()->getParam('sort', 'newcommer');
 
         $pages = $this->Request()->getParam("pages");
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
@@ -112,7 +101,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
 
-        $sort = array('date', $sort);
         $values = $this->getProductSliderData($category, $userGroupKey, $offset, $limit, $sort);
 
         $this->View()->assign('articles', $values["values"]);
@@ -504,30 +492,18 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 }
                 break;
             case "topseller":
-                $sort = array('popularity', $data['article_slider_sort_criteria']);
-                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $sort);
-                $values = $temp["values"];
-                $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
-
-                $query = array(
-                    'controller' => 'emotion',
-                    'module' => 'widgets',
-                    'action' => 'emotionTopSeller',
-                    'sort' => $data['article_slider_sort_criteria']
-                );
-                $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
-                break;
             case "newcomer":
-                $sort = array('date', $data['article_slider_sort_criteria']);
-                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $sort);
+            case "price_asc":
+            case "price_desc":
+                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $data["article_slider_type"]);
                 $values = $temp["values"];
                 $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
 
                 $query = array(
                     'controller' => 'emotion',
                     'module' => 'widgets',
-                    'action' => 'emotionNewcomer',
-                    'sort' => $data['article_slider_sort_criteria']
+                    'action' => 'emotionArticleSlider',
+                    'sort' => $data["article_slider_type"]
                 );
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
@@ -549,7 +525,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * @param $userGroupKey
      * @param int $offset
      * @param $limit
-     * @param array $sort
+     * @param string $sort
      * @return array
      */
     private function getProductSliderData($category, $userGroupKey, $offset = 0, $limit, $sort = null)
@@ -563,21 +539,19 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->offset($offset)
             ->limit($limit);
 
-        foreach ($sort as $sortCriteria) {
-            switch ($sortCriteria) {
-                case 'price_asc':
-                    $criteria->sortByCheapestPrice();
-                    break;
-                case 'price_desc':
-                    $criteria->sortByHighestPrice();
-                    break;
-                case 'popularity':
-                    $criteria->sortByPopularity('DESC');
-                    break;
-                case 'date':
-                    $criteria->sortByReleaseDate('DESC');
-                    break;
-            }
+        switch ($sort) {
+            case 'price_asc':
+                $criteria->sortByCheapestPrice();
+                break;
+            case 'price_desc':
+                $criteria->sortByHighestPrice();
+                break;
+            case 'topseller':
+                $criteria->sortByPopularity('DESC');
+                break;
+            case 'newcomer':
+                $criteria->sortByReleaseDate('DESC');
+                break;
         }
 
         /** @var $result \Shopware\Bundle\SearchBundle\ProductSearchResult */

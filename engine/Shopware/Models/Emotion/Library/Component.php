@@ -143,6 +143,14 @@ class Component extends ModelEntity
     protected $fields;
 
     /**
+     * Private var that holds the max position value of the form fields
+     * The value is kept up to date on a "best effort" policy
+     *
+     * @var int
+     */
+    private $maxFieldPositionValue = null;
+
+    /**
      * Class constructor.
      * Initials all array collections and date time properties.
      */
@@ -353,8 +361,11 @@ class Component extends ModelEntity
             'defaultValue' => '',
             'displayField' => '',
             'valueField' => '',
-            'allowBlank' => false
+            'allowBlank' => false,
+            'position' => $this->getMaxPositionValue()
         );
+
+        $this->maxFieldPositionValue = max($data['position'], $this->maxFieldPositionValue) + 1;
 
         $field = new Field();
         $field->fromArray($data);
@@ -677,5 +688,20 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
+    }
+
+    public function getMaxPositionValue()
+    {
+        if (is_null($this->maxFieldPositionValue)) {
+            $this->maxFieldPositionValue = 0;
+
+            $positions = array_map(
+                function($field) {return $field->getPosition();},
+                $this->getFields()->toArray()
+            );
+            $this->maxFieldPositionValue = max($positions) ? : 0;
+        }
+
+        return $this->maxFieldPositionValue;
     }
 }

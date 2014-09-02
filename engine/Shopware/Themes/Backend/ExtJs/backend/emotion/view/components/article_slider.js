@@ -72,24 +72,20 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         me.getGridData();
 
         me.articleType = me.down('emotion-components-fields-article-slider-type');
-        me.articleSortCriteria = me.down('emotion-components-fields-article-slider-sort-criteria');
         me.categoryFilter = me.down('emotion-components-fields-category-selection');
         if(!me.articleType.getValue()) {
             me.maxCountField.hide();
-            me.articleSortCriteria.hide();
             me.categoryFilter.hide();
             me.articleFieldset.hide();
         }
         if(me.articleType.getValue() === 'selected_article') {
             me.maxCountField.hide();
-            me.articleSortCriteria.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
         } else {
             me.maxCountField.show();
-            me.articleSortCriteria.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
@@ -105,14 +101,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
 
         if(newValue !== 'selected_article') {
             me.maxCountField.show();
-            me.articleSortCriteria.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
         } else {
             me.maxCountField.hide();
-            me.articleSortCriteria.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
