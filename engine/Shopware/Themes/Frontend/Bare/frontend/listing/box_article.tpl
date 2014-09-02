@@ -10,7 +10,7 @@
 		{* Customer rating for the product *}
 		{block name='frontend_listing_box_article_rating'}
 			{if $sArticle.sVoteAverange.averange}
-				<div class="product--rating star{($sArticle.sVoteAverange.averange * 2)|round:0}"></div>
+                {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverange.averange type="aggregated" base="5" label=false}
 			{/if}
 		{/block}
 

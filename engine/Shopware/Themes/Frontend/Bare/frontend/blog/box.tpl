@@ -53,23 +53,9 @@
 						{* Rating *}
 						{block name='frontend_blog_col_meta_data_rating'}
 							{if $sArticle.sVoteAverage|round !=0}
-								<div class="blog--metadata-rating blog--metadata is--nowrap is--last" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-									{$average = $sArticle.sVoteAverage / 2|round:0}
-
-									<meta itemprop="worstRating" content="1">
-									<meta itemprop="ratingValue" content="{$sArticle.sVoteAverage}">
-									<meta itemprop="bestRating" content="5">
-
-									{for $value=1 to 5}
-										{$cls = 'icon--star'}
-
-										{if $value > $average}
-											{$cls = 'icon--star-empty'}
-										{/if}
-
-										<i class="{$cls}"></i>
-									{/for}
-								</div>
+								<div class="blog--metadata-rating blog--metadata is--nowrap is--last">
+                                    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated"}
+                                </div>
 							{/if}
 						{/block}
 					</div>
