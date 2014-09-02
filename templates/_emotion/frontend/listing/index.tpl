@@ -75,16 +75,9 @@
 </div>
 {/block}
 
-{* Trusted shops logo *}
-{block name='frontend_index_left_trustedshops'}
-    {block name="frontend_listing_left_additional_features"}
-        {include file="frontend/listing/right.tpl"}
-        <div class="clear">&nbsp;</div>
-    {/block}
-
-    {if {config name=TSID}}
-        {include file='frontend/plugins/trusted_shops/logo.tpl'}
-    {/if}
+{block name="frontend_listing_left_additional_features"}
+	{include file="frontend/listing/right.tpl"}
+	<div class="clear">&nbsp;</div>
 {/block}
 
 {* Sidebar right *}

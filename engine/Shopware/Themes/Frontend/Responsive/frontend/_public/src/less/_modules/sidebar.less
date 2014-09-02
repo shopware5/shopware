@@ -2,10 +2,6 @@
 body > .sidebar-main {
     .unitize(20, 16, padding-bottom);
     border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
-
-    .logo--trusted-shops {
-        display: none;
-    }
 }
 
 .mobile--switches {
@@ -74,25 +70,6 @@ body > .sidebar-main {
         .navigation--smartphone,
         .filter--container {
             display: none;
-        }
-
-        .logo--trusted-shops {
-            .clearfix();
-            .unitize-margin(30, 0);
-            display: block;
-
-            .trusted-shops--link {
-                color: @darkTextColor;
-
-                &:hover {
-                    color: @primaryColor;
-                }
-            }
-
-            .trusted-shops--icon {
-                .unitize-margin(0, 10);
-                float: left;
-            }
         }
     }
 

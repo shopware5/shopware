@@ -24,12 +24,6 @@
 		</div>
 
 		<div class="doublespace">&nbsp;</div>
-
-		{* Trusted shops form *}
-		{if {config name=TSID}}
-			{include file="frontend/plugins/trusted_shops/form.tpl"}
-		{/if}
-
 	{/block}
 
 	<div class="doublespace">&nbsp;</div>

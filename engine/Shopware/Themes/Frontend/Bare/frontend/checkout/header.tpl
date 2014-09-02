@@ -34,13 +34,7 @@
 
 				{* Trusted Shops *}
 				{block name='frontend_index_logo_trusted_shops'}
-					{if {config name=TSID}}
-						<div class="logo--trusted-shops block">
-							<a class="trusted-shops--link" href="https://www.trustedshops.com/shop/certificate.php?shop_id={config name=TSID}" title="{"{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}"|escape}" target="_blank">
-								<img src="{link file='frontend/_public/src/img/logos/logo--trusted-shops.png'}" alt="{"{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}"|escape}" />
-							</a>
-						</div>
-					{/if}
+
 				{/block}
 			</div>
 		{/block}

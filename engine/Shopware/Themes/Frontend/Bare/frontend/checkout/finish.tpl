@@ -100,17 +100,6 @@
 			</div>
 		{/block}
 
-		{* Trusted shops form *}
-		{block name='frontend_checkout_finish_teaser_trusted_shops'}
-			{if {config name=TSID}}
-				<div class="finish--trusted-shops panel has--border">
-					<div class="panel--body is--wide is--align-center">
-						{include file="frontend/plugins/trusted_shops/form.tpl"}
-					</div>
-				</div>
-			{/if}
-		{/block}
-
 		{block name='frontend_checkout_finish_info'}
 			<div class="finish--info">
 
