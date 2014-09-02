@@ -100,7 +100,6 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->getCacheInfo('config'),
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
-            $this->getCacheInfo('theme'),
             $this->getCacheInfo('proxy'),
             $this->getCacheInfo('doctrine-file'),
             $this->getCacheInfo('doctrine-proxy')
@@ -145,7 +144,6 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->cacheManager->clearHttpCache();
             $this->cacheManager->clearConfigCache();
             $this->cacheManager->clearTemplateCache();
-            $this->cacheManager->clearThemeCache();
             $this->cacheManager->clearProxyCache();
             $this->cacheManager->clearSearchCache();
 
@@ -163,9 +161,6 @@ class Cache extends Resource implements ContainerAwareInterface
                 break;
             case 'template':
                 $this->cacheManager->clearTemplateCache();
-                break;
-            case 'theme':
-                $this->cacheManager->clearThemeCache();
                 break;
             case 'backend':
                 $tags[] = 'Shopware_Config';
@@ -221,9 +216,6 @@ class Cache extends Resource implements ContainerAwareInterface
                 break;
             case 'template':
                 $cacheInfo = $this->cacheManager->getTemplateCacheInfo();
-                break;
-            case 'theme':
-                $cacheInfo = $this->cacheManager->getThemeCacheInfo();
                 break;
             case 'proxy':
                 $cacheInfo = $this->cacheManager->getShopwareProxyCacheInfo();

@@ -594,6 +594,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                     callback: function(records, operation) {
                         if(operation) {
                             Shopware.Notification.createGrowlMessage(me.snippets.manager.title, me.snippets.manager.clear_cache_successful);
+
+                            if (Ext.Array.contains(caches, 'theme')) {
+                                Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
+                            }
                         } else {
                             Shopware.Notification.createStickyGrowlMessage({
                                title: me.snippets.manager.title,

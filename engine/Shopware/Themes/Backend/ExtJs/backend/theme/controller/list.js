@@ -165,6 +165,10 @@ Ext.define('Shopware.apps.Theme.controller.List', {
                 );
 
                 me.getListingView().getStore().load();
+
+                if (theme.get('version') >= 3) {
+                    Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request', shop.get('id'));
+                }
             }
         });
     },

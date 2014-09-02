@@ -83,7 +83,17 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
         me.control({
             'performance-tabs-cache-main button[action=clear]': {
                 click: function(button, event) {
-                    me.getForm().submit();
+                    me.getForm().submit({
+                        success: function(form, action) {
+                            var themeCacheCleared = form.getFields().findBy(function(record) {
+                                return (record.name !== undefined && record.name == 'cache[theme]' && record.checked == true);
+                            });
+
+                            if (themeCacheCleared) {
+                                Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
+                            }
+                        }
+                    });
                 }
             },
 

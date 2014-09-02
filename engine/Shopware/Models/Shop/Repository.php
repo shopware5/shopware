@@ -96,6 +96,37 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns a query object for all shops with themes.
+     *
+     * @param null $filter
+     * @param null $order
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getShopsWithThemes($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->createQueryBuilder('shop');
+
+        $builder->select(array('shop', 'template'))
+            ->innerJoin('shop.template', 'template')
+            ->where('template.version >= 3');
+
+        if ($filter) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper method to create the query builder for the "getBaseListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *

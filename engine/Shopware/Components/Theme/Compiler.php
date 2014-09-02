@@ -116,29 +116,36 @@ class Compiler
      * Helper function which compiles all shop with new themes.
      * The function is called when the template cache is cleared.
      */
-    public function preCompile()
+    public function preCompileAll()
     {
-        $shops = $this->getShopsWithTheme();
+        $shops = $this->getShopsWithThemes();
         if (empty($shops)) {
             return;
         }
 
-        $timestamp = $this->getThemeTimestamp();
-
         foreach($shops as $shop) {
-            if ($shop->getMain()) {
-                $shop = $shop->getMain();
-            }
-
-            $this->compileLess($timestamp, $shop->getTemplate(), $shop);
-
-            $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
-
-            $this->compiler->reset();
+            $this->preCompile($shop);
         }
     }
 
+    /**
+     * Helper function which compiles a shop with new theme.
+     * The function is called when the template cache is cleared.
+     */
+    public function preCompile($shop)
+    {
+        $timestamp = $this->getThemeTimestamp();
 
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $this->compileLess($timestamp, $shop->getTemplate(), $shop);
+
+        $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
+
+        $this->compiler->reset();
+    }
 
     /**
      * Compiles all required resources for the passed shop and template.
@@ -642,18 +649,17 @@ class Compiler
 
     /**
      * Returns all shops which have a configured theme.
+     *
+     * @param array $filter
      * @return Shop\Shop[]
      */
-    private function getShopsWithTheme()
+    private function getShopsWithThemes($filter = null)
     {
-        $query = $this->entityManager->createQueryBuilder();
+        $repository = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
 
-        $query->select(array('shop', 'template'))
-            ->from('Shopware\Models\Shop\Shop', 'shop')
-            ->innerJoin('shop.template', 'template')
-            ->where('template.version >= 3');
+        $query = $repository->getShopsWithThemes($filter);
 
-        $shops = $query->getQuery()->getResult(
+        $shops = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         );
 
