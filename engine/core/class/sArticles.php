@@ -137,6 +137,11 @@ class sArticles
     private $queryAliasMapper;
 
     /**
+     * @var Enlight_Controller_Front
+     */
+    private $frontController;
+
+    /**
      * @var SearchBundle\ProductNumberSearchInterface
      */
     private $productNumberSearch;
@@ -175,6 +180,7 @@ class sArticles
         $this->additionalTextService     = $container->get('additional_text_service');
         $this->searchService             = $container->get('product_search');
         $this->queryAliasMapper          = $container->get('query_alias_mapper');
+        $this->frontController           = $container->get('front');        
         $this->legacyStructConverter     = $container->get('legacy_struct_converter');
         $this->legacyEventManager        = $container->get('legacy_event_manager');
         $this->session                   = $container->get('session');
@@ -249,7 +255,7 @@ class sArticles
             SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?
             ", array($this->sSYSTEM->sSESSION_ID));
 
-            if ($checkNumberArticles["countArticles"] >= $this->sSYSTEM->sCONFIG["sMAXCOMPARISONS"]) {
+            if ($checkNumberArticles["countArticles"] >= $this->config["sMAXCOMPARISONS"]) {
                 return "max_reached";
             }
 
@@ -270,7 +276,7 @@ class sArticles
 
                 $queryNewPrice = $this->db->executeUpdate($sql, array(
                     $this->sSYSTEM->sSESSION_ID,
-                    empty($this->sSYSTEM->_SESSION["sUserId"]) ? 0 : $this->sSYSTEM->_SESSION["sUserId"],
+                    empty($this->session["sUserId"]) ? 0 : $this->session["sUserId"],
                     $articleName,
                     $article
                 ));
@@ -289,7 +295,6 @@ class sArticles
      */
     public function sGetComparisons()
     {
-
         if (!$this->sSYSTEM->sSESSION_ID) return array();
 
         // Get all comparisons for this user
@@ -501,42 +506,44 @@ class sArticles
      * Save a new article comment / voting
      * Reads several values directly from _POST
      * @param int $article - s_articles.id
+     * @throws Enlight_Exception
      * @return null
      */
     public function sSaveComment($article)
     {
+        $request = $this->frontController->Request();
+
         // Permit Injects
+        $request->setPost('sVoteName', strip_tags($request->getPost('sVoteName')));
+        $request->setPost('sVoteSummary', strip_tags($request->getPost('sVoteSummary')));
+        $request->setPost('sVoteComment', strip_tags($request->getPost('sVoteComment')));
+        $request->setPost('sVoteStars', doubleval($request->getPost('sVoteStars')));
 
-        $this->sSYSTEM->_POST["sVoteName"] = strip_tags($this->sSYSTEM->_POST["sVoteName"]);
-        $this->sSYSTEM->_POST["sVoteSummary"] = strip_tags($this->sSYSTEM->_POST["sVoteSummary"]);
-        $this->sSYSTEM->_POST["sVoteComment"] = strip_tags($this->sSYSTEM->_POST["sVoteComment"]);
-        $this->sSYSTEM->_POST["sVoteStars"] = doubleval($this->sSYSTEM->_POST["sVoteStars"]);
-
-        if ($this->sSYSTEM->_POST["sVoteStars"] < 1 || $this->sSYSTEM->_POST["sVoteStars"] > 10) {
-            $this->sSYSTEM->_POST["sVoteStars"] = 0;
+        if ($request->getPost('sVoteStars') < 1 || $request->getPost('sVoteStars') > 10) {
+            $request->setPost('sVoteStars', 0);
         }
 
-        $this->sSYSTEM->_POST["sVoteStars"] /= 2;
+        $request->setPost('sVoteStars', $request->getPost('sVoteStars') / 2);
 
         $datum = date("Y-m-d H:i:s");
 
-        if ($this->sSYSTEM->sCONFIG['sVOTEUNLOCK']) {
+        if ($this->config['sVOTEUNLOCK']) {
             $active = 0;
         } else {
             $active = 1;
         }
 
         $sBADWORDS = "#sex|porn|viagra|url\=|src\=|link\=#i";
-        if (preg_match($sBADWORDS, $this->sSYSTEM->_POST["sVoteComment"])) {
+        if (preg_match($sBADWORDS, $this->frontController->Request()->getPost("sVoteComment"))) {
             return false;
         }
 
-        if (!empty($this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article])) {
+        if (!empty($this->session['sArticleCommentInserts'][$article])) {
             $sql = '
                 DELETE FROM s_articles_vote WHERE id=?
             ';
             $this->db->executeUpdate($sql, array(
-                $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article]
+                $this->session['sArticleCommentInserts'][$article]
             ));
         }
 
@@ -546,10 +553,10 @@ class sArticles
         ';
         $insertComment = $this->db->executeUpdate($sql, array(
             $article,
-            $this->sSYSTEM->_POST["sVoteName"],
-            $this->sSYSTEM->_POST["sVoteSummary"],
-            $this->sSYSTEM->_POST["sVoteComment"],
-            $this->sSYSTEM->_POST["sVoteStars"],
+            $this->frontController->Request()->getPost("sVoteName"),
+            $this->frontController->Request()->getPost("sVoteSummary"),
+            $this->frontController->Request()->getPost("sVoteComment"),
+            $this->frontController->Request()->getPost("sVoteStars"),
             $datum,
             $active,
             $this->sSYSTEM->_POST["sVoteMail"]
@@ -559,12 +566,11 @@ class sArticles
         }
 
         $insertId = $this->db->lastInsertId();
-        if (!isset($this->sSYSTEM->_SESSION['sArticleCommentInserts'])) {
-            $this->sSYSTEM->_SESSION['sArticleCommentInserts'] = new ArrayObject();
+        if (!isset($this->session['sArticleCommentInserts'])) {
+            $this->session['sArticleCommentInserts'] = new ArrayObject();
         }
-        $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article] = $insertId;
 
-        $this->sSYSTEM->_POST = array();
+        $this->session['sArticleCommentInserts'][$article] = $insertId;
     }
 
     /**
@@ -574,13 +580,19 @@ class sArticles
      */
     public function sGetArticlesBySupplier($supplierID = null)
     {
-        if (!empty($supplierID)) $this->sSYSTEM->_GET['sSearch'] = $supplierID;
-        if (!$this->sSYSTEM->_GET['sSearch']) return;
-        $sSearch = intval($this->sSYSTEM->_GET['sSearch']);
+        if (!empty($supplierID)) {
+            $this->frontController->Request()->setQuery('sSearch', $supplierID);
+        }
 
-        $getArticles = $this->db->fetchAll("
-        SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC
-        ", array($sSearch));
+        if (!$this->frontController->Request()->getQuery('sSearch')) {
+            return;
+        }
+        $sSearch = intval($this->frontController->Request()->getQuery('sSearch'));
+
+        $getArticles = $this->db->fetchAll(
+            "SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC",
+            array($sSearch)
+        );
 
         return $getArticles;
     }
@@ -629,7 +641,7 @@ class sArticles
     public function sGetSupplierById($id)
     {
         $id = (int) $id;
-        $categoryId = (int) $this->sSYSTEM->_GET['sCategory'];
+        $categoryId = (int) $this->frontController->Request()->getQuery('sCategory');
 
         $supplierRepository = Shopware()->Models()->getRepository(
             'Shopware\Models\Article\Supplier'
@@ -642,7 +654,7 @@ class sArticles
         if (!Shopware()->Shop()->getDefault()) {
             $supplier = $this->sGetTranslation($supplier, $supplier['id'], 'supplier');
         }
-        $supplier['link'] = $this->sSYSTEM->sCONFIG['sBASEFILE'];
+        $supplier['link'] = $this->config['sBASEFILE'];
         $supplier['link'] .= '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1&sSupplier=0';
 
         return $supplier;
@@ -651,12 +663,13 @@ class sArticles
     /**
      * Get all available suppliers from a specific category
      * @param int $id - category id
+     * @param int $limit
      * @return array
      */
     public function sGetAffectedSuppliers($id = null, $limit = null)
     {
-        $id = empty($id) ? (int) $this->sSYSTEM->_GET["sCategory"] : (int) $id;
-        $configLimit = $this->sSYSTEM->sCONFIG['sMAXSUPPLIERSCATEGORY'] ? $this->sSYSTEM->sCONFIG['sMAXSUPPLIERSCATEGORY'] : 30;
+        $id = empty($id) ? (int) $this->frontController->Request()->getQuery("sCategory") : (int) $id;
+        $configLimit = $this->config['sMAXSUPPLIERSCATEGORY'] ? $this->config['sMAXSUPPLIERSCATEGORY'] : 30;
         $limit = empty($limit) ? $configLimit : (int) $limit;
 
         $sql = "
@@ -720,7 +733,9 @@ class sArticles
      * Article price calucation
      * @param double $price
      * @param double $tax
+     * @param int $taxId
      * @param array $article article data as an array
+     * @throws Enlight_Exception
      * @return double $price formated price
      */
     public function sCalculatingPrice($price, $tax, $taxId = 0, $article = array())
@@ -780,9 +795,9 @@ class sArticles
         LIMIT 1
         ";
 
-        $areaId = Shopware()->Session()->sArea;
-        $countryId = Shopware()->Session()->sCountry;
-        $stateId = Shopware()->Session()->sState;
+        $areaId = $this->session->get('sArea');
+        $countryId = $this->session->get('sCountry');
+        $stateId = $this->session->get('sState');
         $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
 
         $parameters = array($taxId,$areaId,$countryId,$stateId,$customerGroupId);
@@ -807,10 +822,12 @@ class sArticles
      * Article price calucation unformated return
      * @param double $price
      * @param double $tax
-     * @param bool $considerTax
-     * @param bool $donotround
-     * @param array $article article data as an array
+     * @param bool $doNotRound
+     * @param bool $ignoreTax
+     * @param int $taxId
      * @param bool $ignoreCurrency
+     * @param array $article article data as an array
+     * @throws Enlight_Exception
      * @return double $price  price unformated
      */
     public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = array())
@@ -861,14 +878,15 @@ class sArticles
      */
     public function sGetArticleCharts($category = null)
     {
-        $sLimitChart = $this->sSYSTEM->sCONFIG['sCHARTRANGE'];
+        $sLimitChart = $this->config['sCHARTRANGE'];
         if (empty($sLimitChart)) {
             $sLimitChart = 20;
         }
+
         if (!empty($category)) {
             $category = (int) $category;
-        } elseif (!empty($this->sSYSTEM->_GET['sCategory'])) {
-            $category = (int) $this->sSYSTEM->_GET['sCategory'];
+        } elseif ($this->frontController->Request()->getQuery('sCategory')) {
+            $category = (int) $this->frontController->Request()->getQuery('sCategory');
         } else {
             $category = $this->categoryId;
         }
@@ -1031,7 +1049,7 @@ class sArticles
             if ($previousProduct) {
                 $previousProduct = $this->listProductService->get($previousProduct->getNumber(), $context);
                 $navigation["previousProduct"]["orderNumber"] = $previousProduct->getNumber();
-                $navigation["previousProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
+                $navigation["previousProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["previousProduct"]["name"] = $previousProduct->getName();
                 $navigation["previousProduct"]["image"] = $previousProduct->getCover()->getThumbnail(4);
             }
@@ -1040,7 +1058,7 @@ class sArticles
                 $nextProduct = $this->listProductService->get($nextProduct->getNumber(), $context);
 
                 $navigation["nextProduct"]["orderNumber"] = $nextProduct->getNumber();
-                $navigation["nextProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
+                $navigation["nextProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["nextProduct"]["name"] = $nextProduct->getName();
                 $navigation["nextProduct"]["image"] = $nextProduct->getCover()->getThumbnail(4);
             }
@@ -1078,7 +1096,7 @@ class sArticles
         );
 
         $queryPrams = http_build_query($params);
-        $listingLink = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?" . $queryPrams;
+        $listingLink = $this->config->get('sBASEFILE') . "?" . $queryPrams;
 
         return $listingLink;
     }
@@ -1224,6 +1242,9 @@ class sArticles
      * @param int $group customer group id
      * @param int $pricegroup pricegroup id
      * @param bool $usepricegroups consider pricegroups
+     * @param bool $realtime
+     * @param bool $returnArrayIfConfigurator
+     * @param bool $checkLiveshopping
      * @return float cheapest price or null
      */
     public function sGetCheapestPrice($article, $group, $pricegroup, $usepricegroups, $realtime = false, $returnArrayIfConfigurator = false, $checkLiveshopping = false)
@@ -1364,7 +1385,7 @@ class sArticles
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
     {
         if ($sCategoryID === null) {
-            $sCategoryID = Shopware()->Front()->Request()->getParam('sCategory', null);
+            $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
         };
 
         /**
@@ -1485,7 +1506,7 @@ class sArticles
     /**
      * Round article price
      *
-     * @param float $moneyFloat price
+     * @param float $moneyfloat
      * @return float price
      */
     public function sRound($moneyfloat = null)
@@ -1507,8 +1528,8 @@ class sArticles
 
         $context = $this->contextService->getShopContext();
 
-        $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
-        $markTop = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
+        $markNew = (int) $this->config['sMARKASNEW'];
+        $markTop = (int) $this->config['sMARKASTOPSELLER'];
         // Used in emotion widget to fetch only articles that have an image assigned
 
         $sql = "
@@ -1624,7 +1645,7 @@ class sArticles
         // Strip tags from descriptions
         $getPromotionResult["articleName"] = $this->sOptimizeText($getPromotionResult["articleName"]);
 
-        if (Shopware()->Config()->get('useShortDescriptionInListing')) {
+        if ($this->config->get('useShortDescriptionInListing')) {
             $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
         }
 
@@ -1635,8 +1656,8 @@ class sArticles
         );
         $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, "", false, false);
 
-        $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
-        $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
+        $getPromotionResult["linkBasket"] = $this->config['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
+        $getPromotionResult["linkDetails"] = $this->config['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
         if (!empty($category) && $category != $context->getShop()->getCategory()->getId()) {
             $getPromotionResult["linkDetails"] .= "&sCategory=$category";
         }
@@ -1787,7 +1808,7 @@ class sArticles
         }
 
         if ($mode == 'top') {
-            $promotionTime = !empty($this->sSYSTEM->sCONFIG['sPROMOTIONTIME']) ? (int) $this->sSYSTEM->sCONFIG['sPROMOTIONTIME'] : 30;
+            $promotionTime = !empty($this->config['sPROMOTIONTIME']) ? (int) $this->config['sPROMOTIONTIME'] : 30;
             $now = $this->db->quote(date('Y-m-d H:00:00'));
             $sql = "
                 SELECT od.articleID
@@ -3035,8 +3056,8 @@ class sArticles
      */
     private function getCurrentConfiguration($selection)
     {
-        if (empty($selection) && Shopware()->Front() && Shopware()->Front()->Request()) {
-            $selection = Shopware()->Front()->Request()->getParam('group');
+        if (empty($selection) && $this->frontController && $this->frontController->Request()) {
+            $selection = $this->frontController->Request()->getParam('group');
         }
 
         foreach ($selection as $groupId => $optionId) {
