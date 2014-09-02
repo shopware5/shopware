@@ -56,6 +56,6 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
     {
         /** @var $compiler \Shopware\Components\Theme\Compiler */
         $compiler = $this->container->get('theme_compiler');
-        $compiler->preCompile();
+        $compiler->preCompileAll();
     }
 }

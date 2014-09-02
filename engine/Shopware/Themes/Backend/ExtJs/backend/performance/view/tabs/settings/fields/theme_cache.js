@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/theme/info}The theme cache contains precompiled and optimized versions of your frontend theme resources, and it's used to make your shop faster. Depending on your system specifications, creating these optimized resources can take some time, and it's recommended warming up the cache before publishing your store.{/s}")
+                    me.createDescriptionContainer("{s name=fieldset/theme/info}The theme cache contains precompiled and optimized versions of your frontend theme resources, and it's used to make your shop faster. Depending on your system specifications, creating these optimized resources can take some time, and it's recommended warming up the cache before publishing your store.{/s}")
                 ]
             },
             {
@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
                         cls: 'primary',
                         scope: me,
                         handler:function () {
-                            Shopware.app.Application.fireEvent('shopware-compile-themes');
+                            Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request', null, true);
                         }
                     })
                 ]
