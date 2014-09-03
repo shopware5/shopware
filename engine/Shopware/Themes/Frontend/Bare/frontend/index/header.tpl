@@ -32,9 +32,9 @@
 {block name="frontend_index_header_favicons"}
     <link rel="apple-touch-icon" href="{link file=$theme.appleTouchIcon}">
 	<link rel="apple-touch-icon-precomposed" href="{link file=$theme.appleTouchIcon}">
-	<link rel="shortcut icon" sizes="196x196" href="{link file='frontend/_public/src/img/favicon.ico'}">
-	<link rel="shortcut icon" href="{link file='frontend/_public/src/img/favicon.ico'}">
-	<link rel="shortcut icon" href="{s name='IndexMetaShortcutIcon'}{link file='frontend/_public/src/img/favicon.ico'}{/s}" type="image/x-icon" />{* Favicon *}
+	<link rel="shortcut icon" sizes="196x196" href="{link file=$theme.favicon}">
+	<link rel="shortcut icon" href="{link file=$theme.favicon}">
+	<link rel="shortcut icon" href="{s name='IndexMetaShortcutIcon'}{link file=$theme.favicon}{/s}" type="image/x-icon" />{* Favicon *}
 {/block}
 
 {* Internet Explorer 9 specific meta tags *}
