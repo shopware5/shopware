@@ -69,9 +69,5 @@
 </div>
 {/block}
 
-{block name="frontend_listing_left_additional_features"}
-	{include file="frontend/listing/sidebar.tpl"}
-{/block}
-
 {* Sidebar right *}
 {block name='frontend_index_content_right'}{/block}
