@@ -48,7 +48,7 @@
 						{* TellAFriend email address *}
 						{block name='frontend_tellafriend_field_email'}
 							<div class="tellafriend--email">
-								<input name="sMail" type="email" class="tellafriend--field is--required" required="required" aria-required="true" placeholder="{s name='TellAFriendLabelMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" value="{$sMail|escape}"/>
+								<input name="sMail" type="email" class="tellafriend--field is--required" required="required" aria-required="true" placeholder="{s name='TellAFriendPlaceholderMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" value="{$sMail|escape}"/>
 							</div>
 						{/block}
 
@@ -62,7 +62,7 @@
 						{* TellAFriend comment *}
 						{block name='frontend_tellafriend_field_comment'}
 							<div class="tellafriend--comment">
-								<textarea name="sComment" class="tellafriend--field" placeholder="{s name='TellAFriendLabelComment'}{/s}">{$sComment|escape}</textarea>
+								<textarea name="sComment" class="tellafriend--field" placeholder="{s name='TellAFriendPlaceholderComment'}{/s}">{$sComment|escape}</textarea>
 							</div>
 						{/block}
 
