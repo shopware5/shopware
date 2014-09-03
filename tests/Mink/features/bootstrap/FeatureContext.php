@@ -49,6 +49,9 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
      */
     public static function prepare(SuiteEvent $event)
     {
+        $em = self::$statickernel->getContainer()->get('models');
+        $em->generateAttributeModels();
+
         //refresh s_core_templates
         $last = error_reporting(0);
         self::$statickernel->getContainer()->get('theme_installer')->synchronize();
