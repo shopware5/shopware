@@ -92,6 +92,32 @@ class Enlight_Plugin_Bootstrap_Config extends Enlight_Plugin_Bootstrap
     }
 
     /**
+     * Removes an existing plugin event.
+     *
+     * First all subscribed listeners are looped to find the one, which matches the given
+     * event and listener names and also the name of this plugin. Finally the matching listener
+     * is removed from the namespace subscriber.
+     *
+     * @param string|Enlight_Event_Handler $event The name of the event or the event itself, which shall be removed.
+     * @param string $listener The name of the listener, which shall be removed.
+     * @return Enlight_Plugin_Bootstrap_Config This instance.
+     */
+    public function unsubscribeEvent($event, $listener)
+    {
+        // Find the listener instance matching the plugin, event and listener names
+        $subscriber = $this->Collection()->Subscriber();
+        foreach ($subscriber->getListeners() as $handler) {
+            if ($handler->toArray()['plugin'] === $this->getName() && $handler->getName() === $event
+                    && $handler->getListener() === $listener) {
+                // Remove the matching handler
+                $subscriber->removeListener($handler);
+                break;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * This function installs the plugin.
      *
      * @return bool

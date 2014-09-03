@@ -497,6 +497,27 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Unsubscribes a plugin event.
+     *
+     * {@inheritDoc}
+     *
+     * @param string|Enlight_Event_Handler $event
+     * @param string $listener
+     *
+     * @return Enlight_Plugin_Bootstrap_Config
+     */
+    public function unsubscribeEvent($event, $listener = null)
+    {
+        if ($listener === null) {
+            $this->Collection()->Subscriber()->removeListener($event);
+        } else {
+            parent::unsubscribeEvent($event, $listener);
+        }
+
+        return $this;
+    }
+
+    /**
      * Helper function to register a plugin controller.
      *
      * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
