@@ -196,9 +196,9 @@ div.supplier ul li.image {background-color: #fff;}
     top: 160px;
     z-index: 10;
 }
-#detail .article_back { left: 0 }
+#detail .article_back { left: -40px }
 #detail .article_back:hover { background-position: 0 bottom }
-#detail .article_next { right: 0; background-position: -20px 0 }
+#detail .article_next { right: -40px; background-position: -20px 0 }
 #detail .article_next:hover { background-position: -20px bottom }
 #detail .article_back a,
 #detail .article_next a {

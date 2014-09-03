@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
+	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 
 	{* The configurator selection is checked at this early point
    	   to use it in different included files in the detail template. *}
@@ -36,20 +36,16 @@
 
 			{* Previous article *}
 			{block name='frontend_detail_article_back'}
-				{if $sArticle.sNavigation.sPrevious}
-					<div class="article_back">
-						<a href="{$sArticle.sNavigation.sPrevious.link|rewrite:$sArticle.sNavigation.sPrevious.name}" title="{$sArticle.sNavigation.sPrevious.name}" class="article_back">{s name='DetailNavPrevious'}Zurück{/s}</a>
-					</div>
-				{/if}
+                <div class="article_back">
+                    <a href="#" class="article_back">{s name='DetailNavPrevious'}Zurück{/s}</a>
+                </div>
 			{/block}
 
 			{* Next article *}
 			{block name='frontend_detail_article_next'}
-				{if $sArticle.sNavigation.sNext}
-					<div class="article_next">
-						<a href="{$sArticle.sNavigation.sNext.link|rewrite:$sArticle.sNavigation.sNext.name}" title="{$sArticle.sNavigation.sNext.name}" class="article_next">{s name='DetailNavNext'}Vor{/s}</a>
-					</div>
-				{/if}
+                <div class="article_next">
+                    <a href="#" class="article_next">{s name='DetailNavNext'}Vor{/s}</a>
+                </div>
 			{/block}
 
 			{* Detailbox left *}

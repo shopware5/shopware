@@ -383,8 +383,6 @@ $(function() {
 
     $('*[data-add-article="true"]').addArticle();
 
-    $('body').httpCacheFilters();
-
     $('*[data-menu-scroller="true"]').menuScroller();
 
     // Jump to the scroll comments section on the detail-page
