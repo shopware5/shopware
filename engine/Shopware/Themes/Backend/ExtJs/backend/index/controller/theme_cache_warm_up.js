@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             me.shopStore = Ext.create('Shopware.apps.Index.store.ThemeCacheWarmUp');
 
             if (Ext.isNumber(shopId)) {
-                me.shopStore.getProxy().extraParams.id = shopId;
+                me.shopStore.getProxy().extraParams.shopId = shopId;
 
                 me.window.setSingleShopId(shopId);
             }

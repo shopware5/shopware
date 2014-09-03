@@ -113,22 +113,6 @@ class Compiler
     }
 
     /**
-     * Helper function which compiles all shop with new themes.
-     * The function is called when the template cache is cleared.
-     */
-    public function preCompileAll()
-    {
-        $shops = $this->getShopsWithThemes();
-        if (empty($shops)) {
-            return;
-        }
-
-        foreach ($shops as $shop) {
-            $this->preCompile($shop);
-        }
-    }
-
-    /**
      * Helper function which compiles a shop with new theme.
      * The function is called when the template cache is cleared.
      *
@@ -136,17 +120,40 @@ class Compiler
      */
     public function preCompile(Shop\Shop $shop)
     {
-        $timestamp = $this->getThemeTimestamp();
-
         if ($shop->getMain()) {
             $shop = $shop->getMain();
         }
+
+        $this->clearThemeCache($shop);
+
+        $timestamp = $this->getThemeTimestamp($shop);
 
         $this->compileLess($timestamp, $shop->getTemplate(), $shop);
 
         $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
 
         $this->compiler->reset();
+    }
+
+    /**
+     * Clear existing theme cache
+     * Removes all assets and timestamp files
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
+     */
+    public function clearThemeCache(Shop\Shop $shop)
+    {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $timestamp = $this->getThemeTimestamp($shop);
+
+        $files = array(
+            (string) $timestamp,
+            'timestamp' . $shop->getId() . '.txt'
+        );
+        $this->clearDirectory($files);
     }
 
     /**
@@ -164,9 +171,6 @@ class Compiler
         $this->compiler->setConfiguration(
             $this->getCompilerConfiguration($shop)
         );
-
-        $name = 'theme' . $shop->getId() . '.css';
-        $this->clearDirectory(array($name));
 
         $this->buildConfig($template, $shop);
 
@@ -190,9 +194,6 @@ class Compiler
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $name = 'theme' . $shop->getId() . '.js';
-        $this->clearDirectory(array($name));
-
         $this->compressThemeJavascript($timestamp, $template, $shop);
 
         $this->compressPluginJavascript($timestamp, $template, $shop);
@@ -642,7 +643,7 @@ class Compiler
     private function fileNameMatch($original, $names)
     {
         foreach($names as $name) {
-            if (strpos($original, $name)) {
+            if (strpos($original, $name) !== false) {
                 return true;
             }
         }
@@ -650,6 +651,7 @@ class Compiler
     }
 
     /**
+     *
      * Returns all shops which have a configured theme.
      *
      * @param array $filter
@@ -670,12 +672,14 @@ class Compiler
 
     /**
      * Helper function which reads and creates the theme timestamp for the css and js files.
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
      * @return int
      */
-    private function getThemeTimestamp()
+    private function getThemeTimestamp(Shop\Shop $shop)
     {
         /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
-        $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp.txt';
+        $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
 
         if (file_exists($file)) {
             $timestamp = file_get_contents($file);

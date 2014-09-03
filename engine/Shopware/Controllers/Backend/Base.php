@@ -603,11 +603,22 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var $repository \Shopware\Models\Shop\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
+        $shopId = $this->Request()->getParam('shopId', null);
+        $filter = $this->Request()->getParam('filter', array());
+        if ($shopId) {
+            $filter[] = array(
+                'property' => 'shop.id',
+                'value' => $shopId,
+                'operator' => null,
+                'expression' => null
+            );
+        }
+
         $query = $repository->getShopsWithThemes(
-            $filter = $this->Request()->getParam('filter', array()),
-            $order = $this->Request()->getParam('sort', array()),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $filter,
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         //get total result of the query

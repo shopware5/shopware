@@ -24,11 +24,9 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\ORM\AbstractQuery;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -54,8 +52,25 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        $query = $repository->getShopsWithThemes();
+
+        $shops = $query->getResult(
+            AbstractQuery::HYDRATE_OBJECT
+        );
+
+        if (empty($shops)) {
+            $output->writeln('No theme shops found');
+            return;
+        }
+
         /** @var $compiler \Shopware\Components\Theme\Compiler */
         $compiler = $this->container->get('theme_compiler');
-        $compiler->preCompileAll();
+
+        foreach ($shops as $shop) {
+            $output->writeln(sprintf('Generating theme cache for shop "%s" ...', $shop->getName()));
+            $compiler->preCompile($shop);
+        }
     }
 }
