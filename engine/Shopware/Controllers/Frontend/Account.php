@@ -345,6 +345,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                     $countryDataIndex = array_search($values["shipping"]["country"], $countryIds);
                     $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
 
+                    // if not required, allow empty values
+                    if (!$stateSelectionRequired["force_state_in_registration"]) {
+                        $statesIds[] = "";
+                    }
+
                     $rules["stateID"] = array(
                         "required" => $stateSelectionRequired["force_state_in_registration"],
                         'in' => $statesIds
@@ -423,10 +428,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'zipcode'=>array('required'=>1),
                 'city'=>array('required'=>1),
                 'department'=>array('required'=>0),
-                'country'=>array(
-                    'required' => Shopware()->Config()->get('sCOUNTRYSHIPPING'),
-                    'in' => $countryIds
-                ),
                 'text1'=>array('required'=>0),
                 'text2'=>array('required'=>0),
                 'text3'=>array('required'=>0),
@@ -434,7 +435,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'text5'=>array('required'=>0),
                 'text6'=>array('required'=>0)
             );
-
 
             if ($this->Request()->getParam('sSelectAddress')) {
                 $address = $this->admin->sGetPreviousAddresses('shipping', $this->Request()->getParam('sSelectAddress'));
@@ -448,34 +448,46 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
             $values = $this->Request()->getPost('register');
 
-            // State selection
-            if (!empty($values["shipping"]["country"])) {
-                $stateSelectionRequired = Shopware()->Db()->fetchRow("
-                    SELECT display_state_in_registration, force_state_in_registration
-                    FROM s_core_countries WHERE id = ?",
-                    array($values["shipping"]["country"])
+            if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
+                $rules['country'] = array(
+                    'required' => 1,
+                    'in' => $countryIds
                 );
 
-                if ($stateSelectionRequired["display_state_in_registration"]) {
-                    $countryDataIndex = array_search($values["shipping"]["country"], $countryIds);
-                    $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
-
-                    $rules["stateID"] = array(
-                        "required" => $stateSelectionRequired["force_state_in_registration"],
-                        'in' => $statesIds
+                // State selection
+                if (!empty($values["shipping"]["country"])) {
+                    $stateSelectionRequired = Shopware()->Db()->fetchRow("
+                    SELECT display_state_in_registration, force_state_in_registration
+                    FROM s_core_countries WHERE id = ?",
+                        array($values["shipping"]["country"])
                     );
-                }
 
-                if (
-                    $stateSelectionRequired["display_state_in_registration"] == false
-                    && $stateSelectionRequired["force_state_in_registration"] == false
-                ) {
-                    $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = 0;
-                } else {
-                    $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = $values["shipping"]["country_shipping_state_".$values["shipping"]["country"]];
-                }
+                    if ($stateSelectionRequired["display_state_in_registration"]) {
+                        $countryDataIndex = array_search($values["shipping"]["country"], $countryIds);
+                        $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
 
-                unset($values["shipping"]["country_shipping_state_".$values["shipping"]["country"]]);
+                        // if not required, allow empty values
+                        if (!$stateSelectionRequired["force_state_in_registration"]) {
+                            $statesIds[] = "";
+                        }
+
+                        $rules["stateID"] = array(
+                            "required" => $stateSelectionRequired["force_state_in_registration"],
+                            'in' => $statesIds
+                        );
+                    }
+
+                    if (
+                        $stateSelectionRequired["display_state_in_registration"] == false
+                        && $stateSelectionRequired["force_state_in_registration"] == false
+                    ) {
+                        $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = 0;
+                    } else {
+                        $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = $values["shipping"]["country_shipping_state_".$values["shipping"]["country"]];
+                    }
+
+                    unset($values["shipping"]["country_shipping_state_".$values["shipping"]["country"]]);
+                }
             }
 
             if (!empty($values)) {
