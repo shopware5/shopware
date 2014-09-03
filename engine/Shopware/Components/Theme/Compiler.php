@@ -123,7 +123,7 @@ class Compiler
             return;
         }
 
-        foreach($shops as $shop) {
+        foreach ($shops as $shop) {
             $this->preCompile($shop);
         }
     }
@@ -131,8 +131,10 @@ class Compiler
     /**
      * Helper function which compiles a shop with new theme.
      * The function is called when the template cache is cleared.
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
      */
-    public function preCompile($shop)
+    public function preCompile(Shop\Shop $shop)
     {
         $timestamp = $this->getThemeTimestamp();
 
@@ -633,8 +635,8 @@ class Compiler
     }
 
     /**
-     * @param $original
-     * @param $names
+     * @param string $original
+     * @param string $names
      * @return bool
      */
     private function fileNameMatch($original, $names)
@@ -668,7 +670,7 @@ class Compiler
 
     /**
      * Helper function which reads and creates the theme timestamp for the css and js files.
-     * @return int|string
+     * @return int
      */
     private function getThemeTimestamp()
     {
@@ -682,7 +684,6 @@ class Compiler
             file_put_contents($file, $timestamp);
         }
 
-        return $timestamp;
-
+        return (int) $timestamp;
     }
 }
