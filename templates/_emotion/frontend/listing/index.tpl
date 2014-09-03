@@ -75,7 +75,7 @@
 </div>
 {/block}
 
-{block name="frontend_listing_left_additional_features"}
+{block name="frontend_index_left_categories" append}
 	{include file="frontend/listing/right.tpl"}
 	<div class="clear">&nbsp;</div>
 {/block}
