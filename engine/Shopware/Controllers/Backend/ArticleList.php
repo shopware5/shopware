@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             list($entity, $field) = explode('_', $key);
             $value = array('entity' => $entity, 'field' => $field, 'value' => $value);
         }
-        
+
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);        $data = $resource->save($params);
 
