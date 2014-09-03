@@ -308,6 +308,7 @@ In this document you will find a changelog of the important changes related to t
 * Moved s_user_billingaddress.customernumber to s_user table
 * Removed \Shopware\Models\Customer\Billing::number property
 * Removed method `Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::getPluginBootstrap()`
+* Add a new `unsubscribeEvent` method to `Enlight_Plugin_Bootstrap_Config` for removing existing event subscriptions
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
@@ -334,6 +335,7 @@ In this document you will find a changelog of the important changes related to t
 * Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
 * Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
 * Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
+* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

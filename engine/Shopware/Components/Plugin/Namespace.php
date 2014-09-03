@@ -374,7 +374,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $plugin->setInstalled(new DateTime());
             $plugin->setUpdated(new DateTime());
             $em->flush($plugin);
-            $this->write();
+            $this->write($bootstrap);
 
             $em->flush();
 
@@ -681,7 +681,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $this->registerPlugin($plugin);
 
             // Save events / Hooks
-            $this->write();
+            $this->write($plugin);
 
             $form = $plugin->Form();
             if ($form->hasElements()) {
@@ -702,15 +702,32 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     }
 
     /**
-     * Writes all registered plugins into the storage.
-     * The subscriber and the registered plugins are converted to an array.
+     * Synchronizes the plugin subscribes with the storage.
+     * All remaining subscribes are inserted or updated in the storage. If the optional bootstrap
+     * parameter is given, all subscribes of that plugin are loaded and compared to the
+     * given subscribes. Finally the subscribes, which were removed from the list,
+     * are also removed from the storage.
      *
+     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
      * @return  Enlight_Plugin_Namespace_Config
      */
-    public function write()
+    public function write(Shopware_Components_Plugin_Bootstrap $bootstrap = null)
     {
-        $subscribes = $this->Subscriber()->toArray();
+        $obsoleteSubscribes = array();
+        if ($bootstrap !== null) {
+            // Fetch all existing subscribes of the given plugin
+            $pluginId = $this->getPluginId($bootstrap->getName());
+            $sql = '
+                SELECT `subscribe`, `listener`, `pluginID`
+                FROM `s_core_subscribes`
+                WHERE pluginID = ?
+            ';
+            $obsoleteSubscribes = $this->Application()->Db()->fetchAll($sql, array(
+                $pluginId
+            ));
+        }
 
+        $subscribes = $this->Subscriber()->toArray();
         foreach ($subscribes as $subscribe) {
             $subscribe['pluginID'] = $this->getInfo($subscribe['plugin'], 'id');
             if (!isset($subscribe['pluginID'])) {
@@ -739,6 +756,31 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 $subscribe['listener'],
                 $subscribe['position'],
                 $subscribe['pluginID'],
+            ));
+
+            if ($subscribe['pluginID'] === $pluginId) {
+                // Remove the subscribe from the list of obsolete subscribes
+                for ($i = 0; $i < count($obsoleteSubscribes); $i++) {
+                    if ($obsoleteSubscribes[$i]['subscribe'] === $subscribe['name'] && $obsoleteSubscribes[$i]['listener'] === $subscribe['listener']){
+                        array_splice($obsoleteSubscribes, $i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Delete all subscribes, that are left in obsoleteSubscribes
+        foreach ($obsoleteSubscribes as $subscribe) {
+            $sql = '
+                DELETE FROM `s_core_subscribes`
+                WHERE `subscribe` = ?
+                AND `listener` = ?
+                AND `pluginID` = ?
+            ';
+            $this->Application()->Db()->query($sql, array(
+                $subscribe['subscribe'],
+                $subscribe['listener'],
+                $subscribe['pluginID']
             ));
         }
 
