@@ -336,5 +336,7 @@
                  factory-method="createFromConfig">
             <argument type="service" id="config" />
         </service>
+
+        <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
     </services>
 </container>

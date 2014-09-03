@@ -12,8 +12,6 @@
         </service>
         <service id="oyejorge_compiler_lib" class="Less_Parser" />
 
-        <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
-
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
 
         <service id="theme_service" class="Shopware\Components\Theme\Service">
