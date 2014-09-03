@@ -1746,7 +1746,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'linkNote',
             'tax',
         );
-        
+
         $result = $this->module->sGetBasket();
         $this->assertEquals($keys, array_keys($result));
         $this->assertGreaterThanOrEqual(1, count($result['content']));
@@ -1977,7 +1977,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $randomNoESDArticle = $this->db->fetchRow(
             'SELECT detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
@@ -1992,7 +1992,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random esd article
         $randomESDArticle = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
