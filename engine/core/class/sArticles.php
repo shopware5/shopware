@@ -772,52 +772,18 @@ class sArticles
     }
 
     /**
-     * @param $taxId
-     * @return mixed
+     * @param int $taxId
+     * @return double|false
      */
     public function getTaxRateByConditions($taxId)
     {
-        static $result = array();
-        if (!empty($result[$taxId])) {
-            return $result[$taxId];
+        $context = $this->contextService->getProductContext();
+        $taxRate = $context->getTaxRule($taxId);
+        if ($taxRate) {
+            return number_format($taxRate->getTax(), 2);
+        } else {
+            return false;
         }
-
-        $sql = "
-        SELECT id,tax FROM s_core_tax_rules WHERE
-            active = 1 AND groupID = ?
-        AND
-            (areaID = ? OR areaID IS NULL)
-        AND
-            (countryID = ? OR countryID IS NULL)
-        AND
-            (stateID = ? OR stateID IS NULL)
-        AND
-            (customer_groupID = ? OR customer_groupID = 0 OR customer_groupID IS NULL)
-        ORDER BY customer_groupID DESC, areaID DESC, countryID DESC, stateID DESC
-        LIMIT 1
-        ";
-
-        $areaId = $this->session->get('sArea');
-        $countryId = $this->session->get('sCountry');
-        $stateId = $this->session->get('sState');
-        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA["id"];
-
-        $parameters = array($taxId,$areaId,$countryId,$stateId,$customerGroupId);
-
-        $getTax = $this->db->fetchRow($sql,$parameters);
-
-        if (empty($getTax["id"])) {
-            $getTax["tax"] = $this->db->fetchOne("SELECT tax FROM s_core_tax WHERE id = ?",array($taxId));
-        }
-
-        $result[$taxId] = $getTax["tax"];
-
-        /*$params = ($this->db->getProfiler()->getLastQueryProfile()->getQueryParams());
-        $query = ($this->db->getProfiler()->getLastQueryProfile()->getQuery());
-        foreach ($params as $par) {
-            $query = preg_replace('/\\?/', "'" . $par . "'", $query, 1);
-        }*/
-        return $result[$taxId];
     }
 
     /**
