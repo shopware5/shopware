@@ -30,8 +30,10 @@ function smarty_function_themeTimestamp($params, $template)
 {
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
+    $context = Shopware()->Container()->get('context_service')->get();
+    $shopId = $context->getShop()->getId();
 
-    $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp.txt';
+    $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shopId . '.txt';
 
     if (file_exists($file)) {
         $timestamp = file_get_contents($file);
