@@ -80,8 +80,6 @@ class DqlHelper
 
     protected $columnsNotToShowInGrid = array(
         'Tax_tax',
-        'Tax_id',
-        'Detail_id',
         'Detail_kind',
         'Detail_active',
         'Detail_articleId',
@@ -99,7 +97,6 @@ class DqlHelper
         'Article_supplierId',
         'Article_taxId',
         'Article_crossBundleLook',
-        'Supplier_id',
         'Supplier_image',
         'Supplier_metaDescription',
         'Supplier_metaKeywords',
@@ -107,7 +104,6 @@ class DqlHelper
         'Supplier_changed',
         'Supplier_description',
         'Supplier_link',
-        'Attribute_id',
         'Attribute_articleId',
         'Attribute_articleDetailId'
     );
