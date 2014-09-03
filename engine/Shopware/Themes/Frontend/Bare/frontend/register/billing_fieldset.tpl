@@ -5,7 +5,7 @@
 		{* Company *}
 		{block name='frontend_register_billing_fieldset_input_company'}
 			<div class="register--companyname">
-				<input name="register[billing][company]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterLabelCompany'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field is--required{if $error_flags.company} has--error{/if}" />
+				<input name="register[billing][company]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderCompany'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field is--required{if $error_flags.company} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -68,7 +68,7 @@
 			<div class="register--country field--select">
 				<span class="arrow"></span>
 				<select name="register[billing][country]" id="country" required="required" aria-required="true" class="select--country is--required{if $error_flags.country} has--error{/if}">
-                    <option disabled="disabled" value="" selected="selected">{s name='RegisterBillingLabelCountry'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+                    <option disabled="disabled" value="" selected="selected">{s name='RegisterBillingPlaceholderCountry'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
                     {foreach $country_list as $country}
                         <option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
                             {$country.countryname}
