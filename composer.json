@@ -48,6 +48,7 @@
     },
     "autoload": {
         "psr-0": {
+            "Behat\\Mink\\Driver\\BrowserKitDriver": "engine/Library/",
             "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
             "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
             "Shopware": "engine/",

@@ -82,4 +82,12 @@ class CheckoutContext extends SubContext
         $aggregations = $aggregations->getHash();
         $this->getPage('CheckoutCart')->checkAggregation($aggregations);
     }
+
+    /**
+     * @When /^I proceed to checkout$/
+     */
+    public function iProceedToCheckout()
+    {
+        $this->getPage('CheckoutConfirm')->proceedToCheckout();
+    }
 }

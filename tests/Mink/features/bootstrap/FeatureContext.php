@@ -76,6 +76,19 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         //activate SEPA payment method
         $sql = 'UPDATE `s_core_paymentmeans` SET `active`= 1 WHERE `id` = 6';
         self::$statickernel->getContainer()->get('db')->exec($sql);
+
+
+        /** @var \Shopware\Components\Plugin\Manager $pluginManager */
+        $pluginManager = self::$statickernel->getContainer()->get('shopware.plugin_Manager');
+
+        // hack to prevent behat error handler kicking in.
+        $oldErrorReporting = error_reporting(0);
+        $pluginManager->refreshPluginList();
+        error_reporting($oldErrorReporting);
+
+        $plugin = $pluginManager->getPluginByName('Notification');
+        $pluginManager->installPlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
     }
 
     /** @BeforeScenario */

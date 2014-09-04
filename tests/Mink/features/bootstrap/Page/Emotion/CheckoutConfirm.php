@@ -17,6 +17,11 @@ class CheckoutConfirm extends Page
         'orderNumber' => 'div#finished > div.orderdetails > p'
     );
 
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'confirmButton'  => array('de' => 'Zahlungspflichtig bestellen',            'en' => 'Send order')
+    );
+
     public function verifyPage()
     {
         $locators = array('pageIdentifier');
@@ -41,5 +46,14 @@ class CheckoutConfirm extends Page
         $orderNumber = intval($orderNumber[0]);
 
         return $orderNumber;
+    }
+
+    /**
+     * Proceeds the checkout
+     */
+    public function proceedToCheckout()
+    {
+        $this->checkField('sAGB');
+        \Helper::pressNamedButton2($this, 'confirmButton', null, 'de');
     }
 }
