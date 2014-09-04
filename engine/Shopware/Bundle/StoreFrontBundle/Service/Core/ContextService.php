@@ -23,6 +23,7 @@
  */
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use Enlight_Components_Session_Namespace as Session;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
@@ -37,7 +38,7 @@ use Shopware\Models;
 class ContextService implements Service\ContextServiceInterface
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var Container
      */
     private $container;
 
@@ -79,7 +80,7 @@ class ContextService implements Service\ContextServiceInterface
      */
     public function initialize()
     {
-        /** @var $session \Enlight_Components_Session_Namespace */
+        /** @var $session Session */
         $session = $this->container->get('session');
 
         /**@var $shop Models\Shop\Shop */
@@ -96,15 +97,15 @@ class ContextService implements Service\ContextServiceInterface
         $context = new Struct\Context();
 
         $context->setBaseUrl(
-            $this->getBaseUrl()
+            $this->buildBaseUrl()
         );
 
         $context->setShop(
-            $this->createShopStruct($shop)
+            Struct\Shop::createFromShopEntity($shop)
         );
 
         $context->setCurrency(
-            $this->createCurrencyStruct($shop->getCurrency())
+            Struct\Currency::createFromCurrencyEntity($shop->getCurrency())
         );
 
         $context->setCurrentCustomerGroup(
@@ -115,43 +116,14 @@ class ContextService implements Service\ContextServiceInterface
             $this->customerGroupGateway->get($fallback)
         );
 
-        $area = null;
-        if ($session->offsetGet('sArea')) {
-            $area = $this->countryGateway->getArea(
-                $session->offsetGet('sArea'),
-                $context
-            );
-        }
-
-        $country = null;
-        if ($session->offsetGet('sCountry')) {
-            $country = $this->countryGateway->getCountry(
-                $session->offsetGet('sCountry'),
-                $context
-            );
-        }
-
-        $state = null;
-        if ($session->offsetGet('sState')) {
-            $state = $this->countryGateway->getState(
-                $session->offsetGet('sState'),
-                $context
-            );
-        }
-
-        $rules = $this->taxGateway->getRules(
-            $context->getCurrentCustomerGroup(),
-            $area,
-            $country,
-            $state
-        );
+        $area    = $this->createAreaStruct($session, $context);
+        $country = $this->createCountryStruct($session, $context);
+        $state   = $this->createStateStruct($session, $context);
+        $rules   = $this->createTaxRulesStruct($context, $area, $country, $state);
 
         $context->setArea($area);
-
         $context->setCountry($country);
-
         $context->setState($state);
-
         $context->setTaxRules($rules);
 
         $this->context = $context;
@@ -170,70 +142,9 @@ class ContextService implements Service\ContextServiceInterface
     }
 
     /**
-     * Converts a currency doctrine model to a currency struct
-     *
-     * @param Models\Shop\Currency $currency
-     * @return Struct\Currency
-     */
-    private function createCurrencyStruct(Models\Shop\Currency $currency)
-    {
-        $struct = new Struct\Currency();
-
-        $struct->setId($currency->getId());
-        $struct->setName($currency->getName());
-        $struct->setCurrency($currency->getCurrency());
-        $struct->setFactor($currency->getFactor());
-        $struct->setSymbol($currency->getSymbol());
-
-        return $struct;
-    }
-
-    /**
-     * Converts a shop doctrine model to a shop struct
-     * @param Models\Shop\Shop $shop
-     * @return Struct\Shop
-     */
-    private function createShopStruct(Models\Shop\Shop $shop)
-    {
-        $struct = new Struct\Shop();
-        $struct->setId($shop->getId());
-
-        $struct->setName($shop->getName());
-        $struct->setHost($shop->getHost());
-        $struct->setPath($shop->getBasePath());
-        $struct->setUrl($shop->getBaseUrl());
-        $struct->setSecure($shop->getSecure());
-        $struct->setSecureHost($shop->getSecureHost());
-        $struct->setSecurePath($struct->getSecurePath());
-
-        if ($shop->getCategory()) {
-            $struct->setCategory(
-                $this->convertCategoryStruct($shop->getCategory())
-            );
-        }
-
-        return $struct;
-    }
-
-    /**
-     * @param Models\Category\Category $category
-     * @return Struct\Category
-     */
-    private function convertCategoryStruct(Models\Category\Category $category)
-    {
-        $struct = new Struct\Category();
-
-        $struct->setId($category->getId());
-        $struct->setName($category->getName());
-        $struct->setPath($category->getPath());
-
-        return $struct;
-    }
-
-    /**
      * @return string
      */
-    private function getBaseUrl()
+    private function buildBaseUrl()
     {
         /** @var $config \Shopware_Components_Config */
         $config = $this->container->get('config');
@@ -252,5 +163,88 @@ class ContextService implements Service\ContextServiceInterface
         }
 
         return $baseUrl;
+    }
+
+    /**
+     * @param Session $session
+     * @param Struct\Context $context
+     * @return null|Struct\Country\Area
+     */
+    protected function createAreaStruct(Session $session, Struct\Context $context)
+    {
+        $area = null;
+        if ($session->offsetGet('sArea')) {
+            $area = $this->countryGateway->getArea(
+                $session->offsetGet('sArea'),
+                $context
+            );
+
+            return $area;
+        }
+
+        return $area;
+    }
+
+    /**
+     * @param Session $session
+     * @param Struct\Context $context
+     * @return null|Struct\Country
+     */
+    protected function createCountryStruct(Session $session, Struct\Context $context)
+    {
+        $country = null;
+        if ($session->offsetGet('sCountry')) {
+            $country = $this->countryGateway->getCountry(
+                $session->offsetGet('sCountry'),
+                $context
+            );
+
+            return $country;
+        }
+
+        return $country;
+    }
+
+    /**
+     * @param Session $session
+     * @param Struct\Context $context
+     * @return null|Struct\Country\State
+     */
+    protected function createStateStruct(Session $session, Struct\Context $context)
+    {
+        $state = null;
+        if ($session->offsetGet('sState')) {
+            $state = $this->countryGateway->getState(
+                $session->offsetGet('sState'),
+                $context
+            );
+
+            return $state;
+        }
+
+        return $state;
+    }
+
+    /**
+     * @param Struct\Context $context
+     * @param Struct\Country\Area $area
+     * @param Struct\Country $country
+     * @param Struct\Country\State $state
+     * @return Struct\Tax[]
+     */
+    protected function createTaxRulesStruct(
+        Struct\Context $context,
+        Struct\Country\Area $area,
+        Struct\Country $country,
+        Struct\Country\State $state
+    ) {
+        $rules = $this->taxGateway->getRules(
+            $context->getCurrentCustomerGroup(),
+            $area,
+            $country,
+            $state
+        );
+
+        return $rules;
     }
 }

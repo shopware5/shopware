@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Models\Shop\Shop as ShopEntity;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
@@ -75,6 +77,32 @@ class Shop extends Extendable
      * @var Category
      */
     protected $category;
+
+    /**
+     * @param ShopEntity $shop
+     * @return Shop
+     */
+    public static function createFromShopEntity(ShopEntity $shop)
+    {
+        $struct = new self();
+        $struct->setId($shop->getId());
+
+        $struct->setName($shop->getName());
+        $struct->setHost($shop->getHost());
+        $struct->setPath($shop->getBasePath());
+        $struct->setUrl($shop->getBaseUrl());
+        $struct->setSecure($shop->getSecure());
+        $struct->setSecureHost($shop->getSecureHost());
+        $struct->setSecurePath($shop->getSecureBasePath());
+
+        if ($shop->getCategory()) {
+            $struct->setCategory(
+                Category::createFromCategoryEntity($shop->getCategory())
+            );
+        }
+
+        return $struct;
+    }
 
     /**
      * @param int $id
