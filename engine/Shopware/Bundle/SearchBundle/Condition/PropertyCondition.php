@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PropertyCondition implements ConditionInterface
+class PropertyCondition implements ConditionInterface, \JsonSerializable
 {
     /**
      * @var array
@@ -60,5 +60,13 @@ class PropertyCondition implements ConditionInterface
     public function getValueIds()
     {
         return $this->valueIds;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

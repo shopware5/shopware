@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MarketingAttribute extends Attribute
+class MarketingAttribute extends Attribute implements \JsonSerializable
 {
     /**
      * @var bool
@@ -96,4 +96,11 @@ class MarketingAttribute extends Attribute
         return $this->isTopSeller;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

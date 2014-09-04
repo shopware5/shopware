@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryFacet implements FacetInterface
+class CategoryFacet implements FacetInterface, \JsonSerializable
 {
     /**
      * Flag if the facet is filtered with a condition
@@ -83,5 +83,13 @@ class CategoryFacet implements FacetInterface
     public function setCategories($categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

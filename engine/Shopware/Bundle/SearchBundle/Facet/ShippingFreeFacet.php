@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShippingFreeFacet implements FacetInterface
+class ShippingFreeFacet implements FacetInterface, \JsonSerializable
 {
     /**
      * @var int
@@ -83,4 +83,11 @@ class ShippingFreeFacet implements FacetInterface
         $this->total = $total;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

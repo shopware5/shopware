@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Manufacturer extends Extendable
+class Manufacturer extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier of the manufacturer
@@ -235,5 +235,13 @@ class Manufacturer extends Extendable
     public function setCoverFile($coverFile)
     {
         $this->coverFile = $coverFile;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

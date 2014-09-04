@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Link extends Extendable
+class Link extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -117,4 +117,11 @@ class Link extends Extendable
         return $this->target;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

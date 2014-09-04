@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Customer
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Group extends Extendable
+class Group extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier
@@ -223,5 +223,13 @@ class Group extends Extendable
     public function setMinimumOrderValue($minimumOrderValue)
     {
         $this->minimumOrderValue = $minimumOrderValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

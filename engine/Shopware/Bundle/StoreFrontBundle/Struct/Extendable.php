@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Extendable extends Struct
+abstract class Extendable extends Struct implements \JsonSerializable
 {
     /**
      * Contains an array of attribute structs.
@@ -48,6 +48,16 @@ abstract class Extendable extends Struct
     public function addAttribute($name, Attribute $attribute)
     {
         $this->attributes[$name] = $attribute;
+    }
+
+    /**
+     * @param $attributes
+     */
+    public function addAttributes($attributes)
+    {
+        foreach($attributes as $key => $attribute) {
+            $this->addAttribute($key, $attribute);
+        }
     }
 
     /**
@@ -83,5 +93,13 @@ abstract class Extendable extends Struct
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

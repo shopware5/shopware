@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Context extends Extendable
+class Context extends Extendable implements \JsonSerializable
 {
     /**
      * @var Tax[]
@@ -265,5 +265,13 @@ class Context extends Extendable
     public function setBaseUrl($baseUrl)
     {
         $this->baseUrl = $baseUrl;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

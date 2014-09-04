@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductAttributeFacet implements FacetInterface
+class ProductAttributeFacet implements FacetInterface, \JsonSerializable
 {
     const MODE_NOT_EMPTY = 'not_null';
 
@@ -140,5 +140,13 @@ class ProductAttributeFacet implements FacetInterface
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

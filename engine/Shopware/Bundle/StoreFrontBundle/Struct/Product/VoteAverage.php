@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class VoteAverage extends Extendable
+class VoteAverage extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -94,5 +94,13 @@ class VoteAverage extends Extendable
     public function setPointCount($pointCount)
     {
         $this->pointCount = $pointCount;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

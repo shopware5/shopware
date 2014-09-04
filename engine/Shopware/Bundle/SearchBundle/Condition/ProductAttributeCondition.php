@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductAttributeCondition implements ConditionInterface
+class ProductAttributeCondition implements ConditionInterface, \JsonSerializable
 {
     const OPERATOR_EQ = '=';
     const OPERATOR_NEQ = '!=';
@@ -125,5 +125,13 @@ class ProductAttributeCondition implements ConditionInterface
     public function setOperator($operator)
     {
         $this->operator = $operator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

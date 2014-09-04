@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceFacet implements FacetInterface
+class PriceFacet implements FacetInterface, \JsonSerializable
 {
     /**
      * @var float
@@ -103,5 +103,13 @@ class PriceFacet implements FacetInterface
     public function getMaxPrice()
     {
         return $this->maxPrice;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
