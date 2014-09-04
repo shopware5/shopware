@@ -290,15 +290,37 @@ class Helper
      */
     public function removeArticle($number)
     {
-        $detail = $this->entityManager->getRepository('Shopware\Models\Article\Detail')
-            ->findOneBy(array('number' => $number));
+        $articleId = $this->db->fetchOne(
+            "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
+            array($number)
+        );
 
-        if (!$detail) {
+        if (!$articleId) {
             return;
         }
 
-        $this->entityManager->remove($detail->getArticle());
+        $article = $this->entityManager->find('Shopware\Models\Article\Article', $articleId);
+
+        $this->entityManager->remove($article);
         $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $detailIds = $this->db->fetchCol(
+            "SELECT id FROM s_articles_details WHERE articleID = ?",
+            array($articleId)
+        );
+
+        if (empty($detailIds)) {
+            return;
+        }
+
+        foreach($detailIds as $id) {
+            $detail = $this->entityManager->find('Shopware\Models\Article\Detail', $id);
+            if ($detail) {
+                $this->entityManager->remove($detail);
+                $this->entityManager->flush();
+            }
+        }
         $this->entityManager->clear();
     }
 
