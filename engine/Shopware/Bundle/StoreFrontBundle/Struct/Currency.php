@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Models\Shop\Currency as CurrencyEntity;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
@@ -55,6 +57,23 @@ class Currency extends Extendable
      * @var string
      */
     protected $symbol;
+
+    /**
+     * @param CurrencyEntity $currency
+     * @return Currency
+     */
+    public static function createFromCurrencyEntity(CurrencyEntity $currency)
+    {
+        $struct = new self();
+
+        $struct->setId($currency->getId());
+        $struct->setName($currency->getName());
+        $struct->setCurrency($currency->getCurrency());
+        $struct->setFactor($currency->getFactor());
+        $struct->setSymbol($currency->getSymbol());
+
+        return $struct;
+    }
 
     /**
      * @param int $id
