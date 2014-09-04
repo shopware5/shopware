@@ -29,7 +29,7 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
  * @package   Shopware\Bundle\SearchBundle\Sorting
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ReleaseDateSorting extends Sorting implements \JsonSerializable
+class ReleaseDateSorting extends Sorting
 {
     /**
      * {@inheritdoc}
@@ -37,13 +37,5 @@ class ReleaseDateSorting extends Sorting implements \JsonSerializable
     public function getName()
     {
         return 'release_date';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

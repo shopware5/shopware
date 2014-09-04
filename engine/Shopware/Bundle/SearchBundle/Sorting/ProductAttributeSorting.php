@@ -29,7 +29,7 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
  * @package   Shopware\Bundle\SearchBundle\Sorting
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductAttributeSorting extends Sorting implements \JsonSerializable
+class ProductAttributeSorting extends Sorting
 {
     /**
      * @var string
@@ -68,13 +68,5 @@ class ProductAttributeSorting extends Sorting implements \JsonSerializable
     public function getField()
     {
         return $this->field;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

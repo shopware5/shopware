@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerCondition implements ConditionInterface, \JsonSerializable
+class ManufacturerCondition implements ConditionInterface
 {
     /**
      * @var array
