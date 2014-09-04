@@ -65,8 +65,7 @@ Feature: Successful changes of login data
     Scenario: I can create a new account
         Given I am on the homepage
         When  I follow "Mein Konto"
-        And   only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        And   I register me:
             | field                | register[personal] | register[billing] | register[shipping] |
             | customer_type        | business           |                   |                    |
             | salutation           | mr                 |                   | ms                 |

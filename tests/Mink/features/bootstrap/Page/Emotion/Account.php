@@ -22,6 +22,12 @@ class Account extends Page
         'paymentForm' => 'div.change_payment > form'
     );
 
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'registerButton' => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
+        'sendButton'     => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration')
+    );
+
     /**
      * Logins a user
      * @param string $email
@@ -279,5 +285,14 @@ class Account extends Page
         $type = ucfirst($type);
 
         $this->getElement('Account'.$type)->checkAddress($address);
+    }
+
+    public function register($data)
+    {
+        $this->verifyPage();
+
+        \Helper::pressNamedButton2($this, 'registerButton', null, 'de');
+        \Helper::fillForm($this, 'registrationForm', $data);
+        \Helper::pressNamedButton2($this, 'sendButton', null, 'de');
     }
 }

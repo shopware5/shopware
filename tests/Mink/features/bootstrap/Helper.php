@@ -1,5 +1,6 @@
 <?php
 use Behat\Mink\Element\Element;
+use \Behat\Mink\Element\TraversableElement;
 
 class Helper
 {
@@ -317,10 +318,10 @@ class Helper
     }
 
     /**
-     * @param SubContext $context
-     * @param string     $page
-     * @param string     $key
-     * @param array      $locatorArray
+     * @param Page $page
+     * @param $key
+     * @param array $locatorArray
+     * @param string $language
      */
     public static function pressNamedButton2(\SensioLabs\Behat\PageObjectExtension\PageObject\Page $page, $key, $locatorArray = array(), $language = '')
     {
@@ -337,5 +338,63 @@ class Helper
         }
 
         $page->pressButton($locatorArray[$key][$language]);
+    }
+
+    /**
+     * @param TraversableElement $element
+     * @param $formKey
+     * @param $values
+     */
+    public static function fillForm(\Behat\Mink\Element\TraversableElement $element, $formKey, $values)
+    {
+        $locators = array($formKey);
+        $elements = self::findElements($element, $locators);
+
+        if(empty($elements[$formKey])) {
+            $message = sprintf('The form "%s" was not found!', $formKey);
+            self::throwException($message);
+        }
+
+        /** @var \SensioLabs\Behat\PageObjectExtension\PageObject\Element $form */
+        $form = $elements[$formKey];
+
+        foreach ($values as $value) {
+            $tempFieldName = $fieldName = $value['field'];
+            unset($value['field']);
+
+            foreach ($value as $key => $fieldValue) {
+                if ($key !== 'value') {
+                    $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
+                }
+
+                $field = $form->findField($fieldName);
+
+                if (empty($field)) {
+                    if (empty($fieldValue)) {
+                        continue;
+                    }
+
+                    $message = sprintf('The form "%s" has no field "%s"!', $formKey, $fieldName);
+                    self::throwException($message);
+                }
+
+                $fieldType = $field->getAttribute('type');
+
+                //Select
+                if (empty($fieldType)) {
+                    $field->selectOption($fieldValue);
+                    continue;
+                }
+
+                //Checkbox
+                if ($fieldType === 'checkbox') {
+                    $field->check();
+                    continue;
+                }
+
+                //Text
+                $field->setValue($fieldValue);
+            }
+        }
     }
 }
