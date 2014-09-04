@@ -1605,7 +1605,7 @@ class sOrder
         ));
 
         if ($sendStatusMail) {
-            $mail = $this->createStatusMail($paymentStatusId, $comment, $orderId);
+            $mail = $this->createStatusMail($orderId, $paymentStatusId);
             if ($mail) {
                 $this->sendStatusMail($mail);
             }
@@ -1662,7 +1662,7 @@ class sOrder
         ));
 
         if ($sendStatusMail) {
-            $mail = $this->createStatusMail($orderStatusId, $comment, $orderId);
+            $mail = $this->createStatusMail($orderId, $orderStatusId);
             if ($mail) {
                 $this->sendStatusMail($mail);
             }
