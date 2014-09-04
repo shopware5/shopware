@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Models\Category\Category as CategoryEntity;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
@@ -105,6 +107,30 @@ class Category extends Extendable
      * @var Media
      */
     protected $media;
+
+    /**
+     * @param CategoryEntity $category
+     * @return Category
+     */
+    public static function createFromCategoryEntity(CategoryEntity $category)
+    {
+        $struct = new self();
+
+        $struct->setId($category->getId());
+        $struct->setName($category->getName());
+
+        $path = $category->getPath();
+        if ($path) {
+            $path = ltrim($path , '|');
+            $path = rtrim($path, '|');
+
+            $path = explode('|', $path);
+
+            $struct->setPath(array_reverse($path));
+        }
+
+        return $struct;
+    }
 
     /**
      * @param int $id
