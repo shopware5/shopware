@@ -601,27 +601,11 @@ class sRewriteTable
             $this->sInsertUrl($org_path, $path);
         }
 
-        $sql = "SELECT id, name, ticket_typeID FROM `s_cms_support`";
-        if ($limit !== null) {
-            $sql = $this->db->limit($sql, $limit, $offset);
-        }
-        $cmsSupport = $this->db->fetchAll($sql);
-        foreach ($cmsSupport as $row) {
-            $org_path = 'sViewport=ticket&sFid=' . $row['id'];
-            $path = $this->sCleanupPath($row['name']);
-            $this->sInsertUrl($org_path, $path);
-        }
+        //form urls
+        $this->insertFormUrls($offset, $limit);
 
-        $sql = "SELECT id, description as name FROM `s_cms_static` WHERE link=''";
-        if ($limit !== null) {
-            $sql = $this->db->limit($sql, $limit, $offset);
-        }
-        $cmsStatic = $this->db->fetchAll($sql);
-        foreach ($cmsStatic as $row) {
-            $org_path = 'sViewport=custom&sCustom=' . $row['id'];
-            $path = $this->sCleanupPath($row['name']);
-            $this->sInsertUrl($org_path, $path);
-        }
+        //static pages urls
+        $this->insertStaticPageUrls($offset, $limit);
 
         $sql = "SELECT id, description as name FROM `s_cms_groups`";
         if ($limit !== null) {
@@ -756,5 +740,45 @@ class sRewriteTable
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Generates and inserts the form seo urls
+     *
+     * @param $offset
+     * @param $limit
+     */
+    private function insertFormUrls($offset, $limit)
+    {
+        $formListData = $this->modelManager->getRepository('Shopware\Models\Form\Form')
+            ->getListQuery(array(), array(), $offset, $limit)->getArrayResult();
+
+        foreach ($formListData as $form) {
+            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
+            $this->data->assign('form', $form);
+            $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
+            $path = $this->sCleanupPath($path, false);
+            $this->sInsertUrl($org_path, $path);
+        }
+    }
+
+    /**
+     * Generates and inserts static page urls
+     *
+     * @param $offset
+     * @param $limit
+     */
+    private function insertStaticPageUrls($offset, $limit)
+    {
+        $sitesData = $this->modelManager->getRepository('Shopware\Models\Site\Site')
+            ->getSitesWithoutLinkQuery($offset, $limit)->getArrayResult();
+
+        foreach ($sitesData as $site) {
+            $org_path = 'sViewport=custom&sCustom=' . $site['id'];
+            $this->data->assign('site', $site);
+            $path = $this->template->fetch('string:' . $this->config->get('seoCustomSiteRouteTemplate'), $this->data);
+            $path = $this->sCleanupPath($path, false);
+            $this->sInsertUrl($org_path, $path);
+        }
     }
 }
