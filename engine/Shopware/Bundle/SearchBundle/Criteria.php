@@ -39,7 +39,7 @@ use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Criteria
+class Criteria implements \JsonSerializable
 {
     /**
      * Offset for the limitation
@@ -431,5 +431,13 @@ class Criteria
         $this->sortings = array();
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

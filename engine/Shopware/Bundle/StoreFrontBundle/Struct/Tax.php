@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Tax extends Extendable
+class Tax extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier of the tax struct.
@@ -97,5 +97,13 @@ class Tax extends Extendable
     public function getTax()
     {
         return $this->tax;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

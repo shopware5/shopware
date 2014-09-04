@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Currency as CurrencyEntity;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Currency extends Extendable
+class Currency extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -155,4 +155,11 @@ class Currency extends Extendable
         return $this->factor;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

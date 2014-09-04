@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Unit extends Extendable
+class Unit extends Extendable implements \JsonSerializable
 {
     /**
      * Unique identifier of the struct.
@@ -264,4 +264,11 @@ class Unit extends Extendable
         return $this->purchaseStep;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SearchProduct extends Extendable
+class SearchProduct extends Extendable implements \JsonSerializable
 {
     /**
      * Order number of the product
@@ -58,5 +58,13 @@ class SearchProduct extends Extendable
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

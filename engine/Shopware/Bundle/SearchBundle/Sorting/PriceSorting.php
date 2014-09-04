@@ -29,7 +29,7 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
  * @package   Shopware\Bundle\SearchBundle\Sorting
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceSorting extends Sorting
+class PriceSorting extends Sorting implements \JsonSerializable
 {
     /**
      * {@inheritdoc}
@@ -37,5 +37,13 @@ class PriceSorting extends Sorting
     public function getName()
     {
         return 'prices';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

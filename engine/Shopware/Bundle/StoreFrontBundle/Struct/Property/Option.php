@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Option extends Extendable
+class Option extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -79,5 +79,13 @@ class Option extends Extendable
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

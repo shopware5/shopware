@@ -31,7 +31,7 @@ namespace Shopware\Bundle\SearchBundle;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductNumberSearchResult
+class ProductNumberSearchResult implements \JsonSerializable
 {
     /**
      * @var SearchProduct[] Indexed by the product order number
@@ -82,5 +82,13 @@ class ProductNumberSearchResult
     public function getTotalCount()
     {
         return $this->totalCount;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

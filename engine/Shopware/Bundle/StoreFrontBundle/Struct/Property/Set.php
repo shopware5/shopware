@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Set extends Extendable
+class Set extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -127,5 +127,13 @@ class Set extends Extendable
     public function isComparable()
     {
         return $this->comparable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
