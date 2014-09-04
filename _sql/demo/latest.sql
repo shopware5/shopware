@@ -5538,7 +5538,6 @@ INSERT IGNORE INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value
 (null, 658, 2, 's:19:"2013-12-01 11:15:53";'),
 (null, 658, 1, 's:19:"2013-12-01 11:42:13";');
 
-TRUNCATE TABLE `s_core_rewrite`;
 TRUNCATE TABLE `s_core_rewrite_urls`;
 INSERT INTO `s_core_rewrite_urls` (`id`, `org_path`, `path`, `main`, `subshopID`) VALUES
 (1, 'sViewport=cat&sCategory=3', 'listing/', 1, 1),
