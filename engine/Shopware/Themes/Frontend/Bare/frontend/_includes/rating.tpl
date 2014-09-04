@@ -127,7 +127,7 @@
                     {$diff=$value - $average}
 
                     {if $diff > 0 && $diff <= 0.5}
-                        {$cls = 'icon--twitter'}
+                        {$cls = 'icon--star-half'}
                     {else}
                         {$cls = 'icon--star-empty'}
                     {/if}
