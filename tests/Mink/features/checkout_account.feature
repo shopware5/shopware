@@ -24,9 +24,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
 
         Then  I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
 
@@ -71,9 +69,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         When  only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
         Then  I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     Examples:
