@@ -63,6 +63,10 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
         addSerialsTitle: '{s name=esd/add_serials_title}Add Serials{/s}',
+        error: {
+            title: '{s name=esd/error/title}Error{/s}',
+            noFolder: '{s name=esd/error/no_folder}The ESD folder could not be found.{/s}'
+        },
         success: {
             title: '{s name=esd/success/title}Success{/s}',
             esdSaved: '{s name=esd/success/esd_saved}The ESD has been saved.{/s}',
@@ -304,7 +308,13 @@ Ext.define('Shopware.apps.Article.controller.Esd', {
         var me = this,
             esdTab = me.getEsdTab(),
             serialStore = Ext.create('Shopware.apps.Article.store.Serial'),
-            fileStore = Ext.create('Shopware.apps.Article.store.EsdFile').load();
+            fileStore = Ext.create('Shopware.apps.Article.store.EsdFile').load(
+                function(records, operation, success) {
+                    if (success == false && operation.error == 'noFolder') {
+                        Shopware.Notification.createGrowlMessage(me.snippets.error.title, me.snippets.error.noFolder, me.snippets.growlMessage);
+                    }
+                }
+            );
 
         me.fileStore = fileStore;
 
