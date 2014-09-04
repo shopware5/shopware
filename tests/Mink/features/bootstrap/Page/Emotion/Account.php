@@ -12,8 +12,11 @@ class Account extends Page
     protected $path = '/account';
 
     public $cssLocator = array(
-        'pageIdentifier1'  => 'div#content > div > div.account',
-        'pageIdentifier2'  => 'div#login',
+        'identifiers' => array(
+            'dashboard' => 'div#content > div > div.account',
+            'login' => 'div#login',
+            'register' => 'div#content > div > div.register'
+        ),
         'payment' => 'div#selected_payment strong',
         'logout' => 'div.adminbox a.logout',
         'registrationForm' => 'div.register > form',
@@ -55,22 +58,30 @@ class Account extends Page
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     * @param string|null $action
+     * @return string
      */
-    public function verifyPage()
+    public function verifyPage($action = null)
     {
-        $locators = array('pageIdentifier1', 'pageIdentifier2');
-        $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
+        $locators = $this->cssLocator['identifiers'];
+        $elements = \Helper::findElements($this, $locators, $locators, false, false);
 
-        if (!empty($elements['pageIdentifier1'])) {
-            return;
+        $elements = array_filter($elements);
+
+        if (empty($elements)) {
+            $message = array('You are not on Account page!', 'Current URL: ' . $this->getSession()->getCurrentUrl());
+            \Helper::throwException($message);
         }
 
-        if (!empty($elements['pageIdentifier2'])) {
-            return;
+        if (!$action) {
+            return true;
         }
 
-        $message = array('You are not on Account page!', 'Current URL: '.$this->getSession()->getCurrentUrl());
-        \Helper::throwException($message);
+        if (array_key_exists($action, $elements)) {
+            return true;
+        }
+
+        return key($elements);
     }
 
     /**
@@ -289,9 +300,10 @@ class Account extends Page
 
     public function register($data)
     {
-        $this->verifyPage();
+        if ($this->verifyPage('login') === true) {
+            \Helper::pressNamedButton2($this, 'registerButton', null, 'de');
+        }
 
-        \Helper::pressNamedButton2($this, 'registerButton', null, 'de');
         \Helper::fillForm($this, 'registrationForm', $data);
         \Helper::pressNamedButton2($this, 'sendButton', null, 'de');
     }
