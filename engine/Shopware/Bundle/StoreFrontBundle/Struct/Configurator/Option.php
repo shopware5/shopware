@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Configurator
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Option extends Extendable
+class Option extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -137,5 +137,13 @@ class Option extends Extendable
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

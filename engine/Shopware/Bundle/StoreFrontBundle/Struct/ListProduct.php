@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ListProduct extends Extendable
+class ListProduct extends Extendable implements \JsonSerializable
 {
     /**
      * State for a calculated product price
@@ -982,5 +982,13 @@ class ListProduct extends Extendable
     public function setBlockedCustomerGroupIds($blockedCustomerGroupIds)
     {
         $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

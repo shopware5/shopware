@@ -82,4 +82,12 @@ class ImmediateDeliveryFacet implements FacetInterface
     {
         $this->total = $total;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

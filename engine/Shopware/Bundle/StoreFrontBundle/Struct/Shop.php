@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Shop as ShopEntity;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shop extends Extendable
+class Shop extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -248,4 +248,11 @@ class Shop extends Extendable
         $this->category = $category;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

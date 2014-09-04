@@ -61,4 +61,12 @@ class CategoryCondition implements ConditionInterface
     {
         return 'category';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

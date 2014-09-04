@@ -141,4 +141,12 @@ class ProductAttributeFacet implements FacetInterface
     {
         $this->mode = $mode;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

@@ -61,4 +61,12 @@ class PropertyCondition implements ConditionInterface
     {
         return $this->valueIds;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

@@ -61,4 +61,12 @@ class CustomerGroupCondition implements ConditionInterface
     {
         return $this->customerGroupIds;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

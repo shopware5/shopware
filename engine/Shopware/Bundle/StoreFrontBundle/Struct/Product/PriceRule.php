@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceRule extends Extendable
+class PriceRule extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -187,5 +187,13 @@ class PriceRule extends Extendable
     public function getUnit()
     {
         return $this->unit;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

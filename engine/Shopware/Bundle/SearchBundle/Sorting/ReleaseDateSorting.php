@@ -38,5 +38,4 @@ class ReleaseDateSorting extends Sorting
     {
         return 'release_date';
     }
-
 }

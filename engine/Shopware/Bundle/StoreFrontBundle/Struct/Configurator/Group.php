@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Configurator
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Group extends Extendable
+class Group extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -144,5 +144,13 @@ class Group extends Extendable
     public function setSelected($selected)
     {
         $this->selected = $selected;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -29,7 +29,7 @@ namespace Shopware\Bundle\SearchBundle;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface FacetInterface
+interface FacetInterface extends \JsonSerializable
 {
     /**
      * Defines the unique name for the facet for re identification.

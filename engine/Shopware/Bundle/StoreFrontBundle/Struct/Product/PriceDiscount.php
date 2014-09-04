@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceDiscount extends Extendable
+class PriceDiscount extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -139,4 +139,11 @@ class PriceDiscount extends Extendable
         return $this->percent;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

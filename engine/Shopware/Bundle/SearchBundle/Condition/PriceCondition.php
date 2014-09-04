@@ -76,4 +76,12 @@ class PriceCondition implements ConditionInterface
     {
         return $this->maxPrice;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

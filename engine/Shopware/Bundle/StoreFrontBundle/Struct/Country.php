@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Country extends Extendable
+class Country extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -283,4 +283,11 @@ class Country extends Extendable
         return $this->requiresStateSelection;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }
