@@ -12,8 +12,7 @@ Feature: detail page
 
     @plugin @notification
     Scenario: I can let me notify, when an article is available
-        Given the "Notification" plugin is enabled
-        And   I am on the detail page for article 243
+        Given I am on the detail page for article 243
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
         When  I submit the form "notificationForm" on page "Detail" with:

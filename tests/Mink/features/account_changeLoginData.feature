@@ -129,7 +129,7 @@ Feature: Successful changes of login data
 
         When  I fill in "email" with "test@example.info"
         And   I press "Passwort anfordern"
-        Then  I should see "Diese Mailadresse ist uns nicht bekannt"
+        Then  I should see "Diese E-Mail-Adresse ist uns nicht bekannt"
 
         When  I fill in "email" with "test@example.com"
         And   I press "Passwort anfordern"

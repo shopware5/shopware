@@ -29,9 +29,7 @@ Feature: Checkout esd article
             | 19 %    | 6,07 € |
 
         When  only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
-        And   I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
         And   my finished order should look like this:
             | product                  | quantity | price   | sum     | esd |

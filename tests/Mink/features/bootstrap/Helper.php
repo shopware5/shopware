@@ -315,4 +315,27 @@ class Helper
 
         $parent->clickLink($locatorArray[$key][$language]);
     }
+
+    /**
+     * @param SubContext $context
+     * @param string     $page
+     * @param string     $key
+     * @param array      $locatorArray
+     */
+    public static function pressNamedButton2(\SensioLabs\Behat\PageObjectExtension\PageObject\Page $page, $key, $locatorArray = array(), $language = '')
+    {
+        if (empty($locatorArray)) {
+            if (isset($page->namedSelectors)) {
+                $locatorArray = $page->namedSelectors;
+            } else {
+                self::throwException(array('No locatorArray defined!'));
+            }
+        }
+
+        if(empty($language)) {
+            $language = $page->getElement('LanguageSwitcher')->getCurrentLanguage();
+        }
+
+        $page->pressButton($locatorArray[$key][$language]);
+    }
 }
