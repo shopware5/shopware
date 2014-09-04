@@ -3872,6 +3872,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $filePath = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
+        if (!file_exists($filePath)) {
+            $this->View()->assign(array(
+                'message' =>  'noFolder',
+                'success' => false
+            ));
+            return;
+        }
         $result = array();
         foreach (new DirectoryIterator($filePath) as $file) {
             if ($file->isDot() || strpos($file->getFilename(), '.') === 0) {
