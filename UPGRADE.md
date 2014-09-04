@@ -92,6 +92,7 @@ In this document you will find a changelog of the important changes related to t
 * Add isFamilyFriendly core setting. To enable or disable the isFamilyFriendly Meta tag.
 * Add new SEO fields to the forms module.
 * Add new SEO templates in the core settings for the form and the site data.
+* Dropped unused table `s_core_rewrite`
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
