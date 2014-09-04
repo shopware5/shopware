@@ -84,7 +84,7 @@ Feature: Successful changes of login data
         And   I should see "Die Passwörter stimmen nicht überein."
         And   I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
-        When  I submit the form "registrationForm" on page "Account" with:
+        When  I register me:
             | field                | register[personal] |
             | email                | test@example.com   |
             | password             | abc                |
@@ -95,7 +95,7 @@ Feature: Successful changes of login data
         And   I should see "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht."
         But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
 
-        When  I submit the form "registrationForm" on page "Account" with:
+        When  I register me:
             | field                | register[personal] |
             | email                | test@example.net   |
             | password             | abcdefgh           |
