@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShippingFreeFacet implements FacetInterface, \JsonSerializable
+class ShippingFreeFacet implements FacetInterface
 {
     /**
      * @var int

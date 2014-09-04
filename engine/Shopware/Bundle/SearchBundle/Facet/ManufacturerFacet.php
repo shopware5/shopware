@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerFacet implements FacetInterface, \JsonSerializable
+class ManufacturerFacet implements FacetInterface
 {
     /**
      * Flag if the facet is filtered with a condition
