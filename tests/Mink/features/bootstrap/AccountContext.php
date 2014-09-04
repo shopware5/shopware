@@ -52,4 +52,13 @@ class AccountContext extends SubContext
     {
         $this->getPage('Account')->checkAddress($type, $address);
     }
+
+    /**
+     * @Given /^I register me:$/
+     */
+    public function iRegisterMe(\Behat\Gherkin\Node\TableNode $table)
+    {
+        $this->getPage('Account')->register($table->getHash());
+    }
+
 }

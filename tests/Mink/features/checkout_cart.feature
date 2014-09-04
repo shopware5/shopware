@@ -14,8 +14,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
 
     @fastOrder @payment @delivery @noEmotion
     Scenario Outline: I can finish my order with different payment and delivery methods
-        Given only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        Given I register me:
             | field         | register[personal] | register[billing] |
             | customer_type | private            |                   |
             | salutation    | mr                 |                   |
@@ -54,8 +53,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
 
     @fastOrder @payment @shipping @noEmotion
     Scenario: I can finish my order with different payment and delivery methods
-        Given only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        Given I register me:
             | field         | register[personal] | register[billing] |
             | customer_type | private            |                   |
             | salutation    | mr                 |                   |

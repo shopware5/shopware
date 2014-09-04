@@ -14,10 +14,10 @@ class Account extends \Emotion\Account
         'paymentForm' => 'div.account--payment-form > form'
     );
 
-    protected function getRegistrationForm()
-    {
-
-    }
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'sendButton'     => array('de' => 'Weiter',  'en' => 'Continue')
+    );
 
     public function checkOrder($orderNumber, $articles, $position = 1)
     {
@@ -98,5 +98,13 @@ class Account extends \Emotion\Account
             $message = sprintf('There was a different value of the order! (%s: %s instead of %s)', $result, $check[$result][0], $check[$result][1]);
             \Helper::throwException(array($message));
         }
+    }
+
+    public function register($data)
+    {
+        $this->verifyPage();
+
+        \Helper::fillForm($this, 'registrationForm', $data);
+        \Helper::pressNamedButton2($this, 'sendButton', null, 'de');
     }
 }

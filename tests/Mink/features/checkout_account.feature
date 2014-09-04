@@ -35,8 +35,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
 
     @registration
     Scenario Outline: I can register, add articles to basket and finish my order
-        Given only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        Given I register me:
             | field                | register[personal] | register[billing] |
             | customer_type        | <customer_type>    |                   |
             | salutation           | mr                 |                   |
