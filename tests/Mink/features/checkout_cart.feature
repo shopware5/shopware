@@ -40,9 +40,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | shipping | <shippingCosts> |
             | totalSum | <totalSum>      |
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     Examples:
@@ -98,7 +96,5 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | shipping | 75,00 €  |
             | totalSum | 214,99 € |
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"

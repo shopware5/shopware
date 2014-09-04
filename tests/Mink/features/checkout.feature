@@ -42,9 +42,7 @@ Feature: Checkout articles
             | 19 %    | 6,68 € |
         And   I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     @shipping @payment
@@ -82,9 +80,7 @@ Feature: Checkout articles
             | 19 %    | 7,56 € |
         And   I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     @delivery @payment
@@ -118,9 +114,7 @@ Feature: Checkout articles
             | 19 %    | 7,10 € |
         And   I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     @currency @payment @noResponsive
@@ -136,9 +130,7 @@ Feature: Checkout articles
             | 19 %    | 6,76 € |
         And   I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     @javascript @plugin @noResponsive
@@ -152,8 +144,6 @@ Feature: Checkout articles
 
         When  I proceed to confirm
         Then  I should see "AGB und Widerrufsbelehrung"
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
         And   I log me out

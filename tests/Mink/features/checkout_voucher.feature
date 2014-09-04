@@ -62,9 +62,7 @@ Feature: Checkout articles with voucher
         Then  I should see "Gesamtsumme"
         And   I should see "AGB und Widerrufsbelehrung"
 
-        When  I submit the form "proceedCheckoutForm" on page "CheckoutConfirm" with:
-            | field | value |
-            | sAGB  | 1     |
+        When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
     Scenario: I can use a free-shipping voucher and put articles with 7% tax in my basket
