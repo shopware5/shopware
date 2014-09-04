@@ -137,13 +137,16 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
 	    // prepare form data for view
         $formData = array(
-            'id'             => (string) $form->getId(),  // intended string cast to keep compatibility
-            'name'           => $form->getName(),
-            'text'           => $form->getText(),
-            'text2'          => $form->getText2(),
-            'email'          => $form->getEmail(),
-            'email_template' => $form->getEmailTemplate(),
-            'email_subject'  => $form->getEmailSubject(),
+            'id'                => (string) $form->getId(),  // intended string cast to keep compatibility
+            'name'              => $form->getName(),
+            'text'              => $form->getText(),
+            'text2'             => $form->getText2(),
+            'email'             => $form->getEmail(),
+            'email_template'    => $form->getEmailTemplate(),
+            'email_subject'     => $form->getEmailSubject(),
+            'metaTitle'         => $form->getMetaTitle(),
+            'metaDescription'   => $form->getMetaDescription(),
+            'metaKeywords'      => $form->getMetaKeywords(),
         );
 
         $this->View()->sSupport = array_merge($formData, array(
