@@ -37,7 +37,7 @@
 							{block name="frontend_account_password_reset_content"}
 								<div class="panel--body is--wide is--align-center">
 									<p>
-										<input name="email" type="email" required="required" aria-required="true" class="password-reset--input" placeholder="{s name='PasswordLabelMail'}{/s}" />
+										<input name="email" type="email" required="required" aria-required="true" class="password-reset--input" placeholder="{s name='PasswordPlaceholderMail'}{/s}" />
 									</p>
 									<p>{s name="PasswordText"}{/s}</p>
 								</div>

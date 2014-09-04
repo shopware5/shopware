@@ -60,7 +60,7 @@
 							{* Email *}
 							{block name="frontend_newsletter_form_input_email"}
 								<div class="newsletter--email">
-									<input name="newsletter" type="email" placeholder="{s name="sNewsletterLabelMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
+									<input name="newsletter" type="email" placeholder="{s name="sNewsletterPlaceholderMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
 								</div>
 							{/block}
 
@@ -73,7 +73,7 @@
 										{block name="frontend_newsletter_form_input_salutation"}
 											<div class="newsletter--salutation">
 												<select name="salutation" class="field--select{if $sStatus.sErrorFlag.salutation} has--error{/if}">
-                                                    <option value=""{if $_POST.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterLabelSalutation'}{/s}</option>
+                                                    <option value=""{if $_POST.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
 													<option value="mr"{if $_POST.salutation eq "mr"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
 													<option value="ms"{if $_POST.salutation eq "ms"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
 												</select>
@@ -83,29 +83,29 @@
 										{* Firstname *}
 										{block name="frontend_newsletter_form_input_firstname"}
 											<div class="newsletter--firstname">
-												<input name="firstname" type="text" placeholder="{s name="NewsletterRegisterLabelFirstname"}{/s}" value="{$_POST.firstname|escape}" class="input--field{if $sStatus.sErrorFlag.firstname} has--error{/if}"/>
+												<input name="firstname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderFirstname"}{/s}" value="{$_POST.firstname|escape}" class="input--field{if $sStatus.sErrorFlag.firstname} has--error{/if}"/>
 											</div>
 										{/block}
 
 										{* Lastname *}
 										{block name="frontend_newsletter_form_input_lastname"}
 											<div class="newsletter--lastname">
-												<input name="lastname" type="text" placeholder="{s name="NewsletterRegisterLabelLastname"}{/s}" value="{$_POST.lastname|escape}" class="input--field{if $sStatus.sErrorFlag.lastname} has--error{/if}"/>
+												<input name="lastname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderLastname"}{/s}" value="{$_POST.lastname|escape}" class="input--field{if $sStatus.sErrorFlag.lastname} has--error{/if}"/>
 											</div>
 										{/block}
 
 										{* Street *}
 										{block name="frontend_newsletter_form_input_street"}
 											<div class="newsletter--street">
-												<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreetname"}{/s}" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
+												<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderStreet"}{/s}" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
 											</div>
 										{/block}
 
 										{* Zip + City *}
 										{block name="frontend_newsletter_form_input_zip_and_city"}
 											<div class="newsletter--zip-city">
-												<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
-												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCityname"}{/s}" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
+												<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
 											</div>
 										{/block}
 
