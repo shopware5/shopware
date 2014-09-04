@@ -40,4 +40,12 @@ class ShippingFreeCondition implements ConditionInterface
     {
         return 'shipping_free';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

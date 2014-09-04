@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Attribute extends Struct
+class Attribute extends Struct implements \JsonSerializable
 {
     /**
      * Internal storage which contains all struct data.
@@ -90,4 +90,13 @@ class Attribute extends Struct
     {
         return $this->storage[$name];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return $this->storage;
+    }
+
 }

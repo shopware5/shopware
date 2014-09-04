@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Media extends Extendable
+class Media extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -211,5 +211,13 @@ class Media extends Extendable
         $this->thumbnails = $thumbnails;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

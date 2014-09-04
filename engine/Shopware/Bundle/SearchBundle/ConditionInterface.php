@@ -35,7 +35,7 @@ namespace Shopware\Bundle\SearchBundle;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface ConditionInterface
+interface ConditionInterface extends \JsonSerializable
 {
     /**
      * @return string

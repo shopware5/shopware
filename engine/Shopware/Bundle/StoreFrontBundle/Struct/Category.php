@@ -31,7 +31,7 @@ use Shopware\Models\Category\Category as CategoryEntity;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Category extends Extendable
+class Category extends Extendable implements \JsonSerializable
 {
     /**
      * @var int
@@ -370,5 +370,13 @@ class Category extends Extendable
     public function displayPropertySets()
     {
         return $this->displayPropertySets;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

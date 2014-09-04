@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Product extends ListProduct
+class Product extends ListProduct implements \JsonSerializable
 {
     /**
      * @var ListProduct[]
@@ -200,5 +200,13 @@ class Product extends ListProduct
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
