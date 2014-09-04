@@ -126,14 +126,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         // Rewrite path for <link href - CSS-Styles
         $source = preg_replace_callback('#<(a|form|iframe|link|img)[^<>]*(href|src|action)="([^"]*)".*>#Umsi', array($this, 'rewriteSrc'), $source);
 
-        // User defined, runtime rewriterules
-        //todo@hl Add this as plugin config
-        //$sql = 'SELECT search, `replace` FROM s_core_rewrite ORDER BY id ASC';
-        //$replaceRules = Shopware()->Db()->fetchPairs($sql);
-        //if (!empty($replaceRules)) {
-        //    $source = preg_replace(array_keys($replaceRules), array_values($replaceRules), $source);
-        //}
-
         return $source;
     }
 
