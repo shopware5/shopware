@@ -58,21 +58,89 @@ class ContextService implements Service\ContextServiceInterface
     private $context = null;
 
     /**
+     * @var Struct\ProductContext
+     */
+    private $productContext = null;
+
+    /**
+     * @var Gateway\PriceGroupDiscountGatewayInterface
+     */
+    private $priceGroupDiscountGateway;
+
+    /**
      * @param Container $container
      * @param Gateway\CustomerGroupGatewayInterface $customerGroupGateway
      * @param Gateway\TaxGatewayInterface $taxGateway
      * @param Gateway\CountryGatewayInterface $countryGateway
+     * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
      */
     public function __construct(
         Container $container,
         Gateway\CustomerGroupGatewayInterface $customerGroupGateway,
         Gateway\TaxGatewayInterface $taxGateway,
-        Gateway\CountryGatewayInterface $countryGateway
+        Gateway\CountryGatewayInterface $countryGateway,
+        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
         $this->countryGateway = $countryGateway;
         $this->customerGroupGateway = $customerGroupGateway;
+        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get()
+    {
+        if (!$this->context) {
+            $this->initialize();
+        }
+
+        return $this->context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductContext()
+    {
+        if (!$this->productContext) {
+            $this->initializeProductContext();
+        }
+        return $this->productContext;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    private function initializeProductContext()
+    {
+        if (!$this->context) {
+            $this->initialize();
+        }
+
+        $this->productContext = Struct\ProductContext::createFromContext($this->context);
+
+        /** @var $session Session */
+        $session = $this->container->get('session');
+
+        $area    = $this->createAreaStruct($session, $this->productContext);
+        $country = $this->createCountryStruct($session, $this->productContext);
+        $state   = $this->createStateStruct($session, $this->productContext);
+        $rules   = $this->createTaxRulesStruct($this->productContext, $area, $country, $state);
+
+        $this->productContext->setArea($area);
+        $this->productContext->setCountry($country);
+        $this->productContext->setState($state);
+        $this->productContext->setTaxRules($rules);
+
+        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups(
+            $this->productContext->getCurrentCustomerGroup(),
+            $this->productContext
+        );
+
+        $this->productContext->setPriceGroups($priceGroups);
     }
 
     /**
@@ -116,30 +184,9 @@ class ContextService implements Service\ContextServiceInterface
             $this->customerGroupGateway->get($fallback)
         );
 
-        $area    = $this->createAreaStruct($session, $context);
-        $country = $this->createCountryStruct($session, $context);
-        $state   = $this->createStateStruct($session, $context);
-        $rules   = $this->createTaxRulesStruct($context, $area, $country, $state);
-
-        $context->setArea($area);
-        $context->setCountry($country);
-        $context->setState($state);
-        $context->setTaxRules($rules);
-
         $this->context = $context;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function get()
-    {
-        if (!$this->context) {
-            $this->initialize();
-        }
-
-        return $this->context;
-    }
 
     /**
      * @return string

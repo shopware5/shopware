@@ -21,6 +21,37 @@ class Converter
         return $struct;
     }
 
+    /**
+     * @param Models\Price\Group $entity
+     * @return Struct\Product\PriceGroup
+     */
+    public function convertPriceGroup(Models\Price\Group $entity)
+    {
+        $struct = new Struct\Product\PriceGroup();
+
+        $struct->setId($entity->getId());
+
+        $struct->setName($entity->getName());
+
+        $discounts = array();
+
+        foreach($entity->getDiscounts() as $discountEntity) {
+            $discount = new Struct\Product\PriceDiscount();
+
+            $discount->setId($discountEntity->getId());
+
+            $discount->setPercent($discountEntity->getDiscount());
+
+            $discount->setQuantity($discountEntity->getStart());
+
+            $discounts[] = $discount;
+        }
+
+        $struct->setDiscounts($discounts);
+
+        return $struct;
+    }
+
 
     public function convertCategory(Models\Category\Category $category)
     {

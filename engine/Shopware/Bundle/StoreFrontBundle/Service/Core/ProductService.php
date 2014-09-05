@@ -159,7 +159,7 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * @inheritdoc
      */
-    public function get($number, Struct\Context $context)
+    public function get($number, Struct\ProductContext $context)
     {
         $products = $this->getList(array($number), $context);
 
@@ -169,7 +169,7 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($numbers, Struct\Context $context)
+    public function getList($numbers, Struct\ProductContext $context)
     {
         $products = $this->productGateway->getList($numbers, $context);
 

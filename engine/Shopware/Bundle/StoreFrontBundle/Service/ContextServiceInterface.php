@@ -39,9 +39,7 @@ interface ContextServiceInterface
      * - Current language
      * - Current customer group
      * - Fallback customer group of the current shop
-     * - Current country data (area, country, state)
      * - The currency of the shop
-     * - Different tax rules for the current context
      *
      * Required conditions for the selection:
      * - Use the `shop` service of the di container for the language and current category
@@ -58,4 +56,18 @@ interface ContextServiceInterface
      * @return Struct\Context
      */
     public function get();
+
+    /**
+     * The \Shopware\Bundle\StoreFrontBundle\Struct\ProductContext requires the following data:
+     * - Data of the normal context class
+     * - Current country data (area, country, state)
+     * - Different tax rules for the current context
+     *
+     * Required conditions for the selection:
+     *  - Use the `session` service of the di container for the current user data.
+     *
+     * @return Struct\ProductContext
+     */
+    public function getProductContext();
+
 }

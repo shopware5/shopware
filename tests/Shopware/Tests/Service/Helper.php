@@ -957,7 +957,7 @@ class Helper
      * @param array $taxes
      * @param Models\Shop\Currency $currency
      *
-     * @return StoreFrontBundle\Struct\Context
+     * @return StoreFrontBundle\Struct\ProductContext
      */
     public function createContext(
         Models\Customer\Group $currentCustomerGroup,
@@ -966,7 +966,7 @@ class Helper
         Models\Customer\Group $fallbackCustomerGroup = null,
         Models\Shop\Currency $currency = null
     ) {
-        $context = new StoreFrontBundle\Struct\Context();
+        $context = new StoreFrontBundle\Struct\ProductContext();
 
         $context->setTaxRules($this->buildTaxRules($taxes));
 

@@ -566,9 +566,10 @@ class FieldHelper
     public function getPriceGroupDiscountFields()
     {
         return array(
+            'priceGroupDiscount.id as __priceGroupDiscount_id',
             'priceGroupDiscount.groupID as __priceGroupDiscount_groupID',
             'priceGroupDiscount.discount as __priceGroupDiscount_discount',
-            'priceGroupDiscount.discountstart as __priceGroupDiscount_discountstart',
+            'priceGroupDiscount.discountstart as __priceGroupDiscount_discountstart'
         );
     }
 

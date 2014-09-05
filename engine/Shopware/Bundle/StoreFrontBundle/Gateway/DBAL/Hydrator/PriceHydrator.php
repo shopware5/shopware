@@ -151,6 +151,30 @@ class PriceHydrator extends Hydrator
     }
 
     /**
+     * @param $data
+     * @return Struct\Product\PriceGroup
+     */
+    public function hydratePriceGroup($data)
+    {
+        $group = new Struct\Product\PriceGroup();
+
+        $first = $data[0];
+
+        $group->setId((int) $first['__priceGroup_id']);
+
+        $group->setName($first['__priceGroup_description']);
+
+        $discounts = array();
+        foreach($data as $row) {
+            $discounts[] = $this->hydratePriceDiscount($row);
+        }
+
+        $group->setDiscounts($discounts);
+
+        return $group;
+    }
+
+    /**
      * @param array $data
      * @return Struct\Product\PriceDiscount
      */
@@ -158,7 +182,7 @@ class PriceHydrator extends Hydrator
     {
         $discount = new Struct\Product\PriceDiscount();
 
-        $discount->setId((int) $data['__priceGroupDiscount_groupID']);
+        $discount->setId((int) $data['__priceGroupDiscount_id']);
 
         $discount->setPercent((float) $data['__priceGroupDiscount_discount']);
 
