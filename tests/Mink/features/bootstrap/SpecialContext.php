@@ -130,7 +130,7 @@ class SpecialContext extends SubContext
         $locators = array('contentBlock');
         $elements = Helper::findElements($page, $locators, $this->getPage('Homepage')->cssLocator);
 
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        $language = Helper::getCurrentLanguage($page);
         $elements['contentBlock']->clickLink($page->namedSelectors[$linkName][$language]);
     }
 
@@ -152,7 +152,7 @@ class SpecialContext extends SubContext
             $element = $element->setInstance($position);
         }
 
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
         $element->clickLink($element->namedSelectors[$linkName][$language]);
     }
 

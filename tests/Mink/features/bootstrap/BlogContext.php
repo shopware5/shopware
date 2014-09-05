@@ -18,10 +18,9 @@ class BlogContext extends SubContext
      */
     public function iClickToReadTheBlogArticleOnPosition($position)
     {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
         /** @var \Emotion\Blog $page */
         $page = $this->getPage('Blog');
+        $language = Helper::getCurrentLanguage($page);
 
         /** @var MultipleElement $blogBoxes */
         $blogBoxes = $this->getElement('BlogBox');
