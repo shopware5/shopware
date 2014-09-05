@@ -110,7 +110,8 @@ class Repository extends ModelRepository
 
         $builder->select(array('shop', 'template'))
             ->innerJoin('shop.template', 'template')
-            ->where('template.version >= 3');
+            ->where('template.version >= 3')
+            ->andWhere('shop.main IS NULL');
 
         if ($filter) {
             $builder->addFilter($filter);

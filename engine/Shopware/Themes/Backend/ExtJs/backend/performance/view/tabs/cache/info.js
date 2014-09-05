@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
     refreshCacheData: function() {
         var me = this;
 
-        me.store.reload();
+        me.store.load();
     },
 
     /**
