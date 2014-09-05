@@ -28,13 +28,13 @@
         "symfony/console": "2.5.4",
         "monolog/monolog": "1.6.0",
         "ircmaxell/password-compat": "1.0.3",
-        "rhumsaa/array_column": "~1.1",
+        "rhumsaa/array_column": "1.1.2",
         "doctrine/common": "2.4.2",
         "doctrine/dbal": "2.4.2",
         "doctrine/orm": "2.4.4",
-        "oyejorge/less.php": "~1.5",
+        "oyejorge/less.php": "1.7.0.2",
         "mobiledetect/mobiledetectlib": "2.8.4",
-        "guzzlehttp/guzzle": "~4.2"
+        "guzzlehttp/guzzle": "4.2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "@stable",
