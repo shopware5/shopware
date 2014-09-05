@@ -94,6 +94,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->getQuery()
             ->select('variants.ordernumber as number')

@@ -95,6 +95,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->getQuery($context);
 
@@ -129,6 +130,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->getQuery($context);
 

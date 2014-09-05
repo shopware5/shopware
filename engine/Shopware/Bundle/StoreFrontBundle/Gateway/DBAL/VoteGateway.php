@@ -90,6 +90,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
