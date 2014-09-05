@@ -49,18 +49,26 @@ class VoteHydrator extends Hydrator
             $total += $row['total'];
         }
 
-        usort($data, function($a, $b) {
-            if ($a['points'] == $b['points']) {
-                return 0;
-            }
-            return ($a['points'] > $b['points']) ? -1 : 1;
-        });
+        $this->sortByPointsDescending($data);
 
         $struct->setAverage($points / $total * 2);
         $struct->setCount($total);
         $struct->setPointCount($data);
 
         return $struct;
+    }
+
+    /**
+     * @param $data
+     */
+    private function sortByPointsDescending($data)
+    {
+        usort($data, function($a, $b) {
+            if ($a['points'] == $b['points']) {
+                return 0;
+            }
+            return ($a['points'] > $b['points']) ? -1 : 1;
+        });
     }
 
     /**
