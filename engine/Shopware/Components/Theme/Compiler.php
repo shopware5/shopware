@@ -77,11 +77,6 @@ class Compiler
     private $service;
 
     /**
-     * @var ModelManager
-     */
-    private $entityManager;
-
-    /**
      * @param $rootDir
      * @param LessCompiler $compiler
      * @param PathResolver $pathResolver
@@ -89,7 +84,6 @@ class Compiler
      * @param Service $service
      * @param Js $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
-     * @param \Shopware\Components\Model\ModelManager $entityManager
      */
     function __construct(
         $rootDir,
@@ -98,8 +92,7 @@ class Compiler
         Inheritance $inheritance,
         Service $service,
         Js $jsCompressor,
-        \Enlight_Event_EventManager $eventManager,
-        ModelManager $entityManager
+        \Enlight_Event_EventManager $eventManager
     )
     {
         $this->rootDir = $rootDir;
@@ -109,7 +102,6 @@ class Compiler
         $this->inheritance = $inheritance;
         $this->pathResolver = $pathResolver;
         $this->jsCompressor = $jsCompressor;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -648,26 +640,6 @@ class Compiler
             }
         }
         return false;
-    }
-
-    /**
-     *
-     * Returns all shops which have a configured theme.
-     *
-     * @param array $filter
-     * @return Shop\Shop[]
-     */
-    private function getShopsWithThemes($filter = null)
-    {
-        $repository = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
-
-        $query = $repository->getShopsWithThemes($filter);
-
-        $shops = $query->getResult(
-            AbstractQuery::HYDRATE_OBJECT
-        );
-
-        return $shops;
     }
 
     /**
