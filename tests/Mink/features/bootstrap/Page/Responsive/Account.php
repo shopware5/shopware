@@ -102,11 +102,14 @@ class Account extends \Emotion\Account
         }
     }
 
+    /**
+     * @param $data
+     */
     public function register($data)
     {
         $this->verifyPage();
 
         \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton2($this, 'sendButton', null, 'de');
+        \Helper::pressNamedButton2($this, 'sendButton');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 use Behat\Mink\Element\Element;
 use \Behat\Mink\Element\TraversableElement;
+use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Helper
 {
@@ -312,8 +313,7 @@ class Helper
             }
         }
 
-        $language = $context->getElement('LanguageSwitcher')->getCurrentLanguage();
-
+        $language = self::getCurrentLanguage($parent);
         $parent->clickLink($locatorArray[$key][$language]);
     }
 
@@ -334,7 +334,7 @@ class Helper
         }
 
         if(empty($language)) {
-            $language = $page->getElement('LanguageSwitcher')->getCurrentLanguage();
+            $language = self::getCurrentLanguage($page);
         }
 
         $page->pressButton($locatorArray[$key][$language]);
@@ -396,5 +396,30 @@ class Helper
                 $field->setValue($fieldValue);
             }
         }
+    }
+
+    /**
+     * Helper function to get the current language ('de' or 'en')
+     * @param Page $page
+     * @return string
+     */
+    public static function getCurrentLanguage(Page $page)
+    {
+        $shop = null;
+        $metas = $page->findAll('css', 'meta');
+
+        /** @var \SensioLabs\Behat\PageObjectExtension\PageObject\Element $meta */
+        foreach($metas as $meta) {
+            if ($meta->getAttribute('name') === 'application-name') {
+                $shop = $meta->getAttribute('content');
+                break;
+            }
+        }
+
+        if($shop === 'English') {
+            return 'en';
+        }
+
+        return 'de';
     }
 }

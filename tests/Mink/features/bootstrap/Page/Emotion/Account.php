@@ -298,13 +298,16 @@ class Account extends Page
         $this->getElement('Account'.$type)->checkAddress($address);
     }
 
+    /**
+     * @param $data
+     */
     public function register($data)
     {
         if ($this->verifyPage('login') === true) {
-            \Helper::pressNamedButton2($this, 'registerButton', null, 'de');
+            \Helper::pressNamedButton2($this, 'registerButton');
         }
 
         \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton2($this, 'sendButton', null, 'de');
+        \Helper::pressNamedButton2($this, 'sendButton');
     }
 }

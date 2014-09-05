@@ -48,11 +48,9 @@ class CheckoutContext extends SubContext
      */
     public function iRemoveTheArticleOnPosition($position)
     {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
         /** @var \Emotion\CheckoutCart $page */
         $page = $this->getPage('CheckoutCart');
-        $offset = $page->cartPositionFirst;
+        $language = Helper::getCurrentLanguage($page);
 
         /** @var MultipleElement $articleBoxes */
         $cartPositions = $this->getElement('CartPosition');
