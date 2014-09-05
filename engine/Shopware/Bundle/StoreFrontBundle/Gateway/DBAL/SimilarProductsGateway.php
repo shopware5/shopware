@@ -77,6 +77,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -145,6 +146,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $categoryId = 1;
         if ($context->getShop() && $context->getShop()->getCategory()) {

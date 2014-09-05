@@ -136,6 +136,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $subQuery = $this->entityManager->getDBALQueryBuilder();
 

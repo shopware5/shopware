@@ -90,6 +90,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 

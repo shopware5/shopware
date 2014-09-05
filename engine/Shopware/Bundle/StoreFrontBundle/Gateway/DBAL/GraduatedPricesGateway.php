@@ -92,6 +92,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
