@@ -168,7 +168,7 @@ Ext.define('Shopware.model.Helper', {
             }
 
             //relation type has been set? if isn't matched continue with next condition
-            if (condition.relation.toLowerCase() !== association.relation.toLowerCase()) {
+            if (condition.relation && condition.relation.toLowerCase() !== association.relation.toLowerCase()) {
                 return true;
             }
 
