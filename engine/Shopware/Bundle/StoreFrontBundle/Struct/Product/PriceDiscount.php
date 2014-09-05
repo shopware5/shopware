@@ -45,11 +45,6 @@ class PriceDiscount extends Extendable implements \JsonSerializable
     protected $customerGroup;
 
     /**
-     * @var PriceGroup
-     */
-    protected $priceGroup;
-
-    /**
      * @var int
      */
     protected $quantity;
@@ -89,22 +84,6 @@ class PriceDiscount extends Extendable implements \JsonSerializable
     public function getCustomerGroup()
     {
         return $this->customerGroup;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup $priceGroup
-     */
-    public function setPriceGroup($priceGroup)
-    {
-        $this->priceGroup = $priceGroup;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup
-     */
-    public function getPriceGroup()
-    {
-        return $this->priceGroup;
     }
 
     /**

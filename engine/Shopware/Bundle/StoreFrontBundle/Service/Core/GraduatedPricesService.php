@@ -59,7 +59,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContext $context)
     {
         $prices = $this->getList(array($product), $context);
 
@@ -69,7 +69,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ProductContext $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
@@ -108,18 +108,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
             $prices = array_merge($prices, $fallbackPrices);
         }
 
-        /**
-         * checks if one of the products has a configured price group and loads the different price group discounts.
-         */
-        $discounts = $this->priceGroupDiscountGateway->getProductsDiscounts(
-            $products,
-            $context->getCurrentCustomerGroup(),
-            $context
-        );
-
-        if (empty($discounts)) {
-            return $prices;
-        }
+        $priceGroups = $context->getPriceGroups();
 
         /**
          * If one of the products has a configured price group,
@@ -129,22 +118,28 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
          * on the first graduated price of the product.
          */
         foreach ($products as $product) {
-            $number = $product->getNumber();
-
-            if (!array_key_exists($number, $discounts)) {
-                continue;
-            }
-            if (empty($discounts[$number])) {
+            if (!$product->getPriceGroup()) {
                 continue;
             }
 
-            $productDiscounts = $discounts[$number];
-            $firstGraduation = array_shift($prices[$number]);
+            if (!isset($prices[$product->getNumber()])) {
+                continue;
+            }
 
-            $prices[$number] = $this->buildDiscountGraduations(
+            $priceGroupId = $product->getPriceGroup()->getId();
+            if (!isset($priceGroups[$priceGroupId])) {
+                continue;
+            }
+
+            $priceGroup = $priceGroups[$priceGroupId];
+
+
+            $firstGraduation = array_shift($prices[$product->getNumber()]);
+
+            $prices[$product->getNumber()] = $this->buildDiscountGraduations(
                 $firstGraduation,
                 $context->getCurrentCustomerGroup(),
-                $productDiscounts
+                $priceGroup->getDiscounts()
             );
         }
 

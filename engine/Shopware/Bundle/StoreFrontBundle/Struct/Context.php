@@ -36,11 +36,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 class Context extends Extendable implements \JsonSerializable
 {
     /**
-     * @var Tax[]
-     */
-    protected $taxRules;
-
-    /**
      * Contains the current customer group for the store front.
      * If the customer isn't logged in, the current customer group
      * is equal to the fallback customer group of the shop.
@@ -81,21 +76,6 @@ class Context extends Extendable implements \JsonSerializable
      * @var Shop
      */
     protected $shop;
-
-    /**
-     * @var Area
-     */
-    protected $area;
-
-    /**
-     * @var Country
-     */
-    protected $country;
-
-    /**
-     * @var State
-     */
-    protected $state;
 
     /**
      * @var string
@@ -174,81 +154,6 @@ class Context extends Extendable implements \JsonSerializable
         $this->shop = $shop;
 
         return $this;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\Area
-     */
-    public function getArea()
-    {
-        return $this->area;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country\Area $area
-     */
-    public function setArea($area)
-    {
-        $this->area = $area;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\State
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country\State $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax[]
-     */
-    public function getTaxRules()
-    {
-        return $this->taxRules;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Tax[] $taxRules
-     */
-    public function setTaxRules($taxRules)
-    {
-        $this->taxRules = $taxRules;
-    }
-
-    /**
-     * @param $taxId
-     * @return Tax
-     */
-    public function getTaxRule($taxId)
-    {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
     }
 
     /**

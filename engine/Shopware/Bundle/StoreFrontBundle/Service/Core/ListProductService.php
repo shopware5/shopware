@@ -99,7 +99,7 @@ class ListProductService implements Service\ListProductServiceInterface
     /**
      * @inheritdoc
      */
-    public function get($number, Struct\Context $context)
+    public function get($number, Struct\ProductContext $context)
     {
         $products = $this->getList(array($number), $context);
 
@@ -109,7 +109,7 @@ class ListProductService implements Service\ListProductServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList(array $numbers, Struct\Context $context)
+    public function getList(array $numbers, Struct\ProductContext $context)
     {
         $products = $this->productGateway->getList($numbers, $context);
 
@@ -154,10 +154,10 @@ class ListProductService implements Service\ListProductServiceInterface
 
     /**
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ProductContext $context
      * @return Struct\ListProduct[]
      */
-    private function filterValidProducts($products, Struct\Context $context)
+    private function filterValidProducts($products, Struct\ProductContext $context)
     {
         $valid = array();
         foreach($products as $product) {
@@ -174,10 +174,10 @@ class ListProductService implements Service\ListProductServiceInterface
      * the provided context.
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ProductContext $context
      * @return bool
      */
-    private function isProductValid(Struct\ListProduct $product, Struct\Context $context)
+    private function isProductValid(Struct\ListProduct $product, Struct\ProductContext $context)
     {
         return !in_array(
             $context->getCurrentCustomerGroup()->getId(),

@@ -58,6 +58,7 @@
             <argument type="service" id="customer_group_gateway"/>
             <argument type="service" id="tax_gateway"/>
             <argument type="service" id="country_gateway"/>
+            <argument type="service" id="price_group_discount_gateway" />
         </service>
 
         <service id="list_product_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService">

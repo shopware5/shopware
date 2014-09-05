@@ -3,11 +3,12 @@
 namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Tests\Service\TestCase;
 
 class CheapestPriceTest extends TestCase
 {
-    private function getConfiguratorProduct($number, Context $context)
+    private function getConfiguratorProduct($number, ProductContext $context)
     {
         $product = $this->helper->getSimpleProduct(
             $number,
@@ -224,6 +225,10 @@ class CheapestPriceTest extends TestCase
         $data = $this->getConfiguratorProduct($number, $context);
 
         $priceGroup = $this->helper->createPriceGroup();
+        $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
+        $context->setPriceGroups(array(
+            $priceGroupStruct->getId() => $priceGroupStruct
+        ));
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
@@ -247,6 +252,10 @@ class CheapestPriceTest extends TestCase
         $data = $this->getConfiguratorProduct($number, $context);
 
         $priceGroup = $this->helper->createPriceGroup();
+        $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
+        $context->setPriceGroups(array(
+            $priceGroupStruct->getId() => $priceGroupStruct
+        ));
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
