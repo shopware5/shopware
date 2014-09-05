@@ -96,6 +96,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->addSelect($this->fieldHelper->getPriceGroupDiscountFields())

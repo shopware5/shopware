@@ -70,6 +70,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -87,7 +88,6 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             ->groupBy('vote.articleID')
             ->addGroupBy('vote.points')
             ->orderBy('vote.articleID', 'ASC')
-            ->addOrderBy('vote.points', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

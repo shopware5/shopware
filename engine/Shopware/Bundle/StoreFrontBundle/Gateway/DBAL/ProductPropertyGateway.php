@@ -90,6 +90,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
+        $ids = array_unique($ids);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 

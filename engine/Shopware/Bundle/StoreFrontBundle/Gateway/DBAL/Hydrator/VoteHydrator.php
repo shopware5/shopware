@@ -43,11 +43,18 @@ class VoteHydrator extends Hydrator
 
         $points = 0;
         $total = 0;
-
+        
         foreach ($data as $row) {
             $points += $row['points'] * $row['total'];
             $total += $row['total'];
         }
+
+        usort($data, function($a, $b) {
+            if ($a['points'] == $b['points']) {
+                return 0;
+            }
+            return ($a['points'] > $b['points']) ? -1 : 1;
+        });
 
         $struct->setAverage($points / $total * 2);
         $struct->setCount($total);
