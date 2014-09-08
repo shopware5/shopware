@@ -13,6 +13,7 @@ class CheckoutConfirm extends Page
     public $cssLocator = array(
         'pageIdentifier'  => 'div#confirm',
         'deliveryForm' => 'form.payment',
+        'deliveryFormSubmit' => 'form.payment input[type="submit"]',
         'proceedCheckoutForm' => 'div.additional_footer > form',
         'orderNumber' => 'div#finished > div.orderdetails > p'
     );
@@ -54,6 +55,33 @@ class CheckoutConfirm extends Page
     public function proceedToCheckout()
     {
         $this->checkField('sAGB');
-        \Helper::pressNamedButton2($this, 'confirmButton', null, 'de');
+        \Helper::pressNamedButton($this, 'confirmButton');
+    }
+
+    /**
+     * Changes the payment method
+     * @param array   $data
+     */
+    public function changePayment($data = array())
+    {
+        $element = $this->getElement('CheckoutPayment');
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::clickNamedLink($element, 'changeButton', null, $language);
+
+        $account = $this->getPage('Account');
+        \Helper::fillForm($account, 'paymentForm', $data);
+        \Helper::pressNamedButton($account, 'changePaymentButton');
+    }
+
+    /**
+     * @param array $data
+     */
+    public function changeShipping($data = array())
+    {
+        \Helper::fillForm($this, 'deliveryForm', $data);
+
+        $locators = array('deliveryFormSubmit');
+        $elements = \Helper::findElements($this, $locators);
+        $elements['deliveryFormSubmit']->press();
     }
 }

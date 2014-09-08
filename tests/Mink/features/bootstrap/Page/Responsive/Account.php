@@ -18,7 +18,8 @@ class Account extends \Emotion\Account
 
     /** @var array $namedSelectors */
     public $namedSelectors = array(
-        'sendButton'     => array('de' => 'Weiter',  'en' => 'Continue')
+        'sendButton'            => array('de' => 'Weiter',                      'en' => 'Continue'),
+        'changePaymentButton'   => array('de' => 'Ändern',                      'en' => 'Change')
     );
 
     public function checkOrder($orderNumber, $articles, $position = 1)
@@ -110,6 +111,6 @@ class Account extends \Emotion\Account
         $this->verifyPage();
 
         \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton2($this, 'sendButton');
+        \Helper::pressNamedButton($this, 'sendButton');
     }
 }

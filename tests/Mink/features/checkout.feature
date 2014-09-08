@@ -28,13 +28,7 @@ Feature: Checkout articles
             | 19 %    | 6,68 € |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
-        And   I follow the link "changeButton" of the element "CheckoutPayment"
-        And   only on "Emotion" template "I submit the form 'paymentForm' on page 'Account' with:" :
-            | field   | register |
-            | payment | 3        |
-        And   only on "Responsive" template "I submit the form 'shippingPaymentForm' on page 'CheckoutConfirm' with:" :
-            | field   | value |
-            | payment | 3     |
+        And   I change the payment method to 3
         Then  I should see "Nachnahme"
         And   only on "Emotion" template "the cart should contain 1 articles with a value of '37,95 €'"
         And   the total sum should be "41,85 €" when shipping costs are "3,90 €" and VAT is:
@@ -66,13 +60,7 @@ Feature: Checkout articles
             | percent | value  |
             | 19 %    | 6,76 € |
 
-        Given I follow the link "changeButton" of the element "CheckoutPayment"
-        And   only on "Emotion" template "I submit the form 'paymentForm' on page 'Account' with:" :
-            | field   | register |
-            | payment | 4        |
-        And   only on "Responsive" template "I submit the form 'shippingPaymentForm' on page 'CheckoutConfirm' with:" :
-            | field   | value |
-            | payment | 4     |
+        Given I change the payment method to 4
         Then  I should see "Rechnung"
         And   I should see "Zuschlag für Zahlungsart"
         Then  the total sum should be "47,37 €" when shipping costs are "3,90 €" and VAT is:
@@ -87,25 +75,13 @@ Feature: Checkout articles
     Scenario: I can change the delivery to Express and pay via debit
         Given only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
 
-        When  only on "Emotion" template "I submit the form 'deliveryForm' on page 'CheckoutConfirm' with:" :
-            | field     | value |
-            | sDispatch | 14    |
-        And   I follow the link "changeButton" of the element "CheckoutPayment"
-        And   only on "Emotion" template "I submit the form 'paymentForm' on page 'Account' with:" :
+        When  I change the payment method to 2:
             | field             | value          |
-            | register[payment] | 2              |
             | sDebitAccount     | 123456789      |
             | sDebitBankcode    | 1234567        |
             | sDebitBankName    | Shopware Bank  |
             | sDebitBankHolder  | Max Mustermann |
-        And   only on "Responsive" template "I submit the form 'shippingPaymentForm' on page 'CheckoutConfirm' with:" :
-            | field            | value          |
-            | payment          | 2              |
-            | sDebitAccount    | 123456789      |
-            | sDebitBankcode   | 1234567        |
-            | sDebitBankName   | Shopware Bank  |
-            | sDebitBankHolder | Max Mustermann |
-            | sDispatch        | 14             |
+        And   I change the shipping method to 14
 
         Then  I should see "Lastschrift"
         And   I should see "Abschlag für Zahlungsart"
