@@ -1,5 +1,7 @@
 <?php
+
 use Shopware\Components\CacheManager;
+use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware 4
@@ -63,6 +65,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getConfigCacheInfo(),
             $this->cacheManager->getHttpCacheInfo($this->Request()),
             $this->cacheManager->getTemplateCacheInfo(),
+            $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
             $this->cacheManager->getDoctrineFileCacheInfo(),
             $this->cacheManager->getDoctrineProxyCacheInfo()
@@ -124,12 +127,46 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearTemplateCache();
         }
+        if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
+            $this->cacheManager->clearThemeCache();
+        }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearHttpCache();
         }
         if ($cache['proxy'] == 'on') {
             $this->cacheManager->clearProxyCache();
         }
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
+    }
+
+    /**
+     * Warms up the cache for a theme shop
+     */
+    public function themeCacheWarmUpAction()
+    {
+        $shopId = $this->Request()->get('shopId');
+
+        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        $query = $repository->getShopsWithThemes(array('shop.id' => $shopId));
+
+        $shop = $query->getResult(
+            AbstractQuery::HYDRATE_OBJECT
+        )[0];
+
+        if (!$shop) {
+            $this->View()->assign(array(
+                'success' => false
+            ));
+            return;
+        }
+
+        /** @var $compiler \Shopware\Components\Theme\Compiler */
+        $compiler = $this->container->get('theme_compiler');
+        $compiler->preCompile($shop);
 
         $this->View()->assign(array(
             'success' => true

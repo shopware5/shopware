@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.fields.Topseller',
         'tabs.settings.fields.Search',
         'tabs.settings.fields.HttpCache',
+        'tabs.settings.fields.ThemeCache',
         'tabs.settings.fields.Filter',
         'tabs.settings.fields.Categories',
         'tabs.settings.fields.Various',

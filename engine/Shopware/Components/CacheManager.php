@@ -117,7 +117,13 @@ class CacheManager
         if ($cacheDir != $compileDir) {
             $this->clearDirectory($cacheDir);
         }
+    }
 
+    /**
+     * Clear theme cache
+     */
+    public function clearThemeCache()
+    {
         $this->clearDirectory($this->themePathResolver->getCacheDirectory());
     }
 
@@ -255,7 +261,7 @@ class CacheManager
     }
 
     /**
-     * Returns cache information
+     * Returns template cache information
      *
      * @return array
      */
@@ -263,7 +269,21 @@ class CacheManager
     {
         $dir = $this->container->getParameter('shopware.template.compileDir');
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Smarty templates';
+        $info['name'] = 'Shopware templates';
+
+        return $info;
+    }
+
+    /**
+     * Returns template cache information
+     *
+     * @return array
+     */
+    public function getThemeCacheInfo()
+    {
+        $dir = $this->container->get('theme_path_resolver')->getCacheDirectory();
+        $info = $this->getDirectoryInfo($dir);
+        $info['name'] = 'Shopware theme';
 
         return $info;
     }

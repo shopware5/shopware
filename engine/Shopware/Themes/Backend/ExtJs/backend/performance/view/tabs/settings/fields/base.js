@@ -77,11 +77,22 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Base', {
      * @param html
      * @returns Ext.container.Container
      */
-    createDecriptionContainer: function(html) {
-        return  Ext.create('Ext.container.Container', {
+    createDescriptionContainer: function(html) {
+        return Ext.create('Ext.container.Container', {
             style: 'color: #999; font-style: italic; margin: 0 0 15px 0;',
             html: html
         });
+    },
+
+    /**
+     * Deprecated due to typo in name
+     * @param html
+     * @returns Ext.container.Container
+     */
+    createDecriptionContainer: function(html) {
+        var me = this;
+
+        return me.createDescriptionContainer(html);
     }
 
 });

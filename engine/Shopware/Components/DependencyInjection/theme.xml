@@ -5,13 +5,14 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="JSMin" class="JSMin" />
-        <service id="less_compiler" class="Less_Parser" />
-        <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
+        <service id="less_compiler" alias="oyejorge_compiler" />
 
-        <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js">
-            <argument type="service" id="JSMin" />
+        <service id="oyejorge_compiler" class="Shopware\Components\Theme\LessCompiler\Oyejorge">
+            <argument type="service" id="oyejorge_compiler_lib" />
         </service>
+        <service id="oyejorge_compiler_lib" class="Less_Parser" />
+
+        <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
 
         <service id="theme_service" class="Shopware\Components\Theme\Service">
             <argument type="service" id="models" />

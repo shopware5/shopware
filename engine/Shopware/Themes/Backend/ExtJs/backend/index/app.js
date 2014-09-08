@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.Index', {
     controllers:[
         'Main',
         'Widgets',
-        'ErrorReporter'
+        'ErrorReporter',
+        'ThemeCacheWarmUp'
     ],
 
     /**
@@ -86,7 +87,8 @@ Ext.define('Shopware.apps.Index', {
         'widgets.Notice',
         'widgets.Merchant',
         'widgets.Base',
-        'merchant.Window'
+        'merchant.Window',
+        'themeCache.ThemeCacheWarmUp'
     ],
 
     /**
@@ -102,7 +104,8 @@ Ext.define('Shopware.apps.Index', {
         'Visitors',
         'Orders',
         'Merchant',
-        'MerchantMail'
+        'MerchantMail',
+        'ThemeCacheWarmUp'
     ],
 
     /**
@@ -111,7 +114,8 @@ Ext.define('Shopware.apps.Index', {
      */
     stores: [
         'Widget',
-        'WidgetSettings'
+        'WidgetSettings',
+        'ThemeCacheWarmUp'
     ]
 });
 

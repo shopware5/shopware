@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	extend: 'Ext.app.Controller',
 
 	/**
-	 * Creates the neccessary event listener for this
+	 * Creates the necessary event listener for this
 	 * specific controller and opens a new Ext.window.Window
 	 * to display the subapplication
      *
