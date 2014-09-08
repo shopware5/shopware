@@ -98,6 +98,16 @@
     .pagination--display {
         float: right;
     }
+
+    .pagination--link {
+        &.is--active {
+            background: #fff;
+        }
+
+        [class^="icon--"] {
+            margin: 0;
+        }
+    }
 }
 
 .account--orders-overview {
@@ -264,20 +274,20 @@
     .unitize(8, 16, top);
     display: inline-block;
     position: relative;
-
+    
     &.status--0,  //The order has not been processed yet.
     &.status--1,  //The order is in process
     &.status--3,  //Partially completed
     &.status--6 { //The order has been sent in part
         background: @deliveryInfoText;
     }
-
+    
     &.status--2,  //Completed
     &.status--5,  //Ready for shipping
     &.status--7 { //The order has been sent
         background: @deliveryAvailableText;
     }
-
+    
     &.status--4,  //The order has been cancelled
     &.status--8 { //Clarification needed
         background: @deliveryNotAvailableText;
@@ -357,8 +367,7 @@
 
         .categories--headline,
         .categories--navigation,
-        .shop-sites--headline,
-        .shop-sites--navigation {
+        .shop-sites--container {
             display: none;
         }
 
@@ -665,10 +674,10 @@
     }
 
     // Account error message margin
-	.account--error,
-	.account--success {
-		.unitize-margin(0, 0, 20, 0);
-	}
+    .account--error,
+    .account--success {
+        .unitize-margin(0, 0, 20, 0);
+    }
 
     .is--act-partnerStatistic {
         .content-main--inner {
@@ -755,9 +764,9 @@
         .unitize-padding(45, 0, 0, 0);
     }
 
-	// Account error message margin
-	.account--error,
-	.account--success {
-		.unitize-margin(0, 0, 20, 0);
-	}
+    // Account error message margin
+    .account--error,
+    .account--success {
+        .unitize-margin(0, 0, 20, 0);
+    }
 }

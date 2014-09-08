@@ -5,7 +5,7 @@ input[type="search"],
 input[type="password"],
 input[type="number"],
 input[type="email"],
-input[type="tel"]{
+input[type="tel"] {
     @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
     .appearance(none);
     .border-radius(3px);
@@ -27,9 +27,9 @@ input[type="tel"]{
     }
 
     &.has--error {
-        color: @errorText;
-        background: @errorBackground;
-        border-color: @errorBorderColor;
+        color: @inputErrorColor;
+        background: @inputErrorBackground;
+        border-color: @inputErrorColor;
     }
 
     // Input field spacing
@@ -65,17 +65,18 @@ label.has--error {
     .box-sizing();
     .unitize-width(290);
     .unitize(44, 16, line-height);
-    .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
-    .linear-gradient(@lightGradientStart, @primaryLightBackgroundColor);
+    .linear-gradient(@lightGradientStart, @primaryBackgroundColor);
     .clearfix();
     display: inline-block;
     position: relative;
-    border: 1px solid @borderColor;
+    border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
     overflow: hidden;
     cursor: pointer;
 
     &:hover {
-        .linear-gradient(@primaryLightBackgroundColor, @lightGradientStart);
+        color: @primaryColor;
+        background: #fff;
     }
 
     &.js--is--focused {
@@ -104,7 +105,7 @@ label.has--error {
     .js--fancy-select-text {
         .unitize-padding(0, 40, 0, 10);
         border-right: 1px solid #fff;
-        font-weight: bold;
+        width: 100%;
 
         // CSS truncating
         white-space: nowrap;
@@ -134,16 +135,32 @@ label.has--error {
 
     // Error state
     &.has--error {
-        color: @errorText;
-        border-color: @errorBorderColor;
-        background: @errorBackground;
+        color: @inputErrorColor;
+        border-color: @inputErrorColor;
+        background: @inputErrorBackground;
 
         .js--fancy-select-trigger {
-            border-color: @errorBorderColor;
+            border-color: @inputErrorColor;
         }
 
         .js--fancy-select-text {
-            border-color: lighten(@errorBorderColor, 10%);
+            border-color: lighten(@inputErrorColor, 40%);
+        }
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    /* Standard input fields. */
+    .input--field {
+        .unitize(15, 16, margin-bottom);
+
+        .input--field-zipcode {
+            margin-right: 2%;
+            width: 20%;
+        }
+        .input--field-city {
+            width: 78%;
         }
     }
 }
@@ -158,7 +175,6 @@ label.has--error {
     .js--fancy-select {
         .unitize-width(290);
         .unitize(34, 16, line-height);
-        .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 
         select {
             .unitize-height(34);

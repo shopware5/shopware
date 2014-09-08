@@ -130,7 +130,7 @@ See the documentation of the child elements for additional information.
     display: block;
 
     &.has--border {
-        .unitize-margin(10, 0 , 0, 0);
+        .unitize-margin(10, 0, 0, 0);
         .unitize-padding(10, 0, 0, 0);
         border-top: 1px solid @borderColor;
     }
@@ -456,14 +456,12 @@ See the documentation of the child elements for additional information.
         color: @primaryTextColor;
         font-weight: normal;
         text-align: center;
-        border: 1px solid #c7cfda;
         .unitize-padding(0, 10);
         .unitize-margin(0, 1);
         .unitize(14, 16, font-size);
         .unitize(26, 16, line-height);
         .border-radius(3px);
         .linear-gradient(#ffffff, #edeff2);
-        .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
 
         [class^="icon--"] {
             .unitize(10, 16, font-size);
@@ -578,7 +576,9 @@ See the documentation of the child elements for additional information.
 }
 
 .js--mobile-tab-panel {
-    .tab--content { display: none; }
+    .tab--content {
+        display: none;
+    }
     .navigation--entry {
         .unitize-margin(0, 0, 6, 0);
         display: block;
@@ -606,7 +606,10 @@ See the documentation of the child elements for additional information.
             font-weight: bold;
         }
 
-        &.is--active { top: 0; cursor: default }
+        &.is--active {
+            top: 0;
+            cursor: default
+        }
 
         &.is--active:after,
         &.is--active::after {

@@ -19,7 +19,7 @@
     }
 
     .register--check {
-        .unitize(8,16, padding-bottom);
+        .unitize(8, 16, padding-bottom);
     }
 
     .register--action {
@@ -37,22 +37,22 @@
     }
 
     .register--required-info {
-	    .unitize-margin(0, 26, 16);
-	    .unitize(14, 16, font-size);
+        .unitize-margin(0, 26, 16);
+        .unitize(14, 16, font-size);
     }
 
     .js--fancy-select {
-	    .unitize(10, 16, margin-bottom);
+        .unitize(10, 16, margin-bottom);
         width: 100%;
     }
 
     .register--field {
-	    .unitize(10, 16, margin-bottom);
-	    width: 100%;
+        .unitize(10, 16, margin-bottom);
+        width: 100%;
     }
 
     .register--customertype {
-	    display: block;
+        display: block;
     }
 
     .register--zip-city {
@@ -72,14 +72,14 @@
     }
 
     .birthday--label {
-	    .clearfix();
+        .clearfix();
         .unitize-margin(0, 0, 5, 0);
         display: block;
         font-weight: bold;
     }
 
     .register--password-description {
-	    .unitize(20, 16, padding-bottom);
+        .unitize(20, 16, padding-bottom);
     }
 
     .register--birthdate {
@@ -99,8 +99,8 @@
 
     .register--privacy {
         .unitize-padding(20, 20);
-	    .unitize-margin(0, 20, 20);
-	    .unitize(14, 16, font-size);
+        .unitize-margin(0, 20, 20);
+        .unitize(14, 16, font-size);
         border: 1px solid @borderColor;
 
         input[type="checkbox"] {
@@ -110,8 +110,8 @@
 
     // Personal information fieldset
     .register--personal {
-	    .unitize(10, 16, padding-bottom);
-	    .clearfix();
+        .unitize(10, 16, padding-bottom);
+        .clearfix();
     }
 }
 
@@ -168,20 +168,22 @@
 .steps--container {
     background: transparent;
 }
+
 .steps--content {
+    .unitize(16, 16, padding-top);
     display: table;
     border-top: 1px solid @borderColor;
     width: 100%;
 
     .steps--list {
-	    .clearfix();
+        .clearfix();
         display: table-row;
     }
 
     .steps--entry {
-	    .unitize-padding(0, 10);
-	    display: table-cell;
-	    list-style: none;
+        .unitize-padding(0, 10);
+        display: table-cell;
+        list-style: none;
         vertical-align: top;
         text-align: center;
     }
@@ -192,30 +194,30 @@
     }
 
     .steps--entry .icon {
-	    .secondary-gradient();
-	    .border-radius(22px);
-	    .unitize-padding(10, 16);
-	    .box-shadow();
-	    .unitize-width(46, 16);
-	    .unitize(20, 16, font-size);
-	    display: inline-block;
-	    text-align: center;
-	    color: #fff;
-	    font-weight: bold;
+        .secondary-gradient();
+        .border-radius(22px);
+        .unitize-padding(10, 16);
+        .box-shadow();
+        .unitize-width(46, 16);
+        .unitize(20, 16, font-size);
+        display: inline-block;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
     }
 
     .is--active .icon {
-	    .primary-gradient();
-	    color:  #fff;
+        .primary-gradient();
+        color: #fff;
     }
 
     // Text
     .steps--entry .text {
-	    .unitize-margin(0, 0, 0, 10);
-	    .unitize-height(52);
-	    position: relative;
-	    top: -2px;
-	    display: none;
+        .unitize-margin(0, 0, 0, 10);
+        .unitize-height(52);
+        position: relative;
+        top: -2px;
+        display: none;
         vertical-align: middle;
 
         &::after {
@@ -225,14 +227,14 @@
     }
 
     .is--active .text {
-	    color: @primaryColor;
-	    display: inline-block;
-	    font-weight: bold;
+        color: @primaryColor;
+        display: inline-block;
+        font-weight: bold;
     }
 
     .steps--entry .text--inner, .steps--entry .text::after {
-	    display: inline-block;
-	    vertical-align: middle;
+        display: inline-block;
+        vertical-align: middle;
     }
 
 }
@@ -270,7 +272,7 @@
 
     // General Register Form
     .register--content {
-	    .unitize(50, 16, margin-top);
+        .unitize(50, 16, margin-top);
         width: 49%;
         float: right;
         display: block;
@@ -309,18 +311,19 @@
 
     // Register Steps
     .steps--content {
-	    .unitize-padding(30, 0, 40, 0, 16);
-	    background: transparent;
-	    border: none;
+        .unitize-padding(30, 0, 24, 0, 16);
+        background: transparent;
+        border: none;
 
         .steps--spacer {
             .unitize-width(80);
             display: table-cell;
             text-align: center;
-	    }
+        }
 
         .steps--entry {
             .text {
+                .unitize-margin(0, 10, 0, 10);
                 display: inline-block;
                 font-weight: bold;
             }
@@ -377,7 +380,7 @@
 
     // Header Support Info
     .is--ctl-register {
-	    .unitize(48, 16, margin-bottom);
+        .unitize(48, 16, margin-bottom);
     }
 
     .register--content {
@@ -394,9 +397,15 @@
                 width: 30%;
             }
 
-            .text { width: 70%; }
+            .text {
+                .unitize-margin(0, 0, 0, 10);
+                width: 70%;
+                text-align: left;
+            }
         }
 
-        .steps--spacer { width: 15% }
+        .steps--spacer {
+            width: 15%
+        }
     }
 }

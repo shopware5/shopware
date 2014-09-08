@@ -73,21 +73,23 @@
 					{block name="frontend_account_orders_actions_paging"}
 						<div class="account--paging panel--paging">
 							{if $sPages.previous}
-								<a href="{$sPages.previous}">
-									{s name="ListingTextPrevious" namespace="frontend/listing/listing_actions"}&lt;{/s}
+								<a href="{$sPages.previous}" class="btn pagination--link paging--prev">
+									<i class="icon--arrow-left"></i>
 								</a>
 							{/if}
 
 							{foreach $sPages.numbers as $page}
 								{if $page.markup}
-									<a>{$page.value}</a>
+									<a class="btn pagination--link is--active">{$page.value}</a>
 								{else}
-									<a href="{$page.link}">{$page.value}</a>
+									<a href="{$page.link}" class="btn pagination--link">{$page.value}</a>
 								{/if}
 							{/foreach}
 
 							{if $sPages.next}
-								<a href="{$sPages.next}">{s name="ListingTextNext" namespace="frontend/listing/listing_actions"}&gt;{/s}</a>
+								<a href="{$sPages.next}" class="btn pagination--link paging--next">
+                                    <i class="icon--arrow-right"></i>
+                                </a>
 							{/if}
 
 							{block name='frontend_account_orders_actions_paging_count'}

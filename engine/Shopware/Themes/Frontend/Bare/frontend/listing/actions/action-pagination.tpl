@@ -12,7 +12,7 @@
         {* Pagination - Previous page *}
         {block name='frontend_listing_actions_paging_previous'}
             {if $sPages.previous}
-                <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
+                <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="btn pagination--link paging--prev"><i class="icon--arrow-left"></i></a>
             {/if}
         {/block}
 
@@ -21,9 +21,9 @@
             {foreach $sPages.numbers as $page}
                 {if $page.value<$sPage+4 AND $page.value>$sPage-4}
                     {if $page.markup AND (!$sOffers OR $sPage)}
-                        <a title="{$sCategoryInfo.name|escape}" class="pagination--link is--active">{$page.value}</a>
+                        <a title="{$sCategoryInfo.name|escape}" class="btn pagination--link is--active">{$page.value}</a>
                     {else}
-                        <a href="{$page.link|rewrite:$sCategoryInfo.name}" class="pagination--link">{$page.value}</a>
+                        <a href="{$page.link|rewrite:$sCategoryInfo.name}" class="btn pagination--link">{$page.value}</a>
                     {/if}
                 {elseif $page.value==$sPage+4 OR $page.value==$sPage-4}
                     <span class="pagination--link pagination--more">...</span>
@@ -34,7 +34,7 @@
         {* Pagination - Next page *}
         {block name='frontend_listing_actions_paging_next'}
             {if $sPages.next}
-                <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next">{s name="ListingTextNext"}&gt;{/s}</a>
+                <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="btn pagination--link paging--next"><i class="icon--arrow-right"></i></a>
             {/if}
         {/block}
 
