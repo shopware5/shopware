@@ -27,8 +27,9 @@ class Account extends Page
 
     /** @var array $namedSelectors */
     public $namedSelectors = array(
-        'registerButton' => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
-        'sendButton'     => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration')
+        'registerButton'        => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
+        'sendButton'            => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration'),
+        'changePaymentButton'   => array('de' => 'Ändern',                     'en' => 'Change'),
     );
 
     /**
@@ -165,27 +166,16 @@ class Account extends Page
 
     /**
      * Changes the payment method
-     * @param integer $value
      * @param array   $data
      */
-    public function changePayment($value, $data = array())
+    public function changePayment($data = array())
     {
-        $field = $this->findField('register[payment]');
+        $element = $this->getElement('AccountPayment');
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::clickNamedLink($element, 'changeButton', null, $language);
 
-        if (null === $field) {
-            $this->clickLink('Zahlungsart ändern');
-            $this->selectFieldOption('register[payment]', $value);
-        } else {
-            $field->selectOption($value);
-        }
-
-        if ($value === 2) {
-            foreach ($data as $field => $value) {
-                $this->fillField($field, $value);
-            }
-        }
-
-        $this->pressButton('Ändern');
+        \Helper::fillForm($this, 'paymentForm', $data);
+        \Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     public function checkOrder($orderNumber, $articles, $position = 1)
@@ -304,10 +294,10 @@ class Account extends Page
     public function register($data)
     {
         if ($this->verifyPage('login') === true) {
-            \Helper::pressNamedButton2($this, 'registerButton');
+            \Helper::pressNamedButton($this, 'registerButton');
         }
 
         \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton2($this, 'sendButton');
+        \Helper::pressNamedButton($this, 'sendButton');
     }
 }

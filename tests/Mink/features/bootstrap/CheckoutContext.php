@@ -88,4 +88,19 @@ class CheckoutContext extends SubContext
     {
         $this->getPage('CheckoutConfirm')->proceedToCheckout();
     }
+
+    /**
+     * @When /^I change the shipping method to (?P<shippingId>\d+)$/
+     */
+    public function iChangeTheShippingMethodTo($shipping)
+    {
+        $data = array(
+            array(
+                'field' => 'sDispatch',
+                'value' => $shipping
+            )
+        );
+
+        $this->getPage('CheckoutConfirm')->changeShipping($data);
+    }
 }
