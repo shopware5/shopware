@@ -18,7 +18,9 @@
         padding: 0;
     }
 
-    .column--unit-price { display: none }
+    .column--unit-price {
+        display: none
+    }
 
     .agb_info, .list--checkbox {
         .unitize-margin(0, 0, 21, 0);
@@ -78,7 +80,9 @@
     .table-footer--country-notice {
         .unitize-margin(11, 0, 0, 0);
     }
-    .table--aggregation { display: none }
+    .table--aggregation {
+        display: none
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
@@ -99,8 +103,8 @@
         .product--table {
 
             .table--header {
-                .unitize-margin(-10, -10, 10);
-                .unitize-padding(28, 10, 18, 10);
+                .unitize-margin(-14, -20, 10, -20);
+                .unitize-padding(14, 20, 10, 20);
             }
 
             .is--last-row {
@@ -108,7 +112,9 @@
             }
         }
 
-        .product--delivery { float: none; }
+        .product--delivery {
+            float: none;
+        }
 
         .product--table .row--rebate .column--tax-price,
         .product--table .row--premium-product .column--tax-price,
@@ -121,7 +127,6 @@
         .product--table .row--voucher .column--total-price {
             margin-left: 0;
         }
-
 
         // Terms of services box
         .tos--panel {
@@ -159,6 +164,10 @@
                 .clearfix();
                 .unitize(20, 16, bottom);
                 position: absolute;
+
+                .btn {
+                    float: left;
+                }
             }
         }
 
@@ -196,6 +205,7 @@
         }
     }
 }
+
 @media screen and (min-width: @desktopViewportWidth) {
     .confirm--content {
         & > .alert {

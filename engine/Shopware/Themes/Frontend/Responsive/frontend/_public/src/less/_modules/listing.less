@@ -169,14 +169,16 @@
         .unitize(12, 16, font-size);
         .unitize(46, 16, line-height);
         .linear-gradient(#ffffff, #edeff1);
+        .unitize-padding(1, 2, 2, 5);
         display: inline-block;
         font-family: 'shopware';
         text-align: center;
         color: @primaryTextColor;
-        border: 1px solid @borderColor;
         float: left;
 
-        &:hover {
+        &:hover,
+        &.is--active {
+            background: #fff;
             color: @primaryColor;
         }
 
@@ -217,6 +219,15 @@
     .paging--label {
         display: none;
     }
+    .pagination--link {
+        &.is--active {
+            background: #fff;
+        }
+
+        [class^="icon--"] {
+            margin: 0;
+        }
+    }
     .pagination--display {
         .unitize(30, 16, line-height);
         float: right;
@@ -250,8 +261,10 @@
 
             img {
                 position: absolute;
-                top: 0; bottom: 0;
-                left: 0; right: 0;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
                 margin: auto;
                 display: inline-block;
                 vertical-align: middle;
@@ -433,6 +446,10 @@
 
     .action--change-layout {
         display: inline-block;
+
+        .action--link {
+            .unitize-padding(0, 2, 2, 3);
+        }
     }
 
     .action--filter-btn {
@@ -633,7 +650,7 @@
     }
 
     .listing--content {
-		.unitize(45, 16, padding-top);
+        .unitize(45, 16, padding-top);
         .unitize-margin(0, 0);
         width: 78%;
         float: right;
@@ -701,7 +718,6 @@
         float: left;
 
         .change-layout--label {
-            .unitize(34, 16, line-height);
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
             font-weight: bold;
@@ -731,6 +747,7 @@
 
         .per-page--select {
             .unitize-width(80);
+            text-align: center;
             vertical-align: top;
         }
     }

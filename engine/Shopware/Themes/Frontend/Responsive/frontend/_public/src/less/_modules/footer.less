@@ -13,6 +13,8 @@
 
     .column--headline {
         .user-select(none);
+        .unitize-margin(20, 0, 20, 0, 16);
+        font-weight: 700;
         color: @primaryColor;
         cursor: pointer;
 
@@ -44,10 +46,13 @@
         .unitize-padding(16, 12, 0, 12, 12);
         text-align: center;
     }
+
+    .footer--copyright {
+        .unitize(13, 16, font-size);
+    }
     .footer--logo {
         .unitize(28, 12, font-size);
-        color: #00b7e3;
-        text-shadow: 1px 1px 1px @lightTextColor;
+        color: #009fe3;
     }
 
     // Navigation links
@@ -58,7 +63,10 @@
         .unitize-padding(10, 0, 10, 0, 16);
     }
     .navigation--link {
-        color: @darkTextColor
+        color: @primaryTextColor;
+    }
+    .navigation--link:hover {
+        color: @primaryColor;
     }
 
     // Newsletter registration
@@ -106,6 +114,7 @@
         border-top: 1px solid @borderColor;
 
         .column--headline {
+            .unitize(16, 16, font-size);
             cursor: text;
         }
 
@@ -127,6 +136,10 @@
             display: block;
         }
 
+        .column--headline {
+            .unitize-margin(28, 0, 10, 0, 16);
+        }
+
         .column--headline::after {
             display: none;
         }
@@ -135,7 +148,7 @@
             padding: 0;
         }
         .navigation--link {
-            line-height: 1.4;
+            line-height: 1.7;
         }
 
         .newsletter--field {

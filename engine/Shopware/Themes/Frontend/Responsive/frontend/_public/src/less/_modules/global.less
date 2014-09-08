@@ -7,34 +7,35 @@ html, body {
     width: 100%;
     height: 100%;
 }
+
 body {
-	font-family: @bodyFontStack;
-	color: @primaryTextColor;
-	background: @primaryBackgroundColor;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
+    font-family: @bodyFontStack;
+    color: @primaryTextColor;
+    background: @primaryBackgroundColor;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
 // All images should be responsive by default
 img {
-	display: block;
-	max-width: 100%;
-	max-height: 100%;
-	height: auto;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
 }
 
 a {
-	.transition(color);
-	color: @primaryColor;
-	text-decoration: none;
+    color: @primaryColor;
+    text-decoration: none;
 
-	&:hover {
-		color: darken(@secondaryColor, 10%);
-	}
+    &:hover {
+        color: darken(@secondaryColor, 10%);
+    }
 }
+
 ul {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 // Star rating
@@ -84,19 +85,19 @@ p {
 }
 
 blockquote {
-  .unitize-padding(10, 10);
-  .border-radius(3px);
-  .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
-  background: @primaryBackgroundColor;
-  text-align: left;
-  margin: 0;
+    .unitize-padding(10, 10);
+    .border-radius(3px);
+    .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
+    background: @primaryBackgroundColor;
+    text-align: left;
+    margin: 0;
 }
 
 .list--unstyled { list-style: none }
 
 .content-main--inner {
-	.unitize-padding(0, 10, 16);
-	.clearfix();
+    .unitize-padding(0, 10, 16);
+    .clearfix();
 }
 
 // Hide ajax loader by default
@@ -120,7 +121,6 @@ blockquote {
 .is--strong { font-weight: 600 !important; }
 .is--bold { font-weight: bold !important; }
 .is--italic { font-style: italic; }
-.is--required { font-weight: 700 !important; }
 .is--nowrap { white-space: nowrap !important; }
 
 .is--dark { color: @darkTextColor !important; }
@@ -139,6 +139,7 @@ blockquote {
         .unitize(20, 16, margin-bottom);
         .box-shadow(0 0 4px 1px @borderColor);
     }
+
     .content-main--inner {
         .unitize-padding(0, 20, 16);
         width: 100%;
@@ -146,13 +147,15 @@ blockquote {
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-	body {
-		.unitize(14, 16, font-size);
-	}
+    body {
+        .unitize(14, 16, font-size);
+    }
+    
     .content-main {
         .unitize(45, 16, margin-bottom);
     }
-	.content-main--inner {
-		.unitize-padding(0, 45, 45, 45);
-	}
+    
+    .content-main--inner {
+        .unitize-padding(0, 45, 45, 45);
+    }
 }

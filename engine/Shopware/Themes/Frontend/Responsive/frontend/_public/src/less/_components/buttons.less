@@ -1,43 +1,43 @@
 .btn {
-	@backgroundGradientStart: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
-	@boxShadowColor: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .8);
-	.box-shadow(0 1px 1px @backgroundGradientStart);
-	.unitize-padding(10, 16, 10, 16, 16);
-	.border-radius(4px);
-	.transition();
-	.appearance();
-	.unitize(16, 16, font-size);
-	display: inline-block;
-	position: relative;
-	font-weight: bold;
-	text-decoration: none;
-	text-align: left;
-	line-height: normal;
-	cursor: pointer;
-	border: 1px solid @borderColor;
-	color: @primaryTextColor;
+    @backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
+    .linear-gradient(#fff, @primaryBackgroundColor);
+    .unitize-padding(10, 16, 10, 16, 16);
+    .border-radius(4px);
+    .appearance();
+    .unitize(16, 16, font-size);
+    -webkit-font-smoothing: inherit;
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: left;
+    line-height: normal;
+    cursor: pointer;
+    border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
+    color: @primaryTextColor;
 
-	[class^="icon--"] {
-		.unitize-margin(0, 16, 0, 0);
+    [class^="icon--"] {
+        .unitize-margin(0, 16, 0, 0);
 
-		&.is--right {
-			display: block;
-			position: absolute;
-			top: 50%;
-			.unitize-height(16);
-			.unitize-margin(-8, 0, 0, 0);
-			.unitize(16, 16, line-height);
-			.unitize(16, 16, right);
-		}
+        &.is--right {
+            display: block;
+            position: absolute;
+            top: 50%;
+            .unitize-height(16);
+            .unitize-margin(-8, 0, 0, 0);
+            .unitize(16, 16, line-height);
+            .unitize(16, 16, right);
+        }
 
-		&.is--small {
-			.unitize(10, 16, font-size);
-		}
-	}
+        &.is--small {
+            .unitize(10, 16, font-size);
+        }
+    }
 
-	&:active {
-		.linear-gradient(@backgroundGradientStart, #fff);
-	}
+    &:active {
+        .linear-gradient(@backgroundGradientStart, #fff);
+    }
 
     &:disabled,
     &.is--disabled {
@@ -49,60 +49,56 @@
         }
     }
 
-	&:hover {
-		color: @primaryColor;
-	}
+    &:hover {
+        background: #fff;
+        color: @primaryColor;
+    }
 
-	&:focus {
-		outline: none;
-	}
+    &:focus {
+        outline: none;
+    }
 
-	/** State: Small button */
-	&.is--small {
-		.unitize-padding(5, 16, 5, 16, 12);
-		.unitize(12, 16, font-size);
-	}
+    /** State: Small button */
+    &.is--small {
+        .unitize-padding(5, 16, 5, 16, 12);
+        .unitize(12, 16, font-size);
+    }
 
-	/** Type: Light grey button */
-	&.btn--grey {
-		.linear-gradient(#fff, @primaryBackgroundColor);
-		border-color: @lightDarkBorderColor;
-	}
+    /** Type: Light grey button */
+    &.btn--grey {
+        .linear-gradient(#fff, @primaryBackgroundColor);
+        border-color: @lightDarkBorderColor;
+    }
 
-	/** Type: Primary button */
-	&.btn--primary {
-		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .6);
-		.primary-gradient();
-		.box-shadow(0 1px 3px @boxShadowColor);
-		text-shadow: 0 1px 1px @primaryContrastColor;
-		border: 0 none;
-		border-bottom: 1px solid @primaryContrastColor;
-		color: #fff;
+    /** Type: Primary button */
+    &.btn--primary {
+        .primary-gradient();
+        text-shadow: 0 1px 1px @primaryContrastColor;
+        border: 0 none;
+        border-bottom: 1px solid @primaryContrastColor;
+        color: #fff;
 
-		&:hover {
-			@backgroundGradientEnd: rgba(red(@complementarySecondaryColor), green(@complementarySecondaryColor), blue(@complementarySecondaryColor), .5);
-			.linear-gradient-multi(0%, @complementaryPrimaryColor, 65%, @complementaryPrimaryColor, 100%, @backgroundGradientEnd);
-			text-shadow: 0 1px 1px @complementarySecondaryColor;
-			border: 0 none;
-			border-bottom: 1px solid @complementarySecondaryColor;
-		}
-	}
+        &:hover {
+            background: @secondaryColor;
+            text-shadow: 0 1px 1px @primaryContrastColor;
+            border: 0 none;
+            border-bottom: 1px solid @primaryContrastColor;
+        }
+    }
 
-	/** Type: Secondary button */
-	&.btn--secondary {
-		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .5);
-		.secondary-gradient();
-		.box-shadow(0 1px 3px @boxShadowColor);
-		text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
-		color: #fff;
-		border: 0 none;
-		border-bottom: 1px solid @darkBorderColor;
+    /** Type: Secondary button */
+    &.btn--secondary {
+        .secondary-gradient();
+        text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
+        color: #fff;
+        border: 0 none;
+        border-bottom: 1px solid @darkBorderColor;
 
-		&:hover {
-			background: @primaryTextColor;
-		}
-		&:active {
-			.linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
-		}
-	}
+        &:hover {
+            background: @primaryTextColor;
+        }
+        &:active {
+            .linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
+        }
+    }
 }
