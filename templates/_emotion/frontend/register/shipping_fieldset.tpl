@@ -105,8 +105,8 @@
             {foreach $country_list as $country}
                 {if $country.states}
                     <div class="selection{if $country.id != $form_data.country} hidden{/if}">
-                    <label for="country_{$country.id}_states">{se name='RegisterShippingLabelState'}Bundesstaat:{/se} </label>
-                        <select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]" id="country_{$country.id}_states" class="text {if $country.force_state_in_registration}required{/if} {if $error_flags.stateID}instyle_error{/if}">
+                    <label for="country_{$country.id}_states"{if !$country.force_state_in_registration} class="normal"{/if}>{se name='RegisterShippingLabelState'}Bundesstaat{/se}{if $country.force_state_in_registration}*{/if}:</label>
+                        <select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]" id="country_{$country.id}_states" class="text{if $country.force_state_in_registration} required{/if}{if $error_flags.stateID} instyle_error{/if}">
                         <option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}</option>
                             {assign var="stateID" value="country_shipping_state_`$country.id`"}
                             {foreach from=$country.states item=state}
