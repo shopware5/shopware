@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -22,27 +21,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Theme\Compressor;
-
 /**
- * Javascript compressor for the frontend themes.
- * Used to compress theme and plugin javascript files.
+ * Theme cache warm up store
  *
- * @category  Shopware
- * @package   Shopware\Components\Theme\Compressor
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Loads stores that use themes
  */
-class Js implements CompressorInterface
-{
-    /**
-     * Compress the passed content and returns
-     * the compressed content.
-     *
-     * @param string $content
-     * @return string
-     */
-    public function compress($content)
-    {
-        return \JSMin::minify($content);
+//{block name="backend/index/store/theme_cache_warm_up"}
+Ext.define('Shopware.apps.Index.store.ThemeCacheWarmUp', {
+	extend: 'Shopware.apps.Base.store.Shop',
+	model: 'Shopware.apps.Index.model.ThemeCacheWarmUp',
+    remoteFilter: true,
+    clearOnLoad: false,
+
+    proxy: {
+        type: 'ajax',
+        url: '{url controller="base" action="getShopsWithThemes"}',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     }
-}
+});
+//{/block}

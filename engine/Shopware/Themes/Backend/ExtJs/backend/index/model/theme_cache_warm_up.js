@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -23,30 +22,12 @@
  */
 
 /**
- * Returns the current time measured in the number of seconds
- * since the Unix Epoch (January 1 1970 00:00:00 GMT).
+ * Theme cache warm up model
+ *
+ * Loads stores that use themes
  */
-class Smarty_Compiler_ThemeTimestamp extends Smarty_Internal_CompileBase
-{
-    /**
-     * @param $args
-     * @param $compiler
-     * @return int
-     */
-    public function compile($args, $compiler)
-    {
-        /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
-        $pathResolver = Shopware()->Container()->get('theme_path_resolver');
-
-        $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp.txt';
-
-        if (file_exists($file)) {
-            $timestamp = file_get_contents($file);
-        } else {
-            $timestamp = time();
-            file_put_contents($file, $timestamp);
-        }
-
-        return $timestamp;
-    }
-}
+//{block name="backend/index/model/main/theme_cache_warm_up"}
+Ext.define('Shopware.apps.Index.model.ThemeCacheWarmUp', {
+    extend: 'Shopware.apps.Base.model.Shop'
+});
+//{/block}

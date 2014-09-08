@@ -123,8 +123,9 @@ class Enlight_Template_Manager extends Smarty
      */
     public function setTemplateDir($template_dir)
     {
-        $template_dir = (array)$template_dir;
-        foreach ((array) $template_dir as $k => $v) {
+        $template_dir = (array) $template_dir;
+
+        foreach ($template_dir as $k => $v) {
             $template_dir[$k] = $this->resolveTemplateDir($v, $k);
             if ($template_dir[$k] === false) {
                 unset($template_dir[$k]);

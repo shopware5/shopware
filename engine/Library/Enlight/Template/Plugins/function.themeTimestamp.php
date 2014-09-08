@@ -22,27 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Theme\Compressor;
-
 /**
- * Javascript compressor for the frontend themes.
- * Used to compress theme and plugin javascript files.
- *
- * @category  Shopware
- * @package   Shopware\Components\Theme\Compressor
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Returns the current time measured in the number of seconds
+ * since the Unix Epoch (January 1 1970 00:00:00 GMT).
  */
-class Js implements CompressorInterface
+function smarty_function_themeTimestamp($params, $template)
 {
-    /**
-     * Compress the passed content and returns
-     * the compressed content.
-     *
-     * @param string $content
-     * @return string
-     */
-    public function compress($content)
-    {
-        return \JSMin::minify($content);
+    /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
+    $pathResolver = Shopware()->Container()->get('theme_path_resolver');
+    $context = Shopware()->Container()->get('context_service')->get();
+    $shopId = $context->getShop()->getParentId();
+
+    $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shopId . '.txt';
+
+    if (file_exists($file)) {
+        $timestamp = file_get_contents($file);
+    } else {
+        $timestamp = time();
+        file_put_contents($file, $timestamp);
     }
+
+    return $timestamp;
 }

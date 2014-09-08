@@ -26,6 +26,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop as Shop;
 
@@ -46,7 +47,7 @@ class Compiler
     private $rootDir;
 
     /**
-     * @var \Less_Parser
+     * @var LessCompiler
      */
     private $compiler;
 
@@ -77,7 +78,7 @@ class Compiler
 
     /**
      * @param $rootDir
-     * @param \Less_Parser $compiler
+     * @param LessCompiler $compiler
      * @param PathResolver $pathResolver
      * @param Inheritance $inheritance
      * @param Service $service
@@ -86,7 +87,7 @@ class Compiler
      */
     function __construct(
         $rootDir,
-        \Less_Parser $compiler,
+        LessCompiler $compiler,
         PathResolver $pathResolver,
         Inheritance $inheritance,
         Service $service,
@@ -104,6 +105,50 @@ class Compiler
     }
 
     /**
+     * Helper function which compiles a shop with new theme.
+     * The function is called when the template cache is cleared.
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
+     */
+    public function preCompile(Shop\Shop $shop)
+    {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $this->clearThemeCache($shop);
+
+        $timestamp = $this->getThemeTimestamp($shop);
+
+        $this->compileLess($timestamp, $shop->getTemplate(), $shop);
+
+        $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
+
+        $this->compiler->reset();
+    }
+
+    /**
+     * Clear existing theme cache
+     * Removes all assets and timestamp files
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
+     */
+    public function clearThemeCache(Shop\Shop $shop)
+    {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $timestamp = $this->getThemeTimestamp($shop);
+
+        $files = array(
+            (string) $timestamp,
+            'timestamp' . $shop->getId() . '.txt'
+        );
+        $this->clearDirectory($files);
+    }
+
+    /**
      * Compiles all required resources for the passed shop and template.
      * The function compiles all theme and plugin less files and
      * compresses the theme and plugin javascript and css files
@@ -115,11 +160,9 @@ class Compiler
      */
     public function compileLess($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $this->compiler->SetOptions(
+        $this->compiler->setConfiguration(
             $this->getCompilerConfiguration($shop)
         );
-
-        $this->clearDirectory(array('css'));
 
         $this->buildConfig($template, $shop);
 
@@ -143,8 +186,6 @@ class Compiler
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $this->clearDirectory(array('js'));
-
         $this->compressThemeJavascript($timestamp, $template, $shop);
 
         $this->compressPluginJavascript($timestamp, $template, $shop);
@@ -193,16 +234,14 @@ class Compiler
     {
         //set unique import directory for less @import commands
         if ($definition->getImportDirectory()) {
-            $this->compiler->SetImportDirs(array(
+            $this->compiler->setImportDirectories(array(
                 $definition->getImportDirectory()
             ));
         }
 
         //allows to add own configurations for the current compile step.
         if ($definition->getConfig()) {
-            $this->compiler->ModifyVars(
-                $definition->getConfig()
-            );
+            $this->compiler->setVariables($definition->getConfig());
         }
 
         $this->eventManager->notify('Theme_Compiler_Compile_Less', array(
@@ -222,9 +261,7 @@ class Compiler
                 $shop, $file
             );
 
-            $this->compiler->parseFile(
-                $file, $url
-            );
+            $this->compiler->compile($file, $url);
         }
     }
 
@@ -243,7 +280,7 @@ class Compiler
 
         $output = new \SplFileObject($file, "w+");
 
-        $css = $this->compiler->getCss();
+        $css = $this->compiler->get();
 
         $success = $output->fwrite($css);
         if ($success === null) {
@@ -270,7 +307,7 @@ class Compiler
         $config = $this->inheritance->buildConfig($template, $shop, true);
         $config = $this->addThemePrefix($config);
 
-        $this->compiler->ModifyVars($config);
+        $this->compiler->setVariables($config);
 
         $collection = new ArrayCollection();
 
@@ -284,7 +321,7 @@ class Compiler
                 throw new \Exception("The passed plugin less config isn't an array!");
             }
 
-            $this->compiler->ModifyVars($config);
+            $this->compiler->setVariables($config);
         }
     }
 
@@ -562,7 +599,7 @@ class Compiler
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
      */
-    private function clearDirectory($extensions = array())
+    public function clearDirectory($names = array())
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
@@ -578,7 +615,7 @@ class Compiler
                 continue;
             }
 
-            if (!empty($extensions) && !in_array($path->getExtension(), $extensions)) {
+            if (!$this->fileNameMatch($path->getFilename(), $names)) {
                 continue;
             }
 
@@ -588,5 +625,41 @@ class Compiler
                 unlink($path->__toString());
             }
         }
+    }
+
+    /**
+     * @param string $original
+     * @param string $names
+     * @return bool
+     */
+    private function fileNameMatch($original, $names)
+    {
+        foreach($names as $name) {
+            if (strpos($original, $name) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function which reads and creates the theme timestamp for the css and js files.
+     *
+     * @param \Shopware\Models\Shop\Shop $shop
+     * @return int
+     */
+    private function getThemeTimestamp(Shop\Shop $shop)
+    {
+        /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
+        $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
+
+        if (file_exists($file)) {
+            $timestamp = file_get_contents($file);
+        } else {
+            $timestamp = time();
+            file_put_contents($file, $timestamp);
+        }
+
+        return (int) $timestamp;
     }
 }

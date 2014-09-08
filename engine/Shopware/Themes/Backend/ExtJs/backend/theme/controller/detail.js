@@ -307,6 +307,10 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
                 if (window instanceof Ext.window.Window) {
                     window.destroy();
                 }
+
+                if (me.getSelectedTheme().get('enabled') == 1) {
+                    Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request', shop.get('id'));
+                }
             }
         });
 

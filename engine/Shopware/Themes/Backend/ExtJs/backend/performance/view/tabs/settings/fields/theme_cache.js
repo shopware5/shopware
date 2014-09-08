@@ -31,10 +31,10 @@
 //{namespace name=backend/performance/main}
 
 /**
- * SEO fieldSet for
+ * Theme cache management
  */
-//{block name="backend/performance/view/tabs/settings/fields/http_cache"}
-Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
+//{block name="backend/performance/view/tabs/settings/fields/theme_cache"}
+Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.ThemeCache', {
     /**
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
@@ -45,12 +45,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-http-cache',
+    alias:'widget.performance-tabs-settings-theme-cache',
 
     /**
      * Description of the fieldSet
      */
-    caption: '{s name=tabs/settings/http_cache/title}HTTP Cache{/s}',
+    caption: '{s name=tabs/settings/theme_cache/title}Theme Cache{/s}',
 
     layout: 'anchor',
 
@@ -78,58 +78,25 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/cache/info}{/s}")
-                ]},
+                    me.createDescriptionContainer("{s name=fieldset/theme/info}If you have made changes to your theme or its configuration, the theme cache must be regenerated. If you choose not to do this, the process will be automatically triggered during the first frontend request, resulting in a noticeable delay in the page loading process.{/s}")
+                ]
+            },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
-                    {
-                        fieldLabel: '{s name=fieldset/http/enabled}Enable{/s}',
-                        name: 'httpCache[enabled]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/http/ban}Enable Proxy BAN{/s}',
-                        name: 'httpCache[HttpCache:proxyPrune]',
-                        xtype: 'checkbox',
-                        helpText: '{s name=fieldset/http/ban/help}{/s}',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/http/url}Alternate proxy URL{/s}',
-                        name: 'httpCache[HttpCache:proxy]',
-                        helpText: '{s name=fieldset/http/url/help}{/s}',
-                        xtype: 'textfield'
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/http/admin}Admin view{/s}',
-                        name: 'httpCache[HttpCache:admin]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true,
-                        helpText: '{s name=fieldset/http/admin/help}{/s}',
-                        margin: '0 0 20 0'
-                    },
-                    {
-                        xtype: 'performance-tabs-settings-elements-cache-time',
-                        height: 250,
-                        margin: '0 0 20 0'
-                    },
-                    {
-                        xtype: 'performance-tabs-settings-elements-no-cache',
-                        height: 250
-                    }
-                ]}
+                    Ext.create('Ext.Button', {
+                        text: '{s name=fieldset/theme/warmup}Warm up theme cache{/s}',
+                        cls: 'primary',
+                        scope: me,
+                        handler:function () {
+                            Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request', null, true);
+                        }
+                    })
+                ]
+            }
         ];
-
     }
-
-
-
 });
 //{/block}

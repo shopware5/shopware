@@ -593,6 +593,44 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
 
+    /**
+     * Returns a list of shops that have themes assigned
+     * Used for theme cache warm up in the backend
+     */
+    public function getShopsWithThemesAction()
+    {
+        //load shop repository
+        /** @var $repository \Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+
+        $shopId = $this->Request()->getParam('shopId', null);
+        $filter = $this->Request()->getParam('filter', array());
+        if ($shopId) {
+            $filter[] = array(
+                'property' => 'shop.id',
+                'value' => $shopId,
+                'operator' => null,
+                'expression' => null
+            );
+        }
+
+        $query = $repository->getShopsWithThemes(
+            $filter,
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
+        );
+
+        //get total result of the query
+        $total = Shopware()->Models()->getQueryCount($query);
+
+        //select all shop as array
+        $data = $query->getArrayResult();
+
+        //return the data and total count
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+    }
+
     public function getTemplatesAction()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Template');

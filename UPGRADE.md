@@ -89,10 +89,16 @@ In this document you will find a changelog of the important changes related to t
 * Removed `Trusted Shops` from the basic settings. Functionality can now be found in `Trusted Shops Excellence` plugin
 * Removed `sArticles::sGetAllArticlesInCategory` and smarty variable `$sArticle.sNavigation` for product detail page
 * Added `sArticles::getProductNavigation`, product navigation is rendered asynchronous via ajax call to `\Shopware_Controllers_Widgets_Listing::productNavigationAction`
-* Add isFamilyFriendly core setting. To enable or disable the isFamilyFriendly Meta tag.
+* Add `isFamilyFriendly` core setting to enable or disable the correspondent meta tag.
 * Add new SEO fields to the forms module.
 * Add new SEO templates in the core settings for the form and the site data.
 * Dropped unused table `s_core_rewrite`
+* Added `Theme cache warm up` modal window and functionality:
+    * On cache clear
+    * On performance settings
+    * On theme change
+    * On theme settings change
+    * On plugin install, by adding `theme` to the optional caches array returned in `install()`
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

@@ -93,8 +93,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                     },
                     {
                         name: 'cache[template]',
-                        boxLabel: '{s name=form/items/frontend}Smarty-Template-Cache{/s}',
-                        supportText: '{s name=form/items/frontend/support}Cache for compiled smarty templates{/s}'
+                        boxLabel: '{s name=form/items/frontend/template}Template cache{/s}',
+                        supportText: '{s name=form/items/frontend/template/support}Cache for compiled template files{/s}'
+                    },
+                    {
+                        name: 'cache[theme]',
+                        boxLabel: '{s name=form/items/frontend/theme}Theme cache{/s}',
+                        supportText: '{s name=form/items/frontend/theme/support}Cache for compiled theme files{/s}'
                     },
                     {
                         name: 'cache[http]',
