@@ -189,6 +189,10 @@
                 orderNumber = me.$el.find(me.opts.productDetailsSelector).attr('data-ordernumber'),
                 params = me.restoreCurrentProductState();
 
+            if($.isEmptyObject(params)) {
+                return params;
+            }
+
             if(orderNumber && orderNumber.length) {
                 params.ordernumber = orderNumber;
             }
