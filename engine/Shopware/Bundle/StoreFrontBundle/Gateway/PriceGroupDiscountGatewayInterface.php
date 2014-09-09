@@ -33,57 +33,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface PriceGroupDiscountGatewayInterface
 {
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount requires the following data:
-     * - Price group discount base data
+     * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup requires the folling data:
+     * - Price group base data
+     * - Price group discounts for the provided customer group
      *
-     * Required conditions for the selection:
-     * - \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount::quantity is less or equals the provided quantity.
-     * - Selects only discounts for the passed customer group
-     * - Selects the discount with the highest value
-     *
-     * @param Struct\Product\PriceGroup $priceGroup
      * @param Struct\Customer\Group $customerGroup
-     * @param $quantity
-     * @return Struct\Product\PriceDiscount
+     * @param Struct\ShopContextInterface $context
+     * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */
-    public function getHighestQuantityDiscount(
-        Struct\Product\PriceGroup $priceGroup,
+    public function getPriceGroups(
         Struct\Customer\Group $customerGroup,
-        $quantity
-    );
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface::getProductDiscount()
-     *
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Context $context
-     * @return array Indexed by the product number. Each element contains a Struct\Product\PriceDiscount array.
-     */
-    public function getProductsDiscounts(
-        $products,
-        Struct\Customer\Group $customerGroup,
-        Struct\Context $context
-    );
-
-    /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount requires the following data:
-     * - Price group discount base data
-     *
-     * Required conditions for the selection:
-     * - Sorted ascending by the \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount::quantity property.
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Context $context
-     * @return Struct\Product\PriceDiscount[]
-     */
-    public function getProductDiscount(
-        Struct\ListProduct $product,
-        Struct\Customer\Group $customerGroup,
-        Struct\Context $context
+        Struct\ShopContextInterface $context
     );
 }

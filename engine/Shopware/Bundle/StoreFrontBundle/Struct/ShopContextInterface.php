@@ -21,48 +21,41 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductDownloadService implements Service\ProductDownloadServiceInterface
+interface ShopContextInterface
 {
     /**
-     * @var Gateway\DownloadGatewayInterface
+     * Returns the current active shop of the context.
+     * The shop id is used as translation identifier.
+     *
+     * @return Shop
      */
-    private $gateway;
+    public function getShop();
 
     /**
-     * @param Gateway\DownloadGatewayInterface $gateway
+     * @return Currency
      */
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
-    {
-        $this->gateway = $gateway;
-    }
+    public function getCurrency();
 
     /**
-     * @inheritdoc
+     * @return Customer\Group
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
-    {
-        $downloads = $this->getList(array($product), $context);
-
-        return array_shift($downloads);
-    }
+    public function getCurrentCustomerGroup();
 
     /**
-     * @inheritdoc
+     * @return Customer\Group
      */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->gateway->getList($products, $context);
-    }
+    public function getFallbackCustomerGroup();
 
+    /**
+     * @return string
+     */
+    public function getBaseUrl();
 }

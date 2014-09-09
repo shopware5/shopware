@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 
 /**
@@ -64,14 +64,14 @@ class CategoryFacetHandler implements FacetHandlerInterface
      * @param \Shopware\Bundle\SearchBundle\FacetInterface $facet
      * @param \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder $query
      * @param \Shopware\Bundle\SearchBundle\Criteria $criteria
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return \Shopware\Bundle\SearchBundle\Facet\CategoryFacet|\Shopware\Bundle\SearchBundle\FacetInterface
      */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
         Criteria $criteria,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->removeTableInclude('s_categories');
 

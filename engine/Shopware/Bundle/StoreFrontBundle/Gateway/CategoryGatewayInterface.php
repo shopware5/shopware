@@ -39,10 +39,10 @@ interface CategoryGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
      * @param array $ids
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Category[] Indexed by the category id
      */
-    public function getList(array $ids, Struct\Context $context);
+    public function getList(array $ids, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Category requires the following data:
@@ -52,8 +52,8 @@ interface CategoryGatewayInterface
      * - Core attribute of the media object
      *
      * @param $id
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Category
      */
-    public function get($id, Struct\Context $context);
+    public function get($id, Struct\ShopContextInterface $context);
 }

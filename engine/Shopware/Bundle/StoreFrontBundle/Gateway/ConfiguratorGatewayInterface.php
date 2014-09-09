@@ -50,10 +50,10 @@ interface ConfiguratorGatewayInterface
      * - Option name
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Configurator\Set
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Selects the first possible product image for the provided product configurator.
@@ -62,10 +62,10 @@ interface ConfiguratorGatewayInterface
      * Returns for each configurator option the first possible image
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the configurator option id.
      */
-    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\Context $context);
+    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns all possible configurator combinations for the provided product.

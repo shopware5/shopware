@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle\DBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 /**
@@ -52,13 +52,13 @@ class ShippingFreeConditionHandler implements ConditionHandlerInterface
      *
      * @param ConditionInterface $condition
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return void
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->andWhere('variant.shippingfree = 1');
     }

@@ -40,10 +40,10 @@ interface ProductLinkServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface::get()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link classes.
      */
-    public function getList($products, Struct\Context $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -52,8 +52,8 @@ interface ProductLinkServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
-     * @return mixed
+     * @param Struct\ShopContextInterface $context
+     * @return Struct\Product\Link[]
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 }

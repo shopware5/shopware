@@ -38,8 +38,8 @@ interface ProductSearchInterface
      * get the product result for the passed criteria object.
      *
      * @param Criteria $criteria
-     * @param Struct\Context $context
+     * @param Struct\ProductContext $context
      * @return ProductSearchResult
      */
-    public function search(Criteria $criteria, Struct\Context $context);
+    public function search(Criteria $criteria, Struct\ProductContext $context);
 }

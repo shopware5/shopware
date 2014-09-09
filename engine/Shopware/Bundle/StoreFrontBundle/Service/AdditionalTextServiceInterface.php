@@ -43,10 +43,10 @@ interface AdditionalTextServiceInterface
      * This behaviour can be optionally disabled using the backend settings
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\ListProduct $product
      */
-    public function buildAdditionalText(Struct\ListProduct $product, Struct\Context $context);
+    public function buildAdditionalText(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Determines the 'additional text' value for multiple ListProduct.
@@ -54,8 +54,8 @@ interface AdditionalTextServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::buildAdditionalText()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\ListProduct[] $products
      */
-    public function buildAdditionalTextLists($products, Struct\Context $context);
+    public function buildAdditionalTextLists($products, Struct\ShopContextInterface $context);
 }

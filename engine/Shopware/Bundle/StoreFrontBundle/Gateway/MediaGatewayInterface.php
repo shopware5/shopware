@@ -39,10 +39,10 @@ interface MediaGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
      * @param array $ids
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the media id
      */
-    public function getList($ids, Struct\Context $context);
+    public function getList($ids, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -51,8 +51,8 @@ interface MediaGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
      * @param $id
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function get($id, Struct\Context $context);
+    public function get($id, Struct\ShopContextInterface $context);
 }

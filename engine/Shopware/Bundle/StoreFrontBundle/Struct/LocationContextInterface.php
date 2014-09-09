@@ -21,48 +21,31 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
+
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductDownloadService implements Service\ProductDownloadServiceInterface
+interface LocationContextInterface
 {
     /**
-     * @var Gateway\DownloadGatewayInterface
+     * @return Area
      */
-    private $gateway;
+    public function getArea();
 
     /**
-     * @param Gateway\DownloadGatewayInterface $gateway
+     * @return Country
      */
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
-    {
-        $this->gateway = $gateway;
-    }
+    public function getCountry();
 
     /**
-     * @inheritdoc
+     * @return State
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
-    {
-        $downloads = $this->getList(array($product), $context);
-
-        return array_shift($downloads);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->gateway->getList($products, $context);
-    }
-
+    public function getState();
 }

@@ -24,21 +24,16 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Context
+class ShopContext
     extends Extendable
-    implements \JsonSerializable,
-        LocationContextInterface,
-        ProductContextInterface
+    implements ShopContextInterface, \JsonSerializable
 {
     /**
      * Contains the current customer group for the store front.
@@ -83,34 +78,9 @@ class Context
     protected $shop;
 
     /**
-     * @var Tax[]
-     */
-    protected $taxRules;
-
-    /**
-     * @var PriceGroup[]
-     */
-    protected $priceGroups;
-
-    /**
      * @var string
      */
     protected $baseUrl;
-
-    /**
-     * @var Area
-     */
-    protected $area;
-
-    /**
-     * @var Country
-     */
-    protected $country;
-
-    /**
-     * @var State
-     */
-    protected $state;
 
     /**
      * @param string $baseUrl
@@ -118,57 +88,19 @@ class Context
      * @param Currency $currency
      * @param Group $currentCustomerGroup
      * @param Group $fallbackCustomerGroup
-     * @param $taxRules
-     * @param $priceGroups
-     * @param Area $area
-     * @param Country $country
-     * @param State $state
      */
     public function __construct(
         $baseUrl,
         Shop $shop,
         Currency $currency,
         Group $currentCustomerGroup,
-        Group $fallbackCustomerGroup,
-        $taxRules,
-        $priceGroups,
-        Area $area,
-        Country $country,
-        State $state
+        Group $fallbackCustomerGroup
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
         $this->currency = $currency;
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
-        $this->taxRules = $taxRules;
-        $this->priceGroups = $priceGroups;
-        $this->area = $area;
-        $this->country = $country;
-        $this->state = $state;
-    }
-
-    /**
-     * @param ProductContext $productContext
-     * @param LocationContext $locationContext
-     * @return Context
-     */
-    public static function createFromContexts(
-        ProductContext $productContext,
-        LocationContext $locationContext
-    ) {
-        return new self(
-            $productContext->getBaseUrl(),
-            $productContext->getShop(),
-            $productContext->getCurrency(),
-            $productContext->getCurrentCustomerGroup(),
-            $productContext->getFallbackCustomerGroup(),
-            $productContext->getTaxRules(),
-            $productContext->getPriceGroups(),
-            $locationContext->getArea(),
-            $locationContext->getCountry(),
-            $locationContext->getState()
-        );
     }
 
     /**
@@ -212,57 +144,6 @@ class Context
     public function getBaseUrl()
     {
         return $this->baseUrl;
-    }
-
-    /**
-     * @return Tax[]
-     */
-    public function getTaxRules()
-    {
-        return $this->taxRules;
-    }
-
-    /**
-     * @param $taxId
-     * @return Tax
-     */
-    public function getTaxRule($taxId)
-    {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
-    }
-
-    /**
-     * @return PriceGroup[]
-     */
-    public function getPriceGroups()
-    {
-        return $this->priceGroups;
-    }
-
-    /**
-     * @return Area
-     */
-    public function getArea()
-    {
-        return $this->area;
-    }
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @return State
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**

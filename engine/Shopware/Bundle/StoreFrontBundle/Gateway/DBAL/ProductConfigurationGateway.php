@@ -74,7 +74,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $groups = $this->getList(array($product), $context);
 
@@ -84,7 +84,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         if (empty($products)) {
             return array();

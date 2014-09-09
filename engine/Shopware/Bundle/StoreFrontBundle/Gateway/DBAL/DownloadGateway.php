@@ -74,7 +74,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $downloads = $this->getList(array($product), $context);
 
@@ -84,7 +84,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {

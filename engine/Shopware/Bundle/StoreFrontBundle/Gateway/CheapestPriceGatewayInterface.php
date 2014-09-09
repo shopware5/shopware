@@ -39,11 +39,11 @@ interface CheapestPriceGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @param Struct\Customer\Group $customerGroup
      * @return Struct\Product\PriceRule[] Indexed by the product id
      */
-    public function getList($products, Struct\Context $context, Struct\Customer\Group $customerGroup);
+    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
 
     /**
      * The cheapest product price is only selected for the provided customer group.
@@ -66,9 +66,9 @@ interface CheapestPriceGatewayInterface
      *  - Closeout variants can only be selected if the stock > min purchase
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @param Struct\Customer\Group $customerGroup
      * @return Struct\Product\PriceRule
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context, Struct\Customer\Group $customerGroup);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
 }

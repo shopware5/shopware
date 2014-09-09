@@ -58,27 +58,112 @@ class ContextService implements Service\ContextServiceInterface
     private $context = null;
 
     /**
+     * @var Struct\LocationContext
+     */
+    private $locationContext = null;
+
+    /**
+     * @var Struct\ProductContext
+     */
+    private $productContext = null;
+
+    /**
+     * @var Struct\ShopContext
+     */
+    private $shopContext = null;
+
+    /**
+     * @var Gateway\PriceGroupDiscountGatewayInterface
+     */
+    private $priceGroupDiscountGateway;
+
+    /**
      * @param Container $container
      * @param Gateway\CustomerGroupGatewayInterface $customerGroupGateway
      * @param Gateway\TaxGatewayInterface $taxGateway
      * @param Gateway\CountryGatewayInterface $countryGateway
+     * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
      */
     public function __construct(
         Container $container,
         Gateway\CustomerGroupGatewayInterface $customerGroupGateway,
         Gateway\TaxGatewayInterface $taxGateway,
-        Gateway\CountryGatewayInterface $countryGateway
+        Gateway\CountryGatewayInterface $countryGateway,
+        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
         $this->countryGateway = $countryGateway;
         $this->customerGroupGateway = $customerGroupGateway;
+        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }
 
     /**
      * @inheritdoc
      */
-    public function initialize()
+    public function getContext()
+    {
+        if (!$this->context) {
+            $this->initializeContext();
+        }
+
+        return $this->context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getShopContext()
+    {
+        if (!$this->shopContext) {
+            $this->initializeShopContext();
+        }
+
+        return $this->shopContext;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductContext()
+    {
+        if (!$this->productContext) {
+            $this->initializeProductContext();
+        }
+        return $this->productContext;
+    }
+
+    /**
+     * @return Struct\LocationContext
+     */
+    public function getLocationContext()
+    {
+        if (!$this->locationContext) {
+            $this->initializeLocationContext();
+        }
+        return $this->locationContext;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function initializeContext()
+    {
+        $locationContext = $this->getLocationContext();
+
+        $productContext = $this->getProductContext();
+
+        $this->context = Struct\Context::createFromContexts(
+            $productContext,
+            $locationContext
+        );
+    }
+
+    /**
+     * Initials the shop context which contains
+     * all information about the current shop state.
+     */
+    public function initializeShopContext()
     {
         /** @var $session Session */
         $session = $this->container->get('session');
@@ -94,51 +179,63 @@ class ContextService implements Service\ContextServiceInterface
             $key = $fallback;
         }
 
-        $context = new Struct\Context();
-
-        $context->setBaseUrl(
-            $this->buildBaseUrl()
-        );
-
-        $context->setShop(
-            Struct\Shop::createFromShopEntity($shop)
-        );
-
-        $context->setCurrency(
-            Struct\Currency::createFromCurrencyEntity($shop->getCurrency())
-        );
-
-        $context->setCurrentCustomerGroup(
-            $this->customerGroupGateway->get($key)
-        );
-
-        $context->setFallbackCustomerGroup(
+        $this->shopContext = new Struct\ShopContext(
+            $this->buildBaseUrl(),
+            Struct\Shop::createFromShopEntity($shop),
+            Struct\Currency::createFromCurrencyEntity($shop->getCurrency()),
+            $this->customerGroupGateway->get($key),
             $this->customerGroupGateway->get($fallback)
         );
-
-        $area    = $this->createAreaStruct($session, $context);
-        $country = $this->createCountryStruct($session, $context);
-        $state   = $this->createStateStruct($session, $context);
-        $rules   = $this->createTaxRulesStruct($context, $area, $country, $state);
-
-        $context->setArea($area);
-        $context->setCountry($country);
-        $context->setState($state);
-        $context->setTaxRules($rules);
-
-        $this->context = $context;
     }
 
     /**
-     * @inheritdoc
+     * Initials the location context which contains
+     * the information about the current country state.
      */
-    public function get()
+    public function initializeLocationContext()
     {
-        if (!$this->context) {
-            $this->initialize();
-        }
+        $shopContext = $this->getShopContext();
 
-        return $this->context;
+        /** @var $session Session */
+        $session = $this->container->get('session');
+
+        $area    = $this->createAreaStruct($session, $shopContext);
+        $country = $this->createCountryStruct($session, $shopContext);
+        $state   = $this->createStateStruct($session, $shopContext);
+
+        $this->locationContext = new Struct\LocationContext(
+            $area,
+            $country,
+            $state
+        );
+    }
+
+    /**
+     * Initials the product context which contains
+     * the information about the tax rules and price group discounts.
+     */
+    public function initializeProductContext()
+    {
+        $shopContext = $this->getShopContext();
+
+        $locationContext = $this->getLocationContext();
+
+        $rules = $this->createTaxRulesStruct(
+            $shopContext,
+            $locationContext->getArea(),
+            $locationContext->getCountry(),
+            $locationContext->getState()
+        );
+
+        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups(
+            $shopContext->getCurrentCustomerGroup(),
+            $shopContext
+        );
+        $this->productContext = Struct\ProductContext::createFromContexts(
+            $shopContext,
+            $rules,
+            $priceGroups
+        );
     }
 
     /**
@@ -167,10 +264,10 @@ class ContextService implements Service\ContextServiceInterface
 
     /**
      * @param Session $session
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return null|Struct\Country\Area
      */
-    protected function createAreaStruct(Session $session, Struct\Context $context)
+    protected function createAreaStruct(Session $session, Struct\ShopContextInterface $context)
     {
         $area = null;
         if ($session->offsetGet('sArea')) {
@@ -187,10 +284,10 @@ class ContextService implements Service\ContextServiceInterface
 
     /**
      * @param Session $session
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return null|Struct\Country
      */
-    protected function createCountryStruct(Session $session, Struct\Context $context)
+    protected function createCountryStruct(Session $session, Struct\ShopContextInterface $context)
     {
         $country = null;
         if ($session->offsetGet('sCountry')) {
@@ -207,10 +304,10 @@ class ContextService implements Service\ContextServiceInterface
 
     /**
      * @param Session $session
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return null|Struct\Country\State
      */
-    protected function createStateStruct(Session $session, Struct\Context $context)
+    protected function createStateStruct(Session $session, Struct\ShopContextInterface $context)
     {
         $state = null;
         if ($session->offsetGet('sState')) {
@@ -226,14 +323,14 @@ class ContextService implements Service\ContextServiceInterface
     }
 
     /**
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @param Struct\Country\Area $area
      * @param Struct\Country $country
      * @param Struct\Country\State $state
      * @return Struct\Tax[]
      */
     protected function createTaxRulesStruct(
-        Struct\Context $context,
+        Struct\ShopContextInterface $context,
         Struct\Country\Area $area,
         Struct\Country $country,
         Struct\Country\State $state

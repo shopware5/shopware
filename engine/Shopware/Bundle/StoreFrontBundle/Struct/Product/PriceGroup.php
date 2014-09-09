@@ -44,6 +44,11 @@ class PriceGroup extends Extendable implements \JsonSerializable
     protected $name;
 
     /**
+     * @var PriceDiscount[]
+     */
+    protected $discounts = array();
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -81,5 +86,21 @@ class PriceGroup extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount[]
+     */
+    public function getDiscounts()
+    {
+        return $this->discounts;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount[] $discounts
+     */
+    public function setDiscounts($discounts)
+    {
+        $this->discounts = $discounts;
     }
 }

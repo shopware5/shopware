@@ -46,7 +46,7 @@ interface PriceCalculationServiceInterface
      * struct which contains only the calculated price values and the reference to his rule.
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      */
-    public function calculateProduct(Struct\ListProduct $product, Struct\Context $context);
+    public function calculateProduct(Struct\ListProduct $product, Struct\ProductContextInterface $context);
 }

@@ -72,120 +72,49 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
     }
 
     /**
-     * @inheritdoc
+     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\ShopContextInterface $context
+     * @return array|Struct\Product\PriceGroup[]
      */
-    public function getProductDiscount(
-        Struct\ListProduct $product,
+    public function getPriceGroups(
         Struct\Customer\Group $customerGroup,
-        Struct\Context $context
+        Struct\ShopContextInterface $context
     ) {
-        $discounts = $this->getProductsDiscounts(array($product), $customerGroup, $context);
-
-        return array_shift($discounts);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getProductsDiscounts(
-        $products,
-        Struct\Customer\Group $customerGroup,
-        Struct\Context $context
-    ) {
-        $ids = array();
-        foreach ($products as $product) {
-            $ids[] = $product->getId();
-        }
-        $ids = array_unique($ids);
-
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->addSelect($this->fieldHelper->getPriceGroupDiscountFields())
+
+        $query->addSelect('priceGroupDiscount.groupID')
+            ->addSelect($this->fieldHelper->getPriceGroupDiscountFields())
             ->addSelect($this->fieldHelper->getPriceGroupFields());
 
         $query->from('s_core_pricegroups_discounts', 'priceGroupDiscount')
-            ->innerJoin(
-                'priceGroupDiscount',
-                's_core_pricegroups',
-                'priceGroup',
-                'priceGroup.id = priceGroupDiscount.groupID'
-            )
-            ->innerJoin(
-                'priceGroupDiscount',
-                's_articles',
-                'products',
-                'products.pricegroupID = priceGroupDiscount.groupID'
-            );
+            ->innerJoin('priceGroupDiscount', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = priceGroupDiscount.groupID');
 
-        $query->andWhere('priceGroupDiscount.customergroupID = :customerGroup')
-            ->andWhere('products.id IN (:products)');
+        $query->andWhere('priceGroupDiscount.customergroupID = :customerGroup');
 
         $query->groupBy('priceGroupDiscount.id');
 
         $query->orderBy('priceGroupDiscount.groupID')
             ->addOrderBy('priceGroupDiscount.discountstart');
 
-        $query->setParameter(':customerGroup', $customerGroup->getId())
-            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter(':customerGroup', $customerGroup->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $discounts = array();
-        foreach ($data as $priceDiscount) {
-            $id = $priceDiscount['__priceGroupDiscount_groupID'];
-            $discounts[$id][] = $this->priceHydrator->hydratePriceDiscount($priceDiscount);
-        }
+        $priceGroups = array();
 
-        $result = array();
-        foreach ($products as $product) {
-            if (!$product->getPriceGroup() || !$product->isPriceGroupActive()) {
-                continue;
+        foreach ($data as $row) {
+            $priceGroup = $this->priceHydrator->hydratePriceGroup($row);
+
+            foreach($priceGroup->getDiscounts() as $discount) {
+                $discount->setCustomerGroup($customerGroup);
             }
 
-            $number = $product->getNumber();
-            $groupId = $product->getPriceGroup()->getId();
-
-            $result[$number] = $discounts[$groupId];
+            $priceGroups[$priceGroup->getId()] = $priceGroup;
         }
 
-        return $result;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getHighestQuantityDiscount(
-        Struct\Product\PriceGroup $priceGroup,
-        Struct\Customer\Group $customerGroup,
-        $quantity
-    ) {
-        $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select($this->fieldHelper->getPriceGroupDiscountFields())
-            ->from('s_core_pricegroups_discounts', 'priceGroupDiscount')
-            ->andWhere('priceGroupDiscount.groupID = :priceGroup')
-            ->andWhere('priceGroupDiscount.customergroupID = :customerGroup')
-            ->andWhere('priceGroupDiscount.discountstart <= :quantity')
-            ->orderBy('priceGroupDiscount.discount', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-        $query->setParameter(':priceGroup', $priceGroup->getId())
-            ->setParameter(':customerGroup', $customerGroup->getId())
-            ->setParameter(':quantity', $quantity);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        if (empty($data)) {
-            return null;
-        }
-
-        return $this->priceHydrator->hydratePriceDiscount(
-            $data
-        );
+        return $priceGroups;
     }
 }

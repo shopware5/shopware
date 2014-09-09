@@ -3509,6 +3509,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     }
  
     public function testArticles() {
+        Shopware()->Container()->get('context_service_core')->initializeProductContext();
         $this->dispatch("/");
 
         foreach($this->articles as $id => $expected) {
