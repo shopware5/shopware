@@ -47,7 +47,7 @@
 						{if {config name=NewsletterExtendedFields}}
 							<div id="sAdditionalForm">
 								<div>
-									<label for="salutation">{s name=NewsletterRegisterLabelSalutation}{/s}</label>
+									<label for="salutation" class="normal">{s name=NewsletterRegisterLabelSalutation}{/s}</label>
 									<select name="salutation" id="salutation"
 											class="text{if $sStatus.sErrorFlag.salutation} instyle_error{/if}">
 										<option value="">{s name=NewsletterRegisterPleaseChoose}{/s}</option>
@@ -59,25 +59,25 @@
 								</div>
 
 								<div>
-									<label for="firstname">{s name=NewsletterRegisterLabelFirstname}{/s}</label>
+									<label for="firstname" class="normal">{s name=NewsletterRegisterLabelFirstname}{/s}</label>
 									<input name="firstname" type="text" id="firstname" value="{$_POST.firstname|escape}"
 										   class="text {if $sStatus.sErrorFlag.firstname}instyle_error{/if}"/>
 								</div>
 
 								<div>
-									<label for="lastname">{s name=NewsletterRegisterLabelLastname}{/s}</label>
+									<label for="lastname" class="normal">{s name=NewsletterRegisterLabelLastname}{/s}</label>
 									<input name="lastname" type="text" id="lastname" value="{$_POST.lastname|escape}"
 										   class="text {if $sStatus.sErrorFlag.lastname}instyle_error{/if}"/>
 								</div>
 
 								<div>
-									<label for="street">{s name=NewsletterRegisterBillingLabelStreet}{/s}</label>
+									<label for="street" class="normal">{s name=NewsletterRegisterBillingLabelStreet}{/s}</label>
 									<input name="street" type="text" id="street" value="{$_POST.street|escape}"
 										   class="text {if $sStatus.sErrorFlag.street}instyle_error{/if}"/>
 								</div>
 
 								<div>
-									<label for="zipcode">{s name=NewsletterRegisterBillingLabelCity}{/s}</label>
+									<label for="zipcode" class="normal">{s name=NewsletterRegisterBillingLabelCity}{/s}</label>
 									<input name="zipcode" type="text" id="zipcode" value="{$_POST.zipcode|escape}"
 										   class="zipcode text {if $sStatus.sErrorFlag.zipcode}instyle_error{/if}"/>
 									<input name="city" type="text" id="city" value="{$_POST.city|escape}" size="25"
