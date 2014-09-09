@@ -258,12 +258,11 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         $this->registerShop($shopId);
 
-        $counts = array(
+        $counts = [
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_emarketing_promotion_main`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_groups`')
-        );
+        ];
 
         return max($counts);
     }

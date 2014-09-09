@@ -268,8 +268,6 @@ class sRewriteTable
               ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
             LEFT JOIN s_emarketing_promotion_main ep
               ON ru.org_path LIKE CONCAT('sViewport=campaign&sCampaign=', ep.id)
-            LEFT JOIN s_cms_groups cg
-              ON ru.org_path LIKE CONCAT('sViewport=content&sContent=', cg.id)
             WHERE (
                 ru.org_path LIKE 'sViewport=custom&sCustom=%'
                 OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
@@ -278,8 +276,7 @@ class sRewriteTable
             )
             AND cs.id IS NULL
             AND ct.id IS NULL
-            AND ep.id IS NULL
-            AND cg.id IS NULL"
+            AND ep.id IS NULL"
         );
 
         // delete non-existing blog categories from rewrite table
@@ -606,17 +603,6 @@ class sRewriteTable
 
         //static pages urls
         $this->insertStaticPageUrls($offset, $limit);
-
-        $sql = "SELECT id, description as name FROM `s_cms_groups`";
-        if ($limit !== null) {
-            $sql = $this->db->limit($sql, $limit, $offset);
-        }
-        $cmsGroups = $this->db->fetchAll($sql);
-        foreach ($cmsGroups as $row) {
-            $org_path = 'sViewport=content&sContent=' . $row['id'];
-            $path = $this->sCleanupPath($row['name']);
-            $this->sInsertUrl($org_path, $path);
-        }
     }
 
     /**
