@@ -57,10 +57,9 @@ class NoteContext extends SubContext
 
     private function clickActionLink($position, $name)
     {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
         /** @var \Emotion\Note $page */
         $page = $this->getPage('Note');
+        $language = Helper::getCurrentLanguage($page);
 
         /** @var MultipleElement $notePositions */
         $notePositions = $this->getElement('NotePosition');

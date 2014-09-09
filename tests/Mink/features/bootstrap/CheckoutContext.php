@@ -48,11 +48,9 @@ class CheckoutContext extends SubContext
      */
     public function iRemoveTheArticleOnPosition($position)
     {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
         /** @var \Emotion\CheckoutCart $page */
         $page = $this->getPage('CheckoutCart');
-        $offset = $page->cartPositionFirst;
+        $language = Helper::getCurrentLanguage($page);
 
         /** @var MultipleElement $articleBoxes */
         $cartPositions = $this->getElement('CartPosition');
@@ -89,5 +87,20 @@ class CheckoutContext extends SubContext
     public function iProceedToCheckout()
     {
         $this->getPage('CheckoutConfirm')->proceedToCheckout();
+    }
+
+    /**
+     * @When /^I change the shipping method to (?P<shippingId>\d+)$/
+     */
+    public function iChangeTheShippingMethodTo($shipping)
+    {
+        $data = array(
+            array(
+                'field' => 'sDispatch',
+                'value' => $shipping
+            )
+        );
+
+        $this->getPage('CheckoutConfirm')->changeShipping($data);
     }
 }

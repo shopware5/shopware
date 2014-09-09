@@ -36,7 +36,11 @@ class Homepage extends \Emotion\Homepage
         'articleTitle' => 'a.title',
         'articleDescription' => 'p.desc',
         'articlePrice' => 'p.price',
-        'articleMore' => 'a.more'
+        'articleMore' => 'a.more',
+        'controller' => array(
+            'account' => 'body.is--ctl-account',
+            'checkout' => 'body.is--ctl-checkout'
+        )
     );
 
     protected $srcAttribute = 'data-image-src';

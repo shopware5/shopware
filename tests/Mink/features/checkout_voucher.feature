@@ -37,8 +37,7 @@ Feature: Checkout articles with voucher
             | totalSum | 55,89 € |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
-        And   only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        And   I register me:
             | field         | register[personal] | register[billing] |
             | customer_type | business           |                   |
             | salutation    | mr                 |                   |

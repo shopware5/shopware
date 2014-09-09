@@ -65,8 +65,7 @@ Feature: Successful changes of login data
     Scenario: I can create a new account
         Given I am on the homepage
         When  I follow "Mein Konto"
-        And   only on "Emotion" template "I press 'Neuer Kunde'"
-        And   I submit the form "registrationForm" on page "Account" with:
+        And   I register me:
             | field                | register[personal] | register[billing] | register[shipping] |
             | customer_type        | business           |                   |                    |
             | salutation           | mr                 |                   | ms                 |
@@ -85,7 +84,7 @@ Feature: Successful changes of login data
         And   I should see "Die Passwörter stimmen nicht überein."
         And   I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
-        When  I submit the form "registrationForm" on page "Account" with:
+        When  I register me:
             | field                | register[personal] |
             | email                | test@example.com   |
             | password             | abc                |
@@ -96,7 +95,7 @@ Feature: Successful changes of login data
         And   I should see "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht."
         But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
 
-        When  I submit the form "registrationForm" on page "Account" with:
+        When  I register me:
             | field                | register[personal] |
             | email                | test@example.net   |
             | password             | abcdefgh           |

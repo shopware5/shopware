@@ -58,13 +58,10 @@ Feature: My account (without changing login data)
         Given the element "AccountPayment" should have the content:
             | position      | content          |
             | currentMethod | <oldPaymentName> |
-        When  I follow the link "changeButton" of the element "AccountPayment"
-        And   I submit the form "paymentForm" on page "Account" with:
-            | field   | register    |
-            | payment | <paymentId> |
 
-        Then I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And  the element "AccountPayment" should have the content:
+        When  I change the payment method to <paymentId>
+        Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
+        And   the element "AccountPayment" should have the content:
             | position      | content       |
             | currentMethod | <paymentName> |
 
@@ -76,28 +73,24 @@ Feature: My account (without changing login data)
 
     @payment
     Scenario: I can change my payment method
-        When  I follow the link "changeButton" of the element "AccountPayment"
-        And   I submit the form "paymentForm" on page "Account" with:
+        When  I change the payment method to 2:
             | field             | value          |
-            | register[payment] | 2              |
             | sDebitAccount     | 123456789      |
             | sDebitBankcode    | 1234567        |
             | sDebitBankName    | Shopware Bank  |
             | sDebitBankHolder  | Max Mustermann |
-        Then I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And  the element "AccountPayment" should have the content:
+        Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
+        And   the element "AccountPayment" should have the content:
             | position      | content     |
             | currentMethod | Lastschrift |
 
-        When  I follow the link "changeButton" of the element "AccountPayment"
-        And   I submit the form "paymentForm" on page "Account" with:
+        When  I change the payment method to 6:
             | field             | value                  |
-            | register[payment] | 6                      |
             | sSepaIban         | DE68210501700012345678 |
             | sSepaBic          | SHOPWAREXXX            |
             | sSepaBankName     | Shopware Bank          |
 
-        Then I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And  the element "AccountPayment" should have the content:
+        Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
+        And   the element "AccountPayment" should have the content:
             | position      | content |
             | currentMethod | SEPA    |

@@ -44,7 +44,11 @@ class Homepage extends Page
         'articleTitle' => 'a.title',
         'articleDescription' => 'p.desc',
         'articlePrice' => 'p.price',
-        'articleMore' => 'a.more'
+        'articleMore' => 'a.more',
+        'controller' => array(
+            'account' => 'body.ctl_account',
+            'checkout' => 'body.ctl_checkout'
+        )
     );
 
     protected $srcAttribute = 'src';
@@ -752,5 +756,16 @@ class Homepage extends Page
         }
 
         $formSubmit->press();
+    }
+
+    /**
+     * Returns the called Shopware controller
+     * @return string
+     */
+    public function getController()
+    {
+        $elements = \Helper::findElements($this, $this->cssLocator['controller'], $this->cssLocator['controller'], false, false);
+        $elements = array_filter($elements);
+        return key($elements);
     }
 }

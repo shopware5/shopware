@@ -4,8 +4,10 @@ namespace Responsive;
 class Account extends \Emotion\Account
 {
     public $cssLocator = array(
-        'pageIdentifier1'  => 'section.content-main > div > div.account--content',
-        'pageIdentifier2'  => 'section.content-main > div > div.register--content',
+        'identifiers' => array(
+            'dashboard' => 'section.content-main > div > div.account--content',
+            'register' => 'section.content-main > div > div.register--content'
+        ),
         'payment' => 'div.account--payment.account--box strong',
         'logout' => 'div.account--menu-container a.link--logout',
         'registrationForm' => 'form.register--form',
@@ -14,10 +16,11 @@ class Account extends \Emotion\Account
         'paymentForm' => 'div.account--payment-form > form'
     );
 
-    protected function getRegistrationForm()
-    {
-
-    }
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'sendButton'            => array('de' => 'Weiter',                      'en' => 'Continue'),
+        'changePaymentButton'   => array('de' => 'Ändern',                      'en' => 'Change')
+    );
 
     public function checkOrder($orderNumber, $articles, $position = 1)
     {
@@ -98,5 +101,16 @@ class Account extends \Emotion\Account
             $message = sprintf('There was a different value of the order! (%s: %s instead of %s)', $result, $check[$result][0], $check[$result][1]);
             \Helper::throwException(array($message));
         }
+    }
+
+    /**
+     * @param $data
+     */
+    public function register($data)
+    {
+        $this->verifyPage();
+
+        \Helper::fillForm($this, 'registrationForm', $data);
+        \Helper::pressNamedButton($this, 'sendButton');
     }
 }

@@ -12,14 +12,24 @@ class Account extends Page
     protected $path = '/account';
 
     public $cssLocator = array(
-        'pageIdentifier1'  => 'div#content > div > div.account',
-        'pageIdentifier2'  => 'div#login',
+        'identifiers' => array(
+            'dashboard' => 'div#content > div > div.account',
+            'login' => 'div#login',
+            'register' => 'div#content > div > div.register'
+        ),
         'payment' => 'div#selected_payment strong',
         'logout' => 'div.adminbox a.logout',
         'registrationForm' => 'div.register > form',
         'billingForm' => 'div.change_billing > form',
         'shippingForm' => 'div.change_shipping > form',
         'paymentForm' => 'div.change_payment > form'
+    );
+
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'registerButton'        => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
+        'sendButton'            => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration'),
+        'changePaymentButton'   => array('de' => 'Ändern',                     'en' => 'Change'),
     );
 
     /**
@@ -49,22 +59,30 @@ class Account extends Page
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     * @param string|null $action
+     * @return string
      */
-    public function verifyPage()
+    public function verifyPage($action = null)
     {
-        $locators = array('pageIdentifier1', 'pageIdentifier2');
-        $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
+        $locators = $this->cssLocator['identifiers'];
+        $elements = \Helper::findElements($this, $locators, $locators, false, false);
 
-        if (!empty($elements['pageIdentifier1'])) {
-            return;
+        $elements = array_filter($elements);
+
+        if (empty($elements)) {
+            $message = array('You are not on Account page!', 'Current URL: ' . $this->getSession()->getCurrentUrl());
+            \Helper::throwException($message);
         }
 
-        if (!empty($elements['pageIdentifier2'])) {
-            return;
+        if (!$action) {
+            return true;
         }
 
-        $message = array('You are not on Account page!', 'Current URL: '.$this->getSession()->getCurrentUrl());
-        \Helper::throwException($message);
+        if (array_key_exists($action, $elements)) {
+            return true;
+        }
+
+        return key($elements);
     }
 
     /**
@@ -148,27 +166,16 @@ class Account extends Page
 
     /**
      * Changes the payment method
-     * @param integer $value
      * @param array   $data
      */
-    public function changePayment($value, $data = array())
+    public function changePayment($data = array())
     {
-        $field = $this->findField('register[payment]');
+        $element = $this->getElement('AccountPayment');
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::clickNamedLink($element, 'changeButton', null, $language);
 
-        if (null === $field) {
-            $this->clickLink('Zahlungsart ändern');
-            $this->selectFieldOption('register[payment]', $value);
-        } else {
-            $field->selectOption($value);
-        }
-
-        if ($value === 2) {
-            foreach ($data as $field => $value) {
-                $this->fillField($field, $value);
-            }
-        }
-
-        $this->pressButton('Ändern');
+        \Helper::fillForm($this, 'paymentForm', $data);
+        \Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     public function checkOrder($orderNumber, $articles, $position = 1)
@@ -279,5 +286,18 @@ class Account extends Page
         $type = ucfirst($type);
 
         $this->getElement('Account'.$type)->checkAddress($address);
+    }
+
+    /**
+     * @param $data
+     */
+    public function register($data)
+    {
+        if ($this->verifyPage('login') === true) {
+            \Helper::pressNamedButton($this, 'registerButton');
+        }
+
+        \Helper::fillForm($this, 'registrationForm', $data);
+        \Helper::pressNamedButton($this, 'sendButton');
     }
 }
