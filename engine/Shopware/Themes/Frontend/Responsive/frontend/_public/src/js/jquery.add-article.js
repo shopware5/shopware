@@ -49,7 +49,7 @@
              *
              * @type {String}
              */
-            'addArticleUrl': jQuery.controller['ajax_add_article'],
+            'addArticleUrl': $.controller['ajax_add_article'],
 
             /**
              * Object that maps different device types with their per-page amount.
@@ -69,7 +69,14 @@
              *
              * @type {Number}
              */
-            'sliderPerPageDefault': 3
+            'sliderPerPageDefault': 3,
+
+            /**
+             * Whether or not the modal box should be shown.
+             *
+             * @type {Boolean}
+             */
+            'showModal': true
         },
 
         /**
@@ -81,13 +88,16 @@
          * @method init
          */
         init: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
             // Applies HTML data attributes to the current options
             me.applyDataAttributes();
 
+            opts.showModal = !!opts.showModal && opts.showModal !== 'false';
+
             // Will be automatically removed when destroy() is called.
-            me._on(me.$el, me.opts.eventName, $.proxy(me.sendSerializedForm, me));
+            me._on(me.$el, opts.eventName, $.proxy(me.sendSerializedForm, me));
 
             // Close modal on continue shopping button
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
@@ -106,18 +116,29 @@
             event.preventDefault();
 
             var me = this,
+                opts = me.opts,
                 $el = me.$el,
                 ajaxData = $el.serialize();
 
-            $.loadingIndicator.open({
-                'closeOverlay': false
-            });
+            if (opts.showModal) {
+                $.loadingIndicator.open({
+                    'closeOverlay': false
+                });
+            }
+
+            $.publish('plugin/' + me.getName() + '/onBeforeAddArticle', [ me, ajaxData ]);
 
             $.ajax({
                 'data': ajaxData,
                 'dataType': 'jsonp',
-                'url': me.opts.addArticleUrl,
+                'url': opts.addArticleUrl,
                 'success': function (result) {
+                    $.publish('plugin/' + me.getName() + '/onAddArticle', [ me, result ]);
+
+                    if (!opts.showModal) {
+                        return;
+                    }
+
                     $.loadingIndicator.close(function () {
                         $.modal.open(result, {
                             width: 750,
@@ -139,7 +160,6 @@
 
                             slider.setSizes();
                         }, 20);
-
                     });
                 }
             });

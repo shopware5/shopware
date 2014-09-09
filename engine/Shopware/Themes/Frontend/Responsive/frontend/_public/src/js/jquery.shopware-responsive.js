@@ -385,6 +385,8 @@ $(function() {
 
     $('*[data-menu-scroller="true"]').menuScroller();
 
+    $('*[data-collapse-cart="true"]').collapseCart();
+
     // Jump to the scroll comments section on the detail-page
     if(window.location.hash === '#content--product-reviews') {
         var tabPanel = $('.additional-info--tabs').data('plugin_tabContent'),

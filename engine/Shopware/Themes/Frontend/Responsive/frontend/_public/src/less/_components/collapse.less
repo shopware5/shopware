@@ -15,7 +15,7 @@
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
     display: block;
     position: relative;
-    z-index: 11;
+    z-index: 1100;
     border: 1px solid @lightDarkBorderColor;
     cursor: pointer;
 
@@ -46,7 +46,7 @@
         border-width: 0 0 1px 0;
         border-style: solid;
         border-color: @darkBorderColor;
-        z-index: 15;
+        z-index: 1300;
 
         .collapse--toggler {
             &:before {
@@ -63,7 +63,7 @@
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
     display: none;
     position: relative;
-    z-index: 10;
+    z-index: 1000;
     background: #fff;
     border-width: 0 1px 1px 1px;
     border-style: solid;
@@ -71,7 +71,7 @@
 
     &.is--collapsed {
         display: block;
-        z-index: 14;
+        z-index: 1200;
     }
 }
 

@@ -1,53 +1,69 @@
-<div class="inner_cart">
-	{if $sBasket.content}
-		{foreach name=ajaxbasket from=$sBasket.content item=sBasketItem}
-			
-			{block name='frontend_checkout_ajax_cart_row'}
-			
-			<div class="{if $sBasketItem.modus == 1} premium{elseif $sBasketItem.modus == 10} bundle{/if}{if $smarty.foreach.ajaxbasket.last} last{/if}">
-				{if $sBasketItem.image.src.0}
-				<div class="thumbnail">
-					<img src="{$sBasketItem.image.src.0}" alt="{$sBasketItem.articlename|strip_tags}" />
-				</div>
-				{/if}
-				
-				{* Article name *}
-				{block name='frontend_checkout_ajax_cart_articlename'}
-				<span class="title">
-					<strong>{$sBasketItem.quantity}x</strong> <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}">
-					{if $sBasketItem.modus == 10}{s name='AjaxCartInfoBundle'}{/s}{else}{$sBasketItem.articlename|truncate:30}{/if}
-					</a>
-				</span>
-				{/block}
-				
-				{block name='frontend_checkout_ajax_cart_price'}
-				{* Article price *}
-				<strong class="price">{if $sBasketItem.amount}{$sBasketItem.amount|currency}{else}{s name="AjaxCartInfoFree"}{/s}{/if}*</strong>
-				{/block}
-				
-				
-			</div>
-			{/block}
-		{/foreach}
-	{else}
-		{block name='frontend_checkout_ajax_cart_empty'}
-		<div class="{if !$sBasket.content}last{/if}">
-			{s name='AjaxCartInfoEmpty'}{/s}
-		</div>
-		{/block}
-	{/if}
-</div>
-{* Basket link *}
-{block name='frontend_checkout_ajax_cart_open_basket'}
-<div class="left">
-	<a href="{url controller='checkout' action='cart'}" class="button-left small_left" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape}">
-		{s name='AjaxCartLinkBasket'}{/s}
-	</a>
-</div>
-<div class="right">
-<a href="{url controller='checkout' action='confirm'}" class="button-right small_right checkout" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
-		{s name='AjaxCartLinkConfirm'}{/s}
-	</a>
-</div>
-<div class="clear"></div>
+{block name='frontend_checkout_ajax_cart'}
+    <div class="ajax--cart">
+        {block name='frontend_checkout_ajax_cart_buttons_offcanvas'}
+            <div class="buttons--off-canvas">
+                {block name='frontend_checkout_ajax_cart_buttons_offcanvas_inner'}
+                    <a href="#close-categories-menu" class="close--off-canvas">
+                        <i class="icon--arrow-left"></i>
+                        {s name="AjaxCartContinueShopping"}Continue shopping{/s}
+                    </a>
+                {/block}
+            </div>
+        {/block}
+
+        {block name='frontend_checkout_ajax_cart_item_container'}
+            <div class="item--container">
+                {block name='frontend_checkout_ajax_cart_item_container_inner'}
+                    {if $sBasket.content}
+                        {foreach $sBasket.content as $sBasketItem}
+                            {block name='frontend_checkout_ajax_cart_row'}
+                                {include file="frontend/checkout/ajax_cart_item.tpl" basketItem=$sBasketItem}
+                            {/block}
+                        {/foreach}
+                    {else}
+                        {block name='frontend_checkout_ajax_cart_empty'}
+                            <div class="cart--item is--empty">
+                                {block name='frontend_checkout_ajax_cart_empty_inner'}
+                                    <span class="cart--empty-text">{s name='AjaxCartInfoEmpty'}Your shopping cart is empty{/s}</span>
+                                {/block}
+                            </div>
+                        {/block}
+                    {/if}
+                {/block}
+            </div>
+        {/block}
+
+        {block name='frontend_checkout_ajax_cart_prices_container'}
+            {if $sBasket.content}
+                <div class="prices--container">
+                    {block name='frontend_checkout_ajax_cart_prices_container_inner'}
+                        <div class="prices--articles">
+                            <span class="prices--articles-text">{s name="AjaxCartTotalAmount"}Total amount{/s}</span>
+                            <span class="prices--articles-amount">{$sBasket.Amount|currency}</span>
+                        </div>
+                    {/block}
+                </div>
+            {/if}
+        {/block}
+
+        {* Basket link *}
+        {block name='frontend_checkout_ajax_cart_button_container'}
+            <div class="button--container">
+                {block name='frontend_checkout_ajax_cart_button_container_inner'}
+                    {block name='frontend_checkout_ajax_cart_open_checkout'}
+                        <a href="{url controller='checkout' action='confirm'}" class="btn btn--primary button--checkout" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape:"html"}">
+                            <i class="icon--arrow-right is--right"></i>
+                            {s name='AjaxCartLinkConfirm'}Proceed to checkout{/s}
+                        </a>
+                    {/block}
+                    {block name='frontend_checkout_ajax_cart_open_basket'}
+                        <a href="{url controller='checkout' action='cart'}" class="btn btn--grey button--open-basket" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape:"html"}">
+                            <i class="icon--arrow-right is--right"></i>
+                            {s name='AjaxCartLinkBasket'}View shopping cart{/s}
+                        </a>
+                    {/block}
+                {/block}
+            </div>
+        {/block}
+    </div>
 {/block}

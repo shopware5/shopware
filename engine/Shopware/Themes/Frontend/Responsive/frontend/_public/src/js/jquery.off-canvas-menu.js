@@ -153,7 +153,7 @@
         });
 
         // Allow the user to close the off canvas menu
-        me.$closeButton.on(clickEvt + '.' + pluginName, function(event) {
+        me.$body.delegate(opts.closeButtonSelector, clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
             me.closeMenu();
         });
@@ -167,11 +167,17 @@
      */
     Plugin.prototype.openMenu = function() {
         var me = this,
-            opts = me.opts,
-            deltaX = 0;
+            opts = me.opts;
 
         // Close all other opened off-canvas menus
         $('.' + opts.offCanvasElementCls).removeClass(opts.activeMenuCls);
+
+        $.overlay.open({
+            closeOnClick: true,
+            onClick: function () {
+                me.closeMenu();
+            }
+        });
 
         me.$offCanvas.addClass(opts.activeMenuCls);
         me.$pageWrap.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
@@ -189,6 +195,8 @@
     Plugin.prototype.closeMenu = function() {
         var me = this,
             opts = me.opts;
+
+        $.overlay.close();
 
         me.$offCanvas.removeClass(opts.activeMenuCls).removeAttr('style');
         me.$pageWrap.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
@@ -223,6 +231,8 @@
         me.$closeButton.off(clickEvt + '.' + pluginName);
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
+
+        me.$body.undelegate('.' + pluginName);
 
         return true;
     };
