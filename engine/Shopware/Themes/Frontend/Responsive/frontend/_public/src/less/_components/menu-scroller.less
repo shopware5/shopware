@@ -2,7 +2,6 @@
 // Some styling rules can also be found in the hacks.less!
 
 .js--menu-scroller {
-    overflow: hidden;
     position: relative;
 
     &:before,
@@ -38,17 +37,21 @@
     }
 }
 
+.js--menu-scroller--viewport {
+    overflow: hidden;
+}
+
 .js--menu-scroller--list {
+    /**
+     * Large width so the menu doesn't wrap on initialization.
+     * The right width will be set by the plugin
+     */
+    width: 10000%;
+    max-width: none;
     overflow: visible;
     position: relative;
     white-space: nowrap;
-    width: 100%;
     left: 0;
-    font-size: 0;
-}
-
-.js--menu-scroller--item {
-    .unitize(16, 16, font-size);
 }
 
 .js--menu-scroller--arrow {
@@ -67,6 +70,7 @@
     color: #FFFFFF;
     cursor: pointer;
     z-index: 750;
+    display: none;
 
     &:hover {
         background: @primaryTextColor;
@@ -90,11 +94,5 @@
         top: 50%;
         left: 0;
         right: 0;
-    }
-}
-
-@media screen and(min-width: @desktopViewportWidth) {
-    .js--menu-scroller--item {
-        .unitize(14, 16, font-size);
     }
 }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware AdvancedMenu Plugin
@@ -34,32 +35,95 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     public function install()
     {
+        $this->subscribeEvents();
+        $this->createForm();
+
+        return true;
+    }
+
+    private function subscribeEvents()
+    {
         $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch',
-            'onPostDispatch'
+            'Theme_Compiler_Collect_Plugin_Less',
+            'onCollectLessFiles'
         );
 
+        $this->subscribeEvent(
+            'Theme_Compiler_Collect_Plugin_Javascript',
+            'onCollectJavascriptFiles'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Controller_Action_PostDispatchSecure_Frontend',
+            'onPostDispatch'
+        );
+    }
+
+    private function createForm()
+    {
         $form = $this->Form();
 
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
 
         $form->setElement('checkbox', 'show', array(
-            'label' => 'Menü anzeigen', 'value' => 1,
+            'label' => 'Menü anzeigen',
+            'value' => 1,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-        ));
-        $form->setElement('text', 'levels', array(
-            'label' => 'Anzahl Ebenen', 'value' => 2,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-        ));
-        $form->setElement('boolean', 'caching', array(
-            'label' => 'Caching aktivieren', 'value' => 1
-        ));
-        $form->setElement('number', 'cachetime', array(
-            'label' => 'Cachezeit', 'value' => 86400
         ));
 
-        return true;
+        $form->setElement('text', 'levels', array(
+            'label' => 'Anzahl Ebenen',
+            'value' => 3,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
+
+        $form->setElement('boolean', 'caching', array(
+            'label' => 'Caching aktivieren',
+            'value' => 1
+        ));
+
+        $form->setElement('number', 'cachetime', array(
+            'label' => 'Cachezeit',
+            'value' => 86400
+        ));
+
+        $form->setElement(
+            'select',
+            'columnAmount',
+            array(
+                'label' => 'Breite des Teasers',
+                'store' => array(
+                    array(0, '0%'),
+                    array(1, '25%'),
+                    array(2, '50%'),
+                    array(3, '75%'),
+                    array(4, '100%')
+                ),
+                'value' => 2,
+            )
+        );
+
+        $this->translateForm($form);
+    }
+
+    private function translateForm(Shopware\Models\Config\Form $form)
+    {
+        $translations = array(
+            'en_GB' => array(
+                'show' => array('label' => 'Show menu'),
+                'levels' => array('label' => 'Category levels'),
+                'caching' => array('label' => 'Enable caching'),
+                'cachetime' => array('label' => 'Caching time'),
+                'columnAmount' => array('label' => 'Teaser width')
+            )
+        );
+
+        if ($this->assertMinimumVersion('4.2.2')) {
+            $this->addFormTranslations($translations);
+        } else {
+            $form->translateForm($translations);
+        }
     }
 
     /**
@@ -68,8 +132,45 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getInfo()
     {
         return array(
-            'label' => 'Erweitertes Menü'
+            'label' => $this->getLabel()
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Erweitertes Menü';
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function onCollectLessFiles()
+    {
+        $lessDir = __DIR__ . '/Views/frontend/_public/src/less/';
+
+        $less = new \Shopware\Components\Theme\LessDefinition(
+            array(),
+            array(
+                $lessDir . 'advanced-menu.less'
+            )
+        );
+
+        return new ArrayCollection(array($less));
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function onCollectJavascriptFiles()
+    {
+        $jsDir = __DIR__ . '/Views/frontend/_public/src/js/';
+
+        return new ArrayCollection(array(
+            $jsDir . 'jquery.advanced-menu.js'
+        ));
     }
 
     /**
@@ -84,18 +185,10 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
-        $request = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
-        $view = $args->getSubject()->View();
-
-        if (!$request->isDispatched() || $response->isException()
-          || $request->getModuleName() != 'frontend' || !$view->hasTemplate()) {
-            return;
-        }
-
-        $parent = Shopware()->Shop()->get('parentID');
-        $category = empty(Shopware()->System()->_GET['sCategory']) ? $parent : Shopware()->System()->_GET['sCategory'];
         $config = $this->Config();
+        $view = $args->getSubject()->View();
+        $parent = Shopware()->Shop()->get('parentID');
+        $sCategory = $args->get('sCategory');
 
         if (empty($config->show) && $config->show !== null) {
             return;
@@ -105,9 +198,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         $view->assign('sAdvancedMenu', $this->getAdvancedMenu(
             $parent,
-            $category,
+            !empty($sCategory) ? $sCategory : $parent,
             (int) $config->levels
         ));
+
+        $view->assign('columnAmount', $config->columnAmount);
+
+        $view->addTemplateDir($this->Path() . 'Views');
         $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
     }
 
@@ -150,6 +247,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             }
             break;
         }
+
+        foreach ($tree as &$category) {
+            $activeCategories = 0;
+
+            foreach ($category['sub'] as $subCategory) {
+                if ($subCategory['active']) {
+                    $activeCategories++;
+                }
+            }
+
+            $category['activeCategories'] = $activeCategories;
+        }
+
+
         return $tree;
     }
 
