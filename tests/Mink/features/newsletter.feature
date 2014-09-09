@@ -3,21 +3,16 @@ Feature: Newsletter
 
     Scenario: Subscribe to and unsubscripe from newsletter
         Given I am on the homepage
-        And   I submit the form "newsletterForm" on page "Homepage" with:
-            | field      | value           |
-            | newsletter | test@example.de |
+        When  I subscribe to the newsletter with "test@example.de"
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
-        When  I submit the form "newsletterForm" on page "Newsletter" with:
-            | field                 | value |
-            | subscribeToNewsletter | -1    |
+        When  I unsubscribe the newsletter
         Then  I should see "Ihre eMail-Adresse wurde gelöscht"
 
     Scenario: I can subscribe to the newsletter with additional data
         Given I am on the page "Newsletter"
-        When  I submit the form "newsletterForm" on page "Newsletter" with:
+        When  I subscribe to the newsletter with "test@example.de" :
             | field      | value           |
-            | newsletter | test@example.de |
             | salutation | mr              |
             | firstname  | Max             |
             | lastname   | Mustermann      |
@@ -26,9 +21,7 @@ Feature: Newsletter
             | city       | Musterhausen    |
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
-        When  I submit the form "newsletterForm" on page "Newsletter" with:
-            | field                 | value |
-            | subscribeToNewsletter | -1    |
+        When  I unsubscribe the newsletter
         Then  I should see "Ihre eMail-Adresse wurde gelöscht"
 
     @javascript @account

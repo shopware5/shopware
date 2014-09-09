@@ -117,19 +117,59 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I subscribe to the newsletter on frontpage with "(?P<email>[^"]*)"$/
-     */
-    public function iSubscribeToTheNewsletterOnFrontpageWith($email)
-    {
-        $this->getPage('Homepage')->subscribeNewsletter($email);
-    }
-
-    /**
      * @Then /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
      */
     public function theCartShouldContainArticlesWithAValueOf($quantity, $amount)
     {
         $this->getElement('HeaderCart')->checkCart($quantity, $amount);
+    }
+
+    /**
+     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)"$/
+     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)" :$/
+     */
+    public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
+    {
+        /** @var \Emotion\Homepage $page */
+        $page = $this->getPage('Homepage');
+        $controller = $page->getController();
+
+        $data = array(
+            array(
+                'field' => 'newsletter',
+                'value' => $email
+            )
+        );
+
+        if($controller === 'newsletter') {
+            $page = $this->getPage('Newsletter');
+
+            if($additionalData) {
+                $data = array_merge($data, $additionalData->getHash());
+            }
+        }
+
+        $page->subscribeNewsletter($data);
+    }
+
+    /**
+     * @When /^I unsubscribe the newsletter$/
+     * @When /^I unsubscribe the newsletter with "(?P<email>[^"]*)"$/
+     */
+    public function iUnsubscribeTheNewsletter($email = null)
+    {
+        $data = array();
+
+        if($email) {
+            $data = array(
+                array(
+                    'field' => 'newsletter',
+                    'value' => $email
+                )
+            );
+        }
+
+        $this->getPage('Newsletter')->unsubscribeNewsletter($data);
     }
 
 }
