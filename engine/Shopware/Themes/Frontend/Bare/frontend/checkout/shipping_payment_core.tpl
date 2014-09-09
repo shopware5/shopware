@@ -45,7 +45,7 @@
     {* Action bottom *}
     {block name='frontend_checkout_shipping_payment_core_buttons'}
         <div class="confirm--actions table--actions block">
-            <input type="submit" form="shippingPaymentForm" value="{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}" class="btn btn--primary right main--actions" />
+            <input type="submit" form="shippingPaymentForm" value="{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}" class="btn btn--primary right main--actions" data-form-polyfill="true" />
         </div>
     {/block}
 
