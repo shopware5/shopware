@@ -36,6 +36,7 @@
  * ?>
  * </code>
  *
+ * @deprecated Will be removed in SW 5.1
  * @author      shopware AG
  * @package     Shopware 3.5.0
  * @subpackage  API-Export

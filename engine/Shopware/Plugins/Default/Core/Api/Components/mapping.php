@@ -26,6 +26,7 @@
  * Shopware API
  * Mapping von Shopware Datenfeldern
  *
+ * @deprecated Will be removed in SW 5.1
  * @author      Heiner Lohaus <hl@shopware2.de>
  * @package     Shopware 2.08.01
  * @subpackage  API-Converter

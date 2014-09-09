@@ -24,6 +24,8 @@
 
 /**
  * Deprecated Shopware API Import
+ *
+ * @deprecated Will be removed in SW 5.1
  * @link http://www.shopware.de
  * @copyright Copyright (c) 2011, shopware AG
  * @author Heiner Lohaus
