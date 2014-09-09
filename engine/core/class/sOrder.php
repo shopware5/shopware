@@ -1009,8 +1009,7 @@ class sOrder
      */
     private function getOrderDetailsForStatusMail($orderId)
     {
-        $orderDetails = Shopware()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
-        $orderDetails = array_values($orderDetails);
+        $orderDetails = $this->getOrderDetailsByOrderId(array('orderID' => $orderId));
 
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
@@ -1032,11 +1031,7 @@ class sOrder
      */
     private function getOrderForStatusMail($orderId)
     {
-        $order = Shopware()->Api()->Export()->sGetOrders(
-            array('orderID' => $orderId)
-        );
-        $order = current($order);
-
+        $this->getOrderById($orderId);
         $attributes = $this->getOrderAttributes($orderId);
         unset($attributes['id']);
         unset($attributes['orderID']);
@@ -1476,8 +1471,7 @@ class sOrder
             ', array($order['dispatchID']));
         }
 
-        $user = Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
-        $user = current($user);
+        $user = $this->getCustomerInformationByOrderId($orderId);
 
         if (empty($order) || empty($orderDetails) || empty($user)) {
             return;
@@ -1687,5 +1681,211 @@ class sOrder
         return $this->config;
     }
 
+    /**
+     * Replacement for: Shopware()->Api()->Export()->sGetOrders(array('orderID' => $orderId));
+     *
+     * @param int $orderId
+     * @return array|false
+     */
+    public function getOrderById($orderId)
+    {
+        $sql = <<<EOT
+SELECT
+    `o`.`id` as `orderID`,
+    `o`.`ordernumber`,
+    `o`.`ordernumber` as `order_number`,
+    `o`.`userID`,
+    `o`.`userID` as `customerID`,
+    `o`.`invoice_amount`,
+    `o`.`invoice_amount_net`,
+    `o`.`invoice_shipping`,
+    `o`.`invoice_shipping_net`,
+    `o`.`ordertime` as `ordertime`,
+    `o`.`status`,
+    `o`.`status` as `statusID`,
+    `o`.`cleared` as `cleared`,
+    `o`.`cleared` as `clearedID`,
+    `o`.`paymentID` as `paymentID`,
+    `o`.`transactionID` as `transactionID`,
+    `o`.`comment`,
+    `o`.`customercomment`,
+    `o`.`net`,
+    `o`.`net` as `netto`,
+    `o`.`partnerID`,
+    `o`.`temporaryID`,
+    `o`.`referer`,
+    o.cleareddate,
+    o.cleareddate as cleared_date,
+    o.trackingcode,
+    o.language,
+    o.currency,
+    o.currencyFactor,
+    o.subshopID,
+    o.dispatchID,
+    cu.id as currencyID,
+    `c`.`description` as `cleared_description`,
+    `s`.`description` as `status_description`,
+    `p`.`description` as `payment_description`,
+    `d`.`name` 		  as `dispatch_description`,
+    `cu`.`name` 	  as `currency_description`
+FROM
+    `s_order` as `o`
+LEFT JOIN `s_core_states` as `s`
+    ON	(`o`.`status` = `s`.`id`)
+LEFT JOIN `s_core_states` as `c`
+    ON	(`o`.`cleared` = `c`.`id`)
+LEFT JOIN `s_core_paymentmeans` as `p`
+    ON	(`o`.`paymentID` = `p`.`id`)
+LEFT JOIN `s_premium_dispatch` as `d`
+    ON	(`o`.`dispatchID` = `d`.`id`)
+LEFT JOIN `s_core_currencies` as `cu`
+    ON	(`o`.`currency` = `cu`.`currency`)
+WHERE
+    `o`.`id` = :orderId
+EOT;
 
+        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
+
+        return $row;
+    }
+
+    /**
+     * Replacement for: Shopware()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
+     *
+     * Returns order details for a given orderId
+     *
+     * @param int $orderId
+     * @return array
+     */
+    public function getOrderDetailsByOrderId($orderId)
+    {
+        $sql = <<<EOT
+SELECT
+    `d`.`id` as `orderdetailsID`,
+    `d`.`orderID` as `orderID`,
+    `d`.`ordernumber`,
+    `d`.`articleID`,
+    `d`.`articleordernumber`,
+    `d`.`price` as `price`,
+    `d`.`quantity` as `quantity`,
+    `d`.`price`*`d`.`quantity` as `invoice`,
+    `d`.`name`,
+    `d`.`status`,
+    `d`.`shipped`,
+    `d`.`shippedgroup`,
+    `d`.`releasedate`,
+    `d`.`modus`,
+    `d`.`esdarticle`,
+    `d`.`taxID`,
+    `t`.`tax`,
+    `d`.`tax_rate`,
+    `d`.`esdarticle` as `esd`
+FROM
+    `s_order_details` as `d`
+LEFT JOIN
+    `s_core_tax` as `t`
+ON
+    `t`.`id` = `d`.`taxID`
+WHERE
+    `d`.`orderID` = :orderId
+ORDER BY
+    `orderdetailsID` ASC
+EOT;
+
+        $rows = $this->db->fetchAll($sql, ['orderId' => $orderId]);
+
+        return $rows;
+    }
+
+    /**
+     * Replacement for: Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
+     *
+     * @param $orderId
+     * @return array|false
+     */
+    public function getCustomerInformationByOrderId($orderId)
+    {
+        $sql = <<<EOT
+SELECT
+    `b`.`company` AS `billing_company`,
+    `b`.`department` AS `billing_department`,
+    `b`.`salutation` AS `billing_salutation`,
+    `ub`.`customernumber`,
+    `b`.`firstname` AS `billing_firstname`,
+    `b`.`lastname` AS `billing_lastname`,
+    `b`.`street` AS `billing_street`,
+    `b`.`zipcode` AS `billing_zipcode`,
+    `b`.`city` AS `billing_city`,
+    `b`.`phone` AS `phone`,
+    `b`.`phone` AS `billing_phone`,
+    `b`.`fax` AS `fax`,
+    `b`.`fax` AS `billing_fax`,
+    `b`.`countryID` AS `billing_countryID`,
+    `b`.`stateID` AS `billing_stateID`,
+    `bc`.`countryname` AS `billing_country`,
+    `bc`.`countryiso` AS `billing_countryiso`,
+    `bca`.`name` AS `billing_countryarea`,
+    `bc`.`countryen` AS `billing_countryen`,
+    `b`.`ustid`,
+    `ba`.`text1` AS `billing_text1`,
+    `ba`.`text2` AS `billing_text2`,
+    `ba`.`text3` AS `billing_text3`,
+    `ba`.`text4` AS `billing_text4`,
+    `ba`.`text5` AS `billing_text5`,
+    `ba`.`text6` AS `billing_text6`,
+    `b`.`orderID` as `orderID`,
+    `s`.`company` AS `shipping_company`,
+    `s`.`department` AS `shipping_department`,
+    `s`.`salutation` AS `shipping_salutation`,
+    `s`.`firstname` AS `shipping_firstname`,
+    `s`.`lastname` AS `shipping_lastname`,
+    `s`.`street` AS `shipping_street`,
+    `s`.`zipcode` AS `shipping_zipcode`,
+    `s`.`city` AS `shipping_city`,
+    `s`.`stateID` AS `shipping_stateID`,
+    `s`.`countryID` AS `shipping_countryID`,
+    `sc`.`countryname` AS `shipping_country`,
+    `sc`.`countryiso` AS `shipping_countryiso`,
+    `sca`.`name` AS `shipping_countryarea`,
+    `sc`.`countryen` AS `shipping_countryen`,
+    `sa`.`text1` AS `shipping_text1`,
+    `sa`.`text2` AS `shipping_text2`,
+    `sa`.`text3` AS `shipping_text3`,
+    `sa`.`text4` AS `shipping_text4`,
+    `sa`.`text5` AS `shipping_text5`,
+    `sa`.`text6` AS `shipping_text6`,
+    `u`.*,
+       ub.birthday,
+       `g`.`id` AS `preisgruppe`,
+       `g`.`tax` AS `billing_net`
+FROM
+    `s_order_billingaddress` as `b`
+LEFT JOIN `s_order_shippingaddress` as `s`
+    ON `s`.`orderID` = `b`.`orderID`
+LEFT JOIN `s_user_billingaddress` as `ub`
+    ON `ub`.`userID` = `b`.`userID`
+LEFT JOIN `s_user` as `u`
+    ON `b`.`userID` = `u`.`id`
+LEFT JOIN `s_core_countries` as `bc`
+    ON `bc`.`id` = `b`.`countryID`
+LEFT JOIN `s_core_countries` as `sc`
+    ON `sc`.`id` = `s`.`countryID`
+LEFT JOIN `s_core_customergroups` as `g`
+    ON `u`.`customergroup` = `g`.`groupkey`
+LEFT JOIN s_core_countries_areas bca
+    ON bc.areaID = bca.id
+LEFT JOIN s_core_countries_areas sca
+    ON sc.areaID = sca.id
+LEFT JOIN s_order_billingaddress_attributes ba
+    ON b.id = ba.billingID
+LEFT JOIN s_order_shippingaddress_attributes sa
+    ON s.id = sa.shippingID
+WHERE
+    `b`.`orderID`=:orderId
+EOT;
+
+        $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
+
+        return $row;
+    }
 }
