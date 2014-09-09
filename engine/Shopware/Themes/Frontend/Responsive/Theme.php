@@ -87,8 +87,9 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.shipping-payment.js',
         'src/js/jquery.add-article.js',
         'src/js/jquery.ui.datepicker.js',
-        'src/js/jquery.shopware-responsive.js'
-    );
+        'src/js/jquery.collapse-cart.js',
+		'src/js/jquery.shopware-responsive.js'
+	);
 
     /**
      * @param Form\Container\TabContainer $container

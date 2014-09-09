@@ -1209,7 +1209,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Ajax add article action
      *
-     * Loads the ajax padding plugin.
+     * This action will get redirected from the default addArticleAction
+     * when the request was an AJAX request.
+     *
+     * The json padding will be set so that the content type will get to
+     * 'text/javascript' so the template can be returned via jsonp
      */
     public function ajaxAddArticleAction()
     {
@@ -1217,23 +1221,69 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * Ajax add article cart action
+     *
+     * This action is a lightweight way to add an article by the passed
+     * article ordernumber and quantity.
+     *
+     * The ordernumber is expected to get passed by the 'sAdd' parameter
+     * This quantity is expected to get passed by the 'sQuantity' parameter.
+     *
+     * After the article was added to the basket, the whole cart content will be returned.
+     */
+    public function ajaxAddArticleCartAction()
+    {
+        $orderNumber = $this->Request()->getParam('sAdd');
+        $quantity = $this->Request()->getParam('sQuantity');
+
+        $this->basket->sAddArticle($orderNumber, $quantity);
+
+        $this->forward('ajaxCart');
+    }
+
+    /**
+     * Ajax delete article action
+     *
+     * This action is a lightweight way to delete an article by the passed
+     * basket item id.
+     *
+     * This id is expected to get passed by the 'sDelete' parameter.
+     *
+     * After the article was removed from the basket, the whole cart content will be returned.
+     */
+    public function ajaxDeleteArticleCartAction()
+    {
+        $itemId = $this->Request()->getParam('sDelete');
+
+        if ($itemId) {
+            $this->basket->sDeleteArticle($itemId);
+        }
+
+        $this->forward('ajaxCart');
+    }
+
+    /**
      * Ajax cart action
      *
-     * Loads the cart in order to send via ajax.
+     * This action loads the cart content and returns it.
+     * Its purpose is to return all necessary informations in a minimal template
+     * for a good performance so e.g. ajax requests are finished more quickly.
      */
     public function ajaxCartAction()
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
 
-        //$this->View()->sUserData = $this->getUserData();
-        $this->View()->sBasket = $this->getBasket();
+        $view = $this->View();
+        $basket = $this->getBasket();
 
-        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
-        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+        $view->sBasket = $basket;
+
+        $view->sShippingcosts = $basket['sShippingcosts'];
+        $view->sShippingcostsDifference = $basket['sShippingcostsDifference'];
+        $view->sAmount = $basket['sAmount'];
+        $view->sAmountWithTax = $basket['sAmountWithTax'];
+        $view->sAmountTax = $basket['sAmountTax'];
+        $view->sAmountNet = $basket['AmountNetNumeric'];
     }
 
     /**
