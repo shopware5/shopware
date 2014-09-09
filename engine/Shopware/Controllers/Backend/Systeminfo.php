@@ -98,7 +98,6 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $skipList = array(
             'engine/Shopware/Plugins/Default/Backend/HeidelActions/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Backend/SwagBepado/Bootstrap.php',
-            'engine/Shopware/Plugins/Default/Core/CouchCommerce/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Frontend/HeidelPayment/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Frontend/MoptPaymentPayone/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Frontend/PaymentSkrill/Bootstrap.php',
