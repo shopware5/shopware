@@ -11,6 +11,7 @@ class Homepage extends \Emotion\Homepage
         'contentBlock' => 'section.content-main > div.content-main--inner',
         'searchForm' => 'form.main-search--form',
         'newsletterForm' => 'form.newsletter--form',
+        'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]',
         'emotionElement' => 'li.emotion--element.%s-element',
         'emotionSliderElement' => 'li.emotion--element.%s-slider-element',
         'bannerImage' => 'div.emotion--element-banner',
@@ -39,7 +40,8 @@ class Homepage extends \Emotion\Homepage
         'articleMore' => 'a.more',
         'controller' => array(
             'account' => 'body.is--ctl-account',
-            'checkout' => 'body.is--ctl-checkout'
+            'checkout' => 'body.is--ctl-checkout',
+            'newsletter' => 'body.is--ctl-newsletter'
         )
     );
 

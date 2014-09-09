@@ -15,12 +15,43 @@ class Newsletter extends Page
         'newsletterForm' => 'form#letterForm'
     );
 
+    public $namedSelectors = array(
+        'newsletterFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
+    );
+
     /**
-     * Verify if we're on an expected page. Throw an exception if not.
+     * @param array $data
      */
-    public function verifyPage()
+    public function subscribeNewsletter(array $data)
     {
-        $locators = array('newsletterForm');
-        \Helper::findElements($this, $locators);
+        $mode = array(
+            array(
+                'field' => 'subscribeToNewsletter',
+                'value' => 1
+            )
+        );
+
+        $data = array_merge($data, $mode);
+
+        \Helper::fillForm($this, 'newsletterForm', $data);
+        \Helper::pressNamedButton($this, 'newsletterFormSubmit');
+    }
+
+    /**
+     * @param array $data
+     */
+    public function unsubscribeNewsletter(array $data)
+    {
+        $mode = array(
+            array(
+                'field' => 'subscribeToNewsletter',
+                'value' => -1
+            )
+        );
+
+        $data = array_merge($data, $mode);
+
+        \Helper::fillForm($this, 'newsletterForm', $data);
+        \Helper::pressNamedButton($this, 'newsletterFormSubmit');
     }
 }

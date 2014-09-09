@@ -19,6 +19,7 @@ class Homepage extends Page
         'contentBlock' => 'div#content > div.inner',
         'searchForm' => 'div#searchcontainer form',
         'newsletterForm' => 'div.footer_column.col4 > form',
+        'newsletterFormSubmit' => 'div.footer_column.col4 > form input[type="submit"]',
         'emotionElement' => 'div.emotion-element > div.%s-element',
         'emotionSliderElement' => 'div.emotion-element > div.%s-slider-element',
         'bannerImage' => 'div.mapping img',
@@ -47,7 +48,8 @@ class Homepage extends Page
         'articleMore' => 'a.more',
         'controller' => array(
             'account' => 'body.ctl_account',
-            'checkout' => 'body.ctl_checkout'
+            'checkout' => 'body.ctl_checkout',
+            'newsletter' => 'body.ctl_newsletter'
         )
     );
 
@@ -599,13 +601,15 @@ class Homepage extends Page
     }
 
     /**
-     * @param $email
+     * @param array $data
      */
-    public function subscribeNewsletter($email)
+    public function subscribeNewsletter(array $data)
     {
-        $this->open();
-        $this->getElement('NewsletterForm')->submit($email);
-        $this->verifyResponse();
+        \Helper::fillForm($this, 'newsletterForm', $data);
+
+        $locators = array('newsletterFormSubmit');
+        $elements = \Helper::findElements($this, $locators);
+        $elements['newsletterFormSubmit']->press();
     }
 
     /**
