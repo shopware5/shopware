@@ -12,6 +12,12 @@
         {block name='frontend_blog_detail_content'}
             <div class="blog--detail-content blog--box block" itemscope itemtype="https://schema.org/BlogPosting">
 
+                {if $sArticle.author.name}
+                    <meta itemprop="author" content="{$sArticle.author.name}">
+                {/if}
+
+                <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
+
                 {* Detail Box Header *}
                 {block name='frontend_blog_detail_box_header'}
                     <div class="blog--detail-header">
@@ -28,7 +34,7 @@
                                 {* Author *}
                                 {block name='frontend_blog_detail_author'}
                                     {if $sArticle.author.name}
-                                        <span class="blog--metadata-author blog--metadata is--first" itemprop="author">{s name="BlogInfoFrom"}{/s}: {$sArticle.author.name}</span>
+                                        <span class="blog--metadata-author blog--metadata is--first">{s name="BlogInfoFrom"}{/s}: {$sArticle.author.name}</span>
                                     {/if}
                                 {/block}
 
