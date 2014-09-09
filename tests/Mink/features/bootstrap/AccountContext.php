@@ -1,5 +1,7 @@
 <?php
 
+use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class AccountContext extends SubContext
@@ -51,5 +53,41 @@ class AccountContext extends SubContext
     public function theAddressShouldBe($type, $address)
     {
         $this->getPage('Account')->checkAddress($type, $address);
+    }
+
+    /**
+     * @Given /^I register me:$/
+     */
+    public function iRegisterMe(\Behat\Gherkin\Node\TableNode $table)
+    {
+        $this->getPage('Account')->register($table->getHash());
+    }
+
+    /**
+     * @When /^I change the payment method to (?P<paymentId>\d+)$/
+     * @When /^I change the payment method to (?P<paymentId>\d+):$/
+     */
+    public function iChangeThePaymentMethodTo($payment, TableNode $table = null)
+    {
+        $controller = $this->getPage('Homepage')->getController();
+
+        $pageName = 'Account';
+
+        if($controller !== 'account') {
+            $pageName = 'CheckoutConfirm';
+        }
+
+        $data = array(
+            array(
+                'field' => 'register[payment]',
+                'value' => $payment
+            )
+        );
+
+        if($table) {
+            $data = array_merge($data, $table->getHash());
+        }
+
+        $this->getPage($pageName)->changePayment($data);
     }
 }

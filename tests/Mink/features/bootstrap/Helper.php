@@ -1,5 +1,7 @@
 <?php
-use Behat\Mink\Element\Element;
+use \Behat\Mink\Element\TraversableElement;
+use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
 class Helper
 {
@@ -151,7 +153,7 @@ class Helper
      * If $locatorArray parameter is set, the element locators will be read from it instead of the cssLocator of $parent
      * If $all is set to true, the search uses findAll() instead of find()
      * If $throwExceptions is set to false, no Exception will be thrown, if an element was not found.
-     * @param  Element   $parent
+     * @param  TraversableElement   $parent
      * @param  array     $keys
      * @param  array     $locatorArray
      * @param  bool      $all
@@ -290,52 +292,139 @@ class Helper
     }
 
     /**
-     * @param SubContext $context
-     * @param string     $page
-     * @param string     $key
-     * @param array      $locatorArray
+     * @param Page|Element|TraversableElement $element
+     * @param string $key
+     * @param array $locatorArray
+     * @param string $language
      */
-    public static function pressNamedButton(SubContext $context, $page, $key, $locatorArray = array())
-    {
-        if (empty($page)) {
-            self::throwException(array('No page defined!'));
-        }
-
-        $parent = $context->getPage($page);
-
-        if (empty($locatorArray)) {
-            if (isset($parent->namedSelectors)) {
-                $locatorArray = $parent->namedSelectors;
-            } else {
-                self::throwException(array('No locatorArray defined!'));
-            }
-        }
-
-        $language = $context->getElement('LanguageSwitcher')->getCurrentLanguage();
-
-        $parent->clickLink($locatorArray[$key][$language]);
-    }
-
-    /**
-     * @param SubContext $context
-     * @param string     $page
-     * @param string     $key
-     * @param array      $locatorArray
-     */
-    public static function pressNamedButton2(\SensioLabs\Behat\PageObjectExtension\PageObject\Page $page, $key, $locatorArray = array(), $language = '')
+    public static function clickNamedLink(TraversableElement $element, $key, $locatorArray = array(), $language = '')
     {
         if (empty($locatorArray)) {
-            if (isset($page->namedSelectors)) {
-                $locatorArray = $page->namedSelectors;
+            if (isset($element->namedSelectors)) {
+                $locatorArray = $element->namedSelectors;
             } else {
-                self::throwException(array('No locatorArray defined!'));
+                self::throwException('No locatorArray defined!');
             }
         }
 
         if(empty($language)) {
-            $language = $page->getElement('LanguageSwitcher')->getCurrentLanguage();
+            if($element instanceof Page) {
+                $language = self::getCurrentLanguage($element);
+            } else {
+                self::throwException('For elements the language have to be set!');
+            }
         }
 
-        $page->pressButton($locatorArray[$key][$language]);
+        $element->clickLink($locatorArray[$key][$language]);
+    }
+
+    /**
+     * @param Page|Element|TraversableElement $element
+     * @param string $key
+     * @param array $locatorArray
+     * @param string $language
+     */
+    public static function pressNamedButton(TraversableElement $element, $key, $locatorArray = array(), $language = '')
+    {
+        if (empty($locatorArray)) {
+            if (isset($element->namedSelectors)) {
+                $locatorArray = $element->namedSelectors;
+            } else {
+                self::throwException('No locatorArray defined!');
+            }
+        }
+
+        if(empty($language)) {
+            if($element instanceof Page) {
+                $language = self::getCurrentLanguage($element);
+            } else {
+                self::throwException('For elements the language have to be set!');
+            }
+        }
+
+        $element->pressButton($locatorArray[$key][$language]);
+    }
+
+    /**
+     * @param TraversableElement $element
+     * @param $formKey
+     * @param $values
+     */
+    public static function fillForm(\Behat\Mink\Element\TraversableElement $element, $formKey, $values)
+    {
+        $locators = array($formKey);
+        $elements = self::findElements($element, $locators);
+
+        if(empty($elements[$formKey])) {
+            $message = sprintf('The form "%s" was not found!', $formKey);
+            self::throwException($message);
+        }
+
+        /** @var \SensioLabs\Behat\PageObjectExtension\PageObject\Element $form */
+        $form = $elements[$formKey];
+
+        foreach ($values as $value) {
+            $tempFieldName = $fieldName = $value['field'];
+            unset($value['field']);
+
+            foreach ($value as $key => $fieldValue) {
+                if ($key !== 'value') {
+                    $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
+                }
+
+                $field = $form->findField($fieldName);
+
+                if (empty($field)) {
+                    if (empty($fieldValue)) {
+                        continue;
+                    }
+
+                    $message = sprintf('The form "%s" has no field "%s"!', $formKey, $fieldName);
+                    self::throwException($message);
+                }
+
+                $fieldType = $field->getAttribute('type');
+
+                //Select
+                if (empty($fieldType)) {
+                    $field->selectOption($fieldValue);
+                    continue;
+                }
+
+                //Checkbox
+                if ($fieldType === 'checkbox') {
+                    $field->check();
+                    continue;
+                }
+
+                //Text
+                $field->setValue($fieldValue);
+            }
+        }
+    }
+
+    /**
+     * Helper function to get the current language ('de' or 'en')
+     * @param Page $page
+     * @return string
+     */
+    public static function getCurrentLanguage(Page $page)
+    {
+        $shop = null;
+        $metas = $page->findAll('css', 'meta');
+
+        /** @var \SensioLabs\Behat\PageObjectExtension\PageObject\Element $meta */
+        foreach($metas as $meta) {
+            if ($meta->getAttribute('name') === 'application-name') {
+                $shop = $meta->getAttribute('content');
+                break;
+            }
+        }
+
+        if($shop === 'English') {
+            return 'en';
+        }
+
+        return 'de';
     }
 }

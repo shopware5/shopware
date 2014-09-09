@@ -71,10 +71,9 @@ class ListingContext extends SubContext
      */
     public function iOrderTheArticleOnPosition($position)
     {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
         /** @var \Emotion\Listing $page */
         $page = $this->getPage('Listing');
+        $language = Helper::getCurrentLanguage($page);
 
         /** @var MultipleElement $articleBoxes */
         $articleBoxes = $this->getElement('ArticleBox');
