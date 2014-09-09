@@ -59,7 +59,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
         $related = $this->getList(array($product), $context);
 
@@ -69,7 +69,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ProductContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.

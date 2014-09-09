@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 /**
@@ -53,13 +53,13 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
      *
      * @param ConditionInterface|ManufacturerCondition $condition
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return void
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->innerJoin(
             'product',

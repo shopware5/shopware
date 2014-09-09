@@ -74,7 +74,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $properties = $this->getList(array($product), $context);
 
@@ -84,7 +84,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {

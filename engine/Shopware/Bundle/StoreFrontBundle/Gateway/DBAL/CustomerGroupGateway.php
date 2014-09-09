@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -96,7 +97,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
             );
 
         $query->where('customerGroup.groupkey IN (:keys)')
-            ->setParameter(':keys', implode(',', $keys));
+            ->setParameter(':keys', $keys, Connection::PARAM_STR_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

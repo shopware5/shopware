@@ -50,7 +50,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $downloads = $this->getList(array($product), $context);
 
@@ -60,7 +60,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         return $this->gateway->getList($products, $context);
     }

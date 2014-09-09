@@ -40,10 +40,10 @@ interface ConfiguratorServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Configurator\Group[]
      */
-    public function getProductConfiguration(Struct\ListProduct $product, Struct\Context $context);
+    public function getProductConfiguration(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -52,10 +52,10 @@ interface ConfiguratorServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::getList()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
      */
-    public function getProductsConfigurations($products, Struct\Context $context);
+    public function getProductsConfigurations($products, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -64,9 +64,9 @@ interface ConfiguratorServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::get()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @param array $selection
      * @return Struct\Configurator\Set
      */
-    public function getProductConfigurator(Struct\ListProduct $product, Struct\Context $context, array $selection);
+    public function getProductConfigurator(Struct\ListProduct $product, Struct\ShopContextInterface $context, array $selection);
 }

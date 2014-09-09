@@ -74,7 +74,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getArea($id, Struct\Context $context)
+    public function getArea($id, Struct\ShopContextInterface $context)
     {
         $areas = $this->getAreas(array($id), $context);
 
@@ -84,7 +84,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCountry($id, Struct\Context $context)
+    public function getCountry($id, Struct\ShopContextInterface $context)
     {
         $countries = $this->getCountries(array($id), $context);
 
@@ -94,7 +94,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getState($id, Struct\Context $context)
+    public function getState($id, Struct\ShopContextInterface $context)
     {
         $states = $this->getStates(array($id), $context);
 
@@ -104,7 +104,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getAreas(array $ids, Struct\Context $context)
+    public function getAreas(array $ids, Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -129,7 +129,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCountries(array $ids, Struct\Context $context)
+    public function getCountries(array $ids, Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -159,7 +159,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getStates(array $ids, Struct\Context $context)
+    public function getStates(array $ids, Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->fieldHelper->getStateFields());

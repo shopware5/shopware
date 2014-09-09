@@ -76,7 +76,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return ProductContext
+     * @return TestContext
      */
     protected function getContext()
     {

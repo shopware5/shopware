@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle\DBAL\SortingHandler;
 use Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 /**
@@ -52,13 +52,13 @@ class PopularitySortingHandler implements SortingHandlerInterface
      *
      * @param SortingInterface|PopularitySorting $sorting
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return void
      */
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->leftJoin(
             'product',

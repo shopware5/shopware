@@ -40,26 +40,18 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     private $graduatedPricesGateway;
 
     /**
-     * @var Gateway\PriceGroupDiscountGatewayInterface
-     */
-    private $priceGroupDiscountGateway;
-
-    /**
      * @param Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
-     * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
      */
     public function __construct(
-        Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway,
-        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
+        Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
     ) {
         $this->graduatedPricesGateway = $graduatedPricesGateway;
-        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }
 
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContext $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
         $prices = $this->getList(array($product), $context);
 
@@ -69,7 +61,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\ProductContext $context)
+    public function getList($products, Struct\ProductContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(

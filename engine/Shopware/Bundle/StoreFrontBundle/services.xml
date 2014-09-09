@@ -113,7 +113,6 @@
 
         <service id="graduated_prices_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\GraduatedPricesService">
             <argument type="service" id="graduated_prices_gateway"/>
-            <argument type="service" id="price_group_discount_gateway"/>
         </service>
 
         <service id="manufacturer_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService">

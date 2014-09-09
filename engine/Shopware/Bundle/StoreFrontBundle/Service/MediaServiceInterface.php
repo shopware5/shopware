@@ -40,10 +40,10 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
      * @param $id
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function get($id, Struct\Context $context);
+    public function get($id, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -52,19 +52,19 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
      * @param $ids
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the media id
      */
-    public function getList($ids, Struct\Context $context);
+    public function getList($ids, Struct\ShopContextInterface $context);
 
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
-    public function getProductsMedia($products, Struct\Context $context);
+    public function getProductsMedia($products, Struct\ShopContextInterface $context);
 
     /**
      * If the forceArticleMainImageInListing configuration is activated,
@@ -80,19 +80,19 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::getCover()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function getCover(Struct\ListProduct $product, Struct\Context $context);
+    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getCover()
      *
      * @param Struct\ListProduct[] $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by product number
      */
-    public function getCovers($products, Struct\Context $context);
+    public function getCovers($products, Struct\ShopContextInterface $context);
 
     /**
      * Selects first the media structs which have a configurator configuration for the provided product variant.
@@ -105,8 +105,8 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::get()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[]
      */
-    public function getProductMedia(Struct\ListProduct $product, Struct\Context $context);
+    public function getProductMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 }

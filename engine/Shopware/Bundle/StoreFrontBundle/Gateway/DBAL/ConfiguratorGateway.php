@@ -82,7 +82,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery();
 
@@ -111,7 +111,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\Context $context)
+    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $subQuery = $this->entityManager->getDBALQueryBuilder();
 

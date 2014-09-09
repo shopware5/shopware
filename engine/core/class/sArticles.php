@@ -1803,7 +1803,7 @@ class sArticles
         unset($config['sPage']);
         unset($config['sPerPage']);
 
-        $context = $this->contextService->get();
+        $context = $this->contextService->getProductContext();
         $criteria = $this->getListingCriteria(
             $categoryId,
             $config,
@@ -3144,7 +3144,7 @@ class sArticles
             $product->setVariantId($article["did"]);
             $product->setNumber($orderNumber);
 
-            $context = $this->contextService->get();
+            $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
             if (!$returnAll) {

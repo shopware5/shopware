@@ -52,8 +52,8 @@ interface PropertyGatewayInterface
      *  - In all other cases the values are sorted by their alphanumeric value
      *
      * @param array $valueIds
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
      */
-    public function getList(array $valueIds, Struct\Context $context);
+    public function getList(array $valueIds, Struct\ShopContextInterface $context);
 }

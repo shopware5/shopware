@@ -74,7 +74,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get($number, Struct\Context $context)
+    public function get($number, Struct\ShopContextInterface $context)
     {
         $products = $this->getList(array($number), $context);
 
@@ -84,7 +84,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList(array $numbers, Struct\Context $context)
+    public function getList(array $numbers, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery($numbers, $context);
 
@@ -104,10 +104,10 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
 
     /**
      * @param array $numbers
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function getQuery(array $numbers, Struct\Context $context)
+    protected function getQuery(array $numbers, Struct\ShopContextInterface $context)
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();

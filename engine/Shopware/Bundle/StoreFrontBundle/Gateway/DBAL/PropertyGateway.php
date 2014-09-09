@@ -107,7 +107,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList(array $valueIds, Struct\Context $context)
+    public function getList(array $valueIds, Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -199,7 +199,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     /**
      * Returns the sort mode for the passed value ids.
      * If the value ids contains more than one property set, the
-     * globale fallback sort mode is used.
+     * global fallback sort mode is used.
      *
      * @param array $valueIds
      * @return int
