@@ -37,10 +37,10 @@ interface RelatedProductsServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface::get()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return array Indexed with the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct array.
      */
-    public function getList($products, Struct\Context $context);
+    public function getList($products, Struct\ProductContextInterface $context);
 
     /**
      * Selects all related products for the provided product.
@@ -55,8 +55,8 @@ interface RelatedProductsServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return Struct\ListProduct[] Indexed by the product order number.
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
 }

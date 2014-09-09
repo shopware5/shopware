@@ -59,7 +59,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
         $similar = $this->getList(array($product), $context);
 
@@ -69,7 +69,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ProductContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.

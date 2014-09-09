@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle\DBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
 
 /**
@@ -99,10 +99,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * to add their own handler classes.
      *
      * @param SearchBundle\Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return SearchBundle\ProductNumberSearchResult
      */
-    public function search(SearchBundle\Criteria $criteria, Context $context)
+    public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
         $this->conditionHandlers = $this->registerConditionHandlers();
         $this->facetHandlers     = $this->registerFacetHandlers();
@@ -169,10 +169,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * Calculated the total count of the whole search result.
      *
      * @param SearchBundle\Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return int
      */
-    private function getTotalCount(SearchBundle\Criteria $criteria, Context $context)
+    private function getTotalCount(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
         $query = $this->getQuery($criteria, $context);
 
@@ -195,10 +195,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * Executes the base query to select the products.
      *
      * @param SearchBundle\Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return array
      */
-    private function getProducts(SearchBundle\Criteria $criteria, Context $context)
+    private function getProducts(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
         $query = $this->getQuery($criteria, $context);
 
@@ -251,10 +251,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param SearchBundle\Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder
      */
-    private function getQuery(SearchBundle\Criteria $criteria, Context $context)
+    private function getQuery(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
         $query = $this->queryBuilderFactory->createQueryBuilder();
 
@@ -289,11 +289,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param SearchBundle\Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return SearchBundle\FacetInterface[]
      * @throws \Exception
      */
-    private function createFacets(SearchBundle\Criteria $criteria, Context $context)
+    private function createFacets(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
         $facets = array();
 
@@ -309,11 +309,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     /**
      * @param SearchBundle\Criteria $criteria
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      *
      * @throws \Exception
      */
-    private function addConditions(SearchBundle\Criteria $criteria, QueryBuilder $query, Context $context)
+    private function addConditions(SearchBundle\Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getConditions() as $condition) {
             $handler = $this->getConditionHandler($condition);
@@ -324,10 +324,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     /**
      * @param SearchBundle\Criteria $criteria
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @throws \Exception
      */
-    private function addSorting(SearchBundle\Criteria $criteria, QueryBuilder $query, Context $context)
+    private function addSorting(SearchBundle\Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getSortings() as $sorting) {
             $handler = $this->getSortingHandler($sorting);

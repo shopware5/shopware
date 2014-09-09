@@ -34,40 +34,64 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ContextServiceInterface
 {
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\Context requires the following data:
+     * The \Shopware\Bundle\StoreFrontBundle\Struct\Context class contains
+     * all information about the current state.
+     *
+     * Requires the following data:
      * - Current shop
-     * - Current language
      * - Current customer group
      * - Fallback customer group of the current shop
      * - The currency of the shop
+     * - Tax rules of the current customer group
+     * - Price group discounts of the current customer group
+     * - Location data of the current state.
      *
      * Required conditions for the selection:
      * - Use the `shop` service of the di container for the language and current category
      * - Use the `session` service of the di container for the current user data.
-     */
-    public function initialize();
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ContextGatewayInterface::initialize()
      *
      * @return Struct\Context
      */
-    public function get();
+    public function getContext();
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\ProductContext requires the following data:
-     * - Data of the normal context class
-     * - Current country data (area, country, state)
-     * - Different tax rules for the current context
+     * Requires the following data:
+     * - Current shop
+     * - Current customer group
+     * - Fallback customer group of the current shop
+     * - The currency of the shop
      *
-     * Required conditions for the selection:
-     *  - Use the `session` service of the di container for the current user data.
+     * @return Struct\ShopContext
+     */
+    public function getShopContext();
+
+    /**
+     * Requires the following data:
+     * - Current shop
+     * - Current customer group
+     * - Fallback customer group of the current shop
+     * - The currency of the shop
+     * - Tax rules of the current customer group
+     * - Price group discounts of the current customer group
      *
      * @return Struct\ProductContext
      */
     public function getProductContext();
+
+    /**
+     * Requires the following data:
+     * - Location data of the current state. (area, country, state)
+     *
+     * @return Struct\LocationContext
+     */
+    public function getLocationContext();
+
+    public function initializeContext();
+
+    public function initializeShopContext();
+
+    public function initializeLocationContext();
+
+    public function initializeProductContext();
 
 }

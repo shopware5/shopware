@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\DBAL\PriceHelper;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -64,14 +64,14 @@ class PriceFacetHandler implements FacetHandlerInterface
      * @param FacetInterface|Facet\PriceFacet $facet
      * @param QueryBuilder $query
      * @param Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return FacetInterface
      */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
         Criteria $criteria,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');

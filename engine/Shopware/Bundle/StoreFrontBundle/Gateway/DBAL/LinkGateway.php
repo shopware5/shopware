@@ -74,7 +74,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $links = $this->getList(array($product), $context);
 
@@ -84,7 +84,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {

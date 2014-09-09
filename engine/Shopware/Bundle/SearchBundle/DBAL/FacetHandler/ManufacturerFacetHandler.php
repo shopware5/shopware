@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
@@ -58,14 +58,14 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
      * @param FacetInterface $facet
      * @param QueryBuilder $query
      * @param Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return FacetInterface|Facet\ManufacturerFacet
      */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
         Criteria $criteria,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->resetQueryPart('groupBy');
         $query->resetQueryPart('orderBy');

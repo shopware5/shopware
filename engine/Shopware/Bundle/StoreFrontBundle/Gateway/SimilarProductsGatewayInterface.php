@@ -49,10 +49,10 @@ interface SimilarProductsGatewayInterface
      * )
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product number
      */
-    public function getList($products, Struct\Context $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -61,10 +61,10 @@ interface SimilarProductsGatewayInterface
      * Example result: array('SW101', 'SW102')
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Array of order numbers
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -77,10 +77,10 @@ interface SimilarProductsGatewayInterface
      * Example result: array('SW101', 'SW102')
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Array of order numbers
      */
-    public function getByCategory(Struct\ListProduct $product, Struct\Context $context);
+    public function getByCategory(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -101,8 +101,8 @@ interface SimilarProductsGatewayInterface
      * )
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product number
      */
-    public function getListByCategory($products, Struct\Context $context);
+    public function getListByCategory($products, Struct\ShopContextInterface $context);
 }

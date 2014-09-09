@@ -50,7 +50,7 @@ class CategoryService implements Service\CategoryServiceInterface
     /**
      * @inheritdoc
      */
-    public function get($id, Struct\Context $context)
+    public function get($id, Struct\ShopContextInterface $context)
     {
         $categories = $this->getList(array($id), $context);
 
@@ -60,7 +60,7 @@ class CategoryService implements Service\CategoryServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($ids, Struct\Context $context)
+    public function getList($ids, Struct\ShopContextInterface $context)
     {
         return $this->categoryGateway->getList($ids, $context);
     }

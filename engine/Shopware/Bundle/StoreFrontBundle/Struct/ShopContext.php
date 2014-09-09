@@ -3,22 +3,15 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
-class ProductContext
+/**
+ * Class LocationContext
+ * @package Shopware\Bundle\StoreFrontBundle\Struct
+ */
+class ShopContext
     extends Extendable
-    implements ProductContextInterface
+    implements ShopContextInterface
 {
-    /**
-     * @var Tax[]
-     */
-    protected $taxRules;
-
-    /**
-     * @var PriceGroup[]
-     */
-    protected $priceGroups;
-
     /**
      * Contains the current customer group for the store front.
      * If the customer isn't logged in, the current customer group
@@ -72,74 +65,19 @@ class ProductContext
      * @param Currency $currency
      * @param Group $currentCustomerGroup
      * @param Group $fallbackCustomerGroup
-     * @param Tax[] $taxRules
-     * @param PriceGroup[] $priceGroups
      */
     public function __construct(
         $baseUrl,
         Shop $shop,
         Currency $currency,
         Group $currentCustomerGroup,
-        Group $fallbackCustomerGroup,
-        $taxRules,
-        $priceGroups
+        Group $fallbackCustomerGroup
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
         $this->currency = $currency;
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
-        $this->taxRules = $taxRules;
-        $this->priceGroups = $priceGroups;
-    }
-
-    /**
-     * @param ShopContextInterface $shopContext
-     * @param Tax[] $taxRules
-     * @param PriceGroup[] $priceGroups
-     * @return ProductContext
-     */
-    public static function createFromContexts(
-        ShopContextInterface $shopContext,
-        $taxRules,
-        $priceGroups
-    ) {
-        return new self(
-            $shopContext->getBaseUrl(),
-            $shopContext->getShop(),
-            $shopContext->getCurrency(),
-            $shopContext->getCurrentCustomerGroup(),
-            $shopContext->getFallbackCustomerGroup(),
-            $taxRules,
-            $priceGroups
-        );
-    }
-
-    /**
-     * @return Tax[]
-     */
-    public function getTaxRules()
-    {
-        return $this->taxRules;
-    }
-
-    /**
-     * @param $taxId
-     * @return Tax
-     */
-    public function getTaxRule($taxId)
-    {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
-    }
-
-    /**
-     * @return PriceGroup[]
-     */
-    public function getPriceGroups()
-    {
-        return $this->priceGroups;
     }
 
     /**
@@ -184,5 +122,4 @@ class ProductContext
     {
         return $this->baseUrl;
     }
-
 }

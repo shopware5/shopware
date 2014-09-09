@@ -39,10 +39,10 @@ interface ListProductGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface::get()
      *
      * @param array $numbers
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\ListProduct[] Indexed by the product order number
      */
-    public function getList(array $numbers, Struct\Context $context);
+    public function getList(array $numbers, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct requires the following data:
@@ -65,8 +65,8 @@ interface ListProductGatewayInterface
      * - Unit of the variant
      *
      * @param $number
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\ListProduct
      */
-    public function get($number, Struct\Context $context);
+    public function get($number, Struct\ShopContextInterface $context);
 }

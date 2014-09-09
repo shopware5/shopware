@@ -523,7 +523,7 @@ class sBasket
             $product->setVariantId($premium["variantID"]);
             $product->setNumber($premium['ordernumber']);
 
-            $context = $this->contextService->get();
+            $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $premium['additionaltext'] = $product->getAdditional();
         }
@@ -1207,7 +1207,7 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('context_service')->get();
+        $context = Shopware()->Container()->get('context_service')->getProductContext();
 
         $products = Shopware()->Container()->get('list_product_service')
             ->getList($numbers, $context);
@@ -2553,7 +2553,7 @@ class sBasket
             $product->setVariantId($article["articledetailsID"]);
             $product->setNumber($article['ordernumber']);
 
-            $context = $this->contextService->get();
+            $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }

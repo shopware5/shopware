@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -48,12 +48,12 @@ interface SortingHandlerInterface
      *
      * @param SortingInterface $sorting
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return void
      */
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     );
 }

@@ -38,11 +38,11 @@ interface PriceGroupDiscountGatewayInterface
      * - Price group discounts for the provided customer group
      *
      * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */
     public function getPriceGroups(
         Struct\Customer\Group $customerGroup,
-        Struct\Context $context
+        Struct\ShopContextInterface $context
     );
 }

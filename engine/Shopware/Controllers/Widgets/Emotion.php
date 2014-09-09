@@ -530,7 +530,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $userGroupKey, $offset = 0, $limit, $sort = null)
     {
-        $context = Shopware()->Container()->get('context_service')->get();
+        $context = Shopware()->Container()->get('context_service')->getProductContext();
         $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
         $criteria

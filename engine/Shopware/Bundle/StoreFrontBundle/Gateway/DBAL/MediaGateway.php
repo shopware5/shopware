@@ -69,7 +69,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get($id, Struct\Context $context)
+    public function get($id, Struct\ShopContextInterface $context)
     {
         $media = $this->getList(array($id), $context);
 
@@ -79,7 +79,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($ids, Struct\Context $context)
+    public function getList($ids, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery($context);
 

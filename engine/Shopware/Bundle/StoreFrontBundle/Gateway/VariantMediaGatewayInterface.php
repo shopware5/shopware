@@ -58,10 +58,10 @@ interface VariantMediaGatewayInterface
      * </php>
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by product number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
-    public function getList($products, Struct\Context $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Media requires the following data:
@@ -78,10 +78,10 @@ interface VariantMediaGatewayInterface
      * - Sorted ascending by the image main flag and position
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function getCover(Struct\ListProduct $product, Struct\Context $context);
+    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Media requires the following data:
@@ -98,10 +98,10 @@ interface VariantMediaGatewayInterface
      * - Sorted ascending by the image main flag and image position
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[]
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -123,8 +123,8 @@ interface VariantMediaGatewayInterface
      * </php>
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the product order number
      */
-    public function getCovers($products, Struct\Context $context);
+    public function getCovers($products, Struct\ShopContextInterface $context);
 }

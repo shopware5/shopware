@@ -27,13 +27,18 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Context extends Extendable implements \JsonSerializable
+class Context
+    extends Extendable
+    implements \JsonSerializable,
+        LocationContextInterface,
+        ProductContextInterface
 {
     /**
      * Contains the current customer group for the store front.
@@ -78,67 +83,99 @@ class Context extends Extendable implements \JsonSerializable
     protected $shop;
 
     /**
+     * @var Tax[]
+     */
+    protected $taxRules;
+
+    /**
+     * @var PriceGroup[]
+     */
+    protected $priceGroups;
+
+    /**
      * @var string
      */
     protected $baseUrl;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Currency $currency
-     *
+     * @var Area
      */
-    public function setCurrency($currency)
-    {
+    protected $area;
+
+    /**
+     * @var Country
+     */
+    protected $country;
+
+    /**
+     * @var State
+     */
+    protected $state;
+
+    /**
+     * @param string $baseUrl
+     * @param Shop $shop
+     * @param Currency $currency
+     * @param Group $currentCustomerGroup
+     * @param Group $fallbackCustomerGroup
+     * @param $taxRules
+     * @param $priceGroups
+     * @param Area $area
+     * @param Country $country
+     * @param State $state
+     */
+    public function __construct(
+        $baseUrl,
+        Shop $shop,
+        Currency $currency,
+        Group $currentCustomerGroup,
+        Group $fallbackCustomerGroup,
+        $taxRules,
+        $priceGroups,
+        Area $area,
+        Country $country,
+        State $state
+    ) {
+        $this->baseUrl = $baseUrl;
+        $this->shop = $shop;
         $this->currency = $currency;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Currency
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $currentCustomerGroup
-     * @return $this
-     */
-    public function setCurrentCustomerGroup($currentCustomerGroup)
-    {
         $this->currentCustomerGroup = $currentCustomerGroup;
-
-        return $this;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
-     */
-    public function getCurrentCustomerGroup()
-    {
-        return $this->currentCustomerGroup;
-    }
-
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $fallbackCustomerGroup
-     * @return $this
-     */
-    public function setFallbackCustomerGroup($fallbackCustomerGroup)
-    {
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
-
-        return $this;
+        $this->taxRules = $taxRules;
+        $this->priceGroups = $priceGroups;
+        $this->area = $area;
+        $this->country = $country;
+        $this->state = $state;
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     * @param ProductContext $productContext
+     * @param LocationContext $locationContext
+     * @return Context
      */
-    public function getFallbackCustomerGroup()
-    {
-        return $this->fallbackCustomerGroup;
+    public static function createFromContexts(
+        ProductContext $productContext,
+        LocationContext $locationContext
+    ) {
+        return new self(
+            $productContext->getBaseUrl(),
+            $productContext->getShop(),
+            $productContext->getCurrency(),
+            $productContext->getCurrentCustomerGroup(),
+            $productContext->getFallbackCustomerGroup(),
+            $productContext->getTaxRules(),
+            $productContext->getPriceGroups(),
+            $locationContext->getArea(),
+            $locationContext->getCountry(),
+            $locationContext->getState()
+        );
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Shop
+     * Returns the current active shop of the context.
+     * The shop id is used as translation identifier.
+     *
+     * @return Shop
      */
     public function getShop()
     {
@@ -146,14 +183,27 @@ class Context extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop
-     * @return $this
+     * @return Currency
      */
-    public function setShop($shop)
+    public function getCurrency()
     {
-        $this->shop = $shop;
+        return $this->currency;
+    }
 
-        return $this;
+    /**
+     * @return Customer\Group
+     */
+    public function getCurrentCustomerGroup()
+    {
+        return $this->currentCustomerGroup;
+    }
+
+    /**
+     * @return Customer\Group
+     */
+    public function getFallbackCustomerGroup()
+    {
+        return $this->fallbackCustomerGroup;
     }
 
     /**
@@ -165,11 +215,54 @@ class Context extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param string $baseUrl
+     * @return Tax[]
      */
-    public function setBaseUrl($baseUrl)
+    public function getTaxRules()
     {
-        $this->baseUrl = $baseUrl;
+        return $this->taxRules;
+    }
+
+    /**
+     * @param $taxId
+     * @return Tax
+     */
+    public function getTaxRule($taxId)
+    {
+        $key = 'tax_' . $taxId;
+
+        return $this->taxRules[$key];
+    }
+
+    /**
+     * @return PriceGroup[]
+     */
+    public function getPriceGroups()
+    {
+        return $this->priceGroups;
+    }
+
+    /**
+     * @return Area
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 
     /**

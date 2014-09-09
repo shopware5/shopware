@@ -74,9 +74,9 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
-        $votes = $this->getList(array($product));
+        $votes = $this->getList(array($product), $context);
 
         return array_shift($votes);
     }
@@ -84,7 +84,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {

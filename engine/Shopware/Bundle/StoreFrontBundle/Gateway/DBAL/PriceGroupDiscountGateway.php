@@ -73,12 +73,12 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
 
     /**
      * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array|Struct\Product\PriceGroup[]
      */
     public function getPriceGroups(
         Struct\Customer\Group $customerGroup,
-        Struct\Context $context
+        Struct\ShopContextInterface $context
     ) {
         $query = $this->entityManager->getDBALQueryBuilder();
 
