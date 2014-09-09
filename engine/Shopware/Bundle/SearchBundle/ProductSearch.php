@@ -58,8 +58,10 @@ class ProductSearch implements ProductSearchInterface
     /**
      * @inheritdoc
      */
-    public function search(Criteria $criteria, StoreFrontBundle\Struct\Context $context)
-    {
+    public function search(
+        Criteria $criteria,
+        StoreFrontBundle\Struct\ProductContext $context
+    ) {
         $result = $this->searchGateway->search(
             $criteria,
             $context

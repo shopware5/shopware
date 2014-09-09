@@ -37,10 +37,10 @@ interface ProductServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()
      *
      * @param $numbers
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product[] Indexed by the product order number
      */
-    public function getList($numbers, Struct\Context $context);
+    public function getList($numbers, Struct\ProductContextInterface $context);
 
     /**
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object which all required data.
@@ -66,8 +66,8 @@ interface ProductServiceInterface
      * and calculates the prices for the store front through a \Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface class.
      *
      * @param $number
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product
      */
-    public function get($number, Struct\Context $context);
+    public function get($number, Struct\ProductContextInterface $context);
 }

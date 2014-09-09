@@ -423,7 +423,7 @@ class LegacyEventManager
     public function fireArticleByIdEvents(array $product, \sArticles $module)
     {
         $getArticle = $product;
-        $context = $this->contextService->get();
+        $context = $this->contextService->getShopContext();
 
         if ($getArticle["pricegroupActive"]) {
             $getArticle["priceBeforePriceGroup"] = $getArticle["price"];

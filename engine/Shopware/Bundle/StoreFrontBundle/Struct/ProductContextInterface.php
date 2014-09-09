@@ -21,48 +21,34 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
+
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductDownloadService implements Service\ProductDownloadServiceInterface
+interface ProductContextInterface extends ShopContextInterface
 {
     /**
-     * @var Gateway\DownloadGatewayInterface
+     * Returns all tax rules
+     * @return Tax[]
      */
-    private $gateway;
+    public function getTaxRules();
 
     /**
-     * @param Gateway\DownloadGatewayInterface $gateway
+     * Returns the active tax rule for the provided tax id.
+     * @param $taxId
+     * @return Tax
      */
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
-    {
-        $this->gateway = $gateway;
-    }
+    public function getTaxRule($taxId);
 
     /**
-     * @inheritdoc
+     * Returns the active price groups
+     * @return PriceGroup[]
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
-    {
-        $downloads = $this->getList(array($product), $context);
-
-        return array_shift($downloads);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->gateway->getList($products, $context);
-    }
-
+    public function getPriceGroups();
 }

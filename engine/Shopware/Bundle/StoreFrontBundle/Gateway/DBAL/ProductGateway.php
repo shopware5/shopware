@@ -37,7 +37,7 @@ class ProductGateway extends ListProductGateway implements Gateway\ProductGatewa
     /**
      * @inheritdoc
      */
-    public function get($number, Struct\Context $context)
+    public function get($number, Struct\ShopContextInterface $context)
     {
         $products = $this->getList(array($number), $context);
 
@@ -47,7 +47,7 @@ class ProductGateway extends ListProductGateway implements Gateway\ProductGatewa
     /**
      * @inheritdoc
      */
-    public function getList(array $numbers, Struct\Context $context)
+    public function getList(array $numbers, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery($numbers, $context);
 

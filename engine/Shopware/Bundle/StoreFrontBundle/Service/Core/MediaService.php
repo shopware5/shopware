@@ -74,20 +74,20 @@ class MediaService implements Service\MediaServiceInterface
 
     /**
      * @param $id
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function get($id, Struct\Context $context)
+    public function get($id, Struct\ShopContextInterface $context)
     {
         return $this->mediaGateway->get($id, $context);
     }
 
     /**
      * @param $ids
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the media id
      */
-    public function getList($ids, Struct\Context $context)
+    public function getList($ids, Struct\ShopContextInterface $context)
     {
         return $this->mediaGateway->getList($ids, $context);
     }
@@ -95,7 +95,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getCover(Struct\ListProduct $product, Struct\Context $context)
+    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $covers = $this->getCovers(array($product), $context);
 
@@ -105,7 +105,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getCovers($products, Struct\Context $context)
+    public function getCovers($products, Struct\ShopContextInterface $context)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             return $this->productMediaGateway->getCovers(
@@ -134,7 +134,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getProductMedia(Struct\ListProduct $product, Struct\Context $context)
+    public function getProductMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $media = $this->getProductsMedia(array($product), $context);
 
@@ -144,7 +144,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getProductsMedia($products, Struct\Context $context)
+    public function getProductsMedia($products, Struct\ShopContextInterface $context)
     {
         $specifyMedia = $this->variantMediaGateway->getList($products, $context);
 

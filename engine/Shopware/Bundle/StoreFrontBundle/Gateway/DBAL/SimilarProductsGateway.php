@@ -61,7 +61,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $numbers = $this->getList(array($product), $context);
 
@@ -71,7 +71,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -130,7 +130,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getByCategory(Struct\ListProduct $product, Struct\Context $context)
+    public function getByCategory(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $products = $this->getListByCategory(array($product), $context);
 
@@ -140,7 +140,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getListByCategory($products, Struct\Context $context)
+    public function getListByCategory($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {

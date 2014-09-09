@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 /**
@@ -53,14 +53,14 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
      *
      * @param ConditionInterface|ProductAttributeCondition $condition
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @throws \Exception
      * @return void
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     ) {
         if (!$condition->getField()) {
             throw new \Exception('ProductAttributeCondition class requires a defined attribute field!');

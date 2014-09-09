@@ -9,7 +9,7 @@ The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\
 
 ```
 //load or create a context object to define which user context are set
-$context = Shopware()->Container()->get('context_service')->get();
+$context = Shopware()->Container()->get('context_service')->getShopContext();
 
 $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
@@ -33,6 +33,7 @@ $productNumberResult = Shopware()->Container()->get('product_number_search')->se
 );
 
 //executes a search request to find a list of \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct.
+$context = Shopware()->Container()->get('context_service')->getProductContext();
 $productResult = Shopware()->Container()->get('product_search')->search(
     $criteria,
     $context
@@ -41,17 +42,17 @@ $productResult = Shopware()->Container()->get('product_search')->search(
 ```
 
 ## How it works
-The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Bundle\SearchBundle\Criteria and a Shopware\Bundel\StoreFrontBundle\Context object.
+The Shopware\Bundle\SearchBundle provides a ProductNumberSearchInterface which expects a Shopware\Bundle\SearchBundle\Criteria and a Shopware\Bundle\StoreFrontBundle\ShopContextInterface object.
 
 The Criteria class contains the definition which conditions, sortings and facets (terms) the search has to consider.
 
-The Context class contains the current user/shop context like which customer group is active or which language is selected.
+The ShopContextInterface class contains the current user/shop context like which customer group is active or which language is selected.
 
 This both classes are required for a search request.
 
 The ProductNumberSearchInterface is only the definition of the search API. The ProductNumberSearch is implemented for a specify database platform like Mysql or Elastic Search.
 
-The implementation of the ProductNumberSearch has to interpret the provided Context and Criteria object to the specify database language.
+The implementation of the ProductNumberSearch has to interpret the provided ShopContextInterface and Criteria object to the specify database language.
 
 
 ## Default ProductNumberSearch
@@ -98,7 +99,7 @@ class PluginSortingHandler implements \Shopware\Bundle\SearchBundle\DBAL\Sorting
     public function generateSorting(
         \Shopware\Bundle\SearchBundle\SortingInterface   $sorting,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
         $query->innerJoin(
             'product',
@@ -134,7 +135,7 @@ class PluginConditionHandler implements \Shopware\Bundle\SearchBundle\DBAL\Condi
     public function generateCondition(
         \Shopware\Bundle\SearchBundle\ConditionInterface $condition,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
         $query->innerJoin(
             'product',
@@ -168,10 +169,10 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundle\DBAL\FacetHand
     }
 
     public function generateFacet(
-        \Shopware\Bundle\SearchBundle\FacetInterface     $facet,
-        \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\SearchBundle\Criteria           $criteria,
-        \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+        \Shopware\Bundle\SearchBundle\FacetInterface                  $facet,
+        \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder               $query,
+        \Shopware\Bundle\SearchBundle\Criteria                        $criteria,
+        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
         $query->resetQueryPart('orderBy');
 

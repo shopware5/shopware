@@ -41,14 +41,14 @@ interface FacetHandlerInterface
      * @param FacetInterface $facet
      * @param QueryBuilder $query
      * @param Criteria $criteria
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return FacetInterface
      */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
         Criteria $criteria,
-        Struct\Context $context
+        Struct\ShopContextInterface $context
     );
 
     /**

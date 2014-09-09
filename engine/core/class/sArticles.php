@@ -1803,7 +1803,7 @@ class sArticles
         unset($config['sPage']);
         unset($config['sPerPage']);
 
-        $context = $this->contextService->get();
+        $context = $this->contextService->getProductContext();
         $criteria = $this->getListingCriteria(
             $categoryId,
             $config,
@@ -3144,7 +3144,7 @@ class sArticles
             $product->setVariantId($article["did"]);
             $product->setNumber($orderNumber);
 
-            $context = $this->contextService->get();
+            $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
             if (!$returnAll) {
@@ -3656,7 +3656,7 @@ class sArticles
      */
     private function getPromotion($category, $number)
     {
-        $context = $this->contextService->get();
+        $context = $this->contextService->getProductContext();
 
         $product = $this->listProductService->get(
             $number,
@@ -3712,7 +3712,7 @@ class sArticles
      */
     private function getListing($categoryId)
     {
-        $context = $this->contextService->get();
+        $context = $this->contextService->getProductContext();
 
         $config = $this->loadCategoryConfig($categoryId);
 
@@ -3832,7 +3832,7 @@ class sArticles
      */
     private function getProduct($number, $categoryId, array $selection)
     {
-        $context = $this->contextService->get();
+        $context = $this->contextService->getProductContext();
         $product = $this->productService->get(
             $number,
             $context

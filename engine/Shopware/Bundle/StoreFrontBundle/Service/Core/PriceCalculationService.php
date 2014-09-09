@@ -50,8 +50,10 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     /**
      * @inheritdoc
      */
-    public function calculateProduct(Struct\ListProduct $product, Struct\Context $context)
-    {
+    public function calculateProduct(
+        Struct\ListProduct $product,
+        Struct\ProductContextInterface $context
+    ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
         $prices = array();
@@ -86,13 +88,13 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      *
      * @param Struct\ListProduct $product
      * @param Struct\Product\PriceRule $cheapestPrice
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product\Price
      */
     private function calculateCheapestPrice(
         Struct\ListProduct $product,
         Struct\Product\PriceRule $cheapestPrice,
-        Struct\Context $context
+        Struct\ProductContextInterface $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
@@ -114,9 +116,9 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
         }
 
         //selects the highest price group discount, for the passed quantity.
-        $discount = $this->priceGroupDiscountGateway->getHighestQuantityDiscount(
-            $product->getPriceGroup(),
-            $context->getCurrentCustomerGroup(),
+        $discount = $this->getHighestQuantityDiscount(
+            $product,
+            $context,
             $cheapestPrice->getUnit()->getMinPurchase()
         );
 
@@ -134,6 +136,56 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     }
 
     /**
+     * Returns the highest price group discount for the provided product.
+     *
+     * The price groups are stored in the provided context object.
+     * If the product has no configured price group or the price group has no discount defined for the
+     * current customer group, the function returns null.
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\ProductContextInterface $context
+     * @param $quantity
+     * @return null|Struct\Product\PriceDiscount
+     */
+    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
+    {
+        if (!$product->getPriceGroup()) {
+            return null;
+        }
+
+        $priceGroups = $context->getPriceGroups();
+        if (empty($priceGroups)) {
+            return null;
+        }
+
+        $id = $product->getPriceGroup()->getId();
+        if (!isset($priceGroups[$id])) {
+            return null;
+        }
+
+        $priceGroup = $priceGroups[$id];
+
+        /**@var $highest Struct\Product\PriceDiscount*/
+        $highest = null;
+        foreach($priceGroup->getDiscounts() as $discount) {
+            if ($discount->getQuantity() > $quantity) {
+                continue;
+            }
+
+            if (!$highest) {
+                $highest = $discount;
+                continue;
+            }
+
+            if ($highest->getPercent() < $discount->getPercent()) {
+                $highest = $discount;
+            }
+        }
+
+        return $highest;
+    }
+
+    /**
      * Helper function which calculates a single price struct of a product.
      * The product can contains multiple price struct elements like the graduated prices
      * and the cheapest price struct.
@@ -141,13 +193,13 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      *
      * @param Struct\Product\PriceRule $rule
      * @param Struct\Tax $tax
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product\Price
      */
     private function calculatePriceStruct(
         Struct\Product\PriceRule $rule,
         Struct\Tax $tax,
-        Struct\Context $context
+        Struct\ProductContextInterface $context
     ) {
         $price = new Struct\Product\Price($rule);
 
@@ -181,10 +233,10 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      *
      * @param $price
      * @param Struct\Tax $tax
-     * @param Struct\Context $context
+     * @param Struct\ProductContextInterface $context
      * @return float
      */
-    private function calculatePrice($price, Struct\Tax $tax, Struct\Context $context)
+    private function calculatePrice($price, Struct\Tax $tax, Struct\ProductContextInterface $context)
     {
         /**
          * Important:

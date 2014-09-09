@@ -74,8 +74,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context, Struct\Customer\Group $customerGroup)
-    {
+    public function get(
+        Struct\ListProduct $product,
+        Struct\ShopContextInterface $context,
+        Struct\Customer\Group $customerGroup
+    ) {
         $prices = $this->getList(array($product), $context, $customerGroup);
 
         return array_shift($prices);
@@ -84,8 +87,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context, Struct\Customer\Group $customerGroup)
-    {
+    public function getList(
+        $products,
+        Struct\ShopContextInterface $context,
+        Struct\Customer\Group $customerGroup
+    ) {
         /**
          * Contains the cheapest price logic which product price should be selected.
          */
@@ -128,7 +134,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      *
      * @param Struct\ListProduct[] $products
      * @param Struct\Customer\Group $customerGroup
-     * @return mixed
+     * @return array
      */
     private function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
     {
@@ -209,5 +215,4 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
-
 }

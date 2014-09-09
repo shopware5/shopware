@@ -6,7 +6,7 @@ use Shopware\Bundle\SearchBundle\DBAL\PriceHelper;
 use Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 /**
@@ -44,13 +44,13 @@ class PriceSortingHandler implements SortingHandlerInterface
      *
      * @param SortingInterface|PriceSorting $sorting
      * @param QueryBuilder $query
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return void
      */
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
-        Context $context
+        ShopContextInterface $context
     ) {
         $selection = $this->priceHelper->getCheapestPriceSelection(
             $context->getCurrentCustomerGroup(),

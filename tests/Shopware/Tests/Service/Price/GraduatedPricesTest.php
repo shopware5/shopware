@@ -129,6 +129,12 @@ class GraduatedPricesTest extends TestCase
         ));
 
         $priceGroup = $this->helper->createPriceGroup();
+        $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
+        $context->setPriceGroups(array(
+            $priceGroupStruct->getId() => $priceGroupStruct
+        ));
+
+
         $data['priceGroupId'] = $priceGroup->getId();
         $data['priceGroupActive'] = true;
 

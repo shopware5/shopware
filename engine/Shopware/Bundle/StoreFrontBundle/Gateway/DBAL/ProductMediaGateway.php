@@ -69,7 +69,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $media = $this->getList(array($product), $context);
 
@@ -79,7 +79,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCover(Struct\ListProduct $product, Struct\Context $context)
+    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $covers = $this->getCovers(array($product), $context);
 
@@ -89,7 +89,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Context $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -126,7 +126,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCovers($products, Struct\Context $context)
+    public function getCovers($products, Struct\ShopContextInterface $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -179,10 +179,10 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery(Struct\Context $context)
+    private function getQuery(Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 

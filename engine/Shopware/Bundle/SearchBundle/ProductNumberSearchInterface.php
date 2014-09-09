@@ -42,8 +42,8 @@ interface ProductNumberSearchInterface
      * to add their own handler classes.
      *
      * @param Criteria $criteria
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return ProductNumberSearchResult
      */
-    public function search(Criteria $criteria, Struct\Context $context);
+    public function search(Criteria $criteria, Struct\ShopContextInterface $context);
 }

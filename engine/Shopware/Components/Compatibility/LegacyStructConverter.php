@@ -266,7 +266,7 @@ class LegacyStructConverter
             $data['sDownloads'][] = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
-                'filename' => $this->contextService->get()->getBaseUrl() . $this->config->get('articleFiles') . "/" . $download->getFile(),
+                'filename' => $this->contextService->getShopContext()->getBaseUrl() . $this->config->get('articleFiles') . "/" . $download->getFile(),
                 'size' => $download->getSize()
             );
         }
@@ -384,7 +384,7 @@ class LegacyStructConverter
     public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
         //now we get the configured image and thumbnail dir.
-        $imageDir = $this->contextService->get()->getBaseUrl() . '/media/image/';
+        $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
 
         $src = $media->getThumbnails();

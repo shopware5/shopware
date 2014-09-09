@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -44,14 +44,14 @@ class ImmediateDeliveryFacetHandler implements FacetHandlerInterface
      * @param FacetInterface|Facet\ShippingFreeFacet $facet
      * @param QueryBuilder $query
      * @param Criteria $criteria
-     * @param Context $context
+     * @param ShopContextInterface $context
      * @return Facet\ShippingFreeFacet
      */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
         Criteria $criteria,
-        Context $context
+        ShopContextInterface $context
     ) {
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');

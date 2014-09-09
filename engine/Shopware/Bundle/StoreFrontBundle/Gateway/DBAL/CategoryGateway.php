@@ -74,7 +74,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get($id, Struct\Context $context)
+    public function get($id, Struct\ShopContextInterface $context)
     {
         $categories = $this->getList($id, $context);
 
@@ -84,7 +84,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList(array $ids, Struct\Context $context)
+    public function getList(array $ids, Struct\ShopContextInterface $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 

@@ -39,10 +39,10 @@ interface ProductConfigurationGatewayInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product order number, each array element contains a Struct\Configurator\Group array.
      */
-    public function getList($products, Struct\Context $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group requires the following data:
@@ -54,8 +54,8 @@ interface ProductConfigurationGatewayInterface
      * - Configurator options
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Context $context
+     * @param Struct\ShopContextInterface $context
      * @return Struct\Configurator\Group[]
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context);
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
 }

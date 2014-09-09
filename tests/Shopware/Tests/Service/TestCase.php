@@ -5,6 +5,7 @@ namespace Shopware\Tests\Service;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SearchProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
@@ -75,7 +76,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return Context
+     * @return TestContext
      */
     protected function getContext()
     {

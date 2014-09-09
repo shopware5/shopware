@@ -1007,7 +1007,7 @@ class sExport
                             $product->setVariantId($row["articledetailsID"]);
                             $product->setNumber($orderNumber);
 
-                            $context = $this->contextService->get();
+                            $context = $this->contextService->getShopContext();
                             $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                             if (array_key_exists($orderNumber, $row['group_additionaltext'])) {

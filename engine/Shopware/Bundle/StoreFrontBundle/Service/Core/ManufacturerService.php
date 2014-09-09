@@ -50,7 +50,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * @inheritdoc
      */
-    public function get($id, Struct\Context $context)
+    public function get($id, Struct\ShopContextInterface $context)
     {
         $manufacturers = $this->getList(array($id), $context);
 
@@ -60,7 +60,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList(array $ids, Struct\Context $context)
+    public function getList(array $ids, Struct\ShopContextInterface $context)
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 

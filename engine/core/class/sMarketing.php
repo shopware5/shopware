@@ -362,7 +362,7 @@ class sMarketing
      */
     private function getVariantDetailsForPremiumArticles($articleId, $mainDetailId)
     {
-        $context = $this->contextService->get();
+        $context = $this->contextService->getShopContext();
 
         $sql = "SELECT id, ordernumber, additionaltext
             FROM s_articles_details

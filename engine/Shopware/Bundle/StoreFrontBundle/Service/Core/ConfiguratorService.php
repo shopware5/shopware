@@ -63,7 +63,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     /**
      * @inheritdoc
      */
-    public function getProductConfiguration(Struct\ListProduct $product, Struct\Context $context)
+    public function getProductConfiguration(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $configuration = $this->getProductsConfigurations(array($product), $context);
 
@@ -73,7 +73,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     /**
      * @inheritdoc
      */
-    public function getProductsConfigurations($products, Struct\Context $context)
+    public function getProductsConfigurations($products, Struct\ShopContextInterface $context)
     {
         $configuration = $this->productConfigurationGateway->getList($products, $context);
 
@@ -85,7 +85,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      */
     public function getProductConfigurator(
         Struct\ListProduct $product,
-        Struct\Context $context,
+        Struct\ShopContextInterface $context,
         array $selection
     ) {
         $configurator = $this->configuratorGateway->get($product, $context, $selection);

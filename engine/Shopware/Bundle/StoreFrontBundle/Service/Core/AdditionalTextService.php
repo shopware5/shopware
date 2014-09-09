@@ -27,8 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -62,7 +62,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     /**
      * @inheritdoc
      */
-    public function buildAdditionalText(ListProduct $product, Context $context)
+    public function buildAdditionalText(ListProduct $product, ShopContextInterface $context)
     {
         $products = $this->buildAdditionalTextLists(array($product), $context);
 
@@ -72,7 +72,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     /**
      * @inheritdoc
      */
-    public function buildAdditionalTextLists($products, Context $context)
+    public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
         $required = array();
         foreach($products as &$product) {
@@ -90,6 +90,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
             $context
         );
 
+        /**@var $required ListProduct[]*/
         foreach($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;

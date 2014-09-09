@@ -21,48 +21,78 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
+
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductDownloadService implements Service\ProductDownloadServiceInterface
+class LocationContext
+    extends Extendable
+    implements LocationContextInterface, \JsonSerializable
 {
     /**
-     * @var Gateway\DownloadGatewayInterface
+     * @var Area
      */
-    private $gateway;
+    protected $area;
 
     /**
-     * @param Gateway\DownloadGatewayInterface $gateway
+     * @var Country
      */
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
+    protected $country;
+
+    /**
+     * @var State
+     */
+    protected $state;
+
+    /**
+     * @param Area $area
+     * @param Country $country
+     * @param State $state
+     */
+    public function __construct(Area $area, Country $country, State $state)
     {
-        $this->gateway = $gateway;
+        $this->area = $area;
+        $this->country = $country;
+        $this->state = $state;
     }
+
+    /**
+     * @return Area
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
 
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function jsonSerialize()
     {
-        $downloads = $this->getList(array($product), $context);
-
-        return array_shift($downloads);
+        return get_object_vars($this);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->gateway->getList($products, $context);
-    }
-
 }
