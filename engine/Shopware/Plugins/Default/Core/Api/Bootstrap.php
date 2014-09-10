@@ -23,7 +23,7 @@
  */
 
 /**
- *
+ * @deprecated Will be removed in SW 5.1
  */
 class Shopware_Plugins_Core_Api_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -72,6 +72,9 @@ class Shopware_Plugins_Core_Api_Bootstrap extends Shopware_Components_Plugin_Boo
 
 }
 
+/**
+ * @deprecated Will be removed in SW 5.1
+ */
 class sAPI
 {
     /**
