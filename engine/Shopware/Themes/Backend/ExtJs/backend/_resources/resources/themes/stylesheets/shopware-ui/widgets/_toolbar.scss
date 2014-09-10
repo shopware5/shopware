@@ -163,7 +163,7 @@
 
 // Main Menu Toolbar
 .shopware-menu {
-    @include single-box-shadow(rgba(0, 0, 0, 0.075), 0px, 3px, 0);
+    @include single-box-shadow(rgba(0, 0, 0, 0.075), 0, 3px, 0);
     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                                   svg-color-stop(rgba(46,181,249,1), 0%, 1),
                                   svg-color-stop(rgba(22,129,211,1), 100%, 1)
@@ -197,35 +197,54 @@
        @include transition-timing-function(ease-out);
        @include border-radius(16px);
        position: relative;
-       top: 6px !important;
+       top: 8px !important;
        
        table {
            margin: 0 !important;
        }
    }
    .searchfield tbody {
-       background: theme-image($theme, 'search_taskbar_top_left.png') no-repeat 0 0;
-       padding: 0 0 0 26px;
+       padding: 0;
        height: $search-field-height;
        width: auto !important;
        display: block;
        margin: 0 !important;
 
        .#{$prefix}form-item-body {
-           background: theme-image($theme, 'search_taskbar_top_right.png') no-repeat right 0;
-           padding: 0 14px 0 0;
+           background: #186db8;
+           border-bottom: 1px solid rgba(59, 170, 250, 1);
+           border-radius: 14px;
+           padding: 0 0 0 0;
            height: $search-field-height;
            width: auto !important;
+
+           -webkit-box-shadow:inset 0 2px 0 #185f9d;
+           -moz-box-shadow:inset 0 2px 0 #185f9d;
+           box-shadow:inset 0 2px 0 #185f9d;
 
            .#{$prefix}form-field {
                @include border-radius(0px);
            	   @include reset-box-shadow;
-               background: theme-image($theme, 'search_taskbar_top_mid.png') repeat-x 0 0;
+               background: theme-image($theme, 'search_taskbar_top_left.png') no-repeat 9px 6px transparent;
+               padding-left: 32px;
                border: 0 none;
                height: $search-field-height;
+               min-width: 320px;
                width: auto !important;
-               color: #3075ac;
-               font-size: 11px;
+               color: #fff;
+               text-shadow: #145c9a 0 1px 0;
+               font-size: 12px;
+               line-height: 16px;
+
+               /** Styling the empty text */
+               &::-webkit-input-placeholder {
+                   color: lighten($font-color, 100%);
+                   text-shadow: #145c9a 0 1px 0;
+               }
+               &:-moz-placeholder {
+                   color: lighten($font-color, 100%);
+                   text-shadow: #145c9a 0 1px 0;
+               }
            }
        }
 	}
