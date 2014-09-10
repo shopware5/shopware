@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
 
             me.shopStore.load({
                 callback: function(records, operation, success) {
-                    if (records.length == 0 && Ext.isEmpty(forceShow)) {
+                    if (records.length == 0 && forceShow !== true) {
                         me.window.close();
                     } else {
                         me.window.setShops(records);
