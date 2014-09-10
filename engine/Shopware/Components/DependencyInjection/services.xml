@@ -4,13 +4,6 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="shopware.snippet_manager.class">Shopware_Components_Snippet_Manager</parameter>
-        <parameter key="shopware.cache_factory.class">Shopware\Components\DependencyInjection\Bridge\Cache</parameter>
-        <parameter key="shopware.config_factory.class">Shopware\Components\DependencyInjection\Bridge\Config</parameter>
-        <parameter key="shopware.model_factory.class">Shopware\Components\DependencyInjection\Bridge\Models</parameter>
-    </parameters>
-
     <services>
         <service id="bootstrap"       synthetic="true" />
         <service id="application"     synthetic="true" />
@@ -125,7 +118,7 @@
 
         <service id="shopware.loader" alias="Loader" />
         <service id="Loader"     class="Enlight_Loader" />
-        <service id="snippets"   class="%shopware.snippet_manager.class%">
+        <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
             <argument>%shopware.snippet%</argument>
         </service>
@@ -163,7 +156,7 @@
             <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
-        <service id="cache_factory" class="%shopware.cache_factory.class%"/>
+        <service id="cache_factory" class="Shopware\Components\DependencyInjection\Bridge\Cache"/>
         <service id="cache"
                  class="Zend_Cache_Core"
                  factory-service="cache_factory"
@@ -172,7 +165,7 @@
             <argument type="service" id="cache_zend"/>
         </service>
 
-        <service id="config_factory" class="%shopware.config_factory.class%" />
+        <service id="config_factory" class="Shopware\Components\DependencyInjection\Bridge\Config" />
         <service id="config"
                  class="Shopware_Components_Config"
                  factory-service="config_factory"
