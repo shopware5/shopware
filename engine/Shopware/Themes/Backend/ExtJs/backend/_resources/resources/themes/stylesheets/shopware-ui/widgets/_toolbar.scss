@@ -163,11 +163,14 @@
 
 // Main Menu Toolbar
 .shopware-menu {
-	@include single-box-shadow(#475C6A, -1px, 0, 4px);
+    @include single-box-shadow(rgba(0, 0, 0, 0.075), 0px, 3px, 0);
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                                  svg-color-stop(rgba(46,181,249,1), 0%, 1),
+                                  svg-color-stop(rgba(22,129,211,1), 100%, 1)
+                                )) center center no-repeat transparent;
 	padding: 0 0 0 6px;
-    background: theme-image($theme, 'nav_taskbar_top_bg.png') repeat-x;
-    border-bottom: 1px solid #0057A7 !important;
-    border-top: 0 none !important;
+    border-width: 0 0 1px 0 !important;
+    border-color: #0b6dbe !important;
     overflow: visible;
     position: fixed;
     left: 0; top: 0;
@@ -180,9 +183,10 @@
 
 	// Seperators
 	.#{$prefix}toolbar-separator-horizontal {
-	   height: 40px;
-	   border-left: 1px solid rgba(0, 83, 153, 0.5);
-	   border-right: 1px solid rgba(97, 209, 255, 0.45);
+       margin: 18px 0 0 0;
+	   height: 18px;
+	   border-left: 1px solid rgba(24, 109, 184, 0.6);
+	   border-right: 1px solid rgba(255, 255, 255, 0.2);
    }
 
    // Search field

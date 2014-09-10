@@ -32,7 +32,10 @@
         margin: 0;
         padding: 0;
         border: 0 none;
-        background: theme-image($theme, 'background-compressed.jpg') fixed center center;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                                  svg-color-stop(rgb(198, 234, 248), 0%, 1),
+                                  svg-color-stop(rgb(172, 206, 243), 100%, 1)
+                                )) center center no-repeat transparent;
         overflow: hidden;
         height: 100%;
     }
