@@ -178,6 +178,9 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSet->addElement($this->createColorPickerField('reviewStarColor', 'reviewStarColor', '#ffcb00'));
 
+        $fieldSet->addElement($this->createColorPickerField('basketHeaderColor', 'basketHeaderColor', '#f7f8fa'));
+        $fieldSet->addElement($this->createColorPickerField('basketHeaderFontColor', 'basketHeaderFontColor', '#2b3742'));
+
         return $fieldSet;
     }
 

@@ -1,18 +1,5 @@
 {extends file="frontend/account/select_shipping.tpl"}
 
-{* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
-{block name="frontend_index_header_css_screen" append}
-    <style type="text/css">
-        #confirm .table, #confirm .country-notice {
-            background: {config name=baskettablecolor};
-        }
-        #confirm .table .table_head {
-            color: {config name=basketheaderfontcolor};
-            background: {config name=basketheadercolor};
-        }
-    </style>
-{/block}
-
 {* Shop header *}
 {block name='frontend_index_navigation'}
     {include file="frontend/checkout/header.tpl"}
