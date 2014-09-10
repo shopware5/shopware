@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             article = me.subApplication.article,
             variantTab = mainWindow.variantTab;
 
-        if (newValue === false) {
+        if (newValue === false && !Ext.isEmpty(article.get('id'))) {
             var variantStore = me.getStore('Variant');
             variantStore.getProxy().extraParams.articleId = article.get('id');
 
