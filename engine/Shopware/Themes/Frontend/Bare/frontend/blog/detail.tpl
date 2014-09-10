@@ -12,11 +12,14 @@
         {block name='frontend_blog_detail_content'}
             <div class="blog--detail-content blog--box block" itemscope itemtype="https://schema.org/BlogPosting">
 
-                {if $sArticle.author.name}
-                    <meta itemprop="author" content="{$sArticle.author.name}">
-                {/if}
+                {* Rich snippets *}
+                {block name='frontend_blog_detail_rich_snippets'}
+                    {if $sArticle.author.name}
+                        <meta itemprop="author" content="{$sArticle.author.name}">
+                    {/if}
 
-                <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
+                    <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
+                {/block}
 
                 {* Detail Box Header *}
                 {block name='frontend_blog_detail_box_header'}
