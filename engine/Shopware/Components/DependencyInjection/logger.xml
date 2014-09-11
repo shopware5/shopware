@@ -72,10 +72,5 @@
         <service id="debuglogger" class="Shopware\Components\Logger">
             <argument>debug</argument>
         </service>
-
-        <!-- Legacy Log object -->
-        <service id="log" class="Enlight_Components_Log">
-            <argument type="service" id="debuglogger" />
-        </service>
     </services>
  </container>
