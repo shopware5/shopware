@@ -57,21 +57,6 @@
     {/if}
 {/block}
 
-{* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
-{block name="frontend_index_header_css_screen" append}
-    <style type="text/css">
-
-        @media screen and (min-width: 768px) {
-            .confirm--content .product--table .table--header {
-                background: {config name=basketheadercolor};
-            }
-            .product--table .table--header .table--column {
-                color: {config name=basketheaderfontcolor};
-            }
-        }
-    </style>
-{/block}
-
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="content block confirm--content">

@@ -13,6 +13,35 @@
         .border-radius();
     }
 
+    .product--table {
+
+        .panel--body{
+            background: @basketTableColor;
+            color: @basketTableFontColor;
+            border-color: @basketBorderColor;
+            padding-bottom: 0;
+        }
+
+        .table--row,
+        .table--media img {
+            border-color: @basketBorderColor;
+        }
+
+        .basket--footer{
+            background: @basketTableColor;
+            border-color: @basketBorderColor;
+
+            .aggregation--list {
+                background: transparent;
+                border-color: @basketBorderColor;
+            }
+        }
+
+        .table--actions {
+            .unitize-padding(25, 0, 0, 0);
+        }
+    }
+
     .panel--actions {
         .unitize-margin(16, 0, 0, 0);
         padding: 0;
@@ -105,10 +134,24 @@
             .table--header {
                 .unitize-margin(-14, -20, 10, -20);
                 .unitize-padding(14, 20, 10, 20);
+                background: @basketHeaderColor;
+                border-color: @basketBorderColor;
+
+                .table--column {
+                    color: @basketHeaderFontColor;
+                }
             }
 
             .is--last-row {
                 border-bottom: 0 none;
+            }
+
+            .panel--body{
+                .unitize(20, 16, padding-bottom);
+            }
+
+            .table--actions {
+                .unitize-padding(20, 0, 0, 0);
             }
         }
 
