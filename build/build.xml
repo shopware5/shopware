@@ -191,7 +191,7 @@
     </target>
 
     <target name="build-config">
-        <copy file="${basedir}/config.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
+        <copy file="${basedir}/config.php.dist" toFile="${basedir}/config.php" overwrite="true">
             <filterset begintoken="%" endtoken="%">
                 <filter token="db.database" value="${db.name}"/>
                 <filter token="db.host"     value="${db.host}"/>

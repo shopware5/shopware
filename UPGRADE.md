@@ -258,7 +258,8 @@ In this document you will find a changelog of the important changes related to t
         * sGetCheapestPrice
         * sCalculatingPrice
         * calculateCheapestBasePriceData
-
+* Removed support for `engine/Shopware/Configs/Custom.php`
+    * Use `config.php` or `config_$environment.php` e.g. `config_production.php`
 
 ## 4.2.2
 

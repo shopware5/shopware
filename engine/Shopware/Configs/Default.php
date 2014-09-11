@@ -5,8 +5,6 @@ if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
-} elseif (file_exists(__DIR__ . '/Custom.php')) {
-    $customConfig = $this->loadConfig(__DIR__ . '/Custom.php');
 } else {
     $customConfig = array();
 }
