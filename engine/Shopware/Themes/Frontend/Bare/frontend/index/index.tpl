@@ -138,6 +138,7 @@
                 'title': '{s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}',
                 'baseUrl': '{$Shop->getBaseUrl()}',
                 'shopId': '{$Shop->getId()}',
+                'noPicture': '{link file="frontend/_public/src/img/no-picture.jpg"}',
                 'productLimit': ~~('{config name="lastarticlestoshow"}'),
                 'currentArticle': {ldelim}{if $sArticle}
                     {foreach $sLastArticlesConfig as $key => $value}
