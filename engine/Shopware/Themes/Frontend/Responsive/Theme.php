@@ -180,6 +180,9 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSet->addElement($this->createColorPickerField('basketHeaderColor', 'basketHeaderColor', '#f7f8fa'));
         $fieldSet->addElement($this->createColorPickerField('basketHeaderFontColor', 'basketHeaderFontColor', '#2b3742'));
+        $fieldSet->addElement($this->createColorPickerField('basketTableColor', 'basketTableColor', '#f7f8fa'));
+        $fieldSet->addElement($this->createColorPickerField('basketTableFontColor', 'basketTableFontColor', '#5f7285'));
+        $fieldSet->addElement($this->createColorPickerField('basketBorderColor', 'basketBorderColor', '#d8dde5'));
 
         return $fieldSet;
     }
