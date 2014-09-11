@@ -190,8 +190,6 @@ class Utils
             $config = require $shopPath . '/config.php';
         } elseif (file_exists($shopPath . '/config.update.php')) {
             $config = require $shopPath . '/config.update.php';
-        } elseif (file_exists($shopPath . '/engine/Shopware/Configs/Custom.php')) {
-            $config = require $shopPath . '/engine/Shopware/Configs/Custom.php';
         } else {
             die('Could not find shopware config');
         }

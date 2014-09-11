@@ -474,7 +474,6 @@ class Kernel implements HttpKernelInterface
     {
         $files = array(
             '/config.php',
-            '/engine/Shopware/Configs/Custom.php',
         );
         foreach ($files as $file) {
             if (!is_file($filePath = $this->getRootDir() . $file)) {

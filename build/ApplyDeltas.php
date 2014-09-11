@@ -17,8 +17,6 @@ $dbConfig = getopt('', $longopts);
 if (empty($dbConfig)) {
     if (file_exists($shopPath . '/config.php')) {
         $config = require $shopPath . '/config.php';
-    } elseif (file_exists($shopPath . '/engine/Shopware/Configs/Custom.php')) {
-        $config = require $shopPath . '/engine/Shopware/Configs/Custom.php';
     } else {
         die('Could not find shopware config');
     }
