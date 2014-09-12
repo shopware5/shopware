@@ -17,7 +17,7 @@
 
         {* Search form *}
         {block name='frontend_index_search'}
-            <li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true" {if $theme.focusSearch && {controllerName} == 'index'}data-activeOnStart="true" {/if}>
+            <li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true" {if $theme.focusSearch && {controllerName} == 'index'}data-activeOnStart="true"{/if}>
                 <a class="btn entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}"|escape}">
                     <i class="icon--search"></i>
 

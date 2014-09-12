@@ -25,6 +25,9 @@
         init: function() {
             var me = this;
 
+            //cache DOM
+            me.$body = $('body');
+
             me.applyDataAttributes();
 
             StateManager.registerListener([{
@@ -40,7 +43,7 @@
             }]);
 
             if(me.$el.hasClass(me.defaults.activeCls)) {
-                $('body').addClass('is--active-searchfield');
+                me.$body.addClass('is--active-searchfield');
             }
 
             me._on(me.$el, 'click', $.proxy(me.onClickSearchTrigger, me));
@@ -65,11 +68,11 @@
             if(me.$el.hasClass(me.opts.activeCls)) {
                 me.$el.removeClass(me.opts.activeCls);
                 me.$el.find(me.defaults.searchFieldCls).delay(150).blur();
-                $('body').removeClass('is--active-searchfield');
+                me.$body.removeClass('is--active-searchfield');
             } else {
                 me.$el.addClass(me.opts.activeCls);
                 me.$el.find(me.defaults.searchFieldCls).delay(150).focus();
-                $('body').addClass('is--active-searchfield');
+                me.$body.addClass('is--active-searchfield');
             }
         },
 
