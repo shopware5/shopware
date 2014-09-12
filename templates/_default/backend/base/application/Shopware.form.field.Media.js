@@ -400,10 +400,16 @@ Ext.define('Shopware.form.field.Media', {
      * @returns { Ext.Img }
      */
     createPreview: function() {
-        var me = this;
+        var me = this, value;
+
+        if (me.value == undefined) {
+            value = me.noMedia;
+        } else {
+            value = me.mediaPath + me.value;
+        }
 
         me.preview = Ext.create('Ext.Img', {
-            src: me.mediaPath + me.value,
+            src: value,
             height: 100,
             maxHeight: 100,
             padding: 5,
@@ -540,6 +546,10 @@ Ext.define('Shopware.form.field.Media', {
     requestMediaData: function(value) {
         var me = this, params = {};
 
+        if (!value) {
+            me.updatePreview(me.noMedia);
+            return;
+        }
         params[me.valueField] = value;
 
         Ext.Ajax.request({
