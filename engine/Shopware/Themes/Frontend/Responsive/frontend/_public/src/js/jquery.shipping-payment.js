@@ -59,7 +59,7 @@
          */
         onSubmitForm: function() {
             var me = this,
-                $form = $('#shippingPaymentForm');
+                $form = me.$el.find('#shippingPaymentForm');
 
             // We can't find the form
             if(!$form.length) {
