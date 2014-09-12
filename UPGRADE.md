@@ -102,6 +102,7 @@ In this document you will find a changelog of the important changes related to t
 * Dropped unused table `s_cms_groups`
 * Deprecate Legacy API `Shopware->Api()`, will be removed in SW 5.1
 * Removed deprecated class `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
+* Removed unused `/backend/document` templates and several unused `Shopware_Controllers_Backend_Document` actions, methods and variables
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
