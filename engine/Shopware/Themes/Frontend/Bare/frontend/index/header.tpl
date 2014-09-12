@@ -30,11 +30,9 @@
 
 {* Set favicons and touch icons for all different sizes *}
 {block name="frontend_index_header_favicons"}
+    <meta name="apple-mobile-web-app-status-bar-style" content="none">
     <link rel="apple-touch-icon" href="{link file=$theme.appleTouchIcon}">
-	<link rel="apple-touch-icon-precomposed" href="{link file=$theme.appleTouchIcon}">
-	<link rel="shortcut icon" sizes="196x196" href="{link file=$theme.favicon}">
 	<link rel="shortcut icon" href="{link file=$theme.favicon}">
-	<link rel="shortcut icon" href="{s name='IndexMetaShortcutIcon'}{link file=$theme.favicon}{/s}" type="image/x-icon" />{* Favicon *}
 {/block}
 
 {* Internet Explorer 9 specific meta tags *}
