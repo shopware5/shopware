@@ -169,11 +169,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
                     $name = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);
 
-
                     $basePath = $action->Front()->Router()->assemble(array('sViewport' => 'index'));
-                    Shopware()->System()->_POST['sLanguage'] = Shopware()->System()->sLanguageData[Shopware()->System()->sLanguage]['isocode'];
+                    Shopware()->System()->_POST['sLanguage'] = Shopware()->Shop()->getId();
                     Shopware()->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
-
 
                     $sql = '
                         INSERT INTO s_core_optin (datum, hash, data)
