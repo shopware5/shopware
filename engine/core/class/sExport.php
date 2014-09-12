@@ -910,6 +910,8 @@ class sExport
     {
         fwrite($handleResource, $this->sSmarty->fetch('string:' . $this->sSettings['header'], $this->sFeedID));
 
+        $context = $this->contextService->getShopContext();
+
         $sql = $this->sCreateSql();
 
         $result = $this->db->query($sql);
@@ -1007,7 +1009,6 @@ class sExport
                             $product->setVariantId($row["articledetailsID"]);
                             $product->setNumber($orderNumber);
 
-                            $context = $this->contextService->getShopContext();
                             $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                             if (array_key_exists($orderNumber, $row['group_additionaltext'])) {
@@ -1024,7 +1025,6 @@ class sExport
                 $product->setVariantId($row["articledetailsID"]);
                 $product->setNumber($row['ordernumber']);
 
-                $context = $this->contextService->get();
                 $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                 $row['additionaltext'] = $product->getAdditional();
