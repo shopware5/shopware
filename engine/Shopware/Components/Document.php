@@ -275,6 +275,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 "bid" => $this->_documentBid,
                 "date" =>$this->_config["date"],
                 "deliveryDate" => $this->_config["delivery_date"],
+                // The "netto" config flag, if set to true, allows creating
+                // netto documents for brutto orders. Setting it to false,
+                // does not however create brutto documents for netto orders.
                 "netto" => $this->_order->order->taxfree ? true : $this->_config["netto"],
                 "nettoPositions" => $this->_order->order->net
             )
