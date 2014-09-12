@@ -273,7 +273,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 "comment" => $this->_config["docComment"],
                 "id" => $id,
                 "bid" => $this->_documentBid,
-                "date" =>$this->_config["date"],
+                "date" => $this->_config["date"],
                 "deliveryDate" => $this->_config["delivery_date"],
                 // The "netto" config flag, if set to true, allows creating
                 // netto documents for brutto orders. Setting it to false,
@@ -334,7 +334,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             "billing" => $order->billing,
             "additional" => array(
                 "countryShipping" => $order->shipping->country,
-                "country"=>$order->billing->country
+                "country" => $order->billing->country
             )
         );
         $this->_view->assign('User', $user);
