@@ -406,11 +406,18 @@ class LegacyStructConverter
                     'width' => 0,
                     'height' => 0,
                 ),
-                'description' => $media->getDescription(),
+                'description' => $media->getName(),
             )
         );
 
-        $data['attributes'] = $media->getAttributes();
+        $attributes = $media->getAttributes();
+        if ($attributes && isset($attributes['image'])) {
+            $data['attribute'] = $attributes['image']->toArray();
+            unset($data['attribute']['id']);
+            unset($data['attribute']['imageID']);
+        } else {
+            $data['attribute'] = [];
+        }
 
         return $data;
     }
@@ -769,7 +776,7 @@ class LegacyStructConverter
             'width' => $product->getWidth(),
             'laststock' => $product->isCloseouts(),
             'additionaltext' => $product->getAdditional(),
-            'datum' => $product->getCreatedAt(),
+            'datum' => $product->getCreatedAt()->format('Y-m-d'),
             'sales' => $product->getSales(),
             'filtergroupID' => null,
             'priceStartingFrom' => null,
