@@ -56,7 +56,7 @@
 
 		{* Review text *}
 		{block name='frontend_detail_comment_input_text'}
-			<textarea name="sVoteComment" placeholder="{s name="DetailCommentLabelText"}{/s}" cols="3" rows="2" class="review--field{if $sErrorFlag.sVoteComment} has--error{/if}">{$sFormData.sVoteComment|escape}</textarea>
+			<textarea name="sVoteComment" placeholder="{s name="DetailCommentPlaceholderText"}{/s}" cols="3" rows="2" class="review--field{if $sErrorFlag.sVoteComment} has--error{/if}">{$sFormData.sVoteComment|escape}</textarea>
 		{/block}
 
 		{* Captcha *}
