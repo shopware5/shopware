@@ -695,7 +695,9 @@ class sArticles
             $search = intval($search);
         }
 
-        $sCategory = $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"] ? $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"] : $this->sSYSTEM->sCONFIG["sCATEGORYPARENT"];
+        $context = $this->contextService->getShopContext();
+
+        $sCategory = $context->getShop()->getCategory()->getId() ? : $this->sSYSTEM->sCONFIG["sCATEGORYPARENT"];
         if (!empty($category)) $sCategory = $category;
         $sSearch = trim(stripslashes(html_entity_decode($search)));
 
@@ -731,12 +733,13 @@ class sArticles
         if (empty($mode)) {
             $sSearch = explode(' ', $sSearch);
 
-            if (!empty($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["id"])) {
+            $shopId = $context->getShop()->getId();
+            if (!empty($shopId)) {
                 foreach ($sSearch as $search) {
                     $search = $this->sSYSTEM->sDB_CONNECTION->qstr("%$search%");
                     $sql_add_where .= "
                             OR (
-                                '{$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["id"]}'=t.languageID
+                                '{$shopId}'=t.languageID
                                 AND (t.name LIKE $search OR t.keywords LIKE $search)
                             )
                     ";
@@ -1922,13 +1925,15 @@ class sArticles
         if (empty($this->translationId)) {
             return array();
         }
+        $context = $this->contextService->getShopContext();
+
         $sql = 'SELECT objectdata FROM s_core_translations WHERE objecttype=? AND objectkey=? AND objectlanguage=?';
-        $data = array('configuratorgroup', $id, $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+        $data = array('configuratorgroup', $id, $context->getShop()->getId());
         $getGroupTranslations = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, $data);
         $getGroupTranslations = unserialize($getGroupTranslations);
 
         $sql = 'SELECT objectdata FROM s_core_translations WHERE objecttype=? AND objectkey=? AND objectlanguage=?';
-        $data = array('configuratoroption', $id, $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+        $data = array('configuratoroption', $id, $context->getShop()->getId());
         $getOptionTranslations = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, $data);
         $getOptionTranslations = unserialize($getOptionTranslations);
 
@@ -2472,6 +2477,8 @@ class sArticles
             return false;
         }
 
+        $context = $this->contextService->getShopContext();
+
         $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
         $markTop = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         // Used in emotion widget to fetch only articles that have an image assigned
@@ -2602,7 +2609,7 @@ class sArticles
 
         $getPromotionResult["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
         $getPromotionResult["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
-        if (!empty($category) && $category != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
+        if (!empty($category) && $category != $context->getShop()->getCategory()->getId()) {
             $getPromotionResult["linkDetails"] .= "&sCategory=$category";
         }
 
@@ -3245,7 +3252,7 @@ class sArticles
         $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array(
             $this->sSYSTEM->sSESSION_ID,
             (int) $currentArticle,
-            $this->sSYSTEM->sLanguage
+            $this->contextService->getShopContext()->getShop()->getId()
         ));
 
         foreach ($queryArticles as $articleKey => $articleValue) {
@@ -3668,7 +3675,7 @@ class sArticles
         }
 
         $promotion = $this->legacyStructConverter->convertListProductStruct($product);
-        if (!empty($category) && $category != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
+        if (!empty($category) && $category != $context->getShop()->getCategory()->getId()) {
             $promotion["linkDetails"] .= "&sCategory=$category";
         }
 
@@ -3738,7 +3745,7 @@ class sArticles
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
-            if (!empty($categoryId) && $categoryId != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
+            if (!empty($categoryId) && $categoryId != $context->getShop()->getCategory()->getId()) {
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
 
@@ -4431,6 +4438,7 @@ class sArticles
     private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null)
     {
         $baseFile = $this->config->get('baseFile');
+        $context = $this->contextService->getShopContext();
 
         $detail = $baseFile . "?sViewport=detail&sArticle=" . $product->getId();
         if ($categoryId) {
@@ -4441,7 +4449,7 @@ class sArticles
         $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
         $note = $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();
         $friend = $baseFile . "?sViewport=tellafriend&sDetails=" . $product->getId();
-        $pdf = $baseFile . "?sViewport=detail&sDetails=" . $product->getId() . "&sLanguage=" . $this->sSYSTEM->sLanguage . "&sPDF=1";
+        $pdf = $baseFile . "?sViewport=detail&sDetails=" . $product->getId() . "&sLanguage=" . $context->getShop()->getId() . "&sPDF=1";
 
         return array(
             'linkBasket' => $basket,

@@ -278,6 +278,8 @@ class sMarketing
 
     public function sGetPremiums()
     {
+        $context = $this->contextService->getContext();
+
         $sql = "
             SELECT id, esdarticle FROM s_order_basket
             WHERE sessionID='" . $this->sSYSTEM->sSESSION_ID . "'
@@ -294,7 +296,9 @@ class sMarketing
                 $esdOnly = false;
             }
         }
-        if (!empty($esdOnly)) return array();
+        if (!empty($esdOnly)) {
+            return array();
+        }
 
         $sBasketAmount = $this->sSYSTEM->sMODULES['sBasket']->sGetAmount();
         if (empty($sBasketAmount["totalAmount"]))
@@ -316,7 +320,7 @@ class sMarketing
             ORDER BY p.startprice ASC
         ";
 
-        $premiums = $this->db->fetchAll($sql, array($this->sSYSTEM->sSubShop["id"]));
+        $premiums = $this->db->fetchAll($sql, array($context->getShop()->getId()));
 
         foreach ($premiums as &$premium) {
 
@@ -596,7 +600,6 @@ class sMarketing
 
     public function sCampaignsGetDetail($id)
     {
-
         $id = intval($id);
 
         $sql = "
@@ -658,11 +661,10 @@ class sMarketing
                         ORDER BY position
                         ");
                         unset($articleData);
+                        $context = $this->contextService->getShopContext();
                         foreach ($getArticles as $article) {
-
-
                             if ($article["type"]) {
-                                $category = $this->sSYSTEM->_GET["sCategory"] ? $this->sSYSTEM->_GET["sCategory"] : $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"];
+                                $category = $this->sSYSTEM->_GET["sCategory"] ? : $context->getShop()->getCategory()->getId();
                                 if ($article["type"] == "image") {
                                     $tmpContainer = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($article["type"], $category, $article);
                                 } else {
@@ -763,9 +765,10 @@ class sMarketing
 
                         $getArticles = $this->db->fetchAll($sql);
                         unset($articleData);
+                        $context = $this->contextService->getShopContext();
                         foreach ($getArticles as $article) {
                             if ($article["type"]) {
-                                $category = $this->sSYSTEM->_GET["sCategory"] ? $this->sSYSTEM->_GET["sCategory"] : $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"];
+                                $category = $this->sSYSTEM->_GET["sCategory"] ? : $context->getShop()->getCategory()->getId();
                                 $tmpContainer = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($article["type"], $category, $article['articleordernumber']);
 
                                 if (count($tmpContainer) && isset($tmpContainer["articleName"])) {

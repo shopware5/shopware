@@ -125,49 +125,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     }
 
     /**
-     * Return shop languages
-     *
-     * @return array
-     */
-    public function getLanguages()
-    {
-        $shops = Shopware()->System()->sSubShop['switchLanguages'];
-        if (empty($shops)) {
-            return false;
-        }
-        $shops = Shopware()->Db()->quote(explode('|', $shops));
-        $sql = '
-            SELECT c.*, IF(id=?,1,0) as flag FROM s_core_multilanguage c
-            WHERE id IN ( ' . $shops.')
-        ';
-        return Shopware()->Db()->fetchAll($sql, array(
-            Shopware()->System()->sLanguage
-        ));
-    }
-
-    /**
-     * Return shop currencies
-     *
-     * @return array
-     */
-    public function getCurrencies()
-    {
-        $currencies = Shopware()->System()->sSubShop['switchCurrencies'];
-        if (empty($currencies)) {
-            return false;
-        }
-        $currencies = Shopware()->Db()->quote(explode('|', $currencies));
-        $sql = '
-            SELECT c.*, IF(id=?, 1, 0) as flag FROM s_core_currencies c
-            WHERE id IN (' . $currencies . ')
-            ORDER BY position ASC
-        ';
-        return Shopware()->Db()->fetchAll($sql, array(
-            Shopware()->System()->sCurrency['id']
-        ));
-    }
-
-    /**
      * Return cms menu items
      *
      * @param   null|int $shopId

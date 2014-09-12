@@ -58,7 +58,6 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-        $this->module->sSYSTEM->sLanguage = 2;
         $this->snippetManager = Shopware()->Snippets();
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
@@ -905,8 +904,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        // Change current subshop, test and expect success
-        $this->module->sSYSTEM->sSubShop["id"] = 3;
+        // Change current subshop id, test and expect success
+        Shopware()->Container()->get('context_service_core')->getShopContext()->getShop()->setId(3);
+
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
         $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
@@ -1009,7 +1009,8 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Change current subshop, test and expect success
-        $this->module->sSYSTEM->sSubShop["id"] = 3;
+        Shopware()->Container()->get('context_service_core')->getShopContext()->getShop()->setId(3);
+
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
         $this->assertTrue($this->module->sAddVoucher($voucherOneData['vouchercode']));
