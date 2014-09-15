@@ -61,6 +61,8 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
         });
 
         Shopware.app.Application.on('shopware-theme-cache-warm-up-request', function(shopId, forceShow) {
+            me.forceShow = forceShow;
+
             me.window = Ext.create('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp');
 
             me.shopStore = Ext.create('Shopware.apps.Index.store.ThemeCacheWarmUp');
@@ -114,8 +116,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
     runRequest: function(shops, offset) {
         var me = this,
             shop = shops[offset],
-            batchSize = shops.length;
-
+            batchSize = shops.length + 1;
 
         //cancel button pushed?
         if (me.cancelOperation) {
@@ -133,9 +134,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             return;
         }
 
-        //has the current request a progress bar?
         if (me.window.progressBar) {
-
             // updates the progress bar value and text, the last parameter is the animation flag
             me.window.progressBar.updateProgress(
                 (offset) / batchSize,
@@ -152,30 +151,16 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             },
             timeout: 4000000,
             success: function(response) {
-                if (offset+1 == batchSize) {
-                    //has the current request a progress bar?
+                if (offset+2 == batchSize) {
                     if (me.window.progressBar) {
-                        // updates the progress bar value and text, the last parameter is the animation flag
                         me.window.progressBar.updateProgress(
-                            1,
-                            Ext.String.format('{s name=response/success/progress_bar}Done{/s}'),
+                            (offset+1) / batchSize,
+                            Ext.String.format('{s name=progress_bar/clearing_http_cache}Clearing HTTP cache{/s}'),
                             true
                         );
                     }
 
-                    me.window.resetButtons();
-
-                    if (Ext.isNumber(me.window.singleShopId)) {
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=response/success/title}Theme shop cache warm up{/s}',
-                            '{s name=response/success/detail_single}Theme shop cache has been successfully warmed up{/s}'
-                        );
-                    } else {
-                        Shopware.Notification.createGrowlMessage(
-                            '{s name=response/success/title}Theme shop cache warm up{/s}',
-                            '{s name=response/success/detail_multiple}All theme shop caches have been successfully warmed up{/s}'
-                        );
-                    }
+                    me.clearHttpCache();
                 } else {
                     me.runRequest(shops, offset+1);
                 }
@@ -186,7 +171,51 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                     // updates the progress bar value and text, the last parameter is the animation flag
                     me.window.progressBar.updateProgress(
                         (offset) / batchSize,
-                        Ext.String.format('{s name=response/error/progress_bar}Done{/s}')
+                        Ext.String.format('{s name=response/error/progress_bar}Done{/s}'),
+                        true
+                    );
+                }
+
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=response/error/title}An error occurred{/s}',
+                    Ext.String.format('{s name=response/error/detail}A server error occurred while processing your request for shop [0]{/s}', shop.get('name'))
+                );
+            }
+        });
+    },
+
+    clearHttpCache: function() {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=Cache action=clearCache}',
+            method: 'POST',
+            params: {
+                'cache[theme]' : 'on'
+            },
+            timeout: 4000000,
+            success: function(response) {
+                if (Ext.isNumber(me.window.singleShopId)) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=response/success/title}Theme shop cache warm up{/s}',
+                        '{s name=response/success/detail_single}Theme shop cache has been successfully warmed up{/s}'
+                    );
+                } else {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=response/success/title}Theme shop cache warm up{/s}',
+                        '{s name=response/success/detail_multiple}All theme shop caches have been successfully warmed up{/s}'
+                    );
+                }
+
+                me.window.hide();
+            },
+            failure: function(response) {
+                //has the current request a progress bar?
+                if (me.window.progressBar) {
+                    me.window.progressBar.updateProgress(
+                        0,
+                        Ext.String.format('{s name=response/error/progress_bar}Error{/s}'),
+                        true
                     );
                 }
 
@@ -197,5 +226,6 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
             }
         });
     }
+
 });
 //{/block}
