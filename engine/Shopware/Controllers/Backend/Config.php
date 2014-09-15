@@ -614,6 +614,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         $data[$key] = null;
                     }
                 }
+
+                if ($data['templateId'] === null && $data['mainId'] === null && $data['id'] === null) {
+                    $templateId = Shopware()->Db()->fetchOne(
+                        'SELECT template_id FROM s_core_shops WHERE `default` = 1 AND template_id IS NOT NULL'
+                    );
+                    $data['templateId'] = $templateId;
+                }
+
                 $fields = array(
                     'mainId' => 'main',
                     'templateId' => 'template',
