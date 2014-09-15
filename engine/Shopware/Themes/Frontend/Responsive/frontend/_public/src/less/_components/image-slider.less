@@ -26,7 +26,7 @@
         z-index: 1000;
         font-family: 'shopware';
         text-align: center;
-        color: @primaryTextColor;
+        color: @text-color;
         cursor: pointer;
 
         &.is--left {
@@ -47,7 +47,7 @@
         }
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -131,10 +131,10 @@
             .border-radius(3px);
             display: inline-block;
             text-align: center;
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
 
             &.is--active {
-                border-color: @primaryColor;
+                border-color: @brand-primary;
             }
         }
 
@@ -152,18 +152,18 @@
             .user-select(none);
             .touch-callout(none);
             .tap-highlight-color(rgba(0, 0, 0, 0));
-            .linear-gradient(#ffffff, #edeff2);
+            .linear-gradient(#ffffff, @gray-light);
             display: none;
             position: absolute;
             z-index: 1000;
             font-family: 'shopware';
             text-align: center;
-            color: @primaryTextColor;
-            border: 1px solid @borderColor;
+            color: @text-color;
+            border: 1px solid @border-color;
             cursor: pointer;
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
 
             &.is--top {

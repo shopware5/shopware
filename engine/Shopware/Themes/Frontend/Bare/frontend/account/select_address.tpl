@@ -35,7 +35,7 @@
 
 		{block name="frontend_account_select_actions"}
 			<div class="panel--actions is--wide">
-				<input type="submit" class="btn btn--secondary is--small" value="{s name="SelectAddressSubmit"}{/s}" />
+				<input type="submit" class="btn is--secondary is--small" value="{s name="SelectAddressSubmit"}{/s}" />
 			</div>
 		{/block}
 

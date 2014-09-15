@@ -13,7 +13,7 @@
 	{* New customer *}
 	{block name='frontend_register_login_newcustomer'}
 		<div class="register--new-customer">
-			<a href="#registration" class="btn btn--secondary" id="new-customer-action" data-collapseTarget="#registration">{s name="LoginLinkRegister2"}{/s}</a>
+			<a href="#registration" class="btn is--secondary" id="new-customer-action" data-collapseTarget="#registration">{s name="LoginLinkRegister2"}{/s}</a>
 		</div>
 	{/block}
 
@@ -53,7 +53,7 @@
 
 						{block name='frontend_register_login_input_form_submit'}
 							<div class="register--login-action">
-								<button type="submit" class="btn btn--primary" name="Submit">{s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right is--small"></i></button>
+								<button type="submit" class="btn is--primary is--icon-right" name="Submit">{s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right"></i></button>
 							</div>
 						{/block}
 					</form>

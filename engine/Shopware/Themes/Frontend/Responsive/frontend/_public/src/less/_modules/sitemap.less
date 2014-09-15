@@ -20,15 +20,15 @@
         .unitize(10, 16, padding-bottom);
         .unitize(16, 16, margin-bottom);
         .unitize(60, 16, min-height);
-        background-color: @primaryBackgroundColor;
+        background-color: darken(@gray-light, 2%);
 
         .sitemap--navigation-link {
             .unitize-padding(4, 0, 4, 20);
-            color: @primaryTextColor;
+            color: @text-color;
             display: block;
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
     }
@@ -43,7 +43,7 @@
         .border-radius();
         .unitize-padding(4, 10, 4, 10);
         .unitize(8, 16, margin-bottom);
-        background-color: @darkBackgroundColor;
+        background: @brand-secondary;
 
         .sitemap--navigation-head-link {
             color: #fff;

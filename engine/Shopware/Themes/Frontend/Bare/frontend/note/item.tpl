@@ -121,7 +121,7 @@
 					<div class="note--actions">
 						{* Place article in basket *}
 						{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
-							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn btn--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
+							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn is--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
 								{s name="NoteLinkBuy"}{/s}
 							</a>
 						{/if}
@@ -134,7 +134,7 @@
                         {/block}
 
 						{* Article Details *}
-						<a href="{$detailLink}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename|escape}">
+						<a href="{$detailLink}" class="action--details btn is--secondary" title="{$sBasketItem.articlename|escape}">
 							{s name="NoteLinkDetails"}{/s}
 						</a>
 					</div>

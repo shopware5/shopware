@@ -74,7 +74,7 @@
                                 <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn--primary btn--filter is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
+                        <input type="submit" class="btn is--primary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
                     </form>
                 {/block}
             </div>

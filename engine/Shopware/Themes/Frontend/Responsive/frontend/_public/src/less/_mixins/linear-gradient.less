@@ -32,13 +32,13 @@
 }
 
 .primary-gradient() {
-	@gradient-contrast-color: @gradientContrastColor;
-	.linear-gradient-multi(0%, @gradient-contrast-color, 66%, @primaryColor, 100%, @primaryColor, bottom, top);
+	.linear-gradient(@brand-primary-light, @brand-primary);
 }
+
 .secondary-gradient() {
-	.linear-gradient-multi(0%, @primaryTextColor, 53%, @lightTextColor, 100%, @lightTextColor, bottom, top);
+	.linear-gradient(@brand-secondary, @brand-secondary-dark);
 }
+
 .white-gradient() {
-	@rgba-color: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
-	.linear-gradient(#fff, @rgba-color);
+	.linear-gradient(#fff, @gray-light);
 }

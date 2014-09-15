@@ -67,14 +67,14 @@
 				{block name="frontend_account_index_info_actions"}
 					<div class="panel--actions is--wide">
 						<a href="#account--password"
-						   class="btn btn--secondary is--small btn--password"
+						   class="btn is--secondary is--small btn--password"
 						   data-collapseTarget="#account--password"
 						   data-closeSiblings="true"
 						   data-scrollTarget="#account--password">
 							{s name="AccountLinkChangePassword"}{/s}
 						</a>
 						<a href="#account--email"
-						   class="btn btn--secondary is--small btn--email"
+						   class="btn is--secondary is--small btn--email"
 						   data-collapseTarget="#account--email"
 						   data-closeSiblings="true"
 						   data-scrollTarget="#account--email">
@@ -111,7 +111,7 @@
 					<div class="panel--actions is--wide">
 						<a href="{url controller='account' action='payment'}"
 						   title="{$paymentMethodTitle|escape}"
-						   class="btn btn--secondary is--small">
+						   class="btn is--secondary is--small">
 							{s name='AccountLinkChangePayment'}{/s}
 						</a>
 					</div>
@@ -148,7 +148,7 @@
 
 						{block name="frontend_account_index_password_actions"}
 							<div class="panel--actions is--wide">
-								<input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="btn btn--secondary is--small" />
+								<input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="btn is--secondary is--small" />
 							</div>
 						{/block}
 					</form>
@@ -185,7 +185,7 @@
 
 						{block name="frontend_account_index_email_actions"}
 							<div class="panel--actions is--wide">
-								<input type="submit" value="{s name='AccountLinkChangeMail'}{/s}" class="btn btn--secondary is--small" />
+								<input type="submit" value="{s name='AccountLinkChangeMail'}{/s}" class="btn is--secondary is--small" />
 							</div>
 						{/block}
 					</form>
@@ -246,10 +246,10 @@
 
 				{block name="frontend_account_index_primary_billing_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn btn--secondary is--small">
+						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn is--secondary is--small">
 							{s name="AccountLinkSelectBilling"}{/s}
 						</a>
-						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn btn--secondary is--small">
+						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn is--secondary is--small">
 							{s name="AccountLinkChangeBilling"}{/s}
 						</a>
 					</div>
@@ -287,10 +287,10 @@
 
 				{block name="frontend_account_index_primary_shipping_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn btn--secondary is--small">
+						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--secondary is--small">
 							{se name="AccountLinkSelectShipping"}{/se}
 						</a>
-						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn btn--secondary is--small">
+						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--secondary is--small">
 							{se name="AccountLinkChangeShipping"}{/se}
 						</a>
 					</div>

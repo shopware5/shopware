@@ -10,7 +10,7 @@
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
             {$breadCrumbBackLink = $sBreadcrumb[count($sBreadcrumb) - 1]['link']}
-            <a class="breadcrumb--button breadcrumb--link" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex"}{/s}">
+            <a class="btn is--icon-left breadcrumb--button breadcrumb--link" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex"}{/s}">
                 <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
             </a>
         {/if}

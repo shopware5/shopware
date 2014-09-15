@@ -48,9 +48,9 @@
 {block name='frontend_index_logo_trusted_shops' append}
     {if $theme.checkoutHeader}
         <a href="{url controller='index'}"
-           class="btn btn--grey is--small btn--back-top-shop"
+           class="btn is--small btn--back-top-shop is--icon-left"
            title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
-            <i class="icon--arrow-left is--small"></i>
+            <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop"}{/s}
         </a>
     {/if}
@@ -77,12 +77,12 @@
 
                                 {strip}
 								{* Back to the shop button *}
-								<a href="{url controller='index'}" class="btn btn--secondary teaser--btn-back" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
+								<a href="{url controller='index'}" class="btn is--secondary teaser--btn-back is--icon-left" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
 									<i class="icon--arrow-left"></i>&nbsp;{"{s name="FinishButtonBackToShop"}{/s}"|replace:' ':'&nbsp;'}
 								</a>
 
 								{* Print button *}
-								<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
+								<a href="#" class="btn is--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
 									{s name="FinishLinkPrint"}{/s}
 								</a>
                                 {/strip}

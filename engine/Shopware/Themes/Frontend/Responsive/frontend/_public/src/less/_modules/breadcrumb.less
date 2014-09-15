@@ -7,10 +7,9 @@
         .clearfix();
         .unitize(14, 16, font-size);
         .unitize-padding(15, 12);
-        .box-shadow(0 18px 16px -16px rgba(0, 0, 0, 0.1));
         display: block;
         float: none;
-        border-bottom: 1px solid #ebedef;
+        border-bottom: 1px solid @border-color;
 
         .breadcrumb--list {
             overflow: hidden;
@@ -37,12 +36,12 @@
 
         // Link
         .breadcrumb--link {
-            color: @primaryTextColor;
+            color: @text-color;
         }
 
         // Active link
         .is--active .breadcrumb--link {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 

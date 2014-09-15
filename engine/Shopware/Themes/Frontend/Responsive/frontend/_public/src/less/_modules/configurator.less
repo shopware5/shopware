@@ -37,18 +37,18 @@
          * based on the state of the radio element.
          */
         &:hover ~ label {
-            color: @darkTextColor;
-            border-color: @darkBorderColor;
+            color: @text-color-dark;
+            border-color: darken(@border-color, 15%);
 
             &.is--disabled {
-                color: @primaryTextColor;
-                border-color: @borderColor;
+                color: @text-color;
+                border-color: @border-color;
             }
         }
 
         &:checked ~ label {
-            color: @primaryColor;
-            border-color: @primaryColor;
+            color: @brand-primary;
+            border-color: brand-primaryr;
         }
 
         &:disabled ~ label {
@@ -69,7 +69,7 @@
         height: 100%;
         position: relative;
         z-index: 500;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
         font-weight: bold;
         text-align: center;
         overflow: hidden;
