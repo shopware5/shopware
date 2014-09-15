@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -72,5 +73,10 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
             $output->writeln(sprintf('Generating theme cache for shop "%s" ...', $shop->getName()));
             $compiler->preCompile($shop);
         }
+
+        $output->writeln('Clearing HTTP cache ...');
+        /** @var $cacheManager CacheManager */
+        $cacheManager = $this->container->get('shopware.cache_manager');
+        $cacheManager->clearHttpCache();
     }
 }
