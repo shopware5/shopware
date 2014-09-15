@@ -119,7 +119,7 @@
 
         parent.find('.register--state-selection').addClass('is--hidden');
         select = areaSelection.find('select');
-        plugin = select.data('pluginSelectboxReplacement');
+        plugin = select.data('plugin_selectboxReplacement');
 
         plugin.$el.addClass('is--hidden');
         plugin.$wrapEl.addClass('is--hidden');
@@ -129,7 +129,7 @@
         if (areaSelection.length) {
             // We have a state selection
             select = areaSelection.find('select');
-            plugin = select.data('pluginSelectboxReplacement');
+            plugin = select.data('plugin_selectboxReplacement');
 
             plugin.$el.removeClass('is--hidden');
             plugin.$wrapEl.removeClass('is--hidden');
@@ -228,7 +228,7 @@
         var me = this;
 
         if ($el.is(':plugin-selectboxreplacement')) {
-            var plugin = $el.data('pluginSelectboxReplacement');
+            var plugin = $el.data('plugin_selectboxReplacement');
             plugin.setError();
         } else {
             $el.addClass(me.opts.errorCls);
@@ -284,7 +284,8 @@
         var me = this;
 
         if ($el.is(':plugin-selectboxreplacement')) {
-            var plugin = $el.data('pluginSelectboxReplacement');
+            var plugin = $el.data('plugin_selectboxReplacement');
+            console.log('1');
             plugin.removeError();
         } else {
             $el.removeClass(me.opts.errorCls);
