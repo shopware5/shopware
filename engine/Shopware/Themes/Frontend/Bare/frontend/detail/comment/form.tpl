@@ -93,7 +93,7 @@
 
 				{* Publish review button *}
 				{block name='frontend_detail_comment_input_actions_submit'}
-					<button type="submit" class="btn btn--primary" name="Submit">
+					<button type="submit" class="btn is--primary" name="Submit">
 						{s name="DetailCommentActionSave"}{/s}
 					</button>
 				{/block}

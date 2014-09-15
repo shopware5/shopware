@@ -74,7 +74,7 @@
                                                         {/block}
 
                                                         {block name='frontend_checkout_premium_info_button'}
-                                                            <button class="btn btn--primary is--align-center" type="submit">
+                                                            <button class="btn is--primary is--align-center is--icon-right" type="submit">
                                                                 {s name='PremiumActionAdd'}{/s}
                                                                 <i class="icon--arrow-right"></i>
                                                             </button>

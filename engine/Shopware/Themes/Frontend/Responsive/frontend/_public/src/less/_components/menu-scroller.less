@@ -59,9 +59,7 @@
     .unitize-padding(0, 8);
     .border-radius(2px);
     .secondary-gradient();
-    .box-shadow(0 1px 3px rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .5));
-    border-bottom: 1px solid @darkBorderColor;
-    text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
+    .box-shadow(0 1px 3px rgba(red(@text-color), green(@text-color), blue(@text-color), .5));
     position: absolute;
     height: 90%;
     top: 5%;
@@ -73,11 +71,11 @@
     display: none;
 
     &:hover {
-        background: @primaryTextColor;
+        background: @brand-secondary-dark;
     }
 
     &:active {
-        .linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
+        .linear-gradient(@brand-secondary-dark, @brand-secondary);
     }
 
     &.left--arrow {

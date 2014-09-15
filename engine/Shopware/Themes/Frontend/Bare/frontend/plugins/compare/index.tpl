@@ -14,9 +14,9 @@
 	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
 	   rel="nofollow"
 	   title="{"{s name='ListingBoxLinkCompare'}vergleichen{/s}"|escape}"
-	   class="product--action action--compare btn btn--secondary">
+	   class="product--action action--compare btn is--secondary is--icon-right">
 		{se name='ListingBoxLinkCompare'}{/se}
-		<i class="icon--arrow-right is--right is--small"></i>
+		<i class="icon--arrow-right"></i>
 	</a>
 {/block}
 
@@ -40,7 +40,7 @@
 
 {* Compare button note *}
 {block name='frontend_note_item_actions_compare'}
-	<a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="product--action action--compare btn btn--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
+	<a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="product--action action--compare btn is--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
 		{s name='ListingBoxLinkCompare'}{/s}
 	</a>
 {/block}

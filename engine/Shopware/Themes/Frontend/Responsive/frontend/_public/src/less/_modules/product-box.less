@@ -1,5 +1,5 @@
 .panel--box {
-	border: 1px solid @borderColor;
+	border: 1px solid @border-color;
 	height: 100%;
 
 	.box--image {
@@ -28,10 +28,10 @@
 
 	.box--title {
 		font-weight: bold;
-		color: @primaryTextColor;
+		color: @text-color;
 
 		&:hover {
-			color: @primaryColor;
+			color: @brand-primary;
 		}
 	}
 }
@@ -39,7 +39,7 @@
 .product--box {
 	.box--image {
 		.unitize(14, 16, margin-bottom);
-		border-bottom: 1px solid @borderColor;
+		border-bottom: 1px solid @border-color;
 	}
 
 	.box--title, .box--actions {

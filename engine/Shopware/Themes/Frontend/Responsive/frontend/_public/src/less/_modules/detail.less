@@ -15,8 +15,8 @@
             .unitize(21, 16, font-size);
             margin: 0;
             font-weight: bold;
-            color: @darkTextColor;
-            border-bottom: 1px solid @borderColor;
+            color: @text-color-dark;
+            border-bottom: 1px solid @border-color;
         }
 	}
 
@@ -45,7 +45,7 @@
         .product--rating-link {
             .unitize(14, 16, font-size);
             vertical-align: middle;
-            color: @primaryTextColor;
+            color: @text-color;
         }
 
         // Star icon styling
@@ -80,10 +80,10 @@
         .content--default {
             .unitize(28, 16, font-size);
             font-weight: bold;
-            color: @darkTextColor;
+            color: @text-color-dark;
 
             &.is--discount {
-                color: @discountTextColor;
+                color: @badge-discount-bg;
             }
         }
 
@@ -110,7 +110,7 @@
         }
 
         .price--discount-percentage {
-            color: @deliveryAvailableText;
+            color: @highlight-success;
         }
 
         .price--discount-icon {
@@ -123,10 +123,8 @@
             .border-radius(3px);
             display: inline-block;
             position: relative;
-            background: @discountTextColor;
-            border: 1px solid @discountBorderColor;
-            text-shadow: 0 1px 1px @discountDarkColor;
-            color: #FFFFFF;
+            background: @badge-discount-bg;
+            color: @badge-discount-color;
             text-align: center;
             font-weight: bold;
             float: left;
@@ -135,7 +133,7 @@
 
     .buybox--form {
         .unitize-padding(20, 0, 0, 0);
-        border-top: 1px solid @borderColor;
+        border-top: 1px solid @border-color;
     }
 
     // Quanitity box and input
@@ -146,6 +144,7 @@
         .js--fancy-select {
 			.unitize-height(44);
 			.border-radius(3px);
+            font-weight: bold;
             width: 100%;
 
             .js--fancy-select-text,
@@ -158,14 +157,10 @@
 
 	// "Buy now" button
 	.buybox--button {
-		width: 63%;
-
-        .icon--arrow-right {
-            .unitize-margin(6, 0, 0, 0);
-            .unitize(10, 16, font-size);
-            float: right;
-        }
-	}
+        .unitize-padding(11, 10, 11, 10, 16);
+        .unitize(16, 16, font-size);
+        width: 63%;
+    }
 
 	// Product base information
 	.product--base-info {
@@ -205,7 +200,7 @@
 	// Content headlines
 	.content--title {
 		.unitize(18, 16, font-size);
-		color: @darkTextColor;
+		color: @text-color-dark;
 	}
 
     .content--link [class^=icon] {
@@ -217,7 +212,7 @@
 	.block-prices--container {
 		.unitize-margin(0, 0, 12, 0);
         display: block;
-		border: 1px solid @borderColor;
+		border: 1px solid @border-color;
 		padding: 1px;
 
         .block-prices--table {
@@ -230,15 +225,15 @@
             th {
                 .unitize-padding(4, 10);
                 color: #fff;
-                background: @lightTextColor;
+                background: @gray;
                 text-align: left;
             }
         }
 	}
 
 	.listing .product--box .panel--body {
-		border-left: 1px solid @borderColor;
-		border-right: 1px solid @borderColor;
+		border-left: 1px solid @border-color;
+		border-right: 1px solid @border-color;
 	}
 }
 
@@ -275,7 +270,7 @@
 	.border-radius(3px);
 	.unitize-margin(0, 0, 10, 0);
 	.unitize(12, 16, font-size);
-	border: 1px solid @borderColor;
+	border: 1px solid @border-color;
 
 	&.is--last {
 		.unitize-margin(0, 0, 32, 0, 16);
@@ -291,7 +286,7 @@
 	}
 
 	.entry--author {
-		border-bottom: 1px solid @borderColor;
+		border-bottom: 1px solid @border-color;
 		position: relative;
 
 		// Arrow down
@@ -305,7 +300,7 @@
 			position: absolute;
 			left: 50%;
 			background: #fff;
-			border: 1px solid @borderColor;
+			border: 1px solid @border-color;
 			border-left: 0 none;
 			border-top: 0 none;
 		}
@@ -336,7 +331,7 @@
 	.unitize-margin(0, 12, 10, 12);
 	.border-radius-multi(0, 0, 3px, 3px);
 	border-top: 0;
-	background: @lightGradientEnd;
+	background: @gray;
 
 	&.is--last { .unitize-margin(0, 12, 32, 10, 16) }
 
@@ -350,7 +345,7 @@
 		&::after {
 			.rotate(225deg);
 			.unitize(-9, 16, top);
-			background: @lightGradientEnd
+			background: @gray;
 		}
 	}
 }
@@ -394,7 +389,7 @@
 .configurator--form {
     .unitize-margin(16, 0, 0, 0);
     .unitize-padding(10, 0);
-    border-top: 1px solid @borderColor;
+    border-top: 1px solid @border-color;
 
 	.js--fancy-select {
 		.unitize-margin(0, 0, 8, 0);
@@ -462,18 +457,18 @@
             .unitize-margin(25, 0, 45, 0);
             .unitize-padding(10, 0, 0, 0);
             display: block;
-            border-top: 1px solid @borderColor;
+            border-top: 1px solid @border-color;
         }
 
         // Product action link
         .action--link {
             .unitize-margin(0, 35, 0, 0);
-            color: @primaryTextColor;
+            color: @text-color;
 
             &:last-child { margin-right: 0 }
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
 
             // Icon
@@ -548,7 +543,7 @@
 			.unitize-margin(20, 0);
             padding: 0;
 			border-top: 0 none;
-			border-bottom: 1px solid @borderColor;
+			border-bottom: 1px solid @border-color;
 		}
 
         // Product actions
@@ -588,7 +583,7 @@
             .unitize(255, 16, line-height);
             .unitize(25, 16, font-size);
             .transition(background, 0.3s, ease);
-            background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.1);
+            background: rgba(red(@gray-dark), green(@gray-dark), blue(@gray-dark), 0.1);
             text-align: center;
             color: #fff;
         }
@@ -636,7 +631,7 @@
 
             &:hover .link--prev-button,
             &:hover .link--next-button {
-                background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.2);
+                background: rgba(red(@gray-dark), green(@gray-dark), blue(@gray-dark), 0.2);
             }
         }
 
@@ -670,12 +665,13 @@
         }
     }
 
-    .product--supplier {
-        .unitize-height(70);
-        margin: 0;
+            .product--supplier {
+                .unitize-height(70);
+                margin: 0;
 
-        .product--supplier-link {
-            .unitize-height(70);
+                .product--supplier-link {
+                    .unitize-height(70);
+            }
         }
     }
 

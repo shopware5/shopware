@@ -27,7 +27,7 @@
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    border: 1px solid @borderColor;
+    border: 1px solid @border-color;
 }
 
 .note--image {
@@ -45,10 +45,10 @@
     .unitize(18, 16, font-size);
     display: block;
     font-weight: 600;
-    color: @primaryTextColor;
+    color: @text-color;
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
@@ -56,7 +56,7 @@
     .unitize-margin(0, 0, 10, 95);
 
     [class^="icon--"] {
-        color: @reviewStarColor;
+        color: @rating-star-color;
     }
 }
 
@@ -117,14 +117,14 @@
     .border-radius(3px);
     display: block;
     position: absolute;
-    border: 1px solid @lightDarkBorderColor;
+    border: 1px solid @border-color;
     text-align: center;
     font-weight: normal;
-    color: @primaryTextColor;
+    color: @text-color;
 
     &:hover {
-        color: @primaryColor;
-        border-color: @primaryColor;
+        color: @brand-primary;
+        border-color: @brand-primary;
     }
 }
 
@@ -187,11 +187,11 @@
     .note--zoom {
         .unitize(12, 16, font-size);
         display: block;
-        color: @primaryTextColor;
+        color: @text-color;
         text-align: center;
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 

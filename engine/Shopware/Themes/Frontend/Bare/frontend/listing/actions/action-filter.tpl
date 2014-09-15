@@ -7,7 +7,7 @@
 
 		<div class="action--filter-btn">
 			<a href="#"
-			   class="filter--trigger btn btn--primary"
+			   class="filter--trigger btn is--primary"
 			   data-collapseTarget=".action--filter-options"
 			   data-offcanvas="true"
 			   data-offCanvasSelector=".action--filter-options"

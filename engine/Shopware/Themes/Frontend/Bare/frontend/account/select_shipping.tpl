@@ -45,7 +45,7 @@
 
 		{block name="frontend_account_select_shipping_action_buttons"}
             <div class="panel--actions">
-                <a class="btn btn--secondary left" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectShippingLinkBack"}{/s}"|escape}">
+                <a class="btn is--secondary left" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectShippingLinkBack"}{/s}"|escape}">
                     {s name="SelectShippingLinkBack"}{/s}
                 </a>
             </div>

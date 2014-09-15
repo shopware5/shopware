@@ -47,13 +47,13 @@
                                 <div class="account--actions">
                                     {block name="frontend_account_payment_action_button_back"}
                                         {if $sTarget}
-                                            <a class="btn btn--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{"{s name='PaymentLinkBack'}{/s}"|escape}">
+                                            <a class="btn is--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{"{s name='PaymentLinkBack'}{/s}"|escape}">
                                                 {s name="PaymentLinkBack"}{/s}
                                             </a>
                                         {/if}
                                     {/block}
                                     {block name="frontend_account_payment_action_button_send"}
-                                        <input type="submit" value="{s name='PaymentLinkSend'}{/s}" class="btn btn--primary register--submit right" />
+                                        <input type="submit" value="{s name='PaymentLinkSend'}{/s}" class="btn is--primary register--submit right" />
                                     {/block}
                                 </div>
                             {/block}
