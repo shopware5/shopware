@@ -310,6 +310,7 @@ class Order extends Resource
             }
 
             if (isset($detail['status'])) {
+                /** @var $status \Shopware\Models\Order\DetailStatus */
                 $status = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $detail['status']);
 
                 if (!$status) {

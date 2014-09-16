@@ -200,7 +200,7 @@ class sArticles
         $this->category = $category ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
         $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
         $this->contextService = $contextService ?: $container->get('context_service');
         $this->config = $config ?: $container->get('config');
         $this->listProductService = $listProductService ?: $container->get('list_product_service');
@@ -2453,7 +2453,7 @@ class sArticles
      * Round article price
      *
      * @param float $moneyFloat price
-     * @return float price
+     * @r e
      */
     public function sRound($moneyfloat = null)
     {

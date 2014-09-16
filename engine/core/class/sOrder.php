@@ -573,7 +573,7 @@ class sOrder
 
             $basketRow = $this->formatBasketRow($basketRow);
 
-            $sql = "
+            $preparedQuery = "
             INSERT INTO s_order_details
                 (orderID,
                 ordernumber,
@@ -587,23 +587,34 @@ class sOrder
                 modus,
                 esdarticle,
                 taxID,
-                tax_rate
+                tax_rate,
+                ean,
+                unit,
+                pack_unit
                 )
-                VALUES (
+                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s)
+            ";
+
+            $sql = sprintf($preparedQuery,
                 $orderID,
-                '$orderNumber',
-                {$basketRow["articleID"]},
-                '{$basketRow["ordernumber"]}',
-                {$basketRow["priceNumeric"]},
-                {$basketRow["quantity"]},
-                '".addslashes($basketRow["articlename"])."',
+                $this->db->quote((string) $orderNumber),
+                $basketRow["articleID"],
+                $this->db->quote((string) $basketRow["ordernumber"]),
+                $basketRow["priceNumeric"],
+                $basketRow["quantity"],
+                $this->db->quote((string) $basketRow["articlename"]),
                 0,
                 '0000-00-00',
-                {$basketRow["modus"]},
-                {$basketRow["esdarticle"]},
-                {$basketRow["taxID"]},
-                {$basketRow["tax_rate"]}
-            )";
+                $basketRow["modus"],
+                $basketRow["esdarticle"],
+                $basketRow["taxID"],
+                $basketRow["tax_rate"],
+                $this->db->quote((string) $basketRow["ean"]),
+                $this->db->quote((string) $basketRow["itemUnit"]),
+                $this->db->quote((string) $basketRow["packunit"])
+            );
+
+
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
 
             // Check for individual voucher - code
@@ -1083,11 +1094,24 @@ class sOrder
             $basketRow["articlename"]
         );
 
-        if (!$basketRow["price"]) $basketRow["price"] = "0,00";
-        if (!$basketRow["esdarticle"]) $basketRow["esdarticle"] = "0";
-        if (!$basketRow["modus"]) $basketRow["modus"] = "0";
-        if (!$basketRow["taxID"]) $basketRow["taxID"] = "0";
-        if ($this->sNet == true) $basketRow["taxID"] = "0";
+        if (!$basketRow["price"]) {
+            $basketRow["price"] = "0,00";
+        }
+        if (!$basketRow["esdarticle"]) {
+            $basketRow["esdarticle"] = "0";
+        }
+        if (!$basketRow["modus"]) {
+            $basketRow["modus"] = "0";
+        }
+        if (!$basketRow["taxID"]) {
+            $basketRow["taxID"] = "0";
+        }
+        if ($this->sNet == true) {
+            $basketRow["taxID"] = "0";
+        }
+        if (!$basketRow["ean"]) {
+            $basketRow["ean"] = '';
+        }
 
         return $basketRow;
     }

@@ -261,7 +261,12 @@ $app->map('/cleanup', function () use ($app) {
             $url = $app->urlFor('done');
             $app->response()->redirect($url);
         } else {
-            $result = array_map(function ($path) { return substr($path, strlen(__DIR__.'/../../')); }, $result);
+            $result = array_map(
+                function ($path) {
+                    return substr($path, strlen(realpath(__DIR__.'/../../../'))+1);
+                },
+                $result
+            );
             $app->render('cleanup.php', array('cleanupList' => $result, 'error' => true));
         }
 

@@ -80,8 +80,8 @@ class FeedbackCollector
         $dataString = json_encode($data);
 
         $encryptionMethod = 'aes128';
-        if ($this->isEnryptionSupported($encryptionMethod)) {
-            $data = $this->enryptData($dataString, $encryptionMethod);
+        if ($this->isEncryptionSupported($encryptionMethod)) {
+            $data = $this->encryptData($dataString, $encryptionMethod);
             $dataString = json_encode($data);
         }
 
@@ -104,6 +104,20 @@ class FeedbackCollector
     {
         $db = Shopware()->Models()->getConnection();
         $serverSoftware = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : null;
+
+        // Get languages of all active shops, sort by default shop first
+        $shopLanguages = $db->fetchAll(
+            'SELECT s_core_locales.locale as locale
+            FROM s_core_shops
+            LEFT JOIN s_core_locales ON s_core_locales.id = s_core_shops.locale_id
+            WHERE s_core_shops.active = 1
+            ORDER BY s_core_shops.default DESC;'
+        );
+        $mainLanguage = array_shift($shopLanguages);
+        array_walk($shopLanguages, function(&$item){
+            $item = $item['locale'];
+        });
+
         $data = array(
             'unique' => $this->uniqueId,
             'data' => array(
@@ -121,6 +135,8 @@ class FeedbackCollector
                 'serverSoftware'            => $serverSoftware,
                 'mysql_version'             => $db->fetchColumn("SELECT VERSION()"),
                 'extension'                 => get_loaded_extensions(),
+                'main_language'             => $mainLanguage['locale'],
+                'sub_languages'             => $shopLanguages
             ),
         );
 
@@ -131,7 +147,7 @@ class FeedbackCollector
      * @param  string $encryptionMethod
      * @return bool
      */
-    private function isEnryptionSupported($encryptionMethod)
+    private function isEncryptionSupported($encryptionMethod)
     {
         if (!extension_loaded('openssl')) {
             return false;
@@ -150,7 +166,7 @@ class FeedbackCollector
      * @throws \Exception
      * @return array
      */
-    private function enryptData($data, $encryptionMethod)
+    private function encryptData($data, $encryptionMethod)
     {
         $publicKeyString = $this->publicKey;
 
@@ -161,7 +177,7 @@ class FeedbackCollector
         $ivLength = openssl_cipher_iv_length($encryptionMethod);
         $iv  = Random::getBytes($ivLength);
 
-        $cryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
+        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
 
         $encryptedKey = '';
         if (!true === openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
@@ -175,7 +191,7 @@ class FeedbackCollector
             'encryptedKey'     => base64_encode($encryptedKey),
             'iv'               => base64_encode($iv),
             'encryptionMethod' => $encryptionMethod,
-            'encryptedMessage' => $cryptedMessage,
+            'encryptedMessage' => $encryptedMessage,
         );
 
         return $result;

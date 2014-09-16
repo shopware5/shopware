@@ -404,21 +404,15 @@ class CategoryDenormalization
     public function rebuildAllAssignmentsCount()
     {
         $sql = '
-            SELECT ac.id, c.parent
+            SELECT COUNT(*)
             FROM  s_articles_categories ac
-            INNER JOIN s_categories c
+            JOIN s_categories c
             ON ac.categoryID = c.id
-            GROUP BY ac.id
         ';
 
         $stmt = $this->getConnection()->query($sql);
-        $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (empty($rows)) {
-            return 0;
-        }
-
-        return count($rows);
+        $rows = $stmt->fetchColumn();
+        return (int)$rows;
     }
 
     /**
@@ -435,7 +429,7 @@ class CategoryDenormalization
             LEFT JOIN s_categories c2 ON c.id = c2.parent
             WHERE c2.id IS NULL
             GROUP BY ac.id
-            ORDER BY articleID
+            ORDER BY articleID, categoryID
         ";
 
         if ($count !== null) {
@@ -520,7 +514,10 @@ class CategoryDenormalization
         ';
 
         $stmt = $this->getConnection()->prepare($deleteQuery);
-        $stmt->execute(array('categoryId' => $categoryId, 'articleId' => $articleId));
+        $stmt->execute(array(
+            'categoryId' => $categoryId,
+            'articleId' => $articleId
+        ));
 
         return $stmt->rowCount();
     }

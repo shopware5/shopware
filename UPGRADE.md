@@ -104,6 +104,29 @@ In this document you will find a changelog of the important changes related to t
 * Removed deprecated class `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
 * Removed unused `/backend/document` templates and several unused `Shopware_Controllers_Backend_Document` actions, methods and variables
 
+
+## 4.3.1
+* Fixed name used as reference when setting attributes of an order document.
+* Added new event `Shopware_Modules_Articles_sGetArticlesByCategory_FilterCountSql`
+* `Forgotten password` feature now takes into account the configured minimum password length when generating new passwords
+* Create an attributes entity when creating an order document using the Document component and check for an `attributes` array in the document config, whose key/value pairs will be set as the document's attributes
+* Customer reviews backend module was improved to better handle reviews with large texts
+* Auto update module now also reports main shop and subshops languages
+* Maintenance mode options can now be configured by subshop
+* Error notification via email was improved and now additionally includes environment and request information
+* Minor occurrences of `metadescription` and `metakeywords` have been uniformized to `metaDescription` and `metaKeywords`
+* It's now possible to filter payment methods by subshops
+* `/widgets` and `/listing` added to `robots.txt`
+* Calling certain widget urls without the required parameters will no longer trigger a server error (returns 404 instead)
+* `Overview` and `Statistics` backend modules were adjusted to have matching data and differentiate between new users and new customers.
+* `Shopping worlds` pages without assigned categories now support SEO urls
+* The query passed in the `Shopware_Modules_Basket_GetBasket_FilterSQL` event will no longer include `s_core_units` join and fields
+* The config option `showException` is `false` by default (`engine/Shopware/Configs/Default.php`)
+    * Exceptions will no longer be shown in the store front
+    * Exceptions are logged in a logfile since 4.2.0 (/logs)
+    * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
+* Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
+
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:
@@ -317,3 +340,4 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
+

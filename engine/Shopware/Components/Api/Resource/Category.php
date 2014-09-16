@@ -262,7 +262,7 @@ class Category extends Resource
                 }
 
                 if (null === $parent) {
-                    /** @var Category $parent */
+                    /** @var \Shopware\Models\Category\Category $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
                         throw new \RuntimeException(sprintf('Could not find parent %s', $parentId));

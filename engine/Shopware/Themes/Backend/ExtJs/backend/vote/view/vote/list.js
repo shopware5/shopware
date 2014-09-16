@@ -137,7 +137,7 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
     },
 
     /**
-     * Creates the checkboxmodel and the listeners for it
+     * Creates the checkbox model and the listeners for it
      */
     getGridSelModel: function(){
         var selModel = Ext.create('Ext.selection.CheckboxModel',{
@@ -170,7 +170,6 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
                 header: '{s name=column/status}Status{/s}',
                 dataIndex: 'active',
                 width: 58,
-//              Renderer to format the column
                 renderer: this.statusColumn
             },{
                 header: '{s name=column/date}Datum{/s}',
@@ -192,7 +191,8 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
             },{
                 header: '{s name=column/points}Points{/s}',
                 dataIndex: 'points',
-                flex: 1
+                flex: 1,
+                renderer: this.pointsColumn
             },
             {
                 xtype: 'actioncolumn',
@@ -215,27 +215,39 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
         }
     },
 
-    renderEdit: function(value, metaData, model, rowIndex, colIndex, store, view){
+    /**
+     * Function to render the points column
+     * @param value Contains the active-value
+     */
+    pointsColumn: function(value){
+        return value+'/5';
+    },
 
-        /*{if {acl_is_allowed privilege=delete}}*/
-        var data = Ext.DomHelper.markup({
-            tag:'img',
-            'class': 'x-action-col-icon sprite-minus-circle',
-            tooltip: '{s name=column/actioncolumn/delete}Delete vote{/s}',
-            cls:'sprite-minus-circle',
-            onclick: "Ext.getCmp('" + this.id + "').fireEvent('deleteColumn', " + rowIndex + ");"
-        });
-        /*{/if}*/
+    renderEdit: function(value, metaData, model, rowIndex, colIndex, store, view){
+        var data = '';
+
         /*{if {acl_is_allowed privilege=accept}}*/
         if (model.get("active") != 1) {
             data = data + Ext.DomHelper.markup({
                 tag:'img',
                 'class': 'x-action-col-icon sprite-plus-circle',
                 tooltip: '{s name=column/actioncolumn/add}Accept vote{/s}',
+                'data-qtip': '{s name=column/actioncolumn/add}Accept vote{/s}',
                 cls:'sprite-plus-circle',
                 onclick: "Ext.getCmp('" + this.id + "').fireEvent('addColumn', " + rowIndex + ");"
             });
         }
+        /*{/if}*/
+
+        /*{if {acl_is_allowed privilege=delete}}*/
+        data = data + Ext.DomHelper.markup({
+            tag:'img',
+            'class': 'x-action-col-icon sprite-minus-circle',
+            tooltip: '{s name=column/actioncolumn/delete}Delete vote{/s}',
+            'data-qtip': '{s name=column/actioncolumn/delete}Delete vote{/s}',
+            cls:'sprite-minus-circle',
+            onclick: "Ext.getCmp('" + this.id + "').fireEvent('deleteColumn', " + rowIndex + ");"
+        });
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=comment}}*/
@@ -243,10 +255,12 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
             tag:'img',
             'class': 'x-action-col-icon sprite-balloon--pencil',
             tooltip: '{s name=column/actioncolumn/comment}Comment on vote{/s}',
+            'data-qtip': '{s name=column/actioncolumn/comment}Comment on vote{/s}',
             cls:'sprite-balloon--pencil',
             onclick: "Ext.getCmp('" + this.id + "').fireEvent('commentColumn', " + rowIndex + ");"
         });
         /*{/if}*/
+
         return data;
     }
 });

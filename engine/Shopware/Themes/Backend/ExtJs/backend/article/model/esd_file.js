@@ -72,7 +72,8 @@ Ext.define('Shopware.apps.Article.model.EsdFile', {
         reader:{
             type:'json',
             root:'data',
-            totalProperty:'total'
+            totalProperty:'total',
+            messageProperty : 'message'
         }
     }
 

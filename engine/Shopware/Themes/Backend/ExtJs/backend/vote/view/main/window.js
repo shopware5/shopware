@@ -58,14 +58,16 @@ Ext.define('Shopware.apps.Vote.view.main.Window', {
     initComponent: function() {
         var me = this;
 
-        me.items = [{
-            xtype: 'vote-main-list',
-            voteStore: me.voteStore
-        },{
-           xtype: 'vote-main-toolbar'
-        },{
-            xtype: 'vote-main-infopanel'
-        }];
+        me.items = [
+            {
+                xtype: 'vote-main-list',
+                voteStore: me.voteStore
+            },{
+                xtype: 'vote-main-toolbar'
+            },{
+                xtype: 'vote-main-infopanel'
+            }
+        ];
         me.callParent(arguments);
     }
 });
