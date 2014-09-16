@@ -59,8 +59,8 @@ class Theme extends \Shopware\Components\Theme
         $tab->addElement($fieldSet);
 
         $fieldSet = $this->createFieldSet('Icons', '__icons__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('labelWidth' => 280, 'anchor' => '100%'))));
-        $fieldSet->addElement($this->createMediaField('appleTouchIcon', '__apple_touch_icon__', 'frontend/_public/src/img/favicon.ico'));
-        $fieldSet->addElement($this->createMediaField('win8TileImage', '__win8_tile_image__', 'frontend/_public/src/img/favicon.ico'));
+        $fieldSet->addElement($this->createMediaField('appleTouchIcon', '__apple_touch_icon__', 'frontend/_public/src/img/apple-touch-icon-precomposed.png'));
+        $fieldSet->addElement($this->createMediaField('win8TileImage', '__win8_tile_image__', 'frontend/_public/src/img/win-tile-image.png'));
         $fieldSet->addElement($this->createMediaField('favicon', '__favicon__', 'frontend/_public/src/img/favicon.ico'));
         $tab->addElement($fieldSet);
 
