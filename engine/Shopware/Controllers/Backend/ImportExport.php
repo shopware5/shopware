@@ -1301,6 +1301,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'details.articleName as name',
                 'details.price as price',
                 'details.quantity as quantity',
+                'details.ean as ean',
+                'details.unit as unit',
+                'details.packUnit as packUnit',
 
                 'details.price * details.quantity as invoice',
 

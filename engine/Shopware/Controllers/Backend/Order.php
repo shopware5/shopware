@@ -256,7 +256,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('status'))
                     ->from('Shopware\Models\Order\Status', 'status')
-                    ->where("status.id > -1")
                     ->andWhere("status.group = 'state'");
 
         if ($filter !== null) {
@@ -1072,10 +1071,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $documents = $order->getDocuments();
 
             //create only not existing documents
-            if ($documentMode === 1) {
+            if ($documentMode == 1) {
                 $alreadyCreated = false;
                 foreach ($documents as $document) {
-                    if ($document->getTypeId() === $documentType) {
+                    if ($document->getTypeId() == $documentType) {
                         $alreadyCreated = true;
                         break;
                     }
@@ -1319,6 +1318,87 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
         } else {
             unset($data['tax']);
+        }
+
+        $articleDetails = null;
+        // Add articleId if it's not provided by the client
+        if ($data['articleId'] == 0 && !empty($data['articleNumber'])) {
+            $detailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+            /** @var \Shopware\Models\Article\Detail $articleDetails */
+            $articleDetails = $detailRepo->findOneBy(array('number' => $data['articleNumber']));
+            if ($articleDetails) {
+                $data['articleId'] = $articleDetails->getArticle()->getId();
+            }
+        }
+        if (!$articleDetails && $data['articleId']) {
+            /** @var \Shopware\Models\Article\Detail $articleDetails */
+            $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
+                ->findOneBy(array('number' => $data['articleNumber']));
+        }
+
+        //Load ean, unit and pack unit (translate if needed)
+        if ($articleDetails) {
+            $data['ean'] = $articleDetails->getEan() ? : $articleDetails->getArticle()->getMainDetail()->getEan();
+            $unit = $articleDetails->getUnit() ? : $articleDetails->getArticle()->getMainDetail()->getUnit();
+            $data['unit'] = $unit ? $unit->getName() : null;
+            $data['packunit'] = $articleDetails->getPackUnit() ? : $articleDetails->getArticle()->getMainDetail()->getPackUnit();
+
+            $languageData = Shopware()->Db()->fetchRow(
+                'SELECT s_core_shops.default, s_order.language AS languageId
+                FROM s_core_shops
+                INNER JOIN s_order ON s_order.language = s_core_shops.id
+                WHERE s_order.id = :orderId
+                LIMIT 1',
+                array(
+                    'orderId' => $data['orderId']
+                )
+            );
+
+            if (!$languageData['default']) {
+                $translator = new Shopware_Components_Translation();
+
+                // Translate unit
+                if ($unit) {
+                    $unitTranslation = $translator->read(
+                        $languageData['languageId'],
+                        'config_units',
+                        1
+                    );
+                    if (!empty($unitTranslation[$unit->getId()]['description'])) {
+                        $data['unit'] = $unitTranslation[$unit->getId()]['description'];
+                    } elseif ($unit) {
+                        $data['unit'] = $unit->getName();
+                    }
+
+                }
+
+                $articleTranslation = array();
+
+                // Load variant translations if we are adding a variant to the order
+                if ($articleDetails->getId() != $articleDetails->getArticle()->getMainDetail()->getId()) {
+                    $articleTranslation = $translator->read(
+                        $languageData['languageId'],
+                        'variant',
+                        $articleDetails->getId()
+                    );
+                }
+
+                // Load article translations if we are adding a main article or the variant translation is incomplete
+                if (
+                    $articleDetails->getId() == $articleDetails->getArticle()->getMainDetail()->getId()
+                    || empty($articleTranslation['packUnit'])
+                ) {
+                    $articleTranslation = $translator->read(
+                        $languageData['languageId'],
+                        'article',
+                        $articleDetails->getArticle()->getId()
+                    );
+                }
+
+                if (!empty($articleTranslation['packUnit'])) {
+                    $data['packUnit'] = $articleTranslation['packUnit'];
+                }
+            }
         }
 
         return $data;

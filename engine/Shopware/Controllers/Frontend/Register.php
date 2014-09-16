@@ -493,6 +493,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
                 $countryDataIndex = array_search($this->post["billing"]["country"], $countryIds);
                 $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
 
+                // if not required, allow empty values
+                if (!$stateSelectionRequired["force_state_in_registration"]) {
+                    $statesIds[] = "";
+                }
+
                 $rules["stateID"] = array(
                     "required" => $stateSelectionRequired["force_state_in_registration"],
                     'in' => $statesIds
@@ -551,10 +556,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text4'         => array('required' => 0),
             'text5'         => array('required' => 0),
             'text6'         => array('required' => 0),
-            'country' => array(
-                'required' => (Shopware()->Config()->get('sCOUNTRYSHIPPING')) ? 1 : 0,
-                'in' => $countryIds
-            ),
             'additional_address_line1' => array(
                 'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
             ),
@@ -563,26 +564,38 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             )
         );
 
-        // Check if state selection is required
-        if (!empty($this->post["shipping"]["country"]) && Shopware()->Config()->get('sCOUNTRYSHIPPING') == true) {
-            $stateSelectionRequired = Shopware()->Db()->fetchRow(
-                "SELECT display_state_in_registration, force_state_in_registration
-                FROM s_core_countries WHERE id = ?",
-                array($this->post["shipping"]["country"])
+        if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
+            $rules['country'] = array(
+                'required' => 1,
+                'in' => $countryIds
             );
 
-            if ($stateSelectionRequired["display_state_in_registration"]) {
-                $countryDataIndex = array_search($this->post["shipping"]["country"], $countryIds);
-                $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
-
-                $rules["stateID"] = array(
-                    "required" => $stateSelectionRequired["force_state_in_registration"],
-                    'in' => $statesIds
+            // Check if state selection is required
+            if (!empty($this->post["shipping"]["country"])) {
+                $stateSelectionRequired = Shopware()->Db()->fetchRow(
+                    "SELECT display_state_in_registration, force_state_in_registration
+                    FROM s_core_countries WHERE id = ?",
+                    array($this->post["shipping"]["country"])
                 );
-            }
 
-            $this->post["shipping"]["stateID"] = $this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]];
-            unset($this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]]);
+                if ($stateSelectionRequired["display_state_in_registration"]) {
+                    $countryDataIndex = array_search($this->post["shipping"]["country"], $countryIds);
+                    $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
+
+                    // if not required, allow empty values
+                    if (!$stateSelectionRequired["force_state_in_registration"]) {
+                        $statesIds[] = "";
+                    }
+
+                    $rules["stateID"] = array(
+                        "required" => $stateSelectionRequired["force_state_in_registration"],
+                        'in' => $statesIds
+                    );
+                }
+
+                $this->post["shipping"]["stateID"] = $this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]];
+                unset($this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]]);
+            }
         }
 
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validateShipping_FilterRules', $rules, array('subject'=>$this));

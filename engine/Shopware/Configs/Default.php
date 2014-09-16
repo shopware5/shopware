@@ -57,7 +57,7 @@ return array_merge($customConfig, array(
         'noErrorHandler' => false,
         'throwExceptions' => false,
         'disableOutputBuffering' => false,
-        'showException' => true,
+        'showException' => false,
         'charset' => 'utf-8'
     ), $customConfig['front']),
     'config' => array_merge(array(), $customConfig['config']),

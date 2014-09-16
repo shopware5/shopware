@@ -899,7 +899,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 '2013-06-01' => array(
                     array(
-                        'registrations' => 1
+                        'registrations' => 1,
+                        'customers' => 0
                     )
                 )
             )

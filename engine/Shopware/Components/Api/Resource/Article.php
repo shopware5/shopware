@@ -173,6 +173,7 @@ class Article extends Resource implements BatchInterface
         }
 
         if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+            /** @var $article array */
             $article['images'] = $this->getArticleImages($id);
             $article['configuratorSet'] = $this->getArticleConfiguratorSet($id);
             $article['links'] = $this->getArticleLinks($id);
@@ -1005,7 +1006,7 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf("Tax by id %s not found", $data['taxId']));
             }
 
-        } elseif (!empty($data['tax'])) {
+        } elseif (isset($data['tax']) && ($data['tax'] >= 0)) {
             $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
             if (!$tax) {
                 throw new ApiException\CustomValidationException(sprintf("Tax by taxrate %s not found", $data['tax']));
@@ -1191,6 +1192,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($categoryData['shopId'])) {
+                /** @var $shop \Shopware\Models\Shop\Shop */
                 $shop = $this->manager->find(
                     'Shopware\Models\Shop\Shop',
                     $categoryData['shopId']
@@ -1212,6 +1214,7 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($categoryData['categoryId'])) {
+                /** @var $category \Shopware\Models\Category\Category */
                 $category = $this->manager->find(
                     'Shopware\Models\Category\Category',
                     $categoryData['categoryId']
@@ -1224,7 +1227,7 @@ class Article extends Resource implements BatchInterface
                 }
 
                 $seoCategory->setCategory($category);
-                
+
             } else if (isset($categoryData['categoryPath'])) {
                 $category = $this->getResource('Category')->findCategoryByPath(
                     $categoryData['categoryPath'],
@@ -1252,7 +1255,7 @@ class Article extends Resource implements BatchInterface
 
             $seoCategory->setArticle($article);
         }
-        
+
         $data['seoCategories'] = $categories;
 
         return $data;

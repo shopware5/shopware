@@ -409,7 +409,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 $site = new Site();
             }
 
-            $params['attribute'] = $params['attribute'][0];
             $site->fromArray($params);
             $site->setChanged();
 

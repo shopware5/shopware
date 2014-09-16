@@ -396,6 +396,7 @@ class Repository extends ModelRepository
             $this->getEntityManager()->detach($main);
             $shop->setHost($main->getHost());
             $shop->setSecure($main->getSecure());
+            $shop->setAlwaysSecure($main->getAlwaysSecure());
             $shop->setSecureHost($main->getSecureHost());
             $shop->setSecureBasePath($main->getSecureBasePath());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());

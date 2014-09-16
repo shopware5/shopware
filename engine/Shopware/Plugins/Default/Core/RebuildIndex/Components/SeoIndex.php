@@ -237,9 +237,13 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countEmotions()
     {
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')->getCampaigns();
+        $builder = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getListQueryBuilder();
+        $builder
+            ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.active = 1');
 
-        $numResults = $builder->select('COUNT(emotions)')
+        $numResults = $builder->select('COUNT(emotions) + COUNT(DISTINCT emotions.id)')
             ->getQuery()
             ->getSingleScalarResult();
 

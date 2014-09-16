@@ -518,6 +518,27 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $this->_order->id
                 ));
 
+            if (!empty($this->_config["attributes"])) {
+                // Get the updated document
+                $updatedDocument = Shopware()->Models()->getRepository("\Shopware\Models\Order\Document\Document")->findOneBy(array(
+                    "type" => $typID,
+                    "customerId" => $this->_order->userID,
+                    "orderId" => $this->_order->id
+                ));
+                // Check its attributes
+                if ($updatedDocument->getAttribute() === null) {
+                    // Create a new attributes entity for the document
+                    $documentAttributes = new \Shopware\Models\Attribute\Document();
+                    $updatedDocument->setAttribute($documentAttributes);
+                    // Persist the document
+                    Shopware()->Models()->flush($updatedDocument);
+                }
+                // Save all given attributes
+                $updatedDocument->getAttribute()->fromArray($this->_config["attributes"]);
+                // Persist the attributes
+                Shopware()->Models()->flush($updatedDocument->getAttribute());
+            }
+
             $rowID = $checkForExistingDocument["ID"];
             $bid = $checkForExistingDocument["docID"];
             $hash = $checkForExistingDocument["hash"];
@@ -543,6 +564,20 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $hash
                 ));
             $rowID = Shopware()->Db()->lastInsertId();
+
+            // Add an entry in s_order_documents_attributes for the created document
+            // containing all values found in the 'attributes' element of '_config'
+            $createdDocument = Shopware()->Models()->getRepository('\Shopware\Models\Order\Document\Document')->findOneById($rowID);
+            // Create a new attributes entity for the document
+            $documentAttributes = new \Shopware\Models\Attribute\Document();
+            $createdDocument->setAttribute($documentAttributes);
+            if (!empty($this->_config["attributes"])) {
+                // Save all given attributes
+                $createdDocument->getAttribute()->fromArray($this->_config["attributes"]);
+            }
+            // Persist the document
+            Shopware()->Models()->flush($createdDocument);
+
             // Update numberrange, except for cancellations
             if ($typID!=4) {
                 if (!empty($this->_document['numbers'])) {

@@ -51,6 +51,7 @@ Ext.define('Shopware.apps.Overview.model.Overview', {
         { name: 'averageUsers',     type: 'float' },
         { name: 'hits',             type: 'int' },
         { name: 'countOrders',      type: 'int' },
+        { name: 'countUsers',       type: 'int' },
         { name: 'countCustomers',   type: 'int' },
         { name: 'amount',           type: 'float' },
         { name: 'date',             type: 'date' },

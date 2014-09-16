@@ -48,7 +48,15 @@ Ext.define('Shopware.apps.Vote', {
 	*/
 	name: 'Shopware.apps.Vote',
 
-    views: [ 'main.Window', 'vote.List', 'vote.Edit', 'vote.Toolbar', 'vote.Infopanel' ],
+    views: [
+        'main.Window',
+        'vote.Window',
+        'vote.List',
+        'vote.Edit',
+        'vote.Detail',
+        'vote.Toolbar',
+        'vote.Infopanel'
+    ],
     stores: ['Votes'],
     models: ['Vote'],
 

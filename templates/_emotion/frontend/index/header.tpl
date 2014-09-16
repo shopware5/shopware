@@ -11,7 +11,7 @@
 	<meta name="copyright" content="{s name='IndexMetaCopyright'}{/s}" />
 	<meta name="robots" content="{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}{/s}{/block}" />
 	<meta name="revisit-after" content="{s name='IndexMetaRevisit'}{/s}" />
-	<meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metakeywords}{$sCategoryContent.metakeywords}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
+	<meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
 	<meta name="description" content="{block name='frontend_index_header_meta_description'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
 	<link rel="shortcut icon" href="{s name='IndexMetaShortcutIcon'}{link file='frontend/_resources/favicon.ico'}{/s}" type="image/x-icon" />{* Favicon *}
 {/block}

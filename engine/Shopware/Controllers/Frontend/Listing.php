@@ -79,16 +79,19 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
             $supplierName = $supplier->getName();
             $supplierTitle = $supplier->getMetaTitle();
-            $categoryContent['metadescription'] = $supplier->getMetaDescription();
-            $categoryContent['metakeywords'] = $supplier->getMetaKeywords();
+            $categoryContent['metaDescription'] = $supplier->getMetaDescription();
+            $categoryContent['metaKeywords'] = $supplier->getMetaKeywords();
             if (!Shopware()->Shop()->getDefault()) {
                 $translation = $this->getTranslator()->read(Shopware()->Shop()->getId(), 'supplier', $supplier->getId());
-                if (array_key_exists('metaTitle', $translation))
+                if (array_key_exists('metaTitle', $translation)) {
                     $supplierTitle = $translation['metaTitle'];
-                if (array_key_exists('metaDescription', $translation))
-                    $categoryContent['metadescription'] = $translation['metaDescription'];
-                if (array_key_exists('metaKeywords', $translation))
-                    $categoryContent['metakeywords'] = $translation['metaKeywords'];
+                }
+                if (array_key_exists('metaDescription', $translation)) {
+                    $categoryContent['metaDescription'] = $translation['metaDescription'];
+                }
+                if (array_key_exists('metaKeywords', $translation)) {
+                    $categoryContent['metaKeywords'] = $translation['metaKeywords'];
+                }
             }
             $path = $this->Front()->Router()->assemble(array(
                 'sViewport' => 'supplier',

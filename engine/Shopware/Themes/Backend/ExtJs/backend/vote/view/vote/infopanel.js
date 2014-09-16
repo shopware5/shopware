@@ -31,7 +31,7 @@
 //{namespace name=backend/vote/main}
 
 /**
- * Shopware UI - Vote view infopanel
+ * Shopware UI - Vote view info panel
  *
  * This infopanel contains some information about the chosen vote.
  * For example it contains the articles name, the authors name, the rating and the comment.
@@ -40,7 +40,7 @@
 Ext.define('Shopware.apps.Vote.view.vote.Infopanel', {
     extend : 'Ext.form.Panel',
     alias : 'widget.vote-main-infopanel',
-    autoShow : true,
+    autoScroll  : true,
     region: 'east',
     name:  'infopanel',
     cls: 'detail-view',
@@ -106,38 +106,38 @@ Ext.define('Shopware.apps.Vote.view.vote.Infopanel', {
                 '<div class="info-view">',
                     '<div class="base-info">',
                         '<p>',
-                            '<b>{s name=infopanel_headline}Headline: {/s}</b>',
+                            '<b>{s name=infopanel_headline}Headline:{/s}</b> ',
                             '<span>{literal}{headline}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_author}Author: {/s}</b>',
+                            '<b>{s name=infopanel_author}Author:{/s}</b> ',
                             '<span>{literal}{name}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_article}Article: {/s}</b>',
+                            '<b>{s name=infopanel_article}Article:{/s}</b> ',
                             '<span>{literal}{articleName}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_datum}Datum: {/s}</b>',
+                            '<b>{s name=infopanel_datum}Datum:{/s}</b> ',
                             '<span>{literal}{[this.formatDate(values.datum)]}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_status}Status: {/s}</b>',
+                            '<b>{s name=infopanel_status}Status:{/s}</b> ',
                             '<tpl if="active==1"><span style="color: green"><b>{s name=infopanel_statusAccepted}Accepted{/s}</b></span></tpl>',
                             '<tpl if="active==0"><span style="color: red"><b>{s name=infopanel_statusNotAccepted}Not accepted yet{/s}</b></span></tpl>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_points}Points: {/s}</b>',
+                            '<b>{s name=infopanel_points}Points:{/s}</b> ',
                             //function to create a star-rating
                             '<span>{literal}{[this.formatPoints(values.points)]}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<b>{s name=infopanel_comment}Comment: {/s}</b>',
+                            '<b>{s name=infopanel_comment}Comment:{/s}</b> ',
                             '<br />',
                             '<span>{literal}{comment}{/literal}</span>',
                         '</p>',
                         '<p>',
-                            '<tpl if="answer"><b>{s name=infopanel_answer}Answer: {/s}</b>',
+                            '<tpl if="answer"><b>{s name=infopanel_answer}Answer:{/s}</b> ',
                             '<br />',
                             '<span>{literal}{answer}{/literal}</span></tpl>',
                         '</p>',

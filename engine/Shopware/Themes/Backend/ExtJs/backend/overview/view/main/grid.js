@@ -126,6 +126,14 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
+            header: '{s name=column_countUsers}New users{/s}',
+            dataIndex: 'countUsers',
+            align: 'right',
+            flex: 1,
+            summaryType: 'sum',
+            summaryRenderer: me.summaryRenderer,
+            renderer: me.trendRenderer
+        }, {
             header: '{s name=column_countCustomers}New customers{/s}',
             dataIndex: 'countCustomers',
             align: 'right',
@@ -212,28 +220,29 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
      */
     getToolbar: function() {
         var me       = this,
-            theFirst = new Date(),
             today    = new Date();
-
-        theFirst.setDate(1);
 
         var fromDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: '{s name=fieldLabel_from}From{/s}',
             name: 'from_date',
+            labelWidth: 50,
+            width: 150,
             maxValue: today,
-            value: theFirst
+            value: new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
         });
 
         var toDate = Ext.create('Ext.form.field.Date', {
             fieldLabel: '{s name=fieldLabel_to}To{/s}',
             name: 'to_date',
+            labelWidth: 50,
+            width: 150,
             maxValue: today,
             value: today
         });
 
         var filterButton = Ext.create('Ext.button.Button', {
             text: '{s name=buttonText_filter}Filter{/s}',
-//            cls: 'small secondary',
+            iconCls: 'sprite-arrow-circle-135',
             scope : this,
             handler: function() {
                 me.fireEvent('dateChange', fromDate.getValue(), toDate.getValue());
@@ -241,7 +250,8 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
         });
 
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            items: [ fromDate, toDate, filterButton]
+            ui: 'shopware-ui',
+            items: [ fromDate, toDate, { xtype: 'tbspacer' }, filterButton]
         });
 
         return toolbar;
