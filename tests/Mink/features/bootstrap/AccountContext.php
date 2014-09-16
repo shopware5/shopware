@@ -50,6 +50,23 @@ class AccountContext extends SubContext
     }
 
     /**
+     * @Given /^I change my billing address:$/
+     */
+    public function iChangeMyBillingAddress(TableNode $table)
+    {
+        $this->getPage('Account')->changeBilling($table->getHash());
+    }
+
+    /**
+     * @Given /^I change my shipping address:$/
+     */
+    public function iChangeMyShippingAddress(TableNode $table)
+    {
+        $this->getPage('Account')->changeShipping($table->getHash());
+    }
+
+
+    /**
      * @Given /^the "([^"]*)" address should be "([^"]*)"$/
      */
     public function theAddressShouldBe($type, $address)
