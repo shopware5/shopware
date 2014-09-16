@@ -12,7 +12,7 @@
 
                     {*Image based on our default media queries*}
                     {block name='checkout_ajax_add_cross_slider_item_image_default_queries'}
-                        <span data-src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+                        <span data-src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
                     {/block}
 
                     {*Block to add additional image based on media queries*}
@@ -21,7 +21,7 @@
                     {*If the browser doesn't support JS, the following image will be used*}
                     {block name='checkout_ajax_add_cross_slider_item_image_fallback'}
                         <noscript>
-                            <img itemprop="image" src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$article.articleName|escape:"html"}">
+                            <img itemprop="image" src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$article.articleName|escape:"html"}">
                         </noscript>
                     {/block}
                 </span>

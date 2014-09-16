@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Description', {
             var media = me.article.getMediaStore.first().data;
             thumbPath = media.thumbnails[5];
         } else {
-            thumbPath = '{link file="frontend/_resources/images/no_picture.jpg"}';
+            thumbPath = '{link file="backend/_resources/images/index/no-picture.jpg"}';
         }
 
         var image = Ext.create('Ext.Img', {

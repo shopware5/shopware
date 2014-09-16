@@ -26,7 +26,7 @@
 							{/block}
 						{else}
 							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
-								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
+								<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
 							</a>
 						{/if}
 					</div>

@@ -20,7 +20,7 @@
 {if $sArticle.image.src.3}
 	<meta property="og:image" content="{$sArticle.image.src.3}" />
 {else}
-	<meta property="og:image" content="{link file='frontend/_resources/images/no_picture.jpg'}" />
+	<meta property="og:image" content="{link file='frontend/_public/src/img/no-picture.jpg'}" />
 {/if}
 {/block}
 
