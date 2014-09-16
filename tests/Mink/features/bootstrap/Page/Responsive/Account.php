@@ -13,7 +13,9 @@ class Account extends \Emotion\Account
         'registrationForm' => 'form.register--form',
         'billingForm' => 'div.account--billing-form > form',
         'shippingForm' => 'div.account--shipping-form > form',
-        'paymentForm' => 'div.account--payment-form > form'
+        'paymentForm' => 'div.account--payment-form > form',
+        'passwordForm' => 'div.account--password > form',
+        'emailForm' => 'div.account--email > form'
     );
 
     /** @var array $namedSelectors */

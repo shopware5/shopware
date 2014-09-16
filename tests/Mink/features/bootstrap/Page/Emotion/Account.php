@@ -22,7 +22,9 @@ class Account extends Page
         'registrationForm' => 'div.register > form',
         'billingForm' => 'div.change_billing > form',
         'shippingForm' => 'div.change_shipping > form',
-        'paymentForm' => 'div.change_payment > form'
+        'paymentForm' => 'div.change_payment > form',
+        'passwordForm' => 'div.password > form',
+        'emailForm' => 'div.email > form'
     );
 
     /** @var array $namedSelectors */
@@ -30,6 +32,8 @@ class Account extends Page
         'registerButton'        => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
         'sendButton'            => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration'),
         'changePaymentButton'   => array('de' => 'Ändern',                     'en' => 'Change'),
+        'changePasswordButton'  => array('de' => 'Passwort ändern',            'en' => ''),
+        'changeEmailButton'     => array('de' => 'E-Mail ändern',              'en' => ''),
     );
 
     /**
@@ -109,13 +113,25 @@ class Account extends Page
      * @param string $password
      * @param string $passwordConfirmation
      */
-    public function changePassword($currentPassword, $password, $passwordConfirmation)
+    public function changePassword($currentPassword, $password, $passwordConfirmation = null)
     {
-        $this->fillField('currentPassword', $currentPassword);
-        $this->fillField('password', $password);
-        $this->fillField('passwordConfirmation', $passwordConfirmation);
+        $data = array(
+            array(
+                'field' => 'currentPassword',
+                'value' => $currentPassword
+            ),
+            array(
+                'field' => 'password',
+                'value' => $password
+            ),
+            array(
+                'field' => 'passwordConfirmation',
+                'value' => ($passwordConfirmation !== null) ? $passwordConfirmation : $password
+            )
+        );
 
-        $this->pressButton('Passwort ändern');
+        \Helper::fillForm($this, 'passwordForm', $data);
+        \Helper::pressNamedButton($this, 'changePasswordButton');
     }
 
     /**
@@ -124,13 +140,25 @@ class Account extends Page
      * @param string $email
      * @param string $emailConfirmation
      */
-    public function changeEmail($password, $email, $emailConfirmation)
+    public function changeEmail($password, $email, $emailConfirmation = null)
     {
-        $this->fillField('emailPassword', $password);
-        $this->fillField('email', $email);
-        $this->fillField('emailConfirmation', $emailConfirmation);
+        $data = array(
+            array(
+                'field' => 'emailPassword',
+                'value' => $password
+            ),
+            array(
+                'field' => 'email',
+                'value' => $email
+            ),
+            array(
+                'field' => 'emailConfirmation',
+                'value' => ($emailConfirmation !== null) ? $emailConfirmation : $email
+            )
+        );
 
-        $this->pressButton('E-Mail ändern');
+        \Helper::fillForm($this, 'emailForm', $data);
+        \Helper::pressNamedButton($this, 'changeEmailButton');
     }
 
     /**
