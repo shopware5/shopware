@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.model.Check', {
         { name:'id', type:'int' },
         { name:'name', type:'string' },
         { name:'value', type:'string' },
-        { name:'valid', type:'boolean' },
+        { name:'valid', type:'int' },
         { name:'description', type:'string' }
     ]
 
