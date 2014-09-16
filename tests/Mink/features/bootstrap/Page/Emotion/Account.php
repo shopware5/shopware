@@ -167,8 +167,8 @@ class Account extends Page
      */
     public function changeBilling($values)
     {
-        $this->fillBilling($values);
-        $this->pressButton('Ändern');
+        \Helper::fillForm($this, 'billingForm', $values);
+        \Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     /**
@@ -177,8 +177,8 @@ class Account extends Page
      */
     public function changeShipping($values)
     {
-        $this->fillShipping($values);
-        $this->pressButton('Ändern');
+        \Helper::fillForm($this, 'shippingForm', $values);
+        \Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     public function checkPayment($payment)

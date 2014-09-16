@@ -36,7 +36,7 @@ Feature: My account (without changing login data)
     @shipping
     Scenario Outline: I can change my shipping address
         When I follow "Lieferadresse ändern"
-        And  I submit the form "shippingForm" on page "Account" with:
+        And  I change my shipping address:
             | field      | register[shipping] |
             | salutation | <salutation>       |
             | company    | <company>          |

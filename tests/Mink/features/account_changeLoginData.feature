@@ -40,7 +40,7 @@ Feature: Successful changes of login data
     Scenario Outline: I can change my billing address
         Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
         When  I follow "Rechnungsadresse ändern"
-        And   I submit the form "billingForm" on page "Account" with:
+        And   I change my billing address:
             | field         | register[personal] | register[billing] |
             | customer_type | <type>             |                   |
             | salutation    | <salutation>       |                   |
