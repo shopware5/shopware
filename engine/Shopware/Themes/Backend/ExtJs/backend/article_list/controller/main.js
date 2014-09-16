@@ -305,7 +305,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         }
 
         if (searchTerm && searchTerm.length > 0) {
-            filter = '(article.name ~ "[0]" OR detail.number ~ "[0]") AND ';
+            filter = '(article.name ~ "[0]" OR detail.number ~ "[0]" OR supplier.name ~ "[0]") AND ';
             filter = Ext.String.format(filter, searchTerm);
         } else {
             filter = '';
