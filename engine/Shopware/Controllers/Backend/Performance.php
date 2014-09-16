@@ -29,6 +29,13 @@ use Doctrine\ORM\AbstractQuery;
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
+    const PHP_RECOMMENDED_VERSION = '5.6.0';
+    const PHP_MINIMUM_VERSION     = '5.4.0';
+
+    const PERFORMANCE_VALID       = 1;
+    const PERFORMANCE_WARNING     = 2;
+    const PERFORMANCE_INVALID     = 0;
+
     /**
      * Stores a list of all needed config data
      * @var array
@@ -288,24 +295,36 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function getPerformanceCheckData()
     {
+        $descriptionPHPVersion = '';
+        if (version_compare(phpversion(), self::PHP_RECOMMENDED_VERSION, '>=')) {
+            $validPHPVersion = self::PERFORMANCE_VALID;
+        } elseif (version_compare(phpversion(), self::PHP_MINIMUM_VERSION, '>=')) {
+            $validPHPVersion = self::PERFORMANCE_WARNING;
+            $descriptionPHPVersion = Shopware()->Snippets()->getNamespace('backend/performance/main')
+                ->get('cache/php_version/description_eol');
+        } else {
+            $validPHPVersion = self::PERFORMANCE_INVALID;
+        }
+
         return array(
             array(
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true
+                'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
             ),
             array(
                 'id' => 3,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
                 'value' => extension_loaded('Zend OPcache'),
-                'valid' => extension_loaded('Zend OPcache') === true
+                'valid' => extension_loaded('Zend OPcache') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
             ),
             array(
                 'id' => 4,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
                 'value' => phpversion(),
-                'valid' => version_compare(phpversion(), '5.4.0', '>=')
+                'valid' => $validPHPVersion,
+                'description' => $descriptionPHPVersion
             )
         );
 
