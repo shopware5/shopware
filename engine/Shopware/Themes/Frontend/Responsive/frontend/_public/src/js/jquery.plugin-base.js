@@ -62,7 +62,7 @@
 
         // Create new selector for the plugin
         $.expr[':']['plugin-' + name.toLowerCase()] = function (elem) {
-            return !!$.data(elem, 'plugin-' + name);
+            return !!$.data(elem, 'plugin_' + name);
         };
 
         // Call the init method of the plugin

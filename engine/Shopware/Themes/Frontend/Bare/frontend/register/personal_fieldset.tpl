@@ -8,7 +8,7 @@
 			{else}
 				<div class="register--customertype">
 				{if {config name=showCompanySelectField}}
-					<select id="register_personal_customer_type" name="register[personal][customer_type]" required="required" class="is--required{if $error_flags.customer_type} has--error{/if}">
+					<select id="register_personal_customer_type" name="register[personal][customer_type]" required="required" aria-required="true" class="is--required{if $error_flags.customer_type} has--error{/if}">
 						<option value="" disabled="disabled"{if $form_data.customer_type eq ""} selected="selected"{/if}>{s name='RegisterPersonalLabelType'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 						<option value="private"{if $form_data.customer_type eq "private" or (!$form_data.company and $sUserLoggedIn)} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
@@ -28,8 +28,7 @@
 		{* Salutation *}
 		{block name='frontend_register_personal_fieldset_salutation'}
 			<div class="register--salutation field--select">
-				<span class="arrow"></span>
-				<select name="register[personal][salutation]" id="salutation" class="is--required{if $error_flags.salutation} has--error{/if}">
+				<select name="register[personal][salutation]" id="salutation" required="required" aria-required="true" class="is--required{if $error_flags.salutation} has--error{/if}">
                     <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 					<option value="mr"{if $form_data.salutation eq "mr"} selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
 					<option value="ms"{if $form_data.salutation eq "ms"} selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
@@ -116,40 +115,36 @@
 		{if {config name=showBirthdayField}}
 			{if !$form_data.skipLogin && !$update}
 				{block name='frontend_register_personal_fieldset_birthday'}
-						<div class="register--birthdate">
-							<label for="register_personal_birthdate" class="birthday--label">{s name='RegisterPlaceholderBirthday'}{/s}{if {config name=requireBirthdayField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</label>
+                    <div class="register--birthdate">
+                        <label for="register_personal_birthdate" class="birthday--label">{s name='RegisterPlaceholderBirthday'}{/s}{if {config name=requireBirthdayField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</label>
 
-							<div class="register--birthday field--select">
-								<span class="arrow"></span>
-								<select id="register_personal_birthdate" name="register[personal][birthday]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthday && {config name=requireBirthdayField}} has--error{/if}">
-									<option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectDay'}day{/s}</option>
-									{section name="birthdate" start=1 loop=32 step=1}
-										<option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
-									{/section}
-								</select>
-							</div>
+                        <div class="register--birthday field--select">
+                            <select id="register_personal_birthdate" name="register[personal][birthday]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthday && {config name=requireBirthdayField}} has--error{/if}">
+                                <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectDay'}day{/s}</option>
+                                {section name="birthdate" start=1 loop=32 step=1}
+                                    <option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
+                                {/section}
+                            </select>
+                        </div>
 
-							<div class="register--birthmonth field--select">
-								<span class="arrow"></span>
-								<select name="register[personal][birthmonth]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthmonth && {config name=requireBirthdayField}} has--error{/if}">
-									<option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectMonth'}month{/s}</option>
-									{section name="birthmonth" start=1 loop=13 step=1}
-										<option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
-									{/section}
-								</select>
-							</div>
+                        <div class="register--birthmonth field--select">
+                            <select name="register[personal][birthmonth]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthmonth && {config name=requireBirthdayField}} has--error{/if}">
+                                <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectMonth'}month{/s}</option>
+                                {section name="birthmonth" start=1 loop=13 step=1}
+                                    <option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
+                                {/section}
+                            </select>
+                        </div>
 
-							<div class="register--birthyear field--select">
-								<span class="arrow"></span>
-								<select name="register[personal][birthyear]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthyear && {config name=requireBirthdayField}} has--error{/if}">
-									<option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectYear'}year{/s}</option>
-									{section name="birthyear" loop={$smarty.now|date_format:"%Y"} max={$smarty.now|date_format:"%Y"}-1900 step=-1}
-										<option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
-									{/section}
-								</select>
-							</div>
-
-						</div>
+                        <div class="register--birthyear field--select">
+                            <select name="register[personal][birthyear]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthyear && {config name=requireBirthdayField}} has--error{/if}">
+                                <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}>{s name='RegisterBirthdaySelectYear'}year{/s}</option>
+                                {section name="birthyear" loop={$smarty.now|date_format:"%Y"} max={$smarty.now|date_format:"%Y"}-1900 step=-1}
+                                    <option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
+                                {/section}
+                            </select>
+                        </div>
+                    </div>
 				{/block}
 			{/if}
 		{/if}
