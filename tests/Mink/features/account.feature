@@ -14,6 +14,7 @@ Feature: My account (without changing login data)
         | password  | new_password | confirmation | message                                                                 |
         |           |              |              | Das aktuelle Passwort stimmt nicht!                                     |
         | shopware  |              |              | Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht. |
+        | shopware  | shopware4    |              | Die Passwörter stimmen nicht überein.                                   |
         | shopware  | sw4          | sw4          | Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht. |
         | shopware  | shopware4    | shopware5    | Die Passwörter stimmen nicht überein.                                   |
         | shopware4 | shopware5    | shopware5    | Das aktuelle Passwort stimmt nicht!                                     |
@@ -27,6 +28,7 @@ Feature: My account (without changing login data)
         | password  | new_email         | confirmation      | message                                        |
         |           |                   |                   | Das aktuelle Passwort stimmt nicht!            |
         | shopware  |                   |                   | Bitte geben Sie eine gültige eMail-Adresse ein |
+        | shopware  | test2@example.com |                   | Die eMail-Adressen stimmen nicht überein.      |
         | shopware  | abc               | abc               | Bitte geben Sie eine gültige eMail-Adresse ein |
         | shopware  | test@example.com  | test2@example.com | Die eMail-Adressen stimmen nicht überein.      |
         | shopware4 | test2@example.com | test2@example.com | Das aktuelle Passwort stimmt nicht!            |
