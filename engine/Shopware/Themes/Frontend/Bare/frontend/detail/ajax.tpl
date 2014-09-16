@@ -2,7 +2,6 @@
 
 {* Change the styling a bit *}
 {block name="frontend_index_header_css_screen"}
-<link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/framework.css'}" />
 {block name="frontend_detail_header_css"}
 <style type="text/css">
     .container_20, #content .inner { width: 580px; border-color: transparent }
@@ -87,7 +86,7 @@
             {if $sArticle.image.src.4}
                 <img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName|escape}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articleName|escape}{/if}" />
             {else}
-                <img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName|escape}" />
+                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape}" />
             {/if}
         </div>
         <div class="main-details">

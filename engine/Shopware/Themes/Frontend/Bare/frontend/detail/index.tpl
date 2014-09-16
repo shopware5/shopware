@@ -91,7 +91,7 @@
         <div class="product--detail-upper block-group">
             {* Product image *}
             {block name='frontend_detail_index_image_container'}
-                <div class="product--image-container image-slider{if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}"
+                <div class="product--image-container image-slider{if $sArticle.image && {config name=sUSEZOOMPLUS}} product--image-zoom{/if}"
                      data-image-slider="true"
                      data-thumbnails=".image--thumbnails">
                     {include file="frontend/detail/image.tpl"}

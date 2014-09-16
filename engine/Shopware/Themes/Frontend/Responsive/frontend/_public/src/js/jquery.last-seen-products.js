@@ -105,25 +105,25 @@
 
             imageMobile = $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[4]
+                'data-src': data.images[4] ? data.images[4] : me.opts.noPicture
             }).appendTo(imageEl);
 
             imageTablet = $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[3],
+                'data-src': data.images[3] ? data.images[3] : me.opts.noPicture,
                 'data-media': '(min-width: 48em)'
             }).appendTo(imageEl);
 
             imageDesktop = $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[2],
+                'data-src': data.images[2] ? data.images[2] : me.opts.noPicture,
                 'data-media': '(min-width: 78.75em)'
             }).appendTo(imageEl);
 
             noScript = $('<noscript></noscript>').appendTo(imageEl);
 
             imageDefault = $('<img>', {
-                'src': data.images[2],
+                'src': data.images[2] ? data.images[2] : me.opts.noPicture,
                 'alt': data.articleName
             }).appendTo(noScript);
 

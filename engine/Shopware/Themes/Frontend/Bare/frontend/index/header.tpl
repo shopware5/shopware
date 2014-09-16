@@ -30,21 +30,19 @@
 
 {* Set favicons and touch icons for all different sizes *}
 {block name="frontend_index_header_favicons"}
-	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="apple-touch-icon-precomposed" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="shortcut icon" sizes="196x196" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="shortcut icon" href="{link file='frontend/_resources/favicon.ico'}">
-	<link rel="shortcut icon" href="{s name='IndexMetaShortcutIcon'}{link file='frontend/_resources/favicon.ico'}{/s}" type="image/x-icon" />{* Favicon *}
+    <meta name="apple-mobile-web-app-status-bar-style" content="none">
+    <link rel="apple-touch-icon" href="{link file=$theme.appleTouchIcon}">
+	<link rel="shortcut icon" href="{link file=$theme.favicon}">
 {/block}
 
 {* Internet Explorer 9 specific meta tags *}
 {block name='frontend_index_header_meta_tags_ie9'}
-	<meta name="msapplication-navbutton-color" content="{s name='IndexMetaMsNavButtonColor'}#dd4800{/s}" />{* Navbutton color *}
+	<meta name="msapplication-navbutton-color" content="{$theme.primaryColor}" />{* Navbutton color *}
 	<meta name="application-name" content="{config name=shopName}" />{* Pinned name *}
 	<meta name="msapplication-starturl" content="{url controller='index'}" />{* Start url to launch from the shortcut *}
 	<meta name="msapplication-window" content="width=1024;height=768" />{* Size of the window to launch *}
+    <meta name="msapplication-TileImage" content="{link file=$theme.win8TileImage}"> {* Image of the Windows 8 tile *}
+    <meta name="msapplication-TileColor" content="{$theme.primaryColor}"> {* Backgroud Color of the Windows 8 tile *}
 {/block}
 
 {* Canonical link *}

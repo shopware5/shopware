@@ -49,7 +49,7 @@
 		                                                        <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName|escape}"
 		                                                             title="{$premium.sArticle.articleName|escape}">
 															{else}
-																<img src="{link file='frontend/_resources/images/no_picture.jpg'}" 
+																<img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
 																	 alt="{"{s name="PremiumInfoNoPicture"}{/s}"|escape}">
 															{/if}
 														</span>

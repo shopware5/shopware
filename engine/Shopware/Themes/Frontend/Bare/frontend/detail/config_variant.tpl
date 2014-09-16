@@ -39,12 +39,12 @@
 
 														{block name='frontend_detail_configurator_variant_group_option_label_image'}
 															<span data-picture data-alt="{$configuratorOption.optionname}" class="image--element">
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
+																<span class="image--media" data-src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
+																<span class="image--media" data-src="{if isset($media.src)}{$media.src.2}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
+																<span class="image--media" data-src="{if isset($media.src)}{$media.src.3}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
 
 																<noscript>
-																	<img src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$option.optionname}">
+																	<img src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$option.optionname}">
 																</noscript>
 															</span>
 														{/block}
