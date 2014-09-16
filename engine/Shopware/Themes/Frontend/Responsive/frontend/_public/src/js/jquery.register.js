@@ -285,7 +285,6 @@
 
         if ($el.is(':plugin-selectboxreplacement')) {
             var plugin = $el.data('plugin_selectboxReplacement');
-            console.log('1');
             plugin.removeError();
         } else {
             $el.removeClass(me.opts.errorCls);
