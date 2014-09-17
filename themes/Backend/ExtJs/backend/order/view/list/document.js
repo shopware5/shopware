@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
             display = '',
             type = record.getDocType().first();
 
-        if (record.get('typeId') === 4) {
+        if ( ! record.get('documentId')) {
             display = type.get('name');
         } else {
             display = type.get('name') + ' ' + Ext.String.leftPad(record.get('documentId'), 8, '0');
