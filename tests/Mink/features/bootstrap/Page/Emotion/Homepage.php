@@ -20,32 +20,6 @@ class Homepage extends Page
         'searchForm' => 'div#searchcontainer form',
         'newsletterForm' => 'div.footer_column.col4 > form',
         'newsletterFormSubmit' => 'div.footer_column.col4 > form input[type="submit"]',
-        'emotionElement' => 'div.emotion-element > div.%s-element',
-        'emotionSliderElement' => 'div.emotion-element > div.%s-slider-element',
-        'bannerImage' => 'div.mapping img',
-        'bannerLink' => 'div.mapping > a',
-        'bannerMapping' => 'div.banner-mapping > a',
-        'sliderSlide' => 'div.slide',
-        'slideImage' => 'img',
-        'slideLink' => 'a',
-        'slideSupplier' => 'div.supplier',
-        'slideArticle' => 'div.outer-article-box > div.article_box',
-        'slideArticleImageLink' => 'a.article-thumb-wrapper',
-        'slideArticleTitleLink' => 'a.title',
-        'slideArticlePrice' => 'p.price',
-        'blogEntry' => 'div.blog-entry > div.blog-entry-inner',
-        'blogEntryImage' => 'div.blog_img > a',
-        'blogEntryTitle' => 'h2 > a',
-        'blogEntryText' => 'p',
-        'youtubeVideo' => 'iframe',
-        'categoryTeaserImage' => 'div.teaser_img',
-        'categoryTeaserLink' => 'a',
-        'categoryTeaserHeader' => 'h3',
-        'articleImage' => 'a.artbox_thumb',
-        'articleTitle' => 'a.title',
-        'articleDescription' => 'p.desc',
-        'articlePrice' => 'p.price',
-        'articleMore' => 'a.more',
         'controller' => array(
             'account' => 'body.ctl_account',
             'checkout' => 'body.ctl_checkout',
@@ -72,451 +46,6 @@ class Homepage extends Page
     public function receiveSearchResultsFor($searchTerm)
     {
         $this->getElement('SearchForm')->receiveSearchResultsFor($searchTerm);
-    }
-
-    /**
-     * Checks an emotion banner element
-     * @param  string                                      $image
-     * @param  mixed                                       $links
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkBanner($image, $links = null)
-    {
-        $testBanner = array(
-            'image' => $image,
-            'links' => $links
-        );
-
-        $banners = $this->findAllEmotionParentElements('banner');
-
-        /** @var NodeElement $banner */
-        foreach ($banners as $banner) {
-            $locators = array('bannerImage');
-
-            if (is_string($links)) {
-                $locators[] = 'bannerLink';
-            }
-
-            $elements = \Helper::findElements($banner, $locators, $this->cssLocator, false, false);
-
-            $image = $elements['bannerImage']->getAttribute($this->srcAttribute);
-            $mapping = null;
-
-            if (!empty($elements['bannerLink'])) {
-                $mapping = $elements['bannerLink']->getAttribute('href');
-            } elseif (is_array($links)) {
-                $locators = array('bannerMapping');
-                $elements = \Helper::findElements($banner, $locators, $this->cssLocator, true, false);
-
-                if (isset($elements['bannerMapping'])) {
-                    foreach ($elements['bannerMapping'] as $link) {
-                        $mapping[] = array('mapping' => $link->getAttribute('href'));
-                    }
-                }
-            }
-
-            $readBanner = array(
-                'image' => $image,
-                'links' => $mapping
-            );
-
-            $result = \Helper::compareArrays($readBanner, $testBanner);
-
-            if ($result === true) {
-                return;
-            }
-        }
-
-        $message = sprintf('The given banner was not found!');
-        throw new ResponseTextException($message, $this->getSession());
-    }
-
-    /**
-     * Checks an emotion blog element
-     * @param  array                                       $articles
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkBlogArticles($articles)
-    {
-        $return = array();
-        $blogs = $this->findAllEmotionParentElements('blog');
-
-        foreach ($blogs as $blogKey => $blog) {
-            $locators = array('blogEntry');
-            $elements = \Helper::findElements($blog, $locators, $this->cssLocator, true);
-
-            $entries = $elements['blogEntry'];
-
-            foreach ($entries as $entry) {
-                $locators = array('blogEntryImage', 'blogEntryTitle', 'blogEntryText');
-                $elements = \Helper::findElements($entry, $locators, $this->cssLocator);
-
-                $return[$blogKey][] = $elements;
-            }
-        }
-
-        foreach ($articles as $article) {
-            $found = false;
-
-            foreach ($blogs as $blogKey => $blog) {
-                foreach ($return[$blogKey] as $itemKey => $item) {
-                    $check = array(
-                        array($item['blogEntryImage']->getAttribute('title'), $article['title']),
-                        array($item['blogEntryImage']->getAttribute('style'), $article['image']),
-                        array($item['blogEntryImage']->getAttribute('href'), $article['link']),
-                        array($item['blogEntryTitle']->getAttribute('title'), $article['title']),
-                        array($item['blogEntryTitle']->getAttribute('href'), $article['link']),
-                        array($item['blogEntryTitle']->getText(), $article['title']),
-                        array($item['blogEntryText']->getText(), $article['text'])
-                    );
-
-                    $result = \Helper::checkArray($check);
-                    if ($result === true) {
-                        $found = true;
-                        unset($return[$blogKey][$itemKey]);
-                        break;
-                    }
-                }
-
-                if ($found) {
-                    break;
-                }
-
-                if ($blog == end($blogs)) {
-                    $message = sprintf(
-                        'The blog article "%s" with its given properties was not found!',
-                        $article['title']
-                    );
-                    throw new ResponseTextException($message, $this->getSession());
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks an emotion Youtube element
-     * @param  string                                      $code
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkYoutubeVideo($code)
-    {
-        $videos = $this->findAllEmotionParentElements('youtube');
-
-        foreach ($videos as $video) {
-            $locators = array('youtubeVideo');
-            $elements = \Helper::findElements($video, $locators, $this->cssLocator);
-
-            $source = $elements['youtubeVideo']->getAttribute('src');
-
-            if (strpos($source, $code) !== false) {
-                return;
-            }
-        }
-
-        $message = sprintf('The YouTube-Video "%s" was not found!', $code);
-        throw new ResponseTextException($message, $this->getSession());
-    }
-
-    /**
-     * Checks an emotion slider element
-     * @param  string                                      $type
-     * @param  array                                       $slides
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkSlider($type, $slides)
-    {
-        $sliders = $this->findAllEmotionSlider($type);
-
-        $check = array();
-
-        foreach ($slides as $slide) {
-            $found = false;
-
-            foreach ($sliders as $sliderKey => $slider) {
-                foreach ($sliders[$sliderKey] as $itemKey => $item) {
-                    switch ($type) {
-                        case 'banner':
-                            $check = array(
-                                array($item['slideImage']->getAttribute('src'), $slide['image'])
-                            );
-                            if (!empty($slide['title'])) {
-                                $check[] = array($item['slideImage']->getAttribute('title'), $slide['title']);
-                            }
-                            if (!empty($slide['alt'])) {
-                                $check[] = array($item['slideImage']->getAttribute('alt'), $slide['alt']);
-                            }
-                            if (!empty($slide['link'])) {
-                                $check[] = array($item['slideLink']->getAttribute('href'), $slide['link']);
-                            }
-                            break;
-
-                        case 'manufacturer':
-                            $check = array(
-                                array($item['slideLink']->getAttribute('href'), $slide['link']),
-                                array($item['slideLink']->getAttribute('title'), $slide['name']),
-                                array($item['slideImage']->getAttribute('src'), $slide['image']),
-                                array($item['slideImage']->getAttribute('alt'), $slide['name'])
-                            );
-                            break;
-
-                        case 'article':
-                            $check = array(
-                                array($item['slideArticleImageLink']->getAttribute('href'), $slide['link']),
-                                array($item['slideArticleImageLink']->getAttribute('title'), $slide['name']),
-                                array($item['slideImage']->getAttribute('src'), $slide['image']),
-                                array($item['slideImage']->getAttribute('title'), $slide['name']),
-                                array($item['slideArticleTitleLink']->getAttribute('href'), $slide['link']),
-                                array($item['slideArticleTitleLink']->getAttribute('title'), $slide['name']),
-                                array($item['slideArticleTitleLink']->getText(), $slide['name']),
-                                \Helper::toFloat(array($item['slideArticlePrice']->getText(), $slide['price']))
-                            );
-                            break;
-                    }
-
-                    $result = \Helper::checkArray($check);
-                    if ($result === true) {
-                        $found = true;
-                        unset($sliders[$sliderKey][$itemKey]);
-                        break;
-                    }
-                }
-
-                if ($found) {
-                    break;
-                }
-
-                if ($slider == end($sliders)) {
-                    if ($type = 'banner') {
-                        $message = sprintf('The image %s was not found in a slider', $slide['image']);
-                    } else {
-                        $message = sprintf('The slide "%s" with its given properties was not found!', $slide['name']);
-                    }
-                    throw new ResponseTextException($message, $this->getSession());
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks an emotion category teaser element
-     * @param  string                                      $title
-     * @param  string                                      $image
-     * @param  string                                      $link
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkCategoryTeaser($title, $image, $link)
-    {
-        $teasers = $this->findAllEmotionParentElements('category-teaser');
-
-        foreach ($teasers as $teaser) {
-            $locators = array('categoryTeaserImage', 'categoryTeaserLink', 'categoryTeaserHeader');
-            $elements = \Helper::findElements($teaser, $locators, $this->cssLocator);
-
-            $check = array(
-                array($elements['categoryTeaserLink']->getAttribute('href'), $link),
-                array($elements['categoryTeaserLink']->getAttribute('title'), $title),
-                array($elements['categoryTeaserImage']->getAttribute('style'), $image),
-                array($elements['categoryTeaserHeader']->getText(), $title)
-            );
-
-            $result = \Helper::checkArray($check);
-            if ($result === true) {
-                break;
-            }
-
-            if ($teaser == end($teasers)) {
-                $message = sprintf('The category teaser "%s" with its given properties was not found!', $title);
-                throw new ResponseTextException($message, $this->getSession());
-            }
-        }
-    }
-
-    /**
-     * Checks an emotion article element
-     * @param  array                                       $data
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkArticle($data)
-    {
-        $articles = $this->findAllEmotionParentElements('article');
-
-        $title = '';
-
-        foreach ($articles as $article) {
-            $locators = array('articleImage', 'articleTitle', 'articleDescription', 'articlePrice', 'articleMore');
-            $elements = \Helper::findElements($article, $locators, $this->cssLocator);
-
-            $check = array();
-
-            foreach ($data as $row) {
-                switch ($row['property']) {
-                    case 'image':
-                        $check[] = array($elements['articleImage']->getAttribute('style'), $row['value']);
-                        break;
-
-                    case 'title':
-                        $check[] = array($elements['articleImage']->getAttribute('title'), $row['value']);
-                        $check[] = array($elements['articleTitle']->getAttribute('title'), $row['value']);
-                        $check[] = array($elements['articleTitle']->getText(), $row['value']);
-                        $check[] = array($elements['articleMore']->getAttribute('title'), $row['value']);
-                        $title = $row['value'];
-                        break;
-
-                    case 'text':
-                        $check[] = array($elements['articleDescription']->getText(), $row['value']);
-                        break;
-
-                    case 'price':
-                        $check[] = \Helper::toFloat(array($elements['articlePrice']->getText(), $row['value']));
-                        break;
-
-                    case 'link':
-                        $check[] = array($elements['articleImage']->getAttribute('href'), $row['value']);
-                        $check[] = array($elements['articleTitle']->getAttribute('href'), $row['value']);
-                        $check[] = array($elements['articleMore']->getAttribute('href'), $row['value']);
-                        break;
-                }
-            }
-
-            $result = \Helper::checkArray($check);
-            if ($result === true) {
-                break;
-            }
-
-            if ($article == end($articles)) {
-                $message = sprintf('The article "%s" with its given properties was not found!', $title);
-                throw new ResponseTextException($message, $this->getSession());
-            }
-        }
-    }
-
-    /**
-     * Helper function to find all emotion slider and their important tags
-     * @param  string $type
-     * @return array
-     */
-    private function findAllEmotionSlider($type)
-    {
-        $sliders = $this->findAllEmotionParentElements($type, 'emotionSliderElement');
-
-        $return = array();
-
-        foreach ($sliders as $sliderKey => $slider) {
-            switch ($type) {
-                case 'banner':
-                    $return[$sliderKey] = $this->findAllEmotionBannerSliderElements($slider);
-                    break;
-
-                case 'manufacturer':
-                    $return[$sliderKey] = $this->findAllEmotionManufacturerSliderElements($slider);
-                    break;
-
-                case 'article':
-                    $return[$sliderKey] = $this->findAllEmotionArticleSliderElements($slider);
-                    break;
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * Helper function to get all important tags of a banner slider
-     * @param  string $cssClass
-     * @return array
-     */
-    private function findAllEmotionBannerSliderElements(NodeElement $slider)
-    {
-        $return = array();
-
-        $locators = array('sliderSlide');
-        $elements = \Helper::findElements($slider, $locators, $this->cssLocator, true);
-
-        $slides = $elements['sliderSlide'];
-
-        foreach ($slides as $slide) {
-            $locators = array('slideImage', 'slideLink');
-            $elements = \Helper::findElements($slide, $locators, $this->cssLocator, false, false);
-
-            $return[] = $elements;
-        }
-
-        return $return;
-    }
-
-    /**
-     * Helper function to get all important tags of a manufacturer slider
-     * @param  string $cssClass
-     * @return array
-     */
-    private function findAllEmotionManufacturerSliderElements(NodeElement $slider)
-    {
-        $return = array();
-
-        $locators = array('sliderSlide');
-        $elements = \Helper::findElements($slider, $locators, $this->cssLocator, true);
-
-        $slides = $elements['sliderSlide'];
-
-        foreach ($slides as $slide) {
-            $locators = array('slideSupplier');
-            $elements = \Helper::findElements($slide, $locators, $this->cssLocator, true);
-
-            $suppliers = $elements['slideSupplier'];
-
-            foreach ($suppliers as $supplier) {
-                $locators = array('slideImage', 'slideLink');
-                $elements = \Helper::findElements($supplier, $locators, $this->cssLocator, false);
-
-                $return[] = $elements;
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * Helper function to get all important tags of an article slider
-     * @param  string $cssClass
-     * @return array
-     */
-    private function findAllEmotionArticleSliderElements(NodeElement $slider)
-    {
-        $return = array();
-
-        $locators = array('sliderSlide');
-        $elements = \Helper::findElements($slider, $locators, $this->cssLocator, true);
-
-        $slides = $elements['sliderSlide'];
-
-        foreach ($slides as $slide) {
-            $locators = array('slideArticle');
-            $elements = \Helper::findElements($slide, $locators, $this->cssLocator, true);
-
-            $articles = $elements['slideArticle'];
-
-            foreach ($articles as $article) {
-                $locators = array('slideImage', 'slideArticleImageLink', 'slideArticleTitleLink', 'slideArticlePrice');
-                $elements = \Helper::findElements($article, $locators, $this->cssLocator, false);
-
-                $return[] = $elements;
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * Helper function to find all emotion parents elements of one type
-     * @param  string $type
-     * @return array
-     */
-    private function findAllEmotionParentElements($type, $locator = 'emotionElement')
-    {
-        $locators = array($locator => $type);
-        $elements = \Helper::findElements($this, $locators, null, true);
-
-        return $elements[$locator];
     }
 
     /**
@@ -640,19 +169,12 @@ class Homepage extends Page
         $check = array();
 
         foreach ($content as $subCheck) {
-            $checkMethod = sprintf('get%ssToCheck', ucfirst($subCheck['position']));
-
-            if (!method_exists($element, $checkMethod)) {
-                $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
-                \Helper::throwException($message);
+            if(empty($subCheck['position'])) {
+                $this->assertElementItems($element, $content);
+                return;
             }
 
-            $checkValues = $element->$checkMethod();
-
-            if (!is_array($checkValues) || empty($checkValues)) {
-                $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
-                \Helper::throwException($message);
-            }
+            $checkValues = $this->getValuesToCheck($element, $subCheck['position']);
 
             foreach ($checkValues as $key => $checkValue) {
                 //Convert the contentValue to a float if checkValue is also one
@@ -677,6 +199,72 @@ class Homepage extends Page
             \Helper::throwException($message);
         }
     }
+
+    /**
+     * Helper function to assert the items of an element (called from assertElementContent when content array doesn't include a position column)
+     *
+     * @param TraversableElement $element
+     * @param $items
+     */
+    private function assertElementItems(TraversableElement $element, $items)
+    {
+        $positions = array_keys($items[0]);
+
+        foreach($positions as $position)
+        {
+            $checkValues = $this->getValuesToCheck($element, $position);
+            $values = array_column($items, $position);
+
+            foreach($values as &$value) {
+                //Convert the contentValue to a float if checkValue is also one
+                if (is_float($checkValues[0][0])) {
+                    $value = \Helper::toFloat($value);
+                }
+
+                $value = array_fill(0, count($checkValues[0]), $value);
+            }
+
+            $result = \Helper::compareArrays($checkValues, $values);
+
+            if ($result === true) {
+                continue;
+            }
+
+            if($result['key'] >= count($values)) {
+                continue;
+            }
+
+            $message = sprintf('Item %d is different! ("%s" not found in "%s")', $result['key'] + 1, $result['value2'], $result['value']);
+            \Helper::throwException($message);
+        }
+    }
+
+    /**
+     * Helper function to call the elements method to get the values to check of the given position
+     *
+     * @param TraversableElement $element
+     * @param string $position
+     * @return array
+     */
+    private function getValuesToCheck(TraversableElement $element, $position)
+    {
+        $checkMethod = sprintf('get%ssToCheck', ucfirst($position));
+
+        if (!method_exists($element, $checkMethod)) {
+            $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
+            \Helper::throwException($message);
+        }
+
+        $checkValues = $element->$checkMethod();
+
+        if (!is_array($checkValues) || empty($checkValues)) {
+            $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
+            \Helper::throwException($message);
+        }
+
+        return $checkValues;
+    }
+
 
     /**
      * @param string             $formLocatorName
