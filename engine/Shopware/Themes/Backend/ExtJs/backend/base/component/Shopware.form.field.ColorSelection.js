@@ -48,7 +48,8 @@ Ext.define('Shopware.form.field.ColorSelection', {
         var me = this,
             ctx = canvas.getContext('2d'),
             img = new Image(),
-            $canvas = Ext.get(canvas);
+            $canvas = Ext.get(canvas),
+            mouseDown = false;
 
         img.src = me.imageSrc;
 
@@ -56,8 +57,16 @@ Ext.define('Shopware.form.field.ColorSelection', {
             ctx.drawImage(img, 0, 0);
         };
 
+        $canvas.addListener('mousedown', function (event) {
+            mouseDown = event.button === 0;
+        });
+
+        $canvas.addListener('mouseup', function () {
+            mouseDown = false;
+        });
+
         $canvas.addListener('mousemove', function (event) {
-            if (event.button == 0) {
+            if (mouseDown) {
                 me.selectColor(event, ctx);
             }
         });
