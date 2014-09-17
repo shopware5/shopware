@@ -23,6 +23,16 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     private static $template;
 
     /**
+     * @var string
+     */
+    private static $host;
+
+    /**
+     * @var string
+     */
+    private static $basePath;
+
+    /**
      * Initializes context.
      * Every scenario gets it's own context object.
      *
@@ -31,6 +41,8 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     public function __construct(array $parameters)
     {
         self::$template = $parameters['template'];
+        self::$host     = (isset($parameters['host']))      ? $parameters['host']      : '';
+        self::$basePath = (isset($parameters['base_path'])) ? $parameters['base_path'] : '';
 
         $this->useContext('shopware', new ShopwareContext($parameters));
         $this->useContext('account',  new AccountContext($parameters));
@@ -67,8 +79,10 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
 
         //set the template for shop "Deutsch"
         $sql = sprintf(
-            'UPDATE `s_core_shops` SET `template_id`= %d WHERE `id` = 1',
-            $templateId
+            'UPDATE `s_core_shops` SET `template_id`= %d, `host`="%s", `base_path`= "%s" WHERE `id` = 1',
+            $templateId,
+            self::$host,
+            self::$basePath
         );
 
         self::$statickernel->getContainer()->get('db')->exec($sql);

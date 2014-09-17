@@ -21,7 +21,9 @@ class Account extends \Emotion\Account
     /** @var array $namedSelectors */
     public $namedSelectors = array(
         'sendButton'            => array('de' => 'Weiter',                      'en' => 'Continue'),
-        'changePaymentButton'   => array('de' => 'Ändern',                      'en' => 'Change')
+        'changePaymentButton'   => array('de' => 'Ändern',                      'en' => 'Change'),
+        'changePasswordButton'  => array('de' => 'Passwort ändern',             'en' => ''),
+        'changeEmailButton'     => array('de' => 'E-Mail ändern',               'en' => '')
     );
 
     public function checkOrder($orderNumber, $articles, $position = 1)
