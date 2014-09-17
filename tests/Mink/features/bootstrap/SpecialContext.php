@@ -137,10 +137,19 @@ class SpecialContext extends SubContext
     }
 
     /**
+     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)"$/
+     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     */
+    public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
+    {
+        $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
+    }
+
+    /**
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
      */
-    public function iFollowTheLinkOfTheElement($linkName, $elementClass, $position = 1)
+    public function iFollowTheLinkOfTheElementOnPosition($linkName, $elementClass, $position = 1)
     {
         $element = $this->getElement($elementClass);
 
@@ -152,6 +161,11 @@ class SpecialContext extends SubContext
             $element->setParent($page);
 
             $element = $element->setInstance($position);
+        }
+
+        if(empty($linkName)) {
+            $element->click();
+            return;
         }
 
         $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
