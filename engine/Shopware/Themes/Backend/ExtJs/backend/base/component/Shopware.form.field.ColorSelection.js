@@ -16,7 +16,7 @@ Ext.define('Shopware.form.field.ColorSelection', {
 
         me.on('afterrender', function() {
             me.createCanvasElement();
-        })
+        });
     },
 
     rgbToHex: function (r, g, b) {
@@ -70,7 +70,9 @@ Ext.define('Shopware.form.field.ColorSelection', {
     selectColor: function(event, ctx) {
         var me = this,
             bEvent = event.browserEvent,
-            imageData = ctx.getImageData(bEvent.offsetX, bEvent.offsetY, 1, 1),
+            x = (typeof bEvent.offsetX !== 'undefined') ? bEvent.offsetX : bEvent.layerX,
+            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY: bEvent.layerY,
+            imageData = ctx.getImageData(x, y, 1, 1),
             data = imageData.data;
 
         var value = '#' + me.rgbToHex(data[0], data[1], data[2]);
