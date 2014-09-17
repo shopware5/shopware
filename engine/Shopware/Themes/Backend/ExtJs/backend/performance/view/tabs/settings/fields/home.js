@@ -124,14 +124,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
         ];
     },
 
-    validRenderer: function(value) {
-        var me = this;
+    validRenderer: function(value, metaData, record) {
+        var me = this,
+            sprite = 0;
 
-        if (value === true) {
-            return '<div class="sprite-tick" style="width:16px; height:16px;"></div>';
-        } else {
-            return '<div class="sprite-cross" style="width:16px; height:16px;"></div>';
+        if (value === 2) {
+            sprite = 'sprite-exclamation';
+        } else if (value === 1) {
+            sprite = 'sprite-tick';
+        } else if (value === 0) {
+            sprite = 'sprite-cross';
         }
+
+        return Ext.String.format('<div class="[0]" title="[1]" style="width:16px; height:16px;"></div>', sprite, record.get('description'));
     }
 
 
