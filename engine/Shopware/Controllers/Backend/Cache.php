@@ -128,6 +128,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->clearTemplateCache();
         }
         if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
+            $this->cacheManager->clearHttpCache();
             $this->cacheManager->clearThemeCache();
         }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
