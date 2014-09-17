@@ -7,8 +7,8 @@ default:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Emotion
-                element: Emotion
+                page: Page\Emotion
+                element: Element\Emotion
         Shopware\Behat\ShopwareExtension\Extension: ~
         Behat\MinkExtension\Extension:
             ## defined in buildscript
@@ -30,8 +30,8 @@ emotion:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Emotion
-                element: Emotion
+                page: Page\Emotion
+                element: Element\Emotion
     context:
         parameters:
             template: "emotion_orange"
@@ -42,8 +42,8 @@ responsive:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Responsive
-                element: Responsive
+                page: Page\Responsive
+                element: Element\Responsive
     context:
         parameters:
             template: "Responsive"
