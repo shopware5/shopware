@@ -1,5 +1,5 @@
 <?php
-namespace Emotion;
+namespace Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 

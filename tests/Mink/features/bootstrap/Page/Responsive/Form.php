@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class Form extends \Emotion\Form
+class Form extends \Page\Emotion\Form
 {
     public $cssLocator = array(
         'captchaPlaceholder' => 'div.captcha--placeholder',

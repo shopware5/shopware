@@ -1,5 +1,5 @@
 <?php
-namespace Emotion;
+namespace Page\Emotion;
 
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Responsive;
+namespace Page\Responsive;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
     Behat\Behat\Context\Step;
 
-class Homepage extends \Emotion\Homepage
+class Homepage extends \Page\Emotion\Homepage
 {
     public $cssLocator = array(
         'contentBlock' => 'section.content-main > div.content-main--inner',

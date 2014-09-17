@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class Paging extends \Emotion\Paging
+class Paging extends \Element\Emotion\Paging
 {
     /**
      * @var array $selector

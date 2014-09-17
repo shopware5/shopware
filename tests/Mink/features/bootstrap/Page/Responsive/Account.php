@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class Account extends \Emotion\Account
+class Account extends \Page\Emotion\Account
 {
     public $cssLocator = array(
         'identifiers' => array(
