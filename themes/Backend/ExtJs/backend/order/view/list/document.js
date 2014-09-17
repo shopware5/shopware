@@ -153,13 +153,11 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
      */
     nameColumn: function(value, metaData, record, rowIndex, colIndex, store, view) {
         var helper = new Ext.dom.Helper,
-            display = '',
-            type = record.getDocType().first();
-
-        if (record.get('typeId') === 4) {
+            type = record.getDocType().first(),
             display = type.get('name');
-        } else {
-            display = type.get('name') + ' ' + Ext.String.leftPad(record.get('documentId'), 8, '0');
+
+        if (record.get('documentId')) {
+            display += ' ' + Ext.String.leftPad(record.get('documentId'), 8, '0');
         }
 
         var spec = {
