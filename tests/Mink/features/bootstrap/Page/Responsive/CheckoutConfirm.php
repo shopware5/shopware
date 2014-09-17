@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class CheckoutConfirm extends \Emotion\CheckoutConfirm
+class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
 {
     public $cssLocator = array(
         'pageIdentifier'  => 'div#confirm--content',

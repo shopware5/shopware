@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class ArticleBox extends \Emotion\ArticleBox
+class ArticleBox extends \Element\Emotion\ArticleBox
 {
     /**
      * @var array $selector

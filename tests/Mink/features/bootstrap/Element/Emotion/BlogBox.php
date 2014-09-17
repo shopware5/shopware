@@ -1,6 +1,6 @@
 <?php
 
-namespace Emotion;
+namespace Element\Emotion;
 
 require_once 'tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php';
 

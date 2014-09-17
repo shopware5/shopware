@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class CheckoutCart extends \Emotion\CheckoutCart
+class CheckoutCart extends \Page\Emotion\CheckoutCart
 {
     public $cssLocator = array(
         'aggregationAmounts' => 'ul.aggregation--list',

@@ -1,8 +1,8 @@
 <?php
 
-namespace Emotion;
+namespace Page\Emotion;
 
-use Behat\Mink\Element\Element;
+use Element\MultipleElement;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
@@ -614,10 +614,10 @@ class Homepage extends Page
 
     /**
      * Global method to check the count of an MultipleElement
-     * @param \MultipleElement $elements
+     * @param MultipleElement $elements
      * @param int              $count
      */
-    public function assertElementCount(\MultipleElement $elements, $count = 0)
+    public function assertElementCount(MultipleElement $elements, $count = 0)
     {
         if ($count !== count($elements)) {
             $message = sprintf(

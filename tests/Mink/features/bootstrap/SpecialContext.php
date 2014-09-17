@@ -1,5 +1,7 @@
 <?php
 
+use Page\Emotion\Homepage;
+use Element\MultipleElement;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Context\Step\Then;
@@ -65,7 +67,7 @@ class SpecialContext extends SubContext
      */
     public function iShouldSeeElementsOfType($count, $elementClass)
     {
-        /** @var \Emotion\Homepage $page */
+        /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
         /** @var MultipleElement $elements */
@@ -97,7 +99,7 @@ class SpecialContext extends SubContext
      */
     public function theElementOnPositionShouldHaveTheContent($elementClass, $position, TableNode $content)
     {
-        /** @var \Emotion\Homepage $page */
+        /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
         $element = $this->getElement($elementClass);
@@ -143,7 +145,7 @@ class SpecialContext extends SubContext
         $element = $this->getElement($elementClass);
 
         if ($element instanceof MultipleElement) {
-            /** @var \Emotion\Homepage $page */
+            /** @var Homepage $page */
             $page = $this->getPage('Homepage');
 
             /** @var MultipleElement $element */

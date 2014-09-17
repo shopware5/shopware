@@ -1,5 +1,7 @@
 <?php
 
+namespace Element;
+
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
 use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
@@ -7,7 +9,7 @@ use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
 /**
  * Class MultipleElement
  */
-abstract class MultipleElement extends Element implements Countable, Iterator
+abstract class MultipleElement extends Element implements \Countable, \Iterator
 {
     /** @var  integer */
     protected $position;

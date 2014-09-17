@@ -1,5 +1,6 @@
 <?php
 
+use Page\Emotion\Homepage;
 use Behat\Gherkin\Node\TableNode;
 
 require_once 'SubContext.php';
@@ -130,7 +131,7 @@ class ShopwareContext extends SubContext
      */
     public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
     {
-        /** @var \Emotion\Homepage $page */
+        /** @var Homepage $page */
         $page = $this->getPage('Homepage');
         $controller = $page->getController();
 

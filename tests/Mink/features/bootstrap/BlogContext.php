@@ -1,5 +1,9 @@
 <?php
 
+use Page\Emotion\Blog;
+use Element\MultipleElement;
+use Element\Emotion\BlogBox;
+
 require_once 'SubContext.php';
 
 class BlogContext extends SubContext
@@ -18,7 +22,7 @@ class BlogContext extends SubContext
      */
     public function iClickToReadTheBlogArticleOnPosition($position)
     {
-        /** @var \Emotion\Blog $page */
+        /** @var Blog $page */
         $page = $this->getPage('Blog');
         $language = Helper::getCurrentLanguage($page);
 
@@ -26,9 +30,8 @@ class BlogContext extends SubContext
         $blogBoxes = $this->getElement('BlogBox');
         $blogBoxes->setParent($page);
 
-        /** @var \Emotion\BlogBox $blogBox */
+        /** @var BlogBox $blogBox */
         $blogBox = $blogBoxes->setInstance($position);
         $blogBox->clickActionLink('readMore', $language);
     }
-
 }
