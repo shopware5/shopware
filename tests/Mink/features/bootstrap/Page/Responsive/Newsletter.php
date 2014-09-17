@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class Newsletter extends \Emotion\Newsletter
+class Newsletter extends \Page\Emotion\Newsletter
 {
     public $cssLocator = array(
         'newsletterForm' => 'div.newsletter--form > form'

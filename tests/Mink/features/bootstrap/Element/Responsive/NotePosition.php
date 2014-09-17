@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class NotePosition extends \Emotion\NotePosition
+class NotePosition extends \Element\Emotion\NotePosition
 {
     /** @var array $selector */
     protected $selector = array('css' => 'div.note--item');

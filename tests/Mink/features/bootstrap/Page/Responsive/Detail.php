@@ -1,10 +1,10 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
 use Behat\Mink\Driver\SahiDriver;
 use Behat\Mink\Element\NodeElement;
 
-class Detail extends \Emotion\Detail
+class Detail extends \Page\Emotion\Detail
 {
     public $cssLocator = array(
         'productRating' => 'div.product--rating-container > a.product--rating-link',

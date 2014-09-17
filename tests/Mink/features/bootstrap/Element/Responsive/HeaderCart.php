@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class HeaderCart extends \Emotion\HeaderCart
+class HeaderCart extends \Element\Emotion\HeaderCart
 {
     /**
      * @var array $selector

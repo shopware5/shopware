@@ -1,10 +1,12 @@
 <?php
 
-namespace Emotion;
+namespace Element\Emotion;
+
+use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class CartPosition extends \MultipleElement
+class CartPosition extends MultipleElement
 {
     /**
      * @var array $selector

@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class LanguageSwitcher extends \Emotion\LanguageSwitcher
+class LanguageSwitcher extends \Element\Emotion\LanguageSwitcher
 {
     /**
      * @var array $selector

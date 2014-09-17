@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class CartPosition extends \Emotion\CartPosition
+class CartPosition extends \Element\Emotion\CartPosition
 {
     /**
      * @var array $selector

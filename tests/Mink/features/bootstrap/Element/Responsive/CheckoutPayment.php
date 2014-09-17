@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class CheckoutPayment extends \Emotion\CheckoutPayment
+class CheckoutPayment extends \Element\Emotion\CheckoutPayment
 {
     /**
      * @var array $selector

@@ -32,20 +32,39 @@ class AccountContext extends SubContext
     }
 
     /**
+     * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)"$/
      * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
-    public function iChangeMyEmailWithPasswordToWithConfirmation($password, $email, $emailConfirmation)
+    public function iChangeMyEmailWithPasswordToWithConfirmation($password, $email, $emailConfirmation = null)
     {
         $this->getPage('Account')->changeEmail($password, $email, $emailConfirmation);
     }
 
     /**
+     * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)"$/
      * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
-    public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation)
+    public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation = null)
     {
         $this->getPage('Account')->changePassword($currentPassword, $password, $passwordConfirmation);
     }
+
+    /**
+     * @Given /^I change my billing address:$/
+     */
+    public function iChangeMyBillingAddress(TableNode $table)
+    {
+        $this->getPage('Account')->changeBilling($table->getHash());
+    }
+
+    /**
+     * @Given /^I change my shipping address:$/
+     */
+    public function iChangeMyShippingAddress(TableNode $table)
+    {
+        $this->getPage('Account')->changeShipping($table->getHash());
+    }
+
 
     /**
      * @Given /^the "([^"]*)" address should be "([^"]*)"$/

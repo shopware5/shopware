@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class BlogBox extends \Emotion\BlogBox
+class BlogBox extends \Element\Emotion\BlogBox
 {
     /**
      * @var array $selector

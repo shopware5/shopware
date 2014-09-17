@@ -1,6 +1,10 @@
 <?php
 
+use Page\Emotion\Listing;
+use Element\MultipleElement;
+use Element\Emotion\ArticleBox;
 use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class ListingContext extends SubContext
@@ -54,14 +58,14 @@ class ListingContext extends SubContext
     {
         $properties = $properties->getHash();
 
-        /** @var \Emotion\Listing $page */
+        /** @var Listing $page */
         $page = $this->getPage('Listing');
 
         /** @var MultipleElement $articleBoxes */
         $articleBoxes = $this->getElement('ArticleBox');
         $articleBoxes->setParent($page);
 
-        /** @var \Emotion\ArticleBox $articleBox */
+        /** @var ArticleBox $articleBox */
         $articleBox = $articleBoxes->setInstance($position);
         $articleBox->checkProperties($properties);
     }
@@ -71,7 +75,7 @@ class ListingContext extends SubContext
      */
     public function iOrderTheArticleOnPosition($position)
     {
-        /** @var \Emotion\Listing $page */
+        /** @var Listing $page */
         $page = $this->getPage('Listing');
         $language = Helper::getCurrentLanguage($page);
 
@@ -79,7 +83,7 @@ class ListingContext extends SubContext
         $articleBoxes = $this->getElement('ArticleBox');
         $articleBoxes->setParent($page);
 
-        /** @var \Emotion\ArticleBox $articleBox */
+        /** @var ArticleBox $articleBox */
         $articleBox = $articleBoxes->setInstance($position);
         $articleBox->clickActionLink('order', $language);
     }
