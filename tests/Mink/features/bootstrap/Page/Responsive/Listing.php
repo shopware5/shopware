@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class Listing extends \Emotion\Listing
+class Listing extends \Page\Emotion\Listing
 {
     public $cssLocator = array(
         'view' => array(

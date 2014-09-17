@@ -1,5 +1,5 @@
 <?php
-namespace Emotion;
+namespace Page\Emotion;
 
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Driver\SahiDriver;

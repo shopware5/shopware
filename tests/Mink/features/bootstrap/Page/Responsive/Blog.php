@@ -1,7 +1,7 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
-class Blog extends \Emotion\Blog
+class Blog extends \Page\Emotion\Blog
 {
 
 }

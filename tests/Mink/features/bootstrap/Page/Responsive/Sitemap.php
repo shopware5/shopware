@@ -1,9 +1,9 @@
 <?php
-namespace Responsive;
+namespace Page\Responsive;
 
 use Behat\Behat\Context\Step;
 
-class Sitemap extends \Emotion\Sitemap
+class Sitemap extends \Page\Emotion\Sitemap
 {
     public $cssLocator = array(
         'sitemapGroups' => 'div.sitemap--content div.sitemap--category',

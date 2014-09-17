@@ -1,6 +1,10 @@
 <?php
 
+use Page\Emotion\CheckoutCart;
+use Element\MultipleElement;
+use Element\Emotion\ArticleBox;
 use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class CheckoutContext extends SubContext
@@ -48,15 +52,15 @@ class CheckoutContext extends SubContext
      */
     public function iRemoveTheArticleOnPosition($position)
     {
-        /** @var \Emotion\CheckoutCart $page */
+        /** @var CheckoutCart $page */
         $page = $this->getPage('CheckoutCart');
         $language = Helper::getCurrentLanguage($page);
 
-        /** @var MultipleElement $articleBoxes */
+        /** @var MultipleElement $cartPositions */
         $cartPositions = $this->getElement('CartPosition');
         $cartPositions->setParent($page);
 
-        /** @var \Emotion\ArticleBox $articleBox */
+        /** @var ArticleBox $cartPosition */
         $cartPosition = $cartPositions->setInstance($position);
         $cartPosition->clickActionLink('remove', $language);
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
-class AccountPayment extends \Emotion\AccountPayment
+class AccountPayment extends \Element\Emotion\AccountPayment
 {
     /**
      * @var array $selector

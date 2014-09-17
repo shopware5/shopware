@@ -21,6 +21,8 @@ default:
     context:
         parameters:
             template: "emotion_orange"
+            #host: "localhost"
+            #base_path: "/shopware"
 
 emotion:
     filters:

@@ -1,6 +1,10 @@
 <?php
 
+use Page\Emotion\Note;
+use Element\MultipleElement;
+use Element\Emotion\NotePosition;
 use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class NoteContext extends SubContext
@@ -45,7 +49,7 @@ class NoteContext extends SubContext
     {
         $articles = $articles->getHash();
 
-        /** @var \Emotion\Note $page */
+        /** @var Note $page */
         $page = $this->getPage('Note');
 
         /** @var MultipleElement $notePositions */
@@ -57,7 +61,7 @@ class NoteContext extends SubContext
 
     private function clickActionLink($position, $name)
     {
-        /** @var \Emotion\Note $page */
+        /** @var Note $page */
         $page = $this->getPage('Note');
         $language = Helper::getCurrentLanguage($page);
 
@@ -65,7 +69,7 @@ class NoteContext extends SubContext
         $notePositions = $this->getElement('NotePosition');
         $notePositions->setParent($page);
 
-        /** @var \Emotion\NotePosition $notePosition */
+        /** @var NotePosition $notePosition */
         $notePosition = $notePositions->setInstance($position);
         $notePosition->clickActionLink($name, $language);
     }

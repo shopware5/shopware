@@ -1,6 +1,6 @@
 <?php
 
-namespace Emotion;
+namespace Element\Emotion;
 
 class CheckoutShipping extends AccountShipping
 {

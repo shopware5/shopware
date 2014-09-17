@@ -1,5 +1,7 @@
 <?php
 
+use Page\Emotion\Homepage;
+use Element\MultipleElement;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Context\Step\Then;
@@ -65,7 +67,7 @@ class SpecialContext extends SubContext
      */
     public function iShouldSeeElementsOfType($count, $elementClass)
     {
-        /** @var \Emotion\Homepage $page */
+        /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
         /** @var MultipleElement $elements */
@@ -97,7 +99,7 @@ class SpecialContext extends SubContext
      */
     public function theElementOnPositionShouldHaveTheContent($elementClass, $position, TableNode $content)
     {
-        /** @var \Emotion\Homepage $page */
+        /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
         $element = $this->getElement($elementClass);
@@ -135,21 +137,35 @@ class SpecialContext extends SubContext
     }
 
     /**
+     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)"$/
+     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     */
+    public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
+    {
+        $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
+    }
+
+    /**
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
      */
-    public function iFollowTheLinkOfTheElement($linkName, $elementClass, $position = 1)
+    public function iFollowTheLinkOfTheElementOnPosition($linkName, $elementClass, $position = 1)
     {
         $element = $this->getElement($elementClass);
 
         if ($element instanceof MultipleElement) {
-            /** @var \Emotion\Homepage $page */
+            /** @var Homepage $page */
             $page = $this->getPage('Homepage');
 
             /** @var MultipleElement $element */
             $element->setParent($page);
 
             $element = $element->setInstance($position);
+        }
+
+        if(empty($linkName)) {
+            $element->click();
+            return;
         }
 
         $language = Helper::getCurrentLanguage($this->getPage('Homepage'));

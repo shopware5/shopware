@@ -3,12 +3,11 @@ Feature: Successful changes of login data
 
     Background:
         Given I am on the page "Account"
-    #And print last response
 
     @password @login
     Scenario Outline: I can change my password
         Given I log in successful as "Max Mustermann" with email "test@example.com" and password "<password>"
-        When  I change my password from "<password>" to "<new_password>" with confirmation "<new_password>"
+        When  I change my password from "<password>" to "<new_password>"
         Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
 
         When  I log me out
@@ -24,7 +23,7 @@ Feature: Successful changes of login data
     @email @login
     Scenario Outline: I can change my email
         Given I log in successful as "Max Mustermann" with email "<email>" and password "shopware"
-        When  I change my email with password "shopware" to "<new_email>" with confirmation "<new_email>"
+        When  I change my email with password "shopware" to "<new_email>"
         Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
 
         When  I log me out
@@ -41,7 +40,7 @@ Feature: Successful changes of login data
     Scenario Outline: I can change my billing address
         Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
         When  I follow "Rechnungsadresse ändern"
-        And   I submit the form "billingForm" on page "Account" with:
+        And   I change my billing address:
             | field         | register[personal] | register[billing] |
             | customer_type | <type>             |                   |
             | salutation    | <salutation>       |                   |

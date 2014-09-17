@@ -1,6 +1,6 @@
 <?php
 
-namespace Emotion;
+namespace Element\Emotion;
 
 use  Behat\Mink\Exception\ResponseTextException;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Responsive;
+namespace Element\Responsive;
 
 use  Behat\Mink\Exception\ResponseTextException;
 
-class AccountBilling extends \Emotion\AccountBilling
+class AccountBilling extends \Element\Emotion\AccountBilling
 {
     /**
      * @var array $selector
