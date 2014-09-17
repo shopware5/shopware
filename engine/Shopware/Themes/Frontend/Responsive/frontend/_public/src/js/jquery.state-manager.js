@@ -1,4 +1,4 @@
-;(function($, window, document, undefined) {
+;(function ($, window, document, undefined) {
     "use strict";
 
     /**
@@ -44,35 +44,35 @@
      *     }]);
      * ```
      */
-    window.StateManager = (function() {
+    window.StateManager = (function () {
         var breakPoints,
 
-            // Event observer
+        // Event observer
             evtParent = $('body'),
 
-            // Collection for all registered listeners
+        // Collection for all registered listeners
             listeners = [],
 
-            // Collection that corresponds to @{link listeners} and holds the current on / off state.
+        // Collection that corresponds to @{link listeners} and holds the current on / off state.
             listenersInit = [],
 
-            // Browser specific font size, used for converting EM based values to it's corresponding pixel value.
+        // Browser specific font size, used for converting EM based values to it's corresponding pixel value.
             defaultFontSize = 16, // todo@stp - Calculate the browser default font-size instead of using a hard-coded one
             resizeWidth = 0,
 
-            // Caches the current and previous state.
+        // Caches the current and previous state.
             prev = '',
             curr = '',
 
-            // `matchMedia` small polyfill
+        // `matchMedia` small polyfill
             matchMedia = window.matchMedia || window.msMatchMedia,
 
-            // `requestAnimationFrame` polyfill, which supports the Page Visiblity API
-            requestAnimationFrame = (function() {
+        // `requestAnimationFrame` polyfill, which supports the Page Visiblity API
+            requestAnimationFrame = (function () {
                 return window.requestAnimationFrame    ||
                     window.webkitRequestAnimationFrame ||
                     window.mozRequestAnimationFrame    ||
-                    function( callback ){
+                    function (callback) {
                         window.setTimeout(callback, 1000 / 60);
                     };
             })(),
@@ -85,14 +85,14 @@
          *
          * @returns {Number} Window width in pixels.
          */
-        var getWindowWidth = function() {
+        var getWindowWidth = function () {
             var w = 0;
 
             // IE condition due to the weird quirks mode
-            if(typeof window.innerWidth !== 'number') {
+            if (typeof window.innerWidth !== 'number') {
 
                 // Handle the IE implementation *sigh*
-                if(document.documentElement.clientWidth !== 0) {
+                if (document.documentElement.clientWidth !== 0) {
                     // Strict mode
                     w = document.documentElement.clientWidth;
                 } else {
@@ -112,14 +112,14 @@
          *
          * @returns {Number} Window height in pixels.
          */
-        var getWindowHeight = function() {
+        var getWindowHeight = function () {
             var h = 0;
 
             // IE condition due to the weird quirks mode
-            if(typeof window.innerHeight !== 'number') {
+            if (typeof window.innerHeight !== 'number') {
 
                 // Handle the IE implementation *sigh*
-                if(document.documentElement.clientHeight !== 0) {
+                if (document.documentElement.clientHeight !== 0) {
                     // Strict mode
                     h = document.documentElement.clientHeight;
                 } else {
@@ -137,10 +137,10 @@
          * Self-calling method that checks the browser width and delegate
          * if it detects a change on the width.
          */
-        var checkResize = function() {
+        var checkResize = function () {
             var width = getWindowWidth();
 
-            if(width !== resizeWidth) {
+            if (width !== resizeWidth) {
                 checkBreakpoints(width);
             }
 
@@ -153,28 +153,28 @@
          *
          * @param {Number} width - Window width in pixels.
          */
-        var checkBreakpoints = function(width) {
+        var checkBreakpoints = function (width) {
             var foundBreakpoint = false,
                 i = 0,
                 len = breakPoints.length;
 
-            for(; i < len; i++) {
+            for (; i < len; i++) {
                 var activeBreakpoint = breakPoints[i];
 
-                if(width >= convertEmToPx(activeBreakpoint.enter) && width <= convertEmToPx(activeBreakpoint.exit)) {
+                if (width >= convertEmToPx(activeBreakpoint.enter) && width <= convertEmToPx(activeBreakpoint.exit)) {
                     foundBreakpoint = true;
                     break;
                 }
             }
 
-            if(foundBreakpoint && curr !== breakPoints[i].type) {
+            if (foundBreakpoint && curr !== breakPoints[i].type) {
                 var evtName;
 
                 prev = curr;
                 curr = breakPoints[i].type;
 
                 // Fire event on the {@link evtParent}
-                if(prev && prev.length) {
+                if (prev && prev.length) {
                     evtName = (prev === '*' ? 'Wildcard' : capitaliseFirstLetter(prev));
                     evtParent.trigger('exit' + evtName);
                 }
@@ -196,12 +196,12 @@
          * @param {String} val - EM value which should be converted or just pixel values
          * @returns {String|Number} Either the incoming value, if it's not a EM value or the converted value.
          */
-        var convertEmToPx = function(val) {
-            if(val.substr(val.length - 2, 2) === 'px') {
-               return parseFloat(val.substr(0, val.length -2));
+        var convertEmToPx = function (val) {
+            if (val.substr(val.length - 2, 2) === 'px') {
+                return parseFloat(val.substr(0, val.length - 2));
             }
 
-            return parseFloat(val.substr(0, val.length -2)) * defaultFontSize;
+            return parseFloat(val.substr(0, val.length - 2)) * defaultFontSize;
         };
 
         /**
@@ -210,7 +210,7 @@
          * @param {String} str String which should be converted.
          * @returns {String} Converted string.
          */
-        var capitaliseFirstLetter = function(str) {
+        var capitaliseFirstLetter = function (str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
 
@@ -220,33 +220,33 @@
          *
          * The method supports the usage of wildcard characters.
          */
-        var cycleThroughBreakpointListeners = function() {
+        var cycleThroughBreakpointListeners = function () {
             var enterFnArr = [],
                 exitFnArr = [],
                 i = 0,
                 len = listeners.length;
 
-            for(; i < len; i++) {
+            for (; i < len; i++) {
                 var activeListener = listeners[i],
                     enterFn = activeListener.enter || undefined,
                     exitFn = activeListener.exit || undefined;
 
                 // Wildcard support
-                if(activeListener.type === '*') {
-                    if(enterFn !== undefined) {
+                if (activeListener.type === '*') {
+                    if (enterFn !== undefined) {
                         enterFnArr.push(enterFn);
                     }
 
-                    if(exitFn !== undefined) {
+                    if (exitFn !== undefined) {
                         exitFnArr.push(exitFn);
                     }
                 } else if (testForCurrentBreakpoint(activeListener.type)) {
-                    if(enterFn !== undefined && !listenersInit[i]) {
+                    if (enterFn !== undefined && !listenersInit[i]) {
                         enterFnArr.push(enterFn);
                     }
                     listenersInit[i] = true;
                 } else {
-                    if(exitFn !== undefined && listenersInit[i]) {
+                    if (exitFn !== undefined && listenersInit[i]) {
                         exitFnArr.push(exitFn);
                     }
                     listenersInit[i] = false;
@@ -257,12 +257,12 @@
             var evtObj = { entering: curr, exiting: prev };
 
             // Loop through exit function to call
-            for(var j = 0; j < exitFnArr.length; j++) {
+            for (var j = 0; j < exitFnArr.length; j++) {
                 fireCallback(exitFnArr[j], evtObj);
             }
 
             // ...then loop through enter functions to call
-            for(var k = 0; k < enterFnArr.length; k++) {
+            for (var k = 0; k < enterFnArr.length; k++) {
                 fireCallback(enterFnArr[k], evtObj);
             }
         };
@@ -274,8 +274,8 @@
          * @param {Function} fn - Function which should be called
          * @param {Object} evtObj - Event object which will be passed to the function.
          */
-        var fireCallback = function(fn, evtObj) {
-            window.setTimeout(function() {
+        var fireCallback = function (fn, evtObj) {
+            window.setTimeout(function () {
                 fn.call(null, evtObj);
             }, 25);
         };
@@ -289,22 +289,22 @@
          * @param {String|Array} type Type which should be used for testing.
          * @returns {Boolean} Truthy, if the type matches, otherwise falsy.
          */
-        var testForCurrentBreakpoint = function(type) {
+        var testForCurrentBreakpoint = function (type) {
             var ret = false;
 
             // We're dealing with a mulitple breakpoint listener
-            if(type instanceof Array) {
-                if(type.join().indexOf(curr) >= 0) {
+            if (type instanceof Array) {
+                if (type.join().indexOf(curr) >= 0) {
                     ret = true;
                 }
 
             // ...wildcard found
-            } else if(type === '*') {
+            } else if (type === '*') {
                 ret = true;
 
             // ..just a single breakpoint listener
-            } else if(typeof type === 'string') {
-                if(type === curr) {
+            } else if (typeof type === 'string') {
+                if (type === curr) {
                     ret = true;
                 }
             }
@@ -318,18 +318,16 @@
          *
          * @param {Object} listener Listener object which should be added.
          */
-        var registerListenerToStack = function(listener) {
+        var registerListenerToStack = function (listener) {
             var type = listener.type,
-                enterFn = listener.enter || undefined;
+                enterFn = listener.enter || undefined,
+                isCurrentBreakpoint = testForCurrentBreakpoint(type);
 
             listeners.push(listener);
-            listenersInit.push(false);
+            listenersInit.push(isCurrentBreakpoint);
 
-            if(testForCurrentBreakpoint(type)) {
-                if(enterFn !== undefined) {
-                    enterFn.call(null, { entering: curr, exiting: prev });
-                }
-                listenersInit[(listeners.length - 1)] = true;
+            if (isCurrentBreakpoint && enterFn !== undefined) {
+                enterFn.call(null, { entering: curr, exiting: prev });
             }
         };
 
@@ -341,15 +339,15 @@
              *
              * @param {Object|Array} userBreakPoints - User defined breakpoints.
              */
-            init: function(userBreakPoints) {
-                breakPoints = userBreakPoints;
+            init: function (userBreakPoints) {
+                breakPoints = (userBreakPoints instanceof Array) ? userBreakPoints : Array.prototype.slice.call(arguments);
 
                 // Create getter methods for the different types
-                $.each((breakPoints instanceof Array ? breakPoints : [ breakPoints ]), function() {
+                $.each(breakPoints, function () {
                     var type = this.type,
                         prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
 
-                    ret['is' + prettyType] = function() {
+                    ret['is' + prettyType] = function () {
                         return (type === curr);
                     };
                 });
@@ -362,23 +360,24 @@
              *
              * @param {Object|Array} breakpoint One or more breakpoints.
              */
-            add: function(breakpoint) {
+            add: function (breakpoint) {
+                var breakpointArr = (breakpoint instanceof Array) ? breakpoint : Array.prototype.slice.call(arguments);
 
                 // Create getter methods for the different types
-                $.each((breakpoint instanceof Array ? breakpoint : [ breakpoint ]), function() {
+                $.each(breakpointArr, function () {
                     var type = this.type,
                         prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type)),
                         conflict = false;
 
-                    $.each(breakPoints, function(i, item) {
+                    $.each(breakPoints, function (i, item) {
                         return !(item.type === type && (conflict = true));
                     });
 
-                    if(conflict) {
+                    if (conflict) {
                         throw new Error('Multiple breakpoints for the type "' + type + '" detected.');
                     }
 
-                    ret['is' + prettyType] = function() {
+                    ret['is' + prettyType] = function () {
                         return (type === curr);
                     };
 
@@ -392,12 +391,12 @@
              * @param {String} type Type which should be removed
              * @returns {Boolean}
              */
-            remove: function(type) {
-                $.each(breakPoints, function(i, item) {
+            remove: function (type) {
+                $.each(breakPoints, function (i, item) {
                     var itemType = item.type,
                         prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
 
-                    if(type === itemType) {
+                    if (type === itemType) {
                         breakPoints.splice(i, 1);
                         delete ret['is' + prettyType];
                     }
@@ -413,16 +412,13 @@
              *
              * @param {Object|Array} listener
              */
-            registerListener: function(listener) {
-                if(!(listener instanceof Array)) {
-                    registerListenerToStack(listener);
-                } else {
-                    var i = 0,
-                        len = listener.length;
+            registerListener: function (listener) {
+                var listenerArr = listener instanceof Array ? listener : Array.prototype.slice.call(arguments),
+                    len = listenerArr.length,
+                    i = 0;
 
-                    for(; i < len; i++) {
-                        registerListenerToStack(listener[i]);
-                    }
+                for (; i < len; i++) {
+                    registerListenerToStack(listener[i]);
                 }
             },
 
@@ -431,7 +427,7 @@
              *
              * @returns {String}
              */
-            getCurrent: function() {
+            getCurrent: function () {
                 return curr;
             },
 
@@ -441,7 +437,7 @@
              * @param {jQuery} el jQuery object of the element which should fire the events.
              * @returns {Boolean}
              */
-            setEventParent: function(el) {
+            setEventParent: function (el) {
                 evtParent = el;
                 return true;
             },
@@ -451,7 +447,7 @@
              *
              * @returns {Boolean} Truthy, if the device is in portrait mode, otherwise falsy
              */
-            isPortraitMode: function() {
+            isPortraitMode: function () {
                 return matchMedia('(orientation: portrait)').matches;
             },
 
@@ -460,7 +456,7 @@
              *
              * @returns {Boolean} Truthy, if the device is in landscape mode, otherwise falsy
              */
-            isLandscapeMode: function() {
+            isLandscapeMode: function () {
                 return matchMedia('(orientation: landscape)').matches;
             },
 
@@ -469,7 +465,7 @@
              *
              * @returns {Number} The width of the viewport in pixels.
              */
-            getViewportWidth: function() {
+            getViewportWidth: function () {
                 return getWindowWidth();
             },
 
@@ -478,7 +474,7 @@
              *
              * @returns {Number} The height of the viewport in pixels.
              */
-            getViewportHeight: function() {
+            getViewportHeight: function () {
                 return getWindowHeight();
             },
 
@@ -488,7 +484,7 @@
              *
              * @returns {Number} The device pixel ratio.
              */
-            getDevicePixelRatio: function() {
+            getDevicePixelRatio: function () {
                 return ('devicePixelRatio' in window && window.devicePixelRatio) || 1;
             }
         };
