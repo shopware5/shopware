@@ -66,7 +66,7 @@
                                                 {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count}
                                             </a>
                                         {else}
-                                            {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count}
+                                            {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count microData=false}
                                         {/if}
                                     </span>
                                 {/block}
@@ -97,6 +97,13 @@
                         {block name='frontend_blog_detail_tags'}
                             <div class="blog--detail-tags block">
                                 {if $sArticle.tags}
+
+                                    {$tags=''}
+                                    {foreach $sArticle.tags as $tag}
+                                        {$tags="{$tags}{$tag.name}{if !$tag@last},{/if}"}
+                                    {/foreach}
+                                    <meta itemprop="keywords" content="{$tags}">
+
                                     <span class="is--bold">{s name="BlogInfoTags"}{/s}:</span>
                                     {foreach $sArticle.tags as $tag}
                                         <a href="{url controller=blog sCategory=$sArticle.categoryId sFilterTags=$tag.name}" title="{$tag.name|escape}">{$tag.name}</a>{if !$tag@last}, {/if}
