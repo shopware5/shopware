@@ -36,7 +36,7 @@ use         Shopware\Components\Model\ModelEntity,
  * - Categories => Shopware\Models\Category\Category [1:n] [s_categories]
  * - Payments => Shopware\Models\Payment\Payment [1:n] [s_core_paymentmeans]
  * - Holidays => Shopware\Models\Shipping\Holiday [1:n] [s_premium_holidays]
- * - Shop => Shopware\Models\Shop\Shop [1:1] [s_core_multilanguage]
+ * - Shop => Shopware\Models\Shop\Shop [1:1] [s_core_shops]
  * - CustomerGroup => Shopware\Models\Customer\Group [1:1] [s_core_customergroups]
  * - ShippingCosts => Shopware\Models\Dispatch\ShippingCosts [1:n] [s_premium_shippingcosts]
  * </code>

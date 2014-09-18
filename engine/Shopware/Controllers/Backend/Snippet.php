@@ -523,7 +523,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if ($format=="csv" || $format=="csvexcel") {
             $sql = "
             SELECT DISTINCT s.shopID as shopId, l.id as localeId, l.locale
-            FROM s_core_snippets s, s_core_locales l, s_core_multilanguage o
+            FROM s_core_snippets s, s_core_locales l, s_core_shops o
             WHERE l.id = s.localeID
             AND o.id = s.shopID
             ORDER BY s.id, l.id";
