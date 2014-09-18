@@ -179,14 +179,21 @@
 
     <target name="build-cache-dir">
         <exec executable="chmod" os="Linux">
-            <arg value="-R"/>
             <arg value="0777"/>
             <arg value="${cache.dir}/"/>
         </exec>
 
         <delete includeEmptyDirs="true">
-            <fileset dir="${cache.dir}/" includes="**/*.*"/>
-            <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
+            <fileset dir="${cache.dir}">
+                <include name="**/*.*"/>
+                <exclude name=".htaccess"/>
+                <exclude name="clear_cache.sh"/>
+            </fileset>
+
+            <fileset dir="${test.dir.shopware}/TempFiles/">
+                <include name="**/*.*"/>
+                <exclude name=".gitkeep"/>
+            </fileset>
         </delete>
     </target>
 
@@ -204,7 +211,11 @@
 
     <target name="build-log-dir">
         <delete includeemptydirs="true">
-            <fileset dir="${log.dir}" includes="**/*.*"/>
+            <fileset dir="${log.dir}">
+                <include name="**/*.*"/>
+                <exclude name=".htaccess"/>
+                <exclude name=".gitkeep"/>
+            </fileset>
         </delete>
         <mkdir dir="${log.dir}/"/>
     </target>
