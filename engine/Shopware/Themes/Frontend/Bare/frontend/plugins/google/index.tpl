@@ -1,3 +1,5 @@
+{extends file="frontend/checkout/finish.tpl"}
+
 {block name='frontend_index_header_javascript' append}
     {if $GoogleTrackingID}
         {if $GoogleTrackingLibrary == 'ga'}
@@ -8,8 +10,8 @@
     {/if}
 {/block}
 
-{block name='frontend_checkout_finishs_transaction_number' append}
-    {if $GoogleConversionID}
+{block name='frontend_index_header_javascript_jquery' append}
+    {if $sTransactionumber}
         {include file="frontend/plugins/google/adwords.tpl"}
     {/if}
 {/block}
