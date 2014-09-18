@@ -1,29 +1,35 @@
 {**
- *	Global star rating template
+ *  Global star rating template
  *
- *	The template provides an easy way to include a star rating in the storefront.
+ *  The template provides an easy way to include a star rating in the storefront.
  *
- *	The component requires at least the parameter ```points``` to display the message correctly.
+ *  The component requires at least the parameter ```points``` to display the message correctly.
  *  The option depends on the rating and could be eg. ``$vote.points``.
  *
- *	```
- *	   {include file="frontend/_includes/rating.tpl" points=$vote.points}
- *	```
+ *  ```
+ *     {include file="frontend/_includes/rating.tpl" points=$vote.points}
+ *  ```
  *
  *  There are two types of star ratings available. One type for the single ratings (eg. for comments) and one type for the average ratings.
  *  The parameter is ```type```. The available options: single (default) or aggregated.
  *
  *  ```
- *	   {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange type="aggregated"}
- *	```
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange type="aggregated"}
+ *  ```
  *
  *  After choosing the option for the points, the ```base``` is needed to display the right ratings.
  *  - Average ratings: base=10 (default)
  *  - Single ratings: base=5
  *
+ *  IMPORTANT: If the rating is a "10" based rating the parameter ```|round``` is needed after the points to show the right average rating.
+ *
  *  ```
- *	   {include file="frontend/_includes/rating.tpl" points=$vote.points base=5}
- *	```
+ *     {include file="frontend/_includes/rating.tpl" points=$vote.points base=5}
+ *  ```
+ *
+ *  ```
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round }
+ *  ```
  *
  *  The parameter ```label``` provides the ability to display or to hide the rating count. If the type "aggregated" is given and the ```count```
  *  is set, the label will be shown. The ```count``` option depends on the rating and could be eg. ``$sArticle.comments|count``.
@@ -36,13 +42,9 @@
  *
  *  ```
  *     Hide Label
- *	   {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" label=false}
- *	```
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" label=false}
+ *  ```
 
-{*
-    @example
-    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange type="aggregated"}
-*}
 
 {* Type *}
 {block name='frontend_rating_type'}

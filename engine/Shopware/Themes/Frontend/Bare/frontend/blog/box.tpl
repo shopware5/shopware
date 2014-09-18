@@ -54,7 +54,7 @@
 						{block name='frontend_blog_col_meta_data_rating'}
 							{if $sArticle.sVoteAverage|round !=0}
 								<div class="blog--metadata-rating blog--metadata is--nowrap is--last">
-                                    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated"}
+                                    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated"}
                                 </div>
 							{/if}
 						{/block}
