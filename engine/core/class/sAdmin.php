@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class that handles several
  * functions around customer / order related things
@@ -90,6 +92,11 @@ class sAdmin
     public $scopedRegistration;
 
     /**
+     * @var StoreFrontBundle\Service\ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
      * Id of current active shop
      * @var int s_core_multilanguage.id
      */
@@ -112,15 +119,16 @@ class sAdmin
     public $sSYSTEM;
 
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
-        Enlight_Event_EventManager              $eventManager       = null,
-        Shopware_Components_Config              $config             = null,
-        Enlight_Components_Session_Namespace    $session            = null,
-        Enlight_Controller_Front                $front              = null,
-        \Shopware\Components\Password\Manager   $passwordEncoder    = null,
-        Shopware_Components_Snippet_Manager     $snippetManager     = null,
-        Shopware_Components_Modules             $moduleManager      = null,
-        sSystem                                 $systemModule       = null
+        Enlight_Components_Db_Adapter_Pdo_Mysql          $db                 = null,
+        Enlight_Event_EventManager                       $eventManager       = null,
+        Shopware_Components_Config                       $config             = null,
+        Enlight_Components_Session_Namespace             $session            = null,
+        Enlight_Controller_Front                         $front              = null,
+        \Shopware\Components\Password\Manager            $passwordEncoder    = null,
+        Shopware_Components_Snippet_Manager              $snippetManager     = null,
+        Shopware_Components_Modules                      $moduleManager      = null,
+        sSystem                                          $systemModule       = null,
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -133,9 +141,11 @@ class sAdmin
         $this->moduleManager = $moduleManager ? : Shopware()->Modules();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
 
-        $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
-        $this->scopedRegistration = $shop->getCustomerScope();
-        $this->subshopId = $shop->getId();
+        $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
+        $this->scopedRegistration = $mainShop->getCustomerScope();
+
+        $this->contextService = $contextService ? : Shopware()->Container()->get('context_service');
+        $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
     }
 
     /**
@@ -449,10 +459,11 @@ class sAdmin
 
                 AND id = ?
             ";
+
             $active = $this->db->fetchOne(
                 $sql,
                 array(
-                    $this->sSYSTEM->sSubShop['id'],
+                    $this->contextService->getShopContext()->getShop()->getId(),
                     $user['additional']['countryShipping']['id'],
                     $id
                 )
@@ -501,7 +512,7 @@ class sAdmin
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
 
         $countryID = (int) $user['additional']['countryShipping']['id'];
-        $subShopID = (int) $this->sSYSTEM->sSubShop['id'];
+        $subShopID = (int) $this->contextService->getShopContext()->getShop()->getId();
         if (empty($countryID)) {
             $countryID = $this->db->fetchOne(
                 'SELECT id FROM s_core_countries ORDER BY position ASC LIMIT 1'
@@ -1676,7 +1687,7 @@ class sAdmin
             WHERE objecttype = 'config_countries' AND objectlanguage = ?
         ";
 
-        $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+        $param = array($this->contextService->getShopContext()->getShop()->getId());
         $getTranslation = $this->db->fetchRow(
             $sql,
             $param
@@ -1723,7 +1734,7 @@ class sAdmin
             SELECT objectdata FROM s_core_translations
             WHERE objecttype='config_dispatch' AND objectlanguage = ?
         ";
-        $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
+        $params = array($this->contextService->getShopContext()->getShop()->getId());
         $getTranslation = $this->db->fetchRow(
             $sql,
             $params
@@ -1768,7 +1779,7 @@ class sAdmin
         $getTranslation = $this->db->fetchRow(
             "SELECT objectdata FROM s_core_translations
                 WHERE objecttype='config_payment' AND objectlanguage = ?",
-            array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"])
+            array($this->contextService->getShopContext()->getShop()->getId())
         );
         $getTranslation = $getTranslation ? : array();
 
@@ -1804,8 +1815,8 @@ class sAdmin
         if (Shopware()->Shop()->get('skipbackend')) {
             return empty($state) ? array() : $state;
         }
-        $language = Shopware()->Shop()->get('isocode');
-        $fallback = Shopware()->Shop()->get('fallback');
+        $language = $this->contextService->getShopContext()->getShop()->getId();
+        $fallback = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
         $translation = $this->db->fetchOne(
             "SELECT objectdata FROM s_core_translations
@@ -1948,7 +1959,7 @@ class sAdmin
             $this->session->offsetGet('sessionId'),
             empty($partner) ? "" : $partner,
             $this->config->get('sDefaultCustomerGroup'),
-            $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"],
+            $this->contextService->getShopContext()->getShop()->getId(),
             $this->subshopId,
             empty($referer) ? "" : $referer,
             $userObject["auth"]["encoderName"],
@@ -2538,7 +2549,7 @@ class sAdmin
             array(
                 'subject' => $this,
                 'id' => $this->session->offsetGet('sUserId'),
-                'subshopID' => $this->sSYSTEM->sSubShop["id"]
+                'subshopID' => $this->contextService->getShopContext()->getShop()->getId()
             )
         );
 
@@ -3251,7 +3262,7 @@ class sAdmin
      */
     public function sRiskSUBSHOP($user, $order, $value)
     {
-        return ($this->sSYSTEM->sSubShop["id"] == $value);
+        return ($this->contextService->getShopContext()->getShop()->getId() == $value);
     }
 
     /**
@@ -3264,7 +3275,7 @@ class sAdmin
      */
     public function sRiskSUBSHOPNOT($user, $order, $value)
     {
-        return ($this->sSYSTEM->sSubShop["id"] != $value);
+        return ($this->contextService->getShopContext()->getShop()->getId() != $value);
     }
 
     /**
@@ -3665,11 +3676,11 @@ class sAdmin
         }
         $mainId = $this->db->fetchOne(
             'SELECT main_id FROM s_core_shops WHERE id = ?',
-            array((int) $this->sSYSTEM->sSubShop['id'])
+            array((int) $this->contextService->getShopContext()->getShop()->getId())
         );
         // Main id is null, so we use the current shop id
         if (is_null($mainId)) {
-            $mainId = (int) $this->sSYSTEM->sSubShop['id'];
+            $mainId = (int) $this->contextService->getShopContext()->getShop()->getId();
         }
         $basket['basketStateId'] = (int) $stateId;
         $basket['countryID'] = $countryID;

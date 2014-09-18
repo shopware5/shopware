@@ -87,11 +87,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
         if (Shopware()->Bootstrap()->issetResource('Shop')) {
             $shop = Shopware()->Shop();
-            $system->sSubShops = self::getShopData();
-            $system->sLanguageData = $system->sSubShops;
+            $system->sSubShop = self::getSingleShopData($shop->getId());
 
-            $system->sLanguage = $shop->getId();
-            $system->sSubShop = $system->sSubShops[$shop->getId()];
             $system->sCurrency = $shop->getCurrency()->toArray();
 
             $system->sUSERGROUP = $shop->getCustomerGroup()->getKey();
@@ -135,12 +132,17 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Returns shop data
+     * @deprecated since SW 5.0, removed in SW 5.1
      *
+     * @param $shopId
      * @return array
      */
-    public static function getShopData()
+    public static function getSingleShopData($shopId)
     {
-        $data = Shopware()->Db()->fetchAssoc('SELECT id as `key`, m.* FROM s_core_multilanguage m');
+        $data = Shopware()->Db()->fetchRow(
+            'SELECT id as `key`, m.* FROM s_core_multilanguage m WHERE id = ?',
+            array($shopId)
+        );
         return $data;
     }
 

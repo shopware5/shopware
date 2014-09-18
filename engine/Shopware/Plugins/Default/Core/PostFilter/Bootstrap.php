@@ -104,15 +104,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $this->backLinkWhiteList = preg_replace('#\s#', '', self::$shopConfig->seoBackLinkWhiteList);
         $this->backLinkWhiteList = explode(',', $this->backLinkWhiteList);
 
-        if (!empty(Shopware()->System()->sSubShops)) {
-            foreach (Shopware()->System()->sSubShops as $subshop) {
-                $domains = explode("\n", $subshop['domainaliase']);
-                $domain = trim(reset($domains));
-                if (!empty($domain)) {
-                    $this->backLinkWhiteList[] = $domain;
-                }
-            }
-        }
+        $shopHosts = Shopware()->Db()->fetchCol("SELECT host FROM s_core_shops WHERE host > ''");
+        $this->backLinkWhiteList = array_merge(
+            $this->backLinkWhiteList,
+            array_map('trim', $shopHosts)
+        );
     }
 
     /**
