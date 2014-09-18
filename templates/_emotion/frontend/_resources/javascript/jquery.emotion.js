@@ -465,6 +465,10 @@
             orderNumber = me.$el.find('#detail').attr('data-ordernumber'),
             params = me.restoreCurrentProductState();
 
+        if(!params) {
+            return {};
+        }
+
         if(orderNumber && orderNumber.length) {
             params.ordernumber = orderNumber;
         }
