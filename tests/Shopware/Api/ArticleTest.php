@@ -128,7 +128,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'purchaseSteps' => 2,
 
                 'prices' => array(
                     array(
@@ -199,7 +198,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                     ),
 
                     'minPurchase' => 5,
-                    'purchaseSteps' => 2,
                     'purchaseSteps' => 2,
 
                     'prices' => array(
