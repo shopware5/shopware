@@ -7,7 +7,7 @@
         <parameter key="behat.shopware_extension.kernel.bootstrap">../../autoload.php</parameter>
         <parameter key="behat.shopware_extension.kernel.path">engine/kernel.php</parameter>
         <parameter key="behat.shopware_extension.kernel.class">Shopware\Kernel</parameter>
-        <parameter key="behat.shopware_extension.kernel.env">test</parameter>
+        <parameter key="behat.shopware_extension.kernel.env">production</parameter>
         <parameter key="behat.shopware_extension.kernel.debug">true</parameter>
         <parameter key="behat.shopware_extension.context.initializer.class">Shopware\Behat\ShopwareExtension\Context\Initializer\KernelAwareInitializer</parameter>
     </parameters>

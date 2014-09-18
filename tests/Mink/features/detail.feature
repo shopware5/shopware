@@ -33,3 +33,26 @@ Feature: detail page
 
         When  I select "Deutsch" from "__shop"
         Then  I should see "Sonnenbrille Big Eyes"
+
+    @captchaInactive
+    Scenario: I can write an evaluation
+        Given I am on the detail page for article 100
+        Then  I should see "Bewertung schreiben"
+        When  I write an evaluation:
+            | field        | value           |
+            | sVoteName    | Max Mustermann  |
+            | sVoteMail    | info@example.de |
+            | sVoteStars   | 10              |
+            | sVoteSummary | Neue Bewertung  |
+            | sVoteComment | Hallo Welt      |
+            | sCaptcha     | 123456          |
+        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
+        But   I should not see "Hallo Welt"
+
+        When  I click the link in my latest email
+        Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+        But   I should not see "Hallo Welt"
+
+        When  the shop owner activate my latest evaluation
+        Then  I should see "Hallo Welt"

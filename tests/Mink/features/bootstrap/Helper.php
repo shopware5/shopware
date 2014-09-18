@@ -383,6 +383,13 @@ class Helper
                     self::throwException($message);
                 }
 
+                $fieldTag = $field->getTagName();
+
+                if ($fieldTag === 'textarea') {
+                    $field->setValue($fieldValue);
+                    continue;
+                }
+
                 $fieldType = $field->getAttribute('type');
 
                 //Select

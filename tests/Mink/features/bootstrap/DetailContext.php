@@ -65,4 +65,23 @@ class DetailContext extends SubContext
     {
         $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
     }
+
+    /**
+     * @When /^I write an evaluation:$/
+     */
+    public function iWriteAnEvaluation(TableNode $data)
+    {
+        $this->getPage('Detail')->writeEvaluation($data->getHash());
+    }
+
+    /**
+     * @When /^the shop owner activate my latest evaluation$/
+     */
+    public function theShopOwnerActivateMyLatestEvaluation()
+    {
+        $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT 1';
+        $this->getContainer()->get('db')->exec($sql);
+        $this->getSession()->reload();
+    }
+
 }

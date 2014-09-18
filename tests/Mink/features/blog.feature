@@ -43,3 +43,49 @@ Feature: Blog
         | Der Sommer wird bunt                                |
         | Sonnenschutz - so gehören Sie zur Crème de la Crème |
         | Ich packe meinen Koffer                             |
+
+    @captchaInactive @noResponsive
+    Scenario: I can write a comment
+        Given I follow "Der Sommer wird bunt"
+        Then  I should see "Kommentar schreiben"
+        When  I write a comment:
+            | field            | value           |
+            | sCommentName     | Max Mustermann  |
+            | sCommentMail     | info@example.de |
+            | sVoteStars       | 10              |
+            | sCommentHeadline | Neue Bewertung  |
+            | sComment         | Hallo Welt      |
+            | sCaptcha         | 123456          |
+        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser eMail um die Bewertung freizugeben."
+        But   I should not see "Hallo Welt"
+
+        When  I click the link in my latest email
+        Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+        But   I should not see "Hallo Welt"
+
+        When  the shop owner activate my latest comment
+        Then  I should see "Hallo Welt"
+
+    @captchaInactive @noEmotion
+    Scenario: I can write a comment
+        Given I follow "Der Sommer wird bunt"
+        Then  I should see "Kommentar schreiben"
+        When  I write a comment:
+            | field    | value           |
+            | name     | Max Mustermann  |
+            | eMail    | info@example.de |
+            | points   | 10              |
+            | headline | Neue Bewertung  |
+            | comment  | Hallo Welt      |
+            | sCaptcha | 123456          |
+        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser eMail um die Bewertung freizugeben."
+        But   I should not see "Hallo Welt"
+
+        When  I click the link in my latest email
+        Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+        But   I should not see "Hallo Welt"
+
+        When  the shop owner activate my latest comment
+        Then  I should see "Hallo Welt"

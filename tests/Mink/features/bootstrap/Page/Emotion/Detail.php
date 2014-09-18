@@ -27,7 +27,13 @@ class Detail extends Page
         'commentText' => 'div.right_container > p',
         'commentAnswer' => 'div.right_container',
         'configuratorForm' => 'div#buybox > form',
-        'notificationForm' => 'form#sendArticleNotification'
+        'notificationForm' => 'form#sendArticleNotification',
+        'voteForm' => 'div#comments > form'
+    );
+
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'voteFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
     );
 
     protected $configuratorTypes = array(
@@ -231,5 +237,14 @@ class Detail extends Page
                 \Helper::throwException($message);
             }
         }
+    }
+
+    /**
+     * @param array $data
+     */
+    public function writeEvaluation(array $data)
+    {
+        \Helper::fillForm($this, 'voteForm', $data);
+        \Helper::pressNamedButton($this, 'voteFormSubmit');
     }
 }
