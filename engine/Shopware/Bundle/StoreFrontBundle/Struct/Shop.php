@@ -87,6 +87,11 @@ class Shop extends Extendable implements \JsonSerializable
     protected $category;
 
     /**
+     * @var int
+     */
+    protected $fallbackId;
+
+    /**
      * @param ShopEntity $shop
      * @return Shop
      */
@@ -107,6 +112,12 @@ class Shop extends Extendable implements \JsonSerializable
         if ($shop->getCategory()) {
             $struct->setCategory(
                 Category::createFromCategoryEntity($shop->getCategory())
+            );
+        }
+
+        if ($shop->getFallback()) {
+            $struct->setFallbackId(
+                $shop->getFallback()->getId()
             );
         }
 
@@ -287,5 +298,21 @@ class Shop extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param int $fallbackId
+     */
+    public function setFallbackId($fallbackId)
+    {
+        $this->fallbackId = $fallbackId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFallbackId()
+    {
+        return $this->fallbackId;
     }
 }

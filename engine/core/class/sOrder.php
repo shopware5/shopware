@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class that handle frontend orders
  */
@@ -173,14 +175,22 @@ class sOrder
     private $session;
 
     /**
+     * @var StoreFrontBundle\Service\ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      */
-    public function __construct()
-    {
+    public function __construct(
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null
+    ) {
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
+
+        $this->contextService = $contextService ? : Shopware()->Container()->get('context_service');
     }
 
     /**
@@ -1128,6 +1138,8 @@ class sOrder
             array('subject' => $this)
         );
 
+        $shopContext = $this->contextService->getShopContext();
+
         $context = array(
             'sOrderDetails' => $variables["sOrderDetails"],
 
@@ -1147,9 +1159,9 @@ class sOrder
             'attributes'     => $variables["attributes"],
             'sCurrency'    => $this->sSYSTEM->sCurrency["currency"],
 
-            'sLanguage'    => $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"],
+            'sLanguage'    => $shopContext->getShop()->getId(),
 
-            'sSubShop'     => $this->sSYSTEM->sSubShop["id"],
+            'sSubShop'     => $shopContext->getShop()->getId(),
 
             'sEsd'    => $variables["sEsd"],
             'sNet'    => $this->sNet,

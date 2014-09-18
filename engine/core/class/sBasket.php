@@ -1724,7 +1724,7 @@ class sBasket
         $sErrorMessages = array();
 
         if (!empty($voucherDetails["subshopID"])) {
-            if ($this->sSYSTEM->sSubShop["id"] != $voucherDetails["subshopID"]) {
+            if ($this->contextService->getShopContext()->getShop()->getId() != $voucherDetails["subshopID"]) {
                 $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureNotFound',
                     'Voucher could not be found or is not valid anymore'

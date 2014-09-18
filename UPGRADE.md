@@ -104,7 +104,12 @@ In this document you will find a changelog of the important changes related to t
 * Removed deprecated class `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
 * Removed unused `/backend/document` templates and several unused `Shopware_Controllers_Backend_Document` actions, methods and variables
 * Performance recommendations now accept a `warning` state (state was converted from boolean to integer)
-
+* Removed/deprecated `sSystem` variable
+    * `sSystem::sSubShops` was removed
+    * `sSystem::sSubShop` is deprecated
+    * `sSystem::sLanguageData` were removed. Please use Shopware()->Shop() instead
+    * `sSystem::sLanguage` were removed. Please use Shopware()->Shop()->getId() instead
+* Remove unused `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` and `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.

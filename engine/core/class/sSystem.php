@@ -144,21 +144,6 @@ class sSystem
     public $sExtractor;
 
     /**
-     * All active languages
-     *
-     * @var array
-     */
-    public $sLanguageData;
-
-    /**
-     * Current language
-     *
-     * @var int
-     * @deprecated Shopware()->Shop()->getId()
-     */
-    public $sLanguage;
-
-    /**
      * Current active currency
      *
      * @var array
@@ -170,15 +155,9 @@ class sSystem
      * Current active subshop
      *
      * @var array
+     * @deprecated
      */
     public $sSubShop;
-
-    /**
-     * Information about licensed subshops
-     *
-     * @var array
-     */
-    public $sSubShops;
 
     /**
      * Pointer to PHP-Mailer Object
