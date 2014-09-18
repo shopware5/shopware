@@ -81,4 +81,19 @@ class ShopwareContext extends SubContext
         $this->getPage('Newsletter')->unsubscribeNewsletter($data);
     }
 
+    /**
+     * @When /^I click the link in my latest email$/
+     */
+    public function iConfirmTheLinkInTheEmail()
+    {
+        $sql = 'SELECT hash FROM s_core_optin ORDER BY id DESC LIMIT 1';
+        $hash = $this->getContainer()->get('db')->fetchOne($sql);
+        $session = $this->getSession();
+        $link = $session->getCurrentUrl();
+        $query = parse_url($link, PHP_URL_QUERY);
+
+        $mask = empty($query) ? '%s/%s/%s' : '%s&%s=%s';
+        $link = sprintf($mask, $link, 'sConfirmation', $hash);
+        $session->visit($link);
+    }
 }

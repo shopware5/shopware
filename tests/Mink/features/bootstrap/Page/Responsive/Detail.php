@@ -19,7 +19,8 @@ class Detail extends \Page\Emotion\Detail
         'commentText' => 'div.entry--content.block > p',
         'commentAnswer' => 'div.entry--content.block > p',
         'configuratorForm' => 'div.product--buybox > div.buybox--inner > form',
-        'notificationForm' => 'form.notification--form'
+        'notificationForm' => 'form.notification--form',
+        'voteForm' => 'form.review--form'
     );
 
     protected $configuratorTypes = array(

@@ -78,7 +78,7 @@ class Extension implements ExtensionInterface
                             defaultValue('Shopware\Kernel')->
                         end()->
                         scalarNode('env')->
-                            defaultValue('test')->
+                            defaultValue('production')->
                         end()->
                         booleanNode('debug')->
                             beforeNormalization()->
