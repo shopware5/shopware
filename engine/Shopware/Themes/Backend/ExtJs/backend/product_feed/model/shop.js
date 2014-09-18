@@ -31,7 +31,7 @@
 /**
  * Shopware Model -  product feed list backend module.
  *
- * The shop model of the product feed module represent a data row of the s_core_multilanguage or the
+ * The shop model of the product feed module represent a data row of the s_core_shops or the
  * Shopware\Models\Shop\Shop doctrine model, with some additional data for the additional information panel.
  * We can't use the base store because we need all shops and the children
  */

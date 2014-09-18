@@ -767,14 +767,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
     /**
      * Fix the translation table data
-     * @deprecated
+     * @deprecated s_core_multilanguage is deprecated since SW 5.0 and will be removed in SW 5.1
      */
-    protected function fixTranslationTable()
+    private function fixTranslationTable()
     {
-        $sql = "
-            TRUNCATE `s_core_multilanguage`;
-        ";
-        Shopware()->Db()->exec($sql);
+        Shopware()->Db()->exec("TRUNCATE s_core_multilanguage;");
         $sql = "
             INSERT IGNORE INTO `s_core_multilanguage` (
               `id`, `isocode`, `locale`, `parentID`, `skipbackend`,
