@@ -179,7 +179,8 @@
     .#{$prefix}box-inner {
 		width: 100% !important;
 		background: theme-image($theme, 'sw4_logo-shine.png') no-repeat right 0;
-	}
+        overflow: visible;
+    }
 
 	// Seperators
 	.#{$prefix}toolbar-separator-horizontal {
