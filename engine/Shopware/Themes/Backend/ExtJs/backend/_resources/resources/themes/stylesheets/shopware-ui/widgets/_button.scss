@@ -43,43 +43,41 @@
 		-ms-transition: none;
 		-o-transition: none;
 		transition: none;
-		background: theme-image($theme, 'nav_taskbar_top_left.png') no-repeat 0 0;
-        padding: 0 0 0 4px;
+        padding: 0;
 		height: $menu-button-height;
 		border: 0 none;
+        top: 4px !important;
 
 		em {
-			padding: 0 4px 0 0;
+			padding: 0;
 			display: block;
 			height: $menu-button-height;
-			background: theme-image($theme, 'nav_taskbar_top_right.png') no-repeat right 0;
+            background: none;
 		}
 
 		button {
 		    @include box-sizing('content-box');
 			height: $menu-top-button-height;
-			background: theme-image($theme, 'nav_taskbar_top_mid.png') repeat-x 0 0;
 
 			.x-btn-inner {
 				height: $menu-top-button-height;
 				line-height: $menu-top-button-line-height;
 				color: $menu-top-button-color;
 				font-size: $menu-top-button-font-size;
-				text-shadow: 1px 1px 0px #fff;
-				padding: 0 0px 0 30px !important;
-	            margin: -1px 10px 0 0;
-	            font-size: 11px;
+				text-shadow: 1px 1px 0px #145c9a;
+				padding: 0 0px 0 39px !important;
+	            margin: -1px 16px 0 0;
 	            font-weight: normal;
 			}
 			.x-btn-icon {
 			    @include box-sizing('border-box');
 				width: 18px;
 				height: 18px;
-				left: 8px;
+				left: 12px;
 	            top: 7px;
 
 				&.question_frame {
-					left: 12px;
+					left: 19px;
 				}
 			}
 		}
@@ -89,19 +87,35 @@
 			width: 22px !important;
 		}
 
-
 	}
 
 	// Active button state
 	.#{$prefix}btn-default-toolbar-small-menu-active {
-        background: theme-image($theme, 'nav_taskbar_top_left_active.png') no-repeat 0 0;
+        background: #fff;
+
+        .x-btn-inner {
+            color: #0e6bbb !important;
+            text-shadow: none !important;
+        }
 
         em {
-            background: theme-image($theme, 'nav_taskbar_top_right_active.png') no-repeat right 0;
+            background: #fff;
         }
 
         button {
-            background: theme-image($theme, 'nav_taskbar_top_mid_active.png') repeat-x 0 0;
+            background: #fff;
+        }
+    }
+
+    .#{$prefix}btn-default-toolbar-small-pressed {
+        background: none;
+    }
+
+    .#{$prefix}btn-default-toolbar-small-over {
+        background: none;
+
+        em {
+            background: none;
         }
     }
 }
