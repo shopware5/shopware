@@ -343,7 +343,6 @@
 	/** Toolbar button style - Normal state */
 	.#{$prefix}btn {
 		@include border-radius(2px);
-		@include single-transition(background, 0.25s, ease-out);
 		padding: 2px 6px 2px 10px;
 		border-color: #9cb1c8;
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPElEQVQIHQXBsQ2AAAzAsCoD4v93aRNsVGpQsaGiCRsyTM5Q0eEUjVVOuQ2VVdZYj2747sjQ4UbGeN/nB1iTR73yR6BvAAAAAElFTkSuQmCC") repeat-x;
@@ -398,12 +397,14 @@
 
 	/** Secondary button style - Normal state */
 	.#{$prefix}btn.secondary {
-		@include box-shadow(0 1px 4px #999, #b4c0cb -1px 0 0px 0 inset, #b4c0cb 1px 0 0px 0 inset);
-		@include single-transition(background, 0.25s, ease-out);
-		margin: 0 5px;
+        @include border-radius(4px !important);
+        border: 0;
+        margin: 0 5px;
 		padding: 2px 25px;
-		border-color: #647589;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARUlEQVQIHQXBMQrCAAAEwbCdkP8/zdLGLiBYKnK7znB/PPl8f1yvNypTMqZYuGEHbqzQcGNGiskUPUixUHGiYZJhcZ63P5JXTiD7nrAzAAAAAElFTkSuQmCC") repeat-x;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(178,193,203,1), 0%, 1),
+            svg-color-stop(rgba(127,152,169,1), 100%, 1)
+        )) center center no-repeat transparent;
 		
 		button, a {
 			height: 24px;
@@ -412,9 +413,9 @@
 		.#{$prefix}btn-inner {
 			@include user-select(none);
 			color: #fff;
-			font-weight: bold;
-			text-shadow: 0 1px 0 #3F505D;
-			font-size: 12px;
+			font-weight: normal;
+            text-shadow: 0px 1px 1px #475c6a;
+            font-size: 12px;
 			margin: 0 !important; /** Align the button text in FF */
 		}
 	}
@@ -422,8 +423,7 @@
 	/** Secondary button style - Disabled state */
 	.#{$prefix}btn-disabled.secondary {
 		@include opacity(0.65);
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARElEQVQImV2LIQoCABDAjhUR//87m00Mgk25zaAWwxgMNufLledrud0faB/6WdxoYvfbi12pUFkjw/l7lRpUbKg4HQ9vhzxMTTi3KvYAAAAASUVORK5CYII=") repeat-x;
-		
+
 		.#{$prefix}btn-inner {
 			color: #fff !important;
 		}
@@ -431,18 +431,21 @@
 	
 	/** Secondary button style - Hover state */
 	.#{$prefix}btn-over.secondary {
-		border-color: #7189a6;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARElEQVQImV2LIQoCABDAjhUR//87m00Mgk25zaAWwxgMNufLledrud0faB/6WdxoYvfbi12pUFkjw/l7lRpUbKg4HQ9vhzxMTTi3KvYAAAAASUVORK5CYII=") repeat-x;
-	}
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(198,209,217,1), 0%, 1),
+            svg-color-stop(rgba(147,168,183,1), 100%, 1)
+        )) center center no-repeat transparent;	}
 	
 	/** Primary button style - Normal state */
 	.#{$prefix}btn.primary {
-		@include box-shadow(0 1px 4px #888, #2daff3 -1px 0 0px 0 inset, #2daff3 1px 0 0px 0 inset);
-		@include single-transition(background, 0.25s, ease-out);
-		margin: 0 5px;
-		padding: 2px 25px;
-		border-color: #1068e5;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAARElEQVQIHQXBwQkCUQDFwBCvW6N1aw0LnkX4L874fP/8fOfrPrLkYGEHCznJcEuGDDvZkCHDliw7SFjIQZYMC1le1+MP3Nox5b4vUE4AAAAASUVORK5CYII=") repeat-x;
+        @include border-radius(4px !important);
+        border: 0;
+        margin: 0 5px;
+        padding: 2px 25px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
 		
 		button, a {
 			height: 24px;
@@ -451,17 +454,19 @@
 		.#{$prefix}btn-inner {
 			@include user-select(none);
 			color: #fff;
-			font-weight: bold;
+            font-weight: normal;
 			font-size: 12px;
 			margin: 0 !important; /** Align the button text in FF */
-			text-shadow: 0 1px 0 #0B489D;
+			text-shadow: 0 1px 1px #0B489D;
 		}
 	}
 	
 	/** Primary button style - Hover and disabled state. Based on the secondary button style */
 	.#{$prefix}btn-over.primary, .#{$prefix}btn-disabled.primary {
-		border-color: #0b85f5;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPElEQVQIW2MIePSH6d1vBqY77/4zMfxnYGL4B6H//wNiEP8vlP6HwP9ANEzs/3+4OEQPzBxkNRA5Lk5GANkSKPkMcPhVAAAAAElFTkSuQmCC") repeat-x;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(27,201,250,1), 0%, 1),
+            svg-color-stop(rgba(17,153,226,1), 100%, 1)
+        )) center center no-repeat transparent;
 	} 
 	
 	/** Primary button style - Disabled state. */
@@ -476,7 +481,6 @@
 	/** Small secondary button style - Normal state */
 	.#{$prefix}btn.small {
 		@include box-shadow(0 1px 2px #bbb, #dee7ec -1px 0 0px 0 inset, #dee7ec 1px 0 0px 0 inset);
-		@include single-transition(background, 0.25s, ease-out);
 		border-color: #a2b1c3;
 		margin: 0 5px 0 0;
 		padding: 2px 6px;
