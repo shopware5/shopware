@@ -201,7 +201,7 @@
        top: 8px !important;
        
        table {
-           margin: 0 !important;
+           margin: -1px !important;
        }
    }
    .searchfield tbody {
@@ -263,12 +263,13 @@
 // Search drop down
 .#{$prefix}search-dropdown {
 	top: 54px !important;
-	width: 255px;
+    left: 724px !important;
+	width: 330px;
 	border-bottom: 1px solid #a3adb4;
-	-webkit-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	-moz-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	-ms-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    -moz-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    -ms-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
 	
 	.arrow-top {
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAAuElEQVR42l2OPQ6CQBSEuQvrnUxEENFW0UJjDHohFVBsFAp/78IuEIFAO76sFmIxeX/fvIwCoCE2CSvVDqv/fWNQCTLcBJorwEanBvzzKaq1Hcf6WcAhSZh2DZBNo7qz5VgR0PcFTE/AeZRob2K0vrDC7LDWvEQeBkGG4TGDdfhofsmh+wnU8blWdIKW9wL6jsuj4XL09gl0j8MkaHHL0aXcyuz6guGnlCkGZZQGM0jJIGBRpZ7gEm+0asuyctNIOwAAAABJRU5ErkJggg==") no-repeat;
@@ -340,6 +341,11 @@
 				border-bottom-color: #c3dcf0;
 				background: #e2f3ff;
 			}
+
+            // Name
+            .name {
+                width: 210px !important;
+            }
 			
 			// Description
 			.desc, .right {
