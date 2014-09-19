@@ -418,7 +418,7 @@
                     i = 0;
 
                 for (; i < len; i++) {
-                    registerListenerToStack(listener[i]);
+                    registerListenerToStack(listenerArr[i]);
                 }
             },
 
