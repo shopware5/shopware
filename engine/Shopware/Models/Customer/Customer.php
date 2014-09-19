@@ -39,7 +39,7 @@ use         Shopware\Components\Model\LazyFetchModelEntity,
  *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
  *   - Debit    =>  Shopware\Models\Customer\Debit      [1:1] [s_user_debit]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
- *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_multilanguage]
+ *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
  * </code>
  * The s_user table has the follows indices:

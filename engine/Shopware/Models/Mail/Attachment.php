@@ -31,7 +31,7 @@ use         Shopware\Components\Model\ModelEntity,
  *
  * Associations:
  * <code>
- *   - Shop => Shopware\Models\Shop\Shop    [n:1]   [s_core_multilanguage]
+ *   - Shop => Shopware\Models\Shop\Shop    [n:1]   [s_core_shops]
  *   - Mail => Shopware\Models\Mail\Mail    [n:1]   [s_core_config_mails]
  *   - Mail => Shopware\Models\Media\Media  [n:1]   [s_core_config_mails]
  * </code>

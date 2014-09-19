@@ -365,8 +365,8 @@ class Shopware_Components_Translation
     {
         $sql = "
             SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
-            FROM s_core_multilanguage cm, s_core_translations ct
-            WHERE ct.objectlanguage=cm.isocode
+            FROM s_core_shops cm, s_core_translations ct
+            WHERE ct.objectlanguage = cm.id
             AND ct.objecttype = 'article'
             AND ct.objectkey = ?
             AND ct.objectlanguage = ?
@@ -375,19 +375,19 @@ class Shopware_Components_Translation
 
             SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
 
-            FROM s_core_multilanguage cm
+            FROM s_core_shops cm
 
             INNER JOIN s_core_translations ct
-            ON ct.objectlanguage=cm.fallback
+            ON ct.objectlanguage=cm.fallback_id
             AND ct.objecttype = 'article'
             AND ct.objectkey = ?
 
             LEFT JOIN s_core_translations ct2
-            ON ct2.objectlanguage = cm.isocode
+            ON ct2.objectlanguage = cm.id
             AND ct2.objecttype = 'article'
             AND ct2.objectkey = ct.objectkey
 
-            WHERE cm.fallback = ?
+            WHERE cm.fallback_id = ?
             AND ct2.id IS NULL
         ";
         $translations = Shopware()->Db()->fetchAll($sql, array(
@@ -427,16 +427,16 @@ class Shopware_Components_Translation
 
         $sql = "
             DELETE at FROM s_articles_translations at
-            LEFT JOIN s_core_multilanguage cm
-            ON  cm.id=at.languageID
+            LEFT JOIN s_core_shops cm
+              ON  cm.id=at.languageID
             LEFT JOIN s_core_translations ct
-            ON ct.objectkey=at.articleID
-            AND ct.objectlanguage=cm.isocode
-            AND ct.objecttype='article'
+                ON ct.objectkey=at.articleID
+                AND ct.objectlanguage=cm.id
+                AND ct.objecttype='article'
             LEFT JOIN s_core_translations ct2
-            ON ct2.objectkey=at.articleID
-            AND ct2.objectlanguage=cm.fallback
-            AND ct2.objecttype='article'
+                ON ct2.objectkey=at.articleID
+                AND ct2.objectlanguage=cm.fallback_id
+                AND ct2.objecttype='article'
             WHERE ct.id IS NULL AND ct2.id IS NULL
         ";
         Shopware()->Db()->exec($sql);

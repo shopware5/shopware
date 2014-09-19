@@ -31,7 +31,7 @@
 /**
  * Shopware Model - Global Stores and Models
  *
- * The shop model represents a data row of the s_core_multilanguage or the
+ * The shop model represents a data row of the s_core_shops or the
  * Shopware\Models\Shop\Shop doctrine model.
  */
 //{block name="backend/base/model/shop"}
