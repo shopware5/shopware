@@ -133,26 +133,26 @@
 		-moz-box-shadow: transparent 0 0 0 !important;
 		-ms-box-shadow: transparent 0 0 0 !important;
 		box-shadow: transparent 0 0 0 !important;
-		background: theme-image($theme, 'btn_taskbar_cap_left.png') no-repeat 0 0;
-		border: 0 none;
-		padding: 0;
-		height: 28px;
+        border: none;
+        background: none;
+		height: 40px;
+        top: 0 !important;
 		padding: 0 0 0 4px;
 		position: relative;
 
 		em {
 			display: block;
-			height: 28px;
+			height: 40px;
 			line-height: 28px;
 			padding: 0 4px 0 0;
-			background: theme-image($theme, 'btn_taskbar_cap_right.png') no-repeat right 0;
+			background: none;
 		}
 		button {
 		    @include box-sizing('content-box');
-            width: 28px;
-			height: 28px;
+            width: 40px;
+			height: 46px;
 			line-height: 28px;
-			background: theme-image($theme, 'btn_taskbar_cap_mid.png') repeat-x 0 0;
+			background: none;
 
 			.#{$prefix}btn-inner {
 				color: #324552 !important;
@@ -164,7 +164,8 @@
 				width: 28px;
 				height: 18px;
 				bottom: auto;
-				top: 4px;
+				top: 10px;
+                left: 6px;
 			}
 		}
 
@@ -183,14 +184,17 @@
 
 	// Active state
 	.btn-over, .#{$prefix}btn-default-toolbar-small-menu-active {
-		background: theme-image($theme, 'btn_taskbar_cap_left_active.png') no-repeat 0 0;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(22,129,211,1), 0%, 1),
+            svg-color-stop(rgba(46,181,249,1), 100%, 1)
+        )) center center no-repeat transparent;
 
 		em {
-			background: theme-image($theme, 'btn_taskbar_cap_right_active.png') no-repeat right 0;
+			background: none;
 		}
 
 		button {
-			background: theme-image($theme, 'btn_taskbar_cap_mid_active.png') repeat-x 0 0;
+			background: none;
 		}
 		.window-managment {
 			background: theme-image($theme, 'icon_taskbar_cap_fenster_active.png') no-repeat center center;
@@ -199,6 +203,23 @@
 			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAvlJREFUeNqsVOtLFFEUvzM7O2uuK+szhCUzQhJS+6KCUOAXKf0QQgVJmmjEQlAKfvA/KJAQPyhZ2WMxSfNRYg+hWM1nqKitro/Vsi11NbTVdpd2nJ3bOeNMrH4ohC785t5zzzm/e89jLkMpJf9jcHxZ464NoSqfheks4BzgJCBOUa0AegEtgBfgJzFBfoy29AlRN/xV+SdgegRI/ccFJgBFQDYukwDwdEJ3SLIlSoeQZDsgkWeji6TY0k9uddmI1y+Swod9pGHoE0Ed2qAt3D5bvQTDlzYCycVkUAyzDKOzr2ySose94sTqVhPoO03hISkHNJrrjh/ey3BgzrGosML6gkwuLT6agI8ffNJ0ZY02BpLNegVxUs9zSfZlNzld89bu8gmYn2nltDAgiIS1U7l9QqRO+7TDnJWefjia+ARxOpTnjrMBieYiCRrFR4VJbVezihnCKCTy1wNwQugMwAzhLG74t7PAz41KIElCDnZx3XMDNzo/fiM3u2zCmdp3PjyXEvUrV1ILk6W+35Gh26my76Xtq/P9nEvWIwdrDOUzULDOrnyotE5XbAri1J+S7hQhGVqtfd3rz6voGOsBaor7ld0zt1vHnTa0Qw4uPESrRyFAaRMYVe8hwUMGGYj1fp/DvSWIDaoebC1QQSMsq5GD1WpYORGmCP0Cs6dZ2sa+ZKqJ4jXsa5hERmkXHEdjDPM4Iwf3/ecvEmMIIammiNi9XVfQMDBnhTxwcCXLyOdOqrIqI8UUKXf9GnCwtmW3H4WEKEMehJKnNihClOiruqGFktrBebNnO9AUHDYU4NShCL1sPwkcbM+ca0a+ZqwhBxqsGQwSg/KAfA8AdbAIBP1KRij5m8SD4bkoyxxxFc1XnBseiqPfsSqVWPrSYWn8G2p7Zo8MzK+J6OPc8FLkIPDT8hfudrsCkkT3O9Dn/L1uF3LgTyu025cKyltHqbSPtwlty1tG6POppUsQsiA/I8oww0YNVV4EElQhtVp09x4+A9dAvoPybwEGAO2Jsyfl3nhDAAAAAElFTkSuQmCC');
 		}
 	}
+
+    // New footer button positioning
+    #tbseparator-1216 {
+        left: 48px !important;
+    }
+
+    #button-1214 {
+        left: 49px !important;
+    }
+
+    #tbseparator-1219 {
+        left: 97px !important;
+    }
+
+    #widgetTaskBarBtn {
+        left: 98px !important;
+    }
 }
 
 /**
@@ -207,40 +228,42 @@
  */
 .window-management-holder {
     overflow: visible !important;
+    left: 146px !important;
+    top: 0 !important;
+    padding-top: 4px;
+    border-left: 1px solid rgba(170, 173, 203, 0.18);
 
     .footer-btn {
-        margin: 0 6px;
+        margin: 0 5px;
     }
 
     .#{$prefix}btn-default-small {
-        @include border-radius(2px);
-        @include single-transition(none, 0s, linear);
-        @include single-box-shadow(transparent, 0, 0);
-        top: 2px;
+        @include border-radius(4px);
+        top: 1px;
         border: 0 none;
         padding: 0 0 0 4px;
-        background: theme-image($theme, 'btn_taskbar_cap_left.png') no-repeat 0 0;
-        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-		-moz-transition: box-shadow linear 0.2s;
-		-ms-transition: box-shadow linear 0.2s;
-		-o-transition: box-shadow linear 0.2s;
-		transition: box-shadow linear 0.2s;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(127,152,169,1), 0%, 1),
+            svg-color-stop(rgba(178,193,203,1), 100%, 1)
+        )) center center no-repeat transparent;
 
 		em {
 			display: block;
 			padding: 0 4px 0 0;
-			background: theme-image($theme, 'btn_taskbar_cap_right.png') no-repeat right 0;
+			background: none;
 		}
         button {
-			height: 27px;
-			background: theme-image($theme, 'btn_taskbar_cap_mid.png') repeat-x 0 0;
+			height: 29px;
+			background: none;
 		}
 
 		// Button text
         .#{$prefix}btn-inner {
-            padding-left: 6px;
-            padding-right: 18px;
-            font-size: 11px;
+            color: #fff;
+            text-shadow: 0 1px 1px #555;
+            padding-left: 10px;
+            padding-right: 30px;
+            font-size: 12px;
             font-weight: normal;
         }
         .#{$prefix}btn-icon {
@@ -253,31 +276,40 @@
         }
 
         .closeable {
-            background: theme-image($theme, 'btn_taskbar_cap_sprite.png') no-repeat 0 0;
+            background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjQsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iODRweCIgaGVpZ2h0PSI4NHB4IiB2aWV3Qm94PSIwIDAgODQgODQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDg0IDg0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxkZWZzPg0KCQk8cmVjdCBpZD0iU1ZHSURfMV8iIHg9IjAiIHdpZHRoPSI4NCIgaGVpZ2h0PSI4NCIvPg0KCTwvZGVmcz4NCgk8Y2xpcFBhdGggaWQ9IlNWR0lEXzJfIj4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBvdmVyZmxvdz0idmlzaWJsZSIvPg0KCTwvY2xpcFBhdGg+DQoJPHBhdGggY2xpcC1wYXRoPSJ1cmwoI1NWR0lEXzJfKSIgZmlsbD0iI0ZGRkZGRiIgZD0iTTQyLDBDMTguODAzLDAsMCwxOC44MDcsMCw0MmMwLDIzLjE5NywxOC44MDMsNDIsNDIsNDINCgkJYzIzLjE5NCwwLDQyLTE4LjgwMyw0Mi00MkM4NCwxOC44MDcsNjUuMTk0LDAsNDIsMCBNNTAuNjQzLDQybDE1LjMwMywxNS4zMDJsLTguNjQzLDguNjQyTDQyLjAwMiw1MC42NDNMMjYuNjk5LDY1Ljk0NA0KCQlsLTguNjQxLTguNjQybDE1LjMwMS0xNS4zMDJMMTguMDU5LDI2LjcwMmw4LjY0MS04LjY0NUw0MiwzMy4zNTdsMTUuMzAxLTE1LjI5OGw4LjY0Myw4LjY0TDUwLjY0Myw0MnoiLz4NCjwvZz4NCjwvc3ZnPg0K") center no-repeat;
+            background-size: 100%;
+            margin: -1px 4px 0 0;
+            width: 17px;
+            height: 17px;
         }
     }
 
     .#{$prefix}btn-pressed {
-        @include single-box-shadow($font-color, 0, 0, 2px);
-        background: theme-image($theme, 'btn_taskbar_cap_left_active.png') no-repeat 0 0;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
 
         em {
-            background: theme-image($theme, 'btn_taskbar_cap_right_active.png') no-repeat right 0;
+            background: none;
         }
 
         button {
-             background: theme-image($theme, 'btn_taskbar_cap_mid_active.png') repeat-x 0 0;
+             background: none;
         }
 
         .#{$prefix}btn-inner {
             color: #fff;
-            text-shadow: 1px 1px 0px $dark-blue;
+            text-shadow: 0 1px 1px #555;
         }
 
         .closeable { background-position: 0 bottom }
     }
     .#{$prefix}btn-pressed.#{$prefix}btn-over {
-    	@include single-box-shadow($light-blue, 0, 0, 4px);
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(27,201,250,1), 0%, 1),
+            svg-color-stop(rgba(17,153,226,1), 100%, 1)
+        )) center center no-repeat transparent;
     }
 }
 

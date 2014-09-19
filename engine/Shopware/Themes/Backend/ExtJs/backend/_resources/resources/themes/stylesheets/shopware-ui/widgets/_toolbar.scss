@@ -389,10 +389,13 @@
 // Footer Toolbar
 .shopware-footer {
     position: fixed;
-   	padding: 0 6px 0 6px;
-	background: theme-image($theme, 'nav_taskbar_cap_bg.png') repeat-x 0 0;
-	border-top: 1px solid $font-color !important;
-	box-shadow: -1px 1px 5px $font-color;
+   	padding: 0 6px 0 0;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgb(255, 255, 255), 0%, 1),
+        svg-color-stop(rgb(233, 241, 251), 100%, 1)
+    )) center center no-repeat transparent;
+    border: 0 none;
+    border-top: 1px solid #8cabcb;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -402,8 +405,8 @@
 	.#{$prefix}toolbar-separator-horizontal {
 		top: 0px !important;
         height: 40px;
-        border-left: 1px solid #a1adb6;
-        border-right: 1px solid #dfe4e8;
+        border-left: 1px solid rgba(255, 255, 255, 1);
+        border-right: 1px solid rgba(140, 173, 203, 0.18);
     }
 }
 // IE 9 Footer
