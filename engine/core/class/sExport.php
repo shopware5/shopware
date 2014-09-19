@@ -46,9 +46,25 @@ class sExport
 
     public $sCurrency;
     public $sCustomergroup;
+
+    /**
+     * @var array Contains shop data in array format
+     */
+    private $shopData;
+
+    /**
+     * @deprecated Use $shopData instead
+     */
     public $sLanguage;
+
+    /**
+     * @deprecated Use $shopData instead
+     */
     public $sMultishop;
 
+    /**
+     * @var \Shopware\Models\Shop\Shop
+     */
     public $shop;
 
     /**
@@ -103,88 +119,165 @@ class sExport
         $this->db = $db ?: $container->get('db');
     }
 
+    /**
+     * @param $currency
+     * @return array
+     */
     public function sGetCurrency($currency)
     {
-        static $cache = array();
-        if(empty($currency))
-            $currency = $this->sMultishop["defaultcurrency"];
-        if(isset($cache[$currency]))
-            return $cache[$currency];
-        if(is_numeric($currency))
+        static $currencyCache = array();
+
+        if(empty($currency)) {
+            $currency = $this->shopData["currency_id"];
+        }
+        if(isset($currencyCache[$currency])) {
+            return $currencyCache[$currency];
+        }
+        if (is_numeric($currency)) {
             $sql = "id=".$currency;
-        elseif(is_string($currency))
+        } elseif (is_string($currency)) {
             $sql = "currency=".$this->db->quote(trim($currency));
-        else
+        } else {
             return false;
-        $sql = "
+        }
+
+        $currencyCache[$currency] = $this->db->fetchRow("
             SELECT *
             FROM s_core_currencies
             WHERE $sql
-        ";
-        return $cache[$currency] = $this->db->fetchRow($sql);
+        ");
+
+        return $currencyCache[$currency];
     }
 
-    public function sGetCustomergroup($customergroup)
+    /**
+     * @param $customerGroup
+     * @return bool
+     */
+    public function sGetCustomergroup($customerGroup)
     {
         static $cache = array();
-        if(empty($customergroup))
-            $customergroup = $this->sMultishop["defaultcustomergroup"];
-        if(isset($cache[$customergroup]))
-            return $cache[$customergroup];
-        if(is_int($customergroup))
-            $sql = "id=".$customergroup;
-        elseif(is_string($customergroup))
-            $sql = "groupkey=".$this->db->quote(trim($customergroup));
-        else
-
+        if(empty($customerGroup)) {
+            $customerGroup = $this->sMultishop["defaultcustomergroup"];
+        }
+        if (isset($cache[$customerGroup])) {
+            return $cache[$customerGroup];
+        }
+        if (is_int($customerGroup)) {
+            $sql = "id=".$customerGroup;
+        } elseif (is_string($customerGroup)) {
+            $sql = "groupkey=".$this->db->quote(trim($customerGroup));
+        } else {
             return false;
-        $sql = "
+        }
+
+        $cache[$customerGroup] = $this->db->fetchRow("
             SELECT *
             FROM s_core_customergroups
             WHERE $sql
-        ";
-        return $cache[$customergroup] = $this->db->fetchRow($sql);
+        ");
+
+        return $cache[$customerGroup];
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    private function getShopData($id)
+    {
+        static $cache = array();
+
+        if (isset($cache[$id])) {
+            return $cache[$id];
+        }
+
+        if (empty($id)) {
+            $sql = "s.`default`=1";
+        } elseif(is_numeric($id)) {
+            $sql = "s.id=".$id;
+        } elseif(is_string($id)) {
+            $sql = "s.name=".$this->db->quote(trim($id));
+        }
+
+        $cache[$id] = $this->db->fetchRow("
+            SELECT
+              s.id,
+              s.main_id,
+              s.name,
+              s.title,
+              COALESCE (s.host, m.host) AS host,
+              COALESCE (s.base_path, m.base_path) AS base_path,
+              COALESCE (s.base_url, m.base_url) AS base_url,
+              COALESCE (s.hosts, m.hosts) AS hosts,
+              COALESCE (s.secure, m.secure) AS secure,
+              COALESCE (s.secure_host, m.secure_host) AS secure_host,
+              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
+              COALESCE (s.template_id, m.template_id) AS template_id,
+              COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
+              s.category_id,
+              s.customer_group_id,
+              s.fallback_id,
+              s.customer_scope,
+              s.`default`,
+              s.active,
+              s.always_secure
+            FROM s_core_shops s
+            LEFT JOIN s_core_shops m
+              ON m.id=s.main_id
+              OR (s.main_id IS NULL AND m.id=s.id)
+            LEFT JOIN s_core_shop_currencies d
+              ON d.shop_id=m.id
+            WHERE s.active = 1 AND $sql
+            GROUP BY s.id
+        ");
+
+        return $cache[$id];
+    }
+
+    /**
+     * @deprecated Use getShopData
+     *
+     * @param $language
+     * @return mixed
+     */
     public function sGetMultishop($language)
     {
         static $cache = array();
-        if(isset($cache[$language]))
+
+        if(isset($cache[$language])) {
             return $cache[$language];
-        if(empty($language))
-            $sql = "`default`=1";
-        elseif(is_numeric($language))
-            $sql = "id=".$language;
-        elseif(is_string($language))
-            $sql = "name=".$this->db->quote(trim($language));
+        }
+        if (empty($language)) {
+            $sql = "s.`default`=1";
+        } elseif(is_numeric($language)) {
+            $sql = "s.id=".$language;
+        } elseif(is_string($language)) {
+            $sql = "s.name=".$this->db->quote(trim($language));
+        }
 
-        $sql = "
-            SELECT *
-            FROM s_core_multilanguage
-            WHERE $sql
-        ";
-        return $cache[$language] = $this->db->fetchRow($sql);
-    }
+        $cache[$language] = $this->db->fetchRow("
+            SELECT
+              s.id AS id, s.id AS isocode, s.locale_id AS locale,
+              s.category_id AS parentID, s.default AS skipbackend, s.name,
+              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
+              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
+              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
+              CONCAT(s.host, '\n', s.hosts) as domainaliase,
+              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
+              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
+              s.currency_id AS defaultcurrency, s.default, s.fallback_id AS fallback
+            FROM s_core_shops s
+            LEFT JOIN s_core_shops m
+            ON m.id=s.main_id
+            OR (s.main_id IS NULL AND m.id=s.id)
+            LEFT JOIN s_core_shop_currencies d
+            ON d.shop_id=m.id
+            WHERE s.active=1 AND $sql
+            GROUP BY s.id
+        ");
 
-    public function sGetLanguage($language)
-    {
-        static $cache = array();
-        if(isset($cache[$language]))
-            return $cache[$language];
-        if(empty($language))
-            $sql = "default=1";
-        elseif(is_numeric($language))
-            $sql = "id=".$language;
-        elseif(is_string($language))
-            $sql = "isocode=".$this->db->quote(trim($language));
-
-        $sql = "
-            SELECT *
-            FROM s_core_multilanguage
-            WHERE $sql
-            ORDER BY skipbackend
-        ";
-        return $cache[$language] = $this->db->fetchRow($sql);
+        return $cache[$language];
     }
 
     /**
@@ -283,32 +376,31 @@ class sExport
             $this->sSettings["languageID"] = $defaultShop->getId();
         }
 
-        $this->sMultishop = $this->sGetMultishop($this->sSettings["languageID"]);
+        $shop = $shopRepository->getActiveById($this->sSettings["languageID"]);
+        $this->shopData = $this->getShopData($this->sSettings["languageID"]);
+
+        $this->sLanguage = $this->sGetMultishop($this->sSettings["languageID"]);
+        $this->sMultishop = $this->sLanguage;
 
         if (empty($this->sSettings["categoryID"])) {
-            $this->sSettings["categoryID"] = $this->sMultishop["parentID"];
+            $this->sSettings["categoryID"] = $this->shopData["category_id"];
         }
         if (empty($this->sSettings["customergroupID"])) {
-            $this->sSettings["customergroupID"] = $this->sMultishop["defaultcustomergroup"];
+            $this->sSettings["customergroupID"] = $shop->getCustomerGroup()->getKey();
         } else {
             $this->sSettings["customergroupID"] = (int) $this->sSettings["customergroupID"];
         }
         if (empty($this->sSettings["currencyID"])) {
-            $this->sSettings["currencyID"] = $this->sMultishop["defaultcurrency"];
+            $this->sSettings["currencyID"] = $this->shopData["currency_id"];
         }
-
-        $this->sLanguage = $this->sGetMultishop($this->sSettings["languageID"]);
 
         $this->sCurrency = $this->sGetCurrency($this->sSettings["currencyID"]);
 
         $this->sCustomergroup = $this->sGetCustomergroup($this->sSettings["customergroupID"]);
 
-
         $this->articleMediaAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-
-        $shop = $shopRepository->getActiveById($this->sLanguage['id']);
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
@@ -337,11 +429,14 @@ class sExport
         $this->sSmarty->registerPlugin('modifier', 'property', array(&$this,'sGetArticleProperties'));
 
         $this->sSmarty->assign("sConfig",$this->sSYSTEM->sCONFIG);
-        $this->sSmarty->assign("sLanguage",$this->sLanguage);
-        $this->sSmarty->assign("sMultishop",$this->sMultishop);
+        $this->sSmarty->assign("shopData",$this->shopData);
         $this->sSmarty->assign("sCurrency",$this->sCurrency);
         $this->sSmarty->assign("sCustomergroup",$this->sCustomergroup);
         $this->sSmarty->assign("sSettings",$this->sSettings);
+
+        // deprecated: use shopData instead
+        $this->sSmarty->assign("sLanguage",$this->sLanguage);
+        $this->sSmarty->assign("sMultishop",$this->sMultishop);
 
         $this->sSmarty->config_vars["F"] = $this->sSettings["fieldmark"];
         $this->sSmarty->config_vars["EF"] = $this->sSettings["escaped_separator"];
@@ -624,8 +719,10 @@ class sExport
         $sql_add_select = array();
         $sql_add_where  = array();
 
-        if (empty($this->sLanguage["skipbackend"]) && !empty($this->sLanguage["isocode"])) {
-            $sql_isocode = $this->db->quote($this->sLanguage["isocode"]);
+        $skipBackend = $this->shop->get('skipbackend');
+        $isoCode = $this->shop->get('isocode');
+        if (empty($skipBackend) && !empty($isoCode)) {
+            $sql_isocode = $this->db->quote($isoCode);
             $sql_add_join[] = "
                 LEFT JOIN s_core_translations as ta
                 ON ta.objectkey=a.id AND ta.objecttype='article' AND ta.objectlanguage=$sql_isocode
@@ -637,8 +734,9 @@ class sExport
             $sql_add_select[] = "td.objectdata as detail_translation";
 
             //read the fallback for the case the translation is not going to be set
-            if (!empty($this->sLanguage["fallback"])) {
-                $sqlFallbackLanguageId = $this->db->quote($this->sLanguage["fallback"]);
+            $fallbackId = $this->shop->getFallback()->getId();
+            if (!empty($fallbackId)) {
+                $sqlFallbackLanguageId = $this->db->quote($fallbackId);
                 $sql_add_join[] = "
                 LEFT JOIN s_core_translations as taf
                     ON taf.objectkey=a.id AND taf.objecttype='article' AND taf.objectlanguage=$sqlFallbackLanguageId

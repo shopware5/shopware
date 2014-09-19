@@ -87,7 +87,7 @@ class sAdmin
 
     /**
      * Check if current active shop has own registration
-     * @var bool s_core_multilanguage.scoped_registration
+     * @var bool s_core_shops.customer_scope
      */
     public $scopedRegistration;
 
@@ -98,7 +98,7 @@ class sAdmin
 
     /**
      * Id of current active shop
-     * @var int s_core_multilanguage.id
+     * @var int s_core_shops.id
      */
     public $subshopId;
 

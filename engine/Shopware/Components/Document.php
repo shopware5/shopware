@@ -168,42 +168,64 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $config["_preview"] = true;
         }
 
-        /** @var $d Shopware_Components_Document */
-        $d = Enlight_Class::Instance('Shopware_Components_Document');//new Shopware_Components_Document();
+        /** @var $document Shopware_Components_Document */
+        $document = Enlight_Class::Instance('Shopware_Components_Document');//new Shopware_Components_Document();
 
         //$d->setOrder(new Shopware_Models_Document_Order($orderID,$config));
-        $d->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', array($orderID,$config)));
+        $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', array($orderID,$config)));
 
-        $d->setConfig($config);
+        $document->setConfig($config);
 
-        $d->setDocumentId($documentID);
-        $d->_compatibilityMode = false;
+        $document->setDocumentId($documentID);
+        $document->_compatibilityMode = false;
         if (!empty($orderID)) {
-            $d->_subshop = Shopware()->Db()->fetchRow("
-            SELECT s_core_multilanguage.id,doc_template, template, isocode,locale FROM s_order,s_core_multilanguage WHERE s_order.language = s_core_multilanguage.id AND s_order.id = ?
-            ",array($orderID));
+            $document->_subshop = Shopware()->Db()->fetchRow("
+                SELECT
+                    s.id,
+                    (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.document_template_id) as doc_template,
+                    (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.template_id) as template,
+                    s.id as isocode,
+                    s.locale_id as locale
+                FROM s_order, s_core_shops s
+                LEFT JOIN s_core_shops m
+                    ON m.id=s.main_id
+                    OR (s.main_id IS NULL AND m.id=s.id)
+                WHERE s_order.language = s.id
+                AND s_order.id = ?
+                ",
+                array($orderID)
+            );
 
-            if (empty($d->_subshop["doc_template"])) $d->setTemplate($d->_defaultPath);
+            if (empty($document->_subshop["doc_template"])) {
+                $document->setTemplate($document->_defaultPath);
+            }
 
-            if (empty($d->_subshop["id"])) {
+            if (empty($document->_subshop["id"])) {
                 throw new Enlight_Exception("Could not load template path for order $orderID");
             }
 
         } else {
 
-            $d->_subshop = Shopware()->Db()->fetchRow("
-            SELECT s_core_multilanguage.id,doc_template, template, isocode,locale FROM s_core_multilanguage WHERE s_core_multilanguage.default = 1
+            $document->_subshop = Shopware()->Db()->fetchRow("
+            SELECT
+                s.id,
+                (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = s.document_template_id) as doc_template,
+                (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = s.template_id) as template,
+                s.id as isocode,
+                s.locale_id as locale
+            FROM s_core_shops s
+            WHERE s.default = 1
             ");
 
-            $d->setTemplate($d->_defaultPath);
-            $d->_subshop["doc_template"] = $d->_defaultPath;
+            $document->setTemplate($document->_defaultPath);
+            $document->_subshop["doc_template"] = $document->_defaultPath;
 
         }
 
-        $d->setTranslationComponent();
-        $d->initTemplateEngine();
+        $document->setTranslationComponent();
+        $document->initTemplateEngine();
 
-        return $d;
+        return $document;
     }
 
     /**
@@ -591,15 +613,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                $checkForSeparateNumbers = Shopware()->Db()->fetchRow("
-                    SELECT id, separate_numbers
-                    FROM `s_core_multilanguage`
-                    WHERE `id` = ?
-                ",array($this->_subshop["id"]));
-
-                if (!empty($checkForSeparateNumbers['separate_numbers'])) {
-                    $numberrange.= "_".$checkForSeparateNumbers['id'];
-                }
                 $getNumber = Shopware()->Db()->fetchRow("
                     SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?"
                     ,array($numberrange));

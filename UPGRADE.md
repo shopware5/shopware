@@ -110,6 +110,10 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sLanguageData` were removed. Please use Shopware()->Shop() instead
     * `sSystem::sLanguage` were removed. Please use Shopware()->Shop()->getId() instead
 * Remove unused `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` and `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
+* Deprecated `s_core_multilanguage` table
+    * `s_core_multilanguage` table is kept up to date, but will be fully removed in SW 5.1
+    * Removed unused `sExport::sGetLanguage()` and deprecated `sExport::sGetMultishop()`, `sExport::$sLanguage` and `sExport::$sMultishop`
+    * Previously unused fields `mainID`, `flagstorefront`, `flagbackend`, `separate_numbers`, `scoped_registration` and `navigation` are no longer loaded from the database
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
