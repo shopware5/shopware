@@ -36,7 +36,7 @@ Ext.define('Shopware.color.Window', {
             flex: 1,
             items: [
                 me.createColorSelection(),
-                me.createSelectedColorField(),
+                me.createSelectedColorField()
             ]
         });
 

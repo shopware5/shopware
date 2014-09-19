@@ -16,7 +16,7 @@ Ext.define('Shopware.form.field.ColorSelection', {
 
         me.on('afterrender', function() {
             me.createCanvasElement();
-        })
+        });
     },
 
     rgbToHex: function (r, g, b) {
@@ -48,7 +48,8 @@ Ext.define('Shopware.form.field.ColorSelection', {
         var me = this,
             ctx = canvas.getContext('2d'),
             img = new Image(),
-            $canvas = Ext.get(canvas);
+            $canvas = Ext.get(canvas),
+            mouseDown = false;
 
         img.src = me.imageSrc;
 
@@ -56,8 +57,16 @@ Ext.define('Shopware.form.field.ColorSelection', {
             ctx.drawImage(img, 0, 0);
         };
 
+        $canvas.addListener('mousedown', function (event) {
+            mouseDown = event.button === 0;
+        });
+
+        $canvas.addListener('mouseup', function () {
+            mouseDown = false;
+        });
+
         $canvas.addListener('mousemove', function (event) {
-            if (event.button == 0) {
+            if (mouseDown) {
                 me.selectColor(event, ctx);
             }
         });
@@ -70,7 +79,9 @@ Ext.define('Shopware.form.field.ColorSelection', {
     selectColor: function(event, ctx) {
         var me = this,
             bEvent = event.browserEvent,
-            imageData = ctx.getImageData(bEvent.offsetX, bEvent.offsetY, 1, 1),
+            x = (typeof bEvent.offsetX !== 'undefined') ? bEvent.offsetX : bEvent.layerX,
+            y = (typeof bEvent.offsetY !== 'undefined') ? bEvent.offsetY: bEvent.layerY,
+            imageData = ctx.getImageData(x, y, 1, 1),
             data = imageData.data;
 
         var value = '#' + me.rgbToHex(data[0], data[1], data[2]);
