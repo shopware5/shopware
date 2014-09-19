@@ -244,7 +244,7 @@ Ext.define('Shopware.data.Model', {
         proxy.api.read = proxy.api.detail;
 
         var store = Ext.create('Ext.data.Store', {
-            model: me.__proto__.$className,
+            model: (typeof me.__proto__ === 'object') ? me.__proto__.$className : me.modelName,
             proxy: me.proxy
         });
 
