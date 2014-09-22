@@ -48,16 +48,20 @@
 		{/block}
 	{/if}
 
-	<h2>{s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"</h2>
+    {block name="frontend_detail_comment_header"}
+        <h2>{s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"</h2>
 
-	{if $sArticle.sVoteAverange.count}
-		<div class="overview_rating">
-			<strong>{se name="DetailCommentInfoAverageRate"}{/se}</strong>
-			<div class="star star{$sArticle.sVoteAverange.averange}">Star Rating</div>
-			<span>({s name="DetailCommentInfoRating"}{/s})</span>
-			<div class="clear">&nbsp;</div>
-		</div>
-	{/if}
+        {if $sArticle.sVoteAverange.count}
+            {block name="frontend_detail_comment_header_rating"}
+                    <div class="overview_rating">
+                        <strong>{se name="DetailCommentInfoAverageRate"}{/se}</strong>
+                        <div class="star star{$sArticle.sVoteAverange.averange}">Star Rating</div>
+                        <span>({s name="DetailCommentInfoRating"}{/s})</span>
+                        <div class="clear">&nbsp;</div>
+                    </div>
+            {/block}
+        {/if}
+    {/block}
 
 	<div class="doublespace">&nbsp;</div>
 
