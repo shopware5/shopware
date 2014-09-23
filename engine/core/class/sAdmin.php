@@ -1681,37 +1681,26 @@ class sAdmin
      */
     public function sGetCountryTranslation($country = "")
     {
-        // Load translation
-        $sql = "
-            SELECT objectdata FROM s_core_translations
-            WHERE objecttype = 'config_countries' AND objectlanguage = ?
-        ";
+        $languageId = $this->contextService->getShopContext()->getShop()->getId();
+        $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $param = array($this->contextService->getShopContext()->getShop()->getId());
-        $getTranslation = $this->db->fetchRow(
-            $sql,
-            $param
-        );
-        $getTranslation = $getTranslation ? : array();
-
-        if ($getTranslation["objectdata"]) {
-            $object = unserialize($getTranslation["objectdata"]);
-        }
+        $translator = new Shopware_Components_Translation();
+        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_countries');
 
         if (!$country) {
-            return $object;
+            return $translationData;
         }
 
         // Pass (possible) translation to country
-        if ($object[$country["id"]]["countryname"]) {
-            $country["countryname"] = $object[$country["id"]]["countryname"];
+        if ($translationData[$country["id"]]["countryname"]) {
+            $country["countryname"] = $translationData[$country["id"]]["countryname"];
         }
-        if ($object[$country["id"]]["notice"]) {
-            $country["notice"] = $object[$country["id"]]["notice"];
+        if ($translationData[$country["id"]]["notice"]) {
+            $country["notice"] = $translationData[$country["id"]]["notice"];
         }
 
-        if ($object[$country["id"]]["active"]) {
-            $country["active"] = $object[$country["id"]]["active"];
+        if ($translationData[$country["id"]]["active"]) {
+            $country["active"] = $translationData[$country["id"]]["active"];
         }
 
         return $country;
@@ -1729,35 +1718,25 @@ class sAdmin
      */
     public function sGetDispatchTranslation($dispatch = "")
     {
-        // Load Translation
-        $sql = "
-            SELECT objectdata FROM s_core_translations
-            WHERE objecttype='config_dispatch' AND objectlanguage = ?
-        ";
-        $params = array($this->contextService->getShopContext()->getShop()->getId());
-        $getTranslation = $this->db->fetchRow(
-            $sql,
-            $params
-        );
-        $getTranslation = $getTranslation ? : array();
+        $languageId = $this->contextService->getShopContext()->getShop()->getId();
+        $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        if ($getTranslation["objectdata"]) {
-            $object = unserialize($getTranslation["objectdata"]);
-        }
+        $translator = new Shopware_Components_Translation();
+        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_dispatch');
 
         if (!$dispatch) {
-            return $object;
+            return $translationData;
         }
 
         // Pass (possible) translation to country
-        if ($object[$dispatch["id"]]["dispatch_name"]) {
-            $dispatch["name"] = $object[$dispatch["id"]]["dispatch_name"];
+        if ($translationData[$dispatch["id"]]["dispatch_name"]) {
+            $dispatch["name"] = $translationData[$dispatch["id"]]["dispatch_name"];
         }
-        if ($object[$dispatch["id"]]["dispatch_description"]) {
-            $dispatch["description"] = $object[$dispatch["id"]]["dispatch_description"];
+        if ($translationData[$dispatch["id"]]["dispatch_description"]) {
+            $dispatch["description"] = $translationData[$dispatch["id"]]["dispatch_description"];
         }
-        if ($object[$dispatch["id"]]["dispatch_status_link"]) {
-            $dispatch["status_link"] = $object[$dispatch["id"]]["dispatch_status_link"];
+        if ($translationData[$dispatch["id"]]["dispatch_status_link"]) {
+            $dispatch["status_link"] = $translationData[$dispatch["id"]]["dispatch_status_link"];
         }
 
         return $dispatch;
@@ -1775,28 +1754,22 @@ class sAdmin
      */
     public function sGetPaymentTranslation($payment = "")
     {
-        // Load Translation
-        $getTranslation = $this->db->fetchRow(
-            "SELECT objectdata FROM s_core_translations
-                WHERE objecttype='config_payment' AND objectlanguage = ?",
-            array($this->contextService->getShopContext()->getShop()->getId())
-        );
-        $getTranslation = $getTranslation ? : array();
+        $languageId = $this->contextService->getShopContext()->getShop()->getId();
+        $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        if (!empty($getTranslation["objectdata"])) {
-            $object = unserialize($getTranslation["objectdata"]);
-        }
+        $translator = new Shopware_Components_Translation();
+        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_payment');
 
         if (!$payment) {
-            return $object;
+            return $translationData;
         }
 
         // Pass (possible) translation to payment
-        if (!empty($object[$payment["id"]]["description"])) {
-            $payment["description"] = $object[$payment["id"]]["description"];
+        if (!empty($translationData[$payment["id"]]["description"])) {
+            $payment["description"] = $translationData[$payment["id"]]["description"];
         }
-        if (!empty($object[$payment["id"]]["additionalDescription"])) {
-            $payment["additionaldescription"] = $object[$payment["id"]]["additionalDescription"];
+        if (!empty($translationData[$payment["id"]]["additionalDescription"])) {
+            $payment["additionaldescription"] = $translationData[$payment["id"]]["additionalDescription"];
         }
 
         return $payment;
@@ -1815,43 +1788,19 @@ class sAdmin
         if (Shopware()->Shop()->get('skipbackend')) {
             return empty($state) ? array() : $state;
         }
-        $language = $this->contextService->getShopContext()->getShop()->getId();
-        $fallback = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        $translation = $this->db->fetchOne(
-            "SELECT objectdata FROM s_core_translations
-            WHERE objecttype = 'config_country_states'
-            AND objectkey = 1
-            AND objectlanguage = ?",
-            array($language)
-        );
+        $languageId = $this->contextService->getShopContext()->getShop()->getId();
+        $fallbackId = $this->contextService->getShopContext()->getShop()->getFallbackId();
 
-        if (!empty($translation)) {
-            $translation = unserialize($translation);
-        } else {
-            $translation = array();
-        }
-
-        if (!empty($fallback)) {
-            $translationFallback = $this->db->fetchOne(
-                "SELECT objectdata FROM s_core_translations
-                WHERE objecttype = 'config_country_states'
-                AND objectkey = 1
-                AND objectlanguage = ?",
-                array($fallback)
-            );
-            if (!empty($translationFallback)) {
-                $translationFallback = unserialize($translationFallback);
-                $translation += $translationFallback;
-            }
-        }
+        $translator = new Shopware_Components_Translation();
+        $translationData = $translator->readBatchWithFallback($languageId, $fallbackId, 'config_country_states');
 
         if (empty($state)) {
-            return $translation;
+            return $translationData;
         }
 
-        if ($translation[$state["id"]]) {
-            $state["statename"] = $translation[$state["id"]]["name"];
+        if ($translationData[$state["id"]]) {
+            $state["statename"] = $translationData[$state["id"]]["name"];
         }
 
         return $state;
