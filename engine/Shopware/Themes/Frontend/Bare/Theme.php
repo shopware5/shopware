@@ -44,8 +44,7 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSet = $this->createFieldSet('bareGlobal', '__global_configuration__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
         $fieldSet->addElement($this->createCheckboxField('scrollableHeader', '__scrollable_header__', false, $this->getLabelAttribute('scrollable_header_description')));
-        $fieldSet->addElement($this->createCheckboxField('offcanvasBasketTablet', '__offcanvas_basket_tablet__', false, $this->getLabelAttribute('offcanvas_basket_tablet_description')));
-        $fieldSet->addElement($this->createCheckboxField('offcanvasBasketDesktop', '__offcanvas_basket_desktop__', false, $this->getLabelAttribute('offcanvas_basket_desktop_description')));
+        $fieldSet->addElement($this->createCheckboxField('offcanvasCart', '__offcanvas_cart__', true, $this->getLabelAttribute('offcanvas_cart_description')));
         $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
         $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
         $fieldSet->addElement($this->createCheckboxField('showCategoriesLeft', '__show_categories_left__', false, $this->getLabelAttribute('show_categories_left_description')));

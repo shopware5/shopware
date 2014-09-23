@@ -23,7 +23,7 @@
         display: block;
         position: absolute;
         top: 50%;
-        z-index: 90;
+        z-index: 1000;
         font-family: 'shopware';
         text-align: center;
         color: @primaryTextColor;
@@ -86,16 +86,6 @@
 
 .image-slider--thumbnails {
     display: none;
-}
-
-.image-slider--modal {
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    position: fixed;
-    top: 0; left: 0;
-    z-index: 999;
-    background: #ffffff;
 }
 
 .image-slider--dots {
@@ -165,7 +155,7 @@
             .linear-gradient(#ffffff, #edeff2);
             display: none;
             position: absolute;
-            z-index: 90;
+            z-index: 1000;
             font-family: 'shopware';
             text-align: center;
             color: @primaryTextColor;

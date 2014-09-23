@@ -31,7 +31,7 @@
 					{include file="frontend/index/topbar-navigation.tpl"}
 				{/block}
 
-				<div class="container">
+				<div class="container header--navigation">
 
 					{* Logo container *}
 					{block name='frontend_index_logo_container'}
@@ -42,6 +42,8 @@
 					{block name='frontend_index_shop_navigation'}
 						{include file="frontend/index/shop-navigation.tpl"}
 					{/block}
+
+                    <div class="container--ajax-cart" data-collapse-cart="true" data-successMessage="{s name="AjaxCartSuccessText" namespace="frontend/checkout/ajax_cart"}{/s}"{if $theme.offcanvasCart} data-displayMode="offcanvas"{/if}></div>
 				</div>
 			</header>
 
@@ -124,7 +126,7 @@
             jQuery.controller =  {ldelim}
                 'vat_check_enabled': '{config name='vatcheckendabled'}',
                 'vat_check_required': '{config name='vatcheckrequired'}',
-                'ajax_cart': '{url controller="checkout"}',
+                'ajax_cart': '{url controller='checkout' action='ajaxCart'}',
                 'ajax_search': '{url controller="ajax_search"}',
                 'ajax_login': '{url controller="account" action="ajax_login"}',
                 'register': '{url controller="register"}',

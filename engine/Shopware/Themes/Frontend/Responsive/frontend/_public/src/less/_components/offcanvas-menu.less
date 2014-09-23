@@ -2,32 +2,41 @@
 body {
     overflow-x: hidden;
     overflow-y: auto;
+
+    &.is--moved-left,
+    &.is--moved-right {
+        overflow: hidden;
+    }
 }
 
 // Is used for the necessary styling of an off-canvas menu
 .off-canvas {
-    .unitize-width(300);
-    .unitize-variable(300, 16);
+    .unitize-width(280);
+    .unitize-variable(280, 16);
     .transition(all, 0.25s, ease-in-out);
     position: fixed;
     top: 0;
     height: 100%;
-    z-index: 8999;
+    z-index: 8000;
     overflow-y: auto;
     overflow-x: hidden;
     background: @primaryBackgroundColor;
 
     &.is--left {
-        .unitize(-300, 16, left);
+        .unitize(-280, 16, left);
     }
 
     &.is--right {
-        .unitize(-300, 16, right);
+        .unitize(-280, 16, right);
     }
 
     &.is--active {
-        left: 0;
-        right: 0;
+        &.is--right {
+            right: 0;
+        }
+        &.is--left {
+            left: 0;
+        }
     }
 
     &.js--no-transition {
@@ -38,35 +47,15 @@ body {
 .page-wrap {
     .transition(all, 0.25s, ease-in-out);
     position: relative;
-    left: 0; right: 0;
+    left: 0;
 
     &.is--moved-left {
-        .unitize(300, 16, left);
+        .unitize(280, 16, left);
     }
 
     &.is--moved-right {
-        .unitize(300, 16, right);
+        .unitize(-280, 16, left);
     }
-
-    &:after,
-    &::after {
-        .transition(opacity, 0.25s, ease-in-out);
-        .opacity(0);
-        content: '';
-        display: block;
-        visibility: hidden;
-        position: fixed;
-        top: 0; left: 0;
-        right: 0; bottom: 0;
-        background: rgba(0, 0, 0, .5);
-        z-index: 8998;
-    }
-}
-
-.is--moved-left .page-wrap::after,
-.is--moved-right .page-wrap::after {
-    .opacity(1);
-    visibility: visible;
 }
 
 .navigation--smartphone {
@@ -135,10 +124,11 @@ body {
         .translate(0, 0);
         .transition(none);
         background: transparent;
+        position: relative;
         width: auto;
         height: auto;
-        position: relative;
         top: 0;
         left: 0;
+        z-index: 1000;
     }
 }
