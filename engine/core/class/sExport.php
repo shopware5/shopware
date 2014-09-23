@@ -734,7 +734,7 @@ class sExport
             $sql_add_select[] = "td.objectdata as detail_translation";
 
             //read the fallback for the case the translation is not going to be set
-            $fallbackId = $this->shop->getFallback()->getId();
+            $fallbackId = $this->shop->getFallback() ? $this->shop->getFallback()->getId() : null;
             if (!empty($fallbackId)) {
                 $sqlFallbackLanguageId = $this->db->quote($fallbackId);
                 $sql_add_join[] = "
