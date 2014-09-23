@@ -126,6 +126,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $config["sPerPage"] = $config["resultsPerPage"];
 
         $config["shopLanguageId"] = Shopware()->Shop()->getId();
+        $config["shopLanguageFallbackId"] = Shopware()->Shop()->getFallback() ? Shopware()->Shop()->getFallback()->getId() : null;
         $config["shopHasTranslations"] = Shopware()->Shop()->get('skipbackend') == true ? false : true;
         //$config["shopCurrency"] = Shopware()->Shop()->Currency();
         // todo@all Change Call to system class @deprecated

@@ -166,6 +166,60 @@ class Shopware_Components_Translation
     }
 
     /**
+     * Reads a single translation data from the storage.
+     *
+     * @param   $language
+     * @param   $type
+     * @param   int $key
+     * @param   bool $merge
+     * @return  array
+     */
+    public function read($language, $type, $key = 1, $merge = false)
+    {
+        if ($type == 'variantMain') {
+            $type = 'article';
+        }
+
+        $sql  = '
+            SELECT `objectdata`
+            FROM `s_core_translations`
+            WHERE `objecttype` = ?
+            AND `objectkey` = ?
+            AND `objectlanguage` = ?
+        ';
+        $data = Shopware()->Db()->fetchOne($sql, array(
+            $type,
+            $merge ? 1 : $key,
+            $language
+        ));
+
+        return $this->unFilterData($type, $data, $merge ? $key : null);
+    }
+
+    /**
+     * Reads a single translation data from the storage.
+     * Also loads fallback (has less priority)
+     *
+     * @param   $language
+     * @param   $fallback
+     * @param   $type
+     * @param   int $key
+     * @param   bool $merge
+     * @return  array
+     */
+    public function readWithFallback($language, $fallback, $type, $key = 1, $merge = false)
+    {
+        $translation = $this->read($language, $type, $key, $merge);
+        if ($fallback) {
+            $translationFallback = $this->read($fallback, $type, $key, $merge);
+        } else {
+            $translationFallback = array();
+        }
+
+        return $translation + $translationFallback;
+    }
+
+    /**
      * Reads multiple translation data from storage.
      *
      * @param   $language
@@ -206,10 +260,48 @@ class Shopware_Components_Translation
             $translation['objectdata'] = $this->unFilterData(
                 $translation['objecttype'],
                 $translation['objectdata'],
-                $merge ? $translation['objectkey'] : null
+                null
             );
+
+            if ($merge) {
+                return $translation['objectdata'];
+            }
         }
         return $data;
+    }
+
+    /**
+     * Reads multiple translations including their fallbacks
+     * Merges the two (fallback has less priority) and returns the results
+     *
+     * @param int $language
+     * @param int $fallback
+     * @param $type
+     * @return array|mixed
+     */
+    public function readBatchWithFallback($language, $fallback, $type)
+    {
+        $translationData = $this->readBatch($language, $type, 1, true);
+
+        // Look for a fallback and correspondent translations
+        if (!empty($fallback)) {
+            $translationFallback = $this->readBatch($fallback, $type, 1, true);
+
+            if (!empty($translationFallback)) {
+                // We need something like array_merge_recursive, but that also
+                // recursively merges elements with int keys.
+                foreach ($translationFallback as $key => $data) {
+                    if (array_key_exists($key, $translationData)) {
+                        $translationData[$key] += $data;
+                    } else {
+                        $translationData[$key] = $data;
+                    }
+                }
+
+            }
+        }
+
+        return $translationData;
     }
 
     /**
@@ -242,37 +334,6 @@ class Shopware_Components_Translation
         }
 
         $queryBuilder->execute();
-    }
-
-    /**
-     * Reads a single translation data from the storage.
-     *
-     * @param   $language
-     * @param   $type
-     * @param   int $key
-     * @param   bool $merge
-     * @return  array
-     */
-    public function read($language, $type, $key = 1, $merge = false)
-    {
-        if ($type == 'variantMain') {
-            $type = 'article';
-        }
-
-        $sql  = '
-            SELECT `objectdata`
-            FROM `s_core_translations`
-            WHERE `objecttype` = ?
-            AND `objectkey` = ?
-            AND `objectlanguage` = ?
-        ';
-        $data = Shopware()->Db()->fetchOne($sql, array(
-            $type,
-            $merge ? 1 : $key,
-            $language
-        ));
-
-        return $this->unFilterData($type, $data, $merge ? $key : null);
     }
 
     /**
