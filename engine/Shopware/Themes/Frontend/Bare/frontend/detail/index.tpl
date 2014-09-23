@@ -6,14 +6,13 @@
 {/block}
 
 {* Modify the breadcrumb *}
-{block name='frontend_index_breadcrumb_prefix' prepend}
+{block name='frontend_index_breadcrumb_inner' prepend}
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
-            <li class="breadcrumb--button">
-                <a class="btn" href="#" title="{s name="DetailNavIndex"}{/s}">
-                    <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
-                </a>
-            </li>
+            {$breadCrumbBackLink = $sBreadcrumb[count($sBreadcrumb) - 1]['link']}
+            <a class="breadcrumb--button breadcrumb--link" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex"}{/s}">
+                <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
+            </a>
         {/if}
     {/block}
 {/block}

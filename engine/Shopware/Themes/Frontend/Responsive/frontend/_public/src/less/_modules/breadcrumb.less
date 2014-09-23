@@ -12,9 +12,19 @@
         float: none;
         border-bottom: 1px solid #ebedef;
 
+        .breadcrumb--list {
+            overflow: hidden;
+        }
+
+        .breadcrumb--entry,
+        .breadcrumb--separator,
+        .breadcrumb--button {
+            .unitize(24, 16, line-height);
+        }
+
         // Entry styling
         .breadcrumb--entry, .breadcrumb--separator {
-            .unitize-margin(0, 8);
+            .unitize(16, 16, margin-right);
             float: left;
             list-style: none;
 	        white-space: nowrap;
@@ -22,8 +32,7 @@
 
         // Separator
         .breadcrumb--separator {
-            .unitize(8, 16, font-size);
-            .unitize-margin(5, 0, 3, 0, 16);
+            .unitize(10, 16, font-size);
         }
 
         // Link
@@ -35,16 +44,17 @@
         .is--active .breadcrumb--link {
             color: @primaryColor;
         }
+    }
 
-        // Button
-        .breadcrumb--button {
-            .unitize(18, 16, margin-right);
-            float: left;
-            list-style: none;
+    // Button
+    .breadcrumb--button {
+        .unitize-padding(10, 20);
+        float: left;
+        list-style: none;
 
-            .icon--arrow-left {
-                .unitize(10, 16, font-size);
-            }
+        .icon--arrow-left {
+            .unitize(10, 16, font-size);
+            .unitize(8, 16, margin-right);
         }
     }
 
@@ -54,20 +64,18 @@
             .unitize-padding(3, 5);
         }
 
-        .breadcrumb--entry, .breadcrumb--separator {
-            .unitize-margin(10, 8, 0, 8);
-        }
-
-        .breadcrumb--separator {
-            .unitize(15, 16, margin-top);
+        .breadcrumb--list {
+            .unitize-padding(10, 10);
         }
     }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-
     .content--breadcrumb {
         .unitize-padding(15, 20, 15, 45);
-    }
 
+        .breadcrumb--button {
+            .unitize-padding(10, 45);
+        }
+    }
 }
