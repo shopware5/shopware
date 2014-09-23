@@ -1,5 +1,5 @@
 {block name="frontend_detail_buy"}
-	<form name="sAddToBasket" method="post" action="{url controller=checkout action=addArticle}" class="buybox--form" data-add-article="true" data-eventName="submit">
+	<form name="sAddToBasket" method="post" action="{url controller=checkout action=addArticle}" class="buybox--form" data-add-article="true" data-eventName="submit"{if $theme.offcanvasCart} data-showModal="false" data-addArticleUrl="{url controller=checkout action=ajaxAddArticleCart}"{/if}>
 		{if $sArticle.sConfigurator&&$sArticle.sConfiguratorSettings.type==3}
 			{foreach $sArticle.sConfigurator as $group}
 				<input type="hidden" name="group[{$group.groupID}]" value="{$group.selected_value}"/>

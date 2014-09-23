@@ -582,20 +582,25 @@
          * all elements created by the plugin.
          */
         destroy: function() {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
             $(window).off('resize.imageSlider');
 
-            if (me.opts.thumbnails) me.setActiveThumbnail(0);
-            if (me.opts.dotNavigation && me.$dots) me.setActiveDot(0);
+            if (opts.dotNavigation && me.$dots) me.setActiveDot(0);
 
-            if (me.$arrowLeft.length) me.$arrowLeft.remove();
-            if (me.$arrowRight.length) me.$arrowRight.remove();
+            if (opts.arrowControls) {
+                me.$arrowLeft.remove();
+                me.$arrowRight.remove();
+            }
 
-            if (me.$thumbnailArrowPrev.length) me.$thumbnailArrowPrev.remove();
-            if (me.$thumbnailArrowNext.length) me.$thumbnailArrowNext.remove();
+            if (opts.thumbnails) {
+                me.setActiveThumbnail(0);
+                me.$thumbnailArrowPrev.remove();
+                me.$thumbnailArrowNext.remove();
+            }
 
-            if (me.opts.autoSlide) me.stopAutoSlide();
+            if (opts.autoSlide) me.stopAutoSlide();
 
             me._destroy();
         }
