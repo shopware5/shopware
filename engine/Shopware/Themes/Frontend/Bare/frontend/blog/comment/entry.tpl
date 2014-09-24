@@ -13,7 +13,7 @@
 		<ul class="list--unstyled">
 			{foreach $sArticle.comments as $vote}
 				{block name='frontend_blog_comments_comment_block'}
-					<li class="blog--comments-entry">
+					<li class="blog--comments-entry" itemtype="http://schema.org/Comment" itemscope="itemscope" itemprop="comment">
 						<div class="blog--comments-entry-inner panel has--border is--rounded{if $vote@last} is--last{/if}">
 
 							{* Comment Header *}
@@ -29,7 +29,7 @@
 
 									{* Author *}
 									{block name='frontend_blog_comments_comment_author'}
-										<div class="blog--comments-author" itemscope itemtype="http://schema.org/UserComments">
+										<div class="blog--comments-author"">
 
 											{block name='frontned_blog_comments_comment_author_label'}
 												<strong class="content--label">{s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}</strong>
@@ -68,7 +68,7 @@
 
 									{* Comment *}
 									{block name='frontend_blog_comments_comment_text'}
-										<div class="blog--comments-entry-text">{$vote.comment|nl2br}</div>
+										<div class="blog--comments-entry-text" itemprop="commentText">{$vote.comment|nl2br}</div>
 									{/block}
 								</div>
 							{/block}
