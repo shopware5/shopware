@@ -390,7 +390,7 @@
                 // centering again to fix some styling/positioning issues
                 window.setTimeout(me.center.bind(me), 25);
             }
-            
+
             $.publish('plugin/modal/onSetContent');
         },
 

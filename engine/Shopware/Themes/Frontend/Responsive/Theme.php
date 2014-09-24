@@ -88,8 +88,10 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.add-article.js',
         'src/js/jquery.ui.datepicker.js',
         'src/js/jquery.collapse-cart.js',
-		'src/js/jquery.shopware-responsive.js'
-	);
+        'src/js/jquery.product-compare-add.js',
+        'src/js/jquery.product-compare-menu.js',
+        'src/js/jquery.shopware-responsive.js'
+    );
 
     /**
      * @param Form\Container\TabContainer $container

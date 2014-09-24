@@ -1,29 +1,39 @@
 {if $sComparisons}
-<div id="compareContainer" onmouseover="jQuery.compare.showCompare();" onmouseout="jQuery.compare.hideCompare();">
-	<span id="compareHighlight">{se name="CompareInfoCount"}Mein Vergleich{/se} <span class="comparisons">{$sComparisons|@count}</span></span>
-</div>
-<div id="compareContainerResults" onmouseover="jQuery.compare.showCompare();" onmouseout="jQuery.compare.hideCompare()">
-<div class="arrow"></div>
-	<ul>
-		{foreach from=$sComparisons item=compare}
-		<li>
-			<div>{$compare.articlename|truncate:30}</div>
-			<a href="{url controller='compare' action='delete_article' articleID=$compare.articleID}" rel="nofollow" class="del_comp compare_delete_article">&nbsp;</a>
-		</li>
-		{/foreach}
-		
-		
-		<li class="bt_compare">
-			<a href="{url controller='compare' action='overlay' forceSecure}" rel="nofollow" class="bt_compare compare_get_overlay" onclick="return false;">
-				{se name="CompareActionStart"}{/se}
-			</a>
-		</li>
-		
-		<li class="last">
-			<a href="{url controller='compare' action='delete_all' forceSecure}" rel="nofollow" class="bt_compare_del compare_delete_all" onclick="return false;">
-				{se name="CompareActionDelete"}{/se}
-			</a>
-		</li>
-	</ul>
-</div>
+    {block name='frontend_top_navigation_menu_entry'}
+        <i class="icon--compare"></i> {s name="CompareInfoCount"}{/s}<span class="badge">{$sComparisons|@count}</span>
+    {/block}
+    {block name='frontend_compare_product_list_dropdown'}
+        <ul class="compare--list" data-product-compare-menu="true" role="menu">
+            {foreach $sComparisons as $compare}
+                {block name='frontend_compare_product_dropdown_entry'}
+                <li class="service--entry" role="menuitem">
+                    {block name='frontend_compare_product_dropdown_article_name'}
+                        <a class="compare--link">{$compare.articlename|truncate:28}</a>
+                    {/block}
+
+                    {block name='frontend_compare_product_dropdown_article_link'}
+                        <a class="btn btn--item-delete" href="{url controller='compare' action='delete_article' articleID=$compare.articleID}" rel="nofollow">
+                            <i class="icon--cross"></i>
+                        </a>
+                    {/block}
+                </li>
+                {/block}
+            {/foreach}
+            {block name='frontend_compare_product_dropdown_action_start'}
+                <li>
+                    <a href="{url controller='compare' action='overlay' forceSecure}" data-modal-title="{s name="CompareInfoCount"}Produktvergleich{/s}" rel="nofollow" class="btn btn--primary btn--compare btn--compare-start">
+                        {s name="CompareActionStart"}{/s}
+                        <i class="icon--arrow-right"></i>
+                    </a>
+                </li>
+            {/block}
+            {block name='frontend_compare_product_dropdown_action_delete'}
+                <li>
+                    <a href="{url controller='compare' action='delete_all' forceSecure}" rel="nofollow" class="btn btn--secondary btn--compare btn--compare-delete">
+                        {s name="CompareActionDelete"}{/s}
+                    </a>
+                </li>
+            {/block}
+        </ul>
+    {/block}
 {/if}

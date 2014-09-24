@@ -3706,6 +3706,7 @@ class sArticles
 
         $properties = $this->legacyStructConverter->convertPropertySetStruct($propertySet);
         $promotion['sProperties'] = $this->legacyStructConverter->getFlatPropertyArray($properties);
+        $promotion['filtergroupID'] = $propertySet->getId();
 
         return $promotion;
     }
