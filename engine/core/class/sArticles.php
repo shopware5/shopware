@@ -1436,13 +1436,24 @@ class sArticles
      */
     protected function addActiveFilterCondition($builder, $activeFilters)
     {
-        foreach ($activeFilters as $valueId) {
+        foreach ($activeFilters as $key => $valueId) {
+            $key     = (int)$key;
+            $valueId = (int)$valueId;
+
             if ($valueId <= 0) {
                 continue;
             }
-            $alias = 'filterArticles' . $valueId;
-            $builder->innerJoin('articles', 's_filter_articles', $alias, $alias . '.articleID = articles.id AND ' . $alias . '.valueID = ' . (int) $valueId);
+
+            $alias = 'filterArticles' . $key;
+            $builder->innerJoin(
+                'articles',
+                's_filter_articles',
+                $alias,
+                $alias . '.articleID = articles.id AND ' . $alias . '.valueID = :' . $alias
+            );
+            $builder->setParameter($alias, $valueId);
         }
+
         return $builder;
     }
 
