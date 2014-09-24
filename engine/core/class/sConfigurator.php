@@ -357,11 +357,12 @@ class sConfigurator
                 ->addOrderBy('prices.from', 'ASC');
 
         //now we iterate all selected groups with their options to filter the available variant
-        foreach ($selectedItems as $optionId) {
+        foreach ($selectedItems as $key => $optionId) {
+            $optionId = (int)$optionId;
             if (empty($optionId)) {
                 continue;
             }
-            $alias = 'option' . $optionId;
+            $alias = 'option' . (int)$key;
             $builder->addSelect($alias);
             $builder->innerJoin('detail.configuratorOptions', $alias);
             $builder->andWhere($alias . '.id = :' . $alias);
