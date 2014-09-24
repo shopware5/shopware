@@ -24,7 +24,8 @@
 					   title="{"{s name='ListingBoxLinkBuy'}{/s}"|escape}"
 					   class="product--action action--buynow btn btn--secondary"
                        data-add-article="true"
-                       data-addArticleUrl="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}">
+                       data-addArticleUrl="{if $theme.offcanvasCart}{url controller='checkout' action='ajaxAddArticleCart' sAdd=$sArticle.ordernumber}{else}{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}{/if}"
+                       {if $theme.offcanvasCart} data-showModal="false"{/if}>
 						{s name='ListingBoxLinkBuy'}{/s}
 						<i class="icon--arrow-right is--right is--small"></i>
 					</a>
