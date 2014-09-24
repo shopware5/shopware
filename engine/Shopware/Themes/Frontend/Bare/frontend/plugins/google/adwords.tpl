@@ -1,18 +1,16 @@
 {if $GoogleConversionID}
+
+{$sRealAmount=$sAmount|replace:",":"."}
 {if $sAmountWithTax}
-	{assign var="sRealAmount" value=$sAmountWithTax|replace:",":"."}
-{else}
-	{assign var="sRealAmount" value=$sAmount|replace:",":"."}
+    {$sRealAmount=$sAmountWithTax|replace:",":"."}
 {/if}
 <script type="text/javascript">
-//<![CDATA[
     var google_conversion_id = "{$GoogleConversionID}";
-    var google_conversion_language = "{$GoogleConversionLanguage}";
-    var google_conversion_format = "1";
-    var google_conversion_color = "FFFFFF";
-    var google_conversion_value = {$sRealAmount};
-    var google_conversion_label = "purchase";
-//]]>
+        google_conversion_language = "{$GoogleConversionLanguage}";
+        google_conversion_format = "1";
+        google_conversion_color = "FFFFFF";
+        google_conversion_value = parseInt('{$sRealAmount}', 10);
+        google_conversion_label = "purchase";
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
 </script>
