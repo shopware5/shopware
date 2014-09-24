@@ -1,15 +1,21 @@
 {if $sCompareAddResult|is_bool}
-	{include file="frontend/compare/index.tpl"}
+    {include file="frontend/compare/index.tpl"}
 {else}
-	<div class="heading">
-		<h2>{s name="CompareHeaderTitle"}{/s}</h2>
-		
+    <div class="compare--wrapper">
+        <div class="modal--compare is--fluid" data-max-reached="true">
+            {* Compare modal header title *}
+            {block name="product_compare_error_title"}
+                <div class="modal--title">
+                    {s name="CompareHeaderTitle" namespace="frontend/compare/add_article"}{/s}
+                </div>
+            {/block}
 
-		<a href="#" class="modal_close" title="{"{s name='LoginActionClose'}{/s}"|escape}">
-			{s name='CompareActionClose'}{/s}
-		</a>
-	</div>
-	<p class="text">
-		{s name='CompareInfoMaxReached'}{/s}
-	</p>
+            {* Compare modal error message *}
+            {block name="product_compare_error_title"}
+                <div class="modal--error">
+                    {include file="frontend/_includes/messages.tpl" type="info" content="{s name='CompareInfoMaxReached' namespace='frontend/compare/added'}{/s}"}
+                </div>
+            {/block}
+        </div>
+    </div>
 {/if}

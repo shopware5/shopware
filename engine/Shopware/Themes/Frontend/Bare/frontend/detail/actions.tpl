@@ -1,3 +1,9 @@
+{block name='frontend_detail_actions_compare'}
+    <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" data-product-compare-add="true" title="{"{s name='DetailActionLinkCompare'}{/s}"|escape}" class="action--link action--compare">
+        <i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
+    </a>
+{/block}
+
 {block name='frontend_detail_actions_notepad'}
 	<a href="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}" class="action--link link--notepad" rel="nofollow" title="{"{s name='DetailLinkNotepad'}{/s}"|escape}">
 		<i class="icon--heart"></i> {s name="DetailLinkNotepadShort"}{/s}

@@ -15,6 +15,11 @@
 			{se name="DetailLinkContact"}{/se}
 		</a>
 	</li>
+    <li>
+        <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}" class="compare_add_article hide_script">
+            {se name="DetailActionLinkCompare"}{/se}
+        </a>
+    </li>
 	{/block}
 	
 	{block name='frontend_detail_actions_notepad'}

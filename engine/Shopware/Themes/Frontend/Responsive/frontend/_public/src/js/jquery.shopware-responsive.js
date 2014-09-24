@@ -405,4 +405,8 @@ $(function() {
 
         tabPanel.changeTab(idx, true);
     }
+
+    $('*[data-product-compare-add="true"]').productCompareAdd();
+
+    $('*[data-product-compare-menu="true"]').productCompareMenu();
 });
