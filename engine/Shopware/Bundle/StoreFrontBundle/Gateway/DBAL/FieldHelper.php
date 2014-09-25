@@ -675,7 +675,6 @@ class FieldHelper
      */
     private function addPropertySetTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -739,7 +738,6 @@ class FieldHelper
      */
     private function addImageTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -779,7 +777,6 @@ class FieldHelper
      */
     private function addConfiguratorTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -831,7 +828,6 @@ class FieldHelper
      */
     private function addUnitTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -869,7 +865,6 @@ class FieldHelper
      */
     private function addVariantTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -907,7 +902,6 @@ class FieldHelper
      */
     private function addCountryTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -944,7 +938,6 @@ class FieldHelper
      */
     public function addCountryStateTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -982,7 +975,6 @@ class FieldHelper
      */
     public function addProductTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
@@ -1020,7 +1012,6 @@ class FieldHelper
      */
     public function addManufacturerTranslationWithSuffix(QueryBuilder $query, $suffix = '')
     {
-        $suffix = ucfirst($suffix);
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
         $query->leftJoin(
