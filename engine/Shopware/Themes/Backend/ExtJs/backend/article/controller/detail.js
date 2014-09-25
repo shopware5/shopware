@@ -275,6 +275,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     mainWindow.supplierStore.load();
                 }
 
+                if (record.get('isConfigurator')) {
+                    me.subApplication.getController('Variant').getVariantListing().getStore().reload();
+                }
+
                 me.prepareArticleProperties(record);
 
                 newArticle.getPrice().filter(lastFilter);

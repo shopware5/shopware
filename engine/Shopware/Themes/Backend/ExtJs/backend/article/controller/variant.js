@@ -1453,6 +1453,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                     options.callback(record);
                 }
+
+                if (record.get('standard') || record.get('kind') == 1) {
+                    me.subApplication.getController('Detail').reloadArticle(record.get('articleId'));
+                }
             },
             failure: function(record, operation) {
                 var rawData = record.getProxy().getReader().rawData,
