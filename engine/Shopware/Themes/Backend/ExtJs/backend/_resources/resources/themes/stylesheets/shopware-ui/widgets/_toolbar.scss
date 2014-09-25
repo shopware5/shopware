@@ -165,9 +165,9 @@
 .shopware-menu {
     @include single-box-shadow(rgba(0, 0, 0, 0.075), 0, 3px, 0);
     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-                                  svg-color-stop(rgba(46,181,249,1), 0%, 1),
-                                  svg-color-stop(rgba(22,129,211,1), 100%, 1)
-                                )) center center no-repeat transparent;
+        svg-color-stop(rgba(46,181,249,1), 0%, 1),
+        svg-color-stop(rgba(22,129,211,1), 100%, 1)
+    )) center center no-repeat transparent;
 	padding: 0 0 0 6px;
     border-width: 0 0 1px 0 !important;
     border-color: #0b6dbe !important;
@@ -272,7 +272,7 @@
     box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
 	
 	.arrow-top {
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAAuElEQVR42l2OPQ6CQBSEuQvrnUxEENFW0UJjDHohFVBsFAp/78IuEIFAO76sFmIxeX/fvIwCoCE2CSvVDqv/fWNQCTLcBJorwEanBvzzKaq1Hcf6WcAhSZh2DZBNo7qz5VgR0PcFTE/AeZRob2K0vrDC7LDWvEQeBkGG4TGDdfhofsmh+wnU8blWdIKW9wL6jsuj4XL09gl0j8MkaHHL0aXcyuz6guGnlCkGZZQGM0jJIGBRpZ7gEm+0asuyctNIOwAAAABJRU5ErkJggg==") no-repeat;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHBAMAAADDgsFQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFDXLc////DXLcILL8IbX/Jrf/K7j/MLr/M7v/QrLU/gAAAAJ0Uk5TAAB2k804AAAALklEQVQI12MQFFRiFGQQFOpQAJLqaUWMDEJpaWkKDKouLi5BDM7GxsYmDMYgAACCmAb6OwoFKwAAAABJRU5ErkJggg==") no-repeat;
 		display: block;
 		position: absolute;
 		top: -5px; left: 16px;
@@ -280,9 +280,11 @@
 	}
 	
 	.header {
-		@include inner-border(1px 1px 0 1px, #79cbf4);
-		background: theme-image($theme, 'bg_search-header.png') repeat-x 0 0;
-		border: 1px solid #1974d8;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+        border: 1px solid #1974d8;
 		height: 33px;
 		color: #fff;
 		font-weight: bold;
@@ -297,12 +299,12 @@
 	.articles .header {
 		@include border-radius(3px 3px 0 0);
 		.inner {
-			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABlElEQVR42s2MyyuEYRTGTyklU2hEwijs7f0BFjZi5b5RSmhiZIzbuNSIXKYZskEUykIKIRm3JCSXMihEkQUpkyImHud7P81n6PtmpZz69Zzz9rw/+ueT5XBR9gAob0gm14dy5wxC9DSnbBlkPQe1XIGaLzkZkVfMV1rPIPV4utVFDacg5yuo712h1yunU+zMG6Qez4q6qPGEP7z443j+/cY9bVH9IajnEWQXiF2+PYxIAfcCiCy7oK575k6ksotbgXvaIvMmqOP6Bzf+yXAvgMi0CrKdf+PC/26Tb+5pi4JNi6BWN4Jajxk3SOZrV+CetkhnnEVI0x5Cm/eh49Qpuz/GGW1RePkUwhq3EGH1IW597cbH0a1nW/p8cP24k1Q5+aYpiiydQHT9uo+oOok1JFbNegG4Cmxj6frC/oeU8hEn31OqopiSUcTVugSxFikZyxKSjRPehZ2TTX1G3VNqxVAnS6aZInVR8cC8wTwHg3kBhhqGM6F6HvFl44jJt3+k1QzbWDDH5FKg4VI7s6KCi8mkv5xPmV+68Nz6yiwAAAAASUVORK5CYII=") no-repeat 14px 7px;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAWlBMVEUAAAASXqARXZ8QZq8cfcgfgMg3tP8fgsw3s/8hhdA3s/83tP8VcLo3s/84tP8Oa7sNa7oOa7oObLs3s/8RXp8RXZ84tP8QZq8OabYSXqAPZa4PbLsRZKgTdMNFKb3LAAAAD3RSTlMA39/+gpxbnFGWTt9vVkca7skOAAAAhElEQVR4XnXIRxICMQxEUZMz3S15EuH+10Su0lCzgK+weOV3q1prFxN/ndR1NXaKq1PSSAKIo41J1sTACEkSRVKCmARAQrQkEmxiSCLFSDDMZAAJmPAlInFBBkr0VpIII3kdHpvtTCBF7oaX75NAMDo8/Viyt9Ds5Ocyd+m9791v9/KvD2A2DAj9SM9sAAAAAElFTkSuQmCC") no-repeat 14px 7px;
 		}
 	}
 	
 	.customers .header .inner {
-		background: theme-image($theme, 'icon_taskbar_top_kunden.png') no-repeat 14px 7px;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACAUlEQVQ4y2NgoAUQjJvPCMSLBGPn3wTiP4JxC24BsTvJBgnFL3QBGvQfhIXiFvwHGgZkL/gNpMVIMkiqcMs8gfSN//kyt/3ny979nz9r+3+BxOX/pYq2e0JcvIAZaGgM0JIaINsVp0HS5fuOgwwAYd7sXWDMB8TSZXtqoS5OgrsW5PLY+R7YDao8fJUvZzdYM8xAEJapOrQYJC9ZsHWPQPKq/wKpa/8LJC37L128fR5Wg7SmP9kKMogX2SAgX3feqzaw18v230CWkyrdewKrQeab/ztKN15AMUi64cJ/oLgqSF5jyoN9MG+DaLX+27twhpN8541byF5TnnDvMtyiTf/9RUqOgMWFig79N9vwNwJ7Ooqdzy+ct/sFckCLFO29BRTnAskLJK30RXaRUPo6P2DsMSLST9wCTaDiyUDBj/wpa6Gu2QUOH4GUNaAYegPEHXJVB/olqk5A5IFJQzAWHHuXgfpCQK7oBeJ/oOgUiFv4ny9jKzzqQZg/YwtEAzBxCiSt+KPUd/e+VMM5iCXANAZOBvELfjEIJS76IRC/5L9A2gagLQgvQZIB1GVZO/6DXAr02n8hoNfl264+gIUhf8Y2kAX/GfjTNyA0IKUdZO8hkgQwzLK3/NJd8G4BMCb/I2MGPqSARU7VmIZCDBTK3/sHe9rZgmoyNmyBquYlw5AAALfsmczHc7Z5AAAAAElFTkSuQmCC") no-repeat 14px 7px;
 	}
 	
 	.orders .header .inner {
