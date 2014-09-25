@@ -61,6 +61,10 @@
         &:last-child {
             height: 27px !important;
         }
+
+        &:only-child {
+            height: 29px !important;
+        }
     }
 
     .#{$prefix}menu-item {
