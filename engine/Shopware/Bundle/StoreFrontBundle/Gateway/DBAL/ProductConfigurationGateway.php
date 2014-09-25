@@ -105,6 +105,12 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
         $this->fieldHelper->addConfiguratorTranslation($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addConfiguratorTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         $query->where('relations.article_id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 

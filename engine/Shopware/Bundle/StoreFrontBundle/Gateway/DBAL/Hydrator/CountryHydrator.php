@@ -87,6 +87,7 @@ class CountryHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__country_translation',
+            '__country_translation_fallback',
             $data['__country_id'],
             $this->translationCountryFields
         );
@@ -149,25 +150,31 @@ class CountryHydrator extends Hydrator
 
     /**
      * @param $data
-     * @param $field
+     * @param $arrayKey
+     * @param $fallbackArrayKey
      * @param $id
      * @param array $mapping
      * @return array|mixed
      */
-    private function getTranslation($data, $field, $id, $mapping = array())
+    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $id, $mapping = array())
     {
-        if (!isset($data[$field])) {
-            return array();
+        if (!isset($data[$arrayKey])
+            || empty($data[$arrayKey])
+        ) {
+            $translation = array();
+        } else {
+            $translation = unserialize($data[$arrayKey]);
         }
 
-        $translation = unserialize($data[$field]);
-
-        if (empty($translation[$id])) {
-            return array();
+        if (isset($data[$fallbackArrayKey])
+            && !empty($data[$fallbackArrayKey])
+        ) {
+            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
+            $translation += $fallbackTranslation;
         }
 
-        if (empty($mapping)) {
-            return $translation;
+        if (empty($translation)) {
+            return array();
         }
 
         return $this->convertArrayKeys($translation[$id], $mapping);
@@ -184,6 +191,7 @@ class CountryHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__countryState_translation',
+            '__countryState_translation_fallback',
             $data['__countryState_id'],
             $this->translationStateFields
         );
