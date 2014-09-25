@@ -658,31 +658,51 @@ class FieldHelper
      */
     public function addPropertySetTranslation(QueryBuilder $query)
     {
+        $this->addPropertySetTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addPropertySetTranslationFallback(QueryBuilder $query)
+    {
+        $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addPropertySetTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'propertySet',
             's_core_translations',
-            'propertySetTranslation',
-            'propertySetTranslation.objecttype = :setTranslation AND
-             propertySetTranslation.objectkey = propertySet.id AND
-             propertySetTranslation.objectlanguage = :language'
+            'propertySetTranslation' . $suffix,
+            'propertySetTranslation' . $suffix . '.objecttype = :setTranslation AND
+             propertySetTranslation' . $suffix . '.objectkey = propertySet.id AND
+             propertySetTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
         $query->leftJoin(
             'propertyGroup',
             's_core_translations',
-            'propertyGroupTranslation',
-            'propertyGroupTranslation.objecttype = :groupTranslation AND
-             propertyGroupTranslation.objectkey = propertyGroup.id AND
-             propertyGroupTranslation.objectlanguage = :language'
+            'propertyGroupTranslation' . $suffix,
+            'propertyGroupTranslation' . $suffix . '.objecttype = :groupTranslation AND
+             propertyGroupTranslation' . $suffix . '.objectkey = propertyGroup.id AND
+             propertyGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
         $query->leftJoin(
             'propertyOption',
             's_core_translations',
-            'propertyOptionTranslation',
-            'propertyOptionTranslation.objecttype = :optionTranslation AND
-             propertyOptionTranslation.objectkey = propertyOption.id AND
-             propertyOptionTranslation.objectlanguage = :language'
+            'propertyOptionTranslation' . $suffix,
+            'propertyOptionTranslation' . $suffix . '.objecttype = :optionTranslation AND
+             propertyOptionTranslation' . $suffix . '.objectkey = propertyOption.id AND
+             propertyOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
         $query->setParameter(':setTranslation', 'propertygroup')
@@ -691,9 +711,9 @@ class FieldHelper
         ;
 
         $query->addSelect(array(
-            'propertySetTranslation.objectdata as __propertySet_translation',
-            'propertyGroupTranslation.objectdata as __propertyGroup_translation',
-            'propertyOptionTranslation.objectdata as __propertyOption_translation'
+            'propertySetTranslation' . $suffix . '.objectdata as __propertySet_translation' . $selectSuffix,
+            'propertyGroupTranslation' . $suffix . '.objectdata as __propertyGroup_translation' . $selectSuffix,
+            'propertyOptionTranslation' . $suffix . '.objectdata as __propertyOption_translation' . $selectSuffix
         ));
     }
 
@@ -702,16 +722,36 @@ class FieldHelper
      */
     public function addImageTranslation(QueryBuilder $query)
     {
+        $this->addImageTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addImageTranslationFallback(QueryBuilder $query)
+    {
+        $this->addImageTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addImageTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'image',
             's_core_translations',
-            'imageTranslation',
-            'imageTranslation.objecttype = :imageType AND
-             imageTranslation.objectkey = image.id AND
-             imageTranslation.objectlanguage = :language'
+            'imageTranslation' . $suffix,
+            'imageTranslation' . $suffix . '.objecttype = :imageType AND
+             imageTranslation' . $suffix . '.objectkey = image.id AND
+             imageTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
         $query->addSelect(array(
-            'imageTranslation.objectdata as __image_translation',
+            'imageTranslation' . $suffix . '.objectdata as __image_translation' . $selectSuffix,
         ));
 
         $query->setParameter(':imageType', 'articleimage');
@@ -722,30 +762,50 @@ class FieldHelper
      */
     public function addConfiguratorTranslation(QueryBuilder $query)
     {
+        $this->addConfiguratorTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addConfiguratorTranslationFallback(QueryBuilder $query)
+    {
+        $this->addConfiguratorTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addConfiguratorTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'configuratorGroup',
             's_core_translations',
-            'configuratorGroupTranslation',
-            'configuratorGroupTranslation.objecttype = :configuratorGroupType AND
-             configuratorGroupTranslation.objectkey = configuratorGroup.id AND
-             configuratorGroupTranslation.objectlanguage = :language'
+            'configuratorGroupTranslation' . $suffix,
+            'configuratorGroupTranslation' . $suffix . '.objecttype = :configuratorGroupType AND
+             configuratorGroupTranslation' . $suffix . '.objectkey = configuratorGroup.id AND
+             configuratorGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
         $query->leftJoin(
             'configuratorOption',
             's_core_translations',
-            'configuratorOptionTranslation',
-            'configuratorOptionTranslation.objecttype = :configuratorOptionType AND
-             configuratorOptionTranslation.objectkey = configuratorOption .id AND
-             configuratorOptionTranslation.objectlanguage = :language'
+            'configuratorOptionTranslation' . $suffix,
+            'configuratorOptionTranslation' . $suffix . '.objecttype = :configuratorOptionType AND
+             configuratorOptionTranslation' . $suffix . '.objectkey = configuratorOption .id AND
+             configuratorOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
         $query->setParameter(':configuratorGroupType', 'configuratorgroup')
            ->setParameter(':configuratorOptionType', 'configuratoroption');
 
         $query->addSelect(array(
-            'configuratorGroupTranslation.objectdata as __configuratorGroup_translation',
-            'configuratorOptionTranslation.objectdata as __configuratorOption_translation'
+            'configuratorGroupTranslation' . $suffix . '.objectdata as __configuratorGroup_translation' . $selectSuffix,
+            'configuratorOptionTranslation' . $suffix . '.objectdata as __configuratorOption_translation' . $selectSuffix
         ));
     }
 
@@ -754,16 +814,36 @@ class FieldHelper
      */
     public function addUnitTranslation(QueryBuilder $query)
     {
+        $this->addUnitTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addUnitTranslationFallback(QueryBuilder $query)
+    {
+        $this->addUnitTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addUnitTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'variant',
             's_core_translations',
-            'unitTranslation',
-            'unitTranslation.objecttype = :unitType AND
-             unitTranslation.objectkey = 1 AND
-             unitTranslation.objectlanguage = :language'
+            'unitTranslation' . $suffix,
+            'unitTranslation' . $suffix . '.objecttype = :unitType AND
+             unitTranslation' . $suffix . '.objectkey = 1 AND
+             unitTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->addSelect(array('unitTranslation.objectdata as __unit_translation'))
+        $query->addSelect(array('unitTranslation' . $suffix . '.objectdata as __unit_translation' . $selectSuffix))
             ->setParameter(':unitType', 'config_units');
     }
 
@@ -772,16 +852,36 @@ class FieldHelper
      */
     public function addVariantTranslation(QueryBuilder $query)
     {
+        $this->addVariantTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addVariantTranslationFallback(QueryBuilder $query)
+    {
+        $this->addVariantTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addVariantTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'variant',
             's_core_translations',
-            'variantTranslation',
-            'variantTranslation.objecttype = :variantType AND
-             variantTranslation.objectkey = variant.id AND
-             variantTranslation.objectlanguage = :language'
+            'variantTranslation' . $suffix,
+            'variantTranslation' . $suffix . '.objecttype = :variantType AND
+             variantTranslation' . $suffix . '.objectkey = variant.id AND
+             variantTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->addSelect('variantTranslation.objectdata as __variant_translation')
+        $query->addSelect('variantTranslation' . $suffix . '.objectdata as __variant_translation' . $selectSuffix)
             ->setParameter(':variantType', 'variant');
     }
 
@@ -790,15 +890,35 @@ class FieldHelper
      */
     public function addCountryTranslation(QueryBuilder $query)
     {
+        $this->addCountryTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addCountryTranslationFallback(QueryBuilder $query)
+    {
+        $this->addCountryTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addCountryTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'country',
             's_core_translations',
-            'countryTranslation',
-            'countryTranslation.objecttype = :countryType AND
-             countryTranslation.objectkey = 1 AND
-             countryTranslation.objectlanguage = :language'
+            'countryTranslation' . $suffix,
+            'countryTranslation' . $suffix . '.objecttype = :countryType AND
+             countryTranslation' . $suffix . '.objectkey = 1 AND
+             countryTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
-        $query->addSelect('countryTranslation.objectdata as __country_translation')
+        $query->addSelect('countryTranslation' . $suffix . '.objectdata as __country_translation' . $selectSuffix)
             ->setParameter(':countryType', 'config_countries');
     }
 
@@ -807,15 +927,35 @@ class FieldHelper
      */
     public function addCountryStateTranslation(QueryBuilder $query)
     {
+        $this->addCountryStateTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addCountryStateTranslationFallback(QueryBuilder $query)
+    {
+        $this->addCountryStateTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    public function addCountryStateTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'countryState',
             's_core_translations',
-            'stateTranslation',
-            'stateTranslation.objecttype = :stateType AND
-             stateTranslation.objectkey = 1 AND
-             stateTranslation.objectlanguage = :language'
+            'stateTranslation' . $suffix,
+            'stateTranslation' . $suffix . '.objecttype = :stateType AND
+             stateTranslation' . $suffix . '.objectkey = 1 AND
+             stateTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
-        $query->addSelect('stateTranslation.objectdata as __countryState_translation')
+        $query->addSelect('stateTranslation' . $suffix . '.objectdata as __countryState_translation' . $selectSuffix)
             ->setParameter(':stateType', 'config_country_states')
         ;
     }
@@ -825,18 +965,37 @@ class FieldHelper
      */
     public function addProductTranslation(QueryBuilder $query)
     {
+        $this->addProductTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addProductTranslationFallback(QueryBuilder $query)
+    {
+        $this->addProductTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    public function addProductTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'variant',
             's_core_translations',
-            'productTranslation',
-            'productTranslation.objecttype = :productType AND
-             productTranslation.objectkey = variant.articleID AND
-             productTranslation.objectlanguage = :language'
+            'productTranslation' . $suffix,
+            'productTranslation' . $suffix . '.objecttype = :productType AND
+             productTranslation' . $suffix . '.objectkey = variant.articleID AND
+             productTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->addSelect(array('productTranslation.objectdata as __product_translation'))
+        $query->addSelect(array('productTranslation' . $suffix . '.objectdata as __product_translation' . $selectSuffix))
             ->setParameter(':productType', 'article');
-
     }
 
     /**
@@ -844,15 +1003,35 @@ class FieldHelper
      */
     public function addManufacturerTranslation(QueryBuilder $query)
     {
+        $this->addManufacturerTranslationWithSuffix($query);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function addManufacturerTranslationFallback(QueryBuilder $query)
+    {
+        $this->addManufacturerTranslationWithSuffix($query, 'Fallback');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    public function addManufacturerTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $suffix = ucfirst($suffix);
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
         $query->leftJoin(
             'manufacturer',
             's_core_translations',
-            'manufacturerTranslation',
-            'manufacturerTranslation.objecttype = :manufacturerType AND
-             manufacturerTranslation.objectkey = 1 AND
-             manufacturerTranslation.objectlanguage = :language'
+            'manufacturerTranslation' . $suffix,
+            'manufacturerTranslation' . $suffix . '.objecttype = :manufacturerType AND
+             manufacturerTranslation' . $suffix . '.objectkey = manufacturer.id AND
+             manufacturerTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
-        $query->addSelect(array('manufacturerTranslation.objectdata as __manufacturer_translation'))
+        $query->addSelect(array('manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix))
             ->setParameter(':manufacturerType', 'supplier');
     }
 

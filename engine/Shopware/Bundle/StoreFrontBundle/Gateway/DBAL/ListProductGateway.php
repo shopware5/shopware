@@ -145,6 +145,15 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $this->fieldHelper->addManufacturerTranslation($query);
         $this->fieldHelper->addUnitTranslation($query);
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addProductTranslationFallback($query);
+            $this->fieldHelper->addVariantTranslationFallback($query);
+            $this->fieldHelper->addManufacturerTranslationFallback($query);
+            $this->fieldHelper->addUnitTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         $query->setParameter(':language', $context->getShop()->getId());
 
         return $query;

@@ -193,6 +193,12 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         $this->fieldHelper->addImageTranslation($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addImageTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')

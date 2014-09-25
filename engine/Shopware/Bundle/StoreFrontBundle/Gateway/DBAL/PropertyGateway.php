@@ -156,6 +156,12 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addPropertySetTranslationFallback($query, $context);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         $query->orderBy('propertySet.position')
             ->addOrderBy('propertySet.id')
             ->addOrderBy('relations.position')

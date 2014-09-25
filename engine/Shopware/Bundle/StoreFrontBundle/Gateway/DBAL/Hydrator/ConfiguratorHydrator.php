@@ -107,6 +107,7 @@ class ConfiguratorHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__configuratorGroup_translation',
+            '__configuratorGroup_translation_fallback',
             array('name' => '__configuratorGroup_name', 'description' => '__configuratorGroup_description')
         );
         $data = array_merge($data, $translation);
@@ -128,6 +129,7 @@ class ConfiguratorHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__configuratorOption_translation',
+            '__configuratorOption_translation_fallback',
             array('name' => '__configuratorOption_name')
         );
         $data = array_merge($data, $translation);
@@ -141,18 +143,26 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param $data
      * @param $arrayKey
+     * @param $fallbackArrayKey
      * @param $mapping
      * @return array
      */
-    private function getTranslation($data, $arrayKey, $mapping)
+    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $mapping)
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-            return array();
+            $translation = array();
+        } else {
+            $translation = unserialize($data[$arrayKey]);
         }
 
-        $translation = unserialize($data[$arrayKey]);
+        if (isset($data[$fallbackArrayKey])
+            && !empty($data[$fallbackArrayKey])
+        ) {
+            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
+            $translation += $fallbackTranslation;
+        }
 
         if (empty($translation)) {
             return array();

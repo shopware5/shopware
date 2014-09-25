@@ -183,7 +183,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetPaymentMeanById()
     {
         // Fetching non-existing payment means returns null
-        $this->assertNull($this->module->sGetPaymentMeanById(0));
+        $this->assertEmpty($this->module->sGetPaymentMeanById(0));
 
         // Fetching existing inactive payment means returns the data array
         $sepaData = $this->module->sGetPaymentMeanById(6);
