@@ -30,10 +30,14 @@
 .login-window {
     background: theme-image($theme, 'login_background.png') no-repeat;
     color: #475c6a;
-    
+    width: 360px !important;
+    height: 410px !important;
+
     .#{$prefix}window-body {
 	    background: transparent;
 	    border: 0 none !important;
+        width: 360px !important;
+        height: 410px !important;
     }
 
 	/** Footer toolbar */
@@ -50,19 +54,27 @@
     }
 
     h1 {
-        margin: 40px 0;
+        margin: 120px 0 25px 0;
         font-size: 18px;
         line-height: 21px;
         text-align: center;
         color: #475c6a;
-        text-shadow: 1px 1px 1px #fff;
     }
-    .#{$prefix}panel-body-default{
+    .#{$prefix}panel-body-default {
         background: transparent !important;
         padding: 0 50px;
+        height: 410px !important;
+
+        .#{$prefix}container-default {
+            width: auto !important;
+        }
     }
 
 	// Form elements - field labels
+    .#{$prefix}form-item {
+        width: 266px !important;
+    }
+
     .#{$prefix}form-item-label {
         color: #475c6a;
         font-weight: 700;
@@ -72,17 +84,24 @@
 
 	// Form elements - text fields
     .#{$prefix}form-item-body {
-        @include border-radius(3px);
-        background: rgba(255, 255, 255, 0.8);
-        padding: 1px;
+        @include border-radius(6px);
+        background: none;
 
         .x-form-text {
-            @include border-radius(3px);
-            @include single-box-shadow(rgba(0, 51, 104, 0.26), 0, 1px, 2px, 0, true);
+            @include border-radius(6px);
             background: rgba(255, 255, 255, .5);
-            border-color: rgba(27, 60, 92, 0.3) rgba(27, 60, 92, 0.3) #D3DBE2;
+            border-color: #fff;
+            font-size: 12px;
             width: 263px !important;
-            height: 30px;
+            height: 35px;
+            text-align: center;
+            line-height: 16px;
+
+            &:focus {
+                background: #fff !important;
+                border-color: #2eb5f9 !important;
+                @include box-shadow(0 0 3px #52A8EC !important);
+            }
         }
 
         .#{$prefix}form-text, textarea.#{$prefix}form-field {
@@ -105,40 +124,47 @@
 	// Form elements - combobox fields
     .#{$prefix}form-combo {
         .#{$prefix}form-text {
-        	@include border-radius(3px 0 0 3px);
-            width: 246px !important
+        	@include border-radius(6px 0 0 6px);
+            width: 226px !important;
+            line-height: 16px;
         }
         
         .#{$prefix}trigger-cell {
-	        width: 19px !important;
+	        width: 37px !important;
         }
         .#{$prefix}form-trigger {
-        	border-bottom: 1px solid #A6B0B7;
-        	height: 30px;
-        	width: 19px !important;
-	        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAcCAIAAAAMZBNOAAAACXBIWXMAAAsTAAALEwEAmpwYAAABEklEQVQ4y2M5fe0hAyng////v//8/fjlO4u8pBCJOhn+/P37/tM3Fn4eTlLtBGoGAhYGEgEjCDCwMDOTrBOmn4FMneS4lko6oYFFX53k+xNsJxAzIsc4JPQxxNFci6KaAUP/f9yuRUjNX7h41ryFbOzsTMwsQKv+/v37+9fP8OCA/NxsAiGUEBfDw8u3Yv1Wdk5Qev7144evm2NWSvyvP39+/f5DIGyDA3w5uLjW79gPZPu5OydHhwL1/Pz9G58/4cDL1ZmRkenrt+9JkcFAbT9+/SYhPj2cHdjZWH8Ctf38RXJKwKVnwFIfIwU6gdH9jwydjEjplhydZNjJBAyh/5SFLcnagFogOv+RpO0fUDnTPwDpppJDbm1U3AAAAABJRU5ErkJggg==") no-repeat !important;
+            @include border-radius(0 6px 6px 0);
+            border: 1px solid #fff;
+        	height: 35px;
+        	width: 38px !important;
+	        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAABzklEQVR4AcXRvYsUQRCG8fvPTQQzQwMDMVID95JDOEExOARhRRADL9HA8ALRU/drurt0avZBg1deKrqBB4pmmf5N7cmhj6Dpn9qgiH5sUGTyGTSW+rGWjWzqRPNv8o2nJVAvgroHxYHaSFSCFKp1DxoSY0ACM7dvy1kdRKEDUwdlgIp/G9Uw2eRADAIktiRQom62kwmMBJktiTSCKtvZASIJ8iiPsdsxIIdqHuIxBlRAUeiA1DEGBErCTEAkxoAYDErABK4DKWIUyKPqVTFbQB5FdUgFs50AaZSGkblcIBSGEpMgBo3SsBfrD/Ho+UVcb/acZW8vP8WDs5dx9e2HgBhM1gHVUKtXb+LW/Sdxb3Ue19v9gvn4Oc/mvlx9LWFoA4iy5mHfN7u/qKfncfH+Muc7D09j/QfmEAkBM1FfQJtlyAOBIokDtWBWbEYhNAYIAZIoA6Nnr9/F3cdnidmVIGA0SKM8rI7QGA3yMPIIchD6deyE4b8wgavXNQQMHQCBcjAqIIB4DKB5IGCF7MVkIBoEqg4rQjTmpwTRVMcZhIaAAcQwZ3DFNEJDNMjACsgDeYgDFXD17F2AKpUAxbbTAHSz8aGt3zyIzSQmIm7/BtC/NeJ5aEtBAAAAAElFTkSuQmCC") no-repeat !important;
         }
     }
     
     .#{$prefix}form-trigger-wrap-focus {
 	    .#{$prefix}form-trigger {
-		    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
-		    border-color: rgba(82, 168, 236, 0.8) !important;
+            border: 1px solid;
+            border-color: #2eb5f9 !important;
+            -webkit-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
+            -moz-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
+            box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
 	    }
+    }
+
+    // Form submit button
+    .#{$prefix}toolbar-shopware-ui-docked-bottom {
+        .#{$prefix}btn {
+            left: 43px !important;
+            width: 265px !important;
+            height: 35px !important;
+        }
     }
 
     // Google Chrome hint
     .#{$prefix}google-chrome-hint {
-        border-top: 1px solid #C1D2E2!important;
-        margin-top: 14px;
+        margin: 14px 0;
         font-size: 11px;
-        text-shadow: 1px 1px 0 #fff;
         color: lighten($font-color, 10%);
-
-        .inner {
-            border-top: 1px solid #fff;
-            padding-top: 8px;
-        }
 
         a.logo-chrome {
             background: theme-image($theme, 'logo-chrome.png') no-repeat;
@@ -151,11 +177,10 @@
         }
         .right-content {
             margin: 0 0 0 12px;
-            width: 333px;
+            width: 220px;
 
             a {
                 color: #009CFF;
-                border-bottom: 1px dotted transparent;
                 text-decoration: none;
             }
         }

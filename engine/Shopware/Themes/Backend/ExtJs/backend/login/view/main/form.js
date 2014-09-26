@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
             me.userName = Ext.create('Ext.form.field.Text', {
                 name: 'username',
                 allowBlank: true,
-                fieldLabel: '{s name=field/username}Username{/s}'
+                emptyText: '{s name=field/username}Username{/s}'
             });
 
             // Passwort field
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
                 inputType: 'password',
                 name: 'password',
                 allowBlank: true,
-                fieldLabel: '{s name=field/password}Password{/s}'
+                emptyText: '{s name=field/password}Password{/s}'
             });
 
             // Language switcher
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
                 store: me.localeStore,
                 queryMode: 'local',
                 emptyText: '{s name=field/locale/empty_text}Select other language...{/s}',
-                fieldLabel: '{s name=field/locale}Language{/s}',
+                //fieldLabel: '{s name=field/locale}Language{/s}',
                 displayField: 'name',
                 valueField: 'id',
                 cls: Ext.baseCSSPrefix + 'form-combo'
