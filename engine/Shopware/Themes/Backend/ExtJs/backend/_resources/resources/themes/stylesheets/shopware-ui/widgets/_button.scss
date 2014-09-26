@@ -423,10 +423,6 @@
 	/** Secondary button style - Disabled state */
 	.#{$prefix}btn-disabled.secondary {
 		@include opacity(0.65);
-
-		.#{$prefix}btn-inner {
-			color: #fff !important;
-		}
 	}
 
 	/** Secondary button style - Hover state */
