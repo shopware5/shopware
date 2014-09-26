@@ -5,11 +5,11 @@
     {$sRealAmount=$sAmountWithTax|replace:",":"."}
 {/if}
 <script type="text/javascript">
-    var google_conversion_id = "{$GoogleConversionID}";
+    var google_conversion_id = parseInt('{$GoogleConversionID}',10);
         google_conversion_language = "{$GoogleConversionLanguage}";
         google_conversion_format = "1";
         google_conversion_color = "FFFFFF";
-        google_conversion_value = parseInt('{$sRealAmount}', 10);
+        google_conversion_value = parseFloat('{$sRealAmount}');
         google_conversion_label = "purchase";
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">

@@ -1,5 +1,4 @@
 <script type="text/javascript">
-//<![CDATA[
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', "{$GoogleTrackingID|escape:'javascript'}"]);
 {if $GoogleAnonymizeIp}
@@ -52,5 +51,4 @@
 			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
 		})();
 	{/literal}
-//]]>
 </script>
