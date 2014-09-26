@@ -1,11 +1,20 @@
 <?php
-class Migrations_Migration405 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration406 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
+
+        $sql = <<<'EOD'
+UPDATE `s_core_plugins` SET `label`='Erweitertes Menü' WHERE `name`='AdvancedMenu';
+EOD;
+
+        $this->addSql($sql);
+
         $statement = $this->connection->query("SELECT DISTINCT `id` FROM `s_core_plugins` WHERE `name`='AdvancedMenu' AND `installation_date` IS NOT NULL");
 
-        if (!$statement->columnCount()) {
+        $result = $statement->fetch(PDO::FETCH_NUM);
+
+        if (empty($result)) {
             return;
         }
 
