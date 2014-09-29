@@ -1,0 +1,200 @@
+// Advanced menu container that contains every category listing
+.advanced-menu {
+    .clearfix();
+    .unitize-max-width(1260, 16);
+    .box-shadow(0 10px 30px -15px #000);
+    background: @lightGradientStart;
+    width: 100%;
+    position: absolute;
+    color: @darkTextColor;
+    z-index: 30000;
+
+    .menu--list {
+        list-style: none;
+        display: block;
+    }
+
+    .content--wrapper {
+        .unitize-margin(20, 20);
+        overflow: hidden;
+    }
+
+    .menu--teaser {
+        .unitize-padding(10, 10, 0, 20);
+        position: relative;
+        float: left;
+
+        &.has--border:before,
+        &.has--border::before {
+            content: "";
+            width: 1px;
+            background: @borderColor;
+            position: absolute;
+            padding-bottom: 99999px;
+            margin-bottom: -99999px;
+            display: block;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .teaser--image {
+        .unitize-height(250);
+        width: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+
+        + .teaser--headline,
+        + .teaser--text {
+            .unitize(40, 16, margin-top);
+        }
+    }
+
+    .teaser--headline {
+        .unitize-margin(0, 0, 20, 0);
+    }
+
+    .menu--list-item {
+        .hyphens(auto);
+        word-break: normal;
+        word-wrap:  break-word;
+    }
+
+    .menu--list-item-link {
+        .unitize(16, 16, font-size);
+        .transition(color, 0.2s, ease-out);
+        color: @darkTextColor;
+    }
+
+    .button-container {
+        .unitize(16, 16, font-size);
+        .unitize-padding(25, 30);
+        background: @darkTextColor;
+        color: @lightGradientStart;
+        font-weight: bold;
+
+        .button--category {
+            color: @lightGradientStart;
+            position: relative;
+        }
+
+        .icon--arrow-right {
+            .unitize(12, 16, font-size);
+            .unitize(-26, 16, right);
+            .unitize(-6, 16, margin-top);
+            position: absolute;
+            top: 50%;
+        }
+
+        .button--close {
+            float: right;
+            cursor: pointer;
+        }
+    }
+
+    .menu--container {
+        display: none;
+
+        &:first-child {
+            border-left: block;
+        }
+
+        &.menu--is-active {
+            display: block;
+        }
+    }
+
+    .menu--level-0 {
+        .unitize-padding(10, 10, 0, 10);
+        float: left;
+
+        &.columns--1 {
+            .column-count(1);
+        }
+        &.columns--2 {
+            .column-count(2);
+        }
+        &.columns--3 {
+            .column-count(3);
+        }
+        &.columns--4 {
+            .column-count(4);
+        }
+    }
+
+    .menu--level-1 {
+        .unitize-margin(10, 0, 0, 20);
+    }
+
+    .menu--level-2 {
+        .unitize-margin(5, 0, 5, 20);
+    }
+
+    .item--level-0 {
+        .unitize(40, 16, padding-bottom);
+        display: inline-block;
+        position: relative;
+
+        .menu--list-item-link {
+            .unitize(18, 16, font-size);
+            color: @darkTextColor;
+            font-weight: bold;
+        }
+    }
+
+    .item--level-1 {
+        .unitize-margin(0, 0, 8, 0);
+
+        &:last-child {
+            margin: 0;
+        }
+
+        .menu--list-item-link {
+            .menu--list-item-link();
+            font-weight: normal;
+        }
+    }
+
+    .item--level-2 {
+        .unitize-margin(0, 0, 5, 0);
+
+        .menu--list-item-link {
+            .unitize(14, 16, font-size);
+
+            + .menu--level-3 {
+                .unitize-margin(5, 0, 5, 20);
+            }
+        }
+    }
+
+    .item--level-3 {
+        .unitize-margin(0, 0, 3, 0);
+
+        .menu--list-item-link {
+            .unitize(12, 16, font-size);
+        }
+    }
+}
+
+.navigation-main .navigation--list .navigation--entry.is--hovered {
+    .border-radius-multi(3px, 3px);
+    background: @darkTextColor;
+
+    .navigation--link {
+        background: @darkTextColor;
+        color: @lightGradientStart;
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+    .advanced-menu {
+        .content--wrapper {
+            .unitize-margin(40, 40);
+        }
+
+        .button-container {
+            .unitize-padding(20, 50);
+        }
+    }
+}
