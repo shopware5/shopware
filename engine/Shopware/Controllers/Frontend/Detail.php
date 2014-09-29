@@ -123,10 +123,13 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $categoryInfo = null;
         }
 
-        $breadcrumb[] = array(
-            'link' => $article['linkDetails'],
-            'name' => $article['articleName']
-        );
+        // Don't add the article itself to the breadcrumb in the new template
+        if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+            $breadcrumb[] = array(
+                'link' => $article['linkDetails'],
+                'name' => $article['articleName']
+            );
+        }
 
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
         $article['sReleaseDate'] = $article['sReleasedate'];

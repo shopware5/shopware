@@ -66,7 +66,7 @@
             productDetailsSelector: '.product--details',
             prevLinkSelector: 'a.navigation--link.link--prev',
             nextLinkSelector: 'a.navigation--link.link--next',
-            breadcrumbButtonSelector: '.breadcrumb--button .btn'
+            breadcrumbButtonSelector: '.breadcrumb--button'
         },
 
         /**

@@ -61,9 +61,13 @@
 
             {* Breadcrumb *}
 			{block name='frontend_index_breadcrumb'}
-				<nav class="content--breadcrumb block">
-					{include file='frontend/index/breadcrumb.tpl'}
-				</nav>
+                {if count($sBreadcrumb)}
+                    <nav class="content--breadcrumb block">
+                        {block name='frontend_index_breadcrumb_inner'}
+                            {include file='frontend/index/breadcrumb.tpl'}
+                        {/block}
+                    </nav>
+                {/if}
 			{/block}
 
 			{* Content top container *}
