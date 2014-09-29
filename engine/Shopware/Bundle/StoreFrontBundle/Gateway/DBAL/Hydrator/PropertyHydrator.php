@@ -96,6 +96,7 @@ class PropertyHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__propertySet_translation',
+            '__propertySet_translation_fallback',
             array('groupName' => '__propertySet_name')
         );
         $data = array_merge($data, $translation);
@@ -122,6 +123,7 @@ class PropertyHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__propertyGroup_translation',
+            '__propertyGroup_translation_fallback',
             array('optionName' => '__propertyGroup_name')
         );
         $data = array_merge($data, $translation);
@@ -143,6 +145,7 @@ class PropertyHydrator extends Hydrator
         $translation = $this->getTranslation(
             $data,
             '__propertyOption_translation',
+            '__propertyOption_translation_fallback',
             array('optionValue' => '__propertyOption_value')
         );
         $data = array_merge($data, $translation);
@@ -156,18 +159,26 @@ class PropertyHydrator extends Hydrator
     /**
      * @param $data
      * @param $arrayKey
+     * @param $fallbackArrayKey
      * @param $mapping
      * @return array
      */
-    private function getTranslation($data, $arrayKey, $mapping)
+    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $mapping)
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-            return array();
+            $translation = array();
+        } else {
+            $translation = unserialize($data[$arrayKey]);
         }
 
-        $translation = unserialize($data[$arrayKey]);
+        if (isset($data[$fallbackArrayKey])
+            && !empty($data[$fallbackArrayKey])
+        ) {
+            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
+            $translation += $fallbackTranslation;
+        }
 
         if (empty($translation)) {
             return array();

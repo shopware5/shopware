@@ -111,6 +111,13 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addUnitTranslation($query);
         $this->fieldHelper->addVariantTranslation($query);
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addUnitTranslationFallback($query);
+            $this->fieldHelper->addVariantTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         $query->andWhere('price.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':language', $context->getShop()->getId());

@@ -82,7 +82,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $categoryContent['metaDescription'] = $supplier->getMetaDescription();
             $categoryContent['metaKeywords'] = $supplier->getMetaKeywords();
             if (!Shopware()->Shop()->getDefault()) {
-                $translation = $this->getTranslator()->read(Shopware()->Shop()->getId(), 'supplier', $supplier->getId());
+                $translationId = Shopware()->Shop()->getId();
+                $translationFallbackId = Shopware()->Shop()->getFallback() ? Shopware()->Shop()->getFallback()->getId() : null;
+                $translation = $this->getTranslator()->readWithFallback($translationId, $translationFallbackId, 'supplier', $supplier->getId());
                 if (array_key_exists('metaTitle', $translation)) {
                     $supplierTitle = $translation['metaTitle'];
                 }

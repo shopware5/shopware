@@ -187,10 +187,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     protected $requestResultsPerPage;
 
     /**
-     * Id of main category of current shop object
+     * Id of language of current shop
      * @var int
      */
     protected $requestShopLanguageId;
+
+    /**
+     * Id of language fallback of current shop
+     * @var int
+     */
+    protected $requestShopLanguageFallbackId;
 
     /**
      * Has the current shop object translations
@@ -512,6 +518,22 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 LEFT JOIN s_articles_translations AS at
                 ON a.id=at.articleID
                 AND at.languageID=' . (int) $shopId . '
+               ';
+    }
+
+    /**
+     * Add a second translation table as join in query
+     * Used to handle fallback language
+     *
+     * @param int $fallbackId
+     * @return string
+     */
+    public function getSearchTranslationFallbackSql(int $fallbackId)
+    {
+        return '
+                LEFT JOIN s_articles_translations AS fat
+                ON a.id=fat.articleID
+                AND fat.languageID=' . (int) $fallbackId . '
                ';
     }
 
@@ -864,7 +886,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Find keywords matching term
         $this->searchFindKeywords($term);
 
-        // Get sql part to support multilanguage environments
+        // Get sql part to support multi language environments
         $sqlTranslationTableStatement = null;
         $sqlNameField = 'a.name';
         $sqlDescriptionField = 'IF(TRIM(a.description)!=\'\',a.description,a.description_long)';
@@ -872,8 +894,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Shop has possibly translations
         if ($this->requestShopHasTranslations == true) {
             $sqlTranslationTableStatement = $this->getSearchTranslationSql($this->requestShopLanguageId);
-            $sqlNameField = 'IF(at.name IS NULL OR at.name=\'\',a.name,at.name)';
-            $sqlDescriptionField = 'IF(at.description_long IS NULL OR at.description_long=\'\',IF(TRIM(a.description)!=\'\',a.description,a.description_long),IF(TRIM(at.description)=\'\',at.description_long,at.description))';
+            if ($this->requestShopLanguageId) {
+                $sqlTranslationTableStatement .= $this->getSearchTranslationFallbackSql($this->requestShopLanguageId);
+                $sqlNameField = 'IF(at.name > \'\', at.name, IF(fat.name > \'\', fat.name, a.name))';
+                $sqlDescriptionField = 'IF(at.description_long > \'\', IF(TRIM(at.description)=\'\',at.description_long,at.description), IF(fat.description_long > \'\', IF(TRIM(fat.description)=\'\',fat.description_long,fat.description), IF(TRIM(a.description)!=\'\',a.description,a.description_long)))';
+            } else {
+                $sqlNameField = 'IF(at.name > \'\', at.name, a.name)';
+                $sqlDescriptionField = 'IF(at.description_long > \'\', IF(TRIM(at.description)=\'\',at.description_long,at.description), IF(TRIM(a.description)!=\'\',a.description,a.description_long))';
+            }
         }
 
         // Get sql part for selecting keywords in search query

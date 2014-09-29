@@ -143,6 +143,12 @@ class CountryGateway implements Gateway\CountryGatewayInterface
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':language', $context->getShop()->getId());
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addCountryTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
@@ -173,6 +179,12 @@ class CountryGateway implements Gateway\CountryGatewayInterface
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':language', $context->getShop()->getId())
         ;
+
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addCountryStateTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

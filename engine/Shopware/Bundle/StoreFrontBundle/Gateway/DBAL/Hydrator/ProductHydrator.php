@@ -346,15 +346,36 @@ class ProductHydrator extends Hydrator
     private function getProductTranslation($data)
     {
         $translation = array();
+        if (isset($data['__product_translation_fallback'])) {
+            $translation = array_merge(
+                $translation,
+                $this->unserializeTranslation($data['__product_translation_fallback'])
+            );
+            if ($data['__product_main_detail_id'] != $data['__variant_id'] ) {
+                unset($translation['txtzusatztxt']);
+            }
+        }
         if (isset($data['__product_translation'])) {
-            $translation = array_merge($translation, $this->unserializeTranslation($data['__product_translation']));
+            $translation = array_merge(
+                $translation,
+                $this->unserializeTranslation($data['__product_translation'])
+            );
             if ($data['__product_main_detail_id'] != $data['__variant_id'] ) {
                 unset($translation['txtzusatztxt']);
             }
         }
 
+        if (isset($data['__variant_translation_fallback'])) {
+            $translation = array_merge(
+                $translation,
+                $this->unserializeTranslation($data['__variant_translation_fallback'])
+            );
+        }
         if (isset($data['__variant_translation'])) {
-            $translation = array_merge($translation, $this->unserializeTranslation($data['__variant_translation']));
+            $translation = array_merge(
+                $translation,
+                $this->unserializeTranslation($data['__variant_translation'])
+            );
         }
 
         foreach ($translation as $key => $value) {
