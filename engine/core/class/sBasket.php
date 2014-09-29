@@ -474,7 +474,7 @@ class sBasket
         );
 
         $premium = $this->db->fetchRow('
-            SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
+            SELECT premium.id, detail.ordernumber, article.id as articleID, article.name as articleName,
               article.main_detail_id,
               detail.id as variantID, detail.additionaltext, premium.ordernumber_export,
               article.configurator_set_id
@@ -538,7 +538,7 @@ class sBasket
             's_order_basket',
             array(
                 'sessionID' => $this->session->get('sessionId'),
-                'articlename' => trim($premium["name"] . " " . $premium["additionaltext"]),
+                'articlename' => trim($premium["articleName"] . " " . $premium["additionaltext"]),
                 'articleID' => $premium['id'],
                 'ordernumber' => $number,
                 'quantity' => 1,

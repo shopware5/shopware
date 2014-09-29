@@ -135,21 +135,27 @@ class ManufacturerHydrator extends Hydrator
      */
     private function getTranslation($data)
     {
-        $translation = array();
-        $id = $data['__manufacturer_id'];
-
-        if (!isset($data['__manufacturer_translation'])) {
-            return $translation;
+        if (!isset($data['__manufacturer_translation'])
+            || empty($data['__manufacturer_translation'])
+        ) {
+            $translation = array();
+        } else {
+            $translation = unserialize($data['__manufacturer_translation']);
         }
 
-        $translation = unserialize($data['__manufacturer_translation']);
+        if (isset($data['__manufacturer_translation_fallback'])
+            && !empty($data['__manufacturer_translation_fallback'])
+        ) {
+            $fallbackTranslation = unserialize($data['__manufacturer_translation_fallback']);
+            $translation += $fallbackTranslation;
+        }
 
-        if (!isset($translation[$id]) || empty($translation[$id])) {
+        if (empty($translation)) {
             return array();
         }
 
         return $this->convertArrayKeys(
-            $translation[$id],
+            $translation,
             $this->translationMapping
         );
     }

@@ -100,6 +100,12 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':id', $product->getId());
 
+        $fallbackId = $context->getShop()->getFallbackId();
+        if (!empty($fallbackId)) {
+            $this->fieldHelper->addConfiguratorTranslationFallback($query);
+            $query->setParameter(':languageFallback', $fallbackId);
+        }
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 

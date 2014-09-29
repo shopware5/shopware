@@ -351,11 +351,9 @@ class Helper
     {
         $data = array(
             'type' => 'supplier',
-            'key' => 1,
+            'key' => $manufacturerId,
             'localeId' => $shopId,
-            'data' => array(
-                $manufacturerId => $this->getManufacturerTranslation()
-            )
+            'data' => $this->getManufacturerTranslation()
         );
 
         $this->translationApi->create($data);

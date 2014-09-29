@@ -147,11 +147,19 @@ class MediaHydrator extends Hydrator
     private function getImageTranslation($data)
     {
         if (!isset($data['__image_translation'])
-            || empty($data['__image_translation'])) {
-            return array();
+            || empty($data['__image_translation'])
+        ) {
+            $translation = array();
+        } else {
+            $translation = unserialize($data['__image_translation']);
         }
 
-        $translation = unserialize($data['__image_translation']);
+        if (isset($data['__image_translation_fallback'])
+            && !empty($data['__image_translation_fallback'])
+        ) {
+            $fallbackTranslation = unserialize($data['__image_translation_fallback']);
+            $translation += $fallbackTranslation;
+        }
 
         if (empty($translation)) {
             return array();
