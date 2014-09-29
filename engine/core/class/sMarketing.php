@@ -247,12 +247,12 @@ class sMarketing
     {
         $sql = "
             SELECT id, esdarticle FROM s_order_basket
-            WHERE sessionID='" . $this->sSYSTEM->sSESSION_ID . "'
+            WHERE sessionID=?
             AND modus=0
             ORDER BY esdarticle DESC
         ";
 
-        $checkForEsdOnly = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $checkForEsdOnly = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->sSESSION_ID));
 
         foreach ($checkForEsdOnly as $esdCheck) {
             if ($esdCheck["esdarticle"]) {
