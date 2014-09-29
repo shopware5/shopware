@@ -3,7 +3,7 @@
 	{foreach from=$categories item=category}
 		{if !$category.hidetop}
 			<li class="{if !empty($category.flag)}active{/if}{if $category.sub} sub{/if}">
-				<a href="{$category.link}" class="{if !empty($category.flag)} active{/if}">{$category.name}</a>
+				<a href="{$category.link}" class="{if !empty($category.flag)} active{/if}" {if $category.name}title="{$category.name|escape}"{/if}>{$category.name}</a>
 				{if $category.sub}
 					{call name=categories_top categories=$category.sub level=$level+1}
 				{/if}

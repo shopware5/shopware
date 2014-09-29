@@ -45,6 +45,14 @@
             listSelector: '*[class$="--list"]',
 
             /**
+             * CSS class which will be added to a given viewPort.
+             * If no one is defined, the view port will be the list itself.
+             *
+             * @type {String}
+             */
+            viewPortSelector: '',
+
+            /**
              * CSS class which will be added to the wrapper / this.$el
              *
              * @type {String}
@@ -64,6 +72,13 @@
              * @type {String}
              */
             itemClass: 'js--menu-scroller--item',
+
+            /**
+             * CSS class which will be added to a given view port.
+             *
+             * @type {String}
+             */
+            viewPortClass: 'js--menu-scroller--viewport',
 
             /**
              * CSS class(es) which will be set for the left arrow
@@ -150,6 +165,15 @@
              */
             me._width = 0;
 
+            /**
+             * Timeout id that will be set in the onWindowResize method..
+             *
+             * @private
+             * @property _resizeTimeout
+             * @type {Number}
+             */
+            me._resizeTimeout = 0;
+
             // Apply all given data attributes to the options
             me.applyDataAttributes();
 
@@ -159,10 +183,8 @@
             // Register window resize and button events
             me.registerEvents();
 
-            // Wait for applying other styling changes
-            setTimeout(function () {
-                me.updateResize();
-            }, 50);
+            // applying other styling changes
+            me.onWindowResize();
         },
 
         /**
@@ -179,6 +201,9 @@
 
             me.$list = me.$el.find(opts.listSelector);
             me.$list.addClass(opts.listClass);
+
+            me.$viewPort = opts.viewPortSelector.length ? $(opts.viewPortSelector) : me.$list;
+            me.$viewPort.addClass(opts.viewPortClass);
 
             $.each(me.$list.children(), function (index, el) {
                 $(el).addClass(opts.itemClass);
@@ -213,7 +238,7 @@
 
             me.refreshListeners();
 
-            me._on(window, 'resize', $.proxy(me.updateResize, me));
+            me._on(window, 'resize', $.proxy(me.onWindowResize, me));
         },
 
         /**
@@ -225,11 +250,28 @@
         refreshListeners: function () {
             var me = this;
 
-            me._on(me.$leftArrow, 'click touchstart MSPointerDown', $.proxy(me.onLeftArrowClick, me));
-            me._on(me.$rightArrow, 'click touchstart MSPointerDown', $.proxy(me.onRightArrowClick, me));
+            me._on(me.$leftArrow, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
+            me._on(me.$rightArrow, 'click touchstart', $.proxy(me.onRightArrowClick, me));
 
             me._on(me.$el, 'swipeleft', $.proxy(me.onRightArrowClick, me));
             me._on(me.$el, 'swiperight', $.proxy(me.onLeftArrowClick, me));
+
+            me._on(me.$el, 'movestart', function(e) {
+                if ((e.distX > e.distY && e.distX < -e.distY) ||
+                    (e.distX < e.distY && e.distX > -e.distY)) {
+                    e.preventDefault();
+                }
+            });
+        },
+
+        onWindowResize: function () {
+            var me = this;
+
+            if (me._resizeTimeout) {
+                clearTimeout(me._resizeTimeout);
+            }
+
+            me._resizeTimeout = window.setTimeout($.proxy(me.updateResize, me), 200);
         },
 
         /**
@@ -242,11 +284,12 @@
          */
         updateResize: function () {
             var me = this,
-                opts = me.opts;
+                opts = me.opts,
+                viewPortWidth = me.$viewPort.width();
 
-            me._step = opts.scrollStep === 'auto' ? me.$list.width() / 2 : opts.scrollStep;
+            me._step = opts.scrollStep === 'auto' ? viewPortWidth / 2 : opts.scrollStep;
 
-            me._width = me.calculateWidth();
+            me._width = Math.max(viewPortWidth, me.calculateWidth());
 
             me.setOffset(me._offset);
 
@@ -282,9 +325,9 @@
          * @method onLeftArrowClick
          */
         onLeftArrowClick: function (event) {
-            var me = this;
-
             event.preventDefault();
+
+            var me = this;
 
             me.addOffset(me._step * -1);
 
@@ -300,9 +343,9 @@
          * @param {jQuery.Event} event
          */
         onRightArrowClick: function (event) {
-            var me = this;
-
             event.preventDefault();
+
+            var me = this;
 
             me.addOffset(me._step);
 
@@ -332,7 +375,7 @@
          */
         setOffset: function (offset) {
             var me = this,
-                maxWidth = me._width - me.$list.width();
+                maxWidth = me._width - me.$viewPort.width();
 
             me._offset = Math.max(0, Math.min(maxWidth, offset));
 
@@ -358,10 +401,10 @@
          */
         updateButtons: function () {
             var me = this,
-                listWidth = me.$list.width(),
-                maxWidth = me._width - me.$list.width();
+                viewPortWidth = me.$viewPort.width(),
+                maxWidth = me._width - me.$viewPort.width();
 
-            if (listWidth >= me._width) {
+            if (viewPortWidth >= me._width) {
                 me.toggleLeftArrow(false);
                 me.toggleRightArrow(false);
                 return;

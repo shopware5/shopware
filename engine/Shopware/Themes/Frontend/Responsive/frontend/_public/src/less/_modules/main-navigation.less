@@ -5,18 +5,21 @@
 @media screen and (min-width: @tabletViewportWidth) {
 	.navigation-main {
 		.unitize-margin(0, 0, 20, 0, 16);
-		.unitize-padding(0, 12, 0, 12, 16);
 		border-bottom: 4px solid lighten(@primaryContrastColor, 1%);
 		display: block;
 		position: relative;
 
 		.navigation--list {
 			.clearfix();
+            margin: 0;
 		}
+
 		.navigation--entry {
 			float: left;
 		}
+
 		.navigation--link {
+            .transition(none, 0);
 			.unitize-margin(0, 10, 0, 10, 16);
 			.unitize-padding(8, 12, 8, 12, 16);
 			display: block;
@@ -27,8 +30,12 @@
 		.is--active {
 			.primary-gradient();
 			.border-radius-multi(3px, 3px);
-			.navigation--link { color: #fff; }
+            .navigation--link,
+            &:hover .navigation--link {
+                color: #fff;
+            }
 
+            font-weight: 700;
 		}
 	}
 	.js--scrollable-list--arrow-left,
