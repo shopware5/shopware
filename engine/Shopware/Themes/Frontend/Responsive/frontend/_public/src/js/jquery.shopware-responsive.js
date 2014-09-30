@@ -409,4 +409,6 @@ $(function() {
     $('*[data-product-compare-add="true"]').productCompareAdd();
 
     $('*[data-product-compare-menu="true"]').productCompareMenu();
+
+    $('*[data-infinite-scrolling="true"]').infiniteScrolling();
 });

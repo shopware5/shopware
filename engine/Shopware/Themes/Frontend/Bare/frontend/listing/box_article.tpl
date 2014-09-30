@@ -1,4 +1,4 @@
-<li class="product--box panel{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}"{if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
+<li class="product--box panel{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}"{if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}" data-page-index="{$pageIndex}">
 
 	<div class="panel--body has--border">
 
