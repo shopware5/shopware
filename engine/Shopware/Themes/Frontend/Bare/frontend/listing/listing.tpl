@@ -13,19 +13,7 @@
 {* Hide actual listing if a emotion world is active *}
 {if !$sOffers}
     {block name="frontend_listing_listing_outer"}
-		<div class="listing--container">
-			<ul class="listing listing--{$sTemplate}">
-				{block name="frontend_listing_list_inline"}
-
-					{* Actual listing *}
-					{if $showListing}
-						{foreach $sArticles as $sArticle}
-							{include file="frontend/listing/box_article.tpl" sTemplate=$sTemplate lastitem=$sArticle@last firstitem=$sArticle@first}
-						{/foreach}
-					{/if}
-				{/block}
-			</ul>
-		</div>
+        {include file="frontend/listing/listing_outer.tpl"}
     {/block}
 {else}
     {if $sCategoryContent.parent != 1}

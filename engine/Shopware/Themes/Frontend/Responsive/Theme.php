@@ -90,6 +90,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.collapse-cart.js',
         'src/js/jquery.product-compare-add.js',
         'src/js/jquery.product-compare-menu.js',
+        'src/js/jquery.infinite-scrolling.js',
         'src/js/jquery.shopware-responsive.js'
     );
 
@@ -121,6 +122,7 @@ class Theme extends \Shopware\Components\Theme
         $description = Shopware()->Snippets()->getNamespace('themes/responsive/backend/config')->get('desktop_responsive_description');
         $fieldSet->addElement($this->createCheckboxField('desktopResponsive', '__desktop_responsive__', true, array('attributes' => array('boxLabel' => $description))));
 
+        $fieldSet->addElement($this->createNumberField('infiniteThreshold', '__infinite_threshold__', 4, array('help' => '__infinite_threshold_description__')));
         $tab->addElement($fieldSet);
 
         return $tab;

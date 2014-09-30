@@ -67,9 +67,20 @@
 .listing--actions {
     .clearfix();
 
-    &.is--advanced {
-        .listing--paging {
-            display: none;
+    &.listing--load-more {
+        display: block;
+        text-align: center;
+        border: 0;
+        background: none;
+
+        .btn--primary {
+            .unitize(40, 16, padding-right);
+        }
+
+        [class^="icon--"] {
+            .unitize(14, 16, top);
+            right: 0px;
+            position: absolute;
         }
     }
 }

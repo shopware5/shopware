@@ -107,4 +107,25 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             );
         }
     }
+
+    public function ajaxListingAction()
+    {
+        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+        $mapper->replaceShortRequestQueries($this->Request());
+
+        $categoryId = $this->Request()->getParam('sCategory');
+        $pageIndex = $this->Request()->getParam('sPage');
+
+        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
+        $articles = $articles['sArticles'];
+
+        $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+
+        $this->View()->assign(array(
+            'sArticles' => $articles,
+            'pageIndex' => $pageIndex,
+            'showListing' => true
+        ));
+    }
 }
