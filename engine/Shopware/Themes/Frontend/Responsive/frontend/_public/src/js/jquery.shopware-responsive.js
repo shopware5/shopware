@@ -411,4 +411,32 @@ $(function() {
     $('*[data-product-compare-menu="true"]').productCompareMenu();
 
     $('*[data-infinite-scrolling="true"]').infiniteScrolling();
+    
+    // Ajax cart amount display
+    function cartRefresh() {
+        var ajaxCartRefresh = $.controller.ajax_cart_refresh,
+            $cartAmount = $('.cart--amount');
+
+        if(!ajaxCartRefresh.length) {
+            return;
+        }
+
+        $.get(ajaxCartRefresh, function(data) {
+            if(!data.length) {
+                return;
+            }
+
+            $cartAmount.fadeOut('fast', function() {
+                $cartAmount.html(data).fadeIn();
+            });
+        });
+    }
+
+    $.subscribe("plugin/addArticle/onAddArticle", function() {
+        cartRefresh();
+    });
+
+    $.subscribe("plugin/collapseCart/afterRemoveArticle", function() {
+        cartRefresh();
+    });
 });
