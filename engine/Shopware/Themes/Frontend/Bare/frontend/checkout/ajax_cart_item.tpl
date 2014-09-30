@@ -1,10 +1,12 @@
 <div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
     {* Article image *}
-    <div class="thumbnail--container{if $basketItem.image.src.0} has--image{/if}">
-        {if $basketItem.image.src.0}
-            <img class="thumbnail--image" src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape:"html"}" />
-        {/if}
-    </div>
+	{block name='frontend_checkout_ajax_cart_articleimage'}
+		<div class="thumbnail--container{if $basketItem.image.src.0} has--image{/if}">
+			{if $basketItem.image.src.0}
+				<img class="thumbnail--image" src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape:"html"}" />
+			{/if}
+		</div>
+	{/block}
 
     {* Article actions *}
     {block name='frontend_checkout_ajax_cart_actions'}
