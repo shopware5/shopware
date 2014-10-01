@@ -97,7 +97,7 @@
     background: $toolbar-background-color;
 
 	// Button normal style
-    .#{$prefix}btn-default-toolbar-small{
+    .#{$prefix}btn-default-toolbar-small {
         background: transparent;
 
         em, button {
@@ -178,6 +178,10 @@
 		width: 100% !important;
 		background: theme-image($theme, 'sw4_logo-shine.png') no-repeat right center;
         overflow: visible;
+    }
+
+    .#{$prefix}btn-default-toolbar-small-focus {
+        background: none;
     }
 
 	// Seperators
@@ -378,7 +382,6 @@
         }
 
         .#{$prefix}form-field {
-            margin: 0 0 0 26px;
 
             &:before {
                 display: block;

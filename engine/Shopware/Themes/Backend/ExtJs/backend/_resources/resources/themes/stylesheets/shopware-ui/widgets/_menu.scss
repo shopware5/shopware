@@ -76,6 +76,7 @@
             height: 29px;
 
             .#{$prefix}menu-item-arrow {
+                background: theme-image($theme, 'menu-parent.png') no-repeat !important;
                 top: 10px;
             }
         }
