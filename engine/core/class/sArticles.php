@@ -1866,6 +1866,7 @@ class sArticles
                 $navigation["previousProduct"]["orderNumber"] = $previousProduct->getNumber();
                 $navigation["previousProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["previousProduct"]["name"] = $previousProduct->getName();
+                $navigation["previousProduct"]["image"] = $previousProduct->getCover()->getThumbnail(4);
             }
 
             if ($nextProduct) {
@@ -1874,6 +1875,7 @@ class sArticles
                 $navigation["nextProduct"]["orderNumber"] = $nextProduct->getNumber();
                 $navigation["nextProduct"]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["nextProduct"]["name"] = $nextProduct->getName();
+                $navigation["nextProduct"]["image"] = $nextProduct->getCover()->getThumbnail(4);
             }
 
             $navigation["currentListing"]["position"] = $index + 1;

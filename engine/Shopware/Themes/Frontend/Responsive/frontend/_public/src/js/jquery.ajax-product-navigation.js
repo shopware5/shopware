@@ -1,52 +1,5 @@
-;(function($, window, document, undefined) {
-    "use strict";
-
-    /**
-     * Checks if a the given {@link obj} is a numeric (float) value.
-     * @private
-     * @param {Mixed} obj
-     * @returns {Boolean}
-     */
-    var isNumeric = function(obj) {
-        return !$.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
-    };
-
-    /**
-     * Parses the given {@link url} parameter and extracts all query parameters. If the parameter is numeric
-     * it will automatically based to a {@link Number} instead of a {@link String}.
-     * @private
-     * @param {String} url - Usually {@link window.location.href}
-     * @returns {{}} Object with all extracted parameters
-     */
-    var parseQueryString = function(url) {
-        var qparams = {},
-            parts = (url || '').split('?'),
-            qparts, qpart,
-            i=0;
-
-        if(parts.length <= 1){
-            return qparams;
-        }
-
-        qparts = parts[1].split('&');
-        for (i in qparts) {
-            var key, value;
-
-            qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0])
-            value = decodeURIComponent(qpart[1] || '');
-            qparams[key] = (isNumeric(value) ? parseFloat(value, 10) : value);
-        }
-
-        return qparams;
-    };
-
-    /** @type {Array} Selectors for the listing part of the plugin  */
-    var listingSelectors = [
-        '.listing .product--box .box--image',
-        '.listing .product--box .product--title',
-        '.listing .product--box .product--actions .action--more'
-    ];
+;(function ($, StateManager, Modernizr, location) {
+    'use strict';
 
     /**
      * Ajax Product navigation
@@ -58,94 +11,243 @@
      * needs to support {@link window.sessionStorage}.
      */
     $.plugin('ajaxProductNavigation', {
-        /** @type {Object} Default configuration of the plugin */
+        /**
+         * Default configuration of the plugin
+         *
+         * @type {Object}
+         */
         defaults: {
-            arrowAnimSpeed: 500,
-            arrowOffset: -45,
+
+            /**
+             * Animation speed in milliseconds of the arrow fading.
+             *
+             * @type {Number}
+             */
+            arrowFadeSpeed: 500,
+
+            /**
+             * Default offset of the arrows.
+             *
+             * @type {Number}
+             */
+            arrowOffset: 40,
+
+            /**
+             * Offset of the arrows in pixel when they get hovered over.
+             *
+             * @type {Number}
+             */
+            arrowSlideOffset: 140,
+
+            /**
+             * Class to enable the arrow sliding.
+             *
+             * @type {String}
+             */
+            arrowSlideClass: 'can--slide',
+
+            /**
+             * Selector for the product box in the listing.
+             *
+             * @type {String}
+             */
             productBoxSelector: '.product--box',
+
+            /**
+             * Selector for the product details.
+             * This element should have data attributes of the ordernumber and product navigation link.
+             *
+             * @type {String}
+             */
             productDetailsSelector: '.product--details',
-            prevLinkSelector: 'a.navigation--link.link--prev',
-            nextLinkSelector: 'a.navigation--link.link--next',
-            breadcrumbButtonSelector: '.breadcrumb--button'
+
+            /**
+             * Selector for the previous button.
+             *
+             * @type {String}
+             */
+            prevLinkSelector: '.navigation--link.link--prev',
+
+            /**
+             * Selector for the next button.
+             *
+             * @type {String}
+             */
+            nextLinkSelector: '.navigation--link.link--next',
+
+            /**
+             * Selector for the breadcrumb back button.
+             *
+             * @type {String}
+             */
+            breadcrumbButtonSelector: '.breadcrumb--button .btn',
+
+            /**
+             * Selector for the image container.
+             *
+             * @type {String}
+             */
+            imageContainerSelector: '.image--container',
+
+            /**
+             * Selectors of product box childs in the listing.
+             *
+             * @type {Array}
+             */
+            listingSelectors: [
+                '.listing .product--box .box--image',
+                '.listing .product--box .product--title',
+                '.listing .product--box .product--actions .action--more'
+            ]
         },
 
         /**
-         * Initializes the plugin and checks if we're on listing page or on the detail page.
-         * @returns {boolean}
+         * Initializes the plugin and registers event listeners depending on
+         * whether we are on the listing- or detail page.
+         *
+         * @public
+         * @method init
          */
-        init: function() {
-            var me = this;
+        init: function () {
+            var me = this,
+                $el = me.$el,
+                isListing = $el.hasClass('is--ctl-listing'),
+                isDetail = $el.hasClass('is--ctl-detail'),
+                opts = me.opts;
 
-            me._mode = (function() {
-                if(me.$el.hasClass('is--ctl-listing')) {
-                    return 'listing';
-                } else if(me.$el.hasClass('is--ctl-detail')) {
-                    return 'detail';
-                }
-                return undefined;
-            })();
-
-            if(!me._mode) {
-                return false;
+            if (!(isListing || isDetail)) {
+                return;
             }
 
-            if(me._mode === 'listing') {
-                me.registerListingEventListeners(listingSelectors);
-            } else {
-                var params = parseQueryString(window.location.href);
+            me.storage = StorageManager.getStorage('session');
+            me.urlParams = me.parseQueryString(location.href);
 
-                // ...the url wasn't called through the listing
-                if(!params.hasOwnProperty('c')) {
+            me.$prevButton = $el.find(opts.prevLinkSelector);
+            me.$nextButton = $el.find(opts.nextLinkSelector);
+            me.$backButton = $el.find(opts.breadcrumbButtonSelector);
+            me.$productDetails = $el.find(opts.productDetailsSelector);
+
+            if (isListing) {
+                me.registerListingEventListeners();
+            } else {
+                if (!me.urlParams.hasOwnProperty('c') && !me.$productDetails.attr('data-category-id')) {
                     me.clearCurrentProductState();
                     return;
                 }
 
-                me.getProductNavigation();
+                me.registerDetailEventListeners();
             }
+
+            me.getProductNavigation();
         },
 
         /**
-         * Adds an event listener to the back button which uses {@link window.history.back}.
+         * Parses the given {@link url} parameter and extracts all query parameters. If the parameter is numeric
+         * it will automatically based to a {@link Number} instead of a {@link String}.
+         *
+         * @private
+         * @method parseQueryString
+         * @param {String} url - Usually {@link window.location.href}
+         * @returns {Object} All extracted URL-parameters
          */
-        mapBackButton: function(response) {
-            var me = this,
-                backBtn = me.$el.find(me.opts.breadcrumbButtonSelector);
+        parseQueryString: function (url) {
+            var params = {},
+                urlParts = (url + '').split('?'),
+                queryParts,
+                part,
+                key,
+                value,
+                p;
 
-            backBtn.attr('href', response.href);
+            if (urlParts.length < 2) {
+                return params;
+            }
+
+            queryParts = urlParts[1].split('&');
+
+            for (p in queryParts) {
+                if (!queryParts.hasOwnProperty(p)) {
+                    continue;
+                }
+
+                part = queryParts[p].split('=');
+
+                key = decodeURIComponent(part[0]);
+                value = decodeURIComponent(part[1] || '');
+
+                params[key] = $.isNumeric(value) ? parseFloat(value) : value;
+            }
+
+            return params;
         },
 
         /**
          * Registers the event listeners for the listing page.
-         * @param {Array} selectors
-         * @returns {Void}
+         *
+         * @private
+         * @method registerListingEventListeners
          */
-        registerListingEventListeners: function(selectors) {
-            var me = this;
+        registerListingEventListeners: function () {
+            var me = this,
+                selectors = me.opts.listingSelectors.join(', '),
+                $listingEls = me.$el.find(selectors);
 
-            selectors = selectors.join(', ');
-            me.$el.find(selectors).on(me.getEventName('click'), $.proxy(me.onProductLinkInListing, me));
+            me._on($listingEls, 'click', $.proxy(me.onClickProductInListing, me));
         },
 
         /**
-         * Event handler method which saves the current listing state like selected sorting and active page
-         * into the {@link window.sessionStorage}
+         * Registers the event listeners for the detail page.
+         *
+         * @private
+         * @method registerDetailEventListeners
+         */
+        registerDetailEventListeners: function () {
+            var me = this;
+
+            me._on(window, 'resize', $.proxy(me.checkPossibleSliding, me));
+        },
+
+        /**
+         * Checks if it's possible for the arrows to slide to full extend.
+         * If so, add the arrow slide class to the arrows.
+         *
+         * @private
+         * @method checkPossibleSliding
+         */
+        checkPossibleSliding: function () {
+            var me = this,
+                opts = me.opts,
+                offset = opts.arrowOffset,
+                slideOffset = opts.arrowSlideOffset,
+                $prevBtn = me.$prevButton,
+                $nextBtn = me.$nextButton,
+                remainingSpacePrev = $prevBtn.offset().left + offset,
+                remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + opts.arrowOffset;
+
+            $prevBtn.toggleClass(opts.arrowSlideClass, remainingSpacePrev >= slideOffset);
+            $nextBtn.toggleClass(opts.arrowSlideClass, remainingSpaceNext >= slideOffset);
+        },
+
+        /**
+         * Event handler method which saves the current listing state like
+         * selected sorting and active page into the {@link window.sessionStorage}
          *
          * @event click
          * @param {MouseEvent} event
          */
-        onProductLinkInListing: function(event) {
+        onClickProductInListing: function (event) {
             var me = this,
-                params = parseQueryString(window.location.href),
+                params = me.urlParams,
                 $target = $(event.target),
                 $parent = $target.parents(me.opts.productBoxSelector),
                 categoryId = parseInt($parent.attr('data-category-id'), 10),
                 orderNumber = $parent.attr('data-ordernumber');
 
-            if(categoryId && isNumeric(categoryId) && !isNaN(categoryId)) {
+            if ($.isNumeric(categoryId)) {
                 params.categoryId = categoryId;
             }
 
-            if(orderNumber && orderNumber.length) {
+            if (orderNumber && orderNumber.length) {
                 params.ordernumber = orderNumber;
             }
 
@@ -153,83 +255,82 @@
         },
 
         /**
-         * Tries to write the given parameters into the {@link window.sessionStorage}. If the browser
-         * doesn't support it, the method will just return false.
+         * Writes the given parameters into the {@link window.sessionStorage}.
+         * The key 'lastProductState' will be used.
+         *
+         * @private
+         * @method saveCurrentProductState
          * @param {Object} params
-         * @returns {boolean} Truee, if the state was saved, otherwise false.
          */
-        saveCurrentProductState: function(params) {
-            try {
-                window.sessionStorage.setItem('lastProductState', JSON.stringify(params));
-                return true;
-            } catch(err) {
-                return false;
-            }
+        saveCurrentProductState: function (params) {
+            this.storage.setItem('lastProductState', JSON.stringify(params));
         },
 
         /**
-         * Tries to read out the last saved product state.
+         * Reads the last saved product state by the key 'lastProductState'.
+         *
+         * @private
+         * @method restoreCurrentProductState
          * @returns {Object} The last saved product state or an empty object.
          */
-        restoreCurrentProductState: function() {
-            try {
-                return JSON.parse(window.sessionStorage.getItem('lastProductState'));
-            } catch(err) {
-                return {};
-            }
+        restoreCurrentProductState: function () {
+            return JSON.parse(this.storage.getItem('lastProductState')) || {};
         },
 
         /**
-         * Tries to refresh the current product state with the information which is given
-         * on the detail page.
+         * Removes the product state from the {@link window.sessionStorage}.
+         *
+         * @private
+         * @method clearCurrentProductState
+         */
+        clearCurrentProductState: function () {
+            this.storage.removeItem('lastProductState');
+        },
+
+        /**
+         * Tries to refresh the current product state with the ordernumber that
+         * is given from the product detail element by the attribute 'data-ordernumber'.
+         *
+         * @private
+         * @method refreshCurrentProductState
          * @returns {Object}
          */
-        refreshCurrentProductState: function() {
+        refreshCurrentProductState: function () {
             var me = this,
-                orderNumber = me.$el.find(me.opts.productDetailsSelector).attr('data-ordernumber'),
+                orderNumber = me.$productDetails.attr('data-ordernumber'),
+                categoryId = me.$productDetails.attr('data-category-id'),
                 params = me.restoreCurrentProductState();
 
-            if($.isEmptyObject(params)) {
-                return params;
-            }
-
-            if(orderNumber && orderNumber.length) {
+            if (orderNumber && orderNumber.length) {
                 params.ordernumber = orderNumber;
             }
+
+            if (categoryId && categoryId.length) {
+                params.categoryId = categoryId;
+            }
+
             me.saveCurrentProductState(params);
 
             return params;
         },
 
         /**
-         * Tries to remove the product state from the {@link window.sessionStorage}.
-         * @returns {boolean} True, if the state could be removed, otherwise false.
+         * Requests the product navigation information from the server side
+         * using an AJAX request.
+         *
+         * The url will be fetched from the product details element by
+         * the 'data-product-navigation' attribute.
+         *
+         * @private
+         * @method getProductNavigation
          */
-        clearCurrentProductState: function() {
-            try {
-                window.sessionStorage.removeItem('lastProductState');
-                return true;
-            } catch(err) {
-                return false;
-            }
-        },
-
-        /**
-         * Requests the product navigation information from the server side using an AJAX request.
-         * @returns {boolean|void} False, if the url is missing, otherwise void
-         */
-        getProductNavigation: function() {
+        getProductNavigation: function () {
             var me = this,
                 params = me.refreshCurrentProductState(),
-                url;
+                url = me.$productDetails.attr('data-product-navigation');
 
-            if($.isEmptyObject(params)) {
-                return false;
-            }
-            url = me.$el.find(me.opts.productDetailsSelector).attr('data-product-navigation');
-
-            if(!url || !url.length) {
-                return false;
+            if ($.isEmptyObject(params) || !url || !url.length) {
+                return;
             }
 
             $.ajax({
@@ -237,58 +338,94 @@
                 'data': params,
                 'method': 'GET',
                 'dataType': 'json',
-                'success': $.proxy(me.setProductNavigation, me)
-            })
+                'success': $.proxy(me.onProductNavigationLoaded, me)
+            });
+        },
+
+        /**
+         * Animates a given button with a given anim
+         *
+         * @param $button
+         * @param css
+         * @param speed
+         */
+        animateButton: function ($button, css, speed) {
+            if (Modernizr.csstransitions) {
+                $button.transition(css, speed);
+                return;
+            }
+
+            $button.animate(css, speed);
         },
 
         /**
          * Sets the requested product navigation information into the DOM and displays the
          * prev and next arrow.
          *
+         * @private
+         * @method onProductNavigationLoaded
          * @param {Object} response - Server response
-         * @returns {boolean}
          */
-        setProductNavigation: function(response) {
+        onProductNavigationLoaded: function (response) {
             var me = this,
-                prevLink = me.$el.find(me.opts.prevLinkSelector),
-                nextLink = me.$el.find(me.opts.nextLinkSelector);
+                opts = me.opts,
+                $prevBtn = me.$prevButton,
+                $nextBtn = me.$nextButton,
+                listing = response.currentListing,
+                prevProduct = response.previousProduct,
+                nextProduct = response.nextProduct,
+                animSpeed = opts.arrowFadeSpeed,
+                animCss = {
+                    opacity: 1
+                };
 
-            if(response.hasOwnProperty('currentListing')) {
-                me.mapBackButton(response.currentListing);
+            if (listing && listing.href) {
+                me.$backButton.attr('href', listing.href);
             }
 
-            if(response.hasOwnProperty('previousProduct')) {
-                var previousProduct = response.previousProduct;
+            if (typeof prevProduct === 'object') {
+                $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image + ')');
 
-                prevLink
-                    .attr('href', previousProduct.href)
-                    .attr('title', previousProduct.name)
-                    .animate({
-                        'opacity': 1
-                    }, me.opts.arrowAnimSpeed);
-            } else {
-                prevLink.remove();
+                $prevBtn
+                    .attr('href', prevProduct.href)
+                    .attr('title', prevProduct.name)
+                    .show();
+
+                if (Modernizr.csstransitions) {
+                    $prevBtn.transition(animCss, animSpeed);
+                } else {
+                    $prevBtn.animate(animCss, animSpeed);
+                }
             }
 
-            if(response.hasOwnProperty('nextProduct')) {
-                var nextProduct = response.nextProduct;
+            if (typeof nextProduct === 'object') {
+                $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image + ')');
 
-                nextLink
+                $nextBtn
                     .attr('href', nextProduct.href)
                     .attr('title', nextProduct.name)
-                    .animate({
-                        'opacity': 1
-                    }, me.opts.arrowAnimSpeed);
-            } else {
-                nextLink.remove();
+                    .show();
+
+                if (Modernizr.csstransitions) {
+                    $nextBtn.transition(animCss, animSpeed);
+                } else {
+                    $nextBtn.animate(animCss, animSpeed);
+                }
             }
 
-            return true;
+            me.checkPossibleSliding();
+        },
+
+        /**
+         * Destroys the plugin by removing all listeners.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            var me = this;
+
+            me._destroy();
         }
     });
-
-    /** Starts the plugin */
-    $(function() {
-        $('body').ajaxProductNavigation();
-    });
-})(jQuery, window, document);
+})(jQuery, StateManager, Modernizr, location);
