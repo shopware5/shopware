@@ -11,9 +11,9 @@
                    data-product-compare-add="true"
                    rel="nofollow"
                    title="{s name='ListingBoxLinkCompare'}{/s}"
-                   class="product--action action--compare btn is--secondary">
+                   class="product--action action--compare btn is--secondary is--icon-right">
                         {s name='ListingBoxLinkCompare'}{/s}
-                        <i class="icon--arrow-right is--right is--small"></i>
+                        <i class="icon--arrow-right"></i>
                 </a>
             {/block}
 

@@ -128,7 +128,7 @@
 
                         {* Compare button note *}
                         {block name='frontend_note_item_actions_compare'}
-                            <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" data-product-compare-add="true" class="product--action action--compare btn btn--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
+                            <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" data-product-compare-add="true" class="product--action action--compare btn is--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
                                 {s name='ListingBoxLinkCompare'}{/s}
                             </a>
                         {/block}

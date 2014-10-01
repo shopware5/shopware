@@ -59,7 +59,7 @@
     .unitize-width(450);
     .border-radius();
     .unitize(14, 16, font-size);
-    border: 1px solid @lightDarkBorderColor;
+    border: 1px solid @border-color;
     position: relative;
     background: #fff;
 
@@ -82,7 +82,7 @@
     }
 
     &:before {
-        border-bottom-color: @lightDarkBorderColor;
+        border-bottom-color: @border-color;
         border-width: 10px;
     }
 
@@ -116,7 +116,7 @@
     .cart--item {
         .unitize-padding(10, 0);
         .unitize(38, 16, line-height);
-        border-bottom: 1px solid @lightDarkBorderColor;
+        border-bottom: 1px solid @border-color;
         overflow: hidden;
 
         &:last-child {
@@ -136,7 +136,7 @@
             position: relative;
 
             &.has--image {
-                border: 1px solid @lightDarkBorderColor;
+                border: 1px solid @border-color;
                 background: #FFFFFF;
             }
         }
@@ -151,7 +151,7 @@
         }
 
         .item--link {
-            color: @primaryTextColor;
+            color: @text-color;
         }
 
         .item--quantity {
@@ -188,8 +188,8 @@
 
     .prices--container {
         .unitize-padding(10, 10);
-        background: @primaryLightBackgroundColor;
-        border-color: @lightDarkBorderColor;
+        background: @gray-light;
+        border-color: @border-color;
         border-style: solid;
         border-width: 1px 0;
 
@@ -198,7 +198,7 @@
         }
 
         .prices--articles {
-            color: @darkTextColor;
+            color: @text-color-dark;
             font-weight: bold;
         }
     }
@@ -239,7 +239,7 @@
 
 .off-canvas .ajax--cart {
     .unitize(14, 16, font-size);
-    background: @primaryLightBackgroundColor;
+    background: @gray-light;
     width: auto;
     position: absolute;
     left: 0;
@@ -270,10 +270,9 @@
 
         .close--off-canvas {
             .unitize-padding(12, 10, 12, 10, 16);
-            .linear-gradient(@lightTextColor, @primaryTextColor);
+            .secondary-gradient();
             .clearfix();
-            border-bottom: 1px solid @darkBorderColor;
-            text-shadow: 1px 1px 0 @darkTextColor;
+            border-bottom: 1px solid @border-color;
             display: block;
             color: #FAFAFA;
             font-weight: bold;

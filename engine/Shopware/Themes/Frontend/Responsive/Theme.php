@@ -545,6 +545,6 @@ class Theme extends \Shopware\Components\Theme
             'Konfiguriert die Farben des Responsive Themes mit unterschiedlichen Rot-Tönen, die von Shopware aufeinander abgestimmt sind'
         )->setValues(array('color' => '#fff'));
 
-        $collection->add($set);    
+        $collection->add($set);
     }
 }

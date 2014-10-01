@@ -21,7 +21,7 @@
             {/foreach}
             {block name='frontend_compare_product_dropdown_action_start'}
                 <li>
-                    <a href="{url controller='compare' action='overlay' forceSecure}" data-modal-title="{s name="CompareInfoCount"}Produktvergleich{/s}" rel="nofollow" class="btn btn--primary btn--compare btn--compare-start">
+                    <a href="{url controller='compare' action='overlay' forceSecure}" data-modal-title="{s name="CompareInfoCount"}Produktvergleich{/s}" rel="nofollow" class="btn is--primary btn--compare btn--compare-start">
                         {s name="CompareActionStart"}{/s}
                         <i class="icon--arrow-right"></i>
                     </a>
@@ -29,7 +29,7 @@
             {/block}
             {block name='frontend_compare_product_dropdown_action_delete'}
                 <li>
-                    <a href="{url controller='compare' action='delete_all' forceSecure}" rel="nofollow" class="btn btn--secondary btn--compare btn--compare-delete">
+                    <a href="{url controller='compare' action='delete_all' forceSecure}" rel="nofollow" class="btn is--secondary btn--compare btn--compare-delete">
                         {s name="CompareActionDelete"}{/s}
                     </a>
                 </li>
