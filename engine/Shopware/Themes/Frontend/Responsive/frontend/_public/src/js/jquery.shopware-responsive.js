@@ -263,6 +263,8 @@ $(function() {
     $('*[data-newsletter="true"]').newsletter();
     $('*[data-pseudo-text="true"]').pseudoText();
 
+    $('body').ajaxProductNavigation();
+
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
