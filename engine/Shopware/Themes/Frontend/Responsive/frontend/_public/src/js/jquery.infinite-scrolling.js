@@ -44,13 +44,22 @@
             /** @int categoryId - category id is used for generating ajax request */
             'categoryId': 0,
 
+            /** @string pagingSelector - listing paging selector **/
+            'pagingSelector': '.listing--paging',
+
+            /** @string defaultPerPageSelector - default per page selector which will be removed **/
+            'defaultPerPageSelector': '.action--per-page',
+
+            /** @string defaultChangeLayoutSelector - default change layout selecot which will be get a new margin **/
+            'defaultChangeLayoutSelector': '.action--change-layout',
+
             /** @int threshold - after this threshold reached, auto fetching is disabled and the "load more" button is shown. */
             'threshold': 3,
 
-            /** @string loadMoreSelector - this selector will be used for fetching further data by button. */
+            /** @string loadMoreCls - this class will be used for fetching further data by button. */
             'loadMoreCls': 'js--load-more',
 
-            /** @string loadPreviousSelector - this selector will be used for fetching previous data by button. */
+            /** @string loadPreviousCls - this class  will be used for fetching previous data by button. */
             'loadPreviousCls': 'js--load-previous',
 
             /** @string Class will be used for load more or previous button */
@@ -65,8 +74,8 @@
             /** @string listingActionsSelector - this class will be used for appending the load more button */
             'listingActionsSelector': '.listing--actions',
 
-            /** @string listingActionsWrapper - this class will be used as a actions wrapper for the load more and previous button */
-            'listingActionsWrapper': 'listing--load-more'
+            /** @string listingActionsWrapper - this class will be cloned and used as a actions wrapper for the load more and previous button */
+            'listingActionsWrapper': 'listing--actions block-group listing--load-more'
         },
 
         /**
@@ -93,6 +102,13 @@
                 return;
             }
 
+            // Remove paging
+            $(me.opts.pagingSelector).remove();
+
+            $(me.opts.defaultPerPageSelector).remove();
+
+            $(me.opts.defaultChangeLayoutSelector).css('margin-left', '30%');
+
             // Check max pages by data attribute
             me.maxPages = me.$el.attr('data-pages');
             if(me.maxPages <= 1) {
@@ -117,12 +133,24 @@
                 'bottom': $(me.opts.listingActionsSelector).last()
             };
 
+            // Prepare top and bottom actions containers
+            me.buttonWrapperTop = $('<div>', {
+                'class': me.opts.listingActionsWrapper
+            });
+
+            me.buttonWrapperBottom = $('<div>', {
+                'class': me.opts.listingActionsWrapper
+            });
+
+            // append load more button
+            me.actions.top.after(me.buttonWrapperTop);
+            me.actions.bottom.before(me.buttonWrapperBottom);
+
+            // remove bottom pagination
+            me.actions.bottom.remove();
+
             // base url for push state and ajax fetch url
             me.baseUrl = window.location.href.split('?')[0];
-
-            // prepare bottom area for load more button
-            me.actions.bottom.empty();
-            me.actions.bottom.addClass(me.opts.listingActionsWrapper);
 
             // Ajax configuration
             me.ajax = {
@@ -230,7 +258,7 @@
                 var button = me.generateButton('next');
 
                 // append load more button
-                me.actions.bottom.html(button);
+                me.buttonWrapperBottom.html(button);
 
                 // set finished flag
                 me.isFinished = true;
@@ -304,6 +332,8 @@
 
             var me = this;
 
+            $('.' + me.opts.loadMoreCls).remove();
+
             // Set finished to false to reanable the fetch method
             me.isFinished = false;
 
@@ -328,10 +358,8 @@
             var me = this,
                 button = me.generateButton('previous');
 
-            me.actions.top.empty();
-            me.actions.top.addClass(me.opts.listingActionsWrapper);
-
-            me.actions.top.html(button);
+            // append load previous button
+            me.buttonWrapperTop.html(button);
         },
 
         /**
@@ -347,12 +375,12 @@
             var me = this;
 
             // Remove load more button
-            $(me.opts.loadPreviousSelector).remove();
+            $('.' + me.opts.loadPreviousCls).remove();
 
             me.previousPageIndex = --me.ajax.params.p;
 
             // fetching new page
-            me.openLoadingIndicator();
+            me.openLoadingIndicator(top);
 
             // use categoryid by settings if not defined by filters
             if(!me.ajax.params.c) me.ajax.params.c = me.opts.categoryId;
@@ -385,15 +413,27 @@
          *
          * opens the loading indicator relative
          */
-        openLoadingIndicator: function() {
-            var me = this;
+        openLoadingIndicator: function(type) {
+            var me = this,
+                $indicator = $('.js--loading-indicator.indicator--relative');
 
-            var $indicator = $('.js--loading-indicator.indicator--relative');
             if($indicator.length) {
                 return;
             }
 
-            me.$el.parent().after('<div class="js--loading-indicator indicator--relative"><i class="icon--default"></i></div>');
+            $indicator = $('<div>', {
+                'class': 'js--loading-indicator indicator--relative',
+                'html': $('<i>', {
+                    'class': 'icon--default'
+                })
+            });
+
+            if(!type) {
+                me.$el.parent().after($indicator);
+                return;
+            }
+
+            me.$el.parent().before($indicator);
         },
 
         /**
@@ -402,9 +442,9 @@
          * close the relative loading indicator
          */
         closeLoadingIndicator: function() {
-            var me = this;
+            var me = this,
+            $indicator = $('.js--loading-indicator.indicator--relative');
 
-            var $indicator = $('.js--loading-indicator.indicator--relative');
             if(!$indicator.length) {
                 return;
             }
