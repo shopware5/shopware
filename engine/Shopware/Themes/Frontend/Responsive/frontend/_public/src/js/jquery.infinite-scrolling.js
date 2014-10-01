@@ -63,7 +63,7 @@
             'loadPreviousCls': 'js--load-previous',
 
             /** @string Class will be used for load more or previous button */
-            'loadBtnCls': 'btn btn--primary',
+            'loadBtnCls': 'btn is--primary is--icon-right',
 
             /** @string loadMoreSnippet - this snippet will be printed inside the load more button */
             'loadMoreSnippet': 'Weitere Artikel laden',
@@ -317,7 +317,7 @@
                 'class': 'actions--buttons',
                 'html': $('<a>', {
                     'class': me.opts.loadBtnCls + ' ' + cls,
-                    'html': snippet + ' <i class="icon--cw"></i>'
+                    'html': snippet + ' <i class="icon--cw is--large"></i>'
                 })
             });
         },

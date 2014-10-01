@@ -17,7 +17,7 @@
         <input class="input is--disabled" type="text" placeholder="{s name='PaymentDebitLabelName'}{/s}" readonly="readonly" value="{$form_data.sDebitBankHolder|escape}">
     </p>
 
-    <a href="{url controller=account action=payment sTarget=$sTarget|default:"checkout" sTargetAction=$sTargetAction|default:"index"}" class="btn btn--secondary is--small">
+    <a href="{url controller=account action=payment sTarget=$sTarget|default:"checkout" sTargetAction=$sTargetAction|default:"index"}" class="btn is--secondary is--small">
         {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
     </a>
 </div>
