@@ -402,7 +402,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 break;
             case "select":
                 $values = explode(";", $element['value']);
-                $output .= "<select class=\"{$element['class']} $requiredField\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t";
+                $output .= "<select class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t";
 
                 if (!empty($requiredField)) {
                     $requiredField = 'disabled="disabled"';
