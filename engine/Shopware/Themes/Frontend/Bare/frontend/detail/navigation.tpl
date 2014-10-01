@@ -6,7 +6,9 @@
         <div class="link--prev-button">
             <span class="link--prev-inner">{s name='DetailNavPrevious'}Zurück{/s}</span>
         </div>
-        <div class="image--container"></div>
+        <div class="image--wrapper">
+            <div class="image--container"></div>
+        </div>
     </a>
 {/block}
 
@@ -16,6 +18,8 @@
         <div class="link--next-button">
             <span class="link--next-inner">{s name='DetailNavNext'}Vor{/s}</span>
         </div>
-        <div class="image--container"></div>
+        <div class="image--wrapper">
+            <div class="image--container"></div>
+        </div>
     </a>
 {/block}

@@ -26,13 +26,6 @@
             arrowFadeSpeed: 500,
 
             /**
-             * Animation speed in milliseconds of the arrow sliding.
-             *
-             * @type {Number}
-             */
-            arrowSlideSpeed: 300,
-
-            /**
              * Default offset of the arrows.
              *
              * @type {Number}

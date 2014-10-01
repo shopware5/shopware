@@ -588,19 +588,26 @@
             .unitize(255, 16, line-height);
             .unitize(25, 16, font-size);
             .transition(background, 0.3s, ease);
-            background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.15);
+            background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.1);
             text-align: center;
             color: #fff;
         }
 
-        .image--container {
-            .unitize-width(285);
+        .image--wrapper {
+            .unitize-padding(15, 15);
+            .unitize-width(200);
             .unitize-height(255);
+            float: left;
             background: #fff;
             position: relative;
-            float: left;
+        }
+
+        .image--container {
+            width: 100%;
+            height: 100%;
             background-position: center center;
             background-repeat: no-repeat;
+            background-size: contain;
         }
 
         .link--prev-button {
@@ -629,7 +636,7 @@
 
             &:hover .link--prev-button,
             &:hover .link--next-button {
-                background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.3);
+                background: rgba(red(@darkBackgroundColor), green(@darkBackgroundColor), blue(@darkBackgroundColor), 0.2);
             }
         }
 
