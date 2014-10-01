@@ -21,9 +21,7 @@
 
 			{* Products per page selection *}
 			{block name='frontend_listing_actions_items_per_page'}
-                {if !$theme.infiniteScrolling}
-				    {include file="frontend/listing/actions/action-per-page.tpl"}
-                {/if}
+                {include file="frontend/listing/actions/action-per-page.tpl"}
 			{/block}
 
 			{* Filter options *}
@@ -35,9 +33,7 @@
 
         {* Listing pagination *}
         {block name='frontend_listing_actions_paging'}
-            {if !$theme.infiniteScrolling}
-                {include file="frontend/listing/actions/action-pagination.tpl"}
-            {/if}
+            {include file="frontend/listing/actions/action-pagination.tpl"}
         {/block}
 
         {block name="frontend_listing_actions_close"}{/block}
