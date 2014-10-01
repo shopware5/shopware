@@ -69,10 +69,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         if (isset($navigation['previousProduct'])) {
             $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
+            $navigation['previousProduct']['image'] = Shopware()->Shop()->getBaseUrl() . '/' . $navigation['previousProduct']['image'];
         }
 
         if (isset($navigation['nextProduct'])) {
             $navigation['nextProduct']['href'] = $linkRewriter($navigation['nextProduct']['link']);
+            $navigation['nextProduct']['image'] = Shopware()->Shop()->getBaseUrl() . '/' .  $navigation['nextProduct']['image'];
         }
 
         $navigation['currentListing']['href'] = $linkRewriter($navigation['currentListing']['link']);

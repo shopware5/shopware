@@ -19,18 +19,39 @@
         defaults: {
 
             /**
-             * Animation speed in milliseconds of the arrow fadings.
+             * Animation speed in milliseconds of the arrow fading.
              *
              * @type {Number}
              */
-            arrowAnimSpeed: 500,
+            arrowFadeSpeed: 500,
 
             /**
-             * Offset of the arrows in pixel.
+             * Animation speed in milliseconds of the arrow sliding.
              *
              * @type {Number}
              */
-            arrowOffset: -45,
+            arrowSlideSpeed: 300,
+
+            /**
+             * Default offset of the arrows.
+             *
+             * @type {Number}
+             */
+            arrowOffset: 40,
+
+            /**
+             * Offset of the arrows in pixel when they get hovered over.
+             *
+             * @type {Number}
+             */
+            arrowSlideOffset: 140,
+
+            /**
+             * Class to enable the arrow sliding.
+             *
+             * @type {String}
+             */
+            arrowSlideClass: 'can--slide',
 
             /**
              * Selector for the product box in the listing.
@@ -52,14 +73,14 @@
              *
              * @type {String}
              */
-            prevLinkSelector: 'a.navigation--link.link--prev',
+            prevLinkSelector: '.navigation--link.link--prev',
 
             /**
              * Selector for the next button.
              *
              * @type {String}
              */
-            nextLinkSelector: 'a.navigation--link.link--next',
+            nextLinkSelector: '.navigation--link.link--next',
 
             /**
              * Selector for the breadcrumb back button.
@@ -67,6 +88,13 @@
              * @type {String}
              */
             breadcrumbButtonSelector: '.breadcrumb--button .btn',
+
+            /**
+             * Selector for the image container.
+             *
+             * @type {String}
+             */
+            imageContainerSelector: '.image--container',
 
             /**
              * Selectors of product box childs in the listing.
@@ -108,11 +136,13 @@
 
             if (isListing) {
                 me.registerListingEventListeners();
-            }
+            } else {
+                if (!me.urlParams.hasOwnProperty('c') && !me.$productDetails.attr('data-category-id')) {
+                    me.clearCurrentProductState();
+                    return;
+                }
 
-            // ...the url wasn't called through the listing
-            if (isDetail && !me.urlParams.hasOwnProperty('c')) {
-                me.clearCurrentProductState();
+                me.registerDetailEventListeners();
             }
 
             me.getProductNavigation();
@@ -170,6 +200,39 @@
                 $listingEls = me.$el.find(selectors);
 
             me._on($listingEls, 'click', $.proxy(me.onClickProductInListing, me));
+        },
+
+        /**
+         * Registers the event listeners for the detail page.
+         *
+         * @private
+         * @method registerDetailEventListeners
+         */
+        registerDetailEventListeners: function () {
+            var me = this;
+
+            me._on(window, 'resize', $.proxy(me.checkPossibleSliding, me));
+        },
+
+        /**
+         * Checks if it's possible for the arrows to slide to full extend.
+         * If so, add the arrow slide class to the arrows.
+         *
+         * @private
+         * @method checkPossibleSliding
+         */
+        checkPossibleSliding: function () {
+            var me = this,
+                opts = me.opts,
+                offset = opts.arrowOffset,
+                slideOffset = opts.arrowSlideOffset,
+                $prevBtn = me.$prevButton,
+                $nextBtn = me.$nextButton,
+                remainingSpacePrev = $prevBtn.offset().left + offset,
+                remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + opts.arrowOffset;
+
+            $prevBtn.toggleClass(opts.arrowSlideClass, remainingSpacePrev >= slideOffset);
+            $nextBtn.toggleClass(opts.arrowSlideClass, remainingSpaceNext >= slideOffset);
         },
 
         /**
@@ -242,14 +305,15 @@
         refreshCurrentProductState: function () {
             var me = this,
                 orderNumber = me.$productDetails.attr('data-ordernumber'),
+                categoryId = me.$productDetails.attr('data-category-id'),
                 params = me.restoreCurrentProductState();
-
-            if ($.isEmptyObject(params)) {
-                return params;
-            }
 
             if (orderNumber && orderNumber.length) {
                 params.ordernumber = orderNumber;
+            }
+
+            if (categoryId && categoryId.length) {
+                params.categoryId = categoryId;
             }
 
             me.saveCurrentProductState(params);
@@ -286,6 +350,22 @@
         },
 
         /**
+         * Animates a given button with a given anim
+         *
+         * @param $button
+         * @param css
+         * @param speed
+         */
+        animateButton: function ($button, css, speed) {
+            if (Modernizr.csstransitions) {
+                $button.transition(css, speed);
+                return;
+            }
+
+            $button.animate(css, speed);
+        },
+
+        /**
          * Sets the requested product navigation information into the DOM and displays the
          * prev and next arrow.
          *
@@ -301,8 +381,7 @@
                 listing = response.currentListing,
                 prevProduct = response.previousProduct,
                 nextProduct = response.nextProduct,
-                transitions = Modernizr.csstransitions,
-                animSpeed = opts.arrowAnimSpeed,
+                animSpeed = opts.arrowFadeSpeed,
                 animCss = {
                     opacity: 1
                 };
@@ -312,12 +391,14 @@
             }
 
             if (typeof prevProduct === 'object') {
+                $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image + ')');
+
                 $prevBtn
                     .attr('href', prevProduct.href)
                     .attr('title', prevProduct.name)
                     .show();
 
-                if (transitions) {
+                if (Modernizr.csstransitions) {
                     $prevBtn.transition(animCss, animSpeed);
                 } else {
                     $prevBtn.animate(animCss, animSpeed);
@@ -325,17 +406,21 @@
             }
 
             if (typeof nextProduct === 'object') {
+                $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image + ')');
+
                 $nextBtn
                     .attr('href', nextProduct.href)
                     .attr('title', nextProduct.name)
                     .show();
 
-                if (transitions) {
+                if (Modernizr.csstransitions) {
                     $nextBtn.transition(animCss, animSpeed);
                 } else {
                     $nextBtn.animate(animCss, animSpeed);
                 }
             }
+
+            me.checkPossibleSliding();
         },
 
         /**

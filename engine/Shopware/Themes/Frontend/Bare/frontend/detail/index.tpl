@@ -17,9 +17,20 @@
     {/block}
 {/block}
 
+{block name="frontend_index_content_top" append}
+    {* Product navigation - Previous and next arrow button *}
+    {block name="frontend_detail_index_navigation"}
+        {if !{config name=disableArticleNavigation}}
+            <nav class="product--navigation">
+                {include file="frontend/detail/navigation.tpl"}
+            </nav>
+        {/if}
+    {/block}
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
+    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-category-id="{$sArticle.categoryID}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 
         {* The configurator selection is checked at this early point
            to use it in different included files in the detail template. *}
@@ -35,15 +46,6 @@
                         {$activeConfiguratorSelection = false}
                     {/if}
                 {/foreach}
-            {/if}
-        {/block}
-    
-        {* Product navigation - Previous and next arrow button *}
-        {block name="frontend_detail_index_navigation"}
-            {if !{config name=disableArticleNavigation}}
-                <nav class="product--navigation">
-                    {include file="frontend/detail/navigation.tpl"}
-                </nav>
             {/if}
         {/block}
     
