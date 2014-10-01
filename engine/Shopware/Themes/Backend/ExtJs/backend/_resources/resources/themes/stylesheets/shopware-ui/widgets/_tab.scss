@@ -84,7 +84,8 @@
     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
         svg-color-stop(rgba(178,193,203,1), 0%, 1),
         svg-color-stop(rgba(127,152,169,1), 100%, 1)
-    )) center center no-repeat transparent;	border-color: #8896a6;
+    )) center center no-repeat transparent;
+    border-color: #8896a6;
 	margin: 0 5px;
 
 	button .#{$prefix}tab-inner {
@@ -105,12 +106,29 @@
 }
 
 /** IE9 specific */
-.#{$prefix}ie9 .#{$prefix}tab-default-top {
-    background: #f1f2f2 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAATCAIAAADeafBOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAN0lEQVQIW2O4cusB05ev35n+/vvH9A+M/zP9/QthQ8SAfLgcSOw/038kud+//zJ9+/GD6dOXbwBDNjfyea5ETQAAAABJRU5ErkJggg==") repeat-x left bottom;
+.#{$prefix}ie9 {
+    .#{$prefix}tab-default-top {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(178,193,203,1), 0%, 1),
+            svg-color-stop(rgba(127,152,169,1), 100%, 1)
+        )) center center no-repeat transparent;
 
-    /** Tab Styling - Hover */
-    &:hover {
-        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAMElEQVQIW2N49fYD0+t3H5n+/fsHxP8h9P//CD4S+z8WcZDY7z9/mX78+sX07dtPADgJOzMb//O9AAAAAElFTkSuQmCC") repeat-x left bottom;
+        /** Tab Styling - Hover */
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(198,209,217,1), 0%, 1),
+                svg-color-stop(rgba(147,168,183,1), 100%, 1)
+            )) center center no-repeat transparent;
+        }
+    }
+
+    /** Default tab - disabled state */
+    .#{$prefix}tab-default-top-disabled {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent;
+
     }
 }
 
@@ -127,11 +145,6 @@
 		color: #fff;
 		text-shadow: 0 1px 0 #0941e2;
 	}
-}
-/** IE9 specific */
-.#{$prefix}ie9 .#{$prefix}tab-top-active {
-    filter: none;
-    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAOklEQVQImS3IsRGAAAwDMecHZHmOIZiAJrYpQKV0nA/XvSgiFo3ICmWoQzaMh1pkizbIxe73+S9F0QtkGyitCFKC2wAAAABJRU5ErkJggg==") repeat-x !important;
 }
 
 /** Tab Styling - Disable */

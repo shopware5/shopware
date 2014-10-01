@@ -33,6 +33,16 @@
         height: 100%;
     }
 
+    .#{$prefix}viewport .#{$prefix}body {
+
+        /* Stacked backgrounds */
+        background: $viewport-background-image, -webkit-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Chrome 10+, Saf5.1+ */
+        background: $viewport-background-image, -moz-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* FF3.6+ */
+        background: $viewport-background-image, -ms-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* IE10 */
+        background: $viewport-background-image, -o-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Opera 11.10+ */
+        background: $viewport-background-image, linear-gradient(165deg, #c6eaf6 5%, #dff1f6 45%, #daedf5 55%, #abc8ee 100%); /* W3C */
+    }
+
     .#{$prefix}body {
         margin: 0;
         padding: 0;
@@ -40,14 +50,23 @@
         overflow: hidden;
         height: 100%;
 
-        /* Stacked backgrounds */
-        background: #adcef0; /* Fallback */
-        background: $viewport-background-image, -webkit-gradient(linear, left top, left bottom, from(#c6eaf6), to(#abc8ee)); /* Saf4+, Chrome */
-        background: $viewport-background-image, -webkit-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Chrome 10+, Saf5.1+ */
-        background: $viewport-background-image, -moz-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* FF3.6+ */
-        background: $viewport-background-image, -ms-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* IE10 */
-        background: $viewport-background-image, -o-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Opera 11.10+ */
-        background: $viewport-background-image, linear-gradient(165deg, #c6eaf6 5%, #dff1f6 45%, #daedf5 55%, #abc8ee 100%); /* W3C */
+        /* Stacked backgrounds for the login */
+        background: -webkit-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Chrome 10+, Saf5.1+ */
+        background: -moz-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* FF3.6+ */
+        background: -ms-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* IE10 */
+        background: -o-linear-gradient(105deg, #abc8ee 5%, #daedf5 45%, #dff1f6 55%, #c6eaf6 100%); /* Opera 11.10+ */
+        background: linear-gradient(165deg, #c6eaf6 5%, #dff1f6 45%, #daedf5 55%, #abc8ee 100%); /* W3C */
+    }
+
+    /* IE9 backgrounds */
+    .#{$prefix}ie9 {
+        background-image: theme-image($theme, 'background-compressed-login.jpg');
+        background-size: cover;
+    }
+
+    .#{$prefix}viewport .#{$prefix}ie9 {
+        background-image: theme-image($theme, 'background-compressed.jpg');
+        background-size: cover;
     }
 
     body .shopware-menu .#{$prefix}main-logo-container {
