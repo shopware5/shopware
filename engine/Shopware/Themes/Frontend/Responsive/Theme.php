@@ -114,24 +114,16 @@ class Theme extends \Shopware\Components\Theme
         );
         $container->addTab($tab);
 
-        $tab->addElement(
-            $this->createBottomTabPanel()
-        );
+        $tab->addElement($this->createBottomTabPanel());
     }
 
     private function createBasicFieldSet()
     {
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 130)
-        );
-
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
         $fieldSet = $this->createFieldSet(
             'basic_field_set',
             '__responsive_tab_general_fieldset_base__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSet->addElement(
@@ -162,6 +154,7 @@ class Theme extends \Shopware\Components\Theme
                 'darken(@brand-secondary, 15%)'
             )
         );
+
         return $fieldSet;
     }
 
@@ -180,25 +173,11 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
-        $tabPanel->addTab(
-            $this->createGeneralTab()
-        );
-
-        $tabPanel->addTab(
-            $this->createTypographyTab()
-        );
-
-        $tabPanel->addTab(
-            $this->createButtonsTab()
-        );
-
-        $tabPanel->addTab(
-            $this->createFormsTab()
-        );
-
-        $tabPanel->addTab(
-            $this->createTablesTab()
-        );
+        $tabPanel->addTab($this->createGeneralTab());
+        $tabPanel->addTab($this->createTypographyTab());
+        $tabPanel->addTab($this->createButtonsTab());
+        $tabPanel->addTab($this->createFormsTab());
+        $tabPanel->addTab($this->createTablesTab());
 
         return $tabPanel;
     }
@@ -219,10 +198,7 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 130)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
         $fieldSetGrey = $this->createFieldSet(
             'grey_tones',
             '__responsive_tab_general_fieldset_grey__',
@@ -262,10 +238,7 @@ class Theme extends \Shopware\Components\Theme
         $tab->addElement($basicFieldSet);
         $tab->addElement($fieldSetGrey);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 130)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
         $fieldSetHighlights = $this->createFieldSet(
             'highlight_colors',
             '__responsive_tab_general_fieldset_highlight__',
@@ -303,10 +276,7 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetHighlights);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 200)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
         $fieldSetScaffolding = $this->createFieldSet(
             'scaffolding',
             '__responsive_tab_general_fieldset_scaffolding__',
@@ -432,16 +402,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetBasic);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 170)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
         $fieldSetHeadlines = $this->createFieldSet(
             'typo_headlines',
             '__responsive_tab_typo_fieldset_headlines__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetHeadlines->addElement(
@@ -508,16 +473,11 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 90)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 90));
         $fieldSetButtons = $this->createFieldSet(
             'buttons_fieldset',
             '__responsive_tab_buttons_fieldset_global__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetButtons->addElement(
@@ -537,16 +497,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetButtons);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 200)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
         $fieldSetDefaultButtons = $this->createFieldSet(
             'buttons_default_fieldset',
             '__responsive_tab_buttons_fieldset_default__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetDefaultButtons->addElement(
@@ -601,16 +556,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetDefaultButtons);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 170)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
         $fieldSetPrimaryButtons = $this->createFieldSet(
             'buttons_primary_fieldset',
             '__responsive_tab_buttons_fieldset_primary__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetPrimaryButtons->addElement(
@@ -651,16 +601,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetPrimaryButtons);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 170)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
         $fieldSetSecondaryButtons = $this->createFieldSet(
             'buttons_secondary_fieldset',
             '__responsive_tab_buttons_fieldset_secondary__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetSecondaryButtons->addElement(
@@ -701,16 +646,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetSecondaryButtons);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 170)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
         $fieldSetPanels = $this->createFieldSet(
             'panels_fieldset',
             '__responsive_tab_buttons_fieldset_panels__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetPanels->addElement(
@@ -770,16 +710,11 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 160)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
         $fieldSetLabels = $this->createFieldSet(
             'labels_fieldset',
             '__responsive_tab_forms_fieldset_labels__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetLabels->addElement(
@@ -827,16 +762,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetLabels);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 160)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
         $fieldSetFormBase = $this->createFieldSet(
             'form_base_fieldset',
             '__responsive_tab_forms_fieldset_global__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetFormBase->addElement(
@@ -877,16 +807,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetFormBase);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 240)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 240));
         $fieldSetFormStates = $this->createFieldSet(
             'form_states_fieldset',
             '__responsive_tab_forms_fieldset_states__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetFormStates->addElement(
@@ -969,16 +894,11 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_tables__'
         );
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 140)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 140));
         $fieldSetTables = $this->createFieldSet(
             'tables_fieldset',
             '__responsive_tab_tables_fieldset_tables__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetTables->addElement(
@@ -1012,16 +932,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetTables);
 
-        $attributes = array_merge(
-            $this->fieldSetDefaults,
-            array('height' => 200)
-        );
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
         $fieldSetBadges = $this->createFieldSet(
             'badges_fieldset',
             '__responsive_tab_tables_fieldset_badges__',
-            array(
-                'attributes' => $attributes
-            )
+            array('attributes' => $attributes)
         );
 
         $fieldSetBadges->addElement(
