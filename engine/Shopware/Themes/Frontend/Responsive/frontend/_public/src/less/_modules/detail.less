@@ -15,7 +15,7 @@
             .unitize(21, 16, font-size);
             margin: 0;
             font-weight: bold;
-            color: @text-color-dark; // just a test
+            color: @text-color-dark;
             border-bottom: 1px solid @border-color;
         }
 	}
@@ -583,7 +583,7 @@
             .unitize(255, 16, line-height);
             .unitize(25, 16, font-size);
             .transition(background, 0.3s, ease);
-            background: rgba(red(@gray-dark), green(@gray-dark), blue(@gray-dark), 0.1);
+            background: @gray-dark;
             text-align: center;
             color: #fff;
         }
@@ -631,7 +631,7 @@
 
             &:hover .link--prev-button,
             &:hover .link--next-button {
-                background: rgba(red(@gray-dark), green(@gray-dark), blue(@gray-dark), 0.2);
+                background: @gray-dark;
             }
         }
 
