@@ -120,6 +120,18 @@
     }
 }
 
+/** Safari specific */
+.#{$prefix}safari {
+    .#{$prefix}btn.primary, .#{$prefix}btn.secondary {
+        .#{$prefix}btn-inner {
+            font-weight: 700 !important;
+        }
+    }
+    .#{$prefix}btn.small .#{$prefix}btn-inner {
+        font-weight: normal !important;
+    }
+}
+
 /**
  * Shopware Footer Toolbar Buttons
  * -----------------------------------------------------------------------
