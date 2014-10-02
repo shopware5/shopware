@@ -8,7 +8,7 @@
 }
 
 .blog--filter-options {
-    border-right: 1px solid rgba(red(@text-color), green(@text-color), blue(@text-color), 50%);
+    border-right: 1px solid @border-color;
 
     .filter--container {
         .unitize-padding(0, 10);
@@ -560,6 +560,14 @@
         .blog--box {
             .blog--box-headline {
                 .unitize(18, 16, font-size);
+            }
+
+            .blog--box-link {
+                color: @text-color-dark;
+
+                &:hover {
+                    color: @brand-primary;
+                }
             }
 
             .blog--box-metadata {

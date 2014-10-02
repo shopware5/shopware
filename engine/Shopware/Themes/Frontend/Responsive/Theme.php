@@ -328,7 +328,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_link-hover-color',
                 '@link-hover-color',
-                'darken(@brand-primary, 10%)'
+                'darken(@link-color, 10%)'
             )
         );
         $fieldSetScaffolding->addElement(
@@ -402,7 +402,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_font-bold-weight',
                 '@font-bold-weight',
-                '600'
+                '700'
             )
         );
 
@@ -716,7 +716,7 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 90));
         $fieldSetLabels = $this->createFieldSet(
             'labels_fieldset',
             '__responsive_tab_forms_fieldset_labels__',
@@ -734,35 +734,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_label-color',
                 '@label-color',
-                '#FFFFFF'
-            )
-        );
-        $fieldSetLabels->addElement(
-            $this->createColorPickerField(
-                '_label-highlight-success',
-                '@label-highlight-success',
-                '@highlight-success'
-            )
-        );
-        $fieldSetLabels->addElement(
-            $this->createColorPickerField(
-                '_label-highlight-error',
-                '@label-highlight-error',
-                '@highlight-error'
-            )
-        );
-        $fieldSetLabels->addElement(
-            $this->createColorPickerField(
-                '_label-highlight-notice',
-                '@label-highlight-notice',
-                '@highlight-notice'
-            )
-        );
-        $fieldSetLabels->addElement(
-            $this->createColorPickerField(
-                '_label-highlight-info',
-                '@label-highlight-info',
-                '@highlight-info'
+                '@text-color'
             )
         );
 
@@ -779,7 +751,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_input-font-size',
                 '@input-font-size',
-                '16'
+                '14'
             )
         );
         $fieldSetFormBase->addElement(
@@ -900,7 +872,7 @@ class Theme extends \Shopware\Components\Theme
             '__responsive_tab_tables__'
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 140));
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
         $fieldSetTables = $this->createFieldSet(
             'tables_fieldset',
             '__responsive_tab_tables_fieldset_tables__',
@@ -911,7 +883,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_table-header-bg',
                 '@table-header-bg',
-                '@brand-secondary-dark'
+                '@brand-secondary'
             )
         );
         $fieldSetTables->addElement(
@@ -919,6 +891,13 @@ class Theme extends \Shopware\Components\Theme
                 '_table-header-color',
                 '@table-header-color',
                 '#FFFFFF'
+            )
+        );
+        $fieldSetTables->addElement(
+            $this->createColorPickerField(
+                '_table-row-bg',
+                '@table-row-bg',
+                '@gray'
             )
         );
         $fieldSetTables->addElement(
@@ -932,7 +911,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_table-row-highlight-bg',
                 '@table-row-highlight-bg',
-                '@gray-light'
+                'darken(@table-row-bg, 4%)'
             )
         );
 
@@ -1055,28 +1034,6 @@ class Theme extends \Shopware\Components\Theme
                 array('attributes' => array('xtype' => 'textarea'))
             )
         );
-        $fieldSet->addElement(
-            $this->createTextField(
-                'bodyFontStack',
-                'bodyFontStack',
-                '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'
-            )
-        );
-        $fieldSet->addElement(
-            $this->createTextField(
-                'headlineFontStack',
-                'headlineFontStack',
-                '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'
-            )
-        );
-        $fieldSet->addElement(
-            $this->createTextField(
-                'subheadlineFontStack',
-                'subheadlineFontStack',
-                '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'
-            )
-        );
-
         $description = Shopware()->Snippets()->getNamespace('themes/responsive/backend/config')->get(
             'desktop_responsive_description'
         );
