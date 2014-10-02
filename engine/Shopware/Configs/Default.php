@@ -52,10 +52,10 @@ return array_merge($customConfig, array(
         'adapter' => 'pdo_mysql'
     ), $customConfig['db']),
     'front' => array_merge(array(
-        'noErrorHandler' => true,
-        'throwExceptions' => true,
+        'noErrorHandler' => false,
+        'throwExceptions' => false,
         'disableOutputBuffering' => false,
-        'showException' => true,
+        'showException' => false,
         'charset' => 'utf-8'
     ), $customConfig['front']),
     'config' => array_merge(array(), $customConfig['config']),
