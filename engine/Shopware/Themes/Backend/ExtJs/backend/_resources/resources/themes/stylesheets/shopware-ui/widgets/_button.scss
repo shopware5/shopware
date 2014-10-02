@@ -354,10 +354,14 @@
 
 	/** Toolbar button style - Normal state */
 	.#{$prefix}btn {
-		@include border-radius(2px);
+		@include border-radius(4px);
 		padding: 2px 6px 2px 10px;
-		border-color: #9cb1c8;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPElEQVQIHQXBsQ2AAAzAsCoD4v93aRNsVGpQsaGiCRsyTM5Q0eEUjVVOuQ2VVdZYj2747sjQ4UbGeN/nB1iTR73yR6BvAAAAAElFTkSuQmCC") repeat-x;
+        border: 0 none;
+        margin-top: 1px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(250,250,251,1), 0%, 1),
+            svg-color-stop(rgba(202,214,227,1), 100%, 1)
+        )) center center no-repeat transparent;
 
 		button, a {
 			height: 23px;
@@ -367,7 +371,6 @@
 		// Button text
 		.#{$prefix}btn-inner {
 			color: $font-color;
-			text-shadow: 0 1px 0 #fff;
 			font-weight: normal;
 			font-size: 11px;
 		}
@@ -381,9 +384,10 @@
 
 	/** Toolbar button style - Hover state */
 	.#{$prefix}btn-over {
-		border-color: #8bb0d8;
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAIAAAAvP0KbAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAQElEQVQIHQXBwQ2AQADDsBKJB/tvy9EUmypZqGMbLpjhgg4XnNTRBh2tnIVufGdUeRUNZ6NHPkUv2tCrpOF57h9RL0K8yBSgcwAAAABJRU5ErkJggg==") repeat-x;
-	}
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(253,254,254,1), 0%, 1),
+            svg-color-stop(rgba(183,206,231,1), 100%, 1)
+        )) center center no-repeat transparent;	}
 
 	/** Toolbar button style - Disabled state */
 	.#{$prefix}btn-disabled {
