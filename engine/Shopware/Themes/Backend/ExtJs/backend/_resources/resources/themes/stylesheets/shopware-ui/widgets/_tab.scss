@@ -105,6 +105,13 @@
     }
 }
 
+/** Safari specific */
+.#{$prefix}safari {
+    .#{$prefix}tab-inner {
+        font-weight: 700 !important;
+    }
+}
+
 /** IE9 specific */
 .#{$prefix}ie9 {
     .#{$prefix}tab-default-top {

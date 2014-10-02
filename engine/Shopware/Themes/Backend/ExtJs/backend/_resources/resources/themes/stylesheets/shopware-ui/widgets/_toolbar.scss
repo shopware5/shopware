@@ -29,7 +29,6 @@
  */
 
 // Default window toolbar
-// Default window toolbar
 .#{$prefix}window, .#{$prefix}window-default {
 	.#{$prefix}toolbar, .#{$prefix}toolbar-default {
 	    border-left: 1px solid $light-border-color;
@@ -155,6 +154,14 @@
 
         .#{$prefix}tbar-loading {
             background: url("data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==") no-repeat !important
+        }
+    }
+}
+
+.#{$prefix}safari {
+    .shopware-menu .#{$prefix}btn-default-toolbar-small {
+        .#{$prefix}btn-inner {
+            font-weight: 700 !important;
         }
     }
 }
@@ -418,6 +425,7 @@
         border-right: 1px solid rgba(140, 173, 203, 0.18);
     }
 }
+
 // IE 9 Footer
 .#{$prefix}nlg .shopware-footer {
     background: theme-image($theme, 'nav_taskbar_cap_bg.png') repeat-x !important;
@@ -431,6 +439,13 @@
     width: 100% !important;
     height: 40px !important;
 }
+
+.#{$prefix}safari {
+    .window-management-holder .#{$prefix}btn-default-small .#{$prefix}btn-inner {
+        font-weight: 700 !important;
+    }
+}
+
 .logout-tooltip  {
     @include border-radius(3px);
     position: fixed !important;
