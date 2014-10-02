@@ -275,16 +275,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     mainWindow.supplierStore.load();
                 }
 
-                if (record.get('isConfigurator')) {
-                    me.subApplication.getController('Variant').getVariantListing().getStore().reload();
-                }
-
                 me.prepareArticleProperties(record);
 
                 newArticle.getPrice().filter(lastFilter);
                 me.reconfigureAssociationComponents(newArticle);
                 Shopware.Notification.createGrowlMessage(me.snippets.saved.title, message, me.snippets.growlMessage);
                 me.refreshArticleList();
+
+                if (record.get('isConfigurator') && record.get('id')) {
+                    me.subApplication.getController('Variant').getVariantListing().getStore().reload();
+                }
+
                 if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
                     options.callback(newArticle, true);
                 }
