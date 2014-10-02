@@ -29,6 +29,10 @@ img {
 a {
     color: @link-color;
     text-decoration: none;
+
+    &:hover {
+        color: @link-hover-color;
+    }
 }
 
 ul {
@@ -48,6 +52,7 @@ h1, h2, h3, h4, h5, h6 {
     .unitize-margin(28, 0, 10, 0);
     font-family: @font-headline-stack;
     font-weight: @font-bold-weight;
+    color: @text-color-dark;
 }
 
 h1 {
@@ -78,7 +83,7 @@ h6 {
 }
 
 p {
-    .unitize(14, 16, font-size);
+    .unitize(@font-size-base, 16, font-size);
     .unitize(24, 16, line-height);
     .unitize-margin(0, 0, 24, 0);
 }
@@ -87,7 +92,7 @@ blockquote {
     .unitize-padding(10, 10);
     .border-radius(3px);
     .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
-    background: darken(@gray-light, 4%);
+    background: @gray;
     text-align: left;
     margin: 0;
 }
@@ -157,4 +162,11 @@ blockquote {
     .content-main--inner {
         .unitize-padding(0, 45, 45, 45);
     }
+
+    p {
+        .unitize(14, 16, font-size);
+        .unitize(24, 16, line-height);
+        .unitize-margin(0, 0, 24, 0);
+    }
+
 }
