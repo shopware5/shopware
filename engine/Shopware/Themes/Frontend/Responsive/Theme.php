@@ -580,7 +580,7 @@ class Theme extends \Shopware\Components\Theme
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
                 '_btn-primary-hover-bg',
-                '@btn-default-hover-bg',
+                '@btn-primary-hover-bg',
                 '@brand-primary'
             )
         );
