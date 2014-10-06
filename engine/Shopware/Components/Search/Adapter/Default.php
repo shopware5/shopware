@@ -894,8 +894,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Shop has possibly translations
         if ($this->requestShopHasTranslations == true) {
             $sqlTranslationTableStatement = $this->getSearchTranslationSql($this->requestShopLanguageId);
-            if ($this->requestShopLanguageId) {
-                $sqlTranslationTableStatement .= $this->getSearchTranslationFallbackSql($this->requestShopLanguageId);
+            if ($this->requestShopLanguageFallbackId) {
+                $sqlTranslationTableStatement .= $this->getSearchTranslationFallbackSql($this->requestShopLanguageFallbackId);
                 $sqlNameField = 'IF(at.name > \'\', at.name, IF(fat.name > \'\', fat.name, a.name))';
                 $sqlDescriptionField = 'IF(at.description_long > \'\', IF(TRIM(at.description)=\'\',at.description_long,at.description), IF(fat.description_long > \'\', IF(TRIM(fat.description)=\'\',fat.description_long,fat.description), IF(TRIM(a.description)!=\'\',a.description,a.description_long)))';
             } else {
