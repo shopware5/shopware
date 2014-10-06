@@ -50,10 +50,10 @@ class ShopwareContext extends SubContext
             )
         );
 
-        if($controller === 'newsletter') {
+        if ($controller === 'newsletter') {
             $page = $this->getPage('Newsletter');
 
-            if($additionalData) {
+            if ($additionalData) {
                 $data = array_merge($data, $additionalData->getHash());
             }
         }
@@ -69,7 +69,7 @@ class ShopwareContext extends SubContext
     {
         $data = array();
 
-        if($email) {
+        if ($email) {
             $data = array(
                 array(
                     'field' => 'newsletter',
@@ -83,17 +83,40 @@ class ShopwareContext extends SubContext
 
     /**
      * @When /^I click the link in my latest email$/
+     * @When /^I click the links in my latest (\d+) emails$/
      */
-    public function iConfirmTheLinkInTheEmail()
+    public function iConfirmTheLinkInTheEmail($limit = 1)
     {
-        $sql = 'SELECT hash FROM s_core_optin ORDER BY id DESC LIMIT 1';
-        $hash = $this->getContainer()->get('db')->fetchOne($sql);
+        $sql = 'SELECT hash FROM s_core_optin ORDER BY id DESC LIMIT ' . $limit;
+        $hashes = $this->getContainer()->get('db')->fetchAll($sql);
+
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
         $query = parse_url($link, PHP_URL_QUERY);
 
-        $mask = empty($query) ? '%s/%s/%s' : '%s&%s=%s';
-        $link = sprintf($mask, $link, 'sConfirmation', $hash);
-        $session->visit($link);
+        //Blogartikel-Bewertung
+        if(empty($query)) {
+            $mask = '%s/sConfirmation/%s';
+        }
+        else {
+            parse_str($query, $args);
+
+            switch($args['sAction']) {
+                //Artikel-Benachrichtigungen
+                case 'notify':
+                    $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';
+                    break;
+
+                //Artikel-Bewertungen
+                default:
+                    $mask = '%s&sConfirmation=%s';
+                    break;
+            }
+        }
+
+        foreach ($hashes as $optin) {
+            $confirmationLink = sprintf($mask, $link, $optin['hash']);
+            $session->visit($confirmationLink);
+        }
     }
 }

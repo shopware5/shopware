@@ -89,14 +89,14 @@ class Listing extends Page
 
             if ($filterKey === false) {
                 $message = sprintf('The filter "%s" was not found!', $property['filter']);
-                throw new ResponseTextException($message, $this->getSession());
+                \Helper::throwException($message);
             }
 
             $success = $this->setFilterProperty($filterKey, $property['value'], $filterContainer);
 
             if (!$success) {
                 $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
-                throw new ResponseTextException($message, $this->getSession());
+                \Helper::throwException($message);
             }
         }
     }

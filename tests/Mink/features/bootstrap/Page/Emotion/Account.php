@@ -188,7 +188,7 @@ class Account extends Page
 
         if (strcmp($elements['payment']->getText(), $payment) !== 0) {
             $message = sprintf('The current payment method is %s! (should be %s)', $elements['payment']->getText(), $payment);
-            throw new ExpectationException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 
@@ -283,7 +283,7 @@ class Account extends Page
 
         if ($result !== true) {
             $message = sprintf('There was a different value of the order! (%s: %s instead of %s)', $result, $check[$result][0], $check[$result][1]);
-            throw new ExpectationException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 
