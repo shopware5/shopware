@@ -1410,7 +1410,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         if (form && template) {
             form.getForm().updateRecord(template);
             var articleController = me.getController('Detail');
-            articleController.onSaveArticle(me.getMainWindow(), win.article);
+            articleController.onSaveArticle(win.mainWindow, win.article);
             win.destroy();
         }
     },
