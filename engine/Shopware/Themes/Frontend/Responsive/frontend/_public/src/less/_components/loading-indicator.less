@@ -39,11 +39,10 @@
             .unitize-height(22);
             .border-radius(100%);
             .animation(keyframe--spin 1s linear infinite);
-
             display: block;
             content: "";
-            border: 2px solid #ccc;
-            border-top: 2px solid #333;
+            border: 2px solid @border-color;
+            border-top: 2px solid darken(@border-color, 25%);
         }
     }
 }

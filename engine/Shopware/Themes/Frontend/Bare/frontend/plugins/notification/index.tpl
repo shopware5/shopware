@@ -35,7 +35,7 @@
 				{/block}
 
 				{block name="frontend_detail_index_notification_button"}
-					<button type="submit" class="btn btn--primary notification--button block">
+					<button type="submit" class="btn is--primary notification--button block">
 						<i class="icon--mail"></i>
 					</button>
 				{/block}

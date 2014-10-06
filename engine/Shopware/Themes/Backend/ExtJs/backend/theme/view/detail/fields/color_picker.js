@@ -28,7 +28,8 @@
 Ext.define('Shopware.apps.Theme.view.detail.fields.ColorPicker', {
     extend: 'Shopware.form.field.ColorField',
     alias: 'widget.theme-color-picker',
-    cls: 'theme-custom-field'
+    cls: 'theme-custom-field',
+    margin: '5 0'
 });
 
 //{/block}

@@ -16,24 +16,24 @@
     .product--table {
 
         .panel--body{
-            background: @basketTableColor;
-            color: @basketTableFontColor;
-            border-color: @basketBorderColor;
+            background: @panel-bg;
+            color: @text-color;
+            border-color: @border-color;
             padding-bottom: 0;
         }
 
         .table--row,
         .table--media img {
-            border-color: @basketBorderColor;
+            border-color: @border-color;
         }
 
         .basket--footer{
-            background: @basketTableColor;
-            border-color: @basketBorderColor;
+            background: @gray;
+            border-color: @border-color;
 
             .aggregation--list {
                 background: transparent;
-                border-color: @basketBorderColor;
+                border-color: @border-color;
             }
         }
 
@@ -134,11 +134,11 @@
             .table--header {
                 .unitize-margin(-14, -20, 10, -20);
                 .unitize-padding(14, 20, 10, 20);
-                background: @basketHeaderColor;
-                border-color: @basketBorderColor;
+                background: @table-header-bg;
+                border-color: @border-color;
 
                 .table--column {
-                    color: @basketHeaderFontColor;
+                    color: @text-color;
                 }
             }
 

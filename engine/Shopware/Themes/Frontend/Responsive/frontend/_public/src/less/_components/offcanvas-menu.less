@@ -20,7 +20,7 @@ body {
     z-index: 8000;
     overflow-y: auto;
     overflow-x: hidden;
-    background: @primaryBackgroundColor;
+    background: @gray;
 
     &.is--left {
         .unitize(-280, 16, left);
@@ -62,24 +62,23 @@ body {
 	.navigation--entry {
 		.unitize-padding(12, 10, 12, 10, 16);
 		background: #fff;
-		border-bottom: 1px solid @borderColor;
+		border-bottom: 1px solid @border-color;
 	}
 	.navigation--link {
 		display: block;
 	}
 
 	.entry--close-off-canvas {
-		.linear-gradient(@lightTextColor, @primaryTextColor);
-		border-bottom: 1px solid @darkBorderColor;
+		.secondary-gradient();
+		border-bottom: 1px solid darken(@border-color, 15%);
 
 		.navigation--link {
 			.clearfix();
-			color: #fafafa;
+			color: @gray-light;
 			font-weight: bold;
-			text-shadow: 1px 1px 0 @darkTextColor;
 
 			&:active {
-				color: #eeeeff;
+				color: @gray;
 			}
 		}
 		.icon--arrow-right {
@@ -100,18 +99,18 @@ body {
 .sidebar--navigation {
 	.border-radius();
 	background: #fff;
-	border: 1px solid @borderColor;
+	border: 1px solid @border-color;
 
 	.navigation--entry {
 		.unitize-padding(10, 20, 10, 20, 16);
-		border-bottom: 1px solid @borderColor;
+		border-bottom: 1px solid @border-color;
 
 		&:last-child {
 			border-bottom: 0 none;
 		}
 	}
 	.navigation--link {
-		color: @primaryTextColor;
+		color: @text-color;
         overflow: hidden;
         text-overflow: ellipsis;
 	}

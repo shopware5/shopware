@@ -6,30 +6,29 @@ input[type="password"],
 input[type="number"],
 input[type="email"],
 input[type="tel"] {
-    @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
     .appearance(none);
     .border-radius(3px);
     .box-sizing();
     .unitize-width(290);
     .unitize-padding(9, 10, 10, 10);
-    .box-shadow(inset 0 1px 1px @boxShadowColor);
-    background: @lightGradientEnd;
-    border: 1px solid @borderColor;
-    border-top-color: darken(@borderColor, 5%);
-    color: @lightTextColor;
+    .box-shadow(inset 0 1px 1px @gray-dark);
+    background: @input-bg;
+    border: 1px solid @input-border;
+    border-top-color: darken(@input-border, 5%);
+    color: lighten(@text-color, 15%);
 
     &:focus {
         .box-shadow(0 0 0 transparent);
         outline: none;
-        border-color: @primaryColor;
+        border-color: @brand-primary;
         background: #fff;
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     &.has--error {
-        color: @inputErrorColor;
-        background: @inputErrorBackground;
-        border-color: @inputErrorColor;
+        color: @input-error-color;
+        background: @input-error-bg;
+        border-color: @input-error-border;
     }
 
     // Input field spacing
@@ -56,8 +55,8 @@ textarea {
 }
 
 label.has--error {
-    color: @errorText;
-    background: @errorBackground;
+    color: @label-highlight-error;
+    background: @input-error-bg;
 }
 
 .js--fancy-select {
@@ -65,22 +64,23 @@ label.has--error {
     .box-sizing();
     .unitize-width(290);
     .unitize(44, 16, line-height);
-    .linear-gradient(@lightGradientStart, @primaryBackgroundColor);
+    .white-gradient();
     .clearfix();
     display: inline-block;
     position: relative;
-    border: 1px solid @lightDarkBorderColor;
-    border-bottom-color: lighten(@darkBorderColor, 40%);
+    border: 1px solid @btn-default-border-color;
     overflow: hidden;
     cursor: pointer;
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
+        border-color: @brand-primary;
         background: #fff;
     }
 
     &.js--is--focused {
-        border-color: @primaryColor;
+        color: @brand-primary;
+        border-color: @brand-primary;
     }
 
     select {
@@ -118,7 +118,7 @@ label.has--error {
         position: absolute;
         right: 0;
         top: 0;
-        border-left: 1px solid @borderColor;
+        border-left: 1px solid @border-color;
         text-align: center;
         text-shadow: 0 1px 0 #fff;
         font-weight: bold;
@@ -135,16 +135,16 @@ label.has--error {
 
     // Error state
     &.has--error {
-        color: @inputErrorColor;
-        border-color: @inputErrorColor;
-        background: @inputErrorBackground;
+        color: @input-error-color;
+        border-color: @input-error-border;
+        background: @input-error-bg;
 
         .js--fancy-select-trigger {
-            border-color: @inputErrorColor;
+            border-color: @input-error-color;
         }
 
         .js--fancy-select-text {
-            border-color: lighten(@inputErrorColor, 40%);
+            border-color: lighten(@input-error-color, 40%);
         }
     }
 }

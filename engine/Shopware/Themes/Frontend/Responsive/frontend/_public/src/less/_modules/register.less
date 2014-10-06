@@ -25,14 +25,9 @@
     .register--action {
         .unitize-margin(20, 20);
 
-        .btn--primary {
+        .is--primary {
             width: 100%;
             text-align: center;
-
-            & [class^=icon] {
-                .unitize(10, 16, font-size);
-                .unitize-margin(-2, 0, 0, 16);
-            }
         }
     }
 
@@ -101,7 +96,7 @@
         .unitize-padding(20, 20);
         .unitize-margin(0, 20, 20);
         .unitize(14, 16, font-size);
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
 
         input[type="checkbox"] {
             .unitize-margin(0, 10, 0, 0);
@@ -146,13 +141,6 @@
         .unitize(20, 16, padding-bottom);
     }
 
-    .register--login-action {
-
-        & [class^=icon] {
-            .unitize(10, 16, font-size);
-            .unitize-margin(-2, 0, 0, 16);
-        }
-    }
 }
 
 // Register Advantages
@@ -172,7 +160,7 @@
 .steps--content {
     .unitize(16, 16, padding-top);
     display: table;
-    border-top: 1px solid @borderColor;
+    border-top: 1px solid @border-color;
     width: 100%;
 
     .steps--list {
@@ -227,7 +215,7 @@
     }
 
     .is--active .text {
-        color: @primaryColor;
+        color: @brand-primary;
         display: inline-block;
         font-weight: bold;
     }
@@ -303,7 +291,7 @@
         .register--action {
             text-align: right;
 
-            .btn--primary {
+            .is--primary {
                 width: auto;
             }
         }

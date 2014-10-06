@@ -10,13 +10,13 @@
     .unitize-margin(10, 0, 0, 0);
     .unitize(16, 16, font-size);
     .unitize(16, 16, line-height);
-    .linear-gradient(#ffffff, #f7f8fa);
+    .linear-gradient(#ffffff, @gray-light);
     .border-radius(3px);
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
     display: block;
     position: relative;
     z-index: 1100;
-    border: 1px solid @lightDarkBorderColor;
+    border: 1px solid @border-color;
     cursor: pointer;
 
     .collapse--toggler {
@@ -35,7 +35,7 @@
     }
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 
     &.is--active {
@@ -45,7 +45,7 @@
         font-weight: bold;
         border-width: 0 0 1px 0;
         border-style: solid;
-        border-color: @darkBorderColor;
+        border-color: darken(@border-color, 15%);
         z-index: 1300;
 
         .collapse--toggler {
@@ -67,7 +67,7 @@
     background: #fff;
     border-width: 0 1px 1px 1px;
     border-style: solid;
-    border-color: @lightDarkBorderColor;
+    border-color: @border-color;
 
     &.is--collapsed {
         display: block;

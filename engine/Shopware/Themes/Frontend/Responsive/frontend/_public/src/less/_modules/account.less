@@ -39,7 +39,7 @@
 }
 
 .register--error-msg {
-    color: @errorText;
+    color: @highlight-error;
 }
 
 .account--actions {
@@ -93,7 +93,7 @@
     .clearfix();
     .unitize-padding(10, 10);
     display: block;
-    background: @primaryBackgroundColor;
+    background: @gray-light;
 
     .pagination--display {
         float: right;
@@ -111,7 +111,7 @@
 }
 
 .account--orders-overview {
-    border: 1px solid @borderColor;
+    border: 1px solid @border-color;
 
     .orders--table-header {
         display: none;
@@ -166,7 +166,7 @@
 
     .listing--actions {
         .unitize-padding(10, 18, 24, 18);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
     }
 
     .date-filter {
@@ -202,7 +202,7 @@
         border: 0;
         background: transparent;
         text-align: center;
-        color: @primaryTextColor;
+        color: @text-color;
         padding: 0;
     }
 
@@ -233,12 +233,12 @@
     .panel--th {
         .unitize-padding(3, 10, 2, 10);
         .unitize(12, 16, font-size);
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     .is--odd {
         .unitize-padding(0, 0, 9, 0);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         .column--price,
         .column--total {
@@ -279,23 +279,23 @@
     &.status--1,  //The order is in process
     &.status--3,  //Partially completed
     &.status--6 { //The order has been sent in part
-        background: @deliveryInfoText;
+        background: @highlight-info;
     }
     
     &.status--2,  //Completed
     &.status--5,  //Ready for shipping
     &.status--7 { //The order has been sent
-        background: @deliveryAvailableText;
+        background: @highlight-success;
     }
     
     &.status--4,  //The order has been cancelled
     &.status--8 { //Clarification needed
-        background: @deliveryNotAvailableText;
+        background: @highlight-error;
     }
 }
 
 .order--name {
-    color: @darkTextColor;
+    color: @text-color-dark;
 }
 
 .order--details,
@@ -305,13 +305,13 @@
 }
 
 .order--details .panel--tr {
-    border-bottom: 1px solid @borderColor;
+    border-bottom: 1px solid @border-color;
 }
 
 .order--repeat {
     text-align: center;
-    background: @softBackgroundColor;
-    border-bottom: 1px solid @borderColor;
+    background: darken(@gray-light, 2%);
+    border-bottom: 1px solid @border-color;
 }
 
 .order--actions {
@@ -320,11 +320,11 @@
 
 .order--user-comments,
 .order--shop-comments {
-    border-bottom: 1px solid @borderColor;
+    border-bottom: 1px solid @border-color;
 }
 
 .account--downloads {
-    border: 1px solid @borderColor;
+    border: 1px solid @border-color;
 
     .downloads--table-header {
         display: none;
@@ -403,7 +403,7 @@
     }
 
     .account--menu {
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
 
         .navigation--headline {
             .panel--title;
@@ -431,18 +431,15 @@
             &.link--logout {
                 .unitize-margin(10, 0, 0, 0);
                 .unitize-padding(10, 0, 0, 0);
-                border-top: 1px solid @borderColor;
+                border-top: 1px solid @border-color;
                 font-weight: bold;
-                color: @primaryColor;
+                color: @brand-primary;
 
                 [class^="icon--"] {
                     .unitize-margin(0, 5, 0, 0);
                     display: inline-block;
                 }
 
-                &:hover {
-                    color: @primaryContrastColor;
-                }
             }
         }
     }
@@ -691,8 +688,8 @@
         .listing--actions {
             .unitize-padding(10, 10, 10, 10);
             .border-radius(3px);
-            border: 1px solid @borderColor;
-            background: @primaryBackgroundColor;
+            border: 1px solid @border-color;
+            background: @gray-light;
         }
 
         .date-filter {

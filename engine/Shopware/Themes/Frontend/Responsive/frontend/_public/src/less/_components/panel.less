@@ -20,7 +20,7 @@ See the documentation of the child elements for additional information.
     }
 
     &.has--border {
-        border: 1px solid @borderColor;
+        border: 1px solid @panel-border;
     }
 }
 
@@ -32,21 +32,21 @@ See the documentation of the child elements for additional information.
 */
 .panel--header {
     .unitize-padding(10, 10);
-    .unitize(14, 16, font-size);
+    .unitize(@panel-header-font-size, 16, font-size);
+    background: @panel-header-bg;
     display: block;
     margin: 0;
     font-weight: bold;
-    color: @primaryTextColor;
-    background: @primaryBackgroundColor;
-    border-bottom: 1px solid @borderColor;
+    color: @panel-header-color;
+    border-bottom: 1px solid @panel-border;
 
     &.secondary {
-        color: @lightTextColor;
+        color: @text-color;
         background: #fff;
     }
 
     &.primary {
-        color: @primaryColor;
+        color: @brand-primary;
         background: #fff;
     }
 }
@@ -58,25 +58,25 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--title {
-    display: block;
     .unitize-padding(20, 0, 0, 0);
     .unitize-margin(0, 20);
     .unitize(16, 16, font-size);
+    display: block;
     font-weight: bold;
-    color: @darkTextColor;
+    color: @text-color-dark;
 
     &.is--underline {
         .unitize-padding(20, 0, 10, 0);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @panel-border;
         text-decoration: none !important;
     }
 
     &.is--secondary {
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     &.is--primary {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
@@ -87,14 +87,14 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--body {
-    display: block;
-    position: relative;
     .unitize-padding(10, 10);
     .unitize(14, 16, font-size);
     .unitize(24, 16, line-height);
+    display: block;
+    position: relative;
 
     &.has--border {
-        border: 1px solid @borderColor;
+        border: 1px solid @panel-border;
     }
 
     &.is--slim {
@@ -106,12 +106,12 @@ See the documentation of the child elements for additional information.
     }
 
     &.is--flat {
-        background: @primaryBackgroundColor;
+        background: darken(@gray-light, 4%);
     }
 
     &.is--embossed {
         .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
-        background: @primaryBackgroundColor;
+        background: darken(@gray-light, 4%);
     }
 }
 
@@ -132,7 +132,7 @@ See the documentation of the child elements for additional information.
     &.has--border {
         .unitize-margin(10, 0, 0, 0);
         .unitize-padding(10, 0, 0, 0);
-        border-top: 1px solid @borderColor;
+        border-top: 1px solid @panel-border;
     }
 
     &.is--slim {
@@ -174,7 +174,7 @@ See the documentation of the child elements for additional information.
     empty-cells: show;
 
     &.has--border {
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
     }
 }
 
@@ -184,22 +184,22 @@ See the documentation of the child elements for additional information.
     width: 100%;
     border-width: 0 0 1px 0;
     border-style: solid;
-    border-color: @borderColor;
+    border-color: @border-color;
 
     &:last-child {
         border-width: 0;
     }
 
     &.is--odd {
-        background: @softBackgroundColor;
+        background: darken(@gray-light, 2%);
     }
 
     &.is--secondary {
-        background: @primaryBackgroundColor;
+        background: darken(@gray-light, 4%);
     }
 
     &.is--primary {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
@@ -215,7 +215,7 @@ See the documentation of the child elements for additional information.
     &.has--border {
         border-width: 0 1px 0 0;
         border-style: solid;
-        border-color: @borderColor;
+        border-color: @border-color;
 
         &:last-child {
             border-width: 0;
@@ -229,7 +229,7 @@ See the documentation of the child elements for additional information.
 
 .panel--th {
     font-weight: bold;
-    color: @darkTextColor;
+    color: @text-color-dark;
 }
 
 /* A list in a panel.
@@ -248,25 +248,25 @@ See the documentation of the child elements for additional information.
     list-style: none;
 
     &.has--border {
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
     }
 
     li {
         .unitize-padding(10, 10);
         .unitize(14, 16, font-size);
         .unitize(24, 16, line-height);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         &:last-child {
             border-bottom: 0 none;
         }
 
         &.is--secondary {
-            background: @primaryBackgroundColor;
+            background: darken(@gray-light, 4%);
         }
 
         &.is--primary {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -292,12 +292,12 @@ See the documentation of the child elements for additional information.
     z-index: 2000;
     font-family: 'shopware';
     text-align: center;
-    color: @primaryTextColor;
+    color: @text-color;
 
     &.has--background {
         .border-radius(3px);
-        .linear-gradient(#ffffff, #edeff2);
-        border: 1px solid @borderColor;
+        .linear-gradient(#ffffff, @gray-light);
+        border: 1px solid @border-color;
     }
 
     &.left--arrow {
@@ -318,7 +318,7 @@ See the documentation of the child elements for additional information.
     }
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
@@ -342,11 +342,11 @@ See the documentation of the child elements for additional information.
         .unitize-width(11);
         .unitize-height(11);
         display: inline-block;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
 
         &.is--active {
-            border-color: @primaryColor;
-            background: @primaryColor;
+            border-color: @brand-primary;
+            background: @brand-primary;
         }
     }
 }
@@ -378,31 +378,31 @@ See the documentation of the child elements for additional information.
         .unitize-margin(0, 5, 0, 0);
         .unitize(24, 16, line-height);
         .unitize(14, 16, font-size);
-        .linear-gradient(#ffffff, #eff0f3);
+        .white-gradient();
         .border-radius-multi(3px, 3px, 0, 0);
         display: block;
         position: relative;
         z-index: 2000;
         font-weight: bold;
         text-align: center;
-        color: #748595;
+        color: @text-color;
         border-width: 1px 1px 0 1px;
         border-style: solid;
-        border-color: @borderColor;
+        border-color: @border-color;
         white-space: nowrap;
 
         &.is--active {
             .unitize(1, 16, top);
-            color: @darkTextColor;
+            color: @text-color-dark;
             background: #fff;
 
             &:hover {
-                color: @darkTextColor;
+                color: @text-color-dark;
             }
         }
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
             background: #fff;
         }
     }
@@ -452,16 +452,16 @@ See the documentation of the child elements for additional information.
     display: inline-block;
 
     a {
-        display: inline-block;
-        color: @primaryTextColor;
-        font-weight: normal;
-        text-align: center;
         .unitize-padding(0, 10);
         .unitize-margin(0, 1);
         .unitize(14, 16, font-size);
         .unitize(26, 16, line-height);
         .border-radius(3px);
-        .linear-gradient(#ffffff, #edeff2);
+        .linear-gradient(#ffffff, @gray-light);
+        display: inline-block;
+        color: @text-color;
+        font-weight: normal;
+        text-align: center;
 
         [class^="icon--"] {
             .unitize(10, 16, font-size);
@@ -469,11 +469,11 @@ See the documentation of the child elements for additional information.
 
         &.is--active {
             font-weight: bold;
-            color: @primaryColor;
+            color: @brand-primary;
         }
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -487,18 +487,18 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--filter-btn {
-    display: inline-block;
-    color: @primaryTextColor;
-    font-weight: normal;
-    text-align: center;
-    border: 1px solid #c7cfda;
     .unitize-padding(0, 10);
     .unitize-margin(0, 10);
     .unitize(14, 16, font-size);
     .unitize(26, 16, line-height);
     .border-radius(3px);
-    .linear-gradient(#ffffff, #edeff2);
+    .linear-gradient(#ffffff, @gray-light);
     .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
+    display: inline-block;
+    color: @text-color;
+    font-weight: normal;
+    text-align: center;
+    border: 1px solid #c7cfda;
 
     i {
         .unitize-margin(0, 10, 0, 0);
@@ -506,7 +506,7 @@ See the documentation of the child elements for additional information.
     }
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
@@ -524,11 +524,6 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--filter-select {
-    display: inline-block;
-    vertical-align: bottom;
-    position: relative;
-    border: 1px solid #c7cfda;
-    overflow: hidden;
     .unitize-width(160);
     .unitize-height(28);
     .unitize(14, 16, font-size);
@@ -536,7 +531,12 @@ See the documentation of the child elements for additional information.
     .border-radius(3px);
     .box-sizing();
     .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
-    .linear-gradient(#ffffff, #edeff2);
+    .linear-gradient(#ffffff, @gray-light);
+    display: inline-block;
+    vertical-align: bottom;
+    position: relative;
+    border: 1px solid @border-color;
+    overflow: hidden;
 
     .arrow {
         .unitize-width(34);
@@ -546,7 +546,7 @@ See the documentation of the child elements for additional information.
         position: absolute;
         top: 0;
         right: 0;
-        border-left: 1px solid @borderColor;
+        border-left: 1px solid @border-color;
         font-family: 'shopware';
         text-align: center;
 
@@ -562,7 +562,7 @@ See the documentation of the child elements for additional information.
         .unitize(14, 16, font-size);
         .unitize(26, 16, line-height);
         .appearance(none);
-        color: @primaryTextColor;
+        color: @text-color;
         background: transparent;
         border: 0 none;
     }
@@ -585,7 +585,7 @@ See the documentation of the child elements for additional information.
 
         & > [class^=content] {
             .unitize-padding(10, 10);
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
             border-top: 0 none;
         }
     }
@@ -594,7 +594,7 @@ See the documentation of the child elements for additional information.
         .unitize-padding(5, 10, 5, 10);
         text-align: left;
         font-weight: normal;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
         margin: 0;
 
         &:after,

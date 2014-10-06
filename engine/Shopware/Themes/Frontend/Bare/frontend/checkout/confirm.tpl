@@ -4,9 +4,9 @@
 {block name='frontend_index_logo_trusted_shops' append}
     {if $theme.checkoutHeader}
         <a href="{url controller='index'}"
-           class="btn btn--grey is--small btn--back-top-shop"
+           class="btn is--small btn--back-top-shop is--icon-left"
            title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
-            <i class="icon--arrow-left is--small"></i>
+            <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>
     {/if}
@@ -204,10 +204,10 @@
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_billing_address_actions"}
                         <div class="panel--actions">
-                            <a href="{url controller=account action=billing sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=account action=billing sTarget=checkout}" class="btn is--secondary is--small">
                                 {s name="ConfirmLinkChangeBilling" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
-                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="btn is--secondary is--small">
                                 {s name="ConfirmLinkSelectBilling" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -251,11 +251,11 @@
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_shipping_address_actions"}
                         <div class="panel--actions">
-                            <a href="{url controller=account action=shipping sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=account action=shipping sTarget=checkout}" class="btn is--secondary is--small">
                                 {s name="ConfirmLinkChangeShipping" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
 
-                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="btn is--secondary is--small">
                                 {s name="ConfirmLinkSelectShipping" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -291,7 +291,7 @@
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
                         <div class="panel--actions">
-                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--secondary is--small">
                                 {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -331,7 +331,7 @@
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_voucher_button'}
-                                            <button type="submit" class="add-voucher--button btn btn--primary is--small block">
+                                            <button type="submit" class="add-voucher--button btn is--primary is--small block">
                                                 <i class="icon--arrow-right"></i>
                                             </button>
                                         {/block}
@@ -349,7 +349,7 @@
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_product_button'}
-                                            <button type="submit" class="add-product--button btn btn--primary is--small block">
+                                            <button type="submit" class="add-product--button btn is--primary is--small block">
                                                 <i class="icon--arrow-right"></i>
                                             </button>
                                         {/block}
@@ -415,11 +415,11 @@
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
-                                    <button type="submit" class="btn btn--primary right" form="confirm--form" data-form-polyfill="true">
+                                    <button type="submit" class="btn is--primary right is--icon-right" form="confirm--form" data-form-polyfill="true">
                                         {s name='ConfirmDoPayment'}Zahlung durchführen{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {else}
-                                    <button type="submit" class="btn btn--primary right" form="confirm--form" data-form-polyfill="true">
+                                    <button type="submit" class="btn is--primary right is--icon-right" form="confirm--form" data-form-polyfill="true">
                                         {s name='ConfirmActionSubmit'}{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {/if}

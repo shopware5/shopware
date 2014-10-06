@@ -72,16 +72,6 @@
         text-align: center;
         border: 0;
         background: none;
-
-        .btn--primary {
-            .unitize(40, 16, padding-right);
-        }
-
-        [class^="icon--"] {
-            .unitize(14, 16, top);
-            right: 0px;
-            position: absolute;
-        }
     }
 }
 
@@ -95,7 +85,7 @@
 
 // Filter options
 .action--filter-options {
-    border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
+    border-right: 1px solid rgba(red(@text-color), green(@text-color), blue(@text-color), 50%);
 
     .filter--container {
         .unitize-padding(0, 10);
@@ -103,12 +93,11 @@
 
     .filter--close-btn {
         .unitize-padding(12, 10);
-        .linear-gradient(@lightTextColor, @primaryTextColor);
+        .secondary-gradient();
         display: block;
         color: #fff;
         font-weight: bold;
-        text-shadow: 1px 1px 0 @darkTextColor;
-        border-bottom: 1px solid @darkBorderColor;
+        text-shadow: 1px 1px 0 @text-color-dark;
 
         &:hover {
             color: #fff;
@@ -132,7 +121,7 @@
         .unitize-padding(10, 20);
         .unitize(16, 16, font-size);
         display: block;
-        border-bottom: 1px solid @lightDarkBorderColor;
+        border-bottom: 1px solid @border-color;
 
         &:last-child {
             border: 0 none;
@@ -140,10 +129,10 @@
     }
 
     .filter--link {
-        color: @primaryTextColor;
+        color: @text-color;
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -179,18 +168,19 @@
         .unitize-height(46);
         .unitize(12, 16, font-size);
         .unitize(46, 16, line-height);
+        .unitize(0, 16, margin);
         .linear-gradient(#ffffff, #edeff1);
         .unitize-padding(1, 2, 2, 5);
         display: inline-block;
         font-family: 'shopware';
         text-align: center;
-        color: @primaryTextColor;
+        color: @text-color;
         float: left;
 
         &:hover,
         &.is--active {
             background: #fff;
-            color: @primaryColor;
+            color: @brand-primary;
         }
 
         &.link--table-view {
@@ -260,7 +250,7 @@
         .unitize-height(200);
         .unitize-padding(10, 0);
         display: block;
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
         text-align: center;
 
         .image--element {
@@ -289,12 +279,12 @@
         .unitize(16, 16, font-size);
         .unitize-margin(0, 0, 10, 0);
         display: inline-block;
-        color: @darkTextColor;
+        color: @text-color-dark;
         font-weight: bold;
         word-wrap: break-word;
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 
@@ -312,24 +302,24 @@
             .unitize(20, 16, font-size);
             .unitize(24, 16, line-height);
             .unitize-margin(10, 0, 0, 0);
-            color: @primaryColor;
+            color: @text-color-dark;
         }
 
         .price--unit {
             .unitize(12, 16, font-size);
             .unitize(16, 16, line-height);
-            color: @primaryTextColor;
+            color: @text-color;
         }
 
         .price--discount {
             .content--default {
-                color: @discountTextColor;
+                color: @badge-discount-bg;
             }
 
             .content--discount {
                 .unitize(12, 16, font-size);
                 .unitize(16, 16, line-height);
-                color: @primaryTextColor;
+                color: @text-color;
                 font-weight: normal;
                 text-decoration: line-through;
             }
@@ -374,12 +364,10 @@
     .border-radius-multi(0, 3px, 3px, 0);
     display: block;
     position: relative;
-    color: #fff;
+    color: @badge-discount-color;
     font-weight: 600;
     text-align: center;
-    text-shadow: 0 1px 1px @discountDarkColor;
-    background: @discountTextColor;
-    border: 1px solid @discountBorderColor;
+    background: @badge-newcomer-bg;
     z-index: 750;
 }
 
@@ -396,12 +384,10 @@
     display: block;
     position: relative;
     margin-top: 100%;
-    color: #fff;
+    color: @badge-newcomer-color;
     font-weight: 600;
-    text-shadow: 0 1px 1px #850000;
     text-align: center;
-    background: @primaryColor;
-    border: 1px solid #cf2302;
+    background: @badge-newcomer-bg;
     z-index: 750;
 }
 
@@ -412,12 +398,10 @@
     .unitize(18, 16, font-size);
     .unitize(20, 16, line-height);
     .border-radius-multi(0, 3px, 3px, 0);
-    background: @primaryBackgroundColor;
+    background: @badge-download-bg;
+    color: @badge-download-color;
     display: block;
     position: relative;
-    border-width: 1px 1px 1px 0;
-    border-style: solid;
-    border-color: @borderColor;
     text-align: center;
     z-index: 750;
 }
@@ -480,8 +464,8 @@
         height: auto;
         overflow: visible;
         position: relative;
-        border: 1px solid @borderColor;
-        background: @primaryBackgroundColor;
+        border: 1px solid @border-color;
+        background: darken(@gray-light, 4%);
         clear: both;
 
         .filter--close-btn {
@@ -582,7 +566,7 @@
                 .unitize-margin(0, 20, 0, 0);
                 border-width: 0 1px 0 0;
                 border-style: solid;
-                border-color: @borderColor;
+                border-color: @border-color;
                 float: left;
             }
 
@@ -643,7 +627,7 @@
                 .product--action {
                     .unitize-padding(8, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
+                    //.unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -656,7 +640,7 @@
 
     .category--teaser {
         .hero--headline {
-            .unitize(24, 16, font-size);
+            .unitize(@font-size-h1, 16, font-size);
         }
     }
 
@@ -670,15 +654,15 @@
     .listing--actions {
         .border-radius(3px);
         .unitize-margin(0, 0, 20, 0);
-        border: 1px solid @borderColor;
-        background: @primaryBackgroundColor;
+        border: 1px solid @border-color;
+        background: darken(@gray-light, 1%);
 
         &.is--advanced {
             .unitize-padding(10, 0, 0, 0);
 
             .listing--paging {
                 display: block;
-                border-top: 1px solid @borderColor;
+                border-top: 1px solid @border-color;
             }
         }
 
@@ -694,7 +678,6 @@
 
         .filter--trigger {
             .unitize-padding(9, 16);
-            .unitize(14, 16, font-size);
             .unitize(14, 16, line-height);
         }
     }
@@ -837,7 +820,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
+                    //.unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -869,7 +852,7 @@
                 .unitize-margin(0, 20, 0, 0);
                 border-width: 0 1px 0 0;
                 border-style: solid;
-                border-color: @borderColor;
+                border-color: @border-color;
                 float: left;
             }
 
@@ -906,7 +889,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
+                    //.unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -962,7 +945,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
+                    //.unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -1018,7 +1001,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
+                    //.unitize(14, 16, font-size);
                     display: block;
                 }
             }

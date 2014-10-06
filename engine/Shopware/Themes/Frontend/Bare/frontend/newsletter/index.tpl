@@ -124,9 +124,9 @@
 							{* Submit button *}
 							{block name="frontend_newsletter_form_submit"}
 								<div class="newsletter--action">
-									<button type="submit" class="btn btn--primary right" name="{s name="sNewsletterButton"}{/s}">
+									<button type="submit" class="btn is--primary right is--icon-right" name="{s name="sNewsletterButton"}{/s}">
 										{s name="sNewsletterButton"}{/s}
-										<i class="icon--arrow-right is--small"></i>
+										<i class="icon--arrow-right"></i>
 									</button>
 								</div>
 							{/block}

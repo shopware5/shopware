@@ -104,7 +104,7 @@
 							{block name='frontend_account_order_item_downloadlink'}
 								{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
 									<div class="order--download is--strong">
-										<a href="{$article.esdLink}" class="btn btn--grey is--small">
+										<a href="{$article.esdLink}" class="btn is--small">
 											{s name="OrderItemInfoInstantDownload"}{/s}
 										</a>
 									</div>
@@ -318,7 +318,7 @@
 
                     {* Repeat order button *}
                     {block name="frontend_account_order_item_repeat_button"}
-                        <input type="submit" class="btn btn--primary is--small" value="{s name='OrderLinkRepeat'}{/s}" />
+                        <input type="submit" class="btn is--primary is--small" value="{s name='OrderLinkRepeat'}{/s}" />
                     {/block}
                 </form>
             </div>

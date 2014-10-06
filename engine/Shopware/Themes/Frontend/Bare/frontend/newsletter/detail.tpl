@@ -34,11 +34,11 @@
 			<div class="newsletter-detail--buttons block">
 
 				{block name="frontend_newsletter_detail_buttons_window"}
-					<a href="{$sContentItem.link}" class="newsletter-detail--window btn btn--primary right" target="_blank">{s name='NewsletterDetailLinkOpenNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
+					<a href="{$sContentItem.link}" class="newsletter-detail--window btn is--primary right" target="_blank">{s name='NewsletterDetailLinkOpenNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
 				{/block}
 
 				{block name="frontend_newsletter_detail_buttons_backlink"}
-					<a href="{$sBackLink}" class="newsletter-detail--backlink btn btn--secondary left"><i class="icon--arrow-left is--small"></i>{s name='NewsletterDetailLinkBack'}{/s}</a>
+					<a href="{$sBackLink}" class="newsletter-detail--backlink btn is--secondary left is--icon-left"><i class="icon--arrow-left is--small"></i>{s name='NewsletterDetailLinkBack'}{/s}</a>
 				{/block}
 			</div>
 		{/block}

@@ -8,7 +8,7 @@
 }
 
 .blog--filter-options {
-    border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
+    border-right: 1px solid rgba(red(@text-color), green(@text-color), blue(@text-color), 50%);
 
     .filter--container {
         .unitize-padding(0, 10);
@@ -16,12 +16,10 @@
 
     .blog--filter-close-btn {
         .unitize-padding(12, 10);
-        .linear-gradient(@lightTextColor, @primaryTextColor);
+        .secondary-gradient();
         display: block;
         color: #fff;
         font-weight: bold;
-        text-shadow: 1px 1px 0 @darkTextColor;
-        border-bottom: 1px solid @darkBorderColor;
 
         &:hover {
             color: #fff;
@@ -45,7 +43,7 @@
         .unitize-padding(10, 20);
         .unitize(16, 16, font-size);
         display: block;
-        border-bottom: 1px solid @lightDarkBorderColor;
+        border-bottom: 1px solid @border-color;
 
         &:last-child {
             border: 0 none;
@@ -53,10 +51,10 @@
     }
 
     .filter--link {
-        color: @primaryTextColor;
+        color: @text-color;
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -79,10 +77,10 @@
             .unitize-padding(10, 20, 10, 20, 16);
             .unitize(5, 16, margin-bottom);
             font-weight: normal;
-            color: @primaryTextColor;
+            color: @text-color;
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
 
@@ -99,11 +97,11 @@
             .unitize-padding(0, 0, 0, 0, 16);
 
             .filter--entry-link {
-                color: @primaryTextColor;
+                color: @text-color;
             }
 
             .filter--entry-link:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
     }
@@ -130,13 +128,13 @@
         .unitize-margin(0, 20, 0, 20, 16);
         .unitize(14, 16, padding-bottom);
         .unitize(12, 16, font-size);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         .blog--metadata {
             .unitize(8, 16, padding-right);
             .unitize(8, 16, margin-right);
             display: inline-block;
-            border-right: 1px solid @borderColor;
+            border-right: 1px solid @border-color;
 
             &.is--last {
                 border-right: 0 none;
@@ -145,7 +143,7 @@
 
         .blog--metadata-rating {
             .unitize(14, 16, font-size);
-            color: @primaryTextColor;
+            color: @text-color;
         }
     }
 
@@ -196,7 +194,7 @@
 
     .blog--rating-link {
         .unitize(14, 16, font-size);
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     // Bookmarks
@@ -241,7 +239,7 @@
 
     // Cross Selling
     .blog--crossselling-headline {
-        color: @darkTextColor;
+        color: @text-color-dark;
         margin-top: 0;
     }
 
@@ -267,7 +265,7 @@
 
     .blog--comments-entry-left {
         .unitize-padding(20, 40, 16);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         // Arrow down
         &::after {
@@ -280,7 +278,7 @@
             position: absolute;
             left: 50%;
             background: #fff;
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
             border-left: 0 none;
             border-top: 0 none;
         }
@@ -288,7 +286,7 @@
 
     .blog--comments-rating {
         .unitize(18, 16, font-size);
-        color: @reviewStarColor;
+        color: @rating-star-color;
     }
 
     .blog--comments-entry-right {
@@ -297,7 +295,7 @@
 
     .blog--comments-entry-headline {
         .unitize(16, 16, font-size);
-        color: @darkTextColor;
+        color: @text-color-dark;
         margin-top: 0;
     }
 
@@ -345,8 +343,8 @@
         height: auto;
         overflow: visible;
         position: relative;
-        border: 1px solid @borderColor;
-        background: @primaryBackgroundColor;
+        border: 1px solid @border-color;
+        background: @gray-light;
         clear: both;
 
         .blog--filter-close-btn, .filter--headline {
@@ -474,13 +472,13 @@
             .unitize-padding(0, 0, 0, 0, 16);
 
             .has--border {
-                border: 1px solid @borderColor;
+                border: 1px solid @border-color;
             }
 
             .panel--title {
                 .unitize-padding(20, 0, 10, 0, 16);
                 .unitize-margin(0, 20, 0, 20, 16);
-                color: @darkTextColor;
+                color: @text-color-dark;
                 border-width: 0 0 0 0;
                 display: block;
                 font-weight: bold;
@@ -491,21 +489,20 @@
 
             .is--underline {
                 .border-radius(0);
-                border-color: @borderColor;
+                border-color: @border-color;
                 border-width: 0 0 1px 0;
             }
 
             .panel--body {
                 .unitize-padding(20, 20, 20, 20, 16);
                 border: 0 none;
-                box-shadow: none;
                 -webkit-box-shadow: none;
                 -moz-box-shadow: none;
-                box-shadow: none
+                box-shadow: none;
             }
 
             .collapse--header:hover {
-                color: @darkTextColor;
+                color: @text-color-dark;
             }
 
             .blog--subscribe {

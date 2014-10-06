@@ -9,9 +9,11 @@ html, body {
 }
 
 body {
-    font-family: @bodyFontStack;
-    color: @primaryTextColor;
-    background: @primaryBackgroundColor;
+    font-family: @font-base-stack;
+    font-weight: @font-base-weight;
+    font-size: @font-size-base;
+    color: @text-color;
+    background: @body-bg;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 }
@@ -25,12 +27,8 @@ img {
 }
 
 a {
-    color: @primaryColor;
+    color: @link-color;
     text-decoration: none;
-
-    &:hover {
-        color: darken(@secondaryColor, 10%);
-    }
 }
 
 ul {
@@ -40,42 +38,43 @@ ul {
 
 // Star rating
 .product--rating {
-    i[class^=icon] { color: @reviewStarColor; }
-    i.icon--star-empty { color: @borderColor; }
+    i[class^=icon] { color: @rating-star-color; }
+    i.icon--star-empty { color: @border-color; }
 }
 
 // Font
 h1, h2, h3, h4, h5, h6 {
     .unitize(26, 16, line-height);
     .unitize-margin(28, 0, 10, 0);
-    font-weight: 600;
+    font-family: @font-headline-stack;
+    font-weight: @font-bold-weight;
 }
 
 h1 {
-    .unitize(24, 16, font-size);
+    .unitize(@font-size-h1, 16, font-size);
     .unitize(28, 16, line-height);
     .unitize-margin(34, 0, 20, 0);
-    color: @darkTextColor;
+    color: @text-color-dark;
 }
 
 h2 {
-    .unitize(21, 16, font-size);
+    .unitize(@font-size-h2, 16, font-size);
 }
 
 h3 {
-    .unitize(19, 16, font-size);
+    .unitize(@font-size-h3, 16, font-size);
 }
 
 h4 {
-    .unitize(17, 16, font-size);
+    .unitize(@font-size-h4, 16, font-size);
 }
 
 h5 {
-    .unitize(15, 16, font-size);
+    .unitize(@font-size-h5, 16, font-size);
 }
 
 h6 {
-    .unitize(14, 16, font-size);
+    .unitize(@font-size-h6, 16, font-size);
 }
 
 p {
@@ -88,7 +87,7 @@ blockquote {
     .unitize-padding(10, 10);
     .border-radius(3px);
     .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
-    background: @primaryBackgroundColor;
+    background: darken(@gray-light, 4%);
     text-align: left;
     margin: 0;
 }
@@ -123,21 +122,21 @@ blockquote {
 .is--italic { font-style: italic; }
 .is--nowrap { white-space: nowrap !important; }
 
-.is--dark { color: @darkTextColor !important; }
-.is--light { color: @lightTextColor !important; }
-.is--soft { color: @softTextColor !important; }
+.is--dark { color: @text-color-dark !important; }
+.is--light { color: darken(@gray-dark, 20%) !important; }
+.is--soft { color: @gray-dark !important; }
 
 .left { float: left; }
 .right { float: right; }
 
-::-moz-placeholder { color: @lightTextColor }
-::-webkit-input-placeholder { color: @lightTextColor }
-:-ms-input-placeholder { color: @lightTextColor }
+::-moz-placeholder { color: @input-placeholder-color; }
+::-webkit-input-placeholder { color: @input-placeholder-color; }
+:-ms-input-placeholder { color: @input-placeholder-color; }
 
 @media screen and(min-width: @tabletViewportWidth) {
     .content-main {
         .unitize(20, 16, margin-bottom);
-        .box-shadow(0 0 4px 1px @borderColor);
+        .box-shadow(0 0 4px 1px @border-color);
     }
 
     .content-main--inner {

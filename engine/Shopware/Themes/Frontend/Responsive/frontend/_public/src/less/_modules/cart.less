@@ -27,7 +27,7 @@
         border: 0 none;
     }
     .premium-product.panel {
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
     }
 
     .delivery--status-icon {
@@ -40,17 +40,7 @@
         .unitize-padding(20, 0, 0);
         position: relative;
 
-        .btn--primary,
-        .btn--secondary {
-            .unitize-padding(10, 15);
-        }
-
-        .btn--primary i {
-            .unitize-margin(0, 0, 0, 6);
-            vertical-align: middle;
-        }
-
-        .btn--secondary {
+        .is--secondary {
             .unitize(5, 16, margin-right);
         }
     }
@@ -64,7 +54,7 @@
         .unitize-padding(10, 0);
         .clearfix();
         position: relative;
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
         width: 100%;
         height: 100%;
     }
@@ -85,7 +75,7 @@
 
         img {
             .border-radius();
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
             margin: 0 auto;
         }
     }
@@ -106,7 +96,7 @@
     .content--title {
         .unitize(18, 16, font-size);
         font-weight: bold;
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     // Product actions
@@ -126,7 +116,7 @@
     }
 
     .column--label {
-        color: @darkTextColor;
+        color: @text-color-dark;
         text-align: left;
         margin: 0 0 0 26.5%;
         float: left;
@@ -154,10 +144,10 @@
         .unitize-height(48);
         .unitize-width(48);
         margin-right: 9.25%;
-        background: @borderColor;
+        background: @border-color;
         text-align: center;
         font-weight: bold;
-        background: @primaryTextColor;
+        background: @text-color;
         color: #fff;
         font-weight: bold;
         margin: 0 auto;
@@ -220,8 +210,8 @@
     .table--aggregation {
         .unitize-margin(0, -20);
         .unitize-padding(12, 20);
-        background: @primaryLightBackgroundColor;
-        border: 1px solid @borderColor;
+        background: @gray-light;
+        border: 1px solid @border-color;
         border-left: 0 none;
         border-right: 0 none;
 
@@ -252,7 +242,7 @@
 
     .benefit--headline {
         .unitize(14, 16, font-size);
-        color: @primaryTextColor;
+        color: @text-color;
         font-weight: bold;
     }
 }
@@ -260,8 +250,8 @@
 .aggregation--list {
     .unitize-margin(0, -20);
     .unitize-padding(12, 20);
-    background: @primaryLightBackgroundColor;
-    border-bottom: 1px solid @borderColor;
+    background: @gray-light;
+    border-bottom: 1px solid @border-color;
 
     .list--entry { list-style: none }
 
@@ -276,7 +266,7 @@
 
     .entry--total {
         font-weight: bold;
-        color: #000;
+        color: @text-color;
     }
 }
 
@@ -300,8 +290,8 @@
         .unitize-padding(10, 16, 10, 16, 16);
         .border-radius();
         .white-gradient();
-        font-color: @primaryTextColor;
-        border: 1px solid @borderColor;
+        font-color: @text-color;
+        border: 1px solid @border-color;
         font-weight: bold;
         display: block;
         text-shadow: 0 1px 0 #fff;
@@ -320,7 +310,7 @@
             .unitize(175, 16, min-height);
             .unitize-margin(0, 0, 15, 0);
             display: block;
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
             position: relative;
             text-align: center;
         }
@@ -333,25 +323,19 @@
             .unitize(38, 16, line-height);
             .unitize(-19, 16, top);
             .unitize(-19, 16, right);
-            background: @primaryColor;
+            background: @brand-primary;
             position: absolute;
             color: #fff;
             font-weight: bold;
         }
 
         .premium-product--free {
-            color: @successText;
+            color: @highlight-success;
             font-weight: bold;
         }
 
         .btn {
             width: 100%;
-
-            .icon--arrow-right {
-                .unitize-margin(6, 0, 0, 0);
-                .unitize(10, 16, font-size);
-                float: right;
-            }
         }
 
         .btn--inquiry {
@@ -374,7 +358,7 @@
         .unitize-padding(10, 40, 10, 20);
         .unitize(16, 16, font-size);
         font-weight: 700;
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
     }
 
     .modal--error {
@@ -389,7 +373,7 @@
         .unitize(5, 16, padding);
         .border-radius();
         width: 25%;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
     }
 
     .article--name {
@@ -404,7 +388,7 @@
         }
 
         .link--name {
-            color: @primaryTextColor;
+            color: @text-color;
             font-weight: 700;
         }
     }
@@ -417,7 +401,7 @@
 
     .list--price .entry--price {
         .unitize(10, 16, margin-bottom);
-        color: @primaryTextColor;
+        color: @text-color;
         font-weight: 700;
     }
 
@@ -438,19 +422,6 @@
             .unitize(35, 16, padding-left);
         }
 
-        .icon--arrow-right {
-            .unitize-margin(6, 0, 0, 0);
-            .unitize(10, 16, font-size);
-            float: right;
-        }
-
-        .icon--arrow-left {
-            position: absolute;
-            .unitize(15, 16, left);
-            .unitize-margin(6, 0, 0, 0);
-            .unitize(10, 16, font-size);
-            float: left;
-        }
     }
 
     .modal--cross-selling {
@@ -468,7 +439,7 @@
         .item--image {
             .unitize(10, 16, padding-bottom);
             .unitize-height(170);
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
             margin: 0 auto;
             text-align: center;
         }
@@ -492,7 +463,7 @@
         }
 
         .link--name {
-            color: @darkTextColor;
+            color: @text-color-dark;
             font-weight: 700;
         }
 
@@ -502,12 +473,12 @@
 
         .price--normal {
             .unitize(17, 16, font-size);
-            color: @secondaryColor;
+            color: @text-color-dark;
             font-weight: 700;
         }
 
         .price--reduced {
-            color: @primaryContrastColor;
+            color: @badge-discount-bg;
         }
 
         .price--pseudo {
@@ -525,7 +496,7 @@
     }
 
     .has--border {
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
     }
 
     .payment--method-list,
@@ -575,7 +546,7 @@
         .unitize(14, 16, font-size);
         .unitize(24, 16, line-height);
         .unitize-margin(0, -10, 0, -10, 16);
-        border-top: 1px solid @borderColor;
+        border-top: 1px solid @border-color;
     }
 }
 
@@ -592,7 +563,7 @@
 
         .panel--body {
             .unitize-padding(14, 20, 20, 20);
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
         }
 
         .premium-product--content {
@@ -623,13 +594,13 @@
         .table--header {
             .unitize-padding(0, 0, 10, 0);
             .unitize-margin(0, 0, 10, 0);
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
             display: block;
 
             .table--column {
                 .unitize(16, 16, font-size);
                 font-weight: bold;
-                color: @darkTextColor;
+                color: @text-color-dark;
             }
         }
 
@@ -640,7 +611,7 @@
         // Basic layout
         .table--row {
             .unitize-padding(10, 0, 10, 0);
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
         }
         .table--column {
             width: 16.5%;
@@ -683,7 +654,7 @@
         .content--title {
             .unitize(16, 16, font-size);
             font-weight: bold;
-            color: @primaryTextColor;
+            color: @text-color;
         }
         .column--total-price {
             font-weight: bold;
@@ -719,8 +690,8 @@
             .unitize-margin(0, -20, -20, -20);
             .unitize(28, 16, padding-bottom);
             .clearfix();
-            border-top: 1px solid @borderColor;
-            background: @primaryLightBackgroundColor;
+            border-top: 1px solid @border-color;
+            background: @gray-light;
         }
 
         .aggregation--list,
@@ -737,15 +708,7 @@
 
         .table--actions {
 
-            .btn--primary {
-                .unitize-padding(10, 16, 10, 50);
-
-                i {
-                    .unitize(40, 16, margin-left);
-                }
-            }
-
-            .btn--secondary {
+            .is--secondary {
                 .unitize-padding(10, 50, 10, 50);
                 .unitize(20, 16, margin-right);
 
@@ -830,11 +793,11 @@
             }
 
             .has--border {
-                border: 1px solid @borderColor;
+                border: 1px solid @border-color;
             }
 
             .basket--footer {
-                border: 1px solid @borderColor;
+                border: 1px solid @border-color;
                 margin: 0;
             }
 

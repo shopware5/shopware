@@ -11,7 +11,7 @@
     bottom: 0;
     margin: auto;
     background: padding-box #FFFFFF;
-    border: 1px solid @darkBorderColor;
+    border: 1px solid darken(@border-color, 15%);
     max-height: 100%;
     max-width: 100%;
     z-index: 7000;
@@ -21,7 +21,7 @@
     .header {
         .unitize-padding(10, 10, 10, 10);
         .unitize-height(42, 16);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         .title {
             .unitize(16, 16, font-size);

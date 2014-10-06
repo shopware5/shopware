@@ -51,13 +51,13 @@
 								<div class="account--actions">
                                     {block name="frontend_account_billing_action_button_back"}
                                         {if $sTarget}
-                                            <a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{"{s name='BillingLinkBack'}{/s}"|escape}">
+                                            <a class="btn is--secondary left" href="{url controller=$sTarget}" title="{"{s name='BillingLinkBack'}{/s}"|escape}">
                                                 {s name="BillingLinkBack"}{/s}
                                             </a>
                                         {/if}
                                     {/block}
                                     {block name="frontend_account_billing_action_button_send"}
-									    <input type="submit" value="{s name='BillingLinkSend'}{/s}" class="btn btn--primary register--submit right"/>
+									    <input type="submit" value="{s name='BillingLinkSend'}{/s}" class="btn is--primary register--submit right"/>
                                     {/block}
 								</div>
 							{/block}

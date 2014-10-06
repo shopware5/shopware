@@ -19,7 +19,7 @@
 				<div class="password--success">
 					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
 				</div>
-				<a href="javascript:window.history.back();" class="btn btn--secondary"><span>{s name="LoginBack"}{/s}</span></a>
+				<a href="javascript:window.history.back();" class="btn is--secondary"><span>{s name="LoginBack"}{/s}</span></a>
 			{/block}
 		{else}
 			{* Recover password *}
@@ -46,8 +46,8 @@
 							{* Recover password actions *}
 							{block name="frontend_account_password_reset_actions"}
 								<div class="password-reset--actions panel--actions is--align-center">
-									<input type="submit" class="btn btn--primary" value="{s name="PasswordSendAction"}Passwort anfordern{/s}" />
-									<a href="javascript:window.history.back();" class="btn btn--secondary">{s name="PasswordLinkBack"}{/s}</a>
+									<input type="submit" class="btn is--primary" value="{s name="PasswordSendAction"}Passwort anfordern{/s}" />
+									<a href="javascript:window.history.back();" class="btn is--secondary">{s name="PasswordLinkBack"}{/s}</a>
 								</div>
 							{/block}
 						</form>

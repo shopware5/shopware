@@ -76,14 +76,14 @@
         <div class="modal--actions">
             {* Contiune shopping *}
             {block name='checkout_ajax_add_actions_continue'}
-                <a href="{$detailLink}" data-modal-close="true" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
+                <a href="{$detailLink}" data-modal-close="true" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn is--secondary is--left is--icon-left is--large">
                     {s name='AjaxAddLinkBack'}{/s} <i class="icon--arrow-left"></i>
                 </a>
             {/block}
 
             {* Forward to the checkout *}
             {block name='checkout_ajax_add_actions_checkout'}
-                <a href="{url action=cart}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn btn--primary right">
+                <a href="{url action=cart}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn is--primary right is--icon-right is--large">
                     {s name='AjaxAddLinkCart'}{/s} <i class="icon--arrow-right"></i>
                 </a>
             {/block}

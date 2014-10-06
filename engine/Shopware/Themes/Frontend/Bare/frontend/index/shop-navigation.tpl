@@ -19,7 +19,7 @@
         {block name='frontend_index_search'}
             <li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true"{if $theme.focusSearch && {controllerName} == 'index'} data-activeOnStart="true"{/if}>
                 <a class="btn entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}"|escape}">
-                    <i class="icon--search"></i>
+                    <i class="icon--search is--large"></i>
 
                     {block name='frontend_index_search_display'}
                         <span class="search--display">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
@@ -38,7 +38,7 @@
             <li class="navigation--entry entry--account block" role="menuitem">
                 {block name="frontend_index_checkout_actions_account"}
                     <a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="btn entry--link">
-                        <i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
+                        <i class="icon--account is--large"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
                     </a>
                 {/block}
             </li>
