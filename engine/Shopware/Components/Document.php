@@ -172,7 +172,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $document = Enlight_Class::Instance('Shopware_Components_Document');//new Shopware_Components_Document();
 
         //$d->setOrder(new Shopware_Models_Document_Order($orderID,$config));
-        $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', array($orderID,$config)));
+        $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', array($orderID, $config)));
 
         $document->setConfig($config);
 
@@ -275,7 +275,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * Assign configuration / data to template, new templatebase
+     * Assign configuration / data to template, new template base
      */
     protected function assignValues4x()
     {
@@ -297,8 +297,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         // and replace the default payment/dispatch text
         $dispatchId = $this->_order->order->dispatchID;
         $paymentId  = $this->_order->order->paymentID;
-        $translationPayment = $this->translationComponent->read($this->_order->order->language, 'config_payment', 1);
-        $translationDispatch = $this->translationComponent->read($this->_order->order->language, 'config_dispatch', 1);
+        $translationPayment = $this->readTranslationWithFallback($this->_order->order->language, 'config_payment', 1);
+        $translationDispatch = $this->readTranslationWithFallback($this->_order->order->language, 'config_dispatch', 1);
 
         if (isset($translationPayment[$paymentId])) {
             if (isset($translationPayment[$paymentId]['description'])) {
@@ -343,6 +343,24 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             "additional"=>array("countryShipping"=>$order->shipping->country,"country"=>$order->billing->country)
         );
         $this->_view->assign('User',$user);
+    }
+
+    /**
+     * Loads translations including fallbacks
+     *
+     * @param $languageId
+     * @param $type
+     * @param $key
+     * @return array
+     */
+    protected function readTranslationWithFallback($languageId, $type, $key)
+    {
+        $fallbackLanguageId = Shopware()->Db()->fetchOne(
+            "SELECT fallback_id FROM s_core_shops WHERE id = ?",
+            array($languageId)
+        );
+
+        return $this->translationComponent->readWithFallback($languageId, $fallbackLanguageId, $type, $key);
     }
 
     /**
