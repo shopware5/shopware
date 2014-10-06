@@ -83,13 +83,11 @@
 
 	.entry--cart {
 		.primary-gradient();
-		border-top: 1px solid darken(@brand-primary, 5%);
-		border-bottom: 1px solid darken(@brand-secondary, 10%);
 		border-left: 0 none;
         cursor: pointer;
 
         .entry--link {
-            color: #fff;
+            color: @text-color;
         }
     }
 
@@ -302,7 +300,6 @@
         .top-bar {
             .unitize-padding(4, 0, 4, 0, 16);
             display: block;
-            border-bottom: 1px solid @border-color;
         }
         .top-bar--switches {
             .clearfix();
@@ -317,7 +314,6 @@
             line-height: normal;
             width: auto;
             border: 0 none;
-            border-right: 1px solid @border-color;
 
             &.js--is--focused {
                 border-color: @border-color;
@@ -386,7 +382,7 @@
         .navigation--entry {
             .unitize-padding(0, 16, 0, 16, 16);
             display: inline-block;
-            border-left: 1px solid @border-color;
+
 
             i { .unitize-padding(0, 5, 0, 0, 16); }
 
@@ -472,10 +468,10 @@
             display: inline-block;
         }
         .entry--cart {
-            .primary-gradient();
+            .white-gradient();
             .unitize-padding(12, 20, 12, 20, 16);
             .unitize(18, 16, line-height);
-            border-right: none;
+            border: 1px solid @border-color;
 
             .entry--link {
                 padding: 0;
@@ -513,7 +509,7 @@
             }
         }
 
-        .cart--quantity { color: #fff; font-weight: normal }
+        .cart--quantity { color: @text-color; font-weight: normal }
 
         // Search entry
         .entry--search {
@@ -714,27 +710,16 @@
     .cart--display {
         .unitize-margin(0, 25, 0, 5, 16);
         font-weight: bold;
-        color: #fff;
+        color: @text-color;
     }
 
     .cart--amount {
         .border-radius(3px);
         .unitize-padding(3, 5, 3, 10, 16);
         background: #fff;
-        color: @text-color;
+        color: @brand-primary;
+        font-weight: @font-bold-weight;
         position: relative;
         text-shadow: 0 0 0 transparent;
-
-        // Arrow at the amout display
-        &::after {
-            .unitize(-5, 16, left);
-            .unitize(8, 16, top);
-            .unitize-height(10, 16);
-            .unitize-width(10, 16);
-            .rotate(45deg);
-            content: '';
-            background: #fff;
-            position: absolute;
-        }
     }
 }

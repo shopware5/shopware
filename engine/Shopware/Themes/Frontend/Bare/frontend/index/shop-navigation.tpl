@@ -33,6 +33,13 @@
             </li>
         {/block}
 
+		{* My account entry *}
+		<li class="navigation--entry block" role="menuitem">
+			<a href="#" title="" class="btn">
+				<i class="icon--heart is--large"></i>
+			</a>
+		</li>
+
         {* My account entry *}
         {block name="frontend_index_checkout_actions_my_options"}
             <li class="navigation--entry entry--account block" role="menuitem">
