@@ -98,9 +98,9 @@
 					{* Send recommendation button *}
 					{block name='frontend_tellafriend_captcha_code_actions'}
 						<div class="tellafriend--buttons">
-							<a href="{$sArticle.linkDetails}" class="btn btn--secondary is--bold">{s name='TellAFriendLinkBack'}{/s}</a>
+							<a href="{$sArticle.linkDetails}" class="btn is--secondary is--bold">{s name='TellAFriendLinkBack'}{/s}</a>
 
-							<button type="submit" class="btn btn--primary">
+							<button type="submit" class="btn is--primary is--icon-right">
 								{s name='TellAFriendActionSubmit'}{/s} <i class="icon--arrow-right"></i>
 							</button>
 						</div>

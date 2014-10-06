@@ -96,7 +96,7 @@
 										{block name="frontend_account_downloads_link"}
 											<div class="download--actions panel--td column--actions">
 												{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
-													<a href="{$article.esdLink}" title="{"{s name='DownloadsLink'}{/s}"|escape} {$article.name|escape}" class="btn btn--primary is--small">
+													<a href="{$article.esdLink}" title="{"{s name='DownloadsLink'}{/s}"|escape} {$article.name|escape}" class="btn is--primary is--small">
 														{s name="DownloadsLink"}{/s}
 													</a>
 												{/if}

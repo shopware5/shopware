@@ -46,7 +46,7 @@
 
 		{block name="frontend_account_select_billing_action_buttons"}
             <div class="panel--actions">
-                <a class="btn btn--secondary" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectBillingLinkBack"}{/s}"|escape}">
+                <a class="btn is--secondary" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectBillingLinkBack"}{/s}"|escape}">
                     {s name="SelectBillingLinkBack"}{/s}
                 </a>
             </div>

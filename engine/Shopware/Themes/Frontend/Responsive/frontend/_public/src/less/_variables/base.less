@@ -1,0 +1,26 @@
+// Basic color definition
+@brand-primary: @theme_brand-primary; // #d9400b
+@brand-primary-light: @theme_brand-primary-light; // saturate(lighten(@brand-primary,12%), 5%)
+@brand-secondary: @theme_brand-secondary; // #5f7285
+@brand-secondary-dark: @theme_brand-secondary-dark; // darken(@brand-secondary, 15%)
+
+// Grey tones
+@gray: @theme_gray; // #f5f5f8;
+@gray-light: @theme_gray-light; // lighten(@gray, 1%)
+@gray-dark: @theme_gray-dark; // darken(@gray-light, 10%)
+@border-color: @theme_border-color; // @gray-dark
+
+// Highlight colors
+@highlight-success: @theme_highlight-success; // #2ecc71
+@highlight-error: @theme_highlight-error; // #e74c3c
+@highlight-notice: @theme_highlight-notice; // #f1c40f
+@highlight-info: @theme_highlight-info; // #4aa3df
+
+//Scaffolding
+@body-bg: @theme_body-bg; // darken(@gray-light, 5%);
+@overlay-bg: @theme_overlay-bg; // #555555;
+@text-color: @theme_text-color; // @brand-secondary;
+@text-color-dark: @theme_text-color-dark; // @brand-secondary-dark;
+@link-color: @theme_link-color; // @brand-primary;
+@link-hover-color: @theme_link-hover-color; // darken(@brand-primary, 10%);
+@rating-star-color: @theme_rating-star-color; // @highlight-notice;

@@ -9,9 +9,9 @@
 {block name='frontend_index_logo_trusted_shops' append}
     {if $theme.checkoutHeader && $sTarget != "account"}
         <a href="{url controller='index'}"
-           class="btn btn--grey is--small btn--back-top-shop"
+           class="btn is--small btn--back-top-shop is--icon-left"
            title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
-            <i class="icon--arrow-left is--small"></i>
+            <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>
     {/if}
@@ -134,7 +134,7 @@
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}
                         <div class="register--action">
-                            <button type="submit" class="register--submit btn btn--primary" name="Submit">{s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right is--small"></i></button>
+                            <button type="submit" class="register--submit btn is--primary is--icon-right" name="Submit">{s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right"></i></button>
                         </div>
                     {/block}
                 </form>

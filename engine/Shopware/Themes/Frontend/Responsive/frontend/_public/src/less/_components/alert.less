@@ -11,43 +11,43 @@
     position: relative;
     overflow: hidden; // Necessary for faux columns
 
-    // States
+    // State: Success
     &.is--success {
-        color: @successText;
-        background: @successBackground;
-        //border-color: @successBorderColor;
+        color: darken(@highlight-success, 15%);
+        background: desaturate(lighten(@highlight-success, 42%),20%);
 
         .alert--icon {
-            background: @successText;
+            background: @highlight-success;
         }
     }
 
+    // State: Info
     &.is--info {
-        color: @infoText;
-        background: @infoBackground;
-        //border-color: @infoBorderColor;
+        color: darken(@highlight-info, 15%);
+        background: desaturate(lighten(@highlight-info, 36%),20%);
 
         .alert--icon {
-            background: @infoText;
+            background: @highlight-info;
         }
     }
 
+    // State: Notice
     &.is--warning {
-        color: @warningText;
-        background: @warningBackground;
-        //border-color: @warningBorderColor;
+        color: darken(@highlight-notice, 14%);
+        background: desaturate(lighten(@highlight-notice, 42%),10%);
 
         .alert--icon {
-            background: #ffc000;
+            background: @highlight-notice;
         }
     }
 
+    // State: Error
     &.is--error {
-        color: @errorText;
-        background: @errorBackground;
+        color: @highlight-error;
+        background: desaturate(lighten(@highlight-error, 38%),20%);
 
         .alert--icon {
-            background: #f9390a;
+            background: @highlight-error;
         }
     }
 

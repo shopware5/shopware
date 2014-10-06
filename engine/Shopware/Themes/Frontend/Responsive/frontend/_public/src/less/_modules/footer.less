@@ -4,10 +4,10 @@
 
     .footer--column {
         .unitize-padding(0, 20, 0, 20, 16);
-        border-top: 1px solid @borderColor;
+        border-top: 1px solid @border-color;
 
         &.is--last {
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
         }
     }
 
@@ -15,7 +15,7 @@
         .user-select(none);
         .unitize-margin(20, 0, 20, 0, 16);
         font-weight: 700;
-        color: @primaryColor;
+        color: @brand-primary;
         cursor: pointer;
 
         &.is--active::after {
@@ -25,7 +25,7 @@
         &::after {
             .unitize-margin(-3.5, 0, 0, 0, 16);
             .unitize(24, 16);
-            color: @primaryTextColor;
+            color: @text-color;
             content: '+';
             font-weight: bold;
             float: right;
@@ -63,10 +63,10 @@
         .unitize-padding(10, 0, 10, 0, 16);
     }
     .navigation--link {
-        color: @primaryTextColor;
+        color: @text-color;
     }
     .navigation--link:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 
     // Newsletter registration
@@ -82,7 +82,7 @@
     .newsletter--button {
         .box-shadow(0 0 0 transparent);
         .border-radius-multi(0, 3px, 3px, 0);
-        .unitize-padding(12, 5, 8, 5, 16);
+        .unitize-padding(12, 5, 12, 5, 16);
         width: 12.5%;
         text-align: center;
         float: left;
@@ -111,7 +111,7 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
     .footer-main {
-        border-top: 1px solid @borderColor;
+        border-top: 1px solid @border-color;
 
         .column--headline {
             .unitize(16, 16, font-size);
@@ -129,7 +129,7 @@
         }
 
         .footer--columns {
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
         }
 
         .column--content {
@@ -184,7 +184,7 @@
         }
 
         .newsletter--button {
-            .unitize-padding(9, 5, 8, 5, 16);
+            .unitize-padding(11, 5, 10, 5, 16);
 
             .icon--mail {
                 .unitize(14, 16, font-size);

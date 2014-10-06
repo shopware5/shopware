@@ -23,19 +23,13 @@
         text-align: center;
 
         &.green {
-            .linear-gradient(#70cb06, #6dca00);
-            .box-shadow(0 0 2px 0 #339d00);
-            color: #fff;
-            text-shadow: 0 1px 1px #41b400;
-            border: 1px solid #3ab100;
+            background: @badge-recommendation-bg;
+            color: @badge-recommendation-color;
         }
 
         &.orange {
-            .linear-gradient(@primaryColor, @gradientContrastColor);
-            .box-shadow(0 0 2px 0 @primaryContrastColor);
-            color: #fff;
-            text-shadow: 0 1px 1px @primaryContrastColor;
-            border: 1px solid @primaryContrastColor;
+            background: @badge-newcomer-bg;
+            color: @badge-newcomer-color;
         }
     }
 

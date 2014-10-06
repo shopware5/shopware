@@ -8,7 +8,7 @@
 .js--img-zoom--lens {
     display: none;
     background: rgba(255, 255, 255, 0.4);
-    border: 2px solid @borderColor;
+    border: 2px solid @border-color;
     position: absolute;
     top: 0;
     left: 0;
@@ -26,16 +26,16 @@
     z-index: 2500;
     overflow: hidden;
     background: #FFFFFF;
-    border: 2px solid @borderColor;
+    border: 2px solid @border-color;
 }
 
 .js--img-zoom--title {
     .unitize-padding(5, 20);
     .unitize(14, 16, font-size);
     .unitize(16, 16, line-height);
+    .secondary-gradient();
     color: #FFFFFF;
     font-weight: bold;
     text-align: center;
-    background: @darkBackgroundColor; // for older IE
     background: rgba(0, 0, 0, 0.5);
 }

@@ -94,7 +94,7 @@
 
 			{* Submit button *}
 			{block name='frontend_blog_comments_input_submit'}
-				<input class="btn btn--primary" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
+				<input class="btn is--primary" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
 			{/block}
 
 			{block name='frontend_blog_comments_input_notice'}

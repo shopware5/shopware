@@ -53,13 +53,13 @@
     position: relative;
 
     .navigation--list {
-        .linear-gradient(@lightGradientStart, @lightGradientEnd);
+        .white-gradient();
         width: 100%;
     }
     .navigation--entry {
         width: 15%;
         display: block;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
         border-right: 0 none;
     }
     .entry--link {
@@ -68,7 +68,7 @@
         display: block;
         text-align: center;
         font-weight: bold;
-        color: @primaryTextColor;
+        color: @text-color;
         text-decoration: none;
     }
 
@@ -83,8 +83,8 @@
 
 	.entry--cart {
 		.primary-gradient();
-		border-top: 1px solid darken(@primaryColor, 5%);
-		border-bottom: 1px solid darken(@secondaryColor, 10%);
+		border-top: 1px solid darken(@brand-primary, 5%);
+		border-bottom: 1px solid darken(@brand-secondary, 10%);
 		border-left: 0 none;
         cursor: pointer;
 
@@ -92,6 +92,7 @@
             color: #fff;
         }
     }
+
     .entry--spacer {
         .unitize-height(47, 16);
         width: 38%;
@@ -99,7 +100,7 @@
     }
 
     .entry--menu-left {
-        border-right: 1px solid @borderColor;
+        border-right: 1px solid @border-color;
         border-left: 0 none;
         width: 32%;
     }
@@ -133,9 +134,9 @@
 // Default ajax search form
 .main-search--form {
     .unitize-padding(8, 10, 8, 10, 16);
-    .box-shadow(0 6px 6px -6px @lightTextColor);
+    .box-shadow(0 6px 6px -6px @gray);
     background: #fff;
-    border-bottom: 1px solid @borderColor;
+    border-bottom: 1px solid @border-color;
     width: 100%;
     left: 0;
     top: 0;
@@ -177,8 +178,8 @@
 
             display: block;
             content: "";
-            border: 2px solid #ccc;
-            border-top: 2px solid #333;
+            border: 2px solid @border-color;
+            border-top: 2px solid darken(@border-color, 50%);
         }
     }
 }
@@ -208,9 +209,9 @@
 
 .results--list {
     .unitize-padding(10, 15);
-    .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
-    border-top: 1px solid @borderColor;
-    border-bottom: 1px solid @borderColor;
+    .box-shadow(0 2px 3px 1px lighten(@border-color, 5%));
+    border-top: 1px solid @border-color;
+    border-bottom: 1px solid @border-color;
     background: #fff;
 
     &::after {
@@ -223,7 +224,7 @@
         position: absolute;
         background: #fff;
         left: 48%;
-        border: 1px solid @borderColor;
+        border: 1px solid @border-color;
         border-top: 0 none;
         border-right: 0 none;
     }
@@ -235,7 +236,7 @@
 
     .list--entry {
         .unitize(30, 16, line-height);
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid @border-color;
 
         &:last-child {
             border: 0 none;
@@ -250,23 +251,23 @@
     }
 
     .is-active, .list--entry:hover {
-        background: lighten(@borderColor, 10%);
-        color: @primaryColor;
+        background: lighten(@border-color, 10%);
+        color: @brand-primary;
 
-        .name--link { color: @primaryColor; }
+        .name--link { color: @brand-primary; }
     }
 
     .entry--media { width: 10%; min-width:10% }
 
     .entry--name { width: 60%; }
 
-    .name--link { color: @primaryTextColor }
+    .name--link { color: @text-color }
 
     .entry--price,
     .entry--all-results-number {
         width: 30%;
         text-align: right;
-        color: @primaryColor;
+        color: @brand-primary;
     }
 
     .entry--all-results-link,
@@ -301,7 +302,7 @@
         .top-bar {
             .unitize-padding(4, 0, 4, 0, 16);
             display: block;
-            border-bottom: 1px solid @borderColor;
+            border-bottom: 1px solid @border-color;
         }
         .top-bar--switches {
             .clearfix();
@@ -316,10 +317,10 @@
             line-height: normal;
             width: auto;
             border: 0 none;
-            border-right: 1px solid @borderColor;
+            border-right: 1px solid @border-color;
 
             &.js--is--focused {
-                border-color: @borderColor;
+                border-color: @border-color;
             }
 
             select { height: auto; }
@@ -357,7 +358,7 @@
     .is--ctl-checkout.is--minimal-header,
     .is--ctl-register.is--minimal-header.is--target-checkout {
         .header-main {
-            .box-shadow(0 1px 2px 0 @borderColor);
+            .box-shadow(0 1px 2px 0 @border-color);
 
             .logo-main {
                 width: 100%;
@@ -385,7 +386,7 @@
         .navigation--entry {
             .unitize-padding(0, 16, 0, 16, 16);
             display: inline-block;
-            border-left: 1px solid @borderColor;
+            border-left: 1px solid @border-color;
 
             i { .unitize-padding(0, 5, 0, 0, 16); }
 
@@ -395,11 +396,11 @@
         }
 
         .navigation--entry, .navigation--link {
-            color: @primaryTextColor;
+            color: @text-color;
             cursor: pointer;
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
 
@@ -407,7 +408,7 @@
             .unitize-width(166);
             .unitize-padding(0, 8);
             position: relative;
-            border-right: 1px solid @borderColor;
+            border-right: 1px solid @border-color;
             text-align: center;
 
             &:after,
@@ -419,7 +420,7 @@
             }
 
             &.js--is--dropdown-active {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
         .service--list {
@@ -433,7 +434,7 @@
             list-style: none;
             background: #fff;
             z-index: 1000;
-            border: 1px solid @borderColor;
+            border: 1px solid @border-color;
             border-top-color: #fff;
         }
         .js--is--dropdown-active .service--list {
@@ -442,12 +443,12 @@
             .service--link {
                 .unitize-padding(5, 8);
                 display: block;
-                color: @primaryTextColor;
-                border-top: 1px solid @softBackgroundColor;
+                color: @text-color;
+                border-top: 1px solid darken(@gray-light, 2%);
 
                 &:hover {
-                    color: @primaryColor;
-                    background: @softBackgroundColor;
+                    color: @brand-primary;
+                    background-color: darken(@gray-light, 2%);
                 }
             }
         }
@@ -495,20 +496,19 @@
 
         .entry--account .entry--link {
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
 
             i { .unitize(10, 16, margin-right); }
         }
 
         .entry--search .entry--trigger {
-            @backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
-            .linear-gradient(#fff, @primaryBackgroundColor);
-            border: 1px solid @lightDarkBorderColor;
-            border-bottom-color: lighten(@darkBorderColor, 40%);
+            .white-gradient();
+            border: 1px solid @border-color;
+            border-bottom-color: lighten(@border-color, 40%);
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
                 background: #fff;
             }
         }
@@ -560,8 +560,8 @@
     .results--list {
         .border-radius();
         .unitize-padding(10, 15);
-        .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
-        border: 1px solid @borderColor;
+        .box-shadow(0 2px 3px 1px lighten(@border-color, 5%));
+        border: 1px solid @border-color;
         background: #fff;
 
         .list--entry,
@@ -594,7 +594,7 @@
     .is--ctl-register.is--minimal-header.is--target-checkout {
 
         .header-main {
-            .box-shadow(0 1px 2px 0 @borderColor);
+            .box-shadow(0 1px 2px 0 @border-color);
 
             .logo--shop {
                 width: 30%
@@ -637,7 +637,7 @@
     .is--ctl-register.is--minimal-header.is--target-checkout {
 
         .header-main {
-            .box-shadow(0 1px 2px 0 @borderColor);
+            .box-shadow(0 1px 2px 0 @border-color);
 
             .logo--shop {
                 width: 30%
@@ -696,7 +696,7 @@
             .unitize-width(152);
 
             &:hover {
-                color: @primaryColor;
+                color: @brand-primary;
             }
         }
 
@@ -707,10 +707,7 @@
 
     // Cart link
     .cart--link {
-        text-shadow: 0 1px 0 @primaryContrastColor;
-
         .cart--quantity { display: none; }
-
         .cart--amount { display: inline-block; }
     }
 
@@ -724,7 +721,7 @@
         .border-radius(3px);
         .unitize-padding(3, 5, 3, 10, 16);
         background: #fff;
-        color: @primaryTextColor;
+        color: @text-color;
         position: relative;
         text-shadow: 0 0 0 transparent;
 

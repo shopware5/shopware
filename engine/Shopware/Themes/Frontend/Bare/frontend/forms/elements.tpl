@@ -49,7 +49,7 @@
 				{* Forms actions *}
 				{block name='frontend_forms_elements_form_submit'}
 					<div class="buttons">
-						<button class="btn btn--primary" type="submit" name="Submit" value="submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
+						<button class="btn is--primary is--icon-right" type="submit" name="Submit" value="submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
 					</div>
 				{/block}
 			</div>

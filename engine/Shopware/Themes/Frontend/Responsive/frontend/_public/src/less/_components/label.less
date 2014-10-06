@@ -7,28 +7,28 @@
 .label {
     .unitize-padding(3, 8);
     .unitize-margin(0, 5);
-    .unitize(12, 16, font-size);
+    .unitize(@label-font-size, 16, font-size);
     .unitize(18, 16, line-height);
     .border-radius(3px);
     display: inline-block;
     text-align: center;
     white-space: nowrap;
-    color: #fff;
-    background: @primaryTextColor;
+    color: @label-color;
+    background: @text-color;
 
     &.success {
-        background: #5cb85c;
+        background: @label-highlight-success;
     }
 
     &.info {
-        background: #5bc0de;
+        background: @label-highlight-info;
     }
 
     &.warning {
-        background: #f0ad4e;
+        background: @label-highlight-notice;
     }
 
     &.error {
-        background: #d9534f;
+        background: @label-highlight-error;
     }
 }

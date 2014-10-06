@@ -53,9 +53,9 @@
 	{elseif $type == 'success'}
 		{$iconCls= 'icon--check'}
 	{elseif $type == 'warning'}
-		{$iconCls = 'icon--info'}
+		{$iconCls = 'icon--warning'}
 	{else}
-		{$iconCls = 'icon--question'}
+		{$iconCls = 'icon--info'}
 	{/if}
 
 	{* Support for customized icons *}

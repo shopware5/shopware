@@ -81,36 +81,33 @@
     height: 100%;
 }
 .ui-datepicker {
+    .border-radius(3px);
     width: 17em;
     padding: .2em .2em 0;
-    background-color: @primaryBackgroundColor;
-    border: 1px solid @borderColor;
-    .border-radius(3px);
+    background: darken(@gray-light, 4%);
+    border: 1px solid @border-color;
     display: none;
 
     .ui-datepicker-header {
+        .primary-gradient();
+        .border-radius(4px);
+        .box-shadow(0 1px 3px @gray-dark);
+        .unitize(12, 16, font-size);
         position: relative;
         padding: .2em 0;
-        @boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .6);
-        .primary-gradient();
-        .box-shadow(0 1px 3px @boxShadowColor);
-        text-shadow: 0 1px 1px @primaryContrastColor;
         border: 0 none;
-        border-bottom: 1px solid @primaryContrastColor;
         color: #fff;
         text-align: center;
-        .border-radius(4px);
         height: 40px;
-        .unitize(12, 16, font-size);
     }
 
     .ui-datepicker-prev,
     .ui-datepicker-next {
-        position: absolute;
-        top: 2px;
         .unitize-height(36);
         .unitize-width(36);
         .unitize(36, 16, line-height);
+        position: absolute;
+        top: 2px;
         color:#fff;
     }
 
@@ -175,7 +172,7 @@
         text-align: center;
         font-weight: bold;
         border: 0;
-        color: @primaryTextColor;
+        color: @text-color;
     }
 
     td {
@@ -185,19 +182,19 @@
 
         span,
         a {
+            .border-radius(3px);
             display: block;
             padding: .2em;
             text-align: right;
             text-decoration: none;
-            background-color: @softBackgroundColor;
-            border: 1px solid @lightDarkBorderColor;
-            .border-radius(3px);
-            color: @primaryTextColor;
+            background: darken(@gray-light, 2%);
+            border: 1px solid @border-color;
+            color: @text-color;
         }
 
         &.ui-datepicker-current-day a {
             font-weight: bold;
-            color: @lightTextColor;
+            color: @gray-dark;
         }
 
         &.ui-datepicker-today a {
@@ -205,7 +202,7 @@
         }
 
         &.ui-datepicker-week-end a {
-            color: @softTextColor;
+            color: @gray-dark;
         }
     }
 

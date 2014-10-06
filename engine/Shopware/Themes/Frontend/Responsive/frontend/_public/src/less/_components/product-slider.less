@@ -56,10 +56,10 @@
         .tap-highlight-color(rgba(0, 0, 0, 0));
         display: block;
         text-align: center;
-        color: @primaryTextColor;
+        color: @text-color;
 
         &:hover {
-            color: @primaryColor;
+            color: @brand-primary;
         }
     }
 }
@@ -71,7 +71,7 @@
     .unitize(28, 16, line-height);
     .unitize(12, 16, font-size);
     .border-radius(3px);
-    .linear-gradient(#ffffff, #edeff2);
+    .linear-gradient(#ffffff, @gray-light);
     .user-select(none);
     .touch-callout(none);
     .tap-highlight-color(rgba(0, 0, 0, 0));
@@ -81,8 +81,8 @@
     z-index: 750;
     font-family: 'shopware';
     text-align: center;
-    color: @primaryTextColor;
-    border: 1px solid @borderColor;
+    color: @text-color;
+    border: 1px solid @border-color;
     cursor: pointer;
 
     &.is--left {
@@ -103,7 +103,7 @@
     }
 
     &:hover {
-        color: @primaryColor;
+        color: @brand-primary;
     }
 }
 
