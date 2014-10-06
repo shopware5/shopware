@@ -180,9 +180,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         me.registerEvents();
         me.callParent(arguments);
 
-        mainWindow = me.subApplication.articleWindow;
-        if(mainWindow.hasOwnProperty('unitStore')) {
-            me.unitComboBox.bindStore(mainWindow.unitStore);
+        me.mainWindow = me.subApplication.articleWindow;
+        if(me.mainWindow.hasOwnProperty('unitStore')) {
+            me.unitComboBox.bindStore(me.mainWindow.unitStore);
         }
 
         if (me.record) {
