@@ -471,6 +471,7 @@ class sArticles
         $this->sSYSTEM->_POST["sVoteSummary"] = strip_tags($this->sSYSTEM->_POST["sVoteSummary"]);
         $this->sSYSTEM->_POST["sVoteComment"] = strip_tags($this->sSYSTEM->_POST["sVoteComment"]);
         $this->sSYSTEM->_POST["sVoteStars"] = doubleval($this->sSYSTEM->_POST["sVoteStars"]);
+        $this->sSYSTEM->_POST["sVoteMail"] = strip_tags($this->sSYSTEM->_POST["sVoteMail"]);
 
         if ($this->sSYSTEM->_POST["sVoteStars"] < 1 || $this->sSYSTEM->_POST["sVoteStars"] > 10) {
             $this->sSYSTEM->_POST["sVoteStars"] = 0;
@@ -501,8 +502,8 @@ class sArticles
         }
 
         $sql = '
-            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ';
         $insertComment = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
             $article,
@@ -511,7 +512,8 @@ class sArticles
             $this->sSYSTEM->_POST["sVoteComment"],
             $this->sSYSTEM->_POST["sVoteStars"],
             $datum,
-            $active
+            $active,
+            $this->sSYSTEM->_POST["sVoteMail"]
         ));
         if (empty($insertComment)) {
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
