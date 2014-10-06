@@ -158,24 +158,25 @@
                 'params': parseQueryString(window.location.href)
             }
 
+            me.params = parseQueryString(window.location.href);
+            me.upperParams = $.extend({}, me.params);
+            me.historyParams = $.extend({}, me.params);
+
             // set page index to one if not assigned
-            if(!me.ajax.params.p) {
-                me.ajax.params.p = 1;
+            if(!me.params.p) {
+                me.params.p = 1;
             }
 
             // set start page
-            me.startPage = me.ajax.params.p;
+            me.startPage = me.params.p;
 
             // register current push state var
             me.currentPushState;
 
             // Check if there is/are previous pages
-            if(me.ajax.params.p && me.ajax.params.p > 1) {
+            if(me.params.p && me.params.p > 1) {
                 me.showLoadPrevious();
             }
-
-            // Ajax first page to load on ul bottom reached
-            if(!me.ajax.params.p) me.ajax.params.p = 2;
 
             // on scrolling event for auto fetching new pages and push state
             me._on(window, me.opts.eventName, $.proxy(me.onScrolling, me));
@@ -210,7 +211,7 @@
                 bufferSize = fetchPoint.height(),
                 triggerPoint = fetchPointOffset - bufferSize;
 
-            if(docTop > triggerPoint) {
+            if(docTop > triggerPoint && (me.params.p < me.maxPages)) {
                 me.fetchNewPage();
             }
 
@@ -224,16 +225,25 @@
             var $firstProduct = $(visibleProducts).last(),
                 tmpPageIndex = $firstProduct.attr('data-page-index');
 
-            me.ajax.params.p = me.startPage;
-            if(tmpPageIndex.length) {
-                me.ajax.params.p = tmpPageIndex;
+            // Collection variables and build push state url
+            var tmpParams = me.historyParams;
+
+            // remove category id from history url
+            delete tmpParams.c;
+
+            // setting actual page index
+            if(!tmpParams.p || !tmpPageIndex) {
+                tmpParams.p = me.startPage;
             }
 
-            var tmpPushState = me.baseUrl + '?' + $.param(me.ajax.params);
+            if(tmpPageIndex) {
+                tmpParams.p = tmpPageIndex;
+            }
+
+            var tmpPushState = me.baseUrl + '?' + $.param(tmpParams);
             if(me.currentPushState != tmpPushState) {
-
+                
                 me.currentPushState = tmpPushState;
-
                 if(!history || !history.pushState) {
                     return;
                 }
@@ -249,7 +259,12 @@
             var me = this;
 
             // Quit here if all pages rendered
-            if(me.isFinished || me.ajax.params.p >= me.maxPages) {
+            if(me.isFinished || me.params.p >= me.maxPages) {
+                return;
+            }
+
+            // stop if process is running
+            if(me.isLoading) {
                 return;
             }
 
@@ -271,19 +286,18 @@
             me.openLoadingIndicator();
 
             // increase page index for further page loading
-            me.ajax.params.p++;
+            me.params.p ++;
 
             // increase fetch count for preventing auto fetching
             me.fetchCount++;
 
             // use categoryid by settings if not defined by filters
-            if(!me.ajax.params.c) me.ajax.params.c = me.opts.categoryId;
+            if(!me.params.c) me.params.c = me.opts.categoryId;
 
             // generate ajax fefch url by all params
-            var url = me.ajax.url + '?' + $.param(me.ajax.params);
+            var url = me.ajax.url + '?' + $.param(me.params);
 
             $.get(url, function(data) {
-
                 var template = data.trim();
 
                 // Cancel is no data provided
@@ -304,6 +318,11 @@
 
                 // enable loading for further pages
                 me.isLoading = false;
+
+                // check if last page reached
+                if(me.params.p >= me.maxPages) {
+                    me.isFinished = true;
+                }
             });
         },
 
@@ -377,16 +396,19 @@
             // Remove load more button
             $('.' + me.opts.loadPreviousCls).remove();
 
-            me.previousPageIndex = --me.ajax.params.p;
-
             // fetching new page
-            me.openLoadingIndicator(top);
+            me.openLoadingIndicator('top');
+
+            // build ajax url
+            var tmpParams = me.upperParams;
 
             // use categoryid by settings if not defined by filters
-            if(!me.ajax.params.c) me.ajax.params.c = me.opts.categoryId;
+            if(!tmpParams.c) tmpParams.c = me.opts.categoryId;
+
+            tmpParams.p = tmpParams.p - 1;
 
             // generate ajax fefch url by all params
-            var url = me.ajax.url + '?' + $.param(me.ajax.params);
+            var url = me.ajax.url + '?' + $.param(tmpParams);
 
             $.get(url, function(data) {
                 var template = data.trim();
@@ -402,7 +424,7 @@
                 me.isLoading = false;
 
                 // Set load previous button if we aren't already on page one
-                if(me.ajax.params.p > 1) {
+                if(tmpParams.p > 1) {
                     me.showLoadPrevious();
                 }
             });
