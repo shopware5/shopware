@@ -123,7 +123,7 @@ class Homepage extends Page
                         'The article on position %d was not found!',
                         $articleKey + 1
                     );
-                    throw new ResponseTextException($message, $this->getSession());
+                    \Helper::throwException($message);
                 }
             }
         }
