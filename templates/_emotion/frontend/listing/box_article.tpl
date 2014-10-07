@@ -25,7 +25,7 @@
 		{* Article rating *}
         {block name='frontend_listing_box_article_rating'}
         	{if $sArticle.sVoteAverange.averange}
-	        <div class="star star{($sArticle.sVoteAverange.averange * 2)|round:0}"></div>
+	        <div class="star star{$sArticle.sVoteAverageOriginal.average|round}"></div>
 	        {/if}
 	    {/block}
         
