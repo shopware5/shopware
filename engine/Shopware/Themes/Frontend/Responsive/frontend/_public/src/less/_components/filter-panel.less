@@ -56,12 +56,15 @@
 .filter-panel--title {
     .unitize-height(32);
     .unitize(32, 16, line-height);
-    .unitize-padding(0, 10);
+    .unitize-padding(0, 30, 0, 10);
     .unitize-margin(0, 0, 5, 0);
     .user-select(none);
     .touch-callout(none);
     .tap-highlight-color(rgba(0, 0, 0, 0));
     display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
     cursor: pointer;
 }
 
@@ -119,6 +122,9 @@
 	.tap-highlight-color(rgba(0, 0, 0, 0));
     display: block;
     cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .filter-panel--checkbox {

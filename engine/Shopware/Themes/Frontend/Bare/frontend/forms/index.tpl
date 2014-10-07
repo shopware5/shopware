@@ -16,7 +16,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="forms--content content block right">
+	<div class="forms--content content right">
 
 		{* Form error *}
 		{block name='frontend_forms_elements_error'}

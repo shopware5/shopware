@@ -119,7 +119,10 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
         defaultSettingsFilterGroupsLabel : '{s name=view/settings_default_settings_filter_groups_label}Group filters{/s}',
         defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
-        
+
+        defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
+        defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
+
         cmsTitle : '{s name=view/settings_cms_title}CMS functions{/s}',
         cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
         cmsTextLabel : '{s name=view/settings_cms_text_label}Text{/s}',
@@ -348,6 +351,10 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             name:'template'
         });
 
+        me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
+            name: 'productBoxLayout'
+        });
+
         return [
             {
                 xtype:'checkboxgroup',
@@ -378,6 +385,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 name:'name'
             },
             me.templateComboBox,
+            me.productLayoutField,
             {
                 xtype:'textfield',
                 fieldLabel:me.snippets.defaultSettingsLinkExternalPageLabel,

@@ -1,3 +1,7 @@
+.account--content {
+	.unitize-margin(20, 0, 0, 0);
+}
+
 .account--content,
 .payment_logo_debit {
     .clearfix();
@@ -28,7 +32,7 @@
     .unitize(20, 16, margin-bottom);
 
     .panel--body {
-        .unitize-padding(10, 20, 0, 20);
+        .unitize-padding(25, 20, 0, 20);
     }
 }
 
@@ -95,23 +99,15 @@
     display: block;
     background: lighten(@panel-bg, 4%);
 
-    .pagination--display {
+    .paging--display {
         float: right;
-    }
-
-    .pagination--link {
-        &.is--active {
-            background: #fff;
-        }
-
-        [class^="icon--"] {
-            margin: 0;
-        }
     }
 }
 
 .account--orders-overview {
     border: 1px solid @panel-border;
+
+	p { .unitize(14, 16, font-size); }
 
     .orders--table-header {
         display: none;
@@ -331,6 +327,8 @@
 .account--downloads {
     border: 1px solid @panel-border;
 
+    p { .unitize(14, 16, font-size) }
+
     .downloads--table-header {
         display: none;
     }
@@ -364,47 +362,16 @@
 
 @media screen and(min-width: @tabletViewportWidth) {
 
-    .is--ctl-account {
-        .sidebar-main {
-            .unitize-padding(20, 0, 0, 0);
-            display: block;
-        }
-
-        .categories--headline,
-        .categories--navigation,
-        .shop-sites--container {
-            display: none;
-        }
-
-        &.is--act-logout,
-        &.is--act-password {
-            .sidebar-main {
-                display: none;
-            }
-        }
-    }
-
     .account--content {
-        .unitize-margin(20, 0, 0, 0);
-        width: 78%;
-        float: right;
+		.unitize-margin(30, 0, 0, 0);
 
-        &.is--wide {
-            width: 100%;
-        }
+		&.is--wide {
+			width: 100%;
+		}
     }
 
     .account--password-reset {
         .unitize-margin(45, 0, 0, 0);
-    }
-
-    // Change Address / Payment method
-    .account--change-billing,
-    .account--change-shipping,
-    .account--change-payment {
-        &.register--content {
-            width: 78%
-        }
     }
 
     .account--menu {
@@ -452,44 +419,7 @@
 
     .account--welcome {
         .panel--title {
-            .unitize(28, 16, font-size);
-        }
-    }
-
-    .account--info,
-    .account--billing {
-        width: 49%;
-        float: left;
-    }
-
-    .account--payment,
-    .account--shipping {
-        width: 49%;
-        float: right;
-    }
-
-    .account--email,
-    .account--password {
-        display: none;
-    }
-
-    .account--email,
-    .account--password,
-    .account--newsletter {
-        clear: both;
-    }
-
-    .account--info,
-    .account--payment {
-        .panel--body {
-            .unitize-height(120);
-        }
-    }
-
-    .account--billing,
-    .account--shipping {
-        .panel--body {
-            .unitize-height(220);
+            .unitize(@font-size-h1, 16, font-size);
         }
     }
 
@@ -757,7 +687,48 @@
     }
 }
 
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+	.account--info,
+	.account--billing {
+		width: 49%;
+		float: left;
+	}
+
+	.account--payment,
+	.account--shipping {
+		width: 49%;
+		float: right;
+	}
+
+	.account--email,
+	.account--password {
+		display: none;
+	}
+
+	.account--email,
+	.account--password,
+	.account--newsletter {
+		clear: both;
+	}
+
+	.account--info,
+	.account--payment {
+		.panel--body {
+			.unitize-height(120);
+		}
+	}
+
+	.account--billing,
+	.account--shipping {
+		.panel--body {
+			.unitize-height(220);
+		}
+	}
+}
+
 @media screen and(min-width: @desktopViewportWidth) {
+
     .is--act-partnerStatistic {
         .content-main--inner {
             .unitize-padding(0, 45, 45, 45);
@@ -766,10 +737,6 @@
 
     .account--content {
         .unitize-margin(45, 0, 0, 0);
-    }
-
-    .is--ctl-account .sidebar-main {
-        .unitize-padding(45, 0, 0, 0);
     }
 
     // Account error message margin

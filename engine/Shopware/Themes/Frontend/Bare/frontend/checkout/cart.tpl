@@ -13,7 +13,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content block content--basket content--checkout">
+    <div class="content content--basket content--checkout">
 
         {* If articles are in the basket... *}
         {if $sBasket.content}

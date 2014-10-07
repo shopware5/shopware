@@ -2,11 +2,9 @@
 
 {block name="frontend_index_content_top"}{/block}
 
-{block name='frontend_index_content_left'}{/block}
-
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content block content--home">
+<div class="content content--home">
 
 	{block name='frontend_home_index_banner'}
 		{* Banner *}

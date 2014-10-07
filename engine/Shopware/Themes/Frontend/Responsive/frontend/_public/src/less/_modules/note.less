@@ -1,3 +1,7 @@
+.note--content {
+	.unitize-margin(20, 0);
+}
+
 .note--table-head {
     display: none;
 }
@@ -128,24 +132,7 @@
     }
 }
 
-@media screen and(min-width: @tabletViewportWidth) {
-
-    .is--ctl-note {
-        .sidebar-main {
-            .unitize-padding(20, 0, 0, 0);
-            display: block;
-        }
-
-        .categories--headline,
-        .categories--navigation,
-        .shop-sites--container {
-            display: none;
-        }
-    }
-
-    .note--content {
-        .unitize-margin(20, 0);
-    }
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
 
     .note--table {
         .unitize-padding(0, 20);
@@ -249,10 +236,6 @@
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-
-    .is--ctl-note .sidebar-main {
-        .unitize-padding(45, 0, 0, 0);
-    }
 
     .note--content {
         .unitize-margin(45, 0, 0, 0);

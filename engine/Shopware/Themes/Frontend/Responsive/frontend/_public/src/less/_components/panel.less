@@ -449,31 +449,40 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--paging {
+	.unitize(32, 16, line-height);
     display: inline-block;
 
-    a {
+    .paging--link {
         .unitize-padding(0, 10);
         .unitize-margin(0, 1);
         .unitize(14, 16, font-size);
-        .unitize(26, 16, line-height);
+        .unitize(30, 16, line-height);
         .border-radius(3px);
-        .linear-gradient(#ffffff, @gray-light);
+		.linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
         display: inline-block;
-        color: @text-color;
         font-weight: normal;
         text-align: center;
+		border: 1px solid @btn-default-border-color;
+		color: @btn-default-text-color;
 
         [class^="icon--"] {
             .unitize(10, 16, font-size);
         }
 
-        &.is--active {
-            font-weight: bold;
-            color: @brand-primary;
+        &.is--active,
+        &.is--active:hover {
+			.unitize(32, 16, line-height);
+			.linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
+			color: @btn-primary-text-color;
+			border: 0 none;
+			font-weight: bold;
+			cursor: default;
         }
 
         &:hover {
-            color: @brand-primary;
+			background: @btn-default-hover-bg;
+			color: @btn-default-hover-text-color;
+			border-color: @btn-default-hover-border-color;
         }
     }
 }

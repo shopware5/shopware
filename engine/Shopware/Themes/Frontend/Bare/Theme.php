@@ -46,8 +46,8 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet->addElement($this->createCheckboxField('scrollableHeader', '__scrollable_header__', false, $this->getLabelAttribute('scrollable_header_description')));
         $fieldSet->addElement($this->createCheckboxField('offcanvasCart', '__offcanvas_cart__', true, $this->getLabelAttribute('offcanvas_cart_description')));
         $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
+        $fieldSet->addElement($this->createCheckboxField('displaySidebar', '__display_sidebar__', true, $this->getLabelAttribute('display_sidebar_description')));
         $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
-        $fieldSet->addElement($this->createCheckboxField('showCategoriesLeft', '__show_categories_left__', false, $this->getLabelAttribute('show_categories_left_description')));
         $fieldSet->addElement($this->createCheckboxField('infiniteScrolling', '__enable_infinite_scrolling__', true, $this->getLabelAttribute('enable_infinite_scrolling_description')));
         $fieldSet->addElement($this->createNumberField('infiniteThreshold', '__infinite_threshold__', 4, $this->getLabelAttribute('infinite_threshold_description')));
         $tab->addElement($fieldSet);

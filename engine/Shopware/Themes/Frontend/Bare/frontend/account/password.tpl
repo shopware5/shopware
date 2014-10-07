@@ -2,7 +2,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content block account--password-reset">
+	<div class="content account--password-reset">
 
 		{* Error messages *}
 		{block name='frontend_account_error_messages'}
