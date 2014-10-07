@@ -47,6 +47,9 @@
             /** @string pagingSelector - listing paging selector **/
             'pagingSelector': '.listing--paging',
 
+            /** @string productBoxSelector - selector for single product boxes **/
+            'productBoxSelector': '.product--box',
+
             /** @string defaultPerPageSelector - default per page selector which will be removed **/
             'defaultPerPageSelector': '.action--per-page',
 
@@ -149,7 +152,7 @@
             me.ajax = {
                 'url': $.controller.ajax_listing,
                 'params': parseQueryString(window.location.href)
-            }
+            };
 
             me.params = parseQueryString(window.location.href);
             me.upperParams = $.extend({}, me.params);
@@ -163,8 +166,8 @@
             // set start page
             me.startPage = me.params.p;
 
-            // register current push state var
-            me.currentPushState;
+            // holds the current listing url with all params
+            me.currentPushState = '';
 
             // Check if there is/are previous pages
             if(me.params.p && me.params.p > 1) {
@@ -199,7 +202,7 @@
                 docTop = $window.scrollTop() + $window.height(),
 
                 // Get last element in list to get the reference point for fetching new data
-                fetchPoint = me.$el.find('li').last(),
+                fetchPoint = me.$el.find(me.opts.productBoxSelector).last(),
                 fetchPointOffset = fetchPoint.offset().top,
                 bufferSize = fetchPoint.height(),
                 triggerPoint = fetchPointOffset - bufferSize;

@@ -70,8 +70,8 @@ $(function() {
         type: 'm',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('.btn--password').collapsePanel();
-            $('.btn--email').collapsePanel();
+            $('.btn--password').scroll();
+            $('.btn--email').scroll();
             $('.blog-filter--trigger').collapsePanel();
             $('*[data-product-slider="true"]').productSlider({
                 perPage: 3,
@@ -94,10 +94,10 @@ $(function() {
             });
 
             var btnPassword = $('.btn--password');
-            if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
+            if (btnPassword.length) btnPassword.data('plugin_scroll').destroy();
 
             var btnEmail = $('.btn--email');
-            if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
+            if (btnEmail.length) btnEmail.data('plugin_scroll').destroy();
 
             var blogFilterTrigger = $('.blog-filter--trigger');
             if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();

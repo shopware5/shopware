@@ -29,7 +29,7 @@
  */
 
 /**
- * Shopware Model 
+ * Shopware Model
  *
  * This Model is extended from the Shopware.model.Category to add
  * a proxy configuration.
@@ -58,6 +58,7 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         { name : 'cmsHeadline', type: 'string', useNull:true, defaultValue: null },
         { name : 'cmsText', type: 'string', useNull:true, defaultValue: null },
         { name : 'template', type: 'string', useNull:true, defaultValue: null },
+        { name : 'productBoxLayout', type: 'string', useNull:true, defaultValue: null },
         { name : 'noViewSelect', type: 'boolean' },
         { name : 'active', type: 'boolean' },
         { name : 'blog', type: 'boolean' },

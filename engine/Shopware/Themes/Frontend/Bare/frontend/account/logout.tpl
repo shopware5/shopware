@@ -8,7 +8,7 @@
 {/block}
 
 {block name='frontend_index_content'}
-	<div class="content block account--content is--wide">
+	<div class="content account--content is--wide">
 
 		{block name="frontend_account_logout_info"}
 			<div class="account--welcome panel has--border">

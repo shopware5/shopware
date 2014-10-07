@@ -161,10 +161,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
 
+        $layout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
+
         $this->View()->assign(array(
             'sArticles' => $articles,
             'pageIndex' => $pageIndex,
-            'showListing' => true
+            'productBoxLayout' => $layout
         ));
     }
 }

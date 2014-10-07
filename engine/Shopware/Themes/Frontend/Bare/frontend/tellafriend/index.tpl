@@ -7,7 +7,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="content block tellafriend--content right">
+	<div class="content tellafriend--content right">
 
 		{if $sSuccess}
 			{include file="frontend/_includes/messages.tpl" type="success" content="{s name='TellAFriendHeaderSuccess'}{/s}"}

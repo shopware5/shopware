@@ -10,7 +10,7 @@
 		{* Pagination - Frist page *}
 		{block name="frontend_listing_actions_paging_first"}
 			{if $sPage > 1}
-				<a href="#?p=1" title="{"{s name='ListingLinkFirst'}{/s}"|escape}" class="pagination--link paging--prev" data-action-link="true">
+				<a href="#?p=1" title="{"{s name='ListingLinkFirst'}{/s}"|escape}" class="paging--link paging--prev" data-action-link="true">
 					<i class="icon--arrow-left"></i>
 					<i class="icon--arrow-left"></i>
 				</a>
@@ -20,7 +20,7 @@
         {* Pagination - Previous page *}
         {block name='frontend_listing_actions_paging_previous'}
             {if $sPage > 1}
-                <a href="#?p={$sPage - 1}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev" data-action-link="true">
+                <a href="#?p={$sPage - 1}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="paging--link paging--prev" data-action-link="true">
 					<i class="icon--arrow-left"></i>
 				</a>
             {/if}
@@ -28,13 +28,13 @@
 
         {* Pagination - current page *}
         {block name='frontend_listing_actions_paging_numbers'}
-			<a title="{$sCategoryInfo.name|escape}" class="pagination--link is--active">{$sPage}</a>
+			<a title="{$sCategoryInfo.name|escape}" class="paging--link is--active">{$sPage}</a>
         {/block}
 
         {* Pagination - Next page *}
         {block name='frontend_listing_actions_paging_next'}
 			{if $sPage < $pages}
-				<a href="#?p={$sPage + 1}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next" data-action-link="true">
+				<a href="#?p={$sPage + 1}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="paging--link paging--next" data-action-link="true">
 					<i class="icon--arrow-right"></i>
 				</a>
 			{/if}
@@ -43,7 +43,7 @@
 		{* Pagination - Last page *}
 		{block name="frontend_listing_actions_paging_last"}
 			{if $sPage < $pages}
-				<a href="#?p={$pages}" title="{"{s name='ListingLinkLast'}{/s}"|escape}" class="pagination--link paging--next" data-action-link="true">
+				<a href="#?p={$pages}" title="{"{s name='ListingLinkLast'}{/s}"|escape}" class="paging--link paging--next" data-action-link="true">
 					<i class="icon--arrow-right"></i>
 					<i class="icon--arrow-right"></i>
 				</a>
@@ -52,9 +52,14 @@
 
         {* Pagination - Number of pages *}
         {block name='frontend_listing_actions_count'}
-            <span class="pagination--display">
+            <span class="paging--display">
                 {s name="ListingTextFrom"}von{/s} <strong>{$pages}</strong>
             </span>
+        {/block}
+
+        {* Products per page selection *}
+        {block name='frontend_listing_actions_items_per_page'}
+            {include file="frontend/listing/actions/action-per-page.tpl"}
         {/block}
     </div>
 {/if}

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
@@ -82,6 +83,7 @@ class StoreFrontCriteriaFactory
         $criteria = $this->getSearchCriteria($request, $context);
 
         $this->addFacets($criteria);
+        $criteria->addFacet(new CategoryFacet());
 
         return $criteria;
     }

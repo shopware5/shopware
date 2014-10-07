@@ -100,11 +100,6 @@ blockquote {
 
 .list--unstyled { list-style: none }
 
-.content-main--inner {
-    .unitize-padding(0, 10, 16);
-    .clearfix();
-}
-
 // Hide ajax loader by default
 .ajax-loader { display: none }
 
@@ -138,6 +133,22 @@ blockquote {
 ::-moz-placeholder { color: @input-placeholder-color; }
 ::-webkit-input-placeholder { color: @input-placeholder-color; }
 :-ms-input-placeholder { color: @input-placeholder-color; }
+
+
+.content-main,
+.content--wrapper {
+	.clearfix();
+}
+
+.content-main--inner {
+	.unitize-padding(0, 10, 16);
+	.clearfix();
+}
+
+.content {
+	width: 100%;
+	float: left;
+}
 
 @media screen and(min-width: @tabletViewportWidth) {
     .content-main {

@@ -59,7 +59,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content block confirm--content">
+<div class="content confirm--content">
 
     {* Error messages *}
     {block name='frontend_checkout_confirm_error_messages'}
