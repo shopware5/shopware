@@ -509,7 +509,10 @@
             }
         }
 
-        .cart--quantity { color: @text-color; font-weight: normal }
+        .cart--quantity {
+            color: @text-color;
+            font-weight: @font-bold-weight;
+        }
 
         // Search entry
         .entry--search {
@@ -703,7 +706,7 @@
 
     // Cart link
     .cart--link {
-        .cart--quantity { display: none; }
+        .cart--quantity { display: inline-block; }
         .cart--amount { display: inline-block; }
     }
 
