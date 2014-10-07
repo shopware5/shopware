@@ -118,7 +118,7 @@ Feature: Checkout articles
         When  I select "Deutsch" from "__shop"
         Then  I should see "Sonnenbrille Speed Eyes"
 
-        When  I proceed to confirm
+        When  I follow the link "checkout" of the page "CheckoutCart"
         Then  I should see "AGB und Widerrufsbelehrung"
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"

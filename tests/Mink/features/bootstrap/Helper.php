@@ -434,4 +434,31 @@ class Helper
 
         return 'de';
     }
+
+
+    /**
+     * Helper function to call the elements method to get the values to check of the given position
+     *
+     * @param TraversableElement $element
+     * @param string $position
+     * @return array
+     */
+    public static function getValuesToCheck(\Behat\Mink\Element\TraversableElement $element, $position)
+    {
+        $checkMethod = sprintf('get%ssToCheck', ucfirst($position));
+
+        if (!method_exists($element, $checkMethod)) {
+            $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
+            self::throwException($message);
+        }
+
+        $checkValues = $element->$checkMethod();
+
+        if (!is_array($checkValues) || empty($checkValues)) {
+            $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
+            self::throwException($message);
+        }
+
+        return $checkValues;
+    }
 }

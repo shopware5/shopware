@@ -27,6 +27,11 @@ class Homepage extends Page
         )
     );
 
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'searchButton'            => array('de' => 'Suchen',  'en' => 'Search')
+    );
+
     protected $srcAttribute = 'src';
 
     /**
@@ -35,7 +40,14 @@ class Homepage extends Page
      */
     public function searchFor($searchTerm)
     {
-        $this->getElement('SearchForm')->submit($searchTerm);
+        $data = array(
+            array(
+                'field' => 'sSearch',
+                'value' => $searchTerm
+            )
+        );
+        \Helper::fillForm($this, 'searchForm', $data);
+        \Helper::pressNamedButton($this, 'searchButton');
         $this->verifyResponse();
     }
 
@@ -45,7 +57,14 @@ class Homepage extends Page
      */
     public function receiveSearchResultsFor($searchTerm)
     {
-        $this->getElement('SearchForm')->receiveSearchResultsFor($searchTerm);
+        $data = array(
+            array(
+                'field' => 'sSearch',
+                'value' => $searchTerm
+            )
+        );
+        \Helper::fillForm($this, 'searchForm', $data);
+        $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
 
     /**
@@ -55,6 +74,9 @@ class Homepage extends Page
      */
     public function checkComparison($articles)
     {
+        //TODO: REFAKTORIEREN!!! AUCH FÜR RESPONSIVE!!!
+
+
         $result = \Helper::countElements($this, 'div.compare_article', count($articles));
 
         if ($result !== true) {
@@ -174,7 +196,7 @@ class Homepage extends Page
                 return;
             }
 
-            $checkValues = $this->getValuesToCheck($element, $subCheck['position']);
+            $checkValues = \Helper::getValuesToCheck($element, $subCheck['position']);
 
             foreach ($checkValues as $key => $checkValue) {
                 //Convert the contentValue to a float if checkValue is also one
@@ -212,7 +234,7 @@ class Homepage extends Page
 
         foreach($positions as $position)
         {
-            $checkValues = $this->getValuesToCheck($element, $position);
+            $checkValues = \Helper::getValuesToCheck($element, $position);
             $values = array_column($items, $position);
 
             foreach($values as &$value) {
@@ -238,33 +260,6 @@ class Homepage extends Page
             \Helper::throwException($message);
         }
     }
-
-    /**
-     * Helper function to call the elements method to get the values to check of the given position
-     *
-     * @param TraversableElement $element
-     * @param string $position
-     * @return array
-     */
-    private function getValuesToCheck(TraversableElement $element, $position)
-    {
-        $checkMethod = sprintf('get%ssToCheck', ucfirst($position));
-
-        if (!method_exists($element, $checkMethod)) {
-            $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
-            \Helper::throwException($message);
-        }
-
-        $checkValues = $element->$checkMethod();
-
-        if (!is_array($checkValues) || empty($checkValues)) {
-            $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
-            \Helper::throwException($message);
-        }
-
-        return $checkValues;
-    }
-
 
     /**
      * @param string             $formLocatorName

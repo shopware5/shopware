@@ -8,6 +8,14 @@ require_once 'SubContext.php';
 class ShopwareContext extends SubContext
 {
     /**
+     * @When /^I search for "(?P<searchTerm>[^"]*)"$/
+     */
+    public function iSearchFor($searchTerm)
+    {
+        $this->getPage('Homepage')->searchFor($searchTerm);
+    }
+
+    /**
      * @When /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
      */
     public function iReceivedTheSearchResultsFor($searchTerm)
@@ -20,9 +28,40 @@ class ShopwareContext extends SubContext
      */
     public function theComparisonShouldLookLikeThis(TableNode $articles)
     {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\CompareColumn $element */
+        $element = $this->getElement('CompareColumn');
+        $element->setParent($page);
+
         $articles = $articles->getHash();
 
-        $this->getPage('Homepage')->checkComparison($articles);
+        foreach($articles as $article) {
+            foreach($element as $key => $column) {
+                $shopArray = array();
+                $checkArray = array();
+
+                foreach($article as $property => $subCheck) {
+                    $shopValues = Helper::getValuesToCheck($column, $property);
+                    $checkValues = array_fill_keys(array_keys($shopValues), $subCheck);
+
+                    $shopArray[$property] = $shopValues;
+                    $checkArray[$property] = $checkValues;
+                }
+
+                $result = Helper::compareArrays($shopArray, $checkArray);
+
+                if ($result === true) {
+                    break;
+                }
+
+                if ($key >= count($element)-1) {
+                    $message = sprintf('Product "%s" not found in comparision!', $article['name']);
+                    Helper::throwException($message);
+                }
+            }
+        }
     }
 
     /**

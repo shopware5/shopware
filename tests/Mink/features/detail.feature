@@ -41,19 +41,20 @@ Feature: detail page
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
-    @javascript @noResponsive
+
+    @language @javascript @knownFailing
     Scenario: I can change the language
-        Given I am on the detail page for article 159
-        Then  I should see "Strohhut Women mit UV Schutz"
+        Given I am on the detail page for article 229
+        Then  I should see "Magnete London"
 
         When  I select "English" from "__shop"
-        Then  I should see "Hat Women with UV protection"
+        Then  I should see "Magnets London"
 
         When  I go to previous article
-        Then  I should see "Sunglass Big Eyes"
+        Then  I should see "Deco pillow Bird"
 
         When  I select "Deutsch" from "__shop"
-        Then  I should see "Sonnenbrille Big Eyes"
+        Then  I should see "Dekokissen Vogel"
 
     @captchaInactive
     Scenario: I can write an evaluation
