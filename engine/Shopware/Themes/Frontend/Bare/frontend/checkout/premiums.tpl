@@ -62,22 +62,28 @@
                                                     <form action="{url action='addPremium' sTargetAction=$sTargetAction}" method="post" id="sAddPremiumForm{$key}" name="sAddPremiumForm{$key}">
                                                         {block name='frontend_checkout_premium_select_article'}
                                                             {if $premium.sVariants && $premium.sVariants|@count > 1}
-                                                                <select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
-                                                                    <option value="">{s name="PremiumInfoSelect"}{/s}</option>
-                                                                    {foreach from=$premium.sVariants item=variant}
-                                                                        <option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
-                                                                    {/foreach}
-                                                                </select>
+                                                                <div class="premium--variant">
+																	<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
+																		<option value="">{s name="PremiumInfoSelect"}{/s}</option>
+																		{foreach from=$premium.sVariants item=variant}
+																			<option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
+																		{/foreach}
+																	</select>
+																	{block name='frontend_checkout_premium_info_button_small'}
+																		<button class="premium--button btn is--primary is--align-center" type="submit">
+																			<i class="icon--arrow-right is--large"></i>
+																		</button>
+																	{/block}
+																</div>
                                                             {else}
                                                                 <input type="hidden" name="sAddPremium" value="{$premium.sArticle.ordernumber}"/>
+																{block name='frontend_checkout_premium_info_button'}
+																	<button class="btn is--primary is--align-center is--icon-right" type="submit">
+																		{s name='PremiumActionAdd'}{/s}
+																		<i class="icon--arrow-right"></i>
+																	</button>
+																{/block}
                                                             {/if}
-                                                        {/block}
-
-                                                        {block name='frontend_checkout_premium_info_button'}
-                                                            <button class="btn is--primary is--align-center is--icon-right" type="submit">
-                                                                {s name='PremiumActionAdd'}{/s}
-                                                                <i class="icon--arrow-right"></i>
-                                                            </button>
                                                         {/block}
                                                     </form>
                                                 {/block}
