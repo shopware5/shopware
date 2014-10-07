@@ -209,8 +209,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * @return { Boolean|void }
      */
     onSaveArticle: function(win, article, options) {
-        var me = this, priceStore, lastFilter, message, mainWindow = me.getMainWindow(),
-            form = me.getDetailForm();
+        var me = this, priceStore, lastFilter,
+            mainWindow = me.getMainWindow(),
+            form;
+
+        if (Ext.isEmpty(win)) {
+            mainWindow = me.getMainWindow();
+        } else {
+            mainWindow = win;
+        }
+
+        form = mainWindow.detailForm;
 
         //first, check if the detail form panel is valid, otherwise return.
         if ( !form.getForm().isValid() ) {

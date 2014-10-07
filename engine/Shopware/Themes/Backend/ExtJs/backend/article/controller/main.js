@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         var tabPanel = me.mainWindow.createMainTabPanel();
         me.mainWindow.insert(0, tabPanel);
 
-        // Place the module to the right of the visbile screen real estate...
+        // Place the module to the right of the visible screen real estate...
         if(me.subApplication.params && me.subApplication.params.hasOwnProperty('splitViewMode')) {
             me.mainWindow.setPosition(Ext.Element.getViewportWidth() / 2, 0);
             me.mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
