@@ -52,36 +52,32 @@ Feature: Show Listing
             | parameter | value |
             | sPerPage  | 12    |
             | sSort     | 1     |
-        Then I should see "Kundengruppen Brutto / Nettopreise"
+        Then  I should see "Kundengruppen Brutto / Nettopreise"
 
-        When  I select "Beliebtheit" from "sSort"
-        Then  I should see the article "ESD Download Artikel" in listing
-        But  I should not see the article "Kundengruppen Brutto / Nettopreise" in listing
-
-        When  I select "Niedrigster Preis" from "sSort"
+        When  I select "Niedrigster Preis" from "o"
         Then  I should see the article "Fliegenklatsche lila" in listing
-        But   I should not see the article "ESD Download Artikel" in listing
+        But   I should not see the article "Kundengruppen Brutto / Nettopreise" in listing
 
-        When  I select "Höchster Preis" from "sSort"
+        When  I select "Höchster Preis" from "o"
         Then  I should see the article "Dart Automat Standgerät" in listing
         But   I should not see the article "Fliegenklatsche lila" in listing
 
-        When  I select "Artikelbezeichnung" from "sSort"
+        When  I select "Artikelbezeichnung" from "o"
         Then  I should see the article "Artikel mit Abverkauf" in listing
         But   I should not see the article "Dart Automat Standgerät" in listing
 
-        When  I select "Erscheinungsdatum" from "sSort"
+        When  I select "Erscheinungsdatum" from "o"
         Then  I should see the article "Kundengruppen Brutto / Nettopreise" in listing
         But   I should not see the article "Artikel mit Abverkauf" in listing
 
-    @perPage @javascript
+    @perPage @noResponsive @javascript
     Scenario Outline: I can change the articles per page
         Given I am on the listing page:
             | parameter | value  |
             | sPerPage  | <from> |
         Then I should see <from> elements of type "ArticleBox"
 
-        When I select "<to>" from "sPerPage"
+        When I select "<to>" from "n"
         Then I should see <to> elements of type "ArticleBox"
 
     Examples:
