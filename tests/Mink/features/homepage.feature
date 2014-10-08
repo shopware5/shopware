@@ -7,7 +7,7 @@ Feature: General functionality
             | sPerPage  | 24    |
             | sSort     | 5     |
 
-        When  I press "<currency>"
+        When  I change the currency to "<currency>"
         Then  the article on position 11 should have this properties:
             | property | value          |
             | price    | <price_config> |
@@ -55,7 +55,7 @@ Feature: General functionality
             | sPerPage  | 24    |
             | sSort     | 5     |
 
-        When  I select "<currency>" from "__currency"
+        When  I change the currency to "<currency>"
         Then  the article on position 11 should have this properties:
             | property | value          |
             | price    | <price_config> |
@@ -99,5 +99,5 @@ Feature: General functionality
 
     Examples:
         | currency | price_config | price_normal | price_base | price_config_detail | sum         | shipping | vat        |
-        | $ USD    | 162,14 $     | 13.625,00 $  | 68,13 $    | 243,21 $            | 13.938,92 $ | 5,31 $   | 2.225,55 $ |
-        | € EUR    | 119,00 €     | 10.000,00 €  | 50,00 €    | 178,50 €            | 10.230,40 € | 3,90 €   | 1.633,42 € |
+        | USD      | 162,14 $     | 13.625,00 $  | 68,13 $    | 243,21 $            | 13.938,92 $ | 5,31 $   | 2.225,55 $ |
+        | EUR      | 119,00 €     | 10.000,00 €  | 50,00 €    | 178,50 €            | 10.230,40 € | 3,90 €   | 1.633,42 € |

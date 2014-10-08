@@ -3,7 +3,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
 
     Background:
         Given I am on the detail page for article 181
-        And   I put the article "1" times into the basket
+        And   I put the article into the basket
         Then  the element "CartPosition" should have the content:
             | position | content         |
             | name     | Reisekoffer Set |
@@ -16,18 +16,15 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
     Scenario Outline: I can finish my order with different payment and delivery methods
         Given I register me:
             | field         | register[personal] | register[billing] |
-            | customer_type | private            |                   |
             | salutation    | mr                 |                   |
             | firstname     | Max                |                   |
             | lastname      | Mustermann         |                   |
             | skipLogin     | 1                  |                   |
             | email         | test@example.de    |                   |
             | phone         | 05555 / 555555     |                   |
-            | company       |                    | Muster GmbH       |
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
-            | country       |                    | Deutschland       |
 
         And   I submit the form "shippingPaymentForm" on page "CheckoutConfirm" with:
             | field     | value            |
@@ -55,18 +52,15 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
     Scenario: I can finish my order with different payment and delivery methods
         Given I register me:
             | field         | register[personal] | register[billing] |
-            | customer_type | private            |                   |
             | salutation    | mr                 |                   |
             | firstname     | Max                |                   |
             | lastname      | Mustermann         |                   |
             | skipLogin     | 1                  |                   |
             | email         | test@example.de    |                   |
             | phone         | 05555 / 555555     |                   |
-            | company       |                    | Muster GmbH       |
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
-            | country       |                    | Deutschland       |
 
         And   I submit the form "shippingPaymentForm" on page "CheckoutConfirm" with:
             | field            | value          |
