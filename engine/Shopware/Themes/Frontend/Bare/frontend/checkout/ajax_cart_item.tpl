@@ -22,19 +22,25 @@
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
         <a class="item--link" href="{if $basketItem.modus != 4}{$basketItem.linkDetails}{else}#{/if}" title="{$basketItem.articlename|escape:"html"}">
-            <span class="item--quantity">{$basketItem.quantity}x</span>
-            <span class="item--name">
-                {if $basketItem.modus == 10}
-                    {s name='AjaxCartInfoBundle' namespace="frontend/checkout/ajax_cart"}{/s}
-                {else}
-                    {if $theme.offcanvasCart}
-                        {$basketItem.articlename}
-                    {else}
-                        {$basketItem.articlename|truncate:28:"...":true}
-                    {/if}
-                {/if}
-            </span>
-            <span class="item--price">{if $basketItem.amount}{$basketItem.amount|currency}{else}{s name="AjaxCartInfoFree" namespace="frontend/checkout/ajax_cart"}{/s}{/if}*</span>
-        </a>
+            {block name="frontend_checkout_ajax_cart_articlename_quantity"}
+				<span class="item--quantity">{$basketItem.quantity}x</span>
+			{/block}
+			{block name="frontend_checkout_ajax_cart_articlename_name"}
+				<span class="item--name">
+					{if $basketItem.modus == 10}
+						{s name='AjaxCartInfoBundle' namespace="frontend/checkout/ajax_cart"}{/s}
+					{else}
+						{if $theme.offcanvasCart}
+							{$basketItem.articlename}
+						{else}
+							{$basketItem.articlename|truncate:28:"...":true}
+						{/if}
+					{/if}
+				</span>
+			{/block}
+			{block name="frontend_checkout_ajax_cart_articlename_price"}
+				<span class="item--price">{if $basketItem.amount}{$basketItem.amount|currency}{else}{s name="AjaxCartInfoFree" namespace="frontend/checkout/ajax_cart"}{/s}{/if}*</span>
+			{/block}
+		</a>
     {/block}
 </div>
