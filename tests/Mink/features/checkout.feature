@@ -30,7 +30,6 @@ Feature: Checkout articles
         When  I follow the link "checkout" of the page "CheckoutCart"
         And   I change the payment method to 3
         Then  I should see "Nachnahme"
-        And   only on "Emotion" template "the cart should contain 1 articles with a value of '37,95 €'"
         And   the total sum should be "41,85 €" when shipping costs are "3,90 €" and VAT is:
             | percent | value  |
             | 19 %    | 6,68 € |
@@ -39,14 +38,12 @@ Feature: Checkout articles
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
-    @shipping @payment
+    @shipping @payment @noResponsive
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
-        Given only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
-        And   I follow the link "changeButton" of the element "CheckoutShipping"
+        Given I follow the link "changeButton" of the element "CheckoutShipping"
         And   I submit the form "shippingForm" on page "Account" with:
             | field   | register[shipping] |
             | country | Schweiz            |
-
 
         Then  the total sum should be "53,02 €" when shipping costs are "21,00 €"
         And   I should not see "MwSt."
@@ -71,9 +68,60 @@ Feature: Checkout articles
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
 
-    @delivery @payment
+    @shipping @payment @noEmotion
+    Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
+        Given I follow the link "checkout" of the page "CheckoutCart"
+        And   I follow the link "changeButton" of the element "CheckoutShipping"
+        And   I submit the form "shippingForm" on page "Account" with:
+            | field   | register[shipping] |
+            | country | Schweiz            |
+
+        Then  the total sum should be "53,02 €" when shipping costs are "21,00 €"
+        And   I should not see "MwSt."
+
+        Given I follow the link "changeButton" of the element "CheckoutShipping"
+        And   I submit the form "shippingForm" on page "Account" with:
+            | field   | register[shipping] |
+            | country | Deutschland        |
+
+        Then  the total sum should be "42,37 €" when shipping costs are "3,90 €" and VAT is:
+            | percent | value  |
+            | 19 %    | 6,76 € |
+
+        Given I change the payment method to 4
+        Then  I should see "Rechnung"
+        And   I should see "Zuschlag für Zahlungsart"
+        Then  the total sum should be "47,37 €" when shipping costs are "3,90 €" and VAT is:
+            | percent | value  |
+            | 19 %    | 7,56 € |
+        And   I should see "AGB und Widerrufsbelehrung"
+
+        When  I proceed to checkout
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+
+    @delivery @payment @noResponsive
     Scenario: I can change the delivery to Express and pay via debit
-        Given only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
+        Given I change the payment method to 2:
+            | field             | value          |
+            | sDebitAccount     | 123456789      |
+            | sDebitBankcode    | 1234567        |
+            | sDebitBankName    | Shopware Bank  |
+            | sDebitBankHolder  | Max Mustermann |
+        And   I change the shipping method to 14
+
+        Then  I should see "Lastschrift"
+        And   I should see "Abschlag für Zahlungsart"
+        Then  the total sum should be "44,52 €" when shipping costs are "9,90 €" and VAT is:
+            | percent | value  |
+            | 19 %    | 7,10 € |
+        And   I should see "AGB und Widerrufsbelehrung"
+
+        When  I proceed to checkout
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+
+    @delivery @payment @noEmotion
+    Scenario: I can change the delivery to Express and pay via debit
+        Given I follow the link "checkout" of the page "CheckoutCart"
 
         When  I change the payment method to 2:
             | field             | value          |
