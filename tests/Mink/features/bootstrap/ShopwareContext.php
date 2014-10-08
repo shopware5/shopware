@@ -24,6 +24,14 @@ class ShopwareContext extends SubContext
     }
 
     /**
+     * @When /^I change the currency to "(?P<currency>[^"]*)"$/
+     */
+    public function iChangeTheCurrencyTo($currency)
+    {
+        $this->getPage('Homepage')->changeCurrency($currency);
+    }
+    
+    /**
      * @Then /^The comparison should look like this:$/
      */
     public function theComparisonShouldLookLikeThis(TableNode $articles)

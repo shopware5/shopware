@@ -143,12 +143,12 @@ Feature: Checkout articles
 
     @currency @payment @noResponsive
     Scenario: I can change the currency and pay via prepayment
-        Given I press "USD"
+        Given I change the currency to "USD"
         Then  the total sum should be "57,72 $" when shipping costs are "5,31 $" and VAT is:
             | percent | value  |
             | 19 %    | 9,21 $ |
 
-        When  I press "EUR"
+        When  I change the currency to "EUR"
         Then  the total sum should be "42,37 €" when shipping costs are "3,90 €" and VAT is:
             | percent | value  |
             | 19 %    | 6,76 € |

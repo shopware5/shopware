@@ -32,8 +32,6 @@ class Homepage extends Page
         'searchButton'            => array('de' => 'Suchen',  'en' => 'Search')
     );
 
-    protected $srcAttribute = 'src';
-
     /**
      * Searches the given term in the shop
      * @param string $searchTerm
@@ -68,87 +66,13 @@ class Homepage extends Page
     }
 
     /**
-     * Compares the comparison list with the given list of articles
-     * @param  array                                       $articles
-     * @throws \Behat\Mink\Exception\ResponseTextException
+     * Changes the currency
+     * @param string $currency
+     * @throws \Behat\Mink\Exception\ElementNotFoundException
      */
-    public function checkComparison($articles)
+    public function changeCurrency($currency)
     {
-        //TODO: REFAKTORIEREN!!! AUCH FÜR RESPONSIVE!!!
-
-
-        $result = \Helper::countElements($this, 'div.compare_article', count($articles));
-
-        if ($result !== true) {
-            $message = sprintf('There are %d articles in the comparison (should be %d)', $result, count($articles));
-            \Helper::throwException(array($message));
-        }
-
-        $articlesInComparison = $this->findAll('css', 'div.compare_article');
-
-        foreach ($articles as $articleKey => $article) {
-            foreach ($articlesInComparison as $articleInComparisonKey => $articleInComparison) {
-
-                $locator = sprintf('div.compare_article:nth-of-type(%d) ', $articleInComparisonKey + 2);
-
-                $elements = array(
-                    'a-picture' => $this->find('css', $locator . 'div.picture a'),
-                    'img' => $this->find('css', $locator . 'div.picture img'),
-                    'h3-a-name' => $this->find('css', $locator . 'div.name h3 a'),
-                    'a-name' => $this->find('css', $locator . 'div.name a.button-right'),
-                    'div-votes' => $this->find('css', $locator . 'div.votes div.star'),
-                    'p-desc' => $this->find('css', $locator . 'div.desc'),
-                    'strong-price' => $this->find('css', $locator . 'div.price strong')
-                );
-
-                $check = array();
-
-                if (!empty($article['image'])) {
-                    $check[] = array($elements['img']->getAttribute('src'), $article['image']);
-                }
-
-                if (!empty($article['name'])) {
-                    $check[] = array($elements['a-picture']->getAttribute('title'), $article['name']);
-                    $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
-                    $check[] = array($elements['h3-a-name']->getAttribute('title'), $article['name']);
-                    $check[] = array($elements['h3-a-name']->getText(), $article['name']);
-                    $check[] = array($elements['a-name']->getAttribute('title'), $article['name']);
-                }
-
-                if (!empty($article['ranking'])) {
-                    $check[] = array($elements['div-votes']->getAttribute('class'), $article['ranking']);
-                }
-
-                if (!empty($article['text'])) {
-                    $check[] = array($elements['p-desc']->getText(), $article['text']);
-                }
-
-                if (!empty($article['price'])) {
-                    $check[] = \Helper::toFloat(array($elements['strong-price']->getText(), $article['price']));
-                }
-
-                if (!empty($article['link'])) {
-                    $check[] = array($elements['a-picture']->getAttribute('href'), $article['link']);
-                    $check[] = array($elements['h3-a-name']->getAttribute('href'), $article['link']);
-                    $check[] = array($elements['a-name']->getAttribute('href'), $article['link']);
-                }
-
-                $result = \Helper::checkArray($check);
-
-                if ($result === true) {
-                    unset($articlesInComparison[$articleInComparisonKey]);
-                    break;
-                }
-
-                if ($articleInComparison == end($articlesInComparison)) {
-                    $message = sprintf(
-                        'The article on position %d was not found!',
-                        $articleKey + 1
-                    );
-                    \Helper::throwException($message);
-                }
-            }
-        }
+        $this->pressButton($currency);
     }
 
     /**

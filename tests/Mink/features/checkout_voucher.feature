@@ -6,7 +6,7 @@ Feature: Checkout articles with voucher
         Given I am on the detail page for article 137
         Then  I should see "Fahrerbrille Chronos"
 
-        When  I put the article "1" times into the basket
+        When  I put the article into the basket
         Then  the page "CheckoutCart" should have the content:
             | position | content |
             | totalSum | 61,89 € |
@@ -67,7 +67,7 @@ Feature: Checkout articles with voucher
         Given I am on the detail page for article 137
         Then  I should see "Fahrerbrille Chronos"
 
-        When  I put the article "1" times into the basket
+        When  I put the article into the basket
         Then  the page "CheckoutCart" should have the content:
             | position | content |
             | totalSum | 61,89 € |
@@ -130,7 +130,7 @@ Feature: Checkout articles with voucher
         When  I am on the detail page for article 39
         Then  I should see "Mehrzwecknudeln"
 
-        When  I put the article "1" times into the basket
+        When  I put the article into the basket
         Then  the total sum should be "15,38 €" when shipping costs are "3,90 €" and VAT is:
             | percent | value  |
             | 7 %     | 1,01 € |
