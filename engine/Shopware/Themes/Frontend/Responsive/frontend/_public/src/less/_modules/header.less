@@ -71,7 +71,7 @@
     }
 
     .entry--link {
-        .unitize-padding(0, 10);
+        //.unitize-padding(0, 10);
         .unitize(45, 16, line-height);
         display: block;
         text-align: center;
@@ -151,12 +151,12 @@
 
     .icon--search {
         .unitize(22, 16, top);
-        .unitize(22, 16, left);
+        .unitize(22, 16, right);
         position: absolute;
     }
 
     .main-search--field {
-        .unitize-padding(10, 10, 10, 38, 16);
+        .unitize-padding(10, 38, 10, 10, 16);
         width: 100%;
     }
     .main-search--button { display: none; }
@@ -468,7 +468,7 @@
         }
         .navigation--entry {
             .white-gradient();
-            .unitize-margin(0, 10, 0, 10, 16);
+            .unitize-margin(0, 10, 0, 0, 16);
             .border-radius();
             border: 0 none;
             width: auto;
@@ -488,7 +488,7 @@
         }
 
         .entry--link {
-            .unitize-padding(12, 20, 12, 20, 16);
+            //.unitize-padding(12, 20, 12, 20, 16);
             .unitize(18, 16, line-height);
             font-weight: normal;
         }
@@ -543,8 +543,8 @@
             position: relative;
 
             .icon--search {
-                .unitize(14, 16, top);
-                .unitize(14, 16, left);
+                .unitize(10, 16, top);
+                .unitize(14, 16, right);
             }
 
             .entry--trigger { display: none }
