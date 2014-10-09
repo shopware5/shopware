@@ -760,7 +760,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             title: me.snippets.variant.configurator,
             article: me.article,
             dependencyStore: me.dependencyStore,
-            priceSurchargeStore: me.priceSurchargeStore,
+            priceVariationStore: me.priceVariationStore,
             name: 'configurator',
             configuratorGroupStore: me.configuratorGroupStore,
             articleConfiguratorSet: me.articleConfiguratorSet
@@ -985,7 +985,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             supplierStore: me.supplierStore,
             templateStore: me.templateStore,
             dependencyStore: me.dependencyStore,
-            priceSurchargeStore: me.priceSurchargeStore,
+            priceVariationStore: me.priceVariationStore,
             unitStore: me.unitStore,
             propertyStore: me.propertyStore,
             priceGroupStore: me.priceGroupStore,

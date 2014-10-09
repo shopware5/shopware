@@ -4641,13 +4641,13 @@ INSERT INTO `s_article_configurator_option_relations` (`id`, `article_id`, `opti
 (900, 780, 13),
 (901, 781, 38);
 
-TRUNCATE TABLE `s_article_configurator_price_surcharges`;
-INSERT INTO `s_article_configurator_price_surcharges` (`id`, `configurator_set_id`, `parent_id`, `child_id`, `surcharge`) VALUES
-(1, 28, 81, NULL, '25.000'),
-(2, 28, 83, NULL, '35.000'),
-(3, 28, 84, NULL, '45.000'),
-(4, 28, 85, NULL, '50.000'),
-(5, 28, 86, NULL, '100.000');
+TRUNCATE TABLE `s_article_configurator_price_variations`;
+INSERT INTO `s_article_configurator_price_variations` (`id`, `configurator_set_id`, `variation`, `options` ) VALUES
+(1, 28, '25.000', '|81|'),
+(2, 28, '35.000', '|83|'),
+(3, 28, '45.000', '|84|'),
+(4, 28, '50.000', '|85|'),
+(5, 28, '100.000', '|86|');
 
 TRUNCATE TABLE `s_article_configurator_sets`;
 INSERT INTO `s_article_configurator_sets` (`id`, `name`, `public`, `type`) VALUES

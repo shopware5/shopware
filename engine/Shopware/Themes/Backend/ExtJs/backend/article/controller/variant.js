@@ -69,11 +69,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             setSave: '{s name=variant/success/set_saved}The configurator set [0] saved{/s}',
             setLoad: '{s name=variant/success/set_loaded}The configurator set [0] loaded{/s}',
             dependencySave: '{s name=variant/success/dependency_saved}The configurator dependency saved{/s}',
-            surchargeSave: '{s name=variant/success/surcharge_saved}The configurator price surcharge saved{/s}',
             groupRemove: '{s name=variant/success/group_removed}The configurator group [0] removed{/s}',
             optionRemove: '{s name=variant/success/option_removed}The configurator option [0] removed{/s}',
             dependencyRemove: '{s name=variant/success/dependency_removed}The configurator dependency [0] removed{/s}',
-            surchargeRemove: '{s name=variant/success/surcharge_removed}The configurator price surcharge removed{/s}',
             variantRemove: '{s name=variant/success/variant_removed}The article variant [0] removed{/s}',
             variantsRemove: '{s name=variant/success/variants_removed}The article variants removed{/s}'
         },
@@ -89,13 +87,11 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             setSave: '{s name=variant/failure/set_saved}An error occurred while saving the configurator set [0]:{/s}',
             setLoad: '{s name=variant/failure/set_loaded}An error occurred while loading the configurator set [0]:{/s}',
             dependencySave: '{s name=variant/failure/dependency_saved}An error occurred while saving the configurator dependency:{/s}',
-            surchargeSave: '{s name=variant/failure/surcharge_saved}An error occurred while saving the configurator price surcharge:{/s}',
             groupRemove: '{s name=variant/failure/group_removed}An error occurred while removing the configurator group [0]:{/s}',
             groupBounded: '{s name=variant/failure/group_bounded}You are trying to delete an active, used configurator group. This group is used by the following articles:{/s}',
             optionRemove: '{s name=variant/failure/option_removed}An error occurred while removing the configurator option [0]:{/s}',
             optionBounded: '{s name=variant/failure/option_bounded}You are trying to delete an active, used configurator option. This option is used by the following articles:{/s}',
             dependencyRemove: '{s name=variant/failure/dependency_removed}An error occurred while removing the configurator dependency:{/s}',
-            surchargeRemove: '{s name=variant/failure/surcharge_removed}An error occurred while removing the configurator price surcharge:{/s}',
             articleNotFoundViolation: "{s name=variant/failure/article_not_found_violation}The article and first variant couldn't be determined. Please reload the detail page.{/s}",
             variantRemove: '{s name=variant/failure/variant_removed}An error occurred while removing the article variant [0]:{/s}',
             variantsRemove: '{s name=variant/failure/variants_removed}The article variants removed{/s}',
@@ -112,8 +108,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             loadSetWarning: "{s name=variant/message/load_set_warning}The article already contains generated variants. If you load the selected set, please note that all generated variants will be deleted. Are you sure you want to continue the loading of the variant set?{/s}",
             groupRemove: '{s name=variant/message/remove_group}Are you sure, you want to delete the selected configurator group: [0]?{/s}',
             dependencyRemove: '{s name=variant/message/dependency_removed}Are you sure, you want to delete the selected configurator dependency?{/s}',
-            surchargeRemove: '{s name=variant/message/surcharge_removed}Are you sure, you want to delete the selected configurator price surcharge{/s}',
-            optionRemove: '{s name=variant/message/remove_option}Are you sure, you want to delete the selected configurator option: [0]?{/s}',
+            optionRemove: '{s name=variant/message/remove_option}Are you sure you want to delete the selected configurator option: [0]?{/s}',
             generateVariants: '{s name=variant/message/generate_variants}The article already contains generated variants. Please note that all generated variants will be overwritten. Are you sure you want to continue the variant generation?{/s}',
             variantsRemove: '{s name=variant/message/variants_removed}Are you sure, you want to delete all selected article variants?{/s}',
             variantRemove: '{s name=variant/message/variant_removed}Are you sure, you want to delete the article variant: [0]?{/s}'
@@ -191,16 +186,13 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 editGroup: me.onEditGroup,
                 editOption: me.onEditOption,
                 defineDependency: me.onDefineDependency,
-                defineConfiguratorTemplate: me.onDefineConfiguratorTemplate,
-                definePriceSurcharge: me.onDefinePriceSurcharge
+                defineConfiguratorTemplate: me.onDefineConfiguratorTemplate
             },
             'article-configurator-dependency-window': {
                 leftGroupChanged: me.onLeftGroupChanged,
                 rightGroupChanged: me.onRightGroupChanged,
                 saveDependency: me.onSaveDependency,
-                removeDependency: me.onRemoveDependency,
-                savePriceSurcharge: me.onSavePriceSurcharge,
-                removePriceSurcharge: me.onRemovePriceSurcharge
+                removeDependency: me.onRemoveDependency
             },
             'article-variant-detail-window': {
                 saveVariant: me.onSaveVariant,
@@ -1532,7 +1524,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
 
     /*********************************************************************************************
-     *******************EVENTS OF THE DEPENDENCY AND PRICE SURCHARGE COMPONENT********************
+     *******************EVENTS OF THE DEPENDENCY AND PRICE VARIATION COMPONENT********************
      *********************************************************************************************/
 
     /**
@@ -1570,102 +1562,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 rightOptionCombo.setValue(null);
                 rightOptionCombo.bindStore(group.getConfiguratorOptions());
             }
-        }
-    },
-
-    /**
-     * Event will be fired when the user clicks the save button.
-     * @event
-     */
-    onSavePriceSurcharge: function(row, windowStore) {
-        var me = this,
-            record = row.record,
-            deleteButton, createNewRow = true,
-            variantListing = me.getVariantListing(),
-            newRow, fieldSet = me.getDependencyFieldSet(),
-            dependencyWindow = me.getDependencyWindow();
-
-        if (!record) {
-            record = Ext.create('Shopware.apps.Article.model.PriceSurcharge');
-        }
-        if (!row.getForm().isValid()) {
-            return;
-        }
-        if (record.get('id') > 0) {
-            createNewRow = false;
-        } else {
-            windowStore.add(record);
-        }
-        row.getForm().updateRecord(record);
-        record.set('configuratorSetId', me.subApplication.article.get('configuratorSetId'));
-        row.record = record;
-        var store = Ext.create('Shopware.apps.Article.store.Surcharge');
-
-        store.add(record);
-        store.sync({
-            success: function(savedRecord, operation) {
-                var id = savedRecord.operations[0].resultSet.records[0].data.id;
-                record.set('id', id);
-
-                Shopware.Notification.createGrowlMessage(me.snippets.success.title, me.snippets.success.surchargeSave, me.snippets.growlMessage);
-                deleteButton = row.down('button[name=delete-button]');
-                if (deleteButton) {
-                    deleteButton.setDisabled(false);
-                }
-                if (dependencyWindow && createNewRow) {
-                    newRow = dependencyWindow.createContainerRow(null, dependencyWindow.snippets.priceSurcharge);
-                    if (newRow && fieldSet) {
-                        fieldSet.add(newRow);
-                    }
-                }
-            },
-            failure: function(record, operation) {
-                var rawData = record.getProxy().getReader().rawData,
-                    message = rawData.message;
-
-                if (Ext.isString(message) && message.length > 0) {
-                    message = me.snippets.failure.surchargeSave + '<br>' + message;
-                } else {
-                    message = me.snippets.failure.surchargeSave + '<br>' + me.snippets.failure.noMoreInformation;
-                }
-				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
-            }
-        });
-    },
-
-    /**
-     * Event will be fired when the user clicks the delete button.
-     * @event
-     */
-    onRemovePriceSurcharge: function(row, store) {
-        var me = this,
-            fieldSet = me.getDependencyFieldSet();
-
-        if (fieldSet && row && row.record) {
-            // we do not just delete - we are polite and ask the user if he is sure.
-            Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.messages.surchargeRemove, function (response) {
-                if ( response !== 'yes' ) {
-                    return;
-                }
-                row.record.destroy({
-                    success: function(record, operation) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.success.title, me.snippets.success.surchargeRemove, me.snippets.growlMessage);
-                        fieldSet.remove(row);
-                        store.remove(row.record);
-                    },
-                    failure: function(record, operation) {
-                        var rawData = record.getProxy().getReader().rawData,
-                            message = rawData.message;
-
-                        if (Ext.isString(message) && message.length > 0) {
-                            message = me.snippets.failure.surchargeRemove + '<br>' + message;
-                        } else {
-                            message = me.snippets.failure.surchargeRemove + '<br>' + me.snippets.failure.noMoreInformation;
-                        }
-        				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
-                    }
-                });
-            });
         }
     },
 
@@ -1775,26 +1671,9 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         var me = this,
             groupListing = me.getConfiguratorGroupListing();
 
-        var win = me.getView('variant.configurator.Dependency').create({
+        me.getView('variant.configurator.Dependency').create({
             configuratorGroupStore: groupListing.getStore(),
-            store: store,
-            mode: 'dependency'
-        });
-    },
-
-    /**
-     * Event listener function which fired when the user want define configurator dependencies.
-     * The event will be fired over the toolbar button in the configurator tab.
-     */
-    onDefinePriceSurcharge: function(store) {
-        var me = this,
-            variantListing = me.getVariantListing(),
-            groupListing = me.getConfiguratorGroupListing();
-
-        var win = me.getView('variant.configurator.Dependency').create({
-            configuratorGroupStore: groupListing.getStore(),
-            store: store,
-            mode: 'priceSurcharge'
+            store: store
         });
     },
 

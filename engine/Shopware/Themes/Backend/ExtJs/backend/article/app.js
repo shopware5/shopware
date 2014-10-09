@@ -97,6 +97,8 @@ Ext.define('Shopware.apps.Article', {
         'variant.configurator.OptionEdit',
         'variant.configurator.Mapping',
         'variant.configurator.Template',
+        'variant.configurator.PriceVariation',
+        'variant.configurator.PriceVariationRule',
         'esd.List',
         'esd.Detail',
         'esd.Serials',
@@ -120,7 +122,7 @@ Ext.define('Shopware.apps.Article', {
         'EsdFile',
         'Statistic',
         'Serial',
-        'Surcharge',
+        'Variation',
         'Dependency',
         'ConfiguratorSet',
         'MediaMapping',
@@ -166,7 +168,7 @@ Ext.define('Shopware.apps.Article', {
         'ConfiguratorOption',
         'ConfiguratorTemplate',
         'Dependency',
-        'PriceSurcharge',
+        'PriceVariation',
         'Field',
         'MediaMapping',
         'MediaMappingRule',
@@ -177,7 +179,7 @@ Ext.define('Shopware.apps.Article', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'Esd', 'Statistic' ]
+    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic' ]
 });
 //{/block}
 
