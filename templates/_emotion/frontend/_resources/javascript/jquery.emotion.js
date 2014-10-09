@@ -307,88 +307,121 @@
  */
 ;(function($, window, undefined) {
      /*global jQuery:false */
-    "use strict";
+    'use strict';
 
-    var pluginName = 'ajaxProductNavigation',
-        defaults = {
-            arrowAnimSpeed: 500
-        },
-        listingSelectors = [
-            '.artbox .title',
-            '.artbox .artbox_thumb',
-            '.artbox .actions .more'
-        ];
+    var pluginName = 'ajaxProductNavigation';
 
-    var isNumeric = function(obj) {
-        return !$.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
-    };
-
-    var parseQueryString = function(url) {
-        var qparams = {},
-            parts = (url || '').split('?'),
-            qparts, qpart,
-            i=0;
-
-        if(parts.length <= 1){
-            return qparams;
+    $.extend($.easing, {
+        easeOutBounce: function (x, t, b, c, d) {
+            if ((t /= d) < (1 / 2.75)) {
+                return c * (7.5625 * t * t) + b;
+            } else if (t < (2 / 2.75)) {
+                return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+            } else if (t < (2.5 / 2.75)) {
+                return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+            } else {
+                return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+            }
         }
-
-        qparts = parts[1].split('&');
-        for (i in qparts) {
-            var key, value;
-
-            qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0])
-            value = decodeURIComponent(qpart[1] || '');
-            qparams[key] = (isNumeric(value) ? parseFloat(value, 10) : value);
-        }
-
-        return qparams;
-    };
+    });
 
     /**
      * Plugin constructor which merges the default settings
      * with the user configuration and sets up the DOM bridge.
      *
-     * @param { HTMLElement } element
-     * @param { Object } options
-     * @returns { Void }
+     * @param {HTMLElement} element
+     * @param {Object} options
      * @constructor
      */
-    function Plugin(element) {
+    function Plugin (element) {
         var me = this;
 
         me.$el = $(element);
         me._name = pluginName;
+        me.opts = $.extend({}, me.defaults);
 
         me.init();
     }
 
-    Plugin.prototype.init = function() {
-        var me = this;
+    Plugin.prototype.defaults = {
 
-        me._mode = (function() {
-            if(me.$el.hasClass('ctl_listing')) {
-                return 'listing';
-            } else if(me.$el.hasClass('ctl_detail')) {
-                return 'detail';
-            }
-            return undefined;
-        })();
+        /**
+         * Animation speed in milliseconds of the arrow fading.
+         *
+         * @type {Number}
+         */
+        arrowAnimSpeed: 500,
 
-        if(!me._mode) {
-            return false;
+        /**
+         * Selector for the product box in the listing.
+         *
+         * @type {String}
+         */
+        productBoxSelector: '.artbox',
+
+        /**
+         * Selector for the product details.
+         * This element should have data attributes of the ordernumber and product navigation link.
+         *
+         * @type {String}
+         */
+        productDetailsSelector: '#detail',
+
+        /**
+         * Selector for the previous button.
+         *
+         * @type {String}
+         */
+        prevLinkSelector: 'a.article_back',
+
+        /**
+         * Selector for the next button.
+         *
+         * @type {String}
+         */
+        nextLinkSelector: 'a.article_next',
+
+        /**
+         * Selector for the breadcrumb back button.
+         *
+         * @type {String}
+         */
+        breadcrumbButtonSelector: 'a.article_back',
+
+        /**
+         * Selectors of product box childs in the listing.
+         *
+         * @type {Array}
+         */
+        listingSelectors: [
+            '.artbox .title',
+            '.artbox .artbox_thumb',
+            '.artbox .actions .more'
+        ]
+    };
+
+    Plugin.prototype.init = function () {
+        var me = this,
+            $el = me.$el,
+            isListing = $el.hasClass('ctl_listing'),
+            isDetail = $el.hasClass('ctl_detail'),
+            opts = me.opts;
+
+        if (!(isListing || isDetail)) {
+            return;
         }
 
-        me.registerCustomEasing();
+        me.urlParams = me.parseQueryString(location.href);
 
-        if(me._mode === 'listing') {
-            me.registerListingEventListeners(listingSelectors);
+        me.$prevButton = $el.find(opts.prevLinkSelector);
+        me.$nextButton = $el.find(opts.nextLinkSelector);
+        me.$backButton = $el.find(opts.breadcrumbButtonSelector);
+        me.$productDetails = $el.find(opts.productDetailsSelector);
+
+        if (isListing) {
+            me.registerListingEventListeners();
         } else {
-            var params = parseQueryString(window.location.href);
-
-            // ...the url wasn't called through the listing
-            if(!params.hasOwnProperty('c')) {
+            if (!me.urlParams.hasOwnProperty('c') && !me.$productDetails.attr('data-category-id')) {
                 me.clearCurrentProductState();
                 return;
             }
@@ -397,46 +430,58 @@
         }
     };
 
-    Plugin.prototype.registerCustomEasing = function() {
-        var me = this;
+    Plugin.prototype.parseQueryString = function (url) {
+        var params = {},
+            urlParts = (url + '').split('?'),
+            queryParts,
+            part,
+            key,
+            value,
+            p;
 
-        $.extend($.easing, {
-            easeOutBounce: function (x, t, b, c, d) {
-                if ((t/=d) < (1/2.75)) {
-                    return c*(7.5625*t*t) + b;
-                } else if (t < (2/2.75)) {
-                    return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-                } else if (t < (2.5/2.75)) {
-                    return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-                } else {
-                    return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
-                }
+        if (urlParts.length < 2) {
+            return params;
+        }
+
+        queryParts = urlParts[1].split('&');
+
+        for (p in queryParts) {
+            if (!queryParts.hasOwnProperty(p)) {
+                continue;
             }
-        });
 
-        return me;
+            part = queryParts[p].split('=');
+
+            key = decodeURIComponent(part[0]);
+            value = decodeURIComponent(part[1] || '');
+
+            params[key] = $.isNumeric(value) ? parseFloat(value) : value;
+        }
+
+        return params;
     };
 
-    Plugin.prototype.registerListingEventListeners = function(selectors) {
-        var me = this;
-
-        selectors = selectors.join(', ');
-        me.$el.find(selectors).bind('click.' + pluginName, $.proxy(me.onProductLinkInListing, me));
-    };
-
-    Plugin.prototype.onProductLinkInListing = function(event) {
+    Plugin.prototype.registerListingEventListeners = function () {
         var me = this,
-            params = parseQueryString(window.location.href),
+            selectors = me.opts.listingSelectors.join(', '),
+            $listingEls = me.$el.find(selectors);
+
+        $listingEls.on('click', $.proxy(me.onClickProductInListing, me));
+    };
+
+    Plugin.prototype.onClickProductInListing = function(event) {
+        var me = this,
+            params = me.urlParams,
             $target = $(event.target),
-            $parent = $target.parents('.artbox'),
+            $parent = $target.parents(me.opts.productBoxSelector),
             categoryId = parseInt($parent.attr('data-category-id'), 10),
             orderNumber = $parent.attr('data-ordernumber');
 
-        if(categoryId && isNumeric(categoryId) && !isNaN(categoryId)) {
+        if ($.isNumeric(categoryId)) {
             params.categoryId = categoryId;
         }
 
-        if(orderNumber && orderNumber.length) {
+        if (orderNumber && orderNumber.length) {
             params.ordernumber = orderNumber;
         }
 
@@ -505,44 +550,42 @@
             'data': params,
             'method': 'GET',
             'dataType': 'json',
-            'success': $.proxy(me.setProductNavigation, me)
-        })
+            'success': $.proxy(me.onProductNavigationLoaded, me)
+        });
     };
 
-    Plugin.prototype.setProductNavigation = function(response) {
+    Plugin.prototype.onProductNavigationLoaded = function (response) {
         var me = this,
-            prevLink = me.$el.find('a.article_back'),
-            nextLink = me.$el.find('a.article_next');
+            opts = me.opts,
+            $prevBtn = me.$prevButton,
+            $nextBtn = me.$nextButton,
+            prevProduct = response.previousProduct,
+            nextProduct = response.nextProduct,
+            animSpeed = opts.arrowFadeSpeed;
 
-        if(response.hasOwnProperty('previousProduct')) {
-            var previousProduct = response.previousProduct;
-
-            prevLink
-                .attr('href', previousProduct.href)
-                .attr('title', previousProduct.name)
+        if (typeof prevProduct === 'object') {
+            $prevBtn
+                .attr('href', prevProduct.href)
+                .attr('title', prevProduct.name)
                 .parents('div.article_back')
                 .animate({
                     'left': 5
-                }, defaults.arrowAnimSpeed, 'easeOutBounce');
+                }, animSpeed, 'easeOutBounce');
         } else {
-            prevLink.remove();
+            $prevBtn.remove();
         }
 
-        if(response.hasOwnProperty('nextProduct')) {
-            var nextProduct = response.nextProduct;
-
-            nextLink
+        if (typeof nextProduct === 'object') {
+            $nextBtn
                 .attr('href', nextProduct.href)
                 .attr('title', nextProduct.name)
                 .parents('div.article_next')
                 .animate({
                     'right': 5
-                }, defaults.arrowAnimSpeed, 'easeOutBounce');
+                }, animSpeed, 'easeOutBounce');
         } else {
-            nextLink.remove();
+            $nextBtn.remove();
         }
-
-        return true;
     };
 
     $.fn[pluginName] = function () {
