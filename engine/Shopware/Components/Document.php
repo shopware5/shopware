@@ -297,8 +297,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         // and replace the default payment/dispatch text
         $dispatchId = $this->_order->order->dispatchID;
         $paymentId  = $this->_order->order->paymentID;
-        $translationPayment = $this->readTranslationWithFallback($this->_order->order->language, 'config_payment', 1);
-        $translationDispatch = $this->readTranslationWithFallback($this->_order->order->language, 'config_dispatch', 1);
+        $translationPayment = $this->readTranslationWithFallback($this->_order->order->language, 'config_payment');
+        $translationDispatch = $this->readTranslationWithFallback($this->_order->order->language, 'config_dispatch');
 
         if (isset($translationPayment[$paymentId])) {
             if (isset($translationPayment[$paymentId]['description'])) {
@@ -350,17 +350,16 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @param $languageId
      * @param $type
-     * @param $key
      * @return array
      */
-    protected function readTranslationWithFallback($languageId, $type, $key)
+    protected function readTranslationWithFallback($languageId, $type)
     {
         $fallbackLanguageId = Shopware()->Db()->fetchOne(
             "SELECT fallback_id FROM s_core_shops WHERE id = ?",
             array($languageId)
         );
 
-        return $this->translationComponent->readWithFallback($languageId, $fallbackLanguageId, $type, $key);
+        return $this->translationComponent->readBatchWithFallback($languageId, $fallbackLanguageId, $type);
     }
 
     /**
