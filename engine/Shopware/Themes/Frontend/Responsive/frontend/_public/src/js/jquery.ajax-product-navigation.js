@@ -80,7 +80,7 @@
              *
              * @type {String}
              */
-            breadcrumbButtonSelector: '.breadcrumb--button .btn',
+            breadcrumbButtonSelector: '.content--breadcrumb .breadcrumb--button',
 
             /**
              * Selector for the image container.
@@ -136,9 +136,8 @@
                 }
 
                 me.registerDetailEventListeners();
+                me.getProductNavigation();
             }
-
-            me.getProductNavigation();
         },
 
         /**
@@ -343,7 +342,7 @@
         },
 
         /**
-         * Animates a given button with a given anim
+         * Animates a given button with a given animation bases on the css object.
          *
          * @param $button
          * @param css
