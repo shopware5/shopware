@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 count: count,
                 record: record
             });
-            foundGroup = groups.findRecord('groupkey', record.get('key'));
+            foundGroup = groups.findRecord('groupkey', record.get('key'), 0, false, false, true);
             if(foundGroup !== null) {
                 checkBox.setValue(true);
             }
@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 count: count,
                 record: record
             });
-            foundGroup = groups.findRecord('internalId', record.get('id'));
+            foundGroup = groups.findRecord('internalId', record.get('id'), 0, false, false, true);
             if(foundGroup !== null) {
                 checkBox.setValue(true);
             }
