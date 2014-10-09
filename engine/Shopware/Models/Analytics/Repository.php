@@ -1007,7 +1007,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date')
             ->groupBy('WEEKDAY(ordertime)')
-            ->orderBy('date', 'DESC');
+            ->orderBy('date', 'ASC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeekday', $builder, array(
             'subject' => $this
