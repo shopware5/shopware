@@ -119,6 +119,16 @@ In this document you will find a changelog of the important changes related to t
     * Header for HTML
     * Footer for Plaintext
     * Footer for HTML
+* Refactored price surcharge for variants
+    * `s_article_configurator_price_surcharges` database table was fully restructured and renamed to `s_article_configurator_price_variations`. Existing data is migrated on update
+    * Existing related ExtJs classes and events removed
+    * Existing price variation backend controller actions and methods removed:
+        + `getConfiguratorPriceSurchargeRepository`
+        + `saveConfiguratorPriceSurchargeAction`
+        + `deleteConfiguratorPriceSurchargeAction`
+        + `getArticlePriceSurcharges`
+        + `getSurchargeByOptionId`
+    * `Shopware\Models\Article\Configurator\PriceSurcharged` replaced by `Shopware\Models\Article\Configurator\PriceVariation`
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.

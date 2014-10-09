@@ -81,18 +81,6 @@ class Option extends ModelEntity
     private $dependencyChildren;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="parentOption", orphanRemoval=true)
-     */
-    private $surchargeParents;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="childOption", orphanRemoval=true)
-     */
-    private $surchargeChildren;
-
-    /**
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
      *      joinColumns={
@@ -207,37 +195,5 @@ class Option extends ModelEntity
     public function setDependencyChildren($dependencyChildren)
     {
         $this->dependencyChildren = $dependencyChildren;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getSurchargeParents()
-    {
-        return $this->surchargeParents;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $surchargeParents
-     */
-    public function setSurchargeParents($surchargeParents)
-    {
-        $this->surchargeParents = $surchargeParents;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getSurchargeChildren()
-    {
-        return $this->surchargeChildren;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $surchargeChildren
-     */
-    public function setSurchargeChildren($surchargeChildren)
-    {
-        $this->surchargeChildren = $surchargeChildren;
     }
 }

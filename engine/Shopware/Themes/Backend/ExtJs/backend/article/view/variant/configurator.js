@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             template: '{s name=variant/configurator/template}Define configurator template{/s}',
             loadSet: '{s name=variant/configurator/load_set}Load set{/s}',
             dependency: '{s name=variant/configurator/dependency}Set dependency{/s}',
-            surcharge: '{s name=variant/configurator/surcharge}Define price surcharge{/s}',
+            variation: '{s name=variant/configurator/variation}Define price variation{/s}',
             type: '{s name=variant/settings/type/label}Configurator type{/s}',
             empty: '{s name=variant/settings/combo_empty}Please choose...{/s}'
         },
@@ -101,8 +101,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         types: {
             standard:'{s name=variant/configurator/types/standard}Standard{/s}',
             selection:'{s name=variant/configurator/types/selection}Selection{/s}',
-            picture:'{s name=variant/configurator/types/picture}Picture{/s}',
-            surcharge:'{s name=variant/configurator/types/surcharge}Surcharge{/s}'
+            picture:'{s name=variant/configurator/types/picture}Picture{/s}'
         }
     },
 
@@ -162,11 +161,11 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             'defineDependency',
 
             /**
-             * Event will be fired when the user clicks the "define price surcharge" button
+             * Event will be fired when the user clicks the "define price variations" button
              * which displayed in the top toolbar of the whole variant tab.
              * @event
              */
-            'definePriceSurcharge',
+            'openPriceVariation',
 
             /**
              * Event will be fired when the user clicks the "define configurator template" button
@@ -320,11 +319,11 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             }
         });
 
-        //creates the "Define price surcharge" button to define price surcharge for options or group associations.
-        me.surchargeButton = Ext.create('Ext.button.Button', {
-            text: me.snippets.toolbar.surcharge,
+        //creates the "Define price variation" button to define price variation for options or group associations.
+        me.priceVariationButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.toolbar.variation,
             handler: function() {
-                me.fireEvent('definePriceSurcharge', me.priceSurchargeStore);
+                me.fireEvent('openPriceVariation');
             }
         });
 
@@ -352,7 +351,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 { xtype:'tbspacer', width: 6 },
                 me.dependencyButton,
                 { xtype:'tbspacer', width: 12 },
-                me.surchargeButton,
+                me.priceVariationButton,
                 { xtype:'tbspacer', width: 12 },
                 me.templateButton
             ]
