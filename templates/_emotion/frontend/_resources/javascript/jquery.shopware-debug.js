@@ -244,7 +244,7 @@ jQuery(document).ready(function($) {
 		}
 		
 		if($("#register_personal_skipLogin").is(':checked')) {
-			$('.register .fade_password, .register p.description, #birthdate').hide();
+			$('.register .fade_password, .register p.description').hide();
 		}
 		
 		$("#register_personal_customer_type").change(function() {
@@ -271,9 +271,9 @@ jQuery(document).ready(function($) {
 		
 		$('#register_personal_skipLogin').click(function() {
 			if($(this).is(':checked')) {
-				$('.register .fade_password, .register p.description, #birthdate').slideUp();
+				$('.register .fade_password, .register p.description').slideUp();
 			} else {
-				$('.register .fade_password, .register p.description, #birthdate').slideDown();
+				$('.register .fade_password, .register p.description').slideDown();
 			}
 		});
 		
