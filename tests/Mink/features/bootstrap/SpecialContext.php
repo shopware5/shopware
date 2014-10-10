@@ -4,7 +4,6 @@ use Page\Emotion\Homepage;
 use Element\MultipleElement;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Behat\Context\Step\Then;
 
 require_once 'SubContext.php';
 
@@ -170,27 +169,5 @@ class SpecialContext extends SubContext
 
         $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
         $element->clickLink($element->namedSelectors[$linkName][$language]);
-    }
-
-    /**
-     * @Given /^only on "(?P<template>[^"]*)" template "(?P<step>[^"]*)"$/
-     * @Given /^only on "(?P<template>[^"]*)" template "(?P<step>[^"]*)" :$/
-     */
-    public function onlyOn($template, $method, TableNode $dataTable = null)
-    {
-        $page = $this->getPage('Homepage');
-        $class = get_class($page);
-
-        if (strpos($class, $template . '\\') === false) {
-            return;
-        }
-
-        $method = str_replace('\'', '"', $method);
-
-        if (empty($dataTable)) {
-            return new Then($method);
-        }
-
-        return new Then($method, $dataTable);
     }
 }

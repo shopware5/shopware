@@ -3,6 +3,8 @@
 namespace Page\Responsive;
 
 use Behat\Behat\Context\Step;
+use Behat\Mink\Driver\SahiDriver;
+use Symfony\Component\Console\Helper\Helper;
 
 class Homepage extends \Page\Emotion\Homepage
 {
@@ -18,5 +20,18 @@ class Homepage extends \Page\Emotion\Homepage
         )
     );
 
-    protected $srcAttribute = 'data-image-src';
+    /**
+     * Changes the currency
+     * @param string $currency
+     * @throws \Behat\Mink\Exception\ElementNotFoundException
+     */
+    public function changeCurrency($currency)
+    {
+        if(!$this->getSession()->getDriver() instanceof SahiDriver) {
+            \Helper::throwException('Changing the currency in Responsive template requires Javascript!');
+        }
+
+        $valid = array('EUR' => '€ EUR', 'USD' => '$ USD');
+        $this->selectFieldOption('__currency', $valid[$currency]);
+    }
 }

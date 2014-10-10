@@ -11,7 +11,7 @@ class NotePosition extends CartPosition
     protected $namedSelectors = array(
         'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
         'order'   => array('de' => 'Kaufen',        'en' => 'Purchase'),
-        'compare' => array('de' => 'Vergleichen',   'en' => 'Compare'),
+        'compare' => array('de' => 'Produkt vergleichen',   'en' => 'Compare'),
         'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
     );
 

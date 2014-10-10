@@ -125,6 +125,45 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     }
 
     /**
+     * @BeforeScenario @captchaInactive
+     */
+    public function deactivateCaptchas()
+    {
+        //uses a small bug in shopware, which deactivate all captchas when the font color is empty
+        $sql = 'INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`) VALUES
+            (843, 1, \'s:0:"";\'),
+            (843, 2, \'s:0:"";\')'
+        ;
+        $this->getContainer()->get('db')->exec($sql);
+        $this->clearCache();
+    }
+
+    /**
+     * @AfterScenario @captchaInactive
+     */
+    public function reactivateCaptchas()
+    {
+        $sql = 'DELETE FROM `s_core_config_values` WHERE `element_id` = 843';
+        $this->getContainer()->get('db')->exec($sql);
+        $this->clearCache();
+    }
+
+    /**
+     *
+     */
+    private function clearCache()
+    {
+        /** @var \Shopware\Components\CacheManager $cacheManager */
+        $cacheManager = $this->getContainer()->get('shopware.cache_manager');
+
+        $cacheManager->clearHttpCache();
+        $cacheManager->clearTemplateCache();
+        $cacheManager->clearConfigCache();
+        $cacheManager->clearSearchCache();
+        $cacheManager->clearProxyCache();
+    }
+
+    /**
      * Sets Kernel instance.
      *
      * @param HttpKernelInterface $kernel HttpKernel instance

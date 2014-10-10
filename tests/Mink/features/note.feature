@@ -36,17 +36,16 @@ Feature: Note
             | sumWithoutVat | 142,68 € |
             | 19 %          | 27,11 €  |
 
-    @comparison @javascript
+    @comparison
     Scenario: I can compare articles from my note
         When  I compare the article on position 1 of my note
         And   I go to the page "Note"
         And   I compare the article on position 2 of my note
         And   I follow "Vergleich starten"
         Then  The comparison should look like this:
-            | image                           | name                           | ranking | text                                                                                                                                      | price    | link                                                          |
-            | Kwon-Tasche-Coach-schwarz       | Zahlungsarten & Riskmanagement | 0       | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster... | 119,99 € | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
-            | Kwon-Fitness--Boxhandschuh-blau | Abschlag bei Zahlungsarten     | 0       | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren.                                                           | 47,90 €  | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
-
+            | image                           | name                           | ranking | description                                                                              | price  | link                                                          |
+            | Kwon-Tasche-Coach-schwarz       | Zahlungsarten & Riskmanagement | 0       | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht | 119,99 | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
+            | Kwon-Fitness--Boxhandschuh-blau | Abschlag bei Zahlungsarten     | 0       | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren.   | 47,90  | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
         When  I go to the page "Note"
         And   I follow "Vergleich löschen"
         And   I go to the page "Note"
