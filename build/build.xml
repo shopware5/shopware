@@ -23,7 +23,7 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-composer-install, build-config, build-database, build-snippets-deploy, build-cache-dir" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
@@ -185,13 +185,13 @@
 
         <delete includeEmptyDirs="true">
             <fileset dir="${cache.dir}">
-                <include name="**/*.*"/>
+                <include name="**/*"/>
                 <exclude name=".htaccess"/>
                 <exclude name="clear_cache.sh"/>
             </fileset>
 
             <fileset dir="${test.dir.shopware}/TempFiles/">
-                <include name="**/*.*"/>
+                <include name="**/*"/>
                 <exclude name=".gitkeep"/>
             </fileset>
         </delete>
