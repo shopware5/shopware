@@ -149,7 +149,7 @@ class CheckoutCart extends Page
 
         if ($result !== true) {
             $message = sprintf('The value on cart (%s) is deviant from %s!', $check[$result][0], $check[$result][1]);
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 

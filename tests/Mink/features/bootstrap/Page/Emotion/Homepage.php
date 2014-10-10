@@ -27,7 +27,10 @@ class Homepage extends Page
         )
     );
 
-    protected $srcAttribute = 'src';
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'searchButton'            => array('de' => 'Suchen',  'en' => 'Search')
+    );
 
     /**
      * Searches the given term in the shop
@@ -35,7 +38,14 @@ class Homepage extends Page
      */
     public function searchFor($searchTerm)
     {
-        $this->getElement('SearchForm')->submit($searchTerm);
+        $data = array(
+            array(
+                'field' => 'sSearch',
+                'value' => $searchTerm
+            )
+        );
+        \Helper::fillForm($this, 'searchForm', $data);
+        \Helper::pressNamedButton($this, 'searchButton');
         $this->verifyResponse();
     }
 
@@ -45,88 +55,24 @@ class Homepage extends Page
      */
     public function receiveSearchResultsFor($searchTerm)
     {
-        $this->getElement('SearchForm')->receiveSearchResultsFor($searchTerm);
+        $data = array(
+            array(
+                'field' => 'sSearch',
+                'value' => $searchTerm
+            )
+        );
+        \Helper::fillForm($this, 'searchForm', $data);
+        $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
 
     /**
-     * Compares the comparison list with the given list of articles
-     * @param  array                                       $articles
-     * @throws \Behat\Mink\Exception\ResponseTextException
+     * Changes the currency
+     * @param string $currency
+     * @throws \Behat\Mink\Exception\ElementNotFoundException
      */
-    public function checkComparison($articles)
+    public function changeCurrency($currency)
     {
-        $result = \Helper::countElements($this, 'div.compare_article', count($articles));
-
-        if ($result !== true) {
-            $message = sprintf('There are %d articles in the comparison (should be %d)', $result, count($articles));
-            \Helper::throwException(array($message));
-        }
-
-        $articlesInComparison = $this->findAll('css', 'div.compare_article');
-
-        foreach ($articles as $articleKey => $article) {
-            foreach ($articlesInComparison as $articleInComparisonKey => $articleInComparison) {
-
-                $locator = sprintf('div.compare_article:nth-of-type(%d) ', $articleInComparisonKey + 2);
-
-                $elements = array(
-                    'a-picture' => $this->find('css', $locator . 'div.picture a'),
-                    'img' => $this->find('css', $locator . 'div.picture img'),
-                    'h3-a-name' => $this->find('css', $locator . 'div.name h3 a'),
-                    'a-name' => $this->find('css', $locator . 'div.name a.button-right'),
-                    'div-votes' => $this->find('css', $locator . 'div.votes div.star'),
-                    'p-desc' => $this->find('css', $locator . 'div.desc'),
-                    'strong-price' => $this->find('css', $locator . 'div.price strong')
-                );
-
-                $check = array();
-
-                if (!empty($article['image'])) {
-                    $check[] = array($elements['img']->getAttribute('src'), $article['image']);
-                }
-
-                if (!empty($article['name'])) {
-                    $check[] = array($elements['a-picture']->getAttribute('title'), $article['name']);
-                    $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
-                    $check[] = array($elements['h3-a-name']->getAttribute('title'), $article['name']);
-                    $check[] = array($elements['h3-a-name']->getText(), $article['name']);
-                    $check[] = array($elements['a-name']->getAttribute('title'), $article['name']);
-                }
-
-                if (!empty($article['ranking'])) {
-                    $check[] = array($elements['div-votes']->getAttribute('class'), $article['ranking']);
-                }
-
-                if (!empty($article['text'])) {
-                    $check[] = array($elements['p-desc']->getText(), $article['text']);
-                }
-
-                if (!empty($article['price'])) {
-                    $check[] = \Helper::toFloat(array($elements['strong-price']->getText(), $article['price']));
-                }
-
-                if (!empty($article['link'])) {
-                    $check[] = array($elements['a-picture']->getAttribute('href'), $article['link']);
-                    $check[] = array($elements['h3-a-name']->getAttribute('href'), $article['link']);
-                    $check[] = array($elements['a-name']->getAttribute('href'), $article['link']);
-                }
-
-                $result = \Helper::checkArray($check);
-
-                if ($result === true) {
-                    unset($articlesInComparison[$articleInComparisonKey]);
-                    break;
-                }
-
-                if ($articleInComparison == end($articlesInComparison)) {
-                    $message = sprintf(
-                        'The article on position %d was not found!',
-                        $articleKey + 1
-                    );
-                    throw new ResponseTextException($message, $this->getSession());
-                }
-            }
-        }
+        $this->pressButton($currency);
     }
 
     /**
@@ -174,7 +120,7 @@ class Homepage extends Page
                 return;
             }
 
-            $checkValues = $this->getValuesToCheck($element, $subCheck['position']);
+            $checkValues = \Helper::getValuesToCheck($element, $subCheck['position']);
 
             foreach ($checkValues as $key => $checkValue) {
                 //Convert the contentValue to a float if checkValue is also one
@@ -212,7 +158,7 @@ class Homepage extends Page
 
         foreach($positions as $position)
         {
-            $checkValues = $this->getValuesToCheck($element, $position);
+            $checkValues = \Helper::getValuesToCheck($element, $position);
             $values = array_column($items, $position);
 
             foreach($values as &$value) {
@@ -238,33 +184,6 @@ class Homepage extends Page
             \Helper::throwException($message);
         }
     }
-
-    /**
-     * Helper function to call the elements method to get the values to check of the given position
-     *
-     * @param TraversableElement $element
-     * @param string $position
-     * @return array
-     */
-    private function getValuesToCheck(TraversableElement $element, $position)
-    {
-        $checkMethod = sprintf('get%ssToCheck', ucfirst($position));
-
-        if (!method_exists($element, $checkMethod)) {
-            $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
-            \Helper::throwException($message);
-        }
-
-        $checkValues = $element->$checkMethod();
-
-        if (!is_array($checkValues) || empty($checkValues)) {
-            $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
-            \Helper::throwException($message);
-        }
-
-        return $checkValues;
-    }
-
 
     /**
      * @param string             $formLocatorName

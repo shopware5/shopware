@@ -3,6 +3,7 @@
 use Page\Emotion\Blog;
 use Element\MultipleElement;
 use Element\Emotion\BlogBox;
+use Behat\Gherkin\Node\TableNode;
 
 require_once 'SubContext.php';
 
@@ -33,5 +34,23 @@ class BlogContext extends SubContext
         /** @var BlogBox $blogBox */
         $blogBox = $blogBoxes->setInstance($position);
         $blogBox->clickActionLink('readMore', $language);
+    }
+
+    /**
+     * @When /^I write a comment:$/
+     */
+    public function iWriteAComment(TableNode $data)
+    {
+        $this->getPage('Blog')->writeComment($data->getHash());
+    }
+
+    /**
+     * @When /^the shop owner activate my latest comment$/
+     */
+    public function theShopOwnerActivateMyLatestComment()
+    {
+        $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
+        $this->getContainer()->get('db')->exec($sql);
+        $this->getSession()->reload();
     }
 }

@@ -4,6 +4,8 @@ namespace Page\Emotion;
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Driver\SahiDriver;
 use Behat\Mink\Element\NodeElement;
+use Element\Emotion\ArticleEvaluation;
+use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Behat\Mink\Exception\ResponseTextException;
 
@@ -15,19 +17,18 @@ class Detail extends Page
     protected $path = '/detail/index/sArticle/{articleId}';
 
     public $cssLocator = array(
-        'productRating' => 'div#detailbox_middle > div.detail_comments',
-        'productReviews' => 'div#comments',
-        'productRatingAverage' => '.star',
-        'commentRating' => '.star',
-        'commentNumber' => 'span.comment_numbers',
-        'commentBlock' => 'div.comment_block',
-        'commentAuthor' => 'strong.author span.name',
-        'commentDate' => 'span.date',
-        'commentTitle' => 'div.right_container > h3',
-        'commentText' => 'div.right_container > p',
-        'commentAnswer' => 'div.right_container',
+        'productRating' => 'div#detailbox_middle > div.detail_comments > .star',
+        'productRatingCount' => 'div#detailbox_middle > div.detail_comments > .comment_numbers',
+        'productEvaluationAverage' => 'div#comments > div.overview_rating > .star',
+        'productEvaluationCount' => 'div#comments > div.overview_rating > span',
         'configuratorForm' => 'div#buybox > form',
-        'notificationForm' => 'form#sendArticleNotification'
+        'notificationForm' => 'form#sendArticleNotification',
+        'voteForm' => 'div#comments > form'
+    );
+
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'voteFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
     );
 
     protected $configuratorTypes = array(
@@ -42,7 +43,7 @@ class Detail extends Page
     public function verifyPage()
     {
         if (!$this->hasButton('In den Warenkorb')) {
-            throw new \Exception('Detail page has no basket button');
+            \Helper::throwException('Detail page has no basket button');
         }
     }
 
@@ -71,7 +72,7 @@ class Detail extends Page
 
         if (empty($link)) {
             $message = sprintf('Detail page has no %s button', $direction);
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
 
         $link->click();
@@ -79,95 +80,65 @@ class Detail extends Page
 
     /**
      * Checks the evaluations of the current article
-     * @param integer $average
-     * @param array   $evaluations
+     * @param MultipleElement $articleEvaluations
+     * @param $average
+     * @param array $evaluations
+     * @throws \Exception
      */
-    public function checkEvaluations($average, $evaluations)
+    public function checkEvaluations(MultipleElement $articleEvaluations, $average, array $evaluations)
     {
-        $testEvaluations = array(
-            'average' => $average,
-            'evaluations' => $evaluations
-        );
+        $this->checkRating($articleEvaluations, $average);
 
-        $locators = array('productRating', 'productReviews');
-        $elements = \Helper::findElements($this, $locators);
+        $locators = array_keys(current($evaluations));
 
-        $rating = $elements['productRating'];
-        $reviews = $elements['productReviews'];
+        foreach ($evaluations as $key => $evaluation)
+        {
+            /** @var ArticleEvaluation $articleEvaluation */
+            $articleEvaluation = $articleEvaluations->setInstance($key + 1);
 
-        $locators = array('productRatingAverage', 'commentNumber');
-        $elements = \Helper::findElements($rating, $locators, $this->cssLocator);
+            $result = \Helper::compareArrays($articleEvaluation->getProperties($locators), $evaluation);
 
-        preg_match("/\d+/", $elements['commentNumber']->getText(), $commentNumber);
-        $commentNumber = intval($commentNumber[0]);
-
-        if ($commentNumber !== count($evaluations)) {
-            $message = sprintf(
-                'There is a difference to the number of evaluations of the article (should be %d, but is %d)',
-                count($evaluations),
-                $commentNumber
-            );
-            throw new ResponseTextException($message, $this->getSession());
-        }
-
-        $readEvaluations = array(
-            'average' => $this->getEvaluation($elements['productRatingAverage']),
-            'evaluations' => array()
-        );
-
-        $locators = array('commentBlock');
-        $elements = \Helper::findElements($reviews, $locators, $this->cssLocator, true);
-
-        $comments = $elements['commentBlock'];
-
-        for ($i = 0; $i < count($comments); $i++) {
-            $locators = array('commentRating', 'commentAuthor', 'commentDate', 'commentTitle', 'commentText');
-            $elements = \Helper::findElements($comments[$i], $locators, $this->cssLocator);
-
-            $i++;
-
-            $locators = array('commentAnswer');
-            $elements2 = \Helper::findElements($comments[$i], $locators, $this->cssLocator);
-
-            $evaluation = array(
-                'author' => $elements['commentAuthor']->getText(),
-                'evaluation' => $this->getEvaluation($elements['commentRating']),
-                'title' => $elements['commentTitle']->getText(),
-                'text' => $elements['commentText']->getText(),
-                'comment' => $elements2['commentAnswer']->getText()
-            );
-
-            $readEvaluations['evaluations'][] = $evaluation;
-        }
-
-        $result = \Helper::compareArrays($readEvaluations, $testEvaluations);
-
-        if ($result === true) {
-            return;
-        }
-
-        $message = "An error occurred.";
-
-        switch ($result['error']) {
-            case 'keyNotExists':
-                $message = sprintf(
-                    'The key "%s" fails in test data! (Keys exist: %s)',
-                    $result['key'],
-                    implode(', ', array_keys($evaluations[0]))
-                );
-                break;
-
-            case 'comparisonFailed':
+            if($result !== true) {
                 $message = sprintf(
                     'The evaluations are different in "%s" ("%s" is not included in "%s")',
                     $result['key'],
-                    $result['value'],
-                    $result['value2']
+                    $result['value2'],
+                    $result['value']
                 );
-                break;
+                \Helper::throwException($message);
+            }
+        }
+    }
+
+    protected function checkRating(MultipleElement $articleEvaluations, $average)
+    {
+        $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
+
+        $elements = \Helper::findElements($this, $locators);
+
+        $check = array();
+
+        foreach($elements as $locator => $element)
+        {
+            switch($locator) {
+                case 'productRating':
+                case 'productEvaluationAverage':
+                    $check[$locator] = array($element->getAttribute('class'), $average);
+                    break;
+
+                case 'productRatingCount':
+                case 'productEvaluationCount':
+                    $check[$locator] = array($element->getText(), count($articleEvaluations));
+                    break;
+            }
         }
 
-        throw new ResponseTextException($message, $this->getSession());
+        $result = \Helper::checkArray($check);
+
+        if ($result !== true) {
+            $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
+            \Helper::throwException($message);
+        }
     }
 
     /**
@@ -231,5 +202,14 @@ class Detail extends Page
                 \Helper::throwException($message);
             }
         }
+    }
+
+    /**
+     * @param array $data
+     */
+    public function writeEvaluation(array $data)
+    {
+        \Helper::fillForm($this, 'voteForm', $data);
+        \Helper::pressNamedButton($this, 'voteFormSubmit');
     }
 }

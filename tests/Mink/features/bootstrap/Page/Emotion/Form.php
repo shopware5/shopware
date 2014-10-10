@@ -30,7 +30,7 @@ class Form extends Page
             || (empty($captchaHidden))
         ) {
             $message = 'There is no capture in this form!';
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 }

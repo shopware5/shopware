@@ -39,13 +39,20 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations$/
+     * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
      */
     public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
     {
+        /** @var \Page\Emotion\Detail $page */
+        $page = $this->getPage('Detail');
+
+        /** @var \Element\MultipleElement $notePositions */
+        $articleEvaluations = $this->getElement('ArticleEvaluation');
+        $articleEvaluations = $articleEvaluations->setParent($page);
+
         $evaluations = $evaluations->getHash();
 
-        $this->getPage('Detail')->checkEvaluations($average, $evaluations);
+        $page->checkEvaluations($articleEvaluations, $average, $evaluations);
     }
 
     /**
@@ -65,4 +72,24 @@ class DetailContext extends SubContext
     {
         $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
     }
+
+    /**
+     * @When /^I write an evaluation:$/
+     */
+    public function iWriteAnEvaluation(TableNode $data)
+    {
+        $this->getPage('Detail')->writeEvaluation($data->getHash());
+    }
+
+    /**
+     * @When /^the shop owner activates my latest evaluation$/
+     * @When /^the shop owner activates my latest (\d+) evaluations$/
+     */
+    public function theShopOwnerActivateMyLatestEvaluation($limit = 1)
+    {
+        $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT '.$limit;
+        $this->getContainer()->get('db')->exec($sql);
+        $this->getSession()->reload();
+    }
+
 }

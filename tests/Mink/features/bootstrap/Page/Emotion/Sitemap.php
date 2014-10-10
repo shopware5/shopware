@@ -53,7 +53,7 @@ class Sitemap extends Page
                     break;
             }
 
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 
@@ -185,7 +185,7 @@ class Sitemap extends Page
                 $check[$result][0],
                 $check[$result][1]
             );
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 
