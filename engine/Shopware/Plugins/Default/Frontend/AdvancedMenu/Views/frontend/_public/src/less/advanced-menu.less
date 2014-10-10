@@ -3,10 +3,10 @@
     .clearfix();
     .unitize-max-width(1260, 16);
     .box-shadow(0 10px 30px -15px #000);
-    background: @lightGradientStart;
+    background: @btn-secondary-text-color;
     width: 100%;
     position: absolute;
-    color: @darkTextColor;
+    color: @text-color-dark;
     z-index: 30000;
 
     .menu--list {
@@ -28,7 +28,7 @@
         &.has--border::before {
             content: "";
             width: 1px;
-            background: @borderColor;
+            background: @border-color;
             position: absolute;
             padding-bottom: 99999px;
             margin-bottom: -99999px;
@@ -64,18 +64,18 @@
     .menu--list-item-link {
         .unitize(16, 16, font-size);
         .transition(color, 0.2s, ease-out);
-        color: @darkTextColor;
+        color: @text-color-dark;
     }
 
     .button-container {
         .unitize(16, 16, font-size);
         .unitize-padding(25, 30);
-        background: @darkTextColor;
-        color: @lightGradientStart;
+        background: @text-color-dark;
+        color: @btn-secondary-text-color;
         font-weight: bold;
 
         .button--category {
-            color: @lightGradientStart;
+            color: @btn-secondary-text-color;
             position: relative;
         }
 
@@ -138,7 +138,7 @@
 
         .menu--list-item-link {
             .unitize(18, 16, font-size);
-            color: @darkTextColor;
+            color: @text-color-dark;
             font-weight: bold;
         }
     }
@@ -179,11 +179,11 @@
 
 .navigation-main .navigation--list .navigation--entry.is--hovered {
     .border-radius-multi(3px, 3px);
-    background: @darkTextColor;
+    background: @text-color-dark;
 
     .navigation--link {
-        background: @darkTextColor;
-        color: @lightGradientStart;
+        background: @text-color-dark;
+        color: @btn-secondary-text-color;
     }
 }
 
