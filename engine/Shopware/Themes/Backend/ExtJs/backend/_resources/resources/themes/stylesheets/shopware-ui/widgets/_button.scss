@@ -59,7 +59,7 @@
 		    @include box-sizing('content-box');
 			height: $menu-top-button-height;
 
-			.x-btn-inner {
+            .#{$prefix}btn-inner {
 				height: $menu-top-button-height;
 				line-height: $menu-top-button-line-height;
 				color: $menu-top-button-color;
@@ -69,7 +69,7 @@
 	            margin: -1px 16px 0 0;
 	            font-weight: normal;
 			}
-			.x-btn-icon {
+            .#{$prefix}btn-icon {
 			    @include box-sizing('border-box');
 				width: 18px;
 				height: 18px;
@@ -93,7 +93,7 @@
 	.#{$prefix}btn-default-toolbar-small-menu-active {
         background: #fff;
 
-        .x-btn-inner {
+        .#{$prefix}btn-inner {
             color: #0e6bbb !important;
             text-shadow: none !important;
         }
