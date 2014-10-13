@@ -114,6 +114,11 @@ In this document you will find a changelog of the important changes related to t
     * `s_core_multilanguage` table is kept up to date, but will be fully removed in SW 5.1
     * Removed unused `sExport::sGetLanguage()` and deprecated `sExport::sGetMultishop()`, `sExport::$sLanguage` and `sExport::$sMultishop`
     * Previously unused fields `mainID`, `flagstorefront`, `flagbackend`, `separate_numbers`, `scoped_registration` and `navigation` are no longer loaded from the database
+* The MailTemplates now have global header and footer fields in configuration -> storefront -> email settings
+    * Header for Plaintext
+    * Header for HTML
+    * Footer for Plaintext
+    * Footer for HTML
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
