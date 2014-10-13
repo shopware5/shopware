@@ -8,21 +8,6 @@
 {block name='frontend_index_content'}
 	<div class="blog--content block-group">
 
-		{* Blog Filter Button *}
-		{block name='frontend_blog_listing_filter_button'}
-			<div class="blog--filter-btn">
-				<a href="#"
-				   title="{"{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}"|escape}"
-				   class="filter--trigger btn is--primary"
-				   data-collapseTarget=".blog--filter-options"
-				   data-offcanvas="true"
-				   data-offCanvasSelector=".blog--filter-options"
-				   data-closeButtonSelector=".blog--filter-close-btn">
-					<i class="icon--filter"></i> {s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}
-				</a>
-			</div>
-		{/block}
-
 		{* Blog Sidebar *}
 		{block name='frontend_blog_listing_sidebar'}
 			{include file='frontend/blog/listing_sidebar.tpl'}
