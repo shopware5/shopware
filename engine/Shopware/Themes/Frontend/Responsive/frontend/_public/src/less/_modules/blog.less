@@ -1,6 +1,10 @@
+.blog--listing {
+    .unitize(16, 16, margin-top);
+}
+
 // Blog Filter Options
 .blog--filter-btn {
-    .unitize-margin(10, 0);
+    margin: 0;
 
     .filter--trigger {
         display: block;
@@ -122,7 +126,7 @@
 
 // Blog-Entry Box
 .blog--box {
-    .unitize(20, 16, margin-bottom);
+    .unitize(20, 16, margin-top);
 
     .blog--box-metadata {
         .unitize-margin(0, 20, 0, 20, 16);
@@ -238,9 +242,18 @@
     }
 
     // Cross Selling
+    .blog--crossselling {
+        .product--title {
+            .unitize(12, 16, font-size);
+            .unitize(10, 16, margin-top);
+            display: block;
+            text-align: center;
+            font-weight: normal;
+        }
+    }
+
     .blog--crossselling-headline {
         color: @text-color-dark;
-        margin-top: 0;
     }
 
     .blog--crossseling-listing {
@@ -250,6 +263,40 @@
     }
 
     // Comments
+    .blog--comments {
+        .unitize(20, 16, padding);
+        padding-bottom: 0;
+
+        .comments--actions .btn--create-entry {
+            width: 100%;
+        }
+
+        .comments--list {
+            .unitize(30, 16, margin-top);
+        }
+
+        .list--entry {
+            .clearfix();
+            .unitize(20, 16, margin-top);
+        }
+
+        .entry--meta {
+            width: 100%;
+            float: left;
+            text-align: center;
+        }
+
+        .entry--content {
+            width: 100%;
+            float: left;
+        }
+
+        .content--headline {
+            .unitize(2, 16, margin-bottom);
+            margin-top: 0;
+        }
+    }
+
     .blog--comments-headline {
         .unitize(21, 16, font-size);
         .unitize-margin(0, 0, 20, 0, 16);
@@ -301,7 +348,7 @@
 
     // Comments form
     .blog--comments-form-errors {
-        .unitize-margin(20, 20, 0, 20);
+        .unitize-margin(20, 0, 20, 0);
     }
 
     .blog--comments-voting {
@@ -311,83 +358,6 @@
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
-
-    // Blog Filter Options
-    .blog--filter-btn {
-        .unitize-width(190);
-        .unitize-margin(0, 20, 10, 0);
-        float: left;
-
-        .blog--listing {
-            .unitize(16, 16, margin-top);
-        }
-
-        .action--filter-btn {
-            .unitize-margin(20, 0, 10, 0, 16);
-        }
-
-        .filter--trigger {
-            .unitize(24, 16, line-height);
-        }
-    }
-
-    // Blog Filter Options
-    .blog--filter-btn {
-        .unitize-margin(20, 0, 10, 0, 16);
-    }
-
-    .blog--filter-options {
-        .unitize-padding(0, 0, 10, 0);
-        display: none;
-        width: auto;
-        height: auto;
-        overflow: visible;
-        position: relative;
-        border: 1px solid @border-color;
-        background: @gray-light;
-        clear: both;
-
-        .blog--filter-close-btn, .filter--headline {
-            display: none;
-        }
-
-        .filter--container {
-            .unitize(10, 16, padding-top);
-            .clearfix();
-            padding-left: 2%;
-        }
-
-        .filter--headline {
-            display: none;
-        }
-
-        .filter--group {
-            .unitize-height(38);
-            width: 31%;
-            margin: 0 2% 2% 0;
-            position: relative;
-            float: left;
-        }
-
-        .filter--header {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1100;
-
-            &.is--active {
-                z-index: 1300;
-            }
-        }
-
-        .filter--content {
-            .unitize(38, 16, top);
-            width: 100%;
-            position: absolute;
-            left: 0;
-        }
-    }
 
     // Blog Listing
     .blog--listing {
@@ -417,48 +387,7 @@
         }
     }
 
-    // Blog Detail
-    .blog--detail {
-        .unitize-margin(20, 0, 0, 0, 16);
-
-        .blog--detail-headline {
-            .unitize(18, 16, font-size);
-            .unitize(5, 16, margin-bottom)
-        }
-
-        // Thumbnails & Image
-        .blog--detail-thumbnails {
-            .unitize(10, 16, margin-bottom);
-
-            .blog--thumbnail-image {
-                margin: 0 auto;
-            }
-
-            .block {
-                .unitize(60, 16, height);
-                width: 18%;
-            }
-        }
-    }
-}
-
-@media screen and(min-width: @tabletLandscapeViewportWidth) {
-
-    .blog--detail {
-        .blog--detail-description {
-            width: 100%;
-        }
-
-        .blog--detail-image-container {
-            width: 40%;
-            margin: 0 0 3% 3%;
-            float: right;
-        }
-    }
-}
-
-@media screen and(min-width: @desktopViewportWidth) {
-
+    // Blog Sidebar
     .is--ctl-blog .sidebar-main {
         display: none;
     }
@@ -543,6 +472,14 @@
                 padding: 0;
                 border: 0 none;
             }
+
+            .blog--filter-close-btn {
+                display: none;
+            }
+
+            .filter--headline {
+                display: none;
+            }
         }
 
         .filter--expand-collapse {
@@ -582,7 +519,102 @@
 
     // Blog Detail
     .blog--detail {
+        .unitize-margin(20, 0, 0, 0);
 
+        .blog--detail-headline {
+            .unitize(18, 16, font-size);
+            .unitize(5, 16, margin-bottom)
+        }
+
+        // Thumbnails & Image
+        .blog--detail-thumbnails {
+            .unitize(10, 16, margin-bottom);
+
+            .blog--thumbnail-image {
+                margin: 0 auto;
+            }
+
+            .block {
+                .unitize(60, 16, height);
+                width: 18%;
+            }
+        }
+
+        .blog--comments {
+            .entry--meta {
+                width: 25%;
+                text-align: left;
+            }
+
+            .entry--content {
+                width: 75%;
+                float: left;
+            }
+
+            .comments--actions .btn--create-entry {
+                width: auto;
+            }
+        }
+
+        .blog--comments-name, .blog--comments-summary {
+            .unitize(10, 16, padding-right);
+            width: 50%;
+            float: left;
+        }
+
+        .blog--comments-email, .blog--comments-voting {
+            .unitize(10, 16, padding-left);
+            width: 50%;
+            float: right;
+        }
+
+        .blog--comments-voting {
+            .unitize(10, 16, margin-bottom);
+        }
+
+        .blog--comments-captcha {
+            .clearfix();
+            .unitize(10, 16, margin-bottom);
+        }
+
+        .blog--comments-captcha {
+            width: 50%;
+
+            .captcha--placeholder {
+                .unitize(5, 16, margin-top);
+                .unitize(10, 16, padding-right);
+                width: 30%;
+                float: left;
+            }
+
+            .captcha--code {
+                .unitize(10, 16, padding-right);
+                width: 70%;
+                float: right;
+            }
+        }
+    }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+    .blog--detail {
+        .blog--detail-description {
+            width: 100%;
+        }
+
+        .blog--detail-image-container {
+            width: 40%;
+            margin: 0 0 3% 3%;
+            float: right;
+        }
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    // Blog Detail
+    .blog--detail {
         .blog--detail-headline {
             .unitize(21, 16, font-size);
         }

@@ -4,8 +4,10 @@
 	<div class="blog--comments-form" id="commentbug">
 
 		{block name='frontend_blog_comments_form_headline'}
-			<h1 class="blog-detail--comments-form panel--title is--underline">{s name="BlogHeaderWriteComment"}{/s}</h1>
-		{/block}
+            <div class="comments--actions">
+			    <a class="btn is--primary is--icon-right btn--create-entry" data-collapse-panel="true" data-collapseTarget=".comment--collapse-target">{s name="BlogHeaderWriteComment"}{/s} <i class="icon--arrow-right"></i></a>
+            </div>
+        {/block}
 
         {block name='frontend_blog_comments_form_errors'}
             <div class="blog--comments-form-errors">
@@ -23,7 +25,7 @@
             </div>
         {/block}
 
-		<form method="post" class="panel--body is--wide" action="{url controller=blog action=rating blogArticle=$sArticle.id}">
+		<form method="post" class="comment--collapse-target" action="{url controller=blog action=rating blogArticle=$sArticle.id}"{if $sAction != "rating" || !$sErrorFlag} style="display: none"{/if}>
 
 			{* Name *}
 			{block name='frontend_blog_comments_input_name'}
@@ -92,15 +94,14 @@
 				</div>
 			{/block}
 
-			{* Submit button *}
-			{block name='frontend_blog_comments_input_submit'}
-				<input class="btn is--primary" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
-			{/block}
+            {block name='frontend_blog_comments_input_notice'}
+                <p class="required--notice">{s name="BlogInfoFields"}{/s}</p>
+            {/block}
 
-			{block name='frontend_blog_comments_input_notice'}
-				<p class="required--notice">{s name="BlogInfoFields"}{/s}</p>
-			{/block}
-
+            {* Submit button *}
+            {block name='frontend_blog_comments_input_submit'}
+                <input class="btn is--primary" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
+            {/block}
 		</form>
 	</div>
 {/block}

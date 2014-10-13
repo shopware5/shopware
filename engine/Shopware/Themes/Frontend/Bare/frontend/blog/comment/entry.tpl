@@ -1,83 +1,85 @@
 {namespace name="frontend/blog/comments"}
 
 {if $sArticle.comments}
-<div class="blog--comments-list panel--body is--wide">
+    <div class="blog--comments panel panel--body has--border is--rounded">
 
-	{* Comments headline *}
-	{block name='frontend_blog_comments_comment_headline'}
-		<h1 class="blog--comments-headline" id="commentcontainer">{$sArticle.comments|count} {s name="BlogInfoComments"}{/s}</h1>
-	{/block}
+        {* Detail Comment Form *}
+        {block name='frontend_blog_comments_form'}
+            {include file='frontend/blog/comment/form.tpl'}
+        {/block}
 
-	{* List comments *}
-	{block name='frontend_blog_comments_comment'}
-		<ul class="list--unstyled">
-			{foreach $sArticle.comments as $vote}
-				{block name='frontend_blog_comments_comment_block'}
-					<li class="blog--comments-entry" itemtype="http://schema.org/Comment" itemscope="itemscope" itemprop="comment">
-						<div class="blog--comments-entry-inner panel has--border is--rounded{if $vote@last} is--last{/if}">
+        {* List comments *}
+        {block name='frontend_blog_comments_comment'}
+            <ul class="comments--list list--unstyled">
 
-							{* Comment Header *}
-							{block name='frontend_blog_comments_comment_left'}
-								<div class="blog--comments-entry-left panel--body is--wide">
+                {foreach $sArticle.comments as $vote}
+                    <li class="list--entry">
 
-									{* Stars *}
-									{block name='frontend_blog_comments_comment_rating'}
-										<div class="blog--comments-rating">
-                                            {include file="frontend/_includes/rating.tpl" points=$vote.points}
-										</div>
-									{/block}
+                        {* Comment meta data *}
+                        {block name='frontend_blog_comments_comment_meta'}
+                            <div class="entry--meta">
 
-									{* Author *}
-									{block name='frontend_blog_comments_comment_author'}
-										<div class="blog--comments-author"">
+                                {* Stars *}
+                                {block name='frontend_blog_comments_comment_rating'}
+                                    <div class="meta--rating">
+                                        {include file="frontend/_includes/rating.tpl" points=$vote.points}
+                                    </div>
+                                {/block}
 
-											{block name='frontned_blog_comments_comment_author_label'}
-												<strong class="content--label">{s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}</strong>
-											{/block}
+                                {* Author *}
+                                {block name='frontend_blog_comments_comment_author'}
+                                    <div class="meta--author">
 
-											{block name='frontned_blog_comments_comment_author_name'}
-												<span class="comments--author" itemprop="creator">{$vote.name}</span>
-											{/block}
-										</div>
-									{/block}
+                                        {block name='frontned_blog_comments_comment_author_label'}
+                                            <strong class="author--label">{s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}</strong>
+                                        {/block}
 
-									{* Date *}
-									{block name='frontend_blog_comments_comment_date'}
-										<div class="blog--comments-date">
+                                        {block name='frontned_blog_comments_comment_author_name'}
+                                            <span class="author--name" itemprop="creator">{$vote.name}</span>
+                                        {/block}
 
-											{block name='frontend_blog_commetns_comment_date_label'}
-												<strong class="content--label">{s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}Am:{/s}</strong>
-											{/block}
+                                    </div>
+                                {/block}
 
-											{block name='frontend_blog_comments_comment_date_creationdate'}
-												<span class="comments--date" itemprop="commentTime">{$vote.creationDate|date:date_long}</span>
-											{/block}
-										</div>
-									{/block}
-								</div>
-							{/block}
+                                {* Date *}
+                                {block name='frontend_blog_comments_comment_date'}
+                                    <div class="meta--date">
 
-							{* Comment Content *}
-							{block name='frontend_blog_comments_comment_right'}
-								<div class="blog--comments-entry-right panel--body is--wide">
+                                        {block name='frontend_blog_commetns_comment_date_label'}
+                                            <strong class="date--label">{s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}Am:{/s}</strong>
+                                        {/block}
 
-									{* Headline *}
-									{block name='frontend_blog_comments_comment_headline'}
-										<h2 class="blog--comments-entry-headline">{$vote.headline}</h2>
-									{/block}
+                                        {block name='frontend_blog_comments_comment_date_creationdate'}
+                                            <span class="date--creation" itemprop="commentTime">{$vote.creationDate|date:date_long}</span>
+                                        {/block}
 
-									{* Comment *}
-									{block name='frontend_blog_comments_comment_text'}
-										<div class="blog--comments-entry-text" itemprop="commentText">{$vote.comment|nl2br}</div>
-									{/block}
-								</div>
-							{/block}
-						</div>
-					</li>
-				{/block}
-			{/foreach}
-		</ul>
-	{/block}
+                                    </div>
+                                {/block}
 
-</div>
+                            </div>
+                        {/block}
+
+                        {* Comment Content *}
+                        {block name='frontend_blog_comments_comment_right'}
+                            <div class="entry--content">
+                                {* Comments headline *}
+                                {block name='frontend_blog_comments_comment_headline'}
+                                    <h3 class="content--headline">{$vote.headline}</h3>
+                                {/block}
+
+                                {* Comment *}
+                                {block name='frontend_blog_comments_comment_text'}
+                                    <p class="content--comment" itemprop="commentText">
+                                        {$vote.comment|nl2br}
+                                    </p>
+                                {/block}
+                            </div>
+                        {/block}
+
+                    </li>
+                {/foreach}
+
+            </ul>
+        {/block}
+    </div>
 {/if}
