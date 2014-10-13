@@ -1,6 +1,5 @@
 .product--details {
 
-	.product--navigation,
 	.product--actions {
 		display: none
 	}
@@ -235,6 +234,10 @@
 		border-left: 1px solid @border-color;
 		border-right: 1px solid @border-color;
 	}
+}
+
+.product--navigation {
+    display: none;
 }
 
 // Product reviews form
@@ -649,11 +652,6 @@
             &.can--slide:hover {
                 .unitize(-140, 16, right);
             }
-        }
-
-        .link--prev-inner,
-        .link--next-inner {
-           display: none;
         }
     }
 
