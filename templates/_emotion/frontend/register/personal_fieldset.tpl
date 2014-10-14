@@ -109,7 +109,7 @@
 	{block name='frontend_register_personal_fieldset_input_phone'}
         {if {config name=showPhoneNumberField}}
             <div>
-                <label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}</label>
+                <label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}{if {config name=requirePhoneField}}*{/if}:</label>
                 <input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
             </div>
         {/if}
@@ -119,7 +119,7 @@
     {if {config name=showBirthdayField} && !$update}
         {block name='frontend_register_personal_fieldset_birthday'}
             <div id="birthdate">
-                <label for="register_personal_birthdate" {if !{config name=requireBirthdayField}}class="normal"{/if}>{s name='RegisterLabelBirthday'}{/s}</label>
+                <label for="register_personal_birthdate" {if !{config name=requireBirthdayField}}class="normal"{/if}>{s name='RegisterLabelBirthday'}{/s}{if {config name=requireBirthdayField}}*{/if}:</label>
                 <select id="register_personal_birthdate" name="register[personal][birthday]" class="{if {config name=requireBirthdayField}}required{/if} {if $error_flags.birthday && {config name=requireBirthdayField}}instyle_error{/if}">
                     <option value="">{s name='RegisterBirthdaySelectDay'}day{/s}</option>
                     {section name="birthdate" start=1 loop=32 step=1}
