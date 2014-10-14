@@ -43,7 +43,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Shopware Template Object (Smarty)
      *
-     * @var object
+     * @var Enlight_Template_Manager
      */
     public $_template;
 
@@ -182,6 +182,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $document->_subshop = Shopware()->Db()->fetchRow("
                 SELECT
                     s.id,
+                    m.document_template_id as doc_template_id,
+                    m.template_id as template_id,
                     (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.document_template_id) as doc_template,
                     (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.template_id) as template,
                     s.id as isocode,
@@ -237,6 +239,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if (!empty($_renderer)) $this->_renderer = $_renderer;
         if ($this->_valuesAssigend == false) {
             $this->assignValues();
+        }
+
+        /**@var $template \Shopware\Models\Shop\Template*/
+        $template = Shopware()->Container()->get('models')->find('Shopware\Models\Shop\Template', $this->_subshop['doc_template_id']);
+
+        if($template->getVersion() >= 3) {
+            $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
+            $this->_template->setTemplateDir($inheritance);
         }
 
         $data = $this->_template->fetch("documents/".$this->_document["template"],$this->_view);
