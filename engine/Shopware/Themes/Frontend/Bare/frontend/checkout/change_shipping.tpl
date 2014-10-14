@@ -9,11 +9,17 @@
 			{foreach $sDispatches as $dispatch}
 				<div class="dispatch--method method block">
 
+                    {* Radio Button *}
+                    {block name='frontend_checkout_dispatch_shipping_input_radio'}
+                        <div class="method--input">
+                            <input type="radio" id="confirm_dispatch{$dispatch.id}" class="radio auto_submit" value="{$dispatch.id}" name="sDispatch"{if $dispatch.id eq $sDispatch.id} checked="checked"{/if} />
+                        </div>
+                    {/block}
+
 					{* Method Name *}
-					{block name='frontend_checkout_dispatch_shipping_input_radio'}
-						<div class="method--name is--first">
-							<input type="radio" id="confirm_dispatch{$dispatch.id}" class="radio auto_submit" value="{$dispatch.id}" name="sDispatch"{if $dispatch.id eq $sDispatch.id} checked="checked"{/if} />
-							<label class="method--label is--bold" for="confirm_dispatch{$dispatch.id}">{$dispatch.name}</label>
+					{block name='frontend_checkout_dispatch_shipping_input_label'}
+						<div class="method--label is--first">
+							<label class="method--name is--bold" for="confirm_dispatch{$dispatch.id}">{$dispatch.name}</label>
 						</div>
 					{/block}
 
