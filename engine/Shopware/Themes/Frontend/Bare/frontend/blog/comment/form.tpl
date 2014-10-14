@@ -1,7 +1,7 @@
 {namespace name="frontend/blog/comments"}
 
 {block name='frontend_blog_comments_form'}
-	<div class="blog--comments-form" id="commentbug">
+	<div class="blog--comments-form">
 
 		{block name='frontend_blog_comments_form_headline'}
             <div class="comments--actions">
@@ -25,7 +25,7 @@
             </div>
         {/block}
 
-		<form method="post" class="comment--collapse-target" action="{url controller=blog action=rating blogArticle=$sArticle.id}"{if $sAction != "rating" || !$sErrorFlag} style="display: none"{/if}>
+		<form method="post" class="comment--collapse-target{if $sAction != "rating" || !$sErrorFlag} collapse--soft-hidden{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}">
 
 			{* Name *}
 			{block name='frontend_blog_comments_input_name'}
