@@ -28,7 +28,7 @@
 	{* User Votings *}
 	<div class="votes">
 		{block name='frontend_compare_votings'}
-		<div class="star star{$sArticle.sVoteAverange.averange*2|round}">Star Rating</div>
+		<div class="star star{$sArticle.sVoteAverange.averange|round}">Star Rating</div>
 		{/block}
 	</div>
 	
