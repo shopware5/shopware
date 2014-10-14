@@ -26,7 +26,7 @@
                         <a class="link--name" href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">{$sArticle.articleName|truncate:47}</a>
 
                         {block name='frontend_compare_article_name_button'}
-                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="btn is--primary btn--product is--icon-right">
+                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="btn is--primary is--center is--full is--icon-right btn--product">
                                 {s name='ListingBoxLinkDetails' namespace="frontend/listing/box_article"}{/s}
                                 <i class="icon--arrow-right"></i>
                             </a>

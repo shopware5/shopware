@@ -170,6 +170,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             foreach ($resultArticles as $article) {
                 $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $article["articleID"]);
                 if (!empty($article['articleID'])) {
+
+                    // fix correct vote averange
+                    $article['sVoteAverageOriginal']['average'] = $article['sVoteAverange']['averange'];
+
                     $articles[] = $article;
                 }
             }
