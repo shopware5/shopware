@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <atom:link href="{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape}" rel="self" type="application/rss+xml" />
-<title>{block name='frontend_atom_title'}{$sCategoryContent.description}{/block}</title>
+<title>{block name='frontend_atom_title'}{$sCategoryContent.description|escape}{/block}</title>
 <link>{url controller='index'}</link>
-<description>{$sShopname} - {$sCategoryContent.description}</description>
+<description>{$sShopname|escape} - {$sCategoryContent.description|escape}</description>
 <language>de-de</language>
 <lastBuildDate>{time()|date:rss}</lastBuildDate>
 {foreach from=$sArticles item=sArticle key=key name="counter"}
