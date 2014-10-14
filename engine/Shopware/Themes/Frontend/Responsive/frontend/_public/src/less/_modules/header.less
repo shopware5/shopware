@@ -92,7 +92,7 @@
 	.entry--cart {
 		border-left: 0 none;
         cursor: pointer;
-        position: relative !important; //just a test
+        position: relative;
 
         .entry--link {
             color: @text-color;
@@ -476,11 +476,6 @@
             display: inline-block;
         }
         .entry--cart {
-            .white-gradient();
-            .unitize-padding(12, 20, 12, 20, 16);
-            .unitize(18, 16, line-height);
-            border: 1px solid @border-color;
-
             .entry--link {
                 padding: 0;
                 display: inline-block;
@@ -691,7 +686,6 @@
             .unitize-padding(8, 16, 8, 16, 16);
         }
         .entry--cart {
-            .unitize-padding(9, 16, 9, 16, 16);
             margin-right: 0;
         }
         .entry--link {
@@ -735,11 +729,7 @@
     }
 
     .cart--amount {
-        .border-radius(3px);
-        .unitize-padding(3, 5, 3, 10, 16);
-        background: #fff;
         color: @brand-primary;
         font-weight: @font-bold-weight;
-        text-shadow: 0 0 0 transparent;
     }
 }
