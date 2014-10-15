@@ -57,5 +57,8 @@
             "engine/core/class/"
         ],
         "files": ["engine/Shopware/Application.php"]
+    },
+    "config": {
+        "autoloader-suffix": "Shopware"
     }
 }
