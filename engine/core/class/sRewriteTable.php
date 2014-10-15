@@ -314,7 +314,7 @@ class sRewriteTable
             DELETE ru FROM s_core_rewrite_urls ru
             LEFT JOIN s_articles a
               ON a.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
-            WHERE ru.org_path LIKE 'sViewport=supplier&sSupplier=%'
+            WHERE ru.org_path LIKE 'sViewport=listing&sAction=manufacturer&sSupplier=%'
             AND a.id IS NULL"
         );
     }
@@ -547,7 +547,7 @@ class sRewriteTable
             $path = $this->template->fetch('string:' . $seoSupplierRouteTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
 
-            $org_path = 'sViewport=supplier&sSupplier=' . $supplier['id'];
+            $org_path = 'sViewport=listing&sAction=manufacturer&sSupplier=' . (int) $supplier['id'];
             $this->sInsertUrl($org_path, $path);
         }
     }

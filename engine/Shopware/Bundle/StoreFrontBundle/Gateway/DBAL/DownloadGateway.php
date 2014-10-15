@@ -122,7 +122,9 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $result = array();
         foreach ($products as $product) {
-            $result[$product->getNumber()] = $downloads[$product->getId()];
+            if (isset($downloads[$product->getId()])) {
+                $result[$product->getNumber()] = $downloads[$product->getId()];
+            }
         }
 
         return $result;

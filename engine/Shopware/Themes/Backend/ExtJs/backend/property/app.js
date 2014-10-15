@@ -84,7 +84,15 @@ Ext.define('Shopware.apps.Property', {
      * Required views
      * @array
      */
-    views: [ 'main.Window', 'main.OptionGrid', 'main.GroupGrid', 'main.SetGrid', 'main.SetAssignGrid'],
+    views: [
+        'main.Window',
+        'main.OptionGrid',
+        'main.GroupGrid',
+        'main.SetGrid',
+        'main.SetAssignGrid',
+        'detail.OptionWindow',
+        'detail.OptionContainer'
+    ],
 
     /**
      * Returns the main application window for this is expected

@@ -38,8 +38,8 @@ interface FacetInterface extends \JsonSerializable
     public function getName();
 
     /**
-     * Returns true if the search result is filtered by this facet.
-     * @return bool
+     * @param array $data
+     * @return FacetInterface
      */
-    public function isFiltered();
+    public static function createFromJsonData(array $data);
 }

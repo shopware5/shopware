@@ -34,60 +34,51 @@ class ImmediateDeliveryFacetTest extends TestCase
 
     public function testFacetWithNoStock()
     {
-        $facet = new ImmediateDeliveryFacet();
-        $this->search(
-            $facet,
+        $result = $this->search(
             array(
                 'first'  => array('inStock' => 10),
                 'second' => array('inStock' => 0),
                 'third'  => array('inStock' => 10),
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array(new ImmediateDeliveryFacet())
         );
-
-        $this->assertEquals(2, $facet->getTotal());
+        $facet = $result->getFacets()[0];
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
     }
 
     public function testFacetWithMinPurchase()
     {
-        $facet = new ImmediateDeliveryFacet();
-        $this->search(
-            $facet,
+        $result = $this->search(
             array(
                 'first'  => array('inStock' => 2, 'minPurchase' => 2),
                 'second' => array('inStock' => 4, 'minPurchase' => 5),
                 'third'  => array('inStock' => 3, 'minPurchase' => 2),
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array(new ImmediateDeliveryFacet())
         );
-
-        $this->assertEquals(2, $facet->getTotal());
+        $facet = $result->getFacets()[0];
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
     }
 
-
-    private function search(
-        FacetInterface $facet,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $data) {
-            $data = $this->getProduct($number, $context, $category, $data);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
+    public function testFacetWithNoData()
+    {
+        $result = $this->search(
+            array(
+                'first'  => array('inStock' => 1, 'minPurchase' => 2),
+                'second' => array('inStock' => 1, 'minPurchase' => 4),
+                'third'  => array('inStock' => 1, 'minPurchase' => 3),
+            ),
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array(new ImmediateDeliveryFacet())
+        );
+        $this->assertCount(0, $result->getFacets());
     }
-
 }

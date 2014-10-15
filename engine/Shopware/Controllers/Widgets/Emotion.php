@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\Model\Query\SqlWalker;
 
 /**
@@ -433,7 +434,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data["values"] = $temporaryValues;
 
             foreach ($data["values"] as &$value) {
-                $query = array('sViewport' => 'supplier', 'sSupplier' => $value["id"]);
+                $query = array(
+                    'controller' => 'listing',
+                    'action'     => 'manufacturer',
+                    'sSupplier'  => $value['id']
+                );
                 if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
                     $query['sCategory'] = $category;
                 }
@@ -475,7 +480,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $perPage = $element['endRow'] - $element['startRow'] + 1;
         }
 
-        $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
+        $customerGroupId = Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
         $category = (int) $data['article_slider_category'] ? : $category;
 
         $values = array();
@@ -495,7 +500,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             case "newcomer":
             case "price_asc":
             case "price_desc":
-                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $data["article_slider_type"]);
+                $temp = $this->getProductSliderData(
+		   $category,
+		   $customerGroupId,
+		   0,
+		   $perPage,
+		   $data["article_slider_type"]
+		);
                 $values = $temp["values"];
                 $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
 
@@ -522,37 +533,54 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * Returns a list of top sold products
      *
      * @param $category
-     * @param $userGroupKey
+     * @param $customerGroupId
      * @param int $offset
      * @param $limit
      * @param string $sort
      * @return array
      */
-    private function getProductSliderData($category, $userGroupKey, $offset = 0, $limit, $sort = null)
+    private function getProductSliderData($category, $customerGroupId, $offset = 0, $limit, $sort = null)
     {
         $context = Shopware()->Container()->get('context_service')->getProductContext();
-        $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
+        $factory = Shopware()->Container()->get('criteria_factory');
+        $criteria = new Criteria();
 
-        $criteria
-            ->addCategoryCondition(array($category))
-            ->addCustomerGroupCondition(array($userGroupKey))
-            ->offset($offset)
+        $criteria->addBaseCondition(
+            $factory->createCategoryCondition(array($category))
+        );
+        $criteria->addBaseCondition(
+            $factory->createCustomerGroupCondition(array($customerGroupId))
+        );
+        $criteria->addBaseCondition(
+            $factory->createHasPriceCondition()
+        );
+
+        $criteria->offset($offset)
             ->limit($limit);
 
         switch ($sort) {
-            case 'price_asc':
-                $criteria->sortByCheapestPrice();
+             case 'price_asc':
+                 $criteria->addSorting(
+                    $factory->createPriceSorting('ASC')
+                 );
+                 break;
+             case 'price_desc':
+                 $criteria->addSorting(
+                    $factory->createPriceSorting('DESC')
+                    );
+                 break;
+             case 'topseller':
+                 $criteria->addSorting(
+                    $factory->createPopularitySorting('DESC')
+                 );
+                 break;
+             case 'newcomer':
+                $criteria->addSorting(
+                    $factory->createReleaseDateSorting('DESC')
+                );
                 break;
-            case 'price_desc':
-                $criteria->sortByHighestPrice();
-                break;
-            case 'topseller':
-                $criteria->sortByPopularity('DESC');
-                break;
-            case 'newcomer':
-                $criteria->sortByReleaseDate('DESC');
-                break;
-        }
+            }
+
 
         /** @var $result \Shopware\Bundle\SearchBundle\ProductSearchResult */
         $result = Shopware()->Container()->get('product_search')

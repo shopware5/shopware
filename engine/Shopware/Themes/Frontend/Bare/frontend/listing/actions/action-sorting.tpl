@@ -1,13 +1,7 @@
 {* Sorting filter which will be included in the "listing/listing_actions.tpl" *}
 {namespace name="frontend/listing/listing_actions"}
 
-<form class="action--sort action--content block" method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
-    {foreach $categoryParams as $key => $value}
-        {if $key == 'sSort' || $key == $shortParameters.sSort}
-            {continue}
-        {/if}
-        <input type="hidden" name="{$key}" value="{$value}">
-    {/foreach}
+<form class="action--sort action--content block" method="get" data-action-form="true" action="">
 
     {* Necessary to reset the page to the first one *}
     <input type="hidden" name="{$shortParameters.sPage}" value="1">

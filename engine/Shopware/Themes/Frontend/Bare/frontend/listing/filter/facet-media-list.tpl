@@ -1,0 +1,59 @@
+{namespace name="frontend/listing/listing_actions"}
+
+{block name="frontend_listing_filter_facet_media_list"}
+    <div class="filter-panel filter--media facet--{$facet->getFacetName()}"
+         data-filter-type="media">
+
+        {block name="frontend_listing_filter_facet_media_list_flyout"}
+            <div class="filter-panel--flyout">
+
+                {block name="frontend_listing_filter_facet_media_list_title"}
+                    <label class="filter-panel--title">
+                        {$facet->getLabel()}
+                    </label>
+                {/block}
+
+                {block name="frontend_listing_filter_facet_media_list_icon"}
+                    <span class="filter-panel--icon"></span>
+                {/block}
+
+                {block name="frontend_listing_filter_facet_media_list_content"}
+                    <div class="filter-panel--content">
+
+                        {block name="frontend_listing_filter_facet_media_list_list"}
+                            <ul class="filter-panel--media-list">
+
+                                {foreach $facet->getValues() as $option}
+
+                                    {block name="frontend_listing_filter_facet_media_list_option"}
+                                        <li class="filter-panel--media-option">
+
+                                            {block name="frontend_listing_filter_facet_media_list_input"}
+                                                <input type="checkbox"
+                                                       id="__{$facet->getFieldName()}__{$option->getId()}"
+                                                       name="__{$facet->getFieldName()}__{$option->getId()}"
+                                                       value="{$option->getId()}"
+                                                       {if $option->isActive()}checked="checked" {/if}/>
+                                            {/block}
+
+                                            {block name="frontend_listing_filter_facet_media_list_label"}
+                                                {$media = $option->getMedia()}
+
+                                                <label class="filter-panel--media-label"
+                                                       for="__{$facet->getFieldName()}__{$option->getId()}">
+                                                    <img class="filter-panel--media-image"
+                                                         src="{$media->getFile()}"
+                                                         alt="{$option->getLabel()}" />
+                                                </label>
+                                            {/block}
+                                        </li>
+                                    {/block}
+                                {/foreach}
+                            </ul>
+                        {/block}
+                    </div>
+                {/block}
+            </div>
+        {/block}
+    </div>
+{/block}

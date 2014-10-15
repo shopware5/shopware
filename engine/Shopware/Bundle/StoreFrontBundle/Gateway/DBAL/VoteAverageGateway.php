@@ -97,6 +97,10 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
 
         $result = array();
         foreach ($products as $product) {
+            if (!isset($data[$product->getId()])) {
+                continue;
+            }
+
             $key = $product->getNumber();
 
             $votes = $data[$product->getId()];

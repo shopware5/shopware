@@ -556,6 +556,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     public function onAssemble(Enlight_Controller_Router_EventArgs $args)
     {
         $params = $args->getParams();
+
         if (isset($params['sViewport'])) {
             $params['controller'] = $params['sViewport'];
         }

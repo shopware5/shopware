@@ -37,13 +37,21 @@ class PropertyHydrator extends Hydrator
      * @var AttributeHydrator
      */
     private $attributeHydrator;
+    /**
+     * @var MediaHydrator
+     */
+    private $mediaHydrator;
 
     /**
      * @param AttributeHydrator $attributeHydrator
+     * @param MediaHydrator $mediaHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator)
-    {
+    public function __construct(
+        AttributeHydrator $attributeHydrator,
+        MediaHydrator $mediaHydrator
+    ) {
         $this->attributeHydrator = $attributeHydrator;
+        $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
@@ -152,6 +160,12 @@ class PropertyHydrator extends Hydrator
 
         $option->setId((int) $data['__propertyOption_id']);
         $option->setName($data['__propertyOption_value']);
+
+        if (isset($data['__media_id']) && $data['__media_id']) {
+            $option->setMedia(
+                $this->mediaHydrator->hydrate($data)
+            );
+        }
 
         return $option;
     }

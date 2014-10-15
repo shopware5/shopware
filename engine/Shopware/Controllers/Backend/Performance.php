@@ -59,6 +59,37 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     *
+     */
+    public function getConfigAction()
+    {
+        Shopware()->Cache()->remove('Shopware_Config');
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $this->prepareConfigData()
+        ));
+    }
+
+    public function getListingSortingsAction()
+    {
+        /**@var $namespace Enlight_Components_Snippet_Namespace*/
+        $namespace = $this->get('snippets')->getNamespace('frontend/listing/listing_actions');
+
+        $coreSortings = array(
+            array('id' => 1, 'name' => $namespace->get('ListingSortRelease')),
+            array('id' => 2, 'name' => $namespace->get('ListingSortRating')),
+            array('id' => 3, 'name' => $namespace->get('ListingSortPriceLowest')),
+            array('id' => 4, 'name' => $namespace->get('ListingSortPriceHighest')),
+            array('id' => 5, 'name' => $namespace->get('ListingSortName')),
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $coreSortings
+        ));
+    }
+
+    /**
      * Gets a list of id-name of all active shops
      */
     public function getActiveShopsAction()
@@ -106,6 +137,58 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 $this->saveConfig($configKey, $value);
             }
         }
+    }
+
+    /**
+     * Reads all config data and prepares it for our models
+     * @return array
+     */
+    protected function prepareConfigData()
+    {
+        return array(
+            'check'     => $this->getPerformanceCheckData(),
+            'httpCache' => $this->prepareHttpCacheConfig(),
+            'topSeller' => $this->genericConfigLoader(
+                array(
+                    'topSellerActive',
+                    'topSellerValidationTime',
+                    'chartinterval',
+                    'topSellerRefreshStrategy',
+                    'topSellerPseudoSales'
+                )
+            ),
+            'seo'       => $this->prepareSeoConfig(),
+            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate')),
+            'categories' => $this->genericConfigLoader(
+                array(
+                    'moveBatchModeEnabled',
+                    'articlesperpage',
+                    'showSupplierInCategories',
+                    'showImmediateDeliveryFacet',
+                    'showShippingFreeFacet',
+                    'showPriceFacet',
+                    'showVoteAverageFacet',
+                    'displayFiltersInListings',
+                    'defaultListingSorting',
+                )
+            ),
+            'filters' => $this->genericConfigLoader(array(
+                    'propertySorting',
+                    'displayFiltersOnDetailPage'
+                )),
+            'various' => $this->genericConfigLoader(
+                array(
+                    'disableShopwareStatistics',
+                    'TagCloud:show',
+                    'LastArticles:show',
+                    'LastArticles:lastarticlestoshow',
+                    'disableArticleNavigation'
+                )
+            ),
+            'customer' => $this->genericConfigLoader(
+                array('alsoBoughtShow', 'similarViewedShow', 'similarRefreshStrategy', 'similarValidationTime', 'similarActive')
+            ),
+        );
     }
 
     /**
@@ -331,55 +414,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * Reads all config data and prepares it for our models
-     * @return array
-     */
-    protected function prepareConfigData()
-    {
-        return array(
-            'check'     => $this->getPerformanceCheckData(),
-            'httpCache' => $this->prepareHttpCacheConfig(),
-            'topSeller' => $this->genericConfigLoader(
-                array(
-                    'topSellerActive',
-                    'topSellerValidationTime',
-                    'chartinterval',
-                    'topSellerRefreshStrategy',
-                    'topSellerPseudoSales'
-                )
-            ),
-            'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate')),
-            'categories' => $this->genericConfigLoader(
-                array(
-                    'articlesperpage',
-                    'orderbydefault',
-                    'showSupplierInCategories',
-                    'moveBatchModeEnabled'
-                )
-            ),
-            'filters' => $this->genericConfigLoader(array(
-                'propertySorting',
-                'displayFiltersInListings',
-                'displayFilterArticleCount',
-                'displayFiltersOnDetailPage'
-            )),
-            'various' => $this->genericConfigLoader(
-                array(
-                    'disableShopwareStatistics',
-                    'TagCloud:show',
-                    'LastArticles:show',
-                    'LastArticles:lastarticlestoshow',
-                    'disableArticleNavigation'
-                )
-            ),
-            'customer' => $this->genericConfigLoader(
-                array('alsoBoughtShow', 'similarViewedShow', 'similarRefreshStrategy', 'similarValidationTime', 'similarActive')
-            ),
-        );
-    }
-
-    /**
      * Generic helper method to build an array of config which needs to be loaded
      * @param $config
      * @return array
@@ -465,18 +499,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'HttpCache:admin'    => $this->readConfig('HttpCache:admin'),
             'HttpCache:proxy'    => $this->readConfig('HttpCache:proxy')
         );
-    }
-
-    /**
-     *
-     */
-    public function getConfigAction()
-    {
-        Shopware()->Cache()->remove('Shopware_Config');
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->prepareConfigData()
-        ));
     }
 
     /**

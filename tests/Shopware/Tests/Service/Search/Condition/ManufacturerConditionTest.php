@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
@@ -35,61 +37,40 @@ class ManufacturerConditionTest extends TestCase
 
     public function testSingleManufacturer()
     {
-        $category = $this->helper->createCategory();
         $manufacturer = $this->helper->createManufacturer();
+        $condition = new ManufacturerCondition(array($manufacturer->getId()));
 
-        $context = $this->getContext();
-
-        $articles = array(
-            $this->getProduct('testSingleManufacturer-1', $context, $category, null),
-            $this->getProduct('testSingleManufacturer-2', $context, $category, $manufacturer),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addManufacturerCondition(array($manufacturer->getId()));
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testSingleManufacturer-2')
+        $this->search(
+            array(
+                'first' => $manufacturer,
+                'second' => $manufacturer,
+                'third' => null
+            ),
+            array('first', 'second'),
+            null,
+            array($condition)
         );
     }
 
     public function testMultipleManufacturers()
     {
-        $category = $this->helper->createCategory();
         $manufacturer = $this->helper->createManufacturer();
         $second = $this->helper->createManufacturer();
 
-        $context = $this->getContext();
+        $condition = new ManufacturerCondition(array(
+            $manufacturer->getId(),
+            $second->getId()
+        ));
 
-        $articles = array(
-            $this->getProduct('testMultipleManufacturers-1', $context, $category, null),
-            $this->getProduct('testMultipleManufacturers-2', $context, $category, $manufacturer),
-            $this->getProduct('testMultipleManufacturers-3', $context, $category, $second),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addManufacturerCondition(array($manufacturer->getId(), $second->getId()));
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testMultipleManufacturers-2', 'testMultipleManufacturers-3')
+        $this->search(
+            array(
+                'first' => $manufacturer,
+                'second' => $second,
+                'third' => null
+            ),
+            array('first', 'second'),
+            null,
+            array($condition)
         );
     }
 }

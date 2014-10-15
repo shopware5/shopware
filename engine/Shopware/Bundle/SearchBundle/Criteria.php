@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
-
 /**
  * The criteria object is used for the search gateway.
  *
@@ -52,6 +50,11 @@ class Criteria implements \JsonSerializable
      * @var int
      */
     private $limit;
+
+    /**
+     * @var ConditionInterface[]
+     */
+    private $baseConditions = array();
 
     /**
      * @var ConditionInterface[]
@@ -107,234 +110,34 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param array $categoryIds
-     * @return $this
+     * @param $name
+     * @return bool
      */
-    public function addCategoryCondition(array $categoryIds)
+    public function hasCondition($name)
     {
-        return $this->addCondition(
-            new Condition\CategoryCondition($categoryIds)
-        );
-    }
-
-    /**
-     * @param array $manufacturerIds
-     * @return $this
-     */
-    public function addManufacturerCondition(array $manufacturerIds)
-    {
-        return $this->addCondition(
-            new Condition\ManufacturerCondition($manufacturerIds)
-        );
-    }
-
-    /**
-     * @param $min
-     * @param $max
-     *
-     * @return $this
-     */
-    public function addPriceCondition($min, $max)
-    {
-        return $this->addCondition(
-            new Condition\PriceCondition($min, $max)
-        );
-    }
-
-    /**
-     * @param array $valueIds
-     * @return $this
-     */
-    public function addPropertyCondition(array $valueIds)
-    {
-        return $this->addCondition(
-            new Condition\PropertyCondition($valueIds)
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addShippingFreeCondition()
-    {
-        return $this->addCondition(
-            new Condition\ShippingFreeCondition()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addImmediateDeliveryCondition()
-    {
-        return $this->addCondition(
-            new Condition\ImmediateDeliveryCondition()
-        );
-    }
-
-    /**
-     * @param array $customerGroupIds
-     * @return $this
-     */
-    public function addCustomerGroupCondition(array $customerGroupIds)
-    {
-        return $this->addCondition(
-            new Condition\CustomerGroupCondition($customerGroupIds)
-        );
-    }
-
-    /**
-     * @param $field
-     * @param $operator
-     * @param $value
-     * @return $this
-     */
-    public function addProductAttributeCondition($field, $operator, $value)
-    {
-        return $this->addCondition(
-            new ProductAttributeCondition($field, $operator, $value)
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addManufacturerFacet()
-    {
-        return $this->addFacet(
-            new Facet\ManufacturerFacet()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addCategoryFacet()
-    {
-        return $this->addFacet(
-            new Facet\CategoryFacet()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addShippingFreeFacet()
-    {
-        return $this->addFacet(
-            new Facet\ShippingFreeFacet()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addPriceFacet()
-    {
-        return $this->addFacet(
-            new Facet\PriceFacet()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addImmediateDeliveryFacet()
-    {
-        return $this->addFacet(
-            new Facet\ImmediateDeliveryFacet()
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function addPropertyFacet()
-    {
-        return $this->addFacet(
-            new Facet\PropertyFacet()
-        );
-    }
-
-    /**
-     * @param $field
-     * @param string $mode
-     * @return $this
-     */
-    public function addProductAttributeFacet($field, $mode = null)
-    {
-        if ($mode === null) {
-            $mode = Facet\ProductAttributeFacet::MODE_VALUES;
+        if (array_key_exists($name, $this->baseConditions)) {
+            return true;
         }
 
-        return $this->addFacet(
-            new Facet\ProductAttributeFacet($field, $mode)
-        );
+        return array_key_exists($name, $this->conditions);
     }
 
     /**
-     * @param string $direction
-     * @return $this
+     * @param $name
+     * @return bool
      */
-    public function sortByReleaseDate($direction = 'ASC')
+    public function hasSorting($name)
     {
-        return $this->addSorting(
-            new Sorting\ReleaseDateSorting($direction)
-        );
+        return array_key_exists($name, $this->sortings);
     }
 
     /**
-     * @param string $direction
-     * @return $this
+     * @param $name
+     * @return bool
      */
-    public function sortByPopularity($direction = 'ASC')
+    public function hasFacet($name)
     {
-        return $this->addSorting(
-            new Sorting\PopularitySorting($direction)
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function sortByCheapestPrice()
-    {
-        return $this->addSorting(
-            new Sorting\PriceSorting('ASC')
-        );
-    }
-
-    /**
-     * @return $this
-     */
-    public function sortByHighestPrice()
-    {
-        return $this->addSorting(
-            new Sorting\PriceSorting('DESC')
-        );
-    }
-
-    /**
-     * @param string $direction
-     * @return $this
-     */
-    public function sortByProductName($direction = 'ASC')
-    {
-        return $this->addSorting(
-            new Sorting\ProductNameSorting($direction)
-        );
-    }
-
-    /**
-     * @param $field
-     * @param string $direction
-     * @return $this
-     */
-    public function sortByProductAttribute($field, $direction = 'ASC')
-    {
-        return $this->addSorting(
-            new Sorting\ProductAttributeSorting($field, $direction)
-        );
+        return array_key_exists($name, $this->facets);
     }
 
     /**
@@ -360,6 +163,17 @@ class Criteria implements \JsonSerializable
     }
 
     /**
+     * @param ConditionInterface $condition
+     * @return $this
+     */
+    public function addBaseCondition(ConditionInterface $condition)
+    {
+        $this->baseConditions[$condition->getName()] = $condition;
+
+        return $this;
+    }
+
+    /**
      * @param SortingInterface $sorting
      * @return $this
      */
@@ -376,7 +190,15 @@ class Criteria implements \JsonSerializable
      */
     public function getCondition($name)
     {
-        return $this->conditions[$name];
+        if (array_key_exists($name, $this->baseConditions)) {
+            return $this->baseConditions[$name];
+        }
+
+        if (array_key_exists($name, $this->conditions)) {
+            return $this->conditions[$name];
+        }
+
+        return null;
     }
 
     /**
@@ -402,7 +224,10 @@ class Criteria implements \JsonSerializable
      */
     public function getConditions()
     {
-        return $this->conditions;
+        return array_merge(
+            $this->baseConditions,
+            $this->conditions
+        );
     }
 
     /**
@@ -429,8 +254,88 @@ class Criteria implements \JsonSerializable
     public function resetSorting()
     {
         $this->sortings = array();
-
         return $this;
+    }
+
+    /**
+     * Allows to reset the internal base condition collection.
+     *
+     * @return $this
+     */
+    public function resetBaseConditions()
+    {
+        $this->baseConditions = array();
+        return $this;
+    }
+
+    /**
+     * Allows to reset the internal condition collection.
+     *
+     * @return $this
+     */
+    public function resetConditions()
+    {
+        $this->conditions = array();
+        return $this;
+    }
+
+    /**
+     * Allows to reset the internal facet collection.
+     *
+     * @return $this
+     */
+    public function resetFacets()
+    {
+        $this->facets = array();
+        return $this;
+    }
+
+    /**
+     * Removes a condition of the current criteria object.
+     *
+     * @param $name
+     */
+    public function removeCondition($name)
+    {
+        if (array_key_exists($name, $this->conditions)) {
+            unset($this->conditions[$name]);
+        }
+    }
+
+    /**
+     * Removes a base condition of the current criteria object.
+     *
+     * @param $name
+     */
+    public function removeBaseCondition($name)
+    {
+        if (array_key_exists($name, $this->baseConditions)) {
+            unset($this->baseConditions[$name]);
+        }
+    }
+
+    /**
+     * Removes a facet of the current criteria object.
+     *
+     * @param $name
+     */
+    public function removeFacet($name)
+    {
+        if (array_key_exists($name, $this->facets)) {
+            unset($this->facets[$name]);
+        }
+    }
+
+    /**
+     * Removes a sorting of the current criteria object.
+     *
+     * @param $name
+     */
+    public function removeSorting($name)
+    {
+        if (array_key_exists($name, $this->sortings)) {
+            unset($this->sortings[$name]);
+        }
     }
 
     /**
@@ -438,6 +343,28 @@ class Criteria implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return get_object_vars($this);
+        $data = get_object_vars($this);
+
+        $data['baseConditions'] = array();
+        foreach ($this->baseConditions as $object) {
+            $data['baseConditions'][get_class($object)] = $object;
+        }
+
+        $data['conditions'] = array();
+        foreach ($this->conditions as $object) {
+            $data['conditions'][get_class($object)] = $object;
+        }
+
+        $data['sortings'] = array();
+        foreach ($this->sortings as $object) {
+            $data['sortings'][get_class($object)] = $object;
+        }
+
+        $data['facets'] = array();
+        foreach ($this->facets as $object) {
+            $data['facets'][get_class($object)] = $object;
+        }
+
+        return $data;
     }
 }

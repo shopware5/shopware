@@ -21,6 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaFactory;
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
+use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
+use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
+use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
+use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
+use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
+use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\ProductSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
  * @category  Shopware
@@ -36,73 +48,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if ($this->Request()->getParam('sSearchMode') == "supplier") {
-            $params = array(
-                'sViewport' => 'supplier'
-            );
-            if ($page = $this->Request()->getParam('sPage')) {
-                $params['p'] = $page;
-            }
-            if ($supplierId = $this->Request()->getParam('sSearch')) {
-                $params['sSupplier'] = $supplierId;
-            }
-
-            return $this->redirect($params, array('code' => 301));
-        }
         return $this->forward("defaultSearch");
-    }
-
-    /**
-     * Get search configuration based on shop properties
-     * @param string $term
-     * @return array
-     */
-    public function getSearchConfiguration($term)
-    {
-        $config = array();
-        $config["term"] = $config["sSearch"] = $term;
-        $config['restrictSearchResultsToCategory'] = Shopware()->Shop()->get('parentID');
-        $config['filter']['supplier'] = $config['sFilter']['supplier'] = (int) $this->Request()->sFilter_supplier;
-        $config['filter']['category'] = $config['sFilter']['category'] = (int) $this->Request()->sFilter_category;
-        $config['filter']['price'] = $config['sFilter']['price'] = (int) $this->Request()->sFilter_price;
-        $config['filter']['propertyGroup'] = $this->Request()->sFilter_propertygroup;
-        $config['filter']['propertygroup'] = $config['filter']['propertyGroup'];
-        $config['sFilter']['propertygroup']= $config['filter']['propertyGroup'];
-
-        $config['sortSearchResultsBy'] = $config["sSort"] = (int) $this->Request()->sSort;
-        $config['sortSearchResultsByDirection'] = (int) $this->Request()->sOrder;
-
-        if (!empty($this->Request()->sPage)) {
-            $config['currentPage'] = (int) $this->Request()->sPage;
-        } else {
-            $config['currentPage'] = 1;
-        }
-
-        if (!empty($this->Request()->sPerPage)) {
-            $config['resultsPerPage'] = (int) $this->Request()->sPerPage;
-        } elseif (!empty(Shopware()->Config()->sFUZZYSEARCHRESULTSPERPAGE)) {
-            $config['resultsPerPage'] = (int) Shopware()->Config()->sFUZZYSEARCHRESULTSPERPAGE;
-        } else {
-            $config['resultsPerPage'] = 8;
-        }
-
-        $config["sPerPage"] = $config["resultsPerPage"];
-
-        $config['sSearchOrginal'] = $config['term'];
-        $config['sSearchOrginal'] = htmlspecialchars($config['sSearchOrginal']);
-
-        $config["shopLanguageId"] = Shopware()->Shop()->getId();
-        $config["shopHasTranslations"] = Shopware()->Shop()->get('skipbackend') == true ? false : true;
-        //$config["shopCurrency"] = Shopware()->Shop()->Currency();
-        // todo@all Change Call to system class @deprecated
-        $config["shopCustomerGroup"] = Shopware()->System()->sUSERGROUP;
-        $config["shopCustomerGroupDiscount"] = Shopware()->System()->sUSERGROUPDATA["discount"];
-        $config["shopCustomerGroupMode"] = Shopware()->System()->sUSERGROUPDATA["mode"];
-        $config["shopCustomerGroupTax"] = Shopware()->System()->sUSERGROUPDATA["tax"];
-        $config["shopCustomerGroupId"] = Shopware()->System()->sUSERGROUPDATA["id"];
-        $config["shopCurrencyFactor"] = Shopware()->System()->sCurrency["factor"];
-
-        return $config;
     }
 
     /**
@@ -114,12 +60,11 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $mapper = $this->get('query_alias_mapper');
         $mapper->replaceShortRequestQueries($this->Request());
 
-        $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($this->Request()->sSearch))));
-        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $term = str_replace("/","",$term);
+        if (!$this->Request()->has('sSort')) {
+            $this->Request()->setParam('sSort', 7);
+        }
 
-        // Load search configuration
-        $config = $this->getSearchConfiguration($term);
+        $term = $this->getSearchTerm();
 
         // Check if we have a one to one match for ordernumber, then redirect
         $location = $this->searchFuzzyCheck($term);
@@ -129,200 +74,111 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $this->View()->loadTemplate('frontend/search/fuzzy.tpl');
 
-        // Prepare links for template
-        $links = $this->searchDefaultPrepareLinks($config);
+        $minLengthSearchTerm = $this->get('config')->get('minSearchLenght');
+        if (strlen($term) < (int) $minLengthSearchTerm) {
+            return;
+        }
 
-        $minLengthSearchTerm = Shopware()->Config()->sMINSEARCHLENGHT;
+        /**@var $context ProductContextInterface*/
+        $context  = $this->get('context_service')->getProductContext();
 
-        // Check if search term met minimum length
-        if (strlen($term) >= (int) $minLengthSearchTerm) {
-            // Configure search adapter
-            $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
-            if (empty($adapter)) {
-                $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
-            }
+        /**@var $criteria Criteria*/
+        $criteria = $this->get('criteria_factory')->createCriteriaFromRequest(
+            $this->Request(),
+            $context
+        );
 
-            $search = new Shopware_Components_Search($adapter);
-            // Submit search request
-            $searchResults = $search->search($term, $config);
-            // Initiate variables
-            $resultCount = 0;
-            $resultArticles = array();
-            $resultSuppliersAffected = array();
-            $resultPriceRangesAffected = array();
-            $resultCurrentCategory = array();
+        if (!$criteria->hasCondition('category')) {
+            $criteria->addBaseCondition(
+                new CategoryCondition(array(
+                    $context->getShop()->getCategory()->getId()
+                ))
+            );
+        }
 
-            // If search has results
-            if ($searchResults !== false) {
-                $resultCount = $searchResults->getResultCount();
-                $resultArticles = $searchResults->getResult();
-                $resultSuppliersAffected = $searchResults->getAffectedSuppliers();
-                $resultPriceRangesAffected = $searchResults->getAffectedPriceRanges();
-                $resultAffectedCategories = $searchResults->getAffectedCategories();
-                $resultCurrentCategory = $searchResults->getCurrentCategoryFilter();
-            }
+        $criteria->addFacet(new ImmediateDeliveryFacet())
+            ->addFacet(new ShippingFreeFacet())
+            ->addFacet(new PriceFacet())
+            ->addFacet(new VoteAverageFacet())
+            ->addFacet(new ManufacturerFacet())
+            ->addFacet(new PropertyFacet())
+            ->addFacet(new CategoryFacet());
 
-            // Generate page array
-            $sPages = $this->generatePagesResultArray($resultCount, $config['resultsPerPage'], $config["currentPage"]);
+        $criteria = $this->get('events')->filter('Shopware_Search_Create_Criteria', $criteria, array(
+            'context' => $context
+        ));
 
-            // Get additional information for each search result
-            $articles = array();
-            foreach ($resultArticles as $article) {
-                $article = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $article["articleID"]);
-                if (!empty($article['articleID'])) {
+        /**@var $result ProductSearchResult*/
+        $result   = $this->get('product_search')->search($criteria, $context);
+        $articles = $this->convertProducts($result);
 
-                    // fix correct vote averange
-                    $article['sVoteAverageOriginal']['average'] = $article['sVoteAverange']['averange'];
+        if ($this->get('config')->get('traceSearch', true)) {
+            $this->get('search_term_logger')->logResult(
+                $criteria,
+                $result
+            );
+        }
 
-                    $articles[] = $article;
-                }
-            }
+        $pageCounts = $this->get('config')->get('fuzzySearchSelectPerPage');
 
-            $resultSmartyArray = array(
+        $this->View()->assign(array(
+            'term' => $term,
+            'criteria' => $criteria,
+            'facets' => $result->getFacets(),
+            'sPage' => $this->Request()->getParam('sPage', 1),
+            'sSort' => $this->Request()->getParam('sSort', 7),
+            'sTemplate' => $this->Request()->getParam('sTemplate'),
+            'sPerPage' => array_values(explode("|", $pageCounts)),
+            'sRequests' => $this->Request()->getParams(),
+            'shortParameters' => $mapper->getQueryAliases(),
+            'pageSizes' => array_values(explode("|", $pageCounts)),
+            'sSearchResults' => array(
                 'sArticles' => $articles,
-                'sArticlesCount' => $resultCount,
-                'sSuppliers' => $resultSuppliersAffected,
-                'sPrices' => $resultPriceRangesAffected,
-                'sCategories' => $resultAffectedCategories,
-                'sLastCategory' => $resultCurrentCategory
+                'sArticlesCount' => $result->getTotalCount()
+            )
+        ));
+    }
+
+    /**
+     * @param ProductSearchResult $result
+     * @return array
+     */
+    private function convertProducts(ProductSearchResult $result)
+    {
+        $articles = array();
+        foreach($result->getProducts() as $product) {
+            $article = $this->get('legacy_struct_converter')->convertListProductStruct(
+                $product
             );
 
+            $article['sVoteAverageOriginal']['average'] = $article['sVoteAverange']['averange'];
+            if ($article['sVoteAverange']['averange']) {
+                $article['sVoteAverange']['averange'] /= 2;
+            }
 
-            // Assign result to template
-            $this->View()->sRequests = $config;
-            $this->View()->sSearchResults = $resultSmartyArray;
-            $this->View()->sPerPage = array_values(explode("|", Shopware()->Config()->sFUZZYSEARCHSELECTPERPAGE));
-            $this->View()->sLinks = $links;
-            $this->View()->sPages = $sPages;
-            $this->View()->sPriceFilter = $search->getAdapter()->getPriceRanges();
-
-            Enlight()->Events()->notify('Shopware_Controllers_Frontend_Search_ModifySearchResult',array("subject" => $this,"search"=>$search,"result"=>$searchResults));
-
-            $this->View()->sCategoriesTree = $this->getCategoryTree(
-                $resultCurrentCategory, $config['restrictSearchResultsToCategory']
-            );
+            $articles[] = $article;
         }
+
+        if (empty($articles)) {
+            return null;
+        }
+        return $articles;
     }
 
     /**
-     * Generate array with pages for template
-     * @param $resultCount int Count of search results
-     * @param $resultsPerPage int How many products per page
-     * @param $currentPage int Current page offset
-     * @return array
+     * @return string
      */
-    public function generatePagesResultArray($resultCount, $resultsPerPage, $currentPage)
+    private function getSearchTerm()
     {
+        $term = $this->Request()->get('sSearch', '');
 
-        $numberPages = ceil($resultCount / $resultsPerPage);
-        if ($numberPages > 1) {
-            for ($i = 1; $i <= $numberPages; $i++) {
-                $sPages['pages'][$i] = $i;
-            }
-            // Previous page
-            if ($currentPage != 1) {
-                $sPages["before"] = $currentPage - 1;
-            } else {
-                $sPages["before"] = null;
-            }
-            // Next page
-            if ($currentPage != $numberPages) {
-                $sPages["next"] = $currentPage +1;
-            } else {
-                $sPages["next"] = null;
-            }
-        }
-        return $sPages;
+        $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));
+
+        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
+        $term = str_replace("/","",$term);
+
+        return $term;
     }
-
-    /**
-     * Returns a category tree
-     *
-     * @param int $id
-     * @param int $mainId
-     * @return array
-     */
-    protected function getCategoryTree($id, $mainId)
-    {
-        $sql = '
-            SELECT
-                `id` ,
-                `description`,
-                `parent`
-            FROM `s_categories`
-            WHERE `id`=?
-        ';
-        $cat = Shopware()->Db()->fetchRow($sql, array($id));
-        if (empty($cat['id']) || $id == $cat['parent'] || $id == $mainId) {
-            return array();
-        } else {
-            $cats = $this->getCategoryTree($cat['parent'], $mainId);
-            $cats[$id] = $cat;
-            return $cats;
-        }
-    }
-
-    /**
-     * Prepare fuzzy search links
-     *
-     * @param array $config
-     * @return array
-     */
-    protected function searchDefaultPrepareLinks(array $config)
-    {
-        $links = array();
-
-        $links['sLink'] = Shopware()->Config()->BaseFile . '?sViewport=search';
-        $links['sLink'] .= '&sSearch=' . urlencode($config['term']);
-        $links['sSearch'] = $this->Front()->Router()->assemble(array('sViewport' => 'search'));
-
-        $links['sPage'] = $links['sLink'];
-        $links['sPerPage'] = $links['sLink'];
-        $links['sSort'] = $links['sLink'];
-
-        $links['sFilter']['category'] = $links['sLink'];
-        $links['sFilter']['supplier'] = $links['sLink'];
-        $links['sFilter']['price'] = $links['sLink'];
-        $links['sFilter']['propertygroup'] = $links['sLink'];
-
-        $filterTypes = array('supplier', 'category', 'price', 'propertygroup');
-
-        foreach ($filterTypes as $filterType) {
-            if (empty($config['filter'][$filterType])) {
-                continue;
-            }
-            $links['sPage'] .= "&sFilter_$filterType=" . $config['filter'][$filterType];
-            $links['sPerPage'] .= "&sFilter_$filterType=" . $config['filter'][$filterType];
-            $links['sSort'] .= "&sFilter_$filterType=" . $config['filter'][$filterType];
-
-            foreach ($filterTypes as $filterType2) {
-                if ($filterType != $filterType2) {
-                    $links['sFilter'][$filterType2] .= "&sFilter_$filterType=" . urlencode($config['filter'][$filterType]);
-                }
-            }
-        }
-
-        foreach (array('sortSearchResultsBy' => 'sSort', 'resultsPerPage' => 'sPerPage') as $property => $name) {
-            if (!empty($config[$property])) {
-                if ($name != 'sPage') {
-                    $links['sPage'] .= "&$name=" . $config[$property];
-                }
-                if ($name != 'sPerPage') {
-                    $links['sPerPage'] .= "&$name=" . $config[$property];
-                }
-                $links['sFilter']['__'] .= "&$name=" . $config[$property];
-            }
-        }
-
-        foreach ($filterTypes as $filterType) {
-            $links['sFilter'][$filterType] .= $links['sFilter']['__'];
-        }
-
-        $links['sSupplier'] = $links['sSort'];
-
-        return $links;
-    }
-
 
     /**
      * Search product by order number
@@ -332,7 +188,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     protected function searchFuzzyCheck($search)
     {
-        $minSearch = empty(Shopware()->Config()->sMINSEARCHLENGHT) ? 2 : (int) Shopware()->Config()->sMINSEARCHLENGHT;
+        $config = $this->get('config');
+
+        $minSearch = empty($config->sMINSEARCHLENGHT) ? 2 : (int) $config->sMINSEARCHLENGHT;
         $number = null;
         if (!empty($search) && strlen($search) >= $minSearch) {
             $sql = '
@@ -344,7 +202,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 GROUP BY articleID
                 LIMIT 2
             ';
-            $articles = Shopware()->Db()->fetchAll($sql, array($search));
+            $articles = $this->get('db')->fetchAll($sql, array($search));
             if ($articles[0]['configurator_set_id']) {
                 $number = $articles[0]['ordernumber'];
             }
@@ -360,7 +218,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                     GROUP BY articleID
                     LIMIT 2
                 ";
-                $articles = Shopware()->Db()->fetchCol($sql, array($search, $search));
+                $articles = $this->get('db')->fetchCol($sql, array($search, $search));
             }
         }
         if (!empty($articles) && count($articles) == 1) {
@@ -374,12 +232,18 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 WHERE ac.articleID = ?
                 LIMIT 1
             ';
-            $articles = Shopware()->Db()->fetchCol($sql, array(Shopware()->Shop()->get('parentID'), $articles[0]));
+
+            $articles = $this->get('db')->fetchCol($sql, array(
+                $this->get('shop')->get('parentID'),
+                $articles[0]
+            ));
         }
         if (!empty($articles) && count($articles) == 1) {
-            return $this->Front()->Router()->assemble(array('sViewport' => 'detail', 'sArticle' => $articles[0], 'number' => $number));
+            return $this->get('router')->assemble(array(
+                'sViewport' => 'detail',
+                'sArticle' => $articles[0],
+                'number' => $number
+            ));
         }
     }
-
-
 }

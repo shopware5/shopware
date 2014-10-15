@@ -68,7 +68,7 @@ class ConfiguratorHydrator extends Hydrator
         foreach ($data as $row) {
             $groupId = $row['__configuratorGroup_id'];
 
-            if ($groups[$groupId]) {
+            if (isset($groups[$groupId])) {
                 $group = $groups[$groupId];
             } else {
                 $group = $this->createGroup($row);

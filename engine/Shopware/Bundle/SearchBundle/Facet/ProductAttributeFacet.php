@@ -45,16 +45,6 @@ class ProductAttributeFacet implements FacetInterface
     private $field;
 
     /**
-     * @var bool
-     */
-    private $filtered;
-
-    /**
-     * @var array
-     */
-    private $result;
-
-    /**
      * @var string
      */
     private $mode;
@@ -74,24 +64,7 @@ class ProductAttributeFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'product_attribute_facet_' . $this->field;
-    }
-
-    /**
-     * Returns true if the search result is filtered by this facet.
-     * @return bool
-     */
-    public function isFiltered()
-    {
-        return $this->filtered;
-    }
-
-    /**
-     * @param boolean $filtered
-     */
-    public function setFiltered($filtered)
-    {
-        $this->filtered = $filtered;
+        return 'product_attribute_' . $this->field;
     }
 
     /**
@@ -108,22 +81,6 @@ class ProductAttributeFacet implements FacetInterface
     public function setField($field)
     {
         $this->field = $field;
-    }
-
-    /**
-     * @return array
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * @param array $result
-     */
-    public function setResult($result)
-    {
-        $this->result = $result;
     }
 
     /**
@@ -148,5 +105,14 @@ class ProductAttributeFacet implements FacetInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param array $data
+     * @return FacetInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self($data['field'], $data['mode']);
     }
 }

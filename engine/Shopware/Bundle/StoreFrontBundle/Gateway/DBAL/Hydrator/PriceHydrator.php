@@ -165,7 +165,7 @@ class PriceHydrator extends Hydrator
         $group->setName($first['__priceGroup_description']);
 
         $discounts = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $discounts[] = $this->hydratePriceDiscount($row);
         }
 

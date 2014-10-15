@@ -42,9 +42,9 @@
 	<div class="sort-filter">
 		<label for="sSort">{s name='ListingLabelSort'}{/s}</label>
 		<select name="sSort" id="sSort" class="auto_submit">
-			<option value="6"{if $sRequests.sSort eq 6} selected="selected"{/if}>{s name='ListingSortRelevance'}{/s}</option>
+			<option value="7"{if $sRequests.sSort eq 7} selected="selected"{/if}>{s name='ListingSortRelevance'}{/s}</option>
 			<option value="1"{if $sRequests.sSort eq 1} selected="selected"{/if}>{s name='ListingSortRelease'}{/s}</option>
-			<option value="7"{if $sRequests.sSort eq 7} selected="selected"{/if}>{s name='ListingSortRating'}{/s}</option>
+			<option value="2"{if $sRequests.sSort eq 2} selected="selected"{/if}>{s name='ListingSortRating'}{/s}</option>
 			<option value="3"{if $sRequests.sSort eq 3} selected="selected"{/if}>{s name='ListingSortPriceLowest'}{/s}</option>
 			<option value="4"{if $sRequests.sSort eq 4} selected="selected"{/if}>{s name='ListingSortPriceHighest'}{/s}</option>
 			<option value="5"{if $sRequests.sSort eq 5} selected="selected"{/if}>{s name='ListingSortName'}{/s}</option>

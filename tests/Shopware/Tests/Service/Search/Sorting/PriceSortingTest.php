@@ -2,9 +2,13 @@
 
 namespace Shopware\Tests\Service\Search\Sorting;
 
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -65,15 +69,18 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            $context,
-            $sorting,
             array(
                 'first'  => array($customerGroup->getKey() => 20, $fallback->getKey() => 1),
                 'second' => array($customerGroup->getKey() => 10, $fallback->getKey() => 1),
                 'third'  => array($customerGroup->getKey() => 12, $fallback->getKey() => 1),
                 'fourth' => array($customerGroup->getKey() => 14, $fallback->getKey() => 1)
             ),
-            array('second', 'third', 'fourth', 'first')
+            array('second', 'third', 'fourth', 'first'),
+            null,
+            array(),
+            array(),
+            array($sorting),
+            $context
         );
     }
 
@@ -85,15 +92,18 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            $context,
-            $sorting,
             array(
                 'first'  => array($fallback->getKey()  => 20),
                 'second' => array($fallback->getKey()  => 10),
                 'third'  => array($fallback->getKey()  => 12),
                 'fourth' => array($fallback->getKey()  => 14)
             ),
-            array('second', 'third', 'fourth', 'first')
+            array('second', 'third', 'fourth', 'first'),
+            null,
+            array(),
+            array(),
+            array($sorting),
+            $context
         );
     }
 
@@ -106,15 +116,18 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            $context,
-            $sorting,
             array(
                 'first'  => array($customerGroup->getKey() => 20, $fallback->getKey() => 1),
                 'second' => array($fallback->getKey() => 10),
                 'third'  => array($fallback->getKey() => 12),
                 'fourth' => array($customerGroup->getKey() => 14, $fallback->getKey() => 1)
             ),
-            array('second', 'third', 'fourth', 'first')
+            array('second', 'third', 'fourth', 'first'),
+            null,
+            array(),
+            array(),
+            array($sorting),
+            $context
         );
     }
 
@@ -127,15 +140,18 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $result = $this->search(
-            $context,
-            $sorting,
             array(
                 'first'  => array($customerGroup->getKey() => 40, $fallback->getKey() => 1),
                 'second' => array($fallback->getKey() => 10),
                 'third'  => array($fallback->getKey() => 20),
                 'fourth' => array($customerGroup->getKey() => 30, $fallback->getKey() => 1)
             ),
-            array('second', 'third', 'fourth', 'first')
+            array('second', 'third', 'fourth', 'first'),
+            null,
+            array(),
+            array(),
+            array($sorting),
+            $context
         );
 
         $products = $result->getProducts();
@@ -157,31 +173,29 @@ class PriceSortingTest extends TestCase
         $this->assertEquals(126.00, $product->getAttribute('search')->get('cheapest_price'));
     }
 
-    private function search(
-        Context $context,
-        PopularitySorting $sorting,
+    protected function search(
         $products,
-        $expectedNumbers
+        $expectedNumbers,
+        $category = null,
+        $conditions = array(),
+        $facets = array(),
+        $sortings = array(),
+        $context = null
     ) {
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $prices) {
-            $data = $this->getProduct($number, $context, $category, $prices);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addSorting($sorting);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
+        $result = parent::search(
+            $products,
+            $expectedNumbers,
+            $category,
+            $conditions,
+            $facets,
+            $sortings,
+            $context
+        );
 
         $this->assertSearchResultSorting($result, $expectedNumbers);
 
         return $result;
     }
+
 
 }

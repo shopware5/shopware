@@ -4,11 +4,22 @@ namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResultInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
 class CategoryFacetTest extends TestCase
 {
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null,
+        $additionally
+    ) {
+        return parent::getProduct($number, $context, $additionally, $additionally);
+    }
 
     public function testSingleProductInFacet()
     {
@@ -21,27 +32,38 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
-        $facet = new CategoryFacet();
-        $this->search(
-            $facet,
-            $baseCategory,
+        $result = $this->search(
             array(
                 'first' => $baseCategory,
                 'second' => $subCategory,
                 'third' => $subCategory,
                 'fourth' => null
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            $baseCategory,
+            array(),
+            array(new CategoryFacet())
         );
 
-        $this->assertCount(1, $facet->getCategories());
+        $this->assertCount(1, $result->getFacets());
 
-        /**@var $category \Shopware\Bundle\StoreFrontBundle\Struct\Category*/
-        $category = array_shift($facet->getCategories());
+        $facet = $result->getFacets();
+        $facet = $facet[0];
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Category', $category);
-        $this->assertTrue($category->hasAttribute('facet'));
-        $this->assertEquals(2, $category->getAttribute('facet')->get('total'));
+        /**@var $facet TreeFacetResultInterface*/
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+
+        $this->assertCount(1, $facet->getValues());
+
+        $value = $facet->getValues()[0];
+        $this->assertEquals('Deutsch', $value->getLabel());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('firstLevel', $value->getLabel());
+        $this->assertTrue($value->isActive());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('secondLevel', $value->getLabel());
     }
 
     public function testMultipleCategories()
@@ -59,10 +81,7 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
-        $facet = new CategoryFacet();
-        $this->search(
-            $facet,
-            $baseCategory,
+        $result = $this->search(
             array(
                 'first' => $subCategory1,
                 'second' => $subCategory1,
@@ -70,21 +89,29 @@ class CategoryFacetTest extends TestCase
                 'fourth' => $subCategory2,
                 'fifth' => $subCategory2
             ),
-            array('first', 'second', 'third', 'fourth', 'fifth')
+            array('first', 'second', 'third', 'fourth', 'fifth'),
+            $baseCategory,
+            array(),
+            array(new CategoryFacet())
         );
 
-        $this->assertCount(2, $facet->getCategories());
+        $facet = $result->getFacets();
+        $facet = $facet[0];
 
-        foreach ($facet->getCategories() as $category) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Category', $category);
-            $this->assertTrue($category->hasAttribute('facet'));
+        /**@var $facet TreeFacetResultInterface*/
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
-            if ($category->getId() === $subCategory1->getId()) {
-                $this->assertEquals(2, $category->getAttribute('facet')->get('total'));
-            } else {
-                $this->assertEquals(3, $category->getAttribute('facet')->get('total'));
-            }
-        }
+        $this->assertCount(1, $facet->getValues());
+
+        $value = $facet->getValues()[0];
+        $this->assertEquals('Deutsch', $value->getLabel());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('firstLevel', $value->getLabel());
+        $this->assertTrue($value->isActive());
+
+        $this->assertEquals('secondLevel-1', $value->getValues()[0]->getLabel());
+        $this->assertEquals('secondLevel-2', $value->getValues()[1]->getLabel());
     }
 
     public function testNestedCategories()
@@ -108,10 +135,7 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
-        $facet = new CategoryFacet();
-        $this->search(
-            $facet,
-            $baseCategory,
+        $result = $this->search(
             array(
                 'first' => $subCategory1,
                 'second' => $subCategory1,
@@ -119,54 +143,31 @@ class CategoryFacetTest extends TestCase
                 'fourth' => $subCategory3,
                 'fifth' => $subCategory3
             ),
-            array('first', 'second', 'third', 'fourth', 'fifth')
+            array('first', 'second', 'third'),
+            $subCategory1,
+            array(),
+            array(new CategoryFacet())
         );
 
-        $this->assertCount(2, $facet->getCategories());
+        $facet = $result->getFacets();
+        $facet = $facet[0];
 
-        foreach ($facet->getCategories() as $category) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Category', $category);
-            $this->assertTrue($category->hasAttribute('facet'));
+        /**@var $facet TreeFacetResultInterface*/
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
-            if ($category->getId() === $subCategory1->getId()) {
-                $this->assertEquals(3, $category->getAttribute('facet')->get('total'));
-            } else {
-                $this->assertEquals(2, $category->getAttribute('facet')->get('total'));
-            }
-        }
+        $this->assertCount(1, $facet->getValues());
+
+        $value = $facet->getValues()[0];
+        $this->assertEquals('Deutsch', $value->getLabel());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('firstLevel', $value->getLabel());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('secondLevel-1', $value->getLabel());
+        $this->assertTrue($value->isActive());
+
+        $value = $value->getValues()[0];
+        $this->assertEquals('thirdLevel-2', $value->getLabel());
     }
-
-    /**
-     * @param FacetInterface $facet
-     * @param Category $category
-     * @param $products
-     * @param $expectedNumbers
-     * @return \Shopware\Bundle\SearchBundle\ProductNumberSearchResult
-     */
-    private function search(
-        FacetInterface $facet,
-        Category $category,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-
-        foreach ($products as $number => $productCategory) {
-            $data = $this->getProduct($number, $context, $productCategory);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
-    }
-
-
 }

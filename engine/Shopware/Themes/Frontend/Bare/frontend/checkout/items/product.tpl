@@ -72,7 +72,7 @@
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
                 {block name='frontend_checkout_cart_item_quantity_selection'}
                     {if !$sBasketItem.additional_details.laststock || ($sBasketItem.additional_details.laststock && $sBasketItem.additional_details.instock > 0)}
-                        <select name="sQuantity" data-auto-submit-form="true">
+                        <select name="sQuantity" data-auto-submit="true">
                             {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
                                 <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
                                     {$smarty.section.i.index}

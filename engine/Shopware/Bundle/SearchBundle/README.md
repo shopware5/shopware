@@ -5,22 +5,22 @@
 - **Issue-Tracker**: <http://jira.shopware.de/jira>
 
 ## How to use
-The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\SearchBundle\ProductNumberSearch are equals. Only the result object is different.
+The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\SearchBundle\ProductNumberSearch are equal. Only the result object is different.
 
 ```
-//load or create a context object to define which user context are set
+//load or create a context object to define which user context is set
 $context = Shopware()->Container()->get('context_service')->getShopContext();
 
 $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
 //defines to search only products which are assigned to the category with the id 3.
-$criteria->addCategoryCondition(array(3));
+$criteria->addCondition(new \Shopware\Bundle\SearchBundle\Condition\CategoryCondition(array(3));
 
 //defines to generate a price facet, which displays the price range of the search result.
-$criteria->addPriceFacet();
+$criteria->addFacet(new \Shopware\Bundle\SearchBundle\Facet\PriceFacet());
 
 //defines to sort by the cheapest price of the products.
-$criteria->sortByCheapestPrice();
+$criteria->addSorting(new \Shopware\Bundle\SearchBundle\Sorting\PriceSorting());
 
 //defines to load only an offset of products and not the whole product catalog
 $criteria->offset(0);
@@ -58,9 +58,9 @@ The implementation of the ProductNumberSearch has to interpret the provided Shop
 ## Default ProductNumberSearch
 Shopware implements a DBAL ProductNumberSearch as default. This implementation of the ProductNumberSearch interprets the provided context and criteria object over associated handler classes. 
 
-- Shopware\Bundle\SearchBundle\DBAL\SortingHandler
-- Shopware\Bundle\SearchBundle\DBAL\ConditionHandler
-- Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+- Shopware\Bundle\SearchBundleDBAL\SortingHandler
+- Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+- Shopware\Bundle\SearchBundleDBAL\FacetHandler
 
 Notice: Each term has his own handler class and can only be handled by one handler class.
 
@@ -68,9 +68,9 @@ Notice: Each term has his own handler class and can only be handled by one handl
 
 The DBAL implementation of the ProductNumberSearch provides interfaces for this handler classes, which allows third party developers to extend the default implementation or to overwrite existing handler classes:
 
-- Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface
-- Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface
-- Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface
+- Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface
+- Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface
+- Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface
 
 ## Define own handler classes
 Each handler class has to implement on the associated database platform. For example, a handler class which expects a DBAL query builder to extend the search request can't be used in the Elastic Search ProductNumberSearch.
@@ -89,7 +89,7 @@ The following sorting handler adds an inner join condition to the existing query
 ```
 <?php
 
-class PluginSortingHandler implements \Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface
+class PluginSortingHandler implements \Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface
 {
     public function supportsSorting(\Shopware\Bundle\SearchBundle\SortingInterface $sorting)
     {
@@ -156,24 +156,35 @@ A FacetHandler has to implement the following functions:
 
 - ```generateFacet``` which modifies the passed query builder to select the facet data for the provided facet definition.
 
-The following FacetHandler want to display the total count of products which sold more than 20x times.
+The following FacetHandler wants to display the total count of products which sold more than 20x times.
 
 **Notice: The FacetHandler has to load all required data to display the facet in the store front. This includes translations, too.**
   
 ```
-class PluginFacetHandler implements \Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface
+class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface
 {
+    /**
+     * @param QueryBuilderFactory $queryBuilderFactory
+     */
+    public function __construct(
+        \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory\QueryBuilderFactory $queryBuilderFactory
+    ) {
+        $this->queryBuilderFactory = $queryBuilderFactory;
+    }
+
     public function supportsFacet(\Shopware\Bundle\SearchBundle\FacetInterface $facet)
     {
         return ($facet instanceof ...);
     }
 
     public function generateFacet(
-        \Shopware\Bundle\SearchBundle\FacetInterface                  $facet,
-        \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder               $query,
-        \Shopware\Bundle\SearchBundle\Criteria                        $criteria,
+        \Shopware\Bundle\SearchBundle\FacetInterface     $facet,
+        \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
+        \Shopware\Bundle\SearchBundle\Criteria           $criteria,
         \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
+        $query = $this->queryBuilderFactory->createQuery($criteria, $context);
+
         $query->resetQueryPart('orderBy');
 
         $query->select('COUNT(DISTINCT product.id) as total');
@@ -192,8 +203,7 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundle\DBAL\FacetHand
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        $facet->setTotal($total);
-        
+
         return $facet;
     }
 }
@@ -226,7 +236,7 @@ class PluginSorting implements SortingInterface
 {
     private $direction;
 
-    function __construct($direction = SortingInterface::SORT_DESC)
+    public function __construct($direction = SortingInterface::SORT_DESC)
     {
         $this->direction = $direction;
     }
@@ -259,7 +269,7 @@ class PluginCondition implements ConditionInterface
 {
     private $minSales;
 
-    function __construct($minSales = 20)
+    public function __construct($minSales = 20)
     {
         $this->minSales = $minSales;
     }

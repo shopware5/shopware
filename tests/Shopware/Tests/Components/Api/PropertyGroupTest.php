@@ -59,8 +59,7 @@ class Shopware_Tests_Components_Api_PropertyGroupTest extends Shopware_Tests_Com
             "name" => "Eigenschaft1",
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 2
-
+            'sortmode' => 0
         );
 
         $group = $this->resource->create($testData);

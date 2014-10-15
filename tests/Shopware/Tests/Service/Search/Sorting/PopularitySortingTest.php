@@ -2,25 +2,52 @@
 
 namespace Shopware\Tests\Service\Search\Sorting;
 
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
 class PopularitySortingTest extends TestCase
 {
+    protected function createProduct(
+        $number,
+        Context $context,
+        Category $category,
+        $sales
+    ) {
+        $article = parent::createProduct(
+            $number,
+            $context,
+            $category,
+            $sales
+        );
+
+        Shopware()->Db()->query(
+            "UPDATE s_articles_top_seller_ro SET sales = ?
+             WHERE article_id = ?",
+            array($sales, $article->getId())
+        );
+
+        return $article;
+    }
+
+
     public function testAscendingSorting()
     {
         $sorting = new PopularitySorting();
 
         $this->search(
-            $sorting,
             array(
                 'first'  => 3,
                 'second' => 20,
                 'third'  => 1
             ),
-            array('third', 'first', 'second')
+            array('third', 'first', 'second'),
+            null,
+            array(),
+            array(),
+            array($sorting)
         );
     }
 
@@ -29,13 +56,16 @@ class PopularitySortingTest extends TestCase
         $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
 
         $this->search(
-            $sorting,
             array(
                 'first'  => 3,
                 'second' => 20,
                 'third'  => 1
             ),
-            array('second', 'first', 'third')
+            array('second', 'first', 'third'),
+            null,
+            array(),
+            array(),
+            array($sorting)
         );
     }
 
@@ -44,46 +74,41 @@ class PopularitySortingTest extends TestCase
         $sorting = new PopularitySorting(SortingInterface::SORT_DESC);
 
         $this->search(
-            $sorting,
             array(
                 'first'  => 3,
                 'second' => 20,
                 'third'  => 1,
                 'fourth'  => 20
             ),
-            array('fourth', 'second', 'first', 'third')
+            array('fourth', 'second', 'first', 'third'),
+            null,
+            array(),
+            array(),
+            array($sorting)
         );
     }
 
-    private function search(
-        PopularitySorting $sorting,
+    protected function search(
         $products,
-        $expectedNumbers
+        $expectedNumbers,
+        $category = null,
+        $conditions = array(),
+        $facets = array(),
+        $sortings = array(),
+        $context = null
     ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $sales) {
-            $data = $this->getProduct($number, $context, $category);
-            $article = $this->helper->createArticle($data);
-
-            Shopware()->Db()->query(
-                "UPDATE s_articles_top_seller_ro SET sales = ?
-                 WHERE article_id = ?",
-                array($sales, $article->getId())
-            );
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addSorting($sorting);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
+        $result = parent::search(
+            $products,
+            $expectedNumbers,
+            $category,
+            $conditions,
+            $facets,
+            $sortings,
+            $context
+        );
 
         $this->assertSearchResultSorting($result, $expectedNumbers);
-    }
 
+        return $result;
+    }
 }

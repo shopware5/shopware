@@ -44,4 +44,10 @@ interface SortingInterface extends \JsonSerializable
      * @return string
      */
     public function getName();
+
+    /**
+     * @param array $data
+     * @return SortingInterface
+     */
+    public static function createFromJsonData(array $data);
 }

@@ -109,7 +109,7 @@ class QueryAliasMapper
      * $this->getQueryAlias('sSearch') returns 'q'
      *
      * @param string $key
-     * @return string
+     * @return string|null
      */
     public function getShortAlias($key)
     {

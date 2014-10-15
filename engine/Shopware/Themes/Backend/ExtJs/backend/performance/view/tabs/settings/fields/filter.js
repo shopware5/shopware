@@ -82,20 +82,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
-                    {
-                        fieldLabel: '{s name=fieldset/filter/text/displayFiltersInListings}Display product filters in category listings{/s}',
-                        name: 'filters[displayFiltersInListings]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/filter/text/displayFilterArticleCount}Display article count of each filter value{/s}',
-                        name: 'filters[displayFilterArticleCount]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
+
                     {
                         fieldLabel: '{s name=fieldset/filter/text/displayFiltersOnDetailPage}Display product filters on detail page{/s}',
                         name: 'filters[displayFiltersOnDetailPage]',
@@ -119,7 +106,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                             data: [
                                 { id: 0, name: '{s name=fieldset/filter/sort/alphanumeric}Sort by alphanumeric value{/s}' },
                                 { id: 1, name: '{s name=fieldset/filter/sort/numeric}Sort by numeric value{/s}' },
-                                { id: 2, name: '{s name=fieldset/filter/sort/article_count}Sort by article count{/s}' },
                                 { id: 3, name: '{s name=fieldset/filter/sort/position}Sort by position{/s}' }
                             ]
                         })

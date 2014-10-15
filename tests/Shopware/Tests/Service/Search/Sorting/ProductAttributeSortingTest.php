@@ -4,6 +4,8 @@ namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
 class ProductAttributeSortingTest extends TestCase
@@ -26,13 +28,16 @@ class ProductAttributeSortingTest extends TestCase
         $sorting = new ProductAttributeSorting('attr1');
 
         $this->search(
-            array($sorting),
             array(
                 'first'  => array('attr1' => 'Charlie'),
                 'second' => array('attr1' => 'Alpha'),
                 'third'  => array('attr1' => 'Bravo'),
             ),
-            array('second', 'third', 'first')
+            array('second', 'third', 'first'),
+            null,
+            array(),
+            array(),
+            array($sorting)
         );
     }
 
@@ -40,45 +45,43 @@ class ProductAttributeSortingTest extends TestCase
     {
         $this->search(
             array(
-                new ProductAttributeSorting('attr1'),
-                new ProductAttributeSorting('attr2')
-            ),
-            array(
                 'first'  => array('attr1' => 'Charlie'),
                 'second' => array('attr1' => 'Alpha'),
                 'third'  => array('attr1' => 'Bravo', 'attr2' => 'Bravo'),
                 'fourth'  => array('attr1' => 'Bravo', 'attr2' => 'Alpha'),
             ),
-            array('second', 'fourth', 'third', 'first')
+            array('second', 'fourth', 'third', 'first'),
+            null,
+            array(),
+            array(),
+            array(
+                new ProductAttributeSorting('attr1'),
+                new ProductAttributeSorting('attr2')
+            )
         );
     }
 
-    private function search(
-        $sortings,
+    protected function search(
         $products,
-        $expectedNumbers
+        $expectedNumbers,
+        $category = null,
+        $conditions = array(),
+        $facets = array(),
+        $sortings = array(),
+        $context = null
     ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $attribute) {
-            $data = $this->getProduct($number, $context, $category, $attribute);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-
-        foreach ($sortings as $sorting) {
-            $criteria->addSorting($sorting);
-        }
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
+        $result = parent::search(
+            $products,
+            $expectedNumbers,
+            $category,
+            $conditions,
+            $facets,
+            $sortings,
+            $context
+        );
 
         $this->assertSearchResultSorting($result, $expectedNumbers);
-    }
 
+        return $result;
+    }
 }

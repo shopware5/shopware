@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
@@ -108,7 +107,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
         foreach ($data as $row) {
             $priceGroup = $this->priceHydrator->hydratePriceGroup($row);
 
-            foreach($priceGroup->getDiscounts() as $discount) {
+            foreach ($priceGroup->getDiscounts() as $discount) {
                 $discount->setCustomerGroup($customerGroup);
             }
 

@@ -2,62 +2,63 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-    {$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}", 'link'=>{url}]]}
+	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}", 'link'=>{url}]]}
 {/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content search--results">
-        {if !$sSearchResults.sArticles}
-            {if $sRequests.sSearchOrginal}
-                {* No results found *}
-                {block name='frontend_search_fuzzy_empty'}
-                    <div class="alert is--error is--rounded">
-                        <div class="alert--icon">
-                            <i class="icon--element icon--info"></i>
-                        </div>
-                        <div class="alert--content">
-                            {s name='SearchFuzzyHeadlineEmpty'}{/s}
-                        </div>
+	<div class="content search--content">
 
-                    </div>
-                {/block}
-            {else}
-                {* Given search term is too short *}
-                {block name='frontend_search_fuzzy_shortterm'}
-                    {include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
-                {/block}
-            {/if}
-        {/if}
+		{block name='frontend_search_info_messages'}
+			{if !$sSearchResults.sArticles}
+				{if $sRequests.sSearchOrginal}
 
-        {if $sSearchResults.sArticles}
-            {* Results count headline *}
-            {block name='frontend_search_fuzzy_headline'}
-                <h1 class="results-headline">{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}</h1>
-            {/block}
+					{* No results found *}
+					{block name='frontend_search_message_no_results'}
+						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SearchFuzzyHeadlineNoResult'}{/s}"}
+					{/block}
+				{else}
 
-            {* Search reults filter elements *}
-            {block name="frontend_search_fuzzy_filter"}
-                {include file='frontend/search/fuzzy-filter.tpl'}
-            {/block}
+					{* Given search term is too short *}
+					{block name='frontend_search_message_shortterm'}
+						{include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
+					{/block}
+				{/if}
+			{/if}
+		{/block}
 
-            {* Sorting and changing layout *}
-            {block name="frontend_search_fuzzy_actions"}
-                <div class="results--paging panel">
-                    {include file='frontend/search/fuzzy-paging.tpl' sTemplate=$sTemplate sAdvancedActions=1}
-                </div>
-            {/block}
+		{if $sSearchResults.sArticles}
 
-            {* Search results listing *}
-            {block name="frontend_search_fuzzy_results"}
-                <div class="results--articles panel">
-                    <ul class="listing listing--listing">
-                        {foreach $sSearchResults.sArticles as $key => $sArticle}
-                            {include file='frontend/listing/box_article.tpl'}
-                        {/foreach}
-                    </ul>
-                <div>
-            {/block}
-        {/if}
-    </div>
+			{* Listing varibles *}
+			{block name="frontend_search_variables"}
+				{$sArticles = $sSearchResults.sArticles}
+				{$sNumberArticles = $sSearchResults.sArticlesCount}
+				{$sTemplate = "listing"}
+				{$sBoxMode = "table"}
+				{$showListing = true}
+				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
+				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" fullPath}"}
+			{/block}
+
+			{block name='frontend_search_headline'}
+				<h1 class="search--headline">
+					{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}
+				</h1>
+			{/block}
+
+			{block name='frontend_search_category_filter'}
+                {foreach $facets as $facet}
+                    {if $facet|is_a: 'Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult' && $facet->getFacetName() === 'category'}
+                        {include file="frontend/search/category-filter.tpl" facet=$facet}
+                    {/if}
+                {/foreach}
+			{/block}
+
+			{block name="frontend_search_results"}
+				<div class="search--results">
+					{include file='frontend/listing/listing.tpl'}
+				</div>
+			{/block}
+		{/if}
+	</div>
 {/block}

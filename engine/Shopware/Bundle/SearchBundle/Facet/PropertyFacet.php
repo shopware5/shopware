@@ -35,54 +35,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class PropertyFacet implements FacetInterface
 {
     /**
-     * Flag if the facet is filtered with a condition
-     * @var bool
-     */
-    private $filtered = false;
-
-    /**
-     * @var Struct\Property\Set[]
-     */
-    private $properties;
-
-    /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'property_facet';
-    }
-
-    /**
-     * @param bool $filtered
-     */
-    public function setFiltered($filtered)
-    {
-        $this->filtered = $filtered;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFiltered()
-    {
-        return $this->filtered;
-    }
-
-    /**
-     * @return Struct\Property\Set[]
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     * @param Struct\Property\Set[] $properties
-     */
-    public function setProperties($properties)
-    {
-        $this->properties = $properties;
+        return 'property';
     }
 
     /**
@@ -91,5 +48,14 @@ class PropertyFacet implements FacetInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @param array $data
+     * @return FacetInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self();
     }
 }

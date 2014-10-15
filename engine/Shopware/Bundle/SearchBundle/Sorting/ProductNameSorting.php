@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
+use Shopware\Bundle\SearchBundle\SortingInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundle\Sorting
@@ -37,5 +39,14 @@ class ProductNameSorting extends Sorting
     public function getName()
     {
         return 'product_name';
+    }
+
+    /**
+     * @param array $data
+     * @return SortingInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self($data['direction']);
     }
 }

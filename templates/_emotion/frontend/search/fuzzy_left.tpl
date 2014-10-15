@@ -67,7 +67,7 @@
 	    <ul>
 		    {if !$sRequests.sFilter.supplier}
 		    {foreach from=$sSuppliersFirst item=supplier}
-		        <li><a href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}">{$supplier.name} ({$supplier.count})</a></li>
+		        <li><a href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}">{$supplier.name}</a></li>
 		    {/foreach}
 		    
 		    {if $sSuppliersRest}
@@ -101,7 +101,7 @@
 			        {if $sSearchResults.sPrices.$sKey}
 			            <li>
 		            		<a href="{$sLinks.sFilter.price}&sFilter_price={$sKey}">
-		            			{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} ({$sSearchResults.sPrices.$sKey})
+						{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency}
 		           				{if $sFilterActive.price}{/if}
 		           			</a>
 			           	</li>

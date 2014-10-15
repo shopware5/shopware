@@ -38,7 +38,7 @@
 			<h2>{se name="ArticleTipMoreInformation"}{/se} "{$sArticle.articleName}"</h2>
 			{foreach from=$sArticle.sLinks item=information}
 				{if $information.supplierSearch}
-					<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="ico link">
+					<a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="ico link">
 						{se name="DetailDescriptionLinkInformation"}{/se}
 					</a>
 				{else}

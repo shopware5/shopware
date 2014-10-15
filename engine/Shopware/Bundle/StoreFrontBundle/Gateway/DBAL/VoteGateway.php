@@ -116,10 +116,15 @@ class VoteGateway implements Gateway\VoteGatewayInterface
 
         $result = array();
         foreach ($products as $product) {
-            $number = $product->getNumber();
             $id = $product->getId();
 
+            if (!isset($votes[$id])) {
+                continue;
+            }
+
+            $number = $product->getNumber();
             $result[$number] = $votes[$id];
+
         }
 
         return $result;

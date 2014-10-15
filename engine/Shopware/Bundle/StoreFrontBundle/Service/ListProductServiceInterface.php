@@ -53,6 +53,7 @@ interface ListProductServiceInterface
      * - \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface            > Selects the cover
      * - \Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface  > Selects the graduated prices
      * - \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface    > Selects the cheapest price
+     * - \Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface             > Selects the product vote average
      *
      * This data will be injected into the generated \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct object
      * and will be calculated through the \Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface class.
