@@ -15,6 +15,7 @@ class Migrations_Migration370 Extends Shopware\Components\Migrations\AbstractMig
 priceMin=min,
 priceMax=max,
 shippingFree=free,
+immediateDelivery=delivery,
 sSort=o';
 
                 $statement = $this->connection->prepare("UPDATE s_core_config_elements SET value = ? WHERE id = ?");
@@ -39,6 +40,7 @@ sSort=o';
 priceMin=min,
 priceMax=max,
 shippingFree=free,
+immediateDelivery=delivery,
 sSort=o';
 
                 $statement = $this->connection->prepare("UPDATE s_core_config_values SET value = ? WHERE id = ?");

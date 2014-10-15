@@ -108,19 +108,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
 
-        $this->fieldHelper->addUnitTranslation($query);
-        $this->fieldHelper->addVariantTranslation($query);
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addUnitTranslationFallback($query);
-            $this->fieldHelper->addVariantTranslationFallback($query);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
+        $this->fieldHelper->addUnitTranslation($query, $context);
+        $this->fieldHelper->addVariantTranslation($query, $context);
 
         $query->andWhere('price.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':language', $context->getShop()->getId());
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

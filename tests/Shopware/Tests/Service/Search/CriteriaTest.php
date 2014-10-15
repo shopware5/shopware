@@ -16,7 +16,7 @@ class CriteriaTest extends TestCase
     public function testUniqueCondition()
     {
         $criteria = new Criteria();
-        $criteria->addCategoryCondition(array(1));
+        $criteria->addCondition(new CategoryCondition(array(1)));
         $criteria->addCondition(new CategoryCondition(array(3)));
         $this->assertCount(1, $criteria->getConditions());
     }
@@ -24,7 +24,7 @@ class CriteriaTest extends TestCase
     public function testUniqueFacet()
     {
         $criteria = new Criteria();
-        $criteria->addPriceFacet();
+        $criteria->addFacet(new PriceFacet());
         $criteria->addFacet(new PriceFacet());
         $this->assertCount(1, $criteria->getFacets());
     }
@@ -32,7 +32,7 @@ class CriteriaTest extends TestCase
     public function testUniqueSorting()
     {
         $criteria = new Criteria();
-        $criteria->sortByCheapestPrice();
+        $criteria->addSorting(new PriceSorting());
         $criteria->addSorting(new PriceSorting());
         $this->assertCount(1, $criteria->getSortings());
     }
@@ -61,7 +61,7 @@ class CriteriaTest extends TestCase
     {
         $criteria = new Criteria();
 
-        $criteria->addCategoryCondition(array(1));
+        $criteria->addCondition(new CategoryCondition(array(1)));
 
         $condition = new CategoryCondition(array(3));
         $criteria->addCondition($condition);

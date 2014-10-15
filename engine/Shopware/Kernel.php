@@ -24,9 +24,10 @@
 
 namespace Shopware;
 
-use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\DBALCompilerPass;
+use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
@@ -451,6 +452,7 @@ class Kernel implements HttpKernelInterface
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
         $loader->load('SearchBundle/services.xml');
+        $loader->load('SearchBundleDBAL/services.xml');
         $loader->load('StoreFrontBundle/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
@@ -461,6 +463,7 @@ class Kernel implements HttpKernelInterface
         $this->addResources($container);
 
         $container->addCompilerPass(new EventListenerCompilerPass());
+        $container->addCompilerPass(new EventSubscriberCompilerPass());
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
 

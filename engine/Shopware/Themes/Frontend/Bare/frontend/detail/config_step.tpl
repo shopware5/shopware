@@ -24,7 +24,7 @@
 		{block name='frontend_detail_group_selection'}
 			<div class="field--select{if $groupID gt 0 && empty($sArticle.sConfigurator[$pregroupID].user_selected)} is--disabled{/if}">
 				<span class="arrow"></span>
-				<select{if $groupID gt 0 && empty($sArticle.sConfigurator[$pregroupID].user_selected)} disabled="disabled"{/if} name="group[{$sConfigurator.groupID}]" data-auto-submit-form="true">
+				<select{if $groupID gt 0 && empty($sArticle.sConfigurator[$pregroupID].user_selected)} disabled="disabled"{/if} name="group[{$sConfigurator.groupID}]" data-auto-submit="true">
 
 					{* Please select... *}
 					{if empty($sConfigurator.user_selected)}

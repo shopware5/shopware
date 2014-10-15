@@ -2,8 +2,7 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
@@ -37,62 +36,37 @@ class CustomerGroupConditionTest extends TestCase
     public function testSingleCustomerGroup()
     {
         $customerGroup = $this->helper->createCustomerGroup(array('key' => 'CON'));
-        $category = $this->helper->createCategory();
-        $context = $this->getContext();
 
-        $articles = array(
-            $this->getProduct('testSingleCustomerGroup-1', $context, $category, array($customerGroup)),
-            $this->getProduct('testSingleCustomerGroup-2', $context, $category, array($customerGroup)),
-            $this->getProduct('testSingleCustomerGroup-3', $context, $category, array()),
-            $this->getProduct('testSingleCustomerGroup-4', $context, $category, array()),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addCustomerGroupCondition(array($customerGroup->getId()));
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testSingleCustomerGroup-3', 'testSingleCustomerGroup-4')
+        $this->search(
+            array(
+                'first' => array($customerGroup),
+                'second' => array($customerGroup),
+                'third' => null,
+                'fourth' => null
+            ),
+            array('third', 'fourth'),
+            null,
+            array(new CustomerGroupCondition(array($customerGroup->getId())))
         );
     }
 
-    public function testMultipleCategories()
+    public function testMultipleCustomerGroups()
     {
-        $customerGroup = $this->helper->createCustomerGroup(array('key' => 'CON'));
+        $first = $this->helper->createCustomerGroup(array('key' => 'CON'));
         $second = $this->helper->createCustomerGroup(array('key' => 'CON2'));
 
-        $category = $this->helper->createCategory();
-        $context = $this->getContext();
+        $condition = new CustomerGroupCondition(array($first->getId(), $second->getId()));
 
-        $articles = array(
-            $this->getProduct('testSingleCustomerGroup-1', $context, $category, array($customerGroup)),
-            $this->getProduct('testSingleCustomerGroup-2', $context, $category, array($customerGroup)),
-            $this->getProduct('testSingleCustomerGroup-3', $context, $category, array($second)),
-            $this->getProduct('testSingleCustomerGroup-4', $context, $category, array()),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addCustomerGroupCondition(array($customerGroup->getId(), $second->getId()));
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testSingleCustomerGroup-4')
+        $this->search(
+            array(
+                'first' => array($first),
+                'second' => array($second),
+                'third' => array($first, $second),
+                'fourth' => null
+            ),
+            array('fourth'),
+            null,
+            array($condition)
         );
     }
 }

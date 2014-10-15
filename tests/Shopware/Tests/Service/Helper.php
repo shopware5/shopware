@@ -55,6 +55,7 @@ class Helper
     private $createdTaxes = array();
     private $createdCurrencies = array();
     private $createdConfiguratorGroups = array();
+    private $propertyNames = array();
 
     public function __construct()
     {
@@ -130,6 +131,8 @@ class Helper
      * @param null $priceCalculationService
      * @param null $mediaService
      * @param null $eventManager
+     * @param null $marketingService
+     * @param null $voteService
      * @return StoreFrontBundle\Struct\ListProduct
      */
     public function getListProduct(
@@ -140,7 +143,9 @@ class Helper
         $cheapestPriceService = null,
         $priceCalculationService = null,
         $mediaService = null,
-        $eventManager = null
+        $eventManager = null,
+        $marketingService = null,
+        $voteService = null
     ) {
         $products = $this->getListProducts(
             array($number),
@@ -150,6 +155,7 @@ class Helper
             $cheapestPriceService,
             $priceCalculationService,
             $mediaService,
+            $marketingService,
             $eventManager
         );
 
@@ -177,7 +183,8 @@ class Helper
         $priceCalculationService = null,
         $mediaService = null,
         $marketingService = null,
-        $eventManager = null
+        $eventManager = null,
+        $voteService = null
     ) {
 
         if ($productGateway === null)           $productGateway = Shopware()->Container()->get('list_product_gateway_dbal');
@@ -187,6 +194,7 @@ class Helper
         if ($mediaService === null)             $mediaService = Shopware()->Container()->get('media_service_core');
         if ($marketingService === null)         $marketingService = Shopware()->Container()->get('marketing_service_core');
         if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
+        if ($voteService === null)              $voteService = Shopware()->Container()->get('vote_service_core');
 
         $service = new StoreFrontBundle\Service\Core\ListProductService(
             $productGateway,
@@ -195,6 +203,7 @@ class Helper
             $priceCalculationService,
             $mediaService,
             $marketingService,
+            $voteService,
             $eventManager
         );
 
@@ -237,7 +246,9 @@ class Helper
 
     public function cleanUp()
     {
-        $this->deleteProperties();
+        foreach($this->propertyNames as $name) {
+            $this->deleteProperties($name);
+        }
         $this->removePriceGroup();
         foreach ($this->createdProducts as $number) {
             $this->removeArticle($number);
@@ -436,23 +447,25 @@ class Helper
         $this->translationApi->create($data);
     }
 
-    private function createProperties($groupCount, $optionCount)
+    private function createProperties($groupCount, $optionCount, $namePrefix = 'Test')
     {
-        $this->deleteProperties();
+        $this->propertyNames[] = $namePrefix;
 
-        $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
-        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
+        $this->deleteProperties($namePrefix);
+
+        $this->db->insert('s_filter', array('name' => $namePrefix . '-Set', 'comparable' => 1));
+        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
 
         for ($i=0; $i<$groupCount; $i++) {
             $this->db->insert('s_filter_options', array(
-                'name' => 'Test-Gruppe-' . $i,
+                'name' => $namePrefix . '-Gruppe-' . $i,
                 'filterable' => 1
             ));
-            $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = 'Test-Gruppe-" . $i . "'");
+            $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = '" . $namePrefix . "-Gruppe-" . $i . "'");
 
             for ($i2=0; $i2 < $optionCount; $i2++) {
                 $this->db->insert('s_filter_values', array(
-                    'value' => 'Test-Option-' . $i . '-' .$i2,
+                    'value' => $namePrefix . '-Option-' . $i . '-' .$i2,
                     'optionID' => $group['id']
                 ));
             }
@@ -469,17 +482,17 @@ class Helper
         return $data;
     }
 
-    private function deleteProperties()
+    private function deleteProperties($namePrefix = 'Test')
     {
-        $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
+        $this->db->query("DELETE FROM s_filter WHERE name = '".$namePrefix."-Set'");
 
-        $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+        $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE '".$namePrefix."-Gruppe%'");
         foreach ($ids as $id) {
             $this->db->query("DELETE FROM s_filter_options WHERE id = ?", array($id));
             $this->db->query("DELETE FROM s_filter_relations WHERE optionID = ?", array($id));
         }
 
-        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
+        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '".$namePrefix."-Option%'");
     }
 
     public function createPriceGroup($discounts = array())
@@ -641,6 +654,25 @@ class Helper
         $this->createdManufacturers[] = $manufacturer->getId();
 
         return $manufacturer;
+    }
+
+    public function createVotes($articleId, $points = array())
+    {
+        $data = array(
+            'id' => null,
+            'articleID' => $articleId,
+            'name' => 'Bert Bewerter',
+            'headline' => 'Super Artikel',
+            'comment' => 'Dieser Artikel zeichnet sich durch extreme Stabilität aus und fasst super viele Klamotten. Das Preisleistungsverhältnis ist exorbitant gut.',
+            'points' => null,
+            'datum' => '2012-08-29 14:02:24',
+            'active' => '1'
+        );
+
+        foreach ($points as $point) {
+            $data['points'] = $point;
+            Shopware()->Db()->insert('s_articles_vote', $data);
+        }
     }
 
     /**
@@ -995,9 +1027,9 @@ class Helper
         return $context;
     }
 
-    public function getProperties($groupCount, $optionCount)
+    public function getProperties($groupCount, $optionCount, $namePrefix = 'Test')
     {
-        $properties = $this->createProperties($groupCount, $optionCount);
+        $properties = $this->createProperties($groupCount, $optionCount, $namePrefix);
         $options = array();
         foreach ($properties['groups'] as $group) {
             $options = array_merge($options, $group['options']);

@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
@@ -23,79 +23,237 @@ class PropertyConditionTest extends TestCase
         return $product;
     }
 
-    public function testSingleProperty()
+
+    public function testSinglePropertyConditionWithOneValue()
     {
-        $properties = $this->helper->getProperties(2, 3);
+        $properties = $this->helper->getProperties(3, 4);
         $values = $properties['propertyValues'];
 
-        $firstCombination = $this->createPropertyCombination(
-            $properties,
-            array(0, 1)
-        );
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
 
-        $secondCombination = $this->createPropertyCombination(
-            $properties,
-            array(1, 2)
-        );
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(1, 5));
+        $third  = $this->createPropertyCombination($properties, array(2, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 7));
 
-        $thirdCombination = $this->createPropertyCombination(
-            $properties,
-            array(2, 3)
-        );
+        $conditions = array();
 
-        $condition = new PropertyCondition(array($values[1]['id']));
-
-        $this->search(
-            $condition,
-            array(
-                'first' => $firstCombination,
-                'second' => $secondCombination,
-                'third' => $thirdCombination,
-                'fourth' => array()
-            ),
-            array('first', 'second')
-        );
-    }
-
-    public function testMultipleProperties()
-    {
-        $properties = $this->helper->getProperties(2, 3);
-        $values = $properties['propertyValues'];
-
-        $firstCombination = $this->createPropertyCombination(
-            $properties,
-            array(0, 1, 5)
-        );
-
-        $secondCombination = $this->createPropertyCombination(
-            $properties,
-            array(1, 2, 3, 4)
-        );
-
-        $thirdCombination = $this->createPropertyCombination(
-            $properties,
-            array(2, 3, 5)
-        );
-
-        $fourth = $this->createPropertyCombination(
-            $properties,
-            array(1, 2, 4)
-        );
-
-        $condition = new PropertyCondition(array(
-            $values[2]['id'],
-            $values[3]['id']
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id']
         ));
 
         $this->search(
-            $condition,
             array(
-                'first' => $firstCombination,
-                'second' => $secondCombination,
-                'third' => $thirdCombination,
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
                 'fourth' => $fourth
             ),
-            array('second', 'third')
+            array('first'),
+            null,
+            $conditions
+        );
+    }
+
+    public function testSinglePropertyConditionWithTwoValues()
+    {
+        $properties = $this->helper->getProperties(3, 4);
+        $values = $properties['propertyValues'];
+
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
+
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(1, 5));
+        $third  = $this->createPropertyCombination($properties, array(2, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+
+        $conditions = array();
+
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id'],
+            $values[1]['id']
+        ));
+
+        $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second'),
+            null,
+            $conditions
+        );
+    }
+
+    public function testSinglePropertyConditionWithThreeValues()
+    {
+        $properties = $this->helper->getProperties(3, 4);
+        $values = $properties['propertyValues'];
+
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
+
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(1, 5));
+        $third  = $this->createPropertyCombination($properties, array(2, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+
+        $conditions = array();
+
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id'],
+            $values[1]['id'],
+            $values[3]['id'],
+        ));
+
+        $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second', 'fourth'),
+            null,
+            $conditions
+        );
+    }
+
+
+    public function testTwoPropertyConditionsWithOneValue()
+    {
+        $properties = $this->helper->getProperties(3, 4);
+        $values = $properties['propertyValues'];
+
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
+
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(0, 4));
+        $third  = $this->createPropertyCombination($properties, array(2, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 7));
+
+        $conditions = array();
+
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id']
+        ));
+
+        $conditions[] = new PropertyCondition(array(
+            $values[4]['id']
+        ));
+
+        $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second'),
+            null,
+            $conditions
+        );
+    }
+
+    public function testTwoPropertyConditionsWithTwoValues()
+    {
+        $properties = $this->helper->getProperties(3, 4);
+        $values = $properties['propertyValues'];
+
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
+
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(1, 5));
+        $third  = $this->createPropertyCombination($properties, array(1, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 5));
+
+        $conditions = array();
+
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id'],
+            $values[1]['id']
+        ));
+
+        $conditions[] = new PropertyCondition(array(
+            $values[4]['id'],
+            $values[5]['id'],
+        ));
+
+        $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second'),
+            null,
+            $conditions
+        );
+    }
+
+
+    public function testTwoPropertyConditionsWithThreeValues()
+    {
+        $properties = $this->helper->getProperties(3, 4);
+        $values = $properties['propertyValues'];
+
+        /*
+         * Group 0:   0, 1, 2, 3
+         * Group 1:   4, 5, 6, 7
+         * Group 2:   8, 9, 10, 11
+         */
+
+        $first  = $this->createPropertyCombination($properties, array(0, 4));
+        $second = $this->createPropertyCombination($properties, array(1, 5));
+        $third  = $this->createPropertyCombination($properties, array(2, 6));
+        $fourth = $this->createPropertyCombination($properties, array(3, 5));
+
+        $conditions = array();
+
+        $conditions[] = new PropertyCondition(array(
+            $values[0]['id'],
+            $values[1]['id'],
+            $values[2]['id']
+        ));
+
+        $conditions[] = new PropertyCondition(array(
+            $values[4]['id'],
+            $values[5]['id'],
+            $values[6]['id']
+        ));
+
+        $this->search(
+            array(
+                'first' => $first,
+                'second' => $second,
+                'third' => $third,
+                'fourth' => $fourth
+            ),
+            array('first', 'second', 'third'),
+            null,
+            $conditions
         );
     }
 
@@ -113,28 +271,4 @@ class PropertyConditionTest extends TestCase
         $combination['propertyValues'] = $values;
         return $combination;
     }
-
-    private function search(
-        PropertyCondition $condition,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $properties) {
-            $data = $this->getProduct($number, $context, $category, $properties);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addCondition($condition);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-    }
-
 }

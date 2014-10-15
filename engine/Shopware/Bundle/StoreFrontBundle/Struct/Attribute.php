@@ -39,6 +39,14 @@ class Attribute extends Struct implements \JsonSerializable
     protected $storage = array();
 
     /**
+     * @param $data
+     */
+    function __construct($data = array())
+    {
+        $this->storage = $data;
+    }
+
+    /**
      * Checks if a storage key exists
      *
      * @param $key

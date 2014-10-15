@@ -6,6 +6,7 @@ use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\Converter;
@@ -34,21 +35,19 @@ class ProductAttributeFacetTest extends TestCase
         );
 
         $result = $this->search(
-            $facet,
             array(
                 'first'  => array('attr1' => 10),
                 'second' => array('attr1' => 20),
                 'third'  => array('attr1' => null)
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array($facet)
         );
 
         $this->assertCount(1, $result->getFacets());
-
-        $this->assertNotEmpty($facet->getResult());
-
-        $result = $facet->getResult();
-        $this->assertEquals(2, $result[0]['total']);
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
     }
 
     public function testEmptyMode()
@@ -59,22 +58,20 @@ class ProductAttributeFacetTest extends TestCase
         );
 
         $result = $this->search(
-            $facet,
             array(
                 'first'  => array('attr1' => 10),
                 'second' => array('attr1' => 22),
                 'third'  => array('attr1' => null),
                 'fourth' => array('attr1' => null)
             ),
-            array('first', 'second', 'third', 'fourth')
+            array('first', 'second', 'third', 'fourth'),
+            null,
+            array(),
+            array($facet)
         );
 
         $this->assertCount(1, $result->getFacets());
-
-        $this->assertNotEmpty($facet->getResult());
-
-        $result = $facet->getResult();
-        $this->assertEquals(2, $result[0]['total']);
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
     }
 
     public function testValuesMode()
@@ -85,7 +82,6 @@ class ProductAttributeFacetTest extends TestCase
         );
 
         $result = $this->search(
-            $facet,
             array(
                 'first'  => array('attr1' => 10),
                 'second' => array('attr1' => 10),
@@ -93,45 +89,22 @@ class ProductAttributeFacetTest extends TestCase
                 'fourth'  => array('attr1' => null),
                 'fifth' => array('attr1' => 10),
             ),
-            array('first', 'second', 'third', 'fourth', 'fifth')
+            array('first', 'second', 'third', 'fourth', 'fifth'),
+            null,
+            array(),
+            array($facet)
         );
 
         $this->assertCount(1, $result->getFacets());
 
-        $this->assertNotEmpty($facet->getResult());
-        $result = $facet->getResult();
+        /**@var $facet ValueListFacetResultInterface*/
+        $facet = $result->getFacets()[0];
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
 
-        foreach ($result as $value) {
-            if ($value['attr1'] == null) {
-                $this->assertEquals(2, $value['total']);
-            } else {
-                $this->assertEquals(3, $value['total']);
-            }
-        }
-    }
+        $this->assertNull($facet->getValues()[0]->getId());
+        $this->assertNull($facet->getValues()[0]->getLabel());
 
-    private function search(
-        ProductAttributeFacet $facet,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $attribute) {
-            $data = $this->getProduct($number, $context, $category, $attribute);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
+        $this->assertEquals(10, $facet->getValues()[1]->getId());
+        $this->assertEquals(10, $facet->getValues()[1]->getLabel());
     }
 }

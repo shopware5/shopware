@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
@@ -32,29 +34,18 @@ class ShippingFreeConditionTest extends TestCase
 
     public function testShippingFree()
     {
-        $category = $this->helper->createCategory();
         $context = $this->getContext();
 
-        $articles = array(
-            $this->getProduct('testShippingFree-1', $context, $category),
-            $this->getProduct('testShippingFree-2', $context, $category, false),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addShippingFreeCondition();
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testShippingFree-1')
+        $condition = new ShippingFreeCondition();
+        $this->search(
+            array(
+                'first'  => true,
+                'second' => false,
+                'third'  => true
+            ),
+            array('first', 'third'),
+            null,
+            array($condition)
         );
     }
-
 }

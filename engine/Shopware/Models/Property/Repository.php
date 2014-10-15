@@ -376,8 +376,9 @@ class Repository extends ModelRepository
     public function getPropertyValueByOptionIdQueryBuilder($optionId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('value'))
+        $builder->select(array('value', 'media'))
                 ->from('Shopware\Models\Property\Value', 'value')
+                ->leftJoin('value.media', 'media')
                 ->where('value.optionId = ?0')
                 ->orderBy('value.position', 'ASC')
                 ->setParameter(0, $optionId);

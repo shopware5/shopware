@@ -173,17 +173,13 @@ class ProductService implements Service\ProductServiceInterface
     {
         $products = $this->productGateway->getList($numbers, $context);
 
-        $products = $this->filterValidProducts($products, $context);
-
-        if (empty($products)) {
-            return array();
-        }
-
         $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
 
         $cheapestPrice = $this->cheapestPriceService->getList($products, $context);
 
         $votes = $this->voteService->getList($products, $context);
+
+        $averages = $this->voteService->getAverages($products, $context);
 
         $relatedProducts = $this->relatedProductsService->getList($products, $context);
 
@@ -211,27 +207,53 @@ class ProductService implements Service\ProductServiceInterface
 
             $product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED);
 
-            $product->setRelatedProducts($relatedProducts[$number]);
+            if (isset($relatedProducts[$number])) {
+                $product->setRelatedProducts($relatedProducts[$number]);
+            }
 
-            $product->setSimilarProducts($similarProducts[$number]);
+            if (isset($similarProducts[$number])) {
+                $product->setSimilarProducts($similarProducts[$number]);
+            }
 
-            $product->setPriceRules($graduatedPrices[$number]);
+            if (isset($graduatedPrices[$number])) {
+                $product->setPriceRules($graduatedPrices[$number]);
+            }
 
-            $product->setVotes($votes[$number]);
+            if (isset($votes[$number])) {
+                $product->setVotes($votes[$number]);
+            }
 
-            $product->setDownloads($downloads[$number]);
+            if (isset($downloads[$number])) {
+                $product->setDownloads($downloads[$number]);
+            }
 
-            $product->setLinks($links[$number]);
+            if (isset($links[$number])) {
+                $product->setLinks($links[$number]);
+            }
 
-            $product->setMedia($media[$number]);
+            if (isset($media[$number])) {
+                $product->setMedia($media[$number]);
+            }
 
-            $product->setPropertySet($properties[$number]);
+            if (isset($properties[$number])) {
+                $product->setPropertySet($properties[$number]);
+            }
 
-            $product->setConfiguration($configuration[$number]);
+            if (isset($configuration[$number])) {
+                $product->setConfiguration($configuration[$number]);
+            }
 
-            $product->setCheapestPriceRule($cheapestPrice[$number]);
+            if (isset($cheapestPrice[$number])) {
+                $product->setCheapestPriceRule($cheapestPrice[$number]);
+            }
 
-            $product->setCover($covers[$number]);
+            if (isset($covers[$number])) {
+                $product->setCover($covers[$number]);
+            }
+
+            if (isset($averages[$number])) {
+                $product->setVoteAverage($averages[$number]);
+            }
 
             $product->addAttribute(
                 'marketing',
@@ -240,27 +262,12 @@ class ProductService implements Service\ProductServiceInterface
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $result[$number] = $product;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Struct\Product[] $products
-     * @param Struct\ProductContextInterface $context
-     * @return Struct\Product[]
-     */
-    private function filterValidProducts($products, Struct\ProductContextInterface $context)
-    {
-        $valid = array();
-        foreach($products as $product) {
             if ($this->isProductValid($product, $context)) {
-                $valid[$product->getNumber()] = $product;
+                $result[$number] = $product;
             }
         }
 
-        return $valid;
+        return $result;
     }
 
     /**
@@ -273,10 +280,15 @@ class ProductService implements Service\ProductServiceInterface
      */
     private function isProductValid(Struct\Product $product, Struct\ProductContextInterface $context)
     {
-        return !in_array(
-            $context->getCurrentCustomerGroup()->getId(),
-            $product->getBlockedCustomerGroupIds()
-        );
-    }
+        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+            return false;
+        }
 
+        $prices = $product->getPrices();
+        if (empty($prices)) {
+            return false;
+        }
+
+        return true;
+    }
 }

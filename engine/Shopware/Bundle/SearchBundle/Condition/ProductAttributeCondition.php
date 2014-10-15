@@ -134,4 +134,14 @@ class ProductAttributeCondition implements ConditionInterface
     {
         return get_object_vars($this);
     }
+
+    /**
+     * @param array $data
+     * @return ConditionInterface
+     */
+    public static function createFromJsonData(array $data)
+    {
+        return new self($data['field'], $data['operator'], $data['value']);
+    }
+
 }

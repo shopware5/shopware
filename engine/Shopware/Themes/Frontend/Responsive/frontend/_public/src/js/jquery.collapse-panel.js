@@ -128,7 +128,9 @@
 
             me.$el.addClass(options.activeTriggerCls);
 
-            $targetEl.slideDown(options.duration).addClass(options.collapsedStateCls);
+            $targetEl.slideDown(options.duration, function() {
+                $.publish('plugin/collapsePanel/onOpen');
+            }).addClass(options.collapsedStateCls);
 
             if (options.closeSiblings) {
                 siblings.slideUp(options.duration, function () {
@@ -148,6 +150,8 @@
 
             me.$el.removeClass(me.opts.activeTriggerCls);
             me.$targetEl.slideUp(me.opts.duration).removeClass(me.opts.collapsedStateCls);
+
+            $.publish('plugin/collapsePanel/onClose');
         },
 
         /**

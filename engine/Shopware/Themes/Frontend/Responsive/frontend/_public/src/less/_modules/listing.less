@@ -47,19 +47,14 @@
     .clearfix();
     .unitize-margin(0, 0, 20, 0);
 
-    .hero--image {
+    .vendor--image {
         .unitize-margin(0, 0, 10, 0);
         margin-left: auto;
         margin-right: auto;
     }
 
-    .hero--text {
+    .vendor--text {
         .unitize-margin(0, 0, 20, 0);
-    }
-
-    .hero--link {
-        .unitize-margin(0, 0, 20, 0);
-        float: right;
     }
 }
 
@@ -81,6 +76,17 @@
 
     .filter--trigger {
         display: block;
+        position: relative;
+
+        .action--collapse-icon {
+            .unitize-padding(0, 10);
+            .unitize(24, 16, line-height);
+            .primary-gradient();
+            .border-radius();
+            display: inline-block;
+            color: #fff;
+            float: right;
+        }
     }
 }
 
@@ -99,6 +105,7 @@
         color: #fff;
         font-weight: bold;
         text-shadow: 1px 1px 0 @text-color-dark;
+        border-bottom: 1px solid @border-color;
 
         &:hover {
             color: #fff;
@@ -110,8 +117,8 @@
         }
     }
 
-    .filter--headline {
-        .unitize(16, 16, font-size);
+    .filter--btn-apply {
+        clear: both;
     }
 
     .filter--list {
@@ -232,8 +239,12 @@
     }
     .pagination--display {
         .unitize(30, 16, line-height);
-        float: right;
+        .unitize(10, 16, margin-left);
     }
+}
+
+.listing--bottom-paging {
+    .unitize-margin(10, 0, 20, 0);
 }
 
 .listing--container {
@@ -417,13 +428,13 @@
     }
 
     .vendor--info {
-        .hero--image {
+        .vendor--image {
             .unitize-margin(0, 20, 20, 0);
             float: left;
         }
 
-        .hero--text {
-            .unitize-margin(0, 0, 10, 0);
+        .vendor--text {
+            .unitize-margin(0, 0, 0, 250);
         }
     }
 
@@ -455,19 +466,73 @@
 
         .filter--trigger {
             .unitize(24, 16, line-height);
+
+            .action--collapse-icon {
+                .unitize-width(16);
+                .unitize-height(16);
+                .unitize(10, 16, right);
+                .unitize(-8, 16, margin-top);
+                .unitize(6, 16, font-size);
+                .unitize(16, 16, line-height);
+                .border-radius(0);
+                display: inline-block;
+                padding: 0;
+                position: absolute;
+                top: 50%;
+                font-family: "shopware";
+                text-align: center;
+                background: none;
+                color: inherit;
+
+                &:before {
+                    content: "\e612";
+                }
+            }
+
+            // ToDo: use new is--primary class as mixin for active styles.
+            &.is--active {
+                @boxShadowColor: rgba(red(@text-color), green(@text-color), blue(@text-color), .6);
+                .primary-gradient();
+                .box-shadow(0 1px 3px @boxShadowColor);
+                text-shadow: 0 1px 1px @brand-secondary;
+                border: 0 none;
+                border-bottom: 1px solid @brand-secondary;
+                color: #fff;
+
+                .action--collapse-icon:before {
+                    content: "\e610";
+                }
+            }
         }
     }
 
     .action--filter-options {
-        .unitize-padding(0, 0, 10, 0);
-        display: none;
         width: auto;
         height: auto;
+        padding: 0;
         overflow: visible;
         position: relative;
-        border: 1px solid @border-color;
-        background: darken(@gray-light, 4%);
+        border: 0 none;
+        background: @body-bg;
         clear: both;
+
+        &.is--collapsed,
+        &.is--active-filter {
+            border-width: 1px;
+            border-style: solid;
+            border-color: @border-color;
+        }
+
+        &.is--active-filter {
+            .filter--active-container {
+                display: block;
+            }
+        }
+
+        #filter,
+        .filter--active-container {
+            display: none;
+        }
 
         .filter--close-btn {
             display: none;
@@ -475,12 +540,8 @@
 
         .filter--container {
             .clearfix();
-            .unitize(10, 16, padding-top);
-            padding-left: 2%;
-        }
-
-        .filter--headline {
-            display: none;
+            margin-left: -2%;
+            padding-left: 3%;
         }
 
         .filter--group {
@@ -508,6 +569,11 @@
             width: 100%;
             position: absolute;
             left: 0;
+        }
+
+        #filter {
+            .clearfix();
+            .unitize(10, 16, padding-bottom);
         }
     }
 
@@ -628,7 +694,7 @@
                 .product--action {
                     .unitize-padding(8, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    //.unitize(14, 16, font-size);
+                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -655,39 +721,46 @@
     .listing--actions {
         .border-radius(3px);
         .unitize-margin(0, 0, 20, 0);
+        .unitize(10, 16, padding-top);
         border: 1px solid @border-color;
         background: darken(@gray-light, 1%);
 
-        &.is--advanced {
-            .unitize-padding(10, 0, 0, 0);
 
-            .listing--paging {
-                display: block;
-                border-top: 1px solid @border-color;
-            }
-        }
 
-        &.no--actions {
-            display: none;
+        .listing--paging {
+            display: block;
+            border-top: 1px solid @border-color;
         }
     }
 
     .action--filter-btn {
         .unitize-margin(0, 0, 10, 10);
-        width: 12%;
-        margin-right: 4%;
+        width: 14%;
+        margin-right: 2%;
 
         .filter--trigger {
             .unitize-padding(9, 16);
+            .unitize(14, 16, font-size);
             .unitize(14, 16, line-height);
+
+            .icon--filter {
+                .unitize(8, 16, margin-right);
+            }
+
+            .action--collapse-icon {
+                .unitize(-6, 16, margin-top);
+            }
         }
     }
 
     .action--filter-options {
         background: #fff;
-        border-width: 1px 0 0 0;
-    }
 
+        &.is--collapsed,
+        &.is--active-filter {
+            border-width: 1px 0 0 0;
+        }
+    }
     .action--sort {
         .unitize-margin(0, 0, 10, 10);
         .unitize(36, 16, line-height);
@@ -757,11 +830,12 @@
             .unitize-margin(0, 10, 0, 0);
             font-weight: bold;
         }
+    }
 
-        .pagination--display {
-            .unitize(30, 16, line-height);
-            float: right;
-        }
+    .listing--bottom-paging {
+        .border-radius(3px);
+        border: 1px solid @border-color;
+        background: @body-bg;
     }
 
     // Listing views
@@ -821,7 +895,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    //.unitize(14, 16, font-size);
+                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -890,7 +964,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    //.unitize(14, 16, font-size);
+                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -946,7 +1020,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    //.unitize(14, 16, font-size);
+                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -1002,7 +1076,7 @@
                 .product--action {
                     .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    //.unitize(14, 16, font-size);
+                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }

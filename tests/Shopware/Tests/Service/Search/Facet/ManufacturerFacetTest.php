@@ -5,6 +5,7 @@ namespace Shopware\Tests\Service\Search\Facet;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Models\Article\Supplier;
@@ -39,98 +40,67 @@ class ManufacturerFacetTest extends TestCase
 
     public function testWithNoManufacturer()
     {
-        $facet = new ManufacturerFacet();
-        $this->search(
-            $facet,
+        $result = $this->search(
             array(
                 'first' => null,
                 'second' => null
             ),
-            array('first', 'second')
+            array('first', 'second'),
+            null,
+            array(),
+            array(new ManufacturerFacet())
         );
-        $this->assertCount(0, $facet->getManufacturers());
+
+        $this->assertCount(0, $result->getFacets());
     }
 
     public function testSingleManufacturer()
     {
-        $facet = new ManufacturerFacet();
         $supplier = $this->helper->createManufacturer();
 
-        $this->search(
-            $facet,
+        $result = $this->search(
             array(
                 'first' => $supplier,
                 'second' => $supplier,
                 'third' => null
             ),
-            array('first', 'second', 'third')
+            array('first', 'second', 'third'),
+            null,
+            array(),
+            array(new ManufacturerFacet())
         );
-        $this->assertCount(1, $facet->getManufacturers());
 
-        $manufacturer = array_shift($facet->getManufacturers());
+        $facet = $result->getFacets()[0];
 
-        /**@var $manufacturer Manufacturer*/
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $manufacturer);
-        $this->assertTrue($manufacturer->hasAttribute('facet'));
-        $this->assertEquals(2, $manufacturer->getAttribute('facet')->get('total'));
+        /**@var $facet ValueListFacetResultInterface*/
+        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
+
+        $this->assertCount(1, $facet->getValues());
+        $this->assertEquals($supplier->getId(), $facet->getValues()[0]->getId());
     }
 
     public function testMultipleManufacturers()
     {
-        $facet = new ManufacturerFacet();
         $supplier1 = $this->helper->createManufacturer();
         $supplier2 = $this->helper->createManufacturer(array(
             'name' => 'Test-Manufacturer-2'
         ));
 
-        $this->search(
-            $facet,
+        $result = $this->search(
             array(
                 'first' => $supplier1,
                 'second' => $supplier1,
                 'third' => $supplier2,
                 'fourth' => null
             ),
-            array('first', 'second', 'third', 'fourth')
+            array('first', 'second', 'third', 'fourth'),
+            null,
+            array(),
+            array(new ManufacturerFacet())
         );
 
-        $this->assertCount(2, $facet->getManufacturers());
-        foreach ($facet->getManufacturers() as $manufacturer) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $manufacturer);
-
-            $this->assertTrue($manufacturer->hasAttribute('facet'));
-
-            if ($manufacturer->getId() === $supplier1->getId()) {
-                $this->assertEquals(2, $manufacturer->getAttribute('facet')->get('total'));
-            } else {
-                $this->assertEquals(1, $manufacturer->getAttribute('facet')->get('total'));
-            }
-        }
+        /**@var $facet ValueListFacetResultInterface*/
+        $facet = $result->getFacets()[0];
+        $this->assertCount(2, $facet->getValues());
     }
-
-    private function search(
-        FacetInterface $facet,
-        $products,
-        $expectedNumbers
-    ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $manufacturer) {
-            $data = $this->getProduct($number, $context, $category, $manufacturer);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addFacet($facet);
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
-
-        return $result;
-    }
-
 }

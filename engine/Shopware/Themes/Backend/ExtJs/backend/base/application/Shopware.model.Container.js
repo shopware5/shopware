@@ -258,7 +258,13 @@ Ext.define('Shopware.model.Container', {
              *
              * @type { String }
              */
-            fieldAlias: undefined
+            fieldAlias: undefined,
+
+            /**
+             * Splits the container fields into two containers
+             * @type { Boolean }
+             */
+            splitFields: true
         },
 
         /**
@@ -804,21 +810,31 @@ Ext.define('Shopware.model.Container', {
             return fieldSet;
         }
 
-        //create a column container to display the columns in a two column layout
-        container = Ext.create('Ext.container.Container', {
-            columnWidth: 0.5,
-            padding: '0 20 0 0',
-            layout: 'anchor',
-            items: fields.slice(0, Math.round(fields.length / 2))
-        });
-        items.push(container);
+        if (me.getConfig('splitFields')) {
+            //create a column container to display the columns in a two column layout
+            container = Ext.create('Ext.container.Container', {
+                columnWidth: 0.5,
+                padding: '0 20 0 0',
+                layout: 'anchor',
+                items: fields.slice(0, Math.round(fields.length / 2))
+            });
+            items.push(container);
 
-        container = Ext.create('Ext.container.Container', {
-            columnWidth: 0.5,
-            layout: 'anchor',
-            items: fields.slice(Math.round(fields.length / 2))
-        });
-        items.push(container);
+            container = Ext.create('Ext.container.Container', {
+                columnWidth: 0.5,
+                layout: 'anchor',
+                items: fields.slice(Math.round(fields.length / 2))
+            });
+            items.push(container);
+
+        } else {
+            container = Ext.create('Ext.container.Container', {
+                columnWidth: 1,
+                layout: 'anchor',
+                items: fields
+            });
+            items.push(container);
+        }
 
         me.fireEvent(me.eventAlias + '-column-containers-created', me, fields, items, model);
 

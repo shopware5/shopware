@@ -53,7 +53,7 @@ interface ManufacturerServiceInterface
      *
      * @param $id
      * @param Struct\ShopContextInterface $context
-     * @return Struct\Product\Manufacturer[]
+     * @return Struct\Product\Manufacturer
      */
     public function get($id, Struct\ShopContextInterface $context);
 }

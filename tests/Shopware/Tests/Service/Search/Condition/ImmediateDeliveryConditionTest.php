@@ -2,8 +2,7 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -33,60 +32,83 @@ class ImmediateDeliveryConditionTest extends TestCase
 
     public function testNoStock()
     {
-        $category = $this->helper->createCategory();
-        $context = $this->getContext();
+        $condition = new ImmediateDeliveryCondition();
 
-        $articles = array(
-            $this->getProduct('testNoStock-1', $context, $category),
-            $this->getProduct('testNoStock-2', $context, $category),
-            $this->getProduct('testNoStock-3', $context, $category, array('inStock' => 2, 'minPurchase' => 1)),
-            $this->getProduct('testNoStock-4', $context, $category, array('inStock' => 2, 'minPurchase' => 1)),
-        );
-
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addImmediateDeliveryCondition();
-
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testNoStock-3', 'testNoStock-4')
+        $this->search(
+            array(
+                'first'  => array('inStock' => 0, 'minPurchase' => 1),
+                'second' => array('inStock' => 0, 'minPurchase' => 1),
+                'third'  => array('inStock' => 2, 'minPurchase' => 1),
+                'fourth' => array('inStock' => 1, 'minPurchase' => 1)
+            ),
+            array('third', 'fourth'),
+            null,
+            array($condition)
         );
     }
 
     public function testMinPurchaseEquals()
     {
-        $category = $this->helper->createCategory();
-        $context = $this->getContext();
+        $condition = new ImmediateDeliveryCondition();
 
-        $articles = array(
-            $this->getProduct('testMinPurchaseEquals-1', $context, $category),
-            $this->getProduct('testMinPurchaseEquals-2', $context, $category),
-            $this->getProduct('testMinPurchaseEquals-3', $context, $category, array('inStock' => 3, 'minPurchase' => 3)),
-            $this->getProduct('testMinPurchaseEquals-4', $context, $category, array('inStock' => 20, 'minPurchase' => 20)),
+        $this->search(
+            array(
+                'first'  => array('inStock' => 0, 'minPurchase' => 1),
+                'second' => array('inStock' => 0, 'minPurchase' => 1),
+                'third'  => array('inStock' => 3, 'minPurchase' => 3),
+                'fourth' => array('inStock' => 20, 'minPurchase' => 20)
+            ),
+            array('third', 'fourth'),
+            null,
+            array($condition)
         );
+    }
 
-        foreach ($articles as $article) {
-            $this->helper->createArticle($article);
+    public function testSubVariantWithStock()
+    {
+        $condition = new ImmediateDeliveryCondition();
+
+        $this->search(
+            array(
+                'first'  => array('inStock' => 0, 'minPurchase' => 1),
+                'second' => array('inStock' => 0, 'minPurchase' => 1),
+                'third'  => array('inStock' => 1, 'minPurchase' => 1),
+                'fourth' => array('createVariants' => true)
+            ),
+            array('third', 'fourth'),
+            null,
+            array($condition)
+        );
+    }
+
+
+    protected function createProduct(
+        $number,
+        Context $context,
+        Category $category,
+        $additionally
+    ) {
+        if ($additionally['createVariants'] == true) {
+            $fourth = $this->getProduct('fourth', $context, $category);
+            $configurator = $this->helper->getConfigurator(
+                $context->getCurrentCustomerGroup(),
+                'fourth'
+            );
+
+            $fourth = array_merge($fourth, $configurator);
+            foreach($fourth['variants'] as &$variant) {
+                $variant['inStock'] = 4;
+                $variant['minPurchase'] = 3;
+            }
+            return $this->helper->createArticle($fourth);
+
+        } else {
+            return parent::createProduct(
+                $number,
+                $context,
+                $category,
+                $additionally
+            );
         }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-        $criteria->addImmediateDeliveryCondition();
-
-        /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
-
-        $this->assertSearchResult(
-            $result,
-            array('testMinPurchaseEquals-3', 'testMinPurchaseEquals-4')
-        );
     }
 }

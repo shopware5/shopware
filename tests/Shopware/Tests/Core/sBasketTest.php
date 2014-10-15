@@ -1777,6 +1777,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND ordernumber IS NOT NULL
+            AND article.name IS NOT NULL
             ORDER BY RAND() LIMIT 1'
         );
 

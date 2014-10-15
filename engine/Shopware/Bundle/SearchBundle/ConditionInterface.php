@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 /**
  * Defines a condition which can be added to the
- * \Shopware\SearchBundle\Criteria class.
+ * \Shopware\Bundle\SearchBundle\Criteria class.
  *
  * Each condition is handled by his own condition handler
  * which defined in the specify gateway engines.
@@ -41,4 +41,10 @@ interface ConditionInterface extends \JsonSerializable
      * @return string
      */
     public function getName();
+
+    /**
+     * @param array $data
+     * @return ConditionInterface
+     */
+    public static function createFromJsonData(array $data);
 }

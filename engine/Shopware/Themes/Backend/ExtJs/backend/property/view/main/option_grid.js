@@ -110,9 +110,16 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
             }
         }, {
             xtype: 'actioncolumn',
-            width: 24,
+            width: 45,
             hideable: false,
             items: [{
+                action: 'edit',
+                iconCls: 'sprite-pencil',
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('editOption', record, view);
+                }
+            },
+                {
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
                 cls: 'delete',

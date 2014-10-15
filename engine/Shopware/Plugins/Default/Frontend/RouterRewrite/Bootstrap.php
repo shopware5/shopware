@@ -258,14 +258,22 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             case 'content':
                 $orgQuery['sContent'] = $query['sContent'];
                 break;
+
+            case 'listing':
+                if (isset($query['sAction']) && $query['sAction'] == 'manufacturer') {
+                    $orgQuery['sAction'] = $query['sAction'];
+                    $orgQuery['sSupplier'] = $query['sSupplier'];
+                }
+                break;
+
             default:
                 if (isset($query['sAction'])) {
                     $orgQuery['sAction'] = $query['sAction'];
                 }
                 break;
         }
-        $orgPath = http_build_query($orgQuery, '', '&');
 
+        $orgPath = http_build_query($orgQuery, '', '&');
         $shopId = Shopware()->Shop()->getId();
 
         $sql = 'SELECT path FROM s_core_rewrite_urls WHERE org_path=? AND subshopID=? AND main=1 ORDER BY id DESC';

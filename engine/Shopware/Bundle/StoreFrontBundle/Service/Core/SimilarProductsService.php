@@ -116,6 +116,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
 
         $fallbackResult = array();
         foreach ($products as $product) {
+            if (!isset($fallback[$product->getId()])) {
+                continue;
+            }
+
             $fallbackResult[$product->getNumber()] = $this->getProductsByNumbers(
                 $listProducts,
                 $fallback[$product->getId()]

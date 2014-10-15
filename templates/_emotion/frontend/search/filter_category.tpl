@@ -32,7 +32,7 @@
 		                {if $sCategorie.count!=""}
 		                    <li>
 		                    	<a href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}">
-		                    		{$sCategorie.description} ({$sCategorie.count})
+						{$sCategorie.description}
 		                    	</a>
 		                    </li>
 		                {/if}

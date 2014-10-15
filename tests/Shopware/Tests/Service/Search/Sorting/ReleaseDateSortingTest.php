@@ -4,6 +4,8 @@ namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
 class ReleaseDateSortingTest extends TestCase
@@ -26,43 +28,41 @@ class ReleaseDateSortingTest extends TestCase
         $sorting = new ReleaseDateSorting();
 
         $this->search(
-            array($sorting),
             array(
                 'first'  => '2014-01-01',
                 'second' => '2013-04-03',
                 'third'  => '2014-12-12',
                 'fourth' => '2012-01-03'
             ),
-            array('fourth', 'second', 'first', 'third')
+            array('fourth', 'second', 'first', 'third'),
+            null,
+            array(),
+            array(),
+            array($sorting)
         );
     }
 
-    private function search(
-        $sortings,
+    protected function search(
         $products,
-        $expectedNumbers
+        $expectedNumbers,
+        $category = null,
+        $conditions = array(),
+        $facets = array(),
+        $sortings = array(),
+        $context = null
     ) {
-        $context = $this->getContext();
-        $category = $this->helper->createCategory();
-
-        foreach ($products as $number => $releaseDate) {
-            $data = $this->getProduct($number, $context, $category, $releaseDate);
-            $this->helper->createArticle($data);
-        }
-
-        $criteria = new Criteria();
-        $criteria->addCategoryCondition(array($category->getId()));
-
-        foreach ($sortings as $sorting) {
-            $criteria->addSorting($sorting);
-        }
-
-        $result = Shopware()->Container()->get('product_number_search_dbal')
-            ->search($criteria, $context);
-
-        $this->assertSearchResult($result, $expectedNumbers);
+        $result = parent::search(
+            $products,
+            $expectedNumbers,
+            $category,
+            $conditions,
+            $facets,
+            $sortings,
+            $context
+        );
 
         $this->assertSearchResultSorting($result, $expectedNumbers);
-    }
 
+        return $result;
+    }
 }

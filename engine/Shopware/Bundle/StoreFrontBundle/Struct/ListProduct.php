@@ -30,6 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
  * @category  Shopware
@@ -248,7 +249,7 @@ class ListProduct extends Extendable implements \JsonSerializable
     /**
      * @var array
      */
-    protected $blockedCustomerGroupIds;
+    protected $blockedCustomerGroupIds = array();
 
     /**
      * @var string
@@ -323,6 +324,11 @@ class ListProduct extends Extendable implements \JsonSerializable
      * @var Esd
      */
     protected $esd;
+
+    /**
+     * @var VoteAverage
+     */
+    protected $voteAverage;
 
     /**
      * Adds a new product state.
@@ -611,7 +617,7 @@ class ListProduct extends Extendable implements \JsonSerializable
     /**
      * @param array $keywords
      */
-    public function setKeywords(array $keywords)
+    public function setKeywords($keywords)
     {
         $this->keywords = $keywords;
     }
@@ -990,5 +996,21 @@ class ListProduct extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
+     */
+    public function getVoteAverage()
+    {
+        return $this->voteAverage;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage $voteAverage
+     */
+    public function setVoteAverage($voteAverage)
+    {
+        $this->voteAverage = $voteAverage;
     }
 }

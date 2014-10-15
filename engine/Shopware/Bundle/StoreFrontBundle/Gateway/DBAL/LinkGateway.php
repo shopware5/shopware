@@ -123,7 +123,9 @@ class LinkGateway implements Gateway\LinkGatewayInterface
 
         $result = array();
         foreach ($products as $product) {
-            $result[$product->getNumber()] = $links[$product->getId()];
+            if (isset($links[$product->getId()])) {
+                $result[$product->getNumber()] = $links[$product->getId()];
+            }
         }
 
         return $result;

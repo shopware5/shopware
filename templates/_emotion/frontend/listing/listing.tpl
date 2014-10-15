@@ -34,11 +34,13 @@
 				</div>
 			</div>
 			<div class="clear">&nbsp;</div>
-			<div class="{if !$sSupplierInfo.description}no-desc{else}right{/if}">
-				<a href="{$sSupplierInfo.link}" title="{s name='ListingLinkAllSuppliers'}{/s}" class="close">
-					{se name='ListingLinkAllSuppliers'}{/se}
-				</a>
-			</div>
+			{if $sSupplierInfo.link}
+				<div class="{if !$sSupplierInfo.description}no-desc{else}right{/if}">
+					<a href="{$sSupplierInfo.link}" title="{s name='ListingLinkAllSuppliers'}{/s}" class="close">
+						{se name='ListingLinkAllSuppliers'}{/se}
+					</a>
+				</div>
+			{/if}
 			<div class="clear">&nbsp;</div>
 		</div>
 		<div class="space">&nbsp;</div>

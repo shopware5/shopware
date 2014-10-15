@@ -68,6 +68,7 @@
             <argument type="service" id="price_calculation_service"/>
             <argument type="service" id="media_service"/>
             <argument type="service" id="marketing_service"/>
+            <argument type="service" id="vote_service"/>
             <argument type="service" id="events"/>
         </service>
 
@@ -359,6 +360,7 @@
 
         <service id="property_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator">
             <argument type="service" id="attribute_hydrator_dbal"/>
+            <argument type="service" id="media_hydrator_dbal"/>
         </service>
 
         <service id="country_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator">

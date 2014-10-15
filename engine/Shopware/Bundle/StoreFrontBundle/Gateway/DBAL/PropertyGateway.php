@@ -47,11 +47,6 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     const FILTERS_SORT_NUMERIC = 1;
 
     /**
-     * Constant for the article count sort configuration of the category filters
-     */
-    const FILTERS_SORT_ARTICLE_COUNT = 2;
-
-    /**
      * Constant for the position sort configuration of the category filters
      */
     const FILTERS_SORT_POSITION = 3;
@@ -116,6 +111,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $query->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
             ->addSelect($this->fieldHelper->getPropertyOptionFields())
+            ->addSelect($this->fieldHelper->getMediaFields())
         ;
 
         $query->from('s_filter', 'propertySet');
@@ -138,7 +134,8 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             'relations',
             's_filter_options',
             'propertyGroup',
-            'relations.optionID = propertyGroup.id'
+            'relations.optionID = propertyGroup.id
+             AND filterable = 1'
         );
 
         $query->innerJoin(
@@ -148,19 +145,26 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             'propertyOption.optionID = propertyGroup.id'
         );
 
+        $query->leftJoin(
+            'propertyOption',
+            's_media',
+            'media',
+            'propertyOption.media_id = media.id'
+        );
+
+        $query->leftJoin(
+            'media',
+            's_media_attributes',
+            'mediaAttribute',
+            'mediaAttribute.mediaID = media.id'
+        );
+
         $this->fieldHelper->addPropertySetTranslation($query, $context);
 
         $query->groupBy('propertyOption.id');
 
         $query->where('propertyOption.id IN (:ids)')
-            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
-
-        $fallbackId = $context->getShop()->getFallbackId();
-        if (!empty($fallbackId)) {
-            $this->fieldHelper->addPropertySetTranslationFallback($query, $context);
-            $query->setParameter(':languageFallback', $fallbackId);
-        }
 
         $query->orderBy('propertySet.position')
             ->addOrderBy('propertySet.id')
@@ -170,18 +174,6 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         switch ($sortMode) {
             case self::FILTERS_SORT_NUMERIC:
                 $query->addOrderBy('propertyOption.value_numeric');
-                break;
-
-            case self::FILTERS_SORT_ARTICLE_COUNT:
-                $query->innerJoin(
-                    'propertyOption',
-                    's_filter_articles',
-                    'productProperty',
-                    'productProperty.valueID = propertyOption.id'
-                );
-
-                $query->addOrderBy('COUNT(DISTINCT productProperty.articleID)', 'DESC');
-                $query->addOrderBy('propertyOption.value');
                 break;
 
             case self::FILTERS_SORT_POSITION:
@@ -213,7 +205,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     private function getSortMode(array $valueIds)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select('propertySet.sortmode')
+        $query->select('DISTINCT propertySet.sortmode')
             ->from('s_filter', 'propertySet');
 
         $query->innerJoin(
@@ -233,17 +225,15 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $query->where('propertyOption.id IN (:ids)')
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
-        $query->groupBy('propertySet.id');
-
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        if (count($rows) > 1) {
-            return $this->config->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
+        if (count($rows) == 1) {
+            return $rows[0];
         } else {
-            return $rows[0]['sortmode'];
+            return $this->config->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
         }
     }
 }

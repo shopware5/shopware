@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+
 /**
  * Shopware Listing Widgets
  */
@@ -110,24 +113,23 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
     }
 
-    public function ajaxListingAction()
+    public function listingCountAction()
     {
-        /** @var $mapper \Shopware\Components\QueryAliasMapper */
-        $mapper = $this->get('query_alias_mapper');
-        $mapper->replaceShortRequestQueries($this->Request());
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $categoryId = $this->Request()->getParam('sCategory');
-        $pageIndex = $this->Request()->getParam('sPage');
+        $context = $this->get('context_service')->getShopContext();
 
-        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
-        $articles = $articles['sArticles'];
+        $criteria = $this->get('store_front_criteria_factory')
+            ->createAjaxCountCriteria($this->Request(), $context);
 
-        $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+        /**@var $result ProductNumberSearchResult*/
+        $result = $this->get('product_number_search')->search(
+            $criteria,
+            $context
+        );
 
-        $this->View()->assign(array(
-            'sArticles' => $articles,
-            'pageIndex' => $pageIndex,
-            'showListing' => true
-        ));
+        $body = json_encode(array('totalCount' => $result->getTotalCount()));
+        $this->Response()->setBody($body);
+        $this->Response()->setHeader('Content-type', 'application/json', true);
     }
 }
