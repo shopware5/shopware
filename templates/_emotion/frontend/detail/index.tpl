@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
+	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-category-id="{$sArticle.categoryID}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 
 	{* The configurator selection is checked at this early point
    	   to use it in different included files in the detail template. *}
