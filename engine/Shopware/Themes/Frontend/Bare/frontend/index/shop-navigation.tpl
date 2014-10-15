@@ -33,27 +33,20 @@
             </li>
         {/block}
 
-		{* Notepad *}
-		{*{block name="frontend_index_checkout_actions_notepad"}*}
-			{*<li class="navigation--entry entry--notepad" role="menuitem">*}
-				{*<a href="{url controller='note'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}"|escape}" class="note navigation--link">*}
-					{*<i class="icon--heart"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s} {if $sNotesQuantity > 0}<span class="notes_quantity">{$sNotesQuantity}</span>{/if}*}
-				{*</a>*}
-			{*</li>*}
-		{*{/block}*}
-
 		{* Notepad entry *}
+		{block name="frontend_index_checkout_actions_notepad"}
 		<li class="navigation--entry block" role="menuitem">
-			<a href="#" title="" class="btn">
-				<i class="icon--heart is--large"></i>
+			<a href="{url controller='note'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}"|escape}" class="btn">
+				<i class="icon--heart is--large"></i><span class="notes--quantity">{$sNotesQuantity}</span>
 			</a>
 		</li>
+		{/block}
 
         {* My account entry *}
         {block name="frontend_index_checkout_actions_my_options"}
             <li class="navigation--entry entry--account block" role="menuitem">
                 {block name="frontend_index_checkout_actions_account"}
-                    <a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="btn is--icon-left entry--link">
+                    <a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="btn is--icon-left is--large entry--link">
                         <i class="icon--account is--large"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
                     </a>
                 {/block}
@@ -64,12 +57,10 @@
         {block name='frontend_index_checkout_actions'}
             <li class="navigation--entry entry--cart block" role="menuitem">
 
-					{* Include of the cart *}
-					{block name='frontend_index_checkout_actions_include'}
-						{action module=widgets controller=checkout action=info}
-					{/block}
-
-
+				{* Include of the cart *}
+				{block name='frontend_index_checkout_actions_include'}
+					{action module=widgets controller=checkout action=info}
+				{/block}
             </li>
         {/block}
     </ul>
