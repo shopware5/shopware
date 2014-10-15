@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "79f42ef9980adc210c3544b15aeb24d1",
+    "hash": "9c7577f1e92fe10fb5e83da418a13deb",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3110,9 +3111,7 @@
             "time": "2014-04-18 20:37:09"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "phpunit/phpunit": 0,
@@ -3123,13 +3122,12 @@
         "behat/mink-sahi-driver": 0,
         "behat/mink-goutte-driver": 0
     },
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.3.2",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
