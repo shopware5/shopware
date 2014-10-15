@@ -121,6 +121,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $pageCounts = $this->get('config')->get('fuzzySearchSelectPerPage');
 
+        $request = $this->Request()->getParams();
+        $request['sSearchOrginal'] = $term;
+
         $this->View()->assign(array(
             'term' => $term,
             'criteria' => $criteria,
@@ -129,7 +132,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'sSort' => $this->Request()->getParam('sSort', 7),
             'sTemplate' => $this->Request()->getParam('sTemplate'),
             'sPerPage' => array_values(explode("|", $pageCounts)),
-            'sRequests' => $this->Request()->getParams(),
+            'sRequests' => $request,
             'shortParameters' => $mapper->getQueryAliases(),
             'pageSizes' => array_values(explode("|", $pageCounts)),
             'sSearchResults' => array(
