@@ -1063,26 +1063,31 @@ class sExport
                 $row['group_instock'] = explode(';', $row['group_instock']);
                 $row['group_active'] = explode(';', $row['group_active']);
             }
-            if (!empty($row['article_translation'])) {
-                $translation = $this->sMapTranslation('article', $row['article_translation']);
-                if ($row['main_detail_id'] != $row['articledetailsID']) {
-                    unset($translation['additionaltext']);
-                }
-                $row = array_merge($row, $translation);
-            } elseif (!empty($row['article_translation_fallback'])) {
+
+            if (!empty($row['article_translation_fallback'])) {
                 $translation = $this->sMapTranslation('article', $row['article_translation_fallback']);
                 if ($row['main_detail_id'] != $row['articledetailsID']) {
                     unset($translation['additionaltext']);
                 }
                 $row = array_merge($row, $translation);
             }
-            if (!empty($row['detail_translation'])) {
-                $translation = $this->sMapTranslation('detail', $row['detail_translation']);
+            if (!empty($row['article_translation'])) {
+                $translation = $this->sMapTranslation('article', $row['article_translation']);
+                if ($row['main_detail_id'] != $row['articledetailsID']) {
+                    unset($translation['additionaltext']);
+                }
                 $row = array_merge($row, $translation);
-            } elseif (!empty($row['detail_translation_fallback'])) {
+            }
+
+            if (!empty($row['detail_translation_fallback'])) {
                 $translation = $this->sMapTranslation('detail', $row['detail_translation_fallback']);
                 $row = array_merge($row, $translation);
             }
+            if (!empty($row['detail_translation'])) {
+                $translation = $this->sMapTranslation('detail', $row['detail_translation']);
+                $row = array_merge($row, $translation);
+            }
+
             $row['name'] = htmlspecialchars_decode($row['name']);
             $row['supplier'] = htmlspecialchars_decode($row['supplier']);
 
