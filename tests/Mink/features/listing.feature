@@ -1,6 +1,7 @@
 @listing
 Feature: Show Listing
 
+    @noResponsive
     Scenario: I can change the view method
         Given I am on the listing page:
             | parameter | value |
@@ -9,7 +10,7 @@ Feature: Show Listing
         When  I follow "Listen-Ansicht"
         Then  the articles should be shown in a list-view
 
-    @filter
+    @filter @noResponsive
     Scenario Outline: I can filter the articles by supplier
         Given I am on the listing page:
             | parameter | value |
