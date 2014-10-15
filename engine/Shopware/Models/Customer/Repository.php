@@ -228,6 +228,7 @@ class Repository extends ModelRepository
         $builder = $this->getCustomerGroupsQueryBuilder();
         return $builder->getQuery();
     }
+
     /**
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.

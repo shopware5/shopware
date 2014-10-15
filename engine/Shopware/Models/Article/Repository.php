@@ -939,27 +939,25 @@ class Repository extends ModelRepository
      * @param $configuratorSetId
      * @return \Doctrine\ORM\Query
      */
-    public function getConfiguratorPriceSurchargesQuery($configuratorSetId)
+    public function getConfiguratorPriceVariationsQuery($configuratorSetId)
     {
-        $builder = $this->getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId);
+        $builder = $this->getConfiguratorPriceVariationsQueryBuilder($configuratorSetId);
         return $builder->getQuery();
     }
 
 
     /**
-     * Helper function to create the query builder for the "getConfiguratorPriceSurchargesQuery" function.
+     * Helper function to create the query builder for the "getConfiguratorPriceVariationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      * @param $configuratorSetId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId)
+    public function getConfiguratorPriceVariationsQueryBuilder($configuratorSetId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('priceSurcharges', 'priceSurchargesParent', 'priceSurchargesChild'))
-                ->from('Shopware\Models\Article\Configurator\PriceSurcharge', 'priceSurcharges')
-                ->leftJoin('priceSurcharges.parentOption', 'priceSurchargesParent')
-                ->leftJoin('priceSurcharges.childOption', 'priceSurchargesChild')
-                ->where('priceSurcharges.configuratorSetId = ?1')
+        $builder->select(array('priceVariations'))
+                ->from('Shopware\Models\Article\Configurator\PriceVariation', 'priceVariations')
+                ->where('priceVariations.configuratorSetId = ?1')
                 ->setParameter(1, $configuratorSetId);
         return $builder;
     }
@@ -1047,12 +1045,20 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object that returns a list
+     * of configurator options
+     *
+     * @param array|null $filter
      * @return \Doctrine\ORM\Query
      */
-    public function getAllConfiguratorOptionsIndexedByIdQuery()
+    public function getAllConfiguratorOptionsIndexedByIdQuery($filter = null)
     {
         $builder = $this->getAllConfiguratorOptionsIndexedByIdQueryBuilder();
+
+        if ($filter) {
+            $builder->addFilter($filter);
+        }
+
         return $builder->getQuery();
     }
 

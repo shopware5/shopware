@@ -105,9 +105,9 @@ class Set extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceVariation", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
-    protected $priceSurcharges;
+    protected $priceVariations;
 
     /**
      * Class constructor, initials the array collections for the associations.
@@ -118,7 +118,7 @@ class Set extends ModelEntity
         $this->options = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
-        $this->priceSurcharges = new ArrayCollection();
+        $this->priceVariations = new ArrayCollection();
     }
 
     /**

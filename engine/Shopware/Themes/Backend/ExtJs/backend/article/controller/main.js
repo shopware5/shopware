@@ -200,9 +200,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         });
     },
 
-
-
-
     /**
      * The passed data object is the batch model which contains associations for each store
      * which is used for the detail page data selection, like the price group combo box or the supplier combo box.
@@ -213,7 +210,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
      */
     prepareAssociationStores: function(data) {
         var me = this, globalGroup, articleConfiguratorSet = null,
-            dependencyStore = null, priceSurchargeStore = null,
+            dependencyStore = null, priceVariationStore = null,
             article = data.getArticle().first(), articleOptions,
             globalOptions, globalOption,
             stores = [], globalApp = Shopware.app.Application;
@@ -246,10 +243,12 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             //get the configurator set of the current article
             articleConfiguratorSet = article.getConfiguratorSet().first();
             dependencyStore = article.getDependencies();
-            priceSurchargeStore = article.getPriceSurcharges();
+
+            priceVariationStore = Ext.create('Shopware.apps.Article.store.Variation');
+            priceVariationStore.getProxy().extraParams.configuratorSetId = article.get('configuratorSetId');
         } else {
             dependencyStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Dependency' });
-            priceSurchargeStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.PriceSurcharge' });
+            priceVariationStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.PriceVariation' });
         }
 
         if (articleConfiguratorSet) {
@@ -311,7 +310,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         stores['configuratorGroups'] = configuratorGroupStore;
         stores['dependencyStore'] = dependencyStore;
-        stores['priceSurchargeStore'] = priceSurchargeStore;
+        stores['priceVariationStore'] = priceVariationStore;
         stores['articleConfiguratorSet'] = articleConfiguratorSet;
 
         stores['categories'] = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
@@ -502,7 +501,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 unitStore: stores['unit'],
                 propertyStore: stores['properties'],
                 dependencyStore: stores['dependencyStore'],
-                priceSurchargeStore: stores['priceSurchargeStore'],
+                priceVariationStore: stores['priceVariationStore'],
                 categoryTreeStore: stores['categories'],
                 articleConfiguratorSet: stores['articleConfiguratorSet'],
                 configuratorGroupStore: stores['configuratorGroups']
