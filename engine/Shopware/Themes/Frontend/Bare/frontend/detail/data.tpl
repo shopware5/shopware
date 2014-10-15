@@ -90,7 +90,9 @@
 						{/block}
 
 						{block name='frontend_detail_data_pseudo_price_discount_icon'}
-							<span class="price--discount-icon">%</span>
+							<span class="price--discount-icon">
+                                <i class="icon--percent"></i>
+                            </span>
 						{/block}
 					{/if}
 				{/block}
