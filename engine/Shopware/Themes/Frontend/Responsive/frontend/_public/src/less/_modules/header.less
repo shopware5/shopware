@@ -72,11 +72,9 @@
 
     .entry--link {
         //.unitize-padding(0, 10);
-        .unitize(45, 16, line-height);
+        //.unitize(45, 16, line-height);
         display: block;
         text-align: center;
-        font-weight: bold;
-        color: @text-color;
         text-decoration: none;
     }
 
@@ -91,12 +89,7 @@
 
 	.entry--cart {
 		border-left: 0 none;
-        cursor: pointer;
         position: relative;
-
-        .entry--link {
-            color: @text-color;
-        }
     }
 
     .entry--spacer {
@@ -392,7 +385,7 @@
             display: inline-block;
 
 
-            i { .unitize-padding(0, 5, 0, 0, 16); }
+//            i { .unitize-padding(0, 5, 0, 0, 16); }
 
             &:first-child {
                 border-left: 0 none;
@@ -412,7 +405,6 @@
             .unitize-width(166);
             .unitize-padding(0, 8);
             position: relative;
-            border-right: 1px solid @border-color;
             text-align: center;
 
             &:after,
@@ -484,7 +476,7 @@
 
         .entry--link {
             //.unitize-padding(12, 20, 12, 20, 16);
-            .unitize(18, 16, line-height);
+            //.unitize(18, 16, line-height);
             font-weight: normal;
         }
         .entry--menu-left, .entry--spacer { display: none }
@@ -493,13 +485,13 @@
         .search--display,
         .entry--account { display: inline-block }
 
-        .entry--account .entry--link {
-            &:hover {
-                color: @brand-primary;
-            }
-
-            i { .unitize(10, 16, margin-right); }
-        }
+//        .entry--account .entry--link {
+//            &:hover {
+//                color: @brand-primary;
+//            }
+//
+//            i { .unitize(10, 16, margin-right); }
+//        }
 
         .entry--search .entry--trigger {
             .white-gradient();
@@ -512,15 +504,16 @@
             }
         }
 
+        // Shop navigation quantity badges
         .cart--quantity,
         .notes--quantity {
-            .unitize-padding(2, 7, 2, 7, 16);
-            .unitize(12, 16, font-size);
+            .unitize-padding(1, 7, 1, 7, 16);
+            .unitize(14, 16, font-size);
             .border-radius(50px);
             background: #fff;
             position: absolute;
-            top: -3px;
-            left: 30px;
+            top: -4px;
+            left: 26px;
             display: inline-block;
             text-align: center;
             z-index: 500;
@@ -729,12 +722,13 @@
     }
 
     // Cart link
-    .entry--cart {
-        .cart--link {
-            //.unitize-padding(50, 10, 11, 10, 16);
-
-            .cart--quantity { display: inline-block; }
-            .cart--amount { display: inline-block; }
+    .navigation--list {
+        .entry--cart {
+            .cart--link {
+                .unitize(60, 16, padding-left);
+                .cart--quantity { display: inline-block; }
+                .cart--amount { display: inline-block; }
+            }
         }
     }
 
