@@ -31,19 +31,20 @@
 /**
  * Shopware Store - Article Module
  */
-//{block name="backend/article/store/surcharge"}
-Ext.define('Shopware.apps.Article.store.Surcharge', {
+//{block name="backend/article/store/variation"}
+Ext.define('Shopware.apps.Article.store.Variation', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
     extend:'Ext.data.Store',
-    autoLoad: false,
+
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Article.model.PriceSurcharge',
+    model:'Shopware.apps.Article.model.PriceVariation',
+
     /**
      * Configure the data communication
      * @object
@@ -61,8 +62,8 @@ Ext.define('Shopware.apps.Article.store.Surcharge', {
          * @object
          */
         api:{
-            create: '{url action="saveConfiguratorPriceSurcharge"}',
-            update: '{url action="saveConfiguratorPriceSurcharge"}',
+            read: '{url controller="ArticlePriceVariation" action="getPriceVariations"}',
+            destroy: '{url controller="ArticlePriceVariation" action="deletePriceVariation"}'
         },
         reader:{
             type:'json',
@@ -70,7 +71,6 @@ Ext.define('Shopware.apps.Article.store.Surcharge', {
             totalProperty:'total'
         }
     }
-
 });
 //{/block}
 

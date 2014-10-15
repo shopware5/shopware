@@ -94,27 +94,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      * @object
      */
     snippets: {
-        dependency: {
-            notice: '{s name=variant/configurator/dependency/notice}In this area you have the opportunity to declare restrictions for the generation of product variants. You can define combinations which are supposed to be excluded from the creation of the product variants. Restrictions are applied as a kind rule set, which offers the advantage to define restrictions based on several combinations of attribute groups and options. To define a restriction, please select the attribute group and option which is supposed to be excluded from the generation from the attached selection boxes below.{/s}',
-            group: '{s name=variant/configurator/dependency/group}Group{/s}',
-            option: '{s name=variant/configurator/dependency/option}Option{/s}',
-            operator: '{s name=variant/configurator/dependency/operator}Not with{/s}',
-            fieldSet: '{s name=variant/configurator/dependency/field_set}Define dependencies{/s}',
-            save: '{s name=variant/configurator/dependency/save}Save{/s}',
-            remove: '{s name=variant/configurator/dependency/remove}Delete{/s}',
-            title: '{s name=variant/configurator/dependency/title}Configurator dependency{/s}'
-        },
-        priceSurcharge: {
-            notice: '{s name=variant/configurator/price_surcharge/notice}In this area you have the opportunity to declare price surcharges for the product variants. You can define combinations which are supposed to be added on the standard prices of the product variants. Price surcharges are applied as a kind rule set, which offers the advantage to define surcharges based on several combinations of attribute groups and options. To define a price surcharge, please select the attribute group and option which is supposed to be added to the standard price from the attached selection boxes below.<br>Price surcharges need to be entered as net prices.{/s}',
-            group: '{s name=variant/configurator/price_surcharge/group}Group{/s}',
-            option: '{s name=variant/configurator/price_surcharge/option}Option{/s}',
-            operator: '{s name=variant/configurator/price_surcharge/operator}Not with{/s}',
-            fieldSet: '{s name=variant/configurator/price_surcharge/field_set}Define price surcharges{/s}',
-            save: '{s name=variant/configurator/price_surcharge/save}Save{/s}',
-            remove: '{s name=variant/configurator/price_surcharge/remove}Delete{/s}',
-            title: '{s name=variant/configurator/price_surcharge/title}Configurator price surcharge{/s}',
-            price: '{s name=variant/configurator/price_surcharge/price}Surcharge{/s}'
-        }
+        notice: '{s name=variant/configurator/dependency/notice}In this area you have the opportunity to declare restrictions for the generation of product variants. You can define combinations which are supposed to be excluded from the creation of the product variants. Restrictions are applied as a kind rule set, which offers the advantage to define restrictions based on several combinations of attribute groups and options. To define a restriction, please select the attribute group and option which is supposed to be excluded from the generation from the attached selection boxes below.{/s}',
+        group: '{s name=variant/configurator/dependency/group}Group{/s}',
+        option: '{s name=variant/configurator/dependency/option}Option{/s}',
+        operator: '{s name=variant/configurator/dependency/operator}Not with{/s}',
+        fieldSet: '{s name=variant/configurator/dependency/field_set}Define dependencies{/s}',
+        save: '{s name=variant/configurator/dependency/save}Save{/s}',
+        remove: '{s name=variant/configurator/dependency/remove}Delete{/s}',
+        title: '{s name=variant/configurator/dependency/title}Configurator dependency{/s}'
     },
 
     /**
@@ -159,59 +146,43 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
              * Event will be fired when the user clicks the delete button.
              * @event
              */
-            'removeDependency',
-            /**
-             * Event will be fired when the user clicks the save button.
-             * @event
-             */
-            'savePriceSurcharge',
-            /**
-             * Event will be fired when the user clicks the delete button.
-             * @event
-             */
-            'removePriceSurcharge'
+            'removeDependency'
         );
     },
 
     /**
-     * Creates the main contains with the card layout which contains the dependency configuration and the
-     * price surcharge configuration.
+     * Creates the main contains with the card layout which contains the dependency configuration
      */
     createItems: function() {
-        var me = this, snippets;
+        var me = this;
 
-        if (me.mode === 'dependency') {
-            snippets = me.snippets.dependency;
-        } else if (me.mode === 'priceSurcharge') {
-            snippets = me.snippets.priceSurcharge;
-        }
-        me.title = snippets.title;
+        me.title = me.snippets.title;
 
-        return me.createContainer(snippets);
+        return me.createContainer();
     },
 
     /**
      * Creates the card item for the configurator dependency.
      */
-    createContainer: function(snippets) {
+    createContainer: function() {
         var me = this, rows = [];
 
         rows.push(Ext.create('Ext.container.Container', {
             cls: Ext.baseCSSPrefix + 'global-notice-text',
-            html: snippets.notice
+            html: me.snippets.notice
         }));
 
         if (me.store && me.store.getCount() > 0) {
             me.store.each(function(dependency) {
-                rows.push(me.createContainerRow(dependency, snippets))
+                rows.push(me.createContainerRow(dependency, me.snippets))
             });
-            rows.push(me.createContainerRow(null, snippets));
+            rows.push(me.createContainerRow(null, me.snippets));
         } else {
-            rows.push(me.createContainerRow(null, snippets));
+            rows.push(me.createContainerRow(null, me.snippets));
         }
 
         return Ext.create('Ext.form.FieldSet', {
-            title: snippets.fieldSet,
+            title: me.snippets.fieldSet,
             name: 'row-field-set',
             autoScroll: true,
             padding: 10,
@@ -224,7 +195,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
      * will be filled with empty elements, otherwise the dependency data will be loaded
      * @param row
      */
-    createContainerRow: function(record, snippets) {
+    createContainerRow: function(record) {
         var me = this, leftGroupCombo, leftOptionCombo, row, items = [],
             saveButton, removeButton, leftGroup, rightGroup, removeButtonDisabled = true,
             middleContainer, rightGroupCombo, rightOptionCombo;
@@ -245,7 +216,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
 
 
         leftGroupCombo = Ext.create('Ext.form.field.ComboBox', {
-            emptyText: snippets.group,
+            emptyText: me.snippets.group,
             flex: 1,
             name: 'parentGroupId',
             allowBlank: false,
@@ -261,7 +232,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
         });
 
         leftOptionCombo = Ext.create('Ext.form.field.ComboBox', {
-            emptyText: snippets.option,
+            emptyText: me.snippets.option,
             name: 'parentId',
             flex: 1,
             allowBlank: false,
@@ -271,7 +242,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
         });
 
         middleContainer = Ext.create('Ext.container.Container', {
-            html: snippets.operator,
+            html: me.snippets.operator,
             margin: '0 10',
             padding: '5 0 0',
             allowBlank: false,
@@ -282,11 +253,11 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
         });
 
         rightGroupCombo = Ext.create('Ext.form.field.ComboBox', {
-            emptyText: snippets.group,
+            emptyText: me.snippets.group,
             flex: 1,
             name: 'childGroupId',
             queryMode: 'local',
-            allowBlank: (me.mode === 'priceSurcharge'),
+            allowBlank: false,
             displayField: 'name',
             valueField: 'id',
             store: me.configuratorGroupStore,
@@ -298,27 +269,22 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
         });
 
         rightOptionCombo = Ext.create('Ext.form.field.ComboBox', {
-            emptyText: snippets.option,
+            emptyText: me.snippets.option,
             margin: '0 10 0 0',
             name: 'childId',
             flex: 1,
-            allowBlank: (me.mode === 'priceSurcharge'),
+            allowBlank: false,
             displayField: 'name',
             valueField: 'id',
             queryMode: 'local'
         });
 
         saveButton = Ext.create('Ext.button.Button', {
-            text: snippets.save,
+            text: me.snippets.save,
             cls: 'primary',
             name: 'save-button',
             handler: function() {
-                if (me.mode === 'dependency') {
-                    me.fireEvent('saveDependency', row, me.store);
-                } else if (me.mode === 'priceSurcharge') {
-                    me.fireEvent('savePriceSurcharge', row, me.store);
-                }
-
+                me.fireEvent('saveDependency', row, me.store);
             }
         });
 
@@ -327,17 +293,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
         }
 
         removeButton = Ext.create('Ext.button.Button', {
-            text: snippets.remove,
+            text: me.snippets.remove,
             margin: 0,
             name: 'delete-button',
             disabled: removeButtonDisabled,
             cls: 'secondary',
             handler: function() {
-                if (me.mode === 'dependency') {
-                    me.fireEvent('removeDependency', row, me.store);
-                } else if (me.mode === 'priceSurcharge') {
-                    me.fireEvent('removePriceSurcharge', row, me.store);
-                }
+                me.fireEvent('removeDependency', row, me.store);
             }
         });
 
@@ -348,18 +310,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
             rightGroupCombo,
             rightOptionCombo
         );
-        if (me.mode === 'priceSurcharge') {
-            var surchargeField = Ext.create('Ext.form.field.Number', {
-                minValue: 0.1,
-                flex: 1,
-                submitLocaleSeparator: false,
-                decimalPrecision: 3,
-                allowBlank: false,
-                name: 'surcharge',
-                emptyText: snippets.price
-            });
-            items.push(surchargeField);
-        }
         items.push(
             saveButton,
             removeButton

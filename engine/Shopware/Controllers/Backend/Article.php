@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorPriceSurchargeRepository = null;
+    protected $configuratorPriceVariationRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
@@ -189,7 +189,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access to the article repository.
      *
-     * @return Shopware\Models\Article\Repository
+     * @return Shopware\Models\Customer\Repository
      */
     protected function getCustomerRepository()
     {
@@ -224,19 +224,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->categoryRepository;
-    }
-
-    /**
-     * Helper function to get access to the configuratorPriceSurcharge repository.
-     * @return \Shopware\Components\Model\ModelRepository
-     */
-    protected function getConfiguratorPriceSurchargeRepository()
-    {
-        if ($this->configuratorPriceSurchargeRepository === null) {
-            $this->configuratorPriceSurchargeRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\PriceSurcharge');
-        }
-
-        return $this->configuratorPriceSurchargeRepository;
     }
 
     /**
@@ -1004,9 +991,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 WHERE source.configurator_set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
-        $sql= "INSERT INTO s_article_configurator_price_surcharges
-                SELECT NULL, ?, parent_id, child_id, surcharge
-                FROM s_article_configurator_price_surcharges as source
+        $sql= "INSERT INTO s_article_configurator_price_variations
+                SELECT NULL, ?, variation, options, is_gross
+                FROM s_article_configurator_price_variations as source
                 WHERE source.configurator_set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
@@ -1402,55 +1389,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Event listener function of the article backend module. Fired when the user saves or updates
-     * an article configurator price surcharge in the dependency window.
-     */
-    public function saveConfiguratorPriceSurchargeAction()
-    {
-        try {
-            $data = $this->Request()->getParams();
-            if (!empty($data['id']) && $data['id'] > 0) {
-                $priceSurcharge = $this->getConfiguratorPriceSurchargeRepository()->find($data['id']);
-            } else {
-                $priceSurcharge = new \Shopware\Models\Article\Configurator\PriceSurcharge();
-            }
-
-            $data['parentOption'] = $this->getConfiguratorOptionRepository()->find($data['parentId']);
-
-            if (!empty($data['childId']) && $data['childId'] > 0) {
-                $data['childOption'] = $this->getConfiguratorOptionRepository()->find($data['childId']);
-            } else {
-                $data['childOption'] = null;
-            }
-            $data['configuratorSet'] = $this->getConfiguratorSetRepository()->find($data['configuratorSetId']);
-
-            $priceSurcharge->fromArray($data);
-            Shopware()->Models()->persist($priceSurcharge);
-            Shopware()->Models()->flush();
-
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $data = $builder->select(array('priceSurcharge', 'priceSurchargesParent', 'priceSurchargesChild'))
-                    ->from('Shopware\Models\Article\Configurator\PriceSurcharge', 'priceSurcharge')
-                    ->leftJoin('priceSurcharge.parentOption', 'priceSurchargesParent')
-                    ->leftJoin('priceSurcharge.childOption', 'priceSurchargesChild')
-                    ->where('priceSurcharge.id = ?1')
-                    ->setParameter(1, $priceSurcharge->getId())
-                    ->getQuery()
-                    ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-        }
-    }
-
-    /**
      * Event listener function of the article backend module. Fired when the user clicks the delete
      * button in the dependency window to delete a dependency.
      */
@@ -1467,32 +1405,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 return;
             }
             $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Dependency', $id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-        }
-    }
-
-    public function deleteConfiguratorPriceSurchargeAction()
-    {
-        try {
-            $id = (int) $this->Request()->getParam('id');
-            if (empty($id)) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid surcharge id passed'
-                ));
-
-                return;
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\PriceSurcharge', $id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
             $this->View()->assign(array(
@@ -1558,9 +1470,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $configuratorGroups = $this->getRepository()->getConfiguratorGroupsQuery()->getArrayResult();
         $attributeFields = $this->getAttributeFields();
 
-        $priceSurcharges = null;
-        $dependencies = null;
-        $configuratorSet = null;
         if (!empty($id)) {
             $article = $this->getArticle($id);
         } else {
@@ -1580,10 +1489,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'properties' => $properties,
                 'priceGroups' => $priceGroups,
                 'article' => $article,
-                'configuratorSet' => $configuratorSet,
                 'configuratorGroups' => $configuratorGroups,
-                'priceSurcharges' => $priceSurcharges,
-                'dependencies' => $dependencies,
                 'settings' => array()
             )
         ));
@@ -2030,22 +1936,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $configuratorSetId
-     * @return array
-     */
-    public function getArticlePriceSurcharges($configuratorSetId)
-    {
-        return $this->getRepository()
-                    ->getConfiguratorPriceSurchargesQuery($configuratorSetId)
-                    ->getArrayResult();
-    }
-
-    /**
-     * Used for the article backend module to load the article data into
-     * the module. This function selects only some fragments for the whole article
-     * data. The full article data stack is defined in the
-     * Shopware_Controller_Backend_Article::getArticle function
-     *
      * @param $articleId
      * @param $tax
      *
@@ -2108,11 +1998,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data[0]['configuratorSet'] = $this->getArticleConfiguratorSet($id);
 
         $data[0]['dependencies'] = array();
-        $data[0]['priceSurcharges'] = array();
 
         if (!empty($data[0]['configuratorSetId'])) {
             $data[0]['dependencies'] = $this->getArticleDependencies($data[0]['configuratorSetId']);
-            $data[0]['priceSurcharges'] = $this->getArticlePriceSurcharges($data[0]['configuratorSetId']);
         }
 
         $data[0]['configuratorTemplate'] = $this->getArticleConfiguratorTemplate($id, $tax);
@@ -2456,7 +2344,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $configuratorSet = $article->getConfiguratorSet();
             $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
-            $priceSurcharges = $this->getRepository()->getConfiguratorPriceSurchargesQuery($configuratorSet->getId())->getArrayResult();
+            $priceVariations = $this->getRepository()->getConfiguratorPriceVariationsQuery($configuratorSet->getId())->getArrayResult();
 
             if (empty($generatorData)) {
                 return;
@@ -2474,7 +2362,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             //iterate all selected variants to insert them into the database
             foreach ($variants as $variant) {
-                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType);
+                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType);
                 if ($variantData === false) {
                     continue;
                 }
@@ -2571,9 +2459,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Helper function to prepare the variant data for a new article detail.
-     * Iterates all passed price surcharges and dependencies to check if the current variant
-     * has configurator options which defined in the dependencies or in the price surcharges.
-     * The used price surcharge options will be added to each variant price row.
+     * Iterates all passed price variations and dependencies to check if the current variant
+     * has configurator options which defined in the dependencies or in the price variations.
+     * The used price variation options will be added to each variant price row.
      * If the variant has configurator options which defined as dependency row,
      * the variant won't be created. The function will return false and
      * the foreach queue in the "createConfiguratorVariantsAction" will be continue.
@@ -2582,7 +2470,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $detailData
      * @param $counter
      * @param $dependencies
-     * @param $priceSurcharges
+     * @param $priceVariations
      * @param $allOptions
      * @param $originals
      * @param $article \Shopware\Models\Article\Article
@@ -2590,7 +2478,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @return array|bool
      */
-    protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType)
+    protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
         $name = '';
         $optionsModels= array();
@@ -2606,15 +2494,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $optionsModels[] = $allOptions[$optionId];
             $name[] = $variant['o' . $id . 'Name'];
-        }
-
-        $optionPriceSurcharges = array();
-        foreach ($priceSurcharges as $surcharge) {
-            if (in_array($surcharge['parentId'], $optionIds) && empty($surcharge['childId'])) {
-                $optionPriceSurcharges[] = $surcharge;
-            } elseif (in_array($surcharge['parentId'], $optionIds) && !empty($surcharge['childId']) && in_array($surcharge['childId'], $optionIds)) {
-                $optionPriceSurcharges[] = $surcharge;
-            }
         }
 
         $abortVariant = false;
@@ -2652,25 +2531,50 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             } while ($this->orderNumberExist($variantData['number']));
         }
 
-        //we have to check the defined price surcharges for the article configurator set,
-        //to add the defined surcharges to the variant prices with the corresponding configurator options
-        if (!empty($optionPriceSurcharges)) {
-            $fullPriceSurcharge = 0;
-            foreach ($optionPriceSurcharges as $priceSurcharge) {
-                $fullPriceSurcharge += $priceSurcharge['surcharge'];
-            }
-
-            $prices = $detailData['prices'];
-            $newPrices = array();
-
-            foreach ($prices as $priceData) {
-                $priceData['price'] += $fullPriceSurcharge;
-                $newPrices[] = $priceData;
-            }
-            $variantData['prices'] = $newPrices;
+        $prices = $this->prepareVariantPrice($detailData, $priceVariations, $optionIds, $tax);
+        if ($prices) {
+            $variantData['prices'] = $prices;
         }
 
         return $variantData;
+    }
+
+    /**
+     * Prepares variant prices according to the price variation rules
+     * Returns prices array
+     *
+     * @param array $detailData
+     * @param array $priceVariations
+     * @param array $optionIds
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @return array
+     */
+    protected function prepareVariantPrice($detailData, $priceVariations, $optionIds, $tax)
+    {
+        $totalPriceVariationValue = 0;
+        foreach ($priceVariations as $priceVariation) {
+            $priceVariation['options'] = explode('|', trim($priceVariation['options'], '|'));
+
+            $optionsDiff = array_diff($priceVariation['options'], $optionIds);
+            if (!empty($optionsDiff)) {
+                continue;
+            }
+
+            $priceVariationValue = $priceVariation['variation'];
+            if ($priceVariation['isGross'] == 1) {
+                $taxValue = (float)$tax->getTax();
+                $priceVariationValue /= ($taxValue + 100) / 100;
+            }
+
+            $totalPriceVariationValue += $priceVariationValue;
+        }
+
+        foreach ($detailData['prices'] as $key => &$configuratorPrice) {
+            $calculatedPrice = $configuratorPrice['price'] + $totalPriceVariationValue;
+            $configuratorPrice['price'] = max($calculatedPrice, 0.01);
+        }
+
+        return $detailData['prices'];
     }
 
     /**
@@ -2692,19 +2596,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($dependencies as $dependency) {
             if ($dependency['parentId'] == $optionId) {
                 $returnValue = $dependency;
-                break;
-            }
-        }
-
-        return $returnValue;
-    }
-
-    protected function getSurchargeByOptionId($optionId, $priceSurcharges)
-    {
-        $returnValue = array();
-        foreach ($priceSurcharges as $priceSurcharge) {
-            if ($priceSurcharge['parentId'] == $optionId) {
-                $returnValue = $priceSurcharge;
                 break;
             }
         }
