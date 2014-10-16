@@ -41,10 +41,4 @@ interface ConditionInterface extends \JsonSerializable
      * @return string
      */
     public function getName();
-
-    /**
-     * @param array $data
-     * @return ConditionInterface
-     */
-    public static function createFromJsonData(array $data);
 }

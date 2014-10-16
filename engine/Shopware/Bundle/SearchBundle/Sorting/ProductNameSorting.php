@@ -40,13 +40,4 @@ class ProductNameSorting extends Sorting
     {
         return 'product_name';
     }
-
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['direction']);
-    }
 }

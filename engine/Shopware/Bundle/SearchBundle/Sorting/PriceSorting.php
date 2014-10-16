@@ -40,13 +40,4 @@ class PriceSorting extends Sorting
     {
         return 'prices';
     }
-
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['direction']);
-    }
 }

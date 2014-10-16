@@ -48,13 +48,4 @@ class HasPriceCondition implements ConditionInterface
     {
         return get_object_vars($this);
     }
-
-    /**
-     * @param array $data
-     * @return HasPriceCondition|ConditionInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self();
-    }
 }
