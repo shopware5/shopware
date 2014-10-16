@@ -82,27 +82,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /**@var $context ProductContextInterface*/
         $context  = $this->get('context_service')->getProductContext();
 
-        /**@var $criteria Criteria*/
-        $criteria = $this->get('criteria_factory')->createCriteriaFromRequest(
-            $this->Request(),
-            $context
-        );
-
-        if (!$criteria->hasCondition('category')) {
-            $criteria->addBaseCondition(
-                new CategoryCondition(array(
-                    $context->getShop()->getCategory()->getId()
-                ))
-            );
-        }
-
-        $criteria->addFacet(new ImmediateDeliveryFacet())
-            ->addFacet(new ShippingFreeFacet())
-            ->addFacet(new PriceFacet())
-            ->addFacet(new VoteAverageFacet())
-            ->addFacet(new ManufacturerFacet())
-            ->addFacet(new PropertyFacet())
-            ->addFacet(new CategoryFacet());
+        $criteria = Shopware()->Container()->get('store_front_criteria_factory')
+            ->createSearchCriteria($this->Request(), $context);
 
         $criteria = $this->get('events')->filter('Shopware_Search_Create_Criteria', $criteria, array(
             'context' => $context

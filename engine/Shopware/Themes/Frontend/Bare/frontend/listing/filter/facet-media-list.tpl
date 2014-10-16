@@ -37,14 +37,18 @@
                                             {/block}
 
                                             {block name="frontend_listing_filter_facet_media_list_label"}
-                                                {$media = $option->getMedia()}
+                                                {$mediaFile = {link file='frontend/_public/src/img/no-picture.jpg'}}
+                                                {if $option->getMedia()}
+                                                    {$mediaFile = $option->getMedia()->getFile()}
+                                                {/if}
 
                                                 <label class="filter-panel--media-label"
                                                        for="__{$facet->getFieldName()}__{$option->getId()}">
                                                     <img class="filter-panel--media-image"
-                                                         src="{$media->getFile()}"
+                                                         src="{$mediaFile}"
                                                          alt="{$option->getLabel()}" />
                                                 </label>
+
                                             {/block}
                                         </li>
                                     {/block}

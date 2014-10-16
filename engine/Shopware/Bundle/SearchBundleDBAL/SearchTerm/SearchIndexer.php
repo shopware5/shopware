@@ -68,6 +68,14 @@ class SearchIndexer
      */
     public function validate()
     {
+        $strategy = $this->config->get('searchRefreshStrategy', 3);
+
+        //search index refresh strategy is configured for "live refresh"?
+        if ($strategy !== 3) {
+            return;
+        }
+
+
         $interval = (int) $this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
@@ -82,16 +90,15 @@ class SearchIndexer
             AND cf.shop_id = 1
         ";
         $result = $this->connection->fetchAll($sql);
+
+        if (empty($result) || !isset($result[0])) {
+            $this->build();
+            return;
+        }
+
         $result = $result[0];
 
         $last = !empty($result['last']) ? unserialize($result['last']) : null;
-
-        $strategy = $this->config->get('searchRefreshStrategy', 3);
-
-        //search index refresh strategy is configured for "live refresh"?
-        if ($strategy !== 3) {
-            return;
-        }
 
         if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->build();
