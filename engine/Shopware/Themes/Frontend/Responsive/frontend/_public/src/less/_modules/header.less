@@ -63,13 +63,6 @@
         border-right: 0 none;
     }
 
-    // Increase icon font size in main shop nav
-    .navigation--entry {
-        [class^="icon--"] {
-            .unitize(20, 16, font-size);
-        }
-    }
-
     .entry--link {
         //.unitize-padding(0, 10);
         //.unitize(45, 16, line-height);
@@ -293,6 +286,12 @@
     }
 }
 
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+    .header-main {
+        background: #fff;
+    }
+}
+
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
     .header-main {
@@ -383,9 +382,6 @@
         .navigation--entry {
             .unitize-padding(0, 16, 0, 16, 16);
             display: inline-block;
-
-
-//            i { .unitize-padding(0, 5, 0, 0, 16); }
 
             &:first-child {
                 border-left: 0 none;
@@ -638,6 +634,24 @@
             }
         }
     }
+
+    .navigation--list {
+
+        // Custom styling cart button
+        .entry--cart {
+            .cart--link {
+                .unitize(50, 16, padding-left);
+                .cart--quantity { display: inline-block; }
+                .cart--amount { display: inline-block; }
+
+                // Adjust icon size
+                [class^="icon--"] {
+                    .unitize(21, 16, font-size);
+                    .unitize(8, 16, left);
+                }
+            }
+        }
+    }
 }
 
 // Desktop styling for the global shop header
@@ -718,17 +732,6 @@
 
         .service--list {
             .unitize-width(152);
-        }
-    }
-
-    // Cart link
-    .navigation--list {
-        .entry--cart {
-            .cart--link {
-                .unitize(60, 16, padding-left);
-                .cart--quantity { display: inline-block; }
-                .cart--amount { display: inline-block; }
-            }
         }
     }
 
