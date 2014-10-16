@@ -138,6 +138,15 @@
  */
 .shopware-footer {
 
+    .#{$prefix}toolbar-separator {
+        &.separator-first {
+            left: 52px !important;
+        }
+        &.separator-second {
+            left: 105px !important;
+        }
+    }
+
     // Normal state
 	.#{$prefix}btn-default-toolbar-small {
 		@include border-radius(0);
@@ -149,14 +158,24 @@
         background: none;
 		height: 40px;
         top: 0 !important;
-		padding: 0 0 0 4px;
+		padding: 0 0 0 6px;
 		position: relative;
+
+        &.logout {
+            left: 0 !important;
+        }
+        &.window {
+            left: 53px !important;
+        }
+        &#widgetTaskBarBtn {
+            left: 106px !important;
+        }
 
 		em {
 			display: block;
 			height: 40px;
 			line-height: 28px;
-			padding: 0 4px 0 0;
+			padding: 0 6px 0 0;
 			background: none;
 		}
 		button {
@@ -168,6 +187,7 @@
 
 			.#{$prefix}btn-inner {
 				color: #324552 !important;
+                width: 40px;
 				font-size: 11px;
 				text-shadow: 1px 1px 1px #fff !important;
 			}
@@ -215,23 +235,6 @@
 			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAvlJREFUeNqsVOtLFFEUvzM7O2uuK+szhCUzQhJS+6KCUOAXKf0QQgVJmmjEQlAKfvA/KJAQPyhZ2WMxSfNRYg+hWM1nqKitro/Vsi11NbTVdpd2nJ3bOeNMrH4ohC785t5zzzm/e89jLkMpJf9jcHxZ464NoSqfheks4BzgJCBOUa0AegEtgBfgJzFBfoy29AlRN/xV+SdgegRI/ccFJgBFQDYukwDwdEJ3SLIlSoeQZDsgkWeji6TY0k9uddmI1y+Swod9pGHoE0Ed2qAt3D5bvQTDlzYCycVkUAyzDKOzr2ySose94sTqVhPoO03hISkHNJrrjh/ey3BgzrGosML6gkwuLT6agI8ffNJ0ZY02BpLNegVxUs9zSfZlNzld89bu8gmYn2nltDAgiIS1U7l9QqRO+7TDnJWefjia+ARxOpTnjrMBieYiCRrFR4VJbVezihnCKCTy1wNwQugMwAzhLG74t7PAz41KIElCDnZx3XMDNzo/fiM3u2zCmdp3PjyXEvUrV1ILk6W+35Gh26my76Xtq/P9nEvWIwdrDOUzULDOrnyotE5XbAri1J+S7hQhGVqtfd3rz6voGOsBaor7ld0zt1vHnTa0Qw4uPESrRyFAaRMYVe8hwUMGGYj1fp/DvSWIDaoebC1QQSMsq5GD1WpYORGmCP0Cs6dZ2sa+ZKqJ4jXsa5hERmkXHEdjDPM4Iwf3/ecvEmMIIammiNi9XVfQMDBnhTxwcCXLyOdOqrIqI8UUKXf9GnCwtmW3H4WEKEMehJKnNihClOiruqGFktrBebNnO9AUHDYU4NShCL1sPwkcbM+ca0a+ZqwhBxqsGQwSg/KAfA8AdbAIBP1KRij5m8SD4bkoyxxxFc1XnBseiqPfsSqVWPrSYWn8G2p7Zo8MzK+J6OPc8FLkIPDT8hfudrsCkkT3O9Dn/L1uF3LgTyu025cKyltHqbSPtwlty1tG6POppUsQsiA/I8oww0YNVV4EElQhtVp09x4+A9dAvoPybwEGAO2Jsyfl3nhDAAAAAElFTkSuQmCC');
 		}
 	}
-
-    // New footer button positioning
-    #tbseparator-1216 {
-        left: 48px !important;
-    }
-
-    #button-1214 {
-        left: 49px !important;
-    }
-
-    #tbseparator-1219 {
-        left: 97px !important;
-    }
-
-    #widgetTaskBarBtn {
-        left: 98px !important;
-    }
 }
 
 /**
@@ -240,7 +243,7 @@
  */
 .window-management-holder {
     overflow: visible !important;
-    left: 146px !important;
+    left: 158px !important;
     top: 0 !important;
     padding-top: 4px;
     border-left: 1px solid rgba(170, 173, 203, 0.18);

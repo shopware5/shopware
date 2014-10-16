@@ -113,29 +113,46 @@
 }
 
 /** IE9 specific */
-.#{$prefix}ie9 {
+.#{$prefix}ie {
     .#{$prefix}tab-default-top {
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(178,193,203,1), 0%, 1),
             svg-color-stop(rgba(127,152,169,1), 100%, 1)
-        )) center center no-repeat transparent;
+        )) center center no-repeat transparent !important;
 
         /** Tab Styling - Hover */
         &:hover {
             background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                 svg-color-stop(rgba(198,209,217,1), 0%, 1),
                 svg-color-stop(rgba(147,168,183,1), 100%, 1)
-            )) center center no-repeat transparent;
+            )) center center no-repeat transparent !important;
         }
     }
 
-    /** Default tab - disabled state */
+    .#{$prefix}tab-top-active {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(46,181,249,1), 0%, 1),
+                svg-color-stop(rgba(22,129,211,1), 100%, 1)
+            )) center center no-repeat transparent !important;
+        }
+    }
+
     .#{$prefix}tab-default-top-disabled {
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(230,230,233,1), 0%, 1),
             svg-color-stop(rgba(221,222,224,1), 100%, 1)
-        )) center center no-repeat transparent;
+        )) center center no-repeat transparent !important;
 
+            /** Tab Styling - Disable - Hover */
+            &:hover {
+                background: none !important;
+            }
     }
 }
 
@@ -173,11 +190,23 @@
 		color: #8596a2 !important;
 	}
 	
-	.x-tab-inner {
+	.#{$prefix}tab-inner {
 		color: #8596a2 !important;
 		text-shadow: 0 1px 0 #fff !important;
 	}
 
+}
+
+/** IE9 specific */
+.#{$prefix}ie9 {
+
+    /** Default tab - disabled state */
+    .#{$prefix}tab-default-top-disabled {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent;
+    }
 }
 
 .#{$prefix}tabpanel-child .#{$prefix}panel-body-default {

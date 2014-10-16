@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
         if(Ext.ieVersion === 0 || Ext.ieVersion >= 9) {
             // Create the headline
             me.headline = Ext.create('Ext.container.Container', {
-                html: '<h1>{s name=title/login}Login Shopware 5 Backend{/s}</h1>'
+                html: '<h1>{s name=title/login}Login Shopware Backend{/s}</h1>'
             });
 
             // Username field
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Login.view.main.Form', {
             }];
         } else {
             me.headline = Ext.create('Ext.container.Container', {
-                html: '<h1>{s name=title/login}Login Shopware 5 Backend{/s}</h1>'
+                html: '<h1>{s name=title/login}Login Shopware Backend{/s}</h1>'
             });
 
             me.items = [me.headline, {
