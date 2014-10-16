@@ -44,6 +44,7 @@ use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
@@ -171,49 +172,6 @@ class CriteriaFactory
         );
 
         return $this->createCriteria($criteriaContext, $context);
-    }
-
-    /**
-     * @param string $json Json encoded Criteria class.
-     * @return Criteria
-     */
-    public function createCriteriaFromJson($json)
-    {
-        $criteriaJson = json_decode($json, true);
-
-        $criteria = new Criteria();
-        $criteria->offset($criteriaJson['offset']);
-        $criteria->limit($criteriaJson['limit']);
-
-        /**@var $class ConditionInterface*/
-        foreach ($criteriaJson['baseConditions'] as $class => $data) {
-            $criteria->addBaseCondition(
-                $class::createFromJsonData($data)
-            );
-        }
-
-        /**@var $class ConditionInterface*/
-        foreach ($criteriaJson['conditions'] as $class => $data) {
-            $criteria->addCondition(
-                $class::createFromJsonData($data)
-            );
-        }
-
-        /**@var $class SortingInterface*/
-        foreach ($criteriaJson['sortings'] as $class => $data) {
-            $criteria->addSorting(
-                $class::createFromJsonData($data)
-            );
-        }
-
-        /**@var $class FacetInterface*/
-        foreach ($criteriaJson['facets'] as $class => $data) {
-            $criteria->addFacet(
-                $class::createFromJsonData($data)
-            );
-        }
-
-        return $criteria;
     }
 
     /**

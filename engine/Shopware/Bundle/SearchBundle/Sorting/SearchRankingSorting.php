@@ -40,13 +40,4 @@ class SearchRankingSorting extends Sorting
     {
         return 'search_ranking';
     }
-
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['direction']);
-    }
 }
