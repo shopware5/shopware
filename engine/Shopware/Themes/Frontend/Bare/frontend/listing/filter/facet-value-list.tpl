@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_value_list"}
 	<div class="filter-panel filter--property facet--{$facet->getFacetName()}"
-		 data-filter-type="value-list">
+		 data-filter-type="value-list"
+		 data-field-name="{$facet->getFieldName()}">
 
 		{block name="frontend_listing_filter_facet_value_list_flyout"}
 			<div class="filter-panel--flyout">

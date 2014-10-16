@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_radio"}
     <div class="filter-panel filter--radio facet--{$facet->getFacetName()}"
-         data-filter-type="radio">
+         data-filter-type="radio"
+         data-field-name="{$facet->getFieldName()}">
 
         {block name="frontend_listing_filter_facet_radio_flyout"}
             <div class="filter-panel--flyout">

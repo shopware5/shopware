@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_media_list"}
     <div class="filter-panel filter--media facet--{$facet->getFacetName()}"
-         data-filter-type="media">
+         data-filter-type="media"
+         data-field-name="{$facet->getFieldName()}">
 
         {block name="frontend_listing_filter_facet_media_list_flyout"}
             <div class="filter-panel--flyout">

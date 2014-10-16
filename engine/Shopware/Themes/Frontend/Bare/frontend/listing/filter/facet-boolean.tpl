@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_boolean"}
 	<div class="filter-panel filter--value facet--{$facet->getFacetName()}"
-		 data-filter-type="value">
+		 data-filter-type="value"
+         data-field-name="{$facet->getFieldName()}">
 
 		{block name="frontend_listing_filter_facet_boolean_flyout"}
 			<div class="filter-panel--flyout">

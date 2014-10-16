@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_range"}
 	<div class="filter-panel filter--range facet--{$facet->getFacetName()}"
-		 data-filter-type="range">
+		 data-filter-type="range"
+         data-field-name="{$facet->getFieldName()}">
 
 		{block name="frontend_listing_filter_facet_range_flyout"}
 			<div class="filter-panel--flyout">
