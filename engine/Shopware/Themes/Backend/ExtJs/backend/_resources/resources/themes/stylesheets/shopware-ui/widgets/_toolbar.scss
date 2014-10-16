@@ -289,6 +289,7 @@
 	}
 	
 	.header {
+        @include border-radius(3px 3px 0 0);
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(46,181,249,1), 0%, 1),
             svg-color-stop(rgba(22,129,211,1), 100%, 1)
@@ -306,8 +307,7 @@
 	}
 	
 	.articles .header {
-		@include border-radius(3px 3px 0 0);
-		.inner {
+        .inner {
 			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAWlBMVEUAAAASXqARXZ8QZq8cfcgfgMg3tP8fgsw3s/8hhdA3s/83tP8VcLo3s/84tP8Oa7sNa7oOa7oObLs3s/8RXp8RXZ84tP8QZq8OabYSXqAPZa4PbLsRZKgTdMNFKb3LAAAAD3RSTlMA39/+gpxbnFGWTt9vVkca7skOAAAAhElEQVR4XnXIRxICMQxEUZMz3S15EuH+10Su0lCzgK+weOV3q1prFxN/ndR1NXaKq1PSSAKIo41J1sTACEkSRVKCmARAQrQkEmxiSCLFSDDMZAAJmPAlInFBBkr0VpIII3kdHpvtTCBF7oaX75NAMDo8/Viyt9Ds5Ocyd+m9791v9/KvD2A2DAj9SM9sAAAAAElFTkSuQmCC") no-repeat 14px 7px;
 		}
 	}
@@ -377,6 +377,13 @@
 			border-bottom: 0 none;
 		}
 	}
+}
+
+// Safari Search Drop Down
+.#{$prefix}safari {
+    .#{$prefix}search-dropdown {
+        left: 746px !important;
+    }
 }
 
 // IE 9 Top Menu
