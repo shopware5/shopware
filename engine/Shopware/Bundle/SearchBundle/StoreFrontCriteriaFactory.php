@@ -117,6 +117,29 @@ class StoreFrontCriteriaFactory
     /**
      * @param Request $request
      * @param ShopContextInterface $context
+     * @param int $categoryId
+     * @return \Shopware\Bundle\SearchBundle\Criteria
+     */
+    public function createProductNavigationCriteria(
+        Request $request,
+        ShopContextInterface $context,
+        $categoryId
+    ) {
+        $criteria = $this->criteriaFactory->createCriteriaFromRequest($request, $context);
+
+        $criteria
+            ->offset(0)
+            ->limit(null);
+
+        $criteria->removeCondition('category');
+        $criteria->addBaseCondition(new CategoryCondition($categoryId));
+
+        return $criteria;
+    }
+
+    /**
+     * @param Request $request
+     * @param ShopContextInterface $context
      * @return Criteria
      */
     public function createAjaxListingCriteria(Request $request, ShopContextInterface $context)
