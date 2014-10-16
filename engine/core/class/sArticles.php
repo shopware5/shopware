@@ -41,6 +41,7 @@ class sArticles
      * @var sSystem
      */
     public $sSYSTEM;
+
     /**
      * @var \Shopware\Models\Category\Category
      */
@@ -150,11 +151,16 @@ class sArticles
      * @var Enlight_Components_Session_Namespace
      */
     private $session;
-    
+
     /**
      * @var SearchBundle\StoreFrontCriteriaFactory
      */
     private $storeFrontCriteriaFactory;
+
+    /**
+     * @var sArticlesComparisons
+     */
+    private $articleComparisons;
 
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
@@ -180,11 +186,13 @@ class sArticles
         $this->additionalTextService     = $container->get('additional_text_service');
         $this->searchService             = $container->get('product_search');
         $this->queryAliasMapper          = $container->get('query_alias_mapper');
-        $this->frontController           = $container->get('front');        
+        $this->frontController           = $container->get('front');
         $this->legacyStructConverter     = $container->get('legacy_struct_converter');
         $this->legacyEventManager        = $container->get('legacy_event_manager');
         $this->session                   = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('store_front_criteria_factory');
+
+        $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
 
     /**
@@ -217,12 +225,7 @@ class sArticles
      */
     public function sDeleteComparison($article)
     {
-        $article = (int) $article;
-        if ($article) {
-            $checkForArticle = $this->db->executeUpdate("
-            DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?
-            ", array($this->sSYSTEM->sSESSION_ID, $article));
-        }
+        $this->articleComparisons->sDeleteComparison($article);
     }
 
     /**
@@ -230,10 +233,7 @@ class sArticles
      */
     public function sDeleteComparisons()
     {
-        $sql = "
-          DELETE FROM s_order_comparisons WHERE sessionID=?
-        ";
-        $checkForArticle = $this->db->executeUpdate($sql, array($this->sSYSTEM->sSESSION_ID));
+        $this->articleComparisons->sDeleteComparisons();
     }
 
     /**
@@ -243,50 +243,7 @@ class sArticles
      */
     public function sAddComparison($article)
     {
-        $article = (int) $article;
-        if ($article) {
-            // Check if this article is already noted
-            $checkForArticle = $this->db->fetchRow("
-            SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?
-            ", array($this->sSYSTEM->sSESSION_ID, $article));
-
-            // Check if max. numbers of articles for one comparison-session is reached
-            $checkNumberArticles = $this->db->fetchRow("
-            SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?
-            ", array($this->sSYSTEM->sSESSION_ID));
-
-            if ($checkNumberArticles["countArticles"] >= $this->config["sMAXCOMPARISONS"]) {
-                return "max_reached";
-            }
-
-            //
-            if (!$checkForArticle["id"]) {
-
-                $articleName = $this->db->fetchOne("
-                SELECT s_articles.name AS articleName FROM s_articles WHERE
-                id = ?
-                ", array($article));
-
-                if (!$articleName) return false;
-
-                $sql = "
-                INSERT INTO s_order_comparisons (sessionID, userID, articlename, articleID, datum)
-                VALUES (?,?,?,?,now())
-                ";
-
-                $queryNewPrice = $this->db->executeUpdate($sql, array(
-                    $this->sSYSTEM->sSESSION_ID,
-                    empty($this->session["sUserId"]) ? 0 : $this->session["sUserId"],
-                    $articleName,
-                    $article
-                ));
-
-                if (!$queryNewPrice) {
-                    throw new Enlight_Exception("sArticles##sAddComparison##01: Error in SQL-query");
-                }
-            }
-            return true;
-        }
+        return $this->articleComparisons->sAddComparison($article);
     }
 
     /**
@@ -295,26 +252,8 @@ class sArticles
      */
     public function sGetComparisons()
     {
-        if (!$this->sSYSTEM->sSESSION_ID) return array();
-
-        // Get all comparisons for this user
-        $checkForArticle = $this->db->fetchAll("
-            SELECT * FROM s_order_comparisons WHERE sessionID=?
-            ", array($this->sSYSTEM->sSESSION_ID));
-
-        if (count($checkForArticle)) {
-            foreach ($checkForArticle as $k => $article) {
-                $checkForArticle[$k]["articlename"] = stripslashes($article["articlename"]);
-                $checkForArticle[$k] = $this->sGetTranslation($article, $article["articleID"], "article");
-                if (!empty($checkForArticle[$k]["articleName"])) $checkForArticle[$k]["articlename"] = $checkForArticle[$k]["articleName"];
-            }
-
-
-            return $checkForArticle;
-        } else {
-            return array();
-        }
-    }
+        return $this->articleComparisons->sGetComparisons();
+     }
 
     /**
      * Get all articles and a table of their properties as an array
@@ -322,28 +261,7 @@ class sArticles
      */
     public function sGetComparisonList()
     {
-        $articles = array();
-        if (!$this->sSYSTEM->sSESSION_ID) return array();
-
-        // Get all comparisons for this user
-        $checkForArticle = $this->db->fetchAll("
-            SELECT * FROM s_order_comparisons WHERE sessionID=?
-            ", array($this->sSYSTEM->sSESSION_ID));
-
-        if (count($checkForArticle)) {
-            foreach ($checkForArticle as $article) {
-                if ($article["articleID"]) {
-                    $data = $this->sGetPromotionById("fix", 0, (int) $article["articleID"]);
-                    $articles[] = $data;
-                }
-            }
-            $properties = $this->sGetComparisonProperties($articles);
-            $articles = $this->sFillUpComparisonArticles($properties, $articles);
-
-            return array("articles" => $articles, "properties" => $properties);
-        } else {
-            return array();
-        }
+        return $this->articleComparisons->sGetComparisonList();
     }
 
     /**
@@ -354,26 +272,7 @@ class sArticles
      */
     public function sGetComparisonProperties($articles)
     {
-        $properties = array();
-        foreach ($articles as $article) {
-            //get all properties in the right order
-            $sql = "SELECT options.id, options.name
-                    FROM s_filter_options as options
-                    LEFT JOIN s_filter_relations as relations ON relations.optionId = options.id
-                    LEFT JOIN s_filter as filter ON filter.id = relations.groupID
-                    WHERE relations.groupID = ?
-                    AND filter.comparable = 1
-                    ORDER BY relations.position ASC";
-            $articleProperties = $this->db->fetchPairs($sql, array($article["filtergroupID"]));
-
-            foreach ($articleProperties as $articlePropertyKey => $articleProperty) {
-                if (!in_array($articlePropertyKey, array_keys($properties))) {
-                    //the key is not part of the array so add it to the end
-                    $properties[$articlePropertyKey] = $articleProperty;
-                }
-            }
-        }
-        return $properties;
+        return $this->articleComparisons->sGetComparisonProperties($articles);
     }
 
     /**
@@ -385,19 +284,7 @@ class sArticles
      */
     public function sFillUpComparisonArticles($properties, $articles)
     {
-        foreach ($articles as $articleKey => $article) {
-            $articleProperties = array();
-            foreach ($properties as $propertyKey => $property) {
-                if (in_array($propertyKey, array_keys($article["sProperties"]))) {
-                    $articleProperties[$propertyKey] = $article["sProperties"][$propertyKey];
-                } else {
-                    $articleProperties[$propertyKey] = null;
-                }
-            }
-            $articles[$articleKey]["sProperties"] = $articleProperties;
-        }
-
-        return $articles;
+        return $this->articleComparisons->sFillUpComparisonArticles($properties, $articles);
     }
 
     /**
