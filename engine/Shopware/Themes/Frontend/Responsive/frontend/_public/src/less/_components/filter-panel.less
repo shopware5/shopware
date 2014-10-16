@@ -3,6 +3,9 @@
     .unitize(10, 16, margin-bottom);
     .border-radius(3px);
     .linear-gradient(#FFF, @body-bg);
+	.user-select(none);
+	.touch-callout(none);
+	.tap-highlight-color(rgba(0, 0, 0, 0));
     display: block;
     position: relative;
     border: 1px solid @border-color;
@@ -26,7 +29,7 @@
             border: 1px solid @brand-primary;
             background: #FFF;
             overflow: visible;
-            z-index: 55;
+            z-index: 550;
         }
 
         .filter-panel--title {
@@ -47,7 +50,7 @@
     display: block;
     width: 100%;
     overflow: hidden;
-    z-index: 50;
+    z-index: 500;
 }
 
 .filter-panel--title {
@@ -111,6 +114,9 @@
 .filter-panel--label {
     .unitize-padding(4, 0, 4, 30);
     .unitize(18, 16, line-height);
+	.user-select(none);
+	.touch-callout(none);
+	.tap-highlight-color(rgba(0, 0, 0, 0));
     display: block;
     cursor: pointer;
 }
@@ -517,8 +523,8 @@
 
     [class^="icon--"] {
         .unitize-margin(0, 0, 0, 10);
-        .unitize(20, 16, font-size);
-        .unitize(3, 16, top);
+        .unitize(14, 16, font-size);
+        .unitize(1, 16, top);
         position: relative;
     }
 

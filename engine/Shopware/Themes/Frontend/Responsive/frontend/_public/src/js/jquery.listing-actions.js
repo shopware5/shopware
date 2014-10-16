@@ -1,6 +1,8 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
+    var $body = $('body');
+
     /**
      * Plugin for handling the filter functionality and
      * all other actions for changing the product listing.
@@ -218,6 +220,8 @@
             me._on(me.$filterComponents, 'onChange', $.proxy(me.onComponentChange, me));
             me._on(me.$filterTrigger, 'click', $.proxy(me.onFilterTriggerClick, me));
 
+            me._on($body, 'click', $.proxy(me.onBodyClick, me));
+
             me.$el.delegate('.' + me.opts.activeFilterCls, 'click', $.proxy(me.onActiveFilterClick, me));
         },
 
@@ -292,6 +296,22 @@
                 me.closeFilterPanel();
             } else {
                 me.openFilterPanel();
+            }
+        },
+
+        /**
+         * Closes all filter panels if the user clicks anywhere else.
+         *
+         * @param event
+         */
+        onBodyClick: function(event) {
+            var me = this,
+                $target = $(event.target);
+
+            if (!$target.is(me.opts.filterComponentSelector + ', ' + me.opts.filterComponentSelector + ' *')) {
+                $.each(me.$filterComponents, function(index, item) {
+                    $(item).data('plugin_filterComponent').close();
+                });
             }
         },
 
