@@ -36,10 +36,4 @@ interface FacetInterface extends \JsonSerializable
      * @return string
      */
     public function getName();
-
-    /**
-     * @param array $data
-     * @return FacetInterface
-     */
-    public static function createFromJsonData(array $data);
 }

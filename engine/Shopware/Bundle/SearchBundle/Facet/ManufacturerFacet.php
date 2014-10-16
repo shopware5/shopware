@@ -49,13 +49,4 @@ class ManufacturerFacet implements FacetInterface
     {
         return get_object_vars($this);
     }
-
-    /**
-     * @param array $data
-     * @return FacetInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self();
-    }
 }

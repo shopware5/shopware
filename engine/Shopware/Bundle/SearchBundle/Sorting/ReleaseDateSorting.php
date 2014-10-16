@@ -40,13 +40,4 @@ class ReleaseDateSorting extends Sorting
     {
         return 'release_date';
     }
-
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['direction']);
-    }
 }
