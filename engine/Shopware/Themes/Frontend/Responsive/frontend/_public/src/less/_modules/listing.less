@@ -489,15 +489,8 @@
                 }
             }
 
-            // ToDo: use new is--primary class as mixin for active styles.
             &.is--active {
-                @boxShadowColor: rgba(red(@text-color), green(@text-color), blue(@text-color), .6);
-                .primary-gradient();
-                .box-shadow(0 1px 3px @boxShadowColor);
-                text-shadow: 0 1px 1px @brand-secondary;
-                border: 0 none;
-                border-bottom: 1px solid @brand-secondary;
-                color: #fff;
+                .is--primary();
 
                 .action--collapse-icon:before {
                     content: "\e610";
@@ -745,7 +738,7 @@
             }
 
             .action--collapse-icon {
-                .unitize(-6, 16, margin-top);
+                .unitize(-8, 16, margin-top);
             }
         }
     }
