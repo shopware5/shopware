@@ -132,7 +132,7 @@ class StoreFrontCriteriaFactory
             ->limit(null);
 
         $criteria->removeCondition('category');
-        $criteria->addBaseCondition(new CategoryCondition($categoryId));
+        $criteria->addBaseCondition(new CategoryCondition([$categoryId]));
 
         return $criteria;
     }
