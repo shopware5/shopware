@@ -72,12 +72,4 @@ class ProductAttributeSorting extends Sorting
         return $this->field;
     }
 
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['field'], $data['direction']);
-    }
 }

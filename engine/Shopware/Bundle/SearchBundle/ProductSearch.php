@@ -60,7 +60,7 @@ class ProductSearch implements ProductSearchInterface
      */
     public function search(
         Criteria $criteria,
-        StoreFrontBundle\Struct\ProductContext $context
+        StoreFrontBundle\Struct\ProductContextInterface $context
     ) {
         $result = $this->searchGateway->search(
             $criteria,

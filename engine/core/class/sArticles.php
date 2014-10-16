@@ -937,7 +937,16 @@ class sArticles
             return false;
         }
 
-        $result = $this->getListing($categoryId, $criteria);
+
+        $context = $this->contextService->getProductContext();
+
+        $request = Shopware()->Container()->get('front')->Request();
+
+        if (!$criteria) {
+            $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($request, $context);
+        }
+
+        $result = $this->getListing($categoryId, $context, $request, $criteria);
 
         $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
 
@@ -1836,16 +1845,13 @@ class sArticles
      */
     public function getProductNavigation($orderNumber, $categoryId, Enlight_Controller_Request_RequestHttp $request)
     {
-        $this->queryAliasMapper->replaceShortRequestQueries($request);
-
-        $criteria = $this->criteriaFactory->createCriteriaFromJson(
-            $this->session->offsetGet('category_config_' . $categoryId)
-        );
-
-        $criteria->offset(null)
-            ->limit(null);
-
         $context = $this->contextService->getProductContext();
+
+        $criteria = $this->storeFrontCriteriaFactory->createProductNavigationCriteria(
+            $request,
+            $context,
+            $categoryId
+        );
 
         $searchResult = $this->productNumberSearch->search(
             $criteria,
@@ -3742,24 +3748,17 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
+     * @param StoreFrontBundle\Struct\ProductContextInterface $context
+     * @param Enlight_Controller_Request_RequestHttp $request
      * @param SearchBundle\Criteria $criteria
-     * @throws Exception
      * @return array
      */
-    private function getListing($categoryId, SearchBundle\Criteria $criteria)
-    {
-        $context = $this->contextService->getProductContext();
-
-        $request = Shopware()->Container()->get('front')->Request();
-
-        if (!$criteria) {
-            $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($request, $context);
-            $this->session->offsetSet(
-                'category_config_' . $categoryId,
-                json_encode($criteria)
-            );
-        }
-
+    private function getListing(
+        $categoryId,
+        StoreFrontBundle\Struct\ProductContextInterface $context,
+        Enlight_Controller_Request_RequestHttp $request,
+        SearchBundle\Criteria $criteria
+    ) {
         $searchResult = $this->searchService->search(
             $criteria,
             $context

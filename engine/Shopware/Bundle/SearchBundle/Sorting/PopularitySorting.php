@@ -40,13 +40,4 @@ class PopularitySorting extends Sorting
     {
         return 'popularity';
     }
-
-    /**
-     * @param array $data
-     * @return SortingInterface
-     */
-    public static function createFromJsonData(array $data)
-    {
-        return new self($data['direction']);
-    }
 }
