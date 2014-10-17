@@ -21,6 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 /**
  * Deprecated Shopware Class that handles categories
@@ -82,19 +85,36 @@ class sCategories
     private $config;
 
     /**
-     * Class constructor.
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
+     * @var CategoryServiceInterface
+     */
+    private $categoryService;
+
+    /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
+     * @throws Exception
      */
     public function __construct()
     {
-        $this->db = Shopware()->Db();
-        $this->config = Shopware()->Config();
-
-        $this->manager = Shopware()->Models();
+        $this->db = Shopware()->Container()->get('db');
+        $this->config = Shopware()->Container()->get('config');
+        $this->manager = Shopware()->Container()->get('models');
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->categoryService = Shopware()->Container()->get('category_service');
+        $this->contextService = Shopware()->Container()->get('context_service');
     }
 
     /**
@@ -107,29 +127,227 @@ class sCategories
      */
     public function sGetCategories($id)
     {
-        if ($id == $this->baseId) {
-            return $this->sGetCategoriesByParentId($this->baseId);
+        $pathIds = $this->getCategoryPath($id);
+
+        $grouped = $this->getCategoryIdsWithParent($pathIds);
+
+        $ids = array_merge($pathIds, array_keys($grouped));
+
+        $context = $this->contextService->getShopContext();
+
+        $categories = $this->categoryService->getList($ids, $context);
+
+        unset($grouped[$this->baseId]);
+
+        $tree = $this->buildTree($grouped, $this->baseId);
+
+        $result = $this->assignCategoriesToTree(
+            $categories,
+            $tree,
+            $pathIds,
+            $this->getChildrenCountOfCategories($ids)
+        );
+
+        return $result;
+    }
+
+
+    /**
+     * Returns a key value array which contains the category id
+     * as key and the count of category children as value.
+     *
+     * @param $ids
+     * @return array
+     */
+    private function getChildrenCountOfCategories($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(array('parent as id', 'COUNT(id) as childrenCount'));
+        $query->from('s_categories', 'category')
+            ->where('parent IN( :ids )')
+            ->groupBy('parent')
+            ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+
+    /**
+     * Returns a associated array with the category id and the parent id
+     * of the category.
+     * The category id is used as array key and the parent id as array value.
+     *
+     * @param $ids
+     * @return array
+     */
+    private function getCategoryIdsWithParent($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(array('category.id', 'category.parent'));
+
+        $query->from('s_categories', 'category')
+            ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
+            ->andWhere('category.active = 1')
+            ->orderBy('category.position')
+            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * Returns all ids, additionally with the provided one,
+     * of the category path of the provided id.
+     * @param $id
+     * @return array
+     */
+    private function getCategoryPath($id)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(array('category.path'))
+            ->from('s_categories', 'category')
+            ->where('category.id = :id')
+            ->setParameter(':id', $id);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        $path = $statement->fetch(PDO::FETCH_COLUMN);
+
+        $ids = array($id);
+
+        if (!$path) {
+            return $ids;
         }
 
-        $path = $this->repository->getPathById($id, 'id');
-        $path = array_reverse($path);
+        $pathIds = explode('|', $path);
+        return array_filter(array_merge($ids, $pathIds));
+    }
 
+    /**
+     * Creates a nested category id tree.
+     *
+     * @param array $associated Contains a id => parentId array
+     * @param int $parentId
+     * @return array
+     */
+    private function buildTree($associated, $parentId)
+    {
         $categories = array();
-        $lastCategoryId = null;
-        foreach ($path as $categoryId) {
-            $subCategories = $this->sGetCategoriesByParentId($categoryId);
-            if (isset($lastCategoryId)) {
-                $subCategories[$lastCategoryId]['flag'] = true;
-                $subCategories[$lastCategoryId]['subcategories'] = $categories;
-            }
-            $categories = $categories[$categoryId]['subcategories'] = $subCategories;
-            $lastCategoryId = $categoryId;
-            if ($categoryId == $this->baseId) {
-                break;
+        foreach ($associated as $id => $parent) {
+            if ($parentId == $parent) {
+                unset($associated[$id]);
+
+                $categories[$id] = $this->buildTree(
+                    $associated,
+                    $id
+                );
             }
         }
-
         return $categories;
+    }
+
+    /**
+     * Assigns the provided categories to the nested tree structure.
+     * @param array $categories
+     * @param array $tree
+     * @param array $activePath
+     * @param array $childrenCounts
+     * @return array
+     */
+    private function assignCategoriesToTree($categories, $tree, $activePath, $childrenCounts)
+    {
+        $result = array();
+        foreach ($tree as $categoryId => $children) {
+            if (!isset($categories[$categoryId])) {
+                continue;
+            }
+
+            $category = $this->convertCategory(
+                $categories[$categoryId],
+                $childrenCounts
+            );
+
+            if (!empty($children)) {
+                $category['subcategories'] = $this->assignCategoriesToTree(
+                    $categories,
+                    $children,
+                    $activePath,
+                    $childrenCounts
+                );
+            }
+
+            $category['flag'] = in_array($categoryId, $activePath);
+
+            $result[$categoryId] = $category;
+        }
+        return $result;
+    }
+
+    /**
+     * @param Category $category
+     * @param $childrenCounts
+     * @return array
+     */
+    private function convertCategory(Category $category, $childrenCounts)
+    {
+        $childrenCount = 0;
+        if (isset($childrenCounts[$category->getId()])) {
+            $childrenCount = $childrenCounts[$category->getId()];
+        }
+
+        $url = $category->isBlog() ? $this->blogBaseUrl : $this->baseUrl;
+
+        $attribute = array();
+        foreach ($category->getAttributes() as $struct) {
+            $attribute = array_merge($attribute, $struct->toArray());
+        }
+
+        $media = array();
+        if ($category->getMedia()) {
+            $media = array(
+                'id'          => $category->getMedia()->getId(),
+                'name'        => $category->getMedia()->getName(),
+                'description' => $category->getMedia()->getDescription(),
+                'path'        => $category->getMedia()->getFile(),
+                'type'        => $category->getMedia()->getType(),
+                'extension'   => $category->getMedia()->getExtension(),
+            );
+        }
+
+        $path = $category->getPath() ? '|' . implode('|', $category->getPath()) . '|' :'';
+
+        return array(
+            'id'                => $category->getId(),
+            'name'              => $category->getName(),
+            'metaKeywords'      => $category->getMetaKeywords(),
+            'metaDescription'   => $category->getMetaDescription(),
+            'cmsHeadline'       => $category->getCmsHeadline(),
+            'cmsText'           => $category->getCmsText(),
+            'active'            => true,
+            'template'          => $category->getTemplate(),
+            'blog'              => $category->isBlog(),
+            'path'              => $path,
+            'external'          => $category->getExternalLink(),
+            'showFilterGroups'  => $category->displayPropertySets(),
+            'hideFilter'        => !$category->displayFacets(),
+            'hideTop'           => !$category->displayInNavigation(),
+            'hidetop'           => !$category->displayInNavigation(),
+            'noViewSelect'      => !$category->allowViewSelect(),
+            'attribute'         => $attribute,
+            'media'             => $media,
+            'description'       => $category->getName(),
+            'link'              => $category->getExternalLink()?: $url . $category->getId(),
+            'flag'              => false,
+            'subcategories'     => array(),
+            'childrenCount'     => $childrenCount
+        );
     }
 
     /**

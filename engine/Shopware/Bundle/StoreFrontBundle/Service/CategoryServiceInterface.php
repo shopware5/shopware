@@ -41,7 +41,7 @@ interface CategoryServiceInterface
      *
      * @param $ids
      * @param Struct\ShopContextInterface $context
-     * @return Struct\Category[]
+     * @return Struct\Category[] Indexed by the category id.
      */
     public function getList($ids, Struct\ShopContextInterface $context);
 
