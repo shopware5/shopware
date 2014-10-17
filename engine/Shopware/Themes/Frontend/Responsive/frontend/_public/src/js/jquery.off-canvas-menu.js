@@ -203,6 +203,7 @@
         me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
 
         me.$pageWrap.off('scroll.' + pluginName);
+        $.publish('plugin/offCanvasMenu/closeMenu');
     };
 
     /**
