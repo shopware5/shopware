@@ -18,7 +18,7 @@
                         {if {config name="compareShow"}}
                             <li class="navigation--entry entry--compare" role="menuitem" aria-haspopup="true" data-drop-down-menu="true">
                                 {block name='frontend_index_navigation_compare'}
-                                    {action module=frontend controller=compare}
+                                    {action module=widgets controller=compare}
                                 {/block}
                             </li>
                         {/if}
