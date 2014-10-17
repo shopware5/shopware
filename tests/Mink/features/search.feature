@@ -17,24 +17,14 @@ Feature: Search things
         And  I should see "Münsterländer Lagerkorn 32%"
         And  I should see "Special Finish Lagerkorn X.O. 32%"
 
-    @noResponsive
     Scenario: Search with many hits
         When I search for "str"
         Then I should see "Zu \"str\" wurden 13 Artikel gefunden!"
         But  I should see 12 elements of type "ArticleBox"
 
-        When I browse to "next" page
-        And  I should see 1 element of type "ArticleBox"
-
-    @noResponsive
     Scenario: Search with no hits
         When I search for "foo"
-        Then I should see "Leider wurden zu \"foo\" keine Artikel gefunden"
-
-
-    Scenario: Search with no hits
-        When I search for "foo"
-        Then I should see "Leider wurden zu Ihrer Suchanfrage keine Artikel gefunden"
+        Then I should see the no results message for keyword "foo"
 
     @javascript
     Scenario Outline: Live-Search with hits
