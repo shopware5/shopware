@@ -225,6 +225,7 @@ In this document you will find a changelog of the important changes related to t
     * `sArticles::displayFilterArticleCount`
     * `sArticles::sGetLastArticles`
     * `sArticles::sGetCategoryProperties`
+    * `sArticles::sGetArticlesVotes`
 
 ## 4.3.1
 
