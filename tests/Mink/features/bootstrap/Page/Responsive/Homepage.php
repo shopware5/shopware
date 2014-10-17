@@ -21,6 +21,16 @@ class Homepage extends \Page\Emotion\Homepage
     );
 
     /**
+     * @param string $keyword
+     */
+    public function receiveNoResultsMessageForKeyword($keyword)
+    {
+        // $keyword gets ignored in responsive template
+        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert->pageTextContains('Leider wurden zu Ihrer Suchanfrage keine Artikel gefunden');
+    }
+
+    /**
      * Changes the currency
      * @param string $currency
      * @throws \Behat\Mink\Exception\ElementNotFoundException
