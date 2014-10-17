@@ -67,21 +67,6 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @covers sCategories::sGetMainCategories
-     */
-    public function testsGetMainCategories()
-    {
-        $this->assertEquals(
-            $this->module->sGetMainCategories(),
-            $this->module->sGetCategories(Shopware()->Shop()->get('parentID'))
-        );
-
-        $this->assertNotEquals(
-            $this->module->sGetMainCategories(),
-            $this->module->sGetCategories(5)
-        );
-    }
 
     /**
      * @covers sCategories::sGetCategoryIdByArticleId
@@ -289,9 +274,7 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
     private function validateCategory($categoryArray, $subcategoriesIndex = null)
     {
         $this->assertArrayHasKey('id', $categoryArray);
-        $this->assertArrayHasKey('parentId', $categoryArray);
         $this->assertArrayHasKey('name', $categoryArray);
-        $this->assertArrayHasKey('position', $categoryArray);
         $this->assertArrayHasKey('active', $categoryArray);
         $this->assertArrayHasKey('description', $categoryArray);
         $this->assertArrayHasKey('link', $categoryArray);

@@ -109,6 +109,11 @@ class Category extends Extendable implements \JsonSerializable
     protected $media;
 
     /**
+     * @var int[]
+     */
+    protected $blockedCustomerGroupIds = array();
+
+    /**
      * @param CategoryEntity $category
      * @return Category
      */
@@ -378,5 +383,21 @@ class Category extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return \int[]
+     */
+    public function getBlockedCustomerGroupIds()
+    {
+        return $this->blockedCustomerGroupIds;
+    }
+
+    /**
+     * @param \int[] $blockedCustomerGroupIds
+     */
+    public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds)
+    {
+        $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
     }
 }

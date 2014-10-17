@@ -91,18 +91,23 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields())
+            ->addSelect("GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups")
         ;
 
         $query->from('s_categories', 'category');
 
         $query->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
+            ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
             ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
 
-        $query->addOrderBy('category.position');
+        $query->addOrderBy('category.position')
+            ->addOrderBy('category.id')
+            ->addGroupBy('category.id');
 
-        $query->where('category.id IN (:categories)');
+        $query->where('category.id IN (:categories)')
+            ->andWhere('category.active = 1');
 
         $query->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
 
