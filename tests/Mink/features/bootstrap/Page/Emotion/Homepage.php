@@ -66,6 +66,18 @@ class Homepage extends Page
     }
 
     /**
+     * @param string $keyword
+     */
+    public function receiveNoResultsMessageForKeyword($keyword)
+    {
+        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert->pageTextContains(sprintf(
+            'Leider wurden zu "%s" keine Artikel gefunden',
+            $keyword
+        ));
+    }
+
+    /**
      * Changes the currency
      * @param string $currency
      * @throws \Behat\Mink\Exception\ElementNotFoundException

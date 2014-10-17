@@ -24,13 +24,21 @@ class ShopwareContext extends SubContext
     }
 
     /**
+     * @Then /^I should see the no results message for keyword "([^"]*)"$/
+     */
+    public function iShouldSeeTheNoResultsMessageForKeyword($keyword)
+    {
+        $this->getPage('Homepage')->receiveNoResultsMessageForKeyword($keyword);
+    }
+
+    /**
      * @When /^I change the currency to "(?P<currency>[^"]*)"$/
      */
     public function iChangeTheCurrencyTo($currency)
     {
         $this->getPage('Homepage')->changeCurrency($currency);
     }
-    
+
     /**
      * @Then /^The comparison should look like this:$/
      */
