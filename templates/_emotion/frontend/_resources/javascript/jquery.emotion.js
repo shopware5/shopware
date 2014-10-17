@@ -305,8 +305,8 @@
  *
  * Copyright (c) 2014, shopware AG
  */
-;(function($, window, undefined) {
-     /*global jQuery:false */
+;(function ($, window) {
+    /*global jQuery:false */
     'use strict';
 
     var pluginName = 'ajaxProductNavigation';
@@ -333,7 +333,7 @@
      * @param {Object} options
      * @constructor
      */
-    function Plugin (element) {
+    function Plugin(element) {
         var me = this;
 
         me.$el = $(element);
@@ -413,21 +413,28 @@
 
         me.urlParams = me.parseQueryString(location.href);
 
+        if (isListing) {
+            me.registerListingEventListeners();
+            return;
+        }
+
         me.$prevButton = $el.find(opts.prevLinkSelector);
         me.$nextButton = $el.find(opts.nextLinkSelector);
         me.$backButton = $el.find(opts.breadcrumbButtonSelector);
         me.$productDetails = $el.find(opts.productDetailsSelector);
 
-        if (isListing) {
-            me.registerListingEventListeners();
-        } else {
-            if (!me.urlParams.hasOwnProperty('c') && !me.$productDetails.attr('data-category-id')) {
-                me.clearCurrentProductState();
-                return;
-            }
+        me.categoryId = ~~(me.urlParams.c || me.$productDetails.attr('data-category-id'));
+        me.orderNumber = me.$productDetails.attr('data-ordernumber');
+        me.productState = me.getProductState();
 
-            me.getProductNavigation();
+        // Clear the product state if the order numbers are not identical
+        if (!$.isEmptyObject(me.productState) && me.productState.ordernumber !== me.orderNumber) {
+            me.clearProductState();
+            me.productState = {};
         }
+
+        me.registerDetailEventListeners();
+        me.getProductNavigation();
     };
 
     Plugin.prototype.parseQueryString = function (url) {
@@ -469,80 +476,72 @@
         $listingEls.on('click', $.proxy(me.onClickProductInListing, me));
     };
 
-    Plugin.prototype.onClickProductInListing = function(event) {
+    Plugin.prototype.onClickProductInListing = function (event) {
         var me = this,
-            params = me.urlParams,
+            opts = me.opts,
             $target = $(event.target),
-            $parent = $target.parents(me.opts.productBoxSelector),
-            categoryId = parseInt($parent.attr('data-category-id'), 10),
-            orderNumber = $parent.attr('data-ordernumber');
+            $parent = $target.parents(opts.productBoxSelector),
+            params = $.extend({}, me.urlParams, {
+                'categoryId': ~~($parent.attr('data-category-id')),
+                'ordernumber': $parent.attr('data-ordernumber')
+            });
 
-        if ($.isNumeric(categoryId)) {
-            params.categoryId = categoryId;
-        }
-
-        if (orderNumber && orderNumber.length) {
-            params.ordernumber = orderNumber;
-        }
-
-        me.saveCurrentProductState(params);
+        me.setProductState(params);
     };
 
-    Plugin.prototype.saveCurrentProductState = function(params) {
+    Plugin.prototype.registerDetailEventListeners = function () {
+        var me = this;
+
+        me.$prevButton.on('click', $.proxy(me.onArrowClick, me));
+        me.$nextButton.on('click', $.proxy(me.onArrowClick, me));
+    };
+
+    Plugin.prototype.onArrowClick = function (event) {
+        var me = this,
+            $target = $(event.currentTarget);
+
+        if (!$.isEmptyObject(me.productState)) {
+            me.productState.ordernumber = $target.attr('data-ordernumber');
+            me.setProductState(me.productState);
+        }
+    };
+
+    Plugin.prototype.getProductState = function () {
+        try {
+            return JSON.parse(window.sessionStorage.getItem('lastProductState'));
+        } catch (err) {
+            return {};
+        }
+    };
+
+    Plugin.prototype.setProductState = function (params) {
         try {
             window.sessionStorage.setItem('lastProductState', JSON.stringify(params));
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     };
 
-    Plugin.prototype.restoreCurrentProductState = function() {
-        try {
-            return JSON.parse(window.sessionStorage.getItem('lastProductState'));
-        } catch(err) {
-            return {};
-        }
-    };
-
-    Plugin.prototype.refreshCurrentProductState = function() {
-        var me = this,
-            orderNumber = me.$el.find('#detail').attr('data-ordernumber'),
-            params = me.restoreCurrentProductState();
-
-        if(!params) {
-            return {};
-        }
-
-        if(orderNumber && orderNumber.length) {
-            params.ordernumber = orderNumber;
-        }
-        me.saveCurrentProductState(params);
-
-        return params;
-    };
-
-    Plugin.prototype.clearCurrentProductState = function() {
+    Plugin.prototype.clearProductState = function () {
         try {
             window.sessionStorage.removeItem('lastProductState');
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     };
 
-    Plugin.prototype.getProductNavigation = function() {
+    Plugin.prototype.getProductNavigation = function () {
         var me = this,
-            params = me.refreshCurrentProductState(),
-            url;
+            url = me.$el.find('#detail').attr('data-product-navigation'),
+            params = $.extend({}, me.productState, {
+                'ordernumber': me.orderNumber,
+                'categoryId': me.categoryId
+            });
 
-        if($.isEmptyObject(params)) {
-            return false;
-        }
-        url = me.$el.find('#detail').attr('data-product-navigation');
-
-        if(!url || !url.length) {
-            return false;
+        if ($.isEmptyObject(params) || !url || !url.length) {
+            return;
         }
 
         $.ajax({
@@ -564,6 +563,8 @@
             animSpeed = opts.arrowFadeSpeed;
 
         if (typeof prevProduct === 'object') {
+            $prevBtn.attr('data-ordernumber', prevProduct.orderNumber);
+
             $prevBtn
                 .attr('href', prevProduct.href)
                 .attr('title', prevProduct.name)
@@ -576,6 +577,8 @@
         }
 
         if (typeof nextProduct === 'object') {
+            $nextBtn.attr('data-ordernumber', nextProduct.orderNumber);
+
             $nextBtn
                 .attr('href', nextProduct.href)
                 .attr('title', nextProduct.name)
@@ -591,12 +594,12 @@
     $.fn[pluginName] = function () {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName, new Plugin( this ));
+                $.data(this, 'plugin_' + pluginName, new Plugin(this));
             }
         });
     };
 
-    $(function() {
+    $(function () {
         $('body').ajaxProductNavigation();
     });
 })(jQuery, window);

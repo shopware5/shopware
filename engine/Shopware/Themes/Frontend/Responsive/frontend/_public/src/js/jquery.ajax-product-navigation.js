@@ -122,22 +122,32 @@
             me.storage = StorageManager.getStorage('session');
             me.urlParams = me.parseQueryString(location.href);
 
+            if (isListing) {
+                me.registerListingEventListeners();
+                return;
+            }
+
             me.$prevButton = $el.find(opts.prevLinkSelector);
             me.$nextButton = $el.find(opts.nextLinkSelector);
             me.$backButton = $el.find(opts.breadcrumbButtonSelector);
             me.$productDetails = $el.find(opts.productDetailsSelector);
 
-            if (isListing) {
-                me.registerListingEventListeners();
-            } else {
-                if (!me.urlParams.hasOwnProperty('c') && !me.$productDetails.attr('data-category-id')) {
-                    me.clearCurrentProductState();
-                    return;
-                }
+            me.categoryId = ~~(me.urlParams.c || me.$productDetails.attr('data-category-id'));
+            me.orderNumber = me.$productDetails.attr('data-ordernumber');
+            me.productState = me.getProductState();
 
-                me.registerDetailEventListeners();
-                me.getProductNavigation();
+            if (!me.categoryId) {
+                return;
             }
+
+            // Clear the product state if the order numbers are not identical
+            if (!$.isEmptyObject(me.productState) && me.productState.ordernumber !== me.orderNumber) {
+                me.clearProductState();
+                me.productState = {};
+            }
+
+            me.registerDetailEventListeners();
+            me.getProductNavigation();
         },
 
         /**
@@ -181,6 +191,39 @@
         },
 
         /**
+         * Reads the last saved product state by the key 'lastProductState'.
+         *
+         * @private
+         * @method getProductState
+         * @returns {Object} The last saved product state or an empty object.
+         */
+        getProductState: function () {
+            return JSON.parse(this.storage.getItem('lastProductState')) || {};
+        },
+
+        /**
+         * Writes the given parameters into the {@link window.sessionStorage}.
+         * The key 'lastProductState' will be used.
+         *
+         * @private
+         * @method setProductState
+         * @param {Object} params
+         */
+        setProductState: function (params) {
+            this.storage.setItem('lastProductState', JSON.stringify(params));
+        },
+
+        /**
+         * Removes the product state from the {@link window.sessionStorage}.
+         *
+         * @private
+         * @method clearProductState
+         */
+        clearProductState: function () {
+            this.storage.removeItem('lastProductState');
+        },
+
+        /**
          * Registers the event listeners for the listing page.
          *
          * @private
@@ -195,6 +238,26 @@
         },
 
         /**
+         * Event handler method which saves the current listing state like
+         * selected sorting and active page into the {@link window.sessionStorage}
+         *
+         * @event click
+         * @param {MouseEvent} event
+         */
+        onClickProductInListing: function (event) {
+            var me = this,
+                opts = me.opts,
+                $target = $(event.target),
+                $parent = $target.parents(opts.productBoxSelector),
+                params = $.extend({}, me.urlParams, {
+                    'categoryId': ~~($parent.attr('data-category-id')),
+                    'ordernumber': $parent.attr('data-ordernumber')
+                });
+
+            me.setProductState(params);
+        },
+
+        /**
          * Registers the event listeners for the detail page.
          *
          * @private
@@ -204,6 +267,22 @@
             var me = this;
 
             me._on(window, 'resize', $.proxy(me.checkPossibleSliding, me));
+            me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
+            me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
+        },
+
+        /**
+         * @private
+         * @method onArrowClick
+         */
+        onArrowClick: function (event) {
+            var me = this,
+                $target = $(event.currentTarget);
+
+            if (!$.isEmptyObject(me.productState)) {
+                me.productState.ordernumber = $target.attr('data-ordernumber');
+                me.setProductState(me.productState);
+            }
         },
 
         /**
@@ -228,92 +307,6 @@
         },
 
         /**
-         * Event handler method which saves the current listing state like
-         * selected sorting and active page into the {@link window.sessionStorage}
-         *
-         * @event click
-         * @param {MouseEvent} event
-         */
-        onClickProductInListing: function (event) {
-            var me = this,
-                params = me.urlParams,
-                $target = $(event.target),
-                $parent = $target.parents(me.opts.productBoxSelector),
-                categoryId = parseInt($parent.attr('data-category-id'), 10),
-                orderNumber = $parent.attr('data-ordernumber');
-
-            if ($.isNumeric(categoryId)) {
-                params.categoryId = categoryId;
-            }
-
-            if (orderNumber && orderNumber.length) {
-                params.ordernumber = orderNumber;
-            }
-
-            me.saveCurrentProductState(params);
-        },
-
-        /**
-         * Writes the given parameters into the {@link window.sessionStorage}.
-         * The key 'lastProductState' will be used.
-         *
-         * @private
-         * @method saveCurrentProductState
-         * @param {Object} params
-         */
-        saveCurrentProductState: function (params) {
-            this.storage.setItem('lastProductState', JSON.stringify(params));
-        },
-
-        /**
-         * Reads the last saved product state by the key 'lastProductState'.
-         *
-         * @private
-         * @method restoreCurrentProductState
-         * @returns {Object} The last saved product state or an empty object.
-         */
-        restoreCurrentProductState: function () {
-            return JSON.parse(this.storage.getItem('lastProductState')) || {};
-        },
-
-        /**
-         * Removes the product state from the {@link window.sessionStorage}.
-         *
-         * @private
-         * @method clearCurrentProductState
-         */
-        clearCurrentProductState: function () {
-            this.storage.removeItem('lastProductState');
-        },
-
-        /**
-         * Tries to refresh the current product state with the ordernumber that
-         * is given from the product detail element by the attribute 'data-ordernumber'.
-         *
-         * @private
-         * @method refreshCurrentProductState
-         * @returns {Object}
-         */
-        refreshCurrentProductState: function () {
-            var me = this,
-                orderNumber = me.$productDetails.attr('data-ordernumber'),
-                categoryId = me.$productDetails.attr('data-category-id'),
-                params = me.restoreCurrentProductState();
-
-            if (orderNumber && orderNumber.length) {
-                params.ordernumber = orderNumber;
-            }
-
-            if (categoryId && categoryId.length) {
-                params.categoryId = categoryId;
-            }
-
-            me.saveCurrentProductState(params);
-
-            return params;
-        },
-
-        /**
          * Requests the product navigation information from the server side
          * using an AJAX request.
          *
@@ -325,8 +318,11 @@
          */
         getProductNavigation: function () {
             var me = this,
-                params = me.refreshCurrentProductState(),
-                url = me.$productDetails.attr('data-product-navigation');
+                url = me.$productDetails.attr('data-product-navigation'),
+                params = $.extend({}, me.productState, {
+                    'ordernumber': me.orderNumber,
+                    'categoryId': me.categoryId
+                });
 
             if ($.isEmptyObject(params) || !url || !url.length) {
                 return;
@@ -339,22 +335,6 @@
                 'dataType': 'json',
                 'success': $.proxy(me.onProductNavigationLoaded, me)
             });
-        },
-
-        /**
-         * Animates a given button with a given animation bases on the css object.
-         *
-         * @param $button
-         * @param css
-         * @param speed
-         */
-        animateButton: function ($button, css, speed) {
-            if (Modernizr.csstransitions) {
-                $button.transition(css, speed);
-                return;
-            }
-
-            $button.animate(css, speed);
         },
 
         /**
@@ -383,6 +363,8 @@
             }
 
             if (typeof prevProduct === 'object') {
+                $prevBtn.attr('data-ordernumber', prevProduct.orderNumber);
+
                 $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image + ')');
 
                 $prevBtn
@@ -398,6 +380,8 @@
             }
 
             if (typeof nextProduct === 'object') {
+                $nextBtn.attr('data-ordernumber', nextProduct.orderNumber);
+
                 $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image + ')');
 
                 $nextBtn
