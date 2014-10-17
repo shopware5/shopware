@@ -567,31 +567,6 @@ class sArticles
     }
 
     /**
-     * Read all article comments / votings
-     * @param int $article - s_articles.id
-     * @return array
-     */
-    public function sGetArticlesVotes($article)
-    {
-        $article = (int) $article;
-
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-        SELECT *
-        FROM s_articles_vote FORCE INDEX (get_articles_votes)
-        WHERE articleID = ?
-        AND active = 1
-        ORDER BY datum DESC
-        ", array($article));
-        foreach ($getArticles as $articleKey => $articleValue) {
-            $getArticles[$articleKey]["comment"] = str_replace("\\n", "", $getArticles[$articleKey]["comment"]);
-            $getArticles[$articleKey]["comment"] = str_replace("\\r", "", $getArticles[$articleKey]["comment"]);
-
-            $getArticles[$articleKey]["comment"] = stripslashes($getArticles[$articleKey]["comment"]); //nl2br($getArticles[$articleKey]["comment"]);
-        }
-        return $getArticles;
-    }
-
-    /**
      * Get id from all articles, that belongs to a specific supplier
      * @param int $supplierID Supplier id (s_articles.supplierID)
      * @return array
