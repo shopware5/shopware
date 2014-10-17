@@ -67,6 +67,10 @@ class MediaHydrator extends Hydrator
             $media->setId((int) $data['__media_id']);
         }
 
+        if (isset($data['__media_name'])) {
+            $media->setName($data['__media_name']);
+        }
+
         if (isset($data['__media_description'])) {
             $media->setDescription($data['__media_description']);
         }

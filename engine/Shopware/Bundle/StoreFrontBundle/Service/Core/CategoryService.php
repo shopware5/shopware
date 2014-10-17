@@ -62,6 +62,22 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
-        return $this->categoryGateway->getList($ids, $context);
+        $categories = $this->categoryGateway->getList($ids, $context);
+
+        return $this->filterValidCategories($categories, $context);
+    }
+
+    /**
+     * @param Struct\Category[] $categories
+     * @param Struct\ShopContextInterface $context
+     * @return Struct\Category[] $categories Indexed by the category id
+     */
+    private function filterValidCategories($categories, Struct\ShopContextInterface $context)
+    {
+        $customerGroup = $context->getCurrentCustomerGroup();
+
+        return array_filter($categories, function(Struct\Category $category) use ($customerGroup) {
+            return !(in_array($customerGroup->getId(), $category->getBlockedCustomerGroupIds()));
+        });
     }
 }

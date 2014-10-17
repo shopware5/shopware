@@ -184,7 +184,7 @@ In this document you will find a changelog of the important changes related to t
         * sGetCheapestPrice
         * sCalculatingPrice
         * calculateCheapestBasePriceData
-
+* sCategories::sGetCategories returns no more the articleCount and the position of each category. Categories always sorted by the position and filtered by the active flag.
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
