@@ -1,5 +1,6 @@
 .btn {
-    .unitize-padding(9, 10, 9, 10, 16);
+    .unitize-padding(2, 10);
+    .unitize(32, 16, line-height);
     .border-radius(4px);
     .appearance();
     .unitize(@btn-font-size, 16, font-size);
@@ -10,12 +11,11 @@
     font-weight: bold;
     text-decoration: none;
     text-align: left;
-    line-height: normal;
     cursor: pointer;
     border: 1px solid @btn-default-border-color;
     color: @btn-default-text-color;
 
-    /** Icon styling */
+    /** Button icon font size */
     [class^="icon--"] {
         .unitize(@btn-icon-size, 16, font-size);
     }
@@ -34,8 +34,8 @@
 
          [class^="icon--"] {
              .unitize-height(16);
-             .unitize-margin(-8, 0, 0, 0);
-             .unitize(16, 16, line-height);
+             .unitize(32, 16, line-height);
+             .unitize-margin(-16, 0, 0, 0);
              .unitize(12, 16, right);
              font-weight: normal;
              display: block;
@@ -50,18 +50,14 @@
 
         [class^="icon--"] {
             .unitize-height(16);
-            .unitize-margin(-8, 0, 0, 0);
-            .unitize(16, 16, line-height);
+            .unitize(32, 16, line-height);
+            .unitize-margin(-16, 0, 0, 0);
             .unitize(12, 16, left);
             font-weight: normal;
             display: block;
             position: absolute;
             top: 50%;
         }
-    }
-
-    &:active {
-        // ???
     }
 
     &:disabled,
@@ -86,41 +82,12 @@
 
     /** State: Small button */
     &.is--small {
-        .unitize-padding(7, 10, 7, 10, 16);
-
-        &.is--icon-right {
-            .unitize(36, 16, padding-right);
-            [class^="icon--"] {
-                font-weight: normal;
-                display: block;
-                position: absolute;
-                top: 50%;
-            }
-        }
-
-        &.is--icon-left {
-            .unitize(36, 16, padding-left);
-            [class^="icon--"] {
-                font-weight: normal;
-                display: block;
-                position: absolute;
-                top: 50%;
-            }
-        }
-
+        .unitize(28, 16, line-height);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize-padding(11, 10, 11, 10, 16);
-
-        &.is--icon-right {
-            .unitize(36, 16, padding-right);
-        }
-
-        &.is--icon-left {
-            .unitize(36, 16, padding-left);
-        }
+        .unitize(36, 16, line-height);
     }
 
     /** State: Button with 100% width */
@@ -132,11 +99,12 @@
     &.is--center {
         text-align: center;
     }
-
 }
 
 /** Type: Primary button or other element */
 .is--primary {
+    .unitize-padding(2, 12);
+    .unitize(34, 16, line-height);
     .linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
     border: 0 none;
     color: @btn-primary-text-color;
@@ -145,10 +113,22 @@
         background: @btn-primary-hover-bg;
         color: @btn-primary-hover-text-color;
     }
+
+    /** State: Small button */
+    &.is--small {
+        .unitize(30, 16, line-height);
+    }
+
+    /** State: Large button */
+    &.is--large {
+        .unitize(38, 16, line-height);
+    }
 }
 
 /** Type: Secondary or other element */
 .is--secondary {
+    .unitize-padding(2, 12);
+    .unitize(34, 16, line-height);
     .linear-gradient(@btn-secondary-top-bg, @btn-secondary-bottom-bg);
     border: 0 none;
     color: @btn-secondary-text-color;
@@ -156,5 +136,15 @@
     &:hover {
         background: @btn-secondary-hover-bg;
         color: @btn-secondary-hover-text-color;
+    }
+
+    /** State: Small button */
+    &.is--small {
+        .unitize(30, 16, line-height);
+    }
+
+    /** State: Large button */
+    &.is--large {
+        .unitize(38, 16, line-height);
     }
 }

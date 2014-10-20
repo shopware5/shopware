@@ -7,7 +7,7 @@
 		{/block}
 
 		{block name='frontend_checkout_cart_footer_add_product_button'}
-			<button type="submit" class="add-product--button btn is--primary is--small block">
+			<button type="submit" class="add-product--button btn is--primary is--center block">
 				<i class="icon--arrow-right"></i>
 			</button>
 		{/block}
@@ -35,7 +35,7 @@
                         {/block}
 
                         {block name='frontend_checkout_cart_footer_add_voucher_button'}
-                            <button type="submit" class="add-voucher--button btn is--primary is--small block">
+                            <button type="submit" class="add-voucher--button btn is--primary is--center block">
                                 <i class="icon--arrow-right"></i>
                             </button>
                         {/block}

@@ -16,8 +16,7 @@
         }
 
         .breadcrumb--entry,
-        .breadcrumb--separator,
-        .breadcrumb--button {
+        .breadcrumb--separator {
             .unitize(24, 16, line-height);
         }
 
@@ -37,6 +36,12 @@
         // Link
         .breadcrumb--link {
             color: @text-color;
+
+            &.btn {
+                &:hover {
+                    color: @btn-default-hover-text-color;
+                }
+            }
         }
 
         // Active link
