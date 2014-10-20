@@ -897,7 +897,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_table-row-bg',
                 '@table-row-bg',
-                '@gray'
+                '#FFFFFF'
             )
         );
         $fieldSetTables->addElement(
