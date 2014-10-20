@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -37,11 +36,11 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 {
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      */
-    public function __construct(ModelManager $entityManager)
+    public function __construct(Connection $connection)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
     }
 
     /**
@@ -65,7 +64,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
         }
         $ids = array_unique($ids);
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(array('product.id'))
             ->addSelect('relatedVariant.ordernumber as number');

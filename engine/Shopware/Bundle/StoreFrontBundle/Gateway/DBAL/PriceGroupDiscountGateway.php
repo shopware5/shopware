@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -56,16 +56,16 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -79,7 +79,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
         Struct\Customer\Group $customerGroup,
         Struct\ShopContextInterface $context
     ) {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->addSelect('priceGroupDiscount.groupID')
             ->addSelect($this->fieldHelper->getPriceGroupDiscountFields())
