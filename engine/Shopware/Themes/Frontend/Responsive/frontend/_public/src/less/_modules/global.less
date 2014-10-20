@@ -165,9 +165,9 @@ blockquote {
     }
 
     p {
-        .unitize(14, 16, font-size);
+        @smallFontSize: @font-size-base - 2;
+        .unitize(@smallFontSize, 16, font-size);
         .unitize(24, 16, line-height);
         .unitize-margin(0, 0, 24, 0);
     }
-
 }
