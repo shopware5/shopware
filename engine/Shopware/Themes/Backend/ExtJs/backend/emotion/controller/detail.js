@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 		growlMessage: '{s name=growlMessage}Emotion{/s}',
 		confirmMessage: '{s name=confirmMessage}Are you sure you want to delete the selected emotion?{/s}'
     },
+
 	/**
 	 * Creates the necessary event listener for this
 	 * specific controller and opens a new Ext.window.Window
@@ -74,13 +75,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.control({
             'emotion-detail-window': {
-                saveEmotion: me.onSaveEmotion
+                'saveEmotion': me.onSaveEmotion
             },
             'emotion-detail-settings-window': {
-                saveComponent: me.onSaveComponent
+                'saveComponent': me.onSaveComponent
             },
             'emotion-detail-designer': {
-                'openSettingsWindow': me.onOpenSettingsWindow
+                'openSettingsWindow': me.onOpenSettingsWindow,
+                'preview': me.onPreview
             },
             'emotion-main-window button[action=emotion-list-toolbar-add]': {
                 'click': me.onOpenDetail
@@ -92,14 +94,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'duplicateemotion': me.onDuplicateEmotion
             },
             'emotion-main-window emotion-list-toolbar': {
-                searchEmotions: me.onSearch,
-                removeEmotions: me.onRemoveEmotions
+                'searchEmotions': me.onSearch,
+                'removeEmotions': me.onRemoveEmotions
             },
             'emotion-components-banner': {
-                openMappingWindow: me.onOpenBannerMappingWindow
+                'openMappingWindow': me.onOpenBannerMappingWindow
             },
             'emotion-components-banner-mapping': {
-                saveBannerMapping: me.onSaveBannerMapping
+                'saveBannerMapping': me.onSaveBannerMapping
             }
         });
 	},
@@ -265,8 +267,12 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      * @param record
      * @param dataViewStore
      */
-    onSaveEmotion: function(record, dataViewStore) {
+    onSaveEmotion: function(record, dataViewStore, preview) {
         var me = this, form = me.getSettingsForm(), win = me.getDetailWindow();
+
+        if(Ext.isObject(preview)) {
+            preview = false;
+        }
 
         form.getForm().updateRecord(record);
 
@@ -285,6 +291,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     var message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name')),
                         gridStore = me.getListing().getStore();
 
+                    if(preview) {
+                        return;
+                    }
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
                     win.destroy();
                     gridStore.load();
@@ -360,6 +369,24 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 gridSettings: settings
             }
         });
+    },
+
+    onPreview: function(view, deviceId, emotion, dataviewStore) {
+        var me = this,
+            store =  view.dataviewStore,
+            settings = store.getAt(0).data.settings,
+            emotionName = settings.name,
+            emotionId = settings.id;
+
+        me.onSaveEmotion(emotion, dataviewStore, true);
+
+        this.getView('detail.Preview').create({
+            emotion: emotion,
+            dataviewStore: dataviewStore,
+            emotionId: emotionId,
+            emotionName: emotionName,
+            deviceId: deviceId
+        }).show();
     },
 
     onOpenBannerMappingWindow: function(view, media, preview, element) {

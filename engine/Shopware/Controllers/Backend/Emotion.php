@@ -203,7 +203,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function saveAction()
     {
-
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
         try {
@@ -725,6 +724,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
 
             $grid->fromArray($data);
+
             Shopware()->Models()->persist($grid);
             Shopware()->Models()->flush();
 

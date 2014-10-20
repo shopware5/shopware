@@ -7,12 +7,12 @@ class Banner extends \Element\Emotion\Banner
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'li.emotion--element.banner-element');
+    protected $selector = array('css' => 'div.emotion--element.banner-element');
 
     public $cssLocator = array(
         'image' => 'div.emotion--element-banner',
-        'link' => 'a.element-banner--link',
-        'mapping' => 'a.element-banner--mapping'
+        'link' => 'a.emotion--element-link',
+        'mapping' => 'a.emotion--element-mapping'
     );
 
     /**

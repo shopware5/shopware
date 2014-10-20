@@ -1,3 +1,17 @@
+{* Emotion worlds *}
+{block name="frontend_listing_list_promotion"}
+    {if !$sSupplierInfo && !$sSupplierInfo.id && $hasEmotion}
+        {action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
+    {/if}
+{/block}
+
+{* Emotion worlds *}
+{block name="frontend_listing_list_promotion"}
+    {if !$sSupplierInfo && !$sSupplierInfo.id && $hasEmotion}
+        {action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
+    {/if}
+{/block}
+
 {* Sorting and changing layout *}
 {block name="frontend_listing_top_actions"}
     {if $showListing && !$sOffers}
