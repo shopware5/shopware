@@ -34,7 +34,7 @@
         "doctrine/orm": "2.4.4",
         "oyejorge/less.php": "1.7.0.2",
         "mobiledetect/mobiledetectlib": "2.8.4",
-        "guzzlehttp/guzzle": "4.2.1"
+        "guzzlehttp/guzzle": "5.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "@stable",
