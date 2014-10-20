@@ -16,11 +16,11 @@
      * @example Register new types
      * ```
      *     StateManager.init([{
-     *         type: 'smartphone',
+     *         type: 'xs',
      *         enter: '0em',
      *         exit: '47.5em'
      *      }, {
-     *         type: 'tablet',
+     *         type: 'm',
      *         enter: '47.5em',
      *         exit: '64em'
      *      }]);
@@ -29,7 +29,7 @@
      * @example Register breakpoint listeners
      * ```
      *     StateManager.registerListener([{
-     *        type: 'smartphone',
+     *        type: 'xs',
      *        enter: function() { console.log('onEnter'); },
      *        exit: function() { console.log('onExit'); }
      *     }]);

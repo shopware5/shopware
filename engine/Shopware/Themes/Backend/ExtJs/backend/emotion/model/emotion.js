@@ -57,6 +57,8 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
 
         { name: 'containerWidth', type: 'int' },
         { name: 'device', type: 'int' },
+        { name: 'fullscreen', type: 'int' },
+        { name: 'rows', type: 'int' },
         { name: 'categoryId', type: 'int', useNull: true },
         { name: 'validFrom', type: 'date', dateFormat: 'd.m.Y', useNull: true },
         { name: 'validTo', type: 'date', dateFormat: 'd.m.Y', useNull: true },
@@ -74,7 +76,8 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'seoDescription', type: 'string' },
         { name: 'categoriesNames', type: 'string' },
         { name: 'categories', type: 'array' },
-        { name: 'landingPageBlock', type: 'string' }
+        { name: 'landingPageBlock', type: 'string' },
+        { name: 'mode', type: 'string', defaultValue: 'masonry' }
     ],
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Emotion.model.EmotionElement', name: 'getElements', associationKey: 'elements'},

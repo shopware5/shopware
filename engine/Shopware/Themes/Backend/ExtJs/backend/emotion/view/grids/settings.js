@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
     extend: 'Enlight.app.Window',
     alias: 'widget.emotion-view-grids-settings',
     width: 600,
-    height: 530,
+    height: 550,
     autoScroll: true,
     autoShow: true,
     layout: 'fit',

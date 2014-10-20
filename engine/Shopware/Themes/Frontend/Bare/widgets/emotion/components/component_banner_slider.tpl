@@ -1,43 +1,32 @@
-<script type="text/javascript">
-(function($) {
-    $(document).ready(function() {
-        {$sliderHeight = $sElementHeight}
+{$dataAllConfig = "{ thumbnails: false, leftArrowCls: 'product-slider--arrow is--left', rightArrowCls: 'product-slider--arrow is--right', lightbox: false, animationSpeed: {$Data.banner_slider_scrollspeed}, arrowControls: {if $Data.banner_slider_arrows}true{else}false{/if}, autoSlideInterval: {$Data.banner_slider_rotatespeed}, autoSlide: {if $Data.banner_slider_rotation}true{else}false{/if} }"}
+
+{block name="frontend_widgets_banner_slider"}
+    <div class="image-slider" data-all="imageSlider" data-xs-config="{$dataAllConfig}" data-m-config="{$dataAllConfig}" data-l-config="{$dataAllConfig}" data-xl-config="{$dataAllConfig}">
+
         {if $Data.banner_slider_title}
-            {$sliderHeight = $sliderHeight - 36};
+            <div class="image-slider--title">{$Data.banner_slider_title}</div>
         {/if}
-        var config  = {
-            'title': '{$Data.banner_slider_title}',
-            'headline': {if $Data.banner_slider_title}true{else}false{/if},
-            'navigation': {if $Data.banner_slider_navigation}true{else}false{/if},
-            'scrollSpeed': ~~(1 * '{$Data.banner_slider_scrollspeed}'),
-            'rotateSpeed': ~~(1 * '{$Data.banner_slider_rotatespeed}'),
-            'rotate': {if $Data.banner_slider_rotation}true{else}false{/if},
-            'layout': 'horizontal',
-            'showNumbers': {if $Data.banner_slider_numbers}true{else}false{/if},
-            'navigation': {if $Data.banner_slider_arrows}true{else}false{/if},
-            'showArrows': {if $Data.banner_slider_arrows}true{else}false{/if},
-            'scrollWidth': ~~(1 * '{$sElementWidth}'),
-            'scrollHeight': ~~(1 * '{$sElementHeight}')
-        };
 
-        var slider = $('.slider_banner_{$Data.objectId}').ajaxSlider('locale', config);
-        slider.find('.sliding_outer, .sliding_container').css('height', {$sliderHeight});
-        slider.find('.ajaxSlider').css('height', {$sElementHeight});
-    });
+        {block name="frontend_widgets_banner_slider_container"}
+            <div class="image-slider--container">
 
-})(jQuery);
-</script>
-<div class="slider_banner_{$Data.objectId} banner-slider-emotion" style="height:{$sElementHeight}px">
-    {foreach $Data.values as $banner}
-        <div class="slide" style="width:{$sElementWidth}px; height: {$sliderHeight}px">
-            {if $banner.link}
-                <a href="{$banner.link}">
-                    <img src="{$banner.path}" alt="{$banner.altText|escape}" {if $banner.title} title="{$banner.title|escape}" {/if}/>
-                </a>
-            {else}
-                <img src="{$banner.path}" alt="{$banner.altText|escape}" {if $banner.title} title="{$banner.title|escape}" {/if}/>
-            {/if}
+                {block name="frontend_widgets_banner_slider_slide"}
+                    <div class="image-slider--slide">
+                        {foreach $Data.values as $banner}
 
-        </div>
-    {/foreach}
-</div>
+                            {block name="frontend_widgets_banner_slider_item"}
+                                <div class="image-slider--item" style="background-image: url({link file=$banner.path})">
+                                    {if $banner.link}
+                                        {block name="frontend_widgets_banner_slider_link"}
+                                            <a class="image-slider--link" href="{$banner.link}" title="{$banner.title|escape:'html'}"></a>
+                                        {/block}
+                                    {/if}
+                                </div>
+                            {/block}
+                        {/foreach}
+                    </div>
+                {/block}
+            </div>
+        {/block}
+    </div>
+{/block}

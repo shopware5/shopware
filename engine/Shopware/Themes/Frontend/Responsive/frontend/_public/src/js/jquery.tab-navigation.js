@@ -54,7 +54,7 @@
 
         me.targets = [];
 
-	    if (StateManager.isSmartphone()) {
+	    if (StateManager.isXs()) {
             me.createMobileView();
         } else {
             me.createDesktopView();
@@ -66,7 +66,7 @@
                 return;
             }
 
-            if (StateManager.isSmartphone()) {
+            if (StateManager.isXs()) {
                 me.createMobileView();
             } else {
                 me.createDesktopView();

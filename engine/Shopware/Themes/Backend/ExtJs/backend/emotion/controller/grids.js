@@ -86,7 +86,11 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
                 'selectionChange': me.onSelectionChange,
                 'editEntry': me.onEdit,
                 'duplicate': me.onDuplicate,
-                'remove': me.onRemove
+                'remove': me.onRemove,
+
+            },
+            'emotion-list-grid': {
+                'preview': me.onPreview
             },
             'emotion-grids-toolbar': {
                 'searchGrids': me.onSearch
@@ -101,6 +105,14 @@ Ext.define('Shopware.apps.Emotion.controller.Grids', {
                 click: me.onSave
             }
         });
+    },
+
+    onPreview: function(emotionId, emotionName, deviceId) {
+        this.getView('detail.Preview').create({
+            emotionId: emotionId,
+            emotionName: emotionName,
+            deviceId: deviceId
+        }).show();
     },
 
     /**

@@ -40,13 +40,6 @@
 Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 	extend: 'Ext.grid.Panel',
     alias: 'widget.emotion-list-grid',
-
-    deviceWidth: {
-        desktop: 1024,
-        tablet: 768,
-        mobile: 320
-    },
-
     /**
      * Initializes the component and builds up the main interface
      *
@@ -69,7 +62,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             'deleteemotion',
             'selectionChange',
             'editemotion',
-            'duplicateemotion'
+            'duplicateemotion',
+            'preview'
         )
     },
 
@@ -111,22 +105,18 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }, {
             header: '{s name=grid/column/type}Type{/s}',
             flex: 2,
+            tdCls: 'emotion-device-column',
             renderer: me.typeColumn
-        }, {
-            header: '{s name=grid/column/container_width}Container width{/s}',
-            dataIndex: 'emotions.containerWidth',
-            flex: 1,
-            renderer: me.containerWidthColumn
         }, {
             xtype: 'datecolumn',
             header: '{s name=grid/column/date}Last edited{/s}',
             dataIndex: 'emotions.modified',
-            flex: 1,
+            flex: 2,
             renderer: me.modifiedColumn
         }, {
             header: '{s name=grid/column/active}Active{/s}',
             dataIndex: 'emotions.status',
-            flex: 1,
+            width: 50,
             sortable: false,
             renderer: me.statusColumn
         },
@@ -158,42 +148,18 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             {
                 iconCls: 'sprite-globe--arrow',
                 tooltip:'{s name=list/action_column/preview}Preview shopping world{/s}',
-                handler: function(view, rowIndex, colIndex, record) {
-
+                handler: function(view, rowIndex) {
                     var listStore = view.getStore(),
                         deviceId = listStore.getAt(rowIndex).get('device'),
                         emotionId = listStore.getAt(rowIndex).get('id'),
-                        emotionName = listStore.getAt(rowIndex).get('name'),
-                        width = me.deviceWidth.desktop,
-                        device = 'Desktop';
+                        emotionName = listStore.getAt(rowIndex).get('name');
 
-                    if(deviceId == 1) {
-                        device = 'Tablet';
-                        width = me.deviceWidth.tablet;
-                    } else if(deviceId == 2) {
-                        device = 'Mobile';
-                        width = me.deviceWidth.mobile;
-                    }
-
-                    me.previewWindow = Ext.create('Ext.window.Window', {
-                        title : "{s name=window/preview/title}Shopping world Preview{/s}: " + emotionName + ' (' + device + ')',
-                        width : width,
-                        height: '90%',
-                        layout : 'fit',
-                        items : [{
-                            xtype : "component",
-                            autoEl : {
-                                tag : "iframe",
-                                src : '{url module=widgets controller=emotion action=preview}/?emotionId=' + emotionId
-                            }
-                        }]
-                    }).show();
-
+                    me.fireEvent('preview', emotionId, emotionName, deviceId);
                 }
             }
 			]
         },
-        me.createCopyDropdown(),
+        me.createCopyDropdown()
         ];
 
         return columns;
@@ -224,7 +190,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             stopSelection: true,        //don't select record on button click
                 items: [
             {
-                iconCls: 'sprite-television',
+                iconCls: 'sprite-imac-icon',
                 text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
@@ -232,7 +198,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             },
             {
-                iconCls: 'sprite-media-player-phone-horizontal',
+                iconCls: 'sprite-ipad-icon',
                 text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
@@ -240,7 +206,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             },
             {
-                iconCls: 'sprite-media-player-phone',
+                iconCls: 'sprite-iphone-icon',
                 text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
@@ -290,7 +256,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }
 
         var type = '{s name=grid/renderer/emotion}Emotion{/s}',
-            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/desktop}Nur für Desktop Computer sichtbar{/s}">&nbsp;</div>';
+            device = '<div class="sprite-imac-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
 
         // Type detection
         if(record.get('isLandingPage')) {
@@ -299,23 +265,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 
         // Device detection
         if(record.get('device') == 1) {
-            device = '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/tablet}Nur für Tablets sichtbar{/s}">&nbsp;</div>';
+            device = '<div class="sprite-ipad-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Tablets sichtbar">&nbsp;</div>';
         } else if(record.get('device') == 2) {
-            device = '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="{s name=grid/renderer/mobile}Nur für mobile Geräte sichtbar{/s}">&nbsp;</div>';
+            device = '<div class="sprite-iphone-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
         }
 
         return device + type;
     },
 
-    /**
-     * Column renderer function for the category name column.
-     * @param [string] value    - The field value
-     * @param [string] metaData - The model meta data
-     * @param [string] record   - The whole data model
-     */
-    containerWidthColumn: function(value, metaData, record) {
-        return Ext.String.format('[0]px', record.get('containerWidth'));
-    },
     /**
      * Column renderer function for the modified column
      * @param [string] value    - The field value
@@ -334,7 +291,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      */
     statusColumn: function(value, metaData, record) {
         if (record.get('active')) {
-            return '<div class="sprite-tick-small"  style="width: 25px; height: 25px">&nbsp;</div>';
+            return '<div class="sprite-ui-check-box"  style="width: 25px; height: 25px">&nbsp;</div>';
         } else {
             return '<div class="sprite-cross-small" style="width: 25px; height: 25px">&nbsp;</div>';
         }

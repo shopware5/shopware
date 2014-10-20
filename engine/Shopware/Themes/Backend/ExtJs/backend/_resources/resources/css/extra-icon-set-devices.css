@@ -1,0 +1,7 @@
+.sprite-imac-icon, .sprite-ipad-icon, .sprite-iphone-icon {
+    background: url("../themes/images/icons/extra-icon-set-devices.png") no-repeat !important;
+}
+
+.sprite-imac-icon{ background-position: 0 0 !important }
+.sprite-ipad-icon{ background-position: 0 -36px !important }
+.sprite-iphone-icon{ background-position: 0 -72px !important }

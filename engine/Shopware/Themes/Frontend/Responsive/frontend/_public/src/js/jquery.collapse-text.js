@@ -1,154 +1,474 @@
+/**!
+ * trunk8 v1.3.1
+ * https://github.com/rviscomi/trunk8
+ *
+ * Copyright 2012 Rick Viscomi
+ * Released under the MIT License.
+ *
+ * Date: September 26, 2012
+ */
+
+;(function ($) {
+    var methods,
+        utils,
+        SIDES = {
+            /* cen...ter */
+            center: 'center',
+            /* ...left */
+            left: 'left',
+            /* right... */
+            right: 'right'
+        },
+        WIDTH = {
+            auto: 'auto'
+        };
+
+    function trunk8(element) {
+        this.$element = $(element);
+        this.original_text = this.$element.html().trim();
+        this.settings = $.extend({}, $.fn.trunk8.defaults);
+    }
+
+    trunk8.prototype.updateSettings = function (options) {
+        this.settings = $.extend(this.settings, options);
+    };
+
+    function stripHTML(html) {
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+
+        if (typeof tmp.textContent != 'undefined') {
+            return tmp.textContent;
+        }
+
+        return tmp.innerText
+    }
+
+    function getHtmlArr(str) {
+        /* Builds an array of strings and designated */
+        /* HTML tags around them. */
+        if (stripHTML(str) === str) {
+            return str.split(/\s/g);
+        }
+        var allResults = [],
+            reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
+            outArr = reg.exec(str),
+            lastI,
+            ind;
+        while (outArr && lastI !== reg.lastIndex) {
+            lastI = reg.lastIndex;
+            if (outArr[5]) {
+                allResults.push(outArr[5]);
+            } else if (outArr[1]) {
+                allResults.push({
+                    tag: outArr[1],
+                    attribs: outArr[2],
+                    content: outArr[3],
+                    after: outArr[4]
+                });
+            }
+            outArr = reg.exec(str);
+        }
+        for (ind = 0; ind < allResults.length; ind++) {
+            if (typeof allResults[ind] !== 'string' &&
+                allResults[ind].content) {
+                allResults[ind].content = getHtmlArr(allResults[ind].content);
+            }
+        }
+        return allResults;
+    }
+
+    function rebuildHtmlFromBite(bite, htmlObject, fill) {
+        // Take the processed bite after binary-search
+        // truncated and re-build the original HTML
+        // tags around the processed string.
+        bite = bite.replace(fill, '');
+
+        var biteHelper = function(contentArr, tagInfo) {
+                var retStr = '',
+                    content,
+                    biteContent,
+                    biteLength,
+                    nextWord,
+                    i;
+                for (i = 0; i < contentArr.length; i++) {
+                    content = contentArr[i];
+                    biteLength = $.trim(bite).split(' ').length;
+                    if ($.trim(bite).length) {
+                        if (typeof content === 'string') {
+                            if (!/<br\s*\/?>/.test(content)) {
+                                if (biteLength === 1 && $.trim(bite).length <= content.length) {
+                                    content = bite;
+                                    // We want the fill to go inside of the last HTML
+                                    // element if the element is a container.
+                                    if (tagInfo === 'p' || tagInfo === 'div') {
+                                        content += fill;
+                                    }
+                                    bite = '';
+                                } else {
+                                    bite = bite.replace(content, '');
+                                }
+                            }
+                            retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
+                        } else {
+                            biteContent = biteHelper(content.content, content.tag);
+                            if (content.after) bite = bite.replace(content.after, '');
+                            if (biteContent) {
+                                if (!content.after) content.after = ' ';
+                                retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
+                            }
+                        }
+                    }
+                }
+                return retStr;
+            },
+            htmlResults = biteHelper(htmlObject);
+
+        // Add fill if doesn't exist. This will place it outside the HTML elements.
+        if (htmlResults.slice(htmlResults.length - fill.length) === fill) {
+            htmlResults += fill;
+        }
+
+        return htmlResults;
+    }
+
+    function truncate() {
+        var data = this.data('trunk8'),
+            settings = data.settings,
+            width = settings.width,
+            side = settings.side,
+            fill = settings.fill,
+            parseHTML = settings.parseHTML,
+            line_height = utils.getLineHeight(this) * settings.lines,
+            str = data.original_text,
+            length = str.length,
+            max_bite = '',
+            lower, upper,
+            bite_size,
+            bite,
+            text,
+            htmlObject;
+
+        /* Reset the field to the original string. */
+        this.html(str);
+        text = this.text();
+
+        /* If string has HTML and parse HTML is set, build */
+        /* the data struct to house the tags */
+        if (parseHTML && stripHTML(str) !== str) {
+            htmlObject = getHtmlArr(str);
+            str = stripHTML(str);
+            length = str.length;
+        }
+
+        if (width === WIDTH.auto) {
+            /* Assuming there is no "overflow: hidden". */
+            if (this.height() <= line_height) {
+                /* Text is already at the optimal trunkage. */
+                return;
+            }
+
+            /* Binary search technique for finding the optimal trunkage. */
+            /* Find the maximum bite without overflowing. */
+            lower = 0;
+            upper = length - 1;
+
+            while (lower <= upper) {
+                bite_size = lower + ((upper - lower) >> 1);
+
+                bite = utils.eatStr(str, side, length - bite_size, fill);
+
+                if (parseHTML && htmlObject) {
+                    bite = rebuildHtmlFromBite(bite, htmlObject, fill);
+                }
+
+                this.html(bite);
+
+                /* Check for overflow. */
+                if (this.height() > line_height) {
+                    upper = bite_size - 1;
+                }
+                else {
+                    lower = bite_size + 1;
+
+                    /* Save the bigger bite. */
+                    max_bite = (max_bite.length > bite.length) ? max_bite : bite;
+                }
+            }
+
+            /* Reset the content to eliminate possible existing scroll bars. */
+            this.html('');
+
+            /* Display the biggest bite. */
+            this.html(max_bite);
+
+            if (settings.tooltip) {
+                this.attr('title', text);
+            }
+        }
+        else if (!isNaN(width)) {
+            bite_size = length - width;
+
+            bite = utils.eatStr(str, side, bite_size, fill);
+
+            this.html(bite);
+
+            if (settings.tooltip) {
+                this.attr('title', str);
+            }
+        }
+        else {
+            $.error('Invalid width "' + width + '".');
+            return;
+        }
+        settings.onTruncate();
+    }
+
+    methods = {
+        init: function (options) {
+            return this.each(function () {
+                var $this = $(this),
+                    data = $this.data('trunk8');
+
+                if (!data) {
+                    $this.data('trunk8', (data = new trunk8(this)));
+                }
+
+                data.updateSettings(options);
+
+                truncate.call($this);
+            });
+        },
+
+        /** Updates the text value of the elements while maintaining truncation. */
+        update: function (new_string) {
+            return this.each(function () {
+                var $this = $(this);
+
+                /* Update text. */
+                if (new_string) {
+                    $this.data('trunk8').original_text = new_string;
+                }
+
+                /* Truncate accordingly. */
+                truncate.call($this);
+            });
+        },
+
+        revert: function () {
+            return this.each(function () {
+                /* Get original text. */
+                var text = $(this).data('trunk8').original_text;
+
+                /* Revert element to original text. */
+                $(this).html(text);
+            });
+        },
+
+        /** Returns this instance's settings object. NOT CHAINABLE. */
+        getSettings: function () {
+            return $(this.get(0)).data('trunk8').settings;
+        }
+    };
+
+    utils = {
+        /** Replaces [bite_size] [side]-most chars in [str] with [fill]. */
+        eatStr: function (str, side, bite_size, fill) {
+            var length = str.length,
+                key = utils.eatStr.generateKey.apply(null, arguments),
+                half_length,
+                half_bite_size;
+
+            /* If the result is already in the cache, return it. */
+            if (utils.eatStr.cache[key]) {
+                return utils.eatStr.cache[key];
+            }
+
+            /* Common error handling. */
+            if ((typeof str !== 'string') || (length === 0)) {
+                $.error('Invalid source string "' + str + '".');
+            }
+            if ((bite_size < 0) || (bite_size > length)) {
+                $.error('Invalid bite size "' + bite_size + '".');
+            }
+            else if (bite_size === 0) {
+                /* No bite should show no truncation. */
+                return str;
+            }
+            if (typeof (fill + '') !== 'string') {
+                $.error('Fill unable to be converted to a string.');
+            }
+
+            /* Compute the result, store it in the cache, and return it. */
+            switch (side) {
+                case SIDES.right:
+                    /* str... */
+                    return utils.eatStr.cache[key] =
+                        $.trim(str.substr(0, length - bite_size)) + fill;
+
+                case SIDES.left:
+                    /* ...str */
+                    return utils.eatStr.cache[key] =
+                        fill + $.trim(str.substr(bite_size));
+
+                case SIDES.center:
+                    /* Bit-shift to the right by one === Math.floor(x / 2) */
+                    half_length = length >> 1; // halve the length
+                    half_bite_size = bite_size >> 1; // halve the bite_size
+
+                    /* st...r */
+                    return utils.eatStr.cache[key] =
+                        $.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
+                        fill +
+                        $.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
+
+                default:
+                    $.error('Invalid side "' + side + '".');
+            }
+        },
+
+        getLineHeight: function (elem) {
+            var floats = $(elem).css('float');
+            if (floats !== 'none') {
+                $(elem).css('float', 'none');
+            }
+            var pos = $(elem).css('position');
+            if (pos === 'absolute') {
+                $(elem).css('position', 'static');
+            }
+
+            var html = $(elem).html(),
+                wrapper_id = 'line-height-test',
+                line_height;
+
+            /* Set the content to a small single character and wrap. */
+            $(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
+
+            /* Calculate the line height by measuring the wrapper.*/
+            line_height = $('#' + wrapper_id).innerHeight();
+
+            /* Remove the wrapper and reset the content. */
+            $(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
+
+            return line_height;
+        }
+    };
+
+    utils.eatStr.cache = {};
+    utils.eatStr.generateKey = function () {
+        return Array.prototype.join.call(arguments, '');
+    };
+
+    $.fn.trunk8 = function (method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if (typeof method === 'object' || !method) {
+            return methods.init.apply(this, arguments);
+        }
+        else {
+            $.error('Method ' + method + ' does not exist on jQuery.trunk8');
+        }
+    };
+
+    /* Default trunk8 settings. */
+    $.fn.trunk8.defaults = {
+        fill: '&hellip;',
+        lines: 1,
+        side: SIDES.right,
+        tooltip: true,
+        width: WIDTH.auto,
+        parseHTML: false,
+        onTruncate: function () {}
+    };
+})(jQuery);
+
 ;(function($, window, document, undefined) {
     "use strict";
 
-    var pluginName = 'collapseText',
-        defaults = {
-            truncateRange: 160,
-            truncateChar: ' ',
-            ellipsis: ' ...',
-            previewTextCls: 'category--preview-text',
-            fullTextCls: 'category--full-text',
-            showMoreCls: 'category--show-more',
-            showMoreText: 'Mehr lesen',
-            showLessText: 'Weniger anzeigen',
-            slideSpeed: 400
-        };
+    $.plugin('collapseText', {
+        defaults: {
+            responsive: true,
+            resize: true,
+            readMoreText: 'Mehr lesen',
+            readMoreCls: 'js--read-more',
+            readLessText: 'Weniger anzeigen',
+            readLessCls: 'js--read-less',
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
-
-        me.$el = $(element);
-        me.opts = $.extend({}, defaults, userOpts);
-
-        me._defaults = defaults;
-        me._name = pluginName;
-
-        me.init();
-    }
-
-    /**
-     * Initializes the plugin and adds the necessary
-     * classes to get the plugin up and running.
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
-
-        me.text = me.$el.html();
-        me.truncatedText = me.truncate(
-            me.text,
-            me.opts.truncateRange,
-            me.opts.truncateChar,
-            me.opts.ellipsis
-        );
-
-        me.showMoreText = (me.$el.attr('data-collapse-show-more') !== undefined) ? me.$el.attr('data-collapse-show-more') : me.opts.showMoreText;
-        me.showLessText = (me.$el.attr('data-collapse-show-less') !== undefined) ? me.$el.attr('data-collapse-show-less') : me.opts.showLessText;
-
-        me.createElements();
-        me.registerEvents();
-    };
-
-    /**
-     * Registers all necessary event handlers.
-     */
-    Plugin.prototype.registerEvents = function() {
-        var me = this;
-
-        me.showMore.on('click.' + pluginName, function(e) {
-            e.preventDefault();
-            me.togglePreviewText();
-        });
-    };
-
-    /**
-     * Creates the dynamic DOM elements used by the plugin.
-     */
-    Plugin.prototype.createElements = function() {
-        var me = this;
-
-        me.$el.html('');
-
-        me.fullText = $('<div>', { 'class': me.opts.fullTextCls, 'html': me.text }).appendTo(me.$el);
-        me.previewText = $('<div>', { 'class': me.opts.previewTextCls + ' is--active', 'html': me.truncatedText }).appendTo(me.$el);
-        me.showMore = $('<a>', { 'class': me.opts.showMoreCls, 'html': me.showMoreText}).appendTo(me.$el);
-    };
-
-    /**
-     * Toggles the preview text view state.
-     */
-    Plugin.prototype.togglePreviewText = function() {
-        var me = this;
-
-        if (me.fullText.hasClass('is--active')) {
-            me.fullText.fadeOut(me.opts.slideSpeed, function() {
-                me.fullText.removeClass('is--active');
-                me.previewText.addClass('is--active');
-                me.showMore.html(me.showMoreText);
-            });
-        } else {
-            me.previewText.removeClass('is--active');
-            me.showMore.html(me.showLessText);
-            me.fullText.fadeIn(me.opts.slideSpeed, function() {
-                me.fullText.addClass('is--active');
-            });
-        }
-    };
-
-    /**
-     * Truncates a string to a given length of chars.
-     * Breaks the string only at the specified char.
-     * Also adds an ellipsis at the end of the string if wanted.
-     *
-     * @param string
-     * @param length
-     * @param truncateChar
-     * @param ellipsis
-     * @returns {string}
-     */
-    Plugin.prototype.truncate = function(string, length, truncateChar, ellipsis) {
-        var truncatedString,
-            reg = new RegExp('(?=[' + truncateChar + '])'),
-            words = string.split(reg),
-            wordCount = 0;
-
-        truncatedString = words.filter(function(word) {
-            wordCount += word.length;
-            return wordCount <= length;
-        }).join('');
-
-        if (ellipsis !== undefined) {
-            truncatedString += ellipsis;
-        }
-
-        return truncatedString;
-    };
-
-    /**
-     * Destroys the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
-
-        me.showMore.off('click.' + pluginName);
-        me.$el.html(me.text).removeData('plugin_' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
+            trunk8: {
+                lines: 1,
+                fill: '&hellip;',
+                side: 'right',
+                width: 'auto',
+                parseHTML: false,
+                tooltip: false
             }
-        });
-    };
+        },
+
+        init: function() {
+            var me = this,
+                readMoreLink,
+                lines;
+
+            me.applyDataAttributes();
+
+            if(me.opts.responsive) {
+                readMoreLink = me.createToggleLink(me.opts.readMoreCls, me.opts.readMoreText, true);
+                me.opts.trunk8.fill = me.opts.trunk8.fill + ' ' + readMoreLink;
+            }
+
+            lines = me.$el.attr('data-lines');
+            if(lines && lines.length) {
+                me.opts.trunk8.lines = window.parseInt(lines, 10);
+            }
+
+            me.$el.trunk8(me.opts.trunk8);
+
+            if(me.opts.responsive) {
+                me.registerToggleListeners();
+            }
+
+            if(me.opts.resize) {
+                me.registerResizeListener();
+            }
+        },
+
+        createToggleLink: function(cls, text, htmlOutput) {
+            var link;
+
+            htmlOutput = htmlOutput || false;
+
+            link = $('<a>', {
+                'href': '#toggle-text',
+                'class': cls,
+                'html': text,
+                'title': text
+            });
+
+            return (htmlOutput ? link.get(0).outerHTML : link);
+        },
+
+        registerToggleListeners: function() {
+            var me = this;
+
+            me.$el.delegate('.' + me.opts.readMoreCls, me.getEventName('click'), function(event) {
+                event.preventDefault();
+                me.$el.trunk8('revert').append(me.createToggleLink(me.opts.readLessCls, me.opts.readLessText, true));
+            });
+
+            me.$el.delegate('.' + me.opts.readLessCls, me.getEventName('click'), function(event) {
+                event.preventDefault();
+                me.$el.trunk8();
+            });
+        },
+
+        registerResizeListener: function() {
+            var me = this;
+
+            $(window).on(me.getEventName('resize'), function() {
+                me.$el.trunk8();
+            }).resize();
+        }
+    });
 
 })(jQuery, window, document);

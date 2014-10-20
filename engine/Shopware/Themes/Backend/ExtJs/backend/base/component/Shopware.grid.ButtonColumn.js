@@ -144,12 +144,10 @@ Ext.define('Ext.ux.ButtonColumn', {
     triggerRe: new RegExp(Ext.baseCSSPrefix + 'btn-split'),
 
     constructor: function (config) {
-        
-        console.log('buttoncolumn constructor called');
-        
         var me = this,
             cfg = Ext.apply({}, config),
             items = cfg.items;
+
         // This is a Container. Delete the items config.
         delete cfg.items;
         me.callParent([cfg]);
