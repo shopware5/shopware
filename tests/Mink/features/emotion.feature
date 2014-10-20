@@ -49,7 +49,7 @@ Feature: Emotion
             | Sonnenschutz - so gehören Sie zur | Blog-Sonnencreme-Sonne-Schulter5037264a3173e_720x600.jpg | /trends-news/sonnenschutz-so-gehoeren-sie-zur-creme-de-la-creme | Sonnencreme richtig auftragen – Darauf müssen Sie achten Strand , Meer und Sonne - Genießen Sie auch  |
             | Ich packe meinen Koffer           | Blog-Koffer503736edaded3_720x600.jpg                     | /trends-news/ich-packe-meinen-koffer                            | Der Urlaub ist die schönste Zeit im Jahr. Ob Sonne, Strand und Meer oder wandern im Gebirge - Es soll |
 
-    @banner @category-teaser @slider @noResponsive
+    @banner @category-teaser @slider
     Scenario: Check emotions on category "Genusswelten"
         When I follow "Genusswelten"
 
@@ -76,15 +76,15 @@ Feature: Emotion
             | link     | /genusswelten/koestlichkeiten/ |
 
         And the element "ArticleSlider" should have the content:
-            | image                                 | link                                                           | name                              | price   |
-            | Lagerkorn_XO_285x255.jpg              | /genusswelten/edelbraende/9/special-finish-lagerkorn-x.o.-32   | Special Finish Lagerkorn X.O. 32% | 24,99 € |
-            | Muensterlaender_Lagerkorn_285x255.jpg | /genusswelten/2/muensterlaender-lagerkorn-32                   | Münsterländer Lagerkorn 32%       | 19,99 € |
-            | Cigar_Special_285x255.jpg             | /genusswelten/edelbraende/6/cigar-special-40                   | Cigar Special 40%                 | 35,95 € |
-            | Tee-weiss-Pai-Mu-Tan_285x255.jpg      | /genusswelten/tees-und-zubeh/13/pai-mu-tan-tee-weiss           | Pai Mu Tan Tee weiss              | 2,50 €  |
-            | Tee-weiss-Silver-Yin-Zhen_285x255.jpg | /genusswelten/tees-und-zubeh/tees/14/silver-yin-zhen-tee-weiss | Silver Yin Zhen Tee weiss         | 3,80 €  |
-            | Tee-gruen-Lung-Ching_285x255.jpg      | /genusswelten/tees-und-zubeh/tees/15/lung-ching-gruener-tee    | LUNG CHING grüner Tee             | 2,40 €  |
+            | image                                 | link                                                           | name                              |
+            | Lagerkorn_XO_285x255.jpg              | /genusswelten/edelbraende/9/special-finish-lagerkorn-x.o.-32   | Special Finish Lagerkorn X.O. 32% |
+            | Muensterlaender_Lagerkorn_285x255.jpg | /genusswelten/2/muensterlaender-lagerkorn-32                   | Münsterländer Lagerkorn 32%       |
+            | Cigar_Special_285x255.jpg             | /genusswelten/edelbraende/6/cigar-special-40                   | Cigar Special 40%                 |
+            | Tee-weiss-Pai-Mu-Tan_285x255.jpg      | /genusswelten/tees-und-zubeh/13/pai-mu-tan-tee-weiss           | Pai Mu Tan Tee weiss              |
+            | Tee-weiss-Silver-Yin-Zhen_285x255.jpg | /genusswelten/tees-und-zubeh/tees/14/silver-yin-zhen-tee-weiss | Silver Yin Zhen Tee weiss         |
+            | Tee-gruen-Lung-Ching_285x255.jpg      | /genusswelten/tees-und-zubeh/tees/15/lung-ching-gruener-tee    | LUNG CHING grüner Tee             |
 
-    @banner @youtube @article @html @noResponsive
+    @banner @youtube @article @html
     Scenario: Check landing page "Stop The Water While Using Me"
         When follow "Sommerwelten"
         And  I follow the link of the element "Banner" on position 3
@@ -98,35 +98,57 @@ Feature: Emotion
             | code     | RVz71XsJIEA |
 
         And the element "Article" on position 1 should have the content:
-            | position | content                                                                                                          |
-            | name     | All Natural - Sesame Sage Bodylotion                                                                             |
-            | image    | All-Natural-Sesame-Sage-Body-Lotion_140x140.jpg                                                                  |
-            | link     | /sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion                                             |
-            | text     | subringor voco ara recolo, labia boo volutarie avus expio ergo via Daci, in for nec fortis, se primoris. Frux eo |
-            | price    | 21,40 €                                                                                                          |
+            | position | content                                                              |
+            | name     | All Natural - Sesame Sage Bodylotion                                 |
+            | image    | All-Natural-Sesame-Sage-Body-Lotion_140x140.jpg                      |
+            | link     | /sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion |
+            | price    | 21,40 €                                                              |
 
         And the element "Article" on position 2 should have the content:
-            | position | content                                                                                                     |
-            | name     | All Natural - Rosemary Grapefruit Shampoo                                                                   |
-            | image    | All-Natural-Rosemary-Grapefruit-Shampoo_140x140.jpg                                                         |
-            | link     | /sommerwelten/beauty-und-care/215/all-natural-rosemary-grapefruit-shampoo                                   |
-            | text     | Dicatio grate. Quia sal loco Pareo in Jacio capulatio si inhalo laus aut faveo Obscoena Sublime quartus pax |
-            | price    | 12,80 €                                                                                                     |
+            | position | content                                                                   |
+            | name     | All Natural - Rosemary Grapefruit Shampoo                                 |
+            | image    | All-Natural-Rosemary-Grapefruit-Shampoo_140x140.jpg                       |
+            | link     | /sommerwelten/beauty-und-care/215/all-natural-rosemary-grapefruit-shampoo |
+            | price    | 12,80 €                                                                   |
 
         And the element "Article" on position 3 should have the content:
-            | position | content                                                                                                        |
-            | name     | All Natural - Lemon Honey Soap                                                                                 |
-            | image    | All-Natural-Lemon-Honey-Soap_140x140.jpg                                                                       |
-            | link     | /sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap                                                 |
-            | text     | Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, filia cedo comprehendo |
-            | price    | 11,40 €                                                                                                        |
+            | position | content                                                        |
+            | name     | All Natural - Lemon Honey Soap                                 |
+            | image    | All-Natural-Lemon-Honey-Soap_140x140.jpg                       |
+            | link     | /sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap |
+            | price    | 11,40 €                                                        |
 
         And the element "Article" on position 4 should have the content:
-            | position | content                                                                                                            |
-            | name     | All Natural - Orange Wild Herbs Shower Gel                                                                         |
-            | image    | All-Natural-Orange-Wild-Herbs-Shower-Gel_140x140.jpg                                                               |
-            | link     | /sommerwelten/beauty-und-care/217/all-natural-orange-wild-herbs-shower-gel                                         |
-            | text     | Ilis ala comitatus oro labia, tergus aro saeta ius nomen. Vox Tractare nos premo quinquagesimus recedo excello tot |
-            | price    | 12,80 €                                                                                                            |
+            | position | content                                                                    |
+            | name     | All Natural - Orange Wild Herbs Shower Gel                                 |
+            | image    | All-Natural-Orange-Wild-Herbs-Shower-Gel_140x140.jpg                       |
+            | link     | /sommerwelten/beauty-und-care/217/all-natural-orange-wild-herbs-shower-gel |
+            | price    | 12,80 €                                                                    |
 
         And I should see "Aliquam erat volutpat. Nulla sollicitudin tincidunt lacus eget lobortis. Nam cursus mattis arcu, eget ornare sapien elementum ut. Vestibulum egestas urna sed quam adipiscing vel tempor erat cursus. Morbi imperdiet, nibh et hendrerit mollis, nisl leo vulputate sapien, non accumsan tortor magna in nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus tempor suscipit sem, quis blandit velit faucibus quis. Sed sagittis nisi id elit commodo sed vulputate tortor consectetur. Aliquam tristique egestas justo."
+
+    @banner @youtube @article @html @noResponsive
+    Scenario: Check prices in article slider on landing page "Genusswelten" and article texts on landing page "Stop The Water While Using Me"
+        When follow "Genusswelten"
+        And the element "ArticleSlider" should have the content:
+            | price   |
+            | 24,99 € |
+            | 19,99 € |
+            | 35,95 € |
+            | 2,50 €  |
+            | 3,80 €  |
+            | 2,40 €  |
+
+        When I go to "/campaign/index/emotionId/5"
+        Then the element "Article" on position 1 should have the content:
+            | position | content                                                                                                          |
+            | text     | subringor voco ara recolo, labia boo volutarie avus expio ergo via Daci, in for nec fortis, se primoris. Frux eo |
+        And the element "Article" on position 2 should have the content:
+            | position | content                                                                                                     |
+            | text     | Dicatio grate. Quia sal loco Pareo in Jacio capulatio si inhalo laus aut faveo Obscoena Sublime quartus pax |
+        And the element "Article" on position 3 should have the content:
+            | position | content                                                                                                        |
+            | text     | Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, filia cedo comprehendo |
+        And the element "Article" on position 4 should have the content:
+            | position | content                                                                                                            |
+            | text     | Ilis ala comitatus oro labia, tergus aro saeta ius nomen. Vox Tractare nos premo quinquagesimus recedo excello tot |
