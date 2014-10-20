@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ConfiguratorHydrator $configuratorHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->configuratorHydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -127,7 +126,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
      */
     private function getQuery()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->from('s_article_configurator_option_relations', 'relations');
 

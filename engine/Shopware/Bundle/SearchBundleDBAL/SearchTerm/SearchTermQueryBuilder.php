@@ -76,6 +76,9 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $this->searchIndexer->validate();
     }
 
+    /**
+     * @return string
+     */
     private function getRelevanceSelection()
     {
         return 'sr.relevance

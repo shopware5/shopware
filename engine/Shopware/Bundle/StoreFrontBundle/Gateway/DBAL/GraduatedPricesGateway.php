@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -94,7 +93,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
         }
         $ids = array_unique($ids);
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getPriceFields());
         $query->addSelect('variants.ordernumber as number');
