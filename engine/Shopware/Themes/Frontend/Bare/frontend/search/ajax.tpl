@@ -21,7 +21,7 @@
                         {block name="search_ajax_list_entry_media"}
                             <div class="entry--media block">
                                 <a href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
-                                    {if $search_result.thumbNails.0 && file_exists($search_result.thumbNails.0)}
+                                    {if $search_result.thumbNails.0}
                                         <img src="{$search_result.thumbNails.0}" class="media--image">
                                     {else}
                                         <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" />
