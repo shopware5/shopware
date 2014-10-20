@@ -22,10 +22,8 @@
 
     /** Larger icon */
     .is--large {
-        @pxValue: round(@btn-font-size * 1.15, 0);
-        .unitize-variable(@pxValue, 16);
-        font-size: ~"@{pxValue}px";
-        font-size: ~"@{emValue}rem";
+        @largeFontSize: @btn-font-size + 2;
+        .unitize(@largeFontSize, 16, font-size);
     }
 
     /** State: Button with icon right */
