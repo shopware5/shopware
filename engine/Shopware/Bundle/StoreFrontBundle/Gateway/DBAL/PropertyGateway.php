@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -79,22 +78,22 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     /**
      * @var \Shopware\Components\Model\ModelManager
      */
-    private $entityManager;
+    private $connection;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PropertyHydrator $propertyHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\PropertyHydrator $propertyHydrator,
         \Shopware_Components_Config $config
     ) {
         $this->propertyHydrator = $propertyHydrator;
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
         $this->config = $config;
     }
@@ -104,7 +103,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
      */
     public function getList(array $valueIds, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $sortMode = $this->getSortMode(array_keys($valueIds));
 
@@ -204,7 +203,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
      */
     private function getSortMode(array $valueIds)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->select('DISTINCT propertySet.sortmode')
             ->from('s_filter', 'propertySet');
 

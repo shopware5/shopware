@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -39,7 +38,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @var \Shopware\Components\Model\ModelManager
      */
-    private $entityManager;
+    private $connection;
 
     /**
      * @var \Shopware_Components_Config
@@ -47,14 +46,14 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     private $config;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         \Shopware_Components_Config $config
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->config = $config;
     }
 
@@ -79,7 +78,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
         }
         $ids = array_unique($ids);
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(
             array(
@@ -153,7 +152,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
             $categoryId = $context->getShop()->getCategory()->getId();
         }
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(array(
             'main.articleID',

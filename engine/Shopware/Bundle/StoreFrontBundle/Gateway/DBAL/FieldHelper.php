@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
@@ -45,16 +45,16 @@ class FieldHelper
     private $attributeFields = array();
 
     /**
-     * @var ModelManager
+     * @var Connection
      */
-    private $entityManager;
+    private $connection;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      */
-    public function __construct(ModelManager $entityManager)
+    public function __construct(Connection $connection)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
     }
 
     /**
@@ -73,7 +73,7 @@ class FieldHelper
             return $this->attributeFields[$key];
         }
 
-        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
+        $schemaManager = $this->connection->getSchemaManager();
 
         $tableColumns = $schemaManager->listTableColumns($table);
         $columns = array();

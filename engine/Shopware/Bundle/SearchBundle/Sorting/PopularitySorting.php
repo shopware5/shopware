@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
-use Shopware\Bundle\SearchBundle\SortingInterface;
-
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundle\Sorting

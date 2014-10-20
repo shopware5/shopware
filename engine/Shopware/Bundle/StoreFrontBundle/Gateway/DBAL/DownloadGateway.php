@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\DownloadHydrator $downloadHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\DownloadHydrator $downloadHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->downloadHydrator = $downloadHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -92,7 +91,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
         }
         $ids = array_unique($ids);
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getDownloadFields());
 

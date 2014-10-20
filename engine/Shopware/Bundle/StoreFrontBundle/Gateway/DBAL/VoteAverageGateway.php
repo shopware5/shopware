@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -42,12 +41,12 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $voteHydrator;
 
     /**
-     * @param \Shopware\Components\Model\ModelManager $entityManager
+     * @param Connection $connection
      * @param Hydrator\VoteHydrator $voteHydrator
      */
-    public function __construct(ModelManager $entityManager, Hydrator\VoteHydrator $voteHydrator)
+    public function __construct(Connection $connection, Hydrator\VoteHydrator $voteHydrator)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->voteHydrator = $voteHydrator;
     }
 
@@ -72,7 +71,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
         }
         $ids = array_unique($ids);
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(
             array(

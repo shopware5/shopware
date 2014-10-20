@@ -164,145 +164,145 @@
 
         <!-- DBAL gateway classes, which used as shopware default -->
         <service id="list_product_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="product_hydrator_dbal"/>
         </service>
 
         <service id="product_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="product_hydrator_dbal"/>
         </service>
 
 
         <service id="media_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\MediaGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="media_hydrator_dbal"/>
         </service>
 
         <service id="product_media_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductMediaGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="media_hydrator_dbal"/>
         </service>
 
         <service id="variant_media_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VariantMediaGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="media_hydrator_dbal"/>
         </service>
 
         <service id="product_configuration_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="configurator_hydrator_dbal"/>
         </service>
 
         <service id="manufacturer_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ManufacturerGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="manufacturer_hydrator_dbal"/>
         </service>
 
         <service id="tax_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\TaxGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="tax_hydrator_dbal"/>
         </service>
 
         <service id="configurator_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="configurator_hydrator_dbal"/>
             <argument type="service" id="media_gateway" />
         </service>
 
         <service id="graduated_prices_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="price_hydrator_dbal"/>
         </service>
 
         <service id="cheapest_price_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="price_hydrator_dbal"/>
         </service>
 
         <service id="price_group_discount_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PriceGroupDiscountGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="price_hydrator_dbal"/>
         </service>
 
         <service id="property_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PropertyGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="property_hydrator_dbal"/>
             <argument type="service" id="config" />
         </service>
 
         <service id="product_property_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="property_hydrator_dbal"/>
         </service>
 
         <service id="related_products_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\RelatedProductsGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <service id="similar_products_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\SimilarProductsGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="config"/>
         </service>
 
         <service id="download_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\DownloadGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="download_hydrator_dbal"/>
         </service>
 
         <service id="link_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\LinkGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="link_hydrator_dbal"/>
         </service>
 
         <service id="vote_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VoteGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="vote_hydrator_dbal"/>
         </service>
 
         <service id="vote_average_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VoteAverageGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="vote_hydrator_dbal"/>
         </service>
 
         <service id="customer_group_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGroupGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="customer_group_hydrator_dbal"/>
         </service>
 
         <service id="country_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CountryGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="country_hydrator_dbal"/>
         </service>
 
         <service id="category_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="category_hydrator_dbal"/>
         </service>
 
         <!-- Helper classes -->
         <service id="field_helper_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <!-- Shopware hydrator definitions -->

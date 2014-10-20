@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CountryHydrator $countryHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\CountryHydrator $countryHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->countryHydrator = $countryHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -106,7 +105,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getAreas(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getAreaFields());
         $query->from('s_core_countries_areas', 'countryArea');
@@ -131,7 +130,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getCountries(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getCountryFields());
         $query->from('s_core_countries', 'country')
@@ -160,7 +159,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getStates(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getStateFields());
 
         $query->from('s_core_countries_states', 'countryState')
