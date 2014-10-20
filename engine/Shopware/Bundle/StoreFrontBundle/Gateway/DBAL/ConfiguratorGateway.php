@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -62,18 +62,18 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $mediaGateway;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ConfiguratorHydrator $configuratorHydrator,
         Gateway\MediaGatewayInterface $mediaGateway
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->configuratorHydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
         $this->mediaGateway = $mediaGateway;
@@ -112,7 +112,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      */
     public function getConfiguratorMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
-        $subQuery = $this->entityManager->getDBALQueryBuilder();
+        $subQuery = $this->connection->createQueryBuilder();
 
         $subQuery->select('image.media_id')
             ->from('s_articles_img', 'image')
@@ -124,7 +124,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->setMaxResults(1)
         ;
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(array(
             'optionRelation.option_id',
@@ -169,7 +169,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      */
     public function getProductCombinations(Struct\ListProduct $product)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select(array(
             'relations.option_id',
@@ -222,7 +222,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      */
     private function getQuery()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->from(
             's_article_configurator_sets',

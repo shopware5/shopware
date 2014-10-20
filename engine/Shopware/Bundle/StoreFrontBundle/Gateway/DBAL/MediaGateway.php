@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -37,9 +36,9 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 class MediaGateway implements Gateway\MediaGatewayInterface
 {
     /**
-     * @var ModelManager
+     * @var Connection
      */
-    private $entityManager;
+    private $connection;
 
     /**
      * @var FieldHelper
@@ -52,16 +51,16 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     private $hydrator;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\MediaHydrator $hydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\MediaHydrator $hydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
         $this->hydrator = $hydrator;
     }
@@ -104,7 +103,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
      */
     private function getQuery()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());

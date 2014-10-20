@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ManufacturerHydrator $manufacturerHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ManufacturerHydrator $manufacturerHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -86,7 +85,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->addSelect($this->fieldHelper->getManufacturerFields());
 

@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,18 +56,18 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     protected $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ProductHydrator $hydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ProductHydrator $hydrator
     ) {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
     }
 
     /**
@@ -112,7 +111,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
             ->addSelect($this->fieldHelper->getTopSellerFields())
             ->addSelect($this->fieldHelper->getVariantFields())
@@ -153,7 +152,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      */
     private function getEsdQuery()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select('1')
             ->from('s_articles_esd', 'esd')
@@ -168,7 +167,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      */
     private function getCustomerGroupQuery()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
             ->from('s_articles_avoid_customergroups', 'customerGroups')

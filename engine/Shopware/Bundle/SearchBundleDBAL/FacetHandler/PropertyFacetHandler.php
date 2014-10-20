@@ -151,6 +151,10 @@ class PropertyFacetHandler implements FacetHandlerInterface
         $query->select('productProperty.valueID as id');
     }
 
+    /**
+     * @param Criteria $criteria
+     * @return array
+     */
     private function getFilteredValues(Criteria $criteria)
     {
         $values = array();

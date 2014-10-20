@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -56,16 +56,16 @@ class TaxGateway implements Gateway\TaxGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param \Shopware\Components\Model\ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\TaxHydrator $taxHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\TaxHydrator $taxHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->taxHydrator = $taxHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -79,7 +79,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         Struct\Country $country = null,
         Struct\Country\State $state = null
     ) {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getTaxFields())
             ->from('s_core_tax', 'tax');
 
@@ -132,7 +132,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         Struct\Country\State $state = null
     ) {
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getTaxRuleFields());
 

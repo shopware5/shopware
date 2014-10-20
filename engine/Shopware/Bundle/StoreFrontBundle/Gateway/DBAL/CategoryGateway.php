@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -57,16 +56,16 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\CategoryHydrator $categoryHydrator
     ) {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->categoryHydrator = $categoryHydrator;
         $this->fieldHelper = $fieldHelper;
     }
@@ -86,7 +85,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())

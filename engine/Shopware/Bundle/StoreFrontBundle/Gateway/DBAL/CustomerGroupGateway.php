@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
@@ -56,17 +55,17 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param ModelManager $entityManager
+     * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CustomerGroupHydrator $customerGroupHydrator
      */
     public function __construct(
-        ModelManager $entityManager,
+        Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\CustomerGroupHydrator $customerGroupHydrator
     ) {
         $this->customerGroupHydrator = $customerGroupHydrator;
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
     }
 
@@ -85,7 +84,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
      */
     public function getList(array $keys)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getCustomerGroupFields());
 
         $query->from('s_core_customergroups', 'customerGroup')
