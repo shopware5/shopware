@@ -105,14 +105,6 @@
         bottom: 20%;
         width: 20%;
         text-align: center;
-
-        .btn {
-            .unitize-padding(10, 14);
-
-            i {
-                margin: 0;
-            }
-        }
     }
 
     .column--label {
@@ -188,15 +180,9 @@
 
     .add-product--button,
     .add-voucher--button {
-        .unitize-padding(11, 0);
+        .unitize-padding(3, 0);
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
-        text-align: center;
-
-        .icon--arrow-right {
-            padding: 0;
-            margin: 0;
-        }
     }
 
     .add-voucher--form {
@@ -223,12 +209,6 @@
 
     .table--shipping-costs-trigger {
         font-weight: bold;
-    }
-
-    .btn--inquiry {
-        width: 100%;
-        display: block;
-        text-align: center;
     }
 
     .main--actions {
@@ -283,21 +263,15 @@
 .premium-product {
 
     p {
-        .unitize-margin(0, 0, 16, 0);
+        .unitize-margin(10, 0, 10, 0);
     }
 
     .premium-product--difference {
-        .unitize-padding(10, 16, 10, 16, 16);
-        .border-radius();
-        .white-gradient();
-        font-color: @text-color;
-        border: 1px solid @border-color;
-        font-weight: bold;
+        border-color: @btn-default-border-color;
         display: block;
-        text-shadow: 0 1px 0 #fff;
 
         .difference--price {
-            .unitize(18, 16, font-size);
+            .unitize(14, 16, font-size);
         }
     }
 
@@ -336,10 +310,6 @@
 
         .btn {
             width: 100%;
-        }
-
-        .btn--inquiry {
-            text-align: center;
         }
 
         .js--fancy-select {
@@ -576,15 +546,6 @@
             position: static;
             bottom: auto;
             float: right;
-
-            .btn {
-                .unitize-padding(5, 8);
-
-                i {
-                    .unitize(9, 16, font-size);
-                    font-weight: bold;
-                }
-            }
         }
 
         // Hide all inline labels
@@ -709,16 +670,7 @@
         .table--actions {
 
             .is--secondary {
-                .unitize-padding(10, 50, 10, 50);
                 .unitize(20, 16, margin-right);
-
-                &.continue-shopping--action {
-                    .unitize(16, 16, padding-left);
-                }
-
-                .icon--arrow-left {
-                    .unitize(40, 16, margin-right);
-                }
             }
 
             .btn--inquiry {

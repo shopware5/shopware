@@ -97,6 +97,7 @@
     .item--container {
         .unitize-padding(0, 10);
         .unitize-max-height(353);
+        background: #fff;
         overflow-y: auto;
     }
 
@@ -176,7 +177,6 @@
                 .unitize-width(21);
                 .unitize-padding(4, 6);
                 .unitize(8, 16, font-size);
-                background: #FFFFFF;
             }
 
             *[class*="icon--"] {
@@ -208,23 +208,13 @@
         overflow: hidden;
 
         *[class*="button--"] {
-            .unitize(14, 16, font-size);
-            .unitize-height(40);
             .unitize-width(210);
             .border-radius();
             text-align: center;
         }
 
         .button--checkout {
-            .unitize(30, 16, padding-right);
             float: right;
-
-            *[class^="icon--"] {
-                .unitize(-7, 16, margin-top);
-                .unitize(10, 16, right);
-                position: absolute;
-                top: 50%;
-            }
         }
 
         .button--open-basket *[class^="icon--"] {
@@ -274,11 +264,11 @@
             .clearfix();
             border-bottom: 1px solid @border-color;
             display: block;
-            color: #FAFAFA;
+            color: #fff;
             font-weight: bold;
 
             &:active {
-                color: #EEEEFF;
+                color: @gray-light;
             }
 
             .icon--arrow-left {
@@ -288,7 +278,7 @@
     }
 
     .prices--container {
-        background: #FFFFFF;
+        background: @gray-light;
     }
 
     .action--container,
@@ -301,7 +291,6 @@
         margin: 0;
 
         .action--remove {
-            .unitize-padding(9, 6);
             .unitize(14, 16, font-size);
             text-align: center;
         }
