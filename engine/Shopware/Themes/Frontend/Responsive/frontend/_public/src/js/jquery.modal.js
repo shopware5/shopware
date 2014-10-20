@@ -583,6 +583,53 @@
                 delete me.options[p];
             }
         }
-    }
+    };
+
+    $.plugin('modalbox', {
+        defaults: {
+            target: ''
+        },
+
+        init: function () {
+            var me = this,
+                opts;
+
+            me.applyDataAttributes();
+
+            opts = me.opts;
+
+            me.$target = (me.$target = me.$el.find(opts.target)).length ? me.$target : me.$el;
+
+            me._isOpened = false;
+
+            me._on(me.$target, 'click', $.proxy(me.onClick, me));
+
+            $.subscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
+        },
+
+        onClick: function (event) {
+            event.preventDefault();
+
+            var me = this;
+
+            $.modal.open(me.opts.content || me.$target, me.opts);
+
+            me._isOpened = true;
+        },
+
+        onClose: function () {
+            this._isOpened = false;
+        },
+
+        destroy: function () {
+            var me = this;
+
+            if (me._isOpened) {
+                $.modal.close();
+            }
+
+            me._destroy();
+        }
+    });
 })(jQuery, window);
 

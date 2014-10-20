@@ -95,8 +95,9 @@
 				{block name='frontend_index_left_last_articles'}
 					{if $sLastArticlesShow && !$isEmotionLandingPage}
                         {* Last seen products *}
-                        <div class="last-seen-products panel" data-last-seen-products="true">
-                            <div class="last-seen-products--slider product-slider panel--body" data-product-slider="true">
+                        <div class="last-seen-products panel has--border" data-last-seen-products="true">
+                            <div class="panel--title is--underline last-seen-products--title">{s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}</div>
+                            <div class="last-seen-products--slider product-slider" data-product-slider="true">
                                 <div class="last-seen-products--container product-slider--container"></div>
                             </div>
                         </div>
@@ -149,7 +150,6 @@
             {rdelim};
 
             var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
-                'title': '{s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}',
                 'baseUrl': '{$Shop->getBaseUrl()}',
                 'shopId': '{$Shop->getId()}',
                 'noPicture': '{link file="frontend/_public/src/img/no-picture.jpg"}',

@@ -122,27 +122,31 @@
 
         {* Stars *}
         {block name='frontend_rating_content_stars'}
-            {for $value=1 to 5}
-                {$cls = 'icon--star'}
+            {if $points != 0}
+                {for $value=1 to 5}
+                    {$cls = 'icon--star'}
 
-                {if $value > $average}
-                    {$diff=$value - $average}
+                    {if $value > $average}
+                        {$diff=$value - $average}
 
-                    {if $diff > 0 && $diff <= 0.5}
-                        {$cls = 'icon--star-half'}
-                    {else}
-                        {$cls = 'icon--star-empty'}
+                        {if $diff > 0 && $diff <= 0.5}
+                            {$cls = 'icon--star-half'}
+                        {else}
+                            {$cls = 'icon--star-empty'}
+                        {/if}
                     {/if}
-                {/if}
 
-                <i class="{$cls}"></i>
-            {/for}
+                    <i class="{$cls}"></i>
+                {/for}
+            {/if}
         {/block}
 
         {* Label *}
         {block name='frontend_rating_content_label'}
             {if $hasLabel && $count}
-                (<span itemprop="ratingCount">{$count}</span>)
+                <span class="rating--count-wrapper">
+                    (<span itemprop="ratingCount" class="rating--count">{$count}</span>)
+                </span>
             {/if}
         {/block}
     </span>

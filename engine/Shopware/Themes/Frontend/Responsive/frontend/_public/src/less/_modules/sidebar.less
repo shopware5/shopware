@@ -419,10 +419,18 @@ body > .sidebar-main {
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
+    .sidebar-main {
+        .unitize(45, 16, padding-top);
+        display: block;
 
-    .sidebar-main,
-	.is--ctl-custom .sidebar-main {
-		.unitize(45, 16, padding-top);
-    	display: block;
+        &.off-canvas {
+            .translate(0, 0);
+            .transition(none);
+            background: transparent;
+            position: relative;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
     }
 }

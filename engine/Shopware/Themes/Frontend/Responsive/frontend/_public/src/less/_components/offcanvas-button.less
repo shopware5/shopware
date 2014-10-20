@@ -1,0 +1,37 @@
+.js--off-canvas-button {
+    .unitize-padding(10, 10);
+    .unitize(10, 16, margin-bottom);
+    .border-radius();
+    position: relative;
+    border: 1px solid @panel-border;
+    cursor: pointer;
+    display: block;
+
+    .tab--header {
+        .unitize(10, 16, margin-bottom);
+        position: relative;
+    }
+
+    .tab--title:after {
+        .unitize(12, 16, font-size);
+        .unitize(5, 16, right);
+        .unitize(-6, 16, margin-top);
+        content: "\e60f";
+    }
+
+    .tab--preview {
+        display: block;
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .tab--content {
+        cursor: default;
+    }
+
+    &:hover .tab--title {
+        color: @link-color;
+    }
+}

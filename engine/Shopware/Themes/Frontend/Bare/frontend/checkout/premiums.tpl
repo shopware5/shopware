@@ -21,7 +21,7 @@
 
                                 {* Product slider item *}
                                 {block name='frontend_checkout_premium_slider_item'}
-                                    <div class="premium-product--product product-slider--item">
+                                    <div class="premium-product--product product--box">
 
                                         <div class="product--inner">
                                             {if $premium.available}
