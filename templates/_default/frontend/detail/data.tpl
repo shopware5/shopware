@@ -2,7 +2,7 @@
 
 	{* Caching instock status *}
 	{if !$sView}
-		<input id='instock_{$sArticle.ordernumber}'type='hidden' value='{$sArticle.instock}' /> 
+		<input id='instock_{$sArticle.ordernumber}' type='hidden' value='{$sArticle.instock}' />
 	{/if}
 
 	{if $sArticle.sBlockPrices && (!$sArticle.sConfigurator || $sArticle.pricegroupActive) && $sArticle.sConfiguratorSettings.type!=2}
