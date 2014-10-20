@@ -3,6 +3,11 @@ $(function () {
         {
             state: 'xs',
             enter: 0,
+            exit: 479
+        },
+        {
+            state: 's',
+            enter: 480,
             exit: 767
         },
         {
@@ -25,22 +30,22 @@ $(function () {
     StateManager
 
         // OffCanvas menu
-        .addPlugin('*[data-offcanvas="true"]', 'offcanvasMenu', 'xs')
+        .addPlugin('*[data-offcanvas="true"]', 'offcanvasMenu', ['xs', 's'])
 
         // Search field
-        .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 'm', 'l'])
+        .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 's', 'm', 'l'])
 
         // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'scroll', 'xs')
+        .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's'])
 
         // Collapse panel
         .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['m', 'l', 'xl'])
 
         // Slide panel
-        .addPlugin('*[data-slide-panel="true"]', 'slidePanel', 'xs')
+        .addPlugin('*[data-slide-panel="true"]', 'slidePanel', ['xs', 's'])
 
         // Collapse panel
-        .addPlugin('#new-customer-action', 'collapsePanel', 'xs')
+        .addPlugin('#new-customer-action', 'collapsePanel', ['xs', 's'])
 
         // Image slider
         .addPlugin('*[data-image-slider="true"]', 'imageSlider', { touchControls: true })
@@ -50,10 +55,10 @@ $(function () {
         .addPlugin('.product--image-zoom', 'imageZoom', 'xl')
 
         // Collapse panel
-        .addPlugin('.blog-filter--trigger', 'collapsePanel', ['xs', 'm', 'l'])
+        .addPlugin('.blog-filter--trigger', 'collapsePanel', ['xs', 's', 'm', 'l'])
 
         // Collapse texr
-        .addPlugin('.category--teaser .hero--text', 'collapseText', 'xs')
+        .addPlugin('.category--teaser .hero--text', 'collapseText', ['xs', 's'])
 
         // Default product slider
 
@@ -105,9 +110,21 @@ $(function () {
             perPage: 4,
             perSlide: 4,
             touchControl: false
-        }, 'xl');
-
-    $('*[data-tab-content="true"]').tabContent();
+        }, 'xl')
+    
+        // Detail page tab menus
+        
+        .addPlugin('.tab-menu--product', 'tabMenu', ['s', 'm', 'l', 'xl'])
+        .addPlugin('.tab-menu--crossselling', 'tabMenu', ['m', 'l', 'xl'])
+        .addPlugin('.tab-menu--product .tab--container', 'offcanvasButton', {
+            titleSelector: '.tab--title',
+            previewSelector: '.tab--preview',
+            contentSelector: '.tab--content'
+        }, ['xs'])
+        .addPlugin('.tab-menu--crossselling .tab--header', 'collapsePanel', {
+            'contentSiblingSelector': '.tab--content'
+        }, ['xs', 's']);
+    
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();
@@ -143,13 +160,7 @@ $(function () {
     // Deferred loading of the captcha
     $('div.captcha--placeholder[data-src]').captcha();
 
-    $('*[data-modal="true"] a').on('click.modal', function () {
-        event.preventDefault();
-
-        $.modal.open(this.href, {
-            mode: 'ajax'
-        });
-    });
+    $('*[data-modalbox="true"]').modalbox();
 
     $('.add-voucher--checkbox').on('change', function (event) {
         var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';

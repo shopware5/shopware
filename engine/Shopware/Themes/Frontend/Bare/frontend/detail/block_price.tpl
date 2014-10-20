@@ -20,18 +20,18 @@
 				{/block}
 
 				<tbody>
-					{foreach $sArticle.sBlockPrices as $row}
+					{foreach $sArticle.sBlockPrices as $blockPrice}
 						{block name='frontend_detail_data_block_prices'}
 							<tr class="{cycle values="is--primary,is--secondary"}">
 								<td>
-									{if $row.from == 1}
-										{s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s} {$row.to}
+									{if $blockPrice.from == 1}
+										{s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s} {$blockPrice.to}
 									{else}
-										{s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s} {$row.from}
+										{s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s} {$blockPrice.from}
 									{/if}
 								</td>
 								<td>
-									{$row.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+									{$blockPrice.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 								</td>
 							</tr>
 						{/block}

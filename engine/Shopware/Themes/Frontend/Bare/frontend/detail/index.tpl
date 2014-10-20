@@ -10,8 +10,9 @@
     {block name="frontend_detail_breadcrumb_overview"}
         {if !{config name=disableArticleNavigation}}
             {$breadCrumbBackLink = $sBreadcrumb[count($sBreadcrumb) - 1]['link']}
-            <a class="btn is--icon-left breadcrumb--button breadcrumb--link is--large" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex"}{/s}">
-                <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
+            <a class="breadcrumb--button breadcrumb--link" href="{if $breadCrumbBackLink}{$breadCrumbBackLink}{else}#{/if}" title="{s name="DetailNavIndex"}{/s}">
+                <i class="icon--arrow-left"></i>
+                <span class="breadcrumb--title">{s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}</span>
             </a>
         {/if}
     {/block}
@@ -51,8 +52,8 @@
     
         {* Product header *}
         {block name='frontend_detail_index_header'}
-            <header class="product--header block-group">
-                <div class="product--info block">
+            <header class="product--header">
+                <div class="product--info">
     
                     {* Product name *}
                     {block name='frontend_detail_index_name'}
@@ -64,7 +65,7 @@
                     {* Product - Supplier information *}
                     {block name='frontend_detai_supplier_info'}
                         {if $sArticle.supplierImg}
-                            <div class="product--supplier block">
+                            <div class="product--supplier">
                                 <a href="{url controller='supplier' sSupplier=$sArticle.supplierID}"
                                    title="{"{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"|escape}"
                                    class="product--supplier-link">
@@ -84,7 +85,7 @@
                             </div>
                         {/if}
                     {/block}
-    
+
                 </div>
             </header>
         {/block}
@@ -253,142 +254,140 @@
     
             {* Tab navigation *}
             {block name="frontend_detail_index_tabs"}
-                <div class="additional-info--tabs" data-tab-content="true">
-                    {include file="frontend/detail/tabs.tpl"}
-    
-                    {* Tab content *}
-                    {block name="frontend_detail_index_outer_tabs"}
-                        <div class="tabs--content-container tab--content panel--body has--border is--rounded">
-                            {block name="frontend_detail_index_inner_tabs"}
-                                {block name='frontend_detail_index_before_tabs'}{/block}
-    
-                                {* Product description *}
-                                {block name="frontend_detail_index_tabs_description"}
-                                    {include file="frontend/detail/tabs/description.tpl"}
-                                {/block}
-    
-                                {* Article rating *}
-                                {block name="frontend_detail_index_tabs_rating"}
-                                    {if !{config name=VoteDisable}}
-                                        {include file="frontend/detail/tabs/comment.tpl"}
-                                    {/if}
-                                {/block}
-    
-                                {block name='frontend_detail_index_after_tabs'}{/block}
-                            {/block}
-                        </div>
-                    {/block}
-                </div>
+                {include file="frontend/detail/tabs.tpl"}
             {/block}
         {/block}
-    
-        {* Related and similar products tab panel *}
-        {block name="frontend_detail_index_related_similiar_tabs"}
-            {if ($sArticle.sRelatedArticles && !$sArticle.crossbundlelook) || $sArticle.sSimilarArticles}
-                <div class="related-slider--tabs" data-tab-content="true">
-    
-                    {block name="frontend_detail_index_related_similiar_tabs_navigation"}
-                        <ul class="tab--navigation panel--tab-nav">
-    
-                            {* Tab navigation - Related products *}
-                            {block name="frontend_detail_tabs_entry_related"}
-                                {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-                                    <li class="navigation--entry">
-                                        <a href="#content--related-products" class="navigation--link">
-                                            {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
-                                            ({$sArticle.sRelatedArticles|@count})
-                                        </a>
-                                    </li>
-                                {/if}
-                            {/block}
-    
-                            {* Similar products *}
-                            {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
-                                {if $sArticle.sSimilarArticles}
-                                    <li class="navigation--entry entry--similar-products">
-                                        <a href="#content--similar-products" class="navigation--link">
-                                            {s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}
-                                        </a>
-                                    </li>
-                                {/if}
-                            {/block}
-                        </ul>
-                    {/block}
-    
-                    {block name="frontend_detail_index_related_similiar_tab_content_container"}
-                        <div class="tab--content panel--body has--border is--rounded">
-    
-                            {* Related articles *}
-                            {block name="frontend_detail_index_tabs_related"}
-                                <div class="content--related-products">
-                                    {include file="frontend/detail/tabs/related.tpl"}
-                                </div>
-                            {/block}
-    
-                            {* Similar products slider *}
-                            {block name="frontend_detail_index_similar_slider"}
-                                <div class="content--similar-products">
-                                    {include file='frontend/detail/similar.tpl'}
-                                </div>
-                            {/block}
-                        </div>
-                    {/block}
-                </div>
+
+        {* Crossselling tab panel *}
+        {block name="frontend_detail_index_tabs"}
+
+            {$showAlsoViewed = {config name=similarViewedShow}}
+            {$showAlsoBought = {config name=alsoBoughtShow}}
+
+            {if $showAlsoBought}
+                {$boughtArticles = {action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}}
+                {$showAlsoBought = !empty($boughtArticles)}
             {/if}
-        {/block}
-    
-        {* Recommendation tab panel *}
-        {block name="frontend_detail_index_recommendation_tabs"}
-            {if {config name=alsoBoughtShow} || {config name=similarViewedShow}}
-                <div class="recommendation-slider--tabs" data-tab-content="true">
-    
+
+            {if $showAlsoViewed}
+                {$viewedArticles = {action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}}
+                {$showAlsoViewed = !empty($viewedArticles)}
+            {/if}
+
+            {if $sArticle.sRelatedArticles || $sArticle.sSimilarArticles || $showAlsoBought || $showAlsoViewed}
+                <div class="tab-menu--crossselling">
+
                     {* Tab navigation *}
-                    {block name="frontend_detail_index_recommendation_tabs_navigation"}
-                        <ul class="tab--navigation panel--tab-nav">
-    
-                            {* Customer also bought *}
-                            {block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
-                                {if {config name=alsoBoughtShow}}
-                                    <li class="navigation--entry entry--also-bought">
-                                        <a class="navigation--link" href="#content--also-bought">
-                                            {s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
+                    {block name="frontend_detail_index_tabs_navigation"}
+                        <ul class="tab--navigation">
+                            {block name="frontend_detail_index_tabs_navigation_inner"}
+
+                                {* Tab navigation - Related products *}
+                                {block name="frontend_detail_tabs_entry_related"}
+                                    {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
+                                        <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}" class="tab--link">
+                                            {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                            <span class="product--rating-count-wrapper">
+                                                <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
+                                            </span>
                                         </a>
-                                    </li>
-                                {/if}
-                            {/block}
-    
-                            {* Customer also viewed *}
-                            {block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
-                                {if {config name=similarViewedShow}}
-                                    <li class="navigation--entry entry--customer-viewed">
-                                        <a class="navigation--link" href="#content--customer-viewed">
-                                            {s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
-                                        </a>
-                                    </li>
-                                {/if}
+                                    {/if}
+                                {/block}
+
+                                {* Similar products *}
+                                {block name="frontend_detail_index_tabs_entry_similar"}
+                                    {if $sArticle.sSimilarArticles}
+                                        <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
+                                    {/if}
+                                {/block}
+
+                                {* Customer also bought *}
+                                {block name="frontend_detail_index_tabs_entry_also_bought"}
+                                    {if $showAlsoBought}
+                                        <a href="#content--also-bought" title="{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}" class="tab--link">{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}</a>
+                                    {/if}
+                                {/block}
+
+                                {* Customer also viewed *}
+                                {block name="frontend_detail_index_tabs_entry_also_viewed"}
+                                    {if $showAlsoViewed}
+                                        <a href="#content--customer-viewed" title="{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}" class="tab--link">{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}</a>
+                                    {/if}
+                                {/block}
                             {/block}
                         </ul>
                     {/block}
-    
+
                     {* Tab content container *}
-                    {block name="frontend_detail_index_recommendation_tab_content_container"}
-                        <div class="tab--content panel--body has--border is--rounded">
-    
-                            {* "Customers bought also" slider *}
-                            {block name="frontend_detail_index_also_bought_slider"}
-                                {if {config name=alsoBoughtShow}}
-                                    <div class="content--also-bought">
-                                        {action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
+                    {block name="frontend_detail_index_tabs_content_list"}
+                        <div class="tab--container-list">
+                            {block name="frontend_detail_index_tabs_content_list_inner"}
+
+                                {* Related articles *}
+                                {block name="frontend_detail_index_tabs_related"}
+                                    {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
+                                        <div class="tab--container">
+                                            {block name="frontend_detail_index_tabs_related_inner"}
+                                                <div class="tab--header">
+                                                    <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}">
+                                                        {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                                        <span class="product--rating-count-wrapper">
+                                                            <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div class="tab--content content--related">
+                                                    {include file="frontend/detail/tabs/related.tpl"}
+                                                </div>
+                                            {/block}
+                                        </div>
+                                    {/if}
+                                {/block}
+
+                                {* Similar products slider *}
+                                {block name="frontend_detail_index_tabs_similar"}
+                                    <div class="tab--container">
+                                        {block name="frontend_detail_index_tabs_similar_inner"}
+                                            <div class="tab--header">
+                                                <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
+                                            </div>
+                                            <div class="tab--content content--similar">
+                                                {include file='frontend/detail/tabs/similar.tpl'}
+                                            </div>
+                                        {/block}
                                     </div>
+                                {/block}
+
+                                {* "Customers bought also" slider *}
+                                {if $showAlsoBought}
+                                    {block name="frontend_detail_index_tabs_also_bought"}
+                                        <div class="tab--container">
+                                            {block name="frontend_detail_index_tabs_also_bought_inner"}
+                                                <div class="tab--header">
+                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}">{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}</a>
+                                                </div>
+                                                <div class="tab--content content--also-bought">
+                                                    {$boughtArticles}
+                                                </div>
+                                            {/block}
+                                        </div>
+                                    {/block}
                                 {/if}
-                            {/block}
-    
-                            {* "Customers similar viewed" slider *}
-                            {block name="frontend_detail_index_similar_viewed_slider"}
-                                {if {config name=similarViewedShow}}
-                                    <div class="content--customer-viewed">
-                                        {action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
-                                    </div>
+
+                                {* "Customers similar viewed" slider *}
+                                {if $showAlsoViewed}
+                                    {block name="frontend_detail_index_tabs_also_viewed"}
+                                        <div class="tab--container">
+                                            {block name="frontend_detail_index_tabs_also_viewed_inner"}
+                                                <div class="tab--header">
+                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}">{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}</a>
+                                                </div>
+                                                <div class="tab--content content--also-viewed">
+                                                    {$viewedArticles}
+                                                </div>
+                                            {/block}
+                                        </div>
+                                    {/block}
                                 {/if}
                             {/block}
                         </div>

@@ -9,19 +9,16 @@
             currentArticle: { },
             listSelector: '.last-seen-products--slider',
             containerSelector: '.last-seen-products--container',
-            itemCls: 'last-seen-products--item product-slider--item',
+            itemCls: 'last-seen-products--item product--box',
             titleCls: 'last-seen-products--title product--title',
-            imageCls: 'last-seen-products--image product--image'
+            imageCls: 'last-seen-products--image product--image',
+            noPicture: ''
         },
 
         init: function () {
             var me = this;
 
             me.applyDataAttributes();
-
-            me.$title = $('<h2>', {
-                'html': me.opts.title
-            }).prependTo(me.$el);
 
             me.$list = me.$el.find(me.opts.listSelector);
             me.$container = me.$list.find(me.opts.containerSelector);
@@ -61,21 +58,18 @@
         },
 
         createTemplate: function (article) {
-            var me = this, item,
-                image = me.createProductImage(article),
-                title = me.createProductTitle(article);
+            var me = this;
 
-            item = $('<div>', {
-                'class': me.opts.itemCls
+            return $('<div>', {
+                'class': me.opts.itemCls,
+                'html': [
+                    me.createProductImage(article),
+                    me.createProductTitle(article)
+                ]
             });
-
-            image.appendTo(item);
-            title.appendTo(item);
-
-            return item;
         },
 
-        createProductTitle: function(data) {
+        createProductTitle: function (data) {
             var me = this;
 
             return $('<a>', {
@@ -87,14 +81,12 @@
             });
         },
 
-        createProductImage: function(data) {
+        createProductImage: function (data) {
             var me = this,
-                element, imageEl,
-                noScript,
-                imageDefault,
-                imageMobile,
-                imageTablet,
-                imageDesktop;
+                image = data.images[4] || me.opts.noPicture,
+                element,
+                imageEl,
+                noScript;
 
             element = $('<a>', {
                 'class': me.opts.imageCls,
@@ -107,27 +99,27 @@
                 'data-alt': data.articleName
             }).appendTo(element);
 
-            imageMobile = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[4] ? data.images[4] : me.opts.noPicture
+                'data-src': image
             }).appendTo(imageEl);
 
-            imageTablet = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[3] ? data.images[3] : me.opts.noPicture,
+                'data-src': image,
                 'data-media': '(min-width: 48em)'
             }).appendTo(imageEl);
 
-            imageDesktop = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[2] ? data.images[2] : me.opts.noPicture,
+                'data-src': image,
                 'data-media': '(min-width: 78.75em)'
             }).appendTo(imageEl);
 
             noScript = $('<noscript></noscript>').appendTo(imageEl);
 
-            imageDefault = $('<img>', {
-                'src': data.images[2] ? data.images[2] : me.opts.noPicture,
+            $('<img>', {
+                'src': image,
                 'alt': data.articleName
             }).appendTo(noScript);
 

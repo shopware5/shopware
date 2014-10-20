@@ -167,10 +167,11 @@
             }
 
             &.is--top {
-                .unitize-width(70);
-                .unitize-height(20);
+                .unitize-width(32);
+                .unitize-height(24);
+                .unitize-padding(2, 0, 0, 0);
                 .unitize(18, 16, line-height);
-                .unitize(-35, 16, margin-left);
+                .unitize(-15, 16, margin-left);
                 top: 0;
                 left: 50%;
 
@@ -180,10 +181,11 @@
             }
 
             &.is--bottom {
-                .unitize-width(70);
-                .unitize-height(20);
+                .unitize-width(32);
+                .unitize-height(24);
+                .unitize-padding(2, 0, 0, 0);
                 .unitize(18, 16, line-height);
-                .unitize(-35, 16, margin-left);
+                .unitize(-16, 16, margin-left);
                 bottom: 0;
                 left: 50%;
 
@@ -222,7 +224,7 @@
 @media screen and(min-width: @desktopViewportWidth) {
 
     .image-slider--container {
-        .unitize-height(360);
+        .unitize-height(430);
         margin-bottom: 0;
 
         .arrow {
@@ -232,15 +234,26 @@
 
     .image-slider--thumbnails {
         .unitize-width(70);
-        .unitize-height(360);
+        .unitize-height(430);
         .unitize-margin(0, 20, 0, 0);
         position: relative;
         top:0; left: 0;
         float: left;
 
         .thumbnail--link {
-            .unitize-margin(0, 0, 10, 0);
+            .unitize-margin(0, 0, 20, 0);
             display: block;
+        }
+
+        &:after {
+            .linear-gradient-multi(0%, #fff, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), bottom, top);
+            .unitize-height(50);
+            width: 100%;
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: 0;
+            pointer-events: none;
         }
     }
 

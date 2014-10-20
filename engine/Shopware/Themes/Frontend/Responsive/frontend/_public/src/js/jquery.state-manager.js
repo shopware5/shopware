@@ -524,7 +524,7 @@
 
             listeners.push(listener);
 
-            if (listener.state === me._currentState && typeof enterFn === 'function') {
+            if ((listener.state === me._currentState || listener.state === '*') && typeof enterFn === 'function') {
                 enterFn({
                     'exiting': me._previousState,
                     'entering': me._currentState
@@ -684,7 +684,9 @@
             }
 
             if (JSON.stringify(currentConfig) === JSON.stringify(me._getPluginConfig(me._previousState, selector, pluginName))) {
-                plugin.update();
+                if (typeof plugin.update === 'function') {
+                    plugin.update.call(plugin, me._currentState, me._previousState);
+                }
                 return;
             }
 
@@ -896,7 +898,9 @@
                     }
 
                     if (JSON.stringify(newPluginConfigs[pluginName]) === JSON.stringify(oldPluginConfigs[pluginName])) {
-                        plugin.update();
+                        if (typeof plugin.update === 'function') {
+                            plugin.update.call(plugin, me._currentState, me._previousState);
+                        }
                         continue;
                     }
 

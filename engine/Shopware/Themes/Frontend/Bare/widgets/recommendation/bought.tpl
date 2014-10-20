@@ -1,11 +1,9 @@
 {if $boughtArticles}
-    <div class="bought--products panel">
-		<div class="bought--content panel--body product-slider" data-product-slider="true">
-			<div class="product-slider--container">
-				{foreach $boughtArticles as $article}
-					{include file="widgets/recommendation/item.tpl" article=$article}
-				{/foreach}
-			</div>
-		</div>
+    <div class="bought--content product-slider" data-product-slider="true">
+        <div class="product-slider--container">
+            {foreach $boughtArticles as $article}
+                {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$article}
+            {/foreach}
+        </div>
     </div>
 {/if}

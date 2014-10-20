@@ -16,17 +16,17 @@
         {block name="frontend_widgets_manufacturer_slider_content"}
             <div class="panel--body is--wide manufacturer--body">
                 {block name="frontend_widgets_manufacturer_slider_container"}
-                    <div class="slider--manufacturer product-slider" data-product-slider="true">
+                    <div class="slider--manufacturer product-slider" data-product-slider="true" data-itemClass="manufacturer--item">
                         <div class="product-slider--container">
                             {foreach $Data.values as $supplier}
                                 {block name="frontend_widgets_manufacturer_slider_item"}
-                                    <div class="manufacturer--item product-slider--item">
+                                    <div class="manufacturer--item">
 
                                         {block name="frontend_widgets_manufacturer_slider_item_link"}
                                             <a href="{$supplier.link}" title="{$supplier.name|escape:'html'}" class="manufacturer--link{if !$supplier.image} has--text{/if}">
                                                 {if $supplier.image}
                                                     {block name="frontend_widgets_manufacturer_slider_item_image"}
-                                                        <span class="is--centered"><img class="manufacturer--image" src="{$supplier.image}" alt="{$supplier.name|escape:'html'}" /></span>
+                                                        <img class="manufacturer--image" src="{$supplier.image}" alt="{$supplier.name|escape:'html'}" />
                                                     {/block}
                                                 {else}
                                                     {block name="frontend_widgets_manufacturer_slider_item_text"}

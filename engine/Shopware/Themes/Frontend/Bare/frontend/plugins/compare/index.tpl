@@ -20,17 +20,6 @@
 	</a>
 {/block}
 
-{* Compare javascript *}
-{block name='frontend_index_header_javascript_inline' prepend}
-	var compareCount = '{$sComparisons|count}';
-	var compareMaxCount = '{config name="MaxComparisons"}';
-{literal}
-	jQuery(document).ready(function() {
-		jQuery.compare.setup();
-	});
-{/literal}
-{/block}
-
 {* Compare button 2 *}
 {block name='frontend_detail_actions_notepad' prepend}
 	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{"{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}"|escape}" class="action--link action--compare">

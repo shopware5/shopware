@@ -45,8 +45,8 @@
     {if !$theme.checkoutHeader}
         {$smarty.block.parent}
     {else}
-         <div class="container footer-vat">
-             <div class="footer--vat-info">
+        <div class="container footer-vat">
+            <div class="footer--vat-info">
                 {if $sOutputNet}
                     <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
                 {else}
@@ -59,7 +59,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content confirm--content">
+    <div class="content block confirm--content">
 
     {* Error messages *}
     {block name='frontend_checkout_confirm_error_messages'}
@@ -81,7 +81,7 @@
                 {* Right of revocation notice *}
                 {block name='frontend_checkout_confirm_tos_revocation_notice'}
                     {if {config name=revocationnotice}}
-                        <div class="body--revocation" data-modal="true">
+                        <div class="body--revocation" data-modalbox="true">
                             {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                         </div>
                     {/if}
@@ -316,27 +316,27 @@
 
                         {* Additional feature - Add voucher *}
                         {block name="frontend_checkout_confirm_additional_features_add_voucher"}
-                            <div class="feature--group block">
-                                <div class="feature--voucher">
-                                    <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
-                                        {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
-                                            {if !{config name='IgnoreAGB'}}
-                                                <input type="hidden" class="agb-checkbox" name="sAGB"
-                                                       value="{if $sAGBChecked}1{else}0{/if}"/>
-                                            {/if}
-                                        {/block}
+                        <div class="feature--group block">
+                            <div class="feature--voucher">
+                                <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
+                                    {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
+                                        {if !{config name='IgnoreAGB'}}
+                                            <input type="hidden" class="agb-checkbox" name="sAGB"
+                                                   value="{if $sAGBChecked}1{else}0{/if}"/>
+                                        {/if}
+                                    {/block}
 
-                                        {block name='frontend_checkout_confirm_add_voucher_field'}
-                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}" />
-                                        {/block}
+                                    {block name='frontend_checkout_confirm_add_voucher_field'}
+                                        <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}" />
+                                    {/block}
 
-                                        {block name='frontend_checkout_confirm_add_voucher_button'}
-                                            <button type="submit" class="add-voucher--button btn is--primary is--small block">
-                                                <i class="icon--arrow-right"></i>
-                                            </button>
-                                        {/block}
-                                    </form>
-                                </div>
+                                    {block name='frontend_checkout_confirm_add_voucher_button'}
+                                        <button type="submit" class="add-voucher--button btn is--primary is--small block">
+                                            <i class="icon--arrow-right"></i>
+                                        </button>
+                                    {/block}
+                                </form>
+                            </div>
                             {/block}
 
                             {* Additional feature - Add product using the sku *}
@@ -434,5 +434,5 @@
             {/block}
         </div>
     {/block}
-</div>
+    </div>
 {/block}

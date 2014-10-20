@@ -1,3 +1,9 @@
+<div class="buttons--off-canvas">
+    <a href="#" title="{s name="CustomAjaxActionClose"}Close{/s}" class="close--off-canvas">
+        <i class="icon--arrow-left"></i>
+        {s name="CustomAjaxActionClose"}Close{/s}
+    </a>
+</div>
 <div class="ajax-modal--custom">
 	{block name='frontend_custom_ajax_action_buttons'}
 		<div class="panel--title is--underline">{$sCustomPage.description}</div>
