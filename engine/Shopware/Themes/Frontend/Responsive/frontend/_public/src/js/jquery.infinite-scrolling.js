@@ -71,11 +71,14 @@
             /** @string loadPreviousSnippet - this snippet will be printed inside the load previous button */
             'loadPreviousSnippet': 'Vorherige Artikel laden',
 
-            /** @string listingActionsSelector - this class will be used for appending the load more button */
-            'listingActionsSelector': '.listing--actions',
+            /** @string listingContainerSelector - will be used for prepending and appending load previous and load more button */
+            'listingContainerSelector': '.listing--container',
+
+            /** @string pagingBottomSelector - this class will be used for removing the bottom paging bar if infinite scrolling is enabled */
+            'pagingBottomSelector': '.listing--bottom-paging',
 
             /** @string listingActionsWrapper - this class will be cloned and used as a actions wrapper for the load more and previous button */
-            'listingActionsWrapper': 'listing--actions block-group listing--load-more'
+            'listingActionsWrapper': 'infinite--actions'
         },
 
         /**
@@ -102,12 +105,11 @@
                 return;
             }
 
-            // Remove paging
+            // Remove paging top bar
             $(me.opts.pagingSelector).remove();
 
-            $(me.opts.defaultPerPageSelector).remove();
-
-            $(me.opts.defaultChangeLayoutSelector).css('margin-left', '30%');
+            // remove bottom paging bar
+            $(me.opts.pagingBottomSelector).remove();
 
             // Check max pages by data attribute
             me.maxPages = me.$el.attr('data-pages');
@@ -127,12 +129,6 @@
             // previosPageIndex for loading in other direction
             me.previousPageIndex = 0;
 
-            // use listing actions container for load more button
-            me.actions = {
-                'top': $(me.opts.listingActionsSelector).first(),
-                'bottom': $(me.opts.listingActionsSelector).last()
-            };
-
             // Prepare top and bottom actions containers
             me.buttonWrapperTop = $('<div>', {
                 'class': me.opts.listingActionsWrapper
@@ -143,11 +139,8 @@
             });
 
             // append load more button
-            me.actions.top.after(me.buttonWrapperTop);
-            me.actions.bottom.before(me.buttonWrapperBottom);
-
-            // remove bottom pagination
-            me.actions.bottom.remove();
+            $(me.opts.listingContainerSelector).after(me.buttonWrapperBottom);
+            $(me.opts.listingContainerSelector).before(me.buttonWrapperTop);
 
             // base url for push state and ajax fetch url
             me.baseUrl = window.location.href.split('?')[0];
@@ -332,12 +325,9 @@
                 cls = (type == 'previous') ? me.opts.loadPreviousCls : me.opts.loadMoreCls,
                 snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet;
 
-            return $('<div>', {
-                'class': 'actions--buttons',
-                'html': $('<a>', {
+            return $('<a>', {
                     'class': me.opts.loadBtnCls + ' ' + cls,
                     'html': snippet + ' <i class="icon--cw is--large"></i>'
-                })
             });
         },
 
@@ -351,6 +341,7 @@
 
             var me = this;
 
+            // Remove load more button
             $('.' + me.opts.loadMoreCls).remove();
 
             // Set finished to false to reanable the fetch method
@@ -360,9 +351,6 @@
             if(me.maxPages >= me.opts.threshold) {
                 me.opts.threshold++;
             }
-
-            // Remove load more button
-            $(me.opts.loadMoreSelector).remove();
 
             // fetching new page
             me.fetchNewPage();
@@ -393,7 +381,7 @@
 
             var me = this;
 
-            // Remove load more button
+            // Remove load previous button
             $('.' + me.opts.loadPreviousCls).remove();
 
             // fetching new page
