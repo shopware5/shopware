@@ -7,6 +7,7 @@ use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
@@ -106,7 +107,7 @@ class LegacySearchSubscriber implements SubscriberInterface
             }
 
             if ($facet->getFacetName() == 'price') {
-                $priceFacetValues = $this->getPriceRangeValues($priceRanges);
+                $priceFacetValues = $this->getPriceRangeValues($priceRanges, $facet);
 
             } else if ($facet->getFacetName() == 'category') {
                 $categoryFacet = $this->convertCategoryFacet($facet, $activeCategoryId);
@@ -249,12 +250,20 @@ class LegacySearchSubscriber implements SubscriberInterface
     }
 
 
-    private function getPriceRangeValues($ranges)
+    private function getPriceRangeValues($ranges, RangeFacetResult $facet)
     {
         $result = array();
         foreach ($ranges as $index => $range) {
-            $result[$index] = 1;
+            $start = $range['start'];
+            $end   = $range['end'];
+
+            if (($start >= $facet->getMin() && $start <= $facet->getMax()) ||
+                ($end >= $facet->getMin() && $end <= $facet->getMax())) {
+                $result[$index] = 1;
+            }
+
         }
+        
         return $result;
     }
 
