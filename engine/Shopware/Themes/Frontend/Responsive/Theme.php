@@ -869,10 +869,15 @@ class Theme extends \Shopware\Components\Theme
     {
         $tab = $this->createTab(
             'tables_tab',
-            '__responsive_tab_tables__'
+            '__responsive_tab_tables__',
+            array(
+                'attributes' => array(
+                    'autoScroll' => true
+                )
+            )
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
+        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
         $fieldSetTables = $this->createFieldSet(
             'tables_fieldset',
             '__responsive_tab_tables_fieldset_tables__',
@@ -881,16 +886,16 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSetTables->addElement(
             $this->createColorPickerField(
-                '_table-header-bg',
-                '@table-header-bg',
-                '@brand-secondary'
+                '_panel-table-header-bg',
+                '@panel-table-header-bg',
+                '#FFFFFF'
             )
         );
         $fieldSetTables->addElement(
             $this->createColorPickerField(
-                '_table-header-color',
-                '@table-header-color',
-                '#FFFFFF'
+                '_panel-table-header-color',
+                '@panel-table-header-color',
+                '@text-color-dark'
             )
         );
         $fieldSetTables->addElement(
@@ -912,6 +917,20 @@ class Theme extends \Shopware\Components\Theme
                 '_table-row-highlight-bg',
                 '@table-row-highlight-bg',
                 'darken(@table-row-bg, 4%)'
+            )
+        );
+        $fieldSetTables->addElement(
+            $this->createColorPickerField(
+                '_table-header-bg',
+                '@table-header-bg',
+                '@brand-secondary'
+            )
+        );
+        $fieldSetTables->addElement(
+            $this->createColorPickerField(
+                '_table-header-color',
+                '@table-header-color',
+                '#FFFFFF'
             )
         );
 
