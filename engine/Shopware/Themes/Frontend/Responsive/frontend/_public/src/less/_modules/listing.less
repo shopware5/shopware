@@ -61,14 +61,6 @@
 // Listing actions
 .listing--actions {
     .clearfix();
-
-    &.listing--load-more {
-        .unitize(20, 16, margin-bottom);
-        display: block;
-        text-align: center;
-        border: 0;
-        background: none;
-    }
 }
 
 .action--filter-btn {
@@ -416,6 +408,17 @@
     position: relative;
     text-align: center;
     z-index: 750;
+}
+
+// button wrapper for ininite scrolling actions
+.infinite--actions {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+
+    .js--load-more, .js--load-previous {
+        .unitize(20, 16, margin-bottom);
+    }
 }
 
 // Tablet view
