@@ -1,0 +1,21 @@
+// General table styles
+table {
+    th,
+    thead td {
+        background: @table-header-bg;
+        color: @table-header-color;
+        font-weight: @font-bold-weight;
+        text-align: center;
+    }
+
+    td {
+        .unitize-padding(5, 10, 5, 10);
+        background: @table-row-bg;
+        color: @table-row-color;
+        border: 1px solid @table-row-bg;
+    }
+
+    tr:nth-child(even) td {
+        background: @table-row-highlight-bg;
+    }
+}

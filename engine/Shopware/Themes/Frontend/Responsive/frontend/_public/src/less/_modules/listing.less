@@ -14,9 +14,6 @@
 .category--teaser {
     .unitize-margin(0, 0, 20, 0);
 
-    .hero--headline {
-        .unitize(20, 16, margin-bottom);
-    }
     .hero--text {
         padding-top: 0;
     }
@@ -92,7 +89,7 @@
 
 // Filter options
 .action--filter-options {
-    border-right: 1px solid rgba(red(@text-color), green(@text-color), blue(@text-color), 50%);
+    border-right: 1px solid @border-color;
 
     .filter--container {
         .unitize-padding(0, 10);
@@ -262,7 +259,7 @@
         .unitize-height(200);
         .unitize-padding(10, 0);
         display: block;
-        border-bottom: 1px solid @border-color;
+        border-bottom: 1px solid @panel-border;
         text-align: center;
 
         .image--element {
@@ -379,7 +376,7 @@
     color: @badge-discount-color;
     font-weight: 600;
     text-align: center;
-    background: @badge-newcomer-bg;
+    background: @badge-discount-bg;
     z-index: 750;
 }
 
@@ -512,8 +509,8 @@
         padding: 0;
         overflow: visible;
         position: relative;
+        background: @gray-light;
         border: 0 none;
-        background: @body-bg;
         clear: both;
 
         &.is--collapsed,
@@ -587,9 +584,8 @@
         margin: -2% 0 0 -2%;
 
         .product--box {
-            width: 50%;
-            padding: 2% 0 0 2%;
-            margin: 0;
+            width: 48%;
+            margin: 2% 0 0 2%;
             float: left;
 
             .panel--body {
@@ -618,7 +614,7 @@
 
     .listing--listing-1col {
         .product--box {
-            width: 100%;
+            width: 98%;
 
             .panel--body {
                 .clearfix();
@@ -633,7 +629,7 @@
                 .unitize-margin(0, 20, 0, 0);
                 border-width: 0 1px 0 0;
                 border-style: solid;
-                border-color: @border-color;
+                border-color: @panel-border;
                 float: left;
             }
 
@@ -692,9 +688,7 @@
                 position: absolute;
 
                 .product--action {
-                    .unitize-padding(8, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -723,7 +717,7 @@
         .unitize-margin(0, 0, 20, 0);
         .unitize(10, 16, padding-top);
         border: 1px solid @border-color;
-        background: darken(@gray-light, 1%);
+        background: @gray-light;
 
 
 
@@ -842,7 +836,6 @@
     .listing {
         .product--box {
             width: 100%;
-            margin: 0;
             float: left;
         }
     }
@@ -850,7 +843,7 @@
     // One column listing view (List-View)
     .listing--listing-1col {
         .product--box {
-            width: 100%;
+            width: 98%;
 
             .panel--body {
                 .clearfix();
@@ -893,9 +886,7 @@
                 position: absolute;
 
                 .product--action {
-                    .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -905,7 +896,7 @@
     // Two column listing view
     .listing--listing-2col {
         .product--box {
-            width: 50%;
+            width: 48%;
 
             &.is--active,
             &:hover {
@@ -927,7 +918,7 @@
                 .unitize-margin(0, 20, 0, 0);
                 border-width: 0 1px 0 0;
                 border-style: solid;
-                border-color: @border-color;
+                border-color: @panel-border;
                 float: left;
             }
 
@@ -958,13 +949,11 @@
                 .product--actions-inner {
                     .unitize-height(170);
                     .unitize-padding(20, 10);
-                    background: #fff;
+                    background: @panel-bg;
                 }
 
                 .product--action {
-                    .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -978,7 +967,7 @@
     // Three column listing view
     .listing--listing-3col {
         .product--box {
-            width: 33.3%;
+            width: 31.3%;
 
             &.is--active,
             &:hover {
@@ -1015,12 +1004,10 @@
                 position: absolute;
                 left: 0;
                 bottom: 0;
-                background: #fff;
+                background: @panel-bg;
 
                 .product--action {
-                    .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }
@@ -1030,7 +1017,7 @@
     // Four column listing view (Grid-View)
     .listing--listing {
         .product--box {
-            width: 25%;
+            width: 23%;
 
             &.is--active,
             &:hover {
@@ -1071,12 +1058,10 @@
                 position: absolute;
                 left: 0;
                 bottom: 0;
-                background: #fff;
+                background: @panel-bg;
 
                 .product--action {
-                    .unitize-padding(3, 16);
                     .unitize-margin(0, 0, 10, 0);
-                    .unitize(14, 16, font-size);
                     display: block;
                 }
             }

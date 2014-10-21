@@ -115,6 +115,11 @@
 
     .orders--table-header {
         display: none;
+        background: @panel-table-header-bg;
+
+        .panel--th {
+            color: @panel-table-header-color;
+        }
     }
 
     .panel--tr {
@@ -310,7 +315,7 @@
 
 .order--repeat {
     text-align: center;
-    background: darken(@gray-light, 2%);
+    background: @gray;
     border-bottom: 1px solid @border-color;
 }
 
@@ -408,6 +413,7 @@
         .navigation--headline {
             .panel--title;
             .is--underline;
+            border-bottom: 1px solid @border-color;
         }
 
         .account--menu-container {

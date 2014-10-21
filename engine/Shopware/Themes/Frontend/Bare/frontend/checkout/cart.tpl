@@ -144,7 +144,7 @@
                                     {block name="frontend_checkout_actions_inquiry"}
                                         <a href="{$sInquiryLink}"
                                            title="{"{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                           class="btn is--secondary btn--inquiry">
+                                           class="btn is--secondary btn--inquiry is--large is--full is--center">
                                             {s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
                                         </a>
                                     {/block}

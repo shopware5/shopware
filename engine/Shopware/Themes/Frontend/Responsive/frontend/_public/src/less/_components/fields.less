@@ -12,6 +12,7 @@ input[type="tel"] {
     .unitize-width(290);
     .unitize-padding(9, 10, 10, 10);
     .box-shadow(inset 0 1px 1px @gray-dark);
+    .unitize(@input-font-size, 16, font-size);
     background: @input-bg;
     border: 1px solid @input-border;
     border-top-color: darken(@input-border, 5%);
@@ -54,8 +55,13 @@ textarea {
     resize: vertical; // Just allow vertical resizing of the text area
 }
 
+label {
+    font-size: @label-font-size;
+    color: @label-color;
+}
+
 label.has--error {
-    color: @label-highlight-error;
+    color: @highlight-error;
     background: @input-error-bg;
 }
 
