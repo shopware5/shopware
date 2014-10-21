@@ -54,10 +54,9 @@
         }
 
         .btn--item-delete {
-            padding: 3px;
+            .unitize(16, 16, line-height);
+            .unitize-margin(1, 0);
             float: right;
-            margin: 0;
-            font-size: 8px;
 
             .icon--cross {
                 padding: 0;
@@ -71,18 +70,7 @@
         }
 
         .btn--compare {
-            .unitize-padding(5, 10);
-            .unitize(13, 16, font-size);
             .unitize(5, 16, margin-top);
-            width: 100%;
-
-            .icon--arrow-right {
-                .unitize(10, 16, top);
-                .unitize(9, 16, font-size);
-                display: block;
-                position: absolute;
-                right: 0;
-            }
         }
     }
 }
@@ -91,7 +79,6 @@
 .compare--wrapper {
     display: block;
     overflow: auto;
-
 }
 
 

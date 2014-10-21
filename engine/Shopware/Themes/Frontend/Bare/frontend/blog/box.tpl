@@ -8,7 +8,7 @@
 				{* Article name *}
 				{block name='frontend_blog_col_article_name'}
 					<h1 class="blog--box-headline panel--title">
-						<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape}">{$sArticle.title}</a>
+						<a class="blog--box-link" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape}">{$sArticle.title}</a>
 					</h1>
 				{/block}
 

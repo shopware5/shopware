@@ -86,11 +86,6 @@
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
         text-align: center;
-
-        .icon--arrow-right {
-            padding: 0;
-            margin: 0;
-        }
     }
 
     .user-comment--field {
@@ -99,11 +94,6 @@
 
     .table--actions .btn {
         width: 100%;
-
-        .icon--arrow-right {
-            .unitize(8, 16, margin-top);
-            float: right;
-        }
     }
 
     .table-footer--country-notice {
@@ -134,11 +124,11 @@
             .table--header {
                 .unitize-margin(-14, -20, 10, -20);
                 .unitize-padding(14, 20, 10, 20);
-                background: @table-header-bg;
+                background: @panel-table-header-bg;
                 border-color: @border-color;
 
                 .table--column {
-                    color: @text-color;
+                    color: @panel-table-header-color;
                 }
             }
 

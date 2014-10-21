@@ -82,7 +82,7 @@
                                                     </form>
                                                 {/block}
                                             {else}
-                                                <div class="premium-product--difference is--align-center">
+                                                <div class="btn premium-product--difference is--align-center is--disabled">
                                                     {s name="PremiumsInfoDifference"}{/s} <span class="difference--price">{$premium.sDifference|currency}</span>
                                                 </div>
                                             {/if}

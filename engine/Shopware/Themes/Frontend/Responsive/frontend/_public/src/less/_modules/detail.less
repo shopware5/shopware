@@ -157,8 +157,9 @@
 
 	// "Buy now" button
 	.buybox--button {
-        .unitize-padding(11, 10, 11, 10, 16);
-        .unitize(16, 16, font-size);
+        @largeFontSize: @btn-font-size + 2;
+        .unitize(@largeFontSize, 16, font-size);
+        .unitize-padding(3, 10);
         width: 63%;
     }
 
@@ -185,15 +186,20 @@
     }
 
     .product--properties {
-        .unitize-padding(0, 0, 10, 0);
 
         .product--properties-table {
             width: 100%;
+            background: @table-row-bg;
         }
 
         td {
-            .unitize-padding(10, 10, 0, 10);
+            .unitize-padding(5, 10, 5, 10);
             width: 50%;
+            border: 0 none;
+        }
+
+        tr:nth-child(even) td {
+            background: @table-row-highlight-bg;
         }
     }
 
@@ -232,8 +238,8 @@
 	}
 
 	.listing .product--box .panel--body {
-		border-left: 1px solid @border-color;
-		border-right: 1px solid @border-color;
+		border-left: 1px solid @panel-border;
+		border-right: 1px solid @panel-border;
 	}
 }
 
@@ -491,8 +497,9 @@
             }
             .tab--content {
                 padding: 0;
-				border-left: 0 none;
-				border-right: 0 none;
+				border-left: none;
+				border-right: none;
+                background: @panel-bg;
             }
         }
 
@@ -669,15 +676,15 @@
         }
     }
 
-            .product--supplier {
-                .unitize-height(70);
-                margin: 0;
+    .product--supplier {
+        .unitize-height(70);
+        margin: 0;
 
-                .product--supplier-link {
-                    .unitize-height(70);
-            }
+        .product--supplier-link {
+            .unitize-height(70);
         }
     }
+
 
     .action--link {
         .unitize-margin(0, 20, 10, 0);
@@ -686,17 +693,20 @@
         float: left;
     }
 
-    .js--desktop-tab-panel {
-        .unitize(40, 16, margin-bottom);
-        margin-left: 0;
-        margin-right: 0;
+    .is--ctl-detail {
+        .js--desktop-tab-panel {
+            .unitize(40, 16, margin-bottom);
+            margin-left: 0;
+            margin-right: 0;
 
-        .panel--tab-nav {
-            .unitize-margin(0, 50, 0, 0);
-        }
+            .panel--tab-nav {
+                .unitize-margin(0, 50, 0, 0);
+            }
 
-        .tab--content {
-            border: 1px solid @border-color;
+            .tab--content {
+                border-right: 1px solid @panel-border;
+                border-left: 1px solid @panel-border;
+            }
         }
     }
 
@@ -722,3 +732,4 @@
             .unitize(20, 16, line-height);
         }
     }
+}
