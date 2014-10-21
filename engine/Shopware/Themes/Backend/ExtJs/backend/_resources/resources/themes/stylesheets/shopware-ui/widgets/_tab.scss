@@ -73,8 +73,9 @@
 	height: 3px !important;
 }
 
+/** Tabs */
 /** Tab Styling - Default */
-.#{$prefix}tab-default-top {
+.#{$prefix}nlg .#{$prefix}tab-default-top, .#{$prefix}tab-default-top {
 	@include border-radius(5px 5px 0 0);
     -webkit-box-shadow: transparent 0 0 0 !important;
     -moz-box-shadow: transparent 0 0 0 !important;
@@ -84,7 +85,7 @@
     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
         svg-color-stop(rgba(178,193,203,1), 0%, 1),
         svg-color-stop(rgba(127,152,169,1), 100%, 1)
-    )) center center no-repeat transparent;
+    )) center center no-repeat transparent !important;
     border-color: #8896a6;
 	margin: 0 5px;
 
@@ -101,8 +102,56 @@
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(198,209,217,1), 0%, 1),
             svg-color-stop(rgba(147,168,183,1), 100%, 1)
-        )) center center no-repeat transparent;
+        )) center center no-repeat transparent !important;
     }
+}
+
+/** Tab Styling - Active */
+.#{$prefix}nlg .#{$prefix}tab-top-active, .#{$prefix}tab-top-active {
+    filter: none;
+    border: 0 none !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(46,181,249,1), 0%, 1),
+        svg-color-stop(rgba(22,129,211,1), 100%, 1)
+    )) center center no-repeat transparent !important;
+
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
+	button .#{$prefix}tab-inner {
+		color: #fff;
+		text-shadow: 0 1px 0 #0941e2;
+	}
+}
+
+/** Tab Styling - Disable */
+.#{$prefix}nlg .#{$prefix}tab-default-top-disabled, .#{$prefix}tab-default-top-disabled {
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(230,230,233,1), 0%, 1),
+        svg-color-stop(rgba(221,222,224,1), 100%, 1)
+    )) center center no-repeat !important;
+
+    /** Tab Styling - Disable - Hover */
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
+	button {
+		color: #8596a2 !important;
+	}
+
+	.#{$prefix}tab-inner {
+		color: #8596a2 !important;
+		text-shadow: 0 1px 0 #fff !important;
+	}
+
 }
 
 /** Safari specific */
@@ -112,20 +161,20 @@
     }
 }
 
-/** IE9 specific */
-.#{$prefix}ie {
+/** IE specific */
+.#{$prefix}ie.#{$prefix}nlg, #{$prefix}nlg {
     .#{$prefix}tab-default-top {
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(178,193,203,1), 0%, 1),
             svg-color-stop(rgba(127,152,169,1), 100%, 1)
-        )) center center no-repeat transparent !important;
+        )) center center no-repeat transparent;
 
         /** Tab Styling - Hover */
         &:hover {
             background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                 svg-color-stop(rgba(198,209,217,1), 0%, 1),
                 svg-color-stop(rgba(147,168,183,1), 100%, 1)
-            )) center center no-repeat transparent !important;
+            )) center center no-repeat transparent;
         }
     }
 
@@ -133,13 +182,13 @@
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(46,181,249,1), 0%, 1),
             svg-color-stop(rgba(22,129,211,1), 100%, 1)
-        )) center center no-repeat transparent !important;
+        )) center center no-repeat transparent;
 
         &:hover {
             background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                 svg-color-stop(rgba(46,181,249,1), 0%, 1),
                 svg-color-stop(rgba(22,129,211,1), 100%, 1)
-            )) center center no-repeat transparent !important;
+            )) center center no-repeat transparent;
         }
     }
 
@@ -149,63 +198,12 @@
             svg-color-stop(rgba(221,222,224,1), 100%, 1)
         )) center center no-repeat transparent !important;
 
-            /** Tab Styling - Disable - Hover */
-            &:hover {
-                background: none !important;
-            }
-    }
-}
-
-/** Tab Styling - Active */
-.#{$prefix}tab-top-active {
-    filter: none;
-    border: 0 none !important;
-    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-        svg-color-stop(rgba(46,181,249,1), 0%, 1),
-        svg-color-stop(rgba(22,129,211,1), 100%, 1)
-    )) center center no-repeat transparent !important;
-	
-	button .#{$prefix}tab-inner {
-		color: #fff;
-		text-shadow: 0 1px 0 #0941e2;
-	}
-}
-
-/** Tab Styling - Disable */
-.#{$prefix}tab-default-top-disabled {
-    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-        svg-color-stop(rgba(230,230,233,1), 0%, 1),
-        svg-color-stop(rgba(221,222,224,1), 100%, 1)
-    )) center center no-repeat transparent;
-
-    /** Tab Styling - Disable - Hover */
-    &:hover {
-        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-            svg-color-stop(rgba(230,230,233,1), 0%, 1),
-            svg-color-stop(rgba(221,222,224,1), 100%, 1)
-        )) center center no-repeat transparent;
-    }
-
-	button {
-		color: #8596a2 !important;
-	}
-	
-	.#{$prefix}tab-inner {
-		color: #8596a2 !important;
-		text-shadow: 0 1px 0 #fff !important;
-	}
-
-}
-
-/** IE9 specific */
-.#{$prefix}ie9 {
-
-    /** Default tab - disabled state */
-    .#{$prefix}tab-default-top-disabled {
-        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-            svg-color-stop(rgba(230,230,233,1), 0%, 1),
-            svg-color-stop(rgba(221,222,224,1), 100%, 1)
-        )) center center no-repeat transparent;
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(230,230,233,1), 0%, 1),
+                svg-color-stop(rgba(221,222,224,1), 100%, 1)
+            )) center center no-repeat transparent !important;
+        }
     }
 }
 
