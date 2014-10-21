@@ -34,6 +34,7 @@
                                                        id="__{$facet->getFieldName()}__{$option->getId()}"
                                                        name="__{$facet->getFieldName()}__{$option->getId()}"
                                                        value="{$option->getId()}"
+                                                       title="{$option->getLabel()}"
                                                        {if $option->isActive()}checked="checked" {/if}/>
                                             {/block}
 
