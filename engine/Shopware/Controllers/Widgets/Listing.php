@@ -30,6 +30,9 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
  */
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
+    /**
+     * product navigation as json string
+     */
     public function productNavigationAction()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
@@ -87,6 +90,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $this->Response()->setHeader('Content-type', 'application/json', true);
     }
 
+    /**
+     * topseller action for getting topsellers
+     * by category with perPage filtering
+     */
     public function topSellerAction()
     {
         $perPage = (int) $this->Request()->getParam('perPage', 4);
@@ -96,6 +103,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $this->View()->perPage = $perPage;
     }
 
+    /**
+     * tag cloud by category
+     */
     public function tagCloudAction()
     {
         $config = Shopware()->Plugins()->Frontend()->TagCloud()->Config();
@@ -131,5 +141,30 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $body = json_encode(array('totalCount' => $result->getTotalCount()));
         $this->Response()->setBody($body);
         $this->Response()->setHeader('Content-type', 'application/json', true);
+    }
+
+    /**
+     * listing action for asynchronous fetching listing pages
+     * by infinite scrolling plugin
+     */
+    public function ajaxListingAction()
+    {
+        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
+        $mapper->replaceShortRequestQueries($this->Request());
+
+        $categoryId = $this->Request()->getParam('sCategory');
+        $pageIndex = $this->Request()->getParam('sPage');
+
+        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
+        $articles = $articles['sArticles'];
+
+        $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
+
+        $this->View()->assign(array(
+            'sArticles' => $articles,
+            'pageIndex' => $pageIndex,
+            'showListing' => true
+        ));
     }
 }
