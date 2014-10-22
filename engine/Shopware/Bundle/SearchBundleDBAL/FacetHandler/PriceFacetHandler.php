@@ -156,10 +156,10 @@ class PriceFacetHandler implements FacetHandlerInterface
             $facet->getName(),
             $criteria->hasCondition($facet->getName()),
             $this->snippetNamespace->get($facet->getName(), 'Price'),
-            $min,
-            $max,
-            $activeMin,
-            $activeMax,
+            (float) $min,
+            (float) $max,
+            (float) $activeMin,
+            (float) $activeMax,
             $this->minFieldName,
             $this->maxFieldName
         );

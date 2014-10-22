@@ -1,6 +1,8 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
+    var $body = $('body');
+
     /**
      * Plugin for handling the filter functionality and
      * all other actions for changing the product listing.
@@ -127,8 +129,8 @@
             /**
              * The characters used as a prefix to identify property field names.
              * The properties will be merged in one GET parameter.
-             * For example properties with field names beginning with --f-"Id"
-             * will be merged to &f=id1|id2|id3|id4 etc.
+             * For example properties with field names beginning with __f__"ID"
+             * will be merged to &f=ID1|ID2|ID3|ID4 etc.
              *
              */
             propertyPrefixChar: '__',
@@ -166,11 +168,13 @@
             me.controllerURL = top.location.href.split('?')[0];
             me.categoryId = me.$el.attr('data-category-id');
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
+            me.propertyFieldNames = [];
             me.activeFilterElements = {};
             me.categoryParams = {};
             me.urlParams = '';
             me.bufferTimeout = false;
 
+            me.getPropertyFieldNames();
             me.setCategoryParamsFromTopLocation();
             me.createActiveFiltersFromCategoryParams();
             me.createUrlParams();
@@ -215,6 +219,8 @@
             me._on(me.$actionLinks, 'click', $.proxy(me.onActionLink, me));
             me._on(me.$filterComponents, 'onChange', $.proxy(me.onComponentChange, me));
             me._on(me.$filterTrigger, 'click', $.proxy(me.onFilterTriggerClick, me));
+
+            me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
             me.$el.delegate('.' + me.opts.activeFilterCls, 'click', $.proxy(me.onActiveFilterClick, me));
         },
@@ -294,6 +300,22 @@
         },
 
         /**
+         * Closes all filter panels if the user clicks anywhere else.
+         *
+         * @param event
+         */
+        onBodyClick: function(event) {
+            var me = this,
+                $target = $(event.target);
+
+            if (!$target.is(me.opts.filterComponentSelector + ', ' + me.opts.filterComponentSelector + ' *')) {
+                $.each(me.$filterComponents, function(index, item) {
+                    $(item).data('plugin_filterComponent').close();
+                });
+            }
+        },
+
+        /**
          * Called by event listener on the change event of the
          * single filter components. Applies the changes of the
          * component values to the category params.
@@ -337,6 +359,23 @@
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
+        },
+
+        getPropertyFieldNames: function() {
+            var me = this;
+
+            $.each(me.$filterComponents, function(index, item) {
+                var $comp = $(item),
+                    type = $comp.attr('data-filter-type'),
+                    fieldName = $comp.attr('data-field-name');
+
+                if ((type == 'value-list' || type == 'media') &&
+                    me.propertyFieldNames.indexOf(fieldName) == -1) {
+                    me.propertyFieldNames.push(fieldName);
+                }
+            });
+
+            return me.propertyFieldNames;
         },
 
         /**
@@ -391,13 +430,14 @@
                 params = urlParams.split('&');
 
             $.each(params, function(index, item) {
-                var param = item.split('='),
-                    properties = param[1].split('|');
+                var param = item.split('=');
 
                 if (param[1] == 'reset') {
                     delete me.categoryParams[param[0]];
 
-                } else if (properties.length > 1) {
+                } else if (me.propertyFieldNames.indexOf(param[0]) != -1) {
+                    var properties = param[1].split('|');
+
                     $.each(properties, function(index, property) {
                         me.categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
                     });

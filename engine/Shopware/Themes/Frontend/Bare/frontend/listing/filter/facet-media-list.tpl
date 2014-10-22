@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_media_list"}
     <div class="filter-panel filter--media facet--{$facet->getFacetName()}"
-         data-filter-type="media">
+         data-filter-type="media"
+         data-field-name="{$facet->getFieldName()}">
 
         {block name="frontend_listing_filter_facet_media_list_flyout"}
             <div class="filter-panel--flyout">
@@ -33,18 +34,23 @@
                                                        id="__{$facet->getFieldName()}__{$option->getId()}"
                                                        name="__{$facet->getFieldName()}__{$option->getId()}"
                                                        value="{$option->getId()}"
+                                                       title="{$option->getLabel()}"
                                                        {if $option->isActive()}checked="checked" {/if}/>
                                             {/block}
 
                                             {block name="frontend_listing_filter_facet_media_list_label"}
-                                                {$media = $option->getMedia()}
+                                                {$mediaFile = {link file='frontend/_public/src/img/no-picture.jpg'}}
+                                                {if $option->getMedia()}
+                                                    {$mediaFile = $option->getMedia()->getFile()}
+                                                {/if}
 
                                                 <label class="filter-panel--media-label"
                                                        for="__{$facet->getFieldName()}__{$option->getId()}">
                                                     <img class="filter-panel--media-image"
-                                                         src="{$media->getFile()}"
+                                                         src="{$mediaFile}"
                                                          alt="{$option->getLabel()}" />
                                                 </label>
+
                                             {/block}
                                         </li>
                                     {/block}
