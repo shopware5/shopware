@@ -32,10 +32,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Cron',
             'onGetControllerPath'
         );
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_AfterSendResponse',
-            'onAfterSendResponse'
-        );
+
         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_Cron',
             'onInitResourceCron'
@@ -98,11 +95,6 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
     {
         return $this->Path() . 'Cron.php';
-    }
-
-    public function onAfterSendResponse(Enlight_Event_EventArgs $args)
-    {
-        //Shopware()->Cron()->runCronJobs();
     }
 
     public function onInitResourceCron(Enlight_Event_EventArgs $args)
