@@ -59,13 +59,14 @@
     }
 
     &:disabled,
-    &.is--disabled {
+    &:disabled:hover,
+    &.is--disabled,
+    &.is--disabled:hover {
         .opacity(0.5);
+		.linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
+		border: 1px solid @btn-default-border-color;
+		color: @btn-default-text-color;
         cursor: not-allowed;
-
-        &:hover {
-            color: @text-color;
-        }
     }
 
     &:hover {

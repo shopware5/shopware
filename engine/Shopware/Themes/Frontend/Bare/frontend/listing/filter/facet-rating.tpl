@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_rating"}
     <div class="filter-panel filter--rating facet--{$facet->getFacetName()}"
-         data-filter-type="rating">
+         data-filter-type="rating"
+         data-field-name="{$facet->getFieldName()}">
 
         {block name="frontend_listing_filter_facet_rating_flyout"}
             <div class="filter-panel--flyout">

@@ -30,7 +30,9 @@
 
 							{block name="frontend_listing_actions_filter_submit_button"}
 								<div class="filter--actions">
-									<button type="submit" class="btn btn--primary filter--btn-apply">
+									<button type="submit"
+									        class="btn is--primary filter--btn-apply"
+									        disabled="disabled">
 										<span class="filter--count"></span>
 										{s name="ListingFilterApplyButton"}Produkte anzeigen{/s}
 										<i class="icon--cycle"></i>
