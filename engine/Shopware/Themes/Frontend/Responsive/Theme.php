@@ -727,7 +727,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_label-font-size',
                 '@label-font-size',
-                '12'
+                '14'
             )
         );
         $fieldSetLabels->addElement(
