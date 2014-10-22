@@ -185,6 +185,10 @@ In this document you will find a changelog of the important changes related to t
         * sCalculatingPrice
         * calculateCheapestBasePriceData
 * sCategories::sGetCategories returns no more the articleCount and the position of each category. Categories always sorted by the position and filtered by the active flag.
+* Removed `Enlight_Controller_Front::returnResponse()` and config option `front.returnResponse`
+    * This option was hardcoded to `true` since SW 4.2
+* Removed `Shopware_Plugins_Core_Cron_Bootstrap::onAfterSendResponse`
+* Removed events `Enlight_Controller_Front_SendResponse` and `Enlight_Controller_Front_AfterSendResponse`
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.

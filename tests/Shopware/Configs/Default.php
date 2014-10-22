@@ -2,7 +2,6 @@
 return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), array(
      'front' => array(
         'throwExceptions' => true,
-        'returnResponse' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
     ),
