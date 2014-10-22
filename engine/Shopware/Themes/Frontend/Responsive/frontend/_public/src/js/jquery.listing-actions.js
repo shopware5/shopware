@@ -190,7 +190,7 @@
             var me = this;
 
             StateManager.registerListener([{
-                type: 'smartphone',
+                type: 'xs',
                 enter: function() {
                     me.$filterForm.removeAttr('style');
 
@@ -286,7 +286,8 @@
         onFilterTriggerClick: function(event) {
             event.preventDefault();
 
-            if (StateManager.getCurrent() == 'smartphone') {
+            if (StateManager.getCurrent() === 'xs' ||
+                StateManager.getCurrent() === 's') {
                 return;
             }
 
@@ -601,7 +602,8 @@
         updateFilterTriggerButton: function(activeFilterCount) {
             var me = this;
 
-            if (StateManager.getCurrent() !== 'smartphone') {
+            if (!StateManager.getCurrent() === 'xs' ||
+                !StateManager.getCurrent() === 's') {
                 return;
             }
 
@@ -641,7 +643,8 @@
                 me.createActiveFilterElement('reset', me.resetLabel);
             }
 
-            if (StateManager.getCurrent() == 'smartphone') {
+            if (StateManager.getCurrent() === 'xs' ||
+                StateManager.getCurrent() === 's') {
                 me.updateFilterTriggerButton(count);
             } else {
                 me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
