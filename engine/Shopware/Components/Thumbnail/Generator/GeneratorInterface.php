@@ -34,7 +34,6 @@ namespace Shopware\Components\Thumbnail\Generator;
  * and call the createThumbnail function which takes
  * the image path, destination and size of the thumbnail
  *
- * Class GeneratorInterface
  * @category    Shopware
  * @package     Shopware\Components\Thumbnail\Generator
  * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
@@ -45,11 +44,11 @@ interface GeneratorInterface
      * This function creates a thumbnail from the given image path
      * and saves it to the defined destination with the given size
      *
-     * @param $image - original image path
-     * @param $destination - full path of the generated thumbnail
-     * @param $width - width in pixel
-     * @param $height - height in pixel
-     * @return mixed
+     * @param string $image - original image path
+     * @param string $destination - full path of the generated thumbnail
+     * @param int    $width - width in pixel
+     * @param int    $height - height in pixel
+     * @param bool   $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
      */
-    public function createThumbnail($image, $destination, $width, $height);
+    public function createThumbnail($image, $destination, $width, $height, $keepProportions = false);
 }
