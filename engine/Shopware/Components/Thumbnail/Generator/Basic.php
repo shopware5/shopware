@@ -39,15 +39,7 @@ namespace Shopware\Components\Thumbnail\Generator;
 class Basic implements GeneratorInterface
 {
     /**
-     * This method creates a new thumbnail based on the given parameters
-     *
-     * @param String $imagePath - full path of the original image
-     * @param String $destination - full path of the thumbnail where it should be created
-     * @param Int $width - width of the thumbnail
-     * @param Int $height - height of the thumbnail
-     * @param bool $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
-     * @throws \Exception
-     * @return void
+     * {@inheritdoc}
      */
     public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false)
     {
