@@ -6,7 +6,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="blog--detail panel has--border is--rounded block-group listing listing--listing-1col">
+    <div class="blog--detail panel block-group listing listing--listing-1col">
 
         {* Content *}
         {block name='frontend_blog_detail_content'}
