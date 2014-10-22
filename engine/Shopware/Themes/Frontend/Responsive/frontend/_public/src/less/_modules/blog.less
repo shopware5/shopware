@@ -408,11 +408,13 @@
                 border: 1px solid @border-color;
             }
 
-            .panel--title {
+            .blog--sidebar-title {
                 .unitize-padding(20, 0, 10, 0, 16);
                 .unitize-margin(0, 20, 0, 20, 16);
+                .border-radius(0);
                 color: @text-color-dark;
-                border-width: 0 0 0 0;
+                border-color: @border-color;
+                border-width: 0 0 1px 0;
                 display: block;
                 font-weight: bold;
                 background: none;
@@ -420,13 +422,7 @@
                 cursor: default;
             }
 
-            .is--underline {
-                .border-radius(0);
-                border-color: @border-color;
-                border-width: 0 0 1px 0;
-            }
-
-            .panel--body {
+            .blog--sidebar-body {
                 .unitize-padding(20, 20, 20, 20, 16);
                 border: 0 none;
                 -webkit-box-shadow: none;

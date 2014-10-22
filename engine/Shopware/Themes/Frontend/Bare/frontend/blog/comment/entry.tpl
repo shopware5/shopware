@@ -25,7 +25,9 @@
                                 <div class="meta--author">
 
                                     {block name='frontned_blog_comments_comment_author_label'}
-                                        <strong class="author--label">{s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}</strong>
+                                        <strong class="author--label">
+                                            {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
+                                        </strong>
                                     {/block}
 
                                     {block name='frontned_blog_comments_comment_author_name'}
@@ -40,11 +42,15 @@
                                 <div class="meta--date">
 
                                     {block name='frontend_blog_commetns_comment_date_label'}
-                                        <strong class="date--label">{s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}Am:{/s}</strong>
+                                        <strong class="date--label">
+                                            {s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}Am:{/s}
+                                        </strong>
                                     {/block}
 
                                     {block name='frontend_blog_comments_comment_date_creationdate'}
-                                        <span class="date--creation" itemprop="commentTime">{$vote.creationDate|date:date_long}</span>
+                                        <span class="date--creation" itemprop="commentTime">
+                                            {$vote.creationDate|date:date_long}
+                                        </span>
                                     {/block}
 
                                 </div>

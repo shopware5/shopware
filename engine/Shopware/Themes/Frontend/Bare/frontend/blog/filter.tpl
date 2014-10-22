@@ -2,16 +2,16 @@
 
 	{* Filter by date *}
 	{block name='frontend_blog_filter_date'}
-		<div class="blog--filter blog--filter-date panel has--border is--rounded filter--group block">
+		<div class="blog--filter blog--filter-date has--border is--rounded filter--group block">
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_date_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{* Filter content *}
 			{block name="frontend_blog_filter_date_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content">
+				<div class="blog--filter-content blog--sidebar-body collapse--content">
 					<ul class="filter--list list--unstyled">
 						{foreach $sFilterDate as $date}
 							{if !$date.removeProperty}
@@ -36,16 +36,16 @@
 
 	{* Filter by author *}
 	{block name='frontend_blog_filter_author'}
-		<div class="blog--filter blog--filter-author panel has--border is--rounded filter--group block">
+		<div class="blog--filter blog--filter-author has--border is--rounded filter--group block">
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_author_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{* Filter content *}
 			{block name="frontend_blog_filter_author_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content {if $filterAuthorActive}is--active{/if}">
+				<div class="blog--filter-content blog--sidebar-body collapse--content {if $filterAuthorActive}is--active{/if}">
 					<ul class="filter--list list--unstyled">
 						{foreach $sFilterAuthor as $author}
 							{if !$author.removeProperty}
@@ -70,16 +70,16 @@
 
     {* Filter by tags *}
     {block name='frontend_blog_filter_tags'}
-		<div class="blog--filter blog--filter-tags panel has--border is--rounded filter--group block">
+		<div class="blog--filter blog--filter-tags has--border is--rounded filter--group block">
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_tags_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{* Filter content *}
 			{block name="frontend_blog_filter_tags_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content">
+				<div class="blog--filter-content blog--sidebar-body collapse--content">
 					<ul class="filter--list list--unstyled">
 						{foreach $sFilterTags as $tag}
 							{if !$tag.removeProperty}

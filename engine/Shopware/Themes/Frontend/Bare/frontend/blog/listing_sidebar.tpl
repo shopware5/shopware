@@ -29,16 +29,16 @@
 
 							{* Subscribe Atom + RSS *}
 							{block name='frontend_blog_index_subscribe'}
-								<div class="blog--subscribe panel has--border is--rounded filter--group block">
+								<div class="blog--subscribe has--border is--rounded filter--group block">
 
 									{* Subscribe headline *}
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 									{/block}
 
 									{* Subscribe Content *}
 									{block name="frontend_blog_index_subscribe_content"}
-										<div class="blog--subscribe-content panel--body is--wide collapse--content">
+										<div class="blog--subscribe-content blog--sidebar-body collapse--content">
 											<ul class="filter--list list--unstyled">
 												{block name="frontend_blog_index_subscribe_entry_rss"}
 													<li class="filter--entry"><a class="filter--entry-link" href="{$sCategoryContent.rssFeed}" title="{$sCategoryContent.description|escape}">{s namespace="frontend/blog/index" name="BlogLinkRSS"}{/s}</a></li>

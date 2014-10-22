@@ -5,7 +5,12 @@
 
 		{block name='frontend_blog_comments_form_headline'}
             <div class="comments--actions">
-			    <a class="btn is--primary is--icon-right btn--create-entry" data-collapse-panel="true" data-collapseTarget=".comment--collapse-target">{s name="BlogHeaderWriteComment"}{/s} <i class="icon--arrow-right"></i></a>
+			    <a class="btn is--primary is--icon-right btn--create-entry"
+                   data-collapse-panel="true"
+                   data-collapseTarget=".comment--collapse-target">
+                    {s name="BlogHeaderWriteComment"}{/s}
+                    <i class="icon--arrow-right"></i>
+                </a>
             </div>
         {/block}
 
@@ -30,14 +35,23 @@
 			{* Name *}
 			{block name='frontend_blog_comments_input_name'}
 				<div class="blog--comments-name">
-					<input name="name" type="text" placeholder="{s name="BlogLabelName"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{$sFormData.name|escape}" class="input--field{if $sErrorFlag.name} has--error{/if}" />
+					<input name="name" type="text"
+                           placeholder="{s name="BlogLabelName"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                           required="required" aria-required="true"
+                           value="{$sFormData.name|escape}"
+                           class="input--field{if $sErrorFlag.name} has--error{/if}" />
 				</div>
 			{/block}
 
 			{* E-Mail *}
 			{block name='frontend_blog_comments_input_mail'}
 				<div class="blog--comments-email">
-					<input name="eMail" type="email" placeholder="{s name="BlogLabelMail"}{/s}{if {config name=OptInVote}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"{if {config name=OptInVote}} required="required" aria-required="true"{/if} value="{$sFormData.eMail|escape}" class="input--field{if $sErrorFlag.eMail} has--error{/if}" />
+					<input name="eMail" type="email"
+                           placeholder="{s name="BlogLabelMail"}{/s}{if {config name=OptInVote}}{s name="RequiredField"
+                           namespace="frontend/register/index"}{/s}{/if}"
+                            {if {config name=OptInVote}}required="required" aria-required="true"{/if}
+                            value="{$sFormData.eMail|escape}"
+                            class="input--field{if $sErrorFlag.eMail} has--error{/if}" />
 				</div>
 			{/block}
 
@@ -63,14 +77,21 @@
 			{* Summary *}
 			{block name='frontend_blog_comments_input_summary'}
 				<div class="blog--comments-summary">
-					<input name="headline" type="text" placeholder="{s name="BlogLabelSummary"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{$sFormData.headline|escape}" class="input--field{if $sErrorFlag.headline} has--error{/if}" />
+					<input name="headline"
+                           type="text"
+                           placeholder="{s name="BlogLabelSummary"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                           required="required" aria-required="true"
+                           value="{$sFormData.headline|escape}"
+                           class="input--field{if $sErrorFlag.headline} has--error{/if}" />
 				</div>
 			{/block}
 
 			{* Opinion *}
 			{block name='frontend_blog_comments_input_comment'}
 				<div class="blog--comments-opinion">
-					<textarea name="comment" type="text" placeholder="{s name="BlogLabelComment"}{/s}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">{$sFormData.comment|escape}</textarea>
+					<textarea name="comment" type="text" placeholder="{s name="BlogLabelComment"}{/s}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">
+                        {$sFormData.comment|escape}
+                    </textarea>
 				</div>
 			{/block}
 
