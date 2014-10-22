@@ -142,7 +142,7 @@
     }
 
     .main-search--field {
-        .unitize-padding(10, 38, 10, 10, 16);
+        .unitize-padding(9, 38, 9, 9, 16);
         width: 100%;
     }
     .main-search--button { display: none; }
@@ -503,25 +503,29 @@
         // Shop navigation quantity badges
         .cart--quantity,
         .notes--quantity {
-            .unitize-padding(1, 7, 1, 7, 16);
+            .unitize-padding(0, 5);
+            .unitize(22, 16, line-height);
+            .unitize(22, 16, height);
+            .unitize(12, 16, min-width);
             .unitize(14, 16, font-size);
             .border-radius(50px);
-            background: #fff;
+            .box-sizing(content-box);
             position: absolute;
             top: -4px;
-            left: 26px;
+            left: 22px;
             display: inline-block;
-            text-align: center;
             z-index: 500;
-            color: @brand-primary;
             font-weight: @font-bold-weight;
+            text-align: center;
+            background: #fff;
+            color: @brand-primary;
             border: 1px solid @border-color;
         }
 
         .cart--quantity {
             .primary-gradient();
             color: #fff;
-            border: none;
+            border: 0 none;
         }
 
         .btn:hover .notes--quantity {
