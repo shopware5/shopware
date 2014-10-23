@@ -37,7 +37,7 @@
     // Actions above the actual table body
     .table--actions {
         .clearfix();
-        .unitize-padding(20, 0, 0);
+        .unitize-padding(20, 0, 10);
         position: relative;
 
         .is--secondary {
@@ -469,6 +469,12 @@
         border: 1px solid @border-color;
     }
 
+    .confirm--actions {
+        input[type="submit"] {
+            .unitize(16, 16, padding-left);
+        }
+    }
+
     .payment--method-list,
     .dispatch--method-list {
         .unitize(10, 16, margin-bottom);
@@ -476,30 +482,36 @@
 
     .payment--method,
     .dispatch--method {
-        .unitize(10, 16, padding-top);
+        .unitize(10, 16, padding-bottom);
+        .unitize(10, 16, margin-bottom);
+        border-bottom: 1px solid @border-color;
 
-        input[type="radio"] {
-            .unitize(10, 16, margin-right);
+        &:nth-last-child(2) {
+            border: 0 none;
         }
     }
 
-    .confirm--actions {
+    .method--input {
+        .unitize(40, 16, width);
+        text-align: center;
+        float: left;
+    }
 
-        input[type="submit"] {
-            .unitize(16, 16, padding-left);
-        }
+    .method--label {
+        .unitize(40, 16, padding-left);
+        width: 100%;
     }
 
     .method--description {
-        .unitize(26, 16, margin-left);
+        .unitize(40, 16, padding-left);
     }
 
     .payment--method-logo {
-        .unitize-margin(10, 0, 0, 26, 16);
+        .unitize(40, 16, margin-left);
     }
 
     .method--bankdata {
-        .unitize-margin(10, 0, 0, 0, 16);
+        .unitize(40, 16, padding-left);
 
         input[type="text"] {
             max-width: 100%;
@@ -532,7 +544,7 @@
         .row--premium-product { height: 100%; }
 
         .panel--body {
-            .unitize-padding(14, 20, 20, 20);
+            .unitize-padding(20, 20);
             border: 1px solid @border-color;
         }
 
@@ -563,10 +575,6 @@
                 font-weight: bold;
                 color: @text-color-dark;
             }
-        }
-
-        .table--actions {
-            .unitize-padding(20, 0, 10);
         }
 
         // Basic layout
@@ -751,10 +759,6 @@
             .basket--footer {
                 border: 1px solid @border-color;
                 margin: 0;
-            }
-
-            .method--bankdata {
-                .unitize-margin(10, 0, 0, 27, 16);
             }
         }
     }
