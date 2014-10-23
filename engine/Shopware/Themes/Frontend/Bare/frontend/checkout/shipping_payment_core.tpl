@@ -9,7 +9,7 @@
 		{* Action top *}
 		{block name='frontend_checkout_shipping_payment_core_buttons'}
 			<div class="confirm--actions table--actions block">
-				<input type="submit" value="{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}" class="btn is--primary right main--actions" />
+				<button type="submit" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}<i class="icon--arrow-right"></i></button>
 			</div>
 		{/block}
 
@@ -19,7 +19,7 @@
             {* Payment method *}
             <div class="confirm--inner-container block">
                 {block name='frontend_checkout_shipping_payment_core_payment_fields'}
-                    {include file='frontend/checkout/change_payment.tpl'}
+                    {include file='frontend/checkout/change_payment.tpl' form_data=$sFormData error_flags=$sErrorFlag payment_means=$sPaymentMeans}
                 {/block}
             </div>
 
@@ -44,7 +44,7 @@
     {* Action bottom *}
     {block name='frontend_checkout_shipping_payment_core_buttons'}
         <div class="confirm--actions table--actions block">
-            <input type="submit" form="shippingPaymentForm" value="{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}" class="btn is--primary right main--actions" />
+            <button type="submit" form="shippingPaymentForm" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}<i class="icon--arrow-right"></i></button>
         </div>
     {/block}
 
