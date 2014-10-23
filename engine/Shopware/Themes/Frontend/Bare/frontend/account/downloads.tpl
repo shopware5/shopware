@@ -25,7 +25,7 @@
 
 		{* Welcome text *}
 		{block name="frontend_account_downloads_welcome"}
-			<div class="account--welcome panel">
+			<div class="account--welcome panel has--border">
 				{block name="frontend_account_downloads_welcome_headline"}
 					<h1 class="panel--title">{s name="DownloadsHeader"}{/s}</h1>
 				{/block}
@@ -47,7 +47,7 @@
 			{/block}
 	    {else}
 			{block name="frontend_account_downloads_table"}
-				<div class="account--downloads panel--table">
+				<div class="account--downloads panel panel--table">
 
 					{block name="frontend_account_downloads_table_head"}
 						<div class="downloads--table-header panel--tr">
