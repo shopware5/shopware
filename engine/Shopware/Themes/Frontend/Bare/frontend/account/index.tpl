@@ -34,7 +34,7 @@
 
 		{* Welcome text *}
 		{block name="frontend_account_index_welcome"}
-			<div class="account--welcome panel">
+			<div class="account--welcome panel has--border">
 				{block name="frontend_account_index_welcome_headline"}
 					<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</h1>
 				{/block}

@@ -888,7 +888,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_panel-table-header-bg',
                 '@panel-table-header-bg',
-                '#FFFFFF'
+                '@panel-bg'
             )
         );
         $fieldSetTables->addElement(

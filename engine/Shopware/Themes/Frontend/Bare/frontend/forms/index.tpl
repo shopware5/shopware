@@ -16,7 +16,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="forms--content content block panel right">
+	<div class="forms--content content block right">
 
 		{* Form error *}
 		{block name='frontend_forms_elements_error'}
@@ -46,7 +46,7 @@
 
 		{* Forms headline *}
 		{block name='frontend_forms_index_headline'}
-			<div class="forms--headline panel--body is--wide">
+			<div class="forms--headline panel panel--body is--wide has--border">
 				{if $sSupport.sElements}
 					<h1 class="forms--title">{$sSupport.name}</h1>
 					<div class="forms--text">{eval var=$sSupport.text}</div>

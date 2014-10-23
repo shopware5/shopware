@@ -15,21 +15,21 @@
 
     .product--table {
 
-        .panel--body{
+        .panel--body {
             background: @panel-bg;
             color: @text-color;
-            border-color: @border-color;
+            border-color: @panel-border;
             padding-bottom: 0;
         }
 
         .table--row,
         .table--media img {
-            border-color: @border-color;
+            border-color: @panel-border;
         }
 
-        .basket--footer{
-            background: @gray;
-            border-color: @border-color;
+        .basket--footer {
+            background: darken(@panel-bg, 4%);
+            border-color: @panel-border;
 
             .aggregation--list {
                 background: transparent;
@@ -113,10 +113,6 @@
 
         .panel {
             .unitize-margin(20, 0);
-        }
-
-        .panel--body {
-            background: #fff;
         }
 
         .product--table {

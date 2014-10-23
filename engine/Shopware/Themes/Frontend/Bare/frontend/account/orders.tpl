@@ -11,7 +11,7 @@
 
         {* Welcome text *}
         {block name="frontend_account_orders_welcome"}
-            <div class="account--welcome panel">
+            <div class="account--welcome panel has--border">
                 {block name="frontend_account_orders_welcome_headline"}
                     <h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
                 {/block}
