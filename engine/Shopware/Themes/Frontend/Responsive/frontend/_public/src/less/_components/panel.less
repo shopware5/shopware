@@ -186,19 +186,17 @@ See the documentation of the child elements for additional information.
     border-width: 0 0 1px 0;
     border-style: solid;
     border-color: @panel-border;
-    background: @table-row-bg;
-
 
     &:last-child {
         border-width: 0;
     }
 
     &.is--odd {
-        background: @table-row-highlight-bg;
+        background: darken(@panel-bg, 4%);
     }
 
     &.is--secondary {
-        background: @table-row-highlight-bg;
+        background: darken(@panel-bg, 4%);
     }
 
     &.is--primary {
@@ -218,7 +216,7 @@ See the documentation of the child elements for additional information.
     &.has--border {
         border-width: 0 1px 0 0;
         border-style: solid;
-        border-color: @border-color;
+        border-color: @panel-border;
 
         &:last-child {
             border-width: 0;

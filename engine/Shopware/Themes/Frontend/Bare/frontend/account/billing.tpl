@@ -11,7 +11,7 @@
 
 		{* Billing headline *}
 		{block name="frontend_account_billing_headline"}
-			<div class="account--welcome">
+			<div class="account--welcome has--border">
 				<h1 class="panel--title">{s name='BillingHeadline'}{/s}</h1>
 			</div>
 		{/block}

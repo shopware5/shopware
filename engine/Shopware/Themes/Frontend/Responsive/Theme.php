@@ -727,7 +727,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_label-font-size',
                 '@label-font-size',
-                '12'
+                '14'
             )
         );
         $fieldSetLabels->addElement(
@@ -888,7 +888,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 '_panel-table-header-bg',
                 '@panel-table-header-bg',
-                '#FFFFFF'
+                '@panel-bg'
             )
         );
         $fieldSetTables->addElement(
