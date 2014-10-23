@@ -16,13 +16,18 @@
                 {* Product image *}
                 {block name='frontend_checkout_cart_item_image'}
                     <div class="table--media">
-                        {if $sBasketItem.image.src.2}
-                            <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
-                                <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
-                            </a>
-                        {else}
-                            <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
-                        {/if}
+                        <div class="table--media-outer">
+                            <div class="table--media-inner">
+                                {if $sBasketItem.image.src.2}
+                                    <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                                        <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                    </a>
+
+                                {else}
+                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
+                                {/if}
+                            </div>
+                        </div>
                     </div>
                 {/block}
 
@@ -120,7 +125,7 @@
         {* Remove product from basket *}
         {block name='frontend_checkout_cart_item_delete_article'}
             <div class="table--column column--actions block">
-                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
                 	<i class="icon--cross"></i>
                 </a>
             </div>
