@@ -4,6 +4,10 @@
         .unitize-margin(30, 0);
     }
 
+    .basket--info-messages {
+        .unitize(10, 16, margin-top);
+    }
+
     .account--change-billing,
     .account--billing-address,
     .account--change-shipping,
@@ -12,13 +16,12 @@
     }
 }
 
-.content--basket {
-    .alert {
-        .unitize-margin(15, 0);
-    }
-}
-
 .product--table {
+    .unitize(10, 16, margin-top);
+
+    .alert {
+        .unitize(10, 16, margin-bottom);
+    }
 
     .is--no-star {
         .unitize(-6, 16, margin-left);
@@ -26,6 +29,11 @@
     .panel {
         border: 0 none;
     }
+
+    .panel--body {
+        padding: 0;
+    }
+
     .premium-product.panel {
         border: 1px solid @border-color;
     }
@@ -37,11 +45,12 @@
     // Actions above the actual table body
     .table--actions {
         .clearfix();
-        .unitize-padding(20, 0, 10);
         position: relative;
+    }
 
-        .is--secondary {
-            .unitize(5, 16, margin-right);
+    .actions--bottom {
+        .main--actions {
+            .unitize(10, 16, margin-bottom);
         }
     }
 
@@ -51,7 +60,7 @@
     }
 
     .table--row {
-        .unitize-padding(10, 0);
+        .unitize-padding(20, 0);
         .clearfix();
         position: relative;
         border-bottom: 1px solid @border-color;
@@ -71,25 +80,49 @@
     // Product image
     .table--media {
         width: 20%;
-        margin: 0 6.5% 0 0;
+        margin: 0 4.5% 0 0;
+
+        .table--media-outer {
+            .border-radius(2px);
+            .unitize-max-width(80, 16);
+            .unitize-max-height(80, 16);
+            .unitize(50, 16, min-width);
+            .unitize(50, 16, min-height);
+            border: 1px solid @border-color;
+        }
+
+        .table--media-inner {
+            width: 100%;
+            position: relative;
+            padding-bottom: 100%;
+            height: 0;
+        }
 
         img {
-            .border-radius();
-            border: 1px solid @border-color;
-            margin: 0 auto;
+            padding: 5%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
         }
     }
 
     // Content area
     .table--content {
         .unitize(12, 16, font-size);
-        width: 73.5%;
+        width: 60.5%;
     }
 
     .product--delivery,
     .delivery--status-icon {
         .unitize(12, 16, font-size);
         margin: 0;
+    }
+
+    .delivery--information {
+        .unitize(14, 16, font-size);
     }
 
     // Product title
@@ -102,25 +135,42 @@
     // Product actions
     .column--actions {
         position: absolute;
-        bottom: 20%;
         width: 20%;
-        text-align: center;
+        right: 0;
+        text-align: right;
+
+        .column--actions-link {
+            .unitize(38, 16, line-height);
+            .unitize-padding(0, 13, 0, 14);
+        }
+
+        .icon--cross {
+            .unitize(12, 16, font-size);
+        }
     }
 
     .column--label {
         color: @text-color-dark;
         text-align: left;
-        margin: 0 0 0 26.5%;
+        margin: 0 0 0 24.5%;
         float: left;
         font-weight: bold;
+
+        &.quantity--label {
+            .unitize(11, 16, margin-top);
+        }
     }
 
     .row--rebate .column--label {
-        margin: 0 0 0 26.5%;
+        margin: 0 0 0 24.5%;
     }
 
     .column--total-price {
         font-weight: bold;
+    }
+
+    .column--product {
+        .unitize(10, 16, padding-bottom);
     }
 
     .column--quantity .js--fancy-select {
@@ -169,7 +219,7 @@
 
     // Add product using the sku
     .add-product--form {
-        .unitize-margin(12, 0);
+        .unitize-margin(20, 0);
     }
 
     .add-product--field,
@@ -180,8 +230,7 @@
 
     .add-product--button,
     .add-voucher--button {
-        .unitize(36, 16, line-height);
-        .unitize-padding(2, 0);
+        .unitize-padding(3, 0);
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
     }
@@ -195,13 +244,13 @@
     }
 
     .table--aggregation {
-        .unitize-margin(0, -20);
-        .unitize-padding(12, 20);
+        .unitize-margin(0, -10);
+        .unitize-padding(12, 10);
         background: @gray-light;
         border: 1px solid @border-color;
         border-left: 0 none;
         border-right: 0 none;
-
+        border-bottom: 0 none;
     }
 
     .table--shipping-costs .js--fancy-select {
@@ -213,12 +262,22 @@
     }
 
     .main--actions {
-        .unitize-margin(0, 0, 8, 0);
         .clearfix();
     }
 
     .table--footer {
-        display: none;
+        .unitize(14, 16, font-size);
+
+        .benefit--text {
+            .unitize(14, 16, font-size);
+        }
+        .benefit--list .list--entry {
+            .unitize(24, 16, line-height);
+        }
+        .benefit--list .icon--check {
+            .unitize(10, 16, font-size);
+            .unitize(10, 16, padding-right);
+        }
     }
 
     .benefit--headline {
@@ -229,8 +288,8 @@
 }
 
 .aggregation--list {
-    .unitize-margin(0, -20);
-    .unitize-padding(12, 20);
+    .unitize-margin(0, -10);
+    .unitize-padding(12, 10);
     background: @gray-light;
     border-bottom: 1px solid @border-color;
 
@@ -247,7 +306,7 @@
 
     .entry--total {
         font-weight: bold;
-        color: @text-color;
+        color: @text-color-dark;
     }
 }
 
@@ -557,10 +616,14 @@
     }
 }
 
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     .product--table {
-        .unitize-margin(20, 0);
+        .unitize-margin(45, 0);
 
         .product--delivery { float: left }
 
@@ -684,7 +747,7 @@
             .unitize(28, 16, padding-bottom);
             .clearfix();
             border-top: 1px solid @border-color;
-            background: @panel-bg;
+            background: @gray-light;
         }
 
         .aggregation--list,

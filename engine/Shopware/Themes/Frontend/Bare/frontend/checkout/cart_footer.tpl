@@ -48,7 +48,7 @@
 
                 {block name='frontend_checkout_shipping_costs_country_trigger'}
                     <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
-                        <i class="icon--arrow-right"></i> {s name='CheckoutFooterEstimatedShippingCosts'}{/s}
+                        {s name='CheckoutFooterEstimatedShippingCosts'}{/s} <i class="icon--arrow-right"></i>
                     </a>
                 {/block}
 
