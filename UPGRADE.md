@@ -189,6 +189,12 @@ In this document you will find a changelog of the important changes related to t
     * This option was hardcoded to `true` since SW 4.2
 * Removed `Shopware_Plugins_Core_Cron_Bootstrap::onAfterSendResponse`
 * Removed events `Enlight_Controller_Front_SendResponse` and `Enlight_Controller_Front_AfterSendResponse`
+* Removed table columns `s_core_auth.admin` and `s_core_auth.salted`
+* Removed methods
+    * `\Shopware\Models\User\User::setAdmin()`
+    * `\Shopware\Models\User\User::getAdmin()`
+    * `\Shopware\Models\User\User::setSalted()`
+    * `\Shopware\Models\User\User::getSalted()`
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
