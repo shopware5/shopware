@@ -42,7 +42,6 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
-        $this->Front()->returnResponse(true);
     }
 
     /**

@@ -444,7 +444,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $this->Front()->setParam('disableOutputBuffering', true);
-        $this->Front()->returnResponse(true);
 
         $this->Response()->setHeader('Content-Type', 'text/javascript; charset=utf-8');
         $this->Response()->sendResponse();
