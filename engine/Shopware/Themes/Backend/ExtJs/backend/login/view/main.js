@@ -35,8 +35,8 @@
  */
 Ext.define('Shopware.apps.Login.view.Main', {
     extend: 'Ext.window.Window',
-    width: 476,
-    height: 321,
+    width: 360,
+    height: 435,
     ui: 'shopware-ui',
     cls: 'login-window',
     shadow: false,

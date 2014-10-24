@@ -32,9 +32,12 @@
 .#{$prefix}accordion-hd {
     @include reset-box-shadow;
 	border-color: #0e6ee1 !important;
-	border-width: 0 1px 1px 0 !important;
+    border-width: 1px 0 0 0 !important;
 	padding: 6px 8px 7px;
-	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAIAAABi9+OQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAASUlEQVQIHQXBsRHCAAADMfuPKViDkuEzDGXKtIkfie9x8TtvtKj4hBaczMJCDE5mcNJHkrAVlC046QYpU7T0Fh1JUKmlCZ/36w/GCzYTPL6EYwAAAABJRU5ErkJggg==") repeat-x !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent !important;
 
 	.#{$prefix}panel-header-text {
 		color: #fff;
@@ -64,11 +67,11 @@
 
 // Special first item
 .#{$prefix}accordion-item:first-child .#{$prefix}accordion-hd {
-	border-width: 1px 1px 1px 0 !important;
+    border-width: 1px 0 0 0 !important;
 }
 // Special first item
 .#{$prefix}accordion-item:last-child .#{$prefix}accordion-hd {
-	border-width: 0 1px 0 0 !important;
+    border-width: 1px 0 0 0 !important;
 }
 
 // Collpased accordion header

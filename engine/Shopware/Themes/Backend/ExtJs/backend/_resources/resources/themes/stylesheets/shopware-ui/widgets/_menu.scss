@@ -28,45 +28,102 @@
  * @author shopware AG
  */
 .shopware-ui-main-menu {
-	border-bottom: 1px solid #a8bfd1;
     position: fixed !important;
+    margin: 0 !important;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
+    -moz-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
+    -ms-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
+    box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.7) !important;
 
+    // Dropdown body
     .#{$prefix}menu-body {
         border-top: 0 none;
-        border-color: #fff;
-        background: #e2eef5 !important;
-    }
-    .#{$prefix}toolbar-separator {
-        border-bottom: 1px solid #c8d6de;
-    }
-    .#{$prefix}menu-item-link {
-        margin: 0;
-        padding: 6px 5px 6px 28px;
+        padding: 0;
+        background: #fff !important;
     }
 
-    .#{$prefix}menu-item-text {
-        color: #465C6B
+    // Normal style
+    .#{$prefix}component-default {
+        height: 26px !important;
+
+        &:first-child {
+            margin-top: 0px !important;
+            height: 28px !important;
+            padding-top: 2px;
+
+            .#{$prefix}menu-item-icon {
+                top: 6px;
+            }
+        }
+
+        &:last-child {
+            height: 27px !important;
+        }
+
+        &:only-child {
+            height: 29px !important;
+        }
+    }
+
+    .#{$prefix}menu-item {
+        overflow: visible;
+
+        .#{$prefix}menu-item-link {
+            margin: 0;
+            padding: 4px 5px 6px 36px;
+            height: 29px;
+
+            .#{$prefix}menu-item-arrow {
+                background: theme-image($theme, 'menu-parent.png') no-repeat !important;
+                top: 10px;
+            }
+        }
+
+        .#{$prefix}menu-item-icon {
+            top: 4px;
+            left: 10px;
+        }
+
+        .#{$prefix}menu-item-text {
+            color: #0e6bbb;
+        }
+
+        &:first-child {
+            margin-top: 0;
+            height: 29px;
+        }
+    }
+
+    // Separators
+    .#{$prefix}toolbar-separator {
+        border-bottom: 1px solid #e7ecf0;
+    }
+    .#{$prefix}toolbar-spacer {
+        color: #000 !important;
+        border-color: #000 !important;
     }
 
     // Active style
     .#{$prefix}menu-item-active .#{$prefix}menu-item-link {
-
-        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-                      svg-color-stop(#d0e5f5, 0%, 1),
-                      svg-color-stop(#a6cdec, 100%, 1)
-                    )) center center no-repeat transparent !important;
-
-        // Using the box shadw as the second bottom border
+        margin-top: -2px !important;
+        background: rgba(188, 213, 227, 0.3) !important;
+        // Using the box shadow as the second bottom border
         //@include single-box-shadow(#fff, 0, 1px, 0, 0);
-        @include border-radius(2px);
-        margin: 1px 0;
-        padding: 4px 5px 3px 27px;
+        height: 29px;
+        padding: 6px 5px 6px 36px;
         color: #2f3d46;
-        text-shadow: 1px 1px 1px #fff;
-        border: 1px solid #87b7e3;
-        
+        border: 0 none;
+
         .#{$prefix}menu-item-text {
 	        color: #035a9b;
+        }
+    }
+
+    .#{$prefix}menu-item-active {
+        &:first-child {
+            margin-top: 0px !important;
+            height: 29px !important;
         }
     }
 

@@ -94,13 +94,9 @@ Ext.define('Shopware.apps.Index.view.Footer', {
 
         this.items = [
             me.logoutBtn,
-            { xtype: 'tbspacer', width: 6 },
-            { xtype: 'tbseparator' },
-            { xtype: 'tbspacer', width: 6 },
+            { xtype: 'tbseparator', cls: 'separator-first' },
             me.windowBtn,
-            { xtype: 'tbspacer', width: 6 },
-            { xtype: 'tbseparator' },
-            { xtype: 'tbspacer', width: 6 },
+            { xtype: 'tbseparator', cls: 'separator-second' },
             me.widgetBtn
         ];
 

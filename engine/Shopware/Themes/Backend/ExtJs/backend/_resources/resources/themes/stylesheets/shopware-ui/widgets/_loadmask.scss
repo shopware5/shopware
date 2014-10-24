@@ -36,7 +36,7 @@
 /** Loading mask */
 .#{$prefix}mask-msg {
 	@include border-radius(3px);
-	@include box-shadow(0 1px 0 0 #F5F7F8 inset, 0 -1px 0 0 #F5F7F8 inset, -1px 0 0 0 #F5F7F8 inset, 1px 0 0 0 #F5F7F8 inset, 0 0 10px #475C6A);
+    @include box-shadow(0 2px 5px rgba(0, 55, 110, 0.2));
 	background: #fff;
 	border-color: #919da6;
 	padding: 6px;
