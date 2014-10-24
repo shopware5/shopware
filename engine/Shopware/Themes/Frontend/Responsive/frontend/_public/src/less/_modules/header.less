@@ -53,20 +53,36 @@
     position: relative;
 
     .navigation--list {
-        .white-gradient();
         width: 100%;
     }
+
     .navigation--entry {
         width: 15%;
         display: block;
         border: 1px solid @border-color;
         border-right: 0 none;
+
+        .btn {
+            .unitize-height(40, 16);
+        }
+
+        .cart--link {
+            .unitize-padding(2, 10);
+        }
+
+        .icon--basket {
+            .unitize(21, 16, font-size);
+            display: inline;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
     }
 
     .entry--link {
         //.unitize-padding(0, 10);
         //.unitize(45, 16, line-height);
-        display: block;
+        //display: block;
         text-align: center;
         text-decoration: none;
     }
@@ -104,10 +120,10 @@
             margin: 0;
         }
 
-        .entry--trigger {
-            background: none;
-            border: 0 none;
-        }
+//        .entry--trigger {
+//            background: none;
+//            border: 0 none;
+//        }
 
         &.is--active {
             background: #fff;
@@ -487,6 +503,7 @@
 //            }
 //
 //            i { .unitize(10, 16, margin-right); }
+
 //        }
 
         .entry--search .entry--trigger {
@@ -543,8 +560,9 @@
             position: relative;
 
             .icon--search {
-                .unitize(10, 16, top);
-                .unitize(14, 16, right);
+                .unitize(8, 16, top);
+                .unitize(12, 16, right);
+                .unitize(22, 16, font-size);
             }
 
             .entry--trigger { display: none }
@@ -650,9 +668,15 @@
 
                 // Adjust icon size
                 [class^="icon--"] {
-                    .unitize(21, 16, font-size);
                     .unitize(8, 16, left);
                 }
+            }
+
+            // @todo refactor!
+            .icon--basket {
+                display: block;
+                position: absolute;
+                top: 50%;
             }
         }
     }
@@ -708,9 +732,7 @@
         .navigation--link {
             .unitize-padding(8, 16, 8, 16, 16);
         }
-        .entry--cart {
-            margin-right: 0;
-        }
+
         .entry--link {
             .unitize(14, 16, font-size);
         }
