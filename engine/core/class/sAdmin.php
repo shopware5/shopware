@@ -2227,7 +2227,13 @@ class sAdmin
         if (!$this->session->offsetGet('sRegisterFinished')) {
             $register = $this->session->offsetGet('sRegister');
             if (empty($register["payment"]["object"]["id"])) {
-                $register["payment"]["object"]["id"] = $this->config->get('sDEFAULTPAYMENT');
+                // predefined payment out of the pre calculation of the shipping costs in the cart
+                if ($this->session->offsetExists("sPaymentID")) {
+                    $register["payment"]["object"]["id"] = $this->session->offsetGet("sPaymentID");
+                } else {
+                    // if no predefined payment exists use the default payment
+                    $register["payment"]["object"]["id"] = $this->config->get('sDEFAULTPAYMENT');
+                }
                 $this->session->offsetSet('sRegister', $register);
             }
 
