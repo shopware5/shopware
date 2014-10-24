@@ -514,15 +514,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return $arguments->getReturn();
         }
 
-        if (Shopware()->Front()->returnResponse()) {
-            $this->TopSeller()->updateElapsedTopSeller(50);
-        } else {
-            $event = new Enlight_Event_EventHandler(
-                'Enlight_Controller_Front_AfterSendResponse',
-                array($this, 'afterSendResponseOnTopSeller')
-            );
-            Shopware()->Events()->registerListener($event);
-        }
+        $this->TopSeller()->updateElapsedTopSeller(50);
 
         return $arguments->getReturn();
     }
