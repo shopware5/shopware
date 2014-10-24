@@ -134,20 +134,6 @@ class User extends ModelEntity
     private $active = 1;
 
     /**
-     * @var integer $admin
-     *
-     * @ORM\Column(name="admin", type="integer", nullable=false)
-     */
-    private $admin = 0;
-
-    /**
-     * @var integer $salted
-     *
-     * @ORM\Column(name="salted", type="integer", nullable=false)
-     */
-    private $salted = 1;
-
-    /**
      * @var integer $failedLogins
      *
      * @ORM\Column(name="failedlogins", type="integer", nullable=false)
@@ -401,50 +387,6 @@ class User extends ModelEntity
     public function getActive()
     {
         return $this->active;
-    }
-
-    /**
-     * Set admin
-     *
-     * @param integer $admin
-     * @return User
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-        return $this;
-    }
-
-    /**
-     * Get admin
-     *
-     * @return integer
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
-    /**
-     * Set salted
-     *
-     * @param integer $salted
-     * @return User
-     */
-    public function setSalted($salted)
-    {
-        $this->salted = $salted;
-        return $this;
-    }
-
-    /**
-     * Get salted
-     *
-     * @return integer
-     */
-    public function getSalted()
-    {
-        return $this->salted;
     }
 
     /**
