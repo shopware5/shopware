@@ -77,6 +77,7 @@ class Manager
 
     /**
      * Method to generate a single thumbnail.
+     *
      * First it loads an image from the media path,
      * then resizes it and saves it to the default thumbnail directory
      *
@@ -97,29 +98,9 @@ class Manager
         }
 
         if (empty($thumbnailSizes)) {
-            $album = $media->getAlbum();
-
-            if (!$album) {
-                throw new \Exception("No album configured for the passed media object and no size passed!");
-            }
-
-            $settings = $album->getSettings();
-
-            if (!$settings) {
-                throw new \Exception("No settings configured in the album of the given media object!");
-            }
-
-            $settingSizes = $settings->getThumbnailSize();
-
-            //when no sizes are defined in the album
-            if (empty($settingSizes) || empty($settingSizes[0])) {
-                $settingSizes = array();
-            }
-
-            $thumbnailSizes = array_merge($thumbnailSizes, $settingSizes);
+            $thumbnailSizes = $this->getThumnailSizesFromMedia($media);
+            $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
         }
-
-        $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
 
@@ -143,9 +124,7 @@ class Manager
             $suffix = $size['width'] . 'x' . $size['height'];
 
             $destinations = $this->getDestination($media, $suffix);
-
-            foreach($destinations as $destination){
-
+            foreach ($destinations as $destination){
                 $this->generator->createThumbnail(
                     $parameters['path'],
                     $destination,
@@ -169,12 +148,25 @@ class Manager
     {
         $thumbnailDir = $this->getThumbnailDir($media);
 
-        $fileNames = array(
-            'jpg' => $thumbnailDir . $media->getName() . '_' . $suffix . '.jpg'
+        $fileName = str_replace(
+            '.' . $media->getExtension(),
+            '_' . $suffix . '.' . 'jpg',
+            $media->getFileName()
         );
 
+        $fileNames = array(
+            'jpg' => $thumbnailDir . $fileName
+        );
+
+        // create native extension thumbnail
         if ($media->getExtension() !== 'jpg') {
-            $fileNames[$media->getExtension()] = $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+            $fileName = str_replace(
+                '.' . $media->getExtension(),
+                '_' . $suffix . '.' . $media->getExtension(),
+                $media->getFileName()
+            );
+
+            $fileNames[$media->getExtension()] = $thumbnailDir . $fileName;
         }
 
         return $fileNames;
@@ -263,5 +255,34 @@ class Manager
                 unlink($thumbnailPath);
             }
         }
+    }
+
+    /**
+     * @param Media $media
+     * @return array
+     * @throws \Exception
+     */
+    private function getThumnailSizesFromMedia(Media $media)
+    {
+        $album = $media->getAlbum();
+
+        if (!$album) {
+            throw new \Exception("No album configured for the passed media object and no size passed!");
+        }
+
+        $settings = $album->getSettings();
+
+        if (!$settings) {
+            throw new \Exception("No settings configured in the album of the given media object!");
+        }
+
+        $thumbnailSizes = $settings->getThumbnailSize();
+
+        //when no sizes are defined in the album
+        if (empty($thumbnailSizes) || empty($thumbnailSizes[0])) {
+            $thumbnailSizes = array();
+        }
+
+        return $thumbnailSizes;
     }
 }
