@@ -29,7 +29,6 @@
  */
 
 // Default window toolbar
-// Default window toolbar
 .#{$prefix}window, .#{$prefix}window-default {
 	.#{$prefix}toolbar, .#{$prefix}toolbar-default {
 	    border-left: 1px solid $light-border-color;
@@ -97,7 +96,7 @@
     background: $toolbar-background-color;
 
 	// Button normal style
-    .#{$prefix}btn-default-toolbar-small{
+    .#{$prefix}btn-default-toolbar-small {
         background: transparent;
 
         em, button {
@@ -123,10 +122,8 @@
 
         // Active state
      	.#{$prefix}form-focus {
-			border-color: rgba(82, 168, 236, 0.8);
-			-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-			-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+            border-color: rgba(82, 168, 236, 0.8);
 		}
     }
 
@@ -161,13 +158,24 @@
     }
 }
 
+.#{$prefix}safari {
+    .shopware-menu .#{$prefix}btn-default-toolbar-small {
+        .#{$prefix}btn-inner {
+            font-weight: 700 !important;
+        }
+    }
+}
+
 // Main Menu Toolbar
 .shopware-menu {
-	@include single-box-shadow(#475C6A, -1px, 0, 4px);
+    @include single-box-shadow(rgba(0, 0, 0, 0.075), 0, 3px, 0);
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(46,181,249,1), 0%, 1),
+        svg-color-stop(rgba(22,129,211,1), 100%, 1)
+    )) center center no-repeat transparent;
 	padding: 0 0 0 6px;
-    background: theme-image($theme, 'nav_taskbar_top_bg.png') repeat-x;
-    border-bottom: 1px solid #0057A7 !important;
-    border-top: 0 none !important;
+    border-width: 0 0 1px 0 !important;
+    border-color: #0b6dbe !important;
     overflow: visible;
     position: fixed;
     left: 0; top: 0;
@@ -175,14 +183,20 @@
 
     .#{$prefix}box-inner {
 		width: 100% !important;
-		background: theme-image($theme, 'sw4_logo-shine.png') no-repeat right 0;
-	}
+		background: theme-image($theme, 'sw4_logo-shine.png') no-repeat right center;
+        overflow: visible;
+    }
+
+    .#{$prefix}btn-default-toolbar-small-focus {
+        background: none;
+    }
 
 	// Seperators
 	.#{$prefix}toolbar-separator-horizontal {
-	   height: 40px;
-	   border-left: 1px solid rgba(0, 83, 153, 0.5);
-	   border-right: 1px solid rgba(97, 209, 255, 0.45);
+       margin: 18px 0 0 0;
+	   height: 18px;
+	   border-left: 1px solid rgba(24, 109, 184, 0.6);
+	   border-right: 1px solid rgba(255, 255, 255, 0.2);
    }
 
    // Search field
@@ -193,35 +207,54 @@
        @include transition-timing-function(ease-out);
        @include border-radius(16px);
        position: relative;
-       top: 6px !important;
+       top: 8px !important;
        
        table {
-           margin: 0 !important;
+           margin: -1px !important;
        }
    }
    .searchfield tbody {
-       background: theme-image($theme, 'search_taskbar_top_left.png') no-repeat 0 0;
-       padding: 0 0 0 26px;
+       padding: 0;
        height: $search-field-height;
        width: auto !important;
        display: block;
        margin: 0 !important;
 
        .#{$prefix}form-item-body {
-           background: theme-image($theme, 'search_taskbar_top_right.png') no-repeat right 0;
-           padding: 0 14px 0 0;
+           background: #186db8;
+           border-bottom: 1px solid rgba(59, 170, 250, 1);
+           border-radius: 14px;
+           padding: 0 0 0 0;
            height: $search-field-height;
            width: auto !important;
+
+           -webkit-box-shadow:inset 0 2px 0 #185f9d;
+           -moz-box-shadow:inset 0 2px 0 #185f9d;
+           box-shadow:inset 0 2px 0 #185f9d;
 
            .#{$prefix}form-field {
                @include border-radius(0px);
            	   @include reset-box-shadow;
-               background: theme-image($theme, 'search_taskbar_top_mid.png') repeat-x 0 0;
+               background: theme-image($theme, 'search_taskbar_top_left.png') no-repeat 9px 6px transparent;
+               padding-left: 32px;
                border: 0 none;
                height: $search-field-height;
+               min-width: 320px;
                width: auto !important;
-               color: #3075ac;
-               font-size: 11px;
+               color: #fff;
+               text-shadow: #145c9a 0 1px 0;
+               font-size: 12px;
+               line-height: 16px;
+
+               /** Styling the empty text */
+               &::-webkit-input-placeholder {
+                   color: lighten($font-color, 100%);
+                   text-shadow: #145c9a 0 1px 0;
+               }
+               &:-moz-placeholder {
+                   color: lighten($font-color, 100%);
+                   text-shadow: #145c9a 0 1px 0;
+               }
            }
        }
 	}
@@ -239,15 +272,16 @@
 // Search drop down
 .#{$prefix}search-dropdown {
 	top: 54px !important;
-	width: 255px;
+    left: 724px !important;
+	width: 330px;
 	border-bottom: 1px solid #a3adb4;
-	-webkit-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	-moz-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	-ms-box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
-	box-shadow: 0 0 18px rgba(0, 55, 110, 0.7) !important;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    -moz-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    -ms-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
+    box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
 	
 	.arrow-top {
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAAuElEQVR42l2OPQ6CQBSEuQvrnUxEENFW0UJjDHohFVBsFAp/78IuEIFAO76sFmIxeX/fvIwCoCE2CSvVDqv/fWNQCTLcBJorwEanBvzzKaq1Hcf6WcAhSZh2DZBNo7qz5VgR0PcFTE/AeZRob2K0vrDC7LDWvEQeBkGG4TGDdfhofsmh+wnU8blWdIKW9wL6jsuj4XL09gl0j8MkaHHL0aXcyuz6guGnlCkGZZQGM0jJIGBRpZ7gEm+0asuyctNIOwAAAABJRU5ErkJggg==") no-repeat;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHBAMAAADDgsFQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFDXLc////DXLcILL8IbX/Jrf/K7j/MLr/M7v/QrLU/gAAAAJ0Uk5TAAB2k804AAAALklEQVQI12MQFFRiFGQQFOpQAJLqaUWMDEJpaWkKDKouLi5BDM7GxsYmDMYgAACCmAb6OwoFKwAAAABJRU5ErkJggg==") no-repeat;
 		display: block;
 		position: absolute;
 		top: -5px; left: 16px;
@@ -255,9 +289,12 @@
 	}
 	
 	.header {
-		@include inner-border(1px 1px 0 1px, #79cbf4);
-		background: theme-image($theme, 'bg_search-header.png') repeat-x 0 0;
-		border: 1px solid #1974d8;
+        @include border-radius(3px 3px 0 0);
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+        border: 1px solid #1974d8;
 		height: 33px;
 		color: #fff;
 		font-weight: bold;
@@ -270,14 +307,13 @@
 	}
 	
 	.articles .header {
-		@include border-radius(3px 3px 0 0);
-		.inner {
-			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABlElEQVR42s2MyyuEYRTGTyklU2hEwijs7f0BFjZi5b5RSmhiZIzbuNSIXKYZskEUykIKIRm3JCSXMihEkQUpkyImHud7P81n6PtmpZz69Zzz9rw/+ueT5XBR9gAob0gm14dy5wxC9DSnbBlkPQe1XIGaLzkZkVfMV1rPIPV4utVFDacg5yuo712h1yunU+zMG6Qez4q6qPGEP7z443j+/cY9bVH9IajnEWQXiF2+PYxIAfcCiCy7oK575k6ksotbgXvaIvMmqOP6Bzf+yXAvgMi0CrKdf+PC/26Tb+5pi4JNi6BWN4Jajxk3SOZrV+CetkhnnEVI0x5Cm/eh49Qpuz/GGW1RePkUwhq3EGH1IW597cbH0a1nW/p8cP24k1Q5+aYpiiydQHT9uo+oOok1JFbNegG4Cmxj6frC/oeU8hEn31OqopiSUcTVugSxFikZyxKSjRPehZ2TTX1G3VNqxVAnS6aZInVR8cC8wTwHg3kBhhqGM6F6HvFl44jJt3+k1QzbWDDH5FKg4VI7s6KCi8mkv5xPmV+68Nz6yiwAAAAASUVORK5CYII=") no-repeat 14px 7px;
+        .inner {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAWlBMVEUAAAASXqARXZ8QZq8cfcgfgMg3tP8fgsw3s/8hhdA3s/83tP8VcLo3s/84tP8Oa7sNa7oOa7oObLs3s/8RXp8RXZ84tP8QZq8OabYSXqAPZa4PbLsRZKgTdMNFKb3LAAAAD3RSTlMA39/+gpxbnFGWTt9vVkca7skOAAAAhElEQVR4XnXIRxICMQxEUZMz3S15EuH+10Su0lCzgK+weOV3q1prFxN/ndR1NXaKq1PSSAKIo41J1sTACEkSRVKCmARAQrQkEmxiSCLFSDDMZAAJmPAlInFBBkr0VpIII3kdHpvtTCBF7oaX75NAMDo8/Viyt9Ds5Ocyd+m9791v9/KvD2A2DAj9SM9sAAAAAElFTkSuQmCC") no-repeat 14px 7px;
 		}
 	}
 	
 	.customers .header .inner {
-		background: theme-image($theme, 'icon_taskbar_top_kunden.png') no-repeat 14px 7px;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACAUlEQVQ4y2NgoAUQjJvPCMSLBGPn3wTiP4JxC24BsTvJBgnFL3QBGvQfhIXiFvwHGgZkL/gNpMVIMkiqcMs8gfSN//kyt/3ny979nz9r+3+BxOX/pYq2e0JcvIAZaGgM0JIaINsVp0HS5fuOgwwAYd7sXWDMB8TSZXtqoS5OgrsW5PLY+R7YDao8fJUvZzdYM8xAEJapOrQYJC9ZsHWPQPKq/wKpa/8LJC37L128fR5Wg7SmP9kKMogX2SAgX3feqzaw18v230CWkyrdewKrQeab/ztKN15AMUi64cJ/oLgqSF5jyoN9MG+DaLX+27twhpN8541byF5TnnDvMtyiTf/9RUqOgMWFig79N9vwNwJ7Ooqdzy+ct/sFckCLFO29BRTnAskLJK30RXaRUPo6P2DsMSLST9wCTaDiyUDBj/wpa6Gu2QUOH4GUNaAYegPEHXJVB/olqk5A5IFJQzAWHHuXgfpCQK7oBeJ/oOgUiFv4ny9jKzzqQZg/YwtEAzBxCiSt+KPUd/e+VMM5iCXANAZOBvELfjEIJS76IRC/5L9A2gagLQgvQZIB1GVZO/6DXAr02n8hoNfl264+gIUhf8Y2kAX/GfjTNyA0IKUdZO8hkgQwzLK3/NJd8G4BMCb/I2MGPqSARU7VmIZCDBTK3/sHe9rZgmoyNmyBquYlw5AAALfsmczHc7Z5AAAAAElFTkSuQmCC") no-repeat 14px 7px;
 	}
 	
 	.orders .header .inner {
@@ -316,6 +352,11 @@
 				border-bottom-color: #c3dcf0;
 				background: #e2f3ff;
 			}
+
+            // Name
+            .name {
+                width: 210px !important;
+            }
 			
 			// Description
 			.desc, .right {
@@ -338,6 +379,13 @@
 	}
 }
 
+// Safari Search Drop Down
+.#{$prefix}safari {
+    .#{$prefix}search-dropdown {
+        left: 746px !important;
+    }
+}
+
 // IE 9 Top Menu
 .#{$prefix}ie9 .shopware-menu {
     background: theme-image($theme, 'nav_taskbar_top_bg.png') repeat-x !important;
@@ -348,7 +396,6 @@
         }
 
         .#{$prefix}form-field {
-            margin: 0 0 0 26px;
 
             &:before {
                 display: block;
@@ -365,23 +412,27 @@
 // Footer Toolbar
 .shopware-footer {
     position: fixed;
-   	padding: 0 6px 0 6px;
-	background: theme-image($theme, 'nav_taskbar_cap_bg.png') repeat-x 0 0;
-	border-top: 1px solid $font-color !important;
-	box-shadow: -1px 1px 5px $font-color;
+   	padding: 0 6px 0 0;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgb(255, 255, 255), 0%, 1),
+        svg-color-stop(rgb(233, 241, 251), 100%, 1)
+    )) center center no-repeat transparent;
+    border: 0 none;
+    border-top: 1px solid #8cabcb;
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 11;
+    z-index: 19001;
 
 	// Seperator
 	.#{$prefix}toolbar-separator-horizontal {
 		top: 0px !important;
         height: 40px;
-        border-left: 1px solid #a1adb6;
-        border-right: 1px solid #dfe4e8;
+        border-left: 1px solid rgba(255, 255, 255, 1);
+        border-right: 1px solid rgba(140, 173, 203, 0.18);
     }
 }
+
 // IE 9 Footer
 .#{$prefix}nlg .shopware-footer {
     background: theme-image($theme, 'nav_taskbar_cap_bg.png') repeat-x !important;
@@ -395,6 +446,13 @@
     width: 100% !important;
     height: 40px !important;
 }
+
+.#{$prefix}safari {
+    .window-management-holder .#{$prefix}btn-default-small .#{$prefix}btn-inner {
+        font-weight: 700 !important;
+    }
+}
+
 .logout-tooltip  {
     @include border-radius(3px);
     position: fixed !important;

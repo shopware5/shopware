@@ -30,12 +30,10 @@
 
 /** Tabbar Styling - Default */
 .#{$prefix}tab-bar {
-
     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-                  svg-color-stop(#f7f7f7, 0%, 1),
-                  svg-color-stop(#e5e6e9, 100%, 1)
-                )) center center no-repeat transparent;
-
+        svg-color-stop(#f7f7f7, 0%, 1),
+        svg-color-stop(#e5e6e9, 100%, 1)
+    )) center center no-repeat transparent;
 	border-color: $font-color;
 	
 	.#{$prefix}tab-bar-body {
@@ -47,7 +45,7 @@
 /** Tabbar Styling - Plain */
 .#{$prefix}tab-bar-default-plain {
 	background: transparent;
-	
+
 	.#{$prefix}box-inner {
 		height: 33px !important;
 	}
@@ -66,26 +64,34 @@
 
 /** Tabbar strip */
 .#{$prefix}tab-bar-top .#{$prefix}tab-bar-strip {
-	background: #1e88e6;
-	border-color: #023cd9;
-	top: 30px;
+	background: #1681d3;
+    border: 0 none;
+	top: 31px;
 }
 
 .#{$prefix}tab-bar-strip-default-plain {
-	height: 4px !important;
+	height: 3px !important;
 }
 
+/** Tabs */
 /** Tab Styling - Default */
-.#{$prefix}tab-default-top {
-	@include border-radius(2px 2px 0 0);
-	@include single-transition(background, 200ms, ease-in);
-	@include inner-border(1px 1px 0 1px, #d9dee4);
-	background: #f1f2f2 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAATCAIAAADeafBOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAN0lEQVQIW2O4cusB05ev35n+/vvH9A+M/zP9/QthQ8SAfLgcSOw/038kud+//zJ9+/GD6dOXbwBDNjfyea5ETQAAAABJRU5ErkJggg==") repeat-x left bottom;
-	border-color: #8896a6;
-	border-bottom-color: #023cd9 !important;
+.#{$prefix}nlg .#{$prefix}tab-default-top, .#{$prefix}tab-default-top {
+	@include border-radius(5px 5px 0 0);
+    -webkit-box-shadow: transparent 0 0 0 !important;
+    -moz-box-shadow: transparent 0 0 0 !important;
+    -ms-box-shadow: transparent 0 0 0 !important;
+    box-shadow: transparent 0 0 0 !important;
+    border: 0 none !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(178,193,203,1), 0%, 1),
+        svg-color-stop(rgba(127,152,169,1), 100%, 1)
+    )) center center no-repeat transparent !important;
+    border-color: #8896a6;
 	margin: 0 5px;
-	
+
 	button .#{$prefix}tab-inner {
+        font-weight: normal;
+        padding-top: 1px;
 		color: #fff;
 		text-shadow: 0 1px 0 #8190a3;
 		margin: 0 !important; /** Fixes the alignment of the text in FF */
@@ -93,54 +99,112 @@
 	
 	/** Tab Styling - Hover */
 	&:hover {
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAMElEQVQIW2N49fYD0+t3H5n+/fsHxP8h9P//CD4S+z8WcZDY7z9/mX78+sX07dtPADgJOzMb//O9AAAAAElFTkSuQmCC") repeat-x left bottom;
-	}
-}
-
-/** IE9 specific */
-.#{$prefix}ie9 .#{$prefix}tab-default-top {
-    background: #f1f2f2 url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAATCAIAAADeafBOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAN0lEQVQIW2O4cusB05ev35n+/vvH9A+M/zP9/QthQ8SAfLgcSOw/038kud+//zJ9+/GD6dOXbwBDNjfyea5ETQAAAABJRU5ErkJggg==") repeat-x left bottom;
-
-    /** Tab Styling - Hover */
-    &:hover {
-        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAMElEQVQIW2N49fYD0+t3H5n+/fsHxP8h9P//CD4S+z8WcZDY7z9/mX78+sX07dtPADgJOzMb//O9AAAAAElFTkSuQmCC") repeat-x left bottom;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(198,209,217,1), 0%, 1),
+            svg-color-stop(rgba(147,168,183,1), 100%, 1)
+        )) center center no-repeat transparent !important;
     }
 }
 
 /** Tab Styling - Active */
-.#{$prefix}tab-top-active {
+.#{$prefix}nlg .#{$prefix}tab-top-active, .#{$prefix}tab-top-active {
     filter: none;
-	@include inner-border(1px 1px 0 1px, #4dc2f7);
-	border-color: #0e6de1;
-	border-bottom-color: #1684e7 !important;
-	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAOklEQVQImS3IsRGAAAwDMecHZHmOIZiAJrYpQKV0nA/XvSgiFo3ICmWoQzaMh1pkizbIxe73+S9F0QtkGyitCFKC2wAAAABJRU5ErkJggg==") repeat-x !important;
-	
+    border: 0 none !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(46,181,249,1), 0%, 1),
+        svg-color-stop(rgba(22,129,211,1), 100%, 1)
+    )) center center no-repeat transparent !important;
+
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
 	button .#{$prefix}tab-inner {
 		color: #fff;
 		text-shadow: 0 1px 0 #0941e2;
 	}
 }
-/** IE9 specific */
-.#{$prefix}ie9 .#{$prefix}tab-top-active {
-    filter: none;
-    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAOklEQVQImS3IsRGAAAwDMecHZHmOIZiAJrYpQKV0nA/XvSgiFo3ICmWoQzaMh1pkizbIxe73+S9F0QtkGyitCFKC2wAAAABJRU5ErkJggg==") repeat-x !important;
-}
 
 /** Tab Styling - Disable */
-.#{$prefix}tab-default-top-disabled {
-	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAATCAIAAADeafBOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAL0lEQVQIHQXBsRHAMACEMI79l42rb2Is+Z1jZSVhIWTkLQkrIwkLAykp/3vd5rYH/ewop3Z+RCEAAAAASUVORK5CYII=") repeat-x !important;
-	border-color: #abbbc5;
-	border-bottom-color: #167ceb;
-	
+.#{$prefix}nlg .#{$prefix}tab-default-top-disabled, .#{$prefix}tab-default-top-disabled {
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(230,230,233,1), 0%, 1),
+        svg-color-stop(rgba(221,222,224,1), 100%, 1)
+    )) center center no-repeat !important;
+
+    /** Tab Styling - Disable - Hover */
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
 	button {
 		color: #8596a2 !important;
 	}
-	
-	.x-tab-inner {
+
+	.#{$prefix}tab-inner {
 		color: #8596a2 !important;
 		text-shadow: 0 1px 0 #fff !important;
 	}
 
+}
+
+/** Safari specific */
+.#{$prefix}safari {
+    .#{$prefix}tab-inner {
+        font-weight: 700 !important;
+    }
+}
+
+/** IE specific */
+.#{$prefix}ie.#{$prefix}nlg, #{$prefix}nlg {
+    .#{$prefix}tab-default-top {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(178,193,203,1), 0%, 1),
+            svg-color-stop(rgba(127,152,169,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+        /** Tab Styling - Hover */
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(198,209,217,1), 0%, 1),
+                svg-color-stop(rgba(147,168,183,1), 100%, 1)
+            )) center center no-repeat transparent;
+        }
+    }
+
+    .#{$prefix}tab-top-active {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(46,181,249,1), 0%, 1),
+                svg-color-stop(rgba(22,129,211,1), 100%, 1)
+            )) center center no-repeat transparent;
+        }
+    }
+
+    .#{$prefix}tab-default-top-disabled {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(230,230,233,1), 0%, 1),
+                svg-color-stop(rgba(221,222,224,1), 100%, 1)
+            )) center center no-repeat transparent !important;
+        }
+    }
 }
 
 .#{$prefix}tabpanel-child .#{$prefix}panel-body-default {
