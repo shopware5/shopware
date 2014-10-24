@@ -273,8 +273,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             }
         }
 
-        if (!empty($this->session['sCountry'])&&empty($this->View()->register->billing->form_data->country)) {
+        // setting the country and the states from the session
+        if (!empty($this->session['sCountry']) && empty($this->View()->register->billing->form_data->country)) {
             $this->View()->register->billing->form_data->country = $this->session['sCountry'];
+        }
+
+        $countryStateName = "country_state_" . $this->View()->register->billing->form_data->country;
+        if (!empty($this->session['sState']) && empty($this->View()->register->billing->form_data->$countryStateName)) {
+            $this->View()->register->billing->form_data->$countryStateName = $this->session['sState'];
         }
     }
 
