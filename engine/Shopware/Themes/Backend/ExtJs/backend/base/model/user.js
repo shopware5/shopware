@@ -70,8 +70,6 @@ Ext.define('Shopware.apps.Base.model.User', {
         { name:'name', type:'string' },
         { name:'email', type:'string' },
         { name:'active', type:'int' },
-        { name:'admin', type:'int' },
-        { name:'salted', type:'int' },
         { name:'failedLogins', type:'int' },
         { name:'lockedUntil', type:'date' }
     ]

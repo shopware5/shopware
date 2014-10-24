@@ -523,8 +523,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *    [string]   name
      *    [string]   email
      *    [int]      active
-     *    [int]      admin
-     *    [int]      salted
      *    [int]      failedLogins
      *    [date]     lockedUntil
      * </code>
@@ -545,8 +543,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'name' => 'user.name',
             'email' => 'user.email',
             'active' => 'user.active',
-            'admin' => 'user.admin',
-            'salted' => 'user.salted',
             'failedLogins' => 'user.failedLogins',
             'lockedUntil' => 'user.lockedUntil'
         );
