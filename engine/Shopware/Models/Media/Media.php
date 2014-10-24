@@ -745,11 +745,7 @@ class Media extends ModelEntity
                  */
                 $this->path = str_replace('\\', '/', $this->path);
             }
-            try {
-                $this->file->move($this->getUploadDir(), $this->getFileName());
-            } catch (\Exception $e) {
-                return $e;
-            }
+            $this->file->move($this->getUploadDir(), $this->getFileName());
         }
         unlink($this->file->getPathname());
         unlink($this->file);
@@ -812,18 +808,24 @@ class Media extends ModelEntity
     {
 	    $thumbnails = $this->getThumbnailFilePaths();
 
-        if(!file_exists(Shopware()->OldPath() . $this->getPath())){
+        if (!file_exists(Shopware()->OldPath() . $this->getPath())){
             return $thumbnails;
         }
 
-	    foreach($thumbnails as $size => $thumbnail) {
-		    $size = explode('x', $size);
+        foreach ($thumbnails as $size => $thumbnail) {
+            $size = explode('x', $size);
 
-		    $path = Shopware()->OldPath() . $thumbnail;
-		    if (!file_exists($path)) {
-                $this->createThumbnail($size[0], $size[1]);
-		    }
-	    }
+            $path = Shopware()->OldPath() . $thumbnail;
+            if (!file_exists($path)) {
+                try {
+                    $this->createThumbnail($size[0], $size[1]);
+                } catch (\Exception $e) {
+                    // Ignore for now
+                    // Exception might be thrown when thumbnails can not
+                    // be generated due to invalid image files
+                }
+            }
+        }
 
 	    return $thumbnails;
     }
@@ -861,8 +863,15 @@ class Media extends ModelEntity
 			if (strpos($size, 'x') === false) {
 				$size = $size . 'x' . $size;
 			}
-			$path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
-			$path = str_replace(Shopware()->OldPath(), '', $path);
+
+            $fileName = str_replace(
+                '.' . $this->extension,
+                '_' . $size . '.' . $this->extension,
+                $this->getFileName()
+            );
+
+			$path = $this->getThumbnailDir() . $fileName;
+            $path = str_replace(Shopware()->OldPath(), '', $path);
 			if (DIRECTORY_SEPARATOR !== '/') {
 				$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
 			}
@@ -905,7 +914,7 @@ class Media extends ModelEntity
 		    return;
 	    }
 
-	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
+	    /** @var \Shopware\Components\Thumbnail\Manager $manager */
 	    $manager = Shopware()->Container()->get('thumbnail_manager');
 
 	    $newSize = array(
