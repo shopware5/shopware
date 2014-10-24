@@ -38,9 +38,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
       'roleId' => 1,
       'name' => "PHPUnit Testuser",
       'email' => 'test@example.com',
-      'active' => 1,
-      'admin' => 1,
-      'salted' => 1
+      'active' => 1
     );
     protected $temporaryRoleName;
 

@@ -97,7 +97,6 @@ class Repository extends ModelRepository
                 'user.lastLogin as lastLogin',
                 'user.name as name',
                 'role.name as groupname',
-                'user.admin as admin',
                 'user.active as active',
                 'user.email as email'
             )
