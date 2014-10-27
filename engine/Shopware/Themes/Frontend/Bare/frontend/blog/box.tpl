@@ -1,4 +1,4 @@
-<div class="blog--box panel has--border is--rounded block">
+<div class="blog--box panel has--border is--rounded">
 	{block name='frontend_blog_col_blog_entry'}
 
 		{* Blog Header *}
@@ -54,7 +54,7 @@
 						{block name='frontend_blog_col_meta_data_rating'}
 							{if $sArticle.sVoteAverage|round !=0}
 								<div class="blog--metadata-rating blog--metadata is--nowrap is--last">
-                                    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated"}
+                                    {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count microData=false}
                                 </div>
 							{/if}
 						{/block}
@@ -72,7 +72,9 @@
 				{block name='frontend_blog_col_article_picture'}
 					{if $sArticle.preview.thumbNails.2}
 						<div class="blog--box-picture">
-							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title|escape}"><img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.2}" /></a>
+							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title|escape}">
+                                <img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.3}" />
+                            </a>
 						</div>
 					{/if}
 				{/block}

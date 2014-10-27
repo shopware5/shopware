@@ -30,7 +30,7 @@
             </div>
         {/block}
 
-		<form method="post" class="comment--collapse-target{if $sAction != "rating" || !$sErrorFlag} collapse--soft-hidden{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}">
+		<form method="post" class="comment--collapse-target{if $sErrorFlag} collapse--soft-show{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}">
 
 			{* Name *}
 			{block name='frontend_blog_comments_input_name'}
