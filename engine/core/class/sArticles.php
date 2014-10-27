@@ -3861,6 +3861,15 @@ class sArticles
 
         $data["articleName"] = $this->sOptimizeText($data["articleName"]);
         $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
+        
+        $data['mainVariantNumber'] = $this->db->fetchOne(
+            "SELECT variant.ordernumber
+             FROM s_articles_details variant
+             INNER JOIN s_articles product
+                ON product.main_detail_id = variant.id
+                AND product.id = ?",
+            array($product->getId())
+        );
 
         $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
             $data["description_long"]

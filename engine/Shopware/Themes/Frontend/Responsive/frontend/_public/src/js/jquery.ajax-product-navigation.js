@@ -133,7 +133,7 @@
             me.$productDetails = $el.find(opts.productDetailsSelector);
 
             me.categoryId = ~~(me.urlParams.c || me.$productDetails.attr('data-category-id'));
-            me.orderNumber = me.$productDetails.attr('data-ordernumber');
+            me.orderNumber = me.$productDetails.attr('data-main-ordernumber');
             me.productState = me.getProductState();
 
             if (!me.categoryId) {
