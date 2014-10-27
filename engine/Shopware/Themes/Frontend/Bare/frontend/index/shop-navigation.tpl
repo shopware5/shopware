@@ -46,7 +46,7 @@
         {block name="frontend_index_checkout_actions_my_options"}
             <li class="navigation--entry entry--account block" role="menuitem">
                 {block name="frontend_index_checkout_actions_account"}
-                    <a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="btn is--icon-left entry--link">
+                    <a href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}" class="btn is--icon-left entry--link account--link">
                         <i class="icon--account is--large"></i>
 						<span class="account--display">
 							{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
