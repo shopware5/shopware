@@ -30,7 +30,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-category-id="{$sArticle.categoryID}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
+    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation" fullPath}" data-category-id="{$sArticle.categoryID}" data-main-ordernumber="{$sArticle.mainVariantNumber}"{/if}>
 
         {* The configurator selection is checked at this early point
            to use it in different included files in the detail template. *}
