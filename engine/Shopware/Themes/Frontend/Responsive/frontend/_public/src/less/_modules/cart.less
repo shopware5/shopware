@@ -180,7 +180,8 @@
 
     .add-product--button,
     .add-voucher--button {
-        .unitize-padding(3, 0);
+        .unitize(36, 16, line-height);
+        .unitize-padding(2, 0);
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
     }
@@ -314,6 +315,30 @@
 
         .js--fancy-select {
             width: 100%;
+        }
+
+        // Premium articles with variants
+        .premium--variant {
+            .clearfix();
+
+            .premium--button {
+                .border-radius-multi(0, 3px, 3px, 0);
+                .unitize(38, 16, height);
+                .unitize(-2, 16, margin-left);
+                width: 20%;
+            }
+
+            .js--fancy-select {
+                .border-radius-multi(3px, 0, 0, 3px);
+                .unitize(36, 16, line-height);
+                .unitize(2, 16, margin-right);
+                width: 80%;
+                float: left;
+
+                .premium--selection {
+                    .unitize-height(36, 16);
+                }
+            }
         }
     }
 }
