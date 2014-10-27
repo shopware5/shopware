@@ -126,12 +126,14 @@
 
 // Blog-Entry Box
 .blog--box {
+    .clearfix();
     .unitize(20, 16, margin-top);
 
     .blog--box-metadata {
         .unitize-margin(0, 20, 0, 20, 16);
         .unitize(14, 16, padding-bottom);
         .unitize(12, 16, font-size);
+        .unitize(5, 16, padding-top);
         border-bottom: 1px solid @border-color;
 
         .blog--metadata {
@@ -148,6 +150,18 @@
         .blog--metadata-rating {
             .unitize(14, 16, font-size);
             color: @text-color;
+        }
+    }
+
+    .blog--box-headline {
+        .unitize(18, 16, font-size);
+    }
+
+    .blog--box-link {
+        color: @text-color-dark;
+
+        &:hover {
+            color: @brand-primary;
         }
     }
 
@@ -265,7 +279,6 @@
     // Comments
     .blog--comments {
         .unitize(20, 16, padding);
-        padding-bottom: 0;
 
         .comments--actions .btn--create-entry {
             width: 100%;
@@ -362,6 +375,10 @@
 
     .collapse--soft-hidden {
         display: none;
+    }
+
+    .collapse--soft-show {
+        display: block;
     }
 }
 
@@ -616,6 +633,20 @@
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
+
+    // Blog Listing
+    .blog--listing {
+
+        .listing--actions {
+            .unitize(15, 16, margin-top);
+            padding-top: 0;
+            margin-bottom: 0;
+        }
+
+        .listing--paging {
+            border: 0 none;
+        }
+    }
 
     // Blog Detail
     .blog--detail {
