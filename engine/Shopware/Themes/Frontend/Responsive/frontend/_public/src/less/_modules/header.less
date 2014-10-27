@@ -64,18 +64,39 @@
 
         .btn {
             .unitize-height(40, 16);
+            .unitize-width(40, 16);
+            vertical-align: middle;
         }
 
         .cart--link {
-            .unitize-padding(2, 10);
+            .unitize-padding(2, 10, 2, 6, 16);
+        }
+
+        .account--link {
+            .unitize-padding(2, 10, 2, 8, 16);
         }
 
         .icon--basket {
             .unitize(21, 16, font-size);
             display: inline;
             position: relative;
+            vertical-align: middle;
             top: 0;
             left: 0;
+        }
+
+        .icon--account {
+            .unitize(21, 16, font-size);
+            display: inline;
+            position: relative;
+            vertical-align: middle;
+            top: 0;
+            left: 0;
+        }
+
+        .icon--heart {
+            .unitize(18, 16, font-size);
+            vertical-align: middle;
         }
     }
 
@@ -88,6 +109,7 @@
     }
 
     .main-search--form,
+    .account--display,
     .cart--display,
     .cart--quantity,
     .cart--amount,
@@ -108,13 +130,23 @@
     }
 
     .entry--menu-left {
+        .unitize(18, 16, font-size);
+        font-weight: @font-bold-weight;
         border-right: 1px solid @border-color;
         border-left: 0 none;
         width: 32%;
+
+        .entry--link {
+            color: @brand-secondary;
+        }
+
+        .icon--menu {
+            .unitize(20, 16, font-size);
+        }
     }
 
     .entry--search {
-        font-weight: bold;
+        font-weight: @font-bold-weight;
 
         [class^="icon--"] {
             margin: 0;
@@ -472,7 +504,7 @@
         }
         .navigation--entry {
             .white-gradient();
-            .unitize-margin(0, 10, 0, 0, 16);
+            .unitize-margin(0, 8, 0, 0, 16);
             .border-radius();
             border: 0 none;
             width: auto;
@@ -659,25 +691,44 @@
 
     .navigation--list {
 
+        .navigation--entry {
+            .btn {
+                width: auto;
+            }
+        }
+
         // Custom styling cart button
         .entry--cart {
             .cart--link {
                 .unitize(50, 16, padding-left);
                 .cart--quantity { display: inline-block; }
                 .cart--amount { display: inline-block; }
-
-                // Adjust icon size
-                [class^="icon--"] {
-                    .unitize(8, 16, left);
-                }
             }
 
             // @todo refactor!
             .icon--basket {
+                .unitize(8, 16, left);
                 display: block;
                 position: absolute;
                 top: 50%;
             }
+        }
+
+        .entry--account {
+            .account--link {
+                .unitize(36, 16, padding-left);
+            }
+
+            .icon--account {
+                .unitize(8, 16, left);
+                display: block;
+                position: absolute;
+                top: 50%;
+            }
+        }
+
+        .account--display {
+            display: inline-block;
         }
     }
 }
