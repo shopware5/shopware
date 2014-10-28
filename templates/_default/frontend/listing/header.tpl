@@ -13,7 +13,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
-    {if $sCategoryContent.title}{$sCategoryContent.title}{else}{$smarty.block.parent}{/if}
+    {if $sCategoryContent.title}{$sCategoryContent.title} | {config name=sShopname}{else}{$smarty.block.parent}{/if}
 {/strip}{/block}
 
 {* RSS and Atom feeds *}
