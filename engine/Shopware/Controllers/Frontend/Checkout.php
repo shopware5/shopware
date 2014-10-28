@@ -584,10 +584,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (empty($instock['articleID'])) {
             return  Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNotFound', 'Product could not be found.', true);
         }
-        if (!empty($instock['laststock'])||!empty(Shopware()->Config()->InstockInfo)) {
-            if ($instock['instock']<=0&&!empty($instock['laststock'])) {
+        if (!empty($instock['laststock']) || !empty(Shopware()->Config()->InstockInfo)) {
+            if ($instock['instock'] <= 0 && !empty($instock['laststock'])) {
                 return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNoStock', 'Unfortunately we can not deliver the desired product in sufficient quantity', true);
-            } elseif ($instock['instock']<$instock['quantity']) {
+            } elseif ($instock['instock'] < $instock['quantity']) {
                 $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 von #1 in stock).';
                 $result = Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleLessStock', $result, true);
                 return str_replace(array('#0', '#1'), array($instock['instock'], $instock['quantity']), $result);
@@ -652,8 +652,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getBasket()
     {
-        $basket = $this->basket->sGetBasket();
-
         $shippingcosts = $this->getShippingCosts();
 
         $basket = $this->basket->sGetBasket();
