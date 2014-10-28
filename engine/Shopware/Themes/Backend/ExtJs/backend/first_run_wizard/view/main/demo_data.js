@@ -22,23 +22,37 @@
  */
 
 /**
- * Shopware Application
+ * Shopware First Run Wizard - Demo data tab
  *
  * @category  Shopware
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name=backend/first_run_wizard/main}
+//{block name="backend/first_run_wizard/view/main/demo_data"}
 
-//{block name="backend/theme/view/list/theme"}
+Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
+    extend: 'Ext.container.Container',
 
-Ext.define('Shopware.apps.Theme.view.list.Theme', {
-    alias: 'widget.theme-listing',
-    region: 'center',
-    autoScroll: true,
-    extend: 'Shopware.apps.Base.view.ThemeListing'
+    /**
+     * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     * @string
+     */
+    alias:'widget.first-run-wizard-demo-data',
+
+    /**
+     * Name attribute used to generate event names
+     */
+    name:'demo-data',
+
+    initComponent: function() {
+        var me = this;
+
+        me.html = '<h1>Demo data</h1>';
+
+        me.callParent(arguments);
+    }
 });
 
 //{/block}
-

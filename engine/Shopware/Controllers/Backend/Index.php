@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
     public function preDispatch()
     {
         // Redirect broken backend urls to frontend
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth'))) {
+        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth', 'changeLocale'))) {
             $uri = $this->Request()->getRequestUri();
             $uri = str_replace('shopware.php/', '', $uri);
             $uri = str_replace('/backend/', '/', $uri);
@@ -109,6 +109,27 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $this->View()->assign('product', '', true);
         $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
 
+        // Only admins can see the wizard
+        if ($identity->role->getAdmin()) {
+            // This value can be stored either as a bool or as an int, so we need an explicit cast
+            // because smarty does not render false properly
+            $firstRunWizardStep = (int) $this->container->get('config')->get('firstRunWizardStep', 0);
+        } else {
+            $firstRunWizardStep = 0;
+        }
+        $sbpLogin = 0;
+        if ($firstRunWizardStep > 0) {
+            /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
+            $storeConnector = $this->container->get('plugin_store_connector');
+
+            try {
+                $token = $storeConnector->getToken();
+                $sbpLogin = (int) !empty($token);
+            } catch (Exception $e) {}
+        }
+        $this->View()->assign('sbpLogin', $sbpLogin, true);
+        $this->View()->assign('firstRunWizardStep', $firstRunWizardStep, true);
+
         if (Shopware()->Bootstrap()->issetResource('License')) {
             $l = Shopware()->License();
             $m = 'SwagCommercial';
@@ -124,6 +145,34 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
     public function authAction()
     {
 
+    }
+
+    /**
+     *
+     */
+    public function changeLocaleAction()
+    {
+        $localeCode = $this->Request()->getParam('locale');
+        if ($localeCode == null) {
+            return null;
+        }
+
+        $locale = $this->container->get('models')
+            ->getRepository('Shopware\Models\Shop\Locale')
+            ->findOneBy(array('locale' => $localeCode));
+
+        if ($locale == null) {
+            return null;
+        }
+
+        $auth = $this->auth->checkAuth();
+
+        if ($auth !== null) {
+            $identity = $auth->getIdentity();
+            if (!empty($identity)) {
+                $identity->locale = $locale;
+            }
+        }
     }
 
     /**

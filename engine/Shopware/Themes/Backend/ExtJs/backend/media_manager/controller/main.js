@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
         var me = this,
             albumStore = me.subApplication.getStore('Album'),
             mediaStore = me.subApplication.getStore('Media'),
+            minimizable = me.subApplication.minimizable,
             forceToFront = me.subApplication.forceToFront || false;
 
         if (me.subApplication.params && me.subApplication.params.albumId !== null) {
@@ -75,7 +76,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Main', {
                 eventScope: me.subApplication.eventScope,
                 selectionMode: me.subApplication.selectionMode,
                 validTypes: me.subApplication.validTypes,
-                forceToFront: forceToFront
+                forceToFront: forceToFront,
+                minimizable: minimizable
             });
         } else {
             me.mainWindow = me.getView('main.Window').create({

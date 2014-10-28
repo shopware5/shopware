@@ -35,7 +35,7 @@
  *      Example:
  *      - Your backend application is called "Shopware.apps.Product"
  *      - So create a new backend php controller "Shopware_Controllers_Backend_Product"
- *  - The only think you have to do now, is to configure the doctrine model in the $model class property.
+ *  - The only thing you have to do now is to configure the doctrine model in the $model class property.
  *  - For example $model = 'Shopware\Models\Article\Article'
  *  - After you have configured the model property, the whole backend application works.
  *   - Loading an filtered, sorted and paginated list of your models - listAction().

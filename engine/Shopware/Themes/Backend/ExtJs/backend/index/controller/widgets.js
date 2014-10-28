@@ -88,9 +88,19 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * Creates the widget store and binds all needed events.
      */
     init: function () {
-        var me = this;
+        var me = this,
+            firstRunWizardStep = Shopware.app.Application.getController('Shopware.apps.Index').firstRunWizardStep;
 
+        if (firstRunWizardStep == 0) {
+            me.loadWidgetPanel();
+        }
+
+        me.callParent(arguments);
+    },
+
+    loadWidgetPanel: function () {
         /*{if {acl_is_allowed resource=widgets privilege=read}}*/
+        var me = this;
 
         me.viewport = Shopware.app.Application.viewport;
 
@@ -133,8 +143,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
 
         /*{/if}*/
-
-        me.callParent(arguments);
     },
 
     /**
