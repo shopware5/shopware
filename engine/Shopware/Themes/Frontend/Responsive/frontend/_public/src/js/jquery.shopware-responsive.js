@@ -70,8 +70,8 @@ $(function() {
         type: 'm',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('.btn--password').scroll();
-            $('.btn--email').scroll();
+            $('.btn--password').collapsePanel();
+            $('.btn--email').collapsePanel();
             $('.blog-filter--trigger').collapsePanel();
             $('*[data-product-slider="true"]').productSlider({
                 perPage: 3,
