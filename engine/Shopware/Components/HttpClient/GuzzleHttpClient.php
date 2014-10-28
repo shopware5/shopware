@@ -25,6 +25,7 @@
 namespace Shopware\Components\HttpClient;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 /**
  * @category  Shopware
@@ -157,12 +158,23 @@ class GuzzleHttpClient implements HttpClientInterface
             // http://guzzle.readthedocs.org/en/latest/clients.html#request-options
             $options = array(
                 'headers' => $headers,
-                'body'    => $content,
+                'body' => $content,
             );
 
             $response = $this->guzzleClient->post($url, $options);
         } catch (\Exception $e) {
-            throw new RequestException($e->getMessage(), $e->getCode(), $e);
+            /** @var $e GuzzleClientException */
+            $body = '';
+            if ($e->hasResponse())  {
+                $body = (string) $e->getResponse()->getBody();
+            }
+
+            throw new RequestException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e,
+                $body
+            );
         }
 
         return new Response(

@@ -140,6 +140,44 @@ class Service
     }
 
     /**
+     * This function returns all configuration ids, names and default
+     * values for the provided template
+     * If a shop is provided, the current values for that shop
+     * will also be returned.
+     * If provided, only option in $optionNames will be returned
+     *
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @param array $optionNames
+     * @return array
+     */
+    public function getConfig(Shop\Template $template, Shop\Shop $shop = null, $optionNames = null)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array(
+            'elements'
+        ))
+            ->from('Shopware\Models\Shop\TemplateConfig\Element', 'elements')
+            ->where('elements.templateId = :templateId')
+            ->orderBy('elements.id')
+            ->setParameter('templateId', $template->getId());
+
+        if ($shop instanceof Shop\Shop) {
+            $builder->addSelect('values')
+                ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
+                ->setParameter('shopId', $shop->getId());
+        }
+        if (!empty($optionNames)) {
+            $builder->andWhere('elements.name IN (:optionNames)')
+                ->setParameter('optionNames', $optionNames);
+        }
+
+        $config = $builder->getQuery()->getArrayResult();
+
+        return $config;
+    }
+
+    /**
      * Translates the passed container values.
      *
      * This function is a double recursive function.

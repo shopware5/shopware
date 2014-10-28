@@ -26,10 +26,6 @@
  *
  * This file contains the index application which represents
  * the basic backend structure.
- *
- * @date 2012-05-19
- * @package Shopware_Controller
- * @subpackage Main
  */
 
 //{namespace name=backend/index/controller/main}
@@ -46,6 +42,24 @@ Ext.define('Shopware.apps.Index.controller.Main', {
      * @return void
 	 */
 	init: function() {
+        var me = this,
+            firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep');
+
+        if (Ext.isEmpty(firstRunWizardStep)) {
+            firstRunWizardStep = me.subApplication.firstRunWizardStep;
+        }
+
+        if (firstRunWizardStep > 0) {
+            Ext.util.Cookies.set('firstRunWizardStep', firstRunWizardStep)
+            Shopware.app.Application.addSubApplication({
+                name: 'Shopware.apps.FirstRunWizard'
+            });
+        } else {
+            me.initBackendDesktop();
+        }
+	},
+
+    initBackendDesktop: function() {
         var me = this,
             mainApp = Shopware.app.Application,
             viewport = mainApp.viewport = Ext.create('Shopware.container.Viewport');

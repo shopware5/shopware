@@ -141,6 +141,14 @@ Ext.define('Shopware.form.field.ColorField', {
 
     valueChanged: function(value) {
         this.colorField.setFieldStyle('background: ' + value);
+    },
+
+    validate: function() {
+        return this.inputField.validate();
+    },
+
+    getName: function() {
+        return this.inputField.getName();
     }
 
 });

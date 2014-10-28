@@ -29,16 +29,18 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/theme/main}
+//{namespace name=backend/first_run_wizard/main}
+//{block name="backend/first_run_wizard/model/plugin"}
 
-//{block name="backend/theme/view/list/theme"}
+Ext.define('Shopware.apps.FirstRunWizard.model.Plugin', {
+    extend: 'Shopware.data.Model',
 
-Ext.define('Shopware.apps.Theme.view.list.Theme', {
-    alias: 'widget.theme-listing',
-    region: 'center',
-    autoScroll: true,
-    extend: 'Shopware.apps.Base.view.ThemeListing'
+    fields: [
+        //{block name="backend/first_run_wizard/model/plugin/fields"}{/block}
+        { name : 'id', type: 'int', useNull: true },
+        { name : 'name', type: 'string' }
+    ]
+
 });
 
 //{/block}
-
