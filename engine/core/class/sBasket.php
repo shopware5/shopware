@@ -413,7 +413,7 @@ class sBasket
                 'SELECT basket.id
                 FROM s_order_basket basket
                 LEFT JOIN s_addon_premiums premium
-                ON premium.id = basket.articleID
+                ON premium.ordernumber_export = basket.ordernumber
                 AND premium.startprice <= ?
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
@@ -482,7 +482,7 @@ class sBasket
             array(
                 'sessionID' => $this->session->get('sessionId'),
                 'articlename' => trim($premium["name"] . " " . $premium["additionaltext"]),
-                'articleID' => $premium['id'],
+                'articleID' => $premium['articleID'],
                 'ordernumber' => $number,
                 'quantity' => 1,
                 'price' => 0,
@@ -1450,7 +1450,8 @@ class sBasket
             FROM s_order_basket
             WHERE articleID = ?
             AND sessionID = ?
-            AND ordernumber = ?',
+            AND ordernumber = ?
+            AND modus != 1',
             array(
                 $article["articleID"],
                 $sessionId,
