@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             url: '{url controller="firstRunWizard" action="saveConfiguration"}',
             method: 'POST',
             params: params,
-            timeout: 4000000,
             success: function(response) {
                 var result = Ext.JSON.decode(response.responseText);
 

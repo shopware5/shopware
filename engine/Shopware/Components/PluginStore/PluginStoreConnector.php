@@ -28,10 +28,8 @@ use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
 
 /**
- * class PluginStoreConnector
- *
  * @category  Shopware
- * @package   Shopware\Components\PluginStore\PluginStoreConnectionInterface
+ * @package   Shopware\Components\PluginStore
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginStoreConnector
@@ -41,43 +39,54 @@ class PluginStoreConnector
      */
     private $httpClient;
 
+    /**
+     * @var string API endpoint address
+     */
     private $apiEndpoint;
 
     /**
      * @param HttpClientInterface $httpClient
-     * @param $apiEndpoint
+     * @param string[] $apiEndpointConfig
      */
-    public function __construct(HttpClientInterface $httpClient, $apiEndpoint)
+    public function __construct(HttpClientInterface $httpClient, $apiEndpointConfig)
     {
         $this->httpClient = $httpClient;
-        $this->apiEndpoint = $apiEndpoint;
+        $this->apiEndpoint = $apiEndpointConfig['apiEndpoint'];
     }
 
     /**
-     * Requests the creation of a new Shopware ID anc account (registration action)
+     * Pings SBP to see if a connection is available and the service is up
+     *
+     * @return boolean
      */
     public function ping()
     {
-        $urlParts = parse_url($this->apiEndpoint);
+        $url = $this->apiEndpoint . 'ping';
 
-        $connected = fsockopen($urlParts['host'], $urlParts['port']);
-
-        if ($connected){
-            $isConn = true;
-            fclose($connected);
-        }else{
-            $isConn = false;
+        try {
+            $response = $this->httpClient->get($url);
+        } catch (RequestException $e) {
+            $responseBody = $e->getBody();
+            if (!empty($responseBody)) {
+                $jsonResponseBody = json_decode($responseBody);
+                if (!empty($jsonResponseBody)) {
+                    throw new \RuntimeException('Could not ping server - '. $jsonResponseBody->reason);
+                }
+            }
+            throw new \RuntimeException('Could not ping server');
         }
-        return $isConn;
+
+        $data = json_decode($response->getBody()) ? : false;
+        return $data;
     }
 
     /**
      * Requests the creation of a new Shopware ID anc account (registration action)
      *
-     * @param $shopwareId
-     * @param $email
-     * @param $password
-     * @param $localeId
+     * @param string $shopwareId
+     * @param string $email
+     * @param string $password
+     * @param int $localeId
      * @return \Shopware\Components\HttpClient\Response
      * @throws \RuntimeException
      */
@@ -116,7 +125,8 @@ class PluginStoreConnector
     /**
      * Gets a locale list
      *
-     * @return mixed
+     * @return Obj[] array of locale details
+     * @throws \RuntimeException
      */
     public function getLocales()
     {
@@ -142,9 +152,10 @@ class PluginStoreConnector
     /**
      * Get the list of shops (and details) associated to the given user
      *
-     * @param $token
-     * @param $shopwareId
-     * @return mixed
+     * @param string $token
+     * @param string $shopwareId
+     * @return Obj[] array of shop details
+     * @throws \RuntimeException
      */
     public function getShops($token, $shopwareId)
     {
@@ -173,9 +184,10 @@ class PluginStoreConnector
      * Requests the domain hash and filename needed to generate the
      * validation key, so that the current domain can be validated
      *
-     * @param $domain
-     * @param $token
-     * @return \Shopware\Components\HttpClient\Response
+     * @param string $domain
+     * @param string $token
+     * @return array Filename and domain hash of the domain validation file
+     * @throws \RuntimeException
      */
     public function getDomainHash($domain, $token)
     {
@@ -206,10 +218,11 @@ class PluginStoreConnector
     /**
      * Requests the validation of the current installation's domain
      *
-     * @param $domain
-     * @param $shopwareId
-     * @param $token
-     * @return mixed
+     * @param string $domain
+     * @param string $shopwareId
+     * @param string $token
+     * @return array Result of the validation operation (empty if successful)
+     * @throws \RuntimeException
      */
     public function verifyDomain($domain, $shopwareId, $token)
     {
@@ -239,47 +252,35 @@ class PluginStoreConnector
     }
 
     /**
-     * Gets the token. If the current token is invalid, empty or will expire soon,
-     * gets a new one from the server using the provided auth credentials
+     * Gets an access token from the server using the provided auth credentials
      *
-     * @param $shopwareId
-     * @param $password
-     * @return token
+     * @param string $shopwareId
+     * @param string $password
+     * @return array Token to access the API
+     * @throws \RuntimeException
      */
     public function getToken($shopwareId = null, $password = null)
     {
-        $tokenData = Shopware()->BackendSession()->accessToken;
+        $url = $this->apiEndpoint . "accesstokens";
 
-        if (empty($tokenData) || strtotime($tokenData->expire->date) >= strtotime("+30 seconds")) {
-            if (empty($shopwareId) || empty($password)) {
-                throw new \RuntimeException('Could not login - missing login data');
-            }
+        $postData = array(
+            'shopwareId' => $shopwareId,
+            'password'   => $password,
+        );
 
-            $url = $this->apiEndpoint . "accesstokens";
-
-            $postData = array(
-                'shopwareId' => $shopwareId,
-                'password'   => $password,
-            );
-
-            try {
-                $response = $this->httpClient->post($url, [], json_encode($postData));
-            } catch (RequestException $e) {
-                $responseBody = $e->getBody();
-                if (!empty($responseBody)) {
-                    $jsonResponseBody = json_decode($responseBody);
-                    if (!empty($jsonResponseBody)) {
-                        throw new \RuntimeException('Could not login - '. $jsonResponseBody->reason);
-                    }
+        try {
+            $response = $this->httpClient->post($url, [], json_encode($postData));
+        } catch (RequestException $e) {
+            $responseBody = $e->getBody();
+            if (!empty($responseBody)) {
+                $jsonResponseBody = json_decode($responseBody);
+                if (!empty($jsonResponseBody)) {
+                    throw new \RuntimeException('Could not login - '. $jsonResponseBody->reason);
                 }
-                throw new \RuntimeException('Could not login');
             }
-
-            $tokenData = json_decode($response->getBody());
-
-            Shopware()->BackendSession()->accessToken = $tokenData;
+            throw new \RuntimeException('Could not login');
         }
 
-        return $tokenData->token;
+        return json_decode($response->getBody());
     }
 }

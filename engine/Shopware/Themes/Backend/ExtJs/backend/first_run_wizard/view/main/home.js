@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
             Ext.Ajax.request({
                 url: '{url controller="firstRunWizard" action="pingServer"}',
                 method: 'GET',
-                timeout: 4000000,
+                timeout: 10000,
                 success: function(response) {
                     var result = Ext.JSON.decode(response.responseText);
 
