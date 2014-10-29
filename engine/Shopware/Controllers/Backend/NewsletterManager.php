@@ -414,11 +414,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             return;
         }
 
+        //copies the id into the request params
         $containers = $model->getContainers();
         foreach ($containers as $container) {
-            Shopware()->Models()->remove($container);
+            $data['containers'][0]['id'] = $container->getId();
         }
-        Shopware()->Models()->flush();
 
 
         // Flatten the newsletter->containers->text field: Each container as only one text-field

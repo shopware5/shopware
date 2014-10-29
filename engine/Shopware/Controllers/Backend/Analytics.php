@@ -226,6 +226,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = array_merge_recursive($turnover, $visitors);
         $data = array_merge_recursive($data, $registrations);
 
+        krsort($data);
+
         foreach($data as $date => &$row) {
             $row['date'] = strtotime($date);
             $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);

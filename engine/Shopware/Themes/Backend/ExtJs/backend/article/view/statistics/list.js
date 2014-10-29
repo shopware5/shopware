@@ -32,7 +32,7 @@
  * Shopware UI - Article esd page
  */
 //{namespace name=backend/article/view/main}
-//{block name="backend/article/view/esd/list"}
+//{block name="backend/article/view/statistics/list"}
 Ext.define('Shopware.apps.Article.view.statistics.List', {
 
     /**

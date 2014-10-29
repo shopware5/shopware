@@ -2950,7 +2950,6 @@ class sAdmin
     {
         return (
             (is_array($order["content"]) && count($order["content"]) >= $value)
-            || $order["content"] >= $value
         );
     }
 

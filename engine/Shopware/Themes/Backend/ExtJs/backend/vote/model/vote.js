@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Vote.model.Vote', {
 		//{block name="backend/vote/model/vote/fields"}{/block}
 		'id', 'active',
         { name : 'datum', type : 'date' },
-        'name', 'headline', 'points', 'articleName', 'comment', 'answer', 'answer_datum'],
+        'name', 'headline', 'points', 'articleName', 'comment', 'answer', 'answer_datum', 'email'],
     /**
     * Configure the data communication
     * @object

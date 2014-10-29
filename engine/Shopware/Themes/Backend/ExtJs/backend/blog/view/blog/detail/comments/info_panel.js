@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
     title: '{s name=blog/detail/comments/info_panel/title}More information{/s}',
     width: 300,
     collapsible: true,
+    autoScroll: true,
 
 
     initComponent: function(){

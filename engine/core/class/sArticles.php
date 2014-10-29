@@ -596,6 +596,7 @@ class sArticles
         $this->sSYSTEM->_POST["sVoteSummary"] = strip_tags($this->sSYSTEM->_POST["sVoteSummary"]);
         $this->sSYSTEM->_POST["sVoteComment"] = strip_tags($this->sSYSTEM->_POST["sVoteComment"]);
         $this->sSYSTEM->_POST["sVoteStars"] = doubleval($this->sSYSTEM->_POST["sVoteStars"]);
+        $this->sSYSTEM->_POST["sVoteMail"] = strip_tags($this->sSYSTEM->_POST["sVoteMail"]);
 
         if ($this->sSYSTEM->_POST["sVoteStars"] < 1 || $this->sSYSTEM->_POST["sVoteStars"] > 10) {
             $this->sSYSTEM->_POST["sVoteStars"] = 0;
@@ -626,8 +627,8 @@ class sArticles
         }
 
         $sql = '
-            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ';
         $insertComment = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
             $article,
@@ -636,7 +637,8 @@ class sArticles
             $this->sSYSTEM->_POST["sVoteComment"],
             $this->sSYSTEM->_POST["sVoteStars"],
             $datum,
-            $active
+            $active,
+            $this->sSYSTEM->_POST["sVoteMail"]
         ));
         if (empty($insertComment)) {
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
@@ -1011,13 +1013,24 @@ class sArticles
      */
     protected function addActiveFilterCondition(QueryBuilder $builder, $activeFilters)
     {
-        foreach ($activeFilters as $valueId) {
+        foreach ($activeFilters as $key => $valueId) {
+            $key     = (int)$key;
+            $valueId = (int)$valueId;
+
             if ($valueId <= 0) {
                 continue;
             }
-            $alias = 'filterArticles' . $valueId;
-            $builder->innerJoin('articles', 's_filter_articles', $alias, $alias . '.articleID = articles.id AND ' . $alias . '.valueID = ' . (int) $valueId);
+
+            $alias = 'filterArticles' . $key;
+            $builder->innerJoin(
+                'articles',
+                's_filter_articles',
+                $alias,
+                $alias . '.articleID = articles.id AND ' . $alias . '.valueID = :' . $alias
+            );
+            $builder->setParameter($alias, $valueId);
         }
+
         return $builder;
     }
 
@@ -3861,7 +3874,7 @@ class sArticles
 
         $data["articleName"] = $this->sOptimizeText($data["articleName"]);
         $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
-        
+
         $data['mainVariantNumber'] = $this->db->fetchOne(
             "SELECT variant.ordernumber
              FROM s_articles_details variant
