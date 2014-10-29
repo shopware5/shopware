@@ -2916,7 +2916,7 @@ INSERT INTO `s_articles_img` (`id`, `articleID`, `img`, `main`, `description`, `
 (626, 272, 'Spachtelmasse--Detail', 2, '', 2, 0, 0, '', 'jpg', NULL, NULL, 764),
 (627, 272, 'Spachtelmasse-Brot', 2, '', 3, 0, 0, '', 'jpg', NULL, NULL, 765),
 (628, 272, 'spachtelmasse', 1, '', 1, 0, 0, '', 'jpg', NULL, NULL, 769),
-(629, 44, 'bienenkleber', 1, '', 1, 0, 0, '', 'jpg', NULL, NULL, 772);
+(629, 44, 'Bienenkleber', 1, '', 1, 0, 0, '', 'jpg', NULL, NULL, 772);
 
 TRUNCATE TABLE `s_articles_img_attributes`;
 TRUNCATE TABLE `s_articles_information`;

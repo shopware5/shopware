@@ -220,6 +220,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
                     me.errors.push(operation.message);
                 }
 
+                if (operation.fails && operation.fails.length > 0) {
+                    Shopware.Notification.createGrowlMessage(
+                        "",
+                        operation.fails.join("\n<br>")
+                    );
+                }
+
                 var newOffset = (offset + config.batchSize);
 
                 if (newOffset > config.totalCount) {

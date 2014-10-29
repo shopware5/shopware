@@ -1747,6 +1747,7 @@ class Repository extends ModelRepository
             'vote.datum as datum',
             'vote.active as active',
             'vote.answer as answer',
+            'vote.email as email',
             'article.name as articleName'
         ));
         $builder->from('Shopware\Models\Article\Vote', 'vote');
