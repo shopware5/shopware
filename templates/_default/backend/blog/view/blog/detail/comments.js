@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Comments', {
     border: false,
     alias:'widget.blog-blog-detail-comments',
     region:'center',
-    autoScroll:true,
+    autoScroll:false,
     layout:'border',
     disabled:true,
     ui:'shopware-ui',
