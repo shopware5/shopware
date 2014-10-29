@@ -119,13 +119,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         }
         $sbpLogin = 0;
         if ($firstRunWizardStep > 0) {
-            /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-            $storeConnector = $this->container->get('plugin_store_connector');
+            $tokenData = Shopware()->BackendSession()->accessToken;
 
-            try {
-                $token = $storeConnector->getToken();
-                $sbpLogin = (int) !empty($token);
-            } catch (Exception $e) {}
+            $sbpLogin = (int) !(empty($tokenData) || strtotime($tokenData->expire->date) >= strtotime("+30 seconds"));
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardStep', $firstRunWizardStep, true);

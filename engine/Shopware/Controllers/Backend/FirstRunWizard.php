@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             '_brand-secondary'
         ];
 
-        $themeConfigValues = array_map(function($configKey) use ($defaultShop, $values) {
+        $themeConfigValues = array_map(function ($configKey) use ($defaultShop, $values) {
             return [
                 'elementName' => $configKey,
                 'shopId' => $defaultShop->getId(),
@@ -137,7 +137,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $themeConfigValues = [];
 
-        foreach($themeConfigData as $themeConfig) {
+        foreach ($themeConfigData as $themeConfig) {
             if (empty($themeConfig['values'])) {
                 $value = $themeConfig['defaultValue'];
             } else {
@@ -175,8 +175,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $shopConfigData = $builder->getQuery()->getArrayResult();
 
         $shopConfigValues = [];
-        
-        foreach($shopConfigData as $shopConfig) {
+
+        foreach ($shopConfigData as $shopConfig) {
             if (empty($shopConfig['values'])) {
                 $value = $shopConfig['value'];
             } else {
@@ -228,7 +228,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * - password
      * - email
      *
-     * @return Enlight_View|Enlight_View_Default
      * @throws Exception
      */
     public function registerNewIdAction()
@@ -267,11 +266,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $shopwareId = $this->Request()->getParam('shopwareID');
         $password = $this->Request()->getParam('password');
 
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
-
         try {
-            $storeConnector->getToken($shopwareId, $password);
+            $this->getToken($shopwareId, $password);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -292,7 +288,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Domain registration/retrieval action for first run wizard
      * Usually called after Shopware ID login/registration
      *
-     * @return Enlight_View|Enlight_View_Default
      * @throws Exception
      */
     public function registerDomainAction()
@@ -305,11 +300,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $password = $this->Request()->getParam('password');
         $domain = 'http://'. $shop->getHost() . $shop->getBasePath();
 
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
-
         try {
-            $token = $storeConnector->getToken($shopwareId, $password);
+            $token = $this->getToken($shopwareId, $password);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -394,7 +386,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return Object Information about the current locale
+     * @return Obj Information about the current locale
      * @throws Exception
      */
     private function getCurrentLocale()
@@ -426,7 +418,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * @param $token
      * @param $shopwareId
      * @throws Exception
-     * @return array Information about the current user's shop domains
+     * @return string[] Information about the current user's shop domains
      */
     private function getDomains($token, $shopwareId)
     {
@@ -443,8 +435,37 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        $shopsDomains = array_map(function($shopData) { return $shopData->domain; }, $shopsData);
+        $shopsDomains = array_map(function ($shopData) { return $shopData->domain; }, $shopsData);
 
         return $shopsDomains;
+    }
+
+    /**
+     * Loads the SBP token from current session
+     * If no valid token is available, queries the server for a new one
+     *
+     * @param string $shopwareId
+     * @param string $password
+     * @return string Token to access the API
+     * @throws \RuntimeException
+     */
+    private function getToken($shopwareId, $password)
+    {
+        $tokenData = Shopware()->BackendSession()->accessToken;
+
+        if (empty($tokenData) || strtotime($tokenData->expire->date) >= strtotime("+30 seconds")) {
+            if (empty($shopwareId) || empty($password)) {
+                throw new \RuntimeException('Could not login - missing login data');
+            }
+
+            /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
+            $storeConnector = $this->container->get('plugin_store_connector');
+
+            $tokenData = $storeConnector->getToken($shopwareId, $password);
+
+            Shopware()->BackendSession()->accessToken = $tokenData;
+        }
+
+        return $tokenData->token;
     }
 }
