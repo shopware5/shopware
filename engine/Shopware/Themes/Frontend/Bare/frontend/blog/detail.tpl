@@ -6,7 +6,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="blog--detail panel has--border is--rounded block-group listing listing--listing-1col">
+    <div class="blog--detail panel block-group listing listing--listing-1col">
 
         {* Content *}
         {block name='frontend_blog_detail_content'}
@@ -122,36 +122,66 @@
             </div>
         {/block}
 
+        {* Comments *}
+        {block name='frontend_blog_detail_comments'}
+            {include file="frontend/blog/comments.tpl"}
+        {/block}
+
         {* Cross selling *}
         {block name='frontend_blog_detail_crossselling'}
             {if $sArticle.sRelatedArticles}
-                <div class="blog--crossselling panel--body is--wide block">
+                <div class="blog--crossselling block">
 
                     {* Headline *}
                     {block name='frontend_blog_detail_crossselling_headline'}
-                        <h2 class="blog--crossselling-headline">{s name="BlogHeaderCrossSelling"}{/s}</h2>
+                        <h2 class="blog--crossselling-headline panel--title is--underline">{s name="BlogHeaderCrossSelling"}{/s}</h2>
                     {/block}
 
                     {* Listing *}
                     {block name='frontend_blog_detail_crossselling_listing'}
-                        <div class="blog--crossseling-listing">
-                            {foreach $sArticle.sRelatedArticles as $related}
-                                {if $relatedarticle@last}
-                                    {$lastitem=true}
-                                {else}
-                                    {$lastitem=false}
-                                {/if}
-                                {include file="frontend/listing/box_blog.tpl" sArticle=$related sTemplate='listing-1col' lastitem=$lastitem}
-                            {/foreach}
+
+                        {* Recomendations *}
+                        <script type="text/javascript">
+                            (function() {
+                                window.widgets = (typeof(window.widgets) == 'undefined') ? [] : window.widgets;
+                                window.widgets.push({
+                                    selector: '.crossselling--content',
+                                    plugin: 'productSlider',
+                                    smartphone: {
+                                        perPage: 1,
+                                        perSlide: 1,
+                                        touchControl: true
+                                    },
+                                    tablet: {
+                                        perPage: 3,
+                                        perSlide: 1,
+                                        touchControl: true
+                                    },
+                                    tabletLandscape: {
+                                        perPage: 4,
+                                        perSlide: 1,
+                                        touchControl: true
+                                    },
+                                    desktop: {
+                                        perPage: 5,
+                                        perSlide: 1
+                                    }
+                                });
+                            })();
+                        </script>
+
+                        <div class="blog--crossselling panel--body is--wide block">
+                            <div class="crossselling--content panel--body product-slider" data-mode="local">
+                                <div class="product-slider--container">
+                                    {foreach $sArticle.sRelatedArticles as $article}
+                                        {include file="widgets/recommendation/item.tpl" article=$article}
+                                    {/foreach}
+                                </div>
+                            </div>
                         </div>
                     {/block}
                 </div>
             {/if}
-        {/block}
-
-        {* Comments *}
-        {block name='frontend_blog_detail_comments'}
-            {include file="frontend/blog/comments.tpl"}
         {/block}
     </div>
 {/block}
