@@ -76,6 +76,12 @@ Ext.define('Shopware.form.field.Media', {
     valueField: 'id',
 
     /**
+     * Defines if the media selection window can be minimized
+     * @type { bool }
+     */
+    minimizable: true,
+
+    /**
      * Contains the instance of the select button,
      * which created in the { @link #createSelectButton } function.
      * @type { Ext.button.Button }
@@ -447,7 +453,8 @@ Ext.define('Shopware.form.field.Media', {
             },
             mediaSelectionCallback: me.onSelectMedia,
             selectionMode: false,
-            validTypes: me.validTypes || []
+            validTypes: me.validTypes || [],
+            minimizable: me.minimizable
         });
 
         me.fireEvent('after-open-media-manager', me);

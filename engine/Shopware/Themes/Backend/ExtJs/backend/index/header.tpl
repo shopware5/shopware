@@ -52,12 +52,13 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 
             this.callParent(arguments);
 {if $user}
-
 			this.addSubApplication({
 				name: "Shopware.apps.{$app|escape}",
 				controller: {$controller},
 				params: {$params},
-                localizedName: 'Shopware'
+                localizedName: 'Shopware',
+                firstRunWizardStep: {$firstRunWizardStep},
+                sbpLogin: {$sbpLogin}
 			});
 {else}
             this.addSubApplication({

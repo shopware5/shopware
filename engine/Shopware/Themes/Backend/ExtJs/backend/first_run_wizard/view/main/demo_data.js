@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -22,37 +21,38 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\HttpClient;
-
 /**
+ * Shopware First Run Wizard - Demo data tab
+ *
  * @category  Shopware
- * @package   Shopware\Components\HttpClient
+ * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RequestException extends \Exception
-{
-    /**
-     * @var string
-     */
-    private $body;
+
+//{namespace name=backend/first_run_wizard/main}
+//{block name="backend/first_run_wizard/view/main/demo_data"}
+
+Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
+    extend: 'Ext.container.Container',
 
     /**
-     * @param string $message
-     * @param int $code
-     * @param \Exception $previous
-     * @param string $body
+     * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     * @string
      */
-    function __construct($message = "", $code = 0, \Exception $previous = null, $body = null)
-    {
-        $this->body = $body;
-        parent::__construct($message, $code, $previous);
-    }
+    alias:'widget.first-run-wizard-demo-data',
 
     /**
-     * @return string
+     * Name attribute used to generate event names
      */
-    public function getBody()
-    {
-        return $this->body;
+    name:'demo-data',
+
+    initComponent: function() {
+        var me = this;
+
+        me.html = '<h1>Demo data</h1>';
+
+        me.callParent(arguments);
     }
-}
+});
+
+//{/block}

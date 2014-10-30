@@ -128,11 +128,11 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     return [
                         '<div class="theme--outer-container">',
                         '<div class="x-grid-group-hd x-grid-group-hd-collapsible">',
-                            '<div class="x-grid-group-title">' + snippets[name] + '</div>',
+                        '<div class="x-grid-group-title">' + snippets[name] + '</div>',
                         '</div>',
                         '<div class="theme--container">',
-                            me.getItem(values),
-                            '<div class="x-clear"></div>',
+                        me.getItem(values),
+                        '<div class="x-clear"></div>',
                         '</div></div>'
                     ].join('');
                 },
@@ -198,7 +198,6 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             }
         });
     }
-
 });
 
 //{/block}

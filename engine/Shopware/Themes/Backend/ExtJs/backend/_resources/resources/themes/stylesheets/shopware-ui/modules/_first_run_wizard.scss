@@ -1,0 +1,45 @@
+
+
+.first-run-wizard {
+
+  .wizard-navigation {
+      padding: 10px;
+      font-size: 16px;
+
+      .item {
+          padding: 10px 10px 10px 20px;
+          border-left: 1px solid #c4c4c4;
+      }
+
+      .item.current:before {
+          position: absolute;
+          background: blue;
+          width: 16px;
+          height: 16px;
+          content: '';
+          left: 3px;
+      }
+
+    .item.current, .item.previous {
+      font-weight: bold;
+    }
+
+    .item.disabled {
+      font-weight: normal;
+      color: #a9a9a9;
+    }
+  }
+
+  .card-container {
+      padding: 20px;
+
+      h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+
+      }
+  }
+
+}

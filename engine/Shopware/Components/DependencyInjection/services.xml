@@ -342,5 +342,9 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
+        <service id="plugin_store_connector" class="Shopware\Components\PluginStore\PluginStoreConnector" scope="prototype">
+            <argument type="service" id="http_client" />
+            <argument>%shopware.firstRunWizard%</argument>
+        </service>
     </services>
 </container>
