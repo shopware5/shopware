@@ -1,6 +1,7 @@
+@knownFailing
 Feature: General functionality
 
-    @currency @noResponsive @knownFailing
+    @currency @noResponsive
     Scenario Outline: I can put articles into my basket in different currencies
         Given I am on the listing page:
             | parameter | value |

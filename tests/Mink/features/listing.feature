@@ -18,14 +18,14 @@ Feature: Show Listing
         When  I set the filter to:
             | filter     | value      |
             | Hersteller | <supplier> |
-        Then I should see <articles> elements of type "ArticleBox"
+        Then  I should see <articles> elements of type "ArticleBox"
 
     Examples:
         | supplier             | articles |
         | Sonnenschirm Versand | 5        |
         | Teapavilion          | 23       |
 
-    @filter @knownFailing
+    @filter @noResponsive
     Scenario: I can filter the articles by custom filters
         Given I am on the listing page:
             | parameter | value |
@@ -36,16 +36,38 @@ Feature: Show Listing
             | Geschmack     | mild      |
             | Flaschengröße | 0,5 Liter |
             | Alkoholgehalt | >30%      |
-        Then I should see 4 elements of type "ArticleBox"
+        Then  I should see 4 elements of type "ArticleBox"
 
         When  I set the filter to:
             | filter          | value   |
             | Trinktemperatur | Gekühlt |
             | Farbe           | rot     |
-        Then I should see 2 elements of type "ArticleBox"
+        Then  I should see 2 elements of type "ArticleBox"
 
-        When I reset all filters
-        Then I should see 10 elements of type "ArticleBox"
+        When  I reset all filters
+        Then  I should see 10 elements of type "ArticleBox"
+
+    @filter @noEmotion @javascript
+    Scenario: I can filter the articles by custom filters
+        Given I am on the listing page:
+            | parameter | value |
+            | sCategory | 21    |
+
+        When  I set the filter to:
+            | filter        | value     |
+            | Geschmack     | mild      |
+            | Flaschengröße | 0,5 Liter |
+            | Alkoholgehalt | >30%      |
+        Then  I should see 4 elements of type "ArticleBox"
+
+        When  I set the filter to:
+            | filter          | value   |
+            | Trinktemperatur | Gekühlt |
+            | Farbe           | rot     |
+        Then  I should see 2 elements of type "ArticleBox"
+
+        When  I reset all filters
+        Then  I should see 10 elements of type "ArticleBox"
 
     @sort @javascript
     Scenario: I can change the sort
@@ -76,10 +98,10 @@ Feature: Show Listing
         Given I am on the listing page:
             | parameter | value  |
             | sPerPage  | <from> |
-        Then I should see <from> elements of type "ArticleBox"
+        Then  I should see <from> elements of type "ArticleBox"
 
-        When I select "<to>" from "n"
-        Then I should see <to> elements of type "ArticleBox"
+        When  I select "<to>" from "n"
+        Then  I should see <to> elements of type "ArticleBox"
 
     Examples:
         | from | to |
@@ -94,13 +116,13 @@ Feature: Show Listing
             | parameter | value |
             | sCategory | 69    |
         Then  I should see "Artikel mit ähnlichen Produkten"
-        And  I should see "Artikel mit Zubehör"
+        And   I should see "Artikel mit Zubehör"
 
         When  I select "English" from "__shop"
         Then  I should see "Articles with similar products"
-        And  I should see "Articles with accessories"
+        And   I should see "Articles with accessories"
 
-        When I go to the listing page:
+        When  I go to the listing page:
             | parameter | value |
             | sSupplier | 5     |
         Then  I should see "Suitcase set"
@@ -108,7 +130,7 @@ Feature: Show Listing
         When  I select "Deutsch" from "__shop"
         Then  I should see "Reisekoffer Set"
 
-    @customergroups @knownFailing
+    @customergroups
     Scenario:
         Given I am on the page "Account"
         And   I log in successful as "Händler Kundengruppe-Netto" with email "mustermann@b2b.de" and password "shopware"
@@ -119,10 +141,10 @@ Feature: Show Listing
         Then  the article on position 1 should have this properties:
             | property | value     |
             | price    | "42,02 €" |
-        And the article on position 2 should have this properties:
+        And   the article on position 2 should have this properties:
             | property | value     |
             | price    | "16,81 €" |
-        And  the article on position 3 should have this properties:
+        And   the article on position 3 should have this properties:
             | property | value    |
             | price    | "6,71 €" |
 
@@ -135,10 +157,10 @@ Feature: Show Listing
         Then  the article on position 1 should have this properties:
             | property | value     |
             | price    | "50,00 €" |
-        And  the article on position 2 should have this properties:
+        And   the article on position 2 should have this properties:
             | property | value     |
             | price    | "20,00 €" |
-        And  the article on position 3 should have this properties:
+        And   the article on position 3 should have this properties:
             | property | value    |
             | price    | "7,99 €" |
 
@@ -149,19 +171,19 @@ Feature: Show Listing
             | sPage     | 4         |
             | sPerPage  | <perPage> |
 
-        Then I should see <perPage> elements of type "ArticleBox"
+        Then  I should see <perPage> elements of type "ArticleBox"
 
-        When I browse to "previous" page 3 times
-        Then I should not be able to browse to "previous" page
+        When  I browse to "previous" page 3 times
+        Then  I should not be able to browse to "previous" page
 
-        When I browse to "next" page <countNextPage> times
-        Then I should see "ESD Download Artikel"
-        And  I should see "Sonnenbrille Speed Eyes"
+        When  I browse to "next" page <countNextPage> times
+        Then  I should see "ESD Download Artikel"
+        And   I should see "Sonnenbrille Speed Eyes"
 
-        When I browse to page <lastPage>
-        Then I should see <countLastPage> elements of type "ArticleBox"
-        And  I should not be able to browse to "next" page
-        And  I should not be able to browse to page 1
+        When  I browse to page <lastPage>
+        Then  I should see <countLastPage> elements of type "ArticleBox"
+        And   I should not be able to browse to "next" page
+        And   I should not be able to browse to page 1
 
     Examples:
         | perPage | countNextPage | lastPage | countLastPage |

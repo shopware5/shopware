@@ -32,7 +32,14 @@ class ListingContext extends SubContext
             $properties = $filter->getHash();
         }
 
-        $this->getPage('Listing')->filter($properties);
+        /** @var Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $filterGroups */
+        $filterGroups = $this->getElement('FilterGroup');
+        $filterGroups->setParent($page);
+
+        $page->filter($filterGroups, $properties);
     }
 
     /**
