@@ -173,6 +173,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      *
      * @param string $language
      * @param mixed $store
+     * @return mixed
      */
     private function translateStore($language, $store)
     {

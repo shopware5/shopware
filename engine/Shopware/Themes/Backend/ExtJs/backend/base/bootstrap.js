@@ -189,7 +189,3 @@
 {include file='backend/base/component/element/textarea.js'}
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
-
-
-
-

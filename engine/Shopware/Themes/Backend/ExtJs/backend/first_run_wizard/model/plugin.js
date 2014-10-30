@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -22,37 +21,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\HttpClient;
-
 /**
+ * Shopware Application
+ *
  * @category  Shopware
- * @package   Shopware\Components\HttpClient
+ * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RequestException extends \Exception
-{
-    /**
-     * @var string
-     */
-    private $body;
 
-    /**
-     * @param string $message
-     * @param int $code
-     * @param \Exception $previous
-     * @param string $body
-     */
-    function __construct($message = "", $code = 0, \Exception $previous = null, $body = null)
-    {
-        $this->body = $body;
-        parent::__construct($message, $code, $previous);
-    }
+//{namespace name=backend/first_run_wizard/main}
+//{block name="backend/first_run_wizard/model/plugin"}
 
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-}
+Ext.define('Shopware.apps.FirstRunWizard.model.Plugin', {
+    extend: 'Shopware.data.Model',
+
+    fields: [
+        //{block name="backend/first_run_wizard/model/plugin/fields"}{/block}
+        { name : 'id', type: 'int', useNull: true },
+        { name : 'name', type: 'string' }
+    ]
+
+});
+
+//{/block}
