@@ -23,6 +23,7 @@ $(function() {
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('.category--teaser .hero--text').collapseText();
             $('#new-customer-action').collapsePanel();
             $('.btn--password').scroll();

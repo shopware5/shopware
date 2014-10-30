@@ -27,6 +27,7 @@
 
             //cache DOM
             me.$body = $('body');
+            me.$toggleSearchBtn = $(".entry--search > .entry--trigger");
 
             me.applyDataAttributes();
 
@@ -67,10 +68,12 @@
 
             if(me.$el.hasClass(me.opts.activeCls)) {
                 me.$el.removeClass(me.opts.activeCls);
+                me.$toggleSearchBtn.removeClass(me.opts.activeCls);
                 me.$el.find(me.defaults.searchFieldCls).delay(150).blur();
                 me.$body.removeClass('is--active-searchfield');
             } else {
                 me.$el.addClass(me.opts.activeCls);
+                me.$toggleSearchBtn.addClass(me.opts.activeCls);
                 me.$el.find(me.defaults.searchFieldCls).delay(150).focus();
                 me.$body.addClass('is--active-searchfield');
             }
