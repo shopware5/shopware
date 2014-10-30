@@ -6,18 +6,20 @@
     {block name='frontend_checkout_cart_item_voucher_name'}
         <div class="table--column column--product block">
 
-			{* Badge *}
-			{block name='frontend_checkout_cart_item_voucher_badge'}
-				<div class="table--media">
-					<div class="basket--badge">
-						<i class="icon--coupon"></i>
-					</div>
-				</div>
-			{/block}
+            {* Badge *}
+            {block name='frontend_checkout_cart_item_voucher_badge'}
+                <div class="panel--td column--image">
+                    <div class="table--media">
+                        <div class="basket--badge">
+                            <i class="icon--coupon"></i>
+                        </div>
+                    </div>
+                </div>
+            {/block}
 
             {* Product information *}
             {block name='frontend_checkout_cart_item_voucher_details'}
-                <div class="table--content">
+                <div class="panel--td table--content">
 
                     {* Product name *}
                     {block name='frontend_checkout_cart_item_voucher_details_title'}
@@ -43,12 +45,12 @@
 
     {* Accumulated product price *}
     {block name='frontend_checkout_cart_item_voucher_total_sum'}
-        <div class="table--column column--total-price block is--align-right">
-			{block name='frontend_checkout_cart_item_voucher_total_sum_label'}
-				<div class="column--label total-price--label">
-					{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
-				</div>
-			{/block}
+        <div class="panel--td column--total-price block is--align-right">
+            {block name='frontend_checkout_cart_item_voucher_total_sum_label'}
+                <div class="column--label total-price--label">
+                    {s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+                </div>
+            {/block}
 
             {block name='frontend_checkout_cart_item_voucher_total_sum_display'}
                 {if $sBasketItem.itemInfo}
@@ -62,9 +64,9 @@
 
     {* Remove voucher from basket *}
     {block name='frontend_checkout_cart_item_voucher_delete_article'}
-        <div class="table--column column--actions block">
-            <a href="{url action='deleteArticle' sDelete=voucher sTargetAction=$sTargetAction}" class="btn is--small" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
-				<i class="icon--cross"></i>
+        <div class="panel--td column--actions block">
+            <a href="{url action='deleteArticle' sDelete=voucher sTargetAction=$sTargetAction}" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+                <i class="icon--cross"></i>
             </a>
         </div>
     {/block}
