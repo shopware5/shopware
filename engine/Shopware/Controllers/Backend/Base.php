@@ -630,28 +630,29 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getTemplatesAction()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Template');
-        $builder = $repository->createQueryBuilder('t');
-        $builder->select(array(
-            't.id as id',
-            't.name as name',
-            't.template as template'
-        ));
-        $builder->addFilter((array) $this->Request()->getParam('filter', array()));
-        $builder->addOrderBy((array) $this->Request()->getParam('sort', array()));
+        $templates = $repository->findAll();
 
-        $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
+        /**@var $template \Shopware\Models\Shop\Template**/
+        $result = [];
+        foreach($templates as $template) {
 
-        $query = $builder->getQuery();
+            $data = array(
+                'id' => $template->getId(),
+                'name' => $template->getName(),
+                'template' => $template->getTemplate()
+            );
 
-        //get total result of the query
-        $total = Shopware()->Models()->getQueryCount($query);
+            if ($template->getVersion() >= 3) {
+                $data = $this->get('theme_service')->translateTheme(
+                    $template,
+                    $data
+                );
+            }
 
-        //select all shop as array
-        $data = $query->getArrayResult();
-
-        //return the data and total count
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+            $result[] = $data;
+        }
+        
+        $this->View()->assign(array('success' => true, 'data' => $result));
     }
 
     public function getCurrenciesAction()
