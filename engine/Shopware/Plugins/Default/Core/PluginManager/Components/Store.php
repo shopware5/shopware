@@ -895,7 +895,7 @@ class CommunityStore
             return is_writable($directory);
         } else {
             $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($directory),
+                new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
