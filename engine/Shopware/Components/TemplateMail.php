@@ -153,6 +153,8 @@ class Shopware_Components_TemplateMail
             }
         }
 
+        $mailModel = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailModel', $mailModel, array('shop' => $shop));
+
         //todo@all Add setter and getter like the shop
         $config = Shopware()->Config();
 
