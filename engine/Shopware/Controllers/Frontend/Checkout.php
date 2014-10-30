@@ -964,13 +964,40 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * checks if the current user selected an available payment method
+     *
+     * @param integer $currentPayment
+     * @return bool
+     */
+    public function checkPaymentAvailability($currentPayment)
+    {
+        $payments = $this->getPayments();
+        foreach ($payments as $availablePayment) {
+            if ($availablePayment['id'] === $currentPayment['id']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get selected payment or do payment mean selection automatically
      *
      * @return array
      */
     public function getSelectedPayment()
     {
-        if (!empty($this->View()->sUserData['additional']['payment'])) {
+        //if the customer didn't choose an available payment
+        if (!$this->checkPaymentAvailability($this->View()->sUserData['additional']['payment']['id'])
+            && !$this->checkPaymentAvailability($this->session['sPaymentID'])
+            && !empty($this->getPayments())) {
+            
+            $payment = $this->getPayments();
+            $payment = array_shift($payment);
+
+            $this->admin->sSYSTEM->_POST['sPayment'] = $payment['id'];
+            $this->admin->sUpdatePayment();
+        } elseif (!empty($this->View()->sUserData['additional']['payment'])) {
             $payment = $this->View()->sUserData['additional']['payment'];
         } elseif (!empty($this->session['sPaymentID'])) {
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
