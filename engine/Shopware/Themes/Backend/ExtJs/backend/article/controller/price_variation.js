@@ -42,10 +42,6 @@ Ext.define('Shopware.apps.Article.controller.PriceVariation', {
      */
     extend:'Ext.app.Controller',
 
-    refs: [
-        { ref: 'configuratorGroupListing', selector: 'article-detail-window article-variant-configurator grid[name=configurator-group-listing]' }
-    ],
-
     snippets: {
         growlMessage: '{s name=growl_message}Article{/s}',
         failure: {
@@ -110,11 +106,12 @@ Ext.define('Shopware.apps.Article.controller.PriceVariation', {
      */
     onDisplayNewPriceVariationWindow: function(window) {
         var me = this,
-            groupListing = me.getConfiguratorGroupListing();
+            mainWindow = me.subApplication.articleWindow,
+            configuratorGroupStore = mainWindow.configuratorGroupStore;
 
         me.getView('variant.configurator.PriceVariationRule').create({
             store: window.variationsStore,
-            configuratorGroupStore: groupListing.getStore()
+            configuratorGroupStore: configuratorGroupStore
         }).show();
     },
 
