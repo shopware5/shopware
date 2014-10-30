@@ -95,11 +95,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             if ($path) {
                 $categoryContent['sSelfCanonical'] = $path;
             }
-            if (!empty($supplierTitle)) {
-                $categoryContent['title'] = $supplierTitle.' | '.Shopware()->Shop()->getName();
-            } elseif (!empty($supplierName)) {
-                $categoryContent['title'] = $supplierName;
-            }
+            $categoryContent['title'] = !empty($supplierTitle) ? $supplierTitle : $supplierName;
             $categoryContent['canonicalTitle'] = $supplierName;
         }
 
