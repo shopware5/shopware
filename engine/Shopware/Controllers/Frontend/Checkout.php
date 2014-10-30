@@ -1149,6 +1149,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             unset($this->session['sPaymentID']);
             return false;
         }
+
+        // check if the standard payment is available than take it as the default
+        foreach ($payments as $payment) {
+            if ($payment["id"] == Shopware()->Config()->get('sDEFAULTPAYMENT')) {
+                $this->session['sPaymentID'] = (int)$payment['id'];
+                return $payment;
+            }
+        }
+
         $payment = reset($payments);
         $this->session['sPaymentID'] = (int) $payment['id'];
         return $payment;
