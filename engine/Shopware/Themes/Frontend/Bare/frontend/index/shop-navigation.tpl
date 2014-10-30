@@ -10,11 +10,6 @@
             </li>
         {/block}
 
-        {* Spacer *}
-        {*{block name="frontend_index_shop_navigation_spacer"}*}
-            {*<li class="navigation--entry entry--spacer block"></li>*}
-        {*{/block}*}
-
         {* Search form *}
         {block name='frontend_index_search'}
             <li class="navigation--entry entry--search" role="menuitem" data-search-dropdown="true" aria-haspopup="true"{if $theme.focusSearch && {controllerName} == 'index'} data-activeOnStart="true"{/if}>

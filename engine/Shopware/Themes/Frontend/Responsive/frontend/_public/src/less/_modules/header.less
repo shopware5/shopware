@@ -1,13 +1,6 @@
-// Helper colors
-//.logo-main { background: #f5f5f5; }
-//.shop--navigation { background: #e8e8e8; }
-//.entry--search { background: #008855; }
-//.entry--account { background: #6900a1; }
-//.entry--cart { background: #ffff00 }
-
 // Basic header
 .header-main {
-    .unitize(8, 16, padding-bottom);
+    .unitize(10, 16, padding-bottom);
     background: #fff;
     border-bottom: 1px solid @brand-primary;
 
@@ -85,8 +78,8 @@
             vertical-align: middle;
         }
 
-        // @todo search gets font-size from other selector
         .icon--search {
+            .unitize(22, 16, font-size);
             vertical-align: middle;
         }
     }
@@ -166,62 +159,73 @@
             .unitize(20, 16, font-size);
         }
     }
-
-    .entry--search {
-        font-weight: @font-bold-weight;
-
-        [class^="icon--"] {
-            .unitize(22, 16, font-size);
-            margin: 0;
-        }
-
-        // @todo remove all is--active specific styles from all other viewports
-        &.is--active {
-            background: #fff;
-            border-bottom-color: #fff;
-
-            .main-search--form {
-                .unitize(48, 16, top);
-                left: 0;
-                display: block;
-                position: absolute;
-            }
-        }
-    }
 }
 
 // Default ajax search form
 .main-search--form {
-    .unitize-padding(8, 10, 8, 10, 16);
-    .box-shadow(0 6px 6px -6px @gray);
-    background: #fff;
-    border-bottom: 1px solid @border-color;
+    .unitize-padding(10, 10, 10, 10, 16);
     width: 100%;
     left: 0;
     top: 0;
     position: absolute;
     z-index: 3000;
 
+    // Icon position will be overwritten by @phoneLandscapeViewportWidth
     .icon--search {
-        .unitize(8, 16, top);
-        .unitize(12, 16, right);
+        .unitize(18, 16, top);
+        .unitize(20, 16, right);
         .unitize(22, 16, font-size);
         position: absolute;
+        z-index: 2;
     }
 
     .main-search--field {
         .unitize-padding(9, 38, 9, 9, 16);
         .unitize-height(40, 16);
+        background: #fff;
         vertical-align: middle;
         width: 100%;
+        position: relative;
     }
-    .main-search--button { display: none; }
 
+    .main-search--button { display: none; }
 }
 
+// Creating the arrow on active search field
+.has--csstransforms {
+    .entry--search .entry--trigger {
+        &.is--active {
+            &::after {
+                .rotate(-45deg);
+                .unitize-width(15, 16);
+                .unitize-height(15, 16);
+                .unitize(8, 16, margin-top);
+                .unitize(1, 16, margin-left);
+                content: '';
+                display: block;
+                background: darken(@gray, 2%);
+            }
+        }
+    }
+}
+
+.entry--search {
+    &.is--active {
+        .main-search--form {
+            .unitize(50, 16, top);
+            background: darken(@gray, 2%);
+            //border-bottom: 1px solid @brand-primary;
+            left: 0;
+            display: block;
+            position: absolute;
+        }
+    }
+}
+
+
 // if searchfield is active add content padding
-.is--active-searchfield .content-main {
-    .unitize(55, 16, padding-top);
+.is--active-searchfield .header-main {
+    .unitize(70, 16, padding-bottom);
 }
 
 // Loading indicator for css animations supported browsers
@@ -357,10 +361,8 @@
     }
 }
 
+// Phone Landscape styling for the global shop header
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
-    .header-main {
-        background: #fff;
-    }
 
     .entry--search {
         display: inline-block;
@@ -368,16 +370,32 @@
         left: 26%;
         width: 40%;
 
-        .entry--trigger {
-            display: none;
+        // Remove the mobile search position in all other viewports
+        &.is--active {
+            .main-search--form {
+                .unitize(0, 16, top);
+                display: inline-block;
+            }
         }
+
+        // Don't display toggle search bar icon
+        .entry--trigger { display: none; }
 
         .main-search--form {
             .box-shadow(0 0 0 transparent);
-            .unitize-padding(0, 0, 0, 0, 16);
+            border-bottom: 0 none;
+            padding: 0;
             display: inline-block;
-            // position: relative;
-            border: none;
+            position: relative;
+
+            .main-search--field { background: @input-bg; }
+
+            // Icon position from here to @desktopViewportWidth
+            .icon--search {
+                .unitize(8, 16, top);
+                .unitize(12, 16, right);
+                .unitize(22, 16, font-size);
+            }
         }
     }
 }
@@ -580,13 +598,6 @@
             border: 0 none;
             width: 50%;
             //position: relative;
-
-            // @todo set general styling for form element
-            .icon--search {
-                .unitize(8, 16, top);
-                .unitize(12, 16, right);
-                .unitize(22, 16, font-size);
-            }
 
             .entry--trigger { display: none }
         }
