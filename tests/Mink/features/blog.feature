@@ -23,7 +23,7 @@ Feature: Blog
         Given I click to read the blog article on position <position>
         Then  I should see "<title>"
         Then  I should see "Passende Artikel"
-        And   I should see <count> elements of type "ArticleBox"
+        And   I should see <count> elements of type "BlogArticleBox"
 
     Examples:
         | position | title                                               | count |

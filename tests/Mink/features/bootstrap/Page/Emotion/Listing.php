@@ -2,6 +2,7 @@
 namespace Page\Emotion;
 
 use Behat\Mink\Element\NodeElement;
+use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
     Behat\Behat\Context\Step;
@@ -11,23 +12,18 @@ class Listing extends Page
     /**
      * @var string $path
      */
-    protected $path = '/listing/index/sCategory/{sCategory}/sSupplier/{sSupplier}?sPage={sPage}&sTemplate={sTemplate}&sPerPage={sPerPage}&sSort={sSort}';
+    protected $path = '/listing/index/sCategory/{sCategory}?sPage={sPage}&sTemplate={sTemplate}&sPerPage={sPerPage}&sSort={sSort}';
 
     public $cssLocator = array(
         'view' => array(
             'table' => 'a.table-view',
             'list' => 'a.list-view'),
         'active' => '.active',
-        'filterContainer' => 'div.filter_properties > div',
-        'filterCloseLinks' => 'div.slideContainer > ul > li.close > a',
-        'filterGroups' => 'div > div:not(.slideContainer)',
-        'filterProperties' => 'div.slideContainer:nth-of-type(%d) > ul > li > a',
+        'filterCloseLinks' => 'div.filter_properties > div > div.slideContainer > ul > li.close > a',
         'listingBox' => 'div.listing'
     );
 
     protected $viewSwitchCount = 2;
-    protected $filterGroupsHasBrackets = true;
-    protected $filterPropertyFactor = 2;
 
     /**
      * Opens the listing page
@@ -42,7 +38,6 @@ class Listing extends Page
         }
 
         $parameters['sCategory'] = isset($parameters['sCategory']) ? $parameters['sCategory'] : '3';
-        $parameters['sSupplier'] = isset($parameters['sSupplier']) ? $parameters['sSupplier'] : '';
         $parameters['sPage']     = isset($parameters['sPage'])     ? $parameters['sPage']     : '1';
         $parameters['sTemplate'] = isset($parameters['sTemplate']) ? $parameters['sTemplate'] : '';
         $parameters['sPerPage'] = isset($parameters['sPerPage']) ? $parameters['sPerPage'] : '12';
@@ -53,19 +48,23 @@ class Listing extends Page
 
     /**
      * Sets the article filter
-     * @param  array                                       $properties
-     * @throws \Behat\Mink\Exception\ResponseTextException
+     * @param MultipleElement $filterGroups
+     * @param $properties
+     * @throws \Exception
      */
-    public function filter($properties)
+    public function filter(MultipleElement $filterGroups, $properties)
     {
-        $locators = array('filterContainer');
-        $elements = \Helper::findElements($this, $locators);
+        $this->resetFilters();
+        $this->setFilters($filterGroups, $properties);
+    }
 
-        $filterContainer = $elements['filterContainer'];
-
-        //Reset all filters
+    /**
+     * @throws \Exception
+     */
+    protected function resetFilters()
+    {
         $locators = array('filterCloseLinks');
-        $elements = \Helper::findElements($filterContainer, $locators, $this->cssLocator, true, false);
+        $elements = \Helper::findElements($this, $locators, null, true, false);
 
         if (isset($elements['filterCloseLinks'])) {
             $closeLinks = array_reverse($elements['filterCloseLinks']);
@@ -73,85 +72,40 @@ class Listing extends Page
                 $closeLink->click();
             }
         }
+    }
 
-        //Set new filters
-        $locators = array('filterGroups');
-        $elements = \Helper::findElements($filterContainer, $locators, $this->cssLocator, true);
+    /**
+     * @param MultipleElement $filterGroups
+     * @param $properties
+     * @throws \Exception
+     */
+    protected function setFilters(MultipleElement $filterGroups, $properties)
+    {
+        foreach($properties as $property)
+        {
+            $found = false;
 
-        $filterGroups = array();
+            foreach($filterGroups as $filterGroup) {
+                $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
-        foreach ($elements['filterGroups'] as $filterGroup) {
-            $filterGroups[] = $this->getElementName($filterGroup, $this->filterGroupsHasBrackets);
-        }
+                if($filterGroupName === $property['filter']) {
+                    $found  = true;
+                    $success = $filterGroup->setProperty($property['value']);
 
-        foreach ($properties as $property) {
-            $filterKey = array_search($property['filter'], $filterGroups, true);
+                    if(!$success) {
+                        $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
+                        \Helper::throwException($message);
+                    }
 
-            if ($filterKey === false) {
+                    break;
+                }
+            }
+
+            if (!$found) {
                 $message = sprintf('The filter "%s" was not found!', $property['filter']);
                 \Helper::throwException($message);
             }
-
-            $success = $this->setFilterProperty($filterKey, $property['value'], $filterContainer);
-
-            if (!$success) {
-                $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
-                \Helper::throwException($message);
-            }
         }
-    }
-
-    /**
-     * Helper function to set a filter
-     * @param  integer     $filterKey
-     * @param  string      $value
-     * @param  NodeElement $filterContainer
-     * @return bool
-     */
-    protected function setFilterProperty($filterKey, $value, $filterContainer)
-    {
-        $filterKey = ($filterKey + 1) * $this->filterPropertyFactor;
-
-        $locators = array('filterProperties' => $filterKey);
-        $elements = \Helper::findElements($filterContainer, $locators, $this->cssLocator, true);
-
-        foreach ($elements['filterProperties'] as $property) {
-            $propertyName = $this->getElementName($property);
-
-            if ($propertyName === $value) {
-                $property->click();
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Helper function to get the displayed name of a filter or filter property
-     * @param  NodeElement $element
-     * @param  bool        $hasBrackets
-     * @return string
-     */
-    protected function getElementName($element, $hasBrackets = true)
-    {
-        $name = $element->getText();
-        $name = trim($name);
-
-        if (empty($name)) {
-            $name = $element->getAttribute('title');
-            $name = trim($name);
-
-            return $name;
-        }
-
-        if ($hasBrackets) {
-            $length = strrpos($name, ' ');
-            $name = substr($name, 0, $length);
-        }
-
-        return $name;
     }
 
     /**
