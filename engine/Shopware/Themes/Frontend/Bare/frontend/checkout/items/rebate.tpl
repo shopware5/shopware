@@ -11,7 +11,11 @@
                 <div class="panel--td column--image">
                     <div class="table--media">
                         <div class="basket--badge">
-                            <i class="icon--arrow-right"></i>
+                            {if $sBasketItem.price >= 0}
+                                <i class="icon--arrow-right"></i>
+                            {else}
+                                <i class="icon--percent"></i>
+                            {/if}
                         </div>
                     </div>
                 </div>
