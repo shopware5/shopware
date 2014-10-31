@@ -174,6 +174,8 @@ class Shopware_Components_TemplateMail
             );
         }
 
+        $mailModel = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailModel', $mailModel, array('shop' => $this->getShop()));
+
         // save current context to mail model
         $mailContext = json_encode($context);
         $mailContext = json_decode($mailContext, true);
