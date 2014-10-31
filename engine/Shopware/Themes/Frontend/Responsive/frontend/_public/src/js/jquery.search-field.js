@@ -57,26 +57,34 @@
          * @param event
          */
         onClickSearchTrigger: function(event) {
-            var me = this;
-            var target = $(event.target);
+            var me = this,
+                target = $(event.target),
+                $el = me.$el,
+                opts = me.opts,
+                $searchField = $el.find(opts.searchFieldCls),
+                toggleState;
+
             event.preventDefault();
             event.stopPropagation();
 
-            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isXs()) {
+            if(target.hasClass(opts.searchFieldCls) || !(StateManager.getCurrent() === 'xs')) {
                 return;
             }
 
-            if(me.$el.hasClass(me.opts.activeCls)) {
-                me.$el.removeClass(me.opts.activeCls);
-                me.$toggleSearchBtn.removeClass(me.opts.activeCls);
-                me.$el.find(me.defaults.searchFieldCls).delay(150).blur();
-                me.$body.removeClass('is--active-searchfield');
-            } else {
-                me.$el.addClass(me.opts.activeCls);
-                me.$toggleSearchBtn.addClass(me.opts.activeCls);
-                me.$el.find(me.defaults.searchFieldCls).delay(150).focus();
-                me.$body.addClass('is--active-searchfield');
+            toggleState = !$el.hasClass(opts.activeCls);
+
+            $el.toggleClass(opts.activeCls, toggleState);
+            me.$toggleSearchBtn.toggleClass(opts.activeCls, toggleState);
+            me.$body.toggleClass('is--active-searchfield', toggleState);
+
+            $searchField.delay(150);
+
+            if($el.hasClass(opts.activeCls)) {
+                $searchField.blur();
+                return;
             }
+
+            $searchField.focus();
         },
 
         destroy: function() {

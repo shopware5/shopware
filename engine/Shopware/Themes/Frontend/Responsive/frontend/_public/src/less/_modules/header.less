@@ -92,11 +92,11 @@
         .unitize(20, 16, height);
         .unitize(10, 16, min-width);
         .unitize(12, 16, font-size);
+        .unitize(-4, 16, top);
+        .unitize(23, 16, left);
         .border-radius(50px);
         .box-sizing(content-box);
         position: absolute;
-        top: -4px;
-        left: 22px;
         display: inline-block;
         z-index: 500;
         font-weight: @font-bold-weight;
@@ -263,11 +263,9 @@
 // Search results modal
 .main-search--results {
     .clearfix();
-    .unitize(60, 16, top);
-    .unitize-width(450);
-    .unitize(-110, 16, margin-left);
+    .unitize(110, 16, top);
     position: absolute;
-    //width: 100%;
+    width: 100%;
     left: 0;
     background: #fff;
     text-align: left;
@@ -276,7 +274,7 @@
 
 .results--list {
     .unitize-padding(10, 15);
-    .box-shadow(0 2px 3px 1px lighten(@border-color, 5%));
+    .box-shadow(0 2px 3px 1px rgba(0,0,0,0.1));
     border-top: 1px solid @border-color;
     border-bottom: 1px solid @border-color;
     background: #fff;
@@ -398,10 +396,27 @@
             }
         }
     }
+
+    // Search results modal
+    .main-search--results {
+        .clearfix();
+        .unitize(60, 16, top);
+        .unitize-width(450);
+        .unitize(-110, 16, margin-left);
+    }
+
+    // Remove the active searchfield padding
+    .is--active-searchfield .header-main {
+        .unitize(10, 16, padding-bottom);
+    }
 }
 
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
+
+    .is--active-searchfield .header-main {
+        .unitize(0, 16, padding-bottom);
+    }
 
     .header-main {
         .unitize(0, 16, padding-bottom);
@@ -413,12 +428,12 @@
             .unitize-padding(4, 0, 4, 0, 16);
             display: block;
         }
-        .top-bar--switches {
-            .clearfix();
-            width: 35%
-        }
+//        .top-bar--switches {
+//            .clearfix();
+//            width: 35%
+//        }
 
-        .top-bar--switches .js--fancy-select {
+        .top-bar--navigation .js--fancy-select {
             .reset-border-radius();
             .reset-box-shadow();
             .unitize(5, 16, margin-right);
@@ -431,23 +446,23 @@
                 border-color: @border-color;
             }
 
-            select { height: auto; }
+            select { height: auto }
         }
-        .top-bar--switches .js--fancy-select-text {
+        .top-bar--navigation .js--fancy-select-text {
             .unitize-padding(0, 30, 0, 5);
             font-weight: normal;
             display: inline-block;
         }
-        .top-bar--switches .js--fancy-select-trigger {
+        .top-bar--navigation .js--fancy-select-trigger {
             .unitize(8, 16, top);
             border-left: 0 none;
         }
 
         .top-bar--language, .top-bar--currency {
-            float: left;
-            max-width: 50%;
+            //float: left;
+            //max-width: 50%;
 
-            & > form { float: left; }
+            //& > form { float: left; }
         }
         .language--flag {
             .unitize-margin(0, 0, 0, 5);
@@ -488,7 +503,6 @@
     }
 
     .top-bar--navigation {
-        width: 65%;
         text-align: right;
 
         .navigation--entry {
@@ -621,15 +635,12 @@
         .unitize-width(450);
         .unitize(-225, 16, margin-left);
         .unitize(60, 16, top);
-        position: absolute;
         left: 50%;
-        text-align: left;
     }
 
     .results--list {
         .border-radius();
         .unitize-padding(10, 15);
-        .box-shadow(0 2px 3px 1px lighten(@border-color, 5%));
         border: 1px solid @border-color;
         background: #fff;
 
@@ -643,7 +654,6 @@
         .unitize(10, 16, top);
         .unitize(10, 16, right);
         position: absolute;
-
     }
 
     .has--no-cssanimations .form--ajax-loader {
