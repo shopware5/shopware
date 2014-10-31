@@ -2,16 +2,18 @@
 	<div class="container block-group">
 
 		{* Language and Currency switcher *}
-		{block name='frontend_index_actions'}
-			<div class="top-bar--switches block">
-				{action module=widgets controller=index action=shopMenu}
-			</div>
-		{/block}
+		{*{block name='frontend_index_actions'}*}
+			{*<div class="top-bar--switches block">*}
+				{*{action module=widgets controller=index action=shopMenu}*}
+			{*</div>*}
+		{*{/block}*}
 
 		{* Top bar navigation *}
 		{block name="frontend_index_top_bar_nav"}
 			<nav class="top-bar--navigation block">
 				<ul class="navigation--list" role="menubar">
+
+					{action module=widgets controller=index action=shopMenu}
 
                     {* Article Compare *}
                     {block name='frontend_index_navigation_inline'}
