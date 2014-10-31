@@ -14,7 +14,6 @@
     }
 
     .product--table {
-
         .panel--body {
             background: @panel-bg;
             color: @text-color;
@@ -27,11 +26,13 @@
             border-color: @panel-border;
         }
 
-        .basket--footer {
-            background: darken(@panel-bg, 4%);
-            border-color: @panel-border;
+        .basket--footer{
+            .unitize-margin(0, -10);
+            background: @gray;
+            border-color: @border-color;
 
             .aggregation--list {
+                margin: 0;
                 background: transparent;
                 border-color: @border-color;
             }
@@ -76,8 +77,8 @@
 
     .add-product--field,
     .add-voucher--field {
-        width: 90%;
         .border-radius-multi(3px, 0, 0, 3px);
+        width: 90%;
     }
 
     .add-product--button,
@@ -104,6 +105,28 @@
     }
 }
 
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+    .confirm--content {
+
+        .product--table {
+            .column--quantity { width: 26%; }
+            .column--total-price { width: 28.5%; }
+            .column--tax-price {
+                .unitize(10, 16, padding-right);
+                float: left;
+                width: 32%;
+            }
+            .row--rebate,
+            .row--premium-product,
+            .row--voucher {
+                .column--tax-price {
+                    margin-left: 39.5%;
+                }
+            }
+        }
+    }
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
     .confirm--content {
 
@@ -123,10 +146,21 @@
                 background: @panel-table-header-bg;
                 border-color: @border-color;
 
-                .table--column {
+                .panel--th {
+                    .unitize-padding(5, 10, 9, 10);
                     color: @panel-table-header-color;
                 }
             }
+
+            .column--product { width: 47%; }
+            .column--quantity { width: 11% }
+            .column--tax-price {
+                .unitize-padding(10, 10);
+                width: 17%
+            }
+            .column--total-price { width: 17% }
+            .column--actions { width: 7.5% }
+
 
             .is--last-row {
                 border-bottom: 0 none;
@@ -137,7 +171,11 @@
             }
 
             .table--actions {
-                .unitize-padding(20, 0, 0, 0);
+                .unitize-padding(10, 0, 0, 0);
+            }
+
+            .basket--footer {
+                .unitize-margin(0, -20, -20, -20);
             }
         }
 
@@ -148,13 +186,20 @@
         .product--table .row--rebate .column--tax-price,
         .product--table .row--premium-product .column--tax-price,
         .product--table .row--voucher .column--tax-price {
-            margin-left: 10%;
+            margin-left: 11%;
         }
 
         .product--table .row--rebate .column--total-price,
         .product--table .row--premium-product .column--total-price,
         .product--table .row--voucher .column--total-price {
             margin-left: 0;
+        }
+
+        .product--table .column--tax-price {
+            .tax-price--label {
+                .unitize(12, 16, margin-bottom);
+                margin: 0;
+            }
         }
 
         // Terms of services box
@@ -219,7 +264,6 @@
 
         // Aggregation
         .product--table .aggregation--list {
-            margin-right: 5%;
             float: right;
         }
 

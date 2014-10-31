@@ -179,7 +179,6 @@
 
         .table--media {
             .unitize(70, 16, width);
-            .unitize(70, 16, height);
             margin: 0 auto;
             float: none;
         }
@@ -212,7 +211,8 @@
 
     .column--quantity,
     .column--unit-price,
-    .column--total-price {
+    .column--total-price,
+    .column--tax-price {
         .unitize-padding(5, 0, 5, 10);
         margin-left: 22%;
         width: 78%;
@@ -659,7 +659,6 @@
 
     .product--table{
         .column--label {
-            margin: 0 0 0 24.5%;
             text-align: right;
             width: 100%;
             margin: 0;
@@ -708,24 +707,24 @@
                 .unitize(12, 16, margin-bottom);
             }
         }
+        .column--tax-price {
+             margin: 0;
+
+            .tax-price--label {
+                .unitize(12, 16, margin-bottom);
+            }
+        }
+
         .row--rebate,
         .row--premium-product,
         .row--voucher {
-            .column--label {
-                margin: 0;
-            }
+            .column--label { margin: 0; }
             .column--image { width: 15%; }
-            .column--total-price {
-                float: right;
-            }
+            .column--total-price { float: right; }
         }
 
         .add-product--field {
             width: 55%;
-        }
-
-        .aggregation--list {
-            padding-left: 35%;
         }
     }
 
@@ -873,29 +872,18 @@
             margin: 0 auto;
         }
 
-        .row--rebate .column--total-price,
-        .row--premium-product .column--total-price,
-        .row--voucher .column--total-price {
-            margin-left: 26.5%;
-        }
-
         .row--rebate,
         .row--premium-product,
         .row--voucher {
-            .column--image {
-                width: 13.5%;
-            }
             .table--media {
                 float: left;
             }
-            .column--product {
-                width: 77.5%;
-            }
-            .table--content {
-                width: 86.5%;
-            }
             .column--total-price {
+                margin-left: 25.5%;
                 float: left;
+
+            }
+            .column--tax-price {
                 margin: 0;
             }
         }
@@ -1035,13 +1023,6 @@
             .table--content { width: 84% }
         }
 
-        .row--rebate,
-        .row--premium-product,
-        .row--voucher {
-            .column--image { width: 10.5%; }
-            .table--content { width: 89.5%; }
-        }
-
         .add-product--form { width: 25%; }
 
         .aggregation--list {
@@ -1049,7 +1030,7 @@
             width: 35%;
         }
         .table--aggregation {
-            width: 35%;
+            width: 45%;
         }
     }
 }
@@ -1071,17 +1052,6 @@
 
             .column--image { width: 14%; }
             .table--content { width: 86%; }
-        }
-
-        .row--rebate,
-        .row--premium-product,
-        .row--voucher {
-            .column--image {
-                width: 9.5%;
-            }
-            .column--product {
-                width: 80.5%;
-            }
         }
 
         .table--row .column--actions {
