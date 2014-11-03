@@ -26,7 +26,7 @@
             var me = this;
 
             //cache DOM
-            me.$body = $('body');
+            me.$mainHeader = $('.header-main');
             me.$toggleSearchBtn = $(".entry--search > .entry--trigger");
 
             me.applyDataAttributes();
@@ -44,7 +44,7 @@
             }]);
 
             if(me.$el.hasClass(me.defaults.activeCls)) {
-                me.$body.addClass('is--active-searchfield');
+                me.$mainHeader.addClass('is--active-searchfield');
             }
 
             me._on(me.$el, 'click', $.proxy(me.onClickSearchTrigger, me));
@@ -75,7 +75,7 @@
 
             $el.toggleClass(opts.activeCls, toggleState);
             me.$toggleSearchBtn.toggleClass(opts.activeCls, toggleState);
-            me.$body.toggleClass('is--active-searchfield', toggleState);
+            me.$mainHeader.toggleClass('is--active-searchfield', toggleState);
 
             $searchField.delay(150);
 

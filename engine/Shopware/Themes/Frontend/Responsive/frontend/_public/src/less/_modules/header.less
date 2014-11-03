@@ -10,11 +10,9 @@
 	// Logo
 	.logo-main { .unitize-padding(10, 10); }
 	.logo--shop { width: 50% }
-    .header--navigation { position: relative; }
-}
+    .logo--supportinfo { display: none; }
 
-.logo--supportinfo {
-    display: none;
+    .header--navigation { position: relative; }
 }
 
 // Small Checkout & Registration Header
@@ -54,15 +52,9 @@
             vertical-align: middle;
         }
 
-        .cart--link {
-            .unitize-padding(2, 10, 2, 6, 16);
-        }
+        .cart--link { .unitize-padding(2, 10, 2, 6, 16); }
+        .account--link { .unitize-padding(2, 10, 2, 8, 16); }
 
-        .account--link {
-            .unitize-padding(2, 10, 2, 8, 16);
-        }
-
-        // @todo refactor!
         .icon--basket,
         .icon--account {
             .unitize(21, 16, font-size);
@@ -136,6 +128,7 @@
         position: relative;
     }
 
+    // Menu Button toggle OffCanvas
     .entry--menu-left {
         top: 0;
         left: 0;
@@ -155,9 +148,7 @@
             border: 0 none;
         }
 
-        .icon--menu {
-            .unitize(20, 16, font-size);
-        }
+        .icon--menu { .unitize(20, 16, font-size); }
     }
 }
 
@@ -192,19 +183,17 @@
 }
 
 // Creating the arrow on active search field
-.has--csstransforms {
-    .entry--search .entry--trigger {
-        &.is--active {
-            &::after {
-                .rotate(-45deg);
-                .unitize-width(15, 16);
-                .unitize-height(15, 16);
-                .unitize(8, 16, margin-top);
-                .unitize(1, 16, margin-left);
-                content: '';
-                display: block;
-                background: darken(@gray, 2%);
-            }
+.has--csstransforms .entry--search .entry--trigger {
+    &.is--active {
+        &::after {
+            .rotate(-45deg);
+            .unitize-width(15, 16);
+            .unitize-height(15, 16);
+            .unitize(8, 16, margin-top);
+            .unitize(1, 16, margin-left);
+            content: '';
+            display: block;
+            background: darken(@gray, 2%);
         }
     }
 }
@@ -214,7 +203,6 @@
         .main-search--form {
             .unitize(50, 16, top);
             background: darken(@gray, 2%);
-            //border-bottom: 1px solid @brand-primary;
             left: 0;
             display: block;
             position: absolute;
@@ -222,17 +210,17 @@
     }
 }
 
-
-// if searchfield is active add content padding
-.is--active-searchfield .header-main {
-    .unitize(70, 16, padding-bottom);
+.header-main {
+    &.is--active-searchfield {
+        .unitize(70, 16, padding-bottom);
+    }
 }
 
 // Loading indicator for css animations supported browsers
 .has--cssanimations {
     .form--ajax-loader {
         .unitize(20, 16, top);
-        .unitize(20, 16, right);
+        .unitize(55, 16, right);
         position: absolute;
         display: none;
 
@@ -252,7 +240,7 @@
 // Loading indicator for non css animations supported browsers
 .has--no-cssanimations .form--ajax-loader {
     .unitize(24, 16, top);
-    .unitize(20, 16, right);
+    .unitize(55, 16, right);
     .unitize-width(16);
     .unitize-height(16);
     position: absolute;
@@ -303,9 +291,7 @@
         .unitize(30, 16, line-height);
         border-bottom: 1px solid @border-color;
 
-        &:last-child {
-            border: 0 none;
-        }
+        &:last-child { border: 0 none; }
     }
 
     .entry--no-results {
@@ -323,9 +309,7 @@
     }
 
     .entry--media { width: 10%; min-width:10% }
-
     .entry--name { width: 60%; }
-
     .name--link { color: @text-color }
 
     .entry--price,
@@ -339,6 +323,7 @@
     .entry--all-results-number {
         display: block;
     }
+
     .entry--all-results {
         .unitize(10, 16, padding-top);
         font-weight: normal;
@@ -356,6 +341,14 @@
 
     .entry--all-results-number {
         font-weight: normal;
+    }
+}
+
+.off-canvas .mobile--switches {
+    .navigation--entry {
+        padding: 0;
+        border: none;
+        background: none;
     }
 }
 
@@ -386,6 +379,7 @@
             display: inline-block;
             position: relative;
 
+            // Reset the searchfield background
             .main-search--field { background: @input-bg; }
 
             // Icon position from here to @desktopViewportWidth
@@ -406,16 +400,32 @@
     }
 
     // Remove the active searchfield padding
-    .is--active-searchfield .header-main {
-        .unitize(10, 16, padding-bottom);
+    .header-main {
+        &.is--active-searchfield {
+            .unitize(10, 16, padding-bottom);
+        }
+    }
+
+    .has--cssanimations .form--ajax-loader {
+        .unitize(10, 16, top);
+        .unitize(45, 16, right);
+        position: absolute;
+    }
+
+    .has--no-cssanimations .form--ajax-loader {
+        .unitize(14, 16, top);
+        .unitize(45, 16, right);
+        position: absolute;
     }
 }
 
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .is--active-searchfield .header-main {
-        .unitize(0, 16, padding-bottom);
+    .header-main {
+        &.is--active-searchfield  {
+            .unitize(0, 16, padding-bottom);
+        }
     }
 
     .header-main {
@@ -428,17 +438,20 @@
             .unitize-padding(4, 0, 4, 0, 16);
             display: block;
         }
-//        .top-bar--switches {
-//            .clearfix();
-//            width: 35%
-//        }
+
+        .top-bar--navigation .field--select {
+            .unitize(0, 16, margin-bottom);
+            position: relative;
+        }
 
         .top-bar--navigation .js--fancy-select {
             .reset-border-radius();
             .reset-box-shadow();
+            .unitize(12, 16, line-height);
             .unitize(5, 16, margin-right);
+            padding: 0;
+            margin: 0;
             background: #fff;
-            line-height: normal;
             width: auto;
             border: 0 none;
 
@@ -448,30 +461,34 @@
 
             select { height: auto }
         }
+
         .top-bar--navigation .js--fancy-select-text {
             .unitize-padding(0, 30, 0, 5);
             font-weight: normal;
-            display: inline-block;
         }
+
         .top-bar--navigation .js--fancy-select-trigger {
-            .unitize(8, 16, top);
+            .unitize(1, 16, top);
             border-left: 0 none;
         }
 
-        .top-bar--language, .top-bar--currency {
-            //float: left;
-            //max-width: 50%;
-
-            //& > form { float: left; }
-        }
-        .language--flag {
-            .unitize-margin(0, 0, 0, 5);
+         .top-bar--language .js--fancy-select-text {
+            .unitize-width(45, 16);
             position: relative;
-            bottom: 4px;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .language--flag {
+            .unitize(5, 16, top);
+            .unitize(0, 16, left);
+            position: absolute;
+            z-index: 100;
         }
 
         .logo-main {
-            .unitize-padding(24, 10, 24, 10, 16);
+            .unitize-padding(18, 10, 18, 10, 16);
             width: 35%;
         }
         .logo--shop { width: 82% }
@@ -483,13 +500,8 @@
         .header-main {
             .box-shadow(0 1px 2px 0 @border-color);
 
-            .logo-main {
-                width: 100%;
-            }
-
-            .logo--shop {
-                width: 40%
-            }
+            .logo-main { width: 100%; }
+            .logo--shop { width: 40% }
 
             .logo--supportinfo {
                 display: block;
@@ -498,7 +510,8 @@
         }
     }
 
-    .logo-main, .shop--navigation {
+    .logo-main,
+    .shop--navigation {
         float: left;
     }
 
@@ -506,15 +519,16 @@
         text-align: right;
 
         .navigation--entry {
-            .unitize-padding(0, 16, 0, 16, 16);
+            .unitize-padding(0, 8);
             display: inline-block;
 
-            &:first-child {
-                border-left: 0 none;
+            &:last-child {
+                .unitize(12, 16, padding-right);
             }
         }
 
-        .navigation--entry, .navigation--link {
+        .navigation--entry,
+        .navigation--link {
             color: @text-color;
             cursor: pointer;
 
@@ -524,10 +538,7 @@
         }
 
         .entry--service {
-            .unitize-width(166);
-            .unitize-padding(0, 8);
             position: relative;
-            text-align: center;
 
             &:after,
             &::after {
@@ -541,11 +552,12 @@
                 color: @brand-primary;
             }
         }
+
         .service--list {
             .unitize-width(166);
             .unitize-padding(8, 8);
-            .unitize(22, 16, top);
-            .unitize(-1, 16, left);
+            .unitize(38, 16, top);
+            .unitize(12, 16, right);
             text-align: left;
             position: absolute;
             display: none;
@@ -553,8 +565,23 @@
             background: #fff;
             z-index: 1000;
             border: 1px solid @border-color;
-            border-top-color: #fff;
+
+            &::after {
+                .rotate(135deg);
+                .unitize-width(8);
+                .unitize-height(8);
+                .unitize(-5, 16, top);
+                .unitize(18, 16, right);
+                content: '';
+                display: block;
+                position: absolute;
+                background: #fff;
+                border-color: @border-color;
+                border-width: 0 0 1px 1px;
+                border-style: solid;
+            }
         }
+
         .js--is--dropdown-active .service--list {
             display: block;
 
@@ -569,6 +596,12 @@
                     background-color: @gray;
                 }
             }
+
+            .service--entry {
+                &:first-child .service--link {
+                    border-top: 0 none;
+                }
+            }
         }
     }
 
@@ -580,6 +613,7 @@
             background-image: none;
             text-align: right;
         }
+
         .navigation--entry {
             .border-radius();
             border: 0 none;
@@ -587,6 +621,7 @@
             float: none;
             display: inline-block;
         }
+
         .entry--cart {
             .entry--link {
                 padding: 0;
@@ -611,7 +646,6 @@
             padding: 0;
             border: 0 none;
             width: 50%;
-            //position: relative;
 
             .entry--trigger { display: none }
         }
@@ -625,10 +659,7 @@
         }
     }
 
-    .main-search--form {
-        // position: relative;
-        left: auto;
-    }
+    .main-search--form { left: auto; }
 
     .main-search--results {
         .clearfix();
@@ -649,21 +680,9 @@
             .unitize-padding(6, 0);
         }
     }
-
-    .has--cssanimations .form--ajax-loader {
-        .unitize(10, 16, top);
-        .unitize(10, 16, right);
-        position: absolute;
-    }
-
-    .has--no-cssanimations .form--ajax-loader {
-        .unitize(14, 16, top);
-        .unitize(10, 16, right);
-        position: absolute;
-
-    }
 }
 
+// Tablet Landscape styling for the global shop header
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
 
     .header-main {
@@ -703,6 +722,7 @@
 
     .navigation--list {
 
+        // Reset the button width
         .navigation--entry .btn { width: auto; }
 
         // Custom styling cart button
@@ -717,7 +737,6 @@
                 }
             }
 
-            // @todo refactor!
             .icon--basket {
                 .unitize(8, 16, left);
                 display: block;
@@ -727,9 +746,7 @@
         }
 
         .entry--account {
-            .account--link {
-                .unitize(36, 16, padding-left);
-            }
+            .account--link { .unitize(36, 16, padding-left); }
 
             .icon--account {
                 .unitize(8, 16, left);
@@ -739,9 +756,7 @@
             }
         }
 
-        .account--display {
-            display: inline-block;
-        }
+        .account--display { display: inline-block; }
     }
 }
 
@@ -749,7 +764,7 @@
 @media screen and (min-width: @desktopViewportWidth) {
 
     .header-main {
-        .top-bar { .unitize-margin(0, 0, 8, 0, 16) }
+        .top-bar { .unitize(2, 16, margin-bottom); }
         .logo--shop { width: 75% }
     }
 
@@ -764,7 +779,7 @@
             .logo--supportinfo { width: 35%; }
 
             .btn--back-top-shop {
-                .unitize-margin(5, 0, 0, 0);
+                .unitize(5, 16, margin-top);
                 display: inline-block;
                 float: right;
             }
@@ -782,7 +797,7 @@
         width: 75%;
 
         .navigation--link {
-            .unitize-padding(8, 16, 8, 16, 16);
+            .unitize-padding(8, 16, 16);
         }
 
         .entry--link {
@@ -804,15 +819,16 @@
 
     // Topbar navigation
     .top-bar--navigation {
-        .entry--service {
+        .service--list {
             .unitize-width(152);
-
-            &:hover {
-                color: @brand-primary;
-            }
+            .unitize(0, 16, right);
         }
 
-        .service--list { .unitize-width(152); }
+        .navigation--entry {
+            &:last-child {
+                .unitize(0, 16, padding-right);
+            }
+        }
     }
 
     .cart--display {
