@@ -2,7 +2,7 @@
 
 	{if !$sArticle.liveshoppingData.valid_to_ts}
 		{* Graduated prices *}
-		{if $sArticle.sBlockPrices && $sArticle.pricegroupActive && !$sArticle.liveshoppingData.valid_to_ts}
+		{if $sArticle.sBlockPrices && !$sArticle.liveshoppingData.valid_to_ts}
 
 			{* Include block prices *}
 			{block name="frontend_detail_data_block_price_include"}
