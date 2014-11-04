@@ -41,27 +41,19 @@ class LegacyStructConverter
     private $config;
 
     /**
-     * @var LegacyEventManager
-     */
-    private $legacyEventManager;
-
-    /**
      * @var ContextService
      */
     private $contextService;
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param LegacyEventManager $legacyEventManager
      * @param ContextService $contextService
      */
     function __construct(
         \Shopware_Components_Config $config,
-        LegacyEventManager $legacyEventManager,
         ContextService $contextService
     ) {
         $this->config = $config;
-        $this->legacyEventManager = $legacyEventManager;
         $this->contextService = $contextService;
     }
 
