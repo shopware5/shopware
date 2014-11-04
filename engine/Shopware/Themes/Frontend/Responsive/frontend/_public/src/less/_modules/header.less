@@ -52,8 +52,8 @@
             vertical-align: middle;
         }
 
-        .cart--link { .unitize-padding(2, 10, 2, 6, 16); }
-        .account--link { .unitize-padding(2, 10, 2, 8, 16); }
+        .cart--link { .unitize-padding(2, 10, 2, 6); }
+        .account--link { .unitize-padding(2, 10, 2, 8); }
 
         .icon--basket,
         .icon--account {
@@ -80,9 +80,9 @@
     .cart--quantity,
     .notes--quantity {
         .unitize-padding(0, 5);
+        .unitize-height(20, 16);
+        .unitize-min-width(10, 16);
         .unitize(20, 16, line-height);
-        .unitize(20, 16, height);
-        .unitize(10, 16, min-width);
         .unitize(12, 16, font-size);
         .unitize(-4, 16, top);
         .unitize(23, 16, left);
@@ -154,7 +154,7 @@
 
 // Default ajax search form
 .main-search--form {
-    .unitize-padding(10, 10, 10, 10, 16);
+    .unitize-padding(10, 10);
     width: 100%;
     left: 0;
     top: 0;
@@ -171,7 +171,7 @@
     }
 
     .main-search--field {
-        .unitize-padding(9, 38, 9, 9, 16);
+        .unitize-padding(9, 38, 9, 9);
         .unitize-height(40, 16);
         background: #fff;
         vertical-align: middle;
@@ -184,17 +184,15 @@
 
 // Creating the arrow on active search field
 .has--csstransforms .entry--search .entry--trigger {
-    &.is--active {
-        &::after {
-            .rotate(-45deg);
-            .unitize-width(15, 16);
-            .unitize-height(15, 16);
-            .unitize(8, 16, margin-top);
-            .unitize(1, 16, margin-left);
-            content: '';
-            display: block;
-            background: darken(@gray, 2%);
-        }
+    &.is--active::after {
+        .rotate(-45deg);
+        .unitize-width(15, 16);
+        .unitize-height(15, 16);
+        .unitize(8, 16, margin-top);
+        .unitize(1, 16, margin-left);
+        background: darken(@gray, 2%);
+        content: '';
+        display: block;
     }
 }
 
@@ -210,10 +208,8 @@
     }
 }
 
-.header-main {
-    &.is--active-searchfield {
-        .unitize(70, 16, padding-bottom);
-    }
+.header-main.is--active-searchfield {
+    .unitize(70, 16, padding-bottom);
 }
 
 // Loading indicator for css animations supported browsers
@@ -262,7 +258,7 @@
 
 .results--list {
     .unitize-padding(10, 15);
-    .box-shadow(0 2px 3px 1px rgba(0,0,0,0.1));
+    .box-shadow(0 2px 3px 1px rgba(0, 0, 0, 0.1));
     border-top: 1px solid @border-color;
     border-bottom: 1px solid @border-color;
     background: #fff;
@@ -364,7 +360,7 @@
         // Remove the mobile search position in all other viewports
         &.is--active {
             .main-search--form {
-                .unitize(0, 16, top);
+                top: 0;
                 display: inline-block;
             }
         }
@@ -422,14 +418,12 @@
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .header-main {
-        &.is--active-searchfield  {
-            .unitize(0, 16, padding-bottom);
-        }
+    .header-main.is--active-searchfield  {
+        padding-bottom: 0;
     }
 
     .header-main {
-        .unitize(0, 16, padding-bottom);
+        padding-bottom: 0;
         border-bottom: 0 none;
 
         .container { .clearfix() }
@@ -439,58 +433,69 @@
             display: block;
         }
 
-        .top-bar--navigation .field--select {
-            .unitize(0, 16, margin-bottom);
-            position: relative;
-        }
-
-        .top-bar--navigation .js--fancy-select {
-            .reset-border-radius();
-            .reset-box-shadow();
-            .unitize(12, 16, line-height);
-            .unitize(5, 16, margin-right);
-            padding: 0;
-            margin: 0;
-            background: #fff;
-            width: auto;
-            border: 0 none;
-
-            &.js--is--focused {
-                border-color: @border-color;
+        .top-bar--navigation {
+            .field--select {
+                margin-bottom: 0;
+                position: relative;
             }
-
-            select { height: auto }
         }
 
-        .top-bar--navigation .js--fancy-select-text {
-            .unitize-padding(0, 30, 0, 5);
-            font-weight: normal;
+        .top-bar--navigation {
+            .js--fancy-select {
+                .reset-border-radius();
+                .reset-box-shadow();
+                .unitize(12, 16, line-height);
+                .unitize(5, 16, margin-right);
+                padding: 0;
+                margin: 0;
+                background: #fff;
+                width: auto;
+                border: 0 none;
+
+                &.js--is--focused {
+                    border-color: @border-color;
+                }
+
+                select { height: auto }
+            }
         }
 
-        .top-bar--navigation .js--fancy-select-trigger {
-            .unitize(1, 16, top);
-            border-left: 0 none;
+        .top-bar--navigation {
+            .js--fancy-select-text {
+                .unitize-padding(0, 30, 0, 5);
+                font-weight: normal;
+            }
         }
 
-         .top-bar--language .js--fancy-select-text {
-            .unitize-width(45, 16);
-            position: relative;
-            text-indent: 100%;
-            white-space: nowrap;
-            overflow: hidden;
+        .top-bar--navigation {
+            .js--fancy-select-trigger {
+                .unitize(1, 16, top);
+                border-left: 0 none;
+            }
         }
+
+         .top-bar--language {
+             .js--fancy-select-text {
+                .unitize-width(45, 16);
+                position: relative;
+                text-indent: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+             }
+         }
 
         .language--flag {
             .unitize(5, 16, top);
-            .unitize(0, 16, left);
+            left: 0;
             position: absolute;
             z-index: 100;
         }
 
         .logo-main {
-            .unitize-padding(18, 10, 18, 10, 16);
+            .unitize-padding(18, 10);
             width: 35%;
         }
+
         .logo--shop { width: 82% }
     }
 
@@ -812,22 +817,18 @@
         .entry--search { width: 40%; }
 
         // Reset the right margin for desktop
-        .entry--cart {
-            .unitize(0, 16, margin-right);
-        }
+        .entry--cart { margin-right: 0; }
     }
 
     // Topbar navigation
     .top-bar--navigation {
         .service--list {
             .unitize-width(152);
-            .unitize(0, 16, right);
+            right:  0;
         }
 
-        .navigation--entry {
-            &:last-child {
-                .unitize(0, 16, padding-right);
-            }
+        .navigation--entry:last-child {
+            padding-right: 0;
         }
     }
 
