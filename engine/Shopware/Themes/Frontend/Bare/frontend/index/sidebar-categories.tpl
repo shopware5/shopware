@@ -8,8 +8,14 @@
         {foreach $categories as $category}
             {block name="frontend_index_categories_left_entry"}
                 <li class="navigation--entry{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" role="menuitem">
-                    <a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" title="{$category.description|escape}">
+                    <a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}{if $category.childrenCount} link--go-forward{/if}" data-categoryId="{$category.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$category.id}}" title="{$category.description|escape}">
                         {$category.description}
+
+                        {if $category.childrenCount}
+                            <span class="is--icon-right">
+                                <i class="icon--arrow-right"></i>
+                            </span>
+                        {/if}
                     </a>
                     {block name="frontend_index_categories_left_entry_subcategories"}
                         {if $category.subcategories}

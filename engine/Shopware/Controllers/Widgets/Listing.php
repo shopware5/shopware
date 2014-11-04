@@ -169,4 +169,70 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'productBoxLayout' => $layout
         ));
     }
+
+    /**
+     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level
+     */
+    public function getCategoryAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+        $categoryId = intval($categoryId);
+
+        $category = $this->getCategoryById($categoryId);
+
+        $this->View()->category = $category;
+    }
+
+    /**
+     * Helper function to return the category information by category id
+     * @param integer $categoryId
+     * @return mixed
+     */
+    private function getCategoryById($categoryId)
+    {
+        /** @var \Shopware\Models\Category\Repository $categoryRepository */
+        $categoryRepository = $this->get('models')->getRepository('Shopware\Models\Category\Category');
+        $category = $categoryRepository->getCategoryByIdQuery($categoryId)->getArrayResult();
+
+        if (empty($category)) {
+            return array();
+        }
+
+        $category = $category[0];
+
+        $category['link'] = $this->getCategoryLink($categoryId, $category['name'], $category['blog']);
+
+        foreach ($category['children'] as &$child) {
+            $child['link'] = $this->getCategoryLink($child['id'], $child['name'], $child['blog']);
+
+            // search for childrens
+            $childrenOfChildren = $categoryRepository->getCategoryByIdQuery($child['id'])->getArrayResult();
+            $childrenOfChildren = $childrenOfChildren[0]['children'];
+
+            $child['childrenCount'] = count($childrenOfChildren);
+        }
+
+        return $category;
+    }
+
+    /**
+     * Helper function to create a category link
+     * @param integer $categoryId
+     * @param string $categoryName
+     * @param bool $blog
+     * @return mixed|string
+     */
+    private function getCategoryLink($categoryId, $categoryName, $blog = false)
+    {
+        $sViewport = $blog ? 'blog' : 'cat';
+        $link = $this->Front()->Router()->assemble(
+            array(
+                'sViewport' => $sViewport,
+                'sCategory' => $categoryId,
+                'title' => $categoryName
+            )
+        );
+
+        return $link;
+    }
 }
