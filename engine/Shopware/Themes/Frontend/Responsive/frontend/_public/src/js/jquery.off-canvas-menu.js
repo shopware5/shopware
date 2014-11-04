@@ -217,6 +217,12 @@
         var me = this,
             opts = me.opts;
 
+
+        // check if overlay exists
+        if(me.$offCanvas.hasClass(opts.activeMenuCls)) {
+            $.overlay.close();
+        }
+
         me.$offCanvas.removeClass(opts.offCanvasElementCls)
                      .removeClass(opts.activeMenuCls)
                      .removeClass(opts.disableTransitionCls)
