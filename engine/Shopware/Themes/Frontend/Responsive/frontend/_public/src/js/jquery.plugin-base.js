@@ -101,6 +101,17 @@
         },
 
         /**
+         * Template function for the plugin destruction.
+         * Should be overridden for custom destruction code.
+         *
+         * @public
+         * @method update
+         */
+        update: function () {
+
+        },
+
+        /**
          * Destroys the plugin on the {@link HTMLElement}. It removes the instance of the plugin
          * which is bounded to the {@link jQuery} element.
          *

@@ -1,4 +1,4 @@
-;(function($, window, document, undefined) {
+;(function($, StateManager, undefined) {
     'use strict';
 
     var $body = $('body');
@@ -190,7 +190,7 @@
             var me = this;
 
             StateManager.registerListener([{
-                type: 'xs',
+                state: 'xs',
                 enter: function() {
                     me.$filterForm.removeAttr('style');
 
@@ -286,8 +286,7 @@
         onFilterTriggerClick: function(event) {
             event.preventDefault();
 
-            if (StateManager.getCurrent() === 'xs' ||
-                StateManager.getCurrent() === 's') {
+            if (StateManager.isCurrentState(['xs', 's'])) {
                 return;
             }
 
@@ -602,8 +601,7 @@
         updateFilterTriggerButton: function(activeFilterCount) {
             var me = this;
 
-            if (!StateManager.getCurrent() === 'xs' ||
-                !StateManager.getCurrent() === 's') {
+            if (!StateManager.isCurrentState(['xs', 's'])) {
                 return;
             }
 
@@ -643,8 +641,7 @@
                 me.createActiveFilterElement('reset', me.resetLabel);
             }
 
-            if (StateManager.getCurrent() === 'xs' ||
-                StateManager.getCurrent() === 's') {
+            if (StateManager.isCurrentState(['xs', 's'])) {
                 me.updateFilterTriggerButton(count);
             } else {
                 me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
@@ -840,4 +837,4 @@
             me._destroy();
         }
     });
-})(jQuery, window, document, undefined);
+})(jQuery, StateManager, undefined);
