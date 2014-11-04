@@ -1,7 +1,7 @@
 {* Language switcher *}
 {block name='frontend_index_actions_active_shop'}
     {if $shop && $languages|count > 1}
-        <li class="top-bar--language navigation--entry">
+        <div class="top-bar--language navigation--entry">
             {if $languages|count > 1}
                 <form method="post" action="" class="language--form">
                     <div class="field--select">
@@ -19,14 +19,14 @@
                     </div>
                 </form>
             {/if}
-        </li>
+        </div>
     {/if}
 {/block}
 
 {* Currency changer *}
 {block name='frontend_index_actions_currency'}
     {if $currencies|count > 1}
-        <li class="top-bar--currency navigation--entry">
+        <div class="top-bar--currency navigation--entry">
 			<form action="" method="post" class="currency--form">
                 <div class="field--select">
                     <select name="__currency" class="currency--select" data-auto-submit="true">
@@ -39,6 +39,6 @@
                     <span class="arrow"></span>
                 </div>
 			</form>
-        </li>
+        </div>
     {/if}
 {/block}

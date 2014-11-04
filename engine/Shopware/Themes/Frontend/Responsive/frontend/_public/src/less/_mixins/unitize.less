@@ -38,6 +38,10 @@
 	.unitize(@value, @baseValue, max-width);
 }
 
+.unitize-min-width(@value, @baseValue: 16) {
+    .unitize(@value, @baseValue, min-width);
+}
+
 .unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
 }
