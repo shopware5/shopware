@@ -39,9 +39,9 @@
 			</span>
 
 			{if $sBasketQuantity > 0}
-			<span class="cart--quantity">
-				{$sBasketQuantity}
-			</span>
+				<span class="cart--quantity">
+					{$sBasketQuantity}
+				</span>
 			{/if}
 
 			<i class="icon--basket"></i>
@@ -49,9 +49,9 @@
 			<span class="cart--amount">
 				{$sBasketAmount|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 			</span>
-
-			{block name="frontend_index_checkout_actions_inner"}{/block}
 		</a>
 		<div class="ajax-loader">&nbsp;</div>
 	</li>
 {/block}
+
+{block name="frontend_index_checkout_actions_inner"}{/block}
