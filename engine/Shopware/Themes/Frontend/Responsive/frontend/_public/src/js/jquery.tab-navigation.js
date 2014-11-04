@@ -1,5 +1,5 @@
-;(function ($, window, document, undefined) {
-    "use strict";
+;(function ($, window, StateManager) {
+    'use strict';
 
     var pluginName = 'tabContent',
 	    clickEvt = 'click',
@@ -48,13 +48,13 @@
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
-        me.currentState = StateManager.getCurrent();
+        me.currentState = StateManager.getCurrentState();
 
         me.$additionalTriggers = $('*[data-show-tab="true"]');
 
         me.targets = [];
 
-	    if (StateManager.isXs()) {
+	    if (StateManager.isCurrentState('xs')) {
             me.createMobileView();
         } else {
             me.createDesktopView();
@@ -62,17 +62,17 @@
 
 	    $(window).on('resize.' + pluginName, function () {
 
-            if (StateManager.getCurrent() == me.currentState) {
+            if (StateManager.isCurrentState(me.currentState)) {
                 return;
             }
 
-            if (StateManager.isXs()) {
+            if (StateManager.isCurrentState('xs')) {
                 me.createMobileView();
             } else {
                 me.createDesktopView();
             }
 
-            me.currentState = StateManager.getCurrent();
+            me.currentState = StateManager.getCurrentState();
         });
 
         me.$additionalTriggers.each(function() {
@@ -230,4 +230,4 @@
             }
         });
     };
-})(jQuery, window, document);
+})(jQuery, window, StateManager);

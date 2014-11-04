@@ -517,6 +517,11 @@
     };
 
     /**
+     * Will be called, when two breakpoints are switching but the configuration hasn't changed
+     */
+    Plugin.prototype.update = function() { };
+
+    /**
      * Destroyes the initialized plugin completely, so all event listeners will
      * be removed and the plugin data, which is stored in-memory referenced to
      * the DOM node.

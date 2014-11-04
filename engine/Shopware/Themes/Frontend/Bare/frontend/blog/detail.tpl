@@ -139,39 +139,8 @@
 
                     {* Listing *}
                     {block name='frontend_blog_detail_crossselling_listing'}
-
-                        {* Recomendations *}
-                        <script type="text/javascript">
-                            (function() {
-                                window.widgets = (typeof(window.widgets) == 'undefined') ? [] : window.widgets;
-                                window.widgets.push({
-                                    selector: '.crossselling--content',
-                                    plugin: 'productSlider',
-                                    smartphone: {
-                                        perPage: 1,
-                                        perSlide: 1,
-                                        touchControl: true
-                                    },
-                                    tablet: {
-                                        perPage: 3,
-                                        perSlide: 1,
-                                        touchControl: true
-                                    },
-                                    tabletLandscape: {
-                                        perPage: 4,
-                                        perSlide: 1,
-                                        touchControl: true
-                                    },
-                                    desktop: {
-                                        perPage: 5,
-                                        perSlide: 1
-                                    }
-                                });
-                            })();
-                        </script>
-
                         <div class="blog--crossselling panel--body is--wide block">
-                            <div class="crossselling--content panel--body product-slider" data-mode="local">
+                            <div class="crossselling--content panel--body" data-product-slider="true">
                                 <div class="product-slider--container">
                                     {foreach $sArticle.sRelatedArticles as $article}
                                         {include file="widgets/recommendation/item.tpl" article=$article}

@@ -1,5 +1,5 @@
-;(function ($, window) {
-    "use strict";
+;(function ($, StateManager) {
+    'use strict';
 
     /**
      * Shopware Search Field Plugin.
@@ -32,7 +32,7 @@
             me.applyDataAttributes();
 
             StateManager.registerListener([{
-                type: 'smartphone',
+                state: 'xs',
                 enter: function() {
                     if ( me.opts.activeOnStart ) {
                         me.$el.addClass(me.defaults.activeCls);
@@ -67,7 +67,7 @@
             event.preventDefault();
             event.stopPropagation();
 
-            if(target.hasClass(opts.searchFieldCls) || !(StateManager.getCurrent() === 'xs')) {
+            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isCurrentState('xs')) {
                 return;
             }
 
@@ -93,4 +93,4 @@
             me._destroy();
         }
     });
-})(jQuery, window);
+})(jQuery, StateManager);

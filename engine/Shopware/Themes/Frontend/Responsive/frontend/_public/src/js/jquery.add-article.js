@@ -76,7 +76,9 @@
              *
              * @type {Boolean}
              */
-            'showModal': true
+            'showModal': true,
+
+            'productSliderSelector': '.js--modal .product-slider'
         },
 
         /**
@@ -101,6 +103,25 @@
 
             // Close modal on continue shopping button
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
+
+            StateManager.addPlugin(opts.productSliderSelector, 'productSlider', {
+                'perPage': opts.sliderPerPageDefault,
+                'perSlide': 1,
+                'touchControl': true
+            })
+            .addPlugin(opts.productSliderSelector, 'productSlider', {
+                'perPage': opts.sliderPerPage.smartphone
+            }, 'xs')
+            .addPlugin(opts.productSliderSelector, 'productSlider', {
+                'perPage': opts.sliderPerPage.tablet
+            }, 'm')
+            .addPlugin(opts.productSliderSelector, 'productSlider', {
+                'perPage': opts.sliderPerPage.tabletLandscape
+            }, 'l')
+            .addPlugin(opts.productSliderSelector, 'productSlider', {
+                'perPage': opts.sliderPerPage.desktop,
+                'touchControl': false
+            }, 'xl');
         },
 
         /**
@@ -148,7 +169,7 @@
 
                         picturefill();
 
-                        me.initModalSlider();
+                        StateManager.updatePlugin(opts.productSliderSelector, 'productSlider');
 
                         // Resize slider after DOM manipulation correctly.
                         setTimeout(function() {
@@ -197,53 +218,6 @@
             if (slider) {
                 slider.destroy();
             }
-        },
-
-        /**
-         * When the modal content contains a product slider, it will be initialized.
-         *
-         * @public
-         * @method initModalSlider
-         */
-        initModalSlider: function () {
-            var me = this,
-                perPageList = me.opts.sliderPerPage,
-                perPage = me.opts.sliderPerPageDefault,
-                $sliderEl = $('.js--modal').find('.product-slider'),
-                slider;
-
-            if (!$sliderEl || !$sliderEl.length) {
-                return;
-            }
-
-            StateManager.registerListener({
-                'type': '*',
-                'enter': function (event) {
-                    slider = $sliderEl.data('plugin_productSlider');
-                    perPage = perPageList[event.entering] || perPage;
-
-                    if (!slider) {
-                        $sliderEl.productSlider({
-                            'perPage': perPage,
-                            'perSlide': 1,
-                            'touchControl': true
-                        });
-                        return;
-                    }
-
-                    slider.opts.perPage = perPage;
-                    //slider.setSizes();
-                },
-                
-                'exit': function () {
-                    slider = $sliderEl.data('plugin_productSlider');
-                    if(!slider) {
-                        return;
-                    }
-
-                    slider.destroy();
-                }
-            });
         }
     });
 });

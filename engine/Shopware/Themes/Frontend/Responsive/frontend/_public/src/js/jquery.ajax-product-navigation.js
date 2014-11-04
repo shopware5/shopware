@@ -1,4 +1,4 @@
-;(function ($, StateManager, Modernizr, location) {
+;(function ($, Modernizr, location) {
     'use strict';
 
     /**
@@ -411,4 +411,4 @@
             me._destroy();
         }
     });
-})(jQuery, StateManager, Modernizr, location);
+})(jQuery, Modernizr, location);
