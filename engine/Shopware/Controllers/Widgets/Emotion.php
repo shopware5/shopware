@@ -537,7 +537,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $values = array();
         foreach ($articles as &$article) {
-            $articleId = $article["id"];
+            $articleId = (int) $article["id"];
 
             $value = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
             if (!$value) {
