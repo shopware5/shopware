@@ -201,7 +201,7 @@ class LegacyStructConverter
             $data = array_merge(
                 $data,
                 array(
-                    'pricegroupActive' => 1,
+                    'pricegroupActive' => $product->isPriceGroupActive(),
                     'pricegroupID' => $product->getPriceGroup()->getId()
                 )
             );
