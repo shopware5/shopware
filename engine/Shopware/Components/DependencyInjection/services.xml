@@ -219,6 +219,11 @@
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
+        <service id="dbal_connection"
+                 class="Doctrine\DBAL\Connection"
+                 factory-service="models"
+                 factory-method="getConnection" />
+
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
         <service id="shopware.model_annotations" alias="ModelAnnotations" />
         <service id="ModelAnnotations"
@@ -248,6 +253,10 @@
 
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
             <argument type="service" id="db_connection" />
+        </service>
+
+        <service id="shopware.holiday_table_updater" class="Shopware\Components\HolidayTableUpdater">
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">
