@@ -3370,56 +3370,17 @@ class sAdmin
     }
 
     /**
-     * Generate table with german holidays
+     * Generate table with holidays
      *
      * @return boolean
      */
     public function sCreateHolidaysTable()
     {
-        if (!function_exists('easter_days')) {
-            function easter_days($year)
-            {
-                $G = $year % 19;
-                $C = (int) ($year / 100);
-                $H = (int) ($C - (int) ($C / 4) - (int) ((8*$C+13) / 25) + 19*$G + 15) % 30;
-                $I = (int) $H - (int) ($H / 28)*(1 - (int) ($H / 28)*(int) (29 / ($H + 1))*((int) (21 - $G) / 11));
-                $J = ($year + (int) ($year/4) + $I + 2 - $C + (int) ($C/4)) % 7;
-                $L = $I - $J;
-                $m = 3 + (int) (($L + 40) / 44);
-                $d = $L + 28 - 31 * ((int) ($m / 4));
-                $E = mktime(0,0,0, $m, $d, $year)-mktime(0,0,0,3,21,$year);
-                return intval(round($E/(60*60*24),0));
-            }
-        }
-        $holidays = $this->db->fetchAssoc("
-            SELECT id, calculation, `date`
-            FROM `s_premium_holidays`
-            WHERE `date` < CURDATE()
-        ");
-        if(empty($holidays)) {
-            return true;
-        }
+        /** @var \Shopware\Components\HolidayTableUpdater $updater */
+        $updater = Shopware()->Container()->get('shopware.holiday_table_updater');
+        $updater->update();
 
-        foreach ($holidays as $id => $holiday) {
-            $calculation = $holiday['calculation'];
-            $datestamp = strtotime($holiday['date']);
-            $date = date('Y-m-d', $datestamp);
-            $year = date('Y', $datestamp)+1;
-            $easterDate = date('Y-m-d', mktime(0, 0, 0, 3, 21+easter_days($year), $year));
-
-            $calculation = preg_replace(
-                "#DATE\('(\d+)[\-/](\d+)'\)#i","DATE(CONCAT(YEAR(),'-','\$1-\$2'))",
-                $calculation
-            );
-            $calculation = str_replace("EASTERDATE()", "'$easterDate'", $calculation);
-            $calculation = str_replace("YEAR()", "'$year'", $calculation);
-            $calculation = str_replace("DATE()", "'$date'", $calculation);
-            $this->db->update(
-                's_premium_holidays',
-                array('date' => $calculation),
-                array('id = ?' => $id)
-            );
-        }
+        return true;
     }
 
     /**
@@ -4215,8 +4176,8 @@ class sAdmin
                     $sErrorFlag['email'] = true;
                 }
                 $sErrorMessages[] = $snippet->get(
-                    'AccountCurrentPassword', 
-                    'Das aktuelle Passwort stimmt nicht!', 
+                    'AccountCurrentPassword',
+                    'Das aktuelle Passwort stimmt nicht!',
                     true
                 );
             }
