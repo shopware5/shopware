@@ -123,7 +123,7 @@ class Order extends ModelEntity
     /**
      * @var string $partnerId
      *
-     * @ORM\Column(name="partnerID", type="string", length=255, nullable=false)
+     * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
     private $partnerId;
 
@@ -172,28 +172,28 @@ class Order extends ModelEntity
     /**
      * @var string $transactionId
      *
-     * @ORM\Column(name="transactionID", type="string", length=255, nullable=false)
+     * @ORM\Column(name="transactionID", type="string", length=255, nullable=true)
      */
     private $transactionId;
 
     /**
      * @var string $comment
      *
-     * @ORM\Column(name="comment", type="text", nullable=false)
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
     /**
      * @var string $customerComment
      *
-     * @ORM\Column(name="customercomment", type="text", nullable=false)
+     * @ORM\Column(name="customercomment", type="text", nullable=true)
      */
     private $customerComment;
 
     /**
      * @var string $internalComment
      *
-     * @ORM\Column(name="internalcomment", type="text", nullable=false)
+     * @ORM\Column(name="internalcomment", type="text", nullable=true)
      */
     private $internalComment;
 
@@ -214,14 +214,14 @@ class Order extends ModelEntity
     /**
      * @var string $temporaryId
      *
-     * @ORM\Column(name="temporaryID", type="string", length=255, nullable=false)
+     * @ORM\Column(name="temporaryID", type="string", length=255, nullable=true)
      */
     private $temporaryId;
 
     /**
      * @var string $referer
      *
-     * @ORM\Column(name="referer", type="text", nullable=false)
+     * @ORM\Column(name="referer", type="text", nullable=true)
      */
     private $referer;
 
@@ -235,7 +235,7 @@ class Order extends ModelEntity
     /**
      * @var string $trackingCode
      *
-     * @ORM\Column(name="trackingcode", type="string", length=255, nullable=false)
+     * @ORM\Column(name="trackingcode", type="string", length=255, nullable=true)
      */
     private $trackingCode;
 
@@ -273,7 +273,7 @@ class Order extends ModelEntity
     /**
      * @var string $remoteAddress
      *
-     * @ORM\Column(name="remote_addr", type="string", length=255, nullable=false)
+     * @ORM\Column(name="remote_addr", type="string", length=255, nullable=true)
      */
     private $remoteAddress;
 
