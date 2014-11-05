@@ -1375,147 +1375,18 @@ class sArticles
         return round($money_str, 2);
     }
 
+    /**
+     * @param string $ordernumber
+     * @return array
+     */
     public function sGetProductByOrdernumber($ordernumber)
     {
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', array('subject' => $this, 'value' => $ordernumber))) {
             return false;
         }
 
-        $context = $this->contextService->getShopContext();
-
-        $markNew = (int) $this->config['sMARKASNEW'];
-        $markTop = (int) $this->config['sMARKASTOPSELLER'];
-        // Used in emotion widget to fetch only articles that have an image assigned
-
-        $sql = "
-            SELECT
-                a.id as articleID, d.id AS articleDetailsID, d.kind,
-                d.ordernumber, datum, sales, topseller as highlight,
-                a.description, a.description_long,
-                s.name AS supplierName, s.img AS supplierImg,
-                a.name AS articleName, a.taxID,
-                IFNULL(p.price,p2.price) as price,
-                IF(p.pseudoprice, p.pseudoprice, p2.pseudoprice) as pseudoprice, tax,
-                attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
-                attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-                instock, weight, a.shippingtime,
-                IFNULL(p.pricegroup, IFNULL(p2.pricegroup, 'EK')) as pricegroup,
-                pricegroupID, pricegroupActive, filtergroupID,
-                d.purchaseunit, d.referenceunit,
-                d.unitID, laststock, additionaltext,
-                (a.configurator_set_id IS NOT NULL) as sConfigurator,
-                IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
-                IFNULL((SELECT CONCAT(AVG(points),'|',COUNT(*)) as votes FROM s_articles_vote WHERE active=1 AND articleID=a.id),'0.00|00') as sVoteAverange,
-                IF(DATE_SUB(CURDATE(), INTERVAL $markNew DAY) <= a.datum, 1, 0) as newArticle,
-                IF(d.sales>=$markTop, 1, 0) as topseller,
-                IF(d.releasedate > CURDATE(), 1, 0) as sUpcoming,
-                IF(d.releasedate > CURDATE(), d.releasedate, '') as sReleasedate,
-                (SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind!=1 LIMIT 1) as sVariantArticle
-            FROM s_articles a
-
-            JOIN s_articles_details d
-            ON d.articleID=a.id
-
-            JOIN s_articles_attributes at
-            ON at.articledetailsID=d.id
-
-            JOIN s_core_tax t
-            ON t.id=a.taxID
-
-            LEFT JOIN s_articles_supplier s
-            ON s.id=a.supplierID
-
-            LEFT JOIN s_articles_prices p
-            ON p.articleDetailsID=d.id
-            AND p.pricegroup=?
-            AND p.`from`='1'
-
-            LEFT JOIN s_articles_prices p2
-            ON p2.articleDetailsID=d.id
-            AND p2.pricegroup='EK'
-            AND p2.`from`='1'
-
-            WHERE d.ordernumber=?
-            AND a.active=1
-            LIMIT 1
-        ";
-
-        $sql = Enlight()->Events()->filter(
-            'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql', $sql,
-            array('subject' => $this, 'value' => $ordernumber)
-        );
-
-        $getPromotionResult = $this->db->fetchRow($sql, array($this->sSYSTEM->sUSERGROUP, $ordernumber));
-
-        if (empty($getPromotionResult)) {
-            return false;
-        }
-
-        $getPromotionResult = $this->sGetTranslation(
-            $getPromotionResult, $getPromotionResult["articleID"], 'article'
-        );
-
-        if ($getPromotionResult['kind'] != 1) {
-            $getPromotionResult = $this->sGetTranslation(
-                $getPromotionResult, $getPromotionResult['articleDetailsID'], 'variant'
-            );
-        }
-
-        // Load article properties (Missing support for multilanguage)
-        if ($getPromotionResult["filtergroupID"]) {
-            $getPromotionResult["sProperties"] = $this->sGetArticleProperties(
-                $getPromotionResult["articleID"],
-                $getPromotionResult["filtergroupID"]
-            );
-        }
-
-
-        // Formating prices
-        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
-
-        if (!empty($getPromotionResult["unitID"])) {
-            $getPromotionResult["sUnit"] = $this->sGetUnit($getPromotionResult["unitID"]);
-        }
-
-        if ($getPromotionResult["pseudoprice"]) {
-            $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
-            $discPseudo = str_replace(",", ".", $getPromotionResult["pseudoprice"]);
-            $discPrice = str_replace(",", ".", $getPromotionResult["price"]);
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-            $getPromotionResult["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
-        }
-
-        // Calculating price for reference-unit
-        if ($getPromotionResult["purchaseunit"] > 0 && $getPromotionResult["referenceunit"]) {
-            $getPromotionResult["purchaseunit"] = (float) $getPromotionResult["purchaseunit"];
-            $getPromotionResult["referenceunit"] = (float) $getPromotionResult["referenceunit"];
-
-            $getPromotionResult["referenceprice"] = $this->calculateReferencePrice(
-                $getPromotionResult["price"],
-                $getPromotionResult["purchaseunit"],
-                $getPromotionResult["referenceunit"]
-            );
-        }
-
-        // Strip tags from descriptions
-        $getPromotionResult["articleName"] = $this->sOptimizeText($getPromotionResult["articleName"]);
-
-        if ($this->config->get('useShortDescriptionInListing')) {
-            $getPromotionResult["description_long"] = strlen($getPromotionResult["description"]) > 5 ? $getPromotionResult["description"] : $this->sOptimizeText($getPromotionResult["description_long"]);
-        }
-
-        $getPromotionResult['sVoteAverange'] = explode('|', $getPromotionResult['sVoteAverange']);
-        $getPromotionResult['sVoteAverange'] = array(
-            'averange' => round($getPromotionResult['sVoteAverange'][0], 2),
-            'count' => round($getPromotionResult['sVoteAverange'][1]),
-        );
-        $getPromotionResult["image"] = $this->sGetArticlePictures($getPromotionResult["articleID"], true, 0, "", false, false);
-
-        $getPromotionResult["linkBasket"] = $this->config['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getPromotionResult["ordernumber"];
-        $getPromotionResult["linkDetails"] = $this->config['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getPromotionResult["articleID"];
-        if (!empty($category) && $category != $context->getShop()->getCategory()->getId()) {
-            $getPromotionResult["linkDetails"] .= "&sCategory=$category";
-        }
+        $listProduct = $this->listProductService->get($ordernumber, $this->contextService->getProductContext());
+        $getPromotionResult = $this->legacyStructConverter->convertListProductStruct($listProduct);
 
         $getPromotionResult = Enlight()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',

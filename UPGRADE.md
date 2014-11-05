@@ -226,6 +226,7 @@ In this document you will find a changelog of the important changes related to t
     * `sArticles::sGetLastArticles`
     * `sArticles::sGetCategoryProperties`
     * `sArticles::sGetArticlesVotes`
+* Removed event `Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql`
 
 ## 4.3.1
 
