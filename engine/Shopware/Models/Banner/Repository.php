@@ -33,7 +33,7 @@ use         Shopware\Components\Model\ModelRepository;
 class Repository extends ModelRepository
 {
     /**
-     * Loads all banners without any live shopping banners. The $filter parameter can
+     * Loads all banners. The $filter parameter can
      * be used to narrow the selection down to a category id.
      *
      * @param null $filter
@@ -42,7 +42,6 @@ class Repository extends ModelRepository
     public function getBanners($filter=null)
     {
         $builder = $this->getBannerMainQuery($filter);
-        $builder->andWhere('banner.liveShoppingId = ?2')->setParameter(2, 0);
 
         return $builder->getQuery();
     }

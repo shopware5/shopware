@@ -48,11 +48,11 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
     alias : 'model.bannermodel',
     /**
      * Defined items used by that model
-     * 
+     *
      * We have to have a splitted date time object here.
      * One part is used as date and the other part is used as time - this is because
      * the form has two separate fields - one for the date and one for the time.
-     * 
+     *
      * @array
      */
     fields : [
@@ -68,8 +68,7 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
         { name : 'media-manager-selection', type: 'string' },
         { name : 'linkTarget',     type: 'string' },
         { name : 'categoryId',      type: 'int' },
-        { name : 'extension',       type: 'string' },
-        { name : 'liveshoppingID',  type: 'int' }
+        { name : 'extension',       type: 'string' }
     ],
 
     associations: [
@@ -78,7 +77,7 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
 
     /**
      * defines the field for the unique identifier - id is default.
-     * 
+     *
      * @int
      */
     idProperty : 'id',

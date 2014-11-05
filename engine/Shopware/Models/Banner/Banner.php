@@ -140,15 +140,6 @@ class Banner extends ModelEntity
     private $extension;
 
     /**
-     * The id which links the banner to a live shopping event.
-     *
-     * @var integer $liveShoppingId
-     * @deprecated
-     * @ORM\Column(name="liveshoppingID", type="integer", nullable=false)
-     */
-    private $liveShoppingId;
-
-    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
      * @var \Shopware\Models\Attribute\Banner
@@ -380,28 +371,6 @@ class Banner extends ModelEntity
     public function getExtension()
     {
         return $this->extension;
-    }
-
-    /**
-     * Set the live shopping ID
-     *
-     * @param integer $liveShoppingId
-     * @return Banner
-     */
-    public function setLiveShoppingId($liveShoppingId)
-    {
-        $this->liveShoppingId = (int) $liveShoppingId;
-        return $this;
-    }
-
-    /**
-     * Returns the live shopping ID
-     *
-     * @return integer
-     */
-    public function getLiveShoppingId()
-    {
-        return $this->liveShoppingId;
     }
 
     /**
