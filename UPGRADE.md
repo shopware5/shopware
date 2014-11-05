@@ -200,6 +200,9 @@ In this document you will find a changelog of the important changes related to t
     * `s_order_basket.liveshoppingID`
     * `s_order_basket.liveshoppingID`
     * `s_emarketing_banners.liveshoppingID`
+    * `s_core_sessions.expireref`
+    * `s_core_sessions.created`
+    * `s_core_sessions_backend.created`
 * Removed methods
     * `\Shopware\Models\Banner\Banner::setLiveShoppingId()`
     * `\Shopware\Models\Banner\Banner::getLiveShoppingId()`

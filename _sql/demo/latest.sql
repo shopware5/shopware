@@ -6038,23 +6038,23 @@ INSERT INTO `s_core_rulesets` (`id`, `paymentID`, `rule1`, `value1`, `rule2`, `v
 (4, 4, 'NEWCUSTOMER', '1', 'ORDERVALUELESS', '99');
 
 TRUNCATE TABLE `s_core_sessions`;
-INSERT INTO `s_core_sessions` (`id`, `expiry`, `expireref`, `created`, `modified`, `data`) VALUES
-('06hue2s27mjbapgsdnd4alffe4', 1440, NULL, 0, 1346407623, 'Shopware|a:6:{s:3:"Bot";b:0;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:10:"sOutputNet";N;s:7:"sUserId";N;}'),
-('0961e8eb513a599c5e2245ec1cbcf41e1d9acdef', 1440, NULL, 0, 1346409559, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('0f42f30d658d16106654d56e4c7536b023f4c862', 1440, NULL, 0, 1346407570, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
-('0ff4d5e779f487b3c5d17eb806b927bd032cc67f', 1440, NULL, 0, 1346409307, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('167059f519b93a72a737aab49da35f8d4455b391', 1440, NULL, 0, 1346408904, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('27c47c1e4794ecd2f7d459b3ed2741e7a85c1894', 1440, NULL, 0, 1346408990, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('6c015886a80866af3828d81f4d7d9983e673968d', 1440, NULL, 0, 1346410582, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('8b80481b5c39014e4de987dcc75fbd00147578fa', 1440, NULL, 0, 1346407725, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
-('91c715a484db57d5ef57ad0cd78a7cf436207f9f', 1440, NULL, 0, 1346408075, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('99532560f8cb24d65d60bac28182622a513252b1', 1440, NULL, 0, 1346409305, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('a2afa9542407155488d3e6c19bf2456c61d92197', 1440, NULL, 0, 1346409393, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('a4e216a348cf5dba45f0582378c8690f4d7931a8', 1440, NULL, 0, 1346408827, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
-('b27da7bffc45a04e68fbc604f913bb8c042fcf47', 1440, NULL, 0, 1346408686, 'Shopware|a:10:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";i:1;s:8:"sCountry";i:2;s:6:"sState";N;s:9:"sRegister";C:11:"ArrayObject":59:{x:i:2;a:1:{s:7:"billing";a:1:{s:7:"country";i:2;}};m:a:0:{}}s:7:"sUserId";N;s:10:"sPaymentID";i:5;s:15:"sBasketQuantity";i:0;s:13:"sBasketAmount";i:0;}'),
-('bb79981bea2b344733c132f7a840d9bd39e2ff26', 1440, NULL, 0, 1346409490, 'Shopware|a:10:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:12:"sLastArticle";i:159;s:16:"sCategoryConfig6";a:1:{s:8:"sPerPage";i:48;}s:8:"sPerPage";N;s:16:"sCategoryConfig8";a:1:{s:8:"sPerPage";i:48;}}'),
-('d009f5c59bdb8049443dcad757f08890c69874dd', 1440, NULL, 0, 1346409394, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
-('fe5ab84e1b21101ed6ea32846e0bede2c454f45e', 1440, NULL, 0, 1346409016, 'Shopware|a:8:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;s:12:"sLastArticle";i:214;}');
+INSERT INTO `s_core_sessions` (`id`, `expiry`, `modified`, `data`) VALUES
+('06hue2s27mjbapgsdnd4alffe4', 1440, 1346407623, 'Shopware|a:6:{s:3:"Bot";b:0;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:10:"sOutputNet";N;s:7:"sUserId";N;}'),
+('0961e8eb513a599c5e2245ec1cbcf41e1d9acdef', 1440, 1346409559, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('0f42f30d658d16106654d56e4c7536b023f4c862', 1440, 1346407570, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
+('0ff4d5e779f487b3c5d17eb806b927bd032cc67f', 1440, 1346409307, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('167059f519b93a72a737aab49da35f8d4455b391', 1440, 1346408904, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('27c47c1e4794ecd2f7d459b3ed2741e7a85c1894', 1440, 1346408990, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('6c015886a80866af3828d81f4d7d9983e673968d', 1440, 1346410582, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('8b80481b5c39014e4de987dcc75fbd00147578fa', 1440, 1346407725, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
+('91c715a484db57d5ef57ad0cd78a7cf436207f9f', 1440, 1346408075, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('99532560f8cb24d65d60bac28182622a513252b1', 1440, 1346409305, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('a2afa9542407155488d3e6c19bf2456c61d92197', 1440, 1346409393, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('a4e216a348cf5dba45f0582378c8690f4d7931a8', 1440, 1346408827, 'Shopware|a:7:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;}'),
+('b27da7bffc45a04e68fbc604f913bb8c042fcf47', 1440, 1346408686, 'Shopware|a:10:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";i:1;s:8:"sCountry";i:2;s:6:"sState";N;s:9:"sRegister";C:11:"ArrayObject":59:{x:i:2;a:1:{s:7:"billing";a:1:{s:7:"country";i:2;}};m:a:0:{}}s:7:"sUserId";N;s:10:"sPaymentID";i:5;s:15:"sBasketQuantity";i:0;s:13:"sBasketAmount";i:0;}'),
+('bb79981bea2b344733c132f7a840d9bd39e2ff26', 1440, 1346409490, 'Shopware|a:10:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:12:"sLastArticle";i:159;s:16:"sCategoryConfig6";a:1:{s:8:"sPerPage";i:48;}s:8:"sPerPage";N;s:16:"sCategoryConfig8";a:1:{s:8:"sPerPage";i:48;}}'),
+('d009f5c59bdb8049443dcad757f08890c69874dd', 1440, 1346409394, 'Shopware|a:6:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;}'),
+('fe5ab84e1b21101ed6ea32846e0bede2c454f45e', 1440, 1346409016, 'Shopware|a:8:{s:3:"Bot";b:0;s:10:"sOutputNet";N;s:5:"sArea";N;s:8:"sCountry";N;s:6:"sState";N;s:7:"sUserId";N;s:8:"sPerPage";N;s:12:"sLastArticle";i:214;}');
 
 TRUNCATE TABLE `s_core_sessions_backend`;
 TRUNCATE TABLE `s_core_shops`;
