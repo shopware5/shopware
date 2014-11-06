@@ -48,7 +48,7 @@
 {block name='frontend_index_content'}
 
 {* Partner Provision overview *}
-<div class="content block account--content">
+<div class="content account--content">
     {* Welcome text *}
     {block name="frontend_account_orders_welcome"}
         <div class="account--welcome panel has--border">

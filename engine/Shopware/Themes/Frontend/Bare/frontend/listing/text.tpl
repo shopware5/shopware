@@ -17,7 +17,7 @@
 				{if $sCategoryContent.cmstext}
 					<div class="hero--text panel--body is--wide"
                      data-collapse-text="true"
-                     data-lines="3"
+                     data-lines="2"
 					 data-readMoreText="{s name='ListingCategoryTeaserShowMore'}{/s}"
 					 data-readLessText="{s name='ListingCategoryTeaserShowLess'}{/s}">
                     {$sCategoryContent.cmstext}

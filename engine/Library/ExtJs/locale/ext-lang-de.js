@@ -547,4 +547,32 @@ Ext.onReady(function() {
             tooltip: "Übersetzen"
         }
     });
+    Ext.define('Shopware.apps.Base.view.element.de.ProductBoxLayoutSelect', {
+        override: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
+
+        fieldLabel: 'Produkt Layout',
+        helpText: 'Mit Hilfe des Produkt Layouts können Sie entscheiden, wie Ihre Produkte auf der Kategorie-Seite dargestellt werden sollen. Wählen Sie eines der drei unterschiedlichen Layouts um die Ansicht perfekt auf Ihr Produktsortiment abzustimmen. Sie können für jede Kategorie ein eigenes Layout wählen oder über die Vererbungsfunktion automatisch die Einstellungen der Eltern-Kategorie übernehmen.'
+    });
+    Ext.define('Shopware.apps.Base.store.de.ProductBoxLayout', {
+        override: 'Shopware.apps.Base.store.ProductBoxLayout',
+
+        snippets: {
+            displayExtendLayout: {
+                label: 'Vererbt',
+                description: 'Das Layout der Produkt-Box wird von der Eltern-Kategorie übernommen.'
+            },
+            displayBasicLayout: {
+                label: 'Detaillierte Informationen',
+                description: 'Das Layout der Produkt-Box zeigt detaillierte Informationen an.'
+            },
+            displayMinimalLayout: {
+                label: 'Nur wichtige Informationen',
+                description: 'Das Layout der Produkt-Box zeigt nur die wichtigsten Informationen an.'
+            },
+            displayImageLayout: {
+                label: 'Großes Bild',
+                description: 'Das Layout der Produkt-Box zeigt ein besonders großes Produkt-Bild.'
+            }
+        }
+    });
 });

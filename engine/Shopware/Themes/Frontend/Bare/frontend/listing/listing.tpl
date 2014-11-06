@@ -8,15 +8,37 @@
 {* Sorting and changing layout *}
 {block name="frontend_listing_top_actions"}
     {if $showListing && !$sOffers}
-        {include file='frontend/listing/listing_actions.tpl' sTemplate=$sTemplate}
+        {include file='frontend/listing/listing_actions.tpl'}
     {/if}
 {/block}
 
 {* Hide actual listing if a emotion world is active *}
 {if !$sOffers}
-    {block name="frontend_listing_listing_outer"}
-        {include file="frontend/listing/listing_outer.tpl"}
-    {/block}
+    {block name="frontend_listing_listing_container"}
+        <div class="listing--container">
+
+            {block name="frontend_listing_listing_content"}
+                <div class="listing"
+                    {if $theme.infiniteScrolling}
+                    data-infinite-scrolling="true"
+                    data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}Vorherige Artikel laden{/s}"
+                    data-loadMoreSnippet="{s name="ListingActionsLoadMore"}Weitere Artikel laden{/s}"
+                    data-categoryId="{$sCategoryContent.id}"
+                    data-pages="{$pages}"
+                    data-threshold="{$theme.infiniteThreshold}"{/if}>
+
+                    {block name="frontend_listing_list_inline"}
+                        {* Actual listing *}
+                        {if $showListing}
+                            {foreach $sArticles as $sArticle}
+                                {include file="frontend/listing/box_article.tpl"}
+                            {/foreach}
+                        {/if}
+                    {/block}
+                </div>
+            {/block}
+        </div>
+{/block}
 {else}
     {if $sCategoryContent.parent != 1}
 		<a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">

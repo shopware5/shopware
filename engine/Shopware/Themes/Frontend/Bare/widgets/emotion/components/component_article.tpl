@@ -28,12 +28,12 @@
 
             {* Product price - Unit price *}
             {block name='widget_emotion_component_product_unit'}
-                {include file="frontend/listing/product-box/unit-price.tpl"}
+                {include file="frontend/listing/product-box/product-price-unit.tpl"}
             {/block}
 
             {* Product price - Default and discount price *}
             {block name='widget_emotion_component_product_price'}
-                {include file="frontend/listing/product-box/price.tpl"}
+                {include file="frontend/listing/product-box/product-price.tpl"}
             {/block}
         </div>
     </div>

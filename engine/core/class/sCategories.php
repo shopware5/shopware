@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
@@ -533,20 +534,26 @@ class sCategories
             $canonical = str_replace('https://', 'http://', $canonical);
         }
 
-        $category = array_merge($category['category'], array(
-            'description' => $category['category']['name'],
-            'cmsheadline' => $category['category']['cmsHeadline'],
-            'cmstext' => $category['category']['cmsText'],
-            'metaKeywords' => $category['category']['metaKeywords'],
-            'metaDescription' => $category['category']['metaDescription'],
-            'noviewselect' => $category['category']['noViewSelect'],
-            'childrenCount' => (int) $category['childrenCount'],
-            'articleCount' => (int) $category['articleCount'],
-            'sSelf' => $detailUrl,
-            'sSelfCanonical' => $canonical,
-            'rssFeed' => $detailUrl . '&sRss=1',
-            'atomFeed' => $detailUrl . '&sAtom=1',
-        ));
+
+        $category = array_merge(
+            $category['category'],
+            array(
+                'description'     => $category['category']['name'],
+                'cmsheadline'     => $category['category']['cmsHeadline'],
+                'cmstext'         => $category['category']['cmsText'],
+                'metaKeywords'    => $category['category']['metaKeywords'],
+                'metaDescription' => $category['category']['metaDescription'],
+                'noviewselect'    => $category['category']['noViewSelect'],
+                'childrenCount'   => (int) $category['childrenCount'],
+                'articleCount'    => (int) $category['articleCount'],
+                'sSelf'           => $detailUrl,
+                'sSelfCanonical'  => $canonical,
+                'rssFeed'         => $detailUrl . '&sRss=1',
+                'atomFeed'        => $detailUrl . '&sAtom=1',
+            )
+        );
+
+        $category['productBoxLayout'] = $this->getProductBoxLayout($category['id']);
 
         if (empty($category['template'])) {
             $category['template'] = $this->config->get('categoryDefaultTpl');
@@ -561,6 +568,30 @@ class sCategories
         }
 
         return $category;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return int
+     */
+    public function getProductBoxLayout($categoryId)
+    {
+        /** @var \Shopware\Models\Category\Category $category */
+        $category = $this->repository->find($categoryId);
+
+        if ($category->getProductBoxLayout() !== 'extend' && $category->getProductBoxLayout() !== null) {
+            return $category->getProductBoxLayout();
+        }
+
+        while (null !== $parent = $category->getParent()) {
+            $category = $parent;
+
+            if ($category->getProductBoxLayout() !== 'extend' && $category->getProductBoxLayout() !== null) {
+                return $category->getProductBoxLayout();
+            }
+        }
+
+        return 'basic';
     }
 
     /**

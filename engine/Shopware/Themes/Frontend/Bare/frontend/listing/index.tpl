@@ -4,9 +4,13 @@
 	{include file='frontend/listing/header.tpl'}
 {/block}
 
+{block name='frontend_index_content_left'}
+    {include file='frontend/listing/sidebar.tpl'}
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content block listing--content">
+	<div class="content listing--content">
 
 		{* Banner *}
 		{block name="frontend_listing_index_banner"}
@@ -34,31 +38,23 @@
 				{* Count of available product pages *}
 				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
 
+                {* Controller url for the found products counter *}
 				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" sCategory=$sCategoryContent.id fullPath}"}
 
-				{* Remap the template names to the new syntax *}
-				{if $sCategoryContent.template eq "article_listing_1col.tpl"}
-					{assign var="sTemplate" value="listing-1col"}
-					{assign var="sBoxMode" value="list"}
-				{elseif $sCategoryContent.template eq "article_listing_2col.tpl"}
-					{assign var="sTemplate" value="listing-2col"}
-					{assign var="sBoxMode" value="table"}
-				{elseif $sCategoryContent.template eq "article_listing_3col.tpl"}
-					{assign var="sTemplate" value="listing-3col"}
-					{assign var="sBoxMode" value="table"}
-				{elseif $sCategoryContent.template eq "article_listing_4col.tpl"}
-					{assign var="sTemplate" value="listing"}
-					{assign var="sBoxMode" value="table"}
-				{else}
-					{assign var="sTemplate" value="listing-3col"}
-					{assign var="sBoxMode" value="table"}
+				{* Layout for the product boxes *}
+				{$productBoxLayout = 'basic'}
+
+				{if $sCategoryContent.productBoxLayout !== null &&
+				    $sCategoryContent.productBoxLayout !== 'extend'}
+					{$productBoxLayout = $sCategoryContent.productBoxLayout}
 				{/if}
+
 			{/if}
 		{/block}
 
 		{* Listing *}
 		{block name="frontend_listing_index_listing"}
-			{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
+			{include file='frontend/listing/listing.tpl'}
 
 			{if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
 

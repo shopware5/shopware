@@ -62,12 +62,6 @@
 								{/if}
 							{/block}
 
-							{block name="frontend_listing_actions_filter_form_layout"}
-								{if $sBoxMode}
-									<input type="hidden" name="{$shortParameters['sTemplate']}" value="{$sBoxMode}" />
-								{/if}
-							{/block}
-
                             {block name="frontend_listing_actions_filter_form_facets"}
                                 {include file="frontend/listing/actions/action-filter-facets.tpl" facets=$facets}
                             {/block}

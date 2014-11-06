@@ -14,7 +14,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="content block{if $sUserLoggedIn} account--content{else} note--content{/if}">
+	<div class="content{if $sUserLoggedIn} account--content{else} note--content{/if}">
 
 		{* Infotext *}
 		{block name="frontend_note_index_welcome"}
