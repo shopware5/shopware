@@ -258,9 +258,7 @@ class LegacyStructConverter
 
         if ($product->getPropertySet()) {
             $data['filtergroupID'] = $product->getPropertySet()->getId();
-            $data['sProperties'] = $this->getFlatPropertyArray(
-                $this->convertPropertySetStruct($product->getPropertySet())
-            );
+            $data['sProperties'] = $this->convertPropertySetStruct($product->getPropertySet());
         }
 
         foreach ($product->getDownloads() as $download) {
@@ -458,66 +456,61 @@ class LegacyStructConverter
     }
 
     /**
-     * @param array $propertySet
-     * @return array
-     */
-    public function getFlatPropertyArray(array $propertySet)
-    {
-        $data = array();
-        foreach ($propertySet['groups'] as $group) {
-            $groupData = array(
-                'id' => $group['id'],
-                'optionID' => $group['id'],
-                'name' => $group['name'],
-                'groupID' => $propertySet['id'],
-                'groupName' => $propertySet['name'],
-                'values' => array(),
-                'attributes' => $group['attributes']
-            );
-
-            $options = array();
-            foreach ($group['options'] as $option) {
-                $options[] = array(
-                    'id' => $option['id'],
-                    'name' => $option['name'],
-                    'attributes' => $option['attributes']
-                );
-            }
-
-            $groupData['values'] = array_column($options, 'name');
-            $groupData['value'] = implode(', ', $groupData['values']);
-
-            $first = array_shift($options);
-            $groupData['valueID'] = $first['id'];
-
-            $data[$groupData['id']] = $groupData;
-        }
-        return $data;
-    }
-
-    /**
+     * Example:
+     *
+     * return [
+     *     9 => [
+     *         'id' => 9,
+     *         'optionID' => 9,
+     *         'name' => 'Farbe',
+     *         'groupID' => 1,
+     *         'groupName' => 'Edelbrände',
+     *         'value' => 'goldig',
+     *         'values' => [
+     *             53 => 'goldig',
+     *         ],
+     *     ],
+     *     2 => [
+     *         'id' => 2,
+     *         'optionID' => 2,
+     *         'name' => 'Flaschengröße',
+     *         'groupID' => 1,
+     *         'groupName' => 'Edelbrände',
+     *         'value' => '0,5 Liter, 0,7 Liter, 1,0 Liter',
+     *         'values' => [
+     *             23 => '0,5 Liter',
+     *             24 => '0,7 Liter',
+     *             25 => '1,0 Liter',
+     *         ],
+     *     ],
+     * ];
+     *
      * @param StoreFrontBundle\Struct\Property\Set $set
      * @return array
      */
     public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
     {
-        $data = array(
-            'id' => $set->getId(),
-            'name' => $set->getName(),
-            'isComparable' => $set->isComparable(),
-            'groups' => array(),
-            'attributes' => array()
-        );
-
-        foreach ($set->getAttributes() as $key => $attribute) {
-            $data['attributes'][$key] = $attribute->toArray();
-        }
-
+        $result = [];
         foreach ($set->getGroups() as $group) {
-            $data['groups'][] = $this->convertPropertyGroupStruct($group);
+            $values = array_map(
+                function (StoreFrontBundle\Struct\Property\Option $option) {
+                    return $option->getName();
+                },
+                $group->getOptions()
+            );
+
+            $result[$group->getId()] = [
+                'id'        => $group->getId(),
+                'optionID'  => $group->getId(),
+                'name'      => $group->getName(),
+                'groupID'   => $set->getId(),
+                'groupName' => $set->getName(),
+                'value'     => implode(', ', $values),
+                'values'    => $values,
+            ];
         }
 
-        return $data;
+        return $result;
     }
 
     /**

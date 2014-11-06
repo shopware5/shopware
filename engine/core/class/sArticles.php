@@ -288,105 +288,27 @@ class sArticles
     }
 
     /**
-     * Get all properties from one article, filtered by one filter group
+     * Get all properties from one article
      *
      * @param int $articleId - s_articles.id
-     * @param int $filterGroupId id of the property group (s_filter_groups)
      * @return array
      */
-    public function sGetArticleProperties($articleId, $filterGroupId)
+    public function sGetArticleProperties($articleId)
     {
-        $articleId = (int) $articleId;
-        $filterGroupId = (int) $filterGroupId;
-        $language = $this->translationId;
-
-        $sql = "
-            SELECT
-                fv.optionID AS id,
-                fo.id AS optionID,
-                fo.name AS name,
-                f.id AS groupID,
-                f.name AS groupName,
-                fv.value AS value,
-                fv.id AS valueID,
-                st.objectdata AS nameTranslation,
-                st2.objectdata AS groupNameTranslation,
-                st3.objectdata AS valueTranslation
-            FROM s_filter_articles fa
-
-            JOIN s_filter_values fv
-            ON fv.id=fa.valueID
-
-            JOIN s_filter f
-            ON f.id=?
-
-            JOIN s_filter_relations fr
-            ON fr.groupID=f.id
-
-            JOIN s_filter_options fo
-            ON fo.id=fr.optionID
-            AND fo.id=fv.optionID
-
-            LEFT JOIN s_core_translations AS st
-            ON st.objecttype='propertyoption'
-            AND st.objectkey=fv.optionID
-            AND st.objectlanguage=?
-
-            LEFT JOIN s_core_translations AS st2
-            ON st2.objecttype='propertygroup'
-            AND st2.objectkey=f.id
-            AND st2.objectlanguage=?
-
-            LEFT JOIN s_core_translations AS st3
-            ON st3.objecttype='propertyvalue'
-            AND st3.objectkey=fv.id
-            AND st3.objectlanguage='$language'
-
-            WHERE fa.articleID=?
-
-            ORDER BY
-              fr.position ASC,
-              IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
-              IF(f.sortmode=3, fv.position, 0),
-              fv.value
-        ";
-
-        $getProperties = $this->db->fetchAll($sql, array(
-            $filterGroupId,
-            $language,
-            $language,
-            $articleId
-        ));
-
-        if (!empty($language)) {
-            foreach ($getProperties as $propertyKey => $propertyValue) {
-                if (!empty($propertyValue['nameTranslation'])) {
-                    $translation = unserialize($propertyValue['nameTranslation']);
-                    $getProperties[$propertyKey]['name'] = $translation['optionName'];
-                }
-                if (!empty($propertyValue['groupNameTranslation'])) {
-                    $translation = unserialize($propertyValue['groupNameTranslation']);
-                    $getProperties[$propertyKey]['groupName'] = $translation['groupName'];
-                }
-                if (!empty($propertyValue['valueTranslation'])) {
-                    $translation = unserialize($propertyValue['valueTranslation']);
-                    $getProperties[$propertyKey]['value'] = $translation['optionValue'];
-                }
-            }
+        $orderNumber = $this->getOrdernumberByArticleId($articleId);
+        if (!$orderNumber) {
+            return [];
         }
 
-        $result = array();
-        foreach ($getProperties as $property) {
-            if (!isset($result[$property['optionID']])) {
-                $property['values'] = array($property['value']);
-                $result[$property['optionID']] = $property;
-            } else {
-                $result[$property['optionID']]['value'] .= ', ' . $property['value'];
-                $result[$property['optionID']]['values'][] = $property['value'];
-            }
+        $productContext = $this->contextService->getProductContext();
+        $product = $this->listProductService->get($orderNumber, $productContext);
+        if (!$product || !$product->hasProperties()) {
+            return [];
         }
 
-        return $result;
+        $set = $this->propertyService->get($product, $productContext);
+
+        return $this->legacyStructConverter->convertPropertySetStruct($set);
     }
 
     /**
@@ -1464,14 +1386,7 @@ class sArticles
             return false;
         }
 
-        $number = $this->db->fetchOne(
-            "SELECT ordernumber
-             FROM s_articles_details
-                INNER JOIN s_articles
-                  ON s_articles.main_detail_id = s_articles_details.id
-             WHERE articleID = ?",
-            array($value)
-        );
+        $number = $this->getOrdernumberByArticleId($value);
 
         if ($number) {
             $value = $number;
@@ -2395,8 +2310,7 @@ class sArticles
             return $promotion;
         }
 
-        $properties = $this->legacyStructConverter->convertPropertySetStruct($propertySet);
-        $promotion['sProperties'] = $this->legacyStructConverter->getFlatPropertyArray($properties);
+        $promotion['sProperties'] = $this->legacyStructConverter->convertPropertySetStruct($propertySet);
         $promotion['filtergroupID'] = $propertySet->getId();
 
         return $promotion;
@@ -2794,4 +2708,23 @@ class sArticles
 
         return $selection;
     }
+
+    /**
+     * @param $articleId
+     * @return string
+     */
+    private function getOrdernumberByArticleId($articleId)
+    {
+        $number = $this->db->fetchOne(
+            "SELECT ordernumber
+             FROM s_articles_details
+                INNER JOIN s_articles
+                  ON s_articles.main_detail_id = s_articles_details.id
+             WHERE articleID = ?",
+            [$articleId]
+        );
+
+        return $number;
+    }
+
 }
