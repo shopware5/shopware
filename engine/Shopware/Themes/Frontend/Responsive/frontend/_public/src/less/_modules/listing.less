@@ -1,8 +1,6 @@
 // Listing main content
 .listing--content {
     .unitize-margin(20, 0);
-    margin-left: auto;
-    margin-right: auto;
 }
 
 // Category banner
@@ -15,28 +13,8 @@
     .unitize-margin(0, 0, 20, 0);
 
     .hero--text {
-        padding-top: 0;
+    	.unitize-padding(10, 20);
     }
-
-    .category--preview-text,
-    .category--full-text {
-        display: none;
-
-        &.is--active {
-            display: block;
-        }
-    }
-
-    .category--show-more {
-        .unitize-margin(10, 0, 0, 0);
-        display: block;
-        cursor: pointer;
-    }
-}
-
-// Topseller
-.topseller-slider {
-    .clearfix();
 }
 
 // Vendor information
@@ -66,6 +44,10 @@
     .filter--trigger {
         display: block;
         position: relative;
+
+		.icon--filter {
+			.unitize(8, 16, margin-right);
+		}
 
         .action--collapse-icon {
             .unitize-padding(0, 10);
@@ -136,70 +118,17 @@
 
 // Sorting options
 .action--sort {
-    .unitize(44, 16, line-height);
+    .unitize(38, 16, line-height);
     display: block;
-    float: left;
 
     .sort--label {
         display: none;
     }
 
     .sort--select {
+    	.unitize-height(38);
+    	.unitize(38, 16, line-height);
         width: 100%;
-    }
-}
-
-// Layout changer
-.action--change-layout {
-    .unitize-width(76);
-    display: none;
-    float: right;
-    white-space: nowrap;
-
-    .change-layout--label {
-        display: none;
-    }
-
-    .action--link {
-        .unitize-width(38);
-        .unitize-height(46);
-        .unitize(12, 16, font-size);
-        .unitize(46, 16, line-height);
-        .unitize(0, 16, margin);
-        .linear-gradient(#ffffff, #edeff1);
-        .unitize-padding(1, 2, 2, 5);
-        display: inline-block;
-        font-family: 'shopware';
-        text-align: center;
-        color: @text-color;
-        float: left;
-
-        &:hover,
-        &.is--active {
-            background: #fff;
-            color: @brand-primary;
-        }
-
-        &.link--table-view {
-            .border-radius-multi(3px, 0, 0, 3px);
-            border-width: 1px 0 1px 1px;
-
-            &:before {
-                content: "\e609";
-            }
-        }
-
-        &.link--list-view {
-            .border-radius-multi(0, 3px, 3px, 0);
-
-            &:before {
-                content: "\e608";
-            }
-        }
-
-        .action--link-text {
-            display: none;
-        }
     }
 }
 
@@ -217,16 +146,8 @@
     .paging--label {
         display: none;
     }
-    .pagination--link {
-        &.is--active {
-            background: #fff;
-        }
 
-        [class^="icon--"] {
-            margin: 0;
-        }
-    }
-    .pagination--display {
+    .paging--display {
         .unitize(30, 16, line-height);
         .unitize(10, 16, margin-left);
     }
@@ -240,191 +161,40 @@
     overflow: hidden;
 }
 
-// Listing product box
 .listing {
-    .product--box {
-        .unitize-margin(10, 0, 10, 0);
-    }
-
-    // Product image
-    .box--image {
-        .unitize-height(200);
-        .unitize-padding(10, 0);
-        display: block;
-        border-bottom: 1px solid @panel-border;
-        text-align: center;
-
-        .image--element {
-            height: 100%;
-            width: 100%;
-            display: block;
-            margin: 0 auto;
-            position: relative;
-
-            img {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
-                display: inline-block;
-                vertical-align: middle;
-                z-index: 500;
-            }
-        }
-    }
-
-    // Product title
-    .product--title {
-        .unitize(16, 16, font-size);
-        .unitize-margin(0, 0, 10, 0);
-        display: inline-block;
-        color: @text-color-dark;
-        font-weight: bold;
-        word-wrap: break-word;
-
-        &:hover {
-            color: @brand-primary;
-        }
-    }
-
-    // Product description
-    .product--description {
-        display: none;
-    }
-
-    // Product price info
-    .product--price {
-        .unitize-margin(20, 0);
-        display: block;
-
-        .price--default {
-            .unitize(20, 16, font-size);
-            .unitize(24, 16, line-height);
-            .unitize-margin(10, 0, 0, 0);
-            color: @text-color-dark;
-        }
-
-        .price--unit {
-            .unitize(12, 16, font-size);
-            .unitize(16, 16, line-height);
-            color: @text-color;
-        }
-
-        .price--discount {
-            .content--default {
-                color: @badge-discount-bg;
-            }
-
-            .content--discount {
-                .unitize(12, 16, font-size);
-                .unitize(16, 16, line-height);
-                color: @text-color;
-                font-weight: normal;
-                text-decoration: line-through;
-            }
-        }
-    }
-
-    // Product actions
-    .product--actions {
-        .unitize-margin(10, 0, 0, 0);
-    }
-
-    // Product action button
-    .product--action {
-
-        &.action--compare,
-        &.action--buynow {
-            display: none;
-        }
-
-        &.action--more {
-            display: block;
-        }
-    }
-
-    .product--badges {
-        .unitize-width(30px);
-        .unitize(20, 16, top);
-        .unitize(0, 16, left);
-        display: block;
-        position: absolute;
-    }
-}
-
-// Discount Badge
-.badge--discount {
-    .unitize-width(30);
-    .unitize-padding(3, 0);
-    .unitize-margin(0, 0, 5, 0);
-    .unitize(15, 16, font-size);
-    .unitize(20, 16, line-height);
-    .unitize(-1, 16, left);
-    .border-radius-multi(0, 3px, 3px, 0);
-    display: block;
-    position: relative;
-    color: @badge-discount-color;
-    font-weight: 600;
-    text-align: center;
-    background: @badge-discount-bg;
-    z-index: 750;
-}
-
-.badge--newcomer {
-    .unitize-height(30);
-    .unitize-padding(0, 10);
-    .unitize(15, 16, font-size);
-    .unitize(30, 16, line-height);
-    .unitize(-1, 16, left);
-    .unitize(5, 16, top);
-    .border-radius-multi(0, 0, 3px, 3px);
-    .rotate(-90deg);
-    .transform-origin(top, left, 0);
-    display: block;
-    position: relative;
-    margin-top: 100%;
-    color: @badge-newcomer-color;
-    font-weight: 600;
-    text-align: center;
-    background: @badge-newcomer-bg;
-    z-index: 750;
-}
-
-.badge--esd {
-    .unitize-width(30);
-    .unitize-padding(3, 0);
-    .unitize-margin(0, 0, 5, 0);
-    .unitize(18, 16, font-size);
-    .unitize(20, 16, line-height);
-    .border-radius-multi(0, 3px, 3px, 0);
-    background: @badge-download-bg;
-    color: @badge-download-color;
-    display: block;
-    position: relative;
-    text-align: center;
-    z-index: 750;
+	.clearfix();
+	margin: -2% 0 0 -2%;
+	padding: 0 0 2% 0;
 }
 
 // button wrapper for ininite scrolling actions
 .infinite--actions {
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
 
-    .js--load-more, .js--load-previous {
-        .unitize(20, 16, margin-bottom);
-    }
+	.js--load-more, .js--load-previous {
+		.unitize(20, 16, margin-bottom);
+	}
 }
 
 // Tablet view
 @media screen and(min-width: @tabletViewportWidth) {
 
+	.category--teaser {
+		.hero--headline {
+			.unitize(@font-size-h1, 16, font-size);
+			.unitize-padding(40, 0, 0, 0);
+			.unitize-margin(0, 40);
+		}
+		.hero--text {
+			.unitize-padding(25, 40, 10, 40);
+		}
+	}
+
     .listing--content {
+    	.clearfix();
         .unitize-margin(30, 0);
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .vendor--info {
@@ -445,17 +215,11 @@
     .action--sort {
         .unitize-width(220);
         display: inline-block;
+        text-align: right;
+		float: right;
 
         .sort--select {
             .unitize-width(220);
-        }
-    }
-
-    .action--change-layout {
-        display: inline-block;
-
-        .action--link {
-            .unitize-padding(0, 2, 2, 3);
         }
     }
 
@@ -567,143 +331,19 @@
             .unitize(10, 16, padding-bottom);
         }
     }
-
-    .listing--container {
-        .clearfix();
-    }
-
-    .listing {
-        .clearfix();
-        .unitize-padding(0, 0, 20, 0);
-        margin: -2% 0 0 -2%;
-
-        .product--box {
-            width: 48%;
-            margin: 2% 0 0 2%;
-            float: left;
-
-            .panel--body {
-                .unitize-height(440);
-            }
-
-            .product--title {
-                .unitize-margin(0, 0, 10, 0);
-                .unitize(21, 16, font-size);
-                .unitize(24, 16, line-height);
-            }
-
-            .product--price {
-                .unitize(10, 16, left);
-                .unitize(10, 16, bottom);
-                .unitize(10, 16, padding-right);
-                position: absolute;
-                margin: 0;
-            }
-
-            .product--actions {
-                display: none;
-            }
-        }
-    }
-
-    .listing--listing-1col {
-        .product--box {
-            width: 98%;
-
-            .panel--body {
-                .clearfix();
-                .unitize-height(240);
-                .unitize-padding(0, 40, 0, 0);
-            }
-
-            .box--image {
-                .unitize-width(180);
-                .unitize-height(240);
-                .unitize-padding(10, 10);
-                .unitize-margin(0, 20, 0, 0);
-                border-width: 0 1px 0 0;
-                border-style: solid;
-                border-color: @panel-border;
-                float: left;
-            }
-
-            .product--title {
-                .unitize-margin(20, 10, 10, 200);
-                .unitize(21, 16, font-size);
-                .unitize(24, 16, line-height);
-                display: block;
-            }
-
-            .product--description {
-                .unitize-margin(0, 0, 10, 200);
-                .unitize(14, 16, font-size);
-                .unitize(21, 16, line-height);
-                display: block;
-            }
-
-            .product--price {
-                .unitize(20, 16, bottom);
-                .unitize(200, 16, left);
-                position: absolute;
-                margin: 0;
-            }
-        }
-    }
 }
 
 // Tablet Landscape view
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
 
-    .listing--listing-1col {
-        .product--box {
-            .panel--body {
-                .unitize-padding(0, 270, 0, 0);
-            }
-
-            .product--title {
-                .unitize-margin(20, 10, 10, 200);
-                .unitize(21, 16, font-size);
-            }
-
-            .product--description {
-                .unitize-margin(0, 0, 10, 200);
-                .unitize(14, 16, font-size);
-                .unitize(21, 16, line-height);
-                display: block;
-            }
-
-            .product--actions {
-                .unitize-width(220);
-                .unitize-height(145);
-                .unitize-padding(10, 10);
-                .unitize(40, 16, top);
-                .unitize(30, 16, right);
-                display: block;
-                position: absolute;
-
-                .product--action {
-                    .unitize-margin(0, 0, 10, 0);
-                    display: block;
-                }
-            }
-        }
-    }
 }
 
 // Desktop view
 @media screen and(min-width: @desktopViewportWidth) {
 
-    .category--teaser {
-        .hero--headline {
-            .unitize(@font-size-h1, 16, font-size);
-        }
-    }
-
     .listing--content {
         .unitize(45, 16, padding-top);
         .unitize-margin(0, 0);
-        width: 78%;
-        float: right;
     }
 
     .listing--actions {
@@ -711,10 +351,8 @@
         .unitize-margin(0, 0, 20, 0);
         .unitize(10, 16, padding-top);
         border: 1px solid @border-color;
-        background: @gray-light;
-
-
-
+        background: darken(@gray-light, 1%);
+		
         .listing--paging {
             display: block;
             border-top: 1px solid @border-color;
@@ -723,14 +361,15 @@
 
     .action--filter-btn {
         .unitize-margin(0, 0, 10, 10);
-        width: 14%;
+        width: 20%;
         margin-right: 2%;
 
         .filter--trigger {
             .unitize(14, 16, font-size);
+            .unitize(26, 16, line-height);
 
-            .icon--filter {
-                .unitize(8, 16, margin-right);
+            &.is--active {
+				.unitize(28, 16, line-height);
             }
 
             .action--collapse-icon {
@@ -747,13 +386,13 @@
             border-width: 1px 0 0 0;
         }
     }
+
     .action--sort {
-        .unitize-margin(0, 0, 10, 10);
-        .unitize(36, 16, line-height);
-        width: 34%;
+        .unitize-margin(0, 10, 10, 0);
+        .unitize(32, 16, line-height);
+        width: 40%;
 
         .sort--label {
-            .unitize(34, 16, line-height);
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
             font-weight: bold;
@@ -761,39 +400,20 @@
 
         .sort--select {
             .unitize-width(200);
+			.unitize-height(32);
+			.unitize(30, 16, line-height);
             vertical-align: top;
         }
     }
 
-    .action--change-layout {
-        .unitize(36, 16, line-height);
-        width: 16%;
-        margin-left: 4%;
-        float: left;
-
-        .change-layout--label {
-            .unitize-margin(0, 10, 0, 0);
-            display: inline-block;
-            font-weight: bold;
-            float: left;
-        }
-
-        .action--link {
-            .unitize-height(36);
-            .unitize(34, 16, line-height);
-        }
-    }
-
     .action--per-page {
-        .unitize-margin(0, 10, 0, 0);
-        .unitize(34, 16, line-height);
-        width: 24%;
+        .unitize(32, 16, line-height);
+        width: 30%;
         display: inline-block;
         text-align: right;
         float: right;
 
         .per-page--label {
-            .unitize(36, 16, line-height);
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
             font-weight: bold;
@@ -801,262 +421,31 @@
 
         .per-page--select {
             .unitize-width(80);
+			.unitize-height(32);
+			.unitize(30, 16, line-height);
             text-align: center;
             vertical-align: top;
         }
     }
 
-    .listing--paging {
-        .unitize-padding(10, 10);
-        display: block;
-        float: none;
-        clear: both;
+	.listing--paging {
+		.unitize-padding(10, 10);
+		display: block;
+		clear: both;
 
-        .paging--label {
-            .unitize-margin(0, 10, 0, 0);
-            font-weight: bold;
-        }
-    }
+		.paging--label {
+			.unitize-margin(0, 10, 0, 0);
+			font-weight: bold;
+		}
+
+		.paging--display {
+			.unitize(30, 16, line-height);
+		}
+	}
 
     .listing--bottom-paging {
         .border-radius(3px);
         border: 1px solid @border-color;
-        background: @body-bg;
-    }
-
-    // Listing views
-    .listing {
-        .product--box {
-            width: 100%;
-            float: left;
-        }
-    }
-
-    // One column listing view (List-View)
-    .listing--listing-1col {
-        .product--box {
-            width: 98%;
-
-            .panel--body {
-                .clearfix();
-                .unitize-height(220);
-            }
-
-            .box--image {
-                .unitize-width(180);
-                .unitize-height(220);
-                .unitize-padding(10, 10);
-            }
-
-            .product--title {
-                .unitize-margin(20, 10, 10, 200);
-                display: block;
-            }
-
-            .product--description {
-                .unitize-margin(0, 0, 10, 200);
-                .unitize(14, 16, font-size);
-                .unitize(21, 16, line-height);
-                display: block;
-            }
-
-            .product--price {
-                .unitize(15, 16, bottom);
-
-                .price--default {
-                    .unitize-margin(5, 0, 0, 0);
-                }
-            }
-
-            .product--actions {
-                .unitize-width(220);
-                .unitize-height(145);
-                .unitize-padding(10, 10);
-                .unitize(38, 16, top);
-                .unitize(30, 16, right);
-                display: block;
-                position: absolute;
-
-                .product--action {
-                    .unitize-margin(0, 0, 10, 0);
-                    display: block;
-                }
-            }
-        }
-    }
-
-    // Two column listing view
-    .listing--listing-2col {
-        .product--box {
-            width: 48%;
-
-            &.is--active,
-            &:hover {
-                .product--actions {
-                    display: block;
-                }
-            }
-
-            .panel--body {
-                .clearfix();
-                .unitize-height(180);
-                .unitize-padding(0, 0);
-            }
-
-            .box--image {
-                .unitize-width(180);
-                .unitize-height(180);
-                .unitize-padding(10, 10);
-                .unitize-margin(0, 20, 0, 0);
-                border-width: 0 1px 0 0;
-                border-style: solid;
-                border-color: @panel-border;
-                float: left;
-            }
-
-            .product--title {
-                .unitize-margin(20, 10, 10, 200);
-                display: block;
-            }
-
-            .product--price {
-                .unitize(200, 16, left);
-                .unitize(20, 16, bottom);
-
-                .price--default {
-                    .unitize-margin(5, 0, 0, 0);
-                }
-            }
-
-            .product--actions {
-                .unitize-height(180);
-                .unitize-padding(0, 0, 0, 180);
-                .unitize-margin(0, 0);
-                display: none;
-                width: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
-
-                .product--actions-inner {
-                    .unitize-height(170);
-                    .unitize-padding(20, 10);
-                    background: @panel-bg;
-                }
-
-                .product--action {
-                    .unitize-margin(0, 0, 10, 0);
-                    display: block;
-                }
-            }
-
-            .badge--highlight {
-                .unitize(265, 16, right);
-            }
-        }
-    }
-
-    // Three column listing view
-    .listing--listing-3col {
-        .product--box {
-            width: 31.3%;
-
-            &.is--active,
-            &:hover {
-                .product--actions {
-                    display: block;
-                }
-            }
-
-            .panel--body {
-                .unitize-height(340);
-            }
-
-            .box--image {
-                .unitize-height(160);
-                .unitize-padding(10, 0);
-                .unitize-margin(0, 0, 10, 0);
-            }
-
-            .product--title {
-                .unitize(30, 16, line-height);
-            }
-
-            .product--price {
-                .price--default {
-                    .unitize-margin(5, 0, 0, 0);
-                }
-            }
-
-            .product--actions {
-                .unitize-height(160);
-                .unitize-padding(10, 10);
-                display: none;
-                width: 100%;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                background: @panel-bg;
-
-                .product--action {
-                    .unitize-margin(0, 0, 10, 0);
-                    display: block;
-                }
-            }
-        }
-    }
-
-    // Four column listing view (Grid-View)
-    .listing--listing {
-        .product--box {
-            width: 23%;
-
-            &.is--active,
-            &:hover {
-                .product--actions {
-                    display: block;
-                }
-            }
-
-            .panel--body {
-                .unitize-height(340);
-            }
-
-            .box--image {
-                .unitize-height(160);
-                .unitize-padding(10, 0);
-                .unitize-margin(0, 0, 10, 0);
-            }
-
-            .product--title {
-                .unitize(16, 16, font-size);
-            }
-
-            .product--price {
-                .price--default {
-                    .unitize-margin(5, 0, 0, 0);
-                }
-                .price--unit {
-                    .unitize(11, 16, font-size);
-                    .unitize(14, 16, line-height);
-                }
-            }
-
-            .product--actions {
-                .unitize-height(160);
-                .unitize-padding(10, 10);
-                display: none;
-                width: 100%;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                background: @panel-bg;
-
-                .product--action {
-                    .unitize-margin(0, 0, 10, 0);
-                    display: block;
-                }
-            }
-        }
+        background: darken(@gray-light, 1%);
     }
 }

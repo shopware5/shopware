@@ -520,4 +520,33 @@ Ext.onReady(function() {
             tooltip: "Translate"
         }
     });
+    Ext.define('Shopware.apps.Base.view.element.en_GB.ProductBoxLayoutSelect', {
+        override: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
+
+        fieldLabel: 'Product layout',
+        helpText: 'Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.'
+    });
+
+    Ext.define('Shopware.apps.Base.store.de.ProductBoxLayout', {
+        override: 'Shopware.apps.Base.store.ProductBoxLayout',
+
+        snippets: {
+            displayExtendLayout: {
+                label: 'Parent setting',
+                description: 'The layout of the product box will be set by the value of the parent category.'
+            },
+            displayBasicLayout: {
+                label: 'Detailed information',
+                description: 'The layout of the product box will show very detailed information.'
+            },
+            displayMinimalLayout: {
+                label: 'Only important information',
+                description: 'The layout of the product box will only show the most important information.'
+            },
+            displayImageLayout: {
+                label: 'Big image',
+                description: 'The layout of the product box is based on a big image of the product.'
+            }
+        }
+    });
 });

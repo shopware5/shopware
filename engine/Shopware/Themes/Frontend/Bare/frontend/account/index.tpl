@@ -16,7 +16,7 @@
 
 {* Account Main Content *}
 {block name="frontend_index_content"}
-	<div class="content block account--content">
+	<div class="content account--content">
 
 		{* Success messages *}
 		{block name="frontend_account_index_success_messages"}

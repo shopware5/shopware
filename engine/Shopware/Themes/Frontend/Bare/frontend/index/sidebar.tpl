@@ -1,4 +1,5 @@
-<aside class="sidebar-main off-canvas block">
+<aside class="sidebar-main off-canvas">
+
 	{* Campaign left top *}
 	{block name='frontend_index_left_campaigns_top'}
 		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}

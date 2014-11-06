@@ -11,7 +11,7 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader} is--minimal-header{/if}">
+<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader} is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}">
 	<div class="page-wrap">
 
 		{* Message if javascript is disabled *}
@@ -82,7 +82,11 @@
 				{/block}
 
 				{* Main content *}
-				{block name='frontend_index_content'}{/block}
+				{block name='frontend_index_content_wrapper'}
+                    <div class="content--wrapper">
+                        {block name='frontend_index_content'}{/block}
+                    </div>
+				{/block}
 
 				{* Sidebar right *}
 				{block name='frontend_index_content_right'}{/block}

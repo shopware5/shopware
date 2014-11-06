@@ -1,6 +1,7 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
-    <div data-listing-actions="true" class="listing--actions block-group{block name='frontend_listing_actions_class'}{/block}">
+    <div data-listing-actions="true"
+         class="listing--actions{block name='frontend_listing_actions_class'}{/block}">
 
 		{* Filter action button *}
 		{block name="frontend_listing_actions_filter"}
@@ -10,16 +11,6 @@
 		{* Order by selection *}
 		{block name='frontend_listing_actions_sort'}
 			{include file="frontend/listing/actions/action-sorting.tpl"}
-		{/block}
-
-		{* Layout switcher *}
-		{block name="frontend_listing_actions_change_layout"}
-			{include file="frontend/listing/actions/action-change-layout.tpl"}
-		{/block}
-
-		{* Products per page selection *}
-		{block name='frontend_listing_actions_items_per_page'}
-			{include file="frontend/listing/actions/action-per-page.tpl"}
 		{/block}
 
 		{* Filter options *}

@@ -1,5 +1,6 @@
 /** Main navigation of the storefront */
 body > .sidebar-main {
+	.clearfix();
     .unitize(20, 16, padding-bottom);
     border-right: @border-color;
 }
@@ -58,17 +59,51 @@ body > .sidebar-main {
 @media screen and (min-width: @tabletViewportWidth) {
 
     .sidebar-main {
-        .unitize(45, 16, padding-top);
+    	.unitize-width(230);
         .unitize-margin(0, 0);
+		.unitize(30, 16, padding-top);
         display: none;
-        width: 20%;
+        float: left;
 
-        .mobile--switches {
-            display: none;
-        }
+		.is--ctl-listing &,
+		.is--ctl-note.is--user &,
+		.is--ctl-account.is--user & {
+			display: block;
 
-        .navigation--smartphone,
-        .filter--container {
+			& + .content--wrapper {
+				.unitize(260, 16, margin-left);
+			}
+		}
+
+		.is--ctl-blog &,
+		.is--ctl-note &,
+		.is--ctl-index &,
+		.is--ctl-detail &,
+		.is--ctl-search &,
+		.is--ctl-custom &,
+		.is--ctl-checkout &,
+		.is--ctl-account.is--act-logout &,
+		.is--ctl-account.is--act-password &,
+		.is--ctl-listing.is--no-sidebar & {
+			display: none;
+
+			& + .content--wrapper {
+				margin: 0;
+			}
+		}
+
+		.is--ctl-note &,
+		.is--ctl-account & {
+			.categories--headline,
+			.categories--navigation,
+			.shop-sites--container {
+				display: none;
+			}
+		}
+
+        .mobile--switches,
+		.filter--container,
+        .navigation--smartphone {
             display: none;
         }
     }
@@ -82,7 +117,7 @@ body > .sidebar-main {
     }
 
     .sidebar--navigation {
-        .unitize-margin(0, 0, 10, 0);
+        .unitize-margin(0, 0, 20, 0);
         .border-radius(0);
 
         .navigation--entry {
@@ -204,7 +239,10 @@ body > .sidebar-main {
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-    .sidebar-main {
-    display: block;
+
+    .sidebar-main,
+	.is--ctl-custom .sidebar-main {
+		.unitize(45, 16, padding-top);
+    	display: block;
     }
 }

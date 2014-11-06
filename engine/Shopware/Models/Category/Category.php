@@ -148,6 +148,13 @@ class Category extends ModelEntity
     private $template;
 
     /**
+     * @var string $productBoxLayout
+     *
+     * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
+     */
+    private $productBoxLayout = null;
+
+    /**
      * @var boolean $blog
      *
      * @ORM\Column(name="blog", type="boolean", nullable=false)
@@ -962,5 +969,24 @@ class Category extends ModelEntity
         }
 
         return false;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getProductBoxLayout()
+    {
+        return $this->productBoxLayout;
+    }
+
+    /**
+     * @param integer $productBoxLayout
+     * @return Category
+     */
+    public function setProductBoxLayout($productBoxLayout)
+    {
+        $this->productBoxLayout = $productBoxLayout;
+
+        return $this;
     }
 }

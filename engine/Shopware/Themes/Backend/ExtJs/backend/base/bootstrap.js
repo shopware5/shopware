@@ -116,6 +116,7 @@
 {include file='backend/base/model/position_status.js'}
 {include file='backend/base/model/doc_type.js'}
 {include file='backend/base/model/password_encoder.js'}
+{include file='backend/base/model/product_box_layout.js'}
 {include file='backend/base/model/page_not_found_destination_options.js'}
 
 {* Include global stores *}
@@ -142,6 +143,7 @@
 {include file='backend/base/store/form.js'}
 {include file='backend/base/store/position_status.js'}
 {include file='backend/base/store/password_encoder.js'}
+{include file='backend/base/store/product_box_layout.js'}
 {include file='backend/base/store/page_not_found_destination_options.js'}
 
 
@@ -189,3 +191,8 @@
 {include file='backend/base/component/element/textarea.js'}
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
+{include file='backend/base/component/element/product_box_layout_select.js'}
+
+
+
+
