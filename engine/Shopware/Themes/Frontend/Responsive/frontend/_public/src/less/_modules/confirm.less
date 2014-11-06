@@ -17,7 +17,6 @@
         .panel--body {
             background: @panel-bg;
             color: @text-color;
-            border-color: @panel-border;
             padding-bottom: 0;
         }
 
@@ -26,10 +25,10 @@
             border-color: @panel-border;
         }
 
-        .basket--footer{
+        .basket--footer {
             .unitize-margin(0, -10);
-            background: @gray;
-            border-color: @border-color;
+            background: @gray-light;
+            border-color: @panel-border;
 
             .aggregation--list {
                 margin: 0;
@@ -166,7 +165,12 @@
                 border-bottom: 0 none;
             }
 
-            .panel--body{
+            .row--product .column--tax-price {
+                .unitize(42, 16, line-height);
+                .unitize(26, 16, padding-top);
+            }
+
+            .panel--body {
                 .unitize(20, 16, padding-bottom);
             }
 

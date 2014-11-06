@@ -36,7 +36,7 @@
 
     .premium-product.panel {
         .unitize-margin(10, 0, 0, 0);
-        border: 1px solid @border-color;
+        border: 1px solid @panel-border;
     }
 
     .delivery--status-icon {
@@ -65,7 +65,7 @@
         .unitize-padding(10, 0);
         .clearfix();
         position: relative;
-        border-bottom: 1px solid @border-color;
+        border-bottom: 1px solid @panel-border;
         width: 100%;
         height: 100%;
     }
@@ -122,7 +122,14 @@
         width: 70%;
     }
 
-    .product--delivery,
+    .delivery--text-shipping-free {
+        .unitize(14, 16, font-size);
+    }
+
+    .delivery--shipping-free-icon {
+        display: none;
+    }
+
     .delivery--status-icon {
         .unitize(12, 16, font-size);
         margin: 0;
@@ -518,8 +525,8 @@
     }
 
     .modal--cross-selling {
-        .unitize-margin(0, 0, 0, 0);
         .unitize-padding(0, 20, 20, 20);
+        margin: 0;
 
         .product-slider {
             .unitize-height(270);
@@ -650,7 +657,7 @@
     .aggregation--list {
         .unitize(14, 16, font-size);
         .unitize(24, 16, line-height);
-        .unitize-margin(0, -10, 0, -10, 16);
+        .unitize-margin(0, -10);
         border-top: 1px solid @border-color;
     }
 }
@@ -733,6 +740,10 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
 
+    .basket--info-messages {
+        .unitize-margin(20, 0, 10, 0);
+    }
+
     .product--table {
         .unitize-margin(20, 0);
 
@@ -800,8 +811,8 @@
 
         // Basic layout
         .table--row {
-            .unitize-padding(10, 0, 10, 0);
-            border-bottom: 1px solid @border-color;
+            .unitize-padding(10, 0);
+            border-bottom: 1px solid @panel-border;
         }
 
         .is--centered {
@@ -836,7 +847,7 @@
         }
 
         .column--quantity {
-            .unitize-padding(10, 10, 10, 10);
+            .unitize-padding(10, 10);
             float: left;
             width: 11%;
             margin: 0;
@@ -849,11 +860,23 @@
 
         .column--unit-price,
         .column--total-price {
-            .unitize-padding(10, 10, 10, 10);
+            .unitize-padding(10, 10);
             width: 14.5%
         }
 
-        // Content styling
+        .row--product .column--quantity {
+            .unitize(26, 16, padding-top);
+        }
+        .row--product .column--unit-price,
+        .row--product .column--total-price {
+            .unitize(42, 16, line-height);
+            .unitize(26, 16, padding-top);
+        }
+        .row--product .column--actions {
+            .unitize(26, 16, padding-top);
+        }
+
+            // Content styling
         .content--title {
             .unitize(16, 16, font-size);
             font-weight: bold;
@@ -903,7 +926,7 @@
         .basket--footer {
             .unitize-margin(0, -20, -20, -20);
             .clearfix();
-            border-top: 1px solid @border-color;
+            border-top: 1px solid @panel-border;
             background: @gray-light;
         }
 
@@ -1036,6 +1059,10 @@
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
+    .is--ctl-checkout .basket--info-messages {
+        .unitize(45, 16, margin-top);
+    }
+
     .product--table {
         .unitize(45, 16, margin-top);
 
@@ -1052,6 +1079,10 @@
 
             .column--image { width: 14%; }
             .table--content { width: 86%; }
+        }
+
+        .row--product .column--actions {
+            .unitize(34, 16, padding-top);
         }
 
         .table--row .column--actions {
