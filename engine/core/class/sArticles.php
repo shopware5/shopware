@@ -93,11 +93,6 @@ class sArticles
     private $productService;
 
     /**
-     * @var StoreFrontBundle\Service\VoteServiceInterface
-     */
-    private $voteService;
-
-    /**
      * @var StoreFrontBundle\Service\ConfiguratorServiceInterface
      */
     private $configuratorService;
@@ -146,10 +141,7 @@ class sArticles
      * @var SearchBundle\ProductNumberSearchInterface
      */
     private $productNumberSearch;
-    /**
-     * @var SearchBundle\CriteriaFactory
-     */
-    private $criteriaFactory;
+
     /**
      * @var Enlight_Components_Session_Namespace
      */
@@ -162,53 +154,31 @@ class sArticles
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
-        $customerGroupId = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        Shopware_Components_Config $config = null,
-        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null,
-        StoreFrontBundle\Service\ProductServiceInterface $productService = null,
-        StoreFrontBundle\Service\VoteServiceInterface $voteService = null,
-        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null,
-        StoreFrontBundle\Service\PropertyServiceInterface $propertyService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
-        SearchBundle\ProductSearchInterface $searchService = null,
-        Enlight_Event_EventManager $eventManager = null,
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter = null,
-        \Shopware\Components\Compatibility\LegacyEventManager $legacyEventManager = null,
-        QueryAliasMapper $queryAliasMapper = null,
-        SearchBundle\ProductNumberSearchInterface $productNumberSearch = null,
-        SearchBundle\CriteriaFactory $criteriaFactory,
-        SearchBundle\StoreFrontCriteriaFactory $storeFrontCriteriaFactory,
-        Enlight_Components_Session_Namespace $session
+        $customerGroupId = null
     ) {
         $container = Shopware()->Container();
 
-        $this->category = $category ?: Shopware()->Shop()->getCategory();
-        $this->categoryId = $this->category->getId();
-        $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
+        $this->category        = $category ?: Shopware()->Shop()->getCategory();
+        $this->categoryId      = $this->category->getId();
+        $this->translationId   = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
         $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
-        $this->config = $config ?: $container->get('config');
-        $this->db = $db ?: $container->get('db');
-        $this->eventManager = $eventManager ?: $container->get('events');
 
-        $this->contextService = $contextService ?: $container->get('context_service');
-        $this->listProductService = $listProductService ?: $container->get('list_product_service');
-        $this->productService = $productService ?: $container->get('product_service');
-        $this->productNumberSearch = $productNumberSearch ?: $container->get('product_number_search');
-        $this->voteService = $voteService ?: $container->get('vote_service');
-        $this->configuratorService = $configuratorService ?: $container->get('configurator_service');
-        $this->propertyService = $propertyService ?: $container->get('property_service');
-        $this->additionalTextService = $additionalTextService ?: $container->get('additional_text_service');
-        $this->searchService = $searchService ?: $container->get('product_search');
-        $this->queryAliasMapper = $queryAliasMapper ?: $container->get('query_alias_mapper');
-
-
-        $this->legacyStructConverter = $legacyStructConverter ?: $container->get('legacy_struct_converter');
-        $this->legacyEventManager = $legacyEventManager ?: $container->get('legacy_event_manager');
-        $this->criteriaFactory = $criteriaFactory ?: $container->get('criteria_factory');
-        $this->session = $session ?: $container->get('session');
-        $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory ?: $container->get('store_front_criteria_factory');
+        $this->config                    = $container->get('config');
+        $this->db                        = $container->get('db');
+        $this->eventManager              = $container->get('events');
+        $this->contextService            = $container->get('context_service');
+        $this->listProductService        = $container->get('list_product_service');
+        $this->productService            = $container->get('product_service');
+        $this->productNumberSearch       = $container->get('product_number_search');
+        $this->configuratorService       = $container->get('configurator_service');
+        $this->propertyService           = $container->get('property_service');
+        $this->additionalTextService     = $container->get('additional_text_service');
+        $this->searchService             = $container->get('product_search');
+        $this->queryAliasMapper          = $container->get('query_alias_mapper');
+        $this->legacyStructConverter     = $container->get('legacy_struct_converter');
+        $this->legacyEventManager        = $container->get('legacy_event_manager');
+        $this->session                   = $container->get('session');
+        $this->storeFrontCriteriaFactory = $container->get('store_front_criteria_factory');
     }
 
     /**
