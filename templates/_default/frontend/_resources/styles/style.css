@@ -64,9 +64,7 @@ div.ico_esd span {display: block;width:94px;text-align:center;margin: 3px 0 0 0;
 div.ico_tipp {z-index: 210; position: absolute; top: -4px; right: 10px; width: 57px; height: 25px; background: url(../images/sprite_listing.png) no-repeat 0 -24px;}
 div.ico_tipp span {display: block;text-align: center;margin-top:4px;}
 
-a.basket {background: url(../images/ico_basket.gif) no-repeat;display: inline-block;height: 22px;width:22px;}
-
-/* Flags */ 
+/* Flags */
 #topbar .flag {display: block;width: 16px; height: 11px;text-indent: -9999px;margin: 8px 5px 0 0;float:left;}
 
 /*	TRUSTED SHOPS, PAYPAL
@@ -684,7 +682,6 @@ div#notes .article_price_unit p { margin: 0; }
 .accept_box h3 {font-weight: 700; text-align: center; font-size: 11px;}
 .box_premiumcontainer, .box_premiumcontainer div {width:176px; margin: 0 auto; text-align: center;}
 .box_premiumcontainer div {border: 2px solid; border-top: 0 none;margin-left:-2px;padding: 12px 0 ;position: relative;}
-.box_premiumcontainer .bonus_price {padding: 0; background: url(../images/bonus_price.gif) no-repeat; height: 55px;border: none;margin:0 0 -12px 0;font-weight: 700;}
 .box_premiumcontainer .bonus_price p.pr1 {position: absolute; right: 5px; top: 8px; font-size: 14px;}
 .box_premiumcontainer .bonus_price p.pr2 {position: absolute; left:5px; top: 34px;}
 .basket .changeorder, .basket .more_info, .basket .agb {border: 1px solid; padding: 10px;width: 760px; border-top: 0 none;}
