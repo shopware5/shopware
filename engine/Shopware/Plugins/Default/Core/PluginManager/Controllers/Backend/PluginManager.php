@@ -427,45 +427,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
     }
 
-    public function downloadDummyAction()
-    {
-        $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
-        $name = $this->Request()->getParam('name');
-
-        $plugin = $this->getPluginByName($name);
-        if (!$plugin instanceof \Shopware\Models\Plugin\Plugin) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $namespace->get('locale_plugin_not_found', "The locale plugin can't be found!")
-            ));
-            return;
-        }
-
-        /**@var $plugin \Shopware\Models\Plugin\Plugin*/
-        $bootstrap = $this->getPluginBootstrap($plugin);
-        $tmpPath = '/tmp/' . $plugin->getName() . '_BACKUP';
-        if (file_exists($tmpPath)) {
-            $this->removeDirectory($tmpPath);
-        }
-
-        if (file_exists($bootstrap->Path())) {
-            rename($bootstrap->Path(), $tmpPath);
-        }
-
-        $url = Shopware()->Plugins()->Backend()->StoreApi()->Config()->DummyPluginUrl;
-
-        $version = $this->getCommunityStore()->getNumericShopwareVersion();
-
-        $url = str_replace('%version%', $version, $url);
-        $url = str_replace('%name%', $name, $url);
-
-        $result = $this->getCommunityStore()->downloadPlugin($url, 'Default');
-        $result['activated'] = false;
-        $result['installed'] = false;
-
-        $this->View()->assign($result);
-     }
-
     /**
      * Controller Action to trigger the download of a plugin by a given name
      */
@@ -830,28 +791,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $repository = $this->getRepository();
             /** @var $plugin Shopware\Models\Plugin\Plugin */
             $plugin = $repository->find($id);
-
-            // Special handling for dummy plugins
-            if ($data['capabilityDummy']) {
-                $plugin->setVersion($data['updateVersion']);
-                $plugin->setUpdateVersion(null);
-                $plugin->setActive(false);
-                $plugin->disableDummy();
-
-                Shopware()->Models()->flush();
-
-                $bootstrap = $this->getPluginBootstrap($plugin);
-
-                /** @var $namespace Shopware_Components_Plugin_Namespace */
-                $namespace = $bootstrap->Collection();
-                $result    = $namespace->installPlugin($bootstrap);
-
-                Shopware()->Models()->flush();
-
-                return array(
-                    'success' => $result
-                );
-            }
 
             $bootstrap = $this->getPluginBootstrap($plugin);
             /** @var $namespace Shopware_Components_Plugin_Namespace */
