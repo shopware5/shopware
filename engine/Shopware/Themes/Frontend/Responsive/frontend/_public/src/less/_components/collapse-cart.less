@@ -12,6 +12,7 @@
         .unitize-width(280);
         .unitize(-280, 16, right);
         .transition(all 0.25s ease-in-out);
+        margin-right: 0;
         display: block;
         height: 100%;
         left: auto;
@@ -295,6 +296,7 @@
         .action--remove {
             .unitize(14, 16, font-size);
             text-align: center;
+            vertical-align: middle;
         }
 
         .icon--loading-indicator {
@@ -302,6 +304,12 @@
             .unitize-height(21);
             position: relative;
             margin: 9px auto 0;
+        }
+
+        *[class*="icon--"] {
+            .unitize(28, 16, line-height);
+            margin: 0;
+            padding: 0;
         }
     }
 

@@ -4,7 +4,7 @@
 		<a href="{url controller='note'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}"|escape}" class="btn">
 			<i class="icon--heart"></i>
 			{if $sNotesQuantity > 0}
-				<span class="notes--quantity">
+				<span class="badge notes--quantity">
 					{$sNotesQuantity}
 				</span>
 			{/if}
@@ -39,7 +39,7 @@
 			</span>
 
 			{if $sBasketQuantity > 0}
-				<span class="cart--quantity">
+				<span class="badge is--primary cart--quantity">
 					{$sBasketQuantity}
 				</span>
 			{/if}

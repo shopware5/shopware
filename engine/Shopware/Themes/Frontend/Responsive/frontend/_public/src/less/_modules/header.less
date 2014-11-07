@@ -79,35 +79,10 @@
     // Shop navigation quantity badges
     .cart--quantity,
     .notes--quantity {
-        .unitize-padding(0, 5);
-        .unitize-height(20, 16);
-        .unitize-min-width(10, 16);
-        .unitize(20, 16, line-height);
-        .unitize(12, 16, font-size);
         .unitize(-4, 16, top);
         .unitize(23, 16, left);
-        .border-radius(50px);
-        .box-sizing(content-box);
         position: absolute;
-        display: inline-block;
-        z-index: 500;
-        font-weight: @font-bold-weight;
-        text-align: center;
-        background: #fff;
-        color: @brand-primary;
-        border: 1px solid @border-color;
-    }
-
-    .cart--quantity {
-        .primary-gradient();
-        color: #fff;
-        border: 0 none;
-    }
-
-    .btn:hover .notes--quantity {
-        .primary-gradient();
-        border-color: #fff;
-        color: #fff;
+        margin: 0;
     }
 
     .entry--link {
@@ -460,6 +435,7 @@
             .js--fancy-select-text {
                 .unitize-padding(0, 30, 0, 5);
                 font-weight: normal;
+                width: auto;
             }
 
             .js--fancy-select-trigger {
@@ -509,6 +485,11 @@
                 width: 40%;
             }
         }
+
+        &.is--act-cart .header-main {
+            .logo-main { width: 35% }
+            .logo--shop { width: auto }
+        }
     }
 
     .logo-main,
@@ -520,7 +501,7 @@
         text-align: right;
 
         .navigation--entry {
-            .unitize-padding(0, 8);
+            .unitize-padding(0, 6);
             display: inline-block;
 
             &:last-child {
@@ -715,9 +696,10 @@
             }
         }
 
-        &.is--act-cart {
+        &.is--act-cart .header-main {
             .logo-main { width: 30%; }
-            .logo--shop { width: 82%; }
+            .logo--shop { width: auto }
+            .shop--navigation { width: 70%; }
         }
     }
 
