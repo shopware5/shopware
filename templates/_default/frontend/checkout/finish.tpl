@@ -11,9 +11,18 @@
 	<div class="teaser">
 		<h2 class="center">{se name="FinishHeaderThankYou"}{/se}{$sShopname}!</h2>
 
-	    <p class="center">
-	    	{se name="FinishInfoConfirmationMail"}{/se}<br />{s name="FinishInfoPrintOrder"}{/s}
-	    </p>
+		{if $confirmMailDeliveryFailed}
+			<p class="error">
+				{se name="FinishInfoConfirmationMailFailed"}{/se}
+			</p>
+		{else}
+			<p>
+				{se name="FinishInfoConfirmationMail"}{/se}
+			</p>
+		{/if}
+		<p>
+			{s name="FinishInfoPrintOrder"}{/s}
+		</p>
 
 	    <div class="right">
 		    <a href="#" class="button-right large" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
@@ -38,6 +47,7 @@
 	{/block}
 
 	<div id="finished">
+
 
 		{if $sOrderNumber || $sTransactionumber}
 			<div class="orderdetails">
