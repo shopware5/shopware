@@ -61,7 +61,7 @@
         display: none
     }
 
-    .table--row {
+    .table--tr {
         .unitize-padding(10, 0, 8, 0);
         .clearfix();
         position: relative;
@@ -186,13 +186,13 @@
         }
 
         .table--media {
-            .unitize(70, 16, width);
+            .unitize-width(70);
             margin: 0 auto;
             float: none;
         }
 
         .column--image {
-            padding: 10px 0;
+            .unitize-padding(10, 0);
             width: 24%;
         }
     }
@@ -306,10 +306,9 @@
         .unitize-margin(0, -10);
         .unitize-padding(12, 10);
         background: @gray-light;
-        border: 1px solid @border-color;
-        border-left: 0 none;
-        border-right: 0 none;
-        border-bottom: 0 none;
+        border-color: @border-color;
+        border-style: solid;
+        border-width: 1px 0 0 0;
     }
 
     .table--shipping-costs .js--fancy-select {
@@ -684,7 +683,7 @@
             margin: 0;
         }
 
-        .table--row {
+        .table--tr {
             .unitize-padding(10, 0, 20, 0);
         }
 
@@ -752,8 +751,6 @@
             width: 55%;
         }
     }
-
-
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
@@ -828,7 +825,7 @@
         }
 
         // Basic layout
-        .table--row {
+        .table--tr {
             padding: 0;
             border-bottom: 1px solid @panel-border;
         }
@@ -1121,7 +1118,6 @@
             .table--content { width: 86%; }
         }
 
-
         .row--rebate .column--actions,
         .row--premium-product .column--actions,
         .row--voucher .column--actions {
@@ -1132,7 +1128,7 @@
             .unitize(34, 16, padding-top);
         }
 
-        .table--row .column--actions {
+        .table--tr .column--actions {
             .column--actions-link {
                 .unitize(18, 16, line-height);
                 .unitize-padding(0, 5, 2, 5);

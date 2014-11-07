@@ -1,6 +1,6 @@
 {namespace name="frontend/checkout/cart_item"}
 
-<div class="table--row block-group row--rebate{if $isLast} is--last-row{/if}">
+<div class="table--tr block-group row--rebate{if $isLast} is--last-row{/if}">
 
     {* Product information column *}
     {block name='frontend_checkout_cart_item_rebate_name'}
