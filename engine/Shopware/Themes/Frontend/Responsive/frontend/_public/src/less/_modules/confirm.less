@@ -51,6 +51,10 @@
         display: none
     }
 
+    .table--row .column--tax-price {
+        .unitize-padding(0, 0, 9, 10);
+    }
+
     .agb_info, .list--checkbox {
         .unitize-margin(0, 0, 21, 0);
     }
@@ -190,6 +194,7 @@
         .product--table .row--rebate .column--tax-price,
         .product--table .row--premium-product .column--tax-price,
         .product--table .row--voucher .column--tax-price {
+            .unitize(21 ,16, padding-top);
             margin-left: 11%;
         }
 
@@ -204,6 +209,18 @@
                 .unitize(12, 16, margin-bottom);
                 margin: 0;
             }
+        }
+
+        .row--premium-product .column--product,
+        .row--rebate .column--product {
+            width: 58%;
+
+            .column--image { width: 16.2%; };
+        }
+
+        .product--table .row--premium-product .column--tax-price,
+        .product--table .row--rebate .column--tax-price {
+            margin-left: 0;
         }
 
         // Terms of services box
@@ -283,6 +300,15 @@
     }
 }
 
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+    .confirm--content {
+        .product--table .row--premium-product .column--image,
+        .product--table .row--rebate .column--image {
+            width: 13%;
+        }
+    }
+}
+
 @media screen and (min-width: @desktopViewportWidth) {
     .confirm--content {
         & > .alert {
@@ -291,6 +317,21 @@
 
         .panel {
             .unitize-margin(45, 0);
+        }
+
+        .product--table {
+            .row--premium-product .column--product,
+            .row--rebate .column--product {
+                width: 58%;
+            }
+            .row--premium-product .column--image,
+            .row--rebate .column--image {
+                width: 11.3%;
+            }
+            .row--premium-product .column--tax-price,
+            .row--rebate .column--tax-price {
+                margin-left: 0;
+            }
         }
     }
 }
