@@ -109,8 +109,7 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
             'manualInstall',
             'selectionChange',
             'updatePluginInfo',
-            'deleteplugin',
-            'updateDummyPlugin'
+            'deleteplugin'
         );
     },
 
@@ -164,24 +163,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
             header: me.snippets.actions,
             width: 90,
             items: [
-        /*{if {acl_is_allowed privilege=install}}*/
-            {
-                iconCls: 'sprite-plus-circle',
-                tooltip: me.snippets.install_plugin,
-
-                handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
-                    me.fireEvent('updateDummyPlugin', grid, rowIndex, colIndex, item, eOpts, record);
-                },
-
-                getClass: function(value, metadata, record, rowIdx) {
-                    if (!record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-                }
-            },
-        /*{/if}*/
-
-
         /*{if {acl_is_allowed privilege=update}}*/
 			{
                 iconCls: 'sprite-pencil',
@@ -191,10 +172,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 },
 
                 getClass: function(value, metaData, record) {
-                    if (record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-
                     if(record.get('installed') == null) {
                         return Ext.baseCSSPrefix + 'hidden';
                     }
@@ -213,10 +190,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 },
 
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-
                     if (!record.get('capabilityInstall')) {
                         return Ext.baseCSSPrefix + 'hidden';
                     }
@@ -235,10 +208,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                 },
 
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-
                    if (record.get('installed') != null || record.get('source') == 'Default')  {
                        return Ext.baseCSSPrefix + 'hidden';
                    }
@@ -252,10 +221,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                     me.fireEvent('updatePluginInfo', record, me.pluginStore);
                 },
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-
                     if (record.get('updateVersion') == null) {
                         return Ext.baseCSSPrefix + 'hidden';
                     }
@@ -268,10 +233,6 @@ Ext.define('Shopware.apps.PluginManager.view.manager.Grid', {
                     me.fireEvent('reinstallPlugin', record, me);
                 },
                 getClass: function(value, metadata, record, rowIdx) {
-                    if (record.get('capabilityDummy')) {
-                        return Ext.baseCSSPrefix + 'hidden';
-                    }
-
                     if (!record.get('capabilityInstall')) {
                         return Ext.baseCSSPrefix + 'hidden';
                     }
