@@ -109,10 +109,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
         foreach ($this->prefixPaths as $path => $prefix) {
             $file = $path . $name . $this->Application()->DS() . 'Bootstrap.php';
             if (!file_exists($file)) {
-                $file = $path . $name . $this->Application()->DS() . 'BootstrapDummy.php';
-                if (!file_exists($file)) {
-                    continue;
-                }
+                continue;
             }
             $this->initPlugin($name, $prefix, $file);
             return $this;

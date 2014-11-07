@@ -246,9 +246,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     public function initPlugin($name, $config)
     {
         $class = 'Shopware_Plugins_' . $this->name . '_' . $name . '_Bootstrap';
-        if (!class_exists($class)) {
-            $class .= 'Dummy';
-        }
 
         /** @var $plugin Shopware_Components_Plugin_Bootstrap */
         $plugin = new $class($name, $config);
@@ -293,7 +290,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'capability_update' => !empty($capabilities['update']),
             'capability_install' => !empty($capabilities['install']),
             'capability_enable' => !empty($capabilities['enable']),
-            'capability_dummy' => !empty($capabilities['dummy']),
             'capability_secure_uninstall' => !empty($capabilities['secureUninstall']),
             'refresh_date' => Zend_Date::now()
         );
