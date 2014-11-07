@@ -28,6 +28,7 @@
  * @category  Shopware
  * @package   Shopware\Components\DummyPlugin\Bootstrap
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @deprecated since SW 5.0, will be removed in SW 5.1
  */
 abstract class Shopware_Components_DummyPlugin_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -50,8 +51,7 @@ abstract class Shopware_Components_DummyPlugin_Bootstrap extends Shopware_Compon
         return array(
             'install' => true,
             'update'  => true,
-            'enable'  => true,
-            'dummy'   => true
+            'enable'  => true
         );
     }
 }
