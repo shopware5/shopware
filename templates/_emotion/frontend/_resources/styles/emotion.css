@@ -1754,8 +1754,6 @@ div#article_details div.article_details_bottom {margin: 25px 0 0;}
 .ui-tabs .ui-tabs-nav li.ui-state-active {background: #fff !important; border-bottom-color: #fff !important;}
 .ui-tabs .ui-tabs-nav li.ui-state-active a {color: #000 !important; font-weight: bold;}
 
-.ui-tabs .ui-tabs-nav li.tab_shadow {background: url(../images/backgrounds/bg_tabs-shadow.png) no-repeat;border-color: #fff;border-left: 0;}
-
 /** SIMILAR **/
 #detail #detailinfo .similar h3 {margin: 30px 0 10px 5px;}
 #buybox .accessory_container .accessory_group {width: 238px;}
@@ -3228,26 +3226,6 @@ div.agb_accept input {margin: 3px 0;}
 #confirm .basket_slider .inner-content .slider-info {
 	left: 15px;
 	top: 110px;
-}
-
-/** HEADER TRUSTED SHOPS **/
-#header .inner .trustedshops_logo {
-	position: absolute;
-	height: 70px;
-	left: 250px;
-}
-#header .inner .trustedshops_logo .inner_container {
-	background: url(../images/bg_trusted_shop.png) no-repeat 0 0;
-	display: inline-block;
-	padding: 5px;
-	width: 116px;
-	height: 37px;
-}
-#header .inner .trustedshops_logo .inner_container a {margin-right: 10px; width: 38px;}
-#header .inner .trustedshops_logo .inner_container p {width: 68px; font-size: 10px; line-height: 14px; margin: 0; margin-top: 4px;}
-#header .inner .trustedshops_logo .inner_container a,
-#header .inner .trustedshops_logo .inner_container p {
-	float: left;
 }
 
 /*	BLOG
