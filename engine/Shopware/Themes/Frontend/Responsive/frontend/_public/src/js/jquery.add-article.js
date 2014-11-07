@@ -164,23 +164,12 @@
                         $.modal.open(result, {
                             width: 750,
                             sizing: 'content',
-                            onClose: me.onCloseModal
+                            onClose: me.onCloseModal.bind(me)
                         });
 
                         picturefill();
 
                         StateManager.updatePlugin(opts.productSliderSelector, 'productSlider');
-
-                        // Resize slider after DOM manipulation correctly.
-                        setTimeout(function() {
-                            var $sliderEl = $('.js--modal').find('.product-slider'),
-                            slider = $sliderEl.data('plugin_productSlider');
-                            if (!slider) {
-                                return;
-                            }
-
-                            slider.setSizes();
-                        }, 20);
                     });
                 }
             });
@@ -206,18 +195,7 @@
          * @event onCloseModal
          */
         onCloseModal: function () {
-            var $sliderEl = $('.js--modal').find('.product-slider'),
-                slider;
-
-            if (!$sliderEl || !$sliderEl.length) {
-                return;
-            }
-
-            slider = $sliderEl.data('plugin_productSlider');
-
-            if (slider) {
-                slider.destroy();
-            }
+            StateManager.destroyPlugin(this.opts.productSliderSelector, 'productSlider');
         }
     });
 });

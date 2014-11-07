@@ -16,7 +16,7 @@
         {block name="frontend_widgets_manufacturer_slider_content"}
             <div class="panel--body is--wide manufacturer--body">
                 {block name="frontend_widgets_manufacturer_slider_container"}
-                    <div class="slider--manufacturer" data-product-slider="true">
+                    <div class="slider--manufacturer product-slider" data-product-slider="true">
                         <div class="product-slider--container">
                             {foreach $Data.values as $supplier}
                                 {block name="frontend_widgets_manufacturer_slider_item"}

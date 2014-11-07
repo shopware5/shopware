@@ -417,7 +417,7 @@
                 pluginNames = Object.keys(plugins[selectors[i]]);
 
                 for (j = 0, pluginLen = pluginNames.length; j < pluginLen; j++) {
-                    me._destroyPlugin(selectors[i], pluginNames[j]);
+                    me.destroyPlugin(selectors[i], pluginNames[j]);
                 }
             }
 
@@ -574,15 +574,14 @@
          */
         updatePlugin: function (selector, pluginName) {
             var me = this,
-                $el = $(selector),
                 state = me._currentState,
                 pluginConfigs = me._plugins[state][selector] || {},
-                pluginNames = typeof pluginName === 'string' ? [pluginName] : Object.keys(pluginConfigs),
+                pluginNames = (typeof pluginName === 'string') ? [pluginName] : Object.keys(pluginConfigs),
                 len = pluginNames.length,
                 i = 0;
 
             for (; i < len; i++) {
-                $el[pluginNames[i]](pluginConfigs[pluginNames[i]]);
+                me._initPlugin(selector, pluginNames[i]);
             }
 
             return me;
@@ -593,33 +592,28 @@
          * @method _addPluginOption
          * @param {String} state
          * @param {String} selector
-         * @param {String} plugin
+         * @param {String} pluginName
          * @param {Object} config
          */
-        _addPluginOption: function (state, selector, plugin, config) {
+        _addPluginOption: function (state, selector, pluginName, config) {
             var me = this,
                 plugins = me._plugins,
                 selectors = plugins[state] || (plugins[state] = {}),
                 configs = selectors[selector] || (selectors[selector] = {}),
-                pluginConfig = configs[plugin];
+                pluginConfig = configs[pluginName];
 
-            if (!pluginConfig) {
-                configs[plugin] = config;
-                return;
-            }
-
-            configs[plugin] = $.extend(pluginConfig, config);
+            configs[pluginName] = $.extend(pluginConfig || {}, config);
         },
 
         /**
          * @private
          * @method _initPlugin
-         * @param {String|jQuery} selector
+         * @param {String} selector
          * @param {String} pluginName
          */
         _initPlugin: function (selector, pluginName) {
             var me = this,
-                $el = (typeof selector === 'string') ? $(selector) : selector,
+                $el = $(selector),
                 currentConfig = me._getPluginConfig(me._currentState, selector, pluginName),
                 plugin = $el.data('plugin_' + pluginName);
 
@@ -633,7 +627,7 @@
                 return;
             }
 
-            me._destroyPlugin($el, plugin);
+            me.destroyPlugin($el, pluginName);
 
             $el[pluginName](currentConfig);
         },
@@ -646,9 +640,10 @@
          * @param {String} plugin
          */
         _getPluginConfig: function (state, selector, plugin) {
-            var plugins = this._plugins;
+            var selectors = this._plugins[state] || {},
+                pluginConfigs = selectors[selector] || {};
 
-            return plugins[state] && plugins[state][selector] && plugins[state][selector][plugin];
+            return pluginConfigs[plugin] || {};
         },
 
         /**
@@ -830,7 +825,7 @@
 
                     // When no new state config is available, destroy the old plugin
                     if (!newPluginConfigs || !(pluginConfig = newPluginConfigs[pluginName])) {
-                        me._destroyPlugin($el, pluginName);
+                        me.destroyPlugin($el, pluginName);
                         continue;
                     }
 
@@ -844,7 +839,7 @@
                         continue;
                     }
 
-                    me._destroyPlugin($el, pluginName);
+                    me.destroyPlugin($el, pluginName);
                 }
             }
 
@@ -872,12 +867,12 @@
         },
 
         /**
-         * @private
-         * @method _destroyPlugin
+         * @public
+         * @method destroyPlugin
          * @param {String|jQuery} selector
          * @param {String} pluginName
          */
-        _destroyPlugin: function (selector, pluginName) {
+        destroyPlugin: function (selector, pluginName) {
             var $el = (typeof selector === 'string') ? $(selector) : selector,
                 name = 'plugin_' + pluginName,
                 len = $el.length,
