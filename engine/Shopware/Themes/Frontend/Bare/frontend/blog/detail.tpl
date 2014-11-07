@@ -140,7 +140,7 @@
                     {* Listing *}
                     {block name='frontend_blog_detail_crossselling_listing'}
                         <div class="blog--crossselling panel--body is--wide block">
-                            <div class="crossselling--content panel--body" data-product-slider="true">
+                            <div class="crossselling--content panel--body product-slider" data-product-slider="true">
                                 <div class="product-slider--container">
                                     {foreach $sArticle.sRelatedArticles as $article}
                                         {include file="widgets/recommendation/item.tpl" article=$article}

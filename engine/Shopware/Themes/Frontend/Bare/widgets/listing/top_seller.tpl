@@ -5,7 +5,7 @@
 		{s name="TopsellerHeading" namespace=frontend/plugins/index/topseller}{/s}
 	</div>
 
-	<div class="topseller--content panel--body" data-product-slider="true">
+	<div class="topseller--content panel--body product-slider" data-product-slider="true">
 
 		<div class="product-slider--container">
 

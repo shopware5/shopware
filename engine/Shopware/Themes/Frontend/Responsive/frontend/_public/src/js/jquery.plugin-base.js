@@ -75,7 +75,7 @@
 
         /**
          * Template function for the plugin initialisation.
-         * Should be overridden for custom initialisation logic or an error will be thrown.
+         * Must be overridden for custom initialisation logic or an error will be thrown.
          *
          * @public
          * @method init
@@ -101,8 +101,8 @@
         },
 
         /**
-         * Template function for the plugin destruction.
-         * Should be overridden for custom destruction code.
+         * Template function to update the plugin.
+         * This function will be called when the breakpoint has changed but the configurations are the same.
          *
          * @public
          * @method update
@@ -215,8 +215,7 @@
          * @returns {String}
          */
         getEventName: function (event) {
-            var me = this,
-                suffix = me.eventSuffix,
+            var suffix = this.eventSuffix,
                 parts = event.split(' '),
                 len = parts.length,
                 i = 0;
@@ -274,9 +273,10 @@
         applyDataAttributes: function () {
             var me = this, attr;
 
-            $.each(me.opts, function(key, value) {
+            $.each(me.opts, function (key) {
                 attr = me.$el.attr('data-' + key);
-                if ( attr !== undefined ) {
+
+                if (typeof attr !== 'undefined') {
                     me.opts[key] = attr;
                 }
             });
