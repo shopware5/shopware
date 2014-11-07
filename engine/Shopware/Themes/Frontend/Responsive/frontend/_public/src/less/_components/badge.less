@@ -4,26 +4,34 @@
 <p>Text <span class="badge">23</span></p>
 ```
 */
-.badge {
-    .unitize-padding(3, 8);
-    .unitize-margin(0, 5);
-    .unitize(12, 16, font-size);
-    .unitize(18, 16, line-height);
-    .border-radius(12px);
-    display: inline-block;
-    font-weight: bold;
-    text-align: center;
-    white-space: nowrap;
-    color: @text-color;
-    background: @border-color;
 
-    &.is--secondary {
-        .secondary-gradient();
-        color: #fff;
-    }
+.badge {
+    .unitize-padding(0, 5);
+    .unitize-margin(0, 5);
+    .unitize-height(20, 16);
+    .unitize-min-width(10, 16);
+    .unitize(20, 16, line-height);
+    .unitize(12, 16, font-size);
+    .border-radius(50px);
+    .box-sizing(content-box);
+    display: inline-block;
+    white-space: nowrap;
+    z-index: 500;
+    font-weight: @font-bold-weight;
+    text-align: center;
+    background: #fff;
+    color: @brand-primary;
+    border: 1px solid @border-color;
 
     &.is--primary {
         .primary-gradient();
         color: #fff;
+        border-color: #fff;
+    }
+
+    &.is--secondary {
+        .secondary-gradient();
+        color: #fff;
+        border-color: #fff;
     }
 }
