@@ -89,10 +89,10 @@
             'fetchUrl': '',
 
             /**
-             * @property overlayCls
+             * @property overlaySelector
              * @type {String}
              */
-            'overlayCls': 'offcanvas--overlay',
+            'overlaySelector': '.offcanvas--overlay',
 
             /**
              * @property overlayOffCls
@@ -161,7 +161,7 @@
                 me._$sidebar.append(template);
 
                 // add background class
-                $('.' + me.opts.overlayCls).addClass('background');
+                $(me.opts.overlaySelector).addClass('background');
             });
         },
 
@@ -277,13 +277,13 @@
          */
         slideOut: function (template) {
             var me = this,
-                $overlay = $('.' + me.opts.overlayCls + '.background');
+                $overlay = $(me.opts.overlaySelector + '.background');
 
             /** fetch the template in the background, but on the target position */
             me._$sidebar.append(template);
 
             // change class to
-            $('.' + me.opts.overlayCls).not('.background').addClass('background');
+            $(me.opts.overlaySelector).not('.background').addClass('background');
 
             $overlay.removeClass('background');
 
@@ -306,11 +306,11 @@
 
             me._$sidebar.append(template);
 
-            $overlay = $('.' + me.opts.overlayCls).not('.background').css('left', 280);
+            $overlay = $(me.opts.overlaySelector).not('.background').css('left', 280);
 
             $overlay[me.fadeEffect]({ left: 0 }, 250, function() {
                 // remove background layer
-                $('.' + me.opts.overlayCls + '.background').remove();
+                $(me.opts.overlaySelector + '.background').remove();
 
                 $overlay.addClass('background');
 
@@ -328,7 +328,7 @@
          */
         slideToMainMenu: function () {
             var me = this,
-                $overlay = $('.' + me.opts.overlayCls);
+                $overlay = $(me.opts.overlaySelector);
 
             // make the main menu visible
             me._$sidebarWrapper.css('display', 'block');
