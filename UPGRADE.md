@@ -227,6 +227,13 @@ In this document you will find a changelog of the important changes related to t
     * `sArticles::sGetCategoryProperties`
     * `sArticles::sGetArticlesVotes`
 * Removed event `Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql`
+* Removed legacy promotions system
+    * Removed method `sArticles::getPromotionNumberByMode('premium')`
+    * Removed method `sArticles::sGetPromotions()`
+    * Removed method `sMarketing::sCampaignsGetDetail()`
+    * Removed method `sMarketing::sCampaignsGetList()`
+    * Removed event `Shopware_Modules_Articles_GetPromotions_FilterSQL`
+    * Removed tables `s_emarketing_promotions*`
 
 ## 4.3.1
 
