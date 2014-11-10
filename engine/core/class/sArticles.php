@@ -1375,9 +1375,6 @@ class sArticles
             case "gfx":
             case "image":
                 return $this->getGfxData($mode, $category, $value);
-            case "premium":
-                $value = $this->getPremiumArticle($mode, $category, $value);
-                break;
             case "fix":
                 break;
         }
@@ -1393,33 +1390,6 @@ class sArticles
         }
 
         return $value;
-    }
-
-    private function getPremiumArticle($mode, $category = 0, $value = 0)
-    {
-        $value = $this->db->quote($value);
-
-        $sql = "
-                SELECT a.active AS active, a.id as articleID, ordernumber,datum,sales, topseller,
-                a.description AS description,description_long, aSupplier.name AS supplierName,
-                aSupplier.img AS supplierImg, a.name AS articleName
-                FROM
-                s_articles AS a,
-                s_articles_supplier AS aSupplier,
-                s_articles_details AS d
-                WHERE aSupplier.id=a.supplierID
-                AND d.articleID=a.id
-                AND d.kind=1
-                AND a.id=$value
-            ";
-
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetPromotionById_FilterSqlPremium', $sql, array(
-            'subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value
-        ));
-
-        $data = $this->db->fetchRow($sql);
-
-        return $data['ordernumber'];
     }
 
     private function getRandomArticle($mode, $category = 0, $value = 0, $withImage = false)
@@ -1890,66 +1860,6 @@ class sArticles
             return false;
         }
     }
-
-    /**
-     * Get list of all promotions from a certain category
-     * @param int $category category id
-     * @return array
-     */
-    public function sGetPromotions($category)
-    {
-        $category = intval($category);
-
-        $sToday = date("Y-m-d");
-        $sql = "
-            SELECT category,mode, TRIM(ordernumber) as ordernumber, link, description, link_target, img
-            FROM s_emarketing_promotions
-            WHERE category=$category AND ((TO_DAYS(valid_from) <= TO_DAYS('$sToday') AND
-            TO_DAYS(valid_to) >= TO_DAYS('$sToday')) OR
-            (valid_from='0000-00-00' AND valid_to='0000-00-00')) ORDER BY position ASC
-        ";
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetPromotions_FilterSQL', $sql, array('subject' => $this, 'category' => $category));
-
-        $getAffectedPromitions = $this->db->fetchAll($sql);
-
-        if (count($getAffectedPromitions)) {
-            foreach ($getAffectedPromitions as $promotion) {
-                switch ($promotion["mode"]) {
-                    case "random":
-                        $promotion = $this->sGetPromotionById("random", $category);
-                        if (count($promotion) > 1) $promote[] = $promotion;
-                        break;
-                    case "fix":
-                        $promotion = $this->sGetPromotionById("fix", 0, $promotion["ordernumber"]);
-                        if (count($promotion) > 1) $promote[] = $promotion;
-                        break;
-                    case "new":
-                        $promotion = $this->sGetPromotionById("new", $category);
-                        if (count($promotion) > 1) $promote[] = $promotion;
-                        break;
-                    case "top":
-                        $promotion = $this->sGetPromotionById("top", $category);
-                        if (count($promotion) > 1) $promote[] = $promotion;
-                        break;
-                    case "gfx":
-                        $promotion = $this->sGetPromotionById("gfx", $category, $promotion);
-                        if (count($promotion) > 1) $promote[] = $promotion;
-                        break;
-                    case "livefix":
-                        break;
-                    case "liverand":
-                        break;
-                    case "liverandcat":
-                        break;
-                } // end switch
-
-            } // end foreach
-
-            $promote = Enlight()->Events()->filter('Shopware_Modules_Articles_GetPromotions_FilterResult', $promote, array('subject' => $this, 'category' => $category));
-
-            return $promote;
-        } // end if
-    } // end function
 
     /**
      * Read translation for one or more articles
