@@ -13,8 +13,8 @@
 				{* Trigger to close the off canvas menu *}
 				{block name="frontend_index_left_categories_close_menu"}
 					<li class="navigation--entry entry--close-off-canvas">
-						<a href="#close-categories-menu" class="navigation--link">
-							{s name="IndexActionCloseMenu"}Menü schließen{/s} <i class="icon--arrow-right"></i>
+						<a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}Menü schließen{/s}" class="navigation--link">
+							{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}Menü schließen{/s} <i class="icon--arrow-right"></i>
 						</a>
 					</li>
 				{/block}
@@ -38,32 +38,38 @@
 		</div>
 	{/block}
 
-	{* Sidebar category tree *}
-	{block name='frontend_index_left_categories'}
+    <div class="sidebar--categories-wrapper" data-subcategory-nav="true" data-mainCategoryId="{$Shop->get('parentID')}" data-categoryId="{$sCategoryContent.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}">
 
-		{* Categories headline *}
-		{block name="frontend_index_left_categories_headline"}
-			<h2 class="categories--headline navigation--headline">{s name="IndexSidebarCategoryHeadline"}Kategorien{/s}</h2>
-		{/block}
+        {* Sidebar category tree *}
+        {block name='frontend_index_left_categories'}
 
-		{* Actual include of the categories *}
-		{block name='frontend_index_left_categories_inner'}
-			{include file='frontend/index/sidebar-categories.tpl'}
-		{/block}
-	{/block}			
-	
-	{* Campaign left middle *}
-	{block name='frontend_index_left_campaigns_middle'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
-	{/block}
+            {* Categories headline *}
+            {block name="frontend_index_left_categories_headline"}
+                <h2 class="categories--headline navigation--headline">{s name="IndexSidebarCategoryHeadline"}Kategorien{/s}</h2>
+            {/block}
 
-	{* Static sites *}
-	{block name='frontend_index_left_menu'}
-		{include file='frontend/index/sites-navigation.tpl'}
-	{/block}
+            {* Actual include of the categories *}
+            {block name='frontend_index_left_categories_inner'}
+                <div data-categories-dropdown="true">
+                    {include file='frontend/index/sidebar-categories.tpl'}
+                </div>
+            {/block}
+        {/block}
 
-	{* Campaign left bottom *}
-	{block name='frontend_index_left_campaigns_bottom'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
-	{/block}
+        {* Campaign left middle *}
+        {block name='frontend_index_left_campaigns_middle'}
+            {include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
+        {/block}
+
+        {* Static sites *}
+        {block name='frontend_index_left_menu'}
+            {include file='frontend/index/sites-navigation.tpl'}
+        {/block}
+
+        {* Campaign left bottom *}
+        {block name='frontend_index_left_campaigns_bottom'}
+            {include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
+        {/block}
+
+    </div>
 </aside>

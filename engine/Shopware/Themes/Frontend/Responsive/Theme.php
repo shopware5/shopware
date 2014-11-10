@@ -96,6 +96,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.product-compare-add.js',
         'src/js/jquery.product-compare-menu.js',
         'src/js/jquery.infinite-scrolling.js',
+        'src/js/jquery.subcategory-nav.js',
         'src/js/jquery.shopware-responsive.js'
     );
 
