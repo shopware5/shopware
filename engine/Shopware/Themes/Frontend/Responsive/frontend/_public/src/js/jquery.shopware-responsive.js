@@ -401,20 +401,21 @@ $(function() {
     // Ajax cart amount display
     function cartRefresh() {
         var ajaxCartRefresh = $.controller.ajax_cart_refresh,
-            $cartAmount = $('.cart--amount');
+            $cartAmount = $('.cart--amount'),
+            $cartQuantity = $('.cart--quantity');
 
         if(!ajaxCartRefresh.length) {
             return;
         }
 
-        $.get(ajaxCartRefresh, function(data) {
-            if(!data.length) {
+        $.getJSON(ajaxCartRefresh, function(cart) {
+
+            if(!cart.amount || !cart.quantity) {
                 return;
             }
 
-            $cartAmount.fadeOut('fast', function() {
-                $cartAmount.html(data).fadeIn();
-            });
+            $cartAmount.html(cart.amount);
+            $cartQuantity.html(cart.quantity);
         });
     }
 
