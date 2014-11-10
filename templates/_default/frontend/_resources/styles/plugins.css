@@ -85,16 +85,8 @@
 	left: 0;
 }
 
-#lbPrevLink:hover {
-	background: transparent url(../images/prevlabel.gif) no-repeat 0 15%;
-}
-
 #lbNextLink {
 	right: 10px;
-}
-
-#lbNextLink:hover {
-	background: transparent url(../images/nextlabel.gif) no-repeat 100% 15%;
 }
 
 #lbBottom {
@@ -112,7 +104,6 @@
 	float: right;
 	width: 66px;
 	height: 22px;
-	background: transparent url(../images/closelabel.gif) no-repeat center;
 	margin: 5px 0;
 	outline: none;
 }
