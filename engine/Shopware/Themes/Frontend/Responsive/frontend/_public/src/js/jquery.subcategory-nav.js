@@ -2,7 +2,7 @@
     'use strict';
 
     /**
-     * Categories Slider plugin
+     * Sub Category Navigation plugin
      *
      * The plugin provides an category slider inside the off canvas menu. The categories and sub categories
      * could be fetched by ajax calls and uses a CSS3 `transitions` to slide in or out. The main sidebar will not
@@ -10,15 +10,15 @@
      *
      * @example usage
      * ```
-     *    <div data-categories-slider="true"
+     *    <div data-subcategory-nav="true"
      *      data-mainCategoryId="{$Shop->get('parentID')}"
      *      data-categoryId="{$sCategoryContent.id}"
      *      data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}"></div>
      *
-     *    $('*[data-categories-slider="true"]').categoriesSlider();
+     *    $('*[data-subcategory-nav="true"]').subCategoryNav();
      * ```
      */
-    $.plugin('categoriesSlider', {
+    $.plugin('subCategoryNav', {
 
         defaults: {
 
@@ -351,7 +351,7 @@
             var me = this,
                 $sidebar = me._$sidebar;
 
-            $sidebar.off(me.getEventName(me.opts.eventName));
+            $sidebar.off(me.getEventName(me.opts.eventName), "**");
 
             me._destroy();
 

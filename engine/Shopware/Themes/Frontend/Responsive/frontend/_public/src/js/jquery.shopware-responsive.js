@@ -430,10 +430,10 @@ $(function() {
     StateManager.registerListener({
         type: 'xs',
         enter: function () {
-            $('*[data-categories-slider="true"]').categoriesSlider();
+            $('*[data-subcategory-nav="true"]').subCategoryNav();
         },
         exit: function () {
-            var $elements = $('*[data-categories-slider="true"]'),
+            var $elements = $('*[data-subcategory-nav="true"]'),
                 plugin;
 
             if (!$elements.length) {
@@ -441,7 +441,7 @@ $(function() {
             }
 
             $elements.each(function (i, el) {
-                if (plugin = $(el).data('plugin_categoriesSlider')) {
+                if (plugin = $(el).data('plugin_subCategoryNav')) {
                     plugin.destroy();
                 }
             });
