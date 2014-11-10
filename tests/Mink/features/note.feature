@@ -4,11 +4,7 @@ Feature: Note
     Background:
         Given I am on the detail page for article 230
         And   I follow "Auf den Merkzettel"
-        And   I visit the detail page of the article on position 1 of my note
-        And   I follow "Zahlungsarten"
-        Then  I should see "Zahlungsarten & Riskmanagement"
-
-        When  I follow the link "details" of the element "ArticleBox" on position 2
+        And   I am on the detail page for article 228
         And   I follow "Auf den Merkzettel"
         Then  My note should look like this:
             | name                           | supplier | ordernumber | text                                                                                                                                               | price    | image                           | link                                                          |
@@ -50,3 +46,19 @@ Feature: Note
         And   I follow "Vergleich löschen"
         And   I go to the page "Note"
         Then  I should not see "Artikel vergleichen"
+
+    @noEmotion
+    Scenario: I can put articles from the listing to my note
+        When  I visit the detail page of the article on position 1 of my note
+        And   I follow "Zahlungsarten"
+        Then  I should see "Zahlungsarten & Riskmanagement"
+
+        When  I follow the link "remember" of the element "ArticleBox" on position 2
+        Then  I should see 2 element of type "NotePosition"
+
+        When  I visit the detail page of the article on position 2 of my note
+        And   I follow "Zahlungsarten"
+        Then  I should see "Zahlungsarten & Riskmanagement"
+
+        When  I follow the link "remember" of the element "ArticleBox" on position 1
+        Then  I should see 3 element of type "NotePosition"
