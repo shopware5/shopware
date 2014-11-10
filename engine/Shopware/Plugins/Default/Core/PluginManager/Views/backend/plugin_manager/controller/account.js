@@ -92,10 +92,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                 }
             },
 
-            'plugin-manager-manager-grid': {
-                updateDummyPlugin: me.onUpdateDummyPlugin
-            },
-
             'plugin-manager-manager-navigation': {
                 'openAccount': me.onOpenAccount,
                 'openLicense': me.onOpenLicense,
@@ -148,61 +144,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                         message = Ext.String.format(message, ':<br>' + response.message + '<br>')
                     } else {
                         message = Ext.String.format(message, ' ');
-                    }
-                    Shopware.Notification.createStickyGrowlMessage({
-                       title: me.snippets.account.title,
-                       text: message,
-                       log: true
-                    });
-                }
-            }
-        });
-    },
-
-    onUpdateDummyPlugin: function(grid, rowIndex, colIndex, item, eOpts, record) {
-        var me = this;
-        var window = me.getMainWindow();
-
-        if (window) {
-            window.setLoading(true);
-        }
-
-        Ext.Ajax.request({
-            url:'{url controller="PluginManager" action="downloadDummy"}',
-            method: 'POST',
-            params: {
-                name: record.get('name')
-            },
-            callback: function(request, opts, operation) {
-                var response = Ext.decode(operation.responseText);
-
-                if (window) {
-                    window.setLoading(false);
-                }
-
-                if (response.success === true) {
-                       var pluginStore = me.subApplication.pluginStore;
-                       pluginStore.load({
-                           callback: function(records, operation, success) {
-                               Ext.Array.each(records, function(localRecord) {
-                                   if (record.get('id') == localRecord.get('id')) {
-                                       var controller = me.getController('Manager');
-
-                                       localRecord.set('wasActivated', 0);
-                                       localRecord.set('wasInstalled', 0);
-                                       localRecord.set('installed', new Date());
-                                       localRecord.set('capabilityDummy', true);
-
-                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
-                                   }
-                               });
-                               // do something after the load finishes
-                           }
-                       });
-                } else {
-                    var message = response.message + '';
-                    if (message.length === 0) {
-                        message = me.snippets.account.downloadfailedlicense;
                     }
                     Shopware.Notification.createStickyGrowlMessage({
                        title: me.snippets.account.title,
@@ -296,28 +237,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Account', {
                 var response = Ext.decode(operation.responseText);
 
                if (response.success) {
-                   if (record.get('capabilityDummy')) {
-//                       var pluginStore = me.subApplication.pluginStore;
-//                       pluginStore.load({
-//                           callback: function(records, operation, success) {
-//                               Ext.Array.each(records, function(localRecord) {
-//                                   if (record.get('id') == localRecord.get('id')) {
-//                                       var controller = me.getController('Manager');
-//
-//                                       console.log("Updated record", localRecord.data);
-//
-//
-//                                       localRecord.set('installed', new Date());
-//                                       localRecord.set('capabilityDummy', false);
-//
-//                                       controller.onInstallPlugin(localRecord, me.subApplication.pluginStore);
-//                                   }
-//                               });
-//                               // do something after the load finishes
-//                           }
-//                       });
-                   }
-
                    var message = Ext.String.format(me.snippets.account.updatesuccessful, record.get('name'));
                     Shopware.Notification.createGrowlMessage(me.snippets.account.title, message);
                     if (response.configRequired) {

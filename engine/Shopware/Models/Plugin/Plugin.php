@@ -179,12 +179,6 @@ class Plugin extends ModelEntity
     private $capabilityEnable = true;
 
     /**
-     * @var boolean $capabilityDummy
-     * @ORM\Column(name="capability_dummy", type="boolean")
-     */
-    private $capabilityDummy = false;
-
-    /**
      * INVERSE SIDE
      * @var \Shopware\Models\Config\Form[]|ArrayCollection $configForms
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
@@ -262,22 +256,6 @@ class Plugin extends ModelEntity
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
         $this->widgets = new ArrayCollection();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDummy()
-    {
-        return (bool)$this->capabilityDummy;
-    }
-
-    /**
-     * Disables dummy capability
-     */
-    public function disableDummy()
-    {
-        $this->capabilityDummy = false;
     }
 
     /**

@@ -235,6 +235,11 @@ In this document you will find a changelog of the important changes related to t
     * Removed event `Shopware_Modules_Articles_GetPromotions_FilterSQL`
     * Removed tables `s_emarketing_promotions*`
 * Removed sArticles::getPromotionNumberByMode('image')` and sArticles::getPromotionNumberByMode('gfx')`
+* Removed methods
+    * `\Shopware\Models\Plugin\Plugin::isDummy()`
+    * `\Shopware\Models\Plugin\Plugin::disableDummy()`
+* Removed table columns
+    * `s_core_plugins.capability_dummy`
 
 ## 4.3.1
 
