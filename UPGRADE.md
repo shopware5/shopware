@@ -234,6 +234,7 @@ In this document you will find a changelog of the important changes related to t
     * Removed method `sMarketing::sCampaignsGetList()`
     * Removed event `Shopware_Modules_Articles_GetPromotions_FilterSQL`
     * Removed tables `s_emarketing_promotions*`
+* Removed sArticles::getPromotionNumberByMode('image')` and sArticles::getPromotionNumberByMode('gfx')`
 
 ## 4.3.1
 

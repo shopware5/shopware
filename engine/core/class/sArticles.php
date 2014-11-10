@@ -1372,9 +1372,6 @@ class sArticles
             case 'random':
                 $value = $this->getRandomArticle($mode, $category, $value, $withImage);
                 break;
-            case "gfx":
-            case "image":
-                return $this->getGfxData($mode, $category, $value);
             case "fix":
                 break;
         }
@@ -1468,28 +1465,6 @@ class sArticles
         }
 
         return $value;
-    }
-
-    private function getGfxData($mode, $category, $value)
-    {
-        $rs = array(
-            'mode' => 'gfx',
-            'img'  => $value["img"] ? $this->sSYSTEM->sPathBanner . $value["img"] : $this->sSYSTEM->sPathBanner . $value["image"],
-            'link' => $value["link"],
-            'linkTarget' => $value["link_target"] ? $value["link_target"] : $value["target"],
-            'description' => $value['description']
-        );
-
-        return Enlight()->Events()->filter(
-            'Shopware_Modules_Articles_GetPromotionById_FilterGfx',
-            $rs,
-            array(
-                'subject' => $this,
-                'mode' => $mode,
-                'category' => $category,
-                'value' => $value
-            )
-        );
     }
 
     /**
