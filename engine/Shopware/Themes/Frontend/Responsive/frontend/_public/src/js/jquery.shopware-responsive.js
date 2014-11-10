@@ -425,4 +425,26 @@ $(function() {
     $.subscribe("plugin/collapseCart/afterRemoveArticle", function() {
         cartRefresh();
     });
+
+    // Ajax subcategories for leftmenu and offcanvas menu
+    StateManager.registerListener({
+        type: 'xs',
+        enter: function () {
+            $('*[data-subcategory-nav="true"]').subCategoryNav();
+        },
+        exit: function () {
+            var $elements = $('*[data-subcategory-nav="true"]'),
+                plugin;
+
+            if (!$elements.length) {
+                return;
+            }
+
+            $elements.each(function (i, el) {
+                if (plugin = $(el).data('plugin_subCategoryNav')) {
+                    plugin.destroy();
+                }
+            });
+        }
+    });
 });
