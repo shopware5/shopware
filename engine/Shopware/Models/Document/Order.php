@@ -649,13 +649,25 @@ class
      */
     public function getPayment()
     {
-        $this->_payment =  new ArrayObject(Shopware()->Db()->fetchRow("
-        SELECT * FROM s_core_paymentmeans
-        WHERE id=?
-        ",array($this->_order["paymentID"])), ArrayObject::ARRAY_AS_PROPS);
+        $paymentData = Shopware()->Db()->fetchRow(
+            "SELECT * FROM s_core_paymentmeans WHERE id = ?",
+            array($this->_order["paymentID"])
+        );
+
+        $this->_payment = new ArrayObject(
+            $paymentData ? : array(),
+            ArrayObject::ARRAY_AS_PROPS
+        );
         if (!empty($this->_payment["table"])) {
-            $this->_payment["data"] = new ArrayObject(Shopware()->Db()->fetchRow("
-            SELECT * FROM ".$this->_payment["table"]." WHERE userID=?",$this->_userID), ArrayObject::ARRAY_AS_PROPS);
+            $specificPaymentData = Shopware()->Db()->fetchRow(
+                "SELECT * FROM ".$this->_payment["table"]." WHERE userID=?",
+                $this->_userID
+            );
+
+            $this->_payment["data"] = new ArrayObject(
+                $specificPaymentData,
+                ArrayObject::ARRAY_AS_PROPS
+            );
         }
     }
 
