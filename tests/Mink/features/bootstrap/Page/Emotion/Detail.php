@@ -205,11 +205,60 @@ class Detail extends Page
     }
 
     /**
+     * Writes an evaluation
      * @param array $data
      */
     public function writeEvaluation(array $data)
     {
         \Helper::fillForm($this, 'voteForm', $data);
         \Helper::pressNamedButton($this, 'voteFormSubmit');
+    }
+
+    /**
+     * Checks a select box
+     * @param string $select        Name of the select box
+     * @param string $min           First option
+     * @param string $max           Last option
+     * @param integer $graduation   Steps between each options
+     * @throws \Exception
+     */
+    public function checkSelect($select, $min, $max, $graduation)
+    {
+        $selectBox = $this->findField($select);
+
+        if (empty($selectBox)) {
+            $message = sprintf('Select box "%s" was not found!', $select);
+            \Helper::throwException($message);
+        }
+
+        $options = $selectBox->findAll('css', 'option');
+
+        $errors = array();
+        $optionText = $options[0]->getText();
+        $parts = explode(' ', $optionText, 2);
+        $value = $parts[0];
+        $unit = isset($parts[1]) ? ' '.$parts[1] : '';
+
+        if($optionText !== $min){
+            $errors[] = sprintf('The first option of "%s" is "%s"! (should be "%s")', $select, $optionText, $min);
+        }
+
+        /** @var NodeElement $option */
+        while ($option = next($options)) {
+            $optionText = $option->getText();
+            $value += $graduation;
+
+            if($optionText !== $value.$unit){
+                $errors[] = sprintf('There is the invalid option "%s" in "%s"! ("%s" expected)', $optionText, $select, $value.$unit);
+            }
+        }
+
+        if($optionText !== $max){
+            $errors[] = sprintf('The last option of "%s" is "%s"! (should be "%s")', $select, $value, $max);
+        }
+
+        if(!empty($errors)) {
+            \Helper::throwException($errors);
+        }
     }
 }

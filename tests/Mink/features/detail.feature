@@ -79,7 +79,7 @@ Feature: detail page
             | author         | stars | headline       | comment    |
             | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
 
-    @graduatedPrices @new
+    @graduatedPrices
     Scenario Outline: An article can have graduated prices
         Given I am on the detail page for article 209
         Then  I should see "<grade> <itemPrice>"
@@ -100,3 +100,11 @@ Feature: detail page
         | ab 21  | 0,80      | 30       | 24,00 |
         | ab 31  | 0,75      | 40       | 30,00 |
         | ab 41  | 0,70      | 50       | 35,00 |
+
+    @minimumQuantity @maximumQuantity @graduation
+    Scenario: An article can have a minimum/maximum quantity with graduation
+        Given I am on the detail page for article 207
+        Then  I can select every 3. option of "sQuantity" from "3 Stück" to "30 Stück"
+
+        When  I press "In den Warenkorb"
+        Then  I can select every 3. option of "sQuantity" from "3" to "30"
