@@ -315,10 +315,10 @@ class sRewriteTable
         // delete all non-existing suppliers
         $this->db->query("
             DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_articles a
-              ON a.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
+            LEFT JOIN s_articles_supplier s
+              ON s.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
             WHERE ru.org_path LIKE 'sViewport=supplier&sSupplier=%'
-            AND a.id IS NULL"
+            AND s.id IS NULL"
         );
     }
 
