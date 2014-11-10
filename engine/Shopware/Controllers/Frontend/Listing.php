@@ -48,6 +48,20 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
 
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $categoryRepository->getPathById($categoryId);
+
+        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+            Shopware()->System()->_GET['sCategory'] = $defaultShopCategoryId;
+            $this->Request()->setParam('sCategory', $defaultShopCategoryId);
+
+            $this->Response()->setHttpResponseCode(404);
+            return $this->forward('index', 'index');
+        }
+
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
         if (!empty($categoryContent['external'])) {
@@ -55,15 +69,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         } elseif (empty($categoryContent)) {
             $location = array('controller' => 'index');
         } elseif (Shopware()->Config()->categoryDetailLink && $categoryContent['articleCount'] == 1) {
-            /**@var $repository \Shopware\Models\Category\Repository*/
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-            $articleId = $repository->getActiveArticleIdByCategoryId($categoryContent['id']);
+            $articleId = $categoryRepository->getActiveArticleIdByCategoryId($categoryContent['id']);
             if (!empty($articleId)) {
                 $location = array(
                     'sViewport' => 'detail',
                     'sArticle' => $articleId
                 );
             }
+        } elseif ($defaultShopCategoryId == $categoryId && empty($supplierId)) {
+            $location = array('controller' => 'index');
         }
         if (isset($location)) {
             return $this->redirect($location, array('code' => 301));
