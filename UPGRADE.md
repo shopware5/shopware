@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.3.3
+* The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
+
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
 * Added new event `Shopware_Modules_Articles_sGetArticlesByCategory_FilterCountSql`

@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
         $error = $this->Request()->getParam('error_handler');
 
         if (!empty($error)) {
-            if ($this->Front()->getParam('showException')) {
+            if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() == 'backend') {
                 $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
                 $replace = array('', Enlight()->App() . '/', '');
 
