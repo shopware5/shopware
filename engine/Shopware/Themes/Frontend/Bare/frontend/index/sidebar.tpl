@@ -38,7 +38,7 @@
 		</div>
 	{/block}
 
-    <div class="sidebar--categories-wrapper" data-categories-slider="true" data-mainCategoryId="{$Shop->get('parentID')}" data-categoryId="{$sCategoryContent.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}">
+    <div class="sidebar--categories-wrapper" data-subcategory-nav="true" data-mainCategoryId="{$Shop->get('parentID')}" data-categoryId="{$sCategoryContent.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}">
 
         {* Sidebar category tree *}
         {block name='frontend_index_left_categories'}
