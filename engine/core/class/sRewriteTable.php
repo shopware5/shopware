@@ -266,8 +266,6 @@ class sRewriteTable
               ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
             LEFT JOIN s_cms_support ct
               ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
-            LEFT JOIN s_emarketing_promotion_main ep
-              ON ru.org_path LIKE CONCAT('sViewport=campaign&sCampaign=', ep.id)
             WHERE (
                 ru.org_path LIKE 'sViewport=custom&sCustom=%'
                 OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
@@ -275,8 +273,7 @@ class sRewriteTable
                 OR ru.org_path LIKE 'sViewport=content&sContent=%'
             )
             AND cs.id IS NULL
-            AND ct.id IS NULL
-            AND ep.id IS NULL"
+            AND ct.id IS NULL"
         );
 
         // delete non-existing blog categories from rewrite table
@@ -605,17 +602,6 @@ class sRewriteTable
      */
     public function sCreateRewriteTableContent($offset = null, $limit = null)
     {
-        $sql = "SELECT id, description as name FROM `s_emarketing_promotion_main`";
-        if ($limit !== null) {
-            $sql = $this->db->limit($sql, $limit, $offset);
-        }
-        $eMarketingPromotion = $this->db->fetchAll($sql);
-        foreach ($eMarketingPromotion as $row) {
-            $org_path = 'sViewport=campaign&sCampaign=' . $row['id'];
-            $path = $this->sCleanupPath($row['name']);
-            $this->sInsertUrl($org_path, $path);
-        }
-
         //form urls
         $this->insertFormUrls($offset, $limit);
 

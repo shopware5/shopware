@@ -6276,14 +6276,6 @@ INSERT INTO `s_emarketing_banners_statistics` (`id`, `bannerID`, `display_date`,
 
 TRUNCATE TABLE `s_emarketing_lastarticles`;
 TRUNCATE TABLE `s_emarketing_partner`;
-TRUNCATE TABLE `s_emarketing_promotions`;
-TRUNCATE TABLE `s_emarketing_promotion_articles`;
-TRUNCATE TABLE `s_emarketing_promotion_banner`;
-TRUNCATE TABLE `s_emarketing_promotion_containers`;
-TRUNCATE TABLE `s_emarketing_promotion_html`;
-TRUNCATE TABLE `s_emarketing_promotion_links`;
-TRUNCATE TABLE `s_emarketing_promotion_main`;
-TRUNCATE TABLE `s_emarketing_promotion_positions`;
 TRUNCATE TABLE `s_emarketing_referer`;
 TRUNCATE TABLE `s_emarketing_tellafriend`;
 TRUNCATE TABLE `s_emarketing_vouchers`;

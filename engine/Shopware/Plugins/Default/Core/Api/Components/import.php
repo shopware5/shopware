@@ -2641,8 +2641,6 @@ class sShopwareImport
         $delete_tables = array(
             "s_articles_similar"=>"relatedarticle",
             "s_articles_relationships"=>"relatedarticle",
-            "s_emarketing_promotion_articles"=>"articleordernumber",
-            "s_emarketing_promotions"=>"ordernumber"
         );
         foreach ($delete_tables as $delete_table => $delete_row) {
             $sql = "DELETE FROM $delete_table WHERE $delete_row=?";
@@ -2793,8 +2791,6 @@ class sShopwareImport
         if ($this->sDB->Execute("TRUNCATE s_articles_categories") === false)
             return false;
         if ($this->sDB->Execute("TRUNCATE s_emarketing_banners") === false)
-            return false;
-        if ($this->sDB->Execute("TRUNCATE s_emarketing_promotions") === false)
             return false;
 
         $sql = "SELECT MAX(category_id) FROM  s_core_shops";
