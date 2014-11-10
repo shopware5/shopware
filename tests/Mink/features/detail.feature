@@ -78,3 +78,25 @@ Feature: detail page
         Then  I should see an average customer evaluation of 3 from following evaluations:
             | author         | stars | headline       | comment    |
             | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
+
+    @graduatedPrices @new
+    Scenario Outline: An article can have graduated prices
+        Given I am on the detail page for article 209
+        Then  I should see "<grade> <itemPrice>"
+
+        When  I put the article "<quantity>" times into the basket
+        Then  the element "CartPosition" should have the content:
+            | position  | content       |
+            | name      | Staffelpreise |
+            | number    | SW10208       |
+            | quantity  | <quantity>    |
+            | itemPrice | <itemPrice>   |
+            | sum       | <sum>         |
+
+    Examples:
+        | grade  | itemPrice | quantity | sum   |
+        | bis 10 | 1,00      | 10       | 10,00 |
+        | ab 11  | 0,90      | 20       | 18,00 |
+        | ab 21  | 0,80      | 30       | 24,00 |
+        | ab 31  | 0,75      | 40       | 30,00 |
+        | ab 41  | 0,70      | 50       | 35,00 |
