@@ -632,7 +632,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'install' => true,
             'update' => true,
             'enable' => true,
-            'dummy' => false,
             'secureUninstall' => false
         );
     }
