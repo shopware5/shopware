@@ -3342,8 +3342,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         Shopware()->Db()->exec("TRUNCATE s_articles_categories");
-//        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
-//        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
 
         return $result;
     }
