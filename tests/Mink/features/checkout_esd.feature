@@ -55,7 +55,8 @@ Feature: Checkout esd article
             | sSearch | ESD   |
         Then  I should see "Zu \"ESD\" wurden 1 Artikel gefunden!"
 
-        When  I follow the link "order" of the element "ArticleBox" on position 1
+        When  I follow "ESD Download Artikel"
+        And   I put the article into the basket
         Then  the cart should contain 1 articles with a value of "37,99 €"
         And   I should see "ESD Download Artikel"
         And   I should see "Zuschlag für Zahlungsart"

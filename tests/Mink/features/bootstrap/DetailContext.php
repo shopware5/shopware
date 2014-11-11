@@ -92,4 +92,12 @@ class DetailContext extends SubContext
         $this->getSession()->reload();
     }
 
+    /**
+     * @Given /^I can select every (\d+)\. option of "([^"]*)" from "([^"]*)" to "([^"]*)"$/
+     */
+    public function iCanSelectEveryOptionOfFromTo($graduation, $select, $min, $max)
+    {
+        $this->getPage('Detail')->checkSelect($select, $min, $max, $graduation);
+    }
+
 }

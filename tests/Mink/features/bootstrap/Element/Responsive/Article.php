@@ -14,7 +14,7 @@ class Article extends \Element\Emotion\Article
         'link' => 'a.box--image',
         'container' =>  'a.box--image > .image--element',
         'image' => 'a.box--image > .image--element > span:nth-of-type(2)',
-        'price' => 'div.price--default > .price--content'
+        'price' => 'div.product--price > .price--default'
     );
 
     /**

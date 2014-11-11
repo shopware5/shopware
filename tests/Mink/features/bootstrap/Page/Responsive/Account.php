@@ -5,8 +5,8 @@ class Account extends \Page\Emotion\Account
 {
     public $cssLocator = array(
         'identifiers' => array(
-            'dashboard' => 'section.content-main > div > div.account--content',
-            'register' => 'section.content-main > div > div.register--content'
+            'dashboard' => 'div.content--wrapper > div.account--content',
+            'register' => 'div.content--wrapper > div.register--content'
         ),
         'payment' => 'div.account--payment.account--box strong',
         'logout' => 'div.account--menu-container a.link--logout',
