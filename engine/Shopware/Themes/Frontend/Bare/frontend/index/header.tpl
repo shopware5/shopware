@@ -45,6 +45,11 @@
     <meta name="msapplication-TileColor" content="{$theme.primaryColor}"> {* Backgroud Color of the Windows 8 tile *}
 {/block}
 
+{* Android specifc meta tags *}
+{block name='frontend_index_header_meta_tags_android'}
+    <meta name="theme-color" content="{$theme.primaryColor}" />
+{/block}
+
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}{/block}
 
