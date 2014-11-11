@@ -285,28 +285,43 @@ body > .sidebar-main {
         }
 
         .is--level1 {
-            .unitize-margin(5, 0);
+            .unitize-margin(5, 0, 5, 10);
             border: 0 none;
 
             .navigation--entry {
                 border: 0 none;
 
+                &.has--sub-children {
+                    &:before {
+                        .unitize(11, 16, top);
+                        .unitize(-8, 16, left);
+                        .unitize(9, 16, font-size);
+                        .unitize-margin(0, 6, 0, 0);
+                        font-family: 'shopware';
+                        content: "\e60f";
+                        position: absolute;
+                    }
+
+                    &.is--active {
+                        &:before {
+                            .unitize(13, 16, top);
+                            .unitize(-10, 16, left);
+                            .unitize-margin(0, 6, 0, 0);
+                            font-family: 'shopware';
+                            content: "\e612";
+                            position: absolute;
+                        }
+                    }
+                }
+
                 &.is--active {
-                    .unitize-margin(0, 10);
+                    .unitize-margin(0, 0, 0, 15);
                 }
             }
 
             .navigation--link {
                 .unitize-padding(6, 4);
                 .unitize(13, 16, font-size);
-
-                &:before,
-                &::before {
-                    .unitize(9, 16, font-size);
-                    .unitize-margin(0, 6, 0, 0);
-                    font-family: 'shopware';
-                    content: "\e60f";
-                }
 
                 &.is--active {
                     .unitize-padding(6, 4);
@@ -315,6 +330,16 @@ body > .sidebar-main {
                     color: @brand-primary;
                     background: transparent;
                     border: 0 none;
+                }
+            }
+        }
+
+        .is--level5 {
+            .navigation--entry {
+                margin-left: 0;
+
+                &.is--active {
+                    margin-left: 0;
                 }
             }
         }
