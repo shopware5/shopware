@@ -23,6 +23,7 @@ $(function() {
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('.category--teaser .hero--text').collapseText();
             $('#new-customer-action').collapsePanel();
             $('.btn--password').scroll();
@@ -70,8 +71,8 @@ $(function() {
         type: 'm',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
-            $('.btn--password').scroll();
-            $('.btn--email').scroll();
+            $('.btn--password').collapsePanel();
+            $('.btn--email').collapsePanel();
             $('.blog-filter--trigger').collapsePanel();
             $('*[data-product-slider="true"]').productSlider({
                 perPage: 3,
