@@ -20,8 +20,9 @@
 
 		.navigation--link {
             .transition(none 0);
-			.unitize-margin(0, 10, 0, 10, 16);
-			.unitize-padding(8, 12, 8, 12, 16);
+			.unitize-margin(0, 14);
+			.unitize-padding(8, 0);
+            .unitize(16, 16, font-size);
 			display: block;
 			cursor: pointer;
 			color: @text-color;
@@ -34,15 +35,13 @@
             &:hover .navigation--link {
                 color: #fff;
             }
-
-            font-weight: 700;
 		}
 	}
 	.js--scrollable-list--arrow-left,
 	.js--scrollable-list--arrow-right {
 		.border-radius();
 		.secondary-gradient();
-		.unitize-padding(6, 10, 6, 10, 16);
+		.unitize-padding(6, 10);
 		position: absolute;
 		top: 0;
 		z-index: 750;
