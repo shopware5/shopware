@@ -98,6 +98,20 @@
         display: none;
     }
 
+    .entry--search {
+        .btn:hover {
+            background: inherit;
+            color: inherit;
+            border-color: inherit;
+        }
+
+        .is--active.btn {
+            background: @btn-default-hover-bg;
+            color: @btn-default-hover-text-color;
+            border-color: @btn-default-hover-border-color;
+        }
+    }
+
 	.entry--cart {
         .unitize(12, 16, margin-right);
         position: relative;
