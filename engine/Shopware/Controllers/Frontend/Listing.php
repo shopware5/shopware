@@ -48,17 +48,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
 
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
-
         /**@var $repository \Shopware\Models\Category\Repository*/
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-        $categoryPath = $categoryRepository->getPathById($categoryId);
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
-            Shopware()->System()->_GET['sCategory'] = $defaultShopCategoryId;
-            $this->Request()->setParam('sCategory', $defaultShopCategoryId);
-
-            $this->Response()->setHttpResponseCode(404);
+        if (!$this->validateCategoryPath($categoryId)) {
             return $this->forward('index', 'index');
         }
 
@@ -76,7 +70,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                     'sArticle' => $articleId
                 );
             }
-        } elseif ($defaultShopCategoryId == $categoryId && empty($supplierId)) {
+        } elseif (
+            $defaultShopCategoryId == $categoryId
+            && !array_diff(array_keys($this->Request()->getParams()), ['controller', 'action', 'sCategory'])
+        ) {
             $location = array('controller' => 'index');
         }
         if (isset($location)) {
@@ -224,6 +221,27 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
             ));
         }
+    }
+
+    /**
+     * @param $categoryId
+     * @return bool
+     */
+    private function validateCategoryPath($categoryId) {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $categoryRepository->getPathById($categoryId);
+
+        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+            $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
+
+            $this->Response()->setHttpResponseCode(404);
+            return false;
+        }
+
+        return true;
     }
 
     /**
