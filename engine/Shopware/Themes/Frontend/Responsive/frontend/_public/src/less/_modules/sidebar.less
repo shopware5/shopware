@@ -293,7 +293,8 @@ body > .sidebar-main {
                 border: 0 none;
 
                 &.has--sub-children {
-                    &:before {
+                    &:before,
+                    &::before {
                         .unitize(11, 16, top);
                         .unitize(-8, 16, left);
                         .unitize(9, 16, font-size);
@@ -303,15 +304,14 @@ body > .sidebar-main {
                         position: absolute;
                     }
 
-                    &.is--active {
-                        &:before {
-                            .unitize(13, 16, top);
-                            .unitize(-10, 16, left);
-                            .unitize-margin(0, 6, 0, 0);
-                            font-family: 'shopware';
-                            content: "\e612";
-                            position: absolute;
-                        }
+                    &.is--active:before,
+                    &.is--active::before {
+                        .unitize(13, 16, top);
+                        .unitize(-10, 16, left);
+                        .unitize-margin(0, 6, 0, 0);
+                        font-family: 'shopware';
+                        content: "\e612";
+                        position: absolute;
                     }
                 }
 
