@@ -3251,6 +3251,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->removeArticleEsd($article->getId());
             $this->removeAttributes($article->getId());
             $this->removeArticleDetails($article);
+            $this->removeArticleTranslations($article);
 
             Shopware()->Models()->remove($article);
             Shopware()->Models()->flush();
@@ -3311,9 +3312,24 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
+            $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
+            $query->execute();
+
             $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
             $query->execute();
         }
+    }
+
+    /**
+     * @param $article \Shopware\Models\Article\Article
+     */
+    protected function removeArticleTranslations($article)
+    {
+        $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
+        $query->execute();
+
+        $sql= "DELETE FROM s_articles_translations WHERE articleID = ?";
+        $this->container->get('dbal_connection')->executeQuery($sql, array($article->getId()));
     }
 
     /**
