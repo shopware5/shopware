@@ -454,3 +454,38 @@ div[id^=emotion-main-window] {
         }
     }
 }
+
+.preview-image--container {
+  display: inline-block;
+  position: relative;
+  border: 1px dashed #a3b5c1;
+  border-bottom: 0 none;
+  border-right: 0 none;
+
+  .preview-image--media {
+    display: block;
+    max-width: 100%;
+  }
+  .preview-image--grid {
+    position: absolute;
+    z-index: 1;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAK0lEQVR4AWXIsQ0AIAwDsLzZ/0eOCBuWqLw5nd9pdnWyS6qXSiqppJJKKi6VJ4wV1aMbmAAAAABJRU5ErkJggg==") repeat;
+  }
+  .preview-image--row {
+    height: (100% / 3);
+    border-bottom: 1px dashed #a3b5c1;
+  }
+  .preview-image--col {
+    width: (100% / 3);
+    height: 100%;
+    border-right: 1px dashed #a3b5c1;
+    float: left;
+
+    &.is--active {
+      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.9));
+      border: 1px solid rgba(82, 168, 236, 0.8);
+    }
+  }
+}

@@ -1,4 +1,4 @@
-@emotion
+@emotion @noResponsive
 Feature: Emotion
 
     Background:

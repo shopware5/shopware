@@ -108,7 +108,7 @@ class Emotion extends ModelEntity
     /**
      * @var integer $device
      *
-     * @ORM\Column(name="device", type="integer", nullable=false)
+     * @ORM\Column(name="device", type="string", length=255, nullable=true)
      */
     private $device;
 

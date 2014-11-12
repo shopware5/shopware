@@ -351,7 +351,13 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         });
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
-            name: 'productBoxLayout'
+            name: 'productBoxLayout',
+            storeConfig: {
+                displayExtendLayout: true,
+                displayBasicLayout: true,
+                displayMinimalLayout: true,
+                displayImageLayout: true
+            }
         });
 
         return [

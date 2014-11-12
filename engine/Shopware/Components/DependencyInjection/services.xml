@@ -355,5 +355,9 @@
             <argument type="service" id="plugin_service_local" />
             <argument type="service" id="store_client" />
         </service>
+
+        <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">
+            <argument type="service" id="dbal_connection" />
+        </service>
     </services>
 </container>

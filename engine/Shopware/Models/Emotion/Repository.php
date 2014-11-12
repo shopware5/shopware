@@ -38,15 +38,16 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object
      *
      * @param array $filter
+     * @param array $filterBy
      * @param array $orderBy
      * @param integer $offset
      * @param integer $limit
      * @param integer $categoryId
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($filter = null, $orderBy = null, $offset = null, $limit = null, $categoryId = null)
+    public function getListQuery($filter = null, $filterBy = null, $orderBy = null, $offset = null, $limit = null, $categoryId = null)
     {
-        $builder = $this->getListQueryBuilder($filter, $orderBy, $categoryId);
+        $builder = $this->getListQueryBuilder($filter, $filterBy, $orderBy, $categoryId);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
@@ -60,44 +61,61 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param  array $filter
+     * @param  array $filterBy
      * @param  array $orderBy
      * @param  int $categoryId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($filter = null, $orderBy = null, $categoryId = null)
+    public function getListQueryBuilder($filter = null, $filterBy = null, $orderBy = null, $categoryId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('emotions', 'categories'))
                 ->from('Shopware\Models\Emotion\Emotion', 'emotions')
                 ->leftJoin('emotions.categories', 'categories');
 
+        // filter by search
+        if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
+            $builder->andWhere('emotions.name LIKE ?1')
+                ->setParameter(1, '%'.$filter[0]["value"].'%');
+        }
+
         // filter by desktop devices
-        if (isset($filter) && $filter == 'onlyDesktop') {
-            $builder->andWhere('emotions.device = 0');
+        if (isset($filterBy) && $filterBy == 'onlyDesktop') {
+            $builder->andWhere("emotions.device LIKE '%0%'");
+        }
+
+        // filter by tablet landscape devices
+        if (isset($filterBy) && $filterBy == 'onlyTabletLandscape') {
+            $builder->andWhere("emotions.device LIKE '%1%'");
         }
 
         // filter by tablet devices
-        if (isset($filter) && $filter == 'onlyTablet') {
-            $builder->andWhere('emotions.device = 1');
+        if (isset($filterBy) && $filterBy == 'onlyTablet') {
+            $builder->andWhere("emotions.device LIKE '%2%'");
+        }
+
+        // filter by mobile landscape devices
+        if (isset($filterBy) && $filterBy == 'onlyMobileLandscape') {
+            $builder->andWhere("emotions.device LIKE '%3%'");
         }
 
         // filter by mobile devices
-        if (isset($filter) && $filter == 'onlyMobile') {
-            $builder->andWhere('emotions.device = 2');
+        if (isset($filterBy) && $filterBy == 'onlyMobile') {
+            $builder->andWhere("emotions.device LIKE '%4%'");
         }
 
         // filter by active emotion worlds
-        if (isset($filter) && $filter == 'active') {
+        if (isset($filterBy) && $filterBy == 'active') {
             $builder->andWhere('emotions.active = 1');
         }
 
         // filter by landingpages
-        if (isset($filter) && $filter == 'onlyLandingpage') {
+        if (isset($filterBy) && $filterBy == 'onlyLandingpage') {
             $builder->andWhere('emotions.isLandingPage = 1');
         }
 
         // filter by shopping worlds
-        if (isset($filter) && $filter == 'onlyWorld') {
+        if (isset($filterBy) && $filterBy == 'onlyWorld') {
             $builder->andWhere('emotions.isLandingPage = 0');
         }
 

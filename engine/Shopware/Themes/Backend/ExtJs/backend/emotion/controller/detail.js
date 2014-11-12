@@ -53,6 +53,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     snippets: {
         successTitle: '{s name=save/success/title}Successful{/s}',
         errorTitle: '{s name=save/error/title}Error{/s}',
+        warningTitle: '{s name=save/warning/title}Warning{/s}',
+        saveWarningMessage: '{s name=save/warning/message}This emotion exists already.{/s}',
         saveSuccessMessage: '{s name=save/success/message}The emotion [0] has been saved.{/s}',
         saveErrorMessage: '{s name=save/error/message}An error has occurred while saving the emotion:{/s}',
         onSaveChangesNotValid: '{s name=save/error/not_valid}All required fields have not been filled{/s}',
@@ -289,6 +291,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 if (rawData.success === true) {
                     var message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name')),
                         gridStore = me.getListing().getStore();
+
+                    if (rawData.alreadyExists) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, me.snippets.saveWarningMessage, me.snippets.growlMessage);
+                    }
 
                     if(preview) {
                         return;

@@ -99,12 +99,7 @@
             me.applyDataAttributes();
 
             // Check if plugin is enabled
-            if(!me.opts.enabled) {
-                return;
-            }
-
-            // Check if categoryId is set
-            if(!me.opts.categoryId) {
+            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId) {
                 return;
             }
 
@@ -204,6 +199,13 @@
             $body.delegate(loadPreviousSelector, 'click', $.proxy(me.onLoadPrevious, me));
         },
 
+        update: function () {
+            var me = this;
+
+            // disable infinite scrolling, because listing container is not visible
+            me.opts.enabled = me.$el.is(':visible');
+        },
+
         /**
          * onScrolling method
          */
@@ -211,7 +213,7 @@
             var me = this;
 
             // stop fetch new page if is loading atm
-            if(me.isLoading) {
+            if(me.isLoading || !me.opts.enabled) {
                 return;
             }
 

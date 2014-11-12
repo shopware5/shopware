@@ -87,9 +87,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             },
             menu: Ext.create('Ext.menu.Menu', {
                 items: [
-                    { text: '{s name="list/action_column/copy_desktop" namespace="backend/emotion/list/grid"}Als Desktop Einkaufswelt{/s}', iconCls: 'sprite-imac-icon', handler: function() { me.fireEvent('preview', me, 0, me.emotion, me.dataviewStore); } },
-                    { text: '{s name="list/action_column/copy_tablet" namespace="backend/emotion/list/grid"}Als Tablet Einkaufswelt{/s}', iconCls: 'sprite-ipad-icon', handler: function() { me.fireEvent('preview', me, 1, me.emotion, me.dataviewStore); } },
-                    { text: '{s name="list/action_column/copy_mobile" namespace="backend/emotion/list/grid"}Als mobile Einkaufswelt{/s}', iconCls: 'sprite-iphone-icon', handler: function() { me.fireEvent('preview', me, 2, me.emotion, me.dataviewStore); } }
+                    { text: '{s name="list/action_column/copy_desktop" namespace="backend/emotion/list/grid"}Als Desktop Einkaufswelt{/s}', iconCls: 'sprite-imac', handler: function() { me.fireEvent('preview', me, 0, me.emotion, me.dataviewStore); } },
+                    { text: '{s name="list/action_column/copy_tablet" namespace="backend/emotion/list/grid"}Als Tablet Einkaufswelt{/s}', iconCls: 'sprite-ipad--portrait', handler: function() { me.fireEvent('preview', me, 1, me.emotion, me.dataviewStore); } },
+                    { text: '{s name="list/action_column/copy_mobile" namespace="backend/emotion/list/grid"}Als mobile Einkaufswelt{/s}', iconCls: 'sprite-iphone--portrait', handler: function() { me.fireEvent('preview', me, 2, me.emotion, me.dataviewStore); } }
                 ]
             })
         });

@@ -39,7 +39,9 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     basePath: '{link file=""}',
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            bannerFile;
+
         me.callParent(arguments);
 
         me.addEvents('openMappingWindow');
@@ -47,42 +49,52 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         me.mediaSelection = me.down('mediaselectionfield');
         me.mediaSelection.on('selectMedia', me.onSelectMedia, me);
 
-        var bannerFile = me.getBannerFile(me.getSettings('record').get('data'));
-        if(bannerFile && bannerFile.value && bannerFile.value.length) {
-            me.onSelectMedia('', bannerFile.value);
+        me.bannerFile = me.getFieldByName('file');
+        if(me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {
+            me.onSelectMedia('', me.bannerFile.value);
         }
+
+        me.bannerPositionField = me.getFieldByName('bannerPosition');
     },
 
-    getBannerFile: function(data) {
-        var record = null;
-        Ext.each(data, function(item) {
-            if (item.key == 'file') {
-                record = item;
+    getFieldByName: function(name) {
+        var me = this,
+            items = me.elementFieldset.items.items,
+            storeField;
+
+        Ext.each(items, function(item) {
+            if(item.name === name) {
+                storeField = item;
                 return false;
             }
         });
-        return record;
+
+        return storeField;
     },
 
     onSelectMedia: function(element, media) {
         var me = this;
-        if(!me.previewImage) {
-            me.previewFieldset = this.createPreviewImage(media);
-        } else {
-            me.previewImage.setSrc(me.basePath + media[0].get('path'));
-        }
+
         me.selectedMedia = Ext.isArray(media) ? media[0] : media;
-        me.add(me.previewFieldset);
+
+        if(!me.previewFieldset) {
+            me.previewFieldset = me.createPreviewImage(media);
+            me.add(me.previewFieldset);
+        } else {
+            me.previewImage.update({ src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media) });
+        }
     },
 
     createPreviewImage: function(media) {
         var me = this;
 
-        me.previewImage = Ext.create('Ext.Img', {
-            src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media),
-            style: {
-                'display': 'block',
-                'max-width': '100%'
+        me.previewImage = Ext.create('Ext.container.Container', {
+            tpl: me.getPreviewImageTemplate(),
+            data: {
+                src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media)
+            },
+            listeners: {
+                'afterrender': me.registerPreviewPositionEvents.bind(me)
             }
         });
 
@@ -92,16 +104,71 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         });
     },
 
+    registerPreviewPositionEvents: function() {
+        var me = this,
+            el = me.previewImage.getEl();
+
+        el.on('click', function(event, target) {
+            var $target = Ext.get(target),
+                position = $target.getAttribute('data-position');
+
+            Ext.each(el.dom.querySelectorAll('.preview-image--col'), function() {
+                this.classList.remove('is--active');
+            });
+            $target.addCls('is--active');
+
+            me.bannerPositionField.setValue(position);
+        }, me, { delegate: '.preview-image--col' });
+
+        if(me.bannerPositionField) {
+            var val = me.bannerPositionField.getValue();
+
+            Ext.each(el.dom.querySelectorAll('.preview-image--col'), function() {
+                this.classList.remove('is--active');
+            });
+
+            el.dom.querySelector('.preview-image--col[data-position="' + val + '"]').classList.add('is--active');
+        }
+    },
+
+    getPreviewImageTemplate: function() {
+        return new Ext.Template(
+            '<div class="preview-image--container">',
+                '<img class="preview-image--media" src="[src]" alt="Preview Banner">',
+
+                '<div class="preview-image--grid">',
+                    '<div class="preview-image--row">',
+                        '<div class="preview-image--col" data-position="top left">&nbsp;</div>',
+                        '<div class="preview-image--col" data-position="top center">&nbsp;</div>',
+                        '<div class="preview-image--col" data-position="top right">&nbsp;</div>',
+                    '</div>',
+
+                    '<div class="preview-image--row">',
+                        '<div class="preview-image--col" data-position="center left">&nbsp;</div>',
+                        '<div class="preview-image--col is--active" data-position="center">&nbsp;</div>',
+                        '<div class="preview-image--col" data-position="center right">&nbsp;</div>',
+                    '</div>',
+
+                    '<div class="preview-image--row">',
+                        '<div class="preview-image--col" data-position="bottom left">&nbsp;</div>',
+                        '<div class="preview-image--col" data-position="bottom center">&nbsp;</div>',
+                        '<div class="preview-image--col" data-position="bottom right">&nbsp;</div>',
+                    '</div>',
+                '</div>',
+            '</div>'
+        );
+    },
+
     createMappingButton: function() {
-       var me = this;
-       var button = Ext.create('Ext.button.Button', {
-           text: '{s name=mapping}Create image mapping{/s}',
-           iconCls: 'sprite-layer-select',
-           cls: 'small secondary',
-           handler: function() {
-                me.fireEvent('openMappingWindow', me, me.selectedMedia, me.previewImage, me.getSettings('record'));
-           }
-       });
+       var me = this,
+           button = Ext.create('Ext.button.Button', {
+               text: '{s name=mapping}Create image mapping{/s}',
+               iconCls: 'sprite-layer-select',
+               cls: 'small secondary',
+               handler: function() {
+                    me.fireEvent('openMappingWindow', me, me.selectedMedia, me.previewImage, me.getSettings('record'));
+               }
+           });
 
        return Ext.create('Ext.container.Container', {
            margin: '0 0 10',
