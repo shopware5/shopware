@@ -52,7 +52,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        if (!$this->isValidCategoryPath($categoryId)) {
+        if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
             return $this->forward('index', 'index');
         }
 
