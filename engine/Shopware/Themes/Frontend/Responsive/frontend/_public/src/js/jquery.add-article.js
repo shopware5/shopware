@@ -78,6 +78,11 @@
              */
             'showModal': true,
 
+            /**
+             * Selector for the product slider in the add article modal box.
+             *
+             * @type {String}
+             */
             'productSliderSelector': '.js--modal .product-slider'
         },
 

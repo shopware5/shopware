@@ -1,14 +1,21 @@
 /**
  * Global state manager
  *
- * The state manager helps to master different behaviors for different screen sizes. It provides you with the
- * ability to register different states, which has a enter size and exit size (either in EM or pixels values),
- * so you can mark a range where callback methods are called.
+ * The state manager helps to master different behaviors for different screen sizes.
+ * It provides you with the ability to register different states that are handled
+ * by breakpoints.
  *
- * The manager provides you multiple helper methods which helps you to master responsive design. Some of the
- * functions are created on-the-fly. If you register a new state, a new getter function will be created. Beside that
- * the manager uses the `$evtParent` to fire custom events which will can be used to terminate the entering and
- * exiting of the state breakpoints.
+ * Those Breakpoints are defined by entering and exiting points (in pixels)
+ * based on the viewport width.
+ * By entering the breakpoint range, the enter functions of the registered
+ * listeners are called.
+ * But when the defined points are exceeded, the registered listeners exit
+ * functions will be called.
+ *
+ * That way you can register callbacks that will be called on entering / exiting the defined state.
+ *
+ * The manager provides you multiple helper methods and polyfills which help you
+ * master responsive design.
  *
  * @example Initialize the StateManager
  * ```
@@ -40,13 +47,66 @@
  *         exit: function() { console.log('onGlobalExit'); }
  *     }]);
  * ```
+ *
+ * @example StateManager Events
+ * In this example we are adding an event listener for the 'resize' event.
+ * This event will be called independent of the original window resize event,
+ * because the resize will be compared in a requestAnimationFrame loop.
+ *
+ * ```
+ *     StateManager.on('resize', function () {
+ *         console.log('onResize');
+ *     });
+ *
+ *     StateManager.once('resize', function () {
+ *         console.log('This resize event will only be called once');
+ *     });
+ * ```
+ *
+ * @example StateManager plugin support
+ * In this example we register the plugin 'pluginName' on the element
+ * matching the '.my-selector' selector.
+ * You can also define view ports in which the plugin will be available.
+ * When switching the view ports and the configuration isn't changed for
+ * that state, only the 'update' function of the plugin will be called.
+ *
+ * ```
+ *     // The plugin will be available on all view port states.
+ *     // Uses the default configuration
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName');
+ *
+ *     // The plugin will only be available for the 'xs' state.
+ *     // Uses the default configuration.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', 'xs');
+ *
+ *     // The plugin will only be available for the 'l' and 'xl' state.
+ *     // Uses the default configuration.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', ['l', 'xl']);
+ *
+ *     // The plugin will only be available for the 'xs' and 's' state.
+ *     // For those two states, the passed config will be used.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', {
+ *         'configA': 'valueA',
+ *         'configB': 'valueB',
+ *         'configFoo': 'valueBar'
+ *     }, ['xs', 's']);
+ *
+ *     // The plugin is available on all view port states.
+ *     // We override the 'foo' config only for the 'm' state.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', { 'foo': 'bar' })
+ *                .addPlugin('.my-selector', 'pluginName', { 'foo': 'baz' }, 'm');
+ * ```
  */
 ;(function ($, window, document) {
     'use strict';
 
     /**
-     * @module System
-     * @class Exo.EventEmitter
+     * @class EventEmitter
      * @constructor
      */
     function EventEmitter() {
@@ -224,6 +284,7 @@
      * @public
      * @static
      * @class StateManager
+     * @extends {EventEmitter}
      * @type {Object}
      */
     window.StateManager = $.extend(Object.create(EventEmitter.prototype), {
@@ -339,8 +400,8 @@
                 breakpoints = me._breakpoints,
                 existingBreakpoint,
                 state = breakpoint.state,
-                enter = ~~(breakpoint.enter),
-                exit = ~~(breakpoint.exit),
+                enter = breakpoint.enter,
+                exit = breakpoint.exit,
                 len = breakpoints.length,
                 i = 0;
 
