@@ -39,7 +39,7 @@
 			</span>
 
 			{if $sBasketQuantity > 0}
-				<span class="badge is--primary cart--quantity">
+				<span class="badge is--primary is--minimal cart--quantity">
 					{$sBasketQuantity}
 				</span>
 			{/if}
