@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -57,6 +58,11 @@ class sArticlesComparisons
     private $config;
 
     /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
      * @param sArticles $articleModule
      * @param Container $container
      */
@@ -65,9 +71,10 @@ class sArticlesComparisons
         $this->articleModule = $articleModule;
         $this->systemModule = $articleModule->sSYSTEM;
 
-        $this->db      = $container->get('db');
-        $this->config  = $container->get('config');
-        $this->session = $container->get('session');
+        $this->db             = $container->get('db');
+        $this->config         = $container->get('config');
+        $this->session        = $container->get('session');
+        $this->contextService = $container->get('context_service');
     }
 
     /**
@@ -211,10 +218,10 @@ class sArticlesComparisons
 
         foreach ($checkForArticle as $article) {
             if ($article["articleID"]) {
-                $data = $this->articleModule->sGetPromotionById("fix", 0, (int) $article["articleID"]);
-                $articles[] = $data;
+                $articles[] = $this->articleModule->sGetPromotionById("fix", 0, (int) $article["articleID"]);
             }
         }
+
         $properties = $this->sGetComparisonProperties($articles);
         $articles = $this->sFillUpComparisonArticles($properties, $articles);
 
@@ -229,22 +236,45 @@ class sArticlesComparisons
      */
     public function sGetComparisonProperties($articles)
     {
+        $shopContext = $this->contextService->getShopContext();
         $properties = [];
+
         foreach ($articles as $article) {
             //get all properties in the right order
-            $sql = "SELECT options.id, options.name
+            $sql = "SELECT
+                      options.id,
+                      options.name,
+                      translation.objectdata as translation,
+                      translationFallback.objectdata as translationFallback
+
                     FROM s_filter_options as options
                     LEFT JOIN s_filter_relations as relations ON relations.optionId = options.id
                     LEFT JOIN s_filter as filter ON filter.id = relations.groupID
-                    WHERE relations.groupID = ?
+
+                    LEFT JOIN s_core_translations AS translation
+                    ON translation.objecttype='propertyoption'
+                    AND translation.objectkey=options.id
+                    AND translation.objectlanguage=:shopId
+
+                    LEFT JOIN s_core_translations AS translationFallback
+                    ON translationFallback.objecttype='propertyoption'
+                    AND translationFallback.objectkey=options.id
+                    AND translationFallback.objectlanguage=:fallbackId
+
+                    WHERE relations.groupID = :groupId
                     AND filter.comparable = 1
                     ORDER BY relations.position ASC";
-            $articleProperties = $this->db->fetchPairs($sql, [$article["filtergroupID"]]);
 
-            foreach ($articleProperties as $articlePropertyKey => $articleProperty) {
-                if (!in_array($articlePropertyKey, array_keys($properties))) {
+            $articleProperties = $this->db->fetchAll($sql, [
+                'groupId'    => $article["filtergroupID"],
+                'shopId'     => $shopContext->getShop()->getId(),
+                'fallbackId' => $shopContext->getShop()->getFallbackId()
+            ]);
+
+            foreach ($articleProperties as $articleProperty) {
+                if (!in_array($articleProperty['id'], array_keys($properties))) {
                     //the key is not part of the array so add it to the end
-                    $properties[$articlePropertyKey] = $articleProperty;
+                    $properties[$articleProperty['id']] = $this->extractPropertyTranslation($articleProperty);
                 }
             }
         }
@@ -274,5 +304,37 @@ class sArticlesComparisons
         }
 
         return $articles;
+    }
+
+    /**
+     * @param array $articleProperty
+     * @return string
+     */
+    private function extractPropertyTranslation($articleProperty)
+    {
+        if ($articleProperty['translation']) {
+            $translation = unserialize($articleProperty['translation']);
+            if ($this->containsTranslation($translation)) {
+                return (string)$translation['optionName'];
+            }
+        }
+
+        if ($articleProperty['translationFallback']) {
+            $translation = unserialize($articleProperty['translationFallback']);
+            if ($this->containsTranslation($translation)) {
+                return (string)$translation['optionName'];
+            }
+        }
+
+        return $articleProperty['name'];
+    }
+
+    /**
+     * @param array $translation
+     * @return bool
+     */
+    private function containsTranslation($translation)
+    {
+        return is_array($translation) && isset($translation['optionName']) && $translation['optionName'];
     }
 }
