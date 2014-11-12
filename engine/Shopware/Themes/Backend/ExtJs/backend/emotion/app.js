@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Emotion', {
         'components.fields.SliderSelect', 'components.fields.ManufacturerType', 'components.ManufacturerSlider',
         'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.Youtube',
         'grids.List', 'grids.Toolbar', 'templates.List',
-        'grids.Settings', 'templates.Toolbar', 'templates.Settings' ],
+        'grids.Settings', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode' ],
 
     /**
      * Required views for module (subapplication)

@@ -72,6 +72,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     initComponent: function() {
         var me = this;
 
+        me._initial = true;
+
         me.categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath');
         me.categoryPathStore.getProxy().extraParams.parents = true;
         me.categoryPathStore.load();
@@ -136,6 +138,23 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.callParent(arguments);
 
         me.loadRecord(me.emotion);
+
+        // We have to set the device by hand due loadRecord doesn't work quite well with a checkbox group
+        if(me.emotion) {
+            var data = me.emotion.data,
+                devices = data.device;
+
+            if(!devices.length) {
+                devices = '0';
+            }
+            devices = devices.split(',');
+
+            me.deviceComboGroup.setValue({
+                'device': devices
+            });
+
+            me._initial = false;
+        }
     },
 
     createCategoryFieldSet: function() {
@@ -206,10 +225,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.containerWidthField = Ext.create('Ext.form.field.Number', {
             fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
             name: 'containerWidth',
-            supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}',
+            helpText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}',
             anchor: '100%',
             width: '100%',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth - 20,
+            supportText: '{s name=settings/fieldset/container_width_support}{/s}'
         });
 
         var responsiveModeStore = Ext.create('Ext.data.Store', {
@@ -239,19 +259,27 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             )
         });
 
-        var deviceComboBox = Ext.create('Ext.form.field.ComboBox', {
+        me.deviceComboGroup = Ext.create('Ext.form.CheckboxGroup', {
+            columns: 2,
+            vertical: false,
+            items: me.createDeviceData(),
             fieldLabel: '{s name=settings/fieldset/select_device}Select device{/s}',
-            name: 'device',
-            valueField: 'id',
-            displayField: 'name',
-            store: Ext.create('Ext.data.Store', {
-                fields: [ 'name' ],
-                data : me.createDeviceData()
-            }),
-            queryMode: 'local',
-            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}',
             labelWidth: me.defaults.labelWidth - 20,
-            anchor: '100%'
+            listeners: {
+                scope: me,
+                change: function(comp, newVal, oldVal) {
+                    var vals = comp.getValue();
+
+                    if(me._initial) {
+                        return;
+                    }
+
+                    if(!vals.hasOwnProperty('device')) {
+                        Ext.Msg.alert('{s name=settings/device/warning_title}{/s}', '{s name=settings/device/warning_text}{/s}');
+                        comp.setValue(oldVal);
+                    }
+                }
+            }
         });
 
         var fullscreen = Ext.create('Ext.form.field.Checkbox', {
@@ -273,7 +301,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ me.containerWidthField, responsiveMode ]
+                    items: [ responsiveMode ]
                 }, {
                     xtype: 'container',
                     columnWidth: .5,
@@ -290,7 +318,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ deviceComboBox, fullscreen ]
+                    items: [ me.deviceComboGroup, fullscreen, me.containerWidthField ]
                 }
             ]
         });
@@ -298,14 +326,26 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
     createDeviceData: function() {
         return [{
-            "id" : 0,
-            "name" : "Desktop (1260px)"
+            'inputValue': '0',
+            'boxLabel': 'Desktop (> 1260px)',
+            'checked': 1,
+            'name': 'device'
         }, {
-            "id" : 1,
-            "name" : "Tablet (768px - 1260px)"
+            'inputValue': '1',
+            'boxLabel' : 'Tablet Landscape (1024px - 1260px)',
+            'name': 'device'
         }, {
-            "id" : 2,
-            "name" : "Mobile (320px - 767px)"
+            'inputValue': '2',
+            'boxLabel': 'Tablet Portrait (768px - 1023px)',
+            'name': 'device'
+        }, {
+            'inputValue': '3',
+            'boxLabel': 'Mobile Landscape (480px - 767px)',
+            'name': 'device'
+        }, {
+            'inputValue': '4',
+            'boxLabel': 'Mobile Portrait (< 479px)',
+            'name': 'device'
         }];
     },
 

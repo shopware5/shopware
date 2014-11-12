@@ -1,7 +1,5 @@
-{$rowSpan = $element.endRow - $element.startRow + 1}
-
 {block name="frontend_widgets_manufacturer_slider"}
-    <div class="panel has--border manufacturer--panel element-height--{$rowSpan}">
+    <div class="emotion--manufacturer panel has--border">
 
         {* Manufacturer title *}
         {block name="frontend_widgets_manufacturer_slider_title"}
@@ -14,23 +12,25 @@
 
         {* Manufacturer Content *}
         {block name="frontend_widgets_manufacturer_slider_content"}
-            <div class="manufacturer--body">
+            <div class="manufacturer--content">
+
                 {block name="frontend_widgets_manufacturer_slider_container"}
-                    <div class="slider--manufacturer product-slider" data-product-slider="true">
+                    <div class="manufacturer--slider product-slider" data-product-slider="true">
+
                         <div class="product-slider--container">
                             {foreach $Data.values as $supplier}
                                 {block name="frontend_widgets_manufacturer_slider_item"}
-                                    <div class="product-slider--item manufacturer--item">
+                                    <div class="manufacturer--item product-slider--item">
 
                                         {block name="frontend_widgets_manufacturer_slider_item_link"}
-                                            <a href="{$supplier.link}" title="{$supplier.name|escape:'html'}" class="manufacturer--link{if !$supplier.image} has--text{/if}">
+                                            <a href="{$supplier.link}" title="{$supplier.name|escape:'html'}" class="manufacturer--link">
                                                 {if $supplier.image}
                                                     {block name="frontend_widgets_manufacturer_slider_item_image"}
                                                         <img class="manufacturer--image" src="{$supplier.image}" alt="{$supplier.name|escape:'html'}" />
                                                     {/block}
                                                 {else}
                                                     {block name="frontend_widgets_manufacturer_slider_item_text"}
-                                                        <span class="is--centered">{$supplier.name}</span>
+                                                        <span class="manufacturer--name">{$supplier.name}</span>
                                                     {/block}
                                                 {/if}
                                             </a>

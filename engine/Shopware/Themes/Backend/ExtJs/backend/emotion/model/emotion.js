@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'name', type: 'string' },
 
         { name: 'containerWidth', type: 'int' },
-        { name: 'device', type: 'int' },
+        { name: 'device', type: 'string' },
         { name: 'fullscreen', type: 'int' },
         { name: 'rows', type: 'int' },
         { name: 'categoryId', type: 'int', useNull: true },

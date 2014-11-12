@@ -65,9 +65,11 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         filter: {
             title: '{s name=list/filter/title}Filter{/s}',
             noFilter: '{s name=list/no_filter}No filter{/s}',
-            onlyDesktop: '<div class="sprite-imac-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
-            onlyTablet: '<div class="sprite-ipad-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
-            onlyMobile: '<div class="sprite-iphone-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
+            onlyDesktop: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
+            onlyTabletLandscape: '<div class="sprite-ipad--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet_landscape}Only tablet landscape devices{/s}',
+            onlyTabletPortrait: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
+            onlyMobileLandscape: '<div class="sprite-iphone--landscape" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile_landscape}Only mobile landscape devices{/s}',
+            onlyMobilePortrait: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
             onlyActive: '<div class="sprite-ui-check-box" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}',
             onlyLandingpage: '{s name=list/only_landingpage}Only landingpages{/s}',
             onlyWorld: '{s name=list/only_world}Only shopping worlds{/s}'
@@ -166,12 +168,22 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
             inputValue: 'onlyDesktop'
         },
         {
-            boxLabel: me.snippets.filter.onlyTablet,
+            boxLabel: me.snippets.filter.onlyTabletLandscape,
+            name: 'filter',
+            inputValue: 'onlyTabletLandscape'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyTabletPortrait,
             name: 'filter',
             inputValue: 'onlyTablet'
         },
         {
-            boxLabel: me.snippets.filter.onlyMobile,
+            boxLabel: me.snippets.filter.onlyMobileLandscape,
+            name: 'filter',
+            inputValue: 'onlyMobileLandscape'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyMobilePortrait,
             name: 'filter',
             inputValue: 'onlyMobile'
         },

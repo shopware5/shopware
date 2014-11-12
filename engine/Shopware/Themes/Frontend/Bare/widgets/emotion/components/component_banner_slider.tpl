@@ -1,5 +1,5 @@
 {block name="frontend_widgets_banner_slider"}
-    <div class="image-slider"
+    <div class="emotion--banner-slider image-slider"
          data-image-slider="true"
          data-thumbnails="false"
          data-lightbox="false"
@@ -10,21 +10,23 @@
          data-autoSlide="{if $Data.banner_slider_rotation}true{else}false{/if}">
 
         {if $Data.banner_slider_title}
-            <div class="image-slider--title">{$Data.banner_slider_title}</div>
+            <div class="banner-slider--title">{$Data.banner_slider_title}</div>
         {/if}
 
         {block name="frontend_widgets_banner_slider_container"}
-            <div class="image-slider--container">
+            <div class="banner-slider--container image-slider--container">
 
                 {block name="frontend_widgets_banner_slider_slide"}
-                    <div class="image-slider--slide">
+                    <div class="banner-slider--slide image-slider--slide">
                         {foreach $Data.values as $banner}
 
                             {block name="frontend_widgets_banner_slider_item"}
-                                <div class="image-slider--item" style="background-image: url({link file=$banner.path})">
+                                <div class="banner-slider--item image-slider--item" style="background-image: url({link file=$banner.path})">
                                     {if $banner.link}
                                         {block name="frontend_widgets_banner_slider_link"}
-                                            <a class="image-slider--link" href="{$banner.link}" title="{$banner.title|escape:'html'}"></a>
+                                            <a class="banner-slider--link" href="{$banner.link}" title="{$banner.title|escape}">
+                                                {$banner.altText}
+                                            </a>
                                         {/block}
                                     {/if}
                                 </div>

@@ -128,6 +128,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         //iterate all emotions to select the element data.
 
         foreach ($emotions as &$emotion) {
+            // Support for emotions which are available on multiple devices.
+            $emotion['device'] = explode(',', $emotion['device']);
+
             //for each emotion we have to iterate the elements to get the element data.
             foreach ($emotion['elements'] as &$element) {
                 $component = $element['component'];
@@ -135,6 +138,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $componentData = $elementQuery->getArrayResult();
                 $data = array();
                 $data["objectId"] = md5($element["id"]);
+
                 //we have to iterate the component data to decode the values.
                 foreach ($componentData as $entry) {
                     $value = '';
@@ -153,11 +157,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $data = Enlight()->Events()->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, array('subject' => $this, 'element' => $element));
 
                 if (!empty($component['convertFunction'])) {
-                    $data = $this->$component['convertFunction']($data, $this->Request()->getParam('categoryId'), $element);
+                    $categoryId = $this->Request()->getParam('categoryId') ?: $emotion['categories'][0]['id'];
+
+                    $data = $this->$component['convertFunction']($data, $categoryId, $element);
                 }
 
                 $element['data'] = $data;
-
             }
         }
 
@@ -188,7 +193,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         } elseif ($data["article_type"] == "random_article") {
             // random product
             $data = array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
-
         } else {
             // Fix product
             $data = array_merge($data, $this->articleByNumber($data["article"]));
@@ -222,6 +226,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getBlogEntry($data, $category)
     {
         $entryAmount = (int) $data['entry_amount'];
+        
+        $category = $data['blog_entry_selection'] ?: $category;
 
         // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
         if (!isset($data['thumbnail_size'])) {
@@ -241,20 +247,37 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('blog', 'media', 'mappingMedia'))
-            ->from('Shopware\Models\Blog\Blog', 'blog')
-            ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
-            ->leftJoin('mappingMedia.media', 'media')
-            ->leftJoin('blog.category', 'category')
-            ->where('blog.active = 1')
-            ->andWhere('blog.displayDate <= :displayDate')
-            ->andWhere('category.path LIKE :path')
-            ->orderBy('blog.displayDate', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults($entryAmount)
-            ->setParameter('displayDate', date('Y-m-d H:i:s'))
-            ->setParameter('path', '%|' . $category->getId() . '|%');
 
+        if ($data['blog_entry_selection']) {
+            $builder->select(array('blog', 'media', 'mappingMedia'))
+                ->from('Shopware\Models\Blog\Blog', 'blog')
+                ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
+                ->leftJoin('mappingMedia.media', 'media')
+                ->leftJoin('blog.category', 'category')
+                ->where('blog.active = 1')
+                ->andWhere('blog.displayDate <= :displayDate')
+                ->andWhere('blog.categoryId = :category')
+                ->orderBy('blog.displayDate', 'DESC')
+                ->setFirstResult(0)
+                ->setMaxResults($entryAmount)
+                ->setParameter('displayDate', date('Y-m-d H:i:s'))
+                ->setParameter('category', $category->getId());
+        } else {
+            $builder->select(array('blog', 'media', 'mappingMedia'))
+                ->from('Shopware\Models\Blog\Blog', 'blog')
+                ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
+                ->leftJoin('mappingMedia.media', 'media')
+                ->leftJoin('blog.category', 'category')
+                ->where('blog.active = 1')
+                ->andWhere('blog.displayDate <= :displayDate')
+                ->andWhere('category.path LIKE :path')
+                ->orderBy('blog.displayDate', 'DESC')
+                ->setFirstResult(0)
+                ->setMaxResults($entryAmount)
+                ->setParameter('displayDate', date('Y-m-d H:i:s'))
+                ->setParameter('path', '%|' . $category->getId() . '|%');
+        }
+        
         $query = $this->getForceIndexQuery($builder->getQuery(), 'emotion_get_blog_entry');
         $result = $query->getArrayResult();
 
@@ -300,7 +323,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getCategoryTeaser($data, $category, $element)
     {
-
         // First get category name
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select('category.name')
@@ -314,17 +336,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
-
-
             if ($data['blog_category']) {
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
-                if (!empty( $result['media']['thumbnails'])) {
+                if (!empty($result['media']['thumbnails'])) {
                     $data['image'] = $result['media']['thumbnails'][2];
                     $data['images'] = $result['media']['thumbnails'];
                 } else {
                     $data['image'] = $result['media']['path'];
                 }
-
             } else {
                 // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
@@ -403,7 +422,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getManufacturerSlider($data, $category, $element)
     {
-
         if (empty($data["manufacturer_type"])) {
             return $data;
         }
@@ -498,7 +516,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 foreach ($data["selected_articles"] as &$article) {
                     $articleId = $article["articleId"];
                     $entry = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
-                    if (!empty($entry["articleID"])) $values[] = $entry;
+                    if (!empty($entry["articleID"])) {
+                        $values[] = $entry;
+                    }
                 }
                 break;
             case "topseller":

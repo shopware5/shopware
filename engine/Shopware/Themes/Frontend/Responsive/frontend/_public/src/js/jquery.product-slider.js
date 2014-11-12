@@ -468,7 +468,7 @@
         trackArrows: function() {
             var me = this;
 
-            if(!me.opts.arrowControls || !me.isActive()) {
+            if(!me.$arrowPrev || !me.$arrowNext || !me.isActive()) {
                 return;
             }
 
@@ -506,6 +506,7 @@
                     me.isLoading = false;
                     me.$container.append(response);
                     me.trackItems();
+                    me.trackArrows();
                     me.setSizes();
 
                     if (typeof callback === 'function') {
