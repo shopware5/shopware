@@ -39,6 +39,11 @@ class Shop extends Extendable implements \JsonSerializable
     protected $id;
 
     /**
+     * @var bool
+     */
+    protected $isDefault;
+
+    /**
      * Id of the parent shop if current shop is a language shop,
      * Id of the current shop otherwise.
      *
@@ -101,6 +106,7 @@ class Shop extends Extendable implements \JsonSerializable
         $struct->setId($shop->getId());
         $struct->setParentId($shop->getMain() ? $shop->getMain()->getId() : $shop->getId());
 
+        $struct->setIsDefault($shop->getDefault());
         $struct->setName($shop->getName());
         $struct->setHost($shop->getHost());
         $struct->setPath($shop->getBasePath());
@@ -108,7 +114,6 @@ class Shop extends Extendable implements \JsonSerializable
         $struct->setSecure($shop->getSecure());
         $struct->setSecureHost($shop->getSecureHost());
         $struct->setSecurePath($shop->getSecureBasePath());
-
         if ($shop->getCategory()) {
             $struct->setCategory(
                 Category::createFromCategoryEntity($shop->getCategory())
@@ -130,6 +135,22 @@ class Shop extends Extendable implements \JsonSerializable
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @param bool $isDefault
+     */
+    public function setIsDefault($isDefault)
+    {
+        $this->isDefault = (bool)$isDefault;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefault()
+    {
+        return (bool)$this->isDefault;
     }
 
     /**
