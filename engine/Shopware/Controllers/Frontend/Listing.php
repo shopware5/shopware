@@ -52,7 +52,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        if (!$this->validateCategoryPath($categoryId)) {
+        if (!$this->isValidCategoryPath($categoryId)) {
             return $this->forward('index', 'index');
         }
 
@@ -224,10 +224,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param $categoryId
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
      * @return bool
      */
-    private function validateCategoryPath($categoryId) {
+    private function isValidCategoryPath($categoryId)
+    {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
         /**@var $repository \Shopware\Models\Category\Repository*/
