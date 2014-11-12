@@ -2343,6 +2343,64 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
+     * with the given articleId
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveArticleTranslationsQuery($articleId)
+    {
+        $builder = $this->getRemoveArticleTranslationsQueryBuilder($articleId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveArticleTranslationsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveArticleTranslationsQueryBuilder($articleId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Translation\Translation', 'translation')
+            ->where('translation.key = :id')
+            ->andWhere('translation.type = \'article\'')
+            ->setParameter('id', $articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
+     * with the given articleDetailId
+     * @param $detailId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveVariantTranslationsQuery($detailId)
+    {
+        $builder = $this->getRemoveVariantTranslationsQueryBuilder($detailId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveVariantTranslationsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $detailId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveVariantTranslationsQueryBuilder($detailId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Translation\Translation', 'translation')
+            ->where('translation.key = :id')
+            ->andWhere('translation.type = \'variant\'')
+            ->setParameter('id', $detailId);
+
+        return $builder;
+    }
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove images associated
      * with the given articleDetailId
      * @param $detailId
