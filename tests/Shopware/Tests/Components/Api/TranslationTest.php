@@ -197,6 +197,43 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
     }
 
     /**
+     * Checks if variants can be translated
+     *
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function testCreateVariantTranslationByNumber()
+    {
+        $data = $this->getDummyData('variant');
+        //Artikel mit Standardkonfigurator rot / 39
+        $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
+        $data['key'] = $article['ordernumber'];
+
+        /**@var $translation \Shopware\Models\Translation\Translation */
+        $translation = $this->resource->createByNumber($data);
+
+        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+
+        $this->assertEquals(
+            $article['id'],
+            $translation->getKey(),
+            'Translation key do not match'
+        );
+
+        $this->assertEquals(
+            $data['type'],
+            $translation->getType(),
+            'Translation type do not match'
+        );
+        $this->assertEquals(
+            $data['data'],
+            $this->resource->getTranslationComponent()->unFilterData(
+                'article', $translation->getData()
+            ),
+            'Translation data do not match'
+        );
+    }
+
+    /**
      * @depends testCreateArticle
      */
     public function testArticleUpdateOverride($key)
