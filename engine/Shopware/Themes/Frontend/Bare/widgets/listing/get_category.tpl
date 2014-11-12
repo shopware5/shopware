@@ -51,7 +51,7 @@
                         {block name="widgets_listing_get_category_categories_show_link"}
                             <a href="{$category.link}" title="{$category.name|escape} {s name="ButtonShow"}anzeigen{/s}" class="navigation--link is--display-button">
                                 {block name="widgets_listing_get_category_categories_show_link_name"}
-                                    {$category.name} {s name="ButtonShow"}anzeigen{/s}
+                                    {s name="ButtonShowPrepend"}{/s} {$category.name} {s name="ButtonShowAppend"}{/s}
                                 {/block}
                             </a>
                         {/block}
