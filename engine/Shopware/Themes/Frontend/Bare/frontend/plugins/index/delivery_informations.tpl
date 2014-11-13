@@ -3,9 +3,11 @@
 	<div class="product--delivery">
 		{if $sArticle.shippingfree}
 			<p class="delivery--shipping-free">
-				<span class="delivery--shipping-free-icon"><i class="icon--truck"></i></span>
-                <strong>{s name="DetailDataInfoShippingfree"}{/s}</strong>
-			</p>
+                <span class="delivery--shipping-free-icon"><i class="icon--truck"></i></span>
+                <span class="delivery--text delivery--text-shipping-free">
+                    {s name="DetailDataInfoShippingfree"}{/s}
+                </span>
+            </p>
 		{/if}
 		{if isset($sArticle.active )&& !$sArticle.active}
             <link itemprop="availability" href="http://schema.org/LimitedAvailability" />

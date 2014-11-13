@@ -37,16 +37,39 @@
 
 .finish--table {
     .panel--body {
-        border: 1px solid @border-color;
+        border: 1px solid @panel-border;
     }
+
+    .table--tr {
+        .unitize-padding(10, 10);
+    }
+
+    .column--quantity,
+    .column--total-price {
+        padding-right: 0;
+    }
+
 
     .table--aggregation {
         display: none;
     }
 
     .aggregation--list {
-        .unitize-padding(10, 0);
         margin: 0;
+    }
+}
+
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+
+    .finish--table {
+        .table--tr .column--quantity {
+            margin-left: 42.3%;
+
+            .column--label {
+                .unitize(12, 16, margin-bottom);
+                text-align: right;
+            }
+        }
     }
 }
 
@@ -86,20 +109,37 @@
     .finish--table {
         .unitize-margin(20, 0, 0, 0);
 
+        .table--header .panel--th {
+            padding-right: 0;
+        }
+
+        .panel--body {
+            .unitize-padding(14, 20, 20, 20);
+        }
+
         .column--total-price {
-            width: 39%;
+            width: 37%;
         }
 
-        .table--row:last-child {
-            border: 0 none;
-        }
+        .table--tr {
+            padding: 0;
 
-        .row--rebate,
-        .row--premium-product,
-        .row--voucher {
-            .column--total-price {
-                margin: 0 0 0 10%;
+            &:last-child { border: 0 none; }
+
+            .column--quantity {
+                .unitize(42, 16, line-height);
+                margin: 0;
             }
+        }
+
+        .row--rebate .column--total-price,
+        .row--premium-product .column--total-price {
+            width: 22.5%;
+        }
+
+        .row--voucher .column--total-price {
+            margin-left: 0;
+            width: 48%;
         }
 
         .table--aggregation {
@@ -121,6 +161,24 @@
 
     .finish--content {
         .unitize(45, 16, padding-top);
+
+        .column--total-price {
+            width: 34%;
+        }
+
+        .finish--table {
+
+            .table--header .column--product {
+                width: 55%;
+            }
+            .row--premium-product .column--total-price,
+            .row--rebate .column--total-price {
+                width: 19.5%
+            }
+            .row--voucher .column--total-price {
+                width: 45%;
+            }
+        }
     }
 }
 
@@ -167,7 +225,7 @@
     .finish--table {
         clear: both;
 
-        .table--row {
+        .table--tr {
             page-break-inside: avoid;
         }
 

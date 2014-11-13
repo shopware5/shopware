@@ -3,21 +3,21 @@
 
         {* Product name and information *}
         {block name='frontend_checkout_cart_header_name'}
-            <div class="table--column column--product block">
+            <div class="panel--th column--product block">
                 {s name="CartColumnName"}{/s}
             </div>
         {/block}
 
-		{* Product quantity *}
-		{block name='frontend_checkout_cart_header_quantity'}
-			<div class="table--column column--quantity block is--align-right">
-				{s name="CartColumnQuantity"}{/s}
-			</div>
-		{/block}
+        {* Product quantity *}
+        {block name='frontend_checkout_cart_header_quantity'}
+            <div class="panel--th column--quantity block is--align-right">
+                {s name="CartColumnQuantity"}{/s}
+            </div>
+        {/block}
 
         {* Unit price *}
         {block name='frontend_checkout_cart_header_price'}
-            <div class="table--column column--unit-price block is--align-right">
+            <div class="panel--th column--unit-price block is--align-right">
                 {s name='CartColumnPrice'}{/s}
             </div>
         {/block}
@@ -27,14 +27,14 @@
 
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_header_total'}
-            <div class="table--column column--total-price block is--align-right">
+            <div class="panel--th column--total-price block is--align-right">
                 {s name="CartColumnTotal"}{/s}
             </div>
         {/block}
 
         {* Action column *}
         {block name='frontend_checkout_cart_header_actions'}
-            <div class="table--column column--actions block">
+            <div class="panel--th column--actions block">
                 &nbsp;
             </div>
         {/block}
