@@ -13,7 +13,7 @@ INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`,
 (NULL, 0, 'showImmediateDeliveryFacet', 'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
 (NULL, 0, 'showShippingFreeFacet',      'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
 (NULL, 0, 'showPriceFacet',             'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
-(NULL, 0, 'showVoteAverageFacet',       'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL);
+(NULL, 0, 'showVoteAverageFacet',       'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
 (NULL, 0, 'defaultListingSorting',      'i:1;', '', '', '', 1, 0, 0, NULL, NULL, NULL);
 EOD;
 
