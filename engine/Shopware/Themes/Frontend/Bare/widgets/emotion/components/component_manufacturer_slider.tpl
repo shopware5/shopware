@@ -1,8 +1,3 @@
-{$dataXsConfig = '{ perPage: 1,perSlide: 1, touchControl: true }'}
-{$dataMConfig = '{ perPage: 2, perSlide: 1, touchControl: true }'}
-{$dataLConfig = '{ perPage: 4, perSlide: 1, touchControl: true }'}
-{$dataXlConfig = '{ perPage: 5, perSlide: 1, touchControl: true }'}
-
 {$rowSpan = $element.endRow - $element.startRow + 1}
 
 {block name="frontend_widgets_manufacturer_slider"}
@@ -21,7 +16,7 @@
         {block name="frontend_widgets_manufacturer_slider_content"}
             <div class="panel--body is--wide manufacturer--body">
                 {block name="frontend_widgets_manufacturer_slider_container"}
-                    <div class="product-slider" data-all="productSlider" data-xs-config="{$dataXsConfig}" data-m-config="{$dataMConfig}" data-l-config="{$dataLConfig}" data-xl-config="{$dataXlConfig}">
+                    <div class="slider--manufacturer product-slider" data-product-slider="true">
                         <div class="product-slider--container">
                             {foreach $Data.values as $supplier}
                                 {block name="frontend_widgets_manufacturer_slider_item"}

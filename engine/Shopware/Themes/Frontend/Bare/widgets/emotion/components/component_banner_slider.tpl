@@ -1,7 +1,14 @@
-{$dataAllConfig = "{ thumbnails: false, leftArrowCls: 'product-slider--arrow is--left', rightArrowCls: 'product-slider--arrow is--right', lightbox: false, animationSpeed: {$Data.banner_slider_scrollspeed}, arrowControls: {if $Data.banner_slider_arrows}true{else}false{/if}, autoSlideInterval: {$Data.banner_slider_rotatespeed}, autoSlide: {if $Data.banner_slider_rotation}true{else}false{/if} }"}
-
 {block name="frontend_widgets_banner_slider"}
-    <div class="image-slider" data-all="imageSlider" data-xs-config="{$dataAllConfig}" data-m-config="{$dataAllConfig}" data-l-config="{$dataAllConfig}" data-xl-config="{$dataAllConfig}">
+    <div class="image-slider"
+         data-image-slider="true"
+         data-thumbnails="false"
+         data-leftArrowCls="product-slider--arrow is--left"
+         data-rightArrowCls="product-slider--arrow is--right"
+         data-lightbox="false"
+         data-animationSpeed="{$Data.banner_slider_scrollspeed}"
+         data-arrowControls="{if $Data.banner_slider_arrows}true{else}false{/if}"
+         data-autoSlideInterval="{$Data.banner_slider_rotatespeed}"
+         data-autoSlide="{if $Data.banner_slider_rotation}true{else}false{/if}">
 
         {if $Data.banner_slider_title}
             <div class="image-slider--title">{$Data.banner_slider_title}</div>

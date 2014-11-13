@@ -28,6 +28,10 @@
 
             me.productSlider = me.$list.data('plugin_productSlider');
 
+            if (!me.productSlider) {
+                return;
+            }
+
             me.storage = StorageManager.getLocalStorage();
 
             if ($('body').hasClass('is--ctl-detail')) {

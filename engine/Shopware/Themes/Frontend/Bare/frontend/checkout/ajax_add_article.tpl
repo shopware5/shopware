@@ -108,7 +108,7 @@
 
                             {* Cross selling product slider *}
                             {block name='checkout_ajax_add_cross_slider'}
-                                <div class="product-slider" data-mode="local">
+                                <div class="product-slider">
                                     <div class="product-slider--container">
 
                                         {if $sCrossBoughtToo|count < 1 && $sCrossSimilarShown}
