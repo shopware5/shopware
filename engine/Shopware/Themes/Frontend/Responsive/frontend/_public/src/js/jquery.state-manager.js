@@ -1,495 +1,1200 @@
-;(function ($, window, document, undefined) {
-    "use strict";
+/**
+ * Global state manager
+ *
+ * The state manager helps to master different behaviors for different screen sizes.
+ * It provides you with the ability to register different states that are handled
+ * by breakpoints.
+ *
+ * Those Breakpoints are defined by entering and exiting points (in pixels)
+ * based on the viewport width.
+ * By entering the breakpoint range, the enter functions of the registered
+ * listeners are called.
+ * But when the defined points are exceeded, the registered listeners exit
+ * functions will be called.
+ *
+ * That way you can register callbacks that will be called on entering / exiting the defined state.
+ *
+ * The manager provides you multiple helper methods and polyfills which help you
+ * master responsive design.
+ *
+ * @example Initialize the StateManager
+ * ```
+ *     StateManager.init([{
+ *         state: 'xs',
+ *         enter: '0em',
+ *         exit: '47.5em'
+ *      }, {
+ *         state: 'm',
+ *         enter: '47.5em',
+ *         exit: '64em'
+ *      }]);
+ * ```
+ *
+ * @example Register breakpoint listeners
+ * ```
+ *     StateManager.registerListener([{
+ *        state: 'xs',
+ *        enter: function() { console.log('onEnter'); },
+ *        exit: function() { console.log('onExit'); }
+ *     }]);
+ * ```
+ *
+ * @example Wildcard support
+ * ```
+ *     StateManager.registerListener([{
+ *         state: '*',
+ *         enter: function() { console.log('onGlobalEnter'); },
+ *         exit: function() { console.log('onGlobalExit'); }
+ *     }]);
+ * ```
+ *
+ * @example StateManager Events
+ * In this example we are adding an event listener for the 'resize' event.
+ * This event will be called independent of the original window resize event,
+ * because the resize will be compared in a requestAnimationFrame loop.
+ *
+ * ```
+ *     StateManager.on('resize', function () {
+ *         console.log('onResize');
+ *     });
+ *
+ *     StateManager.once('resize', function () {
+ *         console.log('This resize event will only be called once');
+ *     });
+ * ```
+ *
+ * @example StateManager plugin support
+ * In this example we register the plugin 'pluginName' on the element
+ * matching the '.my-selector' selector.
+ * You can also define view ports in which the plugin will be available.
+ * When switching the view ports and the configuration isn't changed for
+ * that state, only the 'update' function of the plugin will be called.
+ *
+ * ```
+ *     // The plugin will be available on all view port states.
+ *     // Uses the default configuration
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName');
+ *
+ *     // The plugin will only be available for the 'xs' state.
+ *     // Uses the default configuration.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', 'xs');
+ *
+ *     // The plugin will only be available for the 'l' and 'xl' state.
+ *     // Uses the default configuration.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', ['l', 'xl']);
+ *
+ *     // The plugin will only be available for the 'xs' and 's' state.
+ *     // For those two states, the passed config will be used.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', {
+ *         'configA': 'valueA',
+ *         'configB': 'valueB',
+ *         'configFoo': 'valueBar'
+ *     }, ['xs', 's']);
+ *
+ *     // The plugin is available on all view port states.
+ *     // We override the 'foo' config only for the 'm' state.
+ *
+ *     StateManager.addPlugin('.my-selector', 'pluginName', { 'foo': 'bar' })
+ *                .addPlugin('.my-selector', 'pluginName', { 'foo': 'baz' }, 'm');
+ * ```
+ */
+;(function ($, window, document) {
+    'use strict';
 
     /**
-     * Global state manager
-     *
-     * The state manager helps to master different behaviors for different screen sizes. It provides you with the
-     * ability to register different types, which has a enter size and exit size (either in EM or pixels values),
-     * so you can mark a range where callback methods are called.
-     *
-     * The manager provides you multiple helper methods which helps you to master responsive design. Some of the
-     * functions are created on-the-fly. If you register a new type, a new getter function will be created. Beside that
-     * the manager uses the `evtParent` to fire custom events which will can be used to terminate the entering and
-     * exiting of the type breakpoints.
-     *
-     * @example Register new types
-     * ```
-     *     StateManager.init([{
-     *         type: 'xs',
-     *         enter: '0em',
-     *         exit: '47.5em'
-     *      }, {
-     *         type: 'm',
-     *         enter: '47.5em',
-     *         exit: '64em'
-     *      }]);
-     * ```
-     *
-     * @example Register breakpoint listeners
-     * ```
-     *     StateManager.registerListener([{
-     *        type: 'xs',
-     *        enter: function() { console.log('onEnter'); },
-     *        exit: function() { console.log('onExit'); }
-     *     }]);
-     * ```
-     *
-     * @example Wildcard support
-     * ```
-     *     StateManager.registerListener([{
-     *         type: '*',
-     *         enter: function() { console.log('onGlobalEnter'); },
-     *         exit: function() { console.log('onGlobalExit'); }
-     *     }]);
-     * ```
+     * @class EventEmitter
+     * @constructor
      */
-    window.StateManager = (function () {
-        var breakPoints,
-
-        // Event observer
-            evtParent = $('body'),
-
-        // Collection for all registered listeners
-            listeners = [],
-
-        // Collection that corresponds to @{link listeners} and holds the current on / off state.
-            listenersInit = [],
-
-        // Browser specific font size, used for converting EM based values to it's corresponding pixel value.
-            defaultFontSize = 16, // todo@stp - Calculate the browser default font-size instead of using a hard-coded one
-            resizeWidth = 0,
-
-        // Caches the current and previous state.
-            prev = '',
-            curr = '',
-
-        // `matchMedia` small polyfill
-            matchMedia = window.matchMedia || window.msMatchMedia,
-
-        // `requestAnimationFrame` polyfill, which supports the Page Visiblity API
-            requestAnimationFrame = (function () {
-                return window.requestAnimationFrame    ||
-                    window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame    ||
-                    function (callback) {
-                        window.setTimeout(callback, 1000 / 60);
-                    };
-            })(),
-
-            ret;
+    function EventEmitter() {
+        var me = this;
 
         /**
-         * Returns the window width, supporting the W3C suggested implementation
-         * as well as the implementation of the Internet Explorer in standard and quirks mode.
-         *
-         * @returns {Number} Window width in pixels.
+         * @private
+         * @property _events
+         * @type {Object}
          */
-        var getWindowWidth = function () {
-            var w = 0;
+        me._events = {};
+    }
 
-            // IE condition due to the weird quirks mode
-            if (typeof window.innerWidth !== 'number') {
+    EventEmitter.prototype = {
 
-                // Handle the IE implementation *sigh*
-                if (document.documentElement.clientWidth !== 0) {
-                    // Strict mode
-                    w = document.documentElement.clientWidth;
-                } else {
-                    // Quirks mode
-                    w = document.body.clientWidth;
+        constructor: EventEmitter,
+
+        name: 'EventEmitter',
+
+        /**
+         * @public
+         * @chainable
+         * @method on
+         * @param {String} eventName
+         * @param {Function} callback
+         * @param {*} context
+         * @returns {EventEmitter}
+         */
+        on: function (eventName, callback, context) {
+            var me = this,
+                events = me._events || (me._events = {}),
+                event = events[eventName] || (events[eventName] = []);
+
+            event.push({
+                callback: callback,
+                context: context || me
+            });
+
+            return me;
+        },
+
+        /**
+         * @public
+         * @chainable
+         * @method once
+         * @param {String} eventName
+         * @param {Function} callback
+         * @param {*} context
+         * @returns {EventEmitter}
+         */
+        once: function (eventName, callback, context) {
+            var me = this,
+                once = function () {
+                    me.off(eventName, once, context);
+                    callback.apply(me, arguments);
+                };
+
+            return me.on(eventName, once, context);
+        },
+
+        /**
+         * @public
+         * @chainable
+         * @method off
+         * @param {String} eventName
+         * @param {Function} callback
+         * @param {*} context
+         * @returns {EventEmitter}
+         */
+        off: function (eventName, callback, context) {
+            var me = this,
+                events = me._events || (me._events = {}),
+                eventNames = eventName ? [eventName] : Object.keys(events),
+                eventList,
+                event,
+                name,
+                len,
+                i, j;
+
+            for (i = 0, len = eventNames.length; i < len; i++) {
+                name = eventNames[i];
+                eventList = events[name];
+
+                /**
+                 * Return instead of continue because only the one passed
+                 * event name can be wrong / not available.
+                 */
+                if (!eventList) {
+                    return me;
                 }
-            } else {
-                w = window.innerWidth;
-            }
 
-            return w;
-        };
-
-        /**
-         * Returns the window height, supporting the W3C suggested implementation
-         * as well as the implementation of the Internet Explorer in standard and quirks mode.
-         *
-         * @returns {Number} Window height in pixels.
-         */
-        var getWindowHeight = function () {
-            var h = 0;
-
-            // IE condition due to the weird quirks mode
-            if (typeof window.innerHeight !== 'number') {
-
-                // Handle the IE implementation *sigh*
-                if (document.documentElement.clientHeight !== 0) {
-                    // Strict mode
-                    h = document.documentElement.clientHeight;
-                } else {
-                    // Quirks mode
-                    h = document.body.clientHeight;
+                if (!callback && !context) {
+                    eventList.length = 0;
+                    delete events[name];
+                    continue;
                 }
-            } else {
-                h = window.innerHeight;
+
+
+                for (j = eventList.length - 1; j > 0; j--) {
+                    event = eventList[j];
+
+                    if (callback && callback === event.callback || context && context === event.context) {
+                        eventList.splice(j, 1);
+                    }
+                }
             }
 
-            return h;
-        };
+            return me;
+        },
 
         /**
-         * Self-calling method that checks the browser width and delegate
-         * if it detects a change on the width.
+         * @public
+         * @chainable
+         * @method trigger
+         * @param {String} eventName
+         * @returns {EventEmitter}
          */
-        var checkResize = function () {
-            var width = getWindowWidth();
+        trigger: function (eventName) {
+            var me = this,
+                events = me._events || (me._events = {}),
+                eventList = events[eventName],
+                event,
+                args,
+                a1, a2, a3,
+                len, i;
 
-            if (width !== resizeWidth) {
-                checkBreakpoints(width);
+            if (!eventList) {
+                return me;
             }
 
-            resizeWidth = width;
-            requestAnimationFrame(checkResize);
-        };
+            args = Array.prototype.slice.call(arguments, 1);
+            len = eventList.length;
+            i = -1;
+
+            if (args.length <= 3) {
+                a1 = args[0];
+                a2 = args[1];
+                a3 = args[2];
+            }
+
+            /**
+             * Using switch to improve the performance of listener calls
+             * .call() has a much greater performance than .apply() on
+             * many parameters.
+             */
+            switch (args.length) {
+                case 0:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context);
+                    return me;
+                case 1:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
+                    return me;
+                case 2:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
+                    return me;
+                case 3:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
+                    return me;
+                default:
+                    while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
+                    return me;
+            }
+        },
 
         /**
-         * Checks for a corresponding breakpoint against the {@link listeners} collection.
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            this.off();
+        }
+    };
+
+    /**
+     * @public
+     * @static
+     * @class StateManager
+     * @extends {EventEmitter}
+     * @type {Object}
+     */
+    window.StateManager = $.extend(Object.create(EventEmitter.prototype), {
+
+        /**
+         * Collection of all registered breakpoints
          *
-         * @param {Number} width - Window width in pixels.
+         * @private
+         * @property _breakpoints
+         * @type {Array}
          */
-        var checkBreakpoints = function (width) {
-            var foundBreakpoint = false,
-                i = 0,
-                len = breakPoints.length;
+        _breakpoints: [],
+
+        /**
+         * Collection of all registered listeners
+         *
+         * @private
+         * @property _listeners
+         * @type {Array}
+         */
+        _listeners: [],
+
+        /**
+         * Collection of all added plugin configurations
+         *
+         * @private
+         * @property _plugins
+         * @type {Object}
+         */
+        _plugins: {},
+
+        /**
+         * Current breakpoint type
+         *
+         * @private
+         * @property _currentState
+         * @type {String}
+         */
+        _currentState: '',
+
+        /**
+         * Previous breakpoint type
+         *
+         * @private
+         * @property _previousState
+         * @type {String}
+         */
+        _previousState: '',
+
+        /**
+         * Last calculated viewport width.
+         *
+         * @private
+         * @property _viewportWidth
+         * @type {Number}
+         */
+        _viewportWidth: 0,
+
+        /**
+         * Initializes the StateManager with the incoming breakpoint
+         * declaration and starts the listing of the resize of the browser window.
+         *
+         * @public
+         * @chainable
+         * @method init
+         * @param {Object|Array} breakpoints - User defined breakpoints.
+         * @returns {StateManager}
+         */
+        init: function (breakpoints) {
+            var me = this;
+
+            me._viewportWidth = me.getViewportWidth();
+
+            me.registerBreakpoint(breakpoints);
+
+            me._checkResize();
+
+            return me;
+        },
+
+        /**
+         * Adds a breakpoint to check against, after the {@link StateManager.init} was called.
+         *
+         * @public
+         * @chainable
+         * @method registerBreakpoint
+         * @param {Array|Object} breakpoint.
+         * @returns {StateManager}
+         */
+        registerBreakpoint: function (breakpoint) {
+            var me = this,
+                breakpoints = breakpoint instanceof Array ? breakpoint : Array.prototype.slice.call(arguments),
+                len = breakpoints.length,
+                i = 0;
 
             for (; i < len; i++) {
-                var activeBreakpoint = breakPoints[i];
-
-                if (width >= convertEmToPx(activeBreakpoint.enter) && width <= convertEmToPx(activeBreakpoint.exit)) {
-                    foundBreakpoint = true;
-                    break;
-                }
+                me._addBreakpoint(breakpoints[i]);
             }
 
-            if (foundBreakpoint && curr !== breakPoints[i].type) {
-                var evtName;
-
-                prev = curr;
-                curr = breakPoints[i].type;
-
-                // Fire event on the {@link evtParent}
-                if (prev && prev.length) {
-                    evtName = (prev === '*' ? 'Wildcard' : capitaliseFirstLetter(prev));
-                    evtParent.trigger('exit' + evtName);
-                }
-                evtName = (curr === '*' ? 'Wildcard' : capitaliseFirstLetter(curr));
-                evtParent.trigger('enter' + evtName);
-
-                cycleThroughBreakpointListeners();
-            } else if (!foundBreakpoint && curr !== '') {
-                curr = '';
-
-                cycleThroughBreakpointListeners();
-            }
-        };
+            return me;
+        },
 
         /**
-         * Converts EM values to it's pixel counterparts based on the {@link defaultFontSize}
-         * of the browser.
+         * Adds a breakpoint to check against, after the {@link StateManager.init} was called.
          *
-         * @param {String} val - EM value which should be converted or just pixel values
-         * @returns {String|Number} Either the incoming value, if it's not a EM value or the converted value.
+         * @private
+         * @chainable
+         * @method _addBreakpoint
+         * @param {Object} breakpoint.
          */
-        var convertEmToPx = function (val) {
-            if (val.substr(val.length - 2, 2) === 'px') {
-                return parseFloat(val.substr(0, val.length - 2));
-            }
-
-            return parseFloat(val.substr(0, val.length - 2)) * defaultFontSize;
-        };
-
-        /**
-         * Capitialize the first letter of the incoming string.
-         *
-         * @param {String} str String which should be converted.
-         * @returns {String} Converted string.
-         */
-        var capitaliseFirstLetter = function (str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        };
-
-        /**
-         * Cycles through all registered breakpoints listeners in the {@link listeners} array
-         * and determines what should be fired.
-         *
-         * The method supports the usage of wildcard characters.
-         */
-        var cycleThroughBreakpointListeners = function () {
-            var enterFnArr = [],
-                exitFnArr = [],
-                i = 0,
-                len = listeners.length;
+        _addBreakpoint: function (breakpoint) {
+            var me = this,
+                breakpoints = me._breakpoints,
+                existingBreakpoint,
+                state = breakpoint.state,
+                enter = breakpoint.enter,
+                exit = breakpoint.exit,
+                len = breakpoints.length,
+                i = 0;
 
             for (; i < len; i++) {
-                var activeListener = listeners[i],
-                    enterFn = activeListener.enter || undefined,
-                    exitFn = activeListener.exit || undefined;
+                existingBreakpoint = breakpoints[i];
 
-                // Wildcard support
-                if (activeListener.type === '*') {
-                    if (enterFn !== undefined) {
-                        enterFnArr.push(enterFn);
-                    }
+                if (existingBreakpoint.state === state) {
+                    throw new Error('Multiple breakpoints of state "' + state + '" detected.');
+                }
 
-                    if (exitFn !== undefined) {
-                        exitFnArr.push(exitFn);
-                    }
-                } else if (testForCurrentBreakpoint(activeListener.type)) {
-                    if (enterFn !== undefined && !listenersInit[i]) {
-                        enterFnArr.push(enterFn);
-                    }
-                    listenersInit[i] = true;
-                } else {
-                    if (exitFn !== undefined && listenersInit[i]) {
-                        exitFnArr.push(exitFn);
-                    }
-                    listenersInit[i] = false;
+                if (existingBreakpoint.enter <= exit && enter <= existingBreakpoint.exit) {
+                    throw new Error('Breakpoint range of state "' + state + '" overlaps state "' + existingBreakpoint.state + '".');
                 }
             }
 
-            // Create our event object
-            var evtObj = { entering: curr, exiting: prev };
+            breakpoints.push(breakpoint);
 
-            // Loop through exit function to call
-            for (var j = 0; j < exitFnArr.length; j++) {
-                fireCallback(exitFnArr[j], evtObj);
-            }
+            me._plugins[state] = {};
 
-            // ...then loop through enter functions to call
-            for (var k = 0; k < enterFnArr.length; k++) {
-                fireCallback(enterFnArr[k], evtObj);
-            }
-        };
+            me._checkBreakpoint(breakpoint, me._viewportWidth);
+
+            return me;
+        },
 
         /**
-         * Wrapper method which calls the passed function with a slighty delay
-         * to get some time for the DOM manipulation.
+         * Removes breakpoint by state and removes the generated getter method for the state.
          *
-         * @param {Function} fn - Function which should be called
-         * @param {Object} evtObj - Event object which will be passed to the function.
+         * @public
+         * @chainable
+         * @method removeBreakpoint
+         * @param {String} state State which should be removed
+         * @returns {StateManager}
          */
-        var fireCallback = function (fn, evtObj) {
-            window.setTimeout(function () {
-                fn.call(null, evtObj);
-            }, 25);
-        };
+        removeBreakpoint: function (state) {
+            var me = this,
+                breakpoints = me._breakpoints,
+                len = breakpoints.length,
+                i = 0;
 
-        /**
-         * Takes a breakpoint(s) entry from the {@link listeners} collection and
-         * tests it against the current active state / type.
-         *
-         * The method supports the wildcard as well.
-         *
-         * @param {String|Array} type Type which should be used for testing.
-         * @returns {Boolean} Truthy, if the type matches, otherwise falsy.
-         */
-        var testForCurrentBreakpoint = function (type) {
-            var ret = false;
+            if (typeof state !== 'string') {
+                return me;
+            }
 
-            // We're dealing with a mulitple breakpoint listener
-            if (type instanceof Array) {
-                if (type.join().indexOf(curr) >= 0) {
-                    ret = true;
+            for (; i < len; i++) {
+                if (state !== breakpoints[i].state) {
+                    continue;
                 }
 
-            // ...wildcard found
-            } else if (type === '*') {
-                ret = true;
+                breakpoints.splice(i, 1);
 
-            // ..just a single breakpoint listener
-            } else if (typeof type === 'string') {
-                if (type === curr) {
-                    ret = true;
+                return me._removeStatePlugins(state);
+            }
+
+            return me;
+        },
+
+        /**
+         * @protected
+         * @chainable
+         * @method _removeStatePlugins
+         * @param {String} state
+         * @returns {StateManager}
+         */
+        _removeStatePlugins: function (state) {
+            var me = this,
+                plugins = me._plugins[state],
+                selectors = Object.keys(plugins),
+                selectorLen = selectors.length,
+                pluginNames,
+                pluginLen,
+                i, j;
+
+            for (i = 0; i < selectorLen; i++) {
+                pluginNames = Object.keys(plugins[selectors[i]]);
+
+                for (j = 0, pluginLen = pluginNames.length; j < pluginLen; j++) {
+                    me.destroyPlugin(selectors[i], pluginNames[j]);
                 }
             }
 
-            return ret;
-        };
+            delete plugins[state];
+
+            return me;
+        },
 
         /**
-         * Adds a listener to the {@link listeners} collection, so they get registered. It checks
-         * as well if the newly added listener needs to be fired based on the {@link curr} state.
+         * Registers one or multiple event listeners to the StateManager,
+         * so they will be fired when the state matches the current active
+         * state..
          *
-         * @param {Object} listener Listener object which should be added.
+         * @public
+         * @chainable
+         * @method registerListener
+         * @param {Object|Array} listener
+         * @returns {StateManager}
          */
-        var registerListenerToStack = function (listener) {
-            var type = listener.type,
-                enterFn = listener.enter || undefined,
-                isCurrentBreakpoint = testForCurrentBreakpoint(type);
+        registerListener: function (listener) {
+            var me = this,
+                listenerArr = listener instanceof Array ? listener : Array.prototype.slice.call(arguments),
+                len = listenerArr.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                me._addListener(listenerArr[i]);
+            }
+
+            return me;
+        },
+
+        /**
+         * @private
+         * @chainable
+         * @method _addListener
+         * @param {Object} listener.
+         */
+        _addListener: function (listener) {
+            var me = this,
+                listeners = me._listeners,
+                enterFn = listener.enter;
 
             listeners.push(listener);
-            listenersInit.push(isCurrentBreakpoint);
 
-            if (isCurrentBreakpoint && enterFn !== undefined) {
-                enterFn.call(null, { entering: curr, exiting: prev });
+            if (listener.state === me._currentState && typeof enterFn === 'function') {
+                enterFn({
+                    'exiting': me._previousState,
+                    'entering': me._currentState
+                });
             }
-        };
 
-        ret = {
+            return me;
+        },
 
-            /**
-             * Initializes the StateManager with the incoming breakpoint
-             * declaration and starts the listing of the resize of the browser window.
-             *
-             * @param {Object|Array} userBreakPoints - User defined breakpoints.
-             */
-            init: function (userBreakPoints) {
-                breakPoints = (userBreakPoints instanceof Array) ? userBreakPoints : Array.prototype.slice.call(arguments);
+        /**
+         * @public
+         * @chainable
+         * @method addPlugin
+         * @param {String} selector
+         * @param {String} pluginName
+         * @param {Object|Array|String} config
+         * @param {Array|String} viewport
+         * @returns {StateManager}
+         */
+        addPlugin: function (selector, pluginName, config, viewport) {
+            var me = this,
+                breakpoints = me._breakpoints,
+                currentState = me._currentState,
+                len,
+                i;
 
-                // Create getter methods for the different types
-                $.each(breakPoints, function () {
-                    var type = this.type,
-                        prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
+            // If the third parameter are the viewport states
+            if (typeof config === 'string' || config instanceof Array) {
+                viewport = config;
+                config = {};
+            }
 
-                    ret['is' + prettyType] = function () {
-                        return (type === curr);
-                    };
-                });
+            if (typeof viewport === 'string') {
+                viewport = [viewport];
+            }
 
-                checkResize();
-            },
+            if (!(viewport instanceof Array)) {
+                viewport = [];
 
-            /**
-             * Adds a breakpoint to check against, after the {@link StateManger.init} was called.
-             *
-             * @param {Object|Array} breakpoint One or more breakpoints.
-             */
-            add: function (breakpoint) {
-                var breakpointArr = (breakpoint instanceof Array) ? breakpoint : Array.prototype.slice.call(arguments);
-
-                // Create getter methods for the different types
-                $.each(breakpointArr, function () {
-                    var type = this.type,
-                        prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type)),
-                        conflict = false;
-
-                    $.each(breakPoints, function (i, item) {
-                        return !(item.type === type && (conflict = true));
-                    });
-
-                    if (conflict) {
-                        throw new Error('Multiple breakpoints for the type "' + type + '" detected.');
-                    }
-
-                    ret['is' + prettyType] = function () {
-                        return (type === curr);
-                    };
-
-                    breakPoints.push(this);
-                });
-            },
-
-            /**
-             * Removes breakpoint by type and removes the generated getter method for the type.
-             *
-             * @param {String} type Type which should be removed
-             * @returns {Boolean}
-             */
-            remove: function (type) {
-                $.each(breakPoints, function (i, item) {
-                    var itemType = item.type,
-                        prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
-
-                    if (type === itemType) {
-                        breakPoints.splice(i, 1);
-                        delete ret['is' + prettyType];
-                    }
-                });
-
-                return true;
-            },
-
-            /**
-             * Registers one or multiple event listeners to the StateManager,
-             * so they will be fired when the type matches the current active
-             * state / type.
-             *
-             * @param {Object|Array} listener
-             */
-            registerListener: function (listener) {
-                var listenerArr = listener instanceof Array ? listener : Array.prototype.slice.call(arguments),
-                    len = listenerArr.length,
-                    i = 0;
-
-                for (; i < len; i++) {
-                    registerListenerToStack(listenerArr[i]);
+                for (i = 0, len = breakpoints.length; i < len; i++) {
+                    viewport.push(breakpoints[i].state);
                 }
-            },
-
-            /**
-             * Returns the current active type.
-             *
-             * @returns {String}
-             */
-            getCurrent: function () {
-                return curr;
-            },
-
-            /**
-             * Sets the event parent which should fire the state events.
-             *
-             * @param {jQuery} el jQuery object of the element which should fire the events.
-             * @returns {Boolean}
-             */
-            setEventParent: function (el) {
-                evtParent = el;
-                return true;
-            },
-
-            /**
-             * Checks if the device is currently running in portrait mode.
-             *
-             * @returns {Boolean} Truthy, if the device is in portrait mode, otherwise falsy
-             */
-            isPortraitMode: function () {
-                return matchMedia('(orientation: portrait)').matches;
-            },
-
-            /**
-             * Checks if the device is currently running in landscape mode.
-             *
-             * @returns {Boolean} Truthy, if the device is in landscape mode, otherwise falsy
-             */
-            isLandscapeMode: function () {
-                return matchMedia('(orientation: landscape)').matches;
-            },
-
-            /**
-             * Returns the viewport width.
-             *
-             * @returns {Number} The width of the viewport in pixels.
-             */
-            getViewportWidth: function () {
-                return getWindowWidth();
-            },
-
-            /**
-             * Returns the viewport height.
-             *
-             * @returns {Number} The height of the viewport in pixels.
-             */
-            getViewportHeight: function () {
-                return getWindowHeight();
-            },
-
-            /**
-             * Gets the device pixel ratio. All retina displays should return a value > 1, all standard
-             * displays like a desktop monitor will return 1.
-             *
-             * @returns {Number} The device pixel ratio.
-             */
-            getDevicePixelRatio: function () {
-                return ('devicePixelRatio' in window && window.devicePixelRatio) || 1;
             }
-        };
 
-        // Just return the public API instead of all available functions
-        return ret;
-    })();
+            for (i = 0, len = viewport.length; i < len; i++) {
+                me._addPluginOption(viewport[i], selector, pluginName, config);
+
+                if (currentState === viewport[i]) {
+                    me._initPlugin(selector, pluginName);
+                }
+            }
+
+            return me;
+        },
+
+        /**
+         * @public
+         * @chainable
+         * @method removePlugin
+         * @param {String} selector
+         * @param {String} pluginName
+         * @param {Array|String} viewport
+         * @returns {StateManager}
+         */
+        removePlugin: function (selector, pluginName, viewport) {
+            var me = this,
+                breakpoints = me._breakpoints,
+                plugins = me._plugins,
+                state,
+                sel,
+                len,
+                i;
+
+            if (typeof viewport === 'string') {
+                viewport = [viewport];
+            }
+
+            if (!(viewport instanceof Array)) {
+                viewport = [];
+
+                for (i = 0, len = breakpoints.length; i < len; i++) {
+                    viewport.push(breakpoints[i].state);
+                }
+            }
+
+            for (i = 0, len = viewport.length; i < len; i++) {
+                if (!(state = plugins[viewport[i]])) {
+                    continue;
+                }
+
+                if (!(sel = state[selector])) {
+                    continue;
+                }
+
+                delete sel[pluginName];
+            }
+
+            return me;
+        },
+
+        /**
+         * @public
+         * @chainable
+         * @method updatePlugin
+         * @param {String} selector
+         * @param {String} pluginName
+         * @returns {StateManager}
+         */
+        updatePlugin: function (selector, pluginName) {
+            var me = this,
+                state = me._currentState,
+                pluginConfigs = me._plugins[state][selector] || {},
+                pluginNames = (typeof pluginName === 'string') ? [pluginName] : Object.keys(pluginConfigs),
+                len = pluginNames.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                me._initPlugin(selector, pluginNames[i]);
+            }
+
+            return me;
+        },
+
+        /**
+         * @private
+         * @method _addPluginOption
+         * @param {String} state
+         * @param {String} selector
+         * @param {String} pluginName
+         * @param {Object} config
+         */
+        _addPluginOption: function (state, selector, pluginName, config) {
+            var me = this,
+                plugins = me._plugins,
+                selectors = plugins[state] || (plugins[state] = {}),
+                configs = selectors[selector] || (selectors[selector] = {}),
+                pluginConfig = configs[pluginName];
+
+            configs[pluginName] = $.extend(pluginConfig || {}, config);
+        },
+
+        /**
+         * @private
+         * @method _initPlugin
+         * @param {String} selector
+         * @param {String} pluginName
+         */
+        _initPlugin: function (selector, pluginName) {
+            var me = this,
+                $el = $(selector),
+                currentConfig = me._getPluginConfig(me._currentState, selector, pluginName),
+                plugin = $el.data('plugin_' + pluginName);
+
+            if (!plugin) {
+                $el[pluginName](currentConfig);
+                return;
+            }
+
+            if (JSON.stringify(currentConfig) === JSON.stringify(me._getPluginConfig(me._previousState, selector, pluginName))) {
+                plugin.update();
+                return;
+            }
+
+            me.destroyPlugin($el, pluginName);
+
+            $el[pluginName](currentConfig);
+        },
+
+        /**
+         * @private
+         * @method _getPluginConfig
+         * @param {String} state
+         * @param {String} selector
+         * @param {String} plugin
+         */
+        _getPluginConfig: function (state, selector, plugin) {
+            var selectors = this._plugins[state] || {},
+                pluginConfigs = selectors[selector] || {};
+
+            return pluginConfigs[plugin] || {};
+        },
+
+        /**
+         * @private
+         * @method _checkResize
+         */
+        _checkResize: function () {
+            var me = this,
+                width = me.getViewportWidth();
+
+            if (width !== me._viewportWidth) {
+                me.trigger('resize', width);
+                me._checkBreakpoints(width);
+            }
+
+            me._viewportWidth = width;
+
+            me.requestAnimationFrame(me._checkResize.bind(me));
+        },
+
+        /**
+         * @private
+         * @method _checkBreakpoints
+         * @param {Number} width
+         */
+        _checkBreakpoints: function (width) {
+            var me = this,
+                checkWidth = width || me.getViewportWidth(),
+                breakpoints = me._breakpoints,
+                len = breakpoints.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                me._checkBreakpoint(breakpoints[i], checkWidth);
+            }
+
+            return me;
+        },
+
+        /**
+         * @private
+         * @method _checkBreakpoint
+         * @param {Object} breakpoint
+         * @param {Number} width
+         */
+        _checkBreakpoint: function (breakpoint, width) {
+            var me = this,
+                checkWidth = width || me.getViewportWidth(),
+                enterWidth = ~~(breakpoint.enter),
+                exitWidth = ~~(breakpoint.exit),
+                state = breakpoint.state;
+
+            if (state !== me._currentState && checkWidth >= enterWidth && checkWidth <= exitWidth) {
+                me._changeBreakpoint(state);
+            }
+        },
+
+        /**
+         * @private
+         * @chainable
+         * @method _changeBreakpoint
+         * @param {String} state
+         * @returns {StateManager}
+         */
+        _changeBreakpoint: function (state) {
+            var me = this,
+                previousState = me._previousState = me._currentState,
+                currentState = me._currentState = state;
+
+            return me
+                .trigger('exitBreakpoint', previousState)
+                .trigger('changeBreakpoint', {
+                    'entering': currentState,
+                    'exiting': previousState
+                })
+                .trigger('enterBreakpoint', currentState)
+                ._switchListener(previousState, currentState)
+                ._switchPlugins(previousState, currentState);
+        },
+
+        /**
+         * @private
+         * @chainable
+         * @method _switchListener
+         * @param {String} fromState
+         * @param {String} toState
+         * @returns {StateManager}
+         */
+        _switchListener: function (fromState, toState) {
+            var me = this,
+                previousListeners = me._getBreakpointListeners(fromState),
+                currentListeners = me._getBreakpointListeners(toState),
+                eventObj = {
+                    'exiting': fromState,
+                    'entering': toState
+                },
+                callFn,
+                len,
+                i;
+
+            for (i = 0, len = previousListeners.length; i < len; i++) {
+                if (typeof (callFn = previousListeners[i].exit) === 'function') {
+                    callFn(eventObj);
+                }
+            }
+
+            for (i = 0, len = currentListeners.length; i < len; i++) {
+                if (typeof (callFn = currentListeners[i].enter) === 'function') {
+                    callFn(eventObj);
+                }
+            }
+
+            return me;
+        },
+
+        /**
+         * @private
+         * @method _getBreakpointListeners
+         * @param {String} state
+         * @returns {Array}
+         */
+        _getBreakpointListeners: function (state) {
+            var me = this,
+                listeners = me._listeners,
+                breakpointListeners = [],
+                len = listeners.length,
+                i = 0,
+                listenerType;
+
+            for (; i < len; i++) {
+                if ((listenerType = listeners[i].state) === state || listenerType === '*') {
+                    breakpointListeners.push(listeners[i]);
+                }
+            }
+
+            return breakpointListeners;
+        },
+
+        /**
+         * @private
+         * @chainable
+         * @method _switchPlugins
+         * @param {String} fromState
+         * @param {String} toState
+         * @returns {StateManager}
+         */
+        _switchPlugins: function (fromState, toState) {
+            var me = this,
+                plugins = me._plugins,
+                fromSelectors = plugins[fromState] || {},
+                fromKeys = Object.keys(fromSelectors),
+                selector,
+                oldPluginConfigs,
+                newPluginConfigs,
+                configKeys,
+                pluginName,
+                pluginConfig,
+                plugin,
+                $el,
+                toSelectors = plugins[toState] || {},
+                toKeys = Object.keys(toSelectors),
+                lenX, lenY,
+                x, y;
+
+            for (x = 0, lenX = fromKeys.length; x < lenX; x++) {
+                selector = fromKeys[x];
+                oldPluginConfigs = fromSelectors[selector];
+                $el = $(selector);
+
+                if (!oldPluginConfigs || !$el.length) {
+                    continue;
+                }
+
+                newPluginConfigs = toSelectors[selector];
+                configKeys = Object.keys(oldPluginConfigs);
+
+                for (y = 0, lenY = configKeys.length; y < lenY; y++) {
+                    pluginName = configKeys[y];
+
+                    // When no new state config is available, destroy the old plugin
+                    if (!newPluginConfigs || !(pluginConfig = newPluginConfigs[pluginName])) {
+                        me.destroyPlugin($el, pluginName);
+                        continue;
+                    }
+
+                    // If the plugin of the old state is not on the element, continue
+                    if (!(plugin = $el.data('plugin_' + pluginName))) {
+                        continue;
+                    }
+
+                    if (JSON.stringify(newPluginConfigs[pluginName]) === JSON.stringify(oldPluginConfigs[pluginName])) {
+                        plugin.update();
+                        continue;
+                    }
+
+                    me.destroyPlugin($el, pluginName);
+                }
+            }
+
+            for (x = 0, lenX = toKeys.length; x < lenX; x++) {
+                selector = toKeys[x];
+                newPluginConfigs = toSelectors[selector];
+                $el = $(selector);
+
+                if (!newPluginConfigs || !$el.length) {
+                    continue;
+                }
+
+                configKeys = Object.keys(newPluginConfigs);
+
+                for (y = 0, lenY = configKeys.length; y < lenY; y++) {
+                    pluginName = configKeys[y];
+
+                    if (!$el.data('plugin_' + pluginName)) {
+                        $el[pluginName](newPluginConfigs[pluginName]);
+                    }
+                }
+            }
+
+            return me;
+        },
+
+        /**
+         * @public
+         * @method destroyPlugin
+         * @param {String|jQuery} selector
+         * @param {String} pluginName
+         */
+        destroyPlugin: function (selector, pluginName) {
+            var $el = (typeof selector === 'string') ? $(selector) : selector,
+                name = 'plugin_' + pluginName,
+                len = $el.length,
+                i = 0,
+                $currentEl,
+                plugin;
+
+            if (!len) {
+                return;
+            }
+
+            for (; i < len; i++) {
+                $currentEl = $($el[i]);
+
+                if ((plugin = $currentEl.data(name))) {
+                    plugin.destroy();
+                    $currentEl.removeData(name);
+                }
+            }
+        },
+
+        /**
+         * Returns the current viewport width.
+         *
+         * @public
+         * @method getViewportWidth
+         * @returns {Number} The width of the viewport in pixels.
+         */
+        getViewportWidth: function () {
+            var width = window.innerWidth;
+
+            if (typeof width === 'number') {
+                return width;
+            }
+
+            return (width = document.documentElement.clientWidth) !== 0 ? width : document.body.clientWidth;
+        },
+
+        /**
+         * Returns the current viewport height.
+         *
+         * @public
+         * @method getViewportHeight
+         * @returns {Number} The height of the viewport in pixels.
+         */
+        getViewportHeight: function () {
+            var height = window.innerHeight;
+
+            if (typeof height === 'number') {
+                return height;
+            }
+
+            return (height = document.documentElement.clientHeight) !== 0 ? height : document.body.clientHeight;
+        },
+
+        /**
+         * Returns the current active state.
+         *
+         * @public
+         * @method getPrevious
+         * @returns {String} previous breakpoint state
+         */
+        getPreviousState: function () {
+            return this._previousState;
+        },
+
+        /**
+         * Returns whether or not the previous active type is the passed one.
+         *
+         * @public
+         * @method getPrevious
+         * @param {String|Array} state
+         * @returns {Boolean}
+         */
+        isPreviousState: function (state) {
+            var states = state instanceof Array ? state : Array.prototype.slice.call(arguments),
+                previousState = this._previousState,
+                len = states.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                if (previousState === states[i]) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        /**
+         * Returns the current active state.
+         *
+         * @public
+         * @method getCurrent
+         * @returns {String} current breakpoint state
+         */
+        getCurrentState: function () {
+            return this._currentState;
+        },
+
+        /**
+         * Returns whether or not the current active state is the passed one.
+         *
+         * @public
+         * @method isCurrent
+         * @param {String | Array} state
+         * @returns {Boolean}
+         */
+        isCurrentState: function (state) {
+            var states = state instanceof Array ? state : Array.prototype.slice.call(arguments),
+                currentState = this._currentState,
+                len = states.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                if (currentState === states[i]) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        /**
+         * Checks if the device is currently running in portrait mode.
+         *
+         * @public
+         * @method isPortraitMode
+         * @returns {Boolean} Whether or not the device is in portrait mode
+         */
+        isPortraitMode: function () {
+            return !!this.matchMedia('(orientation: portrait)').matches;
+        },
+
+        /**
+         * Checks if the device is currently running in landscape mode.
+         *
+         * @public
+         * @method isLandscapeMode
+         * @returns {Boolean} Whether or not the device is in landscape mode
+         */
+        isLandscapeMode: function () {
+            return !!this.matchMedia('(orientation: landscape)').matches;
+        },
+
+        /**
+         * Gets the device pixel ratio. All retina displays should return a value > 1, all standard
+         * displays like a desktop monitor will return 1.
+         *
+         * @public
+         * @method getDevicePixelRatio
+         * @returns {Number} The device pixel ratio.
+         */
+        getDevicePixelRatio: function () {
+            return window.devicePixelRatio || 1;
+        },
+
+        /**
+         * matchMedia() polyfill
+         * Test a CSS media type/query in JS.
+         * Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas, David Knight.
+         * Dual MIT/BSD license
+         *
+         * @private
+         * @method matchMedia
+         * @param {String} media
+         */
+        matchMedia: (function () {
+            // For browsers that support matchMedium api such as IE 9 and webkit
+            var styleMedia = (window.styleMedia || window.media);
+
+            // For those that don't support matchMedium
+            if (!styleMedia) {
+                var style = document.createElement('style'),
+                    script = document.getElementsByTagName('script')[0],
+                    info = null;
+
+                style.type = 'text/css';
+                style.id = 'matchmediajs-test';
+
+                script.parentNode.insertBefore(style, script);
+
+                // 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
+                info = ('getComputedStyle' in window) && window.getComputedStyle(style, null) || style.currentStyle;
+
+                styleMedia = {
+                    matchMedium: function (media) {
+                        var text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
+
+                        // 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
+                        if (style.styleSheet) {
+                            style.styleSheet.cssText = text;
+                        } else {
+                            style.textContent = text;
+                        }
+
+                        // Test if media query is true or false
+                        return info.width === '1px';
+                    }
+                };
+            }
+
+            return function (media) {
+                return {
+                    matches: styleMedia.matchMedium(media || 'all'),
+                    media: media || 'all'
+                };
+            };
+        }()),
+
+        /**
+         * requestAnimationFrame() polyfill
+         *
+         * @private
+         * @method requestAnimationFrame
+         * @param {Function} callback
+         * @returns {Number}
+         */
+        requestAnimationFrame: (function () {
+            var raf = window.requestAnimationFrame,
+                vendors = ['webkit', 'moz', 'ms', 'o'],
+                i = vendors.length,
+                lastTime = 0;
+
+            while (!raf && i) {
+                raf = window[vendors[i--] + 'RequestAnimationFrame'];
+            }
+
+            return raf || function (callback) {
+                var currTime = +(new Date()),
+                    timeToCall = Math.max(0, 16 - (currTime - lastTime)),
+                    id = window.setTimeout(function () {
+                        callback(currTime + timeToCall);
+                    }, timeToCall);
+
+                lastTime = currTime + timeToCall;
+
+                return id;
+            };
+        }()).bind(window),
+
+        /**
+         * cancelAnimationFrame() polyfill
+         *
+         * @private
+         * @method cancelAnimationFrame
+         * @param {Number} id
+         */
+        cancelAnimationFrame: (function () {
+            var caf = window.cancelAnimationFrame,
+                vendors = ['webkit', 'moz', 'ms', 'o'],
+                i = vendors.length,
+                fnName;
+
+            while (!caf && i) {
+                fnName = vendors[i--];
+                caf = window[fnName + 'CancelAnimationFrame'] || window[fnName + 'CancelRequestAnimationFrame'];
+            }
+
+            return caf || window.clearTimeout;
+        }()).bind(window)
+    });
+
 })(jQuery, window, document);

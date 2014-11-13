@@ -55,7 +55,6 @@ class Theme extends \Shopware\Components\Theme
 
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',
-        'src/js/jquery.data-initialization.js',
         'src/js/jquery.plugin-base.js',
         'src/js/jquery.state-manager.js',
         'src/js/jquery.storage-manager.js',
