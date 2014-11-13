@@ -1,6 +1,6 @@
 {namespace name="frontend/checkout/cart_item"}
 
-<div class="table--row block-group row--product{if $isLast} is--last-row{/if}">
+<div class="table--tr block-group row--product{if $isLast} is--last-row{/if}">
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
         {if $sBasketItem.additional_details.sConfigurator}
@@ -11,24 +11,31 @@
 
         {* Product information column *}
         {block name='frontend_checkout_cart_item_name'}
-            <div class="table--column column--product block">
+            <div class="column--product">
 
                 {* Product image *}
                 {block name='frontend_checkout_cart_item_image'}
-                    <div class="table--media">
-                        {if $sBasketItem.image.src.2}
-                            <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
-                                <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
-                            </a>
-                        {else}
-                            <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
-                        {/if}
+                    <div class="panel--td column--image">
+                        <div class="table--media">
+                            <div class="table--media-outer">
+                                <div class="table--media-inner">
+                                    {if $sBasketItem.image.src.2}
+                                        <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                                            <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                        </a>
+
+                                    {else}
+                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {/block}
 
                 {* Product information *}
                 {block name='frontend_checkout_cart_item_details'}
-                    <div class="table--content">
+                    <div class="panel--td table--content">
 
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
@@ -60,14 +67,14 @@
 
         {* Product quantity *}
         {block name='frontend_checkout_cart_item_quantity'}
-            <div class="table--column column--quantity block is--align-right">
+            <div class="panel--td column--quantity is--align-right">
 
-				{* Label *}
-				{block name='frontend_checkout_cart_item_quantity_label'}
-					<div class="column--label quantity--label">
-						{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
-					</div>
-				{/block}
+                {* Label *}
+                {block name='frontend_checkout_cart_item_quantity_label'}
+                    <div class="column--label quantity--label">
+                        {s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
+                    </div>
+                {/block}
 
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
                 {block name='frontend_checkout_cart_item_quantity_selection'}
@@ -86,18 +93,18 @@
             </div>
         {/block}
 
-		{* Product unit price *}
+        {* Product unit price *}
         {block name='frontend_checkout_cart_item_price'}
-            <div class="table--column column--unit-price block is--align-right">
+            <div class="panel--td column--unit-price is--align-right">
 
                 {if !$sBasketItem.modus}
-					{block name='frontend_checkout_cart_item_unit_price_label'}
-						<div class="column--label unit-price--label">
-							{s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
-						</div>
-					{/block}
+                    {block name='frontend_checkout_cart_item_unit_price_label'}
+                        <div class="column--label unit-price--label">
+                            {s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
+                        </div>
+                    {/block}
 
-					{$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
+                    {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
                 {/if}
             </div>
         {/block}
@@ -107,21 +114,21 @@
 
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_item_total_sum'}
-            <div class="table--column column--total-price block is--align-right">
-				{block name='frontend_checkout_cart_item_total_price_label'}
-					<div class="column--label total-price--label">
-						{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
-					</div>
-				{/block}
+            <div class="panel--td column--total-price is--align-right">
+                {block name='frontend_checkout_cart_item_total_price_label'}
+                    <div class="column--label total-price--label">
+                        {s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+                    </div>
+                {/block}
                 {$sBasketItem.amount|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
             </div>
         {/block}
 
         {* Remove product from basket *}
         {block name='frontend_checkout_cart_item_delete_article'}
-            <div class="table--column column--actions block">
-                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
-                	<i class="icon--cross"></i>
+            <div class="panel--td column--actions">
+                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+                    <i class="icon--cross"></i>
                 </a>
             </div>
         {/block}

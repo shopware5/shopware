@@ -1,23 +1,29 @@
 {namespace name="frontend/checkout/cart_item"}
 
-<div class="table--row block-group row--rebate{if $isLast} is--last-row{/if}">
+<div class="table--tr block-group row--rebate{if $isLast} is--last-row{/if}">
 
     {* Product information column *}
     {block name='frontend_checkout_cart_item_rebate_name'}
         <div class="table--column column--product block">
 
-			{* Badge *}
-			{block name='frontend_checkout_cart_item_rebate_badge'}
-				<div class="table--media">
-					<div class="basket--badge">
-						<i class="icon--arrow-right"></i>
-					</div>
-				</div>
-			{/block}
+            {* Badge *}
+            {block name='frontend_checkout_cart_item_rebate_badge'}
+                <div class="panel--td column--image">
+                    <div class="table--media">
+                        <div class="basket--badge">
+                            {if $sBasketItem.price >= 0}
+                                <i class="icon--arrow-right"></i>
+                            {else}
+                                <i class="icon--percent"></i>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/block}
 
             {* Product information *}
             {block name='frontend_checkout_cart_item_rebate_details'}
-                <div class="table--content">
+                <div class="panel--td table--content">
 
                     {* Product name *}
                     {block name='frontend_checkout_cart_item_rebate_details_title'}
@@ -37,11 +43,11 @@
     {* Accumulated product price *}
     {block name='frontend_checkout_cart_item_rebate_total_sum'}
         <div class="table--column column--total-price block is--align-right">
-			{block name='frontend_checkout_cart_item_rebate_total_sum_label'}
-				<div class="column--label total-price--label">
-					{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
-				</div>
-			{/block}
+            {block name='frontend_checkout_cart_item_rebate_total_sum_label'}
+                <div class="column--label total-price--label">
+                    {s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+                </div>
+            {/block}
 
             {block name='frontend_checkout_cart_item_rebate_total_sum_display'}
                 {if $sBasketItem.itemInfo}

@@ -2,7 +2,7 @@
 
 {* Tax price for normal products *}
 {block name='frontend_checkout_cart_item_tax_price'}
-    <div class="table--column column--tax-price block is--align-right">
+    <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_item_tax_label'}
             <div class="column--label tax-price--label">
                 {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
@@ -24,7 +24,7 @@
 
 {* Voucher tax price *}
 {block name='frontend_checkout_cart_item_voucher_tax_price'}
-    <div class="table--column column--tax-price block is--align-right">
+    <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_voucher_tax_label'}
             <div class="column--label tax-price--label">
                 {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
@@ -41,7 +41,7 @@
 
 {* Premium tax price *}
 {block name='frontend_checkout_cart_item_premium_tax_price'}
-    <div class="table--column column--tax-price block is--align-right">
+    <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_voucher_tax_label'}
             <div class="column--label tax-price--label">
                 {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
@@ -58,7 +58,7 @@
 
 {* Small quanitity tax price *}
 {block name='frontend_checkout_cart_item_small_quantites_tax_price'}
-    <div class="table--column column--tax-price block is--align-right">
+    <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_voucher_tax_label'}
             <div class="column--label tax-price--label">
                 {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
@@ -75,7 +75,7 @@
 
 {* Rebate tax price *}
 {block name='frontend_checkout_cart_item_rebate_tax_price'}
-    <div class="table--column column--tax-price block is--align-right">
+    <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_voucher_tax_label'}
             <div class="column--label tax-price--label">
                 {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
