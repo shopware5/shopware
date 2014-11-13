@@ -1513,8 +1513,6 @@ div#searchresults a.resultall {margin: 0 14px; width: 490px;}
 #detail #detailinfo #description a:hover {color: #e1540f !important;}
 #detail #detailinfo #description a.link:hover {text-decoration: underline !important; }
 
-#detail #detailinfo #facebook h2 {font-size: 14px; font-weight: 700; margin: 0 0 15px;} 
-
 #detail #detailinfo .similar .artbox p.price {margin-top: 10px;}
 #detail #detailinfo .similar .artbox p.price .pseudo_price {color: #990000;}
 #detail #detailinfo .similar .artbox .inner {display: inline-block; padding: 5px;}
