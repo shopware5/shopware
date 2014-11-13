@@ -195,6 +195,7 @@ class Enlight_Components_Mail extends Zend_Mail
      */
     public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
+        $this->_isHtml = true;
         $this->_plainBody = $html;
         return parent::setBodyHtml($html, $charset, $encoding);
     }
