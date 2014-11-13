@@ -86,7 +86,7 @@
 
     .add-product--button,
     .add-voucher--button {
-        .unitize-padding(11, 0);
+        .unitize-padding(5, 0);
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
         text-align: center;
@@ -147,7 +147,7 @@
                 .unitize-margin(-14, -20, 10, -20);
                 .unitize-padding(14, 20, 10, 20);
                 background: @panel-table-header-bg;
-                border-color: @border-color;
+                border-color: @panel-border;
 
                 .panel--th {
                     .unitize-padding(5, 10, 9, 10);
@@ -286,6 +286,7 @@
         // Aggregation
         .product--table .aggregation--list {
             float: right;
+            padding-right: 10.4%;
         }
 
         .main--actions .btn {
@@ -305,6 +306,10 @@
         .product--table .row--premium-product .column--image,
         .product--table .row--rebate .column--image {
             width: 13%;
+        }
+
+        .product--table .aggregation--list {
+            padding-right: 10%;
         }
     }
 }
@@ -332,6 +337,10 @@
             .row--rebate .column--tax-price {
                 margin-left: 0;
             }
+        }
+
+        .product--table .aggregation--list {
+            padding-right: 9.6%;
         }
     }
 }

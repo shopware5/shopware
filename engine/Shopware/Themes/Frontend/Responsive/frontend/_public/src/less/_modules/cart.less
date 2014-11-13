@@ -16,6 +16,22 @@
     }
 }
 
+.is--act-shippingPayment {
+    .add-product--form {
+        display: none;
+    }
+    .product--table {
+        margin-top: 0;
+
+        .panel--body {
+            .unitize-padding(20, 20);
+        }
+    }
+    .payment--method-list {
+        .unitize(10, 16, margin-top);
+    }
+}
+
 .product--table {
     .unitize(10, 16, margin-top);
 
@@ -626,7 +642,7 @@
     .dispatch--method {
         .unitize(10, 16, padding-bottom);
         .unitize(10, 16, margin-bottom);
-        border-bottom: 1px solid @border-color;
+        border-bottom: 1px solid @panel-border;
 
         &:nth-last-child(2) {
             border: 0 none;
@@ -755,8 +771,21 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .basket--info-messages {
+    .is--ctl-checkout .basket--info-messages {
         .unitize-margin(20, 0, 10, 0);
+    }
+
+    .is--act-shippingPayment {
+        .product--table .table--actions {
+            .unitize(20, 16, margin-top);
+        }
+        .payment--method-list {
+            margin-top: 0;
+        }
+
+        .basket--footer .aggregation--list {
+            .unitize(20, 16, padding-right);
+        }
     }
 
     .product--table {
@@ -965,6 +994,7 @@
         .aggregation--list,
         .table--aggregation {
             .unitize-padding(20, 20);
+            padding-right: 11%;
             border: 0 none;
             background: transparent;
             margin: 0;
@@ -1087,7 +1117,7 @@
 
         .aggregation--list {
             float: right;
-            width: 35%;
+            padding-right: 10.5%;
         }
         .table--aggregation {
             width: 45%;
@@ -1098,6 +1128,10 @@
 @media screen and (min-width: @desktopViewportWidth) {
     .is--ctl-checkout .basket--info-messages {
         .unitize-margin(45, 0, 0, 0);
+    }
+
+    .is--act-shippingPayment .product--table {
+        .unitize(25, 16, margin-top);
     }
 
     .product--table {
@@ -1145,6 +1179,10 @@
             .column--image {
                 width: 9.5%;
             }
+        }
+
+        .aggregation--list {
+            padding-right: 7.3%;
         }
     }
 }
