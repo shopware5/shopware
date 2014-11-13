@@ -247,7 +247,7 @@ class Shopware_Components_Translation
             ));
         }
         if ($type == 'article') {
-            $this->fixArticleTranslation($language, $key);
+            $this->fixArticleTranslation($language, $key, $data);
         }
     }
 
@@ -256,85 +256,66 @@ class Shopware_Components_Translation
      *
      * @param $languageId
      * @param $articleId
+     * @param $data
      */
-    protected function fixArticleTranslation($languageId, $articleId)
+    protected function fixArticleTranslation($languageId, $articleId, $data)
     {
-        $sql = "
-            SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
-            FROM s_core_multilanguage cm, s_core_translations ct
-            WHERE ct.objectlanguage=cm.isocode
-            AND ct.objecttype = 'article'
-            AND ct.objectkey = ?
-            AND ct.objectlanguage = ?
+        $sql = "SELECT id FROM s_core_shops WHERE fallback_id = ?";
+        $ids = Shopware()->Db()->fetchCol($sql, array($languageId));
 
-            UNION ALL
+        $existStmt = Shopware()->Container()->get('dbal_connection')->prepare(
+            "SELECT id
+             FROM s_core_translations
+             WHERE objectlanguage = :language"
+        );
 
-            SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
+        $insertStmt = Shopware()->Container()->get('dbal_connection')->prepare("
+          INSERT INTO `s_articles_translations` (articleID, languageID, name, keywords, description, description_long)
+          VALUE (:articleId, :languageId, :name, :keywords, :description, :descriptionLong)
+          ON DUPLICATE KEY UPDATE
+              name = VALUES(name),
+              keywords = VALUES(keywords),
+              description = VALUES(description),
+              description_long = VALUES(description_long);
+        ");
 
-            FROM s_core_multilanguage cm
+        // prepare data
+        $data = unserialize($data);
+        if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
+            $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
+        }
+        $data['txtArtikel'] = isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '';
+        $data['txtkeywords'] = ($data['txtkeywords']) ? (string) $data['txtkeywords'] : '';
+        $data['txtshortdescription'] = isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '';
+        $data['txtlangbeschreibung'] = isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '';
 
-            INNER JOIN s_core_translations ct
-            ON ct.objectlanguage=cm.fallback
-            AND ct.objecttype = 'article'
-            AND ct.objectkey = ?
-
-            LEFT JOIN s_core_translations ct2
-            ON ct2.objectlanguage = cm.isocode
-            AND ct2.objecttype = 'article'
-            AND ct2.objectkey = ct.objectkey
-
-            WHERE cm.fallback = ?
-            AND ct2.id IS NULL
-        ";
-        $translations = Shopware()->Db()->fetchAll($sql, array(
-            $articleId, $languageId,
-            $articleId, $languageId
+        // Insert s_articles_translations entry for current locale
+        $insertStmt->execute(array(
+            ':articleId' => $articleId,
+            ':languageId' => $languageId,
+            ':name' => $data['txtArtikel'],
+            ':keywords' => $data['txtkeywords'],
+            ':description' => $data['txtshortdescription'],
+            ':descriptionLong' => $data['txtlangbeschreibung']
         ));
 
-        foreach ($translations as $data) {
-            $languageId = (int) $data['languageId'];
-            $articleId = (int) $data['articleId'];
-            $data = unserialize($data['data']);
+        // Insert s_articles_translations entry for fallbacks
+        foreach($ids as $id) {
+            $existStmt->execute(array(':language' => $id));
+            $exist = $existStmt->fetch(PDO::FETCH_COLUMN);
 
-            if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
-                $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
+            if ($exist) {
+                continue;
             }
 
-            $sql = '
-                INSERT INTO `s_articles_translations` (
-                  articleID, languageID, name, keywords, description, description_long
-                ) VALUES (
-                  ?, ?, ?, ?, ?, ?
-                ) ON DUPLICATE KEY UPDATE
-                  name = VALUES(name),
-                  keywords = VALUES(keywords),
-                  description = VALUES(description),
-                  description_long = VALUES(description_long);
-            ';
-            Shopware()->Db()->query($sql, array(
-                $articleId,
-                $languageId,
-                isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '',
-                ($data['txtkeywords']) ? (string) $data['txtkeywords'] : '',
-                isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '',
-                isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '',
+            $insertStmt->execute(array(
+                ':articleId' => $articleId,
+                ':languageId' => $id,
+                ':name' => $data['txtArtikel'],
+                ':keywords' => $data['txtkeywords'],
+                ':description' => $data['txtshortdescription'],
+                ':descriptionLong' => $data['txtlangbeschreibung']
             ));
         }
-
-        $sql = "
-            DELETE at FROM s_articles_translations at
-            LEFT JOIN s_core_multilanguage cm
-            ON  cm.id=at.languageID
-            LEFT JOIN s_core_translations ct
-            ON ct.objectkey=at.articleID
-            AND ct.objectlanguage=cm.isocode
-            AND ct.objecttype='article'
-            LEFT JOIN s_core_translations ct2
-            ON ct2.objectkey=at.articleID
-            AND ct2.objectlanguage=cm.fallback
-            AND ct2.objecttype='article'
-            WHERE ct.id IS NULL AND ct2.id IS NULL
-        ";
-        Shopware()->Db()->exec($sql);
     }
 }

@@ -62,8 +62,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $article = $articleDetail->getArticle();
         if (!$article instanceof \Shopware\Models\Article\Article) {
             $this->View()->assign(array(
-               'success' => false,
-               'message' => 'article not found',
+                'success' => false,
+                'message' => 'article not found',
             ));
             return;
         }
@@ -84,10 +84,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 's_articles_prices',
                 array('price' => $price),
                 array(
-                     'pricegroup = ?'       => 'EK',
-                     'articleId = ?'        => $article->getId(),
-                     'articledetailsID = ?' => $articleDetail->getId(),
-                     '`to` LIKE ?'          => 'beliebig',
+                    'pricegroup = ?'       => 'EK',
+                    'articleId = ?'        => $article->getId(),
+                    'articledetailsID = ?' => $articleDetail->getId(),
+                    '`to` LIKE ?'          => 'beliebig',
                 )
             );
             Shopware()->Events()->notify(
@@ -141,6 +141,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 $this->removeArticleEsd($article->getId());
                 $this->removeAttributes($article->getId());
                 $this->removeArticleDetails($article);
+                $this->removeArticleTranslations($article);
                 Shopware()->Models()->remove($article);
             } else {
                 Shopware()->Models()->remove($articleDetail);
@@ -162,10 +163,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
-                ->where('prices.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+            ->where('prices.articleId = :id')
+            ->setParameter('id',$articleId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -176,10 +177,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
-                ->where('attribute.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+            ->where('attribute.articleId = :id')
+            ->setParameter('id',$articleId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -190,10 +191,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
-                ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
+            ->where('esd.articleId = :id')
+            ->setParameter('id',$articleId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -207,21 +208,38 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         foreach ($details as $detail) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->delete('Shopware\Models\Article\Image', 'image')
-                    ->where('image.articleDetailId = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+                ->where('image.articleDetailId = :id')
+                ->setParameter('id', $detail['id'])
+                ->getQuery()
+                ->execute();
 
             $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
+            $query = $this->container->get('models')->getRepository('Shopware\Models\Article\Article')
+                ->getRemoveVariantTranslationsQuery($detail['id']);
+            $query->execute();
+
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->delete('Shopware\Models\Article\Detail', 'detail')
-                    ->where('detail.id = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+                ->where('detail.id = :id')
+                ->setParameter('id', $detail['id'])
+                ->getQuery()
+                ->execute();
         }
+    }
+
+    /**
+     * @param $article \Shopware\Models\Article\Article
+     */
+    protected function removeArticleTranslations($article)
+    {
+        $query = $this->container->get('models')->getRepository('Shopware\Models\Article\Article')
+            ->getRemoveArticleTranslationsQuery($article->getId());
+        $query->execute();
+
+        $sql= "DELETE FROM s_articles_translations WHERE articleID = ?";
+        $this->container->get('dbal_connection')->executeQuery($sql, array($article->getId()));
     }
 
     public function listAction()
@@ -229,9 +247,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         if (!$this->_isAllowed('read', 'article')) {
             /** @var $namespace Enlight_Components_Snippet_Namespace */
             $this->View()->assign(array(
-                'success' => false,
-                'data' => $this->Request()->getParams(),
-                'message' => 'Insufficient permissions' )
+                    'success' => false,
+                    'data' => $this->Request()->getParams(),
+                    'message' => 'Insufficient permissions' )
             );
             return;
         }
