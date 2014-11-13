@@ -668,6 +668,12 @@ class Article extends Resource implements BatchInterface
         $query->execute();
         $query = $this->getRepository()->getRemoveESDQuery($article->getId());
         $query->execute();
+        $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
+        $query->execute();
+
+        $sql= "DELETE FROM s_articles_translations WHERE articleID = ?";
+        $this->getManager()->getConnection()->executeQuery($sql, array($article->getId()));
+
         $this->removeArticleDetails($article);
 
 
@@ -692,6 +698,9 @@ class Article extends Resource implements BatchInterface
 
             $sql = "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
+
+            $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
+            $query->execute();
 
             $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
             $query->execute();
