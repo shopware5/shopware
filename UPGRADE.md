@@ -263,6 +263,7 @@ In this document you will find a changelog of the important changes related to t
 * Block named `frontend_detail_index_also_bought_slider` is now in the `widgets/recommendation/bought.tpl` instead of `frontend/detail/index.tpl`
 * Moved `engine/core/class/*` to `engine/Shopware/Core/*
 * Renamed `ENV` to `SHOPWARE_ENV` to avoid accidentally set `ENV` variable, please update your .htaccess if you use a custom envirenment or you are using the staging plugin
+* Removed Facebook Plugin from core (`Shopware_Plugins_Frontend_Facebook_Bootstrap`). Will be released as plugin on Github.
 
 ## 4.3.1
 
