@@ -1513,7 +1513,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     'mail' => $mail,
                     'data' => array(
                         'error' => false,
-                        'content' => $mail->getPlainBodyText(),
+                        'content' => $mail->__get('Body'),
                         'subject' => $mail->getPlainSubject(),
                         'to' => implode(', ', $mail->getTo()),
                         'fromMail' => $mail->getFrom(),
