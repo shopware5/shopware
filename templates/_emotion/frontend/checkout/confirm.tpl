@@ -372,6 +372,55 @@
                     <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
                 </div>
                 {/block}
+
+                {block name="frontend_index_header_css_screen" append}
+                    {if $hasMixedArticles}
+                        <link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/mixed.css'}" />
+                    {else}
+                        <link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/confirm.css'}" />
+                    {/if}
+                {/block}
+
+                {block name='frontend_checkout_confirm_service_esd'}
+                {if $hasServiceArticles}
+                    {block name='frontend_checkout_confirm_service'}
+                    <div class="agb_accept service_article">
+
+                        {* Service checkbox *}
+                        {block name='frontend_checkout_confirm_service_checkbox'}
+                        <input type="checkbox" class="left" name="serviceAgreementChecked" id="serviceAgreementChecked" {if $serviceAgreementChecked} checked="checked"{/if} />
+                        {/block}
+
+                        {* Service label *}
+                        {block name='frontend_checkout_confirm_service_label'}
+                        <label for="serviceAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.serviceError} instyle_error{/if}">
+                            {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_service_message"}Ja, bitte beginnen Sie sofort mit der Dienstleistung. Mein Widerrufsrecht erlischt mit vollständiger Ausführung.{/s}
+                        </label>
+                        {/block}
+                    </div>
+                    {/block}
+                {/if}
+
+                {if $hasEsdArticles}
+                    {block name='frontend_checkout_confirm_esd'}
+                    <div class="agb_accept esd_article"{if $hasServiceArticles} style="top: 90px !important;"{/if}>
+
+                        {* ESD checkbox *}
+                        {block name='frontend_checkout_confirm_esd_checkbox'}
+                        <input type="checkbox" class="left" name="esdAgreementChecked" id="esdAgreementChecked"{if $esdAgreementChecked} checked="checked"{/if} />
+                        {/block}
+
+                        {* ESD label *}
+                        {block name='frontend_checkout_confirm_esd_label'}
+                        <label for="esdAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.esdError} instyle_error{/if}">
+                            {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_esd_message"}Ja, ich möchte sofort Zugang zu dem digitalen Inhalt und weiß, dass mein Widerrufsrecht mit dem Zugang erlischt.{/s}
+                        </label>
+                        {/block}
+                    </div>
+                    {/block}
+                {/if}
+                {/block}
+
                 {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
                     <div class="more_info">
                         <p>
