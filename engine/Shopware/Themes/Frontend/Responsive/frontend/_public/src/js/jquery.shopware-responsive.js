@@ -240,11 +240,9 @@ $(function () {
                 return;
             }
 
-            $cartAmount.fadeOut('fast', function () {
-                $cartAmount.html(cart.amount);
-                $cartQuantity.html(cart.quantity);
-            });
-        })
+            $cartAmount.html(cart.amount);
+            $cartQuantity.html(cart.quantity);
+        });
     }
 
     $.subscribe('plugin/addArticle/onAddArticle', cartRefresh);
