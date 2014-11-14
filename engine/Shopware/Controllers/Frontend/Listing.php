@@ -50,7 +50,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         /**@var $repository \Shopware\Models\Category\Repository*/
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
         if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
             return $this->forward('index', 'index');
@@ -70,10 +69,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                     'sArticle' => $articleId
                 );
             }
-        } elseif (
-            $defaultShopCategoryId == $categoryId
-            && !array_diff(array_keys($this->Request()->getParams()), ['controller', 'action', 'sCategory'])
-        ) {
+        } elseif ($this->isShopsBaseCategoryPage($categoryId)) {
             $location = array('controller' => 'index');
         }
         if (isset($location)) {
@@ -245,6 +241,23 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         return true;
+    }
+
+    /**
+     * Helper function used in the listing action to detect if
+     * the user is trying to open the page matching the shop's root category
+     *
+     * @param $categoryId
+     * @return bool
+     */
+    private function isShopsBaseCategoryPage($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory');
+        $queryParamsNames = array_keys($this->Request()->getParams());
+
+        return ($defaultShopCategoryId == $categoryId && !array_diff($queryParamsNames, $queryParamsWhiteList));
     }
 
     /**
