@@ -35,7 +35,7 @@
 		{* Newsletter content *}
 		{block name="frontend_newsletter_content"}
 			{if $voteConfirmed == false || $sStatus.code == 0}
-			<div class="newsletter--form panel has--border" data-newsletter="true">
+			<div class="newsletter--form panel has--border is--rounded" data-newsletter="true">
 
 				{* Newsletter headline *}
 				{block name="frontend_newsletter_content_headline"}

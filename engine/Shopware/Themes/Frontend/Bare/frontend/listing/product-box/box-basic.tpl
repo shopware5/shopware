@@ -6,7 +6,7 @@
          {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 
         {block name="frontend_listing_box_article_content"}
-            <div class="box--content">
+            <div class="box--content is--rounded">
 
                 {* Product box badges - highlight, newcomer, ESD product and discount *}
                 {block name='frontend_listing_box_article_badges'}

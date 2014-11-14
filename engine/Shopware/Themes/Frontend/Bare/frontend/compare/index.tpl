@@ -3,7 +3,7 @@
         <i class="icon--compare"></i> {s name="CompareInfoCount"}{/s}<span class="badge">{$sComparisons|@count}</span>
     {/block}
     {block name='frontend_compare_product_list_dropdown'}
-        <ul class="compare--list" data-product-compare-menu="true" role="menu">
+        <ul class="compare--list is--rounded" data-product-compare-menu="true" role="menu">
             {foreach $sComparisons as $compare}
                 {block name='frontend_compare_product_dropdown_entry'}
                 <li class="service--entry" role="menuitem">

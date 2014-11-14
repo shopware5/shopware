@@ -62,7 +62,7 @@
 
 		{* Finish teaser message *}
 		{block name='frontend_checkout_finish_teaser'}
-			<div class="finish--teaser panel has--border">
+			<div class="finish--teaser panel has--border is--rounded">
 
 				{block name='frontend_checkout_finish_teaser_title'}
 					<h2 class="panel--title teaser--title is--align-center">{s name="FinishHeaderThankYou"}{/s} {$sShopname}!</h2>
@@ -104,7 +104,7 @@
 			<div class="finish--info">
 
 				{block name='frontend_checkout_finish_billing_address'}
-					<div class="finish--billing block panel has--border">
+					<div class="finish--billing block panel has--border is--rounded">
 
 						{block name='frontend_checkout_finish_billing_address_title'}
 							<h2 class="panel--title is--underline">{s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm_left"}{/s}</h2>
@@ -136,7 +136,7 @@
 				{/block}
 
 				{block name='frontend_checkout_finish_shipping_address'}
-					<div class="finish--shipping block panel has--border">
+					<div class="finish--shipping block panel has--border is--rounded">
 
 						{block name='frontend_checkout_finish_shipping_address_title'}
 							<h2 class="panel--title is--underline">{s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm_left"}{/s}</h2>
@@ -168,7 +168,7 @@
 				{/block}
 
 				{block name='frontend_checkout_finish_details'}
-					<div class="finish--details block panel has--border">
+					<div class="finish--details block panel has--border is--rounded">
 
 						{* @deprecated block *}
 						{block name='frontend_checkout_finish_header_items'}
@@ -217,7 +217,7 @@
 		{block name='frontend_checkout_finish_items'}
 			<div class="finish--table product--table">
 				<div class="panel has--border">
-					<div class="panel--body">
+					<div class="panel--body is--rounded">
 
 						{* Table header *}
 						{block name='frontend_checkout_finish_table_header'}

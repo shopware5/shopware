@@ -17,7 +17,7 @@
 		{/block}
 
 		{block name="frontend_account_billing_content"}
-			<div class="panel has--border">
+			<div class="panel has--border is--rounded">
 
 				{* Error messages *}
 				{block name="frontend_account_error_messages"}

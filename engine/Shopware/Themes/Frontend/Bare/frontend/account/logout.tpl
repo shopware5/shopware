@@ -11,7 +11,7 @@
 	<div class="content account--content is--wide">
 
 		{block name="frontend_account_logout_info"}
-			<div class="account--welcome panel has--border">
+			<div class="account--welcome panel has--border is--rounded">
 
 				{block name="frontend_account_logout_info_headline"}
 					<h1 class="panel--title">{s name="AccountLogoutHeader"}{/s}</h1>

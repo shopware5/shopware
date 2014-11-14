@@ -379,7 +379,7 @@
     {block name='frontend_checkout_confirm_product_table'}
         <div class="product--table">
             <div class="panel has--border">
-                <div class="panel--body">
+                <div class="panel--body is--rounded">
 
                     {* Product table header *}
                     {block name='frontend_checkout_confirm_confirm_head'}

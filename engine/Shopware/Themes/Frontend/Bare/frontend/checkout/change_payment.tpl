@@ -1,4 +1,4 @@
-<div class="payment--method-list panel has--border block">
+<div class="payment--method-list panel has--border is--rounded block">
 
 	{block name='frontend_checkout_payment_headline'}
 		<h3 class="payment--method-headline panel--title is--underline">{s namespace='frontend/checkout/shipping_payment' name='ChangePaymentTitle'}{/s}</h3>

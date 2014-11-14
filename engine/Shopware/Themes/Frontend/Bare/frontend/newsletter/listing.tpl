@@ -16,7 +16,7 @@
 
 				{* Newsletter listing table *}
 				{block name="frontend_newsletter_listing_table"}
-					<div class="newsletter-listing--table panel has--border">
+					<div class="newsletter-listing--table panel has--border is--rounded">
 
 						{* Newsletter table header *}
 						{block name="frontend_newsletter_listing_table_headline"}

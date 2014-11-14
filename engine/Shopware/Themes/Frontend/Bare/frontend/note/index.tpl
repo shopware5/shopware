@@ -18,7 +18,7 @@
 
 		{* Infotext *}
 		{block name="frontend_note_index_welcome"}
-			<div class="account--welcome panel has--border">
+			<div class="account--welcome panel has--border is--rounded">
 				{block name="frontend_note_index_welcome_headline"}
 					<h1 class="panel--title">{s name="NoteHeadline"}{/s}</h1>
 				{/block}
@@ -36,7 +36,7 @@
 			<div class="note--overview">
 				{if $sNotes}
 					{block name="frontend_note_index_table"}
-						<div class="note--table panel--table has--border">
+						<div class="note--table panel--table has--border is--rounded">
 
 							{* Table head *}
 							{block name="frontend_note_index_table_head"}
