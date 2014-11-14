@@ -69,7 +69,7 @@
 {* Register content *}
 {block name='frontend_index_content'}
     {block name='frontend_register_index_registration'}
-        <div class="register--content panel content block has--border{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}" id="registration" data-register="true">
+        <div class="register--content panel content block has--border is--rounded{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}" id="registration" data-register="true">
 
             {block name='frontend_register_index_dealer_register'}
                 {* Included for compatibility reasons *}

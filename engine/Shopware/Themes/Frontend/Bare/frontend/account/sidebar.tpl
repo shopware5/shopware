@@ -1,5 +1,5 @@
 {if $sUserLoggedIn}
-<div class="account--menu">
+<div class="account--menu is--rounded">
 	{block name="frontend_account_menu"}
 
 		{* Sidebar navigation headline *}

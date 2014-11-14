@@ -1,7 +1,7 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
     <div data-listing-actions="true"
-         class="listing--actions{block name='frontend_listing_actions_class'}{/block}">
+         class="listing--actions is--rounded{block name='frontend_listing_actions_class'}{/block}">
 
 		{* Filter action button *}
 		{block name="frontend_listing_actions_filter"}
