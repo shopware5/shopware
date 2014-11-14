@@ -19,7 +19,7 @@ class CheckoutCart extends \Page\Emotion\CheckoutCart
             'input' => 'form.add-product--form > input.add-product--field',
             'submit' => 'form.add-product--form > button.add-product--button'
         ),
-        'removeVoucher' => 'div.table--row.row--voucher a.btn'
+        'removeVoucher' => 'div.row--voucher a.btn'
     );
 
     public $namedSelectors = array(
