@@ -290,6 +290,7 @@ In this document you will find a changelog of the important changes related to t
     * Old versions are kept for compatibility reasons, but are deprecated and will be removed
     * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
 * Removed configuration variable `deactivateNoInstock`
+* Added VRRL Plugin to Core. Service articles can be identified by article attributes. The field can be configured by general settings
 * Support text which is assigned to an checkbox element in the emotion world module will now be transformed to a box label
 * Added category selection for blog emotion widget
 * Changed default sorting of pictures in the backend's Media Manager. Newer pictures are now displayed first.
