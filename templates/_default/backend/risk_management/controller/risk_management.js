@@ -284,13 +284,13 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
 		var me = this,
 			newSelection;
 		me.panel = panel;
-		panel.riskFieldSet.show();
-		panel.exampleFieldSet.show();
 		newSelection = me.subApplication.paymentStore.data.findBy(function(item){
 			if(item.internalId == newValue) {
 				return true;
 			}
 		});
+		//By hiding the fieldset while manipulating its items, we prevent it from being rendered multiple times
+		panel.riskFieldSet.hide();
 		//Remove all container, before adding the new ones
 		panel.riskFieldSet.removeAll();
 		Ext.each(newSelection.data.getRuleSets, function(item){
@@ -317,5 +317,8 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
 		/*{if {acl_is_allowed privilege=save}}*/
 		panel.riskFieldSet.add(Ext.create('Shopware.apps.RiskManagement.view.risk_management.Container'));
 		/*{/if}*/
+		// Show the fieldsets after everything has been added
+		panel.riskFieldSet.show();
+		panel.exampleFieldSet.show();
 	}
 });
