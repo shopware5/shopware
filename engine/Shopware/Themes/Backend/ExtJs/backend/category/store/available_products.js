@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
  * Shopware Category Module - Available products store
  *
  * @category  Shopware
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{block name="backend/category/store/available_products"}
 Ext.define('Shopware.apps.Category.store.AvailableProducts', {

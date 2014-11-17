@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,9 +21,6 @@
  * our trademarks remain entirely with us.
  *
  * Shopware UI - Country Manager bootstrapper
- *
- *
- * shopware AG (c) 2012. All rights reserved.
  *
  * @link http://www.shopware.de/
  * @date 2012-02-06

@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Banner
  * @subpackage Main
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -55,7 +54,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
     deleteDialogMessage: '{s name=delete_dialog_message}There have been [0] banners selected for deletion. Are you sure you want to delete those banners?{/s}',
     /**
      * Holder property for the main panel
-     * 
+     *
      * @private
      * @null
      */
@@ -118,7 +117,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
 
     /**
      * Edit method called through the edit button
-     * 
+     *
      * @event click
      */
     onEditClick : function() {
@@ -216,7 +215,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             selection       = dataView.getSelectionModel().getSelection(),
             store           = me.subApplication.bannerStore,
             noOfElements    = selection.length;
-        
+
         Ext.MessageBox.confirm('{s name=delete_dialog_title}Delete selected banners.{/s}',
             Ext.String.format(this.deleteDialogMessage, noOfElements),
             function (response) {
@@ -288,10 +287,10 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
             params: { categoryId: categoryId }
         });
 
-/*{if {acl_is_allowed privilege=create}}*/        
+/*{if {acl_is_allowed privilege=create}}*/
         bannerBtn.setDisabled(false);
 /* {/if} */
-        
+
     },
 
     /**
@@ -309,14 +308,14 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
         var me          = this,
             deleteBtn   = me.getDeleteBannerButton(),
             editButton = me.getEditBannerButton();
-/*{if {acl_is_allowed privilege=delete}}*/      
+/*{if {acl_is_allowed privilege=delete}}*/
         deleteBtn.setDisabled((selection.length > 0) ? false : true);
 /* {/if} */
 /*{if {acl_is_allowed privilege=update}}*/
         // rule on when the edit button should be enabled.
         editButton.setDisabled((selection.length == 1) ? false : true);
 /* {/if} */
-        
+
     }
 });
 //{/block}

@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +22,7 @@
  */
 
 /**
- * Base for Shopware 4.x Widgets
+ * Base for Shopware Widgets
  *
  * This file contains a basic class for all widgets in the backend. Please
  * note that this class is just a base file and does only contain base logic that applies to all widgets.

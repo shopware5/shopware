@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Theme.controller.Settings', {
 
     openSettings: function() {
         var me = this;
-        
+
         Ext.create('Shopware.apps.Theme.model.Settings').reload({
             callback: function(record) {
                 me.settingsWindow = me.getView('settings.Window').create({

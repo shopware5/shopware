@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shipping
  * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -32,7 +31,7 @@
 
 /**
  * Shopware Controller - Shipping
- * 
+ *
  * todo@all: Documentation
  */
 //{block name="backend/shipping/controller/categories_tree"}
@@ -47,7 +46,7 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
      * to display the sub-application
-     * 
+     *
      * @return void
      */
     init : function () {
@@ -62,11 +61,11 @@ Ext.define('Shopware.apps.Shipping.controller.CategoriesTree', {
         });
 
         me.callParent(arguments);
-        
+
     },
     /**
      * Detects and expand all previous selected categories
-     * 
+     *
      * @param { Shopware.apps.Shipping.view.edit.CategoriesTree } categoryPanel
      * @return void
      */

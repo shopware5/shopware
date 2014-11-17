@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Customer
  * @subpackage Detail
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -74,7 +73,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Home', {
     getItems: function() {
         var me = this,
             warning = '{s name=fieldset/main/warning}Zu jedem Menüpunkt erhalten Sie korrespondierende Informationen in unserem Wiki. Bevor Sie Einstellungen modifizieren, sollten Sie also die Hinweise in unserer Dokumentation beachten!{/s}',
-            info = '{s name=fieldset/main/information}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=link href=_blank>Performance Tipps Shopware 4</a>{/s}';
+            info = '{s name=fieldset/main/information}In diesem Bereich können Sie verschiedene Einstellungen vornehmen, die die Performance Ihrer Shopware-Installation betreffen.<br><br>Bitte beachten Sie auch unseren allgemeinen Performance-Guide unter <a target=link href=_blank>Performance Tipps Shopware 5</a>{/s}';
 
         return [
             {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -129,7 +129,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Print category urls
-     * 
+     *
      * @param integer $parentId
      * @return array
      */
@@ -156,7 +156,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Read article urls
-     * 
+     *
      * @param integer $parentId
      * @return array
      */
@@ -196,7 +196,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Reads the blog item urls
-     * 
+     *
      * @param integer $parentId
      * @return array
      */
@@ -241,7 +241,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to Read the static pages urls
-     * 
+     *
      * @return array
      */
     private function readStaticUrls()
@@ -269,7 +269,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to read all static pages of a shop from the database
-     * 
+     *
      * @param integer $shopId
      * @return array
      */
@@ -305,7 +305,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     /**
      * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
      * Returns false, if the link is not allowed
-     * 
+     *
      * @param string $link
      * @param array $userParams
      * @return bool
@@ -330,7 +330,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to read the supplier pages urls
-     * 
+     *
      * @return array
      */
     private function readSupplierUrls()
@@ -350,7 +350,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to read the landing pages urls
-     * 
+     *
      * @return array
      */
     private function readLandingPageUrls()
@@ -373,7 +373,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     /**
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
-     * 
+     *
      * @param null $from
      * @param null $to
      * @return bool

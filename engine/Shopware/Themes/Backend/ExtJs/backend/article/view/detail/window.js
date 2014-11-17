@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Article
  * @subpackage Detail
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -33,10 +32,7 @@
  * The detail window contains the definition of the base form and the element orientation within the form element.
  * The window passes the article record and the different stores to the form elements.
  *
- * shopware AG (c) 2012. All rights reserved.
- *
  * @link http://www.shopware.de/
- * @date 2012-02-20
  * @license http://www.shopware.de/license
  * @package Article
  * @subpackage Detail

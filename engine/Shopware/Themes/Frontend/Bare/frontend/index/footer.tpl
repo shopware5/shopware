@@ -26,7 +26,7 @@
 			{* Copyright *}
 			{block name="frontend_index_shopware_footer_copyright"}
 				<div class="footer--copyright">
-					{s name="IndexCopyright"}Copyright &copy; 2014 shopware AG{/s}
+					{s name="IndexCopyright"}Copyright &copy; shopware AG{/s}
 				</div>
 			{/block}
 

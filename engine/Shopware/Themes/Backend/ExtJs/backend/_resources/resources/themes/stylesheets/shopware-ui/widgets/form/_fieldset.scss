@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Fieldset
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -32,16 +31,16 @@
 	border-color: $fieldset-base-border-color;
 	font-size: $fieldset-base-font-size;
 	padding: 12px 20px;
-	
+
 	// Header
 	.#{$prefix}fieldset-header {
 		padding: 0 5px 1px;
-		
+
 		.#{$prefix}fieldset-header-text {
 			color: $fieldset-base-color;
 			font-size: $fieldset-base-font-size;
 		}
-		
+
 		.#{$prefix}tool {
 			@include border-radius(3px);
 			@include transition-property(border-color);
@@ -52,13 +51,13 @@
 			height: 19px !important;
 		}
 	}
-	
+
 	// Checkbox Header
 	.#{$prefix}fieldset-header-checkbox {
 		margin: 1px 3px 0 0;
 		line-height: 20px;
 	}
-	
+
 	// Modify the text to match the new height
 	.#{$prefix}fieldset-header-checkbox + .#{$prefix}fieldset-header-text,
 	.#{$prefix}fieldset-header .#{$prefix}tool + .#{$prefix}fieldset-header-text {

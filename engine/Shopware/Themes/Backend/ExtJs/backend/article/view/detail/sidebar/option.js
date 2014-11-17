@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Article
  * @subpackage Detail
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -333,7 +332,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
      */
     createImageContainer: function() {
         var me = this, fieldset;
-        
+
         fieldset = Ext.create('Ext.form.FieldSet', {
             layout: 'anchor',
             title: me.snippets.imageUpload
@@ -360,7 +359,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
                 cls: 'small secondary'
             }
         });
-        
+
         if(Ext.isIE || Ext.isSafari) {
 	    	var form = Ext.create('Ext.form.Panel', {
 	    		unstyled: true,
@@ -373,13 +372,13 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
 	    	});
 	    	me.uploadField = form;
         }
-        
+
 	    fieldset.add(me.uploadField);
-        
+
         var config = { dropZoneConfig: { height: 85, hideOnLegacy: true, showInput: false } };
         me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', config);
         me.dropZone.mediaDropZone.height = 60;
-   
+
         fieldset.add(me.dropZone);
         return fieldset;
     }

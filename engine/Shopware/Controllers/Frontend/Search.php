@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -88,7 +88,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $criteria = $this->get('events')->filter('Shopware_Search_Create_Criteria', $criteria, array(
             'context' => $context
         ));
-        
+
         /**@var $result ProductSearchResult*/
         $result   = $this->get('product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);

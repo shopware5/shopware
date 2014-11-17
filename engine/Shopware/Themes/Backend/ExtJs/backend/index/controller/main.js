@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -436,7 +436,7 @@ createShopwareVersionMessage = function() {
             xtype: 'container',
             region: 'south',
             cls: Ext.baseCSSPrefix + 'about-shopware-footer',
-            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; 2013 shopware AG. All rights reserved.{/s}</a>'
+            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; shopware AG. All rights reserved.{/s}</a>'
         }, {
             xtype: 'container',
             region: 'center',
@@ -450,7 +450,7 @@ createShopwareVersionMessage = function() {
                     '{if !$product}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
                     '<p><strong>{if $product == "PE"}Professional Edition {elseif $product == "EB"}Enterprise Business Edition {elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
 
-                    '<p><strong>Shopware 4 uses the following components</strong></p>' +
+                    '<p><strong>Shopware 5 uses the following components</strong></p>' +
                     '<p><strong>Enlight 2.0</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +
                     '<p><strong>Zend Framework 1.11.0dev</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Framework Foundation</span></p>' +
                     '<p><strong>ExtJS 4.1.1</strong><span>GPL v3 License</span><span>&nbsp;Origin: Sencha Corp.</span></p>' +

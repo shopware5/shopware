@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright ï¿½ 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Notification
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -116,13 +115,13 @@ $default-index: 10000;
     }
 }
 
-/*	INLINE BLOCK MESSAGES	
+/*	INLINE BLOCK MESSAGES
 	-------------------------------------------- */
 .block-message {
 	@include border-radius(3px);
 	@include single-box-shadow(lighten($font-color, 20%), 0, 1px, 3px);
 	margin: 0 0 8px;
-	
+
 	/** General styles */
 	.success, .error, .notice {
 		@include border-radius(3px);
@@ -135,7 +134,7 @@ $default-index: 10000;
 		display: block;
 		text-transform: uppercase;
 	}
-	
+
 	/** Success message - green */
 	.success {
 		@include inner-border(0 1px 1px 1px, #a0c96a);
@@ -143,7 +142,7 @@ $default-index: 10000;
 		text-shadow: 0 1px 0 darken(#2e8019, 10%);
 		background: #6ca03c url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAfCAIAAACpqzA1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAP0lEQVQIW2M4/mwS07vvj5nefn3K9P//f6Z///4z/f33D0zDMEwcIgdjo6r5hywOVP/3L0LvfxgfxAaLMYDYAOPzWoX8ffy2AAAAAElFTkSuQmCC") repeat-x;
 	}
-	
+
 	/** Error message - red */
 	.error {
 		@include inner-border(0 1px 1px 1px, #ec7777);
@@ -151,7 +150,7 @@ $default-index: 10000;
 		text-shadow: 0 1px 0 darken(#bd1c1c, 10%);
 		background: #c73b3b url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAfCAIAAACpqzA1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAANElEQVQImXWLIQ4AMAjEyP1f8EfCA2YRdAaxZEE0J3q1466KUGUKEKCe/ejeP+PW9sFAmF3OhVh6K11AxQAAAABJRU5ErkJggg==") repeat-x;
 	}
-	
+
 	/** Notice message - yellow */
 	.notice {
 		@include inner-border(0 1px 1px 1px, #ecdc72);
@@ -161,7 +160,7 @@ $default-index: 10000;
 	}
 }
 
-/*	GROWL LIKE MESSAGE	
+/*	GROWL LIKE MESSAGE
 	-------------------------------------------- */
 .growl-msg {
     @include single-transition(opacity, 0.2s);
@@ -177,7 +176,7 @@ $default-index: 10000;
 		background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
 		border: 1px solid #000;
 	}
-	
+
 	.alert {
 		@include border-radius(3px);
 		@include inner-border(1px 1px 0 1px, #53585c);
@@ -188,7 +187,7 @@ $default-index: 10000;
 	}
 
     a { color: #fff; text-shadow: 0 1px 0 #000; text-decoration: underline }
-	
+
 	.title { font-weight: bold; margin: 0 0 4px }
 }
 /*	GROWL STICKY NOTIFICATION
