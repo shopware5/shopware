@@ -241,7 +241,11 @@ $(function () {
             }
 
             $cartAmount.html(cart.amount);
-            $cartQuantity.html(cart.quantity);
+            $cartQuantity.html(cart.quantity).removeClass('is--hidden');
+
+            if(cart.quantity == 0) {
+                $cartQuantity.addClass('is--hidden');
+            }
         });
     }
 
