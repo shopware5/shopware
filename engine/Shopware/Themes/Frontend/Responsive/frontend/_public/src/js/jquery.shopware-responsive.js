@@ -114,6 +114,9 @@ $(function () {
     
         // Detail page tab menus
         
+        .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
+            scrollTarget: '.tab-menu--product'
+        })
         .addPlugin('.tab-menu--product', 'tabMenu', ['s', 'm', 'l', 'xl'])
         .addPlugin('.tab-menu--crossselling', 'tabMenu', ['m', 'l', 'xl'])
         .addPlugin('.tab-menu--product .tab--container', 'offcanvasButton', {
@@ -135,6 +138,7 @@ $(function () {
     $('*[data-collapse-text="true"]').collapseText();
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
+    $('*[data-scroll="true"]').scroll();
 
     $('body').ajaxProductNavigation();
     $('*[data-emotion="true"]').emotion();
@@ -182,16 +186,21 @@ $(function () {
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if ($('.is--ctl-detail').length) {
-        var plugin = $('.additional-info--tabs').data('plugin_tabContent');
+        var tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
 
-        $('.product--rating-link').on('click', function (e) {
-            e.preventDefault();
-            plugin.changeTab(1, true);
+        $('.product--rating-link, .link--publish-comment').on('click', function (event) {
+            event.preventDefault();
+
+            tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
+
+            if (tabMenu) {
+                tabMenu.changeTab(1);
+            }
         });
 
         var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
-        if (param === 'rating') {
-            plugin.changeTab(1, false);
+        if (param === 'rating' && tabMenu) {
+            tabMenu.changeTab(1);
         }
     }
 
