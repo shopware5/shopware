@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    ProductFeed
  * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -109,7 +108,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             }
         });
     },
-    
+
     /**
      * Opens the Ext.window.window which displays
      * the Ext.form.Panel to create a new feed
@@ -294,7 +293,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         store.filter('filter', searchString);
     },
 
-    
+
     /**
      * Event listener method which will be fired when the user
      * clicks the "save"-button in the edit-window.
@@ -387,7 +386,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
 
     /**
      * Creates a Random Hash for the unique link
-     * 
+     *
      * @return string
      */
     createRandomHash:function () {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -153,7 +153,7 @@ class Payment extends ModelEntity
      * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
      */
     private $mobileInactive = false;
-    
+
     /**
      * @var string $embedIFrame
      *
@@ -574,7 +574,7 @@ class Payment extends ModelEntity
     {
         return $this->mobileInactive;
     }
-    
+
     /**
      * Sets the embed-IFrame of a payment
      *

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  */
 
 /**
- * Backend Controller for the Shopware 4 global configured stores.
+ * Backend Controller for the Shopware global configured stores.
  *
  * The following stores are configured global:
  *  - Article
@@ -651,7 +651,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
             $result[] = $data;
         }
-        
+
         $this->View()->assign(array('success' => true, 'data' => $result));
     }
 

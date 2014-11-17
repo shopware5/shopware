@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Forms
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -97,10 +96,10 @@ td.#{$prefix}form-item-body {
 		padding: 2px 6px;
 		font-size: 11px;
 		height: 24px;
-		
+
 		/** Styling the empty text */
 		&::-webkit-input-placeholder { color: lighten($font-color, 35%) }
-		&:-moz-placeholder { color: lighten($font-color, 35%) }			
+		&:-moz-placeholder { color: lighten($font-color, 35%) }
 	}
 	textarea.#{$prefix}form-field {
 		height: auto;

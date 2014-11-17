@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Category
  * @subpackage Settings
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -44,17 +43,17 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
     extend:'Ext.form.Panel',
     /**
      * Register the alias for this class.
-     * @string 
+     * @string
      */
     alias:'widget.category-category-tabs-restriction',
 
     cls: 'shopware-form',
 
     /**
-     * Specifies the border for this component. The border can be a single numeric 
-     * value to apply to all sides or it can be a CSS style specification for each 
+     * Specifies the border for this component. The border can be a single numeric
+     * value to apply to all sides or it can be a CSS style specification for each
      * style, for example: '10 5 3 10'.
-     * 
+     *
      * Default: 0
      * @integer
      */
@@ -71,7 +70,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
     autoScroll: true,
     /**
      * used layout column
-     * 
+     *
      * @string
      */
     layout: 'fit',
@@ -98,7 +97,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.restriction', {
      * Initialize the Shopware.apps.Category.view.category.tabs.restriction and defines the necessary
      * default configuration
      */
-    initComponent:function () 
+    initComponent:function ()
     {
         var me = this;
         me.items = me.getItems();

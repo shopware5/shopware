@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     var me = this,
                         snippets = {
                             'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}',
-                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}'
+                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 5{/s}'
                         };
 
                     if(values.length <= 0) {

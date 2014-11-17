@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Toolbar
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -208,7 +207,7 @@
        @include border-radius(16px);
        position: relative;
        top: 8px !important;
-       
+
        table {
            margin: -1px !important;
        }
@@ -279,7 +278,7 @@
     -moz-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
     -ms-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
     box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
-	
+
 	.arrow-top {
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHBAMAAADDgsFQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFDXLc////DXLcILL8IbX/Jrf/K7j/MLr/M7v/QrLU/gAAAAJ0Uk5TAAB2k804AAAALklEQVQI12MQFFRiFGQQFOpQAJLqaUWMDEJpaWkKDKouLi5BDM7GxsYmDMYgAACCmAb6OwoFKwAAAABJRU5ErkJggg==") no-repeat;
 		display: block;
@@ -287,7 +286,7 @@
 		top: -5px; left: 16px;
 		width: 10px; height: 7px;
 	}
-	
+
 	.header {
         @include border-radius(3px 3px 0 0);
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
@@ -300,37 +299,37 @@
 		font-weight: bold;
 		line-height: 33px;
 		text-shadow: 1px 1px 0 #1774d8;
-		
+
 		.inner {
 			padding: 0 0 0 40px;
 		}
 	}
-	
+
 	.articles .header {
         .inner {
 			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAWlBMVEUAAAASXqARXZ8QZq8cfcgfgMg3tP8fgsw3s/8hhdA3s/83tP8VcLo3s/84tP8Oa7sNa7oOa7oObLs3s/8RXp8RXZ84tP8QZq8OabYSXqAPZa4PbLsRZKgTdMNFKb3LAAAAD3RSTlMA39/+gpxbnFGWTt9vVkca7skOAAAAhElEQVR4XnXIRxICMQxEUZMz3S15EuH+10Su0lCzgK+weOV3q1prFxN/ndR1NXaKq1PSSAKIo41J1sTACEkSRVKCmARAQrQkEmxiSCLFSDDMZAAJmPAlInFBBkr0VpIII3kdHpvtTCBF7oaX75NAMDo8/Viyt9Ds5Ocyd+m9791v9/KvD2A2DAj9SM9sAAAAAElFTkSuQmCC") no-repeat 14px 7px;
 		}
 	}
-	
+
 	.customers .header .inner {
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACAUlEQVQ4y2NgoAUQjJvPCMSLBGPn3wTiP4JxC24BsTvJBgnFL3QBGvQfhIXiFvwHGgZkL/gNpMVIMkiqcMs8gfSN//kyt/3ny979nz9r+3+BxOX/pYq2e0JcvIAZaGgM0JIaINsVp0HS5fuOgwwAYd7sXWDMB8TSZXtqoS5OgrsW5PLY+R7YDao8fJUvZzdYM8xAEJapOrQYJC9ZsHWPQPKq/wKpa/8LJC37L128fR5Wg7SmP9kKMogX2SAgX3feqzaw18v230CWkyrdewKrQeab/ztKN15AMUi64cJ/oLgqSF5jyoN9MG+DaLX+27twhpN8541byF5TnnDvMtyiTf/9RUqOgMWFig79N9vwNwJ7Ooqdzy+ct/sFckCLFO29BRTnAskLJK30RXaRUPo6P2DsMSLST9wCTaDiyUDBj/wpa6Gu2QUOH4GUNaAYegPEHXJVB/olqk5A5IFJQzAWHHuXgfpCQK7oBeJ/oOgUiFv4ny9jKzzqQZg/YwtEAzBxCiSt+KPUd/e+VMM5iCXANAZOBvELfjEIJS76IRC/5L9A2gagLQgvQZIB1GVZO/6DXAr02n8hoNfl264+gIUhf8Y2kAX/GfjTNyA0IKUdZO8hkgQwzLK3/NJd8G4BMCb/I2MGPqSARU7VmIZCDBTK3/sHe9rZgmoyNmyBquYlw5AAALfsmczHc7Z5AAAAAElFTkSuQmCC") no-repeat 14px 7px;
 	}
-	
+
 	.orders .header .inner {
 		background: theme-image($theme, 'icon_taskbar_top_artikel.png') no-repeat 14px 7px;
 	}
-	
+
 	.result-container {
 		border-left: 1px solid #a3adb4;
 		border-right: 1px solid #a3adb4;
 		background: #fff url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAADCAAAAAB3tjpeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADklEQVQIHWN4yvCB4QcACEcCznTUrS8AAAAASUVORK5CYII=") repeat-x left top;
-		
+
 		// Empty search result
 		.empty {
 			padding: 8px 18px;
-			color: $font-color;	
+			color: $font-color;
 		}
-		
+
 		a {
 			display: block;
 			border: 1px solid transparent;
@@ -341,11 +340,11 @@
 			font-weight: bold;
 			padding: 8px 18px;
 			position: relative;
-			
+
 			@include transition-property(all);
        		@include transition-duration(0.5s);
        		@include transition-timing-function(ease-out);
-			
+
 			// Hover style
 			&:hover {
 				border-top-color: #c3dcf0;
@@ -357,14 +356,14 @@
             .name {
                 width: 210px !important;
             }
-			
+
 			// Description
 			.desc, .right {
 				display: block;
 				font-size: 11px;
 				font-weight: normal;
 			}
-			
+
 			// Amount
 			.right {
 				position: absolute;
@@ -372,7 +371,7 @@
 				top: 8px;
 			}
 		}
-		
+
 		a:last-child {
 			border-bottom: 0 none;
 		}
@@ -502,7 +501,7 @@
 
 .#{$prefix}window > .#{$prefix}toolbar-shopware-ui-docked-bottom, .shopware-toolbar {
 	padding: 5px 8px 6px 8px;
-	
+
 	.#{$prefix}box-inner {
 		overflow: visible;
 	}

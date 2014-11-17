@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Supplier
  * @subpackage Store
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -43,7 +42,7 @@ Ext.define('Shopware.apps.Supplier.store.Supplier', {
     extend : 'Ext.data.Store',
     /**
      * Store ID for easy access to this store
-     * 
+     *
      * @string
      */
     storeId: 'supplierStore',
@@ -68,7 +67,7 @@ Ext.define('Shopware.apps.Supplier.store.Supplier', {
      * @boolean
      */
     remoteSort : true,
-        
+
     /**
      * Define the used model for this store
      * @string

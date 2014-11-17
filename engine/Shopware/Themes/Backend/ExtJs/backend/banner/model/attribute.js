@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Banner
  * @subpackage Banner
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -44,11 +43,11 @@ Ext.define('Shopware.apps.Banner.model.Attribute', {
 
     /**
      * Defined items used by that model
-     * 
+     *
      * We have to have a splitted date time object here.
      * One part is used as date and the other part is used as time - this is because
      * the form has two separate fields - one for the date and one for the time.
-     * 
+     *
      * @array
      */
     fields : [

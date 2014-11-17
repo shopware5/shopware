@@ -1,7 +1,7 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-## 4.4.0
+## 5.0.0
 
 * Merged `_default` template into the `_emotion` template
 * Removed the template directory `_default` and all it's dependencies

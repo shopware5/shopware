@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -122,7 +122,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         if ($job->get('inform_mail') === trim('{$sConfig.sMAIL}')) {
             $informMail = Shopware()->Config()->get('mail');
         }
-        
+
         $mail->addTo($informMail);
         $mail->send();
 

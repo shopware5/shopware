@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Customer
  * @subpackage Order
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -81,7 +80,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      */
     initComponent:function () {
         var me = this;
-        
+
         me.store = me.gridStore;
         me.columns = me.getColumns();
         me.toolbar = me.getToolbar();
@@ -268,7 +267,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
     },
 
     /**
-     * 
+     *
      */
     orderStatusColumn: function(value, metaData, record) {
         var me = this;

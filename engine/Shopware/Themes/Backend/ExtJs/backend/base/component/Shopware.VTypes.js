@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Base
  * @subpackage Component
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -96,7 +95,7 @@ Ext.apply(Ext.form.field.VTypes, {
     },
     /**
      * Date Range Check - Checks if an start date is not after a given end date and vice versa
-     * 
+     *
      * <code>
      *     var dateStart =  new Ext.form.DateField( {
      *       name: 'dataStart',
@@ -106,7 +105,7 @@ Ext.apply(Ext.form.field.VTypes, {
      *       vtype: 'daterange',//type here
      *       endDateField: 'dateEnd'//and end date field
      *     });
-     *     
+     *
      *     var dateEnd =  new Ext.form.DateField( {
      *       id: 'dateEnd',
      *       name: 'dateEnd',
@@ -116,11 +115,11 @@ Ext.apply(Ext.form.field.VTypes, {
      *       startDateField: 'dataStart'//start date field
      *     });
      * </code>
-     * 
+     *
      * @param val Date
      * @param field
      */
-    daterange:function(val, field) 
+    daterange:function(val, field)
     {
         var date = field.parseDate(val);
 
@@ -144,7 +143,7 @@ Ext.apply(Ext.form.field.VTypes, {
          * Always return true since we're only using this vtype to set the
          * min/max allowed values (these are tested for after the vtype test)
          */
-        return true; 
+        return true;
     },
 
     /**

@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Site
  * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -216,8 +215,8 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
                         Shopware.Notification.createGrowlMessage('','{s name=onDeleteGroupSuccess}The group has been deleted successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                     },
                     success: function(){
-                        
-                        
+
+
                     },
                     failure: function(response) {
                         //display an error message, followed by the actual error text
