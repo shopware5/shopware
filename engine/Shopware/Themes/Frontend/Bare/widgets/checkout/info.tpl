@@ -38,11 +38,7 @@
 				{/if}
 			</span>
 
-			{if $sBasketQuantity > 0}
-				<span class="badge is--primary is--minimal cart--quantity">
-					{$sBasketQuantity}
-				</span>
-			{/if}
+            <span class="badge is--primary is--minimal cart--quantity{if $sBasketQuantity < 1} is--hidden{/if}">{$sBasketQuantity}</span>
 
 			<i class="icon--basket"></i>
 
