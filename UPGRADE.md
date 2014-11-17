@@ -241,6 +241,8 @@ In this document you will find a changelog of the important changes related to t
 * Removed table columns
     * `s_core_plugins.capability_dummy`
 * Added global JavaScript StateManager Singleton to handle different states based on registered breakpoints.
+* Moved `engine/core/class/*` to `engine/Shopware/Core/*
+
 
 ## 4.3.1
 

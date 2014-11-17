@@ -60,7 +60,7 @@
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension"
         },
         "classmap": [
-            "engine/core/class/"
+            "engine/Shopware/Core/"
         ],
         "files": ["engine/Shopware/Application.php"]
     },
