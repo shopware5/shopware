@@ -1030,7 +1030,7 @@ class sOrder
      */
     private function getOrderDetailsForStatusMail($orderId)
     {
-        $orderDetails = $this->getOrderDetailsByOrderId(array('orderID' => $orderId));
+        $orderDetails = $this->getOrderDetailsByOrderId($orderId);
 
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
@@ -1052,7 +1052,7 @@ class sOrder
      */
     private function getOrderForStatusMail($orderId)
     {
-        $this->getOrderById($orderId);
+        $order = $this->getOrderById($orderId);
         $attributes = $this->getOrderAttributes($orderId);
         unset($attributes['id']);
         unset($attributes['orderID']);
