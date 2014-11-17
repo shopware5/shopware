@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,14 +23,13 @@
  * @category   Shopware
  * @package    Shipping
  * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
 /**
  * Shopware Model - Shipping
- * 
+ *
  * todo@all: Documentation
  */
 //{block name="backend/shipping/model/holiday"}
@@ -46,8 +45,8 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
      */
     fields : [
 		//{block name="backend/shipping/model/holiday/fields"}{/block}
-        { name : 'id',  type: 'integer' }, 
-        { name : 'name',type: 'string' } 
+        { name : 'id',  type: 'integer' },
+        { name : 'name',type: 'string' }
     ],
     /**
      * If the name of the field is 'id' extjs assumes autmagical that

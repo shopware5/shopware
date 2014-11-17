@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Tab
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -35,7 +34,7 @@
         svg-color-stop(#e5e6e9, 100%, 1)
     )) center center no-repeat transparent;
 	border-color: $font-color;
-	
+
 	.#{$prefix}tab-bar-body {
 		height: 33px !important;
 		padding: 9px 5px 3px;
@@ -49,11 +48,11 @@
 	.#{$prefix}box-inner {
 		height: 33px !important;
 	}
-	
+
 	.#{$prefix}tab-bar-body {
 		padding-top: 10px;
 	}
-	
+
 	.#{$prefix}tab-default-top {
 		top: 0px !important;
 	}
@@ -96,7 +95,7 @@
 		text-shadow: 0 1px 0 #8190a3;
 		margin: 0 !important; /** Fixes the alignment of the text in FF */
 	}
-	
+
 	/** Tab Styling - Hover */
 	&:hover {
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
@@ -209,4 +208,4 @@
 
 .#{$prefix}tabpanel-child .#{$prefix}panel-body-default {
 	background: transparent;
-} 
+}

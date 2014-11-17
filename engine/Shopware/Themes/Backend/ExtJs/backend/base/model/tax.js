@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Base
  * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -40,28 +39,28 @@ Ext.define('Shopware.apps.Base.model.Tax', {
      * Defines an alternate name for this class.
      */
     alternateClassName:'Shopware.model.Tax',
-    
+
     /**
      * Extends the standard ExtJS Model
      * @string
      */
     extend : 'Shopware.data.Model',
-    
+
     /**
      * unique id
      * @int
      */
     idProperty:'id',
-    
+
     /**
      * The fields used for this model
      * @array
      */
     fields : [
 		//{block name="backend/base/model/tax/fields"}{/block}
-        { name : 'id',  type: 'integer' }, 
-        { name : 'tax',type: 'float' }, 
-        { name : 'name',type: 'string' } 
+        { name : 'id',  type: 'integer' },
+        { name : 'tax',type: 'float' },
+        { name : 'name',type: 'string' }
     ]
 });
 //{/block}

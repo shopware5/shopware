@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,10 +28,7 @@
  *
  * This file holds off the upload widget.
  *
- * shopware AG (c) 2012. All rights reserved.
- *
  * @link http://www.shopware.de/
- * @date 2012-05-16
  * @license http://www.shopware.de/license
  * @package index
  * @subpackage views/widgets/Upload

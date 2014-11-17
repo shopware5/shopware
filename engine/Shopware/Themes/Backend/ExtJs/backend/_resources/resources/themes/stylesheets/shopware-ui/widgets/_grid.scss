@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright ï¿½ 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Grid
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -105,7 +104,7 @@
 
 	.#{$prefix}grid-row-over {
 		background: transparent;
-		
+
 		.#{$prefix}grid-cell {
 			background: transparent !important;
 		}
@@ -115,7 +114,7 @@
 	}
 
 
-	
+
 	// Marked rows
 	.#{$prefix}grid-row-selected {
 
@@ -185,12 +184,12 @@
 
 .#{$prefix}grid-with-row-lines {
 	border: 1px solid #A4B5C0;
-	
+
 	.#{$prefix}panel-header-default-top {
 		border: 0 none;
 		border-bottom: 1px solid #A4B5C0 !important;
 	}
-	
+
 	.#{$prefix}grid-view {
 		background: #fff;
 		margin: 0 !important;

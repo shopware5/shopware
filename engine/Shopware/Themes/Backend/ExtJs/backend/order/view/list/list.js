@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Order
  * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -638,7 +637,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             name = '',
             billing = record.getBilling(),
             comments = [];
-        
+
         if (billing instanceof Ext.data.Store && billing.first() instanceof Ext.data.Model) {
             billing = billing.first();
             if (billing.get('company').length > 0) {

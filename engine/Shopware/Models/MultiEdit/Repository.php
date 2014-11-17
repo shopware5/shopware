@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelRepository;
  *
  * @category  Shopware
  * @package   Shopware\Plugins\SwagMultiEdit\Models
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
@@ -74,7 +74,7 @@ class Repository extends ModelRepository
 
     	return $builder->getQuery();
     }
-    
+
     /**
      * Helper function to create the query builder for the "getBackupListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
@@ -89,5 +89,5 @@ class Repository extends ModelRepository
 
     	return $builder;
     }
-    
+
 }

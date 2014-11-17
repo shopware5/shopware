@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Banner
  * @subpackage Main
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -66,7 +65,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
     },
     /**
      * Returns the toolbar used to add or delete a banner
-     * 
+     *
      * @return Ext.toolbar.Toolbar
      */
     getBannerToolbar : function() {
@@ -74,7 +73,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             region: 'north',
             ui: 'shopware-ui',
             items: [
-                /*{if {acl_is_allowed privilege=create}}*/ 
+                /*{if {acl_is_allowed privilege=create}}*/
                 {
                     iconCls : 'sprite-plus-circle',
                     text : '{s name=view/main_add}Add{/s}',
@@ -82,7 +81,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
                     disabled : true
                 },
                 /* {/if} */
-                /*{if {acl_is_allowed privilege=delete}}*/ 
+                /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     iconCls : 'sprite-minus-circle',
                     text : '{s name=view/main_delete}Delete{/s}',
@@ -90,7 +89,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
                     action : 'deleteBanner'
                 },
                 /* {/if} */
-                /*{if {acl_is_allowed privilege=update}}*/ 
+                /*{if {acl_is_allowed privilege=update}}*/
                 {
                     iconCls : 'sprite-pencil',
                     text : '{s name=view/main_edit}Edit{/s}',
@@ -103,7 +102,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
     },
     /**
      * The Banner data view
-     * 
+     *
      * @return Ext.Panel
      */
     getBannerList : function() {
@@ -148,7 +147,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
     },
     /**
      * Returns the ExtJS Template for the banner display
-     * 
+     *
      * @return array of strings
      */
     getBannerListTemplate : function() {
@@ -162,11 +161,11 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
             '</tpl>',
             '<div class="x-clear"></div>'
         ];
-    }, 
+    },
 
     /**
      * Builds and returns the category tree
-     * 
+     *
      * @return Ext.tree.Panel
      */
     getCategoryTree : function() {

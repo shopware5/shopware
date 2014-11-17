@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage BoxSelect
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -32,14 +31,14 @@
 		tr[id$=inoutRow] {
 			width: 100%;
 		}
-		
+
 		table.#{$prefix}form-trigger-wrap .#{$prefix}form-trigger-input-cell {
 			width: 100%;
 		}
 	}
     .#{$prefix}boxselect {
     	width: 100%;
-    	
+
         ul.#{$prefix}boxselect-list {
             height: auto;
             cursor: text;
@@ -48,7 +47,7 @@
             overflow: auto;
             overflow-x: hidden;
         }
-        
+
         input {
             border: none;
             background: none;

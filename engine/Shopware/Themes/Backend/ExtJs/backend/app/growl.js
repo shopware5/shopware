@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    App
  * @subpackage Growl
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -56,7 +55,7 @@ Ext.define('Shopware.app.Growl', {
 
 	/**
 	 * Opens a new growl message based on the passed parameters.
-	 * 
+	 *
 	 * @param title
 	 * @param text
 	 */
@@ -126,7 +125,7 @@ Ext.define('Shopware.app.Growl', {
 	 * Close the passed growl message.
 	 *
 	 * Note that this method needs the DOM element to remove the message
-	 * 
+	 *
 	 * @param message
 	 */
 	close: function(message) {
