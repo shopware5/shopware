@@ -29,6 +29,10 @@
         width: 50%;
     }
 
+    .product--rating-link {
+        display: inline-block;
+    }
+
     .product--rating {
         .unitize(19, 16, font-size);
         .clearfix();
@@ -84,7 +88,7 @@
 
     .product--buybox {
         .unitize-margin(0, 0, 10, 0);
-        width: 80%;
+        width: 100%;
 
         .product--price {
             .unitize-margin(0, 0, 5, 0);
@@ -419,9 +423,7 @@
 
 // Product configurator
 .configurator--form {
-    .unitize-margin(16, 0, 0, 0);
     .unitize-padding(10, 0);
-    border-top: 1px solid @border-color;
 
 	.js--fancy-select {
 		.unitize-margin(0, 0, 8, 0);
@@ -478,6 +480,10 @@
         .border-radius(3px);
         border: 1px solid @panel-border;
         display: block;
+
+        &:last-child {
+            .unitize-margin(0, 0);
+        }
     }
 
     .tab--header {
@@ -491,7 +497,7 @@
     }
 
     .tab--title {
-        .unitize-padding(10, 10);
+        .unitize-padding(10, 38, 10, 10);
         position: relative;
         display: block;
 
@@ -519,9 +525,15 @@
                 .unitize(16, 16, font-size);
             }
         }
+
+        .product--buybox {
+            width: 80%;
+        }
     }
 
     .tab-menu--product {
+        .unitize-margin(0, 0, 10, 0);
+
         .tab--navigation {
             display: block;
         }
@@ -591,10 +603,6 @@
             }
         }
 
-        .content--title {
-            .unitize(25, 16, margin-bottom);
-        }
-
         .content--description,
         .content--product-reviews {
             .unitize-padding(30, 30);
@@ -648,6 +656,14 @@
             margin: 0;
             width: 50%;
             float: left
+        }
+
+        .tab--container {
+            .unitize-margin(0, 0, 0, 0);
+        }
+
+        .tab-menu--product {
+            .unitize-margin(0, 0, 30, 0);
         }
     }
 }

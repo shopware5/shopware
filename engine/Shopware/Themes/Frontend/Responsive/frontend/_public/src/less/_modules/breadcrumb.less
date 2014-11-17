@@ -6,7 +6,7 @@
     border-bottom: 1px solid @border-color;
 
     .breadcrumb--list {
-        .unitize(20, 16, padding-left);
+        .unitize(10, 16, padding-left);
         overflow: hidden;
     }
 
@@ -48,13 +48,13 @@
 
     // Button
     .breadcrumb--button {
-        .unitize-padding(10, 0, 10, 30);
+        .unitize-padding(10, 0, 10, 10);
         display: inline-block;
         float: left;
         list-style: none;
 
         .breadcrumb--title {
-            .unitize(30, 16, padding-right);
+            .unitize(20, 16, padding-right);
             border-right: 1px solid @border-color;
         }
 
@@ -79,11 +79,18 @@
 
         // Button
         .breadcrumb--button {
-            .unitize-padding(10, 50);
+            .unitize-padding(10, 30);
 
             .breadcrumb--title {
+                .unitize(0, 16, padding-right);
                 border-right: 0 none;
             }
         }
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+    .content--breadcrumb  .breadcrumb--button {
+        .unitize-padding(10, 50);
     }
 }

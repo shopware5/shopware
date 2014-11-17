@@ -10,7 +10,7 @@
 		<div class="product-slider--container">
 
 			{foreach $sCharts as $article}
-                {include file="frontend/listing/product-box/box--product-slider.tpl"}
+                {include file="frontend/listing/product-box/box-product-slider.tpl"}
 			{/foreach}
 
 		</div>
