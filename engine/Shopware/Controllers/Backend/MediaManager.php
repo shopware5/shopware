@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -106,7 +106,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     /**
      * Returns a JSON string containing all media albums.
-     * Unlike the other Shopware 4 backend controller actions, this action uses the standard method "find".
+     * Unlike the other Shopware backend controller actions, this action uses the standard method "find".
      * The "find" method provides an automatic recursive call to determine the sub-albums with them,
      * so that the sub-albums not to be loaded on demand.
      *

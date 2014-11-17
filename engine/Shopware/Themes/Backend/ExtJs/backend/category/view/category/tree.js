@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Category
  * @subpackage Main
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -33,7 +32,7 @@
 /**
  * Shopware UI - Category management main window.
  *
- * This component contains a category tree. This tree is uses to manage 
+ * This component contains a category tree. This tree is uses to manage
  * the hierarchical order of categories. Its provides methods to create, delete, rearrange categories.
  */
 //{block name="backend/category/view/category/tree"}
@@ -45,14 +44,14 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
     extend: 'Ext.tree.Panel',
     /**
      * Register the alias for this class.
-     * @string 
+     * @string
      */
     alias : 'widget.category-category-tree',
     /**
-     * True to make the panel collapsible and have an expand/collapse toggle 
-     * Tool added into the header tool button area. 
+     * True to make the panel collapsible and have an expand/collapse toggle
+     * Tool added into the header tool button area.
      * False to keep the panel sized either statically, or by an owning layout manager, with no toggle Tool.
-     * 
+     *
      * @boolean
      */
     collapsible: false,
@@ -75,7 +74,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
     useArrows: false,
     /**
      * The width of this component in pixels.
-     * @integer 
+     * @integer
      */
     width: 250,
     /**
@@ -105,16 +104,16 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         contextAddSubCategory : '{s name=view/context_add_category}Add new sub category{/s}',
         contextDeleteSubCategory : '{s name=view/context_delete_category}Delete sub category{/s}',
         contextReloadTree : '{s name=view/context_reload_tree}Reload{/s}',
-        
+
         treeAdd : '{s name=view/tree_add}Add category{/s}',
         treeDelete : '{s name=view/tree_delete}Delete category{/s}'
     },
     /**
      * Name of the root node. We have to show the root node in order to move a subcategory under the root.
-     * @string 
+     * @string
      */
     rootNodeName : 'Shopware',
-    
+
      /**
      * Initialize the controller and defines the necessary default configuration
      */
@@ -239,7 +238,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
 
     /**
      * Builds and returns the footer menu
-     * 
+     *
      * @return [array]
      */
     createMenu : function()

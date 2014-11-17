@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Supplier
  * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -58,7 +57,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Detail', {
     },
     /**
      * Creates and returns a Ext.view.View to display detail information about an supplier.
-     * 
+     *
      * @return Ext.view.View
      */
     createDataView: function() {

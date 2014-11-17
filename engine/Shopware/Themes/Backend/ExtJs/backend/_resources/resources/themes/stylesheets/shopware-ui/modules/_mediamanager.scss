@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage MediaManager
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -47,16 +46,16 @@
             border: 0 none;
             padding-bottom: 4px;
             border-bottom: 1px solid $border-color !important;
-            
+
             .#{$prefix}form-item-label {
 	            margin-top: 2px;
             }
-            
+
             /** File Upload button */
             table[id^=filefield] td.#{$prefix}form-item-body {
 	            background: transparent;
 	            padding: 0;
-	            
+
 	            td[id$="browseButtonWrap"] {
 		            border-left: 0 none;
 	            }
@@ -81,10 +80,10 @@
                 }
             }
         }
-        
+
         /** Tree panel */
         div[id^=mediamanager-album-tree] {
-        
+
         	/** Toolbar top */
 	    	.#{$prefix}toolbar {
 	        	border-bottom: 0 none !important;
@@ -97,19 +96,19 @@
 			.#{$prefix}panel-body {
 				border-bottom: 0 none;
 			}
-	        
+
 	        /** Bottom toolbar */
 	        .#{$prefix}toolbar-default-docked-bottom {
 	        	padding: 5px 0 5px;
 	        }
         }
-        
+
         /** Paging toolbar */
         .#{$prefix}toolbar-default-docked-bottom {
         	@include reset-box-shadow;
         	border-top: 1px solid $border-color !important;
         	border-bottom: 0 none !important;
-        	
+
             /** Media per page combobox */
             .#{$prefix}page-size {
                 .#{$prefix}form-text {
@@ -123,10 +122,10 @@
 			border: 0 none !important;
 		}
     }
-    
+
     /** Dataview */
     div[id^=mediamanager-media-view] .#{$prefix}panel-body .#{$prefix}component {
-    
+
     	.empty-text {
     		@include border-radius(2px);
     		@include inner-border(1px 1px 1px 1px, #f5f7f8);
@@ -136,7 +135,7 @@
     		position: absolute;
 	    	border: 1px solid lighten(#919da6, 20%);
 	    	padding: 6px;
-	    	
+
 	    	span {
 		    	display: block;
 		    	background: #f0f2f4;
@@ -148,11 +147,11 @@
 	    	}
     	}
     }
-    
+
     /** Album settings */
     div[id^=mediamanager-album-setting] .#{$prefix}toolbar-docked-bottom {
     	@include border-radius(0 0 5px 5px);
-	    border-top: 1px solid $border-color !important; 
+	    border-top: 1px solid $border-color !important;
     }
 
     /** Media selection */
@@ -160,7 +159,7 @@
         .#{$prefix}grid-body {
             border-bottom: 0 none;
         }
-        
+
         .#{$prefix}window-body-default {
             border-bottom: 1px solid $border-color !important;
         }
@@ -169,15 +168,15 @@
             @include shopware-button;
         }
     }
-    
+
     /** More information panel (on the right hand of the module) */
     .#{$prefix}more-info {
 	    border-left: 1px solid $border-color;
-	    
+
 	    .outer-media-info-pnl {
 		    border-top: 1px solid $border-color;
 	    }
-	    
+
 	    .#{$prefix}panel-header {
 		    border-left: 0 none;
 		    border-right: 0 none;
@@ -195,9 +194,9 @@
 		    border-bottom: 0 none;
 		    padding: 4px 6px;
 	    }
-	    
+
     }
-    
+
     /** Icons */
     .icon-pdf, .icon-video, .icon-music, .icon-archive, .icon-unknown {
 	    width: 70px;
@@ -208,7 +207,7 @@
 	.icon-music { background: theme-image($theme, 'media_manager_icon_music.png') no-repeat }
 	.icon-archive { background: theme-image($theme, 'media_manager_icon_archive.png') no-repeat }
 	.icon-unknown { background: theme-image($theme, 'media_manager_icon_notdetected.png') no-repeat }
-	
+
 	.thumb-wrap {
 	    width: 79px;
 	    display: block;
@@ -226,7 +225,7 @@
 	        -ms-transition: border linear 0.18s, box-shadow linear 0.18s;
 	        -o-transition: border linear 0.18s, box-shadow linear 0.18s;
 	        transition: border linear 0.18s, box-shadow linear 0.18s;
-	
+
 	        .inner-thumb {
 	            height: 72px;
 	            width: 72px;
@@ -239,12 +238,12 @@
                 }
 	        }
 	    }
-	
+
 	    .x-editable {
 	        color: #6c818f;
 	        font-size: 11px;
 	    }
-	
+
 	    // Selected mode
 	    &.#{$prefix}item-selected {
 	        .thumb {
@@ -253,20 +252,20 @@
 	        }
 	    }
 	}
-	
+
 	.thumb-wrap-tiny {
 	    width: 44px;
 	    display: block;
 	    float: left;
 	    margin: 10px;
-	
+
 	    .thumb {
 	        border: 1px solid #acbbc6;
 	        width: 44px;
 	        height: 44px;
 	        background: theme-image($theme, 'media_manager_image_bg_tiny.png') no-repeat;
 	        position: relative;
-	
+
 	        .number {
 	            @include border-radius(20px);
 	            display: block;
@@ -279,10 +278,10 @@
 	            position: absolute;
 	            top: 50%; left: 50%;
 	            margin: -10px 0 0 -10px;
-	
+
 	        }
 	    }
-	
+
 	    .x-editable {
 	        display: block;
 	        width: 44px;
@@ -290,20 +289,20 @@
 	        color: #6c818f;
 	        font-size: 11px;
 	    }
-	
+
 	}
 
 	.outer-media-info-pnl, .#{$prefix}outer-customer-info-pnl {
 	    background: #fff;
 	    padding: 10px;
-	
+
 	    .thumb {
 	        border: 1px solid #acbbc6;
 	        width: 155px;
 	        height: 155px;
 	        margin: 0 0 0 16px;
 	        background: theme-image($theme, 'media_manager_image_bg_big.png') no-repeat;
-	
+
 	        .inner-thumb {
 	            width: 155px;
 	            height: 155px;
@@ -320,46 +319,46 @@
 		.link {
 			color: #009CFF;
 		}
-	
+
 	    .icon {
 	        background: #EEF1F4;
 	        display: table-cell;
 	        vertical-align: middle;
 	        text-align: center;
-	
+
 	        div {
 	            margin: 0 auto;
 	        }
 	    }
-	
+
 	    .base-info {
 	        margin: 20px 0 0;
-	
+
 	        p {
 	            font-size: 11px;
 	            margin: 0 0 14px;
 	            position: relative;
-	
+
 	            strong { font-weight: 700; color: #475c6a; display: block; margin: 0 0 2px }
 	            span { color: #6c818f; display: block; }
 	            input { width: 100%; }
-	
+
 	            .copy-image-path {
 	                position: absolute;
 	                right: 0;
 	                color: #189eff;
-	
+
 	                &:hover { text-decoration: underline }
 	            }
 	        }
-	
+
 	    }
 	}
-	
+
 	.icon-selection {
 	    .x-form-item label {
 	        display: inline-block;
-	
+
 	        span {
 	            top: 4px;
 	            display: inline-block;

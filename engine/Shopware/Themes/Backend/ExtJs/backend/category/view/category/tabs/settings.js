@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Category
  * @subpackage Settings
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -44,7 +43,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     extend:'Ext.form.Panel',
     /**
      * Register the alias for this class.
-     * @string 
+     * @string
      */
     alias:'widget.category-category-tabs-settings',
 
@@ -55,10 +54,10 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     title:'{s name=tabs/settings_title}Settings{/s}',
     /**
-     * Specifies the border for this component. The border can be a single numeric 
-     * value to apply to all sides or it can be a CSS style specification for each 
+     * Specifies the border for this component. The border can be a single numeric
+     * value to apply to all sides or it can be a CSS style specification for each
      * style, for example: '10 5 3 10'.
-     * 
+     *
      * Default: 0
      * @integer
      */
@@ -75,7 +74,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     autoScroll: true,
     /**
      * used layout column
-     * 
+     *
      * @string
      */
     layout: 'anchor',
@@ -84,7 +83,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @integer
      */
     bodyPadding: 10,
-    
+
     /**
      * Translations
      * @object
@@ -96,7 +95,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         createSubCategoryTitle : '{s name=view/settings_create_category_title}Create sub category{/s}',
         createSubCategoryLabel : '{s name=view/settings_create_category_label}Sub category{/s}',
         createSubCategoryButton: '{s name=view/settings_create_category_button}Create sub category{/s}',
-        
+
         defaultSettingsTitleEmpty : '{s name=view/settings_default_settings_title_empty}Default settings{/s}',
         defaultSettingsTitle : '{s name=view/settings_default_settings_title}Default Settings - Category: [0] (System-ID: [1]){/s}',
 
@@ -130,7 +129,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         metaTitle : '{s name=view/settings_meta_description_title}Meta information{/s}',
         metaDescription : '{s name=view/settings_meta_description_label}Meta description{/s}',
         metaKeywords : '{s name=view/settings_meta_keywords_label}Meta keywords{/s}',
-        
+
         attribute_title : '{s name=view/settings_attribute_title}Free text fields{/s}',
         attribute1 : '{s name=view/settings_attribute1_label}Free text 1{/s}',
         attribute2 : '{s name=view/settings_attribute2_label}Free text 2{/s}',
@@ -138,7 +137,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         attribute4 : '{s name=view/settings_attribute4_label}Free text 4{/s}',
         attribute5 : '{s name=view/settings_attribute5_label}Free text 5{/s}',
         attribute6 : '{s name=view/settings_attribute6_label}Free text 6{/s}',
-        
+
         categorySave : '{s name=view/settings_save}Save category{/s}',
 
         growlMessage: '{s name=window/main_title}Category{/s}'
@@ -148,7 +147,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     /**
      * Form part containing the form for creating a new subcategory
-     * @object [Ext.form.FieldSet] 
+     * @object [Ext.form.FieldSet]
      */
     createCategory  : null,
     /**
@@ -184,20 +183,20 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Initialize the Shopware.apps.Category.view.category.tabs.Settings and defines the necessary
      * default configuration
      */
-    initComponent:function () 
+    initComponent:function ()
     {
         var me = this;
         me.items = me.getItems();
-       
+
         me.registerEvents();
         me.callParent(arguments);
     },
     /**
      * Creates all fields for the form
-     * 
+     *
      * @return array of form elements
      */
-    getItems:function () 
+    getItems:function ()
     {
         var me = this;
         me.emotionNotice        = me.createEmotionNoticeContainer();
@@ -235,7 +234,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
              *     console.log('New recored has been loaded.');
              * }
              * </code>
-             * 
+             *
              * @event recordloaded
              */
         me.addEvents('recordloaded');
@@ -255,7 +254,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
     /**
      * Builds and returns the notice section of the form.
-     * 
+     *
      * @return Ext.container.Container
      */
     getNotice : function()
@@ -269,14 +268,14 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     },
     /**
      * Builds and returns the create category section of the form.
-     * 
+     *
      * This is a way to create a new sub category. It will look at the category tree and takes the selected node as
      * parent node and adds an new node under it. After this has been done, the new node will be selected and loaded into
      * the form.
-     * 
+     *
      * @return Ext.form.FieldSet
      */
-    getCreateCategory : function() 
+    getCreateCategory : function()
     {
         var me =  this,
             addSubCategoryItems = [];
@@ -338,7 +337,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     getDefaultSettingItems:function () {
         var me = this;
-        // create the template combo box and register it in the local namespace to 
+        // create the template combo box and register it in the local namespace to
         // gain access from the outside.
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel:me.snippets.defaultSettingsTemplateLabel,
@@ -452,11 +451,11 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
     /**
      * Builds and retuns the CMS settings. A category can be set as blog article and the data can be defined here.
-     * A blog entry contains the 
+     * A blog entry contains the
      * - blog flag
      * - a headline and
      * - the text.
-     * 
+     *
      * @return Ext.form.FieldSet
      */
     getCmsSettings : function()
@@ -477,7 +476,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     fieldLabel : me.snippets.cmsTextLabel,
                     height: 100,
                     name : 'cmsText'
-                } 
+                }
             ]
         });
     },
@@ -486,10 +485,10 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Fields
      *  - Meta Descriptions
      *  - Meta Keywords
-     *  
+     *
      * @return Ext.form.FieldSet
      */
-    getMetaInfo : function() 
+    getMetaInfo : function()
     {
         var me = this;
         return Ext.create('Ext.form.FieldSet',{
@@ -505,7 +504,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     xtype : 'textfield',
                     fieldLabel : me.snippets.metaKeywords,
                     name : 'metaKeywords'
-                } 
+                }
             ]
         });
     },
@@ -513,7 +512,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     /**
      * Builds and returns the 6 free attributs each category may have.
      * Each of this six fields can store up to 255 chars.
-     * 
+     *
      * @return Ext.form.FieldSet
      */
     getAttributes : function()
@@ -547,7 +546,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 }, {
                     fieldLabel : me.snippets.attribute6,
                      name : 'attribute[attribute6]'
-                } 
+                }
             ]
         });
     },

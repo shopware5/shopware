@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Blog
  * @subpackage Tree
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -33,7 +32,7 @@
 /**
  * Shopware UI - Category management main window.
  *
- * This component contains a category tree. This tree is uses to manage 
+ * This component contains a category tree. This tree is uses to manage
  * the hierarchical order of categories. Its provides methods to create, delete, rearrange categories.
  */
 // {block name="backend/blog/view/blog/tree"}
@@ -45,14 +44,14 @@ Ext.define('Shopware.apps.Blog.view.blog.Tree', {
     extend: 'Ext.tree.Panel',
     /**
      * Register the alias for this class.
-     * @string 
+     * @string
      */
     alias : 'widget.blog-blog-tree',
     /**
-     * True to make the panel collapsible and have an expand/collapse toggle 
-     * Tool added into the header tool button area. 
+     * True to make the panel collapsible and have an expand/collapse toggle
+     * Tool added into the header tool button area.
      * False to keep the panel sized either statically, or by an owning layout manager, with no toggle Tool.
-     * 
+     *
      * @boolean
      */
     collapsible: false,
@@ -73,16 +72,16 @@ Ext.define('Shopware.apps.Blog.view.blog.Tree', {
     useArrows: false,
     /**
      * The width of this component in pixels.
-     * @integer 
+     * @integer
      */
     width: 250,
 
     /**
      * Name of the root node. We have to show the root node in order to move a subcategory under the root.
-     * @string 
+     * @string
      */
     rootNodeName : 'Shopware',
-    
+
      /**
      * Initialize the controller and defines the necessary default configuration
      */

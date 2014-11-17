@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Widgets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -141,13 +140,13 @@
 
 	/** Header */
 	.#{$prefix}panel-header {
-		@include border-radius(3px 3px 0 0);	
+		@include border-radius(3px 3px 0 0);
 		@include reset-box-shadow;
 		padding-top: 8px;
 		padding-bottom: 6px;
 		border: 0 none !important;
 		background: #fff !important;
-		
+
 		/** Header text */
 		.#{$prefix}panel-header-text {
 			padding-left: 6px;
@@ -156,14 +155,14 @@
 			font-weight: bold;
 		}
 	}
-	
+
 	/** Body */
     .#{$prefix}x-toolbar,
 	.#{$prefix}panel-body {
 		border: 0 none !important;
         background: transparent;
 	}
-	
+
 	/** Basic grid styling */
 	.#{$prefix}grid-with-row-lines {
         border: 0 none !important
@@ -191,7 +190,7 @@ div[id^=swag-sales-widget] {
 	.conversation-rate {
 		@include user-select;
 		margin: 10px 0 0;
-		
+
 		* {
 			font-size: 11px;
 			color: #8e979f;
@@ -211,7 +210,7 @@ div[id^=swag-visitors-customers-widget] {
 	.visitors-online {
 		@include user-select;
 		margin: 10px 0 0;
-		
+
 		* {
 			font-size: 11px;
 			color: #8e979f;
@@ -246,12 +245,12 @@ div[id^=swag-notice-widget] {
 		background: #fff;
 		border: 0 none;
 	}
-	
-	.#{$prefix}panel-body { 
+
+	.#{$prefix}panel-body {
 		border-bottom: 0 none;
 		background: #fff;
 	}
-	
+
 	td.#{$prefix}form-item-body {
 		background: transparent;
 		padding: 0;

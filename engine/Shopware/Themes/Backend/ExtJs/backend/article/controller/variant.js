@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Article
  * @subpackage Detail
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -579,7 +578,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         });
         newConfiguratorSet.getConfiguratorOptions().each(function(item) {
             item.set('active', true);
-        }); 
+        });
 
         //to abort inconsistent data we save the set directly.
         var store = Ext.create('Shopware.apps.Article.store.ConfiguratorSet');

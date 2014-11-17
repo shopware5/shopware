@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Login
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -123,7 +122,7 @@
             width: 226px !important;
             line-height: 16px;
         }
-        
+
         .#{$prefix}trigger-cell {
 	        width: 37px !important;
         }
@@ -135,7 +134,7 @@
 	        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAABzklEQVR4AcXRvYsUQRCG8fvPTQQzQwMDMVID95JDOEExOARhRRADL9HA8ALRU/drurt0avZBg1deKrqBB4pmmf5N7cmhj6Dpn9qgiH5sUGTyGTSW+rGWjWzqRPNv8o2nJVAvgroHxYHaSFSCFKp1DxoSY0ACM7dvy1kdRKEDUwdlgIp/G9Uw2eRADAIktiRQom62kwmMBJktiTSCKtvZASIJ8iiPsdsxIIdqHuIxBlRAUeiA1DEGBErCTEAkxoAYDErABK4DKWIUyKPqVTFbQB5FdUgFs50AaZSGkblcIBSGEpMgBo3SsBfrD/Ho+UVcb/acZW8vP8WDs5dx9e2HgBhM1gHVUKtXb+LW/Sdxb3Ue19v9gvn4Oc/mvlx9LWFoA4iy5mHfN7u/qKfncfH+Muc7D09j/QfmEAkBM1FfQJtlyAOBIokDtWBWbEYhNAYIAZIoA6Nnr9/F3cdnidmVIGA0SKM8rI7QGA3yMPIIchD6deyE4b8wgavXNQQMHQCBcjAqIIB4DKB5IGCF7MVkIBoEqg4rQjTmpwTRVMcZhIaAAcQwZ3DFNEJDNMjACsgDeYgDFXD17F2AKpUAxbbTAHSz8aGt3zyIzSQmIm7/BtC/NeJ5aEtBAAAAAElFTkSuQmCC") no-repeat !important;
         }
     }
-    
+
     .#{$prefix}form-trigger-wrap-focus {
 	    .#{$prefix}form-trigger {
             border: 1px solid;

@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Config
  * @subpackage Config
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -90,7 +89,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
      */
     loadConfigStore: function(callback) {
         var me = this;
-        
+
         me.getStore('Config').load(function (records) {
             var storeData = records[0];
 
@@ -102,7 +101,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         });
 
     },
-    
+
     /*
      * Takes a config record, loads it into the settings form and also sets
      * some stores
@@ -123,13 +122,13 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     },
 
 	/*
-	 * Called after the user clicked on an item in the navigation tree 
+	 * Called after the user clicked on an item in the navigation tree
 	 */
 	onNavigationItemClicked: function(itemName) {
 		var me = this,
 			settings = me.getSettings(),
 			itemToShow;
-		
+
 		// First of all: Hide all items:
 		settings.panel.items.each(function(item) {
 			item.hide();
@@ -137,10 +136,10 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
 				itemToShow = item;
 			}
 		});
-		
+
 		// If no fieldSet is defined for the clicked item, return
-		if (!itemToShow) {			
-			me.currentItem = null;			
+		if (!itemToShow) {
+			me.currentItem = null;
 			return;
 		}
 
@@ -149,9 +148,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
 		itemToShow.show();
 		me.currentItem = itemName;
 	},
-	
-	
-	
+
+
+
     /**
      * Callback function called when the users clicks the 'save' button on the settings form
      */
@@ -168,7 +167,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             return false;
         }
         settings.getForm().updateRecord(configRecord);
-        
+
         //save the model and check in the callback function if the operation was successfully
         configRecord.save({
             callback:function (data, operation) {

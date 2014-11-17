@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
  *
  * @category  Shopware
  * @package   Shopware\Core
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sExport
 {
@@ -796,7 +796,7 @@ class sExport
             $sql_add_select[] = "IF(COUNT(d.ordernumber) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.ordernumber,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_ordernumber";
             $sql_add_select[] = "IF(COUNT(d.additionaltext) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.additionaltext,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_additionaltext";
 	    $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
-            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";    
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";
             $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 

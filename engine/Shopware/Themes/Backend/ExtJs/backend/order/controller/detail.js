@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Order
  * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -44,13 +43,13 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @string
      */
     extend:'Ext.app.Controller',
-    
+
     refs: [
         { ref: 'orderList', selector: 'order-list' },
         { ref: 'positionGrid', selector: 'order-detail-window order-position-panel' },
         { ref: 'detailWindow', selector: 'order-detail-window' }
     ],
-    
+
     snippets: {
         successTitle:'{s name=message/save/success_title}Successful{/s}',
         failureTitle:'{s name=message/save/error_title}Error{/s}',
@@ -415,7 +414,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                             options.callback(order);
                         }
-                        
+
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.delete.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
                     }

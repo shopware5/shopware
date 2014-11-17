@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,14 +23,13 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage DatePicker
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 .#{$prefix}datepicker {
 	border: 1px solid #b5c0c7;
 	border-top: 0 none;
-	
+
 	/** Header */
 	.#{$prefix}datepicker-header {
 		border: 1px solid #3980a9;
@@ -40,21 +39,21 @@
         )) center center no-repeat transparent;
 
         .#{$prefix}datepicker-month {
-		
+
 			.#{$prefix}btn-split-right {
 				background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJmvbYAAAAaElEQVR42m2KwQpAQABE9z/cJJHDFuK73J04aM8Se/IHfIADJ5zVRvmYsbtlS5mapt4bkvQ3/pJKTiIu4JbLRzjFjJgLKbsTPttgZYPickcEbIfiBICuV62w80kfX2Zk2F6g9QHaCCMfPcFo6Klg/LQAAAAASUVORK5CYII=");
 			}
-		
+
 			button {
 				text-shadow: 0 1px 0 darken(#207ab7, 10%);
-				
+
 				.#{$prefix}btn-inner {
 					font-weight: bold;
-				} 
+				}
 			}
-		} 
+		}
 	}
-	
+
 	/** Body */
 	table.#{$prefix}datepicker-inner {
 		th {
@@ -62,7 +61,7 @@
 			color: $font-color;
 			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAALUlEQVQIHQXBsRHAMBAEoZvtv185egyh971267bmsuWEbCEnE3LaxDpC27q7H8pxK9yXeDBmAAAAAElFTkSuQmCC") repeat-x;
 		}
-		
+
 		/** Selected day */
 		.#{$prefix}datepicker-selected a {
 			text-shadow: 0 1px 0 darken(#207ab7, 10%);
@@ -74,7 +73,7 @@
             )) center center no-repeat transparent;
 		}
 	}
-	
+
 	/** Footer */
 	.#{$prefix}datepicker-footer {
 		padding: 4px 0;

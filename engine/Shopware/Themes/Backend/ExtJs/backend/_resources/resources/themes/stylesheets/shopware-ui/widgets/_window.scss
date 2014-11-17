@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Shopware_Styling
  * @subpackage Window
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -46,7 +45,7 @@
         text-shadow: 1px 1px 0 #fc6220 !important;
     }
 }
- 
+
 .#{$prefix}window {
     padding: 0;
     position: absolute !important;
@@ -67,7 +66,7 @@
     /** Header top styling */
     .#{$prefix}window-header-top {
         padding: 0;
-        
+
         .#{$prefix}window-header-body {
         	@include border-radius(5px 5px 0 0);
         	padding: $window-header-padding;
@@ -76,22 +75,22 @@
     		border-bottom: 0;
         }
     }
-    
+
     /** Body styling */
     .#{$prefix}window-body {
     	@include border-radius(0 0 4px 4px);
     	border: 1px solid #eff2f5 !important;
     	border-top-width: 2px !important;
     	background: #f9fafa;
-    	
+
     	/** Get rid of the nasty body borders */
     	.#{$prefix}window-item > .#{$prefix}tab-bar {
     		border-color: transparent !important;
-	    	
+
 	    	& > .#{$prefix}tab-bar-body {
 		    	border-color: transparent !important;
 	    	}
-	    	
+
 	    	& + .#{$prefix}panel-body {
 		    	border-color: transparent !important;
 	    	}

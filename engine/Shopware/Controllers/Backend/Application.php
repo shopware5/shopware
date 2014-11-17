@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,7 @@
  * Base controller for a single backend sub application.
  * This controller contains many functions for the quad operations for a single model
  * The Shopware_Controllers_Backend_Application can only be used if the application works
- * with the Shopware 4 Doctrine models.
+ * with the Shopware Doctrine models.
  * Otherwise the controller functions throws different exception that the model has to be configured.
  * In this case use the Shopware_Controllers_Backend_ExtJs controller for your backend application.
  *

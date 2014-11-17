@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,6 @@
  * @category   Shopware
  * @package    Customer
  * @subpackage Order
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
@@ -110,21 +109,21 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
 	                        	key = field.getValue(),
 	                        	split = key.split(' '),
 	                        	value = '';
-	                        	           
+
 							if (split[1]) {
 								key = split[0];
             	           		value = split[1];
             	           	}
-	                        	                        
+
                             record.set('key', key);
-                        	record.set('value', value);	
+                        	record.set('value', value);
 	                        me.store.add(record);
 	                        field.setValue('');
 	                        me.cellEditingPlugin.startEdit(record, 1);
 
 		                }
 		              }
-		            },               
+		            },
                 },
                 {
                     iconCls:'sprite-plus-circle-frame',
