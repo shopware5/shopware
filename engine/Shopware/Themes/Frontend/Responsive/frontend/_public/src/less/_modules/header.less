@@ -431,7 +431,7 @@
             .js--fancy-select {
                 .reset-border-radius();
                 .reset-box-shadow();
-                .unitize(12, 16, line-height);
+                .unitize(17, 16, line-height);
                 .unitize(5, 16, margin-right);
                 padding: 0;
                 margin: 0;
@@ -448,6 +448,7 @@
 
             .js--fancy-select-text {
                 .unitize-padding(0, 30, 0, 5);
+                .unitize-height(15, 16);
                 font-weight: normal;
                 width: auto;
             }
@@ -458,17 +459,21 @@
             }
         }
 
-         .top-bar--language {
-             .js--fancy-select-text {
-                 .unitize-width(45, 16);
-                 position: relative;
-                 text-indent: -9999px;
-                 text-align: left;
-                 white-space: nowrap;
-                 overflow: hidden;
-                 display: inline-block;
-             }
-         }
+        .top-bar--language {
+            .js--fancy-select-trigger {
+                .unitize(2, 16, top);
+            }
+
+            .js--fancy-select-text {
+                .unitize-width(45, 16);
+                position: relative;
+                text-indent: -9999px;
+                text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                display: inline-block;
+            }
+        }
 
         .language--flag {
             .unitize(5, 16, top);
