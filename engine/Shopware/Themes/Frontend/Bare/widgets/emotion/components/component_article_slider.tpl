@@ -20,12 +20,11 @@
                     {if $Data.article_slider_type == 'selected_article'}
                         {$articles = $Data.values}
 
-                            {* Products inside the slider *}
-                            {block name="widget_emotion_component_product_slider"}
-                                {include file="widgets/emotion/slide_articles.tpl" articles=$articles sElementWidth=$sElementWidth sPerPage=$perPage sElementHeight=$sliderHeight-5}
-                            {/block}
-                        {/if}
-                    </div>
+                        {* Products inside the slider *}
+                        {block name="widget_emotion_component_product_slider"}
+                            {include file="widgets/emotion/slide_articles.tpl" articles=$articles sElementWidth=$sElementWidth sPerPage=$perPage sElementHeight=$sliderHeight-5}
+                        {/block}
+                    {/if}
                 </div>
             </div>
         {/block}

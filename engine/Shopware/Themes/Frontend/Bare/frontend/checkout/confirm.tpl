@@ -59,7 +59,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content block confirm--content">
+    <div class="content confirm--content">
 
     {* Error messages *}
     {block name='frontend_checkout_confirm_error_messages'}
@@ -316,47 +316,47 @@
 
                         {* Additional feature - Add voucher *}
                         {block name="frontend_checkout_confirm_additional_features_add_voucher"}
-                        <div class="feature--group block">
-                            <div class="feature--voucher">
-                                <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
-                                    {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
-                                        {if !{config name='IgnoreAGB'}}
-                                            <input type="hidden" class="agb-checkbox" name="sAGB"
-                                                   value="{if $sAGBChecked}1{else}0{/if}"/>
-                                        {/if}
-                                    {/block}
-
-                                    {block name='frontend_checkout_confirm_add_voucher_field'}
-                                        <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}" />
-                                    {/block}
-
-                                    {block name='frontend_checkout_confirm_add_voucher_button'}
-                                        <button type="submit" class="add-voucher--button btn is--primary is--small block">
-                                            <i class="icon--arrow-right"></i>
-                                        </button>
-                                    {/block}
-                                </form>
-                            </div>
-                            {/block}
-
-                            {* Additional feature - Add product using the sku *}
-                            {block name="frontend_checkout_confirm_additional_features_add_product"}
-                                <div class="feature--add-product">
-                                    <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
-
-                                        {block name='frontend_checkout_confirm_add_product_field'}
-                                            <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
+                            <div class="feature--group block">
+                                <div class="feature--voucher">
+                                    <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
+                                        {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
+                                            {if !{config name='IgnoreAGB'}}
+                                                <input type="hidden" class="agb-checkbox" name="sAGB"
+                                                       value="{if $sAGBChecked}1{else}0{/if}"/>
+                                            {/if}
                                         {/block}
 
-                                        {block name='frontend_checkout_confirm_add_product_button'}
-                                            <button type="submit" class="add-product--button btn is--primary is--small block">
+                                        {block name='frontend_checkout_confirm_add_voucher_field'}
+                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}" />
+                                        {/block}
+
+                                        {block name='frontend_checkout_confirm_add_voucher_button'}
+                                            <button type="submit" class="add-voucher--button btn is--primary is--small block">
                                                 <i class="icon--arrow-right"></i>
                                             </button>
                                         {/block}
                                     </form>
                                 </div>
-                            {/block}
-                        </div>
+
+                                {* Additional feature - Add product using the sku *}
+                                {block name="frontend_checkout_confirm_additional_features_add_product"}
+                                    <div class="feature--add-product">
+                                        <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
+
+                                            {block name='frontend_checkout_confirm_add_product_field'}
+                                                <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
+                                            {/block}
+
+                                            {block name='frontend_checkout_confirm_add_product_button'}
+                                                <button type="submit" class="add-product--button btn is--primary is--small block">
+                                                    <i class="icon--arrow-right"></i>
+                                                </button>
+                                            {/block}
+                                        </form>
+                                    </div>
+                                {/block}
+                            </div>
+                        {/block}
 
                         {* Additional customer comment for the order *}
                         {block name='frontend_checkout_confirm_comment'}

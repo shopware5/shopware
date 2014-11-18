@@ -117,7 +117,7 @@
 
 			{* Tax information *}
 			{block name='frontend_detail_data_tax'}
-				<p class="product--tax">
+				<p class="product--tax" data-content="" data-modalbox="true" data-targetSelector="a" data-mode="ajax">
 					{s name="DetailDataPriceInfo"}{/s}
 				</p>
 			{/block}
