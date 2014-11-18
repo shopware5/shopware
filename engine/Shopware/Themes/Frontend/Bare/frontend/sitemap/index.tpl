@@ -32,13 +32,13 @@
 			{/if}
 
 			{block name="frontend_sitemap_category"}
-				<div class="sitemap--category block">
+				<div class="sitemap--category block is--rounded">
 
 					{block name="frontend_sitemap_navigation"}
 						<ul class="sitemap--navigation list--unstyled">
 
 							{block name="frontend_sitemap_navigation_headline"}
-								<li class="sitemap--navigation-head is--bold">
+								<li class="sitemap--navigation-head is--bold is--rounded">
 
 									{if $categoryTree.name == 'SitemapStaticPages'}
 										{block name="frontend_sitemap_navigation_staticpages"}

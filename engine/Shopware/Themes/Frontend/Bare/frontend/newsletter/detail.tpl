@@ -3,7 +3,7 @@
 {* Main content *}
 {block name='frontend_index_content'}
 	<div class="newsletter-detail--content content block">
-		<div class="newsletter-detail--container panel has--border">
+		<div class="newsletter-detail--container panel has--border is--rounded">
 			{block name='frontend_newsletter_detail'}
 				{if $sContentItem}
 

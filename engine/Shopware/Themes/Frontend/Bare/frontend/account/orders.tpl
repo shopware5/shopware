@@ -11,7 +11,7 @@
 
         {* Welcome text *}
         {block name="frontend_account_orders_welcome"}
-            <div class="account--welcome panel has--border">
+            <div class="account--welcome panel has--border is--rounded">
                 {block name="frontend_account_orders_welcome_headline"}
                     <h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
                 {/block}
@@ -33,7 +33,7 @@
         {else}
 			{* Orders overview *}
 			{block name="frontend_account_orders_overview"}
-				<div class="account--orders-overview panel">
+				<div class="account--orders-overview panel is--rounded">
 
 					{block name="frontend_account_orders_table"}
 						<div class="panel--table">

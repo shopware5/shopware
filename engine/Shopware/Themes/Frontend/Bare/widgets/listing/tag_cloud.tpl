@@ -1,5 +1,5 @@
 {if $sCloud}
-    <div class="panel has--border">
+    <div class="panel has--border is--rounded">
          <div class="panel--title is--underline">
             {s name="TagcloudHead" namespace="frontend/plugins/index/tagcloud"}{/s}
          </div>
