@@ -19,7 +19,7 @@
 
 		{* Payment form *}
 		{block name="frontend_account_payment_content"}
-            <div class="panel has--border">
+            <div class="panel has--border is--rounded">
                 {* Error messages *}
                 {block name="frontend_account_error_messages"}
                     {include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}

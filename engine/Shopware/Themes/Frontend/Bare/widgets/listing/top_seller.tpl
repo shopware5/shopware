@@ -1,5 +1,5 @@
 {if $sCharts|@count}
-<div class="topseller panel has--border">
+<div class="topseller panel has--border is--rounded">
 
 	<div class="topseller--title panel--title is--underline">
 		{s name="TopsellerHeading" namespace=frontend/plugins/index/topseller}{/s}

@@ -1,4 +1,4 @@
-<div class="dispatch--method-list panel has--border block">
+<div class="dispatch--method-list panel has--border is--rounded block">
 
     {block name='frontend_checkout_shipping_headline'}
 		<h3 class="dispatch--method-headline panel--title is--underline">{s namespace='frontend/checkout/shipping_payment' name='ChangeShippingTitle'}{/s}</h3>

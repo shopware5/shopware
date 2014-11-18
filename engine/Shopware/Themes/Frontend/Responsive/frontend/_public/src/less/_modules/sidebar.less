@@ -57,15 +57,13 @@ body > .sidebar-main {
 }
 
 .sidebar--navigation {
-
+    .reset-border-radius();
     margin: 0;
     border-left: 0 none;
     border-right: 0 none;
-    border-radius: 0;
 
     .navigation--entry {
         position: relative;
-        border-radius: 0;
     }
 
     .navigation--link {
@@ -250,10 +248,27 @@ body > .sidebar-main {
         display: none;
     }
 
+    // Top rounded corners of the first active category in the sidebar
+    .categories--navigation.is--level0 {
+        .navigation--entry:first-child {
+            .navigation--link.is--active {
+                .border-radius-multi(3px, 3px, 0, 0);
+            }
+        }
+    }
+
+    .categories--navigation.is--level1 {
+        .navigation--entry:first-child {
+            .navigation--link.is--active {
+                .reset-border-radius();
+            }
+        }
+    }
+
     .sidebar--navigation {
         .unitize-margin(0, 0, 20, 0);
-        .border-radius(0);
         .unitize-margin(0, 0, 5, 0);
+        .border-radius();
         border: 1px solid @border-color;
 
         .navigation--entry {

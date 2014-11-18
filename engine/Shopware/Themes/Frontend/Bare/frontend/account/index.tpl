@@ -34,7 +34,7 @@
 
 		{* Welcome text *}
 		{block name="frontend_account_index_welcome"}
-			<div class="account--welcome panel has--border">
+			<div class="account--welcome panel has--border is--rounded">
 				{block name="frontend_account_index_welcome_headline"}
 					<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</h1>
 				{/block}
@@ -49,7 +49,7 @@
 
 		{* General user informations *}
 		{block name="frontend_account_index_info"}
-			<div class="account--info account--box panel has--border">
+			<div class="account--info account--box panel has--border is--rounded">
 
 				{block name="frontend_account_index_info_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderBasic"}{/s}</h2>
@@ -87,7 +87,7 @@
 
 		{* Payment informations *}
 		{block name="frontend_account_index_payment_method"}
-			<div class="account--payment account--box panel has--border">
+			<div class="account--payment account--box panel has--border is--rounded">
 
 				{block name="frontend_account_index_payment_method_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderPayment"}{/s}</h2>
@@ -121,7 +121,7 @@
 
 		{* Set new password *}
 		{block name="frontend_account_index_password"}
-			<div id="account--password" class="account--password account--box panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} is--collapsed{/if}">
+			<div id="account--password" class="account--password account--box panel has--border is--rounded password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_password_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangePassword'}{/s}</h2>
@@ -158,7 +158,7 @@
 
 		{* Edit mail address *}
 		{block name="frontend_account_index_email"}
-			<div id="account--email" class="account--email account--box panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--collapsed{/if}">
+			<div id="account--email" class="account--email account--box panel has--border is--rounded email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_email_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangeMail'}{/s}</h2>
@@ -195,7 +195,7 @@
 
 		{* Newsletter settings *}
 		{block name="frontend_account_index_newsletter_settings"}
-			<div class="account--newsletter account--box panel has--border newsletter">
+			<div class="account--newsletter account--box panel has--border is--rounded newsletter">
 
 				{block name="frontend_account_index_newsletter_settings_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderNewsletter"}{/s}</h2>
@@ -218,7 +218,7 @@
 
 		{* Billing addresses *}
 		{block name="frontend_account_index_primary_billing"}
-			<div class="account--billing account--box panel has--border">
+			<div class="account--billing account--box panel has--border is--rounded">
 
 				{block name="frontend_account_index_primary_billing_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryBilling"}{/s}</h2>
@@ -259,7 +259,7 @@
 
 		{* Shipping addresses *}
 		{block name="frontend_account_index_primary_shipping"}
-			<div class="account--shipping account--box panel has--border">
+			<div class="account--shipping account--box panel has--border is--rounded">
 
 				{block name="frontend_account_index_primary_shipping_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryShipping"}{/s}</h2>

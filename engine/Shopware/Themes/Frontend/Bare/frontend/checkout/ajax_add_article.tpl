@@ -93,7 +93,7 @@
     {block name='checkout_ajax_add_cross_selling'}
         {if $sCrossSimilarShown|@count || $sCrossBoughtToo|@count}
             <div class="modal--cross-selling">
-                <div class="panel has--border">
+                <div class="panel has--border is--rounded">
 
                     {* Cross sellung title *}
                     {block name='checkout_ajax_add_cross_selling_title'}

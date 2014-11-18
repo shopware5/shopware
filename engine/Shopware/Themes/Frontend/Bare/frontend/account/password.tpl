@@ -24,7 +24,7 @@
 		{else}
 			{* Recover password *}
 			{block name="frontend_account_password_reset"}
-				<div class="panel has--border">
+				<div class="panel has--border is--rounded">
 
 					{block name="frontend_account_password_reset_headline"}
 						<h2 class="panel--title is--underline">{s name="PasswordHeader"}{/s}</h2>

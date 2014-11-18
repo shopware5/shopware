@@ -27,7 +27,7 @@
 
             {* Product table *}
             {block name='frontend_checkout_cart_table'}
-                <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
+                <div class="product--table{if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
 
                     {* Deliveryfree dispatch notification *}
                     {block name='frontend_checkout_cart_deliveryfree'}
@@ -78,7 +78,7 @@
                     {* Product table content *}
                     {block name='frontend_checkout_cart_panel'}
                         <div class="panel has--border">
-                            <div class="panel--body">
+                            <div class="panel--body is--rounded">
 
                                 {* Product table header *}
                                 {block name='frontend_checkout_cart_cart_head'}

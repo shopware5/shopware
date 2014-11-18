@@ -46,7 +46,7 @@
 
 		{* Forms headline *}
 		{block name='frontend_forms_index_headline'}
-			<div class="forms--headline panel panel--body is--wide has--border">
+			<div class="forms--headline panel panel--body is--wide has--border is--rounded">
 				{if $sSupport.sElements}
 					<h1 class="forms--title">{$sSupport.name}</h1>
 					<div class="forms--text">{eval var=$sSupport.text}</div>
@@ -59,7 +59,7 @@
 		{* Forms Content *}
 		{block name='frontend_forms_index_content'}
 			{if $sSupport.sElements}
-				<div class="forms--container panel has--border">
+				<div class="forms--container panel has--border is--rounded">
 					<h1 class="panel--title is--underline">{$sSupport.name}</h1>
 					<div class="panel--body">
 						{block name='frontend_forms_index_elements'}

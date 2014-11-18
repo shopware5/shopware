@@ -1,7 +1,7 @@
 {block name='frontend_checkout_premium_body'}
 
     {if $sPremiums|@count}
-        <div class="premium-product panel has--border">
+        <div class="premium-product panel has--border is--rounded">
 
             {* Headline *}
             {block name='frontend_checkout_cart_premium_headline'}
