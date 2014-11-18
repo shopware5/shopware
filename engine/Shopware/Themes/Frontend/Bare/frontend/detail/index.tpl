@@ -262,7 +262,7 @@
         {/block}
 
         {* Crossselling tab panel *}
-        {block name="frontend_detail_index_tabs"}
+        {block name="frontend_detail_index_tabs_cross_selling"}
 
             {$showAlsoViewed = {config name=similarViewedShow}}
             {$showAlsoBought = {config name=alsoBoughtShow}}
@@ -278,30 +278,32 @@
             {/if}
 
             {if $sArticle.sRelatedArticles || $sArticle.sSimilarArticles || $showAlsoBought || $showAlsoViewed}
-                <div class="tab-menu--crossselling">
+                <div class="tab-menu--cross-selling">
 
                     {* Tab navigation *}
                     {block name="frontend_detail_index_tabs_navigation"}
                         <ul class="tab--navigation">
                             {block name="frontend_detail_index_tabs_navigation_inner"}
 
-                                {* Tab navigation - Related products *}
-                                {block name="frontend_detail_tabs_entry_related"}
-                                    {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-                                        <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}" class="tab--link">
-                                            {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
-                                            <span class="product--rating-count-wrapper">
-                                                <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
-                                            </span>
-                                        </a>
-                                    {/if}
-                                {/block}
+                                {block name="frontend_detail_index_related_similiar_tabs"}
+                                    {* Tab navigation - Related products *}
+                                    {block name="frontend_detail_tabs_entry_related"}
+                                        {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
+                                            <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}" class="tab--link">
+                                                {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                                <span class="product--rating-count-wrapper">
+                                                    <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
+                                                </span>
+                                            </a>
+                                        {/if}
+                                    {/block}
 
-                                {* Similar products *}
-                                {block name="frontend_detail_index_tabs_entry_similar"}
-                                    {if $sArticle.sSimilarArticles}
-                                        <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
-                                    {/if}
+                                    {* Similar products *}
+                                    {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
+                                        {if $sArticle.sSimilarArticles}
+                                            <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
+                                        {/if}
+                                    {/block}
                                 {/block}
 
                                 {* Customer also bought *}
@@ -322,9 +324,10 @@
                     {/block}
 
                     {* Tab content container *}
-                    {block name="frontend_detail_index_tabs_content_list"}
+                    {block name="frontend_detail_index_outer_tabs"}
                         <div class="tab--container-list">
-                            {block name="frontend_detail_index_tabs_content_list_inner"}
+                            {block name="frontend_detail_index_inner_tabs"}
+                                {block name='frontend_detail_index_before_tabs'}{/block}
 
                                 {* Related articles *}
                                 {block name="frontend_detail_index_tabs_related"}
@@ -335,8 +338,8 @@
                                                     <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}">
                                                         {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
                                                         <span class="product--rating-count-wrapper">
-                                                            <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
-                                                        </span>
+                                                                <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
+                                                            </span>
                                                     </a>
                                                 </div>
                                                 <div class="tab--content content--related">
@@ -392,6 +395,8 @@
                                         </div>
                                     {/block}
                                 {/if}
+
+                                {block name='frontend_detail_index_after_tabs'}{/block}
                             {/block}
                         </div>
                     {/block}

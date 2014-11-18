@@ -241,6 +241,26 @@ In this document you will find a changelog of the important changes related to t
 * Removed table columns
     * `s_core_plugins.capability_dummy`
 * Added global JavaScript StateManager Singleton to handle different states based on registered breakpoints.
+* Added new default states to the state manager
+    * `xs` that ranges from 0 to 479 pixels viewport width
+    * `s`  that ranges from 480 to 767 pixels viewport width
+    * `m` that ranges from 768 to 1023 pixels viewport width
+    * `l`  that ranges from 1024 to 1259 pixels viewport width
+    * `xl` that ranges from 1260 to 5160 pixels viewport width
+* Moved `frontend/detail/similar.tpl` to `frontend/detail/tabs/similar.tpl`
+* Removed `frontend/checkout/ajax_add_article_slider_item.tpl`
+* Removed `frontend/listing/box_crossselling.tpl`
+* Removed `widgets/recommendation/item.tpl`
+* Added `frontend/listing/product-box/box--product-slider.tpl`
+    * This file should be used as an product slider item template
+* Following template files include the new product slider template `frontend/listing/product-box/box--product-slider.tpl`
+    * `frontend/checkout/ajax_add_article_slider.tpl` includes it instead of `frontend/checkout/ajax_add_article_slider_item.tpl`
+    * `frontend/detail/tabs/related.tpl` includes it instead of `frontend/listing/box_article.tpl`
+    * `widgets/recommendation/bought.tpl` includes it instead of `widgets/recommendation/item.tpl`
+    * `widgets/recommendation/viewed.tpl` includes it instead of `widgets/recommendation/item.tpl`
+    * `widgets/emotion/slide_articles.tpl` includes it instead of its own implementation
+* Block named `frontend_detail_index_similar_viewed_slider` is now in the `widgets/recommendation/viewed.tpl` instead of `frontend/detail/index.tpl`
+* Block named `frontend_detail_index_also_bought_slider` is now in the `widgets/recommendation/bought.tpl` instead of `frontend/detail/index.tpl`
 * Moved `engine/core/class/*` to `engine/Shopware/Core/*
 
 
