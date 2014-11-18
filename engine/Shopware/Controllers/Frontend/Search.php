@@ -96,7 +96,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         if ($this->get('config')->get('traceSearch', true)) {
             $this->get('search_term_logger')->logResult(
                 $criteria,
-                $result
+                $result,
+                $context->getShop()
             );
         }
 
