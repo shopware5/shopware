@@ -89,7 +89,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
         $category = (int) $this->Request()->getParam("category");
-        $limit = (int) $this->Request()->getParam("limit");
+        $limit = (int) $this->Request()->getParam("limit", 5);
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
         $sort = $this->Request()->getParam('sort', 'newcommer');
@@ -102,7 +102,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
 
-        if (!$category || !$pages || !$limit) {
+        if (!$category) {
             $this->Response()->setHttpResponseCode(404);
             return;
         }

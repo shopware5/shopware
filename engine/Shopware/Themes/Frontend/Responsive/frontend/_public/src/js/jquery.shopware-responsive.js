@@ -62,58 +62,29 @@ $(function () {
 
         // Default product slider
 
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', {
-            perPage: 1,
-            perSlide: 1,
-            touchControl: true
-        })
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', {
-            perPage: 3
-        }, 'm')
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', {
-            perPage: 4
-        }, 'l')
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', {
-            perPage: 5,
-            touchControl: false
-        }, 'xl')
+        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 1 })
+        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 3 }, 'm')
+        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 4 }, 'l')
+        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 5 }, 'xl')
 
         // Product slider for premium items
 
-        .addPlugin('.premium-product--content', 'productSlider', {
-            perPage: 1,
-            perSlide: 1,
-            touchControl: true
-        })
-        .addPlugin('.premium-product--content', 'productSlider', {
-            perPage: 2
-        }, 'm')
-        .addPlugin('.premium-product--content', 'productSlider', {
-            perPage: 3
-        }, 'l')
-        .addPlugin('.premium-product--content', 'productSlider', {
-            perPage: 4,
-            touchControl: false
-        }, 'xl')
+        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 1 })
+        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 2 }, 'm')
+        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 3 }, 'l')
+        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 4 }, 'xl')
 
         // Product slider for premium items
 
+        .addPlugin('.emotion--element .slider--article', 'productSlider', { itemsPerPage: 1 })
+        .addPlugin('.emotion--element .slider--article', 'productSlider', { itemsPerPage: 3 }, ['m', 'l'])
         .addPlugin('.emotion--element .slider--article', 'productSlider', {
-            perPage: 1,
-            perSlide: 1,
-            touchControl: true
-        })
-        .addPlugin('.emotion--element .slider--article', 'productSlider', {
-            perPage: 3
-        }, ['m', 'l'])
-        .addPlugin('.emotion--element .slider--article', 'productSlider', {
-            perPage: 4,
-            perSlide: 4,
-            touchControl: false
+            itemsPerPage: 4,
+            itemsPerSlide: 4
         }, 'xl')
-    
+
         // Detail page tab menus
-        
+    
         .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
             scrollTarget: '.tab-menu--product'
         })
@@ -127,7 +98,8 @@ $(function () {
         .addPlugin('.tab-menu--cross-selling .tab--header', 'collapsePanel', {
             'contentSiblingSelector': '.tab--content'
         }, ['xs', 's']);
-    
+
+    $('*[data-tab-content="true"]').tabContent();
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();
