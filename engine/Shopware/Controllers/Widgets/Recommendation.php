@@ -54,6 +54,7 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $articleId = (int) $this->Request()->getParam('articleId');
         $maxPages = (int) $this->config->get('similarViewedMaxPages', 10);
         $perPage = (int) $this->config->get('similarViewedPerPage', 4);
+        $result = array();
 
         $this->marketingModule->sBlacklist[] = $articleId;
         $articles = $this->marketingModule->sGetSimilaryShownArticles($articleId, $maxPages * $perPage);
@@ -78,9 +79,10 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $articleId = (int) $this->Request()->getParam('articleId');
         $maxPages = (int) $this->config->get('alsoBoughtMaxPages', 10);
         $perPage = (int) $this->config->get('alsoBoughtPerPage', 4);
+        $result = array();
 
         $this->marketingModule->sBlacklist[] = $articleId;
-        $articles = $this->marketingModule->sGetAlsoBoughtArticles($articleId, $maxPages  *$perPage);
+        $articles = $this->marketingModule->sGetAlsoBoughtArticles($articleId, $maxPages * $perPage);
 
         foreach ($articles as $article) {
             $article = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['id']);

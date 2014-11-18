@@ -1,67 +1,94 @@
-
 .product-slider {
-    .unitize-height(340);
+    .unitize-height(270);
     display: block;
     overflow: hidden;
     position: relative;
+
+    .product--box {
+        .unitize-padding(10, 10);
+        display: block;
+        position: relative;
+        float: left;
+
+        &:hover .product--title {
+            color: @brand-primary;
+        }
+
+        .box--content {
+            border: 0 none;
+            padding: 0;
+        }
+
+        .product--price-info {
+            height: auto;
+
+            .price--unit {
+                .unitize-height(14);
+            }
+
+            .label--purchase-unit {
+                .unitize(5, 16, margin-right);
+            }
+
+            .price--default {
+                .unitize(14, 16, font-size);
+                font-weight: normal;
+            }
+
+            .is--discount {
+                font-weight: bold;
+            }
+        }
+
+        .product--image {
+            .unitize-height(140);
+            .user-select(none);
+            .touch-callout(none);
+            .tap-highlight-color(rgba(0, 0, 0, 0));
+            .unitize(10, 16, margin-bottom);
+            display: block;
+            text-align: center;
+            position: relative;
+        }
+
+        .image--element {
+            height: 100%;
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+
+            img {
+                position: absolute;
+                top: 0; bottom: 0;
+                left: 0; right: 0;
+                margin: auto;
+                display: inline-block;
+                vertical-align: middle;
+                z-index: 500;
+            }
+        }
+
+        .product--title {
+            .unitize(14, 16, font-size);
+            .unitize(40, 16, height);
+            .user-select(none);
+            .touch-callout(none);
+            .tap-highlight-color(rgba(0, 0, 0, 0));
+            display: block;
+            color: @text-color;
+            font-weight: normal;
+        }
+    }
 }
 
 .product-slider--container {
     .clearfix();
-    .unitize-padding(20, 0, 0, 0);
+    .unitize-padding(10, 0, 0, 0);
     width: 200%;
     position: absolute;
     top: 0;
     left: 0;
-}
-
-.product-slider--item {
-    .unitize-padding(10, 10);
-    display: block;
-    position: relative;
-    float: left;
-
-    .product--image {
-        .unitize-height(255);
-        .user-select(none);
-        .touch-callout(none);
-        .tap-highlight-color(rgba(0, 0, 0, 0));
-        display: block;
-        text-align: center;
-        position: relative;
-    }
-
-    .image--element {
-        height: 100%;
-        width: 100%;
-        display: block;
-        margin: 0 auto;
-        position: relative;
-
-        img {
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 0; right: 0;
-            margin: auto;
-            display: inline-block;
-            vertical-align: middle;
-            z-index: 500;
-        }
-    }
-
-    .product--title {
-        .unitize(14, 16, font-size);
-        .user-select(none);
-        .touch-callout(none);
-        .tap-highlight-color(rgba(0, 0, 0, 0));
-        display: block;
-        text-align: center;
-        color: @text-color;
-
-        &:hover {
-            color: @brand-primary;
-        }
-    }
 }
 
 .product-slider--arrow {
@@ -104,39 +131,5 @@
 
     &:hover {
         color: @brand-primary;
-    }
-}
-
-@media screen and(min-width: @tabletViewportWidth) {
-
-    .product-slider {
-        .unitize-height(220);
-    }
-
-    .product-slider--item {
-        .product--image {
-            .unitize-height(140);
-        }
-
-        .product--title {
-            .unitize(12, 16, font-size);
-        }
-    }
-}
-
-@media screen and(min-width: @desktopViewportWidth) {
-
-    .product-slider {
-        .unitize-height(200);
-    }
-
-    .product-slider--item {
-        .product--image {
-            .unitize-height(105);
-        }
-
-        .product--title {
-            .unitize(10, 16, font-size);
-        }
     }
 }

@@ -4,7 +4,6 @@
 }
 @media screen and (min-width: @tabletViewportWidth) {
 	.navigation-main {
-		.unitize-margin(0, 0, 20, 0, 16);
         border-bottom: 1px solid @brand-primary;
 		display: block;
 		position: relative;
@@ -52,5 +51,10 @@
 	}
 	.js--scrollable-list--arrow-right {
 		right: 2px;
+	}
+}
+@media screen and (min-width: @desktopViewportWidth) {
+	.navigation-main {
+        .unitize-margin(0, 0, 20, 0, 16);
 	}
 }

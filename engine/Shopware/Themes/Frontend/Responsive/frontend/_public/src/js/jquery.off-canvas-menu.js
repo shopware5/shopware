@@ -20,48 +20,140 @@
      * @ToDo: Implement swipe gesture control. The old swipe gesture was removed due to a scrolling bug.
      */
     var pluginName = 'offcanvasMenu',
-        isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
         clickEvt = 'click',
         defaults = {
 
-            /** @string wrapSelector Selector for the content wrapper */
-            wrapSelector: '.page-wrap',
+            /**
+             * Selector for the content wrapper
+             *
+             * @property wrapSelector
+             * @type {String}
+             */
+            'wrapSelector': '.page-wrap',
 
-            /** @string offCanvasSelector Selector of the off-canvas element */
-            offCanvasSelector: '.sidebar-main',
+            /**
+             * Selector of the off-canvas element
+             *
+             * @property offCanvasSelector
+             * @type {String}
+             */
+            'offCanvasSelector': '.sidebar-main',
 
-            /** @string closeButtonSelector Selector for an additional button to close the menu */
-            closeButtonSelector: '.entry--close-off-canvas',
+            /**
+             * Selector for an additional button to close the menu
+             *
+             * @property closeButtonSelector
+             * @type {String}
+             */
+            'closeButtonSelector': '.entry--close-off-canvas',
 
-            /** @string direction Animation direction, `fromLeft` (default) and `fromRight` are possible */
-            direction: 'fromLeft',
+            /**
+             * Animation direction, `fromLeft` (default) and `fromRight` are possible
+             *
+             * @property direction
+             * @type {String}
+             */
+            'direction': 'fromLeft',
 
-            /** @string swipeContainerSelector Container selector which should catch the swipe gestructure */
-            swipeContainerSelector: '.page-wrap',
+            /**
+             * Container selector which should catch the swipe gesture
+             *
+             * @property swipeContainerSelector
+             * @type {String}
+             */
+            'swipeContainerSelector': '.page-wrap',
 
-            /** @string leftMoveCls Class for moving the container to the left */
-            leftMoveCls: 'is--moved-left',
+            /**
+             * Class for moving the container to the left
+             *
+             * @property leftMoveCls
+             * @type {String}
+             */
+            'leftMoveCls': 'is--moved-left',
 
-            /** @string rightMoveCls Class for moving the container to the right */
-            rightMoveCls: 'is--moved-right',
+            /**
+             * Class for moving the container to the right
+             *
+             * @property rightMoveCls
+             * @type {String}
+             */
+            'rightMoveCls': 'is--moved-right',
 
-            /** @string offCanvasElementCls Additional class for the off-canvas menu for necessary styling */
-            offCanvasElementCls: 'off-canvas',
+            /**
+             * Additional class for the off-canvas menu for necessary styling
+             *
+             * @property offCanvasElementCls
+             * @type {String}
+             */
+            'offCanvasElementCls': 'off-canvas',
 
-            /** @string leftMenuCls Class which should be added when the menu will be opened on the left side */
-            leftMenuCls: 'is--left',
+            /**
+             * Class which should be added when the menu will be opened on the left side
+             *
+             * @property leftMenuCls
+             * @type {String}
+             */
+            'leftMenuCls': 'is--left',
 
-            /** @string rightMenuCls Class which should be added when the menu will be opened on the right side */
-            rightMenuCls: 'is--right',
+            /**
+             * Class which should be added when the menu will be opened on the right side
+             *
+             * @property rightMenuCls
+             * @type {String}
+             */
+            'rightMenuCls': 'is--right',
 
-            /** @string activeMenuCls Class which indicates if the off-canvas menu is visible */
-            activeMenuCls: 'is--active',
+            /**
+             * Class which indicates if the off-canvas menu is visible
+             *
+             * @property activeMenuCls
+             * @type {String}
+             */
+            'activeMenuCls': 'is--active',
 
-            /** @boolean disableTransitions Decide to either use transitions or not */
-            disableTransitions: false,
+            /**
+             * Flag whether to use transitions or not
+             *
+             * @property disableTransitions
+             * @type {Boolean}
+             */
+            'disableTransitions': false,
 
-            /** @string disableTransitionCls Class which disables all transitions for a smoother swiping */
-            disableTransitionCls: 'js--no-transition'
+            /**
+             * Class which disables all transitions for a smoother swiping
+             *
+             * @property disableTransitionCls
+             * @type {String}
+             */
+            'disableTransitionCls': 'js--no-transition',
+
+            /**
+             * Flag whether to show the offcanvas menu in full screen or not.
+             *
+             * @property fullscreen
+             * @type {Boolean}
+             */
+            'fullscreen': false,
+
+            /**
+             * Class which sets the canvas to full screen
+             *
+             * @property fullscreenCls
+             * @type {String}
+             */
+            'fullscreenCls': 'js--full-screen',
+
+            /**
+             * The mode in which the off canvas menu should be showing.
+             *
+             * 'local': The given 'offCanvasSelector' will be used as the off canvas menu.
+             *
+             * 'ajax': The given 'offCanvasSelector' will be used as an URL to
+             *         load the content via AJAX.
+             *
+             * @type {String}
+             */
+            'mode': 'local'
         };
 
     /**
@@ -118,18 +210,28 @@
         // Cache the necessary elements
         me.$pageWrap = $(opts.wrapSelector);
         me.$swipe = $(opts.swipeContainerSelector);
-        me.$offCanvas = $(opts.offCanvasSelector);
         me.$closeButton = $(opts.closeButtonSelector);
         me.$overlay = $(opts.wrapSelector + ':before');
         me.$body = $('body');
 
-        me.$offCanvas.addClass(opts.offCanvasElementCls)
-                     .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
-                     .removeAttr('style');
+        if (opts.mode === 'ajax') {
+            me.$offCanvas = $('<div>', {
+                'class': opts.offCanvasElementCls + ' ' + ((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
+            }).appendTo(me.$body);
+        } else {
+            me.$offCanvas = $(opts.offCanvasSelector);
+            me.$offCanvas.addClass(opts.offCanvasElementCls)
+                .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
+                .removeAttr('style');
+        }
 
         if (opts.disableTransitions) {
             me.$pageWrap.addClass(opts.disableTransitionCls);
             me.$offCanvas.addClass(opts.disableTransitionCls);
+        }
+
+        if (opts.fullscreen) {
+            me.$offCanvas.addClass(opts.fullscreenCls);
         }
 
         me.registerEventListeners();
@@ -149,7 +251,9 @@
         // Button click
         me.$el.on(clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
-            (me.$offCanvas.hasClass(opts.activeMenuCls)) ? me.closeMenu() : me.openMenu();
+            if (!me.$offCanvas.hasClass(opts.activeMenuCls)) {
+                me.openMenu();
+            }
         });
 
         // Allow the user to close the off canvas menu
@@ -174,9 +278,7 @@
 
         $.overlay.open({
             closeOnClick: true,
-            onClick: function () {
-                me.closeMenu();
-            }
+            onClick: $.proxy(me.closeMenu, me)
         });
 
         me.$offCanvas.addClass(opts.activeMenuCls);
@@ -186,6 +288,15 @@
         me.$pageWrap.on('scroll.' + pluginName, function(e) {
             e.preventDefault();
         });
+
+        if (opts.mode === 'ajax') {
+            $.ajax({
+                url: opts.offCanvasSelector,
+                success: function (result) {
+                    me.$offCanvas.html(result);
+                }
+            })
+        }
     };
 
     /**
@@ -224,14 +335,14 @@
         }
 
         me.$offCanvas.removeClass(opts.offCanvasElementCls)
-                     .removeClass(opts.activeMenuCls)
-                     .removeClass(opts.disableTransitionCls)
-                     .removeAttr('style');
+            .removeClass(opts.activeMenuCls)
+            .removeClass(opts.disableTransitionCls)
+            .removeAttr('style');
 
         me.$pageWrap.off(clickEvt + '.' + pluginName)
-                    .removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls)
-                    .removeClass(opts.disableTransitionCls)
-                    .removeAttr('style');
+            .removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls)
+            .removeClass(opts.disableTransitionCls)
+            .removeAttr('style');
 
         me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
 
@@ -248,7 +359,7 @@
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
                 $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
+                    new Plugin( this, options ));
             }
         });
     };

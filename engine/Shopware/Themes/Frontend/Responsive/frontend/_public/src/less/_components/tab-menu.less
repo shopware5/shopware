@@ -1,0 +1,46 @@
+.js--tab-menu {
+    .tab--navigation {
+        list-style: none;
+    }
+
+    .tab--link {
+        .unitize-padding(10, 15);
+        .unitize-margin(0, 5, 0, 0);
+        .unitize(24, 16, line-height);
+        .unitize(14, 16, font-size);
+        .white-gradient();
+        .border-radius-multi(3px, 3px, 0, 0);
+        .unitize(1, 16, top);
+        display: inline-block;
+        position: relative;
+        font-weight: bold;
+        text-align: center;
+        color: @text-color;
+        border: 1px solid @border-color;
+        white-space: nowrap;
+
+        &.is--active {
+            color: @text-color-dark;
+            border-bottom-color: #fff;
+            background: #fff;
+
+            &:hover {
+                color: @text-color-dark;
+            }
+        }
+
+        &:hover {
+            color: @link-color;
+            background: #fff;
+        }
+    }
+
+    .tab--container-list .tab--container {
+        border: 1px solid @panel-border;
+        display: none;
+
+        &.is--active {
+            display: block;
+        }
+    }
+}
