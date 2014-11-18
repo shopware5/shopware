@@ -1,27 +1,111 @@
 ;(function ($) {
+
+    var emptyObj = {};
+
+    /**
+     * Shopware Last Seen Products Plugin
+     *
+     * This plugin creates a list of collected articles.
+     * Those articles will be collected, when the user opens a detail page.
+     * The created list will be showed as a product slider.
+     */
     $.plugin('lastSeenProducts', {
 
         defaults: {
+
+            /**
+             * Limit of the products showed in the slider
+             *
+             * @property productLimit
+             * @type {Number}
+             */
             productLimit: 20,
-            title: '',
+
+            /**
+             * Base url used for uniquely identifying an article
+             *
+             * @property baseUrl
+             * @type {String}
+             */
             baseUrl: '/',
+
+            /**
+             * ID of the current shop used for uniquely identifying an article.
+             *
+             * @property shopId
+             * @type {Number}
+             */
             shopId: 1,
-            currentArticle: { },
+
+            /**
+             * Article that will be added to the list when we are
+             * on the detail page.
+             *
+             * @property currentArticle
+             * @type {Object}
+             */
+            currentArticle: emptyObj,
+
+            /**
+             * Selector for the product list used for the product slider
+             *
+             * @property listSelector
+             * @type {String}
+             */
             listSelector: '.last-seen-products--slider',
+
+            /**
+             * Selector for the product slider container
+             *
+             * @property containerSelector
+             * @type {String}
+             */
             containerSelector: '.last-seen-products--container',
-            itemCls: 'last-seen-products--item product-slider--item',
+
+            /**
+             * Class that will be used for a single product slider items
+             *
+             * @property itemCls
+             * @type {String}
+             */
+            itemCls: 'last-seen-products--item product--box',
+
+            /**
+             * Class that will be used for the product title
+             *
+             * @property titleCls
+             * @type {String}
+             */
             titleCls: 'last-seen-products--title product--title',
-            imageCls: 'last-seen-products--image product--image'
+
+            /**
+             * Class that will be used for the product image
+             *
+             * @property imageCls
+             * @type {String}
+             */
+            imageCls: 'last-seen-products--image product--image',
+
+            /**
+             * Picture source when no product image is available
+             *
+             * @property noPicture
+             * @type {String}
+             */
+            noPicture: ''
         },
 
+        /**
+         * Initializes all necessary elements and collects the current
+         * article when we are on the detail page.
+         *
+         * @public
+         * @method init
+         */
         init: function () {
             var me = this;
 
             me.applyDataAttributes();
-
-            me.$title = $('<h2>', {
-                'html': me.opts.title
-            }).prependTo(me.$el);
 
             me.$list = me.$el.find(me.opts.listSelector);
             me.$container = me.$list.find(me.opts.containerSelector);
@@ -41,6 +125,13 @@
             me.createProductList();
         },
 
+        /**
+         * Creates a list of all collected articles and calls
+         * the product slider plugin.
+         *
+         * @public
+         * @method createProductList
+         */
         createProductList: function () {
             var me = this,
                 opts = me.opts,
@@ -60,22 +151,33 @@
             me.productSlider.setSizes();
         },
 
+        /**
+         * Creates a product slider item template.
+         *
+         * @public
+         * @method createTemplate
+         * @param {Object} article
+         */
         createTemplate: function (article) {
-            var me = this, item,
-                image = me.createProductImage(article),
-                title = me.createProductTitle(article);
+            var me = this;
 
-            item = $('<div>', {
-                'class': me.opts.itemCls
+            return $('<div>', {
+                'class': me.opts.itemCls,
+                'html': [
+                    me.createProductImage(article),
+                    me.createProductTitle(article)
+                ]
             });
-
-            image.appendTo(item);
-            title.appendTo(item);
-
-            return item;
         },
 
-        createProductTitle: function(data) {
+        /**
+         * Creates the product name title by the provided article data
+         *
+         * @public
+         * @method createProductTitle
+         * @param {Object} data
+         */
+        createProductTitle: function (data) {
             var me = this;
 
             return $('<a>', {
@@ -87,14 +189,20 @@
             });
         },
 
-        createProductImage: function(data) {
+        /**
+         * Creates a product image with all media queries for the
+         * picturefill plugin
+         *
+         * @public
+         * @method createProductImage
+         * @param {Object} data
+         */
+        createProductImage: function (data) {
             var me = this,
-                element, imageEl,
-                noScript,
-                imageDefault,
-                imageMobile,
-                imageTablet,
-                imageDesktop;
+                image = data.images[4] || me.opts.noPicture,
+                element,
+                imageEl,
+                noScript;
 
             element = $('<a>', {
                 'class': me.opts.imageCls,
@@ -107,33 +215,40 @@
                 'data-alt': data.articleName
             }).appendTo(element);
 
-            imageMobile = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[4] ? data.images[4] : me.opts.noPicture
+                'data-src': image
             }).appendTo(imageEl);
 
-            imageTablet = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[3] ? data.images[3] : me.opts.noPicture,
+                'data-src': image,
                 'data-media': '(min-width: 48em)'
             }).appendTo(imageEl);
 
-            imageDesktop = $('<span>', {
+            $('<span>', {
                 'class': 'image--media',
-                'data-src': data.images[2] ? data.images[2] : me.opts.noPicture,
+                'data-src': image,
                 'data-media': '(min-width: 78.75em)'
             }).appendTo(imageEl);
 
             noScript = $('<noscript></noscript>').appendTo(imageEl);
 
-            imageDefault = $('<img>', {
-                'src': data.images[2] ? data.images[2] : me.opts.noPicture,
+            $('<img>', {
+                'src': image,
                 'alt': data.articleName
             }).appendTo(noScript);
 
             return element;
         },
 
+        /**
+         * Adds a new article to the local storage for usage in the product slider.
+         *
+         * @public
+         * @method collectProduct
+         * @param {Object} newProduct
+         */
         collectProduct: function (newProduct) {
             var me = this,
                 opts = me.opts,

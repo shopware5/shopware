@@ -1,7 +1,24 @@
 .last-seen-products {
     .clearfix();
-    .unitize-margin(20, 0, 0, 0);
+    .unitize-margin(10, 0, 0, 0);
     clear: both;
+
+    .last-seen-products--title {
+        .unitize-padding(10, 0);
+        .unitize-margin(0, 15);
+        .unitize(14, 16, font-size);
+    }
+}
+
+.last-seen-products--slider {
+    .border-radius(3px);
+    height: auto;
+
+    .product--box .product--title {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .last-seen-products--slider,
@@ -17,4 +34,11 @@
 .last-seen-products--image {
     .unitize(120, 16, line-height);
     display: block;
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .last-seen-products {
+        .unitize-margin(30, 0, 0, 0);
+    }
 }

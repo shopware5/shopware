@@ -15,9 +15,9 @@
      * ```
      * <div class="product-slider" data-touchControl="true">
      *     <div class="product-slider--container">
-     *         <div class="product-slider--item"></div>
-     *         <div class="product-slider--item"></div>
-     *         <div class="product-slider--item"></div>
+     *         <div class="product--box"></div>
+     *         <div class="product--box"></div>
+     *         <div class="product--box"></div>
      *     </div>
      * </div>
      * ```
@@ -114,7 +114,7 @@
              * The css class of a single slider item.
              * @string
              */
-            itemClass: 'product-slider--item',
+            itemClass: 'product--box',
 
             /**
              * The css class of the left arrow button.

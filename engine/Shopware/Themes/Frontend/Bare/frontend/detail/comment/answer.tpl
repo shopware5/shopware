@@ -1,9 +1,9 @@
 {namespace name="frontend/detail/comment"}
-<div class="review--entry block-group is--answer{if $isLast} is--last{/if}">
+<div class="review--entry is--answer{if $isLast} is--last{/if}">
 
 	{* Author block *}
 	{block name="frontend_detail_answer_author_block"}
-		<div class="entry--author block">
+		<div class="entry--header">
 
 			{* Answer author label *}
 			{block name='frontend_detail_answer_author_label'}
@@ -37,7 +37,7 @@
 
 	{* Answer content *}
 	{block name='frontend_detail_answer_content'}
-		<div class="entry--content block">
+		<div class="entry--content">
 			<p class="content--box review--content">
 				{$vote.answer}
 			</p>

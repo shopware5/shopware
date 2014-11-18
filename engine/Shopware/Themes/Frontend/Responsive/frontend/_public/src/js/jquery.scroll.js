@@ -1,132 +1,136 @@
-;(function($, window, document, undefined) {
-    "use strict";
+;(function ($) {
+    'use strict';
 
-    var pluginName = 'scroll',
-        defaults = {
+    /**
+     * Shopware Search Field Plugin.
+     *
+     * This plugin scrolls the page or given element to a certain point when the
+     * plugin element was clicked.
+     */
+    $.plugin('scroll', {
 
-            // The selector of the container which should be scrolled.
+        defaults: {
+
+            /**
+             * The selector of the container which should be scrolled.
+             *
+             * @property scrollContainerSelector
+             * @type {String}
+             */
             scrollContainerSelector: 'body',
 
-            // The selector of the target element or the position in px where the container should be scrolled to.
+            /**
+             * The selector of the target element or the position in px where the container should be scrolled to.
+             *
+             * @property scrollTarget
+             * @type {Number|String}
+             */
             scrollTarget: 0,
 
-            // The speed of the scroll animation in ms.
-            animationSpeed: 300
-        };
+            /**
+             * The speed of the scroll animation in ms.
+             *
+             * @property animationSpeed
+             * @type {Number}
+             */
+            animationSpeed: 500
+        },
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
+        /**
+         * Initializes the plugin and register its events
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            var me = this,
+                opts = me.opts;
 
-        me.$el = $(element);
-        me.opts = $.extend({}, defaults, userOpts);
+            me.applyDataAttributes();
 
-        me._defaults = defaults;
-        me._name = pluginName;
+            me.$container = $(opts.scrollContainerSelector);
 
-        me.init();
-    }
-
-    /**
-     * Initializes the plugin and adds the necessary
-     * classes to get the plugin up and running.
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
-
-        me.getDataConfig();
-
-        me.$container = $(me.opts.scrollContainerSelector);
-
-        if (typeof me.opts.scrollTarget == 'string') me.$targetEl = $(me.opts.scrollTarget);
-
-        me.registerEvents();
-    };
-
-    /**
-     * Loads config settings which are set via data attributes and
-     * overrides the old setting with the data attribute of the
-     * same name if defined.
-     */
-    Plugin.prototype.getDataConfig = function() {
-        var me = this,
-            attr;
-
-        $.each(me.opts, function(key, value) {
-            attr = me.$el.attr('data-' + key);
-            if ( attr !== undefined ) {
-                me.opts[key] = attr;
+            if (typeof opts.scrollTarget === 'string') {
+                me.$targetEl = $(opts.scrollTarget);
             }
-        });
-    };
 
-    /**
-     * Registers all necessary event handlers.
-     */
-    Plugin.prototype.registerEvents = function() {
-        var me = this;
+            me.registerEvents();
+        },
 
-        me.$el.on('click.' + pluginName, function(e) {
-            e.preventDefault();
+        /**
+         * This method registers the event listeners when when clicking
+         * or tapping the plugin element.
+         *
+         * @public
+         * @method registerEvents
+         */
+        registerEvents: function () {
+            var me = this;
 
-            if (typeof me.opts.scrollTarget == 'number') {
-                me.scrollToPosition(me.opts.scrollTarget);
-            } else if (me.$targetEl.length) {
+            me._on(me.$el, 'touchstart click', $.proxy(me.onClickElement, me));
+        },
+
+        /**
+         * This method will be called when the plugin element was either clicked or tapped.
+         * It scrolls the target element to the given destination.
+         *
+         * @public
+         * @method onClickElement
+         */
+        onClickElement: function (event) {
+            event.preventDefault();
+
+            var me = this,
+                opts = me.opts;
+
+            if (me.$targetEl) {
                 me.scrollToElement(me.$targetEl);
+                return;
             }
-        });
-    };
 
-    /**
-     * Scrolls to a specific element on the page.
-     *
-     * @param $targetEl - jQuery Element
-     * @param aberration
-     */
-    Plugin.prototype.scrollToElement = function($targetEl, aberration) {
-        var me = this,
-            ab = aberration || 0,
-            offset = $targetEl[0].offsetTop,
-            position = offset + ab;
+            me.scrollToPosition(opts.scrollTarget);
+        },
 
-        me.scrollToPosition(position);
-    };
+        /**
+         * Scrolls the target element to the vertical position of another element.
+         *
+         * @public
+         * @method scrollToElement
+         * @param {jQuery} $targetEl
+         * @param {Number} offset
+         */
+        scrollToElement: function ($targetEl, offset) {
 
-    /**
-     * Scrolls the page to the given position.
-     *
-     * @param position
-     */
-    Plugin.prototype.scrollToPosition = function(position) {
-        var me = this;
-
-        me.$container.animate({ scrollTop: position }, me.opts.animationSpeed);
-    };
-
-    /**
-     * Destroys the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
-
-        me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
+            if (!$targetEl.length) {
+                return;
             }
-        });
-    };
 
-})(jQuery, window, document);
+            this.scrollToPosition($($targetEl[0]).offset().top + ~~(offset));
+        },
+
+        /**
+         * Scrolls the target element to the given vertical position in pixel.
+         *
+         * @public
+         * @method scrollToPosition
+         * @param {Number} position
+         */
+        scrollToPosition: function (position) {
+            var me = this;
+
+            me.$container.animate({
+                scrollTop: position
+            }, me.opts.animationSpeed);
+        },
+
+        /**
+         * This method destroys the plugin and its registered events
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            this._destroy();
+        }
+    });
+})(jQuery);

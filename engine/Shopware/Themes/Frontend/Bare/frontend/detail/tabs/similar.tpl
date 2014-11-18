@@ -1,14 +1,14 @@
 {if $sArticle.sSimilarArticles}
 	{* Similar products - Content *}
 	{block name="frontend_detail_index_similar_slider_content"}
-		<div class="listing--container">
-			<ul class="listing listing--listing">
+		<div class="similar--content product-slider" data-product-slider="true">
+			<div class="product-slider--container">
 				{foreach $sArticle.sSimilarArticles as $sSimilarArticle}
 					{block name="frontend_detail_index_similar_slider_item"}
-						{include file="frontend/listing/box_similar.tpl" sArticle=$sSimilarArticle}
+                        {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$sSimilarArticle}
 					{/block}
 				{/foreach}
-			</ul>
+			</div>
 		</div>
 	{/block}
 {/if}

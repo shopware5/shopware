@@ -349,9 +349,12 @@
          */
         destroy: function () {
             var me = this,
-                $sidebar = me._$sidebar;
+                $sidebar = me._$sidebar,
+                $sidebarWrapper = me._$sidebarWrapper;
 
-            $sidebar.off(me.getEventName(me.opts.eventName), "**");
+            if ($sidebar) {
+                $sidebar.off(me.getEventName(me.opts.eventName), '**');
+            }
 
             me._destroy();
 
@@ -359,7 +362,9 @@
             $('.sidebar--navigation ul').not('.navigation--level-high').css('display', 'block');
 
             // force sidebar to be shown
-            me._$sidebarWrapper.css('display', 'block');
+            if ($sidebarWrapper) {
+                me._$sidebarWrapper.css('display', 'block');
+            }
 
             // clear overlay
             $('.offcanvas--overlay').remove();

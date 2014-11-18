@@ -270,6 +270,7 @@
             // set display to block instead of .show() for browser compatibility
             $modalBox.css('display', 'block');
 
+            console.log(opts.mode);
             switch (opts.mode) {
                 case 'ajax':
                     $.ajax(content, {
@@ -583,6 +584,115 @@
                 delete me.options[p];
             }
         }
-    }
+    };
+
+    /**
+     * Shopware Modalbox Plugin
+     *
+     * This plugin opens a offcanvas menu on click.
+     * The content of the offcanvas can either be passed to the plugin
+     * or the target element will be used as the content.
+     */
+    $.plugin('modalbox', {
+
+        defaults: {
+
+            /**
+             * Selector for the target when clicked on.
+             * If no selector is passed, the element itself will be used.
+             * When no content was passed, the target will be used as the content.
+             *
+             * @property targetSelector
+             * @type {String}
+             */
+            targetSelector: '',
+
+            /**
+             * Optional content for the modal box.
+             *
+             * @property content
+             * @type {String}
+             */
+            content: '',
+
+            /**
+             * Fetch mode for the modal box
+             *
+             * @property mode
+             * @type {String}
+             */
+            mode: 'local'
+        },
+
+        /**
+         * Initializes the plugin, applies addition data attributes and
+         * registers events for clicking the target element.
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            var me = this,
+                opts;
+
+            me.applyDataAttributes();
+
+            opts = me.opts;
+
+            me.$target = (me.$target = me.$el.find(opts.targetSelector)).length ? me.$target : me.$el;
+
+            me._isOpened = false;
+
+            me._on(me.$target, 'click', $.proxy(me.onClick, me));
+
+            $.subscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
+        },
+
+        /**
+         * This method will be called when the target element was clicked.
+         * Opens the actual modal box and uses the provided content.
+         *
+         * @public
+         * @method onClick
+         * @param {jQuery.Event} event
+         */
+        onClick: function (event) {
+            event.preventDefault();
+
+            var me = this;
+
+            $.modal.open(me.opts.content || me.opts.mode !== 'local' ? me.$target.attr('href') : me.$target, me.opts);
+
+            me._isOpened = true;
+        },
+
+        /**
+         * This method will be called when the plugin specific modal box was closed.
+         *
+         * @public
+         * @method onClick
+         */
+        onClose: function () {
+            this._isOpened = false;
+        },
+
+        /**
+         * This method closes the modal box when its opened, destroys
+         * the plugin and removes all registered events
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            var me = this;
+
+
+            if (me._isOpened) {
+                $.modal.close();
+            }
+
+            me._destroy();
+        }
+    });
 })(jQuery, window);
 

@@ -1,75 +1,96 @@
 .content--breadcrumb {
-    display: none;
-}
+    .unitize(14, 16, font-size);
+    .clearfix();
+    display: block;
+    float: none;
+    border-bottom: 1px solid @border-color;
 
-@media screen and(min-width: @tabletViewportWidth) {
-    .content--breadcrumb {
-        .clearfix();
-        .unitize(14, 16, font-size);
-        .unitize-padding(15, 12);
+    .breadcrumb--list {
+        .unitize(10, 16, padding-left);
+        overflow: hidden;
+    }
+
+    // Entry styling
+    .breadcrumb--entry,
+    .breadcrumb--separator {
+        display: none;
+        float: left;
+        list-style: none;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &:last-child {
+            display: list-item;
+        }
+    }
+
+    .breadcrumb--link,
+    .breadcrumb--separator {
+        .unitize(24, 16, line-height);
+        .unitize-padding(10, 10);
+    }
+
+    // Separator
+    .breadcrumb--separator {
+        .unitize(9, 16, font-size);
+    }
+
+    // Link
+    .breadcrumb--link {
         display: block;
-        float: none;
-        border-bottom: 1px solid @border-color;
+        color: @text-color;
+    }
 
-        .breadcrumb--list {
-            overflow: hidden;
-        }
-
-        .breadcrumb--entry,
-        .breadcrumb--separator {
-            .unitize(24, 16, line-height);
-        }
-
-        // Entry styling
-        .breadcrumb--entry, .breadcrumb--separator {
-            .unitize(16, 16, margin-right);
-            float: left;
-            list-style: none;
-	        white-space: nowrap;
-        }
-
-        // Separator
-        .breadcrumb--separator {
-            .unitize(10, 16, font-size);
-        }
-
-        // Link
-        .breadcrumb--link {
-            color: @text-color;
-
-            &.btn {
-                &:hover {
-                    color: @btn-default-hover-text-color;
-                }
-            }
-        }
-
-        // Active link
-        .is--active .breadcrumb--link {
-            color: @brand-primary;
-        }
+    // Active link
+    .is--active .breadcrumb--link {
+        color: @brand-primary;
     }
 
     // Button
     .breadcrumb--button {
+        .unitize-padding(10, 0, 10, 10);
+        display: inline-block;
         float: left;
         list-style: none;
-    }
 
-    // Detail page breadcrumb with button
-    .is--ctl-detail {
-        .content--breadcrumb {
-            .unitize-padding(3, 5);
+        .breadcrumb--title {
+            .unitize(20, 16, padding-right);
+            border-right: 1px solid @border-color;
         }
 
+        .icon--arrow-left {
+            .unitize(9, 16, font-size);
+            .unitize(10, 16, margin-right);
+        }
+    }
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .content--breadcrumb {
+
         .breadcrumb--list {
-            .unitize-padding(10, 10);
+            padding-left: 0;
+        }
+
+        .breadcrumb--entry,
+        .breadcrumb--separator {
+            display: list-item;
+        }
+
+        // Button
+        .breadcrumb--button {
+            .unitize-padding(10, 30);
+
+            .breadcrumb--title {
+                .unitize(0, 16, padding-right);
+                border-right: 0 none;
+            }
         }
     }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-    .content--breadcrumb {
-        .unitize-padding(15, 20, 15, 45);
+    .content--breadcrumb  .breadcrumb--button {
+        .unitize-padding(10, 50);
     }
 }

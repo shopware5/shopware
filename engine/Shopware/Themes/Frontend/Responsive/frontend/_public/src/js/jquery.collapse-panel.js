@@ -23,6 +23,13 @@
             collapseTarget: false,
 
             /**
+             * Selector for the content sibling when no collapseTargetCls was passed.
+             *
+             * @type {String}
+             */
+            contentSiblingSelector: '.collapse--content',
+
+            /**
              * Additional class which will be added to the collapse target.
              *
              * @type {String}
@@ -67,17 +74,20 @@
          * @method init
          */
         init: function () {
-            var me = this;
+            var me = this,
+                opts;
 
             me.applyDataAttributes();
 
-            if (me.opts.collapseTarget.length) {
-                me.$targetEl = $(me.opts.collapseTarget);
+            opts = me.opts;
+
+            if (opts.collapseTarget) {
+                me.$targetEl = $(opts.collapseTarget);
             } else {
-                me.$targetEl = me.$el.next('.collapse--content');
+                me.$targetEl = me.$el.next(opts.contentSiblingSelector);
             }
 
-            me.$targetEl.addClass(me.opts.collapseTargetCls);
+            me.$targetEl.addClass(opts.collapseTargetCls);
 
             me.registerEvents();
         },

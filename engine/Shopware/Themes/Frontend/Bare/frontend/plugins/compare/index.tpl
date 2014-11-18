@@ -15,20 +15,9 @@
 	   rel="nofollow"
 	   title="{"{s name='ListingBoxLinkCompare'}vergleichen{/s}"|escape}"
 	   class="product--action action--compare btn is--secondary is--icon-right">
-		{se name='ListingBoxLinkCompare'}{/se}
+		{s name='ListingBoxLinkCompare'}{/s}
 		<i class="icon--arrow-right"></i>
 	</a>
-{/block}
-
-{* Compare javascript *}
-{block name='frontend_index_header_javascript_inline' prepend}
-	var compareCount = '{$sComparisons|count}';
-	var compareMaxCount = '{config name="MaxComparisons"}';
-{literal}
-	jQuery(document).ready(function() {
-		jQuery.compare.setup();
-	});
-{/literal}
 {/block}
 
 {* Compare button 2 *}

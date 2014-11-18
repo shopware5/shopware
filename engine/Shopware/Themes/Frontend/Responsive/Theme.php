@@ -61,7 +61,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.off-canvas-menu.js',
         'src/js/jquery.search-field.js',
         'src/js/jquery.slide-panel.js',
-        'src/js/jquery.tab-navigation.js',
+        'src/js/jquery.tab-menu.js',
         'src/js/jquery.image-slider.js',
         'src/js/jquery.image-zoom.js',
         'src/js/jquery.collapse-panel.js',
@@ -95,6 +95,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.product-compare-add.js',
         'src/js/jquery.product-compare-menu.js',
         'src/js/jquery.infinite-scrolling.js',
+        'src/js/jquery.off-canvas-button.js',
         'src/js/jquery.subcategory-nav.js',
         'src/js/jquery.shopware-responsive.js'
     );

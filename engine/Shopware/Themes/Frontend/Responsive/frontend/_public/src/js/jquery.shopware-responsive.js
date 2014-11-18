@@ -3,6 +3,11 @@ $(function () {
         {
             state: 'xs',
             enter: 0,
+            exit: 479
+        },
+        {
+            state: 's',
+            enter: 480,
             exit: 767
         },
         {
@@ -25,22 +30,22 @@ $(function () {
     StateManager
 
         // OffCanvas menu
-        .addPlugin('*[data-offcanvas="true"]', 'offcanvasMenu', 'xs')
+        .addPlugin('*[data-offcanvas="true"]', 'offcanvasMenu', ['xs', 's'])
 
         // Search field
-        .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 'm', 'l'])
+        .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 's', 'm', 'l'])
 
         // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'scroll', 'xs')
+        .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's'])
 
         // Collapse panel
         .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['m', 'l', 'xl'])
 
         // Slide panel
-        .addPlugin('*[data-slide-panel="true"]', 'slidePanel', 'xs')
+        .addPlugin('*[data-slide-panel="true"]', 'slidePanel', ['xs', 's'])
 
         // Collapse panel
-        .addPlugin('#new-customer-action', 'collapsePanel', 'xs')
+        .addPlugin('#new-customer-action', 'collapsePanel', ['xs', 's'])
 
         // Image slider
         .addPlugin('*[data-image-slider="true"]', 'imageSlider', { touchControls: true })
@@ -50,10 +55,10 @@ $(function () {
         .addPlugin('.product--image-zoom', 'imageZoom', 'xl')
 
         // Collapse panel
-        .addPlugin('.blog-filter--trigger', 'collapsePanel', ['xs', 'm', 'l'])
+        .addPlugin('.blog-filter--trigger', 'collapsePanel', ['xs', 's', 'm', 'l'])
 
         // Collapse texr
-        .addPlugin('.category--teaser .hero--text', 'collapseText', 'xs')
+        .addPlugin('.category--teaser .hero--text', 'collapseText', ['xs', 's'])
 
         // Default product slider
 
@@ -105,9 +110,24 @@ $(function () {
             perPage: 4,
             perSlide: 4,
             touchControl: false
-        }, 'xl');
-
-    $('*[data-tab-content="true"]').tabContent();
+        }, 'xl')
+    
+        // Detail page tab menus
+        
+        .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
+            scrollTarget: '.tab-menu--product'
+        })
+        .addPlugin('.tab-menu--product', 'tabMenu', ['s', 'm', 'l', 'xl'])
+        .addPlugin('.tab-menu--cross-selling', 'tabMenu', ['m', 'l', 'xl'])
+        .addPlugin('.tab-menu--product .tab--container', 'offcanvasButton', {
+            titleSelector: '.tab--title',
+            previewSelector: '.tab--preview',
+            contentSelector: '.tab--content'
+        }, ['xs'])
+        .addPlugin('.tab-menu--cross-selling .tab--header', 'collapsePanel', {
+            'contentSiblingSelector': '.tab--content'
+        }, ['xs', 's']);
+    
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();
@@ -118,6 +138,7 @@ $(function () {
     $('*[data-collapse-text="true"]').collapseText();
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
+    $('*[data-scroll="true"]').scroll();
 
     $('body').ajaxProductNavigation();
     $('*[data-emotion="true"]').emotion();
@@ -143,13 +164,7 @@ $(function () {
     // Deferred loading of the captcha
     $('div.captcha--placeholder[data-src]').captcha();
 
-    $('*[data-modal="true"] a').on('click.modal', function () {
-        event.preventDefault();
-
-        $.modal.open(this.href, {
-            mode: 'ajax'
-        });
-    });
+    $('*[data-modalbox="true"]').modalbox();
 
     $('.add-voucher--checkbox').on('change', function (event) {
         var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
@@ -171,16 +186,21 @@ $(function () {
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if ($('.is--ctl-detail').length) {
-        var plugin = $('.additional-info--tabs').data('plugin_tabContent');
+        var tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
 
-        $('.product--rating-link').on('click', function (e) {
-            e.preventDefault();
-            plugin.changeTab(1, true);
+        $('.product--rating-link, .link--publish-comment').on('click', function (event) {
+            event.preventDefault();
+
+            tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
+
+            if (tabMenu) {
+                tabMenu.changeTab(1);
+            }
         });
 
         var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
-        if (param === 'rating') {
-            plugin.changeTab(1, false);
+        if (param === 'rating' && tabMenu) {
+            tabMenu.changeTab(1);
         }
     }
 

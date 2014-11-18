@@ -1,5 +1,19 @@
 {namespace name="frontend/detail/comment"}
+
+{* Offcanvas buttons *}
+{block name='frontend_detail_rating_buttons_offcanvas'}
+    <div class="buttons--off-canvas">
+        {block name='frontend_detail_rating_buttons_offcanvas_inner'}
+            <a href="#" title="{"{s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}Close menu{/s}"|escape}" class="close--off-canvas">
+                <i class="icon--arrow-left"></i>
+                {s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}Close menu{/s}
+            </a>
+        {/block}
+    </div>
+{/block}
+
 <div class="content--product-reviews">
+
 	{* Response save comment *}
 	{if $sAction == "ratingAction"}
 		{block name='frontend_detail_comment_error_messages'}

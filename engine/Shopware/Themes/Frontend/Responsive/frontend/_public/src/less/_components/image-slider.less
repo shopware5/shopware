@@ -104,12 +104,18 @@
 
     .image-slider--container {
         .unitize-height(300);
-        .unitize(90, 16, margin-bottom);
+        .unitize(100, 16, margin-bottom);
+    }
+
+    .image-slider--dots {
+        .unitize(300, 16, top);
+        position: absolute;
+        width: 100%;
     }
 
     .image-slider--thumbnails {
         .unitize-height(70);
-        .unitize(320, 16, top);
+        .unitize(330, 16, top);
         display: block;
         width: 100%;
         overflow: hidden;
@@ -166,13 +172,18 @@
                 color: @brand-primary;
             }
 
-            &.is--top {
-                .unitize-width(70);
-                .unitize-height(20);
+            &.is--top,
+            &.is--bottom {
+                .unitize-width(32);
+                .unitize-height(24);
+                .unitize-padding(2, 0, 0, 0);
                 .unitize(18, 16, line-height);
-                .unitize(-35, 16, margin-left);
-                top: 0;
+                .unitize(-16, 16, margin-left);
                 left: 50%;
+            }
+
+            &.is--top {
+                top: 0;
 
                 &::before {
                     content: "\e610";
@@ -180,12 +191,7 @@
             }
 
             &.is--bottom {
-                .unitize-width(70);
-                .unitize-height(20);
-                .unitize(18, 16, line-height);
-                .unitize(-35, 16, margin-left);
                 bottom: 0;
-                left: 50%;
 
                 &::before {
                     content: "\e612";
@@ -213,16 +219,12 @@
             }
         }
     }
-
-    .image-slider--dots {
-        display: none;
-    }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
 
     .image-slider--container {
-        .unitize-height(360);
+        .unitize-height(430);
         margin-bottom: 0;
 
         .arrow {
@@ -232,20 +234,34 @@
 
     .image-slider--thumbnails {
         .unitize-width(70);
-        .unitize-height(360);
+        .unitize-height(430);
         .unitize-margin(0, 20, 0, 0);
         position: relative;
         top:0; left: 0;
         float: left;
 
         .thumbnail--link {
-            .unitize-margin(0, 0, 10, 0);
+            .unitize-margin(0, 0, 20, 0);
             display: block;
+        }
+
+        &:after,
+        &::after {
+            .linear-gradient-multi(0%, #fff, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), bottom, top);
+            .unitize-height(50);
+            width: 100%;
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: 0;
+            pointer-events: none;
         }
     }
 
     .image-slider--dots {
         .unitize-margin(0, 0, 0, 90);
+        position: relative;
+        top: auto;
         display: block;
     }
 }

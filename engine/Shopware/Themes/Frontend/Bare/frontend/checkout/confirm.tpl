@@ -45,8 +45,8 @@
     {if !$theme.checkoutHeader}
         {$smarty.block.parent}
     {else}
-         <div class="container footer-vat">
-             <div class="footer--vat-info">
+        <div class="container footer-vat">
+            <div class="footer--vat-info">
                 {if $sOutputNet}
                     <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
                 {else}
@@ -59,7 +59,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content confirm--content">
+    <div class="content confirm--content">
 
     {* Error messages *}
     {block name='frontend_checkout_confirm_error_messages'}
@@ -81,7 +81,7 @@
                 {* Right of revocation notice *}
                 {block name='frontend_checkout_confirm_tos_revocation_notice'}
                     {if {config name=revocationnotice}}
-                        <div class="body--revocation" data-modal="true">
+                        <div class="body--revocation" data-modalbox="true">
                             {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                         </div>
                     {/if}
@@ -337,26 +337,26 @@
                                         {/block}
                                     </form>
                                 </div>
-                            {/block}
 
-                            {* Additional feature - Add product using the sku *}
-                            {block name="frontend_checkout_confirm_additional_features_add_product"}
-                                <div class="feature--add-product">
-                                    <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
+                                {* Additional feature - Add product using the sku *}
+                                {block name="frontend_checkout_confirm_additional_features_add_product"}
+                                    <div class="feature--add-product">
+                                        <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
-                                        {block name='frontend_checkout_confirm_add_product_field'}
-                                            <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
-                                        {/block}
+                                            {block name='frontend_checkout_confirm_add_product_field'}
+                                                <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
+                                            {/block}
 
-                                        {block name='frontend_checkout_confirm_add_product_button'}
-                                            <button type="submit" class="add-product--button btn is--primary is--small block">
-                                                <i class="icon--arrow-right"></i>
-                                            </button>
-                                        {/block}
-                                    </form>
-                                </div>
-                            {/block}
-                        </div>
+                                            {block name='frontend_checkout_confirm_add_product_button'}
+                                                <button type="submit" class="add-product--button btn is--primary is--small block">
+                                                    <i class="icon--arrow-right"></i>
+                                                </button>
+                                            {/block}
+                                        </form>
+                                    </div>
+                                {/block}
+                            </div>
+                        {/block}
 
                         {* Additional customer comment for the order *}
                         {block name='frontend_checkout_confirm_comment'}
@@ -434,5 +434,5 @@
             {/block}
         </div>
     {/block}
-</div>
+    </div>
 {/block}
