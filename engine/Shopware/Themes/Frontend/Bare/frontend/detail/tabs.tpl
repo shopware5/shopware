@@ -9,12 +9,12 @@
                     {block name="frontend_detail_tabs_navigation_inner"}
 
                         {* Description tab *}
-                        {block name="frontend_detail_tabs_navigation_description"}
+                        {block name="frontend_detail_tabs_description"}
                             <a href="#" class="tab--link" title="{s name='DetailTabsDescription'}{/s}">{s name='DetailTabsDescription'}{/s}</a>
                         {/block}
 
                         {* Rating tab *}
-                        {block name="frontend_detail_tabs_navigation_rating"}
+                        {block name="frontend_detail_tabs_rating"}
                             <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}">
                                 {s name='DetailTabsRating'}{/s}
                                 {block name="frontend_detail_tabs_navigation_rating_count"}

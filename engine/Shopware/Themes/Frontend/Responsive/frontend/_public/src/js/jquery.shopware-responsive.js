@@ -118,13 +118,13 @@ $(function () {
             scrollTarget: '.tab-menu--product'
         })
         .addPlugin('.tab-menu--product', 'tabMenu', ['s', 'm', 'l', 'xl'])
-        .addPlugin('.tab-menu--crossselling', 'tabMenu', ['m', 'l', 'xl'])
+        .addPlugin('.tab-menu--cross-selling', 'tabMenu', ['m', 'l', 'xl'])
         .addPlugin('.tab-menu--product .tab--container', 'offcanvasButton', {
             titleSelector: '.tab--title',
             previewSelector: '.tab--preview',
             contentSelector: '.tab--content'
         }, ['xs'])
-        .addPlugin('.tab-menu--crossselling .tab--header', 'collapsePanel', {
+        .addPlugin('.tab-menu--cross-selling .tab--header', 'collapsePanel', {
             'contentSiblingSelector': '.tab--content'
         }, ['xs', 's']);
     
