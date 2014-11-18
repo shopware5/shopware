@@ -233,10 +233,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
         }
 
+        //sets the correct limit
+        $limit = 25;
+        if (strtolower($this->format) == 'csv') {
+            $limit = count($data);
+        }
+
         $splice = array_splice(
             array_values($data),
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25)
+            $this->Request()->getParam('limit', $limit)
         );
 
         $this->send($splice, count($data));
