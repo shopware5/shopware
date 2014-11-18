@@ -93,7 +93,6 @@
 		color: @text-color-dark;
 		font-weight: bold;
 		overflow: hidden;
-		text-overflow: ellipsis;
 
 		&:hover {
 			color: @link-color;
@@ -266,6 +265,87 @@
 
 .box--image {
 	.image--top(200);
+}
+
+.box--slider {
+	.unitize-padding(10, 10);
+	display: block;
+	position: relative;
+	text-align: left;
+
+	&:hover .product--title {
+		color: @brand-primary;
+	}
+
+	.box--content {
+		border: 0 none;
+		padding: 0;
+	}
+
+	.product--price-info {
+		height: auto;
+
+		.price--unit {
+			.unitize-height(14);
+		}
+
+		.label--purchase-unit {
+			.unitize(5, 16, margin-right);
+		}
+
+		.price--default {
+			.unitize(14, 16, font-size);
+			font-weight: normal;
+		}
+
+		.is--discount {
+			font-weight: bold;
+		}
+	}
+
+	.product--image {
+		.unitize-height(140);
+		.user-select(none);
+		.touch-callout(none);
+		.tap-highlight-color(rgba(0, 0, 0, 0));
+		.unitize(10, 16, margin-bottom);
+		display: block;
+		text-align: center;
+		position: relative;
+	}
+
+	.image--element {
+		height: 100%;
+		width: 100%;
+		display: block;
+		margin: 0 auto;
+		position: relative;
+
+		img {
+			.user-select(none);
+			.touch-callout(none);
+			.tap-highlight-color(rgba(0, 0, 0, 0));
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			margin: auto;
+			display: inline-block;
+			vertical-align: middle;
+			z-index: 500;
+		}
+	}
+
+	.product--title {
+		.unitize(14, 16, font-size);
+		.unitize(40, 16, height);
+		.user-select(none);
+		.touch-callout(none);
+		.tap-highlight-color(rgba(0, 0, 0, 0));
+		display: block;
+		color: @text-color;
+		font-weight: normal;
+		white-space: normal;
+	}
 }
 
 @media screen and(min-width: @phoneLandscapeViewportWidth) {

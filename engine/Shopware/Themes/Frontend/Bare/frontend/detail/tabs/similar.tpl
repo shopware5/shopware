@@ -5,7 +5,9 @@
 			<div class="product-slider--container">
 				{foreach $sArticle.sSimilarArticles as $sSimilarArticle}
 					{block name="frontend_detail_index_similar_slider_item"}
-                        {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$sSimilarArticle}
+                        <div class="product-slider--item">
+                            {include file="frontend/listing/box_article.tpl" sArticle=$sSimilarArticle productBoxLayout="slider"}
+                        </div>
 					{/block}
 				{/foreach}
 			</div>

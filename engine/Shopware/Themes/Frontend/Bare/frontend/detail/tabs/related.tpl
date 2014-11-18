@@ -6,7 +6,9 @@
 		<div class="related--content product-slider" data-product-slider="true">
 			<div class="product-slider--container">
 				{foreach $sArticle.sRelatedArticles as $sArticleSub}
-                    {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$sArticleSub}
+                    <div class="product-slider--item">
+                        {include file="frontend/listing/box_article.tpl" sArticle=$sArticleSub productBoxLayout="slider"}
+                    </div>
 				{/foreach}
 			</div>
 		</div>
