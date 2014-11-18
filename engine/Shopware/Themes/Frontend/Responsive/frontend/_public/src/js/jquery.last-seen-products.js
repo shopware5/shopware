@@ -68,7 +68,7 @@
              * @property itemCls
              * @type {String}
              */
-            itemCls: 'last-seen-products--item product--box',
+            itemCls: 'last-seen-products--item product-slider--item product--box box--slider',
 
             /**
              * Class that will be used for the product title
