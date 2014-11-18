@@ -451,19 +451,24 @@ createShopwareVersionMessage = function() {
                     '<p><strong>{if $product == "PE"}Professional Edition {elseif $product == "EB"}Enterprise Business Edition {elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
 
                     '<p><strong>Shopware 5 uses the following components</strong></p>' +
-                    '<p><strong>Enlight 2.0</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +
-                    '<p><strong>Zend Framework 1.11.0dev</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Framework Foundation</span></p>' +
-                    '<p><strong>ExtJS 4.1.1</strong><span>GPL v3 License</span><span>&nbsp;Origin: Sencha Corp.</span></p>' +
+                    '<p><strong>Enlight 2</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +
+                    '<p><strong>Zend Framework 1</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Technologies</span></p>' +
+                    '<p><strong>ExtJS 4</strong><span>GPL v3 License</span><span>&nbsp;Origin: Sencha Corp.</span></p>' +
                     'If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.' +
-                    '<p><strong>Doctrine 2.2.0</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
-                    '<p><strong>Gedmo 2.3.1-DEV</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
-                    '<p><strong>password_compat 1.0.0</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ircmaxell/password_compat/</span></p>' +
-                    '<p><strong>TinyMCE 3.5.0</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
+                    '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
+                    '<p><strong>password_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ircmaxell/password_compat/</span></p>' +
+                    '<p><strong>TinyMCE 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
                     '<p><strong>Symfony 2</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
-                    '<p><strong>Smarty 3.1.8</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
+                    '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
                     '<p><strong>Mpdf 5.0</strong><span>GPL License</span><span>&nbsp;Origin: http://www.mpdf1.com/mpdf/</span></p>' +
                     '<p><strong>CodeMirror</strong><span>BSD License</span><span>&nbsp;Origin: http://codemirror.net/</span></p>' +
-                    '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' + "</p>"
+                    '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' + "</p>" +
+                    '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org/</span></p>' + "</p>" +
+                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com/</span></p>' + "</p>" +
+                    '<p><strong>reactphp/promise</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/reactphp/promise</span></p>' + "</p>" +
+                    '<p><strong>array_column</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ramsey/array_column</span></p>' + "</p>" +
+                    '<p><strong>Mobile_Detect</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/serbanghita/Mobile-Detect/</span></p>' + "</p>" +
+                    '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog/</span></p>' + "</p>"
         }]
     });
 
