@@ -1,7 +1,7 @@
 {namespace name="frontend/listing/box_article"}
 
 {block name="frontend_listing_box_article"}
-    <div class="product--box{if $productBoxLayout} box--{$productBoxLayout}{/if}"
+    <div class="product--box box--{$productBoxLayout}"
          data-page-index="{$pageIndex}"
          {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
 

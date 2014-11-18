@@ -15,7 +15,7 @@
 	   rel="nofollow"
 	   title="{"{s name='ListingBoxLinkCompare'}vergleichen{/s}"|escape}"
 	   class="product--action action--compare btn is--secondary is--icon-right">
-		{se name='ListingBoxLinkCompare'}{/se}
+		{s name='ListingBoxLinkCompare'}{/s}
 		<i class="icon--arrow-right"></i>
 	</a>
 {/block}

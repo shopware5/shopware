@@ -90,11 +90,7 @@
             thumbnailArrowBottomCls: 'is--bottom',
 
             // The css class for active states of the arrows.
-            activeStateClass: 'is--active',
-
-            leftSlideKey: [37],
-
-            rightSlideKey: [39]
+            activeStateClass: 'is--active'
         },
 
         /**
@@ -194,8 +190,6 @@
                 me._on(me.$el, 'mouseenter', $.proxy(me.stopAutoSlide, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.startAutoSlide, me));
             }
-
-            me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
         },
 
         /**
@@ -213,36 +207,6 @@
                 event.preventDefault();
                 me.slide(i);
             });
-        },
-
-        /**
-         * Called when a key was pressed.
-         * Closes the modal box when the keyCode is mapped to a close key.
-         *
-         * @public
-         * @method onKeyDown
-         */
-        onKeyDown: function (event) {
-            var me = this,
-                keyCode = event.which,
-                leftKeys = me.opts.leftSlideKey,
-                rightKeys = me.opts.rightSlideKey,
-                len = leftKeys.length,
-                i = 0;
-
-            for (; i < len; i++) {
-                if (leftKeys[i] === keyCode) {
-                    me.slidePrev();
-                    return;
-                }
-            }
-
-            for (i = 0, len = rightKeys.length; i < len; i++) {
-                if (rightKeys[i] === keyCode) {
-                    me.slideNext();
-                    return;
-                }
-            }
         },
 
         /**

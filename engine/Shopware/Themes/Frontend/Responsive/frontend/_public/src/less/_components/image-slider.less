@@ -172,14 +172,18 @@
                 color: @brand-primary;
             }
 
-            &.is--top {
+            &.is--top,
+            &.is--bottom {
                 .unitize-width(32);
                 .unitize-height(24);
                 .unitize-padding(2, 0, 0, 0);
                 .unitize(18, 16, line-height);
-                .unitize(-15, 16, margin-left);
-                top: 0;
+                .unitize(-16, 16, margin-left);
                 left: 50%;
+            }
+
+            &.is--top {
+                top: 0;
 
                 &::before {
                     content: "\e610";
@@ -187,13 +191,7 @@
             }
 
             &.is--bottom {
-                .unitize-width(32);
-                .unitize-height(24);
-                .unitize-padding(2, 0, 0, 0);
-                .unitize(18, 16, line-height);
-                .unitize(-16, 16, margin-left);
                 bottom: 0;
-                left: 50%;
 
                 &::before {
                     content: "\e612";
@@ -247,7 +245,8 @@
             display: block;
         }
 
-        &:after {
+        &:after,
+        &::after {
             .linear-gradient-multi(0%, #fff, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), bottom, top);
             .unitize-height(50);
             width: 100%;
