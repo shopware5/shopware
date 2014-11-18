@@ -145,10 +145,7 @@
                 me.$container.append(me.createTemplate(products[i]));
             }
 
-            me.productSlider.trackItems();
-            me.productSlider.checkActiveState();
-            me.productSlider.trackArrows();
-            me.productSlider.setSizes();
+            me.productSlider.initSlider();
         },
 
         /**

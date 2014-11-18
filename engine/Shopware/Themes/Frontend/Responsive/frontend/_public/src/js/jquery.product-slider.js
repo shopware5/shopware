@@ -1,557 +1,821 @@
-;(function($, modernizr, window, document, undefined) {
-    "use strict";
+/**
+ * Product Slider
+ *
+ * A jQuery Plugin for dynamic sliders.
+ * It has functionality for slide and scroll animations.
+ * Supports momentum scrolling via touch gestures on mobile devices.
+ * Can load items via ajax or use an existing dom structure.
+ * Use the different config options to adjust the slider to your needs.
+ *
+ * @Example DOM structure:
+ *
+ * <div class="product-slider">
+ *     <div class="product-slider--container">
+ *         <div class="product-slider--item"></div>
+ *         <div class="product-slider--item"></div>
+ *         <div class="product-slider--item"></div>
+ *     </div>
+ * </div>
+ */
+;(function ($, window) {
+    'use strict';
+
+    /**
+     * Private window object
+     */
+    var $window = $(window);
+
+    /**
+     * Additional jQuery easing methods.
+     */
+    jQuery.extend(jQuery.easing, {
+        easeOutExpo: function (x, t, b, c, d) {
+            return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+        }
+    });
+
+    /**
+     * Browser compatibility for requestAnimationFrame
+     * with polyfill for legacy browsers.
+     */
+    var lastFrame,
+        requestAnimationFrame = (function () {
+            return  window.requestAnimationFrame       ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame    ||
+                    window.msRequestAnimationFrame     ||
+                    window.oRequestAnimationFrame      ||
+                    function(callback, element) {
+                        var currFrame = new Date().getTime(),
+                            animationTime = Math.max(0, 16 - (currFrame - lastFrame)),
+                            animationID = window.setTimeout(function() { callback(currFrame + animationTime); }, animationTime);
+
+                        lastFrame = currFrame + animationTime;
+                        return animationID;
+                    };
+        })(),
+        cancelAnimationFrame = (function () {
+            return  window.cancelAnimationFrame                 ||
+                    window.cancelRequestAnimationFrame          ||
+                    window.webkitCancelAnimationFrame           ||
+                    window.webkitCancelRequestAnimationFrame    ||
+                    window.mozCancelAnimationFrame              ||
+                    window.mozCancelRequestAnimationFrame       ||
+                    window.msCancelAnimationFrame               ||
+                    window.msCancelRequestAnimationFrame        ||
+                    window.oCancelAnimationFrame                ||
+                    window.oCancelRequestAnimationFrame         ||
+                    function(id) {
+                        clearTimeout(id);
+                    };
+        })();
 
     /**
      * Product Slider Plugin
-     *
-     * The plugin provides the functionality to create dynamic product sliders
-     * in every part of the shop. Via the config settings you have many options for
-     * adjusting the slider to fit your needs. The products for example can be set by
-     * the local template or loaded via ajax. Different view options and optional touch
-     * gestures make the slider full responsive on any device. See the defaults for all
-     * available config options. All config settings can also be set via data attributes.
-     *
-     * @Example DOM structure:
-     * ```
-     * <div class="product-slider" data-touchControl="true">
-     *     <div class="product-slider--container">
-     *         <div class="product--box"></div>
-     *         <div class="product--box"></div>
-     *         <div class="product--box"></div>
-     *     </div>
-     * </div>
-     * ```
-     *
-     * ToDo: Add additional functionality like dot navigation or infinite sliding.
      */
-    var pluginName = 'productSlider',
-        defaults = {
+    $.plugin('productSlider', {
+        defaults: {
+
             /**
-             * The mode how the products are loaded.
-             * @string local | ajax
+             * The mode for getting the items.
+             *
+             * @property mode ( local | ajax )
+             * @type {String}
              */
             mode: 'local',
 
             /**
-             * The category id of the products to load.
-             * @integer
+             * The orientation of the slider.
+             *
+             * @property orientation ( horizontal | vertical )
+             * @type {String}
              */
-            categoryID: 1,
+            orientation: 'horizontal',
 
             /**
-             * The number of products shown per page.
-             * @integer
+             * Number of items shown per page.
+             *
+             * @property itemsPerPage
+             * @type {Number}
              */
-            perPage: 5,
+            itemsPerPage: 4,
 
             /**
-             * The number of products moved per slide.
-             * @integer
+             * Number of items moved on each slide.
+             *
+             * @property itemsPerPage
+             * @type {Number}
              */
-            perSlide: 1,
+            itemsPerSlide: 1,
 
             /**
-             * The maximum of products available to laod via ajax.
-             * @integer
-             */
-            ajaxMaxAvailable: 20,
-
-            /**
-             * The maximum of products should be shown via ajax.
-             * @integer
-             */
-            ajaxMaxShow: 20,
-
-            /**
-             * Show or hide the arrow buttons.
-             * @bool
-             */
-            showArrows: true,
-
-            /**
-             * Active touch gesture controls.
-             * @bool
-             */
-            touchControl: false,
-
-            /**
-             * Active automatic sliding.
-             * @bool
+             * Turn automatic sliding on and off.
+             *
+             * @property autoSlide
+             * @type {Boolean}
              */
             autoSlide: false,
 
             /**
-             * Set the interval of the automatic sliding.
-             * @integer
+             * Direction of the auto sliding.
+             *
+             * @property autoSlideDirection ( next | prev )
+             * @type {String}
              */
-            autoSlideInterval: 4000,
+            autoSlideDirection: 'next',
 
             /**
-             * Set the speed of a single slide animation.
-             * @integer
+             * Time in seconds between each auto slide.
+             *
+             * @property autoSlideSpeed
+             * @type {Number}
              */
-            animationSpeed: 300,
+            autoSlideSpeed: 4,
 
             /**
-             * Set the controller url which returns the products loaded via ajax.
-             * @string
+             * Turn automatic scrolling on and off.
+             *
+             * @property autoScroll
+             * @type {Boolean}
              */
-            controllerUrl: '/widgets/emotion/emotionArticleSlider',
+            autoScroll: false,
 
             /**
-             * An additional css class for the wrapper element.
-             * @string
+             * Direction if the auto scrolling.
+             *
+             * @property autoScrollDirection ( next | prev )
+             * @type {String}
              */
-            wrapperClass: 'product-slider',
+            autoScrollDirection: 'next',
 
             /**
-             * The css class of the slider element.
-             * @string
+             * Distance in px for every auto scroll step.
+             *
+             * @property autoScrollSpeed
+             * @type {Number}
              */
-            containerClass: 'product-slider--container',
+            autoScrollSpeed: 1,
 
             /**
-             * The css class of a single slider item.
-             * @string
+             * Distance in px for scroll actions triggered by arrow controls.
+             *
+             * @property scrollDistance
+             * @type {Number}
              */
-            itemClass: 'product--box',
+            scrollDistance: 350,
 
             /**
-             * The css class of the left arrow button.
-             * @string
+             * Speed in ms for slide animations.
+             *
+             * @property animationSpeed
+             * @type {Number}
              */
-            arrowClassLeft: 'product-slider--arrow is--left',
+            animationSpeed: 800,
 
             /**
-             * The css class of the right arrow button.
-             * @string
+             * Turn arrow controls on and off.
+             *
+             * @property arrowControls
+             * @type {Boolean}
              */
-            arrowClassRight: 'product-slider--arrow is--right'
-        };
+            arrowControls: true,
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
+            /**
+             * The type of action the arrows should trigger.
+             *
+             * @property arrowAction ( slide | scroll )
+             * @type {String}
+             */
+            arrowAction: 'slide',
 
-        me.$el = $(element);
+            /**
+             * The css class for the slider wrapper.
+             *
+             * @property wrapperCls
+             * @type {String}
+             */
+            wrapperCls: 'product-slider',
 
-        me.opts = $.extend({}, defaults, userOpts);
+            /**
+             * The css class for the horizontal state.
+             *
+             * @property horizontalCls
+             * @type {String}
+             */
+            horizontalCls: 'is--horizontal',
 
-        me.getDataConfig();
+            /**
+             * The css class for the vertical state.
+             *
+             * @property verticalCls
+             * @type {String}
+             */
+            verticalCls: 'is--vertical',
 
-        me._defaults = defaults;
-        me._name = pluginName;
+            /**
+             * The css class for the arrow controls.
+             *
+             * @property arrowCls
+             * @type {String}
+             */
+            arrowCls: 'product-slider--arrow',
 
-        me.itemsCount = 0;
-        me.slideIndex = 0;
-        me.slideInterval = false;
-        me.touchEvent = {};
+            /**
+             * The css class for the left arrow.
+             *
+             * @property prevArrowCls
+             * @type {String}
+             */
+            prevArrowCls: 'arrow--prev',
 
-        me.$items = false;
+            /**
+             * The css class for the right arrow.
+             *
+             * @property nextArrowCls
+             * @type {String}
+             */
+            nextArrowCls: 'arrow--next',
 
-        me.itemsMaxShow = (me.opts.ajaxMaxShow > me.opts.ajaxMaxAvailable) ? me.opts.ajaxMaxAvailable : me.opts.ajaxMaxShow;
+            /**
+             * The selector for the item container.
+             *
+             * @property containerSelector
+             * @type {String}
+             */
+            containerSelector: '.product-slider--container',
 
-        me.$el.addClass(me.opts.wrapperClass);
+            /**
+             * The selector for the single items.
+             *
+             * @property itemSelector
+             * @type {String}
+             */
+            itemSelector: '.product-slider--item',
 
-        me.$container = me.createSlideContainer();
-        me.createItems();
-    }
+            /**** Ajax Config ****/
 
-    /**
-     * Loads config settings which are set via data attributes and
-     * overrides the old setting with the data attribute of the
-     * same name if defined.
-     */
-    Plugin.prototype.getDataConfig = function() {
-        var me = this,
-            attr;
+            /**
+             * The controller url for ajax loading.
+             *
+             * @property ajaxCtrlUrl
+             * @type {String}
+             */
+            ajaxCtrlUrl: '/responsive/widgets/emotion/emotionArticleSlider',
 
-        $.each(me.opts, function(key, value) {
-            attr = me.$el.attr('data-' + key);
-            if ( attr !== undefined ) {
-                me.opts[key] = attr;
-            }
-        });
-    };
+            /**
+             * The category id for ajax loading.
+             *
+             * @property ajaxCategoryID
+             * @type {Number}
+             */
+            ajaxCategoryID: 3,
 
-    /**
-     * Initializes the plugin and calls all necessary functions.
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
+            /**
+             * The maximum number of items to load via ajax.
+             *
+             * @property ajaxMaxShow
+             * @type {Number}
+             */
+            ajaxMaxShow: 30
+        },
 
-        me.checkActiveState();
+        /**
+         * Initializes the plugin
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            var me = this;
 
-        me.setSizes();
-        me.setPosition();
-        me.createArrows();
-        me.registerEvents();
+            me.applyDataAttributes();
 
-        if (me.opts.autoSlide && me.active) {
-            me.startAutoSlide();
-        }
-    };
+            me.autoScrollAnimation = false;
+            me.autoSlideAnimation = false;
 
-    /**
-     * Checks if there are enough items
-     * and actives the slider if necessary.
-     */
-    Plugin.prototype.checkActiveState = function() {
-        var me = this;
+            me.isLoading = false;
+            me.isAnimating = false;
 
-        me.active = (me.itemsCount > me.opts.perPage);
-    };
+            me.initSlider();
+            me.registerEvents();
+        },
 
-    /**
-     * Gets the container element of the sliding items.
-     * Creates a new container if no element is found.
-     */
-    Plugin.prototype.createSlideContainer = function() {
-        var me = this,
-            container = me.$el.find('.' + me.opts.containerClass);
+        /**
+         * Updates the plugin.
+         *
+         * @public
+         * @method update
+         */
+        update: function () {
+            var me = this;
 
-        if (!container.length) {
-            container = $('<div>', {
-                'class': me.opts.containerClass
-            }).appendTo(me.$el);
-        }
-
-        return container;
-    };
-
-    /**
-     * Creates the slider items.
-     * Calls the init function if after the products are loaded.
-     */
-    Plugin.prototype.createItems = function() {
-        var me = this,
-            loadCount = me.opts.perPage * 2;
-
-        if (loadCount < 4) loadCount = 4;
-        if (loadCount > me.itemsMaxShow) loadCount = me.itemsMaxShow;
-
-        if (me.opts.mode == 'ajax') {
-            me.loadItems(0, loadCount, function(response) {
-                me.$container.html(response);
-                me.trackItems();
-                me.init();
-            });
-        } else {
             me.trackItems();
-            me.init();
-        }
-    };
+            me.setSizes();
 
-    /**
-     * Tracks all slider items and sets some necessary variables.
-     * Is called on initialization and on every slide to update the information.
-     */
-    Plugin.prototype.trackItems = function() {
-        var me = this;
+            /**
+             * Always set back to the first item on update
+             */
+            me.setPosition(0);
+        },
 
-        me.$items = me.$container.find('.' + me.opts.itemClass);
+        /**
+         * Initializes all necessary slider configs.
+         *
+         * @public
+         * @method initSlider
+         */
+        initSlider: function () {
+            var me = this,
+                opts = me.opts;
 
-        me.itemsCount = me.$items.length;
+            me.$el.addClass(opts.wrapperCls);
 
-        me.itemsMaxCount = (me.opts.mode == 'ajax') ? me.opts.ajaxMaxAvailable : me.itemsCount;
+            me.createContainer();
+            me.trackItems();
+            me.setSizes();
 
-        me.twoPages = me.opts.perPage * 2;
-        me.minIndex = 0;
-        me.maxIndex = (me.opts.mode == 'ajax') ? me.itemsMaxShow - me.opts.perPage : me.itemsCount - me.opts.perPage;
+            /**
+             * Used for smooth animations.
+             */
+            me.currentPosition = me.getScrollPosition();
 
-        me.itemsToLoad = me.itemsMaxShow - me.itemsCount;
-    };
-
-    /**
-     * Loads products via ajax.
-     *
-     * @integer start
-     * @integer limit
-     * @function callback
-     */
-    Plugin.prototype.loadItems = function(start, limit, callback) {
-        var me = this,
-            cb = callback || function() {};
-
-        $.ajax({
-            url: me.opts.controllerUrl,
-            method: 'POST',
-            data: {
-                'category': me.opts.categoryID,
-                'start': start,
-                'limit': limit
-            },
-            success: function(response) {
-                cb.call(me, response);
+            if (me.itemsCount <= 0 && opts.mode === 'ajax') {
+                me.loadItems(0, Math.min(opts.itemsPerPage * 2, opts.ajaxMaxShow), $.proxy(me.initSlider, me));
+                return;
             }
-        });
-    };
 
-    /**
-     * Sets the sizes of the container and the slider items.
-     * Triggers also the picturefill method to adjust the product images.
-     */
-    Plugin.prototype.setSizes = function() {
-        var me = this;
+            if (me.opts.arrowControls && me.isActive()) me.createArrows();
+            if (me.opts.autoScroll && me.isActive()) me.autoScroll();
+            if (me.opts.autoSlide && me.isActive()) me.autoSlide();
+        },
 
-        me.wrapperWidth = me.$el.outerWidth();
-        me.itemsWidth = me.wrapperWidth / me.opts.perPage;
+        /**
+         * Registers all necessary event listeners.
+         *
+         * @public
+         * @method registerEvents
+         */
+        registerEvents: function () {
+            var me = this;
 
-        me.$items.css({ width: me.itemsWidth });
-        me.$container.stop(true, true).css({ width: me.itemsCount * me.itemsWidth + 20 });
+            me._on(me.$el, 'touchstart mouseenter', $.proxy(me.onMouseEnter, me));
+            me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
 
-        me.setPosition(me.slideIndex);
+            me._on(me.$container, 'scroll', $.proxy(me.onScroll, me));
 
-        // Also handle new loaded images bye the picturefill
-        window.picturefill();
-    };
+            me._on($window, 'resize', $.proxy(me.update, me));
+        },
 
-    /**
-     * Set the position of the slider directly to a given item index.
-     *
-     * @integer index
-     */
-    Plugin.prototype.setPosition = function(index) {
-        var me = this,
-            i = index || me.slideIndex;
+        /**
+         * Returns the active state of the slider.
+         *
+         * @public
+         * @method isActive
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            var me = this;
 
-        me.$container.css({ left: - ( i * me.itemsWidth ) });
-    };
+            return me.$items.length > me.opts.itemsPerPage;
+        },
 
-    /**
-     * Registers all necessary event handlers.
-     */
-    Plugin.prototype.registerEvents = function() {
-        var me = this;
+        /**
+         * Returns the current position of the slider.
+         *
+         * @public
+         * @method getScrollPosition
+         * @param {String} orientation
+         * @returns {jQuery}
+         */
+        getScrollPosition: function (orientation) {
+            var me = this,
+                o = orientation || me.opts.orientation;
 
-        $(window).on('resize.' + pluginName, $.proxy(me.setSizes, me));
+            return (o === 'vertical') ? me.$container.scrollTop() : me.$container.scrollLeft();
+        },
 
-        me.$arrowLeft.on('click.' + pluginName, function(e) {
-            e.preventDefault();
-            me.slidePrev();
-        });
-        me.$arrowRight.on('click.' + pluginName, function(e) {
-            e.preventDefault();
-            me.slideNext();
-        });
+        /**
+         * Sets the position of the slider.
+         *
+         * @public
+         * @method setPosition
+         * @param {Number} position
+         */
+        setPosition: function (position) {
+            var me = this,
+                pos = position || 0,
+                method = (me.opts.orientation === 'vertical') ? 'scrollTop' : 'scrollLeft';
 
-        if (me.opts.touchControl) {
-            me.$el.on('swipeleft.' + pluginName, $.proxy(me.slideNext, me));
-            me.$el.on('swiperight.' + pluginName, $.proxy(me.slidePrev, me));
+            me.$container[method](pos);
+            me.currentPosition = pos;
+        },
 
-            // Touch scrolling fix
-            me.$el.on('movestart.' + pluginName, function(e) {
-                if ((e.distX > e.distY && e.distX < -e.distY) ||
-                    (e.distX < e.distY && e.distX > -e.distY)) {
-                    e.preventDefault();
+        /**
+         * Sets all necessary size values of the slider.
+         *
+         * @public
+         * @method setSizes
+         * @param {String} orientation
+         */
+        setSizes: function (orientation) {
+            var me = this,
+                o = orientation || me.opts.orientation;
+
+            me.itemSizePercent = 100 / me.opts.itemsPerPage;
+
+            if (o === 'vertical') {
+                me.$items.css({ 'height': me.itemSizePercent + '%' });
+                me.itemSize = me.$items.outerHeight();
+            } else {
+                me.$items.css({ 'width': me.itemSizePercent + '%' });
+                me.itemSize = me.$items.outerWidth();
+            }
+
+            /**
+             * Triggered for sizing lazy loaded images.
+             */
+            window.picturefill();
+        },
+
+        /**
+         * Tracks the number of items the slider contains.
+         *
+         * @public
+         * @method trackItems
+         * @returns {Number}
+         */
+        trackItems: function () {
+            var me = this;
+
+            me.$items = me.$container.find(me.opts.itemSelector);
+
+            return me.itemsCount = me.$items.length;
+        },
+
+        /**
+         * Tracks the arrows and shows/hides them
+         *
+         * @public
+         * @method trackArrows
+         * @returns {Void}
+         */
+        trackArrows: function() {
+            var me = this;
+
+            if(!me.opts.arrowControls || !me.isActive()) {
+                return;
+            }
+
+            /**
+             * Five pixel tolerance for momentum scrolling.
+             */
+            var slideEnd = me.currentPosition + me.$container[(me.opts.orientation === 'vertical') ? 'outerHeight': 'outerWidth']();
+            me.$arrowPrev[(me.currentPosition > 5) ? 'show' : 'hide']();
+            me.$arrowNext[(slideEnd >= parseInt(me.itemSize * me.itemsCount, 10) - 5) ? 'hide' : 'show']();
+        },
+
+        /**
+         * Loads new items via ajax.
+         *
+         * @public
+         * @method loadItems
+         * @param {Number} start
+         * @param {Number} limit
+         * @param {Function} callback
+         */
+        loadItems: function (start, limit, callback) {
+            var me = this;
+
+            me.isLoading = true;
+
+            $.ajax({
+                url: me.opts.ajaxCtrlUrl,
+                method: 'POST',
+                data: {
+                    'category': me.opts.ajaxCategoryID,
+                    'start': start,
+                    'limit': limit
+                },
+                success: function (response) {
+                    me.isLoading = false;
+                    me.$container.append(response);
+                    me.trackItems();
+                    me.setSizes();
+
+                    if (typeof callback === 'function') {
+                        callback.call(me, response);
+                    }
                 }
             });
-        }
+        },
 
-        if (me.opts.autoSlide) {
-            me.$el.on('mouseenter.' + pluginName, $.proxy(me.stopAutoSlide, me));
-            me.$el.on('mouseleave.' + pluginName, $.proxy(me.startAutoSlide, me));
-        }
+        /**
+         * Creates and returns the container for the items.
+         *
+         * @public
+         * @method createContainer
+         * @param {String} orientation
+         * @returns {jQuery}
+         */
+        createContainer: function (orientation) {
+            var me = this,
+                o = orientation || me.opts.orientation,
+                orientationCls = (o === 'vertical') ? me.opts.verticalCls : me.opts.horizontalCls,
+                $container = me.$el.find(me.opts.containerSelector);
 
-        $.subscribe('plugin/tabContent/onChangeTab', function() {
-            me.setSizes();
-            me.setPosition(me.slideIndex);
-        });
-    };
-
-    /**
-     * Creates the arrow buttons.
-     */
-    Plugin.prototype.createArrows = function() {
-        var me = this;
-
-        if (!me.opts.showArrows) {
-            return;
-        }
-
-        if (!me.$arrowLeft) {
-            me.$arrowLeft = $('<a>', {
-                'class': me.opts.arrowClassLeft
-            }).prependTo(me.$el);
-        }
-
-        if (!me.$arrowRight) {
-            me.$arrowRight = $('<a>', {
-                'class': me.opts.arrowClassRight
-            }).prependTo(me.$el);
-        }
-
-        me.trackArrows();
-    };
-
-    /**
-     * Tracks the view of the arrow buttons.
-     * Hides the specific arrow button when the slider comes to last item.
-     */
-    Plugin.prototype.trackArrows = function() {
-        var me = this;
-
-        if (!me.active) {
-            me.$arrowRight.hide();
-            me.$arrowLeft.hide();
-            return;
-        }
-
-        me.$arrowRight[( me.slideIndex == me.maxIndex ) ? 'hide' : 'show']();
-        me.$arrowLeft[( me.slideIndex == me.minIndex ) ? 'hide' : 'show']();
-    };
-
-    /**
-     * Starts the automatic sliding.
-     * Calls slideNext() in the configured interval.
-     */
-    Plugin.prototype.startAutoSlide = function() {
-        var me = this;
-
-        if (!me.active) {
-            return;
-        }
-
-        me.slideInterval = window.setInterval(function(){
-            me.slideNext();
-        }, me.opts.autoSlideInterval);
-    };
-
-    /**
-     * Stops the automatic sliding.
-     */
-    Plugin.prototype.stopAutoSlide = function() {
-        var me = this;
-
-        window.clearInterval(me.slideInterval);
-    };
-
-    /**
-     * Handles the sliding forward to next items.
-     * Loads new products via ajax if necessary.
-     */
-    Plugin.prototype.slideNext = function() {
-        var me = this,
-            newIndex = me.slideIndex + me.opts.perSlide,
-            itemsLeftToSlideNext = me.itemsCount - (me.slideIndex + me.opts.perPage),
-            offset = me.opts.perPage;
-
-        if (!me.active) {
-            return;
-        }
-
-        if ( me.opts.perSlide > itemsLeftToSlideNext ) {
-            newIndex = me.slideIndex + itemsLeftToSlideNext;
-        }
-
-        if ( newIndex <= me.maxIndex ) {
-            me.slide(newIndex);
-        }
-
-        if ( me.opts.mode == 'ajax'
-            && me.itemsToLoad > 0
-            && me.itemsMaxShow > me.itemsCount) {
-
-            if (offset < 4) offset = 4;
-            if ( me.opts.perPage < me.itemsToLoad ) offset = me.itemsToLoad;
-
-            me.loadItems(me.itemsCount, offset, function(response) {
-                me.$container.append(response);
-                me.trackItems();
-                me.setSizes();
-            });
-        }
-    };
-
-    /**
-     * Handles the sliding backwards to previous items.
-     */
-    Plugin.prototype.slidePrev = function() {
-        var me = this,
-            newIndex = me.slideIndex - me.opts.perSlide;
-
-        if (!me.active) {
-            return;
-        }
-
-        if ( me.opts.perSlide > me.slideIndex ) {
-            newIndex = 0;
-        }
-
-        if ( newIndex >= me.minIndex ) {
-            me.slide(newIndex);
-        }
-    };
-
-    /**
-     * Basic slide function which handles the animation based on the new index.
-     * Is called by slideNext() and slidePrev().
-     *
-     * @integer index
-     * @function callback
-     */
-    Plugin.prototype.slide = function(index, callback) {
-        var me = this,
-            newPosition = -(index * me.itemsWidth) + 'px',
-            afterSlide = callback || function() {};
-
-        if (!me.active) {
-            return;
-        }
-
-        me.slideIndex = index;
-
-        me.trackArrows();
-
-        if (modernizr.csstransitions) {
-            me.$container.transition({ left: newPosition }, me.opts.animationSpeed, afterSlide);
-        } else {
-            me.$container.animate({ left: newPosition }, me.opts.animationSpeed, afterSlide);
-        }
-    };
-
-    /**
-     * Will be called, when two breakpoints are switching but the configuration hasn't changed
-     */
-    Plugin.prototype.update = function() { };
-
-    /**
-     * Destroyes the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
-
-        me.stopAutoSlide();
-
-        me.$arrowLeft.off('click.' + pluginName).remove();
-        me.$arrowRight.off('click.' + pluginName).remove();
-
-        me.$el.off('mouseenter.' + pluginName);
-        me.$el.off('mouseleave.' + pluginName);
-        me.$el.off('swipeleft.' + pluginName);
-        me.$el.off('swiperight.' + pluginName);
-        me.$el.off('movestart.' + pluginName);
-
-        $(window).off('resize.' + pluginName);
-
-        me.$el.removeData('plugin_' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
+            if (!$container.length) {
+                $container = $('<div>', {
+                    'class': me.opts.containerSelector.substr(1)
+                }).appendTo(me.$el);
             }
-        });
-    };
 
-})(jQuery, Modernizr, window, document);
+            $container.addClass(orientationCls);
+
+            return me.$container = $container;
+        },
+
+        /**
+         * Creates the arrow controls.
+         *
+         * @private
+         * @method createArrows
+         */
+        createArrows: function () {
+            var me = this,
+                orientationCls = (me.opts.orientation === 'vertical') ? me.opts.verticalCls : me.opts.horizontalCls;
+
+            if (!me.opts.arrowControls || !me.isActive()) {
+                return;
+            }
+
+            if (!me.$arrowPrev) {
+                me.$arrowPrev = $('<a>', {
+                    'class': me.opts.arrowCls + ' ' +
+                        me.opts.prevArrowCls + ' ' +
+                        orientationCls
+                }).hide().prependTo(me.$el);
+
+                me._on(me.$arrowPrev, 'click', $.proxy(me.onArrowClick, me, 'prev'));
+            }
+
+            if (!me.$arrowNext) {
+                me.$arrowNext = $('<a>', {
+                    'class': me.opts.arrowCls + ' ' +
+                        me.opts.nextArrowCls + ' ' +
+                        orientationCls
+                }).prependTo(me.$el);
+
+                me._on(me.$arrowNext, 'click', $.proxy(me.onArrowClick, me, 'next'));
+            }
+        },
+
+        /**
+         * Event listener for click events on the arrows controls.
+         *
+         * @public
+         * @method onArrowClick
+         * @param {String} type
+         * @param {jQuery.Event} event
+         */
+        onArrowClick: function (type, event) {
+            var me = this,
+                next = (me.opts.arrowAction === 'scroll') ? 'scrollNext' : 'slideNext',
+                prev = (me.opts.arrowAction === 'scroll') ? 'scrollPrev' : 'slidePrev';
+
+            event.preventDefault();
+
+            me[(type === 'prev') ? prev : next]();
+        },
+
+        /**
+         * Event listener for mouseenter event.
+         *
+         * @public
+         * @method onMouseEnter
+         */
+        onMouseEnter: function () {
+            var me = this;
+
+            me.stopAutoScroll();
+            me.stopAutoSlide();
+        },
+
+        /**
+         * Event listener for mouseleave event.
+         *
+         * @public
+         * @method onMouseEnter
+         */
+        onMouseLeave: function () {
+            var me = this;
+
+            if (me.isActive() && me.opts.autoScroll) me.autoScroll();
+            if (me.isActive() && me.opts.autoSlide) me.autoSlide();
+        },
+
+        /**
+         * Event listener for scroll event.
+         *
+         * @public
+         * @method onScroll
+         */
+        onScroll: function () {
+            var me = this;
+
+            if (!me.isAnimating) {
+                me.currentPosition = me.getScrollPosition();
+            }
+
+            me.trackArrows();
+
+            if (me.opts.mode !== 'ajax' || me.isLoading) {
+                return;
+            }
+
+            var position = me.getScrollPosition(),
+                scrolledItems = Math.floor(position / me.itemSize),
+                itemsLeftToLoad = me.opts.ajaxMaxShow - me.itemsCount,
+                loadMoreCount = me.itemsCount - me.opts.itemsPerPage * 2;
+
+            if (scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
+                me.loadItems(me.itemsCount, Math.min(me.opts.itemsPerPage, itemsLeftToLoad));
+            }
+        },
+
+        /**
+         * Moves the slider exactly to the next item(s).
+         * Based on the "itemsPerSlide" option.
+         *
+         * @public
+         * @method slideNext
+         */
+        slideNext: function () {
+            var me = this;
+
+            me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
+            me.slide(me.currentPosition);
+        },
+
+        /**
+         * Moves the slider exactly to the previous item(s).
+         * Based on the "itemsPerSlide" option.
+         *
+         * @public
+         * @method slidePrev
+         */
+        slidePrev: function () {
+            var me = this;
+
+            me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
+            me.slide(me.currentPosition);
+        },
+
+        /**
+         * Moves the slider to the position of an item.
+         *
+         * @public
+         * @method slideToElement
+         * @param {jQuery} $el
+         * @param {String} orientation
+         */
+        slideToElement: function ($el, orientation) {
+            var me = this,
+                o = orientation || me.opts.orientation,
+                position = $el.position(),
+                slide = (o === 'vertical') ? position.top : position.left;
+
+            me.slide(slide);
+        },
+
+        /**
+         * Does the slide animation to the given position.
+         *
+         * @public
+         * @method slide
+         * @param {Number} position
+         */
+        slide: function (position) {
+            var me = this,
+                animation = {};
+
+            me.isAnimating = true;
+
+            animation[(me.opts.orientation === 'vertical') ? 'scrollTop' : 'scrollLeft'] = position;
+
+            me.$container.stop().animate(animation, me.opts.animationSpeed, 'easeOutExpo', function () {
+                me.currentPosition = me.getScrollPosition();
+                me.isAnimating = false;
+            });
+        },
+
+        /**
+         * Handles the automatic sliding.
+         *
+         * @public
+         * @method autoSlide
+         * @param {String} slideDirection
+         * @param {Number} slideSpeed
+         */
+        autoSlide: function (slideDirection, slideSpeed) {
+            var me = this,
+                direction = slideDirection || me.opts.autoSlideDirection,
+                speed = slideSpeed || me.opts.autoSlideSpeed,
+                method = (direction === 'prev') ? me.slidePrev : me.slideNext;
+
+            me.autoSlideAnimation = setInterval($.proxy(method, me), speed * 1000);
+        },
+
+        /**
+         * Stops the automatic sliding.
+         *
+         * @public
+         * @method stopAutoSlide
+         */
+        stopAutoSlide: function () {
+            var me = this;
+
+            clearInterval(me.autoSlideAnimation);
+            me.autoSlideAnimation = false;
+        },
+
+        /**
+         * Scrolls the slider forward by the given distance.
+         *
+         * @public
+         * @method scrollNext
+         * @param {Number} scrollDistance
+         */
+        scrollNext: function (scrollDistance) {
+            var me = this;
+
+            me.currentPosition += scrollDistance || me.opts.scrollDistance;
+
+            me.slide(me.currentPosition);
+        },
+
+        /**
+         * Scrolls the slider backwards by the given distance.
+         *
+         * @public
+         * @method scrollPrev
+         * @param {Number} scrollDistance
+         */
+        scrollPrev: function (scrollDistance) {
+            var me = this;
+
+            me.currentPosition -= scrollDistance || me.opts.scrollDistance;
+
+            me.slide(me.currentPosition);
+        },
+
+        /**
+         * Handles the automatic scrolling of the slider.
+         *
+         * @public
+         * @method autoScroll
+         * @param {String} scrollDirection
+         * @param {Number} scrollSpeed
+         */
+        autoScroll: function (scrollDirection, scrollSpeed) {
+            var me = this,
+                direction = scrollDirection || me.opts.autoScrollDirection,
+                speed = scrollSpeed || me.opts.autoScrollSpeed,
+                position = me.getScrollPosition();
+
+            me.autoScrollAnimation = requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
+
+            me.setPosition((direction === 'prev') ? position - speed : position + speed);
+        },
+
+        /**
+         * Stops the automatic scrolling.
+         *
+         * @public
+         * @method stopAutoScroll
+         */
+        stopAutoScroll: function () {
+            var me = this;
+
+            cancelAnimationFrame(me.autoScrollAnimation);
+            me.autoScrollAnimation = false;
+        },
+
+        /**
+         * Destroys the plugin and all necessary settings.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            var me = this;
+
+            if (me.$arrowPrev) me.$arrowPrev.remove();
+            if (me.$arrowNext) me.$arrowNext.remove();
+
+            me.stopAutoSlide();
+            me.stopAutoScroll();
+
+            me._destroy();
+        }
+    });
+})(jQuery, window);
