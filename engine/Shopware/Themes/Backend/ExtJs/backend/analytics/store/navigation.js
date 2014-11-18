@@ -200,7 +200,8 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 text: '{s name=nav/search}Popular search terms{/s}',
                 store: 'analytics-store-navigation-search',
                 iconCls: 'sprite-magnifier',
-                leaf: true
+                leaf: true,
+                multiShop: true
             },
             {
                 id: 'visitors',

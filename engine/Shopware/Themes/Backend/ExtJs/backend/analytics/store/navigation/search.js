@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Search', {
     fields: [
         'searchterm',
         'countRequests',
-        'countResults'
+        'countResults',
+        'shop'
     ],
     remoteSort: true,
     proxy: {

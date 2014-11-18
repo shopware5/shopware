@@ -62,6 +62,10 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
             {
                 dataIndex: 'countResults',
                 text: '{s name=table/search/results}Results{/s}'
+            },
+            {
+                dataIndex: 'shop',
+                text: '{s name=table/search/shop}Shop(s){/s}'
             }
         ];
     }
