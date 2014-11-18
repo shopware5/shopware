@@ -2769,20 +2769,33 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])) {
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])) {
                     return true;
                 }
             } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
                 $rule["rule2"] = "sRisk".$rule["rule2"];
-                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])
-                    && $this->$rule["rule2"]($user, $basket, $rule["value2"])
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])
+                    && $this->executeRiskRule($rule["rule2"], $user, $basket, $rule["value2"])
                 ) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * function to execute risk rules
+     * @param string $rule
+     * @param array $user
+     * @param array $basket
+     * @param string $value
+     * @return bool
+     */
+    public function executeRiskRule($rule, $user, $basket, $value)
+    {
+        return $this->$rule($user, $basket, $value);
     }
 
     /**
