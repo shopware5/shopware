@@ -236,7 +236,7 @@
                 .unitize(-8, 16, margin-top);
                 .unitize(6, 16, font-size);
                 .unitize(16, 16, line-height);
-                .border-radius(0);
+                .reset-border-radius();
                 display: inline-block;
                 padding: 0;
                 position: absolute;
@@ -347,7 +347,7 @@
     }
 
     .listing--actions {
-        .border-radius(3px);
+        .border-radius();
         .unitize-margin(0, 0, 20, 0);
         .unitize(10, 16, padding-top);
         border: 1px solid @border-color;
@@ -444,7 +444,7 @@
 	}
 
     .listing--bottom-paging {
-        .border-radius(3px);
+        .border-radius();
         border: 1px solid @border-color;
         background: darken(@gray-light, 1%);
     }
