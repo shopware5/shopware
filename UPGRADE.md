@@ -374,6 +374,7 @@ In this document you will find a changelog of the important changes related to t
 * The methods `sGetOpenOrderData` and `sGetDownloads` in `/engine/core/class/sAdmin.php` will now return a different array structure and will accept new optional parameters to provide a pager functionality
 * Added X-Sendfile support for ESD downloads. `redirectDownload` configuration variable is now deprecated, `esdDownloadStrategy` should be used instead
 * Deprecation: `/engine/Shopware/Models/Payment/Repository.php:` `getPaymentsQuery` and `getPaymentsQueryBuilder` use `getActivePaymentsQuery` and `getActivePaymentsQueryBuilder` instead.
+* Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
 
 ## 4.2.0
 
