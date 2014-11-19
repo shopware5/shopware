@@ -480,6 +480,10 @@
         &:last-child {
             .unitize-margin(0, 0);
         }
+
+        &.no--content {
+            display: none;
+        }
     }
 
     .tab--header {
@@ -500,6 +504,10 @@
         &:after {
             content: "\e68f";
         }
+    }
+
+    .tab--link {
+        display: none;
     }
 }
 
@@ -660,6 +668,10 @@
 
         .tab-menu--product {
             .unitize-margin(0, 0, 30, 0);
+        }
+
+        .tab-menu--cross-selling .tab--container {
+            display: none;
         }
     }
 }

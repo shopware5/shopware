@@ -157,21 +157,44 @@ $(function () {
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if ($('.is--ctl-detail').length) {
-        var tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
+        var tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu'),
+            tabMenuCrossSelling = $('.tab-menu--cross-selling').data('plugin_tabMenu');
 
         $('.product--rating-link, .link--publish-comment').on('click', function (event) {
             event.preventDefault();
 
-            tabMenu = $('.tab-menu--product').data('plugin_tabMenu');
+            tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu');
 
-            if (tabMenu) {
-                tabMenu.changeTab(1);
+            if (tabMenuProduct) {
+                tabMenuProduct.changeTab(1);
             }
         });
 
         var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
-        if (param === 'rating' && tabMenu) {
-            tabMenu.changeTab(1);
+        if (param === 'rating' && tabMenuProduct) {
+            tabMenuProduct.changeTab(1);
+        }
+
+        // Show the cross selling tabs if they have content when HTTP-Cache is active.
+        if (tabMenuCrossSelling) {
+            var activeContainerClass = tabMenuCrossSelling.opts.activeContainerClass;
+
+            tabMenuCrossSelling.$contents.each(function (i, el) {
+                var $el = $(el),
+                    $con = $el.find('.tab--content');
+
+                if ($con.html().length) {
+                    $con.show();
+                    $(tabMenuCrossSelling.$tabs.get(i)).css('display', 'inline-block');
+                } else {
+                    $el.addClass('no--content');
+
+                    if ($el.hasClass(activeContainerClass)) {
+                        $el.removeClass(activeContainerClass)
+                        $(tabMenuCrossSelling.$contents.get(i + 1)).addClass(activeContainerClass);
+                    }
+                }
+            });
         }
     }
 
