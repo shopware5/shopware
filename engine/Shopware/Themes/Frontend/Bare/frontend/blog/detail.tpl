@@ -143,7 +143,9 @@
                             <div class="crossselling--content panel--body product-slider is--rounded" data-product-slider="true">
                                 <div class="product-slider--container">
                                     {foreach $sArticle.sRelatedArticles as $article}
-                                        {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$article}
+                                        <div class="product-slider--item">
+                                            {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
+                                        </div>
                                     {/foreach}
                                 </div>
                             </div>

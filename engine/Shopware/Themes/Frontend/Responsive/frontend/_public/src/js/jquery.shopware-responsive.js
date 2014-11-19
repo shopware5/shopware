@@ -224,5 +224,5 @@ $(function () {
     $.subscribe('plugin/addArticle/onAddArticle', cartRefresh);
     $.subscribe('plugin/collapseCart/afterRemoveArticle', cartRefresh);
 
-    StateManager.addPlugin('*[data-subcategory-nav="true"]', 'subCategoryNav', 'xs');
+    StateManager.addPlugin('*[data-subcategory-nav="true"]', 'subCategoryNav', ['xs', 's']);
 });

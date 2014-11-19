@@ -11,11 +11,7 @@
 
         {* Slider content based on the configuration *}
         {block name="widget_emotion_component_product_slider_content"}
-            <div class="panel--body is--wide product-slider" data-all="productSlider"
-                 data-ajaxMaxShow="{$Data.article_slider_max_number}"
-                 data-controllerUrl="{$Data.ajaxFeed}"
-                 data-mode="{if $Data.article_slider_type == 'selected_article'}local{else}ajax{/if}"
-                 data-categoryID="{$sCategoryId}">
+            <div class="panel--body is--wide slider--article">
                 <div class="product-slider--container">
                     {if $Data.article_slider_type == 'selected_article'}
                         {$articles = $Data.values}

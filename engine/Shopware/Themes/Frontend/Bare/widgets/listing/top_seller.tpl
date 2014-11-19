@@ -17,7 +17,9 @@
                                     {block name="widgets_listing_top_seller_slider_container_inner"}
                                         {foreach $sCharts as $article}
                                             {block name="widgets_listing_top_seller_slider_container_include"}
-                                                {include file="frontend/listing/product-box/box-product-slider.tpl"}
+                                                <div class="product-slider--item">
+                                                    {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
+                                                </div>
                                             {/block}
                                         {/foreach}
                                     {/block}

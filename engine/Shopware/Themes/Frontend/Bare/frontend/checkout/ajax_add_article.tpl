@@ -120,7 +120,9 @@
                                         {* Product item *}
                                         {foreach $sCrossSellingArticles as $article}
                                             {block name='checkout_ajax_add_cross_slider_item'}
-                                                {include file="frontend/listing/product-box/box-product-slider.tpl" sArticle=$article}
+                                                <div class="product-slider--item">
+                                                    {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
+                                                </div>
                                             {/block}
                                         {/foreach}
                                     </div>
