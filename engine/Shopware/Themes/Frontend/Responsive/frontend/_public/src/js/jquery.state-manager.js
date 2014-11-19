@@ -105,6 +105,8 @@
 ;(function ($, window, document) {
     'use strict';
 
+    var $html = $('html');
+
     /**
      * @class EventEmitter
      * @constructor
@@ -361,6 +363,7 @@
             me.registerBreakpoint(breakpoints);
 
             me._checkResize();
+            me._browserDetection();
 
             return me;
         },
@@ -1093,6 +1096,50 @@
          */
         getDevicePixelRatio: function () {
             return window.devicePixelRatio || 1;
+        },
+
+        /**
+         * Returns if the current user agent is matching the browser test.
+         *
+         * @param browser
+         * @returns {boolean}
+         */
+        isBrowser: function(browser) {
+            var regEx = new RegExp(browser.toLowerCase(), 'i');
+            return this._checkUserAgent(regEx);
+        },
+
+        /**
+         * Checks the user agent against the given regexp.
+         *
+         * @param regEx
+         * @returns {boolean}
+         * @private
+         */
+        _checkUserAgent: function(regEx) {
+            return !!navigator.userAgent.toLowerCase().match(regEx);
+        },
+
+        /**
+         * Detects the browser type and adds specific css classes to the html tag.
+         *
+         * @private
+         */
+        _browserDetection: function() {
+            var me = this,
+                detections = {};
+
+            detections['is--opera']     = me._checkUserAgent(/opera/);
+            detections['is--chrome']    = me._checkUserAgent(/\bchrome\b/);
+            detections['is--firefox']   = me._checkUserAgent(/firefox/);
+            detections['is--webkit']    = me._checkUserAgent(/webkit/);
+            detections['is--safari']    = !detections['is--chrome'] && me._checkUserAgent(/safari/);
+            detections['is--ie']        = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
+            detections['is--gecko']     = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
+
+            $.each(detections, function(key, value) {
+                if (value) $html.addClass(key);
+            });
         },
 
         /**
