@@ -56,8 +56,10 @@
     {/if}
 {/block}
 
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{* Sidebar left *}
+{block name='frontend_index_content_left'}
+	{include file='frontend/index/sidebar.tpl'}
+{/block}
 
 {* Hide footer *}
 {block name="frontend_index_footer"}
