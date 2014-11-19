@@ -328,8 +328,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $this->Application()->Events()->registerListener(
             new Enlight_Event_Handler_Default(
-                'Enlight_Controller_Action_PostDispatchSecure',
-                array($this, 'onPostDispatch')
+                'Enlight_Controller_Action_PostDispatch',
+                array($this, 'onPostDispatch'),
+                // must be positioned before ViewRender Plugin
+                // so the ESI renderer can be registered
+                // before the template is rendered
+                399
             )
         );
     }
@@ -341,6 +345,15 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     public function onPostDispatch(\Enlight_Controller_EventArgs $args)
     {
+        $view = $args->getSubject()->View();
+
+        if (!$this->request->isDispatched()
+            || $this->response->isException()
+            || !$view->hasTemplate()
+        ) {
+            return;
+        }
+
         if ($this->request->getHeader('Surrogate-Capability') === false) {
             return;
         }
