@@ -260,7 +260,7 @@
              * @property ajaxCtrlUrl
              * @type {String}
              */
-            ajaxCtrlUrl: '/responsive/widgets/emotion/emotionArticleSlider',
+            ajaxCtrlUrl: null,
 
             /**
              * The category id for ajax loading.
@@ -295,6 +295,11 @@
 
             me.isLoading = false;
             me.isAnimating = false;
+
+            if (me.opts.mode === 'ajax' && me.opts.ajaxCtrlUrl === null) {
+                console.error('The controller url for the ajax slider is not defined!');
+                return;
+            }
 
             me.initSlider();
             me.registerEvents();
