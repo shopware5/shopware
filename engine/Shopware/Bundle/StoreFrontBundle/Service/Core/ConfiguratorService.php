@@ -100,6 +100,8 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
             );
         }
 
+        $onlyOneGroup = count($configurator->getGroups()) === 1;
+
         foreach ($configurator->getGroups() as $group) {
             $group->setSelected(
                 isset($selection[$group->getId()])
@@ -116,7 +118,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
                     $selection
                 );
 
-                $option->setActive($isValid);
+                $option->setActive($onlyOneGroup || $isValid);
 
                 if (isset($media[$option->getId()])) {
                     $option->setMedia(
