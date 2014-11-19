@@ -2234,7 +2234,6 @@ class sArticles
 
             if ($article['sVoteAverange']) {
                 // the listing pages use a 0 - 5 based average
-                $article['sVoteAverageOriginal']['average'] = $article['sVoteAverange']['averange'];
                 $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
             }
 
