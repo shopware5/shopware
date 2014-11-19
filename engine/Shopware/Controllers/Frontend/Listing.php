@@ -48,6 +48,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $categoryId = $categoryContent['id'];
 
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+
+        if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
+            return $this->forward('index', 'index');
+        }
+
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
         if (!empty($categoryContent['external'])) {
@@ -55,15 +62,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         } elseif (empty($categoryContent)) {
             $location = array('controller' => 'index');
         } elseif (Shopware()->Config()->categoryDetailLink && $categoryContent['articleCount'] == 1) {
-            /**@var $repository \Shopware\Models\Category\Repository*/
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-            $articleId = $repository->getActiveArticleIdByCategoryId($categoryContent['id']);
+            $articleId = $categoryRepository->getActiveArticleIdByCategoryId($categoryContent['id']);
             if (!empty($articleId)) {
                 $location = array(
                     'sViewport' => 'detail',
                     'sArticle' => $articleId
                 );
             }
+        } elseif ($this->isShopsBaseCategoryPage($categoryId)) {
+            $location = array('controller' => 'index');
         }
         if (isset($location)) {
             return $this->redirect($location, array('code' => 301));
@@ -210,6 +217,47 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
             ));
         }
+    }
+
+    /**
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function isValidCategoryPath($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $categoryRepository->getPathById($categoryId);
+
+        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+            $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
+
+            $this->Response()->setHttpResponseCode(404);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function used in the listing action to detect if
+     * the user is trying to open the page matching the shop's root category
+     *
+     * @param $categoryId
+     * @return bool
+     */
+    private function isShopsBaseCategoryPage($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory');
+        $queryParamsNames = array_keys($this->Request()->getParams());
+
+        return ($defaultShopCategoryId == $categoryId && !array_diff($queryParamsNames, $queryParamsWhiteList));
     }
 
     /**
