@@ -59,54 +59,6 @@
 	top: 0; left: 0;
 	overflow: hidden;
 	text-align: center;
-
-    .product--image {
-        .unitize-height(150);
-        .user-select(none);
-        .touch-callout(none);
-        .tap-highlight-color(rgba(0, 0, 0, 0));
-        display: block;
-        text-align: center;
-        position: relative;
-    }
-
-    .image--element {
-        height: 100%;
-        width: 100%;
-        display: block;
-        margin: 0 auto;
-        position: relative;
-
-        img {
-			.user-select(none);
-			.touch-callout(none);
-			.tap-highlight-color(rgba(0, 0, 0, 0));
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 0; right: 0;
-            margin: auto;
-            display: inline-block;
-            vertical-align: middle;
-            z-index: 500;
-        }
-    }
-
-    .product--title {
-        .unitize(14, 16, font-size);
-        .user-select(none);
-        .touch-callout(none);
-        .tap-highlight-color(rgba(0, 0, 0, 0));
-        display: block;
-        text-align: center;
-        color: @text-color;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-
-        &:hover {
-            color: @brand-primary;
-        }
-    }
 }
 
 .product-slider--arrow {
