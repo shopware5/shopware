@@ -12,7 +12,7 @@
 
             {* Product slider *}
             {block name='frontend_checkout_premium_slider'}
-                <div class="premium-product--content panel--body product-slider">
+                <div class="premium-product--content product-slider">
 
                     {* Product slider container *}
                     {block name='frontend_checkout_premium_slider_container'}
@@ -21,7 +21,7 @@
 
                                 {* Product slider item *}
                                 {block name='frontend_checkout_premium_slider_item'}
-                                    <div class="premium-product--product product--box">
+                                    <div class="premium-product--product product-slider--item">
 
                                         <div class="product--inner">
                                             {if $premium.available}
