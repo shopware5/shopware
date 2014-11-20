@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -1185,35 +1186,42 @@ class sArticles
             $selection
         );
 
-        $type = $this->getConfiguratorType($productId);
+        $context = $this->contextService->getProductContext();
+        $product = $this->productService->get(
+            $productNumber,
+            $context
+        );
 
-        /**
-         * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
-         *
-         * Requires the following scenario:
-         * 1. $number has to be set (without a number we can't load a configuration)
-         * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
-         * 3. $configuration is empty (Customer hasn't not set an own configuration)
-         */
-        if ($number && $number == $productNumber && empty($configuration) || $type === 0) {
-            $selection = $this->getSelectionByNumber($productNumber);
+        if (!$product) {
+            return array();
         }
 
+        if ($product->hasConfigurator()) {
+            $type = $this->getConfiguratorType($product->getId());
+
+            /**
+             * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
+             *
+             * Requires the following scenario:
+             * 1. $number has to be set (without a number we can't load a configuration)
+             * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
+             * 3. $configuration is empty (Customer hasn't not set an own configuration)
+             */
+            if ($number && $number == $productNumber && empty($configuration) || $type === 0) {
+                $selection = $product->getSelectedOptions();
+            }
+        }
 
         $categoryId = (int) $sCategoryID;
         if (empty($categoryId) || $categoryId == Shopware()->Shop()->getId()) {
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $product = $this->getProduct(
-            $productNumber,
+        $product = $this->getLegacyProduct(
+            $product,
             $categoryId,
             $selection
         );
-
-        if ($product) {
-            $product = $this->legacyEventManager->fireArticleByIdEvents($product, $this);
-        }
 
         return $product;
     }
@@ -2276,23 +2284,13 @@ class sArticles
      * Helper function which loads a full product struct and converts the product struct
      * to the shopware 3 array structure.
      *
-     * @param $number
-     * @param $categoryId
-     * @param array $selection
+     * @param Product $product
+     * @param int     $categoryId
+     * @param array   $selection
      * @return array
      */
-    private function getProduct($number, $categoryId, array $selection)
+    private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
-        $context = $this->contextService->getProductContext();
-        $product = $this->productService->get(
-            $number,
-            $context
-        );
-
-        if (!$product) {
-            return array();
-        }
-
         $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
 
         $relatedArticles = array();
@@ -2318,10 +2316,9 @@ class sArticles
         if ($product->hasConfigurator()) {
             $configurator = $this->configuratorService->getProductConfigurator(
                 $product,
-                $context,
+                $this->contextService->getProductContext(),
                 $selection
             );
-
             $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
             $data = array_merge($data, $convertedConfigurator);
         }
@@ -2343,6 +2340,8 @@ class sArticles
         $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
             $data["description_long"]
         );
+
+        $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
         return $data;
     }
@@ -2544,7 +2543,6 @@ class sArticles
         return $selected;
     }
 
-
     /**
      * Returns the first active variant ordernumber
      *
@@ -2570,54 +2568,6 @@ class sArticles
         $selected = $statement->fetch(\PDO::FETCH_COLUMN);
 
         return $selected;
-    }
-
-    /**
-     * Helper function which used to get the configuration selection of
-     * the passed product number.
-     * The result array contains a simple array which elements are indexed by
-     * the configurator group id and the value contains the configurator option id.
-     *
-     * This function is required to load different product variations on the product
-     * detail page via order number.
-     *
-     * @param string $number
-     * @return array
-     */
-    private function getSelectionByNumber($number)
-    {
-        $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('groups.id', 'options.id'))
-            ->from('s_article_configurator_option_relations', 'configuration');
-
-        $query->innerJoin(
-            'configuration',
-            's_article_configurator_options',
-            'options',
-            'options.id = configuration.option_id'
-        );
-
-        $query->innerJoin(
-            'options',
-            's_article_configurator_groups',
-            'groups',
-            'groups.id = options.group_id'
-        );
-
-        $query->innerJoin(
-            'configuration',
-            's_articles_details',
-            'variant',
-            'variant.id = configuration.article_id
-             AND variant.ordernumber = :number'
-        );
-
-        $query->setParameter(':number', $number);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**
