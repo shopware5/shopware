@@ -1159,7 +1159,7 @@ class sArticles
      * @param array $selection
      * @return array
      */
-    public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
+    public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = array())
     {
         if ($sCategoryID === null) {
             $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
@@ -1168,7 +1168,7 @@ class sArticles
         /**
          * Validates the passed configuration array for the configurator selection
          */
-        $configuration = $this->getCurrentConfiguration($selection);
+        $selection = $this->getCurrentSelection($selection);
 
         /**
          * Checks which product id should be used.
@@ -1182,7 +1182,7 @@ class sArticles
         $productNumber = $this->getCurrentProductNumber(
             $productId,
             $number,
-            $configuration
+            $selection
         );
 
         $type = $this->getConfiguratorType($productId);
@@ -1196,8 +1196,9 @@ class sArticles
          * 3. $configuration is empty (Customer hasn't not set an own configuration)
          */
         if ($number && $number == $productNumber && empty($configuration) || $type == 0) {
-            $configuration = $this->getConfigurationByNumber($productNumber);
+            $selection = $this->getSelectionByNumber($productNumber);
         }
+
 
         $categoryId = (int) $sCategoryID;
         if (empty($categoryId) || $categoryId == Shopware()->Shop()->getId()) {
@@ -1207,7 +1208,7 @@ class sArticles
         $product = $this->getProduct(
             $productNumber,
             $categoryId,
-            $configuration
+            $selection
         );
 
         if ($product) {
@@ -2569,10 +2570,10 @@ class sArticles
      * This function is required to load different product variations on the product
      * detail page via order number.
      *
-     * @param $number
+     * @param string $number
      * @return array
      */
-    private function getConfigurationByNumber($number)
+    private function getSelectionByNumber($number)
     {
         $query = Shopware()->Models()->getDBALQueryBuilder();
         $query->select(array('groups.id', 'options.id'))
@@ -2640,12 +2641,12 @@ class sArticles
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
      *
-     * @param $selection
-     * @return mixed
+     * @param array $selection
+     * @return array
      */
-    private function getCurrentConfiguration($selection)
+    private function getCurrentSelection(array $selection)
     {
-        if (empty($selection) && $this->frontController && $this->frontController->Request()) {
+        if (empty($selection) && $this->frontController && $this->frontController->Request()->has('group')) {
             $selection = $this->frontController->Request()->getParam('group');
         }
 
@@ -2675,5 +2676,4 @@ class sArticles
 
         return $number;
     }
-
 }
