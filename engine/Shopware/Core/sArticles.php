@@ -1195,7 +1195,7 @@ class sArticles
          * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
          * 3. $configuration is empty (Customer hasn't not set an own configuration)
          */
-        if ($number && $number == $productNumber && empty($configuration) || $type == 0) {
+        if ($number && $number == $productNumber && empty($configuration) || $type === 0) {
             $selection = $this->getSelectionByNumber($productNumber);
         }
 
@@ -1218,9 +1218,13 @@ class sArticles
         return $product;
     }
 
+    /**
+     * @param int $productId
+     * @return bool|int
+     */
     private function getConfiguratorType($productId)
     {
-        return $this->db->fetchOne(
+        $type = $this->db->fetchOne(
             'SELECT type
              FROM s_article_configurator_sets configuratorSet
               INNER JOIN s_articles product
@@ -1228,6 +1232,12 @@ class sArticles
              WHERE product.id = ?',
             array($productId)
         );
+
+        if ($type === false) {
+            return false;
+        }
+
+        return (int)$type;
     }
 
     /**
@@ -2305,15 +2315,16 @@ class sArticles
 
         $data['categoryID'] = $categoryId;
 
-        $configurator = $this->configuratorService->getProductConfigurator(
-            $product,
-            $context,
-            $selection
-        );
+        if ($product->hasConfigurator()) {
+            $configurator = $this->configuratorService->getProductConfigurator(
+                $product,
+                $context,
+                $selection
+            );
 
-        $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
-
-        $data = array_merge($data, $convertedConfigurator);
+            $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
+            $data = array_merge($data, $convertedConfigurator);
+        }
 
         $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
 
