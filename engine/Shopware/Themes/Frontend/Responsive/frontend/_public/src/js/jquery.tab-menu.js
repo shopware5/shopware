@@ -160,6 +160,10 @@
 
             $content.addClass(activeContainerClass);
 
+            $.each($content.find('.product-slider'), function(index, item) {
+                $(item).data('plugin_productSlider').update();
+            });
+
             if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
                 $content.load($tab.attr('data-url'));
             }
