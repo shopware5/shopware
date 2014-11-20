@@ -88,8 +88,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         Struct\ShopContextInterface $context,
         array $selection
     ) {
-        $configurator = $this->configuratorGateway->get($product, $context, $selection);
-
+        $configurator = $this->configuratorGateway->get($product, $context);
         $combinations = $this->configuratorGateway->getProductCombinations($product);
 
         $media = array();
