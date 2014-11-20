@@ -2446,10 +2446,13 @@ class sArticles
      * At least the passed $id parameter is used to get the order number
      * of the main variation.
      *
-     * @param $id
-     * @param $number
-     * @param $selection
-     * @return mixed|string
+     * If all that does not lead to an valid ordernumber the
+     * first variants ordernumber is returned as fallback.
+     *
+     * @param int           $id
+     * @param string        $number
+     * @param array         $selection
+     * @return false|string
      */
     private function getCurrentProductNumber($id, $number, $selection)
     {
@@ -2462,10 +2465,30 @@ class sArticles
             return $selected;
         }
 
+        if ($number !== null) {
+            $selected = $this->getOrdernumberByOrdernumber($number);
+        } else {
+            $selected = $this->getOrdernumberByProductId($id);
+        }
+
+        if ($selected) {
+            return $selected;
+        }
+
+        $selected = $this->getFallbackVariant($id);
+
+        return $selected;
+    }
+
+    /**
+     * @param string $number
+     * @return false|string
+     */
+    private function getOrdernumberByOrdernumber($number)
+    {
         $query = Shopware()->Models()->getDBALQueryBuilder();
         $query->select(array('variant.ordernumber'));
         $query->from('s_articles_details', 'variant');
-
         $query->innerJoin(
             'variant',
             's_articles',
@@ -2474,25 +2497,67 @@ class sArticles
              AND variant.active = 1'
         );
 
-        if ($number !== null) {
-            $query->where('variant.ordernumber = :number')
-                ->setParameter(':number', $number);
-
-            $statement = $query->execute();
-            $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-        }
-
-        if ($selected) {
-            return $selected;
-        }
-
-        $query->where('variant.id = product.main_detail_id')
-            ->andWhere('product.id = :number')
-            ->setParameter(':number', $id);
+        $query->where('variant.ordernumber = :number')
+            ->setParameter(':number', $number);
 
         $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        return $statement->fetch(\PDO::FETCH_COLUMN);
+        return $selected;
+    }
+
+    /**
+     * @param int $productId
+     * @return false|string
+     */
+    private function getOrdernumberByProductId($productId)
+    {
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('variant.ordernumber'));
+        $query->from('s_articles_details', 'variant');
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID
+             AND variant.active = 1'
+        );
+        $query->where('variant.id = product.main_detail_id')
+            ->andWhere('product.id = :productId')
+            ->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
+    }
+
+
+    /**
+     * Returns the first active variant ordernumber
+     *
+     * @param int $productId
+     * @return string
+     */
+    private function getFallbackVariant($productId)
+    {
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('variant.ordernumber'));
+        $query->from('s_articles_details', 'variant');
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID
+             AND variant.active = 1 AND product.id = :productId'
+        );
+        $query->setMaxResults(1);
+        $query->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
     }
 
     /**
