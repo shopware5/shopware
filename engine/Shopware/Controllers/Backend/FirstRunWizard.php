@@ -74,7 +74,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $shopConfigKeys = [
             'address',
-            'taxNumber',
             'bankAccount',
             'company',
             'metaIsFamilyFriendly',
@@ -153,7 +152,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          */
         $shopConfigKeys = [
             'address',
-            'taxNumber',
             'bankAccount',
             'company',
             'metaIsFamilyFriendly',

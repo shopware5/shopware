@@ -81,7 +81,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
             configPanel.themePrimaryColor,
             configPanel.themeSecondaryColor,
             configPanel.addressField,
-            configPanel.taxNumberField,
             configPanel.bankAccountField,
             configPanel.companyField,
             configPanel.metaIsFamilyFriendlyField,
@@ -117,7 +116,6 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                     configPanel.themePrimaryColor.setValue(formData['_brand-primary']);
                     configPanel.themeSecondaryColor.setValue(formData['_brand-secondary']);
                     configPanel.addressField.setValue(formData.address);
-                    configPanel.taxNumberField.setValue(formData.taxNumber);
                     configPanel.bankAccountField.setValue(formData.bankAccount);
                     configPanel.companyField.setValue(formData.company);
                     configPanel.metaIsFamilyFriendlyField.setValue(formData.metaIsFamilyFriendly);
