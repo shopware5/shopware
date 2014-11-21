@@ -9,8 +9,12 @@
 
 	// Logo
 	.logo-main { .unitize-padding(10, 10); }
-	.logo--shop { width: 50% }
     .logo--supportinfo { display: none; }
+
+    .logo--shop {
+        .unitize-height(50, 16);
+        width: 50%;
+    }
 
     .header--navigation { position: relative; }
 }
@@ -483,11 +487,14 @@
         }
 
         .logo-main {
-            .unitize-padding(18, 10);
+            .unitize-padding(10, 10, 16, 10);
             width: 35%;
         }
 
-        .logo--shop { width: 82% }
+        .logo--shop {
+            .unitize-height(60, 16);
+            width: 82%
+        }
     }
 
     // Header Support Info
