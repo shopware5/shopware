@@ -149,7 +149,7 @@
         </service>
 
         <service id="guzzle_http_client" class="GuzzleHttp\Client" public="false" />
-        <service id="http_client"   class="Shopware\Components\HttpClient\GuzzleHttpClient">
+        <service id="http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
             <argument type="service" id="guzzle_http_client"/>
         </service>
 
@@ -354,6 +354,11 @@
             <argument type="service" id="plugin_installer_struct_hydrator" />
             <argument type="service" id="plugin_service_local" />
             <argument type="service" id="store_client" />
+        </service>
+
+        <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="corelogger" />
         </service>
 
         <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">
