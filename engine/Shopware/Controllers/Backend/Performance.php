@@ -543,4 +543,78 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'data' => array('count' => $count)
         ));
     }
+
+    /**
+     * calculates the number of all urls to create a cache entry for
+     */
+    public function getHttpURLsAction()
+    {
+        $shopId = (int)$this->Request()->getParam('shopId', 1);
+
+        /** @var Shopware\Components\HttpCacheWarmer\CacheWarmer $cacheWarmer */
+        $cacheWarmer = $this->get('http_cache_warmer');
+
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => array(
+                    'counts' => array(
+                        'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
+                        'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
+                        'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
+                        'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
+                        'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId)
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * calculates and call every url depending on the shopId and the resource
+     */
+    public function warmUpCacheAction()
+    {
+        $shopId = (int)$this->Request()->getParam('shopId', 1);
+        $limit = $this->Request()->get('limit');
+        $offset = $this->Request()->get('offset');
+        $resource = $this->Request()->get('resource');
+
+        /** @var Shopware\Components\HttpCache\CacheWarmer $cacheWarmer */
+        $cacheWarmer = $this->get('http_cache_warmer');
+
+        $viewPorts = [];
+        switch ($resource) {
+            case 'article':
+                $viewPorts[] = $cacheWarmer::ARTICLE_PATH;
+                break;
+            case 'category':
+                $viewPorts[] = $cacheWarmer::CATEGORY_PATH;
+                break;
+            case 'blog':
+                $viewPorts[] = $cacheWarmer::BlOG_PATH;
+                break;
+            case 'static':
+                $viewPorts[] = $cacheWarmer::CUSTOM_PATH;
+                $viewPorts[] = $cacheWarmer::EMOTION_LANDING_PAGE_PATH;
+                break;
+            case 'supplier':
+                $viewPorts[] = $cacheWarmer::SUPPLIER_PATH;
+                break;
+            default:
+                $this->View()->assign(array('success' => false));
+                return;
+        }
+
+        $urls = $cacheWarmer->getSEOUrlByViewPort($viewPorts, $shopId, $limit, $offset);
+        $cacheWarmer->callUrls($urls, $shopId);
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => array('count' => count($urls))
+            )
+        );
+    }
 }
