@@ -2,12 +2,6 @@
     .clearfix();
     .unitize-margin(10, 0, 0, 0);
     clear: both;
-
-    .last-seen-products--title {
-        .unitize-padding(10, 0);
-        .unitize-margin(0, 15);
-        .unitize(14, 16, font-size);
-    }
 }
 
 .last-seen-products--slider {
@@ -37,7 +31,7 @@
 }
 
 .last-seen-products--item.product-slider--item {
-    float: none;
+    .unitize-padding(10, 10);
 }
 
 @media screen and(min-width: @tabletViewportWidth) {

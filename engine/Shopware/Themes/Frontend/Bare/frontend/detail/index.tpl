@@ -338,8 +338,8 @@
                                                     <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}">
                                                         {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
                                                         <span class="product--rating-count-wrapper">
-                                                                <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
-                                                            </span>
+                                                            <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
+                                                        </span>
                                                     </a>
                                                 </div>
                                                 <div class="tab--content content--related">

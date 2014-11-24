@@ -110,22 +110,19 @@
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
 
             StateManager.addPlugin(opts.productSliderSelector, 'productSlider', {
-                'perPage': opts.sliderPerPageDefault,
-                'perSlide': 1,
-                'touchControl': true
+                'itemsPerPage': opts.sliderPerPageDefault
             })
             .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'perPage': opts.sliderPerPage.smartphone
+                'itemsPerPage': opts.sliderPerPage.smartphone
             }, 'xs')
             .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'perPage': opts.sliderPerPage.tablet
+                'itemsPerPage': opts.sliderPerPage.tablet
             }, 'm')
             .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'perPage': opts.sliderPerPage.tabletLandscape
+                'itemsPerPage': opts.sliderPerPage.tabletLandscape
             }, 'l')
             .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'perPage': opts.sliderPerPage.desktop,
-                'touchControl': false
+                'itemsPerPage': opts.sliderPerPage.desktop
             }, 'xl');
         },
 
