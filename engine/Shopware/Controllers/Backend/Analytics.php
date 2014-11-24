@@ -225,6 +225,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $data = array_merge_recursive($turnover, $visitors);
         $data = array_merge_recursive($data, $registrations);
+        $data = $this->prepareOverviewData($data);
 
         krsort($data);
 
@@ -991,5 +992,52 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $toDate = $toDate->sub(new DateInterval('PT1S'));
 
         return $toDate;
+    }
+
+    /**
+     * fills empty array elements for the csv export
+     *
+     * @param Array $data
+     * @return Array
+     */
+    private function prepareOverviewData($data)
+    {
+        foreach ($data as &$row) {
+            if (!isset($row['orderCount'])) {
+                $row = $this->insertArrayAtPosition(array('orderCount' => 0), $row, 0);
+            }
+            if (!isset($row['turnover'])) {
+                $row = $this->insertArrayAtPosition(array('turnover' => 0), $row, 1);
+            }
+            if (!isset($row['clicks'])) {
+                $row = $this->insertArrayAtPosition(array('clicks' => 0), $row, 2);
+            }
+            if (!isset($row['visits'])) {
+                $row = $this->insertArrayAtPosition(array('visits' => 0), $row, 3);
+            }
+            if (!isset($row['registrations'])) {
+                $row = $this->insertArrayAtPosition(array('registrations' => 0), $row, 4);
+            }
+            if (!isset($row['customers'])) {
+                $row = $this->insertArrayAtPosition(array('customers' => 0), $row, 5);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * helper method which allows to insert an array element with a key
+     *
+     * @param Array $insertValue
+     * @param Array $array
+     * @param int $position
+     * @return array
+     */
+    private function insertArrayAtPosition($insertValue, $array, $position)
+    {
+        return array_slice($array, 0, $position, true) +
+                $insertValue +
+                array_slice($array, 3, count($array) - 1, true);
     }
 }
