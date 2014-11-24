@@ -144,7 +144,7 @@ $(function () {
         $('.add-voucher--panel')[method]('is--hidden');
     });
 
-    $('.table--shipping-costs-trigger').on('click', function (event) {
+    $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
 
         event.preventDefault();
 
@@ -160,7 +160,7 @@ $(function () {
         var tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu'),
             tabMenuCrossSelling = $('.tab-menu--cross-selling').data('plugin_tabMenu');
 
-        $('.product--rating-link, .link--publish-comment').on('click', function (event) {
+        $('.product--rating-link, .link--publish-comment').on('click touchstart', function (event) {
             event.preventDefault();
 
             tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu');

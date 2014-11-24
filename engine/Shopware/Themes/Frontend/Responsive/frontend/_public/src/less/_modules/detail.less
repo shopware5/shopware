@@ -423,7 +423,7 @@
 
 	.js--fancy-select {
 		.unitize-margin(0, 0, 8, 0);
-		width: 80%;
+        width: 100%;
 	}
 }
 
@@ -530,7 +530,13 @@
             }
         }
 
-        .product--buybox {
+        // Product configurator
+        .configurator--form .js--fancy-select {
+            width: 80%;
+        }
+
+        .configurator--form,
+        .buybox--form {
             width: 80%;
         }
     }
@@ -673,6 +679,11 @@
         .tab-menu--cross-selling .tab--container {
             display: none;
         }
+
+        .configurator--form,
+        .buybox--form {
+            width: 100%;
+        }
     }
 }
 
@@ -697,14 +708,14 @@
 
 		.buybox--inner {
             width: 100%;
-            float: none
+            float: none;
         }
 
         .product--base-info {
             .unitize-margin(10, 0, 20, 0);
             padding: 0;
             width: 100%;
-            float: none
+            float: none;
         }
 
         .product--properties {
