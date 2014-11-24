@@ -38,6 +38,11 @@
 		</div>
 	{/block}
 
+    {* if sCategoryContent is not available use sArticle.categoryID *}
+    {if !$sCategoryContent || !$sCategoryContent.id && ($sArticle && $sArticle.categoryID)}
+        {$sCategoryContent.id = $sArticle.categoryID}
+    {/if}
+
     <div class="sidebar--categories-wrapper" data-subcategory-nav="true" data-mainCategoryId="{$Shop->get('parentID')}" data-categoryId="{$sCategoryContent.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}">
 
         {* Sidebar category tree *}
