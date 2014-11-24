@@ -25,6 +25,14 @@ class SitemapContext extends SubContext
     }
 
     /**
+     * @Then /^I should see the homepage in the xml sitemap$/
+     */
+    public function iShouldSeeTheHomepageInTheXmlSitemap()
+    {
+        $this->getPage('Sitemap')->checkXmlHomepage();
+    }
+
+    /**
      * @Given /^I should see all custom pages$/
      */
     public function iShouldSeeAllCustomPages()
