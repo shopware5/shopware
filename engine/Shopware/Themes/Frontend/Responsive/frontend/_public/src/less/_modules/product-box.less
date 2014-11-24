@@ -268,8 +268,8 @@
 }
 
 .box--slider {
-	.unitize-padding(10, 10);
 	display: block;
+	padding: 0;
 	position: relative;
 	text-align: left;
 
@@ -287,15 +287,11 @@
 
 		.price--unit {
 			.unitize-height(14);
-		}
-
-		.label--purchase-unit {
-			.unitize(5, 16, margin-right);
+			.unitize(10, 16, font-size);
 		}
 
 		.price--default {
 			.unitize(14, 16, font-size);
-			font-weight: normal;
 		}
 
 		.is--discount {

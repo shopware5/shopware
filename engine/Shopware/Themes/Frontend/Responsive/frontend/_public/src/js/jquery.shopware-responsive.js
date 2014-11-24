@@ -61,21 +61,18 @@ $(function () {
         .addPlugin('.category--teaser .hero--text', 'collapseText', ['xs', 's'])
 
         // Default product slider
-
         .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 1 })
         .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 3 }, 'm')
         .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 4 }, 'l')
         .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 5 }, 'xl')
 
         // Product slider for premium items
-
         .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 1 })
         .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 2 }, 'm')
         .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 3 }, 'l')
         .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 4 }, 'xl')
 
-        // Product slider for premium items
-
+        // Product slider for emotion items
         .addPlugin('.emotion--element .slider--article', 'productSlider', { itemsPerPage: 1 })
         .addPlugin('.emotion--element .slider--article', 'productSlider', { itemsPerPage: 3 }, ['m', 'l'])
         .addPlugin('.emotion--element .slider--article', 'productSlider', {
@@ -84,7 +81,6 @@ $(function () {
         }, 'xl')
 
         // Detail page tab menus
-    
         .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
             scrollTarget: '.tab-menu--product'
         })
