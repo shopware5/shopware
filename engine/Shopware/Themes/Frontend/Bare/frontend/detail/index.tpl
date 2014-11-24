@@ -342,9 +342,7 @@
                                                             </span>
                                                     </a>
                                                 </div>
-                                                <div class="tab--content content--related">
-                                                    {include file="frontend/detail/tabs/related.tpl"}
-                                                </div>
+                                                <div class="tab--content content--related">{include file="frontend/detail/tabs/related.tpl"}</div>
                                             {/block}
                                         </div>
                                     {/if}
@@ -357,9 +355,7 @@
                                             <div class="tab--header">
                                                 <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
                                             </div>
-                                            <div class="tab--content content--similar">
-                                                {include file='frontend/detail/tabs/similar.tpl'}
-                                            </div>
+                                            <div class="tab--content content--similar">{include file='frontend/detail/tabs/similar.tpl'}</div>
                                         {/block}
                                     </div>
                                 {/block}
@@ -372,9 +368,7 @@
                                                 <div class="tab--header">
                                                     <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}">{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}</a>
                                                 </div>
-                                                <div class="tab--content content--also-bought">
-                                                    {$boughtArticles}
-                                                </div>
+                                                <div class="tab--content content--also-bought">{$boughtArticles}</div>
                                             {/block}
                                         </div>
                                     {/block}
@@ -388,9 +382,7 @@
                                                 <div class="tab--header">
                                                     <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}">{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}</a>
                                                 </div>
-                                                <div class="tab--content content--also-viewed">
-                                                    {$viewedArticles}
-                                                </div>
+                                                <div class="tab--content content--also-viewed">{$viewedArticles}</div>
                                             {/block}
                                         </div>
                                     {/block}
