@@ -10,10 +10,10 @@ class ArticleSlider extends \Element\Emotion\ArticleSlider
     protected $selector = array('css' => 'div.emotion--element.article-slider-element');
 
     public $cssLocator = array(
-        'slideImage' => 'div.article-slider--item a.product--image > .image--element > span:nth-of-type(2)',
-        'slideContainer' => 'div.article-slider--item a.product--image > .image--element',
-        'slideLink' => 'div.article-slider--item a.product--image',
-        'slideName' => 'div.article-slider--item a.product--title'
+        'slideImage' => 'div.product-slider--item a.product--image > .image--element > span:nth-of-type(2)',
+        'slideContainer' => 'div.product-slider--item a.product--image > .image--element',
+        'slideLink' => 'div.product-slider--item a.product--image',
+        'slideName' => 'div.product-slider--item a.product--title'
     );
 
     /**
