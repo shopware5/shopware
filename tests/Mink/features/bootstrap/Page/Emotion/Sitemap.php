@@ -142,6 +142,34 @@ class Sitemap extends Page
     }
 
     /**
+     * Looks in the sitemap.xml for the homepage link
+     * @throws \Behat\Mink\Exception\ResponseTextException
+     */
+    public function checkXmlHomepage()
+    {
+        $homepageUrl = rtrim($this->getParameter('base_url'), '/').'/';
+        $xmlArray = array();
+
+        $this->open(array('xml' => '.xml'));
+
+        $parser = xml_parser_create();
+        xml_parse_into_struct($parser, $this->getContent(), $xmlArray);
+
+        foreach ($xmlArray as $xml) {
+            if ($xml['tag'] !== 'LOC') {
+                continue;
+            }
+
+            if ($xml['value'] == $homepageUrl) {
+                return true;
+            }
+        }
+
+        $message = 'The homepage url was not found in the sitemap';
+        \Helper::throwException($message);
+    }
+
+    /**
      * Compares the category tree (left navigation) with the sitemap.xml
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
@@ -149,7 +177,6 @@ class Sitemap extends Page
     {
         $categories = array();
         $xmlArray = array();
-        $check = array();
 
         $navigation = $this->getNavigationLinks();
 
@@ -168,22 +195,21 @@ class Sitemap extends Page
                 continue;
             }
 
-            $check[] = array($xml['value'], $categories[$i]);
+            if (($key = array_search($xml['value'], $categories)) !== false) {
+                unset($categories[$key]);
+            }
 
-            if (end($categories) === $categories[$i]) {
+            if (empty($categories)) {
                 break;
             }
 
             $i++;
         }
 
-        $result = \Helper::checkArray($check);
-
-        if ($result !== true) {
+        if (!empty($categories)) {
             $message = sprintf(
-                'The category "%s" has a different link in navigation (%s)',
-                $check[$result][0],
-                $check[$result][1]
+                'The following category/ies were not found in the sitemap: %s',
+                implode(', ', $categories)
             );
             \Helper::throwException($message);
         }
