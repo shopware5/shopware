@@ -56,7 +56,7 @@ Feature: detail page
     @captchaInactive
     Scenario: I can write an evaluation
         Given I am on the detail page for article 100
-        Then  I should see "Bewertungen (0)"
+        Then  I should see "Bewertungen"
         And   I should see "Bewertung schreiben"
         When  I write an evaluation:
             | field        | value           |
