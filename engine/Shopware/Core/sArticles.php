@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
@@ -669,54 +670,39 @@ class sArticles
             $category = $this->categoryId;
         }
 
-        $sql = "
-            SELECT STRAIGHT_JOIN DISTINCT
-              a.id AS articleID,
-              s.sales AS quantity
-            FROM s_articles_top_seller_ro s
-            INNER JOIN s_articles_categories_ro ac
-              ON  ac.articleID = s.article_id
-              AND ac.categoryID = :categoryId
-            INNER JOIN s_categories c
-              ON  ac.categoryID = c.id
-              AND c.active = 1
-            INNER JOIN s_articles a
-              ON  a.id = s.article_id
-              AND a.active = 1
+        $context = $this->contextService->getProductContext();
+        $factory = Shopware()->Container()->get('criteria_factory');
+        $criteria = new Criteria();
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-              ON ag.articleID=a.id
-              AND ag.customergroupID = :customerGroupId
+        $criteria->addBaseCondition(
+            $factory->createCategoryCondition([$category])
+        );
+        $criteria->addBaseCondition(
+            $factory->createCustomerGroupCondition([$this->customerGroupId])
+        );
+        $criteria->addBaseCondition(
+            $factory->createHasPriceCondition()
+        );
 
-            INNER JOIN s_articles_details d
-              ON d.id = a.main_detail_id
-              AND d.active = 1
+        $criteria->limit($sLimitChart);
 
-            INNER JOIN s_articles_attributes at
-              ON at.articleID=a.id
+        $criteria->addSorting(
+            $factory->createPopularitySorting('DESC')
+        );
 
-            INNER JOIN s_core_tax t
-              ON t.id = a.taxID
+        $result = $this->searchService->search($criteria, $context);
 
-            WHERE ag.articleID IS NULL
-            ORDER BY s.sales DESC, s.article_id DESC
-            LIMIT $sLimitChart
-        ";
+        $articles = [];
+        foreach ($result->getProducts() as $product) {
+            $article = $this->legacyStructConverter->convertListProductStruct($product);
+            $article = $this->legacyEventManager->firePromotionByIdEvents(
+                $article,
+                $category,
+                $this
+            );
 
-
-        $queryChart = $this->db->fetchAssoc($sql, array(
-            'categoryId'      => $category,
-            'customerGroupId' => $this->customerGroupId
-        ));
-
-        $articles = array();
-        if (!empty($queryChart)) {
-            foreach ($queryChart as $articleID => $quantity) {
-                $article = $this->sGetPromotionById('fix', 0, (int) $articleID);
-                if (!empty($article["articleID"])) {
-                    $article['quantity'] = $quantity;
-                    $articles[] = $article;
-                }
+            if ($article) {
+                $articles[] = $article;
             }
         }
 
