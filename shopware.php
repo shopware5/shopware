@@ -94,7 +94,7 @@ use Shopware\Kernel;
 use Shopware\Components\HttpCache\AppCache;
 use Symfony\Component\HttpFoundation\Request;
 
-$environment = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
+$environment = getenv('SHOPWARE_ENV') ?: getenv('REDIRECT_SHOPWARE_ENV') ?: 'production';
 
 $kernel = new Kernel($environment, $environment !== 'production');
 if ($kernel->isHttpCacheEnabled()) {

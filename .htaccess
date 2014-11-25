@@ -21,8 +21,12 @@ RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
-# Staging-Rules start
-#SetEnvIf Host "staging.test.shopware.in" ENV=staging
+# Staging environment
+#SetEnvIf Host "staging.test.shopware.in" SHOPWARE_ENV=staging
+
+# Development environment
+#SetEnvIf Host "dev.shopware.in" SHOPWARE_ENV=dev
+#SetEnv SHOPWARE_ENVIRONMENT dev
 
 DirectoryIndex index.html
 DirectoryIndex index.php
