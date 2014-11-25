@@ -31,8 +31,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 
 $input = new ArgvInput();
 
-$env = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
-$env = $input->getParameterOption(array('--env', '-e'), $env);
+$env = $input->getParameterOption(array('--env', '-e'), getenv('SHOPWARE_ENV') ?: 'production');
 
 $kernel = new Shopware\Kernel($env, false);
 $application = new Shopware\Components\Console\Application($kernel);
