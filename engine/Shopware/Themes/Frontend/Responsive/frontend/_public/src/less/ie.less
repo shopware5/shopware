@@ -5,3 +5,22 @@
 	outline: none;
     }
 }
+
+/**
+ * Fixing the IE rem-based line-height issue on :after and :before elements
+ * http://bit.ly/1ybSEei
+ */
+.checkbox {
+	.checkbox--state {
+		&:checked ~ .checkbox--state {
+			&:before { line-height: 12px; }
+		}
+	}
+
+	&.is--active,
+	a:hover & {
+		.checkbox--state {
+			&:before { line-height: 12px; }
+		}
+	}
+}
