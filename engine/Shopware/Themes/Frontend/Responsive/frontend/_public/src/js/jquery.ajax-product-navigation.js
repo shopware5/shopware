@@ -370,7 +370,7 @@
                 $prevBtn
                     .attr('href', prevProduct.href)
                     .attr('title', prevProduct.name)
-                    .show();
+                    .css('display', 'inline');
 
                 if (Modernizr.csstransitions) {
                     $prevBtn.transition(animCss, animSpeed);
@@ -387,7 +387,7 @@
                 $nextBtn
                     .attr('href', nextProduct.href)
                     .attr('title', nextProduct.name)
-                    .show();
+                    .css('display', 'inline');
 
                 if (Modernizr.csstransitions) {
                     $nextBtn.transition(animCss, animSpeed);
