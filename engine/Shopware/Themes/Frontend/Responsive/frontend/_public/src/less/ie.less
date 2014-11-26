@@ -2,7 +2,7 @@
 .forms--inner-form {
     textarea:required,
     input:required {
-	outline: none;
+		outline: none;
     }
 }
 
@@ -21,6 +21,16 @@
 	a:hover & {
 		.checkbox--state {
 			&:before { line-height: 12px; }
+		}
+	}
+}
+
+.filter-panel--checkbox {
+	input[type="checkbox"] {
+		&:checked ~ .checkbox--state {
+			&:before {
+				line-height: 12px;
+			}
 		}
 	}
 }
