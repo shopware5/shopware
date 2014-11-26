@@ -47,6 +47,12 @@
 			display: inline-block;
 		}
 	}
+
+	.is--firefox &,
+	&.is--no-scroll {
+		overflow-y: hidden;
+		overflow-x: hidden;
+	}
 }
 
 .product-slider--item {
@@ -131,29 +137,10 @@
 	}
 }
 
-@media screen and(min-width: @tabletViewportWidth) {
-
-    .product-slider--item {
-        .product--image {
-            .unitize-height(140);
-        }
-
-        .product--title {
-            .unitize(12, 16, font-size);
-        }
-    }
-}
-
 @media screen and(min-width: @desktopViewportWidth) {
 
 	.product-slider--container.is--horizontal,
 	.product-slider--container.is--vertical {
 		overflow: hidden;
 	}
-
-    .product-slider--item {
-        .product--image {
-            .unitize-height(105);
-        }
-    }
 }
