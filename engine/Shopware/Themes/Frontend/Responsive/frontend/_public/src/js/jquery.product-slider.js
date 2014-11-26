@@ -260,7 +260,7 @@
              * @property ajaxCtrlUrl
              * @type {String}
              */
-            ajaxCtrlUrl: '/responsive/widgets/emotion/emotionArticleSlider',
+            ajaxCtrlUrl: null,
 
             /**
              * The category id for ajax loading.
@@ -292,9 +292,15 @@
 
             me.autoScrollAnimation = false;
             me.autoSlideAnimation = false;
+            me.bufferedCall = false;
 
             me.isLoading = false;
             me.isAnimating = false;
+
+            if (me.opts.mode === 'ajax' && me.opts.ajaxCtrlUrl === null) {
+                console.error('The controller url for the ajax slider is not defined!');
+                return;
+            }
 
             me.initSlider();
             me.registerEvents();
@@ -363,7 +369,7 @@
 
             me._on(me.$container, 'scroll', $.proxy(me.onScroll, me));
 
-            me._on($window, 'resize', $.proxy(me.update, me));
+            me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
         },
 
         /**
@@ -722,7 +728,7 @@
                 speed = slideSpeed || me.opts.autoSlideSpeed,
                 method = (direction === 'prev') ? me.slidePrev : me.slideNext;
 
-            me.autoSlideAnimation = setInterval($.proxy(method, me), speed * 1000);
+            me.autoSlideAnimation = window.setInterval($.proxy(method, me), speed * 1000);
         },
 
         /**
@@ -734,7 +740,7 @@
         stopAutoSlide: function () {
             var me = this;
 
-            clearInterval(me.autoSlideAnimation);
+            window.clearInterval(me.autoSlideAnimation);
             me.autoSlideAnimation = false;
         },
 
@@ -798,6 +804,20 @@
 
             cancelAnimationFrame(me.autoScrollAnimation);
             me.autoScrollAnimation = false;
+        },
+
+        /**
+         * Buffers the calling of a function.
+         *
+         * @param func
+         * @param bufferTime
+         */
+        buffer: function(func, bufferTime) {
+            var me = this;
+
+             window.clearTimeout(me.bufferedCall);
+
+             me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime)
         },
 
         /**
