@@ -17,7 +17,7 @@
              * @property scrollContainerSelector
              * @type {String}
              */
-            scrollContainerSelector: 'body',
+            scrollContainerSelector: 'body, html',
 
             /**
              * The selector of the target element or the position in px where the container should be scrolled to.
@@ -105,7 +105,7 @@
                 return;
             }
 
-            this.scrollToPosition($($targetEl[0]).offset().top + ~~(offset));
+            this.scrollToPosition($targetEl.offset().top + ~~(offset));
         },
 
         /**
