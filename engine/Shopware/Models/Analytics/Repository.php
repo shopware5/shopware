@@ -658,16 +658,18 @@ class Repository
      *          'countResults' => '1390',
      *      )
      */
-    public function getSearchTerms($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array())
+    public function getSearchTerms($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array(), array $shopIds = array())
     {
         $builder = $this->connection->createQueryBuilder();
 
         $builder->select(array(
             'COUNT(search.searchterm) AS countRequests',
             'search.searchterm',
-            'MAX(search.results) as countResults'
+            'MAX(search.results) as countResults',
+            'GROUP_CONCAT(DISTINCT shops.name SEPARATOR ", ") as shop'
         ))
             ->from('s_statistics_search', 'search')
+            ->leftJoin('search', 's_core_shops', 'shops', 'search.shop_id = shops.id')
             ->groupBy('search.searchterm')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -679,6 +681,10 @@ class Repository
                     $condition['direction']
                 );
             }
+        }
+        if (!empty($shopIds)) {
+            $builder->andWhere('search.shop_id IN (:shopIds)')
+                ->setParameter('shopIds', $shopIds, Connection::PARAM_INT_ARRAY);
         }
 
         $this->addDateRangeCondition($builder, $from, $to, 'datum');

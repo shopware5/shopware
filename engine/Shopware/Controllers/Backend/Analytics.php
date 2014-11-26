@@ -698,7 +698,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'property' => 'countRequests',
                     'direction' => 'DESC'
                 )
-            ))
+            )),
+            $this->getSelectedShopIds()
         );
 
         $this->send(
