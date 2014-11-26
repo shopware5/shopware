@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
  * @category  Shopware
@@ -53,10 +54,12 @@ class SearchTermLogger
      * Traces the search result into the s_statistic_search
      * @param Criteria $criteria
      * @param ProductNumberSearchResult $result
+     * @param Shop $shop
      */
     public function logResult(
         Criteria $criteria,
-        ProductNumberSearchResult $result
+        ProductNumberSearchResult $result,
+        Shop $shop
     ) {
         if (!$criteria->hasCondition('search')) {
             return;
@@ -69,7 +72,8 @@ class SearchTermLogger
         $this->connection->insert('s_statistics_search', array(
             'datum' => $now->format('Y-m-d h:i:s'),
             'searchterm' => $condition->getTerm(),
-            'results' => $result->getTotalCount()
+            'results' => $result->getTotalCount(),
+            'shop_id' => $shop->getId()
         ));
     }
 }

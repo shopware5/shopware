@@ -786,7 +786,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 array(
                     'countRequests' => 1,
                     'searchterm'    => 'phpunit search term',
-                    'countResults'  => 10
+                    'countResults'  => 10,
+                    'shop'          => null
                 )
             )
         );
