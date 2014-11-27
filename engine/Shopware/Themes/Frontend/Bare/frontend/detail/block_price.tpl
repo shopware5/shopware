@@ -38,9 +38,11 @@
                                                 {block name="frontend_detail_data_block_prices_table_body_cell_quantity"}
                                                     <td class="block-prices--cell">
                                                         {if $blockPrice.from == 1}
-                                                            {s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s} {$blockPrice.to}
+                                                            {s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s}
+															<span class="block-prices--quantity">{$blockPrice.to}</span>
                                                         {else}
-                                                            {s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s} {$blockPrice.from}
+                                                            {s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s}
+															<span class="block-prices--quantity">{$blockPrice.from}</span>
                                                         {/if}
                                                     </td>
                                                 {/block}
