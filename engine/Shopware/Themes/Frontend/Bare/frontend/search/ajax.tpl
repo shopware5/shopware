@@ -20,27 +20,27 @@
 
 							{* Product image *}
 							{block name="search_ajax_list_entry_media"}
-								<div class="entry--media block">
+								<span class="entry--media block">
 									{if $search_result.thumbNails.0}
 										<img src="{$search_result.thumbNails.0}" class="media--image">
 									{else}
 										<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" />
 									{/if}
-								</div>
+								</span>
 							{/block}
 
 							{* Product name *}
 							{block name="search_ajax_list_entry_name"}
-								<div class="entry--name block">
+								<span class="entry--name block">
 									{$search_result.name|truncate:200}
-								</div>
+								</span>
 							{/block}
 
 							{* Product price *}
 							{block name="search_ajax_list_entry_price"}
-								<div class="entry--price block">
+								<span class="entry--price block">
 									{$search_result.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-								</div>
+								</span>
 							{/block}
 						</a>
                     </li>
