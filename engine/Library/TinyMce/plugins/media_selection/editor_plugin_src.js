@@ -7,17 +7,6 @@
  *
  * The plugins injects the selected media directly to the current cursor position,
  * so the user wouldn't be interrupted in their workflow.
- *
- * shopware AG (c) 2012. All rights reserved.
- *
- * @class Provides a new ui control element to open up the media selection
- * @link http://www.shopware.de/
- * @author st.pohl <stp@shopware.de>
- * @date 2012-03-14
- * @modifed 2012-11-12
- * @license http://www.shopware.de/license
- * @package tinymce-plugins
- * @subpackage media-selection
  */
 (function()
 /** @lends tinymce# */

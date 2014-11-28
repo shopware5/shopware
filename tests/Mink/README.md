@@ -1,4 +1,4 @@
-# Shopware 4 mink testsuite
+# Shopware 5 mink testsuite
 
 ## Usage
 Install shopware with dev requirements: `php composer.phar install --dev`.

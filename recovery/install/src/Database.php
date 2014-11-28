@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -118,7 +118,7 @@ class Database
             $sql = "SELECT VERSION()";
             $result = $this->database->query($sql)->fetchColumn(0);
             if (version_compare($result, '5.1.0', '<')) {
-                $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 4 requires at least MySQL 5.1.0.<br/>");
+                $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.1.0.<br/>");
 
                 return false;
             }

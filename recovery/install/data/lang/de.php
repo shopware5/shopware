@@ -11,7 +11,7 @@ return array(
     "licence" => "Lizenz",
     "configuration" => "Konfiguration",
     "done" => "Fertig",
-    "thank_you_message" => "<strong>Danke</strong>, dass Sie sich für Shopware 4 entschieden haben. Mit diesem Installer wird die Installation und Basis-Konfiguration von Shopware vorgenommen, so dass Sie nach der Installation direkt mit der Einrichtung Ihres Shops beginnen können.",
+    "thank_you_message" => "<strong>Danke</strong>, dass Sie sich für Shopware 5 entschieden haben. Mit diesem Installer wird die Installation und Basis-Konfiguration von Shopware vorgenommen, so dass Sie nach der Installation direkt mit der Einrichtung Ihres Shops beginnen können.",
     "select_language" => "Sprache wählen",
     "select_language_choose" => "Bitte wählen",
     "select_language_de" => "Deutsch",
