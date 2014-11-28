@@ -1,17 +1,17 @@
 {
-    "name": "shopware-ag/shopware",
-    "description": "Shopware 4 is the next generation of open source e-commerce software made in Germany",
+    "name": "shopware/shopware",
+    "description": "Shopware is the next generation of open source e-commerce software made in Germany",
     "keywords": ["shopware", "shop"],
-    "homepage": "http://http://www.shopware.de",
+    "homepage": "http://http://www.shopware.com",
     "type": "project",
     "license": [
         "AGPL-3.0",
         "proprietary"
     ],
     "support": {
-        "forum": "http://forum.shopware.de",
-        "wiki": "http://wiki.shopware.de",
-        "source": "https://github.com/ShopwareAG/shopware-4",
+        "forum": "http://forum.shopware.com",
+        "wiki": "http://wiki.shopware.com",
+        "source": "https://github.com/shopware/shopware",
         "issues": "http://jira.shopware.de"
     },
     "require": {
