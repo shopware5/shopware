@@ -36,7 +36,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @shipping @payment @noResponsive
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
@@ -66,7 +66,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @shipping @payment @noEmotion
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
@@ -97,7 +97,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @delivery @payment @noResponsive
     Scenario: I can change the delivery to Express and pay via debit
@@ -117,7 +117,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @delivery @payment @noEmotion
     Scenario: I can change the delivery to Express and pay via debit
@@ -139,7 +139,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @currency @payment @noResponsive
     Scenario: I can change the currency and pay via prepayment
@@ -155,7 +155,7 @@ Feature: Checkout articles
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @javascript @plugin @noResponsive
     Scenario: I can change the language and pay via PayPal
@@ -169,5 +169,5 @@ Feature: Checkout articles
         When  I follow the link "checkout" of the page "CheckoutCart"
         Then  I should see "AGB und Widerrufsbelehrung"
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
         And   I log me out

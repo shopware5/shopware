@@ -27,10 +27,10 @@ if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.4.0';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 5 requires at least PHP 5.4.0';
 
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.4.0';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 5 benötigt mindestens PHP 5.4.0';
 
     return;
 }
@@ -40,10 +40,10 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Shopware 4 must be configured installed before use. Please run the <a href="recovery/install/">installer</a>.';
+    echo 'Shopware 5 must be configured installed before use. Please run the <a href="recovery/install/">installer</a>.';
 
     echo '<h2>Fehler</h2>';
-    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a> aus.';
+    echo 'Shopware 5 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a> aus.';
 
     return;
 }
@@ -80,7 +80,7 @@ if (!file_exists('vendor/autoload.php')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Please execute "composer install" from the command line to install the required dependencies for Shopware 4';
+    echo 'Please execute "composer install" from the command line to install the required dependencies for Shopware 5';
 
     echo '<h2>Fehler</h2>';
     echo 'Bitte führen Sie zuerst "composer install" aus.';

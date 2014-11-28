@@ -23,7 +23,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Examples:
         | user                       | email             | sum     | shipping | total   | sumWithoutVat | tax    |
@@ -51,7 +51,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         Then  I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Examples:
         | user                       | email             | sum     | shipping | total   | sumWithoutVat | tax    |
@@ -92,7 +92,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         And  I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Examples:
         | customer_type | email             |
@@ -135,7 +135,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         Then  I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Examples:
         | customer_type | email             |

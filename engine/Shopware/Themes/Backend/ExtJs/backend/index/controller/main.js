@@ -395,19 +395,6 @@ openSearchResult = function(module, id) {
 }
 
 /**
- * Proxy method which creates an Message Box with
- * a notice that the module is currently not
- * available.
- *
- * @public
- * @deprecated deprecated since version 4.1
- * @return void
- */
-createBetaMessage = function() {
-    Ext.MessageBox.alert('{s name=title/missing_in_beta namespace=backend/index/view/menu}Feature is not available in the beta version{/s}', '{s name=content/missing_in_beta namespace=backend/index/view/menu}This feature is not yet available in the current beta version of Shopware 4, but will be available completely refactored in the final version.{/s}');
-}
-
-/**
  * Proxy method which just shows a growl like
  * message with the current version of Shopware.
  *

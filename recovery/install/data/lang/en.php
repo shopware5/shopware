@@ -11,7 +11,7 @@ return array(
     "licence" => "License",
     "configuration" => "Configuration",
     "done" => "Done",
-    "thank_you_message" => "Congratulations and thank you for choosing Shopware 4. This installer will perform the installation and basic configuration. Afterwards, you can start setting up your shop. Note: If you proceed with the English variant of installation assistant, Shopware will be installed with the English language package.",
+    "thank_you_message" => "Congratulations and thank you for choosing Shopware 5. This installer will perform the installation and basic configuration. Afterwards, you can start setting up your shop. Note: If you proceed with the English variant of installation assistant, Shopware will be installed with the English language package.",
     "select_language" => "Select language",
     "select_language_choose" => "Please choose",
     "select_language_de" => "Deutsch",

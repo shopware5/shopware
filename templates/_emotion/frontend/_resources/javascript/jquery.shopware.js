@@ -2917,10 +2917,6 @@ jQuery.fn.liveSearch = function (conf) {
             /**
              * Fix issue with sizzle selector engine and ordernumbers
              * which includes dots
-             * @ticket #5711 (intern)
-             * @ticket #100483 (extern)
-             * @author s.pohl
-             * @date 2011-07-27
              */
             tmpOrdernumber = tmpOrdernumber.replace(/(:|\.)/g, '\\$1');
 
@@ -3893,10 +3889,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
  (c) 2007-2009 Christophe Beyls <http://www.digitalia.be>
  MIT-style license.
 
- Modified by Shopware AG 2010
- @author: S.Pohl <info@shopware.de>
- @date: 25-04-2010
- @version: 1.1
+ Modified by Shopware AG
 
  changelog
  - removes caption

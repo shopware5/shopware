@@ -327,7 +327,7 @@ Ext.onReady(function() {
     });
 
     /**
-     * Shopware 4.0
+     * Shopware 5
      *
      * Code beyond this point is no longer part of ExtJs core
      * and must be ported manually when ExtJs is updated

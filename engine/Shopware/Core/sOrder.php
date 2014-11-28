@@ -559,7 +559,6 @@ class sOrder
             //Payment method code failure
         }
 
-        //new attribute table with shopware 4
         $attributeSql = "INSERT INTO s_order_attributes (orderID, attribute1, attribute2, attribute3, attribute4, attribute5, attribute6)
                 VALUES (
                     " . $orderID  .",

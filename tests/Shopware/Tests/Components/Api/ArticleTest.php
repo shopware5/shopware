@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -2050,7 +2050,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
-    public function testSimilarWithNumber() 
+    public function testSimilarWithNumber()
     {
         $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
 
@@ -2152,7 +2152,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
-    
+
     public function testArticleGrossPrices()
     {
         $data = $this->getSimpleTestData();
@@ -2550,7 +2550,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;
-        
+
         $categories = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
         $data['categories'] = $categories;
 

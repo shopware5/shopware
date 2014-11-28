@@ -19,14 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Order
- * @subpackage View
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stephan Pohl
- * @author     $Author$
  */
 
 //{namespace name=backend/plugin_manager/main}
