@@ -1703,6 +1703,61 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
+    public function testCreateWithMultiplePropertiesAndNewGroup()
+    {
+        $data = $this->getSimpleTestData();
+
+        $optionName = 'newOption' . uniqid();
+        $properties = array(
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'testValue'
+            ),
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'anotherTestValue'
+            )
+        );
+
+        $data['propertyValues'] = $properties;
+        $data['filterGroupId'] = 1;
+        $article = $this->resource->create($data);
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $articleId = $article->getId();
+        $article = $this->resource->getOne($articleId);
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('option'))
+            ->from('Shopware\Models\Property\Option', 'option')
+            ->where('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+        $databaseValuesOptions = $builder->getQuery()->getArrayResult();
+
+        $this->assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
+        $this->assertEquals(1, count($databaseValuesOptions));
+
+        $this->resource->delete($articleId);
+
+        //delete test values in s_filter_values
+        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_relations
+        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_options
+        $builder->delete('Shopware\Models\Property\Option', 'option')
+            ->andWhere('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->getQuery()
+            ->execute();
+    }
+
     public function testUpdateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -1770,7 +1825,67 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(3, $article->getMainDetail()->getPrices());
     }
 
+    public function testUpdateWithMultiplePropertiesAndNewGroup()
+    {
+        $optionName = 'newOption' . uniqid();
+        $properties = array(
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'testValue'
+            ),
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'anotherTestValue'
+            )
+        );
 
+        $update = array(
+            'propertyValues' => $properties,
+            'filterGroupId' => 1
+        );
+        $data = $this->getSimpleTestData();
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT
+        );
+        $article = $this->resource->create($data);
+        /**@var $article Shopware\Models\Article\Article */
+        $article = $this->resource->update($article->getId(), $update);
+
+        $articleId = $article->getId();
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($article->getId());
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('option'))
+            ->from('Shopware\Models\Property\Option', 'option')
+            ->where('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+        $databaseValuesOptions = $builder->getQuery()->getArrayResult();
+
+        $this->assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
+        $this->assertEquals(1, count($databaseValuesOptions));
+
+        $this->resource->delete($articleId);
+
+        //delete test values in s_filter_values
+        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_relations
+        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_options
+        $builder->delete('Shopware\Models\Property\Option', 'option')
+            ->andWhere('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->getQuery()
+            ->execute();
+    }
 
     public function testImageConfiguration()
     {
@@ -1824,8 +1939,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             }
         }
     }
-
-
 
     private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
     {
