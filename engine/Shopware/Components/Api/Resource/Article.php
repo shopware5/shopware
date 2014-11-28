@@ -1499,8 +1499,20 @@ class Article extends Resource implements BatchInterface
                         /** @var \Shopware\Models\Property\Relation $relation */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation) {
-                            $option = new \Shopware\Models\Property\Option();
-                            $propertyGroup->addOption($option);
+                            //checks if a new option was created
+                            //because the new option is not written to the database at this point
+                            $groupOption = $this->getCollectionElementByProperty(
+                                $propertyGroup->getOptions(),
+                                'name',
+                                $valueData['option']['name']
+                            );
+                            //creates a new option
+                            if ($groupOption === null) {
+                                $option = new \Shopware\Models\Property\Option();
+                                $propertyGroup->addOption($option);
+                            } else {
+                                $option = $groupOption;
+                            }
                         } else {
                             $option = $relation->getOption();
                         }
