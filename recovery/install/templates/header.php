@@ -9,7 +9,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <title>Shopware 4 - Installer</title>
+    <title>Shopware 5 - Installer</title>
     <link rel="shortcut icon" href="<?php echo $baseUrl ?>../common/assets/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl ?>../common/assets/styles/bootstrap.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl ?>../common/assets/styles/styles.css" media="all"/>

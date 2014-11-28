@@ -29,7 +29,7 @@ Feature: Checkout esd article
             | 19 %    | 6,07 € |
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
         And   my finished order should look like this:
             | product                  | quantity | price   | sum     | esd |
             | ESD Download Artikel     | 1        | 34,99 € | 34,99 € | x   |
@@ -66,7 +66,7 @@ Feature: Checkout esd article
 
         When  I follow the link "checkout" of the page "CheckoutCart"
         And   I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
         And   my finished order should look like this:
             | product                  | quantity | price   | sum     | esd |
             | ESD Download Artikel     | 1        | 34,99 € | 34,99 € | x   |

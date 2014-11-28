@@ -12,10 +12,6 @@
 
 			/**
 	         * Find the comment tab
-			 * @ticket #5712 (intern)
-			 * @ticket #100484 (extern)
-	         * @author s.pohl
-			 * @date 2011-07-27
 			 */
 			var tabLinks = $('#tabs a'), commentTabIndex;
 			tabLinks.each(function(i, el) {
@@ -26,7 +22,7 @@
 				}
 			});
 			commentTabIndex = commentTabIndex - 1;
-			
+
 			{if $sAction == 'ratingAction'}
 				$.tabNavi.tabs('select', commentTabIndex);
 			{/if}
@@ -35,7 +31,7 @@
                 window.location.hash = '';
 				$.tabNavi.tabs('select', commentTabIndex);
 			}
-			
+
 			$('.write_comment').click(function(e) {
 				e.preventDefault();
 				$.tabNavi.tabs('select', commentTabIndex);
@@ -49,8 +45,8 @@
 	var ordernumber = '{$sArticle.ordernumber}';
 	var useZoom = '{config name=sUSEZOOMPLUS}';
     var isConfigurator = {if !$sArticle.sConfigurator}false{else}true{/if};
-	
-	jQuery.ordernumber = '{$sArticle.ordernumber}';		
+
+	jQuery.ordernumber = '{$sArticle.ordernumber}';
 //]]>
 </script>
 {/block}

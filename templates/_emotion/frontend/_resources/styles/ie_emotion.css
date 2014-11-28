@@ -1,19 +1,19 @@
 /**
 	Shopware 4 Internet Explorer 6/7
 	http://shopware.de
-	
+
 	@package		default
 	@subpackage		css
 	@category		design
-	@version		v4 
+	@version		v4
 	@author			sa/Shopware AG <info@shopware.de>
-	@copyright		Copyright (c) 2012 Shopware AG (http://www.shopware.de)
-	
-	
+	@copyright		Copyright (c) Shopware AG (http://www.shopware.de)
+
+
 	This stylesheets contains all Internet Explorer 6 related
 	styles which forces the Internet Explorer to display the template
 	correctly.
-	
+
 	If you're changing things in your style.css, please check your site
 	in the Internet Explorer and place all your Internet Explorer related
 	styles into this file.
