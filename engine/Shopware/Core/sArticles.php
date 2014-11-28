@@ -2247,7 +2247,7 @@ class sArticles
             }
             $article['description_long'] = $this->sOptimizeText($article['description_long']);
 
-            $articles[] = $article;
+            $articles[$article['articleID']] = $article;
         }
 
         $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
