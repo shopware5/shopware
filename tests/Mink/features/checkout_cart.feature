@@ -37,7 +37,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | totalSum | <totalSum>      |
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Examples:
         | paymentMethod | shippingMethod | shippingCosts | totalSum |
@@ -89,4 +89,4 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | totalSum | 214,99 € |
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"

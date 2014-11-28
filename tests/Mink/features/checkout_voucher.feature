@@ -60,7 +60,7 @@ Feature: Checkout articles with voucher
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @registration @noEmotion
     Scenario: I can use vouchers in my basket and pay as new customer via prepayment
@@ -123,7 +123,7 @@ Feature: Checkout articles with voucher
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
-        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     Scenario: I can use a free-shipping voucher and put articles with 7% tax in my basket
         Given the articles from "The Deli Garage" have tax id 4

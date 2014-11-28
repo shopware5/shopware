@@ -1,6 +1,6 @@
 <?php
 return array(
-    'title'         => "Shopware 4 - Update Script",
+    'title'         => "Shopware 5 - Update Script",
     'meta_text'     => '<strong>Shopware-Update:</strong>',
 
     'tab_start'     => 'Aktualisierung starten',

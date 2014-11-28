@@ -70,43 +70,43 @@ jQuery(document).ready(function($) {
 
 		// Removes hiding class for all script related elements
 		$('.hide_script').removeClass('hide_script');
-		
+
 		//IE 6 Drop down menu fallback
 		if($.browser.msie === true && parseInt($.browser.version, 10) == 6) {
 			$('#mainNavigation li').hover(function(){ $(this).addClass('hover'); }, function() { $(this).removeClass('hover'); });
 		}
-		
-		//Liveshopping 
+
+		//Liveshopping
 		$('.liveshopping_container:visible, .liveshopping_detail:visible').liveshopping();
-		
+
 		//Bundle
 		$('.bundle_container, .relatedbox_container').bundle();
-			
+
 		//Checkout
 		$('a.checkout, a.login, a.account').checkout({'viewport': $.controller.ajax_login,'register':$.controller.register,'checkout':$.controller.checkout});
-				 
+
 		//Supplier filter
 		$('.supplier_filter .slideContainer').supplierfilter();
-		
+
 		//AJAX Warenkorb
 		$.basket.options.viewport = $.controller.ajax_cart;$.basket.init();
-		
+
 		$('select.auto_submit').bind('change', function() {this.form.submit(); });
 		$('input.auto_submit:radio, a.auto_submit, input.auto_submit:checkbox').live('click', function() { this.form.submit(); });
 		$('input.auto_submit:text').live('blur', function() { this.form.submit(); });
-		
+
 		$('.modal_close').live('click', function() { $.modalClose(); $.ie6fix.selectShow(); });
-		
+
 		$('.modal_open a').click(function(event) {
 			event.preventDefault();
 			$.post(this.href, function(data) {
-				$.modal(data, '', {'position':'fixed'}).find('.close').remove();			
+				$.modal(data, '', {'position':'fixed'}).find('.close').remove();
 			});
 		});
-				
+
 		//Topseller
 		if($('.topseller')) { $('.accordion').kwicks({min: 52,sticky: true,spacing: 0,isVertical: true,duration: 350}); }
-		
+
 		//Suggest Search
 		$('#searchfield').liveSearch({url:$.controller.ajax_search, 'id': 'searchresults'});
 		var defaultValue = $('#searchfield').val();
@@ -115,21 +115,21 @@ jQuery(document).ready(function($) {
 				$('#searchfield').val('');
 			}
 		});
-		
+
 		//Get's the servertime for liveshopping articles
 		$.server.init(timeNow);
-		
+
 		//Changing article informations on variants
 		if(typeof(isVariant) != 'undefined' && isVariant === true) {
 			$.changeDetails(0);
-		}	
+		}
 		$('#sAdd.variant').change(function() {
 			$.changeDetails($(this).val());
 		});
-		
+
 		//Lightbox basket
 		$('a.zoom_picture[rel^=lightbox]').slimbox();
-		
+
 		//AJAX basket
 		$('div.ajax_basket').click(function() {
 			if($('.ajax_basket_result').hasClass('active')) {
@@ -138,14 +138,14 @@ jQuery(document).ready(function($) {
 				$.basket.getBasket();
 			}
 		});
-		
+
 		//Article detail accessory
 		var lasthover;
 		$('.basketform label').hover(function() {
 			var $this = $(this);
-			
+
 			var value = $this.prev('input').val();
-			
+
 			if(value.length) {
 				$('div#DIV'+value).fadeIn('fast');
 				lasthover = $('div#DIV'+value);
@@ -154,14 +154,14 @@ jQuery(document).ready(function($) {
 			lasthover.fadeOut('fast');
 			lasthover = '';
 		});
-		
+
 		//Article detail accessory
 		$('.accessory_group input').bind('change', function() {
 			var $this = $(this);
 			$accessories = $('#sAddAccessories');
 			$accessories.val('');
 			if($this.is(':checked')) {
-				
+
 				$('.accessory_group input:checked').each(function(i, el) {
 					var val = $accessories.val();
 					val += $(el).val() + ';';
@@ -169,10 +169,10 @@ jQuery(document).ready(function($) {
 				});
 			}
 		});
-						
+
 		//Lightbox - Blog
 		$('.blogbox [rel^=lightbox]').slimbox();
-		
+
 		//Use a lightbox instead of a zoom
 		if(typeof (useZoom) !== 'undefined' && (useZoom === '0' || useZoom === '')) {
 			$("[rel^='lightbox']").slimbox();
@@ -186,7 +186,7 @@ jQuery(document).ready(function($) {
 
 		$('.account .password').hide();
 		$('.account .email').hide();
-		
+
 		//Change password account
 		if($('.account .password').hasClass('displayblock')) {
 			$('.account .password').show();
@@ -200,14 +200,14 @@ jQuery(document).ready(function($) {
 			$('.account .password').slideToggle('fast').toggleClass('active');
 			$('.account .email').slideUp('fast');
 		});
-		
+
 		//Change email account
 		$('.account .change_mail').bind('click', function(event) {
 			event.preventDefault();
 			$('.account .email').slideToggle('fast').toggleClass('active');
 			$('.account .password').slideUp('fast');
 		});
-		
+
 		//Logout Account
 		$('.logout').bind('click', function(event) {
 			event.preventDefault();
@@ -225,7 +225,7 @@ jQuery(document).ready(function($) {
 				}
 			});
 		});
-		
+
 		//User account page orders
 		$('.orderoverview_active .orderdetails').bind('click', function(e) {
 			e.preventDefault();
@@ -234,19 +234,19 @@ jQuery(document).ready(function($) {
 			} else {
 				$('#'+$(this).attr('rel')).addClass('active').show();
 			}
-		});	
-		
+		});
+
 		//Register validation
 		$('.register .required:input').validate();
-		
+
 		if($("#register_personal_customer_type").val()=="private") {
 			$('.register .company_informations').hide();
 		}
-		
+
 		if($("#register_personal_skipLogin").is(':checked')) {
 			$('.register .fade_password, .register p.description').hide();
 		}
-		
+
 		$("#register_personal_customer_type").change(function() {
 			if($(this).val() == 'business') {
 				$('.register .company_informations').slideDown();
@@ -254,13 +254,13 @@ jQuery(document).ready(function($) {
 				$('.register .company_informations').slideUp();
 			}
 		});
-		
+
 		if(!$("#register_billing_shippingAddress").is(':checked')) {
 			if(!$('.register').hasClass('change_shipping')) {
 				$('.register .alternative_shipping').hide();
 			}
 		}
-		
+
 		$('#register_billing_shippingAddress').click(function() {
 			if(!$(this).is(':checked')) {
 				$('.register .alternative_shipping').slideUp();
@@ -268,7 +268,7 @@ jQuery(document).ready(function($) {
 				$('.register .alternative_shipping').slideDown();
 			}
 		});
-		
+
 		$('#register_personal_skipLogin').click(function() {
 			if($(this).is(':checked')) {
 				$('.register .fade_password, .register p.description').slideUp();
@@ -276,7 +276,7 @@ jQuery(document).ready(function($) {
 				$('.register .fade_password, .register p.description').slideDown();
 			}
 		});
-		
+
 		// Loading Indicator
 		$('form.upprice_config').bind('change', function() {
 			$.loadingIndicator.open();
@@ -523,7 +523,7 @@ jQuery(document).ready(function($) {
  * Shopware AG (c) 2010
  */
 (function($) {
-		
+
 	/**
 	 * $.fn.ajaxSlider
 	 *
@@ -544,17 +544,17 @@ jQuery(document).ready(function($) {
 	 * the mode to 'ajax' and 'navigation': true. This mode get's
 	 * all data at the page load and scrolls through the slides.
 	 * The second modes would be called when you set the mode to
-	 * 'ajax' and 'navigation': false.  
+	 * 'ajax' and 'navigation': false.
 	 *
 	 * @param:  (string) mode  - mode to use
 	 * @param:  (obj) settings - user settings
 	 * @return: (obj) this     - selector which was passed to the plugin
 	 */
 	$.fn.ajaxSlider = function(mode, settings) {
-		
+
 		// default plugin config
 		var config = {
-			
+
 			// Public
 			'layout':           'horizontal',
 			'scrollWidth':      711,
@@ -576,7 +576,7 @@ jQuery(document).ready(function($) {
 			'showNumbers':      true,
 			'numberText':       'Seite %0 von %1',
 			'debug':            false,
-			
+
 			// Private
 			'_this':                 null,
 			'_container':            null,
@@ -596,47 +596,47 @@ jQuery(document).ready(function($) {
 			'_numbers':              null,
 			'_mode':			     null
 		};
-		
+
 		// Override default config with user settings
 		if (settings) { $.extend(config, settings); }
-		
+
 		this.each(function() {
-			
+
 			if(config.debug === true) {
 				console.group('Slider: .' + $(this).attr('class'));
 			}
-			
+
 			$.ajaxSlider.debugMode('Mode: ' + mode, config);
-			
+
 			config._this = $(this);
-			
+
 			$.ajaxSlider.debugMode('Create Container', config);
-			
+
 			// Create slider outer container and replace selector
 			config._container = $('<div>', {
 				'class': config.containerClass
 			}).appendTo(config._this);
-			
+
 			$.ajaxSlider.debugMode('Container created', config);
-			
+
 			// Save slider mode
 			config._mode = mode;
-			
+
 			// Add layout class
 			config._this.addClass(config.layout+'_slider');
-			
+
 			if(config.title !== '' && config.headline) {
 				$.ajaxSlider.debugMode('Create headline', config);
-				
+
 				// Create headline
 				config._headline = $('<h2>', {
 					'class': config.titleClass,
 					'text': config.title
 				}).prependTo(config._container);
 			}
-			
+
 			$.ajaxSlider.debugMode('Create left arrow', config);
-			
+
 			// Left arrow
 			config._leftArrow = $('<a>', {
 				'class': 'leftArrow',
@@ -644,9 +644,9 @@ jQuery(document).ready(function($) {
 				'title': 'Slide left',
 				'href': '#slideLeft'
 				}).appendTo(config._container).hide();
-			
+
 			$.ajaxSlider.debugMode('Create right arrow', config);
-			
+
 			// Right arrow
 			config._rightArrow = $('<a>', {
 				'class': 'rightArrow',
@@ -654,10 +654,10 @@ jQuery(document).ready(function($) {
 				'title': 'Slide right',
 				'href': '#slideRight'
 			}).appendTo(config._container).hide();
-			
-			
+
+
 			$.ajaxSlider.debugMode('Select mode', config);
-			
+
 			// Mode selection
 			switch(mode) {
 				case 'ajax':
@@ -670,23 +670,23 @@ jQuery(document).ready(function($) {
 					$.ajaxSlider.debugMode('The passed mode is not supported', config);
 					return false;
 			}
-			
+
 			if(config.rotate === true) {
 				$.ajaxSlider.debugMode('Create rotation', config);
 				$.ajaxSlider.rotateSlider(config);
 			}
 		});
-		
+
 		if(config.debug === true) {
 			console.groupEnd();
 		}
-		
+
 		// Return this to support jQuery's chaining
 		return this;
 		};
-		
+
 		$.ajaxSlider = {
-		
+
 		/**
 		 * $.ajaxSlider.createContainers
 		 *
@@ -699,13 +699,13 @@ jQuery(document).ready(function($) {
 			config._slideOuterContainer = $('<div>', {
 				'class': 'sliding_outer'
 			}).appendTo(config._container);
-			
+
 			// Create actual sliding container
 			config._slideContainer = $('<div>', {
 				'class': 'sliding_container'
 			}).prependTo(config._slideOuterContainer).hide();
 		},
-		
+
 		/**
 		 * $.ajaxSlider.getPage
 		 *
@@ -723,7 +723,7 @@ jQuery(document).ready(function($) {
 				'data': {'pages': slideNumber},
 				'beforeSend': function() {
 					if(config._loader === null) {
-					
+
 						// Create AJAX Loader
 						config._loader = $('<div>', {
 							'text': config.loadingText,
@@ -732,7 +732,7 @@ jQuery(document).ready(function($) {
 					} else {
 						config._loader.show();
 					}
-					
+
 					// Find old slide and remove it
 					config._slideContainer.fadeOut().find('.slide').remove();
 				},
@@ -748,7 +748,7 @@ jQuery(document).ready(function($) {
 						config._container.hide();
 						return false;
 					} else {
-						
+
 						// Calculate where the content should be insert
 						if(slideNumber > config._activeSlide) {
 							$(result).appendTo(config._slideContainer);
@@ -757,12 +757,12 @@ jQuery(document).ready(function($) {
 						} else if(slideNumber == config._activeSlide) {
 							config._slideContainer.html(result);
 						}
-						
+
 						// Remove pages tag
 						var pages = config._slideContainer.find('.pages');
 						config._slidesCount = pages.text();
 						pages.remove();
-						
+
 						//Handling arrows
 						if(slideNumber == 1) {
 							config._leftArrow.hide();
@@ -774,17 +774,17 @@ jQuery(document).ready(function($) {
 							config._leftArrow.show();
 							config._rightArrow.show();
 						}
-						
+
 						if(parseInt(config._slidesCount, 10) === 1) {
 							config._leftArrow.hide();
 							config._rightArrow.hide();
 						}
-						
+
 						if(parseInt(config._slidesCount, 10) === 0) {
 							config._container.hide();
 							return;
 						}
-						
+
 						// horizontal slider
 						if(config.layout == 'horizontal') {
 							var height;
@@ -795,7 +795,7 @@ jQuery(document).ready(function($) {
 							}
 						// vertical slider
 						} else {
-							
+
 							if(config.outer) {
 								// Setting offset
 								config._slideOuterContainer.css({
@@ -809,34 +809,34 @@ jQuery(document).ready(function($) {
 									'height': config.height - config._headline.outerHeight()+'px'
 								});
 							}
-		
+
 						}
-						
+
 						// Adding numbers
 						if(config.showNumbers === true) {
-							if(config._numbers === null) { 
+							if(config._numbers === null) {
 								config._numbers = $('<div>', {
 									'class': 'slide_numbers'
 								}).insertAfter(config._headline);
 							}
-							
+
 							var text = $.format(config.numberText, slideNumber, config._slidesCount);
 							config._numbers.empty().html(text);
 						}
-						
-						
+
+
 						config._activeSlide = slideNumber;
-						
+
 						config._loader.fadeOut('fast');
 						config._slideContainer.fadeIn('slow');
-						
-						
+
+
 						return true;
 					}
 				}
 			});
 		},
-		
+
 		/**
 		 * $.ajaxSlider.ajaxMode
 		 *
@@ -846,34 +846,34 @@ jQuery(document).ready(function($) {
 		 * @param:  (obj) config - the plugin config
 		 */
 		ajaxMode: function(config) {
-			
+
 			if(config.navigation === false) {
 				$.ajaxSlider.createContainers(config);
 				config._activeSlide = 1;
 				$.ajaxSlider.getPage(config._activeSlide, config);
-				
+
 				config._rightArrow.bind('click', function(event) {
 					event.preventDefault();
 					$.ajaxSlider.getPage(config._activeSlide + 1, config);
-					
-					
+
+
 				});
 				config._leftArrow.bind('click', function(event) {
 					event.preventDefault();
 					$.ajaxSlider.getPage(config._activeSlide - 1, config);
-					
+
 				});
-		
-				
-			} else { 
-				
+
+
+			} else {
+
 				// Load content with ajax
 				if(config.url.length) {
 					$.ajax({
 						'url': config.url,
 						'method': config.ajaxMethod,
 						'beforeSend': function() {
-						
+
 							// Create AJAX Loader
 							config._loader = $('<div>', {
 								'text': config.loadingText,
@@ -886,36 +886,36 @@ jQuery(document).ready(function($) {
 							config._container.hide();
 						},
 						'success': function(result) {
-							
+
 							// If the result is empty, hide container
 							if(!result.length) {
 								config._loader.fadeOut('slow');
 								config._container.hide();
 								return;
 							}
-							
+
 							// Hide AJAX loader
 							window.setTimeout(function() {
 								config._loader.fadeOut('slow');
 								config._loader = null;
-								
-								
+
+
 								// Create the needed containers
 								$.ajaxSlider.createContainers(config);
-								
+
 								//Fill the container and fade it in
 								config._slideContainer.html(result).fadeIn();
-								
+
 								$.ajaxSlider.sliderNavigation(config);
-								
+
 								// Configure the slider for both types
 								if(config.layout == 'horizontal') {
 									$.ajaxSlider.horizontalSlider(config);
 								} else {
 									$.ajaxSlider.verticalSlider(config);
 								}
-								
-							}, 800);		
+
+							}, 800);
 						}
 					});
 				} else {
@@ -924,45 +924,45 @@ jQuery(document).ready(function($) {
 				}
 			}
 		},
-		
+
 		/**
 		 * $.ajaxSlider.localeMode
 		 *
 		 * Gets the given slides, creates the needed
 		 * container and places the slides in it
-		 * 
+		 *
 		 * @param:  (obj) config - the plugin config
 		 */
 		localeMode: function(config) {
-			
+
 			// Getting inline slides
 			var slides = $(config._this).find('.slide');
-			
+
 			// Create sliding outer container
 			config._slideOuterContainer = $('<div>', {
 				'class': 'sliding_outer'
 			}).appendTo(config._container);
-			
+
 			// Create actual sliding container
 			config._slideContainer = $('<div>', {
 				'class': 'sliding_container',
 				'html': slides
 			}).prependTo(config._slideOuterContainer).hide().fadeIn();
-			
+
 			// Configure the slider for both types
 			if(config.layout == 'horizontal') {
 				$.ajaxSlider.horizontalSlider(config);
 			} else {
 				$.ajaxSlider.verticalSlider(config);
 			}
-			
+
 			// Create slider navigation
 			if(config.navigation === true) {
 				$.ajaxSlider.sliderNavigation(config);
 			}
-		
+
 		},
-		
+
 		/**
 		 * $.ajaxSlider.horizontalSlider
 		 *
@@ -978,37 +978,37 @@ jQuery(document).ready(function($) {
 			} else {
 				height = config.height - config._headline.outerHeight();
 			}
-			
-			
+
+
 			if(config.navigation === true || config.navigation === false && config._mode == 'locale') {
-				
+
 				// Setting the width of the slide container
 				var slides = config._slideContainer.find('.slide');
 				config._slideContainerWidth = 0;
-				
+
 				$.each(slides,function(i, el) { config._slideContainerWidth += $(el).width();});
 				config._slideContainer.width(config._slideContainerWidth);
-				
+
 				// Getting the number of slides
 				config._slidesCount = slides.length;
-				
+
 				// Show right arrow
 				if(config._slidesCount > 1) {
 					config._rightArrow.show();
 				}
-				
+
 				// Right arrow
 				config._rightArrow.bind('click', function(event) {
 					$.ajaxSlider.rightArrow(event, config);
 				});
-				
+
 				// Left arrow
 				config._leftArrow.bind('click', function(event) {
 					$.ajaxSlider.leftArrow(event, config);
 				});
 			}
 		},
-		
+
 		/**
 		 * $.ajaxSlider.verticalSlider
 		 *
@@ -1018,7 +1018,7 @@ jQuery(document).ready(function($) {
 		 * @param:  (obj) config - the plugin config
 		 */
 		verticalSlider: function(config) {
-		
+
 			// Position arrows
 			config._leftArrow.css({
 				'top': config._headline.outerHeight()
@@ -1026,7 +1026,7 @@ jQuery(document).ready(function($) {
 			config._rightArrow.css({
 				'top': config.height-config._rightArrow.outerHeight()
 			});
-			
+
 			if(config.outer) {
 				// Setting offset
 				config._slideOuterContainer.css({
@@ -1040,33 +1040,33 @@ jQuery(document).ready(function($) {
 					'height': config.height - config._headline.outerHeight()+'px'
 				});
 			}
-			
+
 			if(config.navigation === true) {
 				// Setting containerHeight
 				var slides = config._slideContainer.find('.slide');
 				config._slideContainerHeight = 0;
-				
+
 				$.each(slides,function(i, el) {
 					config._slideContainerHeight += $(el).height();
 				});
 				config._slideContainer.height(config._slideContainerWidth);
-				
+
 				// Getting the number of slides
 				config._slidesCount = slides.length;
-				
+
 				// Binding events
 				config._activeSlide = 1;
-				
+
 				// Show bottom arrow
 				if(config._slidesCount > 1) {
 					config._rightArrow.show();
 				}
-				
+
 				// Right arrow
 				config._rightArrow.bind('click', function(event) {
 					$.ajaxSlider.rightArrow(event, config);
 				});
-				
+
 				// Left arrow
 				config._leftArrow.bind('click', function(event) {
 					$.ajaxSlider.leftArrow(event, config);
@@ -1074,15 +1074,15 @@ jQuery(document).ready(function($) {
 			}
 		},
 
-		
+
 		rightArrow: function(event, config) {
 			event.preventDefault();
-					
+
 			config._activeSlide++;
 			clearInterval(config._rotateInterval);
 			$.ajaxSlider.animateContainerTo(config._activeSlide, config);
 		},
-		
+
 		leftArrow: function(event, config) {
 			event.preventDefault();
 			config._activeSlide--;
@@ -1090,7 +1090,7 @@ jQuery(document).ready(function($) {
 			$.ajaxSlider.animateContainerTo(config._activeSlide, config);
 
 		},
-		
+
 		/**
 		 * $.ajaxSlider.sliderNavigation
 		 *
@@ -1100,13 +1100,13 @@ jQuery(document).ready(function($) {
 		 * @param:  (obj) config - the plugin config
 		 */
 		sliderNavigation: function(config) {
-			
+
 			// Create an navigation controller and append it
 			// to our main container
 			config._slideNavigation = $('<div>', {
 				'class': config.navigationClass
 			}).prependTo(config._container);
-			
+
 			var i = 1;
 			while(i <= config._slidesCount) {
 				var a = $('<a>', {
@@ -1117,19 +1117,19 @@ jQuery(document).ready(function($) {
 				}).appendTo(config._slideNavigation);
 				i++;
 			}
-			
+
 			// Set first link as active
 			config._activeNavigation = config._slideNavigation.find('a:first').addClass('active');
 			var links = config._slideNavigation.find('a');
-			
+
 			links.bind('click', function(event) {
 				config._activeSlide = parseInt($(this).text(), 10);
 				window.clearInterval(config._rotateInterval);
 				$.ajaxSlider.animateContainerTo(config._activeSlide -1, config);
 			});
-			
+
 		},
-		
+
 		/**
 		 * $.ajaxSlider.animateContainerTo
 		 *
@@ -1140,10 +1140,10 @@ jQuery(document).ready(function($) {
 		 * @param:  (obj) config - the plugin config
 		 */
 		animateContainerTo: function(slideNumber, config) {
-		
+
 			//slideNumber = slideNumber -1;
 			if(config.layout == 'horizontal') {
-				
+
 				if(config._slidesCount > 1) {
 					// Animate sliding container
 					config._leftArrow.unbind('click');
@@ -1151,7 +1151,7 @@ jQuery(document).ready(function($) {
 					config._slideContainer.animate({
 						'left': -(config.scrollWidth * slideNumber)
 					}, config.scrollSpeed, function() {
-						
+
 						// Handling arrows
 						if(config._slideContainer.position().left >= 0) {
 							config._leftArrow.hide();
@@ -1163,7 +1163,7 @@ jQuery(document).ready(function($) {
 							config._leftArrow.show();
 							config._rightArrow.show();
 						}
-						
+
 						config._leftArrow.bind('click', function(event) {
 							$.ajaxSlider.leftArrow(event, config);
 						});
@@ -1177,7 +1177,7 @@ jQuery(document).ready(function($) {
 					config._slideContainer.animate({
 							'top': -(config.scrollWidth * slideNumber)
 						}, config.scrollSpeed, function() {
-						
+
 						if(config._slideContainer.position().top >= 0) {
 							config._leftArrow.hide();
 							config._rightArrow.show();
@@ -1191,7 +1191,7 @@ jQuery(document).ready(function($) {
 					});
 				}
 			}
-			
+
 			// Set navigation point to active
 			if(config.navigation === true) {
 				// Set this navigation point as active
@@ -1201,7 +1201,7 @@ jQuery(document).ready(function($) {
 				config._activeNavigation = config._this.find('#slideNavigation'+ (slideNumber +1)).addClass('active');
 			}
 		},
-					
+
 		/**
 		 * $.ajaxSlider.rotateSlider
 		 *
@@ -1211,7 +1211,7 @@ jQuery(document).ready(function($) {
 		 * @param:  (obj) config - the plugin config
 		 */
 		rotateSlider: function(config) {
-			
+
 			if(config._slidesCount > 1) {
 				var i = 1;
 				config._rotateInterval = window.setInterval(function() {
@@ -1239,9 +1239,9 @@ jQuery(document).ready(function($) {
  * Shopware AG (c) 2010
  */
 (function($) {
-	
+
 	$.loadingIndicator = {
-	
+
 		config: {
 			'overlay': '#lbOverlay',
 			'overlayOpacity': 0.6,
@@ -1253,30 +1253,30 @@ jQuery(document).ready(function($) {
 			'bindEvent': false,
 			'_loader': null
 		},
-		
+
 		open: function(settings) {
-			
+
 			// settings
 			if (settings) { $.extend($.loadingIndicator.config, settings); }
-		
+
 			// Create loader
 			$.loadingIndicator.config._loader = $('<div>', {
 				'class': $.loadingIndicator.config.loadingClass,
 				'text': $.loadingIndicator.config.loadingText
 			}).hide().appendTo($(document.body));
-			
+
 			var height = $.loadingIndicator.config._loader.height(), width = $.loadingIndicator.config._loader.width();
-			
+
 			$.loadingIndicator.config._loader.css({
 				'marginTop':  -(height/2) +'px',
 				'marginLeft': -(width/2) + 'px'
 			});
-			
+
 			// Add additionalcss if passed
 			if(!$.isEmptyObject($.loadingIndicator.config.additionalCSS)) {
 				$.loadingIndicator.config._loader.css($.loadingIndicator.config.additionalCSS);
 			}
-			
+
 			// Overlay handling
 			if($.loadingIndicator.config.hideOverlayAfterClose === true) {
 				$($.loadingIndicator.config.overlay).fadeTo($.loadingIndicator.config.animationSpeed, $.loadingIndicator.config.overlayOpacity);
@@ -1293,9 +1293,9 @@ jQuery(document).ready(function($) {
 			} else {
 				$.loadingIndicator.config._loader.fadeIn($.loadingIndicator.config.animationSpeed);
 			}
-			
+
 		},
-		
+
 		close: function() {
 			if($.loadingIndicator.config._loader) {
 				$($.loadingIndicator.config.overlay).fadeOut($.loadingIndicator.config.animationSpeed);
@@ -1311,7 +1311,7 @@ jQuery(document).ready(function($) {
 			}
 		}
 	};
-	
+
 })(jQuery);
 
 /**
@@ -1329,17 +1329,17 @@ jQuery(document).ready(function($) {
 	};
 
 	$.fn.validate = function(settings) {
-		
+
 		if (settings) { $.extend(config, settings); }
-		
+
 		this.bind('blur', function(event) {
 			validate($(this));
 			return false;
 		});
-		
+
 		return this;
 	};
-	
+
 	validate = function(el) {
 		switch(el.attr('id'))
 		{
@@ -1356,7 +1356,7 @@ jQuery(document).ready(function($) {
 				var action = 'ajax_validate_password';
 				break;
 		}
-		
+
 		if(!el.val()) {
 			setError(el);
 			return;
@@ -1368,7 +1368,7 @@ jQuery(document).ready(function($) {
 			return;
 		}
 	};
-	
+
 	ajaxValidate = function(el, action) {
 		var data = 'action='+action+'&'+$('.register form').serialize();
 		$.ajax({
@@ -1377,10 +1377,10 @@ jQuery(document).ready(function($) {
             'dataType': 'json',
             'url': $.controller.ajax_validate,
             'success': function (result, data) {
-				if(result && result.error_flags) 
+				if(result && result.error_flags)
 				{
 					for (var error_flag in result.error_flags)
-					{  
+					{
 						if(result.error_flags[error_flag]) {
 							setError($('.register .'+error_flag));
 						} else {
@@ -1388,9 +1388,9 @@ jQuery(document).ready(function($) {
 						}
 					}
 				}
-				
+
 				$('#'+action+'_error').remove();
-				
+
 				if(result && result.error_messages&& result.error_messages.length)
 				{
 					var error_css = {
@@ -1399,9 +1399,9 @@ jQuery(document).ready(function($) {
 						'position': 'absolute',
 						'z-index': 100
 					};
-					
+
 					var error_el = $('<div>').attr('id', action+'_error').addClass('error').prependTo($('body')).css(error_css);
-					
+
 					for (var error_key in result.error_messages)
 					{
 						var error_message = result.error_messages[error_key];
@@ -1412,7 +1412,7 @@ jQuery(document).ready(function($) {
             }
         });
 	};
-	
+
 	//Sets error class
 	setError = function(el) {
 		if(!$.isEmptyObject(el)) {
@@ -1424,7 +1424,7 @@ jQuery(document).ready(function($) {
 		}
 		return el;
 	};
-	
+
 	//Sets success class
 	setSuccess = function(el) {
 		if(!$.isEmptyObject(el)) {
@@ -1446,16 +1446,16 @@ jQuery(document).ready(function($) {
  * Shopware AG (c) 2010
  */
 (function($) {
-	
+
 	$.fn.liveshopping = function() {
-		
+
 		// getting liveshopping info
 		this.each(function() {
-			
+
 			// setting target time
 			var target = new Date();
 			target.setTime($(this).find('input.valid_to_ts').val() * 1000);
-			
+
 			// collection article details
 			var article = {
 				'article': $(this),
@@ -1470,112 +1470,112 @@ jQuery(document).ready(function($) {
 				'minPrice': eval($(this).find('input.minPrice').val())
 				//'stints': $(this).find('input.stints').val().split(';')
 			};
-			
+
 			// calling init function
 			$.liveshopping.init(article, this);
 		});
-		
+
 	};
-	
+
 	// extends jQuery's namespace
 	$.liveshopping = {
-	
+
 		// initialize the liveshopping
 		init: function(article, obj) {
-			
+
 			// article limitation
 			var stints = $(obj).find('input.stints');
 			if($.isEmptyObject(stints) === true) {
 				article.stints = $(stints).val().split(';');
 			}
-			
+
 			// prepare ordernumber for sizzle
 			article.ordernumber = article.ordernumber.replace(/\./g, '\\.');
-			
+
 			// refresh every second
 			window.setInterval(function () {
-		
+
 				var now = $.server.dateObj;
-				
+
 				// check difference
 				var diff = $.timestampDiff(article.target.getTime(), now.getTime());
-				
-				// liveshopping is running 
+
+				// liveshopping is running
 				if(diff !== false) {
-				
+
 					$.liveshopping.refreshDates(article, diff);
-					
+
 					// if type standard
 					if(article.typeID == 1) {
 						$.liveshopping.refreshBarChart(article,diff);
-						
+
 						if(article.max_quantity_enable) {
 							$.liveshopping.refreshQuantity(article);
 						}
-						
+
 					// Minutes decrease
 					} else if(article.typeID == 2) {
 						$.liveshopping.refreshSecondsCounter(article, diff);
 						$.liveshopping.refreshPrices(article, diff);
-						
+
 					// Minutes increase
 					} else {
 						$.liveshopping.refreshSecondsCounter(article, diff);
 						$.liveshopping.refreshPrices(article, diff);
 					}
-					
+
 				// liveshopping is finished
 				}
 			}, 1000);
 		},
-		
+
 		// changes bar chart labels which
 		// are used by the standard type
 		refreshDates: function(article, diff) {
-			
+
 			var key = article.uniquekey + article.ordernumber;
-			
+
 			// days
 			$('span.live'+key+'_days').each(function(index, item) {
 				$(item).html(diff.d);
 			});
-			
+
 			// days - double digit
 			$('span.live'+key+'_days_doubledigit').each(function(index, item) {
 				tmp = diff.d;
 				tmp = tmp.toString();
 				if(tmp.length == 1) { $(item).html('0' + tmp); } else { $(item).html(tmp); }
 			});
-			
+
 			// hours
 			$('span.live'+key+'_hours').each(function(index, item) {
 				$(item).html(diff.h);
 			});
-			
+
 			// hours - double digit
 			$('span.live'+key+'_hours_doubledigit').each(function(index, item) {
 				tmp = diff.h;
 				tmp = tmp.toString();
 				if(tmp.length == 1) { $(item).html('0'+tmp); } else { $(item).html(tmp); }
 			});
-			
+
 			// minutes
 			$('span.live'+key+'_min').each(function(index, item) {
 				$(item).html(diff.m);
 			});
-			
+
 			// minutes - double digit
 			$('span.live'+key+'_min_doubledigit').each(function(index, item) {
 				tmp = diff.m;
 				tmp = tmp.toString();
 				if(tmp.length == 1) { $(item).html('0'+tmp); } else { $(item).html(tmp); }
 			});
-			
+
 			// seconds
 			$('span.live'+key+'_sec').each(function(index, item) {
 				$(item).html(diff.s);
 			});
-			
+
 			// seconds - double digit
 			$('span.live'+key+'_sec_doubledigit').each(function(index, item) {
 				tmp = diff.s;
@@ -1584,13 +1584,13 @@ jQuery(document).ready(function($) {
 			});
 
 		},
-		
+
 		// refreshs the bar chart which is used in the
 		// standard liveshopping type
 		refreshBarChart: function(article, diff, config) {
-			
+
 			var key = article.uniquekey + article.ordernumber;
-			
+
 			// days process bar
 			$('div.live'+key+'_days_process').each(function(index, item) {
 				var proz = eval(diff.d)*100/31;
@@ -1598,41 +1598,41 @@ jQuery(document).ready(function($) {
 				proz = 100 - proz;
 				$(item).css('width', proz+'%');
 			});
-			
+
 			// hours process bar
 			$('div.live'+key+'_hours_process').each(function(index, item) {
 				var proz = eval(diff.h)*100/59;
 				proz = 100 - proz;
 				$(item).css('width', proz + '%');
 			});
-			
+
 			// minutes bar chart
 			$('div.live'+key+'_min_process').each(function(index, item) {
 				var proz = eval(diff.m)*100/59;
 				proz = 100 - proz;
 				$(item).css('width', proz + '%');
 			});
-			
+
 			// seconds bar chart
 			$('div.live'+key+'_sec_process').each(function(index, item) {
 				var proz = eval(diff.s)*100/59;
 				proz = 100 - proz;
 				$(item).css('width', proz + '%');
-			});	
+			});
 
 		},
-		
+
 		// necessary for minutes increase and decrease
 		refreshPrices: function(article, diff) {
-		
+
 			if (diff.s === 0) {
-				
+
 				var key = article.uniquekey + article.ordernumber;
 				// calulating new price
 				article.article.find('input.price').each(function(index, item) {
 					newPrice = eval($(item).val());
 				});
-				
+
 				// setting new price
 				$('strong.live'+key+'_display_price').each(function(index, item) {
 					newPrice2 = newPrice;
@@ -1641,16 +1641,16 @@ jQuery(document).ready(function($) {
 					} else {
 						newPrice2 = eval(newPrice2) - eval(article.minPrice);
 					}
-					
+
 					$(item).text($.number_format(newPrice2, 2, ',','.'));
 				});
-				
+
 				// setting new price into hidden input
 				article.article.find('input.price').val(newPrice2);
 			}
 
 		},
-		
+
 		// needed for max quantity
 		refreshQuantity: function(article) {
 			$('div.live'+article.uniquekey+article.ordernumber+'_instock_process').each(function(index, item) {
@@ -1661,7 +1661,7 @@ jQuery(document).ready(function($) {
 				$(item).css('width', proc+'%');
 			});
 		},
-		
+
 		// refresh seconds bar
 		refreshSecondsCounter: function(article, diff) {
 			$('div.live'+article.uniquekey+article.ordernumber+'_secbar_process').each(function(index, item) {
@@ -1669,9 +1669,9 @@ jQuery(document).ready(function($) {
 				$(item).css('width', proc + '%');
 			});
 		}
-	
+
 	};
-	
+
 })(jQuery);
 
 /**
@@ -1699,7 +1699,7 @@ jQuery.fn.liveSearch = function (conf) {
 
 
 	var liveSearch    = jQuery('#' + config.id);
-	
+
 	// Create live-search if it doesn't exist
 	if (!liveSearch.length) {
 		liveSearch = jQuery('<div id="' + config.id + '"></div>')
@@ -1722,20 +1722,20 @@ jQuery.fn.liveSearch = function (conf) {
 	return this.each(function () {
 		var input = jQuery(this);
 		var liveSearchPaddingBorderHoriz = parseInt(liveSearch.css('paddingLeft'), 10) + parseInt(liveSearch.css('paddingRight'), 10) + parseInt(liveSearch.css('borderLeftWidth'), 10) + parseInt(liveSearch.css('borderRightWidth'), 10);
-		
+
 		// Re calculates live search's position
 		var repositionLiveSearch = function () {
-		
-			
+
+
 			if(config._left === null || config._top === null) {
 				liveSearch.show();
 				if(config._left === null) { config._left = parseInt(liveSearch.css('left'), 10); }
 				if(config._top === null) { config._top = parseInt(liveSearch.css('top'), 10); }
 				liveSearch.hide();
 			}
-			
+
 			var containerOffset = $('.container_20:first').offset();
-						
+
 			liveSearch.css({
 				'left': containerOffset.left + config._left,
 				'top': containerOffset.top + config._top
@@ -1762,26 +1762,26 @@ jQuery.fn.liveSearch = function (conf) {
 				config.onSlideUp();
 			});
 		};
-		
+
 		var doLiveSearch = function () {
-			
+
 			if(input.val() == config.lastValue) { return; }
 
 			input.addClass(config.loadingClass);
-		
+
 			// Stop previous ajax-request
 			if (config.timer) {
 				clearTimeout(config.timer);
 			}
-			
+
 			// Reset position
 			config.position = -1;
-			
+
 			config.lastValue = input.val();
 
 			// Start a new ajax-request in X ms
 			config.timer = setTimeout(function () {
-				
+
 				jQuery.ajax({
 	                'url': config.url,
 	                'dataType': 'jsonp',
@@ -1793,7 +1793,7 @@ jQuery.fn.liveSearch = function (conf) {
 	                'success': function (request) {
 	                   $('div.inner_searchcontainer .ajax_loader').hide();
 	                   input.removeClass(config.loadingClass);
-	                   
+
 						// Show live-search if results and search-term aren't empty
 						if (request.length) {
 							liveSearch.html(request);
@@ -1812,7 +1812,7 @@ jQuery.fn.liveSearch = function (conf) {
 		// If not, just slide it down. Only do this if there's something in the input
 		.focus(function () {
 			if (this.value !== '') {
-				
+
 				// Perform a new search if there are no search results
 				if (liveSearch.html() === '') {
 					config.lastValue = '';
@@ -1827,11 +1827,11 @@ jQuery.fn.liveSearch = function (conf) {
 		})
 		// Auto update live-search onkeyup
 		.keydown(function (event) {
-			
+
 			doLiveSearch();
-			
+
 			if (config.results && config.results.length && (event.keyCode==38 || event.keyCode==40))
-			{	
+			{
 				$(config.results[config.position]).removeClass(config.positionClass);
 				if(event.keyCode==40) {
 					config.position++;
@@ -1849,9 +1849,9 @@ jQuery.fn.liveSearch = function (conf) {
 					$(config.results[config.position]).addClass(config.positionClass);
 				}
 			}
-			
+
 			if(event.keyCode==13 && config.position!=-1) {
-				
+
 				var target = $(config.results[config.position]).find('a').attr('href');
 				location.href = target;
 				return false;
@@ -1866,7 +1866,7 @@ jQuery.fn.liveSearch = function (conf) {
  *
  * Shopware AG (c) 2010
  */
- 
+
 (function ($) {
 
 	 // Methods to fix the select box bug
@@ -1882,13 +1882,13 @@ jQuery.fn.liveSearch = function (conf) {
 		open: function(obj) {
 			// Hide select boxes
 			$('select:visible').css('visibility', 'hidden');
-    		
+
     		// Fix missing 'position: fixed'
     		obj.css({
     			'position': 'absolute',
     			'top': document.body.scrollTop + 100 + 'px'
     		}).fadeIn();
-    		
+
     		$(window).bind('scroll', function(event) {
     			obj.css('top', document.body.scrollTop + 100 + 'px');
     		});
@@ -1896,9 +1896,9 @@ jQuery.fn.liveSearch = function (conf) {
     	close: function(obj) {
     		// Show select boxes
     		$('select:hidden').css('visibility', 'visible');
-    		
+
     		obj.fadeOut();
-    		
+
     		// Fix missing 'position: fixed'
     		$(window).unbind('scroll');
     	},
@@ -1915,7 +1915,7 @@ jQuery.fn.liveSearch = function (conf) {
     	selectOnlyShow: function() {
     		$('select').css('visibility', 'visible');
     	}
-    }; 
+    };
 
 	// Formats a string
 	// Syntax: $.format('<div class="%0"'>%1</div>, [value for %0], [value for %1], ...)
@@ -1930,7 +1930,7 @@ jQuery.fn.liveSearch = function (conf) {
     $.server = {
         dateObj: {}
     };
-    
+
     //Initialized the server time which
     //is used by the liveshopping module
     $.server.init = function (servertime) {
@@ -1944,7 +1944,7 @@ jQuery.fn.liveSearch = function (conf) {
         var crntTime = $.server.dateObj.getTime() + 1000;
         $.server.dateObj = new Date(crntTime);
     };
-    
+
     //Formats floats
     $.number_format = function (number, decimals, dec_point, thousands_sep) {
         var n = number,
@@ -1975,7 +1975,7 @@ jQuery.fn.liveSearch = function (conf) {
         }
         return s;
     };
-            
+
     //Changes the state of the related articles which is
     //used by the bundle module
     $.changeRelatedArticleState = function (ordernumber, active) {
@@ -1986,7 +1986,7 @@ jQuery.fn.liveSearch = function (conf) {
             $(tmpContainerName).show();
         }
     };
-    
+
     //Gets the difference between two timestamps
     //which is used by the live shopping module
     $.timestampDiff = function (d1, d2) {
@@ -2004,7 +2004,7 @@ jQuery.fn.liveSearch = function (conf) {
             's': s
         };
     };
-    
+
     //Changes the displayed informations on the
 	//article detail site and changes the active
 	//images which is used by variant articles
@@ -2028,7 +2028,7 @@ jQuery.fn.liveSearch = function (conf) {
 				$('#article_notification').show();
 				var hideBasket = $('#notifyHideBasket').val();
 				hideBasket = ~~hideBasket;
-				
+
 				if(hideBasket) {
 					$('#detailCartButton').hide();
 				}
@@ -2055,13 +2055,13 @@ jQuery.fn.liveSearch = function (conf) {
 			// Hide basket
 			$('#basketButton').css('opacity', '0.4');
 		} else {
-		
+
 			// Show Pseudo price
 			$('#'+ordernumber).find('.PseudoPrice').show();
-			
+
 			// Show delivery info
 			$('.delivery_container').show();
-			
+
 			// Change informations
 			$('#article_details').html($('#' + ordernumber).html());
 
@@ -2097,7 +2097,7 @@ jQuery.fn.liveSearch = function (conf) {
 					 // Change lightbox link
 					$('a#zoom1').attr('href', $('#img' + ordernumber).children('a').attr('href'));
 				}
-				
+
 				// Change active thumbnail image
 				$('#thumb' + $.ordernumber).hide();
 				$('#thumb' + ordernumber).show();
@@ -2120,7 +2120,7 @@ jQuery.fn.liveSearch = function (conf) {
 
     //Check if the article are set up for
     //email notification and checks if
-    //a notification was sent 
+    //a notification was sent
     $.checkNotification = function(ordernumber) {
     	if(typeof(variantOrdernumberArray) == 'undefined') {
     		return;
@@ -2140,7 +2140,7 @@ jQuery.fn.liveSearch = function (conf) {
 			}
 		} catch(err) {}
 	}
-    
+
 })(jQuery);
 
 /**
@@ -2150,27 +2150,27 @@ jQuery.fn.liveSearch = function (conf) {
  * Shopware AG (c) 2010
  */
 (function($) {
-	
+
 	var config = {
 		'ordernumber': $.ordernumber
 	};
-	
+
 	$.bundle = {
-		
+
 		changeDetails: function(selector, ordernumber) {
-			
+
 			// setting config ordernumber
 			if(typeof(ordernumber) != 'undefined') {
 				config.ordernumber = ordernumber;
 			} else {
 				config.ordernumber = $.ordernumber;
 			}
-			
+
 			var bundles = $(selector).find('.bundle_bundles_details').text();
 			var related = $(selector).find('.bundle_related_articles').text();
 			var article = $(selector).find('.bundle_article_details').text();
-			
-			// evil !!! 
+
+			// evil !!!
 			if(bundles.length) {
 				eval("bundles = ("+bundles+")");
 			}
@@ -2180,36 +2180,36 @@ jQuery.fn.liveSearch = function (conf) {
 			if(article.length) {
 				eval("article = ("+article+")");
 			}
-			
+
 			// Related articles
 			if(typeof(related) == 'object' && parseInt(article.crossbundlelook) == 1) {
 				$.bundle.processRelatedArticles(related, article);
 			}
-			
+
 			// Bundles
 			if(typeof(bundles) == 'object') {
 				$.bundle.processBundle(bundles, article, selector);
 			}
 		},
-		
+
 		calculatePrice: function(bundle, ordernumber) {
-		
+
 			var articlePriceSelector = 'input#price_'+ordernumber;
-			
+
 			// Calculate total price
 			var price_rab_span = $('#price_rabAbs_'+bundle.id);
 			var articlePrice = $(articlePriceSelector).val();
 			var bundleArticlesTotalPrice = bundle.sBundleArticlesTotalPrice.display;
-			
+
 			if(price_rab_span != null && articlePrice != null && bundleArticlesTotalPrice != null) {
 				var rabTotal = eval(articlePrice) + eval(bundleArticlesTotalPrice);
 				price_rab_span.text($.number_format(rabTotal, 2, ',', '.'));
 			}
-			
+
 			// Calculate bundle price
 			var price_bundle_span = $('#price_bundle_'+bundle.id);
 			if(price_bundle_span != null) {
-				
+
 				// Calculate total discount
 				if(bundle.rab_type == "abs") {
 					var bundle_price = bundle.sBundlePrices.display;
@@ -2222,79 +2222,79 @@ jQuery.fn.liveSearch = function (conf) {
 					price_bundle_span.text($.number_format(bundle_price, 2, ',', '.'));
 				}
 			}
-			
+
 			// Discount in percentage
 			var price_rabPro_span = $('#price_rabPro_'+bundle.id);
 			var rabPro = 100-(eval(bundle_price) * 100 / eval(rabTotal));
-			
+
 			if(price_rabPro_span != null && rabPro != null) {
 				price_rabPro_span.text($.number_format(rabPro, 2));
 			}
 		},
-		
+
 		processBundle: function(bundles, article, selector) {
-		
+
 			// Bundle display flag
 			// Will be true if at least
 			// one bundle article is active
 			var showBundleBox = false;
-			
+
 			$.each(bundles,function(i, bundle) {
-			
+
 				// Mark variant ordernumber as selected article
 				$('input[name=sAddBundle]').each(function(i, item) {
 					$(item).val(config.ordernumber);
 				});
-					
+
 				$.bundle.calculatePrice(bundle, config.ordernumber.replace('\.', '\\.'));
-				
-				
+
+
 				// Instock check for variant articles
 				if(!$.isEmptyObject(bundle.sBundleStints)) {
-					
+
 					$('.bundle').hide();
-					
+
 					$('#sAdd.variant').change(function() {
 						var ordernumber = $(this).val();
 						var instock = $('#instock_'+ordernumber.replace('\.', '\\.')).val();
-						
+
 						// refresh price
 						$.bundle.calculatePrice(bundle, ordernumber);
-						
-						if(instock.length) {	
-							
+
+						if(instock.length) {
+
 							if(instock >= 0) {
 								if(showBundleBox) $(selector).show();
 							} else {
 								$('.bundle').hide();
 							}
 						} else {
-						
+
 							// Show bundle box, if at least one
 							// one bundle artice is active
 							if(showBundleBox) {
 								$('.bundle').show();
 							}
 						}
-						
+
 					});
 				}
-				
+
 				// Check if we've article limitations
 				if($.isArray(bundle.sBundleStints)) {
-					
+
 					// Hide bundle box and check for
 					// entitled articles
 					$('#bundle_set_'+bundle.id).hide();
-					
+
 					// Pass-through ordernumber, which will
 					// be displayed
 					$.each(bundle.sBundleStints, function(j, stints) {
 						var ordernumberToUpper = config.ordernumber.toUpperCase();
-						
+
 						if(ordernumberToUpper == stints) {
 							showBundleBox = true;
-							
+
 							// show bundle box
 							$('#bundleset_'+bundle.id).show();
 						}
@@ -2303,69 +2303,65 @@ jQuery.fn.liveSearch = function (conf) {
 					$('.bundle').fadeIn();
 				}
 			});
-			
+
 			// Show bundle box, if at least one
 			// one bundle artice is active
 			if(showBundleBox) {
 				$('.bundle').show();
 			}
-			
+
 			/*if(!$.isEmptyObject(article.sVariants)) {
 				$('.bundle').hide();
 			} */
 		},
-		
+
 		processRelatedArticles: function(related, article) {
-		
+
 			// Release related article box
 			try {
 				$('.relatedbox_container').show();
 			} catch(err) {}
-			
+
 			// Caching ordernumber and price
 			$('#related_main_ordernumber').val(config.ordernumber);
 			$('#selected_articel_price').val($('#price_'+config.ordernumber).val());
 			$.refreshRelatedArticle();
-			
+
 			// Deposit images
 			try {
 				var tmpBundleImg = $('#related_main_image');
 				var tmpSourceImg = $('#img_1_'+config.ordernumber);
-				
+
 				if(tmpSourceImg != null) {tmpBundleImg.html(tmpSourceImg.html());}
 			} catch(err) {}
 		}
-		
+
 	};
-	
-	
+
+
 	// Main bundle function
 	// exam.: $('.bundlebox').bundle();
 	$.fn.bundle = function(settings) {
-		
+
 		if (settings) $.extend(config, settings);
-		
+
 		this.each(function() {
 			$.bundle.changeDetails(this);
 		});
 	};
-	
+
 	//Refreshes the relatedArticles which is
     //used by the bundle module
     $.refreshRelatedArticle = function () {
         var relatedOrdernumbers = '';
         var totalPrice = $('#selected_articel_price').val();
-        
+
         $('input[class=relatedOrdernumber]').each(function (i, item) {
             var tmpOrdernumber = $(item).val();
-			
+
 			/**
 			 * Fix issue with sizzle selector engine and ordernumbers
 			 * which includes dots
-			 * @ticket #5711 (intern)
-			 * @ticket #100483 (extern)
-			 * @author s.pohl
-			 * @date 2011-07-27
 			 */
 			tmpOrdernumber = tmpOrdernumber.replace(/(:|\.)/g,'\\$1');
 
@@ -2394,14 +2390,14 @@ jQuery.fn.liveSearch = function (conf) {
 /**
  * Compare Plugin
  * for Shopware
- * 
+ *
  * Shopware AG (c) 2010
  */
 (function($) {
 
 	//Extends jQuery's namespace
     $.compare = {};
-    
+
     //Default options
     $.compare.options = {
         viewportAjax: '',
@@ -2419,21 +2415,21 @@ jQuery.fn.liveSearch = function (conf) {
         maxCount: 5,
         compareCount:  0
     };
-    
+
     //Sets user settings
     $.compare.setup = function (params) {
     	if(params)
         $.each(params, function (i, param) {
             $.compare.options[i] = param
         });
-		
+
 		if(compareMaxCount) {
         	$.compare.options.maxCount = parseInt(compareMaxCount);
         }
         if(compareCount) {
     		$.compare.options.compareCount = parseInt(compareCount);
 		}
-        
+
         //binding events
         $('.compare_delete_all').live('click', function(event) {
         	$.compare.deleteComparisons(this.href);
@@ -2452,19 +2448,19 @@ jQuery.fn.liveSearch = function (conf) {
         	event.preventDefault();
         });
     };
-    
+
     //Displays the compare container
     $.compare.showCompare = function () {
     	$($.compare.options.compareHighlight).addClass('active');
         $($.compare.options.resultsContainer).show();
     };
-    
+
     //Hides the compare container
     $.compare.hideCompare = function () {
     	$($.compare.options.compareHighlight).removeClass('active');
         $($.compare.options.resultsContainer).hide();
     };
-    
+
     //Hides the compare window
     $.compare.hideCompareList = function () {
         $($.compare.options.compareContainer).animate({
@@ -2472,7 +2468,7 @@ jQuery.fn.liveSearch = function (conf) {
         });
         $($.compare.options.compareOverlay).fadeOut();
     };
-    
+
     //Requests the compare informations
 	$.compare.startComparison = function (url) {
 	    $.ajax({
@@ -2480,20 +2476,20 @@ jQuery.fn.liveSearch = function (conf) {
 	        'type': $.compare.options.requestType,
 	        'url': url,
 	        'complete': function (result) {
-	        	
+
 	        	var container = $('<div>', {'class':'ajax_compare_container'}).appendTo(document.body);
 	        	var div = $('<div>', {'class': 'grid_3'}).appendTo(container);
-	        	
-	        	container.show();	
+
+	        	container.show();
 	        	var tmpWidth = parseInt(div.css('width'));
 	        	container.remove();
-	        	
+
 				var width = tmpWidth * $.compare.options.compareCount + tmpWidth;
-				
+
 				if($.browser.msie && parseInt($.browser.version) == 6) {
 					width += 2;
 				}
-	            
+
 				$.modal(result.responseText, '', {
 	           		'width': width+'px',
 	           		'top': '30px',
@@ -2503,7 +2499,7 @@ jQuery.fn.liveSearch = function (conf) {
 	        }
 	    })
 	};
-	
+
     //Adds an article with it's article id
     //to the current compare list
     $.compare.addCompare = function (url) {
@@ -2514,10 +2510,10 @@ jQuery.fn.liveSearch = function (conf) {
             'complete': function (result) {
             	$.compare.options.compareCount = $.compare.options.compareCount + 1;
             	if($.compare.options.compareCount > $.compare.options.maxCount) {
-            	
+
             		var width = 500;
             		var position = 'fixed';
-            		
+
             		if($.browser.msie && parseInt($.browser.version) == 6) {
 						width += 2;
 						position = 'absolute';
@@ -2536,7 +2532,7 @@ jQuery.fn.liveSearch = function (conf) {
             }
         })
     };
-    
+
     //Deletes an article with it's article id
     //from the current compare list
     $.compare.deleteCompare = function (url) {
@@ -2550,11 +2546,11 @@ jQuery.fn.liveSearch = function (conf) {
             },
             'complete': function (result) {
                 $($.compare.options.ajaxContainer).html(result.responseText);
-                
+
             }
         })
     };
-    
+
     //Deletes the current compare list
     $.compare.deleteComparisons = function (url) {
         $.ajax({
@@ -2579,7 +2575,7 @@ jQuery.fn.liveSearch = function (conf) {
  * Shopware AG (c) 2010
  */
 (function ($) {
-	
+
 	//Default settings
 	var config = {
 	    animationSpeed: 500,
@@ -2591,7 +2587,7 @@ jQuery.fn.liveSearch = function (conf) {
 	    useOverlay: true,
 	    width: 500
 	};
-	
+
 	//creates an modal window with text and headline
 	$.modal = function (text, headline, settings) {
         settings = settings || {};
@@ -2602,7 +2598,7 @@ jQuery.fn.liveSearch = function (conf) {
 	        'class': 'modal',
 	        'css': {
 	        	'width': settings.width
-	        } 
+	        }
 	    });
 
 	    if (headline.length) {
@@ -2614,13 +2610,13 @@ jQuery.fn.liveSearch = function (conf) {
 	        var container = $(settings.textContainer, {
 	            'html': text
 	        });
-	        
+
 	        if (settings.textClass.length) {
 	            container.addClass(settings.textClass)
 	        }
 	        container.appendTo(modal);
 	    }
-	    
+
 	    //get css properties
 	    modal.show();
 	    if(!settings.position) {
@@ -2628,21 +2624,21 @@ jQuery.fn.liveSearch = function (conf) {
 	    }
         settings.top = modal.css('top');
 	    modal.hide();
-	    
-	  
+
+
 	    modal.appendTo('body');
-	    
+
 	    modal.show().css('marginLeft', -(modal.width()/2)).hide();
-	    
+
 	    if (settings.useOverlay == true) {
 	        $.modal.overlay.fadeIn();
-	        
+
 	        $(settings.overlay).bind('click', function (event) {
 	            $.modalClose();
 	        })
 	    }
 	    $('.modal').fadeIn('fast');
-	    
+
 	    if($.browser.msie && parseInt($.browser.version) == 6) {
 	 		$.ie6fix.open(modal, settings);
 	 	} else {
@@ -2662,16 +2658,16 @@ jQuery.fn.liveSearch = function (conf) {
 	            }, settings.animationSpeed)
 	        }
 	    }
-	    
+
 	    return modal
 	};
-    
+
     //Cloeses the current modal window
     $.modalClose = function () {
         if (config.useOverlay == true) {
             $.modal.overlay.fadeOut()
         }
-        
+
         if($.browser.msie && parseInt($.browser.version) == 6) {
         	$.ie6fix.close($('.modal'), config);
         } else {
@@ -2685,7 +2681,7 @@ jQuery.fn.liveSearch = function (conf) {
 	        $('.modal').fadeOut();
         }
     };
-    
+
     //Creates a modal window with an iframe and a headline
     $.modalFrame = function (url, headline, settings) {
         if (settings) $.extend(config, settings);
@@ -2745,7 +2741,7 @@ jQuery.fn.liveSearch = function (conf) {
             }, config.animationSpeed)
         }
     };
-        
+
     //Handles the modal overlay
     $.modal.overlay = {
         fadeIn: function () {
@@ -2783,11 +2779,11 @@ jQuery.fn.liveSearch = function (conf) {
         checkout: '',
         target: ''
     };
-    
+
     //Extends jQuery's function namespace
 	$.fn.checkout = function (settings) {
 	    if (settings) $.extend(config, settings);
-	    
+
 	    $(config.container + ' form').live('submit', function (event) {
 	    	if(!$(this).hasClass('new_customer_form')) {
 	    		event.preventDefault();
@@ -2799,19 +2795,19 @@ jQuery.fn.liveSearch = function (conf) {
 	    	var form = $(config.container + ' form[name^=existing_customer]');
 	    	$.checkout.loginUser(form);
 	    });
-	    
+
 	    this.live('click', function (event) {
 	        event.preventDefault();
 	        $.checkout.checkUser(this.href);
 	    });
-	    
+
 	    return this
 	};
 
-    
+
     //Extends jQuery's namespace
     $.checkout = {};
-    
+
     //Checks the user
     $.checkout.checkUser = function (target,event) {
     	config.target = target;
@@ -2841,15 +2837,15 @@ jQuery.fn.liveSearch = function (conf) {
 	                    	this.fireEvent('onmove');
 	                    });
                     }
-                
-                // user is logged in                
+
+                // user is logged in
                 } else {
 					window.location.href = target;
                 }
             }
         });
     };
-    
+
     //Checks if the user is logged in
     $.checkout.loginUser = function (form) {
     	config.register  = $.controller.register;
@@ -2875,10 +2871,10 @@ jQuery.fn.liveSearch = function (conf) {
  * Shopware AG (c) 2010
  */
 (function ($) {
-	
+
 	//Extends jQuery's namespace
     $.basket = {};
-    
+
     //Default settings
     $.basket.options = {
         viewport: '',
@@ -2887,20 +2883,20 @@ jQuery.fn.liveSearch = function (conf) {
         basketDisplay: '#shopnavi div.display_basket',
         basketParent: '.ajax_basket_container'
     };
-    
+
     //Initialize the basket module
     //and binds the needed events
     $.basket.init = function () {
-    	
+
     	var width = 660;
     	var position = 'fixed';
-    	
+
     	if($.browser.msie && parseInt($.browser.version) == 6) {
     		var width = width - 10;
     		var position = 'absolute';
     	}
-    	
-    
+
+
         var modalConfig = {
             'position': position,
             'animationSpeed': 200,
@@ -2920,7 +2916,7 @@ jQuery.fn.liveSearch = function (conf) {
 				'margin': '0 0 15px 15px'
 			}
         };
-        
+
         $('a.buynow').live('click', function (event) {
             event.preventDefault();
 
@@ -2932,9 +2928,9 @@ jQuery.fn.liveSearch = function (conf) {
                 	$.loadingIndicator.close();
                     $.modal(result, '', modalConfig);
                     $('#lbOverlay').css('opacity', '0').show().fadeTo('fast', '0.3');
-                    
+
                     $('.slider_modal').ajaxSlider('locale', sliderConfig);
-                    
+
                     $('.modal .close').hide();
                     $.basket.refreshDisplay();
                 }
@@ -2942,27 +2938,27 @@ jQuery.fn.liveSearch = function (conf) {
         });
         $('.basketform').bind('submit', function (event) {
             event.preventDefault();
-			
+
 			$.loadingIndicator.open();
             $.ajax({
                 'data': $(this).serialize(),
                 'dataType': 'jsonp',
                 'url': $(this).attr('action'),
                 'success': function(result) {
-                	
+
                 	$.loadingIndicator.close();
                     $.modal(result, '', modalConfig);
                     $('#lbOverlay').css('opacity', '0').show().fadeTo('fast', '0.3');
-                	
+
                 	$('.slider_modal').ajaxSlider('locale', sliderConfig);
-					
+
                     $('.modal .close').hide();
                     $.basket.refreshDisplay();
                 }
             });
         });
     };
-    
+
     //Refreshs the basket display
     $.basket.refreshDisplay = function () {
         $.ajax({
@@ -2976,7 +2972,7 @@ jQuery.fn.liveSearch = function (conf) {
             }
         })
     };
-    
+
     //Requests the basket content
     $.basket.getBasket = function () {
         if(!$($.basket.options.basketResult).length) {
@@ -3044,7 +3040,7 @@ jQuery.fn.liveSearch = function (conf) {
 	        	l += Math.floor($(this).css(q).replace(/px/, ''));
 	        });
 	        l /= k.size();
-            
+
             if (!o.max) {
                 o.max = (l * k.size()) - (o.min * (k.size() - 1))
             } else {
@@ -3177,24 +3173,24 @@ jQuery.fn.liveSearch = function (conf) {
 		activeClass: 'active',
 		animationSpeed: 'fast'
 	};
-	
+
 	$.fn.supplierfilter = function(settings) {
-		
+
 		//Extends default settings with user settings
 		if (settings) $.extend(config, settings);
-		
+
 		this.each(function() {
-		
+
 			//Hides the container on start up
 			($(this).find('li').hasClass(config.activeClass)) ? $(this).show() : $(this).hide();
-			
+
 			//Bind click event on span
 			$(this).prev('div').bind('click', function() {
 				$(this).toggleClass(config.activeClass).next('.slideContainer').slideToggle(config.animationSpeed);
 				($(this).hasClass(config.activeClass)) ? $(this).children(config.expander).text(config.minusText) : $(this).children(config.expander).text(config.plusText);
 			});
 		});
-		
+
 	return this;
 	};
 
@@ -3318,12 +3314,9 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 	Slimbox v2.03 - The ultimate lightweight Lightbox clone for jQuery
 	(c) 2007-2009 Christophe Beyls <http://www.digitalia.be>
 	MIT-style license.
-	
-	Modified by Shopware AG 2010
-	@author: S.Pohl <info@shopware.de>
-	@date: 25-04-2010
-	@version: 1.1
-	
+
+	Modified by Shopware AG
+
 	changelog
 	- removes caption
 	- new close button
@@ -3545,7 +3538,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 		    'marginLeft': centerWidth - 11
 		});
 
-        
+
         //Hide Prev and Next picture link
          $.ie6fix.selectHide();
     }
@@ -3598,20 +3591,20 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 		var	softFocus = null;
 		var	$ie6Fix = null;
 		var	zoomImage;
-        var controlTimer = 0;      
+        var controlTimer = 0;
         var cw, ch;
         var destU = 0;
 		var	destV = 0;
         var currV = 0;
-        var currU = 0;      
+        var currU = 0;
         var filesLoaded = 0;
         var mx,
-            my; 
+            my;
         var ctx = this, zw;
-        
+
         // Display an image loading message. This message gets deleted when the images have loaded and the zoom init function is called.
         // We add a small delay before the message is displayed to avoid the message flicking on then off again virtually immediately if the
-        // images load really fast, e.g. from the cache. 
+        // images load really fast, e.g. from the cache.
         //var	ctx = this;
         setTimeout(function () {
             if ($mouseTrap === null) {
@@ -3622,7 +3615,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 
 
         var ie6FixRemove = function () {
-			
+
             if ($ie6Fix !== null) {
                 $ie6Fix.remove();
                 $ie6Fix = null;
@@ -3633,7 +3626,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
         this.removeBits = function () {
             if (lens) {
                 lens.remove();
-                lens = null;             
+                lens = null;
             }
             if ($tint) {
                 $tint.remove();
@@ -3648,8 +3641,8 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
             $('.cloud-zoom-loading', jWin.parent()).remove();
         };
 
-		
-		
+
+
         this.destroy = function () {
             jWin.data('zoom', null);
 
@@ -3670,7 +3663,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 
         // This is called when the zoom window has faded out so it can be removed.
         this.fadedOut = function () {
-            
+
 			if (zoomDiv) {
                 zoomDiv.remove();
                 zoomDiv = null;
@@ -3683,7 +3676,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
             if (lens) {
                 var x = (mx - sImg.offset().left - (cw * 0.5)) >> 0;
                 var y = (my - sImg.offset().top - (ch * 0.5)) >> 0;
-               
+
                 if (x < 0) {
                     x = 0;
                 }
@@ -3708,7 +3701,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                 currU += (destU - currU) / opts.smoothMove;
                 currV += (destV - currV) / opts.smoothMove;
 
-                zoomDiv.css('background-position', (-(currU >> 0) + 'px ') + (-(currV >> 0) + 'px'));              
+                zoomDiv.css('background-position', (-(currU >> 0) + 'px ') + (-(currV >> 0) + 'px'));
             }
             controlTimer = setTimeout(function () {
                 ctx.controlLoop();
@@ -3716,22 +3709,22 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
         };
 
         this.init2 = function (img, id) {
-			
+
 			var wrap = $('#wrap');
             var wrapimg = $('#zoom1 img');
-            
+
             $('#wrap').css('width', wrapimg.innerWidth());
-			
+
             filesLoaded++;
             if (id === 1) {
                 zoomImage = img;
             }
-            
+
             //this.images[id] = img;
             if (filesLoaded === 2) {
-        
+
       			//wrap.css('width', wrapimg.outerWidth());
-            	
+
                 this.init();
             }
         };
@@ -3748,11 +3741,11 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 		transparent parts of a div.
 		*/
             $mouseTrap = jWin.parent().append($.format("<div class='mousetrap' style='z-index:999;position:absolute;width:%0px;height:%1px;left:%2px;top:%3px;\'></div>", sImg.outerWidth(), sImg.outerHeight(), 0, 0)).find(':last');
-			
+
 			if ($.browser.msie && parseInt($.browser.version) < 10) {
 				$mouseTrap.css('background', 'url(".")');
 			}
-			
+
 			$mouseTrap.bind('click', this, function (event) {
                 $(this).prev().addClass('startimage');
                 var relEl = $("a[rel^='" + $(this).prev().attr('rel') + "']");
@@ -3774,34 +3767,34 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                 $.slimbox(images, startImage, thumblist, video)
             });
 
-			
-            //////////////////////////////////////////////////////////////////////			
+
+            //////////////////////////////////////////////////////////////////////
             /* Do as little as possible in mousemove event to prevent slowdown. */
             $mouseTrap.bind('mousemove', this, function (event) {
                 // Just update the mouse position
                 mx = event.pageX;
                 my = event.pageY;
             });
-            //////////////////////////////////////////////////////////////////////					
+            //////////////////////////////////////////////////////////////////////
             $mouseTrap.bind('mouseleave', this, function (event) {
-            	
+
                 clearTimeout(controlTimer);
-                //event.data.removeBits();                
+                //event.data.removeBits();
 				if(lens) { lens.fadeOut(299); }
 				if($tint) { $tint.fadeOut(299); }
 				if(softFocus) { softFocus.fadeOut(299); }
-				
+
 				zoomDiv.fadeOut(300, function () {
                     ctx.fadedOut();
-                });			
-                $.ie6fix.selectShow();													
+                });
+                $.ie6fix.selectShow();
                 return false;
             });
-            //////////////////////////////////////////////////////////////////////			
+            //////////////////////////////////////////////////////////////////////
             $mouseTrap.bind('mouseenter', this, function (event) {
-            
+
             	$.ie6fix.selectHide();
-            		
+
 				mx = event.pageX;
                 my = event.pageY;
                 zw = event.data;
@@ -3812,7 +3805,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 
                 var xPos = opts.adjustX,
                     yPos = opts.adjustY;
-                             
+
                 var siw = sImg.outerWidth();
                 var sih = sImg.outerHeight();
 
@@ -3825,19 +3818,19 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                     h = sih;
                 }
                 //$('#info').text( xPos + ' ' + yPos + ' ' + siw + ' ' + sih );
-                var appendTo = jWin.parent(); // attach to the wrapper			
+                var appendTo = jWin.parent(); // attach to the wrapper
                 switch (opts.position) {
                 case 'top':
                     yPos -= h; // + opts.adjustY;
                     break;
                 case 'right':
-                    xPos += siw; // + opts.adjustX;					
+                    xPos += siw; // + opts.adjustX;
                     break;
                 case 'bottom':
                     yPos += sih; // + opts.adjustY;
                     break;
                 case 'left':
-                    xPos -= w; // + opts.adjustX;					
+                    xPos -= w; // + opts.adjustX;
                     break;
                 case 'inside':
                     w = siw;
@@ -3850,7 +3843,7 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                     if (!appendTo.length) {
                         appendTo = jWin;
                         xPos += siw; //+ opts.adjustX;
-                        yPos += sih; // + opts.adjustY;	
+                        yPos += sih; // + opts.adjustY;
                     } else {
                         w = appendTo.innerWidth();
                         h = appendTo.innerHeight();
@@ -3863,19 +3856,19 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                 if (sImg.attr('title') && opts.showTitle) {
                     zoomDiv.append($.format('<div class="cloud-zoom-title">%0</div>', sImg.attr('title'))).find(':last').css('opacity', opts.titleOpacity);
                 }
-                
+
                 /* Work out size of cursor */
                 cw = (sImg.outerWidth() / zoomImage.width) * zoomDiv.width();
                 ch = (sImg.outerHeight() / zoomImage.height) * zoomDiv.height();
-                
+
                 // if the zoom is larger than the actual picture
                 if(cw > sImg.outerWidth()) {
                 	cw = sImg.outerWidth();
-                	zoomDiv.width(zoomImage.width); 
+                	zoomDiv.width(zoomImage.width);
                 }
-				
+
 				zoomDiv.fadeIn(500);
-				
+
             	 if (lens) {
                     lens.remove();
                     lens = null;
@@ -3883,17 +3876,17 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
 
                 // Attach mouse, initially invisible to prevent first frame glitch
                 lens = jWin.append($.format("<div class='cloud-zoom-lens' style='display:none;z-index:98;position:absolute;width:%0px;height:%1px;'></div>", cw, ch)).find(':last').fadeTo(200, 0.4);
-                
+
 
                 $mouseTrap.css('cursor', lens.css('cursor'));
 
                 var noTrans = false;
 
-                // Init tint layer if needed. (Not relevant if using inside mode)			
+                // Init tint layer if needed. (Not relevant if using inside mode)
                 if (opts.tint) {
                     lens.css('background', 'url("' + sImg.attr('src') + '")');
                     $tint = jWin.append($.format('<div style="display:none;position:absolute; left:0px; top:0px; width:%0px; height:%1px; background-color:%2;" />', sImg.outerWidth(), sImg.outerHeight(), opts.tint)).find(':last');
-                    $tint.css('opacity', opts.tintOpacity);                    
+                    $tint.css('opacity', opts.tintOpacity);
 					noTrans = true;
 					$tint.fadeIn(500);
 
@@ -3913,24 +3906,24 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                     	lens.css('-ms-filter', '"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"'); // opacity for ie 8
                     } else {
                     	lens.css('filter', 'alpha(opacity=50)'); // opacity for ie 6-7
-                    }								
+                    }
                 }*/
 				if ( opts.position !== 'inside' ) {
 					lens.fadeIn(200);
 				}
 
-                // Start processing. 
+                // Start processing.
                 zw.controlLoop();
 
                 return; // Don't return false here otherwise opera will not detect change of the mouse pointer type.
             });
         };
-       
+
 
         img1 = new Image();
         $(img1).load(function () {
         	ctx.init2(this, 0);
-            
+
         });
         img1.src = sImg.attr('src');
 
@@ -3948,9 +3941,9 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
         this.each(function () {
             var relOpts, opts;
             if ($(this).is('.cloud-zoom')) {
-            	
+
             	var img = $(this).find('img');
-        
+
                 $(this).css({
                     'position': 'relative',
                     'display': 'block',
@@ -3960,9 +3953,9 @@ d,e)*0.5+b;return f.easing.easeOutBounce(c,a*2-e,0,d,e)*0.5+d*0.5+b}})}(jQuery);
                 $('img', $(this)).css({
                     'display': 'block'
                 });
-                
+
                 var img = $(this).find('img');
-                
+
                 if ($(this).parent().attr('id') != 'wrap') {
                     $(this).wrap('<div id="wrap" style="top:0px;z-index:9;position:relative;width:'+img.innerWidth()+'px;margin:0 auto"></div>')
                 }

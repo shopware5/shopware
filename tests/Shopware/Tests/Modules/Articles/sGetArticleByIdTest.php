@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -3507,7 +3507,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     {
         return $this->module;
     }
- 
+
     public function testArticles() {
         Shopware()->Container()->get('context_service_core')->initializeProductContext();
         $this->dispatch("/");
