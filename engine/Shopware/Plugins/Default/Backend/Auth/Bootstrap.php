@@ -85,7 +85,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_Auth', 'onInitResourceAuth');
         $this->subscribeEvent('Enlight_Controller_Action_PreDispatch', 'onPreDispatchBackend');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_BackendSession', 'onInitResourceBackendSession');
-        $this->subscribeEvent('Enlight_Bootstrap_InitResource_Acl', 'onInitResourceAcl');
 
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
@@ -476,23 +475,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->registerAclPlugin($resource);
 
         return $resource;
-    }
-
-    /**
-     * Initiate Shopware ACL Component (inherits from zend_acl)
-     *
-     * @return Shopware_Components_Acl
-     */
-    public function onInitResourceAcl()
-    {
-        if (!Shopware()->Bootstrap()->issetResource('Db')) {
-            return null;
-        }
-
-        $acl = new Shopware_Components_Acl();
-        $acl->initShopwareAclTree(Shopware()->Db());
-
-        return $acl;
     }
 
     /**
