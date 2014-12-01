@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
         { name: 'parentId', type: 'string' },
         { name: 'html', type: 'string' },
         { name: 'grouping', type: 'string' },
+        { name: 'shopIds' },
         { name: 'position', type: 'int' },
         { name: 'link', type: 'string' },
         { name: 'target', type: 'string' },

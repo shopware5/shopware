@@ -56,8 +56,9 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
-          || $request->getModuleName() != 'frontend'
-          || !$view->hasTemplate()) {
+            || $request->getModuleName() != 'frontend'
+            || !$view->hasTemplate()
+        ) {
             return;
         }
 
@@ -105,11 +106,11 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getCategoryCurrent($default)
     {
         if (!empty(Shopware()->System()->_GET['sCategory'])) {
-            return (int) Shopware()->System()->_GET['sCategory'];
+            return (int)Shopware()->System()->_GET['sCategory'];
         } elseif (Shopware()->Front()->Request()->getQuery('sCategory')) {
-            return (int) Shopware()->Front()->Request()->getQuery('sCategory');
+            return (int)Shopware()->Front()->Request()->getQuery('sCategory');
         } else {
-            return (int) $default;
+            return (int)$default;
         }
     }
 
@@ -140,7 +141,15 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             SELECT
               p.id, p.description, p.link, p.target,
               g.key as `group`, m.key as mapping,
-              (SELECT COUNT(*) FROM s_cms_static WHERE parentID=p.id) as childrenCount
+              (
+                SELECT COUNT(*)
+                FROM s_cms_static
+                WHERE parentID=p.id
+                AND (
+                    shop_ids IS NULL OR
+                    shop_ids LIKE :staticShopId
+                )
+              ) as childrenCount
 
             FROM s_cms_static p, s_cms_static_groups g
 
@@ -149,16 +158,27 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
             LEFT JOIN s_core_shop_pages s
             ON s.group_id=g.id
-            AND s.shop_id=?
+            AND s.shop_id = :shopId
 
             WHERE g.active=1 AND parentID=0
             AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', g.key, '|%')
             AND (m.id IS NULL OR s.shop_id IS NOT NULL)
             AND (m.id IS NULL OR m.active=1)
+            AND (
+                p.shop_ids IS NULL OR
+                p.shop_ids LIKE :staticShopId
+            )
 
             ORDER BY `mapping`, p.position, p.description
         ";
-        $links = Shopware()->Db()->fetchAll($sql, array($shopId));
+        $links = Shopware()->Db()->fetchAll(
+            $sql,
+            array(
+                'shopId' => $shopId,
+                'staticShopId' => '%|' . $shopId . '|%'
+
+            )
+        );
 
         $menu = array();
         foreach ($links as $link) {
@@ -169,10 +189,20 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
                 $sql = "
                     SELECT p.id, p.description, p.link, p.target
                     FROM s_cms_static p
-                    WHERE p.parentID = ?
+                    WHERE p.parentID = :linkId
+                    AND (
+                        shop_ids IS NULL OR
+                        shop_ids LIKE :staticShopId
+                    )
                     ORDER BY p.position
                 ";
-                $link['subPages'] = Shopware()->Db()->fetchAll($sql, array($link['id']));
+                $link['subPages'] = Shopware()->Db()->fetchAll(
+                    $sql,
+                    array(
+                        'linkId' => $link['id'],
+                        'staticShopId' => '%|' . $shopId . '|%'
+                    )
+                );
                 if ($activePageId !== null) {
                     foreach ($link['subPages'] as $subKey => $subPage) {
                         $active = $activePageId == $subPage['id'];
@@ -202,7 +232,13 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      */
     public function getCampaigns($parentId)
     {
-        $campaigns = array('leftTop'=>array(), 'leftMiddle'=>array(), 'leftBottom'=>array(), 'rightMiddle'=>array(),'rightBottom'=>array());
+        $campaigns = array(
+            'leftTop' => array(),
+            'leftMiddle' => array(),
+            'leftBottom' => array(),
+            'rightMiddle' => array(),
+            'rightBottom' => array()
+        );
 
         foreach ($campaigns as $position => $content) {
 
@@ -225,7 +261,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         if (!empty(Shopware()->Config()->BlogCategory)) {
             /** @var $repository \Shopware\Models\Blog\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
-            $blogArticlesQuery = $repository->getListQuery(array(Shopware()->Config()->BlogCategory), 0, Shopware()->Config()->BlogLimit+1);
+            $blogArticlesQuery = $repository->getListQuery(array(Shopware()->Config()->BlogCategory), 0,
+                Shopware()->Config()->BlogLimit + 1);
 
             $blogArticleData = $blogArticlesQuery->getArrayResult();
 
@@ -233,7 +270,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             foreach ($blogArticleData as $key => $blogArticle) {
                 /** @var $mediaModel \Shopware\Models\Media\Media */
                 if (!empty($blogArticle["media"][0]['mediaId'])) {
-                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $blogArticle["media"][0]['mediaId']);
+                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media',
+                        $blogArticle["media"][0]['mediaId']);
                     if ($mediaModel != null) {
                         $blogArticleData[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
                     }

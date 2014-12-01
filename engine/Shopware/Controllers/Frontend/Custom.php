@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
  * Custom controller
  */
@@ -35,7 +36,17 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/custom/ajax.tpl');
         }
 
-        $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage($this->Request()->sCustom);
+        $shopId = $this->container->get('context_service')->getShopContext()->getShop()->getId();
+
+        $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage(
+            $this->Request()->sCustom,
+            $shopId
+        );
+
+        if (!$staticPage) {
+            $this->Response()->setHttpResponseCode(404);
+            return $this->forward('index', 'index');
+        }
 
         if (!empty($staticPage['link'])) {
             $link = Shopware()->Modules()->Core()->sRewriteLink($staticPage['link'], $staticPage['description']);
@@ -53,7 +64,10 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             if (!$this->View()->templateExists($staticPage['tpl' . $i . 'path'])) {
                 continue;
             }
-            $this->View()->assign($staticPage['tpl' . $i . 'variable'], $this->View()->fetch($staticPage['tpl' . $i . 'path']));
+            $this->View()->assign(
+                $staticPage['tpl' . $i . 'variable'],
+                $this->View()->fetch($staticPage['tpl' . $i . 'path'])
+            );
         }
 
         $this->View()->sCustomPage = $staticPage;
