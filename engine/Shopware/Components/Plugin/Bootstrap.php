@@ -931,9 +931,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
-
         return $component;
     }
+
 
     /**
      * Event listener of the post dispatch event of the backend and widgets emotion controller
@@ -945,14 +945,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         /**@var $view Enlight_View_Default*/
         $view = $args->getSubject()->View();
-        $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+
+        if (file_exists($this->Path() . '/Views/emotion_components/')) {
+            $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+        }
 
         if ($args->getSubject()->Request()->getModuleName() !== 'backend') {
             return;
         }
 
-        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
-        if (!file_exists($backendPath)) {
+        $backendPath = $this->getExistingBackendEmotionPath();
+        if ($backendPath === false) {
             return;
         }
 
@@ -962,6 +965,25 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $path = 'backend/' . $file[0];
             $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
         }
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function getExistingBackendEmotionPath()
+    {
+        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
+
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        $backendPath = $this->Path() . '/Views/backend/emotion_components/';
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        return false;
     }
 
     /**
