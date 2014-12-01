@@ -111,7 +111,6 @@
                  factory-service="front"
                  factory-method="Router" />
 
-
         <service id="date" class="Zend_Date">
             <argument type="service" id="locale"/>
         </service>
@@ -121,6 +120,10 @@
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
             <argument>%shopware.snippet%</argument>
+        </service>
+
+        <service id="acl" class="Shopware_Components_Acl">
+            <argument type="service" id="models"/>
         </service>
 
         <service id="db_connection"
