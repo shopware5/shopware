@@ -12,7 +12,7 @@
 				{* Main shop logo *}
 				{block name='frontend_index_logo'}
 					<div class="logo--shop block">
-						<a href="{url controller='index'}" title="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault'}{/s}"|escape}">
+						<a class="logo--link" href="{url controller='index'}" title="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault'}{/s}"|escape}">
 							<span data-picture data-alt="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}"|escape}">
 								<span data-src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}"></span>
 								<span data-src="{link file='frontend/_public/src/img/logos/logo--tablet.png'}" data-media="(min-width: 47.75em)"></span>
