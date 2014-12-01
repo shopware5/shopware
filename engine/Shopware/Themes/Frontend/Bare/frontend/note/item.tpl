@@ -120,11 +120,13 @@
 				{block name="frontend_note_item_actions"}
 					<div class="note--actions">
 						{* Place article in basket *}
-						{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
-							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn is--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
-								{s name="NoteLinkBuy"}{/s}
-							</a>
-						{/if}
+						{block name="frontend_note_item_actions_buy"}
+							{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
+								<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn is--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
+									{s name="NoteLinkBuy"}{/s}
+								</a>
+							{/if}
+						{/block}
 
                         {* Compare button note *}
                         {block name='frontend_note_item_actions_compare'}
