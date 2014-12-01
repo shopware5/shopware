@@ -58,7 +58,7 @@
 
         <service id="mail_factory" class="Shopware\Components\DependencyInjection\Bridge\Mail" />
         <service id="mail"
-                 class="Zend_Mail_Transport_Abstract"
+                 class="Enlight_Components_Mail"
                  factory-service="mail_factory"
                  factory-method="factory">
             <argument type="service" id="service_container"/>

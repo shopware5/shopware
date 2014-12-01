@@ -21,10 +21,6 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
     'mail' => array(
         'type' => 'file',
         'path' => $this->TestPath('TempFiles'),
-        'callback' => create_function('$transport', 'return
-            "ShopwareMail_" . sha1($transport->body) .
-            "_" . str_replace("@", "[at]", $transport->recipients).".eml";
-        ')
     ),
     'phpSettings' => array(
         'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT,
