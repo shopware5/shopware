@@ -26,7 +26,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
 # Development environment
 #SetEnvIf Host "dev.shopware.in" SHOPWARE_ENV=dev
-#SetEnv SHOPWARE_ENVIRONMENT dev
+#SetEnv SHOPWARE_ENV dev
 
 DirectoryIndex index.html
 DirectoryIndex index.php
