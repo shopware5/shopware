@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Form', {
      * Required stores
      * @array
      */
-    stores: [ 'Form', 'Field' ],
+    stores: [ 'Form', 'Field', 'Shop' ],
 
     /**
      * Required models

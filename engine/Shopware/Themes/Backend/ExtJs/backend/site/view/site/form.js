@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 anchor:'100%',
                 height: 300
             },
-                me.getDdSelector()
+            me.getDdSelector()
         ]
     },
 
@@ -165,7 +165,8 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 					fields:['target'],
 					data: data
 				})
-            }
+            },
+            me.getShopsSelector()
         ]
     },
 
@@ -243,7 +244,6 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         ]
     },
 
-
     getDdSelector: function() {
         var me = this;
 
@@ -273,6 +273,24 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 				dataIndex: 'groupName'
 			}]
         }
+    },
+
+    getShopsSelector: function() {
+        var me = this;
+
+        return {
+            xtype: 'combobox',
+            name: 'shopIds',
+            fieldLabel: '{s name=site/shop_selector/label}Limit to shop(s){/s}',
+            helpText: '{s name=site/shop_selector/helper}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
+            store: me.shopStore,
+            multiSelect: true,
+            displayField: 'name',
+            valueField: 'id',
+            queryMode:'local',
+            anchor:'100%',
+            editable: false
+        };
     }
 });
 //{/block}

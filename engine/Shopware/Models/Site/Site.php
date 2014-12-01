@@ -151,6 +151,13 @@ class Site extends ModelEntity
     private $target;
 
     /**
+     * @var string $shopIds
+     *
+     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     */
+    private $shopIds;
+
+    /**
      * @var \DateTime $changed
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
@@ -554,5 +561,42 @@ class Site extends ModelEntity
     public function getChanged()
     {
         return $this->changed;
+    }
+
+    /**
+     * Returns the unexploded shop ids string (ex: |1|2|)
+     *
+     * @return string
+     */
+    public function getShopIds()
+    {
+        return $this->shopIds;
+    }
+
+    /**
+     * Returns the exploded shop ids (ex: [1, 2])
+     *
+     * @return int[]
+     */
+    public function getExplodedShopIds()
+    {
+        if (empty($this->shopIds)) {
+            return array();
+        }
+
+        $explodedShopIds = explode('|', trim($this->shopIds, '|'));
+
+        // cast to ints
+        $explodedShopIds = array_map( function($elem) {return (int) $elem;}, $explodedShopIds);
+
+        return $explodedShopIds;
+    }
+
+    /**
+     * @param string $shopIds
+     */
+    public function setShopIds($shopIds)
+    {
+        $this->shopIds = $shopIds;
     }
 }

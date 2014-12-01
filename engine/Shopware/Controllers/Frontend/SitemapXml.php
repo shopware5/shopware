@@ -290,7 +290,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
         $sites = array();
         foreach ($keys as $key) {
-            $current = $this->getSiteRepository()->getSitesByNodeNameQueryBuilder($key)
+            $current = $this->getSiteRepository()->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
                 ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
                 ->getQuery()
