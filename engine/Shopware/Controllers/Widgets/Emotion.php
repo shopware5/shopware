@@ -174,7 +174,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
     }
 
-    private function getArticle($data, $categoryId, $element)
+    protected function getArticle($data, $categoryId, $element)
     {
         if ($data["article_type"] == "newcomer") {
             // new product
@@ -205,7 +205,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * @param $category
      * @return array {Array} $result
      */
-    private function getRandomBlogEntry($category)
+    protected function getRandomBlogEntry($category)
     {
         $data = array('entry_amount' => 50);
         $result = $this->getBlogEntry($data, $category);
@@ -221,7 +221,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      * @internal param $ {Array} $data
      * @return array {Array} $data
      */
-    private function getBlogEntry($data, $category)
+    protected function getBlogEntry($data, $category)
     {
         $entryAmount = (int) $data['entry_amount'];
 
@@ -335,7 +335,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
-    private function articleByNumber($number)
+    protected function articleByNumber($number)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select('article.id')
@@ -511,7 +511,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
-    private function getProductNewcomer($category, $offset = 0, $limit)
+    protected function getProductNewcomer($category, $offset = 0, $limit)
     {
         $sql = "
             SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
@@ -550,7 +550,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return array("values" => $values, "pages" => $pages);
     }
 
-    private function getProductTopSeller($category, $offset = 0, $limit)
+    protected function getProductTopSeller($category, $offset = 0, $limit)
     {
         $sql = "
             SELECT
