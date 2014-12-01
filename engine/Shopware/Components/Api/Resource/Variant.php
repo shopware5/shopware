@@ -209,6 +209,20 @@ class Variant extends Resource implements BatchInterface
         return $articleDetail;
     }
 
+    /**
+     * Convenience method to update a variant by number
+     * @param string $number
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function updateByNumber($number, array $params)
+    {
+        $id = $this->getIdFromNumber($number);
+        return $this->update($id, $params);
+    }
 
     /**
      * Updates a single variant entity.
