@@ -38,25 +38,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class AdditionalTextService implements AdditionalTextServiceInterface
 {
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
 
     /**
      * @param ConfiguratorServiceInterface $configuratorService
-     * @param \Shopware_Components_Config $config
      */
-    public function __construct(
-        ConfiguratorServiceInterface $configuratorService,
-        \Shopware_Components_Config $config
-    ) {
+    public function __construct(ConfiguratorServiceInterface $configuratorService)
+    {
         $this->configuratorService = $configuratorService;
-        $this->config = $config;
     }
 
     /**

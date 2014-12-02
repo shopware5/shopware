@@ -23,7 +23,9 @@
  */
 
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -668,54 +670,39 @@ class sArticles
             $category = $this->categoryId;
         }
 
-        $sql = "
-            SELECT STRAIGHT_JOIN DISTINCT
-              a.id AS articleID,
-              s.sales AS quantity
-            FROM s_articles_top_seller_ro s
-            INNER JOIN s_articles_categories_ro ac
-              ON  ac.articleID = s.article_id
-              AND ac.categoryID = :categoryId
-            INNER JOIN s_categories c
-              ON  ac.categoryID = c.id
-              AND c.active = 1
-            INNER JOIN s_articles a
-              ON  a.id = s.article_id
-              AND a.active = 1
+        $context = $this->contextService->getProductContext();
+        $factory = Shopware()->Container()->get('criteria_factory');
+        $criteria = new Criteria();
 
-            LEFT JOIN s_articles_avoid_customergroups ag
-              ON ag.articleID=a.id
-              AND ag.customergroupID = :customerGroupId
+        $criteria->addBaseCondition(
+            $factory->createCategoryCondition([$category])
+        );
+        $criteria->addBaseCondition(
+            $factory->createCustomerGroupCondition([$this->customerGroupId])
+        );
+        $criteria->addBaseCondition(
+            $factory->createHasPriceCondition()
+        );
 
-            INNER JOIN s_articles_details d
-              ON d.id = a.main_detail_id
-              AND d.active = 1
+        $criteria->limit($sLimitChart);
 
-            INNER JOIN s_articles_attributes at
-              ON at.articleID=a.id
+        $criteria->addSorting(
+            $factory->createPopularitySorting('DESC')
+        );
 
-            INNER JOIN s_core_tax t
-              ON t.id = a.taxID
+        $result = $this->searchService->search($criteria, $context);
 
-            WHERE ag.articleID IS NULL
-            ORDER BY s.sales DESC, s.article_id DESC
-            LIMIT $sLimitChart
-        ";
+        $articles = [];
+        foreach ($result->getProducts() as $product) {
+            $article = $this->legacyStructConverter->convertListProductStruct($product);
+            $article = $this->legacyEventManager->firePromotionByIdEvents(
+                $article,
+                $category,
+                $this
+            );
 
-
-        $queryChart = $this->db->fetchAssoc($sql, array(
-            'categoryId'      => $category,
-            'customerGroupId' => $this->customerGroupId
-        ));
-
-        $articles = array();
-        if (!empty($queryChart)) {
-            foreach ($queryChart as $articleID => $quantity) {
-                $article = $this->sGetPromotionById('fix', 0, (int) $articleID);
-                if (!empty($article["articleID"])) {
-                    $article['quantity'] = $quantity;
-                    $articles[] = $article;
-                }
+            if ($article) {
+                $articles[] = $article;
             }
         }
 
@@ -1159,7 +1146,7 @@ class sArticles
      * @param array $selection
      * @return array
      */
-    public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
+    public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = array())
     {
         if ($sCategoryID === null) {
             $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
@@ -1168,7 +1155,7 @@ class sArticles
         /**
          * Validates the passed configuration array for the configurator selection
          */
-        $configuration = $this->getCurrentConfiguration($selection);
+        $selection = $this->getCurrentSelection($selection);
 
         /**
          * Checks which product id should be used.
@@ -1182,21 +1169,33 @@ class sArticles
         $productNumber = $this->getCurrentProductNumber(
             $productId,
             $number,
-            $configuration
+            $selection
         );
 
-        $type = $this->getConfiguratorType($productId);
+        $context = $this->contextService->getProductContext();
+        $product = $this->productService->get(
+            $productNumber,
+            $context
+        );
 
-        /**
-         * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
-         *
-         * Requires the following scenario:
-         * 1. $number has to be set (without a number we can't load a configuration)
-         * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
-         * 3. $configuration is empty (Customer hasn't not set an own configuration)
-         */
-        if ($number && $number == $productNumber && empty($configuration) || $type == 0) {
-            $configuration = $this->getConfigurationByNumber($productNumber);
+        if (!$product) {
+            return array();
+        }
+
+        if ($product->hasConfigurator()) {
+            $type = $this->getConfiguratorType($product->getId());
+
+            /**
+             * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
+             *
+             * Requires the following scenario:
+             * 1. $number has to be set (without a number we can't load a configuration)
+             * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
+             * 3. $configuration is empty (Customer hasn't not set an own configuration)
+             */
+            if ($number && $number == $productNumber && empty($configuration) || $type === 0) {
+                $selection = $product->getSelectedOptions();
+            }
         }
 
         $categoryId = (int) $sCategoryID;
@@ -1204,22 +1203,22 @@ class sArticles
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $product = $this->getProduct(
-            $productNumber,
+        $product = $this->getLegacyProduct(
+            $product,
             $categoryId,
-            $configuration
+            $selection
         );
-
-        if ($product) {
-            $product = $this->legacyEventManager->fireArticleByIdEvents($product, $this);
-        }
 
         return $product;
     }
 
+    /**
+     * @param int $productId
+     * @return bool|int
+     */
     private function getConfiguratorType($productId)
     {
-        return $this->db->fetchOne(
+        $type = $this->db->fetchOne(
             'SELECT type
              FROM s_article_configurator_sets configuratorSet
               INNER JOIN s_articles product
@@ -1227,6 +1226,12 @@ class sArticles
              WHERE product.id = ?',
             array($productId)
         );
+
+        if ($type === false) {
+            return false;
+        }
+
+        return (int)$type;
     }
 
     /**
@@ -2242,7 +2247,7 @@ class sArticles
             }
             $article['description_long'] = $this->sOptimizeText($article['description_long']);
 
-            $articles[] = $article;
+            $articles[$article['articleID']] = $article;
         }
 
         $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
@@ -2265,23 +2270,13 @@ class sArticles
      * Helper function which loads a full product struct and converts the product struct
      * to the shopware 3 array structure.
      *
-     * @param $number
-     * @param $categoryId
-     * @param array $selection
+     * @param Product $product
+     * @param int     $categoryId
+     * @param array   $selection
      * @return array
      */
-    private function getProduct($number, $categoryId, array $selection)
+    private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
-        $context = $this->contextService->getProductContext();
-        $product = $this->productService->get(
-            $number,
-            $context
-        );
-
-        if (!$product) {
-            return array();
-        }
-
         $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
 
         $relatedArticles = array();
@@ -2304,15 +2299,15 @@ class sArticles
 
         $data['categoryID'] = $categoryId;
 
-        $configurator = $this->configuratorService->getProductConfigurator(
-            $product,
-            $context,
-            $selection
-        );
-
-        $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
-
-        $data = array_merge($data, $convertedConfigurator);
+        if ($product->hasConfigurator()) {
+            $configurator = $this->configuratorService->getProductConfigurator(
+                $product,
+                $this->contextService->getProductContext(),
+                $selection
+            );
+            $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
+            $data = array_merge($data, $convertedConfigurator);
+        }
 
         $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
 
@@ -2331,6 +2326,8 @@ class sArticles
         $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
             $data["description_long"]
         );
+
+        $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
         return $data;
     }
@@ -2446,10 +2443,13 @@ class sArticles
      * At least the passed $id parameter is used to get the order number
      * of the main variation.
      *
-     * @param $id
-     * @param $number
-     * @param $selection
-     * @return mixed|string
+     * If all that does not lead to an valid ordernumber the
+     * first variants ordernumber is returned as fallback.
+     *
+     * @param int           $id
+     * @param string        $number
+     * @param array         $selection
+     * @return false|string
      */
     private function getCurrentProductNumber($id, $number, $selection)
     {
@@ -2462,10 +2462,30 @@ class sArticles
             return $selected;
         }
 
+        if ($number !== null) {
+            $selected = $this->getOrdernumberByOrdernumber($number);
+        } else {
+            $selected = $this->getOrdernumberByProductId($id);
+        }
+
+        if ($selected) {
+            return $selected;
+        }
+
+        $selected = $this->getFallbackVariant($id);
+
+        return $selected;
+    }
+
+    /**
+     * @param string $number
+     * @return false|string
+     */
+    private function getOrdernumberByOrdernumber($number)
+    {
         $query = Shopware()->Models()->getDBALQueryBuilder();
         $query->select(array('variant.ordernumber'));
         $query->from('s_articles_details', 'variant');
-
         $query->innerJoin(
             'variant',
             's_articles',
@@ -2474,73 +2494,66 @@ class sArticles
              AND variant.active = 1'
         );
 
-        if ($number !== null) {
-            $query->where('variant.ordernumber = :number')
-                ->setParameter(':number', $number);
-
-            $statement = $query->execute();
-            $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-        }
-
-        if ($selected) {
-            return $selected;
-        }
-
-        $query->where('variant.id = product.main_detail_id')
-            ->andWhere('product.id = :number')
-            ->setParameter(':number', $id);
+        $query->where('variant.ordernumber = :number')
+            ->setParameter(':number', $number);
 
         $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        return $statement->fetch(\PDO::FETCH_COLUMN);
+        return $selected;
     }
 
     /**
-     * Helper function which used to get the configuration selection of
-     * the passed product number.
-     * The result array contains a simple array which elements are indexed by
-     * the configurator group id and the value contains the configurator option id.
-     *
-     * This function is required to load different product variations on the product
-     * detail page via order number.
-     *
-     * @param $number
-     * @return array
+     * @param int $productId
+     * @return false|string
      */
-    private function getConfigurationByNumber($number)
+    private function getOrdernumberByProductId($productId)
     {
         $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('groups.id', 'options.id'))
-            ->from('s_article_configurator_option_relations', 'configuration');
-
+        $query->select(array('variant.ordernumber'));
+        $query->from('s_articles_details', 'variant');
         $query->innerJoin(
-            'configuration',
-            's_article_configurator_options',
-            'options',
-            'options.id = configuration.option_id'
-        );
-
-        $query->innerJoin(
-            'options',
-            's_article_configurator_groups',
-            'groups',
-            'groups.id = options.group_id'
-        );
-
-        $query->innerJoin(
-            'configuration',
-            's_articles_details',
             'variant',
-            'variant.id = configuration.article_id
-             AND variant.ordernumber = :number'
+            's_articles',
+            'product',
+            'product.id = variant.articleID
+             AND variant.active = 1'
         );
+        $query->where('variant.id = product.main_detail_id')
+            ->andWhere('product.id = :productId')
+            ->setParameter(':productId', $productId);
 
-        $query->setParameter(':number', $number);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $selected;
+    }
+
+    /**
+     * Returns the first active variant ordernumber
+     *
+     * @param int $productId
+     * @return string
+     */
+    private function getFallbackVariant($productId)
+    {
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('variant.ordernumber'));
+        $query->from('s_articles_details', 'variant');
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID
+             AND variant.active = 1 AND product.id = :productId'
+        );
+        $query->setMaxResults(1);
+        $query->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
     }
 
     /**
@@ -2575,12 +2588,12 @@ class sArticles
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
      *
-     * @param $selection
-     * @return mixed
+     * @param array $selection
+     * @return array
      */
-    private function getCurrentConfiguration($selection)
+    private function getCurrentSelection(array $selection)
     {
-        if (empty($selection) && $this->frontController && $this->frontController->Request()) {
+        if (empty($selection) && $this->frontController && $this->frontController->Request()->has('group')) {
             $selection = $this->frontController->Request()->getParam('group');
         }
 
@@ -2610,5 +2623,4 @@ class sArticles
 
         return $number;
     }
-
 }
