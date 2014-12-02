@@ -1456,11 +1456,11 @@ class sBasket
             ->setParameter('sessionId', $sessionId)
             ->setParameter('ordernumber', $article["ordernumber"]);
 
-        $this->eventManager->filter(
+        $this->eventManager->notify(
             'Shopware_Modules_Basket_AddArticle_CheckBasketForArticle',
-            $builder,
             array(
-                'subject' => $this
+                'queryBuilder' => $builder,
+                'subject'      => $this
             )
         );
 

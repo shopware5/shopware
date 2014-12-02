@@ -3,6 +3,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
+* New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
