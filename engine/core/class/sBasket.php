@@ -1444,30 +1444,11 @@ class sBasket
             return false;
         }
 
-        // Check if article is already in basket
-        $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
-        $builder->select('id', 'quantity')
-            ->from('s_order_basket', 'basket')
-            ->where('articleID = :articleId')
-            ->andWhere('sessionID = :sessionId')
-            ->andWhere('ordernumber = :ordernumber')
-            ->andWhere('modus != 1')
-            ->setParameter('articleId', $article["articleID"])
-            ->setParameter('sessionId', $sessionId)
-            ->setParameter('ordernumber', $article["ordernumber"]);
-
-        $this->eventManager->notify(
-            'Shopware_Modules_Basket_AddArticle_CheckBasketForArticle',
-            array(
-                'queryBuilder' => $builder,
-                'subject'      => $this
-            )
+        $chkBasketForArticle = $this->checkIfArticleIsInBasket(
+            $article["articleID"],
+            $article["ordernumber"],
+            $sessionId
         );
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $builder->execute();
-
-        $chkBasketForArticle = $statement->fetch() ? : array();
 
         // Shopware 3.5.0 / sth / laststock - instock check
         if (!empty($chkBasketForArticle["id"])) {
@@ -1574,6 +1555,42 @@ class sBasket
         $this->sUpdateArticle($insertId, $quantity);
 
         return $insertId;
+    }
+
+    /**
+     * Check if article is already in basket
+     *
+     * @param int    $articleId
+     * @param string $ordernumber
+     * @param string $sessionId
+     * @return array Example: ["id" => "731", "quantity" => "100"]
+     */
+    private function checkIfArticleIsInBasket($articleId, $ordernumber, $sessionId)
+    {
+        $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
+
+        $builder->select('id', 'quantity')
+            ->from('s_order_basket', 'basket')
+            ->where('articleID = :articleId')
+            ->andWhere('sessionID = :sessionId')
+            ->andWhere('ordernumber = :ordernumber')
+            ->andWhere('modus != 1')
+            ->setParameter('articleId', $articleId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('ordernumber', $ordernumber);
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_AddArticle_CheckBasketForArticle',
+            array(
+                'queryBuilder' => $builder,
+                'subject'      => $this
+            )
+        );
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+
+        return $statement->fetch() ?: array();
     }
 
     /**
