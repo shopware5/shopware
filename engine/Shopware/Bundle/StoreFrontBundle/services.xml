@@ -156,11 +156,7 @@
 
         <service id="additional_text_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService">
             <argument type="service" id="configurator_service_core"/>
-            <argument type="service" id="config"/>
         </service>
-
-
-
 
         <!-- DBAL gateway classes, which used as shopware default -->
         <service id="list_product_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductGateway">

@@ -203,6 +203,29 @@ class Product extends ListProduct implements \JsonSerializable
     }
 
     /**
+     * Helper function which used to get the configuration selection of
+     * the passed product number.
+     * The result array contains a simple array which elements are indexed by
+     * the configurator group id and the value contains the configurator option id.
+     *
+     * This function is required to load different product variations on the product
+     * detail page via order number.
+     *
+     * @return array
+     */
+    public function getSelectedOptions()
+    {
+        $selection = [];
+
+        foreach ($this->configuration as $group) {
+            $selection[$group->getId()] = $group->getOptions()[0]->getId();
+        }
+
+        return $selection;
+
+    }
+
+    /**
      * @inheritdoc
      */
     public function jsonSerialize()
