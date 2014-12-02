@@ -11,16 +11,19 @@
 	.logo-main {
 		.unitize-padding(10, 10);
 
-		.logo--link { display: inline-block; }
+		.logo--link {
+			.unitize-height(35, 16);
+			display: inline-block;
+		}
+
+		// Smaller logo for mobile viewports
+		.logo--shop {
+			.unitize-height(35, 16);
+			width: 75%;
+		}
+
+		.logo--supportinfo { display: none; }
 	}
-
-    .logo--supportinfo { display: none; }
-
-    // Smaller logo for mobile viewports
-    .logo--shop {
-        .unitize-height(35, 16);
-        width: 75%;
-    }
 
     .header--navigation { position: relative; }
 }
@@ -495,12 +498,14 @@
         .logo-main {
             .unitize-padding(12, 10, 16, 10);
             width: 35%;
-        }
 
-        // Larger logo for tablet & desktop viewports
-        .logo--shop {
-            .unitize-height(50, 16);
-            width: 82%
+			.logo--link { .unitize-height(50, 16); }
+
+			// Larger logo for tablet & desktop viewports
+			.logo--shop {
+				.unitize-height(50, 16);
+				width: 82%
+			}
         }
     }
 
