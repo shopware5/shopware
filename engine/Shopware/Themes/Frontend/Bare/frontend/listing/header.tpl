@@ -10,14 +10,25 @@
 {block name='frontend_index_header_canonical'}
 <link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
 
+{* Count of available product pages *}
+{$pages = ceil($sNumberArticles / $criteria->getLimit())}
+
+{if $pages >= $sPage + 1}
+    {$pageNext = $sPage + 1}
+{/if}
+
+{if $sPage >= 1}
+    {$pagePrevious = $sPage - 1}
+{/if}
+
 {* Previous rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $sPages.previous}
-<link rel="prev" href="{$sPages.previous|rewrite:$sCategoryInfo.name}">
+{if $theme.infiniteScrolling && $pagePrevious}
+<link rel="prev" href="{$pagePrevious|rewrite:$sCategoryInfo.name}">
 {/if}
 
 {* Next rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $sPages.next}
-<link rel="next" href="{$sPages.next|rewrite:$sCategoryInfo.name}">
+{if $theme.infiniteScrolling && $pageNext}
+<link rel="next" href="{$pageNext|rewrite:$sCategoryInfo.name}">
 {/if}
 {/block}
 
