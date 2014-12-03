@@ -364,6 +364,7 @@
 
             me._checkResize();
             me._browserDetection();
+            me._setDeviceCookie();
 
             return me;
         },
@@ -723,6 +724,7 @@
             if (width !== me._viewportWidth) {
                 me.trigger('resize', width);
                 me._checkBreakpoints(width);
+                me._setDeviceCookie();
             }
 
             me._viewportWidth = width;
@@ -1140,6 +1142,26 @@
             $.each(detections, function(key, value) {
                 if (value) $html.addClass(key);
             });
+        },
+
+        _getCurrentDevice: function() {
+            var me = this,
+                devices = {
+                    'xs': 'mobile',
+                    's' : 'mobile',
+                    'm' : 'tablet',
+                    'l' : 'tablet',
+                    'xl': 'desktop'
+                };
+
+            return devices[me.getCurrentState()] || 'desktop';
+        },
+
+        _setDeviceCookie: function() {
+            var me = this,
+                device = me._getCurrentDevice();
+
+            document.cookie = 'x-ua-device=' + device + '; path=/';
         },
 
         /**
