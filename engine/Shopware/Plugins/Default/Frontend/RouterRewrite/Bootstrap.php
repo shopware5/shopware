@@ -33,6 +33,17 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     protected $paths = array();
     protected $urls = array();
 
+    public function getCapabilities()
+    {
+        return [
+            'install' => false,
+            'update' => false,
+            'enable' => false,
+            'secureUninstall' => false
+        ];
+    }
+
+
     /**
      * Install plugin method
      *
