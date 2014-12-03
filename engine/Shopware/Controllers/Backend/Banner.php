@@ -301,7 +301,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         // build a single till date instead of two dates
         $params['validTo'] = $this->prepareDateAndTime($this->Request()->get('validToDate'), $this->Request()->get('validToTime'));
         // build attribute
-	    $params['attribute'] = $params['attribute'][0];
+	$params['attribute'] = $params['attribute'][0];
         // Get media manager
         $mediaManagerData = $this->Request()->get('media-manager-selection');
 
