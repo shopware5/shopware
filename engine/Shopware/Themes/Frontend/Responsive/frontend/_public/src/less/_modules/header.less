@@ -8,9 +8,22 @@
     .top-bar { display: none }
 
 	// Logo
-	.logo-main { .unitize-padding(10, 10); }
-	.logo--shop { width: 50% }
-    .logo--supportinfo { display: none; }
+	.logo-main {
+		.unitize-padding(10, 10);
+
+		.logo--link {
+			.unitize-height(35, 16);
+			display: inline-block;
+		}
+
+		// Smaller logo for mobile viewports
+		.logo--shop {
+			.unitize-height(35, 16);
+			width: 75%;
+		}
+
+		.logo--supportinfo { display: none; }
+	}
 
     .header--navigation { position: relative; }
 }
@@ -483,11 +496,17 @@
         }
 
         .logo-main {
-            .unitize-padding(18, 10);
+            .unitize-padding(12, 10, 16, 10);
             width: 35%;
-        }
 
-        .logo--shop { width: 82% }
+			.logo--link { .unitize-height(50, 16); }
+
+			// Larger logo for tablet & desktop viewports
+			.logo--shop {
+				.unitize-height(50, 16);
+				width: 82%
+			}
+        }
     }
 
     // Header Support Info
