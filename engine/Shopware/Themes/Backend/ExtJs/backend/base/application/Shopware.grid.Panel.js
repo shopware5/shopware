@@ -1160,6 +1160,7 @@ Ext.define('Shopware.grid.Panel', {
                     column = me.applyBooleanColumnConfig(column);
                     break;
                 case 'date':
+                case 'datetime':
                     column = me.applyDateColumnConfig(column, field.dateFormat);
                     break;
                 case 'float':
@@ -1712,7 +1713,7 @@ Ext.define('Shopware.grid.Panel', {
             checkChangeBuffer: 500,
             listeners: {
                 change: function (field, value) {
-                    me.fireEvent(me.eventAlias + '-search', me, field, value);
+                    me.searchEvent(field, value);
                 }
             }
         });
@@ -1720,6 +1721,12 @@ Ext.define('Shopware.grid.Panel', {
         me.fireEvent(me.eventAlias + '-search-field-created', me, me.searchField);
 
         return me.searchField;
+    },
+
+    searchEvent: function(field, value) {
+        var me = this;
+
+        me.fireEvent(me.eventAlias + '-search', me, field, value);
     },
 
 

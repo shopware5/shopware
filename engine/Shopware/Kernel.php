@@ -449,6 +449,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('SearchBundle/services.xml');
         $loader->load('SearchBundleDBAL/services.xml');
         $loader->load('StoreFrontBundle/services.xml');
+        $loader->load('PluginInstallerBundle/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);

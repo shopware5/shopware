@@ -665,4 +665,36 @@ class Plugin extends ModelEntity
     {
         $this->widgets = $widgets;
     }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilitySecureUninstall()
+    {
+        return $this->capabilitySecureUninstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityEnable()
+    {
+        return $this->capabilityEnable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityInstall()
+    {
+        return $this->capabilityInstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityUpdate()
+    {
+        return $this->capabilityUpdate;
+    }
 }
