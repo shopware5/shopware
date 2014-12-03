@@ -55,16 +55,14 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         );
     }
 
-    /**
-     * @return array
-     */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
-            'enable' => true,
-            'update' => true
-        );
+            'update' => false,
+            'enable' => false,
+            'secureUninstall' => false
+        ];
     }
 
     /**

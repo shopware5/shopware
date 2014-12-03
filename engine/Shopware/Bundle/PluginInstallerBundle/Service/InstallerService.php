@@ -22,18 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @category  Shopware
- * @package   Shopware\Components\Plugin
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class Manager
+class InstallerService
 {
     /**
      * @var ModelManager
@@ -46,13 +44,35 @@ class Manager
     private $plugins;
 
     /**
-     * @param ModelManager $em
-     * @param $plugins
+     * @var string
      */
-    public function __construct(ModelManager $em, \Enlight_Plugin_PluginManager $plugins)
-    {
+    private $rootDir;
+
+    /**
+     * @param ModelManager $em
+     * @param \Enlight_Plugin_PluginManager $plugins
+     * @param $rootDir
+     */
+    public function __construct(
+        ModelManager $em,
+        \Enlight_Plugin_PluginManager $plugins,
+        $rootDir
+
+    ) {
         $this->plugins = $plugins;
         $this->em = $em;
+        $this->rootDir = $rootDir;
+    }
+
+    public function getPluginPath($pluginName)
+    {
+        $plugin = $this->getPluginByName($pluginName);
+
+        return $this->rootDir .
+               '/engine/Shopware/Plugins/' .
+               $plugin->getSource() . '/' .
+               $plugin->getNamespace() . '/' .
+               $plugin->getName();
     }
 
     /**
@@ -124,6 +144,7 @@ class Manager
 
     /**
      * @param Plugin $plugin
+     * @param bool $removeData
      * @throws \Exception
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
