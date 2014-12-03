@@ -22,7 +22,7 @@
  */
 
 /**
- * Shopware First Run Wizard - Payment tab
+ * Shopware Application
  *
  * @category  Shopware
  * @package   Shopware
@@ -30,28 +30,25 @@
  */
 
 //{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/view/main/payment"}
+//{block name="backend/first_run_wizard/store/demo_plugin"}
 
-Ext.define('Shopware.apps.FirstRunWizard.view.main.Payment', {
-    extend: 'Ext.container.Container',
+Ext.define('Shopware.apps.FirstRunWizard.store.DemoPlugin', {
+    extend: 'Ext.data.Store',
 
-    /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
-     */
-    alias:'widget.first-run-wizard-payment',
+    model: 'Shopware.apps.PluginManager.model.Plugin',
 
-    /**
-     * Name attribute used to generate event names
-     */
-    name:'payment',
+    pageSize: 30,
 
-    initComponent: function() {
-        var me = this;
-
-        me.html = '<h1>Payment</h1>';
-
-        me.callParent(arguments);
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="FirstRunWizardPluginManager" action="getDemoDataPlugins"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
 });
 

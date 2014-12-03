@@ -39,22 +39,27 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-location',
+    alias:'widget.first-run-wizard-localization',
 
     /**
      * Name attribute used to generate event names
      */
-    name:'location',
+    name:'localization',
+
+    overflowY: 'auto',
 
     snippets: {
         content: {
             title: '{s name=localization/content/title}Localization{/s}',
-            message: '{s name=localization/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{/s}'
-        }
+            message: '{s name=localization/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+        },
+        languagePicker: '{s name=localization/languagePicker}Select a language to filter{/s}'
     },
 
     initComponent: function() {
         var me = this;
+
+        me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load();
 
         me.items = [
             {
@@ -71,7 +76,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
-            me.createLanguageSwitcherForm()
+            me.createLanguagePicker(),
+            me.createStoreListing()
         ];
 
         me.callParent(arguments);
@@ -82,42 +88,70 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
      *
      * @return Ext.form.FieldSet Contains the form for existing account login
      */
-    createLanguageSwitcherForm: function () {
-        var me = this, localeStore;
+    createLanguagePicker: function () {
+        var me = this;
 
-        me.buttons = [];
-
-        localeStore = Ext.create('Ext.data.Store', {
-            fields: ['name', 'locale'],
-            data: [
-                { name: 'German',   locale: 'de_DE' },
-                { name: 'English',  locale: 'en_GB' }
-            ]
-        });
-
-        localeStore.each(function(elem) {
-            me.buttons.push(
-                Ext.create('Ext.Button', {
-                    text: elem.get('name'),
-                    cls: 'primary',
-                    handler: function() {
-                        me.fireEvent('switchLanguage', elem.get('locale'));
+        me.languageFilter = Ext.create('Ext.form.field.ComboBox', {
+            store: me.localizationStore,
+            queryMode: 'local',
+            valueField: 'locale',
+            displayField: 'text',
+            emptyText: me.snippets.languagePicker,
+            editable: false,
+            listeners: {
+                change: {
+                    fn: function(view, newValue, oldValue) {
+                        me.fireEvent('changeLanguageFilter', newValue);
                     }
-                })
-            );
+                }
+            }
         });
-
 
         return Ext.create('Ext.form.FieldSet', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
-            defaults:{
-                anchor:'95%',
-                labelWidth:150,
-                minWidth:250,
-                xtype:'textfield'
+            width: 632,
+            defaults: {
+                anchor:'100%'
             },
-            items: me.buttons
+            items: [
+                me.languageFilter
+            ]
         });
+    },
+
+    createStoreListing: function() {
+        var me = this;
+
+        me.communityStore = Ext.create('Shopware.apps.FirstRunWizard.store.LocalizationPlugin');
+        me.storeListing = Ext.create('Shopware.apps.PluginManager.view.components.Listing', {
+            store: me.communityStore,
+            scrollContainer: me,
+            width: 632
+        });
+
+        me.communityStore.on('load', function(store, records) {
+            me.storeListing.setLoading(false);
+        });
+
+        me.content = Ext.create('Ext.container.Container', {
+            items: [
+                me.storeListing
+            ]
+        });
+
+        return me.content;
+    },
+
+    refreshData: function() {
+        var me = this;
+
+        me.fireEvent('localizationResetData');
+
+        if (me.languageFilter.getValue()) {
+            me.storeListing.setLoading(true);
+            me.storeListing.resetListing();
+            me.communityStore.load();
+        }
     }
 });
 
