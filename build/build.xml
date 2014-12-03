@@ -23,7 +23,7 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize, build-disable-firstrunwizard" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
@@ -182,6 +182,12 @@
     <target name="build-theme-initialize" depends="build-generate-attributes">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:theme:initialize"/>
+        </exec>
+    </target>
+
+    <target name="build-disable-firstrunwizard">
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:firstrunwizard:disable"/>
         </exec>
     </target>
 

@@ -1,6 +1,9 @@
 <?php
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
+use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 
 class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs
 {
@@ -47,9 +50,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          * Save theme config
          */
         $themeConfigKeys = [
-            'desktopLogo',
-            '_brand-primary',
-            '_brand-secondary'
+            'desktopLogo'
         ];
 
         $themeConfigValues = array_map(function ($configKey) use ($defaultShop, $values) {
@@ -76,11 +77,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
-            'captchaColor'
+            'metaIsFamilyFriendly'
         ];
 
         $shopConfigValues = array_intersect_key($values, array_flip($shopConfigKeys));
+        $shopConfigValues['metaIsFamilyFriendly'] = (bool) ($shopConfigValues['metaIsFamilyFriendly'] === "true");
 
         $requestElements = array();
 
@@ -123,9 +124,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          * Load theme config values
          */
         $themeConfigKeys = [
-            'desktopLogo',
-            '_brand-primary',
-            '_brand-secondary'
+            'desktopLogo'
         ];
 
         $themeConfigData = $this->container->get('theme_service')->getConfig(
@@ -154,8 +153,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly',
-            'captchaColor'
+            'metaIsFamilyFriendly'
         ];
 
         $builder = $this->container->get('models')->createQueryBuilder();
@@ -199,11 +197,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function pingServerAction()
     {
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
+        /** @var AccountManagerService $accountManagerService */
+        $accountManagerService = $this->container->get('account_manager_service');
 
         try {
-            $isConnected = $storeConnector->ping();
+            $isConnected = $accountManagerService->pingServer();
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -215,6 +213,45 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $this->View()->assign(array(
             'success' => true,
             'message' => $isConnected
+        ));
+    }
+
+    /**
+     * Gets the available backend locales excluding the current one
+     */
+    public function getAlternativeLocalesAction()
+    {
+        /** @var $locale \Shopware\Models\Shop\Locale */
+        $targetLocale = Shopware()->Auth()->getIdentity()->locale;
+
+        /** @var Zend_Locale $baseLocale */
+        $baseLocale = Shopware()->Locale();
+
+        $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
+
+        if(($key = array_search($targetLocale->getId(), $locales)) !== false) {
+            unset($locales[$key]);
+        }
+
+        $locales = Shopware()->Db()->quote($locales);
+        $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';
+        $locales = Shopware()->Db()->fetchPairs($sql);
+
+        $data = array();
+        foreach ($locales as $id => $locale) {
+            list($l, $t) = explode('_', $locale);
+            $l = $baseLocale->getTranslation($l, 'language', $targetLocale->getLocale());
+            $t = $baseLocale->getTranslation($t, 'territory', $targetLocale->getLocale());
+            $data[] = array(
+                'id' => $id,
+                'name' => "$l ($t)"
+            );
+        }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data,
+            'total' => count($data)
         ));
     }
 
@@ -234,17 +271,18 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $password = $this->Request()->getParam('password');
         $email = $this->Request()->getParam('email');
 
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
+        /** @var AccountManagerService $accountManagerService */
+        $accountManagerService = $this->container->get('account_manager_service');
 
         try {
             $locale = $this->getCurrentLocale();
-            $storeConnector->register($shopwareId, $email, $password, $locale->id);
+            $accountManagerService->registerAccount($shopwareId, $email, $password, $locale->getId());
         } catch (Exception $e) {
-            return $this->View()->assign(array(
+            $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+            return;
         }
 
         $this->View()->assign('message', 'loginSuccessful');
@@ -269,11 +307,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => 'Authentication failed - '. $e->getMessage()
+                'message' => $e->getMessage()
             ));
             return;
         }
-
 
         $this->View()->assign('success', true);
         $message = $this->View()->getAssign('message');
@@ -294,34 +331,12 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ->getRepository('Shopware\Models\Shop\Shop')
             ->getDefault();
 
-        $shopwareId = $this->Request()->getParam('shopwareID');
-        $password = $this->Request()->getParam('password');
-        $domain = 'http://'. $shop->getHost() . $shop->getBasePath();
+        $shopwareId = $this->Request()->get('shopwareID');
+        $password = $this->Request()->get('password');
+        $domain = 'http://'. $shop->getHost();
 
         try {
             $token = $this->getToken($shopwareId, $password);
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => 'Authentication failed - '. $e->getMessage()
-            ));
-            return;
-        }
-
-        $domains = $this->getDomains($token, $shopwareId);
-
-        if (in_array($domain, $domains)) {
-            $this->View()->assign(array(
-                'success' => true,
-                'message' => 'alreadyRegisteredDomain'
-            ));
-        }
-
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
-
-        try {
-            $domainHashData = $storeConnector->getDomainHash($domain, $token);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -330,8 +345,32 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        $filename = $domainHashData->fileName;
-        $fileContent = $domainHashData->content;
+        $domains = $this->getDomains($token);
+
+        if (in_array($domain, $domains)) {
+            $this->View()->assign(array(
+                'success' => true,
+                'message' => $this->get('snippets')
+                    ->getNamespace('backend/first_run_wizard/main')
+                    ->get('alreadyRegisteredDomain')
+            ));
+        }
+
+        /** @var AccountManagerService $accountManagerService */
+        $accountManagerService = $this->container->get('account_manager_service');
+
+        try {
+            $domainHashData = $accountManagerService->getDomainHash($domain, $token);
+        } catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+            return;
+        }
+
+        $filename = $domainHashData['fileName'];
+        $fileContent = $domainHashData['content'];
         if (empty($filename) || empty($fileContent)) {
             $this->View()->assign(array(
                 'success' => false,
@@ -343,9 +382,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         /** @var \Symfony\Component\Filesystem\Filesystem $fileSystem */
         $fileSystem = $this->container->get('file_system');
         $rootDir = $this->container->getParameter('kernel.root_dir');
+        $filePath = $rootDir . DIRECTORY_SEPARATOR . $filename;
 
         try {
-            $fileSystem->dumpFile($rootDir . DIRECTORY_SEPARATOR . $domainHashData->fileName, $domainHashData->content);
+            $fileSystem->dumpFile($filePath, $fileContent);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -355,17 +395,18 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         try {
-            $storeConnector->verifyDomain($domain, $shopwareId, $token);
+            $accountManagerService->verifyDomain($domain, $token);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+            $fileSystem->remove($rootDir . DIRECTORY_SEPARATOR . $filename);
             return;
         }
 
         try {
-            $fileSystem->remove($rootDir . DIRECTORY_SEPARATOR . $domainHashData->fileName);
+            $fileSystem->remove($rootDir . DIRECTORY_SEPARATOR . $filename);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -384,7 +425,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return Obj Information about the current locale
+     * @return LocaleStruct Information about the current locale
      * @throws Exception
      */
     private function getCurrentLocale()
@@ -392,13 +433,22 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         static $locales;
 
         if (empty($locales)) {
-            /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-            $storeConnector = $this->container->get('plugin_store_connector');
+            /** @var AccountManagerService $accountManagerService */
+            $accountManagerService = $this->container->get('account_manager_service');
 
-            $serverLocales = $storeConnector->getLocales();
+            try {
+                /** @var LocaleStruct[] $serverLocales */
+                $serverLocales = $accountManagerService->getLocales();
+            } catch (Exception $e) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ));
+                return;
+            }
 
             foreach ($serverLocales as $serverLocale) {
-                $locales[$serverLocale->name] = $serverLocale;
+                $locales[$serverLocale->getName()] = $serverLocale;
             }
         }
 
@@ -413,18 +463,17 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     /**
      * Fetches shop domains for the current id
      *
-     * @param $token
-     * @param $shopwareId
+     * @param AccessTokenStruct $token
      * @throws Exception
      * @return string[] Information about the current user's shop domains
      */
-    private function getDomains($token, $shopwareId)
+    private function getDomains(AccessTokenStruct $token)
     {
-        /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-        $storeConnector = $this->container->get('plugin_store_connector');
+        /** @var AccountManagerService $accountManagerService */
+        $accountManagerService = $this->container->get('account_manager_service');
 
         try {
-            $shopsData = $storeConnector->getShops($token, $shopwareId);
+            $shopsData = $accountManagerService->getShops($token);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -444,26 +493,27 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @param string $shopwareId
      * @param string $password
-     * @return string Token to access the API
+     * @return AccessTokenStruct Token to access the API
      * @throws \RuntimeException
      */
     private function getToken($shopwareId, $password)
     {
-        $tokenData = Shopware()->BackendSession()->accessToken;
+        /** @var AccessTokenStruct $token */
+        $token = Shopware()->BackendSession()->accessToken;
 
-        if (empty($tokenData) || strtotime($tokenData->expire->date) >= strtotime("+30 seconds")) {
+        if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime("+30 seconds")) {
             if (empty($shopwareId) || empty($password)) {
                 throw new \RuntimeException('Could not login - missing login data');
             }
 
-            /** @var \Shopware\Components\PluginStore\PluginStoreConnector $storeConnector */
-            $storeConnector = $this->container->get('plugin_store_connector');
+            /** @var AccountManagerService $accountManagerService */
+            $accountManagerService = $this->container->get('account_manager_service');
 
-            $tokenData = $storeConnector->getToken($shopwareId, $password);
+            $token = $accountManagerService->getToken($shopwareId, $password);
 
-            Shopware()->BackendSession()->accessToken = $tokenData;
+            Shopware()->BackendSession()->accessToken = $token;
         }
 
-        return $tokenData->token;
+        return $token;
     }
 }

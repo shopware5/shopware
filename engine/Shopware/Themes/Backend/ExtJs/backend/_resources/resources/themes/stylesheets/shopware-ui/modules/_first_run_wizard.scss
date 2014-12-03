@@ -16,14 +16,16 @@
   .wizard-navigation {
     padding: 20px;
     font-size: 14px;
+    background: #f4f7f8;
 
     .item {
       margin: 0;
       list-style: none;
       position: relative;
       padding-bottom: 20px;
-      padding-bottom: 1,1719rem;
+      padding-bottom: 1.1719rem;
       z-index: 1;
+      font-size: 13px;
     }
 
     .item::before {
@@ -89,7 +91,7 @@
 
     .item.previous span::after {
       height: 10px; width: 10px;
-      margin-left: 0;
+      margin: 2px 0 0 6px;
       color: #3fcf29;
       font-family: "scc";
       content: '\e677';
@@ -97,6 +99,7 @@
   }
 
   .card-container {
+      background: #f4f7f8;
       padding: 20px;
 
       h1 {
@@ -104,7 +107,9 @@
         margin-bottom: 10px;
       }
       p {
-
+        line-height: 21px;
+        font-size: 13px;
+        color: #a8a8a8;
       }
   }
 
@@ -112,15 +117,14 @@
     min-height: 153px;
   }
 
-  .store-plugin:nth-child(1),
-  .store-plugin:nth-child(2) {
+  .store-plugin {
+    position: relative;
+    top: 1px;
     border-top: 0 none !important;
+    border-bottom: 1px solid #d3e0e6;
   }
   .store-plugin:nth-child(2n+0) {
     border-right: 0 none !important;
-  }
-  .store-plugin:nth-child(3) {
-    border-top: 1px solid #d3e0e6;
   }
   .store-plugin:nth-child(3n+0) {
     border-right: 1px solid #d3e0e6;

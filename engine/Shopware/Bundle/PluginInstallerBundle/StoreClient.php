@@ -26,6 +26,8 @@ namespace Shopware\Bundle\PluginInstallerBundle;
 
 use Shopware\Bundle\PluginInstallerBundle\Exception\AccountException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
+use Shopware\Bundle\PluginInstallerBundle\Exception\DomainValidationException;
+use Shopware\Bundle\PluginInstallerBundle\Exception\DomainVerificationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\LicenceException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\OrderException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\SbpServerException;
@@ -71,8 +73,8 @@ class StoreClient
     }
 
     /**
-     * @param $shopwareId
-     * @param $password
+     * @param string $shopwareId
+     * @param string $password
      * @return AccessTokenStruct
      * @throws \Exception
      */
@@ -290,6 +292,7 @@ class StoreClient
      * @throws OrderException
      * @throws LicenceException
      * @throws StoreException
+     * @throws DomainVerificationException
      */
     private function handleRequestException(\Exception $requestException)
     {
@@ -322,6 +325,7 @@ class StoreClient
             case 'PluginLicensesException-6': //Deserialization failed.
             case 'OrdersException-2':         //Deserialization failed
             case 'UsersException-5':          //Deserialization failed
+            case 'UserShopsException-8':            //Could not find software version.
                 throw new SbpServerException($sbpCode, 'server_error', $httpCode, $requestException);
 
             case 'BinariesException-10': //Shopware version not given
@@ -330,11 +334,12 @@ class StoreClient
 
             case 'BinariesException-14':      //Unauthorized
             case 'UsersException-4':          //Unauthorized
-            case 'OrdersException-0':         //Order authentification failed
+            case 'OrdersException-0':         //Order authentication failed
             case 'PluginLicensesException-8': //Unauthorized
             case 'UserTokensException-0':     //Authorization failed!
             case 'UserTokensException-1':     //Token invalid.
             case 'UserTokensException-2':     //Given token is invalid.
+            case 'LdapTokensException-0':     //Authorization failed.
                 throw new AuthenticationException($sbpCode, 'authentication', $httpCode, $requestException);
 
             case 'UsersException-1':      //Invalid parameters for registration.
@@ -382,6 +387,16 @@ class StoreClient
             case 'PluginLicensesException-7': //License already ordered with a better price model.
                 throw new LicenceException($sbpCode, 'already_ordered', $httpCode, $requestException);
 
+            case 'DomainVerificationException-0':   //Invalid domain.
+                throw new DomainVerificationException($sbpCode, 'invalid_domain', $httpCode, $requestException);
+            case 'DomainVerificationException-1':   //Unauthorized.
+                throw new DomainVerificationException($sbpCode, 'unauthorized', $httpCode, $requestException);
+            case 'DomainVerificationException-2':   //Verification failed.
+                throw new DomainVerificationException($sbpCode, 'verification_failed', $httpCode, $requestException);
+            case 'DomainVerificationException-3':   //Unknown Shopware ID.
+                throw new DomainVerificationException($sbpCode, 'unknown_id', $httpCode, $requestException);
+            case 'DomainVerificationException-4':   //Domain already in use.
+                throw new DomainVerificationException($sbpCode, 'domain_in_use', $httpCode, $requestException);
         }
 
         throw new StoreException(

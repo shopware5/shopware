@@ -8,23 +8,31 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.Window',
         'main.Home',
         'main.Localization',
+        'main.LocalizationSwitcher',
         'main.Config',
         'main.DemoData',
         'main.Recommendation',
         'main.ShopwareId',
-        'main.Payment',
     ],
 
     stores:[
-        'Plugin'
+        'RecommendedPlugin',
+        'LicensePlugin',
+        'IntegratedPlugin',
+        'DemoPlugin',
+        'LocalizationPlugin',
+        'Localization',
+        'Locale'
     ],
 
     models: [
-        'Plugin'
+        'Localization',
+        'Locale'
     ],
 
     controllers: [
         'Main',
+        'LicensePluginHandler',
         'Config',
         'ShopwareId',
         'Localization',

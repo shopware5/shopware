@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -45,13 +46,24 @@ class AccountManagerService
     private $hydrator;
 
     /**
+     * @var \Shopware_Components_Snippet_Manager
+     */
+    private $snippetManager;
+
+    /**
      * @param StoreClient $storeClient
      * @param StructHydrator $structHydrator
+     * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
-    public function __construct(StoreClient $storeClient, StructHydrator $structHydrator)
-    {
+    public function __construct(
+        StoreClient $storeClient,
+        StructHydrator $structHydrator,
+        \Shopware_Components_Snippet_Manager $snippetManager
+    ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $structHydrator;
+        $this->snippetManager = $snippetManager;
+
     }
 
     /**
@@ -62,7 +74,11 @@ class AccountManagerService
      */
     public function pingServer()
     {
-        return $this->storeClient->doGetRequest('/ping') ? : false;
+        try {
+            return $this->storeClient->doGetRequest('/ping') ? : false;
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
     }
 
     /**
@@ -84,7 +100,11 @@ class AccountManagerService
             'localeId'   => $localeId
         );
 
-        return $this->storeClient->doPostRequest('/users', $postData);
+        try {
+            return $this->storeClient->doPostRequest('/users', $postData);
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
     }
 
     /**
@@ -95,7 +115,11 @@ class AccountManagerService
      */
     public function getLocales()
     {
-        $responseBody = $this->storeClient->doGetRequest("/locales");
+        try {
+            $responseBody = $this->storeClient->doGetRequest("/locales");
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
 
         return $this->hydrator->hydrateLocales($responseBody);
     }
@@ -104,15 +128,18 @@ class AccountManagerService
      * Get the list of shops (and details) associated to the given user
      *
      * @param AccessTokenStruct $token
-     * @param string $shopwareId
-     * @return Obj[] array of shop details
+     * @return array Array of shop details
      * @throws \Exception
      */
-    public function getShops(AccessTokenStruct $token, $shopwareId)
+    public function getShops(AccessTokenStruct $token)
     {
-        $query = ['shopwareId' => $shopwareId];
+        $query = ['shopwareId' => $token->getShopwareId()];
 
-        return $this->storeClient->doAuthGetRequest($token, "/shops", $query);
+        try {
+            return $this->storeClient->doAuthGetRequest($token, "/shops", $query);
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
     }
 
     /**
@@ -130,26 +157,33 @@ class AccountManagerService
             'domain' => $domain,
         );
 
-        return $this->storeClient->doAuthPostRequest($token, "/domainhashes", $postData);
+        try {
+            return $this->storeClient->doAuthPostRequest($token, "/domainhashes", $postData);
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
     }
 
     /**
      * Requests the validation of the current installation's domain
      *
      * @param string $domain
-     * @param string $shopwareId
      * @param AccessTokenStruct $token
      * @return array Result of the validation operation (empty if successful)
      * @throws \RuntimeException
      */
-    public function verifyDomain($domain, $shopwareId, AccessTokenStruct $token)
+    public function verifyDomain($domain, AccessTokenStruct $token)
     {
         $postData = array(
-            'shopwareId' => $shopwareId,
+            'shopwareId' => $token->getShopwareId(),
             'domain' => $domain
         );
 
-        return $this->storeClient->doAuthPostRequest($token, "/domainverifications", $postData);
+        try {
+            return $this->storeClient->doAuthPostRequest($token, "/domainverifications", $postData);
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
     }
 
     /**
@@ -162,6 +196,30 @@ class AccountManagerService
      */
     public function getToken($shopwareId = null, $password = null)
     {
-        return $this->storeClient->getAccessToken($shopwareId, $password);
+        try {
+            return $this->storeClient->getAccessToken($shopwareId, $password);
+        } catch (StoreException $se) {
+            $this->translateExceptionMessage($se);
+        }
+    }
+
+    /**
+     * @param StoreException $exception
+     * @throws \Exception
+     */
+    private function translateExceptionMessage(StoreException $exception)
+    {
+        $namespace = $this->snippetManager
+            ->getNamespace('backend/plugin_manager/exceptions');
+
+        if ($namespace->offsetExists($exception->getMessage())) {
+            $snippet = $namespace->get($exception->getMessage());
+        } else {
+            $snippet = $exception->getMessage();
+        }
+
+        $snippet .= '<br><br>Error code: ' . $exception->getSbpCode();
+
+        throw new \Exception($snippet, $exception->getCode(), $exception);
     }
 }

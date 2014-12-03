@@ -88,10 +88,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * Creates the widget store and binds all needed events.
      */
     init: function () {
-        var me = this,
-            firstRunWizardStep = Shopware.app.Application.getController('Shopware.apps.Index').firstRunWizardStep;
+        var me = this, firstRunWizardStep;
 
-        if (firstRunWizardStep == 0) {
+        firstRunWizardStep = parseInt(Ext.util.Cookies.get('firstRunWizardStep'), 10);
+
+        if (Ext.isEmpty(firstRunWizardStep) || isNaN(firstRunWizardStep) || firstRunWizardStep == 0) {
             me.loadWidgetPanel();
         }
 

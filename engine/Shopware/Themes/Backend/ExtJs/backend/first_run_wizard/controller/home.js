@@ -41,61 +41,85 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Home', {
         { ref: 'wizardWindow', selector: 'first-run-wizard' },
     ],
 
-    snippets: {
-        isConnected: {
-            text: '{s name=home/is_connected/text}Connection to Shopware server available{/s}',
-            icon: 'tick-circle'
-        },
-        isNotConnected: {
-            text: '{s name=home/is_not_connected/text}Could not connect to Shopware server{/s}',
-            icon: 'cross-circle'
-        }
-    },
-
     init: function () {
         var me = this;
 
         me.control({
             'first-run-wizard-home': {
-                setConnectivityMode: me.onSetConnectivityMode
+                retryConnectivityTest: me.onRetryConnectivityTest
             }
         });
+
+        me.on('setConnectivityMode', me.onSetConnectivityMode);
+
+        me.firstRunWizardIsConnected = Ext.util.Cookies.get('firstRunWizardIsConnected');
+
+        if (me.firstRunWizardIsConnected === null) {
+            me.checkConnectivityStatus();
+        }
 
         me.callParent(arguments);
     },
 
+    onRetryConnectivityTest: function() {
+        var me = this,
+            homePanel = me.getHomePanel();
+
+        homePanel.connectionResult = false;
+        homePanel.firstRunWizardIsConnected = null;
+        me.getController('Main').validateButtons();
+
+        homePanel.loadingResultContainer.hide();
+        homePanel.loadingIndicator.show();
+        me.checkConnectivityStatus();
+    },
+
     onSetConnectivityMode: function(isConnected) {
-        var me = this, snippetNamespace,
-            homePanel, wizardWindow;
+        var me = this,
+            homePanel = me.getHomePanel(),
+            wizardWindow = me.getWizardWindow();
 
         Ext.util.Cookies.set('firstRunWizardIsConnected', isConnected);
 
-        homePanel = me.getHomePanel();
-        wizardWindow = me.getWizardWindow();
-
         if (isConnected) {
-            snippetNamespace = me.snippets.isConnected;
             wizardWindow.navigation.store.each(
                 function(elem) {
                     elem.set('disabled', false);
                     return true;
                 }
             );
-        } else {
-            snippetNamespace = me.snippets.isNotConnected;
         }
 
         homePanel.connectionResult = true;
+        homePanel.firstRunWizardIsConnected = isConnected;
 
-        homePanel.loadingIndicator.update(
-            Ext.String.format(
-                '<div style="width: 16px; height: 16px; float: left;" class="sprite-[0]"></div><div>[1]</div>',
-                snippetNamespace.icon, snippetNamespace.text
-            )
-        );
+        homePanel.loadingIndicator.hide();
+        homePanel.refreshLoadingResultContainer(isConnected);
 
         wizardWindow.navigation.refresh();
         me.getController('Main').validateButtons();
+    },
+
+    checkConnectivityStatus: function() {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller="firstRunWizard" action="pingServer"}',
+            method: 'GET',
+            timeout: 10000,
+            success: function(response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result || result.success == false || result.message == false) {
+                    me.fireEvent('setConnectivityMode', false);
+                } else {
+                    me.fireEvent('setConnectivityMode', true);
+                }
+            },
+            failure: function (response, request) {
+                me.fireEvent('setConnectivityMode', false);
+            }
+        });
     }
 });
 

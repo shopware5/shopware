@@ -340,6 +340,34 @@
     }
 }
 
+@-webkit-keyframes keyframe--spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes keyframe--spin {
+  0% { -moz-transform: rotate(0deg); }
+  100% { -moz-transform: rotate(360deg); }
+}
+@-ms-keyframes keyframe--spin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); }
+}
+@-o-keyframes keyframe--spin {
+  0% { -o-transform: rotate(0deg); }
+  100% { -o-transform: rotate(360deg); }
+}
+@keyframes keyframe--spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@mixin animation($value) {
+  -webkit-animation: unquote($value);
+  -moz-animation: unquote($value);
+  -o-animation: unquote($value);
+  animation: unquote($value);
+}
+
 .plugin-manager-action-button {
     padding: 8px 25px;
     font-family: 'Open Sans', Arial, sans-serif;

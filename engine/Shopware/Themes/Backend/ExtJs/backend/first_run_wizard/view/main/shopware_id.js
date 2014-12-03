@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             confirmPassword: '{s name=shopware_id/new_registration_form/confirmPassword}Confirm password{/s}',
             email: '{s name=shopware_id/new_registration_form/email}Email{/s}',
             registerButton: '{s name=shopware_id/new_registration_form/register_button}Register{/s}',
-            skipDomainRegistration: '{s name=shopware_id/new_registration_form/skipDomainRegistration}Don\'t register domain{/s}'
+            registerDomain: '{s name=shopware_id/new_registration_form/register_domain}Register domain{/s}'
         },
         existingAccountForm: {
             title: '{s name=shopware_id/existing_account_form/title}Already have an account?{/s}',
@@ -73,9 +73,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             password: '{s name=shopware_id/existing_account_form/password}Password{/s}',
             passwordMessage: '{s name=shopware_id/existing_account_form/passwordMessage}The passwords do not match.{/s}',
             forgotPassword: '{s name=shopware_id/existing_account_form/forgotPassword}Forgot your password?{/s}',
-            forgotShopwareId: '{s name=shopware_id/existing_account_form/forgotShopwareId}Forgot your Shopware ID?{/s}',
+            forgotPasswordLink: '{s name=shopware_id/existing_account_form/forgotPasswordLink}https://account.shopware.com/#/forgotPassword{/s}',
             registerButton: '{s name=shopware_id/existing_account_form/registerButton}Login{/s}',
-            skipDomainRegistration: '{s name=shopware_id/existing_account_form/skipDomainRegistration}Don\'t register domain{/s}'
+            registerDomain: '{s name=shopware_id/existing_account_form/register_domain}Register domain{/s}'
         },
         content: {
             title: '{s name=shopware_id/content/title}Shopware ID{/s}',
@@ -91,8 +91,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         var me = this;
 
         me.sbpLogin = Shopware.app.Application.getController('Shopware.apps.Index').sbpLogin;
-
-        me.title = me.snippets.title;
 
         // If 1, we are already logged in
         if (me.sbpLogin == 1) {
@@ -137,8 +135,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
                     html: '<h1>' + me.snippets.content.title + '</h1>'
                 },
                 me.descriptionContainer,
-                me.existingAccountForm,
-                me.newRegistrationForm
+                me.newRegistrationForm,
+                me.existingAccountForm
             ]
         }
 
@@ -196,7 +194,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             allowBlank:false,
             required:true,
             enableKeyEvents:true,
-            checkChangeBuffer:700
+            checkChangeBuffer:700,
+            labelWidth:150
         });
 
         me.newRegistrationPasswordField = Ext.create('Ext.form.field.Text', {
@@ -207,6 +206,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             required: true,
             fieldLabel:me.snippets.newRegistrationForm.password,
             cls: Ext.baseCSSPrefix + 'password-field',
+            minLength: 5,
+            labelWidth:150,
             validator:function (value) {
                 if ( Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordConfirmationField.getValue()) ) {
                     me.newRegistrationPasswordConfirmationField.clearInvalid();
@@ -224,6 +225,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             allowBlank: false,
             required: true,
             fieldLabel:me.snippets.newRegistrationForm.confirmPassword,
+            minLength: 5,
+            labelWidth:150,
             validator:function (value) {
                 if ( Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordField.getValue()) ) {
                     me.newRegistrationPasswordField.clearInvalid();
@@ -243,24 +246,31 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             allowBlank:false,
             required:true,
             enableKeyEvents:true,
-            checkChangeBuffer:700
+            checkChangeBuffer:700,
+            labelWidth:150
         });
 
-        me.newRegistrationSkipDomainRegistration = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel:me.snippets.newRegistrationForm.skipDomainRegistration,
-            name:'skipDomainRegistration'
+        me.newRegistrationRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel:me.snippets.newRegistrationForm.registerDomain,
+            name:'registerDomain',
+            labelWidth:150,
+            checked: true
         });
 
         me.newRegistrationSendButton = Ext.create('Ext.Button', {
             text: me.snippets.newRegistrationForm.registerButton,
             cls: 'primary',
             action:'register',
+            minWidth: 150,
+            style: {
+                float: 'right'
+            },
             handler: function() {
                 var fields =[
                     me.newRegistrationShopwareId,
                     me.newRegistrationPasswordField,
                     me.newRegistrationEmail,
-                    me.newRegistrationSkipDomainRegistration
+                    me.newRegistrationRegisterDomain
                 ];
 
                 me.fireEvent('submitRegistrationForm', fields);
@@ -272,7 +282,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             me.newRegistrationPasswordField,
             me.newRegistrationPasswordConfirmationField,
             me.newRegistrationEmail,
-            me.newRegistrationSkipDomainRegistration,
+            me.newRegistrationRegisterDomain,
             me.newRegistrationSendButton
         ];
 
@@ -280,8 +290,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             title: me.snippets.newRegistrationForm.title,
             cls: Ext.baseCSSPrefix + 'base-field-set',
             defaults:{
-                labelWidth: 150,
-                minWidth: 250,
+                minWidth: 350,
                 xtype:'textfield'
             },
             items: me.newRegistrationFormItems
@@ -302,7 +311,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             allowBlank:false,
             required:true,
             enableKeyEvents:true,
-            checkChangeBuffer:700
+            checkChangeBuffer:700,
+            labelWidth:150
         });
 
         me.existingAccountPasswordField = Ext.create('Ext.form.field.Text', {
@@ -312,29 +322,33 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             allowBlank: false,
             required: true,
             fieldLabel:me.snippets.existingAccountForm.password,
-            cls: Ext.baseCSSPrefix + 'password-field'
+            cls: Ext.baseCSSPrefix + 'password-field',
+            labelWidth:150
         });
 
-        me.existingAccountSkipDomainRegistration = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel:me.snippets.existingAccountForm.skipDomainRegistration,
-            name:'skipDomainRegistration'
+        me.existingAccountRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel:me.snippets.existingAccountForm.registerDomain,
+            name:'registerDomain',
+            labelWidth:150,
+            checked: true
         });
 
         me.existingAccountForgotPassword = Ext.create('Ext.container.Container', {
-            html: '<a target="_blank" href="http://account.shopware.de/shopware.php/sViewport,LostPassword">'+me.snippets.existingAccountForm.forgotPassword+'</a>'
-        });
-        me.existingAccountForgotShopwareId = Ext.create('Ext.container.Container', {
-            html: '<a target="_blank" href="http://account.shopware.de/shopware.php/sViewport,LostShopwareId">'+me.snippets.existingAccountForm.forgotShopwareId+'</a>'
+            html: '<a target="_blank" href="' + me.snippets.existingAccountForm.forgotPasswordLink + '">'+me.snippets.existingAccountForm.forgotPassword+'</a>'
         });
 
         me.existingAccountSendButton = Ext.create('Ext.Button', {
             text: me.snippets.existingAccountForm.registerButton,
             cls: 'primary',
+            minWidth: 150,
+            style: {
+                float: 'right'
+            },
             handler: function() {
                 var fields =[
                     me.existingAccountShopwareId,
                     me.existingAccountPasswordField,
-                    me.existingAccountSkipDomainRegistration
+                    me.existingAccountRegisterDomain
                 ];
 
                 me.fireEvent('submitLoginForm', fields);
@@ -344,10 +358,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         me.existingAccountFormItems = [
             me.existingAccountShopwareId,
             me.existingAccountPasswordField,
-            me.existingAccountSkipDomainRegistration,
-            me.existingAccountForgotPassword,
-            me.existingAccountForgotShopwareId,
-            me.existingAccountSendButton
+            me.existingAccountRegisterDomain,
+            me.existingAccountSendButton,
+            me.existingAccountForgotPassword
         ];
 
         return Ext.create('Ext.form.FieldSet', {
@@ -355,8 +368,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             defaults:{
                 anchor:'95%',
-                labelWidth:150,
-                minWidth:250,
+                minWidth:350,
                 xtype:'textfield'
             },
             items: me.existingAccountFormItems
