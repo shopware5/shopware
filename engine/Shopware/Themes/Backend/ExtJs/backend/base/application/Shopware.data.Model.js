@@ -248,7 +248,7 @@ Ext.define('Shopware.data.Model', {
             proxy: me.proxy
         });
 
-        store.getProxy().extraParams.id = me.get('id');
+        store.getProxy().extraParams = me.getReloadExtraParams();
 
         if (options && Ext.isFunction(options.callback)) {
             callback = options.callback;
@@ -265,6 +265,14 @@ Ext.define('Shopware.data.Model', {
             store.load(options);
         } catch (e) {
             return e;
+        }
+    },
+
+    getReloadExtraParams: function() {
+        var me = this;
+
+        return {
+            id: me.get('id')
         }
     }
 });
