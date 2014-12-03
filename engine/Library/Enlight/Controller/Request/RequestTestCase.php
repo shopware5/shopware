@@ -43,6 +43,22 @@ class Enlight_Controller_Request_RequestTestCase
     protected $_serverParams = array();
 
     /**
+     * @var string[]
+     */
+    private $validDeviceTypes = [
+        'desktop',
+        'tablet',
+        'mobile',
+    ];
+
+    /**
+     * See: getDeviceType()
+     *
+     * @var string
+     */
+    private $deviceType = 'desktop';
+
+    /**
      * Set GET values method
      *
      * @param  string|array $spec
@@ -193,14 +209,17 @@ class Enlight_Controller_Request_RequestTestCase
      */
     public function getDeviceType()
     {
-        return $this->getHeader('X-UA-Device');
+        return $this->deviceType;
     }
 
     /**
      * Sets the current device type
+     * @param string $deviceType
      */
     public function setDeviceType($deviceType)
     {
-        $this->setHeader('X-UA-Device', $deviceType);
+        $deviceType = strtolower($deviceType);
+
+        $this->deviceType = (in_array($deviceType, $this->validDeviceTypes)) ? $deviceType : 'desktop';
     }
 }

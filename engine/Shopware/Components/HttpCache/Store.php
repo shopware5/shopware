@@ -57,10 +57,6 @@ class Store extends BaseStore
             $uri .= '&__currency=' . $request->cookies->get('currency');
         }
 
-        if ($request->headers->get('X-UA-Device')) { // use 'get' instead of 'has' as value can be set as 'false'
-            $uri .= '&__device=' . $request->headers->get('X-UA-Device');
-        }
-
         return 'md'.hash('sha256', $uri);
     }
 
