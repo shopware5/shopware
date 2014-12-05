@@ -253,13 +253,12 @@
     position: absolute;
     width: 100%;
     left: 0;
-    background: #fff;
     text-align: left;
     z-index: 3000;
 }
 
 .results--list {
-    .unitize-padding(10, 15);
+	.unitize-padding(10, 0);
     .box-shadow(0 2px 3px 1px rgba(0, 0, 0, 0.1));
     border-top: 1px solid @border-color;
     border-bottom: 1px solid @border-color;
@@ -282,7 +281,8 @@
 
     .list--entry,
     .entry--all-results {
-        .unitize-padding(6, 0);
+        .unitize-padding(6, 15);
+		display: block;
     }
 
     .list--entry {
@@ -299,22 +299,34 @@
         font-weight: normal;
     }
 
-    .is-active, .list--entry:hover {
+    .is-active,
+	.list--entry:hover {
         background: lighten(@border-color, 10%);
         color: @brand-primary;
 
-        .name--link { color: @brand-primary; }
+        .entry--name,
+		.entry--price { color: @brand-primary; }
     }
 
-    .entry--media { width: 10%; min-width:10% }
-    .entry--name { width: 60%; }
-    .name--link { color: @text-color }
+	.search-result--link { display: block; }
+
+    .entry--media {
+		width: 10%;
+		min-width: 10%;
+	}
+
+	.entry--name {
+		display: block;
+		width: 60%;
+		color: @text-color;
+	}
 
     .entry--price,
     .entry--all-results-number {
         width: 30%;
         text-align: right;
         color: @text-color-dark;
+		display: block;
     }
 
     .entry--all-results-link,
@@ -691,13 +703,13 @@
 
     .results--list {
         .border-radius();
-        .unitize-padding(10, 15);
+		.unitize-padding(10, 0);
         border: 1px solid @border-color;
         background: #fff;
 
         .list--entry,
         .entry--all-results {
-            .unitize-padding(6, 0);
+            .unitize-padding(6, 15);
         }
     }
 }

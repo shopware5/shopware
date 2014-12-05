@@ -2,7 +2,7 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}", 'link'=>{url}]]}
+	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}"]]}
 {/block}
 
 {* Main content *}
