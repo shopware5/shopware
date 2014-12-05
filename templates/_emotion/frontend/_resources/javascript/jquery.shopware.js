@@ -362,6 +362,66 @@ jQuery(document).ready(function ($) {
 });
 
 /**
+ * Shopware Device Cookie
+ */
+(function($, window, document) {
+
+    var $window = $(window),
+        devices = {
+        'mobile': {
+            start: 0,
+            end: 767
+        },
+        'tablet': {
+            start: 768,
+            end: 1259
+        },
+        'desktop': {
+            start: 1260,
+            end: 5160
+        }
+    };
+
+    function getViewportWidth() {
+        var width = window.innerWidth;
+
+        if (typeof width === 'number') {
+            return width;
+        }
+
+        return (width = document.documentElement.clientWidth) !== 0 ? width : document.body.clientWidth;
+    }
+
+    function getCurrentDevice(viewportWidth) {
+        var width = viewportWidth || getViewportWidth(),
+            currentDevice = 'desktop';
+
+        $.each(devices, function(key, value) {
+            if (width > value.start && width < value.end) {
+                currentDevice = key;
+            }
+        });
+
+        return currentDevice;
+    }
+
+    function setDeviceCookie() {
+        device = getCurrentDevice();
+
+        document.cookie = 'x-ua-device=' + device + '; path=/';
+    }
+
+    $(document).ready(function() {
+
+        setDeviceCookie();
+
+        $window.bind('resize', function() {
+            setDeviceCookie();
+        });
+    });
+})(jQuery, window, document);
+
+/**
  * Shopware Button Solution
  *
  * Shopware AG (c) 2012

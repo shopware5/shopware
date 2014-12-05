@@ -18,10 +18,6 @@ In this document you will find a changelog of the important changes related to t
 * New jQuery plugin helper which provides all the basic operations every jQuery plugin needs to do
 * Added several javascript libraries that enhance the supported features of the IE 8 and above
 * Added `controller_action` and `controller_name` smarty functions that return the correspondent variable values
-* Added device type detection support. Supports external detection (ie. varnish, apache, recommended) or internal using 3rd party lib
-    * Added Mobile Detect (http://mobiledetect.net/) library to composer dependencies for internal mobile detection.
-    * Added `Enlight_Controller_Request_RequestHttp::getDeviceType()`
-    * Added `device` Smarty function
 * The sitemap.xml uses now a smarty template
     * Added `Turnover by device type` in the backend statistics module
     * Added device type details to `Impressions` and `Visitors` in the backend statistics module
