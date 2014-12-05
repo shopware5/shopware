@@ -84,6 +84,43 @@ class Article extends Resource implements BatchInterface
     {
         return $this->getResource('Media');
     }
+    
+    /**
+     * Little helper function for the ...ByEan methods
+     * @param $ean
+     * @return int
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function getIdFromEan($ean)
+    {
+        if (empty($ean)) {
+            throw new ApiException\ParameterMissingException();
+        }
+
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        $articleDetail = $this->getDetailRepository()->findOneBy(array('ean' => $ean));
+
+        if (!$articleDetail) {
+            throw new ApiException\NotFoundException("Article by ean {$ean} not found");
+        }
+
+        return $articleDetail
+            ->getArticle()
+            ->getId();
+    }
+    
+    /**
+     * Convenience method to get a article by ean
+     * @param string $ean
+     * @param array $options
+     * @return array|\Shopware\Models\Article\Article
+     */
+    public function getOneByEan($ean, array $options = array())
+    {
+     	$id = $this->getIdFromEan($ean);
+        return $this->getOne($id, $options);
+    }
 
     /**
      * Little helper function for the ...ByNumber methods
