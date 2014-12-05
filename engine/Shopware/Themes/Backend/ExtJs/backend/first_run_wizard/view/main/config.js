@@ -62,9 +62,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             address: {
                 label: '{s name=config/shopSettings/address/label}Address{/s}'
             },
-            taxNumber: {
-                label: '{s name=config/shopSettings/taxNumber/label}VAT ID{/s}'
-            },
             bankAccount: {
                 label: '{s name=config/shopSettings/bankAccount/label}Bank account{/s}'
             },
@@ -168,12 +165,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             supportText: me.snippets.shopSettings.address.support
         });
 
-        me.taxNumberField = Ext.create('Ext.form.field.Text', {
-            name: 'taxNumber',
-            fieldLabel: me.snippets.shopSettings.taxNumber.label,
-            supportText: me.snippets.shopSettings.taxNumber.support
-        });
-
         me.bankAccountField = Ext.create('Ext.form.field.TextArea', {
             name: 'bankAccount',
             fieldLabel: me.snippets.shopSettings.bankAccount.label,
@@ -208,7 +199,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             },
             items: [
                 me.addressField,
-                me.taxNumberField,
                 me.bankAccountField,
                 me.companyField,
                 me.metaIsFamilyFriendlyField,
