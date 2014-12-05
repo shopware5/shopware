@@ -16,35 +16,33 @@
                 {* Each product in the search result *}
                 {block name="search_ajax_list_entry"}
                     <li class="list--entry block-group">
+						<a class="search-result--link" href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
 
-                        {* Product image *}
-                        {block name="search_ajax_list_entry_media"}
-                            <div class="entry--media block">
-                                <a href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
-                                    {if $search_result.thumbNails.0}
-                                        <img src="{$search_result.thumbNails.0}" class="media--image">
-                                    {else}
-                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" />
-                                    {/if}
-                                </a>
-                            </div>
-                        {/block}
+							{* Product image *}
+							{block name="search_ajax_list_entry_media"}
+								<span class="entry--media block">
+									{if $search_result.thumbNails.0}
+										<img src="{$search_result.thumbNails.0}" class="media--image">
+									{else}
+										<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" />
+									{/if}
+								</span>
+							{/block}
 
-                        {* Product name *}
-                        {block name="search_ajax_list_entry_name"}
-                            <div class="entry--name block">
-                                <a class="name--link" href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
-                                    {$search_result.name|truncate:200}
-                                </a>
-                            </div>
-                        {/block}
+							{* Product name *}
+							{block name="search_ajax_list_entry_name"}
+								<span class="entry--name block">
+									{$search_result.name|truncate:200}
+								</span>
+							{/block}
 
-                        {* Product price *}
-                        {block name="search_ajax_list_entry_price"}
-                            <div class="entry--price block">
-                                {$search_result.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-                            </div>
-                        {/block}
+							{* Product price *}
+							{block name="search_ajax_list_entry_price"}
+								<span class="entry--price block">
+									{$search_result.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+								</span>
+							{/block}
+						</a>
                     </li>
                 {/block}
             {/foreach}

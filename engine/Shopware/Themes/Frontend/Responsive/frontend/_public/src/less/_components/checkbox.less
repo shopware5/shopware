@@ -1,0 +1,96 @@
+/* Checkbox custom styling
+
+As a real checkbox:
+```
+<span class="checkbox">
+	<input type="checkbox" />
+	<span class="checkbox--state"></span>
+</span>
+```
+
+In a link:
+```
+<a href="#">
+	<span class="checkbox">
+		<span class="checkbox--state"></span>
+	</span>
+</a>
+```
+*/
+.checkbox {
+	.unitize-width(16);
+	.unitize-height(16);
+	.unitize-padding(1, 1);
+	.unitize(16, 16, line-height);
+	.border-radius();
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+	border: 1px solid @border-color;
+	cursor: pointer;
+
+	.checkbox--state {
+		.border-radius();
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: relative;
+		z-index: 60;
+	}
+
+	input[type="checkbox"] {
+		.opacity(0);
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0; left: 0;
+		border: 0 none;
+		background: none;
+		cursor: pointer;
+		z-index: 65;
+
+		&:checked ~ .checkbox--state {
+			.primary-gradient();
+
+			&:before {
+				.unitize-width(12);
+				.unitize-height(12);
+				.unitize(12, 16, line-height);
+				.unitize(7, 16, font-size);
+				display: inline-block;
+				font-family: 'shopware';
+				font-weight: normal;
+				text-align: center;
+				vertical-align: top;
+				color: #fff;
+				content: "\e60c";
+			}
+		}
+
+		&:disabled ~ .checkbox--state {
+			background: @body-bg;
+		}
+	}
+
+	&.is--active,
+	a:hover & {
+		.checkbox--state {
+			.primary-gradient();
+
+			&:before {
+				.unitize-width(12);
+				.unitize-height(12);
+				.unitize(12, 16, line-height);
+				.unitize(7, 16, font-size);
+				display: inline-block;
+				font-family: 'shopware';
+				font-weight: normal;
+				text-align: center;
+				vertical-align: top;
+				color: #fff;
+				content: "\e60c";
+			}
+		}
+	}
+}
