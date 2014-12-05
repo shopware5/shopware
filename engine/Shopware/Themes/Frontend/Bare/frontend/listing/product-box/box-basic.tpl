@@ -24,8 +24,8 @@
                         {* Customer rating for the product *}
                         {block name='frontend_listing_box_article_rating'}
                             <div class="product--rating-container">
-                                {if $sArticle.sVoteAverange.averange}
-                                    {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverange.averange type="aggregated" base="5" label=false}
+                                {if $sArticle.sVoteAverage.average}
+                                    {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverage.average type="aggregated" label=false}
                                 {/if}
                             </div>
                         {/block}

@@ -46,7 +46,7 @@
 						{* Reviews *}
 						{block name="frontend_note_item_rating"}
 							{if !{config name=VoteDisable}}
-                                {include file="frontend/_includes/rating.tpl" points=$sBasketItem.sVoteAverange.averange type="aggregated" base=5}
+                                {include file="frontend/_includes/rating.tpl" points=$sBasketItem.sVoteAverage.average type="aggregated"}
                             {/if}
 						{/block}
 
