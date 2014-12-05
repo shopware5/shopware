@@ -550,6 +550,7 @@ class sCategories
                 'sSelfCanonical'  => $canonical,
                 'rssFeed'         => $detailUrl . '&sRss=1',
                 'atomFeed'        => $detailUrl . '&sAtom=1',
+                'seoLink'         => Shopware()->Front()->Router()->assemble($canonical)
             )
         );
 

@@ -183,7 +183,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($viewAssignments);
         $this->View()->assign($categoryArticles);
-
     }
 
     private function getRedirectLocation($categoryContent)
