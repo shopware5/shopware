@@ -6030,17 +6030,6 @@ INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
 (2, 10);
 
 TRUNCATE TABLE `s_core_tax_rules`;
-TRUNCATE TABLE `s_core_templates`;
-INSERT INTO `s_core_templates` (`id`, `template`, `name`, `description`, `author`, `license`, `esi`, `style_support`, `emotion`, `version`, `plugin_id`) VALUES
-(11, 'emotion_orange', 'Emotion Orange', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(14, 'emotion_turquoise', 'Emotion Turquoise', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(15, 'emotion_brown', 'Emotion Brown', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(16, 'emotion_gray', 'Emotion Gray', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(17, 'emotion_red', 'Emotion Red', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(18, 'emotion_blue', 'Emotion Blue', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(19, 'emotion_green', 'Emotion Green', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(20, 'emotion_black', 'Emotion Black', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
-(21, 'emotion_pink', 'Emotion Pink', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL);
 
 INSERT IGNORE INTO `s_core_translations` (`id`, `objecttype`, `objectdata`, `objectkey`, `objectlanguage`) VALUES
 (58, 'config_payment', 'a:13:{i:3;a:2:{s:11:"description";s:16:"cash on delivery";s:21:"additionaldescription";s:105:"Available in Germany only. Please note that at delivery, you will be asked to pay an additional EUR 2,00.";}i:7;a:2:{s:11:"description";s:10:"Creditcard";s:21:"additionaldescription";s:162:"Testing the United-Online-Services creditcard-payment is very easy. Just enter the following data: \nType: Mastercard, Nummer: 4111111111111111, CVC/ CVV-Code: 111";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionaldescription";s:11:"Insert text";}i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionaldescription";s:152:"You pay easy and secure by invoice.\n\nIt is for example possible to reopen the invoice account after the costumer made his second order. (Riskmanagement)";}i:5;a:2:{s:11:"description";s:10:"Prepayment";s:21:"additionaldescription";s:194:"Once we receive the funds you send us via bank transfer, we will ship your order. We cannot be responsible for paying bank fees, so make sure the full invoice amount will be received on our end.";}i:17;a:1:{s:21:"additionaldescription";s:98:"A quick and easy way to pay with your creditcard. We accept: VISA / Master Card / American Express";}i:18;a:1:{s:21:"additionaldescription";s:209:"Carefree shopping on the internet - you can do it now in over 8,000 affiliated online shops using DIRECTebanking.com. You benefit not only from immediate delivery but also from our consumer protection policy.\n";}i:6;a:1:{s:21:"additionaldescription";s:163:"Please enter your real account data, who are connected to your address. An automatic process will check the address.\n\nAll entries will not be charged in this demo!";}i:8;a:1:{s:21:"additionaldescription";s:147:"Testing Giropay from our partner United-Online-Services in this demo isn´t possible.\nIf you are interested in getting an account please contact us.";}i:15;a:1:{s:21:"additionaldescription";s:7:"Invoice";}i:14;a:1:{s:21:"additionaldescription";s:10:"Prepayment";}i:11;a:1:{s:21:"additionaldescription";s:64:"Pay the quick and secured way! Paying direct! No account needed!";}i:12;a:1:{s:21:"additionaldescription";s:64:"Pay the quick and secured way! Paying direct! No account needed!";}}', 1, 'en'),
