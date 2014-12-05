@@ -10,7 +10,7 @@ class Migrations_Migration403 Extends Shopware\Components\Migrations\AbstractMig
                 `s_core_config_forms` `forms`,
                 `s_core_locales` `locales`
             SET
-                `translations`.`description`= '(Hex-Code, only concerns the Emotion template)',
+                `translations`.`description`= '(Hex-Code, only applies to the Emotion template)',
                 `elements`.`description`= '(Hex-Code, betrifft nur das Emotion-Template)'
             WHERE
                 `translations`.`element_id` = `elements`.`id`
