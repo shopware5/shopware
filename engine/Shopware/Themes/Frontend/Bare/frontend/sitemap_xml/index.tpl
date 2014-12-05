@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {strip}
+    {block name="frontend_sitemap_xml_homepage"}
+        {include file="frontend/sitemap_xml/entry.tpl" urlParams = ['controller' => 'index']}
+    {/block}
+
     {block name="frontend_sitemap_xml_categories"}
         {foreach $sitemap.categories as $category}
             {if $category.show}

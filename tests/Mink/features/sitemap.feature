@@ -18,6 +18,11 @@ Feature: View all categories on sitemap
         Given I am on the sitemap.xml
         Then  I should see all active categories
 
+    @navigation @xml
+    Scenario: Homepage link is in the sitemap.xml
+      Given I am on the sitemap.xml
+      And   I should see the homepage in the xml sitemap
+
     @forms @supplier @emotions @xml
     Scenario: All other important subsites are also in the sitemap.xml
         Given I am on the sitemap.xml
