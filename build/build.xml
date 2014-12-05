@@ -23,7 +23,7 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
@@ -167,13 +167,21 @@
         </exec>
     </target>
 
-    <target name="build-snippets-deploy">
+    <target name="build-generate-attributes">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:generate:attributes"/>
         </exec>
+    </target>
 
+    <target name="build-snippets-deploy" depends="build-generate-attributes">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:snippets:to:db --include-plugins"/>
+        </exec>
+    </target>
+
+    <target name="build-theme-initialize" depends="build-generate-attributes">
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:theme:initialize"/>
         </exec>
     </target>
 
