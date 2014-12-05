@@ -36,6 +36,15 @@ class Enlight_Controller_Request_RequestHttp
     implements Enlight_Controller_Request_Request
 {
     /**
+     * @var string[]
+     */
+    private $validDeviceTypes = [
+        'desktop',
+        'tablet',
+        'mobile',
+    ];
+
+    /**
      * Set GET values method
      *
      * @param  string|array $spec
@@ -175,6 +184,8 @@ class Enlight_Controller_Request_RequestHttp
      */
     public function getDeviceType()
     {
-        return $this->getHeader('X-UA-Device');
+        $deviceType = strtolower($this->getCookie('x-ua-device', 'desktop'));
+
+        return (in_array($deviceType, $this->validDeviceTypes)) ? $deviceType : 'desktop';
     }
 }
