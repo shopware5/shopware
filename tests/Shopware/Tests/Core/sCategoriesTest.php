@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class sCategoriesTest extends PHPUnit_Framework_TestCase
+class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var sCategories
@@ -182,6 +182,9 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
      */
     public function testsGetCategoryContent()
     {
+        // Call dispatch as we need the Router to be available inside sCore
+        $this->dispatch('/');
+        
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetCategoryContent(null),
