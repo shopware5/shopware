@@ -101,6 +101,11 @@ class sCategories
     private $contextService;
 
     /**
+     * @var Enlight_Controller_Front
+     */
+    private $frontController;
+
+    /**
      * @throws Exception
      */
     public function __construct()
@@ -116,6 +121,7 @@ class sCategories
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->categoryService = Shopware()->Container()->get('category_service');
         $this->contextService = Shopware()->Container()->get('context_service');
+        $this->frontController = Shopware()->Container()->get('front');
     }
 
     /**
@@ -550,6 +556,7 @@ class sCategories
                 'sSelfCanonical'  => $canonical,
                 'rssFeed'         => $detailUrl . '&sRss=1',
                 'atomFeed'        => $detailUrl . '&sAtom=1',
+                'seoLink'         => $this->frontController->Router()->assemble($canonical)
             )
         );
 

@@ -10,14 +10,28 @@
 {block name='frontend_index_header_canonical'}
 <link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
 
+{* Count of available product pages *}
+{if $showListing}
+{$pages = ceil($sNumberArticles / $criteria->getLimit())}
+
+{if $pages >= $sPage + 1}
+{$pageNext = $sPage + 1}
+{/if}
+
+{if $sPage >= 1}
+{$pagePrevious = $sPage - 1}
+{/if}
+
 {* Previous rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $sPages.previous}
-<link rel="prev" href="{$sPages.previous|rewrite:$sCategoryInfo.name}">
+{if $theme.infiniteScrolling && $pagePrevious}
+<link rel="cannonical" href="{$sCategoryContent.sSelfCanonical}">
+<link rel="prev" href="{$sCategoryContent.seoLink}?p={$pagePrevious}">
 {/if}
 
 {* Next rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $sPages.next}
-<link rel="next" href="{$sPages.next|rewrite:$sCategoryInfo.name}">
+{if $theme.infiniteScrolling && $pageNext}
+<link rel="next" href="{$sCategoryContent.seoLink}?p={$pageNext}">
+{/if}
 {/if}
 {/block}
 
