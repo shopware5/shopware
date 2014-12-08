@@ -182,7 +182,7 @@ class Installer
                 continue;
             }
 
-            if (strpos($directories->getFilename(), 'emotion') == false) {
+            if (strpos($directory->getFilename(), 'emotion') === false) {
                 continue;
             }
 
