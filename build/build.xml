@@ -258,7 +258,7 @@
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
             <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
             <arg value="--no-ansi"/>
-            <arg value="--tags=~@noEmotion&amp;&amp;~@javascript&amp;&amp;~@knownFailing"/>
+            <arg value="--profile=emotion"/>
             <arg value="--format=pretty,junit,html"/>
             <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
         </exec>
@@ -269,15 +269,6 @@
             <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
             <arg value="--no-ansi"/>
             <arg value="--profile=responsive"/>
-            <arg value="--tags=~@noResponsive&amp;&amp;~@javascript&amp;&amp;~@knownFailing"/>
-            <arg value="--format=pretty,junit,html"/>
-            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
-        </exec>
-    </target>
-
-    <target name="mink-shopware-continuous-functional">
-        <exec executable="${script.behat}" dir="${test.dir}/Mink">
-            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
             <arg value="--format=pretty,junit,html"/>
             <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
         </exec>
