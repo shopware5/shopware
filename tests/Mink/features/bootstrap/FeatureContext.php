@@ -30,6 +30,10 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
      */
     public function __construct(array $parameters)
     {
+        if (!isset($parameters['template'])) {
+            throw new \RuntimeException("Template not set. Please start testsuite using the --profile argument.");
+        }
+
         self::$template = $parameters['template'];
 
         $this->useContext('shopware', new ShopwareContext($parameters));
@@ -64,6 +68,11 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         );
 
         $templateId = self::$statickernel->getContainer()->get('db')->fetchOne($sql);
+        if (!$templateId) {
+            throw new \RuntimeException(
+                sprintf("Unable to find template by name %s", self::$template)
+            );
+        }
 
         //set the template for shop "Deutsch"
         $sql = sprintf(
