@@ -49,7 +49,7 @@
 
 {* Paging *}
 {block name="frontend_listing_bottom_paging"}
-	{if $showListing && $pages > 1}
+	{if $showListing}
 		<div class="listing--bottom-paging">
 			{include file="frontend/listing/actions/action-pagination.tpl"}
 		</div>
