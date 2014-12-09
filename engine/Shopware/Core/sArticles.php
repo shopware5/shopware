@@ -1178,6 +1178,11 @@ class sArticles
             $context
         );
 
+        $hideNoInstock = $this->config->get('hideNoInstock');
+        if ($hideNoInstock && !$product->isAvailable()) {
+            return array();
+        }
+
         if (!$product) {
             return array();
         }
