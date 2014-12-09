@@ -86,13 +86,7 @@ class LegacyStructConverter
             return array();
         }
 
-        //required for backward compatibility
-        if (!$product->getCheapestPrice()) {
-            $cheapestPrice = $product->getPrices();
-            $cheapestPrice = array_shift($cheapestPrice);
-        } else {
-            $cheapestPrice = $product->getCheapestPrice();
-        }
+        $cheapestPrice = $product->getCheapestPrice();
 
         $unit = $cheapestPrice->getUnit();
 
@@ -203,20 +197,20 @@ class LegacyStructConverter
             );
         }
 
-        /**@var $first StoreFrontBundle\Struct\Product\Price */
-        $first = array_shift($product->getPrices());
+        /** @var $variantPrice StoreFrontBundle\Struct\Product\Price */
+        $variantPrice = $product->getVariantPrice();
 
         $data['price'] = $this->sFormatPrice(
-            $first->getCalculatedPrice()
+            $variantPrice->getCalculatedPrice()
         );
 
         $data['pseudoprice'] = $this->sFormatPrice(
-            $first->getCalculatedPseudoPrice()
+            $variantPrice->getCalculatedPseudoPrice()
         );
 
-        if ($first->getCalculatedPseudoPrice()) {
-            $discPseudo = $first->getCalculatedPseudoPrice();
-            $discPrice = $first->getCalculatedPrice();
+        if ($variantPrice->getCalculatedPseudoPrice()) {
+            $discPseudo = $variantPrice->getCalculatedPseudoPrice();
+            $discPrice = $variantPrice->getCalculatedPrice();
 
             $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
             $data["pseudopricePercent"] = array(
@@ -225,9 +219,9 @@ class LegacyStructConverter
             );
         }
 
-        $data['pricegroup'] = $first->getCustomerGroup()->getKey();
+        $data['pricegroup'] = $variantPrice->getCustomerGroup()->getKey();
 
-        $data['referenceprice'] = $first->getCalculatedReferencePrice();
+        $data['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
 
         if (count($product->getPrices()) > 1) {
             foreach ($product->getPrices() as $price) {
@@ -773,6 +767,7 @@ class LegacyStructConverter
             'taxID' => $product->getTax()->getId(),
             'tax' => $product->getTax()->getTax(),
             'instock' => $product->getStock(),
+            'isAvailable' => $product->isAvailable(),
             'weight' => $product->getWeight(),
             'shippingtime' => $product->getShippingTime(),
             'pricegroupActive' => false,
