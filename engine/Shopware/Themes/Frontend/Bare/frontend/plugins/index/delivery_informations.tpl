@@ -31,7 +31,7 @@
 					{s name="DetailDataInfoInstantDownload"}{/s}
 				</span>
 			</p>
-		{elseif $sArticle.instock > 0}
+		{elseif $sArticle.instock >= $sArticle.minpurchase}
             <link itemprop="availability" href="http://schema.org/InStock" />
 			<p class="delivery--information">
 				<span class="delivery--text delivery--text-available">
