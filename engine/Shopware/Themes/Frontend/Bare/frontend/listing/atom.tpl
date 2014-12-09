@@ -4,8 +4,8 @@
 <author>
     <name>{$sShopname|escape:'hexentity'}</name>
 </author>
-<title>{block name='frontend_listing_atom_title'}{$sCategoryContent.description|escape|escape:'hexentity'}{/block}</title>
-<id>{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape|escape:'hexentity'}</id>
+<title>{block name='frontend_listing_atom_title'}{$sCategoryContent.description|escape:'hexentity'}{/block}</title>
+<id>{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape:'hexentity'}</id>
 <updated>{time()|date:atom}</updated>
 {foreach $sArticles as $sArticle}
     {block name='frontend_listing_atom_entry'}
