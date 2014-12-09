@@ -33,11 +33,6 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
             'onGetControllerPath'
         );
 
-        $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_Cron',
-            'onInitResourceCron'
-        );
-
         $this->createForm();
 
         return true;
@@ -95,18 +90,6 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
     {
         return $this->Path() . 'Cron.php';
-    }
-
-    public function onInitResourceCron(Enlight_Event_EventArgs $args)
-    {
-        $eventManager = $this->Application()->Events();
-        $adapter = new Enlight_Components_Cron_Adapter_DbTable(array(
-            'name' => 's_crontab'
-        ));
-        $manager = new Enlight_Components_Cron_Manager(
-            $adapter, $eventManager, 'Shopware_Components_Cron_CronJob'
-        );
-        return $manager;
     }
 
     /**

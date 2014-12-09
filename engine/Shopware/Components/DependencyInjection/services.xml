@@ -122,6 +122,16 @@
             <argument type="service" id="models"/>
         </service>
 
+        <service id="cron_adapter" class="Enlight_Components_Cron_Adapter_DBAL">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="cron_manager" class="Enlight_Components_Cron_Manager">
+            <argument type="service" id="cron_adapter"/>
+            <argument type="service" id="events"/>
+            <argument type="string">Shopware_Components_Cron_CronJob</argument>
+        </service>
+
         <service id="db_connection"
                  class="Pdo"
                  factory-service="shopware.db"
