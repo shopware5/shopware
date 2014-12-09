@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed the template directory `_default` and all it's dependencies
 * Added the ability to show campaign banners in blog categories
 * Refactored the template structure of the compare functionality. The plugin now uses based on a widget.
+    * Added new block `frontend_listing_box_article_actions_compare` in the `listing/box_article.tpl`
 * Removed support for flash banners. The associated template block `frontend_listing_swf_banner` is marked as deprecated
 * Removed the template files for the feed functionality, which was marked as deprecated in SW 3.5
 * Add new optional address fields to the register account and checkout process
