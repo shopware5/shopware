@@ -97,15 +97,19 @@
 			<div class="actions">
 
 				{block name='frontend_listing_box_article_actions_buy_now'}
-				{* Buy now button *}
-				{if !$sArticle.priceStartingFrom &&!$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
-					<a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}" title="{s name='ListingBoxLinkBuy'}{/s}" class="buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
-				{/if}
+
+                    {* Buy now button *}
+                    {if !$sArticle.priceStartingFrom &&!$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
+                        <a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}" title="{s name='ListingBoxLinkBuy'}{/s}" class="buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
+                    {/if}
 				{/block}
 
 				{block name='frontend_listing_box_article_actions_inline'}
+
                     {* Compare button *}
-                    <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='ListingBoxLinkCompare'}vergleichen{/s}" class="compare_add_article hide_script">{se name='ListingBoxLinkCompare'}{/se}</a>
+                    {block name='frontend_listing_box_article_actions_compare'}
+                        <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='ListingBoxLinkCompare'}vergleichen{/s}" class="compare_add_article hide_script">{se name='ListingBoxLinkCompare'}{/se}</a>
+                    {/block}
 
                     {* More informations button *}
 					<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="more">{s name='ListingBoxLinkDetails'}{/s}</a>

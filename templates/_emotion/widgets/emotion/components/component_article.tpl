@@ -123,4 +123,5 @@
         {/if}
     </div>
 {/if}
-{/block}    	
+{/block}
+{block name='frontend_listing_box_article_actions_compare'}{/block}
