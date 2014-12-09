@@ -27,7 +27,9 @@
 
     {* Pagination - current page *}
     {block name='frontend_listing_actions_paging_numbers'}
-        <a title="{$sCategoryInfo.name|escape}" class="paging--link is--active">{$sPage}</a>
+        {if $pages > 1}
+            <a title="{$sCategoryInfo.name|escape}" class="paging--link is--active">{$sPage}</a>
+        {/if}
     {/block}
 
     {* Pagination - Next page *}
@@ -51,9 +53,11 @@
 
     {* Pagination - Number of pages *}
     {block name='frontend_listing_actions_count'}
-        <span class="paging--display">
-            {s name="ListingTextFrom"}von{/s} <strong>{$pages}</strong>
-        </span>
+        {if $pages > 1}
+            <span class="paging--display">
+                {s name="ListingTextFrom"}von{/s} <strong>{$pages}</strong>
+            </span>
+        {/if}
     {/block}
 
     {* Products per page selection *}
