@@ -401,6 +401,9 @@ AND
 SQL;
 
         $translation = $this->connection->query($sql)->fetch();
+        if (!$translation) {
+            return;
+        }
 
         $id = $translation['id'];
         $data = unserialize($translation['objectdata']);
