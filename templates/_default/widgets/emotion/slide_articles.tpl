@@ -21,11 +21,10 @@
                     <span class="purchaseunit">
                         <strong>{se name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/se}:</strong> {$article.purchaseunit} {$article.sUnit.description}
                     </span>
-            {/if}
-            {if $article.purchaseunit != $article.referenceunit}
-                    {if $article.referenceunit}
+
+                    {if $article.purchaseunit != $article.referenceunit && $article.referenceunit}
                         <span class="referenceunit">
-                         ({$article.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$article.referenceunit} {$article.sUnit.description})
+                           ({$article.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$article.referenceunit} {$article.sUnit.description})
                         </span>
                     {/if}
                 </p>
