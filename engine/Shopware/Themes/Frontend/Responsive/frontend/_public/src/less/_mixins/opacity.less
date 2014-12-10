@@ -5,9 +5,5 @@
 //
 // @param: {Number} opacity: Value of the opacity, starting from 0 to 1.
 .opacity(@opacity) {
-	@ie-opacity: @opacity * 100;
-	-khtml-opacity: @opacity;
-	-moz-opacity: @opacity;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{ie-opacity})";
 	opacity: @opacity;
 }

@@ -7,18 +7,10 @@
 // @param: {Number} blur: Bluring radius (Default: 1px)
 // @param: {String} color: Color of the shadow (Default: #000)
 .box-shadow(@shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2)) {
-	-webkit-box-shadow: @shadow;
-	-moz-box-shadow: @shadow;
-	-ms-box-shadow: @shadow;
-	-o-box-shadow: @shadow;
 	box-shadow: @shadow;
 }
 
 .reset-box-shadow() {
     @shadow: 0 0 0 transparent;
-    -webkit-box-shadow: @shadow;
-    -moz-box-shadow: @shadow;
-    -ms-box-shadow: @shadow;
-    -o-box-shadow: @shadow;
     box-shadow: @shadow;
 }
