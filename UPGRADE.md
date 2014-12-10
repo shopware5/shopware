@@ -287,6 +287,7 @@ In this document you will find a changelog of the important changes related to t
 * `sVoteAverange` and `averange` properties of article and blog data structures have been renamed to fix the typo in their names. 
     * Old versions are kept for compatibility reasons, but are deprecated and will be removed
     * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
+* Removed configuration variable `deactivateNoInstock`
 
 ## 4.3.1
 
@@ -488,4 +489,5 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
+
 
