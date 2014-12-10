@@ -14,7 +14,7 @@
  *  The parameter is ```type```. The available options: single (default) or aggregated.
  *
  *  ```
- *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange type="aggregated"}
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage.average type="aggregated"}
  *  ```
  *
  *  After choosing the option for the points, the ```base``` is needed to display the right ratings.

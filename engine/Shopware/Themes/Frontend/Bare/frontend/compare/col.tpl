@@ -35,7 +35,7 @@
                 {/block}
                 {block name='frontend_compare_votings'}
                     <li class="list--entry entry--voting">
-                        {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverange.averange base=10 label=false}
+                        {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage.average label=false}
                     </li>
                 {/block}
                 {block name='frontend_compare_description'}

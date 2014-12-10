@@ -18,7 +18,7 @@
                             <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}">
                                 {s name='DetailTabsRating'}{/s}
                                 {block name="frontend_detail_tabs_navigation_rating_count"}
-                                    <span class="product--rating-count">{$sArticle.sVoteAverange.count}</span>
+                                    <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
                                 {/block}
                             </a>
                         {/block}
@@ -79,7 +79,7 @@
                                                 {block name="frontend_detail_tabs_rating_title_inner"}
                                                     <a href="#" class="tab--title" title="{s name='DetailTabsRating'}{/s}">{s name='DetailTabsRating'}{/s}</a>
                                                     {block name="frontend_detail_tabs_rating_title_count"}
-                                                        <span class="product--rating-count">{$sArticle.sVoteAverange.count}</span>
+                                                        <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
                                                     {/block}
                                                 {/block}
                                             </div>
