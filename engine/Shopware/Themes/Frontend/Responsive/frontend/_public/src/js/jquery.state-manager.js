@@ -873,22 +873,22 @@
                 $el,
                 toSelectors = plugins[toState] || {},
                 toKeys = Object.keys(toSelectors),
-                lenX, lenY,
-                x, y;
+                lenKeys, lenConfig, lenEl,
+                x, y, z;
 
-            for (x = 0, lenX = fromKeys.length; x < lenX; x++) {
+            for (x = 0, lenKeys = fromKeys.length; x < lenKeys; x++) {
                 selector = fromKeys[x];
                 oldPluginConfigs = fromSelectors[selector];
                 $el = $(selector);
 
-                if (!oldPluginConfigs || !$el.length) {
+                if (!oldPluginConfigs || !(lenEl = $el.length)) {
                     continue;
                 }
 
                 newPluginConfigs = toSelectors[selector];
                 configKeys = Object.keys(oldPluginConfigs);
 
-                for (y = 0, lenY = configKeys.length; y < lenY; y++) {
+                for (y = 0, lenConfig = configKeys.length; y < lenConfig; y++) {
                     pluginName = configKeys[y];
 
                     // When no new state config is available, destroy the old plugin
@@ -897,14 +897,15 @@
                         continue;
                     }
 
-                    // If the plugin of the old state is not on the element, continue
-                    if (!(plugin = $el.data('plugin_' + pluginName))) {
-                        continue;
-                    }
-
                     if (JSON.stringify(newPluginConfigs[pluginName]) === JSON.stringify(oldPluginConfigs[pluginName])) {
-                        if (typeof plugin.update === 'function') {
-                            plugin.update.call(plugin, me._currentState, me._previousState);
+                        for (z = 0; z < lenEl; z++) {
+                            if (!(plugin = $($el[z]).data('plugin_' + pluginName))) {
+                                continue;
+                            }
+
+                            if (typeof plugin.update === 'function') {
+                                plugin.update.call(plugin, fromState, toState);
+                            }
                         }
                         continue;
                     }
@@ -913,7 +914,7 @@
                 }
             }
 
-            for (x = 0, lenX = toKeys.length; x < lenX; x++) {
+            for (x = 0, lenKeys = toKeys.length; x < lenKeys; x++) {
                 selector = toKeys[x];
                 newPluginConfigs = toSelectors[selector];
                 $el = $(selector);
@@ -924,7 +925,7 @@
 
                 configKeys = Object.keys(newPluginConfigs);
 
-                for (y = 0, lenY = configKeys.length; y < lenY; y++) {
+                for (y = 0, lenConfig = configKeys.length; y < lenConfig; y++) {
                     pluginName = configKeys[y];
 
                     if (!$el.data('plugin_' + pluginName)) {
