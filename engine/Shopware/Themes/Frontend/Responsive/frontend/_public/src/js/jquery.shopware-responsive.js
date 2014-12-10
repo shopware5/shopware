@@ -93,7 +93,8 @@ $(function () {
         }, ['xs'])
         .addPlugin('.tab-menu--cross-selling .tab--header', 'collapsePanel', {
             'contentSiblingSelector': '.tab--content'
-        }, ['xs', 's']);
+        }, ['xs', 's'])
+        .addPlugin('body', 'ajaxProductNavigation', [ 'xl' ]);
 
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
@@ -107,7 +108,6 @@ $(function () {
     $('*[data-listing-actions="true"]').listingActions();
     $('*[data-scroll="true"]').scroll();
 
-    $('body').ajaxProductNavigation();
     $('*[data-emotion="true"]').emotion();
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
 
