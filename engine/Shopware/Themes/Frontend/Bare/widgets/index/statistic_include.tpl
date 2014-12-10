@@ -8,6 +8,8 @@
         ref = document.referrer.indexOf(cur) === -1 ? document.referrer : null,
         url = "{url module=widgets controller=index action=refreshStatistic forceSecure}",
         pth = document.location.pathname.replace("{url controller=index fullPath=false}", "/");
+    url = url.replace('https:', '');
+    url = url.replace('http:', '');
     url += url.indexOf('?') === -1 ? '?' : '&';
     url += 'requestPage=' + encodeURI(pth);
     url += '&requestController=' + encodeURI("{$Controller|escape}");
@@ -15,12 +17,8 @@
     if(pid) { url += '&partner=' + pid; }
     if(ref) { url += '&referer=' + encodeURI(ref); }
     {if $sArticle.articleID}
-    url += '&articleId=' + encodeURI("{$sArticle.articleID}");
+        url += '&articleId=' + encodeURI("{$sArticle.articleID}");
     {/if}
-    url = url.replace('https:', '');
-    url = url.replace('http:', '');
-    //url += '&x-shopware-nocache=' + (new Date()).getTime();
-
     $.ajax({ url: url, dataType: 'jsonp'});
 })(jQuery);
 </script>

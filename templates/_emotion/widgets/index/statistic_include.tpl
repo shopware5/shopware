@@ -1,4 +1,3 @@
-
 <script>
 jQuery(document).ready(function($) {
     var cok = document.cookie.match(/session-{$Shop->getId()}=([^;])+/g),
@@ -17,10 +16,9 @@ jQuery(document).ready(function($) {
     if(sid) { url += '&' + sid; }
     if(pid) { url += '&partner=' + pid; }
     if(ref) { url += '&referer=' + encodeURI(ref); }
-{if $sArticle.articleID}
-    url += '&articleId=' + encodeURI("{$sArticle.articleID}");
-{/if}
-    //url += '&x-shopware-nocache=' + (new Date()).getTime();
+    {if $sArticle.articleID}
+        url += '&articleId=' + encodeURI("{$sArticle.articleID}");
+    {/if}
     $.ajax({ url: url, dataType: 'jsonp'});
 });
 </script>
