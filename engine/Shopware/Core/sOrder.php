@@ -675,12 +675,6 @@ class sOrder
                 );
             }
 
-            $this->refreshLastStockArticle(
-                $basketRow['ordernumber'],
-                $basketRow['articleID'],
-                $basketRow["laststock"]
-            );
-
             // For esd-articles, assign serial number if needed
             // Check if this article is esd-only (check in variants, too -> later)
             if ($basketRow["esdarticle"]) {
@@ -905,57 +899,6 @@ class sOrder
     }
 
     /**
-     * Helper function which checks if the passed article is out of stock and
-     * deactivates it if the config flag sDeactivateNoInStock
-     * and the passed "lastStock" parameter are both true.
-     *
-     * @param $orderNumber
-     * @param $articleId
-     * @param $lastStock
-     */
-    private function refreshLastStockArticle($orderNumber, $articleId, $lastStock)
-    {
-        $lastStockConfig = $this->config->get('sDEACTIVATENOINSTOCK');
-
-        //check if the last stock flag is set and the shop config allows to deactivate last stock articles.
-        if (empty($lastStockConfig) || empty($lastStock) || empty($articleId)) {
-            return;
-        }
-
-        //check if no more stock left
-        if ($this->isArticleOutOfStock($articleId)) {
-            $this->deactivateArticle($articleId);
-            $this->deactivateVariant($orderNumber);
-        }
-    }
-
-    /**
-     * Helper function which deactivates the variant for the passed
-     * order number
-     *
-     * @param $orderNumber
-     */
-    private function deactivateVariant($orderNumber)
-    {
-        $this->db->executeUpdate(
-            "UPDATE s_articles_details SET active = 0 WHERE ordernumber = ?",
-            array($orderNumber)
-        );
-    }
-
-    /**
-     * Deactivates the article of the passed article id.
-     * @param $articleId
-     */
-    private function deactivateArticle($articleId)
-    {
-        $this->db->executeUpdate(
-            'UPDATE s_articles SET active = 0 WHERE id = ?',
-            array($articleId)
-        );
-    }
-
-    /**
      * Helper function which checks if no more variant of the passed article id
      * has stock.
      *
@@ -971,6 +914,7 @@ class sOrder
             array($articleId)
         );
         $stock = (int)$stock;
+
         return ($stock <= 0);
     }
 
