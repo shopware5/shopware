@@ -284,6 +284,9 @@ In this document you will find a changelog of the important changes related to t
     * `showbundlemainarticle`
 * New commands: `sw:cron:list` and `sw:cron:run`
 * Running cronjobs using `php shopware.php backend/cron` is not recommended and should be seen as deprecated
+* `sVoteAverange` and `averange` properties of article and blog data structures have been renamed to fix the typo in their names. 
+    * Old versions are kept for compatibility reasons, but are deprecated and will be removed
+    * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
 
 ## 4.3.1
 
