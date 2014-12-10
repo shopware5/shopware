@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_elements` (
   `allow_blank` int(1) NOT NULL DEFAULT '1',
   `container_id` int(11) NOT NULL,
   `attributes` text COLLATE utf8_unicode_ci,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `template_id_name` (`template_id`, `name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 EOD;
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_values` (
   `shop_id` int(11) NOT NULL,
   `value` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `element_id` (`element_id`,`shop_id`)
+  UNIQUE KEY `element_id_shop_id` (`element_id`,`shop_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 EOD;
