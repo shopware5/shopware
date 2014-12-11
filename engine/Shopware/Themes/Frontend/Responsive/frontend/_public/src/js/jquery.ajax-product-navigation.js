@@ -266,7 +266,7 @@
         registerDetailEventListeners: function () {
             var me = this;
 
-            me._on(window, 'resize', $.proxy(me.checkPossibleSliding, me));
+            StateManager.on('resize', $.proxy(me.checkPossibleSliding, me));
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
         },
@@ -299,8 +299,14 @@
                 slideOffset = opts.arrowSlideOffset,
                 $prevBtn = me.$prevButton,
                 $nextBtn = me.$nextButton,
-                remainingSpacePrev = $prevBtn.offset().left + offset,
-                remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + opts.arrowOffset;
+                remainingSpacePrev, remainingSpaceNext;
+
+            if (!$nextBtn.length || !$prevBtn.length) {
+                return false;
+            }
+
+            remainingSpacePrev = $prevBtn.offset().left + offset,
+            remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + opts.arrowOffset;
 
             $prevBtn.toggleClass(opts.arrowSlideClass, remainingSpacePrev >= slideOffset);
             $nextBtn.toggleClass(opts.arrowSlideClass, remainingSpaceNext >= slideOffset);
