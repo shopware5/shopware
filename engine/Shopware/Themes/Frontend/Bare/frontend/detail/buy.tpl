@@ -50,13 +50,12 @@
 
 		{if (!isset($sArticle.active) || $sArticle.active)}
 			{block name='frontend_detail_buy_laststock'}
-				{if $sArticle.laststock && $sArticle.instock <= 0}
+				{if !$sArticle.isAvailable}
 					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable'}{/s}"}
 				{/if}
 			{/block}
 
-			{if !$sArticle.laststock || $sArticle.instock>0}
-
+			{if $sArticle.isAvailable}
 				{block name="frontend_detail_buy_button_container"}
 				<div class="buybox--button-container block-group{if $NotifyHideBasket && $sArticle.notification && $sArticle.instock <= 0} is--hidden{/if}">
 

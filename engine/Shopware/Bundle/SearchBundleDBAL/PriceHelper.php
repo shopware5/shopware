@@ -44,11 +44,18 @@ class PriceHelper
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var \Shopware_Components_Config
      */
-    public function __construct(Connection $connection)
+    private $config;
+
+    /**
+     * @param Connection $connection
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(Connection $connection, \Shopware_Components_Config $config)
     {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     /**
@@ -152,13 +159,18 @@ class PriceHelper
              AND defaultPrice.from = 1'
         );
 
+        if ($this->config->get('hideNoInstock')) {
+            $inStockCondition = 'AND (product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)';
+        } else {
+            $inStockCondition = '';
+        }
+
         $query->innerJoin(
             'defaultPrice',
             's_articles_details',
             'priceVariant',
             'priceVariant.id = defaultPrice.articledetailsID
-             AND priceVariant.active = 1
-             AND (product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)'
+             AND priceVariant.active = 1 '.$inStockCondition
         );
 
         $query->setParameter(

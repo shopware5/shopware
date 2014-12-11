@@ -196,45 +196,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($updated['instock'], $detail['instock'] - 10);
     }
 
-    public function testRefreshLastStockArticle()
-    {
-        $data = $this->getSimpleArticleData();
-        $data['mainDetail']['inStock'] = 0;
-
-        $config = $this->invokeMethod(
-            $this->module,
-            'getConfig'
-        );
-
-        $config->offsetSet('deactivatenoinstock', true);
-
-        $this->invokeMethod(
-            $this->module,
-            'setConfig',
-            array(
-                $config
-            )
-        );
-
-        $article = $this->getArticleResource()->create($data);
-
-        $this->invokeMethod(
-            $this->module,
-            'refreshLastStockArticle',
-            array(
-                $article->getMainDetail()->getNumber(),
-                $article->getId(),
-                true
-            )
-        );
-
-        /**@var $article \Shopware\Models\Article\Article */
-        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $article->getId());
-
-        $this->assertFalse((bool)$article->getActive());
-        $this->assertFalse((bool)$article->getMainDetail()->getActive());
-    }
-
     public function testGetOrderDetailsForMail()
     {
         $rows = array(
