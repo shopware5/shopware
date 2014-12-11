@@ -13,7 +13,7 @@
                 {* Pagination - Previous page *}
                 {block name='frontend_listing_actions_paging_previous'}
                     {if $sPage > 1}
-                        <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev">
+                        <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="paging--link paging--prev">
                             <i class="icon--arrow-left"></i>
                         </a>
                     {/if}
@@ -21,13 +21,13 @@
 
                 {* Pagination - current page *}
                 {block name='frontend_listing_actions_paging_numbers'}
-                    <a title="{$sCategoryInfo.name|escape}" class="pagination--link is--active">{$sPage}</a>
+                    <a title="{$sCategoryInfo.name|escape}" class="paging--link is--active">{$sPage}</a>
                 {/block}
 
                 {* Pagination - Next page *}
                 {block name='frontend_listing_actions_paging_next'}
                     {if $sPage < $sNumberPages}
-                        <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next">
+                        <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="paging--link paging--next">
                             <i class="icon--arrow-right"></i>
                         </a>
                     {/if}
@@ -35,7 +35,7 @@
 
                 {* Pagination - Number of pages *}
                 {block name='frontend_listing_actions_count'}
-                    <span class="pagination--display">
+                    <span class="paging--display">
                         {s name="ListingTextFrom"}von{/s} <strong>{$sNumberPages}</strong>
                     </span>
                 {/block}
