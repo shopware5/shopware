@@ -106,6 +106,19 @@
     .table--aggregation {
         display: none
     }
+
+    .js--loading {
+        .unitize-width(24);
+        .unitize-height(24);
+        .border-radius(100%);
+        .unitize-margin(0, 10, 0, 0);
+        .animation(keyframe--spin 1s linear infinite);
+        float: right;
+        border: 2px solid @border-color;
+        border-top: 2px solid darken(@border-color, 50%);
+        display: block;
+        content: "";
+    }
 }
 
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
