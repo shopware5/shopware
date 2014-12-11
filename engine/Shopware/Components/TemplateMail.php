@@ -153,8 +153,6 @@ class Shopware_Components_TemplateMail
             }
         }
 
-        $mailModel = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailModel', $mailModel, array('shop' => $shop));
-
         //todo@all Add setter and getter like the shop
         $config = Shopware()->Config();
 
@@ -174,8 +172,6 @@ class Shopware_Components_TemplateMail
             );
         }
 
-        $mailModel = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailModel', $mailModel, array('shop' => $this->getShop()));
-
         // save current context to mail model
         $mailContext = json_encode($context);
         $mailContext = json_decode($mailContext, true);
@@ -186,7 +182,15 @@ class Shopware_Components_TemplateMail
 
         $mail = clone Shopware()->Mail();
 
-        return $this->loadValues($mail, $mailModel, $overrideConfig);
+        $return = Enlight()->Events()->filter(
+            'Shopware_Components_TemplateMail_modifyEnlightComponentsMail',
+            $this->loadValues($mail, $mailModel, $overrideConfig),
+            array(
+                'shop' => $this->getShop()
+            )
+        );
+
+        return $return;
     }
 
     /**
@@ -246,6 +250,9 @@ class Shopware_Components_TemplateMail
             $fileAttachment = $mail->createAttachment($fileHandle);
             $fileAttachment->filename = $attachment->getFileName();
         }
+
+        $mail = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailInstance', $mail, array('shop' => $this->getShop()));
+        die('infunction');
 
         return $mail;
     }
