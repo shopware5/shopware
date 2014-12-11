@@ -97,6 +97,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.infinite-scrolling.js',
         'src/js/jquery.off-canvas-button.js',
         'src/js/jquery.subcategory-nav.js',
+        'src/js/jquery.preloader-button.js',
         'src/js/jquery.image-gallery.js',
         'src/js/jquery.shopware-responsive.js'
     );
