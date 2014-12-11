@@ -181,7 +181,6 @@ class Shopware_Components_TemplateMail
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
         $mail = clone Shopware()->Mail();
-
         $return = Enlight()->Events()->filter(
             'Shopware_Components_TemplateMail_modifyEnlightComponentsMail',
             $this->loadValues($mail, $mailModel, $overrideConfig),
@@ -250,9 +249,6 @@ class Shopware_Components_TemplateMail
             $fileAttachment = $mail->createAttachment($fileHandle);
             $fileAttachment->filename = $attachment->getFileName();
         }
-
-        $mail = Enlight()->Events()->filter('Shopware_Components_TemplateMail_modifyMailInstance', $mail, array('shop' => $this->getShop()));
-        die('infunction');
 
         return $mail;
     }
