@@ -499,7 +499,19 @@ class ListProduct extends Extendable implements \JsonSerializable
      */
     public function getCheapestPrice()
     {
+        if ($this->cheapestPrice == null) {
+            $this->cheapestPrice = $this->getVariantPrice();
+        }
+
         return $this->cheapestPrice;
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
+     */
+    public function getVariantPrice()
+    {
+        return $this->prices[0];
     }
 
     /**
@@ -740,6 +752,18 @@ class ListProduct extends Extendable implements \JsonSerializable
     public function getStock()
     {
         return $this->stock;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        if (!$this->isCloseouts()) {
+            return true;
+        }
+
+        return $this->getStock() >= $this->getUnit()->getMinPurchase();
     }
 
     /**

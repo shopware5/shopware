@@ -18,6 +18,7 @@
 
         <service id="search_price_helper_dbal" class="Shopware\Bundle\SearchBundleDBAL\PriceHelper">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="config" />
         </service>
 
         <!-- Search handlers -->

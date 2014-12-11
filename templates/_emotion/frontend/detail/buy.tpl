@@ -81,7 +81,7 @@
 					</div>
 				{/if}
 			{/block}
-			{if !$sArticle.laststock || $sArticle.sVariants || $sArticle.instock>0}
+			{if !$sArticle.laststock || $sArticle.sVariants || $sArticle.instock > 0}
 				<div id="detailCartButton"
 					 {if $NotifyHideBasket && $sArticle.notification && $sArticle.instock <= 0}style="display: none;"{/if}>
 					{block name='frontend_detail_buy_quantity'}
