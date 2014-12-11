@@ -1,7 +1,7 @@
 {* Per page filter which will be included in the "listing/listing_actions.tpl" *}
 {namespace name="frontend/listing/listing_actions"}
 
-{if $criteria->getLimit() && $pageSizes}
+{if $criteria && $criteria->getLimit() && $pageSizes}
     <form class="action--per-page action--content block" method="get" data-action-form="true" action="">
 
         {* Necessary to reset the page to the first one *}

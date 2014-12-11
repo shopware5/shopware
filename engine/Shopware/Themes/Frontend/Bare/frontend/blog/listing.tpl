@@ -25,7 +25,9 @@
 
 		{* Paging *}
 		{block name="frontend_listing_bottom_paging"}
-			{include file='frontend/blog/listing_actions.tpl'}
+            {if $sNumberPages > 1}
+			    {include file='frontend/blog/listing_actions.tpl'}
+            {/if}
 		{/block}
 	{/if}
 </div>
