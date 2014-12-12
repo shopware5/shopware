@@ -19,6 +19,7 @@
 
             {block name="frontend_listing_listing_content"}
                 <div class="listing"
+                    data-ajax-wishlist="true"
                     {if $theme.infiniteScrolling}
                     data-infinite-scrolling="true"
                     data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}Vorherige Artikel laden{/s}"
