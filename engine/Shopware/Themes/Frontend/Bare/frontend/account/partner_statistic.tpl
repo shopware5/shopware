@@ -33,8 +33,7 @@
     $('*[data-datepicker="true"]').datepicker(jQuery.datePickerRegional);
 {/block}
 
-{block name="frontend_index_header_javascript" append}
-
+{block name="frontend_index_header_javascript_jquery_lib" append}
     <script type="text/javascript" src="{link file='frontend/_public/src/js/jquery.ui.datepicker.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
@@ -50,7 +49,7 @@
 {block name='frontend_index_content'}
 
 {* Partner Provision overview *}
-<div class="content account--content">
+<div class="content account--content partner-statistic">
     {* Welcome text *}
     {block name="frontend_account_orders_welcome"}
         <div class="account--welcome panel has--border">
