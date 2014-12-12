@@ -108,6 +108,7 @@ $(function () {
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
     $('*[data-scroll="true"]').scroll();
+    $('*[data-ajax-wishlist="true"]').ajaxWishlist();
 
     $('*[data-emotion="true"]').emotion();
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();

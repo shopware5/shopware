@@ -265,6 +265,18 @@
 
     .action--compare { display: none }
 
+    .link--notepad {
+        .transition();
+
+        &:focus {
+            outline: none;
+        }
+
+        &.js--is-animating {
+            color: @highlight-success;
+        }
+    }
+
     .price--unit {
         .unitize(12, 16, font-size);
     }

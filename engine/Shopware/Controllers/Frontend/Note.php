@@ -56,6 +56,8 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
     public function addAction()
     {
+        $this->View()->sAddedToNoteSuccessful = false;
+
         $ordernumber = $this->Request()->ordernumber;
         if (!empty($ordernumber)) {
             $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
@@ -63,8 +65,14 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
             $this->View()->sArticleName = $articleName;
             if (!empty($articleID)) {
                 Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $ordernumber);
+                $this->View()->sAddedToNoteSuccessful = true;
+                $this->View()->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
             }
         }
-        $this->forward('index');
+        if ($this->Request()->isXmlHttpRequest()) {
+            $this->View()->loadTemplate('frontend/note/ajax.tpl');
+        } else {
+            $this->forward('index');
+        }
     }
 }
