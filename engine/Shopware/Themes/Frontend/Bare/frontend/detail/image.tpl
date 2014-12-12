@@ -7,11 +7,12 @@
 
 	{* Product image - Gallery *}
 	{block name="frontend_detail_image_box"}
+        {strip}
 		<div class="image-slider--container">
 			<div class="image-slider--slide">
 
 				<div class="image--box image-slider--item">
-					<span data-picture
+					<span data-picture="true"
 						  data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
 						  data-img-large="{$sArticle.image.src.5}"
 						  data-img-small="{$sArticle.image.src.2}"
@@ -38,7 +39,7 @@
 
 				{foreach $sArticle.images as $image}
 					<div class="image--box image-slider--item">
-						<span data-picture
+						<span data-picture="true"
 							  data-alt="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
 							  data-img-large="{$image.src.5}"
 							  data-img-small="{$image.src.2}"
@@ -65,6 +66,7 @@
 				{/foreach}
 			</div>
 		</div>
+        {/strip}
 	{/block}
 
 	{* Product image - Dot navigation *}

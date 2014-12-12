@@ -211,8 +211,8 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 
         if (data.xtype == "theme-select-field") {
             data.store = me.createSelectStore(data.selection);
-            data.valueField = 'name';
-            data.displayField = 'name';
+            data.valueField = 'value';
+            data.displayField = 'text';
         }
 
         if (element['getConfigValuesStore'] instanceof Ext.data.Store) {
@@ -240,16 +240,10 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
      * @returns { Ext.data.Store }
      */
     createSelectStore: function(values) {
-        var data = [], value;
-
-        for (var i = 0; i <= values.length - 1; i++) {
-            value = values[i];
-            data.push({ name: value });
-        }
-
         return Ext.create('Ext.data.Store', {
-            fields: [ 'name'],
-            data: data
+            fields: ['text', 'value'],
+            data: values,
+            queryMode: 'local'
         });
     },
 

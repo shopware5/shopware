@@ -441,7 +441,7 @@ class Theme
      * @param $name
      * @param $label
      * @param $defaultValue
-     * @param array $store
+     * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      * @param array $options
      * @return Form\Field\Selection
      */

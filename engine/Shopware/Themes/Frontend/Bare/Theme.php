@@ -50,6 +50,13 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
         $fieldSet->addElement($this->createCheckboxField('infiniteScrolling', '__enable_infinite_scrolling__', true, $this->getLabelAttribute('enable_infinite_scrolling_description')));
         $fieldSet->addElement($this->createNumberField('infiniteThreshold', '__infinite_threshold__', 4, $this->getLabelAttribute('infinite_threshold_description')));
+        $fieldSet->addElement($this->createSelectField('lightboxZoomFactor', '__lightbox_zoom_factor__', 0, array(
+            array('value' => 0, 'text' => 'auto'),
+            array('value' => 1, 'text' => 'no zoom'),
+            array('value' => 2, 'text' => 'x2'),
+            array('value' => 3, 'text' => 'x3'),
+            array('value' => 5, 'text' => 'x5')
+        ), $this->getLabelAttribute('lightbox_zoom_factor_description')));
         $tab->addElement($fieldSet);
 
         $fieldSet = $this->createFieldSet('bareLogos', '__logos__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
