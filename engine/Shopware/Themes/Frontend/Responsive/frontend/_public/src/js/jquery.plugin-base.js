@@ -276,9 +276,19 @@
             $.each(me.opts, function (key) {
                 attr = me.$el.attr('data-' + key);
 
-                if (typeof attr !== 'undefined') {
-                    me.opts[key] = attr;
+                if (typeof attr === 'undefined') {
+                    return true;
                 }
+
+                if (attr === 'true') {
+                    return (me.opts[key] = true);
+                }
+
+                if (attr === 'false') {
+                    return !(me.opts[key] = false);
+                }
+
+                me.opts[key] = attr;
             });
 
             $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);

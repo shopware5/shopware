@@ -125,6 +125,10 @@
              * Will use the height of its content instead of a given height.
              * The 'height' option will be ignored when set.
              *
+             * 'full':
+             *
+             * Will set the modalbox to fullscreen.
+             *
              * @type {String}
              */
             sizing: 'auto',
@@ -206,7 +210,9 @@
              *
              * @type {Function}
              */
-            onClose: emptyFn
+            onClose: emptyFn,
+
+            additionalClass: ''
         },
 
         /**
@@ -257,6 +263,8 @@
             $modalBox.toggleClass('sizing--content', opts.sizing === 'content');
             $modalBox.toggleClass('no--header', opts.title.length === 0);
 
+            $modalBox.addClass(opts.additionalClass);
+
             if (opts.sizing === 'content') {
                 opts.height = 'auto';
             } else {
@@ -270,7 +278,6 @@
             // set display to block instead of .show() for browser compatibility
             $modalBox.css('display', 'block');
 
-            console.log(opts.mode);
             switch (opts.mode) {
                 case 'ajax':
                     $.ajax(content, {
@@ -293,6 +300,8 @@
                 opacity: 1
             }, me.options.animationSpeed, 'linear');
 
+            $('html, body').addClass('no--scroll');
+
             $.publish('plugin/modal/onOpen');
 
             return me;
@@ -307,22 +316,27 @@
          */
         close: function () {
             var me = this,
-                opts = me.options;
+                opts = me.options,
+                $modalBox = me._$modalBox;
 
             if (opts.overlay) {
                 $.overlay.close();
             }
 
-            if (me._$modalBox !== null) {
+            $('html, body').removeClass('no--scroll');
+
+            if ($modalBox !== null) {
                 me.setTransition({
                     opacity: 0
                 }, opts.animationSpeed, 'linear', function () {
-                    me._$content.empty();
+                    $modalBox.removeClass(opts.additionalClass);
 
                     // set display to none instead of .hide() for browser compatibility
-                    me._$modalBox.css('display', 'none');
+                    $modalBox.css('display', 'none');
 
                     opts.onClose.call(me);
+
+                    me._$content.empty();
                 });
             }
 
@@ -470,7 +484,7 @@
             var me = this,
                 $window = $(window);
 
-            me._$closeButton.on('click.modal', $.proxy(me.close, me));
+            me._$closeButton.on('click.modal touchstart.modal', $.proxy(me.close, me));
 
             $window.on('keydown.modal', $.proxy(me.onKeyDown, me));
             $window.on('resize.modal', $.proxy(me.onWindowResize, me));

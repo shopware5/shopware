@@ -44,7 +44,7 @@
 
             me.active = false;
 
-            me.$container = me.$el.find('.image-slider--container');
+            me.$container = me.$el.find('.image-slider--slide');
             me.imageBox = me.$el.find('.image--box');
             me.$imageElements = me.$el.find('.image--element');
             me.$thumbnails = me.$el.find('.thumbnail--link');
@@ -386,7 +386,6 @@
          * @param event
          */
         onLensClick: function(event) {
-            event.stopPropagation();
             $.publish('plugin/imageZoom/onLensClick');
         },
 
