@@ -1,0 +1,109 @@
+.image--gallery {
+    .image-slider--container {
+        .unitize(90, 16, bottom);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: auto;
+        margin: 0;
+    }
+
+    &.no--thumbnails .image-slider--container {
+        bottom: 0;
+    }
+
+    .image-slider--item {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        text-align: center;
+        cursor: default;
+
+        .image--element {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image--media, img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+
+    .image-slider--thumbnails {
+        .unitize-padding(10, 10, 10, 0);
+        .unitize(90, 16, height);
+        background: #fff;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        position: absolute;
+        display: block;
+
+        .thumbnails--arrow {
+            .unitize(10, 16, top);
+
+            &.is--left {
+                border-left: 0 none;
+            }
+
+            &.is--right {
+                border-right: 0 none;
+            }
+        }
+    }
+
+    .image-slider--thumbnails-slide {
+        .unitize-margin(0, 0, 0, 10);
+        left: auto;
+        top: auto;
+    }
+
+    .thumbnail--link {
+        .unitize-margin(0, 10, 0, 0);
+        display: inline-block;
+    }
+
+    .button--zoom-in,
+    .button--zoom-out,
+    .button--zoom-reset {
+        .unitize(10, 16, top);
+        .unitize(10, 16, left);
+        .unitize(20, 16, font-size);
+        .unitize-padding(2, 6);
+        position: absolute;
+
+        &:hover {
+            z-index: 1;
+        }
+    }
+
+    .button--zoom-out {
+        .border-radius-multi(3px, 0, 0, 3px);
+    }
+
+    .button--zoom-reset {
+        .unitize(43, 16, left);
+        border-radius: 0;
+    }
+
+    .button--zoom-in {
+        .border-radius-multi(0, 3px, 3px, 0);
+        .unitize(76, 16, left);
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+    .js--image-gallery {
+        width: 80%;
+        height: 80%;
+    }
+}
