@@ -16,7 +16,9 @@
 
             nextKeyCode: 39,
 
-            maxZoom: 'auto'
+            maxZoom: 'auto',
+
+            disabledCls: 'is--disabled'
         },
 
         init: function () {
@@ -89,7 +91,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomResetBtn.hasClass('is--disabled')) {
+            if (!plugin || me.$zoomResetBtn.hasClass(me.opts.disabledCls)) {
                 return;
             }
 
@@ -106,7 +108,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomInBtn.hasClass('is--disabled')) {
+            if (!plugin || me.$zoomInBtn.hasClass(me.opts.disabledCls)) {
                 return;
             }
 
@@ -123,7 +125,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomOutBtn.hasClass('is--disabled')) {
+            if (!plugin || me.$zoomOutBtn.hasClass(me.opts.disabledCls)) {
                 return;
             }
 
@@ -153,21 +155,19 @@
         },
 
         disableButtons: function () {
-            var me = this,
-                disabledCls = 'is--disabled';
+            var me = this;
 
-            me.$zoomResetBtn.addClass(disabledCls);
-            me.$zoomOutBtn.addClass(disabledCls);
-            me.$zoomInBtn.addClass(disabledCls);
+            me.$zoomResetBtn.addClass(me.opts.disabledCls);
+            me.$zoomOutBtn.addClass(me.opts.disabledCls);
+            me.$zoomInBtn.addClass(me.opts.disabledCls);
         },
 
         enableButtons: function () {
-            var me = this,
-                disabledCls = 'is--disabled';
+            var me = this;
 
-            me.$zoomResetBtn.removeClass(disabledCls);
-            me.$zoomOutBtn.removeClass(disabledCls);
-            me.$zoomInBtn.removeClass(disabledCls);
+            me.$zoomResetBtn.removeClass(me.opts.disabledCls);
+            me.$zoomOutBtn.removeClass(me.opts.disabledCls);
+            me.$zoomInBtn.removeClass(me.opts.disabledCls);
         },
 
         onClick: function () {
