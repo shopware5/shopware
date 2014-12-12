@@ -42,7 +42,7 @@ class Selection extends Field
     /**
      * Requires to set a name for the field
      * @param $name
-     * @param $store
+     * @param  array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      */
     function __construct($name, $store)
     {

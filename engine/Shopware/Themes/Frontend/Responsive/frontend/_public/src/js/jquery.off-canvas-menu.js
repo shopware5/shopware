@@ -285,6 +285,8 @@
         me.$pageWrap.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
         me.$body.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
 
+        $('html, body').addClass('no--scroll');
+
         me.$pageWrap.on('scroll.' + pluginName, function(e) {
             e.preventDefault();
         });
@@ -312,6 +314,8 @@
         me.$offCanvas.removeClass(opts.activeMenuCls).removeAttr('style');
         me.$pageWrap.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
         me.$body.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
+
+        $('html, body').removeClass('no--scroll');
 
         me.$pageWrap.off('scroll.' + pluginName);
         $.publish('plugin/offCanvasMenu/closeMenu');

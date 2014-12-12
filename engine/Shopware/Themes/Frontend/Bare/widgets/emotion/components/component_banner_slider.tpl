@@ -2,8 +2,6 @@
     <div class="image-slider"
          data-image-slider="true"
          data-thumbnails="false"
-         data-leftArrowCls="product-slider--arrow is--left"
-         data-rightArrowCls="product-slider--arrow is--right"
          data-lightbox="false"
          data-animationSpeed="{$Data.banner_slider_scrollspeed}"
          data-arrowControls="{if $Data.banner_slider_arrows}true{else}false{/if}"
