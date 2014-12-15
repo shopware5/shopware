@@ -49,7 +49,6 @@ $(function () {
 
         // Image slider
         .addPlugin('*[data-image-slider="true"]', 'imageSlider', { touchControls: true })
-        .addPlugin('*[data-image-slider="true"]', 'imageSlider', { touchControls: false }, 'xl')
 
         // Image zoom
         .addPlugin('.product--image-zoom', 'imageZoom', 'xl')

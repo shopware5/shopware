@@ -206,13 +206,15 @@
                     continue;
                 }
 
-
-                for (j = eventList.length - 1; j > 0; j--) {
+                for (j = eventList.length - 1; j >= 0; j--) {
                     event = eventList[j];
 
-                    if (callback && callback === event.callback || context && context === event.context) {
-                        eventList.splice(j, 1);
+                    // Check if the callback and the context (if passed) is the same
+                    if ((callback && callback !== event.callback) || (context && context !== event.context)) {
+                        continue;
                     }
+
+                    eventList.splice(j, 1);
                 }
             }
 
