@@ -100,8 +100,6 @@
                      data-image-slider="true"
                      data-image-gallery="true"
                      data-maxZoom="{$theme.lightboxZoomFactor}"
-                     data-pinchToZoom="false"
-                     data-doubleTap="false"
                      data-thumbnails=".image--thumbnails">
                     {include file="frontend/detail/image.tpl"}
                 </div>

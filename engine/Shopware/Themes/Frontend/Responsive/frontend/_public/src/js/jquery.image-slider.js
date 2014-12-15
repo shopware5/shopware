@@ -84,7 +84,7 @@
              * @property pinchToZoom
              * @type {Boolean}
              */
-            pinchToZoom: true,
+            pinchToZoom: false,
 
             /**
              * Whether or not the swipe to slide feature should be active.
@@ -100,7 +100,7 @@
              * @property doubleTap
              * @type {Boolean}
              */
-            doubleTap: true,
+            doubleTap: false,
 
             /**
              * The minimal zoom factor an image can have.
@@ -146,6 +146,16 @@
             autoSlideInterval: 5000,
 
             /**
+             * This property indicates whether or not the slides are looped.
+             * If this flag is active and the last slide is active, you can
+             * slide to the next one and it will start from the beginning.
+             *
+             * @property loopSlides
+             * @type {Boolean}
+             */
+            loopSlides: false,
+
+            /**
              * The selector for the container element holding the actual image slider.
              *
              * @property imageContainerSelector
@@ -170,12 +180,22 @@
             thumbnailContainerSelector: '.image-slider--thumbnails',
 
             /**
-             * The selector for the slide element which slides inside the thumbnail container.
+             * The selector for the element that slides inside the thumbnail container.
+             * This element should be contained in the thumbnail container.
              *
              * @property thumbnailSlideSelector
              * @type {String}
              */
             thumbnailSlideSelector: '.image-slider--thumbnails-slide',
+
+            /**
+             * Selector of a single thumbnail.
+             * Those thumbnails should be contained in the thumbnail slide.
+             *
+             * @property thumbnailSlideSelector
+             * @type {String}
+             */
+            thumbnailSelector: '.thumbnail--link',
 
             /**
              * The selector for the dot navigation container.
@@ -192,6 +212,14 @@
              * @type {String}
              */
             dotLinkSelector: '.dot--link',
+
+            /**
+             * Class that will be applied to both the previous and next arrow.
+             *
+             * @property thumbnailArrowCls
+             * @type {String}
+             */
+            thumbnailArrowCls: 'thumbnails--arrow',
 
             /**
              * The css class for the left slider arrow.
@@ -265,26 +293,109 @@
              * @property noThumbClass
              * @type {String}
              */
-            noThumbClass: 'no--thumbnails'
+            noThumbClass: 'no--thumbnails',
+
+            /**
+             * Selector for the image elements in the slider.
+             * Those images should be contained in the image slide element.
+             *
+             * @property imageSelector
+             * @type {String}
+             */
+            imageSelector: '.image--element',
+
+            /**
+             * Selector for a single slide item.
+             * Those elements should be contained in the image slide element.
+             *
+             * @property imageSelector
+             * @type {String}
+             */
+            itemSelector: '.image-slider--item',
+
+            /**
+             * Class that will be appended when an element should not be shown.
+             *
+             * @property hiddenClass
+             * @type {String}
+             */
+            hiddenClass: 'is--hidden'
         },
 
         /**
-         * Initializes the plugin.
+         * Method for the plugin initialisation.
+         * Merges the passed options with the data attribute configurations.
+         * Creates and references all needed elements and properties.
+         * Calls the registerEvents method afterwards.
+         *
+         * @public
+         * @method init
          */
         init: function () {
             var me = this,
                 opts = me.opts;
 
+            // Merge the data attribute configurations with the default ones
             me.applyDataAttributes();
 
+            /**
+             * Container of the slide element.
+             * Acts as a wrapper and container for additional
+             * elements like arrows.
+             *
+             * @private
+             * @property $slideContainer
+             * @type {jQuery}
+             */
             me.$slideContainer = me.$el.find(opts.imageContainerSelector);
+
+            /**
+             * Container of the slide element.
+             * Acts as a wrapper and container for additional
+             * elements like arrows.
+             *
+             * @private
+             * @property $slide
+             * @type {jQuery}
+             */
             me.$slide = me.$slideContainer.find(opts.imageSlideSelector);
 
+            /**
+             * Current index of the active slide.
+             * Will be used for correctly showing the active thumbnails / dot.
+             *
+             * @private
+             * @property slideIndex
+             * @type {Number}
+             */
             me.slideIndex = opts.startIndex;
-            me.slideInterval = false;
+
+            /**
+             * ID of the setTimeout that will be called if the
+             * auto slide option is active.
+             * Wil be used for removing / resetting the timer.
+             *
+             * @private
+             * @property slideInterval
+             * @type {Number}
+             */
+            me.slideInterval = 0;
+
+            /**
+             * References the currently active image.
+             * This element is contained in a jQuery wrapper.
+             *
+             * @private
+             * @property $currentImage
+             * @type {jQuery}
+             */
             me.$currentImage = null;
 
             opts.maxZoom = parseFloat(opts.maxZoom) || 'auto';
+
+            if (opts.arrowControls) {
+                me.createArrows();
+            }
 
             if (opts.thumbnails) {
                 me.$thumbnailContainer = me.$el.find(opts.thumbnailContainerSelector);
@@ -297,6 +408,7 @@
             if (opts.dotNavigation) {
                 me.$dotNav = me.$el.find(opts.dotNavSelector);
                 me.$dots = me.$dotNav.find(opts.dotLinkSelector);
+                me.setActiveDot(me.slideIndex);
             }
 
             me.trackItems();
@@ -308,12 +420,8 @@
 
             me.setIndex(me.slideIndex);
 
-            if (opts.arrowControls) {
-                me.createArrows();
-            }
-
             /**
-             * Whether or not the user is grabbing the image with the mouse
+             * Whether or not the user is grabbing the image with the mouse.
              *
              * @private
              * @property grabImage
@@ -332,6 +440,8 @@
             me.startTouchPoint = new Vector(0, 0);
 
             /**
+             * Translation (positioning) of the current image.
+             *
              * @private
              * @property imageTranslation
              * @type {Vector}
@@ -339,6 +449,8 @@
             me.imageTranslation = new Vector(0, 0);
 
             /**
+             * Scaling (both X and Y equally) of the current image.
+             *
              * @private
              * @property imageScale
              * @type {Number}
@@ -346,6 +458,9 @@
             me.imageScale = 1;
 
             /**
+             * Relative distance when pinching.
+             * Will be used for the pinch to zoom gesture.
+             *
              * @private
              * @property touchDistance
              * @type {Number}
@@ -353,6 +468,9 @@
             me.touchDistance = 0;
 
             /**
+             * Last time the current image was touched.
+             * Used to determine double tapping.
+             *
              * @private
              * @property lastTouchTime
              * @type {Number}
@@ -364,35 +482,42 @@
 
         /**
          * Registers all necessary event listeners.
+         *
+         * @public
+         * @method registerEvents
          */
         registerEvents: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts,
+                $slide = me.$slide;
 
-            if (me.opts.touchControls) {
-                me._on(me.$slide, 'touchstart mousedown MSPointerDown', me.onTouchStart.bind(me));
-                me._on(me.$slide, 'touchmove mousemove MSPointerMove', me.onTouchMove.bind(me));
-                me._on(me.$slide, 'touchend mouseup MSPointerUp', me.onTouchEnd.bind(me));
-                me._on(me.$slide, 'mouseleave', me.onMouseLeave.bind(me));
+            if (opts.touchControls) {
+                me._on($slide, 'touchstart mousedown MSPointerDown', me.onTouchStart.bind(me));
+                me._on($slide, 'touchmove mousemove MSPointerMove', me.onTouchMove.bind(me));
+                me._on($slide, 'touchend mouseup MSPointerUp', me.onTouchEnd.bind(me));
+                me._on($slide, 'mouseleave', me.onMouseLeave.bind(me));
 
-                if (me.opts.pinchToZoom) {
-                    me._on(me.$slide, 'mousewheel', me.onScroll.bind(me));
+                if (opts.pinchToZoom) {
+                    me._on($slide, 'mousewheel', me.onScroll.bind(me));
                 }
 
-                me._on(me.$slide, 'dblclick', me.onDoubleClick.bind(me));
+                if (opts.doubleTap) {
+                    me._on($slide, 'dblclick', me.onDoubleClick.bind(me));
+                }
             }
 
-            if (me.opts.arrowControls) {
+            if (opts.arrowControls) {
                 me._on(me.$arrowLeft, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
                 me._on(me.$arrowRight, 'click touchstart', $.proxy(me.onRightArrowClick, me));
             }
 
-            if (me.opts.thumbnails) {
+            if (opts.thumbnails) {
                 me.$thumbnails.each($.proxy(me.applyClickEventHandler, me));
 
-                me._on(me.$thumbnailArrowNext, 'click', $.proxy(me.slideThumbnailsNext, me));
-                me._on(me.$thumbnailArrowPrev, 'click', $.proxy(me.slideThumbnailsPrev, me));
+                me._on(me.$thumbnailArrowPrev, 'click touchstart', $.proxy(me.onThumbnailPrevArrowClick, me));
+                me._on(me.$thumbnailArrowNext, 'click touchstart', $.proxy(me.onThumbnailNextArrowClick, me));
 
-                if (me.opts.touchControls) {
+                if (opts.touchControls) {
                     me._on(me.$thumbnailSlide, 'touchstart', $.proxy(me.onThumbnailSlideTouch, me));
                     me._on(me.$thumbnailSlide, 'touchmove', $.proxy(me.onThumbnailSlideMove, me));
                 }
@@ -400,11 +525,11 @@
                 StateManager.on('resize', me.onResize, me);
             }
 
-            if (me.opts.dotNavigation && me.$dots) {
+            if (opts.dotNavigation && me.$dots) {
                 me.$dots.each($.proxy(me.applyClickEventHandler, me));
             }
 
-            if (me.opts.autoSlide) {
+            if (opts.autoSlide) {
                 me.startAutoSlide();
 
                 me._on(me.$el, 'mouseenter', $.proxy(me.stopAutoSlide, me));
@@ -413,8 +538,10 @@
         },
 
         /**
-         * Will be called when the user starts touching the image slider
+         * Will be called when the user starts touching the image slider.
+         * Checks if the user is double tapping the image.
          *
+         * @event onTouchStart
          * @param {jQuery.Event} event
          */
         onTouchStart: function (event) {
@@ -423,8 +550,6 @@
                 pointerA = pointers[0],
                 currTime = Date.now(),
                 startPoint = me.startTouchPoint,
-                startX = startPoint.x,
-                startY = startPoint.y,
                 distance,
                 deltaX,
                 deltaY;
@@ -444,8 +569,8 @@
                     return;
                 }
 
-                deltaX = Math.abs(pointerA.clientX - startX);
-                deltaY = Math.abs(pointerA.clientY - startY);
+                deltaX = Math.abs(pointerA.clientX - startPoint.x);
+                deltaY = Math.abs(pointerA.clientY - startPoint.y);
 
                 distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
@@ -461,8 +586,14 @@
 
         /**
          * Will be called when the user is moving the finger while touching
-         * the image slider
+         * the image slider.
          *
+         * When only one finger is touching the screen
+         * and the image was scaled, it will be translated (moved).
+         *
+         * If two fingers are available, the image will be zoomed (pinch to zoom).
+         *
+         * @event onTouchMove
          * @param {jQuery.Event} event
          */
         onTouchMove: function (event) {
@@ -516,8 +647,11 @@
         },
 
         /**
-         * Will be called when the user ends touching the image slider
+         * Will be called when the user ends touching the image slider.
+         * If the swipeToSlide option is active and the swipe tolerance is
+         * exceeded, it will slide to the previous / next image.
          *
+         * @event onTouchEnd
          * @param {jQuery.Event} event
          */
         onTouchEnd: function (event) {
@@ -539,6 +673,10 @@
                 return;
             }
 
+            if (!me.opts.swipeToSlide) {
+                return;
+            }
+
             deltaX = me.startTouchPoint.x - touchA.clientX;
             deltaY = me.startTouchPoint.y - touchA.clientY;
 
@@ -557,8 +695,10 @@
         },
 
         /**
-         * Will be called when the user scrolls the image by the mouse
+         * Will be called when the user scrolls the image by the mouse.
+         * Zooms the image in/out by the factor 0.25.
          *
+         * @event onScroll
          * @param {jQuery.Event} event
          */
         onScroll: function (event) {
@@ -574,9 +714,12 @@
         },
 
         /**
-         * Will be called when the user double clicks
-         * or double taps the image slider
+         * Will be called when the user
+         * double clicks or double taps on the image slider.
+         * When the image was scaled, it will reset its scaling
+         * otherwise it will zoom in by the factor of 1.
          *
+         * @event onDoubleClick
          * @param {jQuery.Event} event
          */
         onDoubleClick: function (event) {
@@ -586,28 +729,97 @@
                 return;
             }
 
+            event.preventDefault();
+
             if (me.imageScale <= 1) {
                 me.scale(1, true);
-            } else {
-                me.setScale(1, true);
+                return;
             }
 
-            event.preventDefault();
+            me.setScale(1, true);
         },
 
         /**
-         * Will be called when the user leaves the image slide with the mouse
+         * Is triggered when the left arrow
+         * of the image slider is clicked or tapped.
+         *
+         * @event onLeftArrowClick
+         * @param {jQuery.Event} event
+         */
+        onLeftArrowClick: function (event) {
+            event.preventDefault();
+
+            this.slidePrev();
+
+            $.publish('plugin/imageSlider/onLeftArrowClick');
+        },
+
+        /**
+         * Is triggered when the right arrow
+         * of the image slider is clicked or tapped.
+         *
+         * @event onRightArrowClick
+         * @param {jQuery.Event} event
+         */
+        onRightArrowClick: function (event) {
+            event.preventDefault();
+
+            this.slideNext();
+
+            $.publish('plugin/imageSlider/onRightArrowClick');
+        },
+
+        /**
+         * Slides the thumbnail slider one position backwards.
+         *
+         * @event onThumbnailPrevArrowClick
+         * @param {jQuery.Event} event
+         */
+        onThumbnailPrevArrowClick: function (event) {
+            event.preventDefault();
+
+            var me = this,
+                $container = me.$thumbnailContainer,
+                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
+
+            me.setThumbnailSlidePosition(me.thumbnailOffset + (size / 2), true);
+        },
+
+        /**
+         * Slides the thumbnail slider one position forward.
+         *
+         * @event onThumbnailNextArrowClick
+         * @param {jQuery.Event} event
+         */
+        onThumbnailNextArrowClick: function (event) {
+            event.preventDefault();
+
+            var me = this,
+                $container = me.$thumbnailContainer,
+                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
+
+            me.setThumbnailSlidePosition(me.thumbnailOffset - (size / 2), true);
+        },
+
+        /**
+         * Will be called when the user leaves the image slide with the mouse.
+         * Resets the cursor grab indicator.
+         *
+         * @event onMouseLeave
          */
         onMouseLeave: function () {
             var me = this;
 
-            me.touchDistance = 0;
             me.grabImage = false;
             me.$slideContainer.removeClass(me.opts.dragClass);
         },
 
         /**
-         * Will be called when the viewport is resized
+         * Will be called when the viewport has been resized.
+         * When thumbnails are enabled, the trackThumbnailControls function
+         * will be called.
+         *
+         * @event onResize
          */
         onResize: function () {
             if (this.opts.thumbnails) {
@@ -616,8 +828,9 @@
         },
 
         /**
-         * Will be called when the user starts touching the thumbnails slider
+         * Will be called when the user starts touching the thumbnails slider.
          *
+         * @event onThumbnailSlideTouch
          * @param {jQuery.Event} event
          */
         onThumbnailSlideTouch: function (event) {
@@ -630,8 +843,10 @@
 
         /**
          * Will be called when the user is moving the finger while touching
-         * the thumbnail slider
+         * the thumbnail slider.
+         * Slides the thumbnails slider to the left/right depending on the user.
          *
+         * @event onThumbnailSlideMove
          * @param {jQuery.Event} event
          */
         onThumbnailSlideMove: function (event) {
@@ -654,9 +869,11 @@
         },
 
         /**
-         * Returns either an array of touches or a single mouse event
-         * This is a helper function to unify the touch/mouse gesture logic
+         * Returns either an array of touches or a single mouse event.
+         * This is a helper function to unify the touch/mouse gesture logic.
          *
+         * @private
+         * @method getPointers
          * @param {jQuery.Event} event
          */
         getPointers: function (event) {
@@ -669,6 +886,8 @@
          * Calculates the new x/y coordinates for the image based by the
          * given scale value.
          *
+         * @private
+         * @method getTransformedPosition
          * @param {Number} x
          * @param {Number} y
          * @param {Number} scale
@@ -690,8 +909,10 @@
         },
 
         /**
-         * Sets the tranlation (position) of the current image.
+         * Sets the translation (position) of the current image.
          *
+         * @public
+         * @method setTranslation
          * @param {Number} x
          * @param {Number} y
          */
@@ -701,13 +922,15 @@
 
             me.imageTranslation.set(newPos.x, newPos.y);
 
-            me.updateTransform();
+            me.updateTransform(false);
         },
 
         /**
          * Translates the current image relative to the current position.
          * The x/y values will be added together.
          *
+         * @public
+         * @method translate
          * @param {Number} x
          * @param {Number} y
          */
@@ -723,6 +946,8 @@
          * You can also pass the option if it should be animated
          * and if so, you can also pass a callback.
          *
+         * @public
+         * @method setScale
          * @param {Number|String} scale
          * @param {Boolean} animate
          * @param {Function} callback
@@ -733,13 +958,21 @@
                 $currImage = me.$currentImage,
                 img = $currImage[0],
                 minZoom = opts.minZoom,
-                maxZoom = opts.maxZoom;
+                maxZoom = opts.maxZoom,
+                oldScale = me.imageScale;
 
             if (typeof maxZoom !== 'number') {
                 maxZoom = Math.max(img.naturalWidth, img.naturalHeight) / Math.max($currImage.width(), $currImage.height());
             }
 
             me.imageScale = Math.max(minZoom, Math.min(maxZoom, scale));
+
+            if (me.imageScale === oldScale) {
+                if (typeof callback === 'function') {
+                    callback.call(me);
+                }
+                return;
+            }
 
             me.updateTransform(animate, callback);
         },
@@ -748,6 +981,8 @@
          * Scales the current image relative to the current scale value.
          * The factor value will be added to the current scale.
          *
+         * @public
+         * @method scale
          * @param {Number} factor
          * @param {Boolean} animate
          * @param {Function} callback
@@ -762,6 +997,8 @@
          * You can also decide if the update should be animated
          * and if so, you can provide a callback function
          *
+         * @public
+         * @method updateTransform
          * @param {Boolean} animate
          * @param {Function} callback
          */
@@ -793,8 +1030,10 @@
          * Applies a click event handler to the element
          * to slide the slider to the index of that element.
          *
-         * @param index
-         * @param el
+         * @private
+         * @method applyClickEventHandler
+         * @param {Number} index
+         * @param {HTMLElement} el
          */
         applyClickEventHandler: function (index, el) {
             var me = this,
@@ -808,72 +1047,82 @@
         },
 
         /**
-         * Creates the arrow controls for
-         * the image slider.
+         * Creates the arrow controls for the image slider.
+         *
+         * @private
+         * @method createArrows
          */
         createArrows: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
             me.$arrowLeft = $('<a>', {
-                'class': me.opts.leftArrowCls + (me.slideIndex <= 0 ? ' is--hidden' : '')
+                'class': opts.leftArrowCls + (!opts.loopSlides && (me.slideIndex <= 0) ? ' ' + opts.hiddenClass : '')
             }).appendTo(me.$slideContainer);
 
             me.$arrowRight = $('<a>', {
-                'class': me.opts.rightArrowCls + (me.slideIndex >= me.itemCount - 1 ? ' is--hidden' : '')
+                'class': opts.rightArrowCls + (!opts.loopSlides && (me.slideIndex >= me.itemCount - 1) ? ' ' + opts.hiddenClass : '')
             }).appendTo(me.$slideContainer);
         },
 
         /**
-         * Creates the thumbnail arrow controls
-         * for the thumbnail slider.
+         * Creates the thumbnail arrow controls for the thumbnail slider.
+         *
+         * @private
+         * @method createThumbnailArrows
          */
         createThumbnailArrows: function () {
             var me = this,
+                opts = me.opts,
                 isHorizontal = (me.thumbnailOrientation === 'horizontal'),
-                prevClass = isHorizontal ? me.opts.thumbnailArrowLeftCls : me.opts.thumbnailArrowTopCls,
-                nextClass = isHorizontal ? me.opts.thumbnailArrowRightCls : me.opts.thumbnailArrowBottomCls;
+                prevClass = isHorizontal ? opts.thumbnailArrowLeftCls : opts.thumbnailArrowTopCls,
+                nextClass = isHorizontal ? opts.thumbnailArrowRightCls : opts.thumbnailArrowBottomCls;
 
             me.$thumbnailArrowPrev = $('<a>', {
-                'class': 'thumbnails--arrow ' + prevClass
+                'class': opts.thumbnailArrowCls + ' ' + prevClass
             }).appendTo(me.$thumbnailContainer);
 
             me.$thumbnailArrowNext = $('<a>', {
-                'class': 'thumbnails--arrow ' + nextClass
+                'class': opts.thumbnailArrowCls + ' ' + nextClass
             }).appendTo(me.$thumbnailContainer);
         },
 
         /**
-         * Tracks and counts the image elements
-         * and the thumbnail elements.
+         * Tracks and counts the image elements and the thumbnail elements.
+         *
+         * @private
+         * @method trackItems
          */
         trackItems: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
-            me.$items = me.$slide.find('.image-slider--item');
-            me.$images = me.$slide.find('.image--element');
+            me.$items = me.$slide.find(opts.itemSelector);
+            me.$images = me.$slide.find(opts.imageSelector);
 
-            if (me.opts.thumbnails) {
-                me.$thumbnails = me.$thumbnailContainer.find('.thumbnail--link');
+            if (opts.thumbnails) {
+                me.$thumbnails = me.$thumbnailContainer.find(opts.thumbnailSelector);
                 me.thumbnailCount = me.$thumbnails.length;
 
                 if (me.thumbnailCount === 0) {
-                    me.$el.addClass(me.opts.noThumbClass);
-                    me.opts.thumbnails = false;
+                    me.$el.addClass(opts.noThumbClass);
+                    opts.thumbnails = false;
                 }
             }
 
             me.itemCount = me.$items.length;
 
             if (me.itemCount <= 1) {
-                me.opts.arrowControls = false;
+                opts.arrowControls = false;
             }
         },
 
         /**
-         * Sets the position of the image slide
-         * to the given image index.
+         * Sets the position of the image slide to the given image index.
          *
-         * @param index
+         * @public
+         * @method setIndex
+         * @param {Number} index
          */
         setIndex: function (index) {
             var me = this,
@@ -886,7 +1135,9 @@
         /**
          * Returns the orientation of the thumbnail container.
          *
-         * @returns {string}
+         * @private
+         * @method getThumbnailOrientation
+         * @returns {String}
          */
         getThumbnailOrientation: function () {
             var $container = this.$thumbnailContainer;
@@ -895,10 +1146,11 @@
         },
 
         /**
-         * Sets the active state for the thumbnail
-         * at the given index position.
+         * Sets the active state for the thumbnail at the given index position.
          *
-         * @param index
+         * @public
+         * @method setActiveThumbnail
+         * @param {Number} index
          */
         setActiveThumbnail: function (index) {
             var me = this,
@@ -927,18 +1179,18 @@
         },
 
         /**
-         * Sets the active state for the dot
-         * at the given index position.
+         * Sets the active state for the dot at the given index position.
          *
-         * @param index
+         * @public
+         * @method setActiveDot
+         * @param {Number} index
          */
         setActiveDot: function (index) {
-            var me = this,
-                i = index || me.slideIndex;
+            var me = this;
 
             if (me.opts.dotNavigation && me.$dots) {
                 me.$dots.removeClass(me.opts.activeStateClass);
-                me.$dots.eq(i).addClass(me.opts.activeStateClass);
+                me.$dots.eq(index || me.slideIndex).addClass(me.opts.activeStateClass);
             }
         },
 
@@ -946,6 +1198,8 @@
          * Sets the position of the thumbnails slider
          * If the offset exceeds the minimum/maximum position, it will be culled
          *
+         * @public
+         * @method setThumbnailSlidePosition
          * @param {Number} offset
          * @param {Boolean} animate
          */
@@ -962,26 +1216,51 @@
             me.thumbnailOffset = Math.max(min, Math.min(0, offset));
 
             css[isHorizontal ? 'left' : 'top'] = me.thumbnailOffset;
+            css[isHorizontal ? 'top' : 'left'] = 'auto';
 
             if (!animate) {
                 $slide.css(css);
                 return;
             }
 
-            $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, 400, me.trackThumbnailControls.bind(me));
+            $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, me.trackThumbnailControls.bind(me));
         },
 
         /**
          * Checks which thumbnail arrow controls have to be shown.
+         *
+         * @private
+         * @method trackThumbnailControls
          */
         trackThumbnailControls: function () {
             var me = this,
+                opts = me.opts,
+                isHorizontal = me.thumbnailOrientation === 'horizontal',
                 $container = me.$thumbnailContainer,
                 $slide = me.$thumbnailSlide,
                 $prevArr = me.$thumbnailArrowPrev,
                 $nextArr = me.$thumbnailArrowNext,
                 activeCls = me.opts.activeStateClass,
-                pos = $slide.position();
+                pos = $slide.position(),
+                orientation = me.getThumbnailOrientation();
+
+            if (me.thumbnailOrientation !== orientation) {
+
+                me.$thumbnailSlide.css({
+                    'left': 0,
+                    'top': 0
+                });
+
+                $prevArr
+                    .toggleClass(opts.thumbnailArrowLeftCls, !isHorizontal)
+                    .toggleClass(opts.thumbnailArrowTopCls, isHorizontal);
+
+                $nextArr
+                    .toggleClass(opts.thumbnailArrowRightCls, !isHorizontal)
+                    .toggleClass(opts.thumbnailArrowBottomCls, isHorizontal);
+
+                me.thumbnailOrientation = orientation;
+            }
 
             if (me.thumbnailOrientation === 'horizontal') {
                 $prevArr.toggleClass(activeCls, pos.left < 0);
@@ -995,79 +1274,80 @@
 
         /**
          * Starts the auto slide interval.
+         *
+         * @private
+         * @method startAutoSlide
          */
         startAutoSlide: function () {
             var me = this;
 
-            me.slideInterval = window.setInterval(function () {
-                me.slideNext();
-            }, me.opts.autoSlideInterval);
+            me.stopAutoSlide(me.slideInterval);
+
+            me.slideInterval = window.setTimeout(me.slideNext.bind(me), me.opts.autoSlideInterval);
         },
 
         /**
          * Stops the auto slide interval.
+         *
+         * @private
+         * @method stopAutoSlide
          */
         stopAutoSlide: function () {
-            window.clearInterval(this.slideInterval);
-        },
-
-        /**
-         * Slides the thumbnail slider one position forward.
-         */
-        slideThumbnailsNext: function () {
-            var me = this,
-                $container = me.$thumbnailContainer,
-                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
-
-            me.setThumbnailSlidePosition(me.thumbnailOffset - (size / 2), true);
-        },
-
-        /**
-         * Slides the thumbnail slider one position backwards.
-         */
-        slideThumbnailsPrev: function () {
-            var me = this,
-                $container = me.$thumbnailContainer,
-                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
-
-            me.setThumbnailSlidePosition(me.thumbnailOffset + (size / 2), true);
+            window.clearTimeout(this.slideInterval);
         },
 
         /**
          * Slides the image slider to the given index position.
          *
-         * @param index
-         * @param callback
+         * @public
+         * @method slide
+         * @param {Number} index
+         * @param {Function} callback
          */
         slide: function (index, callback) {
             var me = this,
+                opts = me.opts,
                 newPosition = (index * 100 * -1) + '%',
                 method = (Modernizr.csstransitions) ? 'transition' : 'animate';
 
             me.slideIndex = index;
 
-            if (me.opts.thumbnails) {
+            if (opts.thumbnails) {
                 me.setActiveThumbnail(index);
                 me.trackThumbnailControls();
             }
 
-            if (me.opts.dotNavigation && me.$dots) {
+            if (opts.dotNavigation && me.$dots) {
                 me.setActiveDot(index);
+            }
+
+            if (opts.autoSlide) {
+                me.stopAutoSlide();
+                me.startAutoSlide();
             }
 
             me.resetTransformation(true, function () {
                 me.$slide[method]({
                     'left': newPosition,
                     'easing': 'cubic-bezier(.2,.89,.75,.99)'
-                }, me.opts.animationSpeed, $.proxy(callback, me));
+                }, opts.animationSpeed, $.proxy(callback, me));
             });
 
             me.$currentImage = $(me.$images[index]);
 
-            me.$arrowLeft.toggleClass('is--hidden', index <= 0);
-            me.$arrowRight.toggleClass('is--hidden', index >= me.itemCount - 1);
+            me.$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
+            me.$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me.itemCount - 1);
         },
 
+        /**
+         * Resets the current image transformation (scale and translation).
+         * Can also be animated.
+         *
+         * @public
+         * @method resetTransformation
+         * @param {Boolean} animate
+         * @param {Function} callback
+         */
         resetTransformation: function (animate, callback) {
             var me = this,
                 translation = me.imageTranslation;
@@ -1089,13 +1369,20 @@
 
         /**
          * Slides the image slider one position forward.
+         *
+         * @public
+         * @method slideNext
          */
         slideNext: function () {
             var me = this,
                 newIndex = me.slideIndex + 1;
 
             if (newIndex >= me.itemCount) {
-                return;
+                if (!me.opts.loopSlides) {
+                    return;
+                }
+
+                newIndex = 0;
             }
 
             me.slide(newIndex);
@@ -1105,13 +1392,20 @@
 
         /**
          * Slides the image slider one position backwards.
+         *
+         * @public
+         * @method slidePrev
          */
         slidePrev: function () {
             var me = this,
                 newIndex = me.slideIndex - 1;
 
             if (newIndex < 0) {
-                return;
+                if (!me.opts.loopSlides) {
+                    return;
+                }
+
+                newIndex = me.itemCount - 1;
             }
 
             me.slide(newIndex);
@@ -1120,38 +1414,25 @@
         },
 
         /**
-         * Is triggered when the left arrow
-         * of the image slider is clicked.
-         */
-        onLeftArrowClick: function (event) {
-            event.preventDefault();
-
-            this.slidePrev();
-
-            $.publish('plugin/imageSlider/onLeftArrowClick');
-        },
-
-        /**
-         * Is triggered when the right arrow
-         * of the image slider is clicked.
-         */
-        onRightArrowClick: function (event) {
-            event.preventDefault();
-
-            this.slideNext();
-
-            $.publish('plugin/imageSlider/onRightArrowClick');
-        },
-
-        /**
          * Destroys the plugin and removes
          * all elements created by the plugin.
+         *
+         * @public
+         * @method destroy
          */
         destroy: function () {
             var me = this,
                 opts = me.opts;
 
-            if (opts.dotNavigation && me.$dots) me.setActiveDot(0);
+            me.$slideContainer = null;
+            me.$slides = null;
+            me.$currentImage = null;
+
+            if (opts.dotNavigation && me.$dots) {
+                me.$dots.removeClass(me.opts.activeStateClass);
+                me.$dotNav = null;
+                me.$dots = null;
+            }
 
             if (opts.arrowControls) {
                 me.$arrowLeft.remove();
@@ -1159,14 +1440,21 @@
             }
 
             if (opts.thumbnails) {
-                me.setActiveThumbnail(0);
                 me.$thumbnailArrowPrev.remove();
                 me.$thumbnailArrowNext.remove();
+
+                me.$thumbnailContainer = null;
+                me.$thumbnailSlide = null;
+
+                me.$thumbnails.removeClass(me.opts.activeStateClass);
+                me.$thumbnails = null;
 
                 StateManager.off('resize', me.onResize, me);
             }
 
-            if (opts.autoSlide) me.stopAutoSlide();
+            if (opts.autoSlide) {
+                me.stopAutoSlide();
+            }
 
             me.resetTransformation(false);
 
@@ -1174,6 +1462,14 @@
         }
     });
 
+    /**
+     * Helper Class to manager coordinates of X and Y pair values.
+     *
+     * @class Vector
+     * @constructor
+     * @param {Number} x
+     * @param {Number} y
+     */
     function Vector(x, y) {
         var me = this;
 
@@ -1181,13 +1477,20 @@
         me.y = y || 0;
     }
 
-    Vector.prototype = {
+    /**
+     * Sets the X and Y values.
+     * If one of the passed parameter is not a number, it
+     * will be ignored.
+     *
+     * @public
+     * @method set
+     * @param {Number} x
+     * @param {Number} y
+     */
+    Vector.prototype.set = function (x, y) {
+        var me = this;
 
-        set: function (x, y) {
-            var me = this;
-
-            me.x = typeof x === 'number' ? x : me.x;
-            me.y = typeof y === 'number' ? y : me.y;
-        }
+        me.x = (typeof x === 'number') ? x : me.x;
+        me.y = (typeof y === 'number') ? y : me.y;
     };
 })(jQuery, Modernizr, window, Math);

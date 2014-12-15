@@ -3,6 +3,7 @@
          data-image-slider="true"
          data-thumbnails="false"
          data-lightbox="false"
+         data-loopSlides="true"
          data-animationSpeed="{$Data.banner_slider_scrollspeed}"
          data-arrowControls="{if $Data.banner_slider_arrows}true{else}false{/if}"
          data-autoSlideInterval="{$Data.banner_slider_rotatespeed}"
