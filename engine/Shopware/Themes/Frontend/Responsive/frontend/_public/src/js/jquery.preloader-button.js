@@ -37,14 +37,14 @@
          *
          * @returns {boolean}
          */
-        onShowPreloader: function() {
+        onShowPreloader: function(event) {
             var me = this;
 
             if(me.opts.checkFormIsValid) {
                 var $form = $('#' + me.$el.attr('form')) || me.$el.parents('form');
 
                 if (!$form.length || !$form[0].checkValidity()) {
-                    return false;
+                    return;
                 }
             }
 
