@@ -6,13 +6,27 @@
     {block name='frontend_checkout_cart_item_premium_name'}
         <div class="table--column column--product block">
 
-            {* Badge *}
+            {* Product image *}
             {block name='frontend_checkout_cart_item_premium_image'}
                 <div class="panel--td column--image">
                     <div class="table--media">
-                        <div class="basket--badge">
-                            {s name="CartItemInfoFree"}{/s}
-                        </div>
+                        {if $sBasketItem.image.src.2}
+                            {block name="frontend_checkout_cart_item_image_container"}
+                                <div class="table--media-outer">
+                                    <div class="table--media-inner">
+                                        <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                                            <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                        </a>
+                                    </div>
+                                </div>
+                            {/block}
+                        {else}
+                            <div class="table--media">
+                                <div class="basket--badge">
+                                    {s name="CartItemInfoFree"}{/s}
+                                </div>
+                            </div>
+                        {/if}
                     </div>
                 </div>
             {/block}

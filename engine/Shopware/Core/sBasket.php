@@ -2143,13 +2143,23 @@ class sBasket
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
             }
 
+            $articleId = null;
             if (empty($value["modus"])) {
-                // Article-Image
+                $articleId = $getArticles[$key]["articleID"];
+            } elseif ($value["modus"] == "1") {
+                $articleId = $this->db->fetchOne(
+                    "SELECT articleID FROM s_articles_details WHERE ordernumber = :ordernumber",
+                    array('ordernumber' => $getArticles[$key]["ordernumber"])
+                );
+            }
+
+            if ($articleId) {
+                // Article image
                 if (!empty($getArticles[$key]["ob_attr1"])) {
                     $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetConfiguratorImage(
                             $this->moduleManager->Articles()->sGetArticlePictures(
-                                $getArticles[$key]["articleID"],
+                                $articleId,
                                 false,
                                 $this->config->get('sTHUMBBASKET'),
                                 false,
@@ -2160,7 +2170,7 @@ class sBasket
                 } else {
                     $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetArticlePictures(
-                            $getArticles[$key]["articleID"],
+                            $articleId,
                             true,
                             $this->config->get('sTHUMBBASKET'),
                             $getArticles[$key]["ordernumber"]
