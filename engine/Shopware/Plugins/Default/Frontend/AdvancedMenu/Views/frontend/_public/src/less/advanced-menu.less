@@ -7,7 +7,7 @@
     width: 100%;
     position: absolute;
     color: @text-color-dark;
-    z-index: 30000;
+    z-index: 10000;
 
     .menu--list {
         list-style: none;
@@ -62,9 +62,14 @@
     }
 
     .menu--list-item-link {
+        .unitize-padding(5, 0);
         .unitize(16, 16, font-size);
-        .transition(color 0.2s ease-out);
         color: @text-color-dark;
+        display: block;
+
+        &:hover {
+            color: @brand-primary;
+        }
     }
 
     .button-container {
@@ -124,11 +129,11 @@
     }
 
     .menu--level-1 {
-        .unitize-margin(10, 0, 0, 20);
+        .unitize-margin(5, 0, 0, 20);
     }
 
     .menu--level-2 {
-        .unitize-margin(5, 0, 5, 20);
+        .unitize-margin(0, 0, 5, 20);
     }
 
     .item--level-0 {
@@ -137,15 +142,11 @@
         position: relative;
 
         .menu--list-item-link {
-            .unitize(18, 16, font-size);
-            color: @text-color-dark;
             font-weight: bold;
         }
     }
 
     .item--level-1 {
-        .unitize-margin(0, 0, 8, 0);
-
         &:last-child {
             margin: 0;
         }
@@ -156,24 +157,16 @@
         }
     }
 
-    .item--level-2 {
-        .unitize-margin(0, 0, 5, 0);
+    .item--level-2 .menu--list-item-link {
+        .unitize(14, 16, font-size);
 
-        .menu--list-item-link {
-            .unitize(14, 16, font-size);
-
-            + .menu--level-3 {
-                .unitize-margin(5, 0, 5, 20);
-            }
+        + .menu--level-3 {
+            .unitize-margin(0, 0, 5, 20);
         }
     }
 
-    .item--level-3 {
-        .unitize-margin(0, 0, 3, 0);
-
-        .menu--list-item-link {
-            .unitize(12, 16, font-size);
-        }
+    .item--level-3 .menu--list-item-link {
+        .unitize(12, 16, font-size);
     }
 }
 
