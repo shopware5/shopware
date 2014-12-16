@@ -19,6 +19,9 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div class="cart--batch">
+                                    <span>{s name="CartItemInfoFree"}{/s}</span>
+                                </div>
                             {/block}
                         {else}
                             <div class="table--media">
