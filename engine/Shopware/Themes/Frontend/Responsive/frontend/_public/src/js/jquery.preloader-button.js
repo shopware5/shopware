@@ -28,7 +28,21 @@
 
             me.applyDataAttributes();
 
+            me.opts.checkFormIsValid = me.checkForValiditySupport();
+
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
+        },
+
+        /**
+         * Checks if the browser supports HTML5 form validation
+         * on form elements.
+         *
+         * @returns {boolean}
+         */
+        checkForValiditySupport: function() {
+            var testForm = document.createElement('form');
+
+            return testForm.hasOwnProperty('checkValidity');
         },
 
         /**
@@ -37,7 +51,7 @@
          *
          * @returns {boolean}
          */
-        onShowPreloader: function(event) {
+        onShowPreloader: function() {
             var me = this;
 
             if(me.opts.checkFormIsValid) {
@@ -51,7 +65,7 @@
             //... we have to use a timeout, otherwise the element will not be inserted in the page.
             window.setTimeout(function() {
                 me.$el.replaceWith('<div class="' + me.opts.loaderCls + '"></div>');
-            }, 50);
+            }, 1);
         }
     });
 })(jQuery, window);
