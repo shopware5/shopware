@@ -14,6 +14,7 @@
         defaults: {
 
             /**
+             * Selector for the image container..
              *
              * @property imageContainerSelector
              * @type {String}
@@ -21,6 +22,7 @@
             imageContainerSelector: '.image-slider--container',
 
             /**
+             * Selector for the image slider itself..
              *
              * @property imageSlideSelector
              * @type {String}
@@ -28,6 +30,7 @@
             imageSlideSelector: '.image-slider--slide',
 
             /**
+             * Selector for the thumbnail container.
              *
              * @property thumbnailContainerSelector
              * @type {String}
@@ -35,6 +38,7 @@
             thumbnailContainerSelector: '.image-slider--thumbnails',
 
             /**
+             * Class that is used for the lightbox template.
              *
              * @property imageGalleryClass
              * @type {String}
@@ -42,6 +46,8 @@
             imageGalleryClass: 'image--gallery',
 
             /**
+             * Key code for the button that let the image slider
+             * slide to the previous image.
              *
              * @property previousKeyCode
              * @type {Number}
@@ -49,6 +55,8 @@
             previousKeyCode: 37,
 
             /**
+             * Key code for the button that let the image slider
+             * slide to the next image.
              *
              * @property nextKeyCode
              * @type {Number}
@@ -56,6 +64,8 @@
             nextKeyCode: 39,
 
             /**
+             * Maximum zoom factor for the image slider.
+             * Will be passed to the image slider configuration in the lightbox.
              *
              * @property maxZoom
              * @type {Number|String}
@@ -63,11 +73,13 @@
             maxZoom: 'auto',
 
             /**
+             * Class that will be appended to the buttons when they
+             * should be disabled.
              *
-             * @property disabledCls
+             * @property disabledClass
              * @type {String}
              */
-            disabledCls: 'is--disabled'
+            disabledClass: 'is--disabled'
         },
 
         /**
@@ -182,7 +194,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomResetBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomResetBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
@@ -204,7 +216,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomInBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomInBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
@@ -226,7 +238,7 @@
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomOutBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomOutBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
@@ -329,7 +341,7 @@
          */
         disableButtons: function () {
             var me = this,
-                disabledClass = me.opts.disabledCls;
+                disabledClass = me.opts.disabledClass;
 
             me.$zoomResetBtn.addClass(disabledClass);
             me.$zoomOutBtn.addClass(disabledClass);
@@ -345,7 +357,7 @@
          */
         enableButtons: function () {
             var me = this,
-                disabledClass = me.opts.disabledCls;
+                disabledClass = me.opts.disabledClass;
 
             me.$zoomResetBtn.removeClass(disabledClass);
             me.$zoomOutBtn.removeClass(disabledClass);
