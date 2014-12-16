@@ -907,6 +907,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param e - Mouse scroll event
      */
     onScroll: function (e) {
+        if (this.hidden) {
+            return;
+        }
+
         var me = this,
             winEl = me.getEl(),
             winHeight = me.getHeight(),
@@ -922,7 +926,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             min = (wrapperHeight - winHeight - winEl.getTop()) * -1 - verticalOffset,
             max = winEl.getTop() + toolbarEl.getHeight() + verticalOffset,
             topStyle = me.getPrefixedBoxShadowStyle(''),
-            dropProxyHeight = me.containerCollection.getAt(0).dropProxyEl.getEl().getHeight();
+            dropProxyEl = me.containerCollection.getAt(0).dropProxyEl.getEl(),
+            dropProxyHeight = (dropProxyEl && dropProxyEl.getHeight()) || 200;
 
         if (winHeight > wrapperHeight) {
             wrapperEl.setY(max);
