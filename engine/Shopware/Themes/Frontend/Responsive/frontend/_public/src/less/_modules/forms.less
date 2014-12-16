@@ -92,10 +92,15 @@
 
     }
 
-    .forms--inner-form {
-		input[type="checkbox"] {
-			.unitize-width(12, 16);
-		}
+    .forms--checkbox {
+        label {
+            .unitize(-2, 16, top);
+            position: relative;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+        }
     }
 
 }
