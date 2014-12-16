@@ -43,7 +43,7 @@
 						{include file="frontend/index/shop-navigation.tpl"}
 					{/block}
 
-                    <div class="container--ajax-cart" data-collapse-cart="true" data-successMessage="{s name="AjaxCartSuccessText" namespace="frontend/checkout/ajax_cart"}{/s}"{if $theme.offcanvasCart} data-displayMode="offcanvas"{/if}></div>
+                    <div class="container--ajax-cart" data-collapse-cart="true"{if $theme.offcanvasCart} data-displayMode="offcanvas"{/if}></div>
 				</div>
 			</header>
 

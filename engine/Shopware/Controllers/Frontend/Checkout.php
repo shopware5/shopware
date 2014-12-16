@@ -766,30 +766,34 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * Used in ajax add cart action
      * Check availability of product and return info / error - messages
      *
-     * @param unknown_type $ordernumber article order number
+     * @param unknown_type $orderNumber article order number
      * @param unknown_type $quantity quantity
      * @return unknown
      */
-    public function getInstockInfo($ordernumber, $quantity)
+    public function getInstockInfo($orderNumber, $quantity)
     {
-        if (empty($ordernumber)) {
-            return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutSelectVariant', 'Please select an option to place the required product in the cart', true);
+        if (empty($orderNumber)) {
+            return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutSelectVariant',
+                'Please select an option to place the required product in the cart', true);
         }
 
-        $quantity = max(1, (int) $quantity);
-        $instock = $this->getAvailableStock($ordernumber);
-        $instock['quantity'] += $quantity;
+        $quantity = max(1, (int)$quantity);
+        $inStock = $this->getAvailableStock($orderNumber);
+        $inStock['quantity'] += $quantity;
 
-        if (empty($instock['articleID'])) {
-            return  Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNotFound', 'Product could not be found.', true);
+        if (empty($inStock['articleID'])) {
+            return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNotFound',
+                'Product could not be found.', true);
         }
-        if (!empty($instock['laststock'])||!empty(Shopware()->Config()->InstockInfo)) {
-            if ($instock['instock']<=0&&!empty($instock['laststock'])) {
-                return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNoStock', 'Unfortunately we can not deliver the desired product in sufficient quantity', true);
-            } elseif ($instock['instock']<$instock['quantity']) {
-                $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 von #1 in stock).';
-                $result = Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleLessStock', $result, true);
-                return str_replace(array('#0', '#1'), array($instock['instock'], $instock['quantity']), $result);
+        if (!empty($inStock['laststock']) || !empty(Shopware()->Config()->InstockInfo)) {
+            if ($inStock['instock'] <= 0 && !empty($inStock['laststock'])) {
+                return Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleNoStock',
+                    'Unfortunately we can not deliver the desired product in sufficient quantity', true);
+            } elseif ($inStock['instock'] < $inStock['quantity']) {
+                $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 of #1 in stock).';
+                $result = Shopware()->Snippets()->getNamespace("frontend")->get('CheckoutArticleLessStock', $result,
+                    true);
+                return str_replace(array('#0', '#1'), array($inStock['instock'], $inStock['quantity']), $result);
             }
         }
         return null;
@@ -1280,9 +1284,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * Ajax add article cart action
      *
      * This action is a lightweight way to add an article by the passed
-     * article ordernumber and quantity.
+     * article order number and quantity.
      *
-     * The ordernumber is expected to get passed by the 'sAdd' parameter
+     * The order number is expected to get passed by the 'sAdd' parameter
      * This quantity is expected to get passed by the 'sQuantity' parameter.
      *
      * After the article was added to the basket, the whole cart content will be returned.
@@ -1291,6 +1295,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
+
+        $this->View()->assign(
+            'basketInfoMessage',
+            $this->getInstockInfo($orderNumber, $quantity)
+        );
 
         $this->basket->sAddArticle($orderNumber, $quantity);
 
