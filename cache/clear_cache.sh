@@ -14,6 +14,7 @@ rm -rf $DIR/mpdf/tmp/*
 rm -rf $DIR/mpdf/ttfontdata/*
 
 if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
-    echo "Clearing attributes"
+    echo "Regenerating attributes"
     rm -rf $DIR/doctrine/attributes/*
+    $DIR/../bin/console sw:generate:attributes
 fi
