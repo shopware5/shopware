@@ -51,8 +51,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
     lastSearchFilter: '',
 
-    state: { grammar: false, model: false },
-
     /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
@@ -61,7 +59,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      * @return void
      */
     init: function () {
-        var me = this;
+        var me = this,
+            grammarLoaded = false,
+            modelLoaded = false;
 
         me.loadDetailModelFields();
 
@@ -72,12 +72,19 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         });
 
         me.subApplication.on('grammarProcessed', function () {
-            me.state.grammar = true;
-            me.loadDefaultStore();
+            grammarLoaded = true;
+
+            if (modelLoaded) {
+                me.loadDefaultStore();
+            }
         });
+
         me.subApplication.on('modelCreated', function () {
-            me.state.model = true;
-            me.loadDefaultStore();
+            modelLoaded = true;
+
+            if (grammarLoaded) {
+                me.loadDefaultStore();
+            }
         });
 
         me.callParent();
@@ -88,22 +95,17 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     loadDefaultStore: function () {
         var me = this,
-                name,
-                tree, selection;
+            selection,
+            name;
 
-        if (!me.state.grammar || !me.state.model) {
-            return;
-        }
-
-        tree = me.getCategoryTree();
-        selection = tree.getSelectionModel();
+        selection = me.getCategoryTree().getSelectionModel();
         selection.select(selection.getStore().first());
 
         name = me.getController('CategoryFilter').getFilterNameByConfig(false, false);
 
         me.getController('Suggest').loadFilter(
-                'ISMAIN',
-                name
+            'ISMAIN',
+            name
         );
     },
 
