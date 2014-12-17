@@ -60,13 +60,5 @@
     },
     "config": {
         "autoloader-suffix": "Shopware"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "cache/clear_cache.sh -f"
-        ],
-        "post-update-cmd": [
-            "cache/clear_cache.sh -f"
-        ]
     }
 }
