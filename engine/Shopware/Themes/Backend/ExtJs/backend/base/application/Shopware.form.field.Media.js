@@ -1,4 +1,3 @@
-
 //{namespace name=backend/application/main}
 //{block name="backend/application/Shopware.form.field.Media"}
 Ext.define('Shopware.form.field.Media', {
@@ -498,9 +497,15 @@ Ext.define('Shopware.form.field.Media', {
      * @param { String } image
      */
     updatePreview: function(image) {
-        this.preview.setSrc(
-            this.mediaPath + image
-        );
+        var me = this, src;
+
+        if (Ext.isEmpty(image)) {
+            src = me.noMedia;
+        } else {
+            src = me.mediaPath + image;
+        }
+
+        me.preview.setSrc(src);
     },
 
     /**
@@ -559,7 +564,7 @@ Ext.define('Shopware.form.field.Media', {
         var me = this, params = {};
 
         if (!value) {
-            me.updatePreview(me.noMedia);
+            me.updatePreview(null);
             return;
         }
         params[me.valueField] = value;
