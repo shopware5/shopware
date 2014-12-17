@@ -181,8 +181,15 @@ class Shopware_Components_TemplateMail
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
         $mail = clone Shopware()->Mail();
+        $return = Enlight()->Events()->filter(
+            'Shopware_Components_TemplateMail_modifyEnlightComponentsMail',
+            $this->loadValues($mail, $mailModel, $overrideConfig),
+            array(
+                'shop' => $this->getShop()
+            )
+        );
 
-        return $this->loadValues($mail, $mailModel, $overrideConfig);
+        return $return;
     }
 
     /**
