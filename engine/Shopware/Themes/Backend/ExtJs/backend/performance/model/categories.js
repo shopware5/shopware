@@ -50,13 +50,7 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
         { name: 'orderbydefault', type: 'string'},
         { name: 'moveBatchModeEnabled', type: 'bool'},
 
-        { name: 'defaultListingSorting', type: 'int'},
-        { name: 'showSupplierInCategories', type: 'bool'},
-        { name: 'displayFiltersInListings', type:'bool' },
-        { name: 'showShippingFreeFacet', type:'bool' },
-        { name: 'showPriceFacet', type:'bool' },
-        { name: 'showVoteAverageFacet', type:'bool' },
-        { name: 'showImmediateDeliveryFacet', type:'bool' }
+        { name: 'defaultListingSorting', type: 'int'}
     ]
 });
 //{/block}
