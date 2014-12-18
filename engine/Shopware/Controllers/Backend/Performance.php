@@ -162,7 +162,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'categories' => $this->genericConfigLoader(
                 array(
                     'moveBatchModeEnabled',
-                    'articlesperpage',
+                    'articlesperpage'
+                )
+            ),
+            'filters' => $this->genericConfigLoader(array(
+                    'propertySorting',
+                    'displayFiltersOnDetailPage',
                     'showSupplierInCategories',
                     'showImmediateDeliveryFacet',
                     'showShippingFreeFacet',
@@ -170,11 +175,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                     'showVoteAverageFacet',
                     'displayFiltersInListings',
                     'defaultListingSorting',
-                )
-            ),
-            'filters' => $this->genericConfigLoader(array(
-                    'propertySorting',
-                    'displayFiltersOnDetailPage'
                 )),
             'various' => $this->genericConfigLoader(
                 array(

@@ -30,7 +30,7 @@
 //{namespace name=backend/performance/main}
 
 /**
- * Categories fieldSet
+ * Filter fieldSet
  */
 //{block name="backend/performance/view/tabs/settings/fields/filter"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
@@ -110,6 +110,59 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                         })
                     }
                 ]
+            }, {
+                xtype: 'fieldset',
+                defaults: me.defaults,
+                title: '{s name=fieldset/listings}Listings{/s}',
+                items: [{
+                    name: 'filters[showSupplierInCategories]',
+                    fieldLabel: '{s name=fieldset/filter/text/showManufacturerFacet}Hersteller Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showManufacturerFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Herstellern zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'filters[showImmediateDeliveryFacet]',
+                    fieldLabel: '{s name=fieldset/filter/text/showImmediateDeliveryFacet}Sofort lieferbar Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showImmediateDeliveryFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, die sofort lieferbar sind.{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'filters[showShippingFreeFacet]',
+                    fieldLabel: '{s name=fieldset/filter/text/showShippingFreeFacet}Versandkostenfrei Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showShippingFreeFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, welche als Versandkostenfrei markiert wurden{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'filters[showPriceFacet]',
+                    fieldLabel: '{s name=fieldset/filter/text/showPriceFacet}Preis Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showPriceFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Preisen zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'filters[showVoteAverageFacet]',
+                    fieldLabel: '{s name=fieldset/filter/text/showVoteAverageFacet}Bewertungs Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showVoteAverageFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Durchschnitts-Bewertungen zu filtern{/s}',
+
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    name: 'filters[displayFiltersInListings]',
+                    fieldLabel: '{s name=fieldset/filter/text/showPropertyFacet}Eigenschaften Filter anzeigen{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showPropertyFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Eigenschaften zu filtern{/s}',
+                    cls: 'property-facet',
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }]
             }
         ];
     }

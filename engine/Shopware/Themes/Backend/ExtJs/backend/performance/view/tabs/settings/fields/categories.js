@@ -116,54 +116,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
 
                     xtype: 'numberfield',
                     minValue: 1
-                }, {
-                    name: 'categories[showSupplierInCategories]',
-                    fieldLabel: '{s name=fieldset/categories/text/showManufacturerFacet}Hersteller Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showManufacturerFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Herstellern zu filtern{/s}',
-
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
-                }, {
-                    name: 'categories[showImmediateDeliveryFacet]',
-                    fieldLabel: '{s name=fieldset/categories/text/showImmediateDeliveryFacet}Sofort lieferbar Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showImmediateDeliveryFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, die sofort lieferbar sind.{/s}',
-
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
-                }, {
-                    name: 'categories[showShippingFreeFacet]',
-                    fieldLabel: '{s name=fieldset/categories/text/showShippingFreeFacet}Versandkostenfrei Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showShippingFreeFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, welche als Versandkostenfrei markiert wurden{/s}',
-
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
-                }, {
-                    name: 'categories[showPriceFacet]',
-                    fieldLabel: '{s name=fieldset/categories/text/showPriceFacet}Preis Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showPriceFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Preisen zu filtern{/s}',
-
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
-                }, {
-                    name: 'categories[showVoteAverageFacet]',
-                    fieldLabel: '{s name=fieldset/categories/text/showVoteAverageFacet}Bewertungs Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showVoteAverageFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Durchschnitts-Bewertungen zu filtern{/s}',
-
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
-                }, {
-                    name: 'categories[displayFiltersInListings]',
-                    fieldLabel: '{s name=fieldset/categories/text/showPropertyFacet}Eigenschaften Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/categories/text/showPropertyFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Eigenschaften zu filtern{/s}',
-                    cls: 'property-facet',
-                    xtype: 'checkbox',
-                    uncheckedValue: false,
-                    inputValue: true
                 }]
             }
         ];
