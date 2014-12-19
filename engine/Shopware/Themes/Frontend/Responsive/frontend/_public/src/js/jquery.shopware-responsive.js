@@ -102,6 +102,7 @@ $(function () {
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
     $('*[data-pseudo-text="true"]').pseudoText();
+    $('*[data-preloader-button="true"]').preloaderButton();
 
     $('*[data-collapse-text="true"]').collapseText();
     $('*[data-filter-type]').filterComponent();
