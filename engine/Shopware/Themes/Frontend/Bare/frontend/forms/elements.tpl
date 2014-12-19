@@ -8,7 +8,7 @@
 				{foreach $sSupport.sElements as $sKey => $sElement}
 					{if $sSupport.sFields[$sKey]||$sElement.note}
 						{block name='frontend_forms_elements_form_builder'}
-							<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
+							<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="forms--checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
 								{if $sSupport.sElements[$sKey].typ eq 'select'}<span class="arrow"></span>{/if}
 
 								{eval var=$sSupport.sFields[$sKey]|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
