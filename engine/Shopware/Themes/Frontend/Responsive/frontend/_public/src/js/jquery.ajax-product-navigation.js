@@ -266,7 +266,8 @@
         registerDetailEventListeners: function () {
             var me = this;
 
-            me._on(window, 'resize', $.proxy(me.checkPossibleSliding, me));
+            StateManager.on('resize', me.checkPossibleSliding, me);
+
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
         },
@@ -299,11 +300,18 @@
                 slideOffset = opts.arrowSlideOffset,
                 $prevBtn = me.$prevButton,
                 $nextBtn = me.$nextButton,
-                remainingSpacePrev = $prevBtn.offset().left + offset,
-                remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + opts.arrowOffset;
+                remainingSpacePrev,
+                remainingSpaceNext;
 
-            $prevBtn.toggleClass(opts.arrowSlideClass, remainingSpacePrev >= slideOffset);
-            $nextBtn.toggleClass(opts.arrowSlideClass, remainingSpaceNext >= slideOffset);
+            if (!$nextBtn.length || !$prevBtn.length) {
+                return false;
+            }
+
+            remainingSpacePrev = $prevBtn.offset().left + offset;
+            remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + offset;
+
+            $prevBtn[(remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
+            $nextBtn[(remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
         },
 
         /**
@@ -407,6 +415,8 @@
          */
         destroy: function () {
             var me = this;
+
+            StateManager.off('resize', me.checkPossibleSliding, me);
 
             me._destroy();
         }
