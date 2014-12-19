@@ -50,7 +50,6 @@ class Theme extends \Shopware\Components\Theme
         'vendors/jquery.transit/jquery.transit.js',
         'vendors/jquery.event.move/js/jquery.event.move.js',
         'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
-        'vendors/glidejs/dist/jquery.glide.min.js',
         'vendors/masonry/dist/masonry.pkgd.min.js',
 
         // Shopware specific plugins
@@ -89,7 +88,6 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.range-slider.js',
         'src/js/jquery.filter-component.js',
         'src/js/jquery.listing-actions.js',
-        'src/js/jquery.ui.datepicker.js',
         'src/js/jquery.collapse-cart.js',
         'src/js/jquery.emotion.js',
         'src/js/jquery.product-compare-add.js',
