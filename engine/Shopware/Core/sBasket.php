@@ -2575,7 +2575,7 @@ class sBasket
             ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
             || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
         ) {
-            $netPrice = round($grossPrice, 2);
+            $netPrice = $grossPrice;
         } else {
             // Round to right value, if no purchase unit is set
             if ($queryAdditionalInfo["purchaseunit"] == 1) {
