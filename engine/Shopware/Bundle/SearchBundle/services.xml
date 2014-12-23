@@ -12,17 +12,27 @@
             <argument type="service" id="product_number_search"/>
         </service>
 
-        <service id="criteria_factory" class="Shopware\Bundle\SearchBundle\CriteriaFactory" >
+        <service id="property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
             <argument type="service" id="config" />
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="events" />
-            <argument type="service" id="query_alias_mapper" />
+
+            <tag name="criteria_request_handler"/>
+        </service>
+
+        <service id="core_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+
+            <tag name="criteria_request_handler"/>
         </service>
 
         <service id="store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
-            <argument type="service" id="criteria_factory" />
             <argument type="service" id="config" />
             <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="events" />
+
+            <!--criteria request handlers-->
+            <argument type="collection" />
         </service>
     </services>
 </container>
