@@ -19,6 +19,9 @@ RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
 
 # Fix missing authorization-header on fast_cgi installations
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+# Prevent apache from serving .git-directory
+RedirectMatch 404 /\\.git(/|$)
 </IfModule>
 
 # Staging-Rules start
