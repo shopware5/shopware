@@ -259,6 +259,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             btn.enable();
             btn.addCls('btn-over');
             win.toFront();
+
+            me.onChangePosition(win, me.widgetSettings.get('dock'), true);
         });
 
         me.widgetSettings.set('minimized', false);
@@ -300,8 +302,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             y = yOffset,
             verticalHandle = 's',
             horizontalHandle = 'e',
-            handles = [],
-            anim = animate !== false;
+            handles = [];
 
         if (align.indexOf('b') != -1) {
             y = desktopEl.getHeight() - win.getHeight() - yOffset;
@@ -313,7 +314,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             horizontalHandle = 'w';
         }
 
-        win.setPosition(x, y, anim);
+        win.setPosition(x, y, animate !== false);
 
         me.widgetSettings.set('dock', align);
         me.widgetSettingsStore.sync();
