@@ -141,6 +141,10 @@
                 len = Math.min(opts.productLimit, products.length),
                 i = 0;
 
+            if (len > 0) {
+                me.$el.removeClass('is--hidden');
+            }
+
             for (; i < len; i++) {
                 me.$container.append(me.createTemplate(products[i]));
             }
