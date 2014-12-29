@@ -95,7 +95,7 @@
 				{block name='frontend_index_left_last_articles'}
 					{if $sLastArticlesShow && !$isEmotionLandingPage}
                         {* Last seen products *}
-                        <div class="last-seen-products panel has--border" data-last-seen-products="true">
+                        <div class="last-seen-products panel has--border is--hidden" data-last-seen-products="true">
                             <div class="panel--title is--underline last-seen-products--title">
                                 {s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}
                             </div>
