@@ -56,20 +56,22 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
     public function addAction()
     {
-        $this->View()->sAddedToNoteSuccessful = false;
-
+        $sAddedToNoteSuccessful = false;
         $ordernumber = $this->Request()->ordernumber;
+
         if (!empty($ordernumber)) {
             $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
             $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
             $this->View()->sArticleName = $articleName;
             if (!empty($articleID)) {
                 Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $ordernumber);
-                $this->View()->sAddedToNoteSuccessful = true;
+                $sAddedToNoteSuccessful = true;
                 $this->View()->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
             }
         }
+
         if ($this->Request()->isXmlHttpRequest()) {
+            $this->View()->sAddedToNoteSuccessful = $sAddedToNoteSuccessful;
             $this->View()->loadTemplate('frontend/note/ajax.tpl');
         } else {
             $this->forward('index');
