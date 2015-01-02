@@ -108,16 +108,17 @@
     }
 
     .js--loading {
-        .unitize-width(24);
-        .unitize-height(24);
+        .unitize-width(18);
+        .unitize-height(18);
         .border-radius(100%);
-        .unitize-margin(0, 10, 0, 0);
+        .unitize(6, 16, right);
+        .unitize(2, 16, top);
+        .unitize-margin(8, 5, 8, 5);
         .animation(keyframe--spin 1s linear infinite);
         border: 2px solid @border-color;
         border-top: 2px solid darken(@border-color, 50%);
         display: block;
-        position: relative;
-        left: 50%;
+        position: absolute;
     }
 }
 
