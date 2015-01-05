@@ -47,7 +47,14 @@ Ext.define('Shopware.apps.Performance.model.Filter', {
 		//{block name="backend/performance/model/filter/fields"}{/block}
         { name:'id', type:'int' },
         { name:'displayFiltersOnDetailPage', type:'bool' },
-        { name:'propertySorting', type:'int' }
+        { name:'propertySorting', type:'int' },
+
+        { name: 'showSupplierInCategories', type: 'bool'},
+        { name: 'displayFiltersInListings', type:'bool' },
+        { name: 'showShippingFreeFacet', type:'bool' },
+        { name: 'showPriceFacet', type:'bool' },
+        { name: 'showVoteAverageFacet', type:'bool' },
+        { name: 'showImmediateDeliveryFacet', type:'bool' }
     ]
 
 });
