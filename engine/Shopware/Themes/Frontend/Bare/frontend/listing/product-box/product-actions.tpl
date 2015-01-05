@@ -18,8 +18,9 @@
         <a href="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}"
            title="{"{s name='DetailLinkNotepad' namespace='frontend/detail/actions'}{/s}"|escape}"
            class="product--action action--note"
+           data-text="{s name="DetailNotepadMarked"}Gemerkt{/s}"
            rel="nofollow">
-            <i class="icon--heart"></i> {s name="DetailLinkNotepadShort" namespace="frontend/detail/actions"}{/s}
+            <i class="icon--heart"></i> <span class="action--text">{s name="DetailLinkNotepadShort" namespace="frontend/detail/actions"}{/s}</span>
         </a>
     {/block}
 
