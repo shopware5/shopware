@@ -40,9 +40,8 @@
          * @returns {boolean}
          */
         checkForValiditySupport: function() {
-            var testForm = document.createElement('form');
-
-            return testForm.hasOwnProperty('checkValidity');
+            var element = document.createElement('input');
+            return (typeof element.validity === 'object');
         },
 
         /**
@@ -64,8 +63,8 @@
 
             //... we have to use a timeout, otherwise the element will not be inserted in the page.
             window.setTimeout(function() {
-                me.$el.replaceWith('<div class="' + me.opts.loaderCls + '"></div>');
-            }, 1);
+                me.$el.html(me.$el.text() + '<div class="' + me.opts.loaderCls + '"></div>').attr('disabled', 'disabled');
+            }, 25);
         }
     });
 })(jQuery, window);
