@@ -5,6 +5,12 @@ php:
     - "5.4"
     - "5.3"
 
+sudo: false
+
+cache:
+   directories:
+     - $HOME/.composer/cache
+
 script:
     - ant -f build/build.xml -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
 
