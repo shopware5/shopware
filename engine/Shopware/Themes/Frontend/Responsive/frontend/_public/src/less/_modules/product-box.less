@@ -174,6 +174,18 @@
 		display: none;
 	}
 
+    .action--note {
+        .transition();
+
+        &:focus {
+            outline: none;
+        }
+
+        &.js--is-animating {
+            color: @highlight-success;
+        }
+    }
+
 	.product--badges {
 		.unitize(20, 16, top);
 		.unitize(-1, 16, left);
