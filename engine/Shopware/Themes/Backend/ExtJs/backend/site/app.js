@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Site', {
      * Required stores for controller
      * @array
      */
-    stores: [ 'Nodes', 'Groups', 'Selected' ],
+    stores: [ 'Nodes', 'Groups', 'Selected', 'Shop' ],
     /**
      * Required models for sub-application
      * @array

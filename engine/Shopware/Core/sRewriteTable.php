@@ -99,20 +99,19 @@ class sRewriteTable
      * @param Shopware_Components_Modules $moduleManager
      */
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
-        Shopware_Components_Config              $config             = null,
-        ModelManager                            $modelManager       = null,
-        sSystem                                 $systemModule       = null,
-        Enlight_Template_Manager                $template           = null,
-        Shopware_Components_Modules             $moduleManager      = null
-    )
-    {
-        $this->db = $db ? : Shopware()->Db();
-        $this->config = $config ? : Shopware()->Config();
-        $this->modelManager = $modelManager ? : Shopware()->Models();
-        $this->sSYSTEM = $systemModule ? : Shopware()->System();
-        $this->template = $template ? : Shopware()->Template();
-        $this->moduleManager = $moduleManager ? : Shopware()->Modules();
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        Shopware_Components_Config $config = null,
+        ModelManager $modelManager = null,
+        sSystem $systemModule = null,
+        Enlight_Template_Manager $template = null,
+        Shopware_Components_Modules $moduleManager = null
+    ) {
+        $this->db = $db ?: Shopware()->Db();
+        $this->config = $config ?: Shopware()->Config();
+        $this->modelManager = $modelManager ?: Shopware()->Models();
+        $this->sSYSTEM = $systemModule ?: Shopware()->System();
+        $this->template = $template ?: Shopware()->Template();
+        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
     }
 
     /**
@@ -331,7 +330,9 @@ class sRewriteTable
         if (!empty($urls)) {
             foreach (explode("\n", $urls) as $url) {
                 list($key, $value) = explode(',', trim($url));
-                if (empty($key) || empty($value)) continue;
+                if (empty($key) || empty($value)) {
+                    continue;
+                }
                 $static[$key] = $value;
             }
         }
@@ -544,7 +545,7 @@ class sRewriteTable
             $path = $this->template->fetch('string:' . $seoSupplierRouteTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
 
-            $org_path = 'sViewport=listing&sAction=manufacturer&sSupplier=' . (int) $supplier['id'];
+            $org_path = 'sViewport=listing&sAction=manufacturer&sSupplier=' . (int)$supplier['id'];
             $this->sInsertUrl($org_path, $path);
         }
     }
@@ -558,7 +559,7 @@ class sRewriteTable
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
         $queryBuilder = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion')
-           ->getListQueryBuilder();
+            ->getListQueryBuilder();
         $queryBuilder
             ->andWhere('emotions.isLandingPage = 1 ')
             ->andWhere('emotions.active = 1');
@@ -760,8 +761,11 @@ class sRewriteTable
      */
     private function insertStaticPageUrls($offset, $limit)
     {
+        $shopId = Shopware()->Shop()->getId();
+
         $sitesData = $this->modelManager->getRepository('Shopware\Models\Site\Site')
-            ->getSitesWithoutLinkQuery($offset, $limit)->getArrayResult();
+            ->getSitesWithoutLinkQuery($shopId, $offset, $limit)
+            ->getArrayResult();
 
         foreach ($sitesData as $site) {
             $org_path = 'sViewport=custom&sCustom=' . $site['id'];
