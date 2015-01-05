@@ -53,6 +53,11 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
     ],
 
     /**
+     * Ref to the main window, set up on init, when we are sure the main window exists.
+     */
+    mainWindow: null,
+
+    /**
      * A template method that is called when your application boots.
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
@@ -76,6 +81,7 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
 
         Shopware.app.Application.on('moduleConnector:splitViewClose', me.onCloseSplitView, me);
 
+        me.mainWindow = me.getController('Main').mainWindow;
 
         me.callParent(arguments);
     },
@@ -162,10 +168,12 @@ Ext.define('Shopware.apps.ArticleList.controller.SplitView', {
      */
     onCloseSplitView: function() {
         var me = this,
-            mainWindow = me.getController('Main').mainWindow;
+            mainWindow = me.mainWindow;
 
-        mainWindow.setSize(me.defaultState);
-        mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
+        if (!Ext.isEmpty(mainWindow)) {
+            mainWindow.setSize(me.defaultState);
+            mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
+        }
         me.splitViewMode = false;
     }
 
