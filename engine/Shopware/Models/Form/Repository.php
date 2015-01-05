@@ -67,22 +67,26 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select all data about a single form
      * for the passed form id.
+     *
      * @param $formId
+     * @param $shopId
      * @return \Doctrine\ORM\Query
      */
-    public function getFormQuery($formId)
+    public function getFormQuery($formId, $shopId = null)
     {
-        $builder = $this->getFormQueryBuilder($formId);
+        $builder = $this->getFormQueryBuilder($formId, $shopId);
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getFormQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $formId
+     * @param $shopId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getFormQueryBuilder($formId)
+    public function getFormQueryBuilder($formId, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('forms', 'fields', 'attribute'))
@@ -92,6 +96,16 @@ class Repository extends ModelRepository
             ->where('forms.id = ?1')
             ->setParameter(1, $formId)
             ->orderBy('fields.position');
+
+        if ($shopId) {
+            $builder->andWhere(
+                $builder->expr()->orX(
+                    $builder->expr()->like('forms.shopIds', ':shopId'),
+                    $builder->expr()->isNull('forms.shopIds')
+                )
+            )
+            ->setParameter('shopId',  '%|' . $shopId . '|%');
+        }
 
         return $builder;
     }

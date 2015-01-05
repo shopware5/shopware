@@ -254,7 +254,8 @@ Ext.define('Shopware.apps.Form.controller.Main', {
 
                     var view = me.getView('main.Editwindow').create({
                         formRecord: newRecord,
-                        fieldStore: this.getStore('Field')
+                        fieldStore: this.getStore('Field'),
+                        shopStore: this.getStore('Shop').load()
                     });
 
                     view.down('form-main-fieldgrid').setDisabled(false);
@@ -276,8 +277,12 @@ Ext.define('Shopware.apps.Form.controller.Main', {
      * @return void
      */
     onOpenAddWindow: function() {
+        var shopStore = this.getStore('Shop');
+        shopStore.load();
+
         this.getView('main.Editwindow').create({
-            fieldStore: this.getStore('Field')
+            fieldStore: this.getStore('Field'),
+            shopStore: this.getStore('Shop').load()
         }).show();
     },
 

@@ -75,11 +75,15 @@ Ext.define('Shopware.apps.Site.controller.Main', {
         me.subApplication.nodeStore = me.subApplication.getStore('Nodes');
 
         me.groupStore = me.subApplication.getStore('Groups');
-
         me.selectedStore = me.subApplication.getStore('Selected');
+        me.shopStore = me.subApplication.getStore('Shop').load();
 
-
-        me.mainWindow = me.getView('main.Window').create({ nodeStore: me.subApplication.nodeStore, groupStore: me.groupStore, selectedStore: me.selectedStore  });
+        me.mainWindow = me.getView('main.Window').create({
+            nodeStore: me.subApplication.nodeStore,
+            groupStore: me.groupStore,
+            selectedStore: me.selectedStore,
+            shopStore: me.shopStore
+        });
 
         me.control({
             //fires, when the user tries to create a new site

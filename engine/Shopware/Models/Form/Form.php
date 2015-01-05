@@ -139,6 +139,13 @@ class Form extends ModelEntity
     private $metaDescription = '';
 
     /**
+     * @var string $shopIds
+     *
+     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     */
+    private $shopIds;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -467,6 +474,24 @@ class Form extends ModelEntity
     public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Form', 'attribute', 'form');
+    }
+
+    /**
+     * Returns the unexploded shop ids string (ex: |1|2|)
+     *
+     * @return string
+     */
+    public function getShopIds()
+    {
+        return $this->shopIds;
+    }
+
+    /**
+     * @param string $shopIds
+     */
+    public function setShopIds($shopIds)
+    {
+        $this->shopIds = $shopIds;
     }
 
 }

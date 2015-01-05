@@ -69,15 +69,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $this->View()->forceMail = intval($this->Request()->getParam('forceMail'));
         $this->View()->id        = $id;
 
+        $shopId = $this->container->get('context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id);
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
-            throw new Enlight_Exception("Could not construct form class");
+            $this->Response()->setHttpResponseCode(404);
+            return $this->forward('index', 'index');
         }
 
         /* @var $field Field */
