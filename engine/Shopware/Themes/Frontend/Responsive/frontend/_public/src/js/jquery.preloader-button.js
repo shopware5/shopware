@@ -30,9 +30,6 @@
 
             me.opts.checkFormIsValid = me.checkForValiditySupport();
 
-
-            console.log(me.opts.checkFormIsValid);
-
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
         },
 
