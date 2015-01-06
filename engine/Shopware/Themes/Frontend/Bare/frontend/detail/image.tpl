@@ -73,7 +73,7 @@
 	{block name='frontend_detail_image_box_dots'}
 		{if $sArticle.images}
 			<div class="image--dots image-slider--dots panel--dot-nav">
-				<a href="#" class="dot--link is--active">&nbsp;</a>
+                <a href="#" class="dot--link">&nbsp;</a>
 				{foreach $sArticle.images as $image}
 					<a href="#" class="dot--link">&nbsp;</a>
 				{/foreach}
