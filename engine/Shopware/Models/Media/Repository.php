@@ -86,7 +86,7 @@ class Repository extends ModelRepository
      */
     public function getAlbumMediaQuery($albumId, $filter = null, $orderBy = null, $offset = null, $limit= null,$validTypes = null)
     {
-        $builder = $this->getAlbumMediaQueryBuilder($albumId, $filter, $orderBy,$validTypes);
+        $builder = $this->getAlbumMediaQueryBuilder($albumId, $filter, $orderBy, $validTypes);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
@@ -129,8 +129,10 @@ class Repository extends ModelRepository
             $builder->andWhere('media.extension IN (?2)');
             $builder->setParameter(2, $validTypes);
         }
-        if ($orderBy !== null) {
+        if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
+        } else {
+            $builder->addOrderBy('media.id', 'DESC');
         }
         return $builder;
     }
