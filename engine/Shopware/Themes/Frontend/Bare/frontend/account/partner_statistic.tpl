@@ -35,9 +35,9 @@
 
 {block name="frontend_index_header_javascript_jquery_lib" append}
     <script type="text/javascript" src="{link file='frontend/_public/src/js/jquery.ui.datepicker.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/analytics.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/raphael.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/popup.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/analytics.js'}"></script>
 {/block}
 
 {* Breadcrumb *}
