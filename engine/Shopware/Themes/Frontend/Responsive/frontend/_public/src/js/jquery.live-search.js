@@ -107,12 +107,13 @@
 
             // On enter without result
             if(keyCode == 13) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
                 if (selected.length) {
                     window.location.href = selected.find('a').attr('href');
-                    return;
                 }
-
-                me.$el.closest('form').submit();
             }
         },
 
