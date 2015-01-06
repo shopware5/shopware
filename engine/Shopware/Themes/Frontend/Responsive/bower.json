@@ -4,13 +4,13 @@
   "authors": [
     "shopware AG"
   ],
-  "description": "A bare theme for Shopware, which could be used as a boilerplate template",
+  "description": "A responsive theme for Shopware",
   "keywords": [
     "bare",
     "theme",
     "shopware"
   ],
-  "license": "New BSD",
+  "license": "MIT",
   "homepage": "http://shopware.com",
   "private": true,
   "ignore": [
@@ -31,5 +31,35 @@
     "jquery.event.move": "~1.3.6",
     "jquery.transit": "~0.9.9",
     "masonry": "~3.1.5"
-  }
+  },
+    "exportsOverride": {
+        "jquery.event.move": {
+            "js": [ "js/jquery.event.move.js", "README.md" ]
+        },
+        "jquery.event.swipe": {
+            "js": [ "js/jquery.event.swipe.js", "README.md" ]
+        },
+        "jquery.transit": {
+            "js": [ "jquery.transit.js", "README.md" ]
+        },
+        "jquery": {
+            "js": [ "dist/jquery.min.js", "MIT-LICENSE.txt" ]
+        },
+        "masonry": {
+            "js": [ "dist/masonry.pkgd.min.js", "README.mdown" ]
+        },
+        "normalize-less": {
+            "less": ["normalize.less", "README.md"]
+        },
+        "pocketgrid": {
+            "css": [ "README.md", "LICENCE", "pocketgrid.min.css" ]
+        },
+        "picturefill": {
+            "js": [ "picturefill.js", "README.md" ]
+        },
+        "open-sans-fontface": {
+            "less": [ "open-sans.less", "README.md" ],
+            "fonts": "fonts/"
+        }
+    }
 }
