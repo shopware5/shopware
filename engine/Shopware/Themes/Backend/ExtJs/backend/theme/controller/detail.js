@@ -283,6 +283,10 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
     saveConfig: function(theme, shop, formPanel, window) {
         var me = this;
 
+        if (window instanceof Ext.window.Window) {
+            window.setLoading(true);
+        }
+
         theme = me.updateShopValues(
             theme,
             shop,
