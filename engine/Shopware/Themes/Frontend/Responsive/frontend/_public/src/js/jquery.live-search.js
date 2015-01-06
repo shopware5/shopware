@@ -113,10 +113,7 @@
 
                 if (selected.length) {
                     window.location.href = selected.find('a').attr('href');
-                    return;
                 }
-
-                me.$el.closest('form').submit();
             }
         },
 
