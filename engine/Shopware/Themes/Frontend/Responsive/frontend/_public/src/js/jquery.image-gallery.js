@@ -1,26 +1,96 @@
 ;(function ($) {
     'use strict';
 
+    /**
+     * Image Gallery Plugin.
+     *
+     * This plugin opens a clone of an existing image slider in a lightbox.
+     * This image slider clone provides three control buttons (zoom in, zoom out
+     * and reset zoom) and also enables advanced features of the
+     * image slider plugin like pinch-to-zoom, double-tap, moving scaled images.
+     */
     $.plugin('imageGallery', {
 
         defaults: {
+
+            /**
+             * Selector for the image container..
+             *
+             * @property imageContainerSelector
+             * @type {String}
+             */
             imageContainerSelector: '.image-slider--container',
 
+            /**
+             * Selector for the image slider itself..
+             *
+             * @property imageSlideSelector
+             * @type {String}
+             */
             imageSlideSelector: '.image-slider--slide',
 
+            /**
+             * Selector for the thumbnail container.
+             *
+             * @property thumbnailContainerSelector
+             * @type {String}
+             */
             thumbnailContainerSelector: '.image-slider--thumbnails',
 
+            /**
+             * Class that is used for the lightbox template.
+             *
+             * @property imageGalleryClass
+             * @type {String}
+             */
             imageGalleryClass: 'image--gallery',
 
+            /**
+             * Key code for the button that let the image slider
+             * slide to the previous image.
+             *
+             * @property previousKeyCode
+             * @type {Number}
+             */
             previousKeyCode: 37,
 
+            /**
+             * Key code for the button that let the image slider
+             * slide to the next image.
+             *
+             * @property nextKeyCode
+             * @type {Number}
+             */
             nextKeyCode: 39,
 
+            /**
+             * Maximum zoom factor for the image slider.
+             * Will be passed to the image slider configuration in the lightbox.
+             *
+             * @property maxZoom
+             * @type {Number|String}
+             */
             maxZoom: 'auto',
 
-            disabledCls: 'is--disabled'
+            /**
+             * Class that will be appended to the buttons when they
+             * should be disabled.
+             *
+             * @property disabledClass
+             * @type {String}
+             */
+            disabledClass: 'is--disabled'
         },
 
+        /**
+         * Method for the plugin initialisation.
+         * Merges the passed options with the data attribute configurations.
+         * Creates and references all needed elements and properties.
+         * Calls the registerEvents method afterwards.
+         *
+         * @public
+         * @method init
+         */
         init: function () {
             var me = this,
                 $el,
@@ -35,6 +105,8 @@
             me.$zoomOutBtn = me.createZoomOutButton().appendTo(me.$imageContainerClone);
             me.$zoomResetBtn = me.createZoomResetButton().appendTo(me.$imageContainerClone);
             me.$zoomInBtn = me.createZoomInButton().appendTo(me.$imageContainerClone);
+
+            me.opened = false;
 
             me.$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
                 $el = $(el);
@@ -58,24 +130,48 @@
             me.registerEvents();
         },
 
+        /**
+         * Creates and returns the zoom in ( [+] ) button.
+         *
+         * @private
+         * @method createZoomInButton
+         */
         createZoomInButton: function () {
             return $('<div>', {
                 'class': 'btn icon--plus3 is--small button--zoom-in'
             });
         },
 
+        /**
+         * Creates and returns the zoom out ( [-] ) button.
+         *
+         * @private
+         * @method createZoomOutButton
+         */
         createZoomOutButton: function () {
             return $('<div>', {
                 'class': 'btn icon--minus3 is--small button--zoom-out'
             });
         },
 
+        /**
+         * Creates and returns the zoom reset ( [-><-] ) button.
+         *
+         * @private
+         * @method createZoomResetButton
+         */
         createZoomResetButton: function () {
             return $('<div>', {
                 'class': 'btn icon--resize-shrink is--small button--zoom-reset'
             });
         },
 
+        /**
+         * Registers all needed events of the plugin.
+         *
+         * @private
+         * @method registerEvents
+         */
         registerEvents: function () {
             var me = this;
 
@@ -85,57 +181,80 @@
             me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
         },
 
+        /**
+         * Will be called when the zoom reset button was clicked.
+         * Resets the current image scaling of the image slider.
+         *
+         * @event onResetZoom
+         * @param {jQuery.Event} event
+         */
         onResetZoom: function (event) {
             var me = this,
                 plugin = me.$template.data('plugin_imageSlider');
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomResetBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomResetBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
             me.disableButtons();
 
-            plugin.resetTransformation(true, function () {
-                me.enableButtons();
-            });
+            plugin.resetTransformation(true, me.enableButtons.bind(me));
         },
 
+        /**
+         * Will be called when the zoom in button was clicked.
+         * Zooms the image slider in by the factor of 1.
+         *
+         * @event onZoomIn
+         * @param {jQuery.Event} event
+         */
         onZoomIn: function (event) {
             var me = this,
                 plugin = me.$template.data('plugin_imageSlider');
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomInBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomInBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
             me.disableButtons();
 
-            plugin.scale(1, true, function () {
-                me.enableButtons();
-            });
+            plugin.scale(1, true, me.enableButtons.bind(me));
         },
 
+        /**
+         * Will be called when the zoom out button was clicked.
+         * Zooms the image slider out by the factor of 1.
+         *
+         * @event onZoomOut
+         * @param {jQuery.Event} event
+         */
         onZoomOut: function (event) {
             var me = this,
                 plugin = me.$template.data('plugin_imageSlider');
 
             event.preventDefault();
 
-            if (!plugin || me.$zoomOutBtn.hasClass(me.opts.disabledCls)) {
+            if (!plugin || me.$zoomOutBtn.hasClass(me.opts.disabledClass)) {
                 return;
             }
 
             me.disableButtons();
 
-            plugin.scale(-1, true, function () {
-                me.enableButtons();
-            });
+            plugin.scale(-1, true, me.enableButtons.bind(me));
         },
 
+        /**
+         * Will be called when an keyboard key was pressed.
+         * If the previous/next keycode was pressed, it will slide to
+         * the previous/next image.
+         *
+         * @event onKeyDown
+         * @param {jQuery.Event} event
+         */
         onKeyDown: function (event) {
             var me = this,
                 opts = me.opts,
@@ -154,25 +273,20 @@
             }
         },
 
-        disableButtons: function () {
-            var me = this;
-
-            me.$zoomResetBtn.addClass(me.opts.disabledCls);
-            me.$zoomOutBtn.addClass(me.opts.disabledCls);
-            me.$zoomInBtn.addClass(me.opts.disabledCls);
-        },
-
-        enableButtons: function () {
-            var me = this;
-
-            me.$zoomResetBtn.removeClass(me.opts.disabledCls);
-            me.$zoomOutBtn.removeClass(me.opts.disabledCls);
-            me.$zoomInBtn.removeClass(me.opts.disabledCls);
-        },
-
+        /**
+         * Will be called when the detail page image slider was clicked..
+         * Opens the lightbox with an image slider clone in it.
+         *
+         * @event onClick
+         */
         onClick: function () {
             var me = this,
                 plugin = me.$el.data('plugin_imageSlider');
+
+            if (me.opened) {
+                return;
+            }
+            me.opened = true;
 
             $.modal.open(me.$template, {
                 width: '100%',
@@ -192,14 +306,24 @@
                 dotNavigation: false,
                 swipeToSlide: true,
                 swipeTolerance: 50,
+                pinchToZoom: true,
+                doubleTap: true,
                 maxZoom: me.opts.maxZoom,
                 startIndex: plugin ? plugin.slideIndex : 0
             });
         },
 
+        /**
+         * Will be called when the modal box was closed.
+         * Destroys the imageSlider plugin instance of the lightbox template.
+         *
+         * @event onCloseModal
+         */
         onCloseModal: function () {
             var me = this,
                 plugin = me.$template.data('plugin_imageSlider');
+
+            me.opened = false;
 
             if (!plugin) {
                 return;
@@ -208,10 +332,62 @@
             plugin.destroy();
         },
 
+        /**
+         * This function disables all three control buttons.
+         * Will be called when an animation begins.
+         *
+         * @public
+         * @method disableButtons
+         */
+        disableButtons: function () {
+            var me = this,
+                disabledClass = me.opts.disabledClass;
+
+            me.$zoomResetBtn.addClass(disabledClass);
+            me.$zoomOutBtn.addClass(disabledClass);
+            me.$zoomInBtn.addClass(disabledClass);
+        },
+
+        /**
+         * This function enables all three control buttons.
+         * Will be called when an animation has finished.
+         *
+         * @public
+         * @method enableButtons
+         */
+        enableButtons: function () {
+            var me = this,
+                disabledClass = me.opts.disabledClass;
+
+            me.$zoomResetBtn.removeClass(disabledClass);
+            me.$zoomOutBtn.removeClass(disabledClass);
+            me.$zoomInBtn.removeClass(disabledClass);
+        },
+
+        /**
+         *
+         * @public
+         * @method destroy
+         */
         destroy: function () {
-            var me = this;
+            var me = this,
+                plugin = me.$template.data('plugin_imageSlider');
 
+            if (plugin) {
+                plugin.destroy();
+            }
 
+            me.$template.remove();
+            me.$template = null;
+
+            me.$zoomOutBtn.remove();
+            me.$zoomResetBtn.remove();
+            me.$zoomInBtn.remove();
+
+            me.$imageContainer = null;
+            me.$thumbContainer = null;
+            me.$imageContainerClone = null;
+            me.$thumbContainerClone = null;
         }
     });
 
