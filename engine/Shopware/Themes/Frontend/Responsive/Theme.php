@@ -45,12 +45,12 @@ class Theme extends \Shopware\Components\Theme
     protected $javascript = array(
 
         // Third party plugins / libraries
-        'vendors/jquery/dist/jquery.min.js',
-        'vendors/picturefill/picturefill.js',
-        'vendors/jquery.transit/jquery.transit.js',
-        'vendors/jquery.event.move/js/jquery.event.move.js',
-        'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
-        'vendors/masonry/dist/masonry.pkgd.min.js',
+        'vendors/js/jquery/jquery.min.js',
+        'vendors/js/picturefill/picturefill.js',
+        'vendors/js/jquery.transit/jquery.transit.js',
+        'vendors/js/jquery.event.move/jquery.event.move.js',
+        'vendors/js/jquery.event.swipe/jquery.event.swipe.js',
+        'vendors/js/masonry/masonry.pkgd.min.js',
 
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',

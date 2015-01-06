@@ -1,6 +1,0 @@
-# Ignore all files and folder except the ".gitignore"
-# *
-
-!modernizr/
-!modernizr/*
-!.gitignore
