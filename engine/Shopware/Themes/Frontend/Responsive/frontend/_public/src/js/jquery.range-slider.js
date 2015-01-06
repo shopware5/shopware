@@ -33,7 +33,8 @@
     function roundPretty(value, method) {
         var rounding = method || 'round',
             digits = countDigits(value),
-            base = 5 * Math.pow(10, digits - 1);
+            step = (digits > 1) ? 2 : 1,
+            base = 5 * Math.pow(10, digits - step);
 
         return round(value, base, rounding);
     }
@@ -238,17 +239,8 @@
             me.stepSize = me.range / int(me.opts.stepCount);
             me.stepWidth = 100 / int(me.opts.stepCount);
 
-            if (me.opts.startMin == me.opts.rangeMin) {
-                me.minValue = me.minRange;
-            } else {
-                me.minValue = round(int(me.opts.startMin), me.stepSize, 'floor');
-            }
-
-            if (me.opts.startMax == me.opts.rangeMax || me.opts.startMax <= 0) {
-                me.maxValue = me.maxRange;
-            } else {
-                me.maxValue = round(int(me.opts.startMax), me.stepSize, 'ceil');
-            }
+            me.minValue = (me.opts.startMin <= me.minRange) ? me.minRange : int(me.opts.startMin);
+            me.maxValue = (me.opts.startMax >= me.maxRange) ? me.maxRange : int(me.opts.startMax);
 
             me.setRangeBarPosition(me.minValue, me.maxValue);
             me.updateLayout();
@@ -258,7 +250,7 @@
             var me = this,
                 min = minValue || me.minValue,
                 max = maxValue || me.maxValue,
-                left = 100 / me.range * min,
+                left = 100 / me.range * (min - me.minRange),
                 width = 100 / me.range * (max - min);
 
             me.$rangeBar.css({
@@ -369,7 +361,7 @@
                    width = me.$container.innerWidth(),
                    mouseX = pageX - offset.left,
                    xPercent = clamp(round((100 / width * mouseX), me.stepWidth, 'round'), 0, 100),
-                   value = me.range / 100 * xPercent;
+                   value = (me.range / 100 * xPercent) + me.minRange;
 
                event.preventDefault();
 
