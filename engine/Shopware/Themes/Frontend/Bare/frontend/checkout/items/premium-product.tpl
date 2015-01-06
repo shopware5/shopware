@@ -19,7 +19,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="cart--batch">
+                                <div class="cart--badge">
                                     <span>{s name="CartItemInfoFree"}{/s}</span>
                                 </div>
                             {/block}
