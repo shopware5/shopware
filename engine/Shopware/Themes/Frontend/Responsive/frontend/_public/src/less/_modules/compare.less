@@ -1,16 +1,28 @@
 // Basic header
 .top-bar--navigation {
+	position: relative;
 
     .entry--compare {
         .unitize-padding(0, 8);
-        position: relative;
+
+		// Compare quantity
+		.compare--quantity {
+			.unitize-margin(0, 5);
+			font-weight: 600;
+			display: inline-block;
+			color: @brand-primary;
+		}
+
+		.icon--compare {
+			.unitize(12, 16, font-size);
+		}
     }
 
     .compare--list {
         .unitize-width(280);
-        .unitize-padding(8, 8);
-        .unitize(40, 16, top);
-        .unitize(0, 16, left);
+        .unitize-padding(5, 10, 10, 10);
+        .unitize(30, 16, top);
+		.unitize(12, 16, right);
         text-align: left;
         position: absolute;
         display: none;
@@ -24,7 +36,7 @@
             .unitize-width(8);
             .unitize-height(8);
             .unitize(-5, 16, top);
-            .unitize(18, 16, left);
+            .unitize(33, 16, left);
             content: '';
             display: block;
             position: absolute;
@@ -38,11 +50,21 @@
     .js--is--dropdown-active .compare--list {
         display: block;
 
+		.compare--entry { cursor: default; }
+
         .compare--link {
-            .unitize-padding(4, 6);
+            .unitize(230, 16, width);
+            .unitize-padding(10, 0);
             .unitize(14, 16, font-size);
             color: @text-color;
             display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover {
+                color: @brand-primary;
+            }
         }
 
         .compare--button {
@@ -52,8 +74,12 @@
         }
 
         .btn--item-delete {
-            .unitize(16, 16, line-height);
-            .unitize-margin(1, 0);
+			.unitize-height(21);
+			.unitize-width(21);
+			.unitize-padding(4, 5);
+			.unitize-margin(8, 0);
+			.unitize(8, 16, font-size);
+			.unitize(14, 16, line-height);
             float: right;
 
             .icon--cross {
@@ -78,7 +104,6 @@
     display: block;
     overflow: auto;
 }
-
 
 .modal--compare {
     .unitize(14, 16, font-size);
@@ -197,4 +222,10 @@
     .entry--property {
         height: auto;
     }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+	.top-bar--navigation {
+		.compare--list { right: 0; }
+	}
 }

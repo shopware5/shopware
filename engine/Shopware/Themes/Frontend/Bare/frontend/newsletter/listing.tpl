@@ -9,7 +9,7 @@
 
 			{if $sContent}
 				{block name="frontend_newsletter_listing_headline"}
-					<div class="newsletter-listing-headline panel--body is--wide">
+					<div class="newsletter-listing--headline panel--body is--wide has--border is--rounded">
 						<h1 class="newsletter--title">{s name="NewsletterListingHeadline"}Newsletter-Archiv{/s}</h1>
 					</div>
 				{/block}
@@ -55,7 +55,7 @@
 											{* Newsletter entry button *}
 											{block name="frontend_newsletter_listing_entry_button"}
 												<div class="newsletter-listing--entry-button block">
-													<a href="{$sContentItem.link}" class="btn is--secondary is--small">{s name='NewsletterListingLinkDetails'}{/s}</a>
+													<a href="{$sContentItem.link}" class="btn is--secondary is--small right">{s name='NewsletterListingLinkDetails'}{/s}</a>
 												</div>
 											{/block}
 										</div>

@@ -34,7 +34,7 @@
 
 		{* Welcome text *}
 		{block name="frontend_account_index_welcome"}
-			<div class="account--welcome panel has--border is--rounded">
+			<div class="account--welcome panel">
 				{block name="frontend_account_index_welcome_headline"}
 					<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</h1>
 				{/block}
@@ -67,14 +67,14 @@
 				{block name="frontend_account_index_info_actions"}
 					<div class="panel--actions is--wide">
 						<a href="#account--password"
-						   class="btn is--secondary is--small btn--password"
+						   class="btn is--small btn--password"
 						   data-collapseTarget="#account--password"
 						   data-closeSiblings="true"
 						   data-scrollTarget="#account--password">
 							{s name="AccountLinkChangePassword"}{/s}
 						</a>
 						<a href="#account--email"
-						   class="btn is--secondary is--small btn--email"
+						   class="btn is--small btn--email"
 						   data-collapseTarget="#account--email"
 						   data-closeSiblings="true"
 						   data-scrollTarget="#account--email">
@@ -85,7 +85,7 @@
 			</div>
 		{/block}
 
-		{* Payment informations *}
+		{* Payment information *}
 		{block name="frontend_account_index_payment_method"}
 			<div class="account--payment account--box panel has--border is--rounded">
 
@@ -107,11 +107,11 @@
 
 				{block name="frontend_account_index_payment_method_actions"}
 					{$paymentMethodTitle = {"{s name='AccountLinkChangePayment'}{/s}"|escape}}
-					
+
 					<div class="panel--actions is--wide">
 						<a href="{url controller='account' action='payment'}"
 						   title="{$paymentMethodTitle|escape}"
-						   class="btn is--secondary is--small">
+						   class="btn is--small">
 							{s name='AccountLinkChangePayment'}{/s}
 						</a>
 					</div>
@@ -148,7 +148,7 @@
 
 						{block name="frontend_account_index_password_actions"}
 							<div class="panel--actions is--wide">
-								<input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="btn is--secondary is--small" />
+								<input type="submit" value="{s name='AccountLinkChangePassword'}{/s}" class="btn is--primary is--small" />
 							</div>
 						{/block}
 					</form>
@@ -185,33 +185,10 @@
 
 						{block name="frontend_account_index_email_actions"}
 							<div class="panel--actions is--wide">
-								<input type="submit" value="{s name='AccountLinkChangeMail'}{/s}" class="btn is--secondary is--small" />
+								<input type="submit" value="{s name='AccountLinkChangeMail'}{/s}" class="btn is--primary is--small" />
 							</div>
 						{/block}
 					</form>
-				{/block}
-			</div>
-		{/block}
-
-		{* Newsletter settings *}
-		{block name="frontend_account_index_newsletter_settings"}
-			<div class="account--newsletter account--box panel has--border is--rounded newsletter">
-
-				{block name="frontend_account_index_newsletter_settings_headline"}
-					<h2 class="panel--title is--underline">{s name="AccountHeaderNewsletter"}{/s}</h2>
-				{/block}
-
-				{block name="frontend_account_index_newsletter_settings_content"}
-					<div class="panel--body is--wide">
-						<form name="frmRegister" method="post" action="{url action=saveNewsletter}">
-							<fieldset>
-                                <input type="checkbox" name="newsletter" value="1" id="newsletter" data-auto-submit="true" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
-                                <label for="newsletter">
-                                    {s name="AccountLabelWantNewsletter"}{/s}
-                                </label>
-							</fieldset>
-						</form>
-					</div>
 				{/block}
 			</div>
 		{/block}
@@ -246,10 +223,10 @@
 
 				{block name="frontend_account_index_primary_billing_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn is--secondary is--small">
+						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn is--small">
 							{s name="AccountLinkSelectBilling"}{/s}
 						</a>
-						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn is--secondary is--small">
+						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn is--small">
 							{s name="AccountLinkChangeBilling"}{/s}
 						</a>
 					</div>
@@ -287,15 +264,38 @@
 
 				{block name="frontend_account_index_primary_shipping_actions"}
 					<div class="panel--actions is--wide">
-						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--secondary is--small">
+						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--small">
 							{se name="AccountLinkSelectShipping"}{/se}
 						</a>
-						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--secondary is--small">
+						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--small">
 							{se name="AccountLinkChangeShipping"}{/se}
 						</a>
 					</div>
 				{/block}
 			</div>
+		{/block}
+
+        {* Newsletter settings *}
+        {block name="frontend_account_index_newsletter_settings"}
+            <div class="account--newsletter account--box panel has--border is--rounded newsletter">
+
+                {block name="frontend_account_index_newsletter_settings_headline"}
+                <h2 class="panel--title is--underline">{s name="AccountHeaderNewsletter"}{/s}</h2>
+                {/block}
+
+                {block name="frontend_account_index_newsletter_settings_content"}
+                    <div class="panel--body is--wide">
+                        <form name="frmRegister" method="post" action="{url action=saveNewsletter}">
+                            <fieldset>
+                                <input type="checkbox" name="newsletter" value="1" id="newsletter" data-auto-submit="true" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
+                                <label for="newsletter">
+                                    {s name="AccountLabelWantNewsletter"}{/s}
+                                </label>
+                            </fieldset>
+                        </form>
+                    </div>
+                {/block}
+            </div>
 		{/block}
 
 	</div>

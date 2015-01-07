@@ -1,7 +1,7 @@
 {block name="widgets_listing_top_seller"}
     {if $sCharts|@count}
         {block name="widgets_listing_top_seller_panel"}
-            <div class="topseller panel has--border">
+            <div class="topseller panel">
                 {block name="widgets_listing_top_seller_panel_inner"}
 
                     {block name="widgets_listing_top_seller_title"}

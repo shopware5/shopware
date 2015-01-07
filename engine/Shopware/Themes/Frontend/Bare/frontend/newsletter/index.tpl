@@ -25,7 +25,7 @@
 
 		{* Newsletter headline *}
 		{block name="frontend_newsletter_headline"}
-			<div class="newsletter--headline panel--body is--wide">
+			<div class="newsletter--headline panel--body is--wide has--border is--rounded">
 				{block name="frontend_newsletter_headline_title"}
 					<h1 class="newsletter--title">{s name="NewsletterRegisterHeadline"}{/s}</h1>
 				{/block}
@@ -43,7 +43,7 @@
 
 				{* Newsletter headline *}
 				{block name="frontend_newsletter_content_headline"}
-					<h1 class="panel--title is--underline">{s name="NewsletterRegisterHeadline"}{/s}</h1>
+					<h2 class="panel--title is--underline">{s name="NewsletterRegisterHeadline"}{/s}</h2>
 				{/block}
 
 				{* Newsletter form *}

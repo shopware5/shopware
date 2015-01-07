@@ -5,7 +5,8 @@
     {if $theme.checkoutHeader}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}"
+           xmlns="http://www.w3.org/1999/html">
             <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>
@@ -47,11 +48,13 @@
     {else}
         <div class="container footer-vat">
             <div class="footer--vat-info">
-                {if $sOutputNet}
-                    <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
-                {else}
-                    <p>{s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
-                {/if}
+                <p class="vat-info--text">
+                    {if $sOutputNet}
+                        {s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {else}
+                        {s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {/if}
+                </p>
             </div>
         </div>
     {/if}
@@ -123,7 +126,7 @@
                                     {* Newsletter checkbox *}
                                     {block name='frontend_checkout_confirm_newsletter_checkbox'}
                                         <div class="block column--checkbox">
-                                            <input type="checkbox" name="sNewsletter" value="1"{if $sNewsletter} checked="checked"{/if} />
+                                            <input type="checkbox" name="sNewsletter" id="sNewsletter" value="1"{if $sNewsletter} checked="checked"{/if} />
                                         </div>
                                     {/block}
 
@@ -204,10 +207,10 @@
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_billing_address_actions"}
                         <div class="panel--actions">
-                            <a href="{url controller=account action=billing sTarget=checkout}" class="btn is--secondary is--small">
+                            <a href="{url controller=account action=billing sTarget=checkout}" class="btn is--small">
                                 {s name="ConfirmLinkChangeBilling" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
-                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="btn is--secondary is--small">
+                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="btn is--small">
                                 {s name="ConfirmLinkSelectBilling" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -251,11 +254,11 @@
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_shipping_address_actions"}
                         <div class="panel--actions">
-                            <a href="{url controller=account action=shipping sTarget=checkout}" class="btn is--secondary is--small">
+                            <a href="{url controller=account action=shipping sTarget=checkout}" class="btn is--small">
                                 {s name="ConfirmLinkChangeShipping" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
 
-                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="btn is--secondary is--small">
+                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="btn is--small">
                                 {s name="ConfirmLinkSelectShipping" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -291,7 +294,7 @@
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
                         <div class="panel--actions">
-                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--secondary is--small">
+                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small">
                                 {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
@@ -415,11 +418,11 @@
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
-                                    <button type="submit" class="btn is--primary right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">
+                                    <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">
                                         {s name='ConfirmDoPayment'}Zahlung durchführen{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {else}
-                                    <button type="submit" class="btn is--primary right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">
+                                    <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">
                                         {s name='ConfirmActionSubmit'}{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {/if}

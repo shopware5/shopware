@@ -1,7 +1,7 @@
 {if $sArticle.sSimilarArticles}
 	{* Similar products - Content *}
 	{block name="frontend_detail_index_similar_slider_content"}
-        <div class="similar--content panel--body">
+        <div class="similar--content">
             <div class="product-slider" data-product-slider="true">
                 <div class="product-slider--container">
                     {foreach $sArticle.sSimilarArticles as $sSimilarArticle}

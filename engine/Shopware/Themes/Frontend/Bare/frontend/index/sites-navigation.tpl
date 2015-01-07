@@ -3,18 +3,27 @@
     <ul class="shop-sites--navigation sidebar--navigation navigation--list{if !$level} is--drop-down{/if} is--level{$level}" role="menu">
         {block name='frontend_index_left_menu_before'}{/block}
 
-        {foreach $customPages as $item}
+        {foreach $customPages as $page}
             {block name='frontend_index_left_menu_entry'}
-                <li class="navigation--entry{if $item.active} is--active{/if}" role="menuitem">
-                    <a class="navigation--link{if $item.active} is--active{/if}" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description|escape}" {if $item.target}target="{$item.target}"{/if}>
-                        {$item.description}
-                    </a>
-                    {block name="frontend_index_categories_left_entry_subcategories"}
+                <li class="navigation--entry{if $page.active} is--active{/if}" role="menuitem">
+                    <a class="navigation--link{if $page.active} is--active{/if}{if $page.childrenCount} link--go-forward{/if}"
+                       href="{if $page.link}{$page.link}{else}{url controller='custom' sCustom=$page.id title=$page.description}{/if}"
+                       title="{$page.description|escape}"
+                       data-category-id="{$page.id}"
+                       data-fetchUrl="{url module=widgets controller=listing action=getCustomPage pageId={$page.id}}"
+                       {if $page.target}target="{$page.page}"{/if}>
+                        {$page.description}
 
-                        {if $item.active && $item.subPages}
-                            {call name=customPages customPages=$item.subPages level=$level+1}
+                        {if $page.childrenCount}
+                            <span class="is--icon-right">
+                            <i class="icon--arrow-right"></i>
+                        </span>
                         {/if}
-                    {/block}
+                    </a>
+
+                    {if $page.active && $page.subPages}
+                        {call name=customPages customPages=$page.subPages level=$level+1}
+                    {/if}
                 </li>
             {/block}
         {/foreach}

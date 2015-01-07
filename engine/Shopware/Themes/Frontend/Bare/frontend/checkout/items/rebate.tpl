@@ -14,7 +14,7 @@
                             {if $sBasketItem.price >= 0}
                                 <i class="icon--arrow-right"></i>
                             {else}
-                                <i class="icon--percent"></i>
+                                <i class="icon--percent2"></i>
                             {/if}
                         </div>
                     </div>

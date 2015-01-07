@@ -8,10 +8,10 @@
         .unitize(10, 16, margin-top);
     }
 
-    .account--change-billing,
     .account--billing-address,
-    .account--change-shipping,
-    .account--shipping-address {
+    .account--shipping-address,
+    .account--change-billing,
+    .account--change-shipping {
         width: 100% !important;
     }
 }
@@ -261,7 +261,6 @@
         .unitize-height(48);
         .unitize-width(48);
 		margin: 0 auto;
-		background: @border-color;
         text-align: center;
         font-weight: bold;
         background: @text-color;
@@ -518,15 +517,22 @@
         .unitize(20, 16, padding);
     }
 
+    .article--info {
+        .unitize(80, 16, margin-left);
+        .clearfix();
+    }
+
     .article--image {
         .unitize(5, 16, padding);
+        .unitize-width(80, 16);
+        .unitize-height(80, 16);
         .border-radius();
-        width: 25%;
+        float: left;
         border: 1px solid @border-color;
     }
 
     .article--name {
-        width: 75%;
+        width: 100%;
     }
 
     .list--name {
@@ -543,9 +549,8 @@
     }
 
     .article--price {
-        .unitize(15, 16, margin-top);
-        .unitize(15, 16, margin-left);
-        width: 30%;
+        .unitize-margin(15, 0, 0, 15);
+        width: 100%;
     }
 
     .list--price .entry--price {
@@ -561,10 +566,13 @@
 
         .btn {
             width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .btn:last-child {
-            .unitize(20, 16, margin-top);
+            .unitize(10, 16, margin-top);
         }
 
         .is--left {
@@ -784,12 +792,52 @@
             width: 55%;
         }
     }
+
+    .js--modal .modal--checkout-add-article {
+
+        .article--name {
+            width: 75%;
+            float: left;
+        }
+
+        .article--price {
+            width: 25%;
+            float: right;
+            margin: 0;
+        }
+
+        .modal--actions {
+            .unitize-margin(0, 0, 20, 0);
+            .unitize-padding(10, 20, 0, 20);
+            .clearfix();
+
+            .btn {
+                width: 49%;
+            }
+
+            .btn:last-child {
+                margin-top: 0;
+            }
+
+            .is--left {
+                .unitize(35, 16, padding-left);
+            }
+        }
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .is--ctl-checkout .basket--info-messages {
-        .unitize-margin(20, 0, 4, 0);
+    .is--ctl-checkout {
+        .account--change-billing,
+        .account--change-shipping {
+            width: 80% !important;
+            float: left;
+        }
+
+        .basket--info-messages {
+            .unitize-margin(20, 0, 4, 0);
+        }
     }
 
     .is--act-shippingPayment {
@@ -825,6 +873,10 @@
         .premium-product--content {
             .unitize-height(330);
             border: 0 none;
+        }
+
+        .premium-product.panel {
+            .unitize-margin(20, 0, 0, 0);
         }
 
         // Product actions
@@ -916,6 +968,9 @@
             .js--fancy-select {
                 float: right;
                 min-width: 0;
+            }
+            .js--fancy-select-text {
+                font-weight: bold;
             }
         }
 
@@ -1055,18 +1110,10 @@
 
     .js--modal .modal--checkout-add-article {
 
-        .article--image {
-            width: 15%;
-        }
-
-        .article--name {
-            width: 55%;
-        }
-
         .article--price {
             margin-top: 0;
             margin-left: 0;
-            width: 30%;
+
         }
 
         .modal--actions {

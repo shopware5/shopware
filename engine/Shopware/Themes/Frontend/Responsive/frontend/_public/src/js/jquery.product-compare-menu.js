@@ -26,7 +26,13 @@
             modalSelector: '.js--modal',
 
             /** @string modalContentInnerSelector HTML class for modal inner content */
-            modalContentInnerSelector: '.modal--compare'
+            modalContentInnerSelector: '.modal--compare',
+
+            /** @string compareEntriesSelector Selector for switching between single remove or full plugin reload */
+            compareEntriesSelector: '.compare--list .compare--entry',
+
+            /** @string compareEntry Selector for single compare item inside the dropdown */
+            compareEntrySelector: '.compare--entry'
         },
 
         /**
@@ -140,10 +146,30 @@
 
             var me = this,
                 $deleteBtn = $(event.currentTarget),
-                deleteUrl = $deleteBtn.attr('href');
+                deleteUrl = $deleteBtn.attr('href'),
+                rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
+                compareCount = $(me.opts.compareEntriesSelector).length;
+            
+            if(compareCount > 1) {
 
+                // slide up and remove product from unordered list
+                rowElement.slideUp('fast', function() {
+                    rowElement.remove();
+                });
+
+                // update compare counter
+                var newCompareCount = compareCount - 1;
+                $('.compare--quantity').html('(' + newCompareCount + ')');
+
+                // remove product silent in the background
+                $.get(deleteUrl);
+
+                return;
+            }
+
+            // remove last product, reload full compare plugin
             $(me.opts.compareMenuSelector).load(deleteUrl, function() {
-                // Reload compare menu plugin
+                //Reload compare menu plugin
                 $('*[data-product-compare-menu="true"]').productCompareMenu();
             });
         },

@@ -103,44 +103,29 @@
 				{* Price unit *}
 				{block name="frontend_note_item_unitprice"}
 					{if $sBasketItem.purchaseunit}
-						<div class="note--price-unit">
-							<p>
-								<span class="is--strong">{s name="NoteUnitPriceContent"}{/s}:</span> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
-								{if $sBasketItem.purchaseunit != $sBasketItem}
-									{if $sBasketItem.referenceunit}
-										({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
-									{/if}
-								{/if}
-							</p>
-						</div>
+						<span class="note--price-unit">
+                            <span class="is--strong">{s name="NoteUnitPriceContent"}{/s}:</span> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
+                            {if $sBasketItem.purchaseunit != $sBasketItem}
+                                {if $sBasketItem.referenceunit}
+                                    ({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
+                                {/if}
+                            {/if}
+						</span>
 					{/if}
 				{/block}
 
-				{* Additional links *}
-				{block name="frontend_note_item_actions"}
-					<div class="note--actions">
-						{* Place article in basket *}
-						{block name="frontend_note_item_actions_buy"}
-							{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
-								<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn is--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
-									{s name="NoteLinkBuy"}{/s}
-								</a>
-							{/if}
-						{/block}
-
-                        {* Compare button note *}
-                        {block name='frontend_note_item_actions_compare'}
-                            <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" data-product-compare-add="true" class="product--action action--compare btn is--secondary" title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}" rel="nofollow">
-                                {s name='ListingBoxLinkCompare'}{/s}
-                            </a>
-                        {/block}
-
-						{* Article Details *}
-						<a href="{$detailLink}" class="action--details btn is--secondary" title="{$sBasketItem.articlename|escape}">
-							{s name="NoteLinkDetails"}{/s}
-						</a>
-					</div>
-				{/block}
+                {* Compare product *}
+                {block name='frontend_note_item_actions_compare'}
+                    <div class="note--compare">
+                        <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}"
+                           data-product-compare-add="true"
+                           class="compare--link"
+                           title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}"
+                           rel="nofollow">
+                            <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
+                        </a>
+                    </div>
+                {/block}
 			</div>
 		{/block}
 
