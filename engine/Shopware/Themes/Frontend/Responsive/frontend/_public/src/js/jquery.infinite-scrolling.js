@@ -158,6 +158,24 @@
             me.upperParams = $.extend({}, me.params);
             me.historyParams = $.extend({}, me.params);
 
+            me.urlBasicMode = false;
+
+            // if no seo url is provided, use the url basic push mode
+            if(!me.params.p) {
+
+                me.basicModeSegments = window.location.pathname.split("/");
+                me.basicModePageKey = $.inArray('sPage', me.basicModeSegments);
+                me.basicModePageValue = me.basicModeSegments[ me.basicModePageKey +1];
+
+                if(!me.basicModePageValue) {
+                    return;
+                }
+
+                me.urlBasicMode = true;
+                me.params.p = me.basicModePageValue;
+                me.upperParams.p = me.basicModePageValue;
+            }
+
             // set page index to one if not assigned
             if(!me.params.p) {
                 me.params.p = 1;
@@ -237,6 +255,20 @@
             }
 
             var tmpPushState = me.baseUrl + '?' + $.param(tmpParams);
+
+            if(me.urlBasicMode) {
+                // use start page parameter if no one exists
+                if(!tmpPageIndex) {
+                    tmpPageIndex = me.basicModePageValue;
+                }
+
+                // redesign push url,
+                var segments = me.basicModeSegments;
+                segments[me.basicModePageKey+1] = tmpPageIndex;
+
+                tmpPushState = segments.join('/');
+            }
+
             if(me.currentPushState != tmpPushState) {
                 
                 me.currentPushState = tmpPushState;
