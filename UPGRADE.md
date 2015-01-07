@@ -289,6 +289,7 @@ In this document you will find a changelog of the important changes related to t
     * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
 * Removed configuration variable `deactivateNoInstock`
 * Changed default sorting of pictures in the backend's Media Manager. Newer pictures are now displayed first.
+* `widgets/campaign` is now included in the HTTP cache's default configuration
 
 ## 4.3.1
 

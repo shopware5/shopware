@@ -23,30 +23,5 @@ widgets/campaign 3600";'
 WHERE name='cacheControllers';
 EOD;
         $this->addSql($sql);
-
-        // Check if the element already has a custom value
-        try {
-            $statement = $this->getConnection()->prepare("SELECT id, value FROM s_core_config_values WHERE element_id = (SELECT id FROM s_core_config_elements WHERE name='cacheControllers')");
-            $statement->execute();
-            $data = $statement->fetchAll();
-        } catch(Exception $e) {
-            return;
-        }
-
-        // If not - return
-        if (empty($data)) {
-            return;
-        }
-
-        $rowData = array_shift($data);
-
-        $content = unserialize($rowData['value']);
-
-        if (strpos($content, 'widgets/campaign ') === false) {
-            $content .= "\nwidgets/campaign 3600";
-
-            $statement = $this->connection->prepare("UPDATE s_core_config_values SET value = ? WHERE id = ?");
-            $statement->execute(array(serialize($content), $rowData['id']));
-        }
     }
 }
