@@ -35,13 +35,6 @@
                                 {include file='frontend/register/payment_fieldset.tpl' form_data=$sFormData error_flags=$sErrorFlag payment_means=$sPaymentMeans}
                             {/block}
 
-                            {block name='frontend_account_payment_required'}
-                                {* Required fields hint *}
-                                <div class="register--required-info required_fields">
-                                    {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
-                                </div>
-                            {/block}
-
                             {* Payment actions *}
                             {block name="frontend_account_payment_action_buttons"}
                                 <div class="account--actions">

@@ -2,6 +2,15 @@
     .clearfix();
     .unitize-margin(10, 0, 0, 0);
     clear: both;
+
+    .last-seen-products--title {
+        .unitize-padding(10, 0);
+        border-bottom: 1px solid @panel-border;
+        .unitize(16, 16, font-size);
+        display: block;
+        font-weight: bold;
+        color: @text-color-dark;
+    }
 }
 
 .last-seen-products--slider {
@@ -22,15 +31,15 @@
 }
 
 .last-seen-products--container {
-    padding: 0;
+    .unitize-padding(10, 0);
 }
 
-.last-seen-products--image {
+.last-seen-products-item--image {
     .unitize(120, 16, line-height);
     display: block;
 }
 
-.last-seen-products--item.product-slider--item {
+.last-seen-products--item {
     .unitize-padding(10, 10);
 }
 

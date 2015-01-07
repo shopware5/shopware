@@ -1,5 +1,5 @@
 .account--content {
-	.unitize-margin(20, 0, 0, 0);
+	.unitize-margin(10, 0, 0, 0);
 }
 
 .partner-statistic .panel--title {
@@ -9,6 +9,12 @@
 .account--content,
 .payment_logo_debit {
     .clearfix();
+}
+
+// Logout success message
+.account--logout {
+    .account--welcome { margin: 0; }
+    .logout--text { margin: 0; }
 }
 
 .account--menu {
@@ -32,18 +38,24 @@
     }
 }
 
+// Account teaser text padding
 .account--welcome {
     .unitize(20, 16, margin-bottom);
 
     .panel--body {
-        .unitize-padding(25, 20, 0, 20);
+        padding: 0;
+    }
+
+    .panel--title {
+        .unitize-padding(20, 0);
+        margin: 0;
     }
 }
 
 // Account error message margin
 .account--error,
 .account--success {
-    .unitize-margin(30, 0, 20, 0);
+    .unitize-margin(0, 0, 10, 0);
 }
 
 .register--error-msg {
@@ -69,6 +81,11 @@
 .account--shipping-address {
     .panel--body {
         .unitize(200, 16, height)
+    }
+
+    .billing--actions,
+    .shipping--actions {
+        .unitize-padding(20, 0);
     }
 }
 
@@ -350,16 +367,40 @@
 }
 
 .account--password-reset {
-    .unitize(20, 16, margin-top);
+    .unitize(10, 16, margin-top);
+
+    p { margin: 0; }
 
     .password-reset--input {
-        .unitize-margin(10, 0);
+        .unitize-margin(0, 0, 30, 0);
         width: 100%;
     }
 
-    .password-reset--actions {
-        .btn {
-            .unitize(20, 16, margin-bottom);
+    .password-reset--link {
+        width: 100%;
+        margin: 0;
+
+        &:first-child {
+            .unitize-margin(0, 0, 10, 0);
+        }
+    }
+}
+
+@media screen and(min-width: @phoneLandscapeViewportWidth ) {
+    .account--password-reset {
+        .unitize(10, 16, margin-top);
+
+        .password-reset--input {
+            .unitize-margin(10, 0, 30, 0);
+        }
+
+        .password-reset--link {
+            .unitize-margin(0, 0, 10, 0);
+            width: auto;
+
+            &:first-child {
+                .unitize-margin(0, 10, 0, 0);
+            }
         }
     }
 }
@@ -375,7 +416,7 @@
     }
 
     .account--password-reset {
-        .unitize-margin(45, 0, 0, 0);
+        .unitize-margin(20, 0, 0, 0);
     }
 
     .account--menu {
@@ -689,6 +730,10 @@
             }
         }
     }
+
+    .account--addresses-container {
+        margin: -2% 0 0 -2%;
+    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
@@ -716,6 +761,10 @@
 		clear: both;
 	}
 
+    .account--password-reset {
+        .unitize-margin(20, 0, 0, 0);
+    }
+
 	.account--info,
 	.account--payment {
 		.panel--body {
@@ -740,6 +789,10 @@
     }
 
     .account--content {
+        .unitize-margin(45, 0, 0, 0);
+    }
+
+    .account--password-reset {
         .unitize-margin(45, 0, 0, 0);
     }
 

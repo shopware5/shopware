@@ -23,94 +23,174 @@
         defaults: {
 
             /**
+             * Whether or not the plugin is enabled or not.
+             *
              * @property enabled
              * @type {Boolean}
              */
             'enabled': true,
 
             /**
+             * Event name(s) used for registering the events to navigate
+             *
              * @property eventName
              * @type {String}
              */
             'eventName': 'click',
 
             /**
-             * @property categorySelector
-             * @type {String}
-             */
-            'categorySelector': '.categories--children',
-
-            /**
+             * Selector for a single navigation
+             *
              * @property sidebarCategorySelector
              * @type {String}
              */
             'sidebarCategorySelector': '.sidebar--navigation',
 
             /**
+             * Selector for the back buttons.
+             *
              * @property backwardsSelector
              * @type {String}
              */
             'backwardsSelector': '.link--go-back',
 
             /**
+             * Selector for the forward buttons.
+             *
              * @property forwardSelector
              * @type {String}
              */
             'forwardsSelector': '.link--go-forward',
 
             /**
+             * Selector for the main menu buttons.
+             *
              * @property mainMenuSelector
              * @type {String}
              */
             'mainMenuSelector': '.link--go-main',
 
             /**
+             * Selector for the wrapper of the sidebar navigation.
+             * This wrapper will contain the main menu.
+             *
              * @property sidebarWrapperSelector
              * @type {String}
              */
             'sidebarWrapperSelector': '.sidebar--categories-wrapper',
 
             /**
+             * ID of the root category ID of the current shop.
+             * This is used to determine if the user switches to the main
+             * menu when clicking on a back button.
+             *
              * @property mainCategoryId
              * @type {Number}
              */
             'mainCategoryId': null,
 
             /**
+             * Category ID of the current page.
+             * When this and fetchUrl is set, the correct slide will be loaded.
+             *
              * @property categoryId
              * @type {Number}
              */
             'categoryId': null,
 
             /**
+             * URL to get the current navigation slide.
+             * When this and categoryID is set, the correct slide will be loaded.
+             *
              * @property fetchUrl
              * @type {String}
              */
             'fetchUrl': '',
 
             /**
+             * Selector for a overlay navigation slide.
+             *
              * @property overlaySelector
              * @type {String}
              */
             'overlaySelector': '.offcanvas--overlay',
 
             /**
-             * @property overlayOffCls
-             * @type {String}
-             */
-            'overlayOffCls': 'offcanvas--overlay-off',
-
-            /**
+             * Selector for the whole sidebar itself.
+             *
              * @property sidebarMainSelector
              * @type {String}
              */
             'sidebarMainSelector': '.sidebar-main',
 
             /**
+             * Selector for the mobile navigation.
+             *
+             * @property mobileNavigationSelector
+             * @type {String}
+             */
+            'mobileNavigationSelector': '.navigation--smartphone',
+
+            /**
+             * Loading class for the ajax calls.
+             * This class will be used for a loading item.
+             * This item will be appended to the clicked navigation item.
+             *
              * @property loadingClass
              * @type {String}
              */
-            'loadingClass': 'sidebar--ajax-loader'
+            'loadingClass': 'sidebar--ajax-loader',
+
+            /**
+             * Class that determines the existing slides to remove
+             * them if no longer needed.
+             *
+             * @property backSlideClass
+             * @type {String}
+             */
+            'backSlideClass': 'background',
+
+            /**
+             * Selector for the right navigation icon.
+             * This icon will be hidden and replaced with the loading icon.
+             *
+             * @property iconRightSelector
+             * @type {String}
+             */
+            'iconRightSelector': '.is--icon-right',
+
+            /**
+             * Class that will be appended to the main sidebar to
+             * disable the scrolling functionality.
+             *
+             * @property disableScrollingClass
+             * @type {String}
+             */
+            'disableScrollingClass': 'is--inactive',
+
+            /**
+             * Speed of the slide animations in milliseconds.
+             *
+             * @property animationSpeed
+             * @type {Number}
+             */
+            'animationSpeed': 400,
+
+            /**
+             * Easing function for sliding a slide into the viewport.
+             *
+             * @property fadeInEasing
+             * @type {String}
+             */
+            'fadeInEasing': 'cubic-bezier(.16,.04,.14,1)',
+
+            /**
+             * Easing function for sliding a slide out of the viewport.
+             *
+             * @property fadeOutEasing
+             * @type {String}
+             */
+            'fadeOutEasing': 'cubic-bezier(.2,.76,.5,1)'
         },
 
         /**
@@ -121,52 +201,100 @@
          * @method init
          */
         init: function () {
-            var me = this;
-            
+            var me = this,
+                opts;
+
             // Overwrite plugin configuration with user configuration
             me.applyDataAttributes();
 
-            // return, if no category available
-            if (!me.opts.enabled || !me.opts.categoryId || !me.opts.fetchUrl || !me.opts.mainCategoryId) {
+            opts = me.opts;
+
+            // return, if no main category available
+            if (!opts.enabled || !opts.mainCategoryId) {
                 return;
             }
 
-            me.fadeEffect = (Modernizr.csstransitions) ? 'transition' : 'animate';
-
             /**
+             * Reference of the main sidebar element.
+             *
              * @private
-             * @property _$sidebar
+             * @property $sidebar
              * @type {jQuery}
              */
-            me._$sidebar = $(me.opts.sidebarMainSelector);
-            me._$loadingIcon = $('<div>', {
-                'class': me.opts.loadingClass
+            me.$sidebar = $(opts.sidebarMainSelector);
+
+            /**
+             * Wrapper of the navigation lists in the main navigation.
+             *
+             * @private
+             * @property $sidebarWrapper
+             * @type {jQuery}
+             */
+            me.$sidebarWrapper = $(opts.sidebarWrapperSelector);
+
+            /**
+             *
+             *
+             * @private
+             * @property $navigation
+             * @type {jQuery}
+             */
+            me.$navigation = $(opts.mobileNavigationSelector);
+
+            /**
+             * Loading icon element that will be appended to the
+             * clicked element on loading.
+             *
+             * @private
+             * @property $loadingIcon
+             * @type {jQuery}
+             */
+            me.$loadingIcon = $('<div>', {
+                'class': opts.loadingClass
             });
-            me._$sidebarWrapper = $(me.opts.sidebarWrapperSelector);
+
+            /**
+             * Function used in jQuery based on CSS transition support.
+             *
+             * @private
+             * @property slideFunction
+             * @type {String}
+             */
+            me.slideFunction = (Modernizr.csstransitions) ? 'transition' : 'animate';
+
+            /**
+             * Flag to determine whether or not a slide is in a current
+             * animation or if an ajax call is still loading.
+             *
+             * @private
+             * @property inProgress
+             * @type {Boolean}
+             */
+            me.inProgress = false;
 
             // remove sub level unordered lists
-            $('.sidebar--navigation ul').not('.navigation--level-high').css('display', 'none');
+            $(opts.sidebarCategorySelector + ' ul').not('.navigation--level-high').css('display', 'none');
 
             me.addEventListener();
 
             // fetch menu by category id if actual category is not the main category
-            if(me.opts.mainCategoryId == me.opts.categoryId) {
+            if (!opts.categoryId || !opts.fetchUrl || (opts.mainCategoryId == opts.categoryId)) {
                 return;
             }
 
-            $.get(me.opts.fetchUrl, function (template) {
+            $.get(opts.fetchUrl, function (template) {
 
-                me._$sidebarWrapper.css('display', 'none');
+                me.$sidebarWrapper.css('display', 'none');
 
-                me._$sidebar.append(template);
+                me.$sidebar.addClass(opts.disableScrollingClass).append(template);
 
                 // add background class
-                $(me.opts.overlaySelector).addClass('background');
+                $(opts.overlaySelector).addClass(opts.backSlideClass);
             });
         },
 
         /**
-         * adding the event listeners
+         * Registers all needed event listeners.
          *
          * @public
          * @method addEventListener
@@ -174,7 +302,7 @@
         addEventListener: function () {
             var me = this,
                 opts = me.opts,
-                $sidebar = me._$sidebar,
+                $sidebar = me.$sidebar,
                 eventName = opts.eventName;
 
             $sidebar.on(me.getEventName(eventName), opts.backwardsSelector, $.proxy(me.onClickBackButton, me));
@@ -185,7 +313,10 @@
         },
 
         /**
-         * onBack method for loading old pages
+         * Called when clicked on a back button.
+         * Loads the overlay based on the parent id and fetch url.
+         * When the no fetch url is available or the parent id is the same
+         * as the main menu one, the slideToMainMenu function will be called.
          *
          * @public
          * @method onClickBackButton
@@ -199,6 +330,12 @@
                 url = $target.attr('href'),
                 parentId = $target.attr('data-parentId');
 
+            if (me.inProgress) {
+                return;
+            }
+
+            me.inProgress = true;
+
             // decide if there is a parent group or main sidebar
             if (!url || parentId === me.opts.mainCategoryId) {
                 me.slideToMainMenu();
@@ -209,7 +346,8 @@
         },
 
         /**
-         * forward method for fetching new pages
+         * Called when clicked on a forward button.
+         * Loads the overlay based on the category id and fetch url.
          *
          * @public
          * @method onClickForwardButton
@@ -222,11 +360,21 @@
                 $target = $(event.target),
                 url = $target.attr('data-fetchUrl');
 
+            if (me.inProgress) {
+                return;
+            }
+
+            me.inProgress = true;
+
+            // Disable scrolling on main menu
+            me.$sidebar.addClass(me.opts.disableScrollingClass);
+
             me.loadTemplate(url, me.slideIn, $target);
         },
 
         /**
-         * main menu method for closing all overlays
+         * Called when clicked on a main menu button.
+         * Calls the slideToMainMenu function.
          *
          * @public
          * @method onClickMainMenuButton
@@ -235,7 +383,15 @@
         onClickMainMenuButton: function (event) {
             event.preventDefault();
 
-            this.slideToMainMenu();
+            var me = this;
+
+            if (me.inProgress) {
+                return;
+            }
+
+            me.inProgress = true;
+
+            me.slideToMainMenu();
         },
 
         /**
@@ -245,7 +401,7 @@
          * @method loadTemplate
          * @param {String} url
          * @param {Function} callback
-         * @param {jQuery.Event} $loadingTarget
+         * @param {jQuery} $loadingTarget
          */
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
@@ -255,21 +411,20 @@
                 return;
             }
 
-            $loadingTarget.find('.is--icon-right').fadeOut('fast');
+            $loadingTarget.find(me.opts.iconRightSelector).fadeOut('fast');
 
-            $loadingTarget.append(me._$loadingIcon);
+            $loadingTarget.append(me.$loadingIcon);
 
-            me._$loadingIcon.fadeIn();
+            me.$loadingIcon.fadeIn();
 
             $.get(url, function (template) {
-                me._$loadingIcon.hide();
+                me.$loadingIcon.hide();
                 callback.call(me, template);
             });
         },
 
         /**
-         * sliding out the first level overlay
-         * and removes the slided overlay
+         * Sliding out the first level overlay and removes the slided overlay.
          *
          * @public
          * @method slideOut
@@ -277,24 +432,31 @@
          */
         slideOut: function (template) {
             var me = this,
-                $overlay = $(me.opts.overlaySelector + '.background');
+                opts = me.opts,
+                $overlays,
+                $slide;
 
-            /** fetch the template in the background, but on the target position */
-            me._$sidebar.append(template);
+            me.$sidebar.append(template);
 
-            // change class to
-            $(me.opts.overlaySelector).not('.background').addClass('background');
+            // get all overlays
+            $overlays = $(opts.overlaySelector);
 
-            $overlay.removeClass('background');
+            // flip background classes
+            $overlays.toggleClass(opts.backSlideClass);
 
-            $overlay[me.fadeEffect]({ left: 280 }, 250, function() {
-                $overlay.remove();
+            $slide = $overlays.not('.' + opts.backSlideClass);
+
+            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, opts.fadeOutEasing, function () {
+                $slide.remove();
+
+                me.inProgress = false;
             });
         },
 
         /**
-         * sliding in the invisible container
-         * and removes the background overlay
+         * Slides a given template/slide into the viewport of the sidebar.
+         * After the sliding animation is finished,
+         * the previous slide will be removed.
          *
          * @public
          * @method slideIn
@@ -302,72 +464,104 @@
          */
         slideIn: function (template) {
             var me = this,
-                $overlay;
+                opts = me.opts,
+                $overlays,
+                $slide,
+                $el;
 
-            me._$sidebar.append(template);
+            // hide main menu
+            me.$sidebar.scrollTop(0);
 
-            $overlay = $(me.opts.overlaySelector).not('.background').css('left', 280);
+            me.$sidebar.append(template);
 
-            $overlay[me.fadeEffect]({ left: 0 }, 250, function() {
+            $overlays = $(opts.overlaySelector);
+
+            $slide = $overlays.not('.' + opts.backSlideClass).css({
+                'left': 280,
+                'display': 'block'
+            });
+
+            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeed, opts.fadeInEasing, function () {
                 // remove background layer
-                $(me.opts.overlaySelector + '.background').remove();
+                $overlays.each(function (i, el) {
+                    $el = $(el);
 
-                $overlay.addClass('background');
+                    if ($el.hasClass(opts.backSlideClass)) {
+                        $el.remove();
+                    }
+                });
+
+                $slide.addClass(opts.backSlideClass);
 
                 // hide main menu
-                me._$sidebarWrapper.css('display', 'none');
+                me.$sidebarWrapper.css('display', 'none');
+
+                me.$navigation.hide().show(0);
+
+                $slide.addClass(opts.backSlideClass);
+
+                me.inProgress = false;
             });
         },
 
         /**
-         * sliding all overlays out
-         * and removes all overlays
+         * Slides all overlays out of the viewport and removes them.
+         * That way the main menu will be uncovered.
          *
          * @public
          * @method slideToMainMenu
          */
         slideToMainMenu: function () {
             var me = this,
-                $overlay = $(me.opts.overlaySelector);
+                opts = me.opts,
+                $overlay = $(opts.overlaySelector);
 
             // make the main menu visible
-            me._$sidebarWrapper.css('display', 'block');
+            me.$sidebarWrapper.css('display', 'block');
 
             // fade in arrow icons
-            me._$sidebarWrapper.find('.is--icon-right').fadeIn('slow');
+            me.$sidebarWrapper.find(me.opts.iconRightSelector).fadeIn('slow');
 
-            $overlay[me.fadeEffect]({ left: 280 }, 250, function() {
+            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, opts.fadeOutEasing, function () {
                 $overlay.remove();
+
+                // enable scrolling on main menu
+                me.$sidebar.removeClass(opts.disableScrollingClass);
+
+                me.inProgress = false;
             });
         },
 
         /**
-         * destroys the categories slider plugin
+         * Destroys the plugin by removing all events and references
+         * of the plugin.
+         * Resets all changed CSS properties to default.
          *
          * @public
          * @method destroy
          */
         destroy: function () {
             var me = this,
-                $sidebar = me._$sidebar,
-                $sidebarWrapper = me._$sidebarWrapper;
+                opts = me.opts,
+                $sidebar = me.$sidebar,
+                $sidebarWrapper = me.$sidebarWrapper;
 
             if ($sidebar) {
-                $sidebar.off(me.getEventName(me.opts.eventName), '**');
+                $sidebar.off(me.getEventName(opts.eventName), '**');
             }
 
-            me._destroy();
-
             // make category children visible
-            $('.sidebar--navigation ul').not('.navigation--level-high').css('display', 'block');
+            $(opts.sidebarCategorySelector + ' ul').not('.navigation--level-high').css('display', 'block');
 
             // force sidebar to be shown
             if ($sidebarWrapper) {
-                me._$sidebarWrapper.css('display', 'block');
+                me.$sidebarWrapper.css('display', 'block');
             }
 
             // clear overlay
-            $('.offcanvas--overlay').remove();
+            $(opts.overlaySelector).remove();
+
+            me._destroy();
         }
     });
 }(jQuery, Modernizr));

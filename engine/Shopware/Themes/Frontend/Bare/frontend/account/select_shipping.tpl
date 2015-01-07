@@ -7,17 +7,17 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--shipping-address account--content">
+	<div class="content account--shipping-address account--content">
+
+        {block name="frontend_account_select_shipping_headline"}
+            <div class="account--welcome">
+                <h1 class="panel--title">{s name="SelectShippingHeader"}{/s}</h1>
+            </div>
+        {/block}
 
 		{* Shipping addresses list *}
 		{block name="frontend_account_select_shipping_address"}
 			<div class="account--addresses-container">
-					{block name="frontend_account_select_shipping_headline"}
-						<div class="account--welcome">
-							<h1 class="panel--title">{s name="SelectShippingHeader"}{/s}</h1>
-						</div>
-					{/block}
-
                 {if $sShippingAddresses}
 					{block name="frontend_account_select_shipping_container"}
 						{foreach $sShippingAddresses as $key => $sAddress}
@@ -44,8 +44,8 @@
 		{/block}
 
 		{block name="frontend_account_select_shipping_action_buttons"}
-            <div class="panel--actions">
-                <a class="btn is--secondary left" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectShippingLinkBack"}{/s}"|escape}">
+            <div class="panel--actions shipping--actions is--wide">
+                <a class="btn is--secondary" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{"{s name="SelectShippingLinkBack"}{/s}"|escape}">
                     {s name="SelectShippingLinkBack"}{/s}
                 </a>
             </div>

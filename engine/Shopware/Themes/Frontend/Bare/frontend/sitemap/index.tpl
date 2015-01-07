@@ -6,17 +6,17 @@
 {/block}
 
 {block name="frontend_index_content"}
-    <div class="content sitemap--content block">
+    <div class="sitemap--content content block">
 
 	{block name="frontend_sitemap_headline"}
-		<div class="sitemap--headline panel">
+		<div class="sitemap--headline panel--body is--wide has--border is--rounded">
 
 			{block name="frontend_sitemap_headline_title"}
-				<h1 class="panel--title">{s name='SitemapTitle'}Sitemap{/s}</h1>
+				<h1 class="sitemap--title">{s name='SitemapTitle'}Sitemap{/s}</h1>
 			{/block}
 
 			{block name="frontend_sitemap_headline_text"}
-				<div class="panel--body is--wide">
+				<div class="sitemap--text">
 					<p class="sitemap--headline-text">{s name='SitemapSubHeader'}Alle Kategorien auf einen Blick{/s}</p>
 				</div>
 			{/block}

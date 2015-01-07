@@ -64,12 +64,17 @@
                 $searchField = $el.find(opts.searchFieldCls),
                 toggleState;
 
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isCurrentState('xs')) {
+            if (!StateManager.isCurrentState('xs')
+                || target.hasClass(me.defaults.searchFieldCls)
+                || target.hasClass('entry--name')
+                || target.hasClass('entry--price')
+                || target.hasClass('media--image')
+                || target.hasClass('entry--all-results-link')) {
                 return;
             }
+
+            event.preventDefault();
+            event.stopPropagation();
 
             toggleState = !$el.hasClass(opts.activeCls);
 

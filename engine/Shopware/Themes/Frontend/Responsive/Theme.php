@@ -383,7 +383,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_font-size-base',
                 '@font-size-base',
-                '16'
+                '14'
             )
         );
         $fieldSetBasic->addElement(
@@ -442,14 +442,14 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 '_font-size-h4',
                 '@font-size-h4',
-                '@font-size-base'
+                '16'
             )
         );
         $fieldSetHeadlines->addElement(
             $this->createTextField(
                 '_font-size-h5',
                 '@font-size-h5',
-                '14'
+                '@font-size-base'
             )
         );
         $fieldSetHeadlines->addElement(

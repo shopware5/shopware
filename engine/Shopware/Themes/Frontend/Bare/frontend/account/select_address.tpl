@@ -1,4 +1,4 @@
-<div class="account--billing-address panel has--border">
+<div class="account--billing-address panel has--border is--rounded">
 	
 	{block name="frontend_account_select_billing_address"}
 		{block name="frontend_account_select_headline"}
@@ -35,7 +35,7 @@
 
 		{block name="frontend_account_select_actions"}
 			<div class="panel--actions is--wide">
-				<input type="submit" class="btn is--secondary is--small" value="{s name="SelectAddressSubmit"}{/s}" />
+				<input type="submit" class="btn is--primary is--small" value="{s name="SelectAddressSubmit"}{/s}" />
 			</div>
 		{/block}
 

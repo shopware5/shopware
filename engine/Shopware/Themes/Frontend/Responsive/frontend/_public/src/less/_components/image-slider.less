@@ -107,7 +107,7 @@
 
 .image-slider--thumbnails {
     .unitize-height(70);
-    .unitize(330, 16, top);
+    .unitize(440, 16, top);
     display: none;
     width: 100%;
     overflow: hidden;
@@ -144,7 +144,7 @@
     }
 
     .thumbnails--arrow {
-        .unitize-width(24);
+        .unitize-width(20);
         .unitize-height(70);
         .unitize(70, 16, line-height);
         .unitize(14, 16, font-size);
@@ -198,6 +198,7 @@
 
         &.is--left {
             .border-radius-multi(0, 3px, 3px, 0);
+            .unitize-width(24, 16);
             top: 0;
             left: 0;
 
@@ -208,6 +209,7 @@
 
         &.is--right {
             .border-radius-multi(3px, 0, 0, 3px);
+            .unitize-width(24, 16);
             top: 0;
             right: 0;
 
@@ -240,12 +242,16 @@
     }
 
     .image-slider--container {
-        .unitize-height(300);
-        .unitize(100, 16, margin-bottom);
+        .unitize-height(400);
+        .unitize(110, 16, margin-bottom);
+
+        &.no--thumbnails {
+            margin-bottom: 0;
+        }
     }
 
     .image-slider--dots {
-        .unitize(300, 16, top);
+        .unitize(405, 16, top);
         position: absolute;
         width: 100%;
     }

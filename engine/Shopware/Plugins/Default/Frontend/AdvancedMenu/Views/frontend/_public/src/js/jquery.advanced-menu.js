@@ -117,7 +117,7 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
-                me._on($el, 'mouseenter touchstart MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
+                me._on($el, 'mouseenter click MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
 
                 me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             });
@@ -174,7 +174,7 @@
             var me = this,
                 target = event.toElement || event.relatedTarget;
 
-            if($.contains(me.$el[0], target) || $.contains(me._$list[0], target)) {
+            if($.contains(me.$el[0], target) || me._$listItems.has(target).length) {
                 return;
             }
 

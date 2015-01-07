@@ -82,7 +82,7 @@
 										{/block}
 
 										{block name="frontend_account_order_item_currentprice_value"}
-											<span class="is--soft">
+											<span>
 												{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 											</span>
 										{/block}

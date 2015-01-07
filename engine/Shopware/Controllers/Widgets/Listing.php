@@ -180,7 +180,20 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $category = $this->getCategoryById($categoryId);
 
-        $this->View()->category = $category;
+        $this->View()->assign('category', $category);
+    }
+
+    /**
+     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level
+     */
+    public function getCustomPageAction()
+    {
+        $pageId = (int) $this->Request()->getParam('pageId', 0);
+        $groupKey = $this->Request()->getParam('groupKey', 'gLeft');
+
+        $customPage = Shopware()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
+
+        $this->View()->assign('customPage', $customPage);
     }
 
     /**

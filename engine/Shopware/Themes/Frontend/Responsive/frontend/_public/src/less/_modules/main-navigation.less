@@ -10,51 +10,45 @@
 
 		.navigation--list {
 			.clearfix();
+            .unitize-padding(0, 10);
             margin: 0;
+            overflow-x: scroll;
+            position: relative;
+            white-space: nowrap;
 		}
 
 		.navigation--entry {
-			float: left;
+            display: inline-block;
 		}
 
 		.navigation--link {
             .transition(none 0);
-			.unitize-margin(0, 14);
-			.unitize-padding(8, 0);
+			.unitize-padding(8, 14);
             .unitize(16, 16, font-size);
+			.border-radius-multi(3px, 3px, 0, 0);
+			margin: 0;
 			display: block;
 			cursor: pointer;
 			color: @text-color;
+
+			&:hover { color: @brand-primary; }
 		}
 
-		.is--active {
+		.is--active .navigation--link {
 			.primary-gradient();
-			.border-radius-multi(3px, 3px);
-            .navigation--link,
-            &:hover .navigation--link {
-                color: #fff;
-            }
+			font-weight: 600;
+			color: #fff;
+
+            &:hover { color: #fff; }
 		}
-	}
-	.js--scrollable-list--arrow-left,
-	.js--scrollable-list--arrow-right {
-		.border-radius();
-		.secondary-gradient();
-		.unitize-padding(6, 10);
-		position: absolute;
-		top: 0;
-		z-index: 750;
-		color: #fff;
-	}
-	.js--scrollable-list--arrow-left {
-		left: 2px;
-	}
-	.js--scrollable-list--arrow-right {
-		right: 2px;
 	}
 }
 @media screen and (min-width: @desktopViewportWidth) {
 	.navigation-main {
         .unitize-margin(0, 0, 20, 0, 16);
+
+        .navigation--list {
+            padding: 0;
+        }
 	}
 }

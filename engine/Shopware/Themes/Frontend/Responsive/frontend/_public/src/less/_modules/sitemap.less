@@ -1,16 +1,14 @@
 .sitemap--content {
+    .unitize(10, 16, margin-top);
 
     .sitemap--headline {
+        .unitize(10, 16, margin-bottom);
 
-        .panel--title {
-            .unitize(24, 16, font-size);
+        .sitemap--title {
+            margin-top: 0;
         }
 
-        .panel--body {
-            .unitize-padding(10, 20, 20, 20);
-        }
-
-        .sitemap--headline-text {
+        .sitemap--headline-text  {
             .unitize(0, 16, margin-bottom);
         }
     }
@@ -52,6 +50,11 @@
 @media screen and (min-width: @tabletViewportWidth) {
 
     .sitemap--content {
+        .unitize(20, 16, margin-top);
+
+        .sitemap--headline {
+            .unitize(20, 16, margin-bottom);
+        }
 
         .sitemap--category {
             width: 49%;

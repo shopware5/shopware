@@ -119,6 +119,45 @@ class sCms
     }
 
     /**
+     * List all static page children's and their childrenCount by Id and groupKey
+     *
+     * @param int $pageId
+     * @param string $groupKey
+     * @return array
+     */
+    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'gLeft')
+    {
+        $menu = array();
+
+        // fetch parent if exists
+        if ($pageId) {
+            $sql = "
+                SELECT
+                p.id, p.description, p.link, p.target, p.parentID,
+                (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
+                FROM s_cms_static p
+                WHERE p.id = :parentId
+            ";
+
+            $menu['parent'] = Shopware()->Db()->fetchRow($sql, array('parentId' => $pageId));
+        }
+
+        // fetch childrens
+        $sql = "
+            SELECT
+            p.id, p.description, p.link, p.target, p.parentID,
+            (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
+            FROM s_cms_static p
+            WHERE p.parentID = :parentId
+            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%')
+        ";
+
+        $menu['children'] = Shopware()->Db()->fetchAll($sql, ['parentId' => $pageId, 'groupKey' => $groupKey]);
+
+        return $menu;
+    }
+
+    /**
      * Gets related pages for the given subpage
      * If a shop id is provided, only content for that shop is displayed
      *

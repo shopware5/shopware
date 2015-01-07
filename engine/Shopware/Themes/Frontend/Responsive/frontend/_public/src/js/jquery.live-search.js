@@ -1,24 +1,49 @@
 ;(function($, window, undefined) {
     "use strict";
 
+    /** @object keyMap Maps key codes to the associated function */
+    var keyMap = {
+        'UP': 38,
+        'DOWN': 40,
+        'ENTER': 13
+    };
+
     /**
      * Shopware Live Search Plugin.
      *
      * The plugin fires the ajax search request, render the results inside the modal
      * and controlling the keyboard navigation inside the search results.
+     *
+     * @example
+     *  <input type="search" data-live-search="true">
      */
     $.plugin('liveSearch', {
 
-        /** Your default options */
+        /** @object Plugin default configuration */
         defaults: {
             /** @int minLength minimum term characters which will be needed before the ajax request is triggered */
             minLength: 3,
-            /** @int searchDelay time in miliseconds before ajax requests is triggered after last key down  */
+
+            /** @int searchDelay time in milliseconds before ajax requests is triggered after last key down  */
             searchDelay: 250,
+
             /** @string activeCls Class which will be added when the drop down was triggered */
-            activeCls: 'is-active',
-            /** @string resultsCls Class which will contain the searchresults */
-            resultsCls: 'main-search--results'
+            activeCls: 'js--is-active',
+
+            /** @string resultsSelector Selector which will contain the search results */
+            resultsSelector: '.main-search--results',
+
+            /** @string loadingIndicatorSelector Selector of the ajax loading indicator */
+            loadingIndicatorSelector: '.form--ajax-loader',
+
+            /** @string requestUrl The endpoint which will be triggered by the live search */
+            requestUrl: '',
+
+            /** @boolean Truthy to enable keyboard navigation, if falsy the keyboard navigation will be disabled */
+            enableKeyboardNavigation: true,
+
+            /** @string|integer animationSpeed The speed of the fading animation */
+            animationSpeed: 'fast'
         },
 
         /**
@@ -29,50 +54,134 @@
         init: function () {
             var me = this;
 
-            me.$search = me.$el.closest('.entry--search');
-            me.$results = me.$search.find('.main-search--results');
-            me.$loader = me.$search.find('.form--ajax-loader');
+            me.opts.requestUrl = $.controller.ajax_search || '';
+
+            if (!me.opts.requestUrl.length) {
+                throw new Error('Parameter "requestUrl" needs to be set.');
+                return false;
+            }
+
+            me._lastSearchTerm = '';
+            me.$parent = me.$el.parent('form');
+            me.$results = me.$parent.next(me.opts.resultsSelector).hide();
+            me.$loader = me.$parent.find(me.opts.loadingIndicatorSelector);
 
             me._on(me.$el, 'keyup', $.proxy(me.onKeyUp, me));
-
+            me._on(me.$el, 'keydown', $.proxy(me.onKeyDown, me));
             me._on(me.$el, 'blur', $.proxy(me.onBlur, me));
-
-            me._on(me.$el, 'click', $.proxy(me.onClickSearchBar, me));
-
-            me._on(me.$results, 'mousedown', $.proxy(me.onClickSearchResults, me));
         },
 
-        /**
-         * onKeyUp event for displaying search results
-         * or trigger the keyboard navigation
-         *
-         * @param event
-         */
-        onKeyUp: function (event)  {
+        onBlur: function (event) {
             var me = this,
-                keyCode = event.which;
+                target = event.target || event.currentTarget;
 
-            // Enable keyboard navigation if results are visible and enter, arrow up or arrow down pressed
-            if(me.$results.is(':visible') && (keyCode == 13 || keyCode == 38 || keyCode == 40)) {
-                me.keyboardNavigation(event);
-            } else {
-                me.search();
+            if($.contains(me.$results[0], target)) {
+                return;
             }
+            me.closeResult();
+        },
+
+        onKeyUp: function (event) {
+            var me = this,
+                term = me.$el.val();
+            
+            if (me._keyupTimeout) {
+                window.clearTimeout(me._keyupTimeout);
+            }
+
+            if (me.opts.minLength && term.length < me.opts.minLength) {
+                me._lastSearchTerm = '';
+                me.closeResult();
+                return;
+            }
+
+            if(term === me._lastSearchTerm) {
+                return;
+            }
+
+            me._keyupTimeout = window.setTimeout($.proxy(me.triggerSearchRequest, me, term), me.opts.searchDelay);
         },
 
         /**
-         * keyboardNavigation function for navigation
-         * inside the search results by keyboard
+         * Event handler method which will be fired when the user presses a key when
+         * focusing the field.
          *
-         * @param event
+         * @param event {jQuery.Event}
          */
-        keyboardNavigation: function (event) {
+        onKeyDown: function (event) {
             var me = this,
                 keyCode = event.which,
+                shouldPrevent = me.opts.enableKeyboardNavigation && (keyCode === keyMap.UP || keyCode === keyMap.DOWN || keyCode === keyMap.ENTER);
+
+            if (shouldPrevent) {
+                event.preventDefault();
+            }
+
+            if(me.$results.hasClass(me.opts.activeCls)) {
+                me.onKeyboardNavigation(keyCode);
+            }
+
+            return !shouldPrevent;
+        },
+
+        /**
+         * Triggers an AJAX request with the given {@param searchTerm}.
+         *
+         * @param {String} searchTerm
+         */
+        triggerSearchRequest: function (searchTerm) {
+            var me = this;
+
+            searchTerm = me._sanitizeSearchTerm(searchTerm);
+
+            me.$loader.fadeIn('fast');
+
+            me._lastSearchTerm = searchTerm;
+
+            $.ajax({
+                'url': me.opts.requestUrl,
+                'data': {
+                    'sSearch': searchTerm
+                },
+                'success': $.proxy(me.showResult, me)
+            });
+        },
+
+        /**
+         * Shows the {@param response} of the AJAX request and slides down the results container.
+         *
+         * @param {Object} response
+         */
+        showResult: function (response) {
+            var me = this;
+
+            me.$loader.fadeOut('fast');
+            me.$results.empty().html(response).slideDown().addClass(me.opts.activeCls);
+        },
+
+        /**
+         * Closes the results container.
+         *
+         * @returns {Void}
+         */
+        closeResult: function() {
+            var me = this;
+
+            me.$results.removeClass(me.opts.activeCls).fadeOut(me.opts.animationSpeed, function() {
+                me.$results.empty();
+            });
+        },
+
+        /**
+         * Adds support to navigate using the keyboard.
+         *
+         * @param {Number} key - Keycode number
+         */
+        onKeyboardNavigation: function(key) {
+            var me = this,
                 selected = me.$results.find('.' + me.defaults.activeCls);
 
-            // On arrow down
-            if(keyCode == 40) {
+            if (key === keyMap.DOWN) {
                 if(!selected.length) {
                     me.$results.find('li').first().addClass(me.defaults.activeCls);
                     return;
@@ -88,8 +197,7 @@
                 return;
             }
 
-            // On arrow up
-            if(keyCode == 38) {
+            if (key === keyMap.UP) {
                 if(!selected.length) {
                     me.$results.find('li').last().addClass(me.defaults.activeCls);
                     return;
@@ -105,110 +213,31 @@
                 return;
             }
 
-            // On enter without result
-            if(keyCode == 13) {
-
-                event.preventDefault();
-                event.stopPropagation();
+            if(key == keyMap.ENTER) {
 
                 if (selected.length) {
+                    
                     window.location.href = selected.find('a').attr('href');
                 }
             }
         },
 
         /**
-         * search function for ajax search request
-         * and rendering the search results
+         * Sanitize the search result like trimming the search term.
+         *
+         * @param {String} term - String which should be sanitized
+         * @returns {String} Sanitized string
+         * @private
          */
-        search: function () {
-            var me = this,
-                term = me.$el.val(),
-                termLength = term.length;
-
-            if(me._timeout) {
-                window.clearTimeout(me._timeout);
-            }
-
-            me._timeout = window.setTimeout(function() {
-
-                // check for minimum characters
-                if(me.defaults.minLength && termLength < me.defaults.minLength) {
-                    me.$results.hide();
-                    return;
-                }
-
-                me.$loader.fadeIn();
-
-                $.ajax({
-                    url: $.controller.ajax_search,
-                    data: {
-                        sSearch: term
-                    }
-                }).done(function(results) {
-
-                    me.$loader.fadeOut();
-
-                    if(!results) {
-                        me.$results.hide();
-                        return;
-                    }
-
-                    me.$results.html(results).show();
-                });
-
-            }, me.defaults.searchDelay);
+        _sanitizeSearchTerm: function (term) {
+            return $.trim(term);
         },
 
         /**
-         * onBlur event for closing the search results modal
-         * if the focus of the input is lost
+         * Destroys the plugin.
          *
-         * @param event
+         * @returns {Void}
          */
-        onBlur: function (event) {
-
-            var me = this;
-            if(!me.$results.is(':visible')) {
-                return;
-            }
-
-            me.$results.hide();
-        },
-
-        /**
-         * onClickSearchBar event for opening existing results
-         *
-         * @param event
-         */
-        onClickSearchBar: function (event) {
-            var me = this,
-                term = me.$el.val(),
-                termLength = term.length;
-
-            if(termLength) {
-                me.$results.show();
-            }
-        },
-
-        /**
-         * onClickSearchResults event to prevent closing
-         * the search results
-         *
-         * @param event
-         */
-        onClickSearchResults: function (event) {
-            var $target = $(event.target);
-
-            if(!$target.is('a')) {
-                event.preventDefault();
-                return;
-            }
-
-            location.href = $target.attr('href');
-        },
-
-        /** Destroys the plugin */
         destroy: function () {
             this._destroy();
         }

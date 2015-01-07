@@ -19,23 +19,26 @@
 				<div class="password--success">
 					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
 				</div>
-				<a href="javascript:window.history.back();" class="btn is--secondary"><span>{s name="LoginBack"}{/s}</span></a>
+                <a href="javascript:window.history.back();"
+                   class="btn is--secondary is--icon-left">
+                    <i class="icon--arrow-left"></i>{s name="LoginBack"}{/s}
+                </a>
 			{/block}
 		{else}
 			{* Recover password *}
 			{block name="frontend_account_password_reset"}
-				<div class="panel has--border is--rounded">
+				<div class="password-reset--content panel has--border is--rounded">
 
 					{block name="frontend_account_password_reset_headline"}
-						<h2 class="panel--title is--underline">{s name="PasswordHeader"}{/s}</h2>
+						<h2 class="password-reset--title panel--title is--underline">{s name="PasswordHeader"}{/s}</h2>
 					{/block}
 
 					{block name='frontend_account_password_form'}
 						{* Recover password form *}
-						<form name="frmRegister" method="post" action="{url action=password}">
+						<form name="frmRegister" method="post" action="{url action=password}" class="password-reset--form">
 
 							{block name="frontend_account_password_reset_content"}
-								<div class="panel--body is--wide is--align-center">
+								<div class="password-reset--form-content panel--body is--wide is--align-center">
 									<p>
 										<input name="email" type="email" required="required" aria-required="true" class="password-reset--input" placeholder="{s name='PasswordPlaceholderMail'}{/s}" />
 									</p>
@@ -45,10 +48,16 @@
 
 							{* Recover password actions *}
 							{block name="frontend_account_password_reset_actions"}
-								<div class="password-reset--actions panel--actions is--align-center">
-									<input type="submit" class="btn is--primary" value="{s name="PasswordSendAction"}Passwort anfordern{/s}" />
-									<a href="javascript:window.history.back();" class="btn is--secondary">{s name="PasswordLinkBack"}{/s}</a>
-								</div>
+								<div class="password-reset--form-actions panel--actions is--wide is--align-center">
+                                    <a href="javascript:window.history.back();"
+                                       class="password-reset--link btn is--secondary is--icon-left is--center">
+                                        <i class="icon--arrow-left"></i>{s name="PasswordLinkBack"}{/s}
+                                    </a>
+                                    <button type="submit"
+                                            class="password-reset--link btn is--primary is--icon-right is--center">
+                                        {s name="PasswordSendAction"}Passwort anfordern{/s} <i class="icon--arrow-right"></i>
+                                    </button>
+                                </div>
 							{/block}
 						</form>
 					{/block}

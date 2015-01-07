@@ -7,7 +7,7 @@
             <div class="overlay--headline">
                 {block name="widgets_listing_get_category_mainmenu_link"}
                     <a class="navigation--link link--go-main" href="#" title="{s name="MainMenu"}Hauptmenü{/s}">
-                        <i class="icon--list"></i> {s name="MainMenu"}Hauptmenü{/s}
+                        <i class="icon--menu"></i> {s name="MainMenu"}Hauptmenü{/s}
                     </a>
                 {/block}
             </div>
@@ -64,7 +64,7 @@
                         <li class="navigation--entry" role="menuitem">
                             {block name="widgets_listing_get_category_categories_item_link"}
                                 <a href="{$children.link}" title="{$children.name|escape}"
-                                   class="navigation--link{if $children.childrenCount} categories--children link--go-forward{/if}"
+                                   class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
                                    data-category-id="{$children.id}"
                                    data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}">
 

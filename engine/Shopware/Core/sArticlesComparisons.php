@@ -189,6 +189,8 @@ class sArticlesComparisons
             if (!empty($checkForArticle[$k]["articleName"])) {
                 $checkForArticle[$k]["articlename"] = $checkForArticle[$k]["articleName"];
             }
+            
+            $checkForArticle[$k]['articleId'] = $article["articleID"];
         }
 
         return $checkForArticle;

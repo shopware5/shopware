@@ -48,8 +48,8 @@
     .unitize-margin(0, 0, 5, 95);
     .unitize(18, 16, font-size);
     display: block;
-    font-weight: 600;
-    color: @text-color;
+    font-weight: 700;
+    color: @text-color-dark;
 
     &:hover {
         color: @brand-primary;
@@ -82,33 +82,35 @@
     }
 
     .delivery--text-available {
-        .unitize-padding(0, 0, 0, 20);
         display: block;
     }
 }
 
-.note--price-unit {
+.note--compare {
     .unitize-margin(10, 0, 0, 95);
+
+    .compare--link {
+        color: @text-color;
+
+        &:hover { color: @link-color; }
+    }
+
+    [class^="icon--"] {
+        .unitize-margin(0, 5, 0, 0);
+        .unitize(12, 16, font-size);
+    }
+}
+
+.note--price-unit {
+    .unitize-margin(5, 0, 0, 95);
+    .unitize(12, 16, font-size);
 }
 
 .note--price {
     .unitize(18, 16, font-size);
     .unitize-margin(0, 0, 0, 95);
+    color: @text-color-dark;
     font-weight: bold;
-}
-
-.note--actions {
-    .unitize-margin(40, 0, 0, 0);
-
-    .btn {
-        .unitize-margin(0, 0, 10, 0);
-        display: block;
-    }
-
-    .action--buy,
-    .action--compare {
-        display: none;
-    }
 }
 
 .note--delete {
@@ -118,17 +120,18 @@
     .unitize(26, 16, left);
     .unitize(10, 16, font-size);
     .unitize(38, 16, line-height);
+    .linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
     .border-radius();
     display: block;
     position: absolute;
-    border: 1px solid @border-color;
+    border: 1px solid @btn-default-border-color;
     text-align: center;
     font-weight: normal;
     color: @text-color;
 
     &:hover {
-        color: @brand-primary;
-        border-color: @brand-primary;
+        color: @btn-default-hover-text-color;
+        border-color: @btn-default-hover-border-color;
     }
 }
 
@@ -155,21 +158,6 @@
 
     .note--sale {
         width: 30%;
-    }
-
-    .note--image-container {
-        .unitize-width(115);
-    }
-
-    .note--image-link {
-        .unitize-width(115);
-        .unitize-height(115);
-        .unitize(105, 16, line-height);
-    }
-
-    .note--image {
-        .unitize-max-width(105);
-        .unitize-max-height(105);
     }
 
     .note--zoom {
@@ -202,35 +190,21 @@
         .unitize-margin(0, 0, 0, 135);
     }
 
+    .note--compare {
+        .unitize-margin(10, 0, 0, 0);
+    }
+
     .note--price {
         margin: 0;
     }
 
     .note--price-unit {
-        .unitize-margin(10, 0, 0, 0);
-    }
-
-    .note--actions {
-        .unitize-margin(40, 0, 0, 0);
-
-        .btn {
-            .unitize-padding(3, 16);
-            .unitize(14, 16, font-size);
-        }
-
-        .action--buy,
-        .action--compare {
-            display: block;
-        }
+        .unitize-margin(5, 0, 0, 0);
     }
 
     .note--delete {
-        .unitize-width(20);
-        .unitize-height(20);
         .unitize(30, 16, top);
         .unitize(10, 16, right);
-        .unitize(8, 16, font-size);
-        .unitize(18, 16, line-height);
         left: auto;
     }
 }

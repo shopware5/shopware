@@ -2,56 +2,36 @@
 body {
     overflow-x: hidden;
     overflow-y: auto;
-
-    &.is--moved-left,
-    &.is--moved-right {
-        overflow: hidden;
-    }
 }
 
 // Is used for the necessary styling of an off-canvas menu
 .off-canvas {
     .unitize-width(280);
     .unitize-variable(280, 16);
-    .transition(all 0.25s ease-in-out);
     position: fixed;
     top: 0;
+    display: none;
     height: 100%;
     z-index: 8000;
     overflow-y: auto;
     overflow-x: hidden;
-    background: @gray;
+    background: #fff;
+    -webkit-overflow-scroll: touch;
+
+    &.is--active {
+        display: block;
+    }
 
     &.is--left {
-        .unitize(-280, 16, left);
+        left: -100%;
     }
 
     &.is--right {
-        .unitize(-280, 16, right);
+        right: -100%;
     }
 
     &.js--full-screen {
         width: 100%;
-
-        &.is--left {
-            left: -100%;
-        }
-        &.is--right {
-            right: -100%;
-        }
-    }
-
-    &.is--active {
-        &.is--right {
-            right: 0;
-        }
-        &.is--left {
-            left: 0;
-        }
-    }
-
-    &.js--no-transition {
-        .transition(none 0s linear);
     }
 
     .buttons--off-canvas {
@@ -59,11 +39,10 @@ body {
     }
 
     .close--off-canvas {
-        .unitize-padding(12, 10, 12, 10, 16);
-        .linear-gradient(@brand-secondary, @brand-secondary-dark);
+        .unitize-padding(2, 10);
+        .unitize(38, 16, line-height);
+        .secondary-gradient();
         .clearfix();
-        border-bottom: 1px solid @border-color;
-        text-shadow: 1px 1px 0 @text-color-dark;
         display: block;
         color: #fff;
         font-weight: bold;
@@ -71,6 +50,32 @@ body {
 
         .icon--arrow-left {
             .unitize-margin(0, 10, 0, 0);
+            .unitize(11, 16, font-size);
+        }
+    }
+
+    .link--go-main {
+        .unitize(16, 16, font-size);
+        font-weight: 700;
+
+        .icon--menu {
+            .unitize(20, 16, font-size);
+            .unitize(10, 16, margin-right);
+            float: left;
+        }
+    }
+
+    .sidebar--navigation .navigation--link {
+        .unitize-padding(2, 10);
+        .unitize(38, 16, line-height);
+
+        .is--icon-right {
+            margin-top: 0;
+        }
+
+        .is--icon-left {
+            .unitize-margin(0, 10, 0, 0);
+            float: left;
         }
     }
 }
@@ -80,35 +85,27 @@ body {
 }
 
 .page-wrap {
-    .transition(all 0.25s ease-in-out);
     position: relative;
     left: 0;
-
-    &.is--moved-left {
-        .unitize(280, 16, left);
-    }
-
-    &.is--moved-right {
-        .unitize(-280, 16, left);
-    }
 }
 
 .navigation--smartphone {
 	.navigation--entry {
 		.unitize-padding(12, 10, 12, 10);
 		background: #fff;
-		border-bottom: 1px solid @border-color;
 	}
 	.navigation--link {
 		display: block;
 	}
 
 	.entry--close-off-canvas {
+        .unitize-padding(2, 10);
+        .unitize(38, 16, line-height);
 		.secondary-gradient();
-		border-bottom: 1px solid darken(@border-color, 15%);
 
 		.navigation--link {
 			.clearfix();
+            .unitize(14, 16, font-size);
 			color: @gray-light;
 			font-weight: bold;
 
@@ -117,8 +114,9 @@ body {
 			}
 		}
 		.icon--arrow-right {
-			.unitize-margin(3, 0, 0, 0);
-			float: right;
+			.unitize-margin(12, 0, 0, 0);
+            .unitize(11, 16, font-size);
+            float: right;
 		}
 	}
 }
@@ -128,7 +126,7 @@ body {
 	.unitize-margin(0, 10, 0, 10);
 }
 .navigation--headline {
-	.unitize-margin(16, 10, 16, 10);
+	.unitize-margin(16, 10, 6, 10);
 	font-size: 1em;
 }
 .sidebar--navigation {
@@ -137,7 +135,6 @@ body {
 	border: 1px solid @border-color;
 
 	.navigation--entry {
-		.unitize-padding(10, 20, 10, 20, 16);
 		border-bottom: 1px solid @border-color;
 
 		&:last-child {
@@ -157,6 +154,7 @@ body {
     .off-canvas {
         .translate(0, 0);
         .transition(none);
+        display: block;
         background: transparent;
         position: relative;
         width: auto;
@@ -164,5 +162,19 @@ body {
         top: 0;
         left: 0;
         z-index: 1000;
+
+        .sidebar--navigation .navigation--link {
+            .unitize-padding(10, 10);
+            line-height: inherit;
+
+            .is--icon-right,
+            .is--icon-left {
+                display: none;
+            }
+        }
+
+        .navigation--entry .entry--close-off-canvas {
+            display: none;
+        }
     }
 }

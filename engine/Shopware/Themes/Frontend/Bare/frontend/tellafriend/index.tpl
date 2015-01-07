@@ -21,7 +21,7 @@
 			{if !$sSuccess}
 
 				{block name='frontend_tellafriend_form'}
-					<form name="mailtofriend" class="panel tellafriend--form has--border" action="" method="post">
+					<form name="mailtofriend" class="panel tellafriend--form has--border is--rounded" action="" method="post">
 					<input type="hidden" name="sMailTo" value="1"/>
 					<input type="hidden" name="sDetails" value="{$sArticle.articleID}"/>
 
@@ -98,10 +98,10 @@
 					{* Send recommendation button *}
 					{block name='frontend_tellafriend_captcha_code_actions'}
 						<div class="tellafriend--buttons">
-							<a href="{$sArticle.linkDetails}" class="btn is--secondary is--bold">{s name='TellAFriendLinkBack'}{/s}</a>
+							<a href="{$sArticle.linkDetails}" class="btn is--secondary left is--icon-left"><i class="icon--arrow-left"></i>{s name='TellAFriendLinkBack'}{/s}</a>
 
-							<button type="submit" class="btn is--primary is--icon-right">
-								{s name='TellAFriendActionSubmit'}{/s} <i class="icon--arrow-right"></i>
+							<button type="submit" class="btn is--primary right is--icon-right">
+								{s name='TellAFriendActionSubmit'}{/s}<i class="icon--arrow-right"></i>
 							</button>
 						</div>
 					{/block}
