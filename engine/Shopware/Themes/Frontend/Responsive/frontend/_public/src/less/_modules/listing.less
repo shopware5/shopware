@@ -12,8 +12,10 @@
 .category--teaser {
     .unitize-margin(0, 0, 20, 0);
 
+    .panel--title { margin: 0 }
+
     .hero--text {
-    	.unitize-padding(10, 20);
+        .unitize-padding(10, 0);
     }
 }
 
@@ -126,8 +128,8 @@
     }
 
     .sort--select {
-    	.unitize-height(38);
-    	.unitize(38, 16, line-height);
+        .unitize-height(34);
+        .unitize(34, 16, line-height);
         width: 100%;
     }
 }
@@ -184,11 +186,11 @@
 	.category--teaser {
 		.hero--headline {
 			.unitize(@font-size-h1, 16, font-size);
-			.unitize-padding(40, 0, 0, 0);
-			.unitize-margin(0, 40);
+			.unitize-padding(20, 0, 0, 0);
+			.unitize-margin(0, 0);
 		}
 		.hero--text {
-			.unitize-padding(25, 40, 10, 40);
+			.unitize-padding(25, 0, 10, 0);
 		}
 	}
 
@@ -209,23 +211,52 @@
     }
 
     .listing--actions {
+        .border-radius();
         .unitize-margin(0, 0, 20, 0);
+        .unitize(10, 16, padding-top);
+        border: 1px solid @border-color;
+        background: darken(@gray-light, 1%);
+
+        .listing--paging {
+            .unitize-padding(10, 10);
+            display: block;
+            border-top: 1px solid @border-color;
+        }
+    }
+
+    .action--per-page {
+        display: inline-block;
+        .unitize(32, 16, line-height);
+        width: 30%;
+        text-align: right;
+        float: right;
+
+        .per-page--label { display: none }
+
+        .per-page--select {
+            .unitize-width(80);
+            .unitize-height(32);
+            .unitize(30, 16, line-height);
+            text-align: center;
+            vertical-align: top;
+        }
     }
 
     .action--sort {
-        .unitize-width(220);
+        .unitize-width(200);
+        .unitize-margin(0, 10, 0, 0);
         display: inline-block;
         text-align: right;
 		float: right;
 
         .sort--select {
-            .unitize-width(220);
+            .unitize-width(200);
         }
     }
 
     .action--filter-btn {
         .unitize-width(190);
-        .unitize-margin(0, 20, 10, 0);
+        .unitize-margin(0, 20, 10, 10);
         float: left;
 
         .filter--trigger {
@@ -267,13 +298,13 @@
         padding: 0;
         overflow: visible;
         position: relative;
-        background: @gray-light;
+        background: #fff;
         border: 0 none;
         clear: both;
 
         &.is--collapsed,
         &.is--active-filter {
-            border-width: 1px;
+            border-width: 1px 0 0 0;
             border-style: solid;
             border-color: @border-color;
         }
@@ -331,11 +362,13 @@
             .unitize(10, 16, padding-bottom);
         }
     }
-}
 
-// Tablet Landscape view
-@media screen and(min-width: @tabletLandscapeViewportWidth) {
-
+    .listing--bottom-paging {
+        .unitize-padding(0, 10, 0, 10);
+        .border-radius();
+        border: 1px solid @border-color;
+        background: darken(@gray-light, 1%);
+    }
 }
 
 // Desktop view
@@ -346,31 +379,12 @@
         .unitize-margin(0, 0);
     }
 
-    .listing--actions {
-        .border-radius();
-        .unitize-margin(0, 0, 20, 0);
-        .unitize(10, 16, padding-top);
-        border: 1px solid @border-color;
-        background: darken(@gray-light, 1%);
-		
-        .listing--paging {
-            display: block;
-            border-top: 1px solid @border-color;
-        }
-    }
-
     .action--filter-btn {
-        .unitize-margin(0, 0, 10, 10);
         width: 20%;
         margin-right: 2%;
 
         .filter--trigger {
             .unitize(14, 16, font-size);
-            .unitize(26, 16, line-height);
-
-            &.is--active {
-				.unitize(28, 16, line-height);
-            }
 
             .action--collapse-icon {
                 .unitize(-8, 16, margin-top);
@@ -388,8 +402,8 @@
     }
 
     .action--sort {
-        .unitize-margin(0, 10, 10, 0);
         .unitize(32, 16, line-height);
+        .unitize-margin(0, 10, 10, 0);
         width: 40%;
 
         .sort--label {
@@ -400,36 +414,20 @@
 
         .sort--select {
             .unitize-width(200);
-			.unitize-height(32);
-			.unitize(30, 16, line-height);
             vertical-align: top;
         }
     }
 
     .action--per-page {
-        .unitize(32, 16, line-height);
-        width: 30%;
-        display: inline-block;
-        text-align: right;
-        float: right;
 
         .per-page--label {
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
             font-weight: bold;
         }
-
-        .per-page--select {
-            .unitize-width(80);
-			.unitize-height(32);
-			.unitize(30, 16, line-height);
-            text-align: center;
-            vertical-align: top;
-        }
     }
 
 	.listing--paging {
-		.unitize-padding(10, 10);
 		display: block;
 		clear: both;
 
@@ -442,10 +440,4 @@
 			.unitize(30, 16, line-height);
 		}
 	}
-
-    .listing--bottom-paging {
-        .border-radius();
-        border: 1px solid @border-color;
-        background: darken(@gray-light, 1%);
-    }
 }

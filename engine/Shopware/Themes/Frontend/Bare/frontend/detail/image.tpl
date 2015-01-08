@@ -8,7 +8,7 @@
 	{* Product image - Gallery *}
 	{block name="frontend_detail_image_box"}
         {strip}
-		<div class="image-slider--container">
+		<div class="image-slider--container{if !count($sArticle.images)} no--thumbnails{/if}">
 			<div class="image-slider--slide">
 
 				<div class="image--box image-slider--item">

@@ -251,7 +251,7 @@
 
             me.$el.html(response);
 
-            me.$el.find(me.opts.itemContainerSelector).prepend(me._$successMessage.clone());
+            me.$el.find(me.opts.itemContainerSelector).before(me._$successMessage.clone());
         },
 
         /**
@@ -261,14 +261,14 @@
          * @param {jQuery.Event} event
          */
         onMouseEnter: function (event) {
-            event.preventDefault();
-
             var me = this;
 
             me.showLoadingIndicator();
             me.openMenu();
 
             if (me.isDisplayMode('offcanvas')) {
+                event.preventDefault();
+
                 me.loadCart();
                 return;
             }

@@ -258,6 +258,16 @@
         height: 100%;
     }
 
+    .product-slider--arrow {
+        &.arrow--prev {
+            border-left: 0 none;
+        }
+
+        &.arrow--next {
+            border-right: 0 none;
+        }
+    }
+
     .manufacturer--link {
         height: 100%;
         display: block;
@@ -282,10 +292,14 @@
             text-overflow: ellipsis;
         }
     }
-}
 
-.manufacturer-slider-element .panel--body {
-    height: 70%;
+    .slider--manufacturer {
+        .unitize-padding(20, 20);
+    }
+
+    .manufacturer--body {
+        height: 70%;
+    }
 }
 
 .article-slider--item {

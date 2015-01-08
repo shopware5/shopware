@@ -76,7 +76,7 @@
              * @property titleCls
              * @type {String}
              */
-            titleCls: 'last-seen-products--title product--title',
+            titleCls: 'last-seen-products-item--title product--title',
 
             /**
              * Class that will be used for the product image
@@ -84,7 +84,7 @@
              * @property imageCls
              * @type {String}
              */
-            imageCls: 'last-seen-products--image product--image',
+            imageCls: 'last-seen-products-item--image product--image',
 
             /**
              * Picture source when no product image is available

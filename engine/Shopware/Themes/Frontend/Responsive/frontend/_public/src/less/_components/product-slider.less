@@ -62,34 +62,36 @@
 	.touch-callout(none);
 	.tap-highlight-color(rgba(0, 0, 0, 0));
     position: relative;
-	top: 0; left: 0;
+	top: 0;
+    left: 0;
 	overflow: hidden;
 	text-align: center;
 }
 
 .product-slider--arrow {
-    .unitize-width(22);
-    .unitize-height(30);
-	.unitize-margin(-15, 0, 0, 0);
-    .unitize(28, 16, line-height);
+    .unitize-width(30);
+    .unitize-height(60);
+	.unitize-margin(-30, 0, 0, 0);
+    .unitize(60, 16, line-height);
     .unitize(12, 16, font-size);
     .border-radius();
-    .linear-gradient(#ffffff, @gray-light);
     .user-select(none);
     .touch-callout(none);
     .tap-highlight-color(rgba(0, 0, 0, 0));
+    background: rgba(255, 255, 255, 0.5);
     display: block;
     position: absolute;
     top: 50%;
     z-index: 750;
     font-family: 'shopware';
     text-align: center;
-    color: @text-color;
-    border: 1px solid @border-color;
+    color: @btn-default-text-color;
+    border: 1px solid @btn-default-border-color;
     cursor: pointer;
 
     &.arrow--prev {
-        .unitize(10, 16, left);
+        .border-radius-multi(0, 3px, 3px, 0);
+        left: 0;
 
         &:before,
         &::before {
@@ -98,7 +100,8 @@
     }
 
     &.arrow--next {
-        .unitize(10, 16, right);
+        .border-radius-multi(3px, 0, 0, 3px);
+        right: 0;
 
         &:before {
             content: "\e60f";
@@ -106,20 +109,23 @@
     }
 
     &:hover {
-        color: @brand-primary;
+        color: @btn-default-hover-text-color;
+		border-color: @btn-default-hover-border-color;
+        background: rgba(255, 255, 255, 0.8);
     }
 
 	&.is--vertical {
-		.unitize-width(30);
-		.unitize-height(22);
-		.unitize-margin(0, 0, 0, -15);
-		.unitize(20, 16, line-height);
+		.unitize-width(60);
+		.unitize-height(30);
+		.unitize-margin(0, 0, 0, -30);
+		.unitize(30, 16, line-height);
 		.unitize(6, 16, font-size);
 		left: 50%;
 		top: auto;
 
 		&.arrow--prev {
-			.unitize(10, 16, top);
+            .border-radius-multi(0, 0, 3px, 3px);
+            top: 0;
 
 			&:before,
 			&::before {
@@ -128,7 +134,8 @@
 		}
 
 		&.arrow--next {
-			.unitize(10, 16, bottom);
+            bottom: 0;
+            .border-radius-multi(3px, 3px, 0, 0);
 
 			&:before {
 				content: "\e612";

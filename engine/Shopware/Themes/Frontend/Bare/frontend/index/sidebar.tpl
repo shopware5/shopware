@@ -19,15 +19,6 @@
 					</li>
 				{/block}
 
-				{* My account link in the sidebar *}
-				{block name="frontend_index_left_categories_my_account"}
-					<li class="navigation--entry entry--my-account">
-						<a class="navigation--link" href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}">
-							<i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
-						</a>
-					</li>
-				{/block}
-
 				{* Switches for currency and language on mobile devices *}
 				{block name="frontend_index_left_switches"}
 					<div class="mobile--switches">
@@ -55,7 +46,7 @@
 
             {* Actual include of the categories *}
             {block name='frontend_index_left_categories_inner'}
-                <div data-categories-dropdown="true">
+                <div class="sidebar--categories-navigation">
                     {include file='frontend/index/sidebar-categories.tpl'}
                 </div>
             {/block}

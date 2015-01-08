@@ -137,7 +137,7 @@
 		}
 
 		.price--discount {
-			.unitize(14, 16, font-size);
+			.unitize(12, 16, font-size);
 			.unitize(20, 16, line-height);
 			display: inline-block;
 			text-decoration: line-through;
@@ -199,9 +199,11 @@
 			.unitize(16, 16, line-height);
 			.border-radius-multi(0, 3px, 3px, 0);
 			display: block;
+            float: left;
 			position: relative;
 			text-align: center;
 			font-weight: bold;
+            clear: both;
 		}
 
 		// Discount Badge
@@ -283,7 +285,7 @@
 	display: block;
 	padding: 0;
 	position: relative;
-	text-align: left;
+	text-align: center;
 	float: none;
 
 	&:hover .product--title {

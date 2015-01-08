@@ -25,7 +25,7 @@
 
 		{* Welcome text *}
 		{block name="frontend_account_downloads_welcome"}
-			<div class="account--welcome panel has--border is--rounded">
+			<div class="account--welcome panel">
 				{block name="frontend_account_downloads_welcome_headline"}
 					<h1 class="panel--title">{s name="DownloadsHeader"}{/s}</h1>
 				{/block}

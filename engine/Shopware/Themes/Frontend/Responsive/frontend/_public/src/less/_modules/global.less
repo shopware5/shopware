@@ -29,10 +29,6 @@ img {
 a {
     color: @link-color;
     text-decoration: none;
-
-    &:hover {
-        color: @link-hover-color;
-    }
 }
 
 ul {
@@ -85,7 +81,7 @@ h6 {
 p {
     .unitize(@font-size-base, 16, font-size);
     .unitize(24, 16, line-height);
-    .unitize-margin(0, 0, 24, 0);
+    .unitize-margin(0, 0, 20, 0);
 }
 
 blockquote {
@@ -137,6 +133,9 @@ blockquote {
 ::-webkit-input-placeholder { color: @input-placeholder-color; }
 :-ms-input-placeholder { color: @input-placeholder-color; }
 
+.page-wrap {
+    .unitize-min-width(320, 16);
+}
 
 .content-main,
 .content--wrapper {
@@ -160,16 +159,12 @@ blockquote {
     }
 
     .content-main--inner {
-        .unitize-padding(0, 20, 16);
+        .unitize-padding(0, 30, 16);
         width: 100%;
     }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-    body {
-        .unitize(14, 16, font-size);
-    }
-    
     .content-main {
         .unitize(45, 16, margin-bottom);
         .unitize(700, 16, min-height);
@@ -177,12 +172,5 @@ blockquote {
     
     .content-main--inner {
         .unitize-padding(0, 50, 50, 50);
-    }
-
-    p {
-        @smallFontSize: @font-size-base - 2;
-        .unitize(@smallFontSize, 16, font-size);
-        .unitize(24, 16, line-height);
-        .unitize-margin(0, 0, 24, 0);
     }
 }

@@ -37,7 +37,15 @@
         .logo-main { width: 100%; }
         .logo--shop { width: 50% }
         .logo--supportinfo { display: none; }
-        .btn--back-top-shop { display: none; }
+
+        .btn--back-top-shop {
+            .unitize(10, 16, margin-top);
+            width: 40%;
+            float: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     &.is--act-cart {
@@ -114,8 +122,8 @@
     .entry--search {
         .btn:hover {
             background: inherit;
-            color: inherit;
-            border-color: inherit;
+            color: @btn-default-hover-text-color;
+            border-color: @btn-default-hover-border-color;
         }
 
         .is--active.btn {
@@ -163,15 +171,6 @@
     position: absolute;
     z-index: 3000;
 
-    // Icon position will be overwritten by @phoneLandscapeViewportWidth
-    .icon--search {
-        .unitize(18, 16, top);
-        .unitize(20, 16, right);
-        .unitize(22, 16, font-size);
-        position: absolute;
-        z-index: 2;
-    }
-
     .main-search--field {
         .unitize-padding(9, 38, 9, 9);
         .unitize-height(40, 16);
@@ -181,7 +180,23 @@
         position: relative;
     }
 
-    .main-search--button { display: none; }
+    .main-search--button {
+        .appearance(none);
+        .unitize(20, 16, right);
+        .unitize(12, 16, top);
+        .unitize(20, 16, font-size);
+        padding: 0;
+        position: absolute;
+        z-index: 2;
+        border: 0 none;
+        background: transparent;
+        color: @text-color;
+        outline: none;
+    }
+
+    .main-search--text {
+        display: none
+    }
 }
 
 // Creating the arrow on active search field
@@ -227,8 +242,8 @@
             .unitize-height(16);
             .border-radius(100%);
             .animation(keyframe--spin 1s linear infinite);
-            border-top: 2px solid darken(@border-color  , 50%);
             border: 2px solid @border-color;
+            border-top: 2px solid darken(@border-color, 50%);
             display: block;
             content: "";
         }
@@ -255,10 +270,11 @@
     left: 0;
     text-align: left;
     z-index: 3000;
+    display: none;
 }
 
 .results--list {
-	.unitize-padding(10, 0);
+	.unitize-padding(10, 10);
     .box-shadow(0 2px 3px 1px rgba(0, 0, 0, 0.1));
     border-top: 1px solid @border-color;
     border-bottom: 1px solid @border-color;
@@ -266,9 +282,9 @@
 
     &::after {
         .rotate(135deg);
-        .unitize-width(15);
-        .unitize-height(15);
-        .unitize(-8, 16, top);
+        .unitize-width(12);
+        .unitize-height(12);
+        .unitize(-6, 16, top);
         content: '';
         display: block;
         position: absolute;
@@ -281,7 +297,6 @@
 
     .list--entry,
     .entry--all-results {
-        .unitize-padding(6, 15);
 		display: block;
     }
 
@@ -299,34 +314,52 @@
         font-weight: normal;
     }
 
-    .is-active,
+    .js--is-active,
 	.list--entry:hover {
-        background: lighten(@border-color, 10%);
-        color: @brand-primary;
+        color: @link-color;
 
         .entry--name,
-		.entry--price { color: @brand-primary; }
+		.entry--price { color: @link-color; }
     }
 
-	.search-result--link { display: block; }
+	.search-result--link {
+        .unitize-padding(6, 0);
+        .clearfix();
+        display: block;
+    }
 
     .entry--media {
 		width: 10%;
 		min-width: 10%;
-	}
+        position: relative;
+        line-height: 30px;
+        text-align: center;
+
+        .media--image {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 
 	.entry--name {
-		display: block;
+		.unitize(10, 16, padding-left);
+        display: block;
 		width: 60%;
 		color: @text-color;
+
+        // CSS truncating
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 	}
 
     .entry--price,
     .entry--all-results-number {
         width: 30%;
         text-align: right;
-        color: @text-color-dark;
+        color: @text-color;
 		display: block;
+        white-space: nowrap;
     }
 
     .entry--all-results-link,
@@ -335,7 +368,7 @@
     }
 
     .entry--all-results {
-        .unitize(10, 16, padding-top);
+        .unitize-padding(10, 5);
         font-weight: normal;
     }
 
@@ -351,6 +384,7 @@
 
     .entry--all-results-number {
         font-weight: normal;
+        color: @link-color
     }
 }
 
@@ -364,6 +398,13 @@
 
 // Phone Landscape styling for the global shop header
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
+
+    .is--ctl-checkout.is--minimal-header,
+    .is--ctl-register.is--minimal-header.is--target-checkout {
+        .header-main .btn--back-top-shop {
+            width: auto;
+        }
+    }
 
     .entry--search {
         display: inline-block;
@@ -390,13 +431,16 @@
             position: relative;
 
             // Reset the searchfield background
-            .main-search--field { background: @input-bg; }
+            .main-search--field {
+                background: @input-bg;
+
+                &:focus { background: #fff; }
+            }
 
             // Icon position from here to @desktopViewportWidth
-            .icon--search {
-                .unitize(8, 16, top);
+            .main-search--button {
+                .unitize(2, 16, top);
                 .unitize(12, 16, right);
-                .unitize(22, 16, font-size);
             }
         }
     }
@@ -404,7 +448,7 @@
     // Search results modal
     .main-search--results {
         .clearfix();
-        .unitize(60, 16, top);
+        .unitize(50, 16, top);
         .unitize-width(450);
         .unitize(-110, 16, margin-left);
     }
@@ -508,7 +552,7 @@
         }
 
         .logo-main {
-            .unitize-padding(12, 10, 16, 10);
+			.unitize-padding(10, 10, 15, 10);
             width: 35%;
 
 			.logo--link { .unitize-height(50, 16); }
@@ -528,11 +572,12 @@
             .box-shadow(0 1px 2px 0 @border-color);
 
             .logo-main { width: 100%; }
-            .logo--shop { width: 40% }
+            .logo--shop { width: 35% }
 
             .logo--supportinfo {
+                .unitize-padding(5, 0);
                 display: block;
-                width: 40%;
+                width: 35%;
             }
         }
 
@@ -587,8 +632,8 @@
 
         .service--list {
             .unitize-width(166);
-            .unitize-padding(8, 8);
-            .unitize(38, 16, top);
+            .unitize-padding(5, 0);
+            .unitize(30, 16, top);
             .unitize(12, 16, right);
             text-align: left;
             position: absolute;
@@ -618,27 +663,17 @@
             display: block;
 
             .service--link {
-                .unitize-padding(5, 8);
+                .unitize-padding(5, 10);
                 display: block;
                 color: @text-color;
-                border-top: 1px solid @border-color;
 
-                &:hover {
-                    color: @brand-primary;
-                    background-color: @gray;
-                }
-            }
-
-            .service--entry {
-                &:first-child .service--link {
-                    border-top: 0 none;
-                }
+                &:hover { color: @brand-primary; }
             }
         }
     }
 
     .shop--navigation {
-        .unitize-padding(16, 0, 16, 0, 16);
+		.unitize-padding(10, 0, 15, 0);
         width: 65%;
 
         .navigation--list {
@@ -697,20 +732,14 @@
         .clearfix();
         .unitize-width(450);
         .unitize(-225, 16, margin-left);
-        .unitize(60, 16, top);
+        .unitize(55, 16, top);
         left: 50%;
     }
 
     .results--list {
         .border-radius();
-		.unitize-padding(10, 0);
         border: 1px solid @border-color;
         background: #fff;
-
-        .list--entry,
-        .entry--all-results {
-            .unitize-padding(6, 15);
-        }
     }
 }
 
@@ -740,7 +769,6 @@
             .logo--supportinfo { width: 35%; }
 
             .btn--back-top-shop {
-                .unitize-margin(5, 0, 0, 0);
                 display: inline-block;
                 float: right;
             }
@@ -812,7 +840,6 @@
             .logo--supportinfo { width: 35%; }
 
             .btn--back-top-shop {
-                .unitize(5, 16, margin-top);
                 display: inline-block;
                 float: right;
             }

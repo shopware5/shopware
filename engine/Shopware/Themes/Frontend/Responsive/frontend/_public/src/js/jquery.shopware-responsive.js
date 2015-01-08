@@ -36,10 +36,10 @@ $(function () {
         .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 's', 'm', 'l'])
 
         // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's'])
+        .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's', 'm'])
 
         // Collapse panel
-        .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['m', 'l', 'xl'])
+        .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['l', 'xl'])
 
         // Slide panel
         .addPlugin('*[data-slide-panel="true"]', 'slidePanel', ['xs', 's'])

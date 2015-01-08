@@ -18,7 +18,7 @@
 
 		{* Infotext *}
 		{block name="frontend_note_index_welcome"}
-			<div class="account--welcome panel has--border is--rounded">
+			<div class="account--welcome panel">
 				{block name="frontend_note_index_welcome_headline"}
 					<h1 class="panel--title">{s name="NoteHeadline"}{/s}</h1>
 				{/block}

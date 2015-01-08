@@ -101,7 +101,7 @@
 			<div class="order--actions panel--td column--actions">
 				<a href="#order{$offerPosition.ordernumber}"
 				   title="{"{s name="OrderActionSlide"}{/s}"|escape} {$offerPosition.ordernumber}"
-				   class="btn is--secondary is--small"
+				   class="btn is--small"
 				   data-collapse-panel="true"
 				   data-collapseTarget="#order{$offerPosition.ordernumber}">
 					{s name="OrderActionSlide"}{/s}

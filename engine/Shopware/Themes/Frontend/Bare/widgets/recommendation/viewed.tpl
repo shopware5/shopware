@@ -1,6 +1,6 @@
 {if $viewedArticles}
     {block name="frontend_detail_index_similar_viewed_slider"}
-        <div class="viewed--content panel--body">
+        <div class="viewed--content">
             <div class="product-slider" data-product-slider="true">
                 {block name="frontend_detail_index_similar_viewed_slider_inner"}
                     <div class="product-slider--container">
