@@ -150,6 +150,7 @@
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}
 {include file='backend/base/component/Shopware.MediaManager.MediaSelection.js'}
+{include file='backend/base/component/Shopware.MediaManager.MediaTextSelection.js'}
 {include file='backend/base/component/Shopware.VTypes.js'}
 {include file='backend/base/component/Shopware.form.field.TinyMCE.js'}
 {include file='backend/base/component/Shopware.form.plugin.Translation.js'}
@@ -192,3 +193,4 @@
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
 {include file='backend/base/component/element/product_box_layout_select.js'}
+{include file='backend/base/component/element/media_text_selection.js'}
