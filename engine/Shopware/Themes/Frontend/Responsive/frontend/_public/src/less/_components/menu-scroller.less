@@ -1,97 +1,87 @@
 
 // Some styling rules can also be found in the hacks.less!
-
 .js--menu-scroller {
     position: relative;
-
-    &:before,
-    &:after,
-    &::before,
-    &::after {
-        .linear-gradient-multi(0%, white, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), left, right);
-        content: "";
-        display: block;
-        width: 10%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: transparent;
-        z-index: 500;
-        position: absolute;
-    }
-
-    &:after,
-    &::after{
-        .linear-gradient-multi(0%, white, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), right, left);
-        background-color: transparent;
-        bottom: 0;
-        right: 0;
-        left: auto;
-    }
-
-    &.is--left:before,
-    &.is--right:after,
-    &.is--left::before,
-    &.is--right::after {
-        visibility: hidden;
-    }
 }
 
-.js--menu-scroller--viewport {
+.navigation--list-wrapper {
+    .unitize-height(38);
+    position: relative;
     overflow: hidden;
 }
 
 .js--menu-scroller--list {
-    /**
-     * Large width so the menu doesn't wrap on initialization.
-     * The right width will be set by the plugin
-     */
-    width: 10000%;
     max-width: none;
-    overflow: visible;
+    overflow-x: scroll;
     position: relative;
     white-space: nowrap;
     left: 0;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+
+    // Hide scrollbars in webkit browsers
+    &::-webkit-scrollbar {
+        width: 0  !important;
+        height: 0  !important;
+    }
 }
 
 .js--menu-scroller--arrow {
-    .unitize-width(26);
-    .unitize-padding(0, 8);
-    .border-radius();
-    .unitize(10, 16, font-size);
-    .unitize(16, 16, line-height);
-    background: @brand-secondary;
+    .unitize-width(22);
+    .unitize-height(37);
+    .unitize(36, 16, line-height);
+    .unitize(12, 16, font-size);
+    .linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
+    .unitize(1, 16, top);
+    border: 1px solid @btn-default-border-color;
     position: absolute;
-    height: 70%;
-    top: 15%;
     font-family: "shopware";
     text-align: center;
-    color: #FFFFFF;
+    color: @btn-default-text-color;
     cursor: pointer;
     z-index: 750;
     display: none;
 
-    &:hover {
-        background: @brand-secondary-dark;
-    }
-
+    &:hover,
     &:active {
-        .linear-gradient(@brand-secondary-dark, @brand-secondary);
+        color: @btn-default-hover-text-color;
+        border-color: @btn-default-hover-border-color;
+        background: @btn-default-hover-bg;
     }
 
     &.left--arrow {
-        .unitize(5, 16, left);
+        .border-radius-multi(0, 3px, 3px, 0);
+        border-left: 0 none;
+        left: 0;
     }
 
     &.right--arrow {
-        .unitize(5, 16, right);
-    }
-
-    .arrow--content {
-        .unitize(-8, 16, margin-top);
-        position: absolute;
-        top: 50%;
-        left: 0;
+        .border-radius-multi(3px, 0, 0, 3px);
+        border-right: 0 none;
         right: 0;
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+    .js--menu-scroller--arrow {
+        &.left--arrow {
+            .border-radius();
+            border: 1px solid @btn-default-border-color;
+            left: 0;
+
+            &:hover {
+                border-color: @btn-default-hover-border-color;
+            }
+        }
+
+        &.right--arrow {
+            .border-radius();
+            border: 1px solid @btn-default-border-color;
+            right: 0;
+
+            &:hover {
+                border-color: @btn-default-hover-border-color;
+            }
+        }
     }
 }

@@ -41,14 +41,6 @@
 					{/block}
 				</div>
 			{/foreach}
-
-            {block name='frontend_checkout_payment_required'}
-                {* Required fields hint *}
-                <div class="register--required-info required_fields">
-                    {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
-                </div>
-            {/block}
-
         </div>
 	{/block}
 </div>

@@ -12,11 +12,13 @@
         {* Vat info *}
 		{block name='frontend_index_footer_vatinfo'}
             <div class="footer--vat-info">
-                {if $sOutputNet}
-                    <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
-                {else}
-                    <p>{s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
-                {/if}
+                <p class="vat-info--text">
+                    {if $sOutputNet}
+                        {s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {else}
+                        {s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {/if}
+                </p>
             </div>
 		{/block}
 

@@ -3,21 +3,36 @@
     <form action="{url controller='search' fullPath=false}" method="get" class="main-search--form">
         {block name="frontend_index_search_innerform"}{/block}
 
+        {* Search icon *}
 		{block name='frontend_index_search_icon'}
-			<i class="icon--search"></i>
+
 		{/block}
 
+        {* Search field *}
 		{block name='frontend_index_search_field'}
         	<input type="search" name="sSearch" class="main-search--field" data-live-search="true" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}Suchbegriff...{/s}" maxlength="30"  />
 		{/block}
 
+        {* Search input *}
 		{block name='frontend_index_search_field_submit'}
-        	<input type="submit" class="main-search--button" value="{s name="IndexSearchFieldSubmit"}Suchen{/s}" />
-            {* Ajax loader *}
-            {block name='frontend_index_search_ajax_loader'}
-                <div class="form--ajax-loader">&nbsp;</div>
-            {/block}
+        	<button type="submit" class="main-search--button">
+
+                {* Search icon *}
+                {block name='frontend_index_search_field_submit_icon'}
+                    <i class="icon--search"></i>
+                {/block}
+
+                {* Search text *}
+                {block name='frontend_index_search_field_submit_text'}
+                    <span class="main-search--text">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
+                {/block}
+            </button>
 		{/block}
+
+        {* Ajax loader *}
+        {block name='frontend_index_search_ajax_loader'}
+            <div class="form--ajax-loader">&nbsp;</div>
+        {/block}
     </form>
 
     {* Search results *}

@@ -1,7 +1,14 @@
 .newsletter--content {
+    .unitize(10, 16, padding-top);
     .clearfix();
 
+    .newsletter--error-messages {
+        .unitize(10, 16, margin-bottom);
+    }
+
     .newsletter--headline {
+        .unitize(10, 16, margin-bottom);
+
         .newsletter--title {
             .unitize(10, 16, margin-top);
         }
@@ -22,18 +29,22 @@
 
     .newsletter--action {
         .clearfix();
-
-        .btn {
-            float: right;
-        }
     }
-
 }
 
 // Newsletter listing
 .newsletter-listing--content {
+    .unitize(10, 16, margin-top);
+
+    .newsletter-listing--headline {
+        .unitize(10, 16, margin-bottom);
+    }
+    .newsletter--title {
+        .unitize-margin(10, 0);
+    }
 
     .newsletter-listing--table-headline {
+
         .newsletter-listing--headline-name {
             width: 65%;
         }
@@ -54,10 +65,6 @@
 
         .newsletter-listing--entry-button {
             width: 35%;
-
-            .btn {
-                float: right;
-            }
         }
 
         &:last-child {
@@ -87,35 +94,22 @@
     }
 
     .newsletter-detail--buttons {
-        .unitize(16, 16, margin-top);
+        .unitize-margin(10, 0, 10, 0);
+
+        .newsletter-detail--backlink {
+            width: 100%;
+        }
 
         .newsletter-detail--window {
             .unitize(10, 16, margin-bottom);
-            text-align: center;
             width: 100%;
-
-            i[class^=icon] {
-                .unitize-margin(0, 0, 0, 16);
-            }
         }
     }
 }
 
-// Padding Newsletter Error Message Tablet
-.newsletter--error-messages {
-	.unitize(30, 16, padding-top);
-}
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
 
-@media screen and (min-width: @tabletViewportWidth) {
-
-    .newsletter--content .js--fancy-select {
-        .unitize(15, 16, margin-bottom);
-        .unitize-width(290);
-    }
-
-    // Newsletter listing
     .newsletter-listing--content {
-
         .newsletter-listing--table-headline {
             .newsletter-listing--headline-name {
                 width: 80%;
@@ -131,6 +125,46 @@
             .newsletter-listing--entry-button {
                 width: 20%;
             }
+        }
+    }
+
+    .newsletter-detail--content {
+        .newsletter-detail--buttons {
+            .newsletter-detail--backlink,
+            .newsletter-detail--window {
+                width: auto;
+                margin: 0;
+            }
+        }
+    }
+
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .newsletter--content {
+        .unitize(20, 16, padding-top);
+
+        .newsletter--error-messages {
+            .unitize(20, 16, margin-bottom);
+        }
+
+        .newsletter--headline {
+            .unitize(20, 16, margin-bottom);
+        }
+
+        .js--fancy-select {
+            .unitize(15, 16, margin-bottom);
+            .unitize-width(290);
+        }
+    }
+
+    // Newsletter listing
+    .newsletter-listing--content {
+        .unitize(20, 16, margin-top);
+
+        .newsletter-listing--headline {
+            .unitize(20, 16, margin-bottom);
         }
     }
 
@@ -154,6 +188,7 @@
 
     .newsletter--content {
         .unitize(45, 16, margin-top);
+        padding: 0;
 
         .newsletter--headline .newsletter--title {
             .unitize(0, 16, margin-top);

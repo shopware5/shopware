@@ -51,7 +51,6 @@
 // List items in the menu scroller are not allowed to float or have another display mode then inline-block.
 // This is because we allow items to overflow the list itself and do not have cropping issues.
 .js--menu-scroller--item {
-    float: none !important;
     display: inline-block !important;
 }
 
@@ -79,6 +78,11 @@
     &::-webkit-scrollbar-thumb {
         background: @border-color;
     }
+}
+
+// inactive class for disabling scrolling on different parts of shopware
+.is--inactive {
+    overflow: hidden !important;
 }
 
 @media screen and (min-width: @tabletViewportWidth) {

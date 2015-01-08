@@ -46,29 +46,31 @@
                 </div>
             {/block}
 
-            {* Article Name *}
-            {block name='checkout_ajax_add_information_name'}
-                <div class="article--name block">
-                    <ul class="list--name list--unstyled">
-                        <li class="entry--name">
-                            <a class="link--name" href="{$detailLink}" title="{$sArticle.articlename|escape}">
-                                {$sArticle.articlename|escape|truncate:35}
-                            </a>
-                        </li>
-                        <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
-                    </ul>
-                </div>
-            {/block}
+            <div class="article--info">
+                {* Article Name *}
+                {block name='checkout_ajax_add_information_name'}
+                    <div class="article--name">
+                        <ul class="list--name list--unstyled">
+                            <li class="entry--name">
+                                <a class="link--name" href="{$detailLink}" title="{$sArticle.articlename|escape}">
+                                    {$sArticle.articlename|escape|truncate:35}
+                                </a>
+                            </li>
+                            <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
+                        </ul>
+                    </div>
+                {/block}
 
-            {* Article price *}
-            {block name='checkout_ajax_add_information_price'}
-                <div class="article--price block">
-                    <ul class="list--price list--unstyled">
-                        <li class="entry--price">{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</li>
-                        <li class="entry--quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</li>
-                    </ul>
-                </div>
-            {/block}
+                {* Article price *}
+                {block name='checkout_ajax_add_information_price'}
+                    <div class="article--price">
+                        <ul class="list--price list--unstyled">
+                            <li class="entry--price">{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</li>
+                            <li class="entry--quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</li>
+                        </ul>
+                    </div>
+                {/block}
+            </div>
         </div>
     {/block}
 

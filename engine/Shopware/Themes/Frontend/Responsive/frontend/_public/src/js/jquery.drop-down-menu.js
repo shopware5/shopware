@@ -17,7 +17,7 @@
         onClickMenu: function (event) {
             var me = this;
 
-            if ($(event.target).hasClass('service--link')) {
+            if($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
                 return;
             }
 
@@ -29,18 +29,20 @@
 
             if (me.opts.closeOnBody) {
                 event.stopPropagation();
-                $('body').one(me.getEventName('touchstart click'), $.proxy(me.onClickBody, me));
+                $('body').on(me.getEventName('touchstart.dropdownMenu click.dropdownMenu'), $.proxy(me.onClickBody, me));
             }
         },
 
         onClickBody: function(event) {
             var me = this;
 
-            if ($(event.target).hasClass('service--link')) {
+            if($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
                 return;
             }
 
             event.preventDefault();
+
+            $('body').off('touchstart.dropdownMenu click.dropdownMenu');
 
             me.$el.removeClass(me.opts.activeCls);
         },

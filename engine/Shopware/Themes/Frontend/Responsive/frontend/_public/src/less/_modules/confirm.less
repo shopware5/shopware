@@ -14,6 +14,8 @@
     }
 
     .product--table {
+        margin: 0;
+
         .panel--body {
             background: @panel-bg;
             color: @text-color;
@@ -33,12 +35,12 @@
             .aggregation--list {
                 margin: 0;
                 background: transparent;
-                border-color: @border-color;
+                border-top: 1px solid @border-color;
             }
         }
 
-        .table--actions {
-            .unitize-padding(25, 0, 0, 0);
+        .is--last-row {
+            border-bottom: 0 none;
         }
     }
 
@@ -96,8 +98,12 @@
         width: 100%;
     }
 
-    .table--actions .btn {
-        width: 100%;
+    .table--actions {
+        .main--actions {
+            .unitize-margin(20, 0, 10, 0);
+        }
+
+        .btn { width: 100%; }
     }
 
     .table-footer--country-notice {
@@ -195,10 +201,6 @@
 
             .panel--body {
                 .unitize(20, 16, padding-bottom);
-            }
-
-            .table--actions {
-                .unitize-padding(10, 0, 0, 0);
             }
 
             .basket--footer {
@@ -303,9 +305,12 @@
         }
 
         // Aggregation
-        .product--table .aggregation--list {
-            float: right;
-            padding-right: 10.4%;
+        .product--table {
+            .basket--footer .aggregation--list {
+                float: right;
+                padding-right: 10.4%;
+                border-top: 0 none;
+            }
         }
 
         .main--actions .btn {
@@ -335,12 +340,10 @@
 
 @media screen and (min-width: @desktopViewportWidth) {
     .confirm--content {
+        .unitize(25, 16, padding-top);
+
         & > .alert {
             .unitize-margin(45, 0, 0, 0);
-        }
-
-        .panel {
-            .unitize-margin(45, 0);
         }
 
         .product--table {

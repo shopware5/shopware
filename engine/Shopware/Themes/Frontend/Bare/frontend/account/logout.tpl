@@ -8,10 +8,10 @@
 {/block}
 
 {block name='frontend_index_content'}
-	<div class="content account--content is--wide">
+	<div class="account--logout account--content content is--wide">
 
 		{block name="frontend_account_logout_info"}
-			<div class="account--welcome panel has--border is--rounded">
+			<div class="account--welcome panel">
 
 				{block name="frontend_account_logout_info_headline"}
 					<h1 class="panel--title">{s name="AccountLogoutHeader"}{/s}</h1>
@@ -19,14 +19,14 @@
 
 				{block name="frontend_account_logout_info_content"}
 					<div class="panel--body is--wide">
-						<p>{s name="AccountLogoutText"}{/s}</p>
+						<p class="logout--text">{s name="AccountLogoutText"}{/s}</p>
 					</div>
 				{/block}
 
 				{block name="frontend_account_logout_info_actions"}
-					<div class="panel--actions">
-						<a class="btn is--secondary" href="{url controller='index'}" title="{"{s name='AccountLogoutButton'}{/s}"|escape}">
-							{s name="AccountLogoutButton"}{/s}
+					<div class="panel--actions is--wide">
+						<a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{"{s name='AccountLogoutButton'}{/s}"|escape}">
+							<i class="icon--arrow-left"></i>{s name="AccountLogoutButton"}{/s}
 						</a>
 					</div>
 				{/block}

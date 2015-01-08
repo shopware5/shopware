@@ -2,7 +2,7 @@
 .advanced-menu {
     .clearfix();
     .unitize-max-width(1260, 16);
-    .box-shadow(0 10px 30px -15px #000);
+    .box-shadow(0 10px 25px -15px #000);
     background: @btn-secondary-text-color;
     width: 100%;
     position: absolute;
@@ -64,12 +64,11 @@
     .menu--list-item-link {
         .unitize-padding(5, 0);
         .unitize(16, 16, font-size);
+        .transition(color 0.2s ease-out);
         color: @text-color-dark;
         display: block;
 
-        &:hover {
-            color: @brand-primary;
-        }
+        &:hover { color: @link-color }
     }
 
     .button-container {
@@ -172,6 +171,7 @@
 
 .navigation-main .navigation--list .navigation--entry.is--hovered {
     .border-radius-multi(3px, 3px);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
     background: @text-color-dark;
 
     .navigation--link {

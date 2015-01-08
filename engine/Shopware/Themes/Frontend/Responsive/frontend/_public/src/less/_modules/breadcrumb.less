@@ -6,7 +6,6 @@
     border-bottom: 1px solid @border-color;
 
     .breadcrumb--list {
-        .unitize(10, 16, padding-left);
         overflow: hidden;
     }
 
@@ -39,6 +38,8 @@
     .breadcrumb--link {
         display: block;
         color: @text-color;
+
+        &:hover { color: @link-color; }
     }
 
     // Active link
@@ -67,6 +68,7 @@
 
 @media screen and(min-width: @tabletViewportWidth) {
     .content--breadcrumb {
+        .unitize-padding(0, 20);
 
         .breadcrumb--list {
             padding-left: 0;
@@ -79,7 +81,8 @@
 
         // Button
         .breadcrumb--button {
-            .unitize-padding(10, 30);
+            .unitize(10, 16, margin-right);
+            .unitize-padding(10, 30, 10, 10);
 
             .breadcrumb--title {
                 .unitize(0, 16, padding-right);
@@ -90,7 +93,7 @@
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-    .content--breadcrumb  .breadcrumb--button {
-        .unitize-padding(10, 50);
+    .content--breadcrumb  {
+        .unitize-padding(0, 40);
     }
 }

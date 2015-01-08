@@ -466,7 +466,7 @@
             var me = this;
 
             $(window).on(me.getEventName('resize'), function() {
-                me.$el.trunk8();
+                me.$el.trunk8('revert').trunk8();
             }).resize();
         }
     });

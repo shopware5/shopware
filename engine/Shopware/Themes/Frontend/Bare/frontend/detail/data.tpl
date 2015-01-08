@@ -63,14 +63,13 @@
 
                         {block name='frontend_detail_data_pseudo_price_discount_icon'}
                             <span class="price--discount-icon">
-                                <i class="icon--percent"></i>
+                                <i class="icon--percent2"></i>
                             </span>
                         {/block}
 
                         {* Discount price content *}
                         {block name='frontend_detail_data_pseudo_price_discount_content'}
                             <span class="content--discount">
-								{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
                                 <span class="price--line-through">{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
 
                                 {* Percentage discount *}

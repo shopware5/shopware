@@ -5,7 +5,7 @@
 	{if $facets|count > 0}
 		<div class="action--filter-btn">
 			<a href="#"
-			   class="filter--trigger btn"
+			   class="filter--trigger btn is--small"
 			   data-filter-trigger="true"
 			   data-offcanvas="true"
 			   data-offCanvasSelector=".action--filter-options"

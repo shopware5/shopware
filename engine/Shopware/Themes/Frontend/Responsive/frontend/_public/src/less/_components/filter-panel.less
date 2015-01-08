@@ -1,8 +1,8 @@
 .filter-panel {
-    .unitize-height(34);
+    .unitize-height(38);
     .unitize(10, 16, margin-bottom);
     .border-radius();
-    .linear-gradient(#FFF, @body-bg);
+    .white-gradient();
 	.user-select(none);
 	.touch-callout(none);
 	.tap-highlight-color(rgba(0, 0, 0, 0));
@@ -34,7 +34,6 @@
 
         .filter-panel--title {
             color: @brand-primary;
-            font-weight: 600;
         }
 
         .filter-panel--icon:before {
@@ -45,7 +44,7 @@
 }
 
 .filter-panel--flyout {
-    .unitize-height(34);
+    .unitize-height(38);
     .border-radius();
     display: block;
     width: 100%;
@@ -54,8 +53,8 @@
 }
 
 .filter-panel--title {
-    .unitize-height(32);
-    .unitize(32, 16, line-height);
+    .unitize-height(36);
+    .unitize(36, 16, line-height);
     .unitize-padding(0, 30, 0, 10);
     .unitize-margin(0, 0, 5, 0);
     .user-select(none);
@@ -469,7 +468,7 @@
 }
 
 .filter--active {
-    .unitize-padding(5, 10);
+    .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
     .unitize(22, 16, line-height);
     .unitize(13, 16, font-size);
@@ -546,7 +545,7 @@
         float: left;
 
         &.is--collapsed {
-            .unitize-height(34);
+            .unitize-height(38);
         }
     }
 
@@ -584,10 +583,6 @@
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-
-    .filter--active {
-        .unitize-padding(0, 10);
-    }
 
     .filter-panel--star-rating {
         .unitize-width(100);
