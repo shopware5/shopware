@@ -20,6 +20,7 @@
         defaults: {
             iconCls: 'icon--check',
             counterSelector: '.notes--quantity',
+            wishlistSelector: '.entry--notepad',
             savedCls: 'js--is-saved',
             text: 'Gemerkt'
         },
@@ -32,6 +33,7 @@
 
             me.applyDataAttributes();
 
+            me.$wishlistButton = $(me.opts.wishlistSelector);
             me.$counter = $(me.opts.counterSelector);
 
             me.registerEvents();
@@ -83,7 +85,7 @@
                 return false;
             }
 
-            me.$counter.html(response.notesCount);
+            me.updateCounter(response.notesCount);
             me.animateElement($target);
         },
 
@@ -101,6 +103,42 @@
             $target.addClass('js--is-animating ' + me.opts.savedCls);
             $text.html($target.attr('data-text') || me.opts.text);
             $icon.removeClass(originalIcon).addClass(me.opts.iconCls);
+        },
+
+        /**
+         * Updates the wishlist badge counter. If the badge isn't available,
+         * it will be created on runtime and nicely showed with a transition.
+         *
+         * @param {String|Number} count
+         * @returns {*|HTMLElement|$counter}
+         */
+        updateCounter: function (count) {
+            var me = this,
+                $btn = me.$wishlistButton,
+                animate = 'transition';
+
+            if(me.$counter.length) {
+                me.$counter.html(count);
+                return me.$counter;
+            }
+
+            // Initial state don't has the badge, so we need to create it
+            me.$counter = $('<span>', {
+                'class': 'badge notes--quantity',
+                'html': count,
+                'css': { 'opacity': 0 }
+            }).appendTo($btn.find('a'));
+
+            if (!$.support.transition) {
+                animate = 'animate';
+            }
+
+            // Show it with a nice transition
+            me.$counter[animate]({
+                'opacity': 1
+            }, 500);
+
+            return me.$counter;
         },
 
         /**
