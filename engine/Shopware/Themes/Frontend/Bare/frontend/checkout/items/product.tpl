@@ -19,16 +19,20 @@
                         <div class="table--media">
 							{block name="frontend_checkout_cart_item_image_container"}
 								<div class="table--media-outer">
-									<div class="table--media-inner">
-										{if $sBasketItem.image.src.2}
-											<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
-												<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
-											</a>
+									{block name="frontend_checkout_cart_item_image_container_outer"}
+										<div class="table--media-inner">
+											{block name="frontend_checkout_cart_item_image_container_inner"}
+												{if $sBasketItem.image.src.2}
+													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+														<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+													</a>
+												{else}
+													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
+												{/if}
+											{/block}
+										</div>
+									{/block}
 
-										{else}
-											<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
-										{/if}
-									</div>
 								</div>
 							{/block}
 						</div>
