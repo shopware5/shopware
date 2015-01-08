@@ -398,7 +398,7 @@ class Inheritance
         $builder = $this->getShopConfigQuery($template, $lessCompatible);
 
         $builder->setParameter('templateId', $template->getId())
-            ->setParameter('shopId', $shop->getId());
+            ->setParameter('shopId', $shop->getMain() ? $shop->getMain()->getId() : $shop->getId());
 
         $data = $builder->getQuery()->getArrayResult();
 
