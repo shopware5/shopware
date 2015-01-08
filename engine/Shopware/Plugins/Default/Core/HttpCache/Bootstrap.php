@@ -168,7 +168,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             "widgets/compare 3600\r\n" .
             "widgets/emotion 14400\r\n" .
             "widgets/recommendation 14400\r\n" .
-            "widgets/lastArticles 3600\n"
+            "widgets/lastArticles 3600\n" .
+            "widgets/campaign 3600\n"
         ));
 
         $form->setElement('textarea', 'noCacheControllers', array(
