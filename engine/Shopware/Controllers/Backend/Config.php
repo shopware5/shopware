@@ -1203,7 +1203,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementModel = new Shopware\Models\Document\Element();
         $elementModel->setName('Footer');
         $elementModel->setValue(
-            '<table style="height: 90px;" border="0" width="100%">
+            '<table style="vertical-align: top;" width="100%" border="0">
             <tbody>
             <tr valign="top">
             <td style="width: 25%;">
