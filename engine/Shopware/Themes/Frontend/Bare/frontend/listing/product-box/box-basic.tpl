@@ -3,7 +3,8 @@
 {block name="frontend_listing_box_article"}
     <div class="product--box box--{$productBoxLayout}"
          data-page-index="{$pageIndex}"
-         {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}" data-ordernumber="{$sArticle.ordernumber}"{/if}>
+         data-ordernumber="{$sArticle.ordernumber}"
+         {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}"{/if}>
 
         {block name="frontend_listing_box_article_content"}
             <div class="box--content is--rounded">

@@ -20,26 +20,35 @@
 
 	{* Promotion *}
 	{block name='frontend_home_index_promotions'}
-		{action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
+        {if $hasEmotion}
+            <div class="content--emotions">
+                {foreach $emotions as $emotion}
+                    <div class="emotion--wrapper"
+                         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+                         data-availableDevices="{$emotion.devices}">
+                    </div>
+                {/foreach}
+            </div>
+        {/if}
 	{/block}
 	
 	{block name='frontend_home_index_blog'}
 		{* Blog Articles *}
 		{if $sBlog.sArticles|@count}
-		<div class="listing_box">
-			<h2 class="headingbox_nobg largesize">{s name='WidgetsBlogHeadline'}{/s}:</h2>
-			{foreach from=$sBlog.sArticles item=article key=key name="counter"}
-				{include file="frontend/blog/box.tpl" sArticle=$article key=$key homepage=true}
-			{/foreach}
-		</div>
+            <div class="listing_box">
+                <h2 class="headingbox_nobg largesize">{s name='WidgetsBlogHeadline'}{/s}:</h2>
+                {foreach from=$sBlog.sArticles item=article key=key name="counter"}
+                    {include file="frontend/blog/box.tpl" sArticle=$article key=$key homepage=true}
+                {/foreach}
+            </div>
 		{/if} 
 	{/block}
 
 	{* Tagcloud *}
 	{block name='frontend_home_index_tagcloud'}
-		{* if {config name=show namespace=TagCloud } && (!$isEmotionLandingPage && !$hasEmotion)}
+		{if {config name=show namespace=TagCloud } && (!$isEmotionLandingPage && !$hasEmotion)}
 			{action module=widgets controller=listing action=tag_cloud sController=index}
-		{/if *}
+		{/if}
 	{/block}
 </div>
 {/block}

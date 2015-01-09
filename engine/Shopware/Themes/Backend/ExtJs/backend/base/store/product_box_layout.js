@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
 
     pageSize: 1000,
 
-    displayExtendLayout: true,
+    displayExtendLayout: false,
     displayBasicLayout: true,
     displayMinimalLayout: true,
     displayImageLayout: true,

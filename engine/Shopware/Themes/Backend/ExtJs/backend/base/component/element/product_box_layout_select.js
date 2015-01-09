@@ -36,6 +36,8 @@ Ext.define('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
 
     alias: 'widget.base-element-product-box-layout-select',
 
+    storeConfig: {},
+
     listConfig: {
         getInnerTpl: function () {
             return '{literal}' +
@@ -52,11 +54,13 @@ Ext.define('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
     },
 
     initComponent: function() {
+        this.queryMode = 'local';
+
         this.createStore();
         this.callParent(arguments);
     },
 
     createStore: function() {
-        this.store = Ext.create('Shopware.apps.Base.store.ProductBoxLayout');
+        this.store = Ext.create('Shopware.apps.Base.store.ProductBoxLayout', this.storeConfig);
     }
 });

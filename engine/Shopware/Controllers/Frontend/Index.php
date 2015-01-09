@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
@@ -39,9 +41,17 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
-        $category = Shopware()->Shop()->get('parentID');
+        /**@var $context ShopContextInterface*/
+        $context = Shopware()->Container()->get('context_service')->getShopContext();
+        $categoryId = $context->getShop()->getCategory()->getId();
 
-        $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
-        $this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
+        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
+
+        $this->View()->assign([
+            'emotions' => $emotions,
+            'hasEmotion' => !empty($emotions),
+            'sCategoryContent' => Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId),
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId)
+        ]);
     }
 }

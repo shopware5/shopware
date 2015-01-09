@@ -1,7 +1,6 @@
 // Special mixin for positioning the product image on the left side of the product box
 .image--left(@imageWidth: 180) {
 	.product--image {
-		.unitize-width(@imageWidth);
 		height: 100%;
 		margin: 0;
 		position: absolute;
@@ -10,13 +9,20 @@
 		& when (ispercentage(@imageWidth)) {
 			width: @imageWidth;
 		}
+
+		& when not (ispercentage(@imageWidth)) {
+			.unitize-width(@imageWidth);
+		}
 	}
 	.product--info {
-		.unitize-padding(0, 0, 0, @imageWidth + 20);
 		position: relative;
 
 		& when (ispercentage(@imageWidth)) {
 			padding-left: @imageWidth + 2;
+		}
+
+		& when not (ispercentage(@imageWidth)) {
+			.unitize-padding(0, 0, 0, @imageWidth + 20);
 		}
 	}
 }
@@ -24,13 +30,16 @@
 // Special mixin for positioning the product image at the top of the product box
 .image--top(@imageHeight: 180) {
 	.product--image {
-		.unitize-height(@imageHeight);
 		.unitize-margin(0, 0, 5, 0);
 		width: auto;
 		position: relative;
 
 		& when (ispercentage(@imageHeight)) {
-			width: @imageHeight;
+			height: @imageHeight;
+		}
+
+		& when not (ispercentage(@imageHeight)) {
+			.unitize-height(@imageHeight);
 		}
 	}
 	.product--info {

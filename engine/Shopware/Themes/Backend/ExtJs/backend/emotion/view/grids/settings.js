@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
     extend: 'Enlight.app.Window',
     alias: 'widget.emotion-view-grids-settings',
     width: 600,
-    height: 550,
+    height: 500,
     autoScroll: true,
     autoShow: true,
     layout: 'fit',
@@ -165,7 +165,8 @@ Ext.define('Shopware.apps.Emotion.view.grids.Settings', {
             fieldLabel: label.rows,
             allowBlank: false,
             minValue: 0,
-            supportText: support.rows
+            supportText: support.rows,
+            hidden: false
         });
 
         var cellHeight = Ext.create('Ext.form.field.Number', {

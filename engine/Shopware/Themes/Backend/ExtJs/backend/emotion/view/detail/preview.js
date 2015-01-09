@@ -47,9 +47,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
     height: '90%',
 
     _deviceWidth: {
-        desktop: 1024,
-        tablet: 768,
-        mobile: 320
+        desktop: 1280,
+        tabletLandscape: 1024,
+        tabletPortrait: 768,
+        mobileLandscape: 480,
+        mobilePortrait: 320
     },
 
     initComponent: function() {
@@ -69,10 +71,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
             var device = 'desktop';
             switch(me.deviceId) {
                 case 1:
-                    device = 'tablet';
+                    device = 'tabletLandscape';
                     break;
                 case 2:
-                    device = 'mobile';
+                    device = 'tabletPortrait';
+                    break;
+                case 3:
+                    device = 'mobileLandscape';
+                    break;
+                case 4:
+                    device = 'mobilePortrait';
                     break;
                 case 0:
                 default:
@@ -117,17 +125,35 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
             iconCls: 'sprite-switch',
             menu: Ext.create('Ext.menu.Menu', {
                 items: [
-                    { text: '{s name="list/action_column/copy_desktop" namespace="backend/emotion/list/grid"}Als Desktop Einkaufswelt{/s}', iconCls: 'sprite-imac-icon', handler: function() {
+                    { text: '{s name="list/action_column/copy_desktop" namespace="backend/emotion/list/grid"}Als Desktop Einkaufswelt{/s}', iconCls: 'sprite-imac', handler: function() {
+
+                        me.checkAvailability(0);
                         me.setWidth(me._deviceWidth.desktop);
                         me.center();
                     } },
-                    { text: '{s name="list/action_column/copy_tablet" namespace="backend/emotion/list/grid"}Als Tablet Einkaufswelt{/s}', iconCls: 'sprite-ipad-icon', handler: function() {
-                        me.setWidth(me._deviceWidth.tablet);
+                    { text: '{s name="list/action_column/copy_tablet_landscape" namespace="backend/emotion/list/grid"}Als Tablet Landscape Einkaufswelt{/s}', iconCls: 'sprite-ipad--landscape', handler: function() {
+
+                        me.checkAvailability(1);
+                        me.setWidth(me._deviceWidth.tabletLandscape);
                         me.center()
                     } },
-                    { text: '{s name="list/action_column/copy_mobile" namespace="backend/emotion/list/grid"}Als mobile Einkaufswelt{/s}', iconCls: 'sprite-iphone-icon', handler: function() {
-                        me.setWidth(me._deviceWidth.mobile);
+                    { text: '{s name="list/action_column/copy_tablet" namespace="backend/emotion/list/grid"}Als Tablet Portrait Einkaufswelt{/s}', iconCls: 'sprite-ipad--portrait', handler: function() {
+
+                        me.checkAvailability(2);
+                        me.setWidth(me._deviceWidth.tabletPortrait);
                         me.center();
+                    } },
+                    { text: '{s name="list/action_column/copy_mobile_landsacpe" namespace="backend/emotion/list/grid"}Als Mobile Landscape Einkaufswelt{/s}', iconCls: 'sprite-iphone--landscape', handler: function() {
+
+                        me.checkAvailability(3);
+                        me.setWidth(me._deviceWidth.mobileLandscape);
+                        me.center()
+                    } },
+                    { text: '{s name="list/action_column/copy_mobile" namespace="backend/emotion/list/grid"}Als Mobile Portrait Einkaufswelt{/s}', iconCls: 'sprite-iphone--portrait', handler: function() {
+
+                        me.checkAvailability(4);
+                        me.setWidth(me._deviceWidth.mobilePortrait);
+                        me.center()
                     } }
                 ]
             })
@@ -140,6 +166,33 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
         });
 
         return toolbar;
+    },
+
+    checkAvailability: function(deviceIdentifier) {
+        var me = this;
+
+        /**
+         * Device Indentifier:
+         *
+         * 0 Desktop
+         * 1 Tablet Landscape
+         * 2 Tablet Portrait
+         * 3 Smartphone Landscape
+         * 4 Smartphone Portrait
+         */
+
+        Ext.Ajax.request({
+            url: '{url action=checkAvailability emotionId=""}' + me.emotionId + '/deviceId/' + deviceIdentifier,
+            success: function(response, opts) {
+                var status = Ext.decode(response.responseText);
+
+                if(!status.success || !status.alreadyExists) {
+                    return;
+                }
+
+                Shopware.Notification.createGrowlMessage('{s name="save/warning/title"}Warning{/s}', '{s name="save/warning/otherEmotion"}{/s}');
+            }
+        });
     },
 
     onReload: function() {
