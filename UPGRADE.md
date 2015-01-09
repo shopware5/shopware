@@ -294,6 +294,9 @@ In this document you will find a changelog of the important changes related to t
 * Changed default sorting of pictures in the backend's Media Manager. Newer pictures are now displayed first.
 * `widgets/campaign` is now included in the HTTP cache's default configuration
 * Email validation is now done using the `egulias/email-validator` library. `Zend_Validate_EmailAddress` is deprecated.
+* Removed `frontend/detail/ajax.tpl`
+* Added `frontend/detail/product_quick_view.tpl`
+* Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
 
 ## 4.3.1
 
