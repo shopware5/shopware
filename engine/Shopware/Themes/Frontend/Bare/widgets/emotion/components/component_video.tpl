@@ -1,34 +1,41 @@
 {block name="widget_emotion_component_video_container"}
-    <div class="emotion--element-video-inner">
+    <div class="emotion--video"
+         {if $Data.videoMode} data-mode="{$Data.videoMode}"{/if}
+         {if $Data.originTop} data-scaleOriginX="{$Data.originTop}"{/if}
+         {if $Data.originLeft} data-scaleOriginY="{$Data.originLeft}"{/if}
+         {if $Data.scale} data-scale="{$Data.scale}"{/if}>
+
         {block name="widget_emotion_component_video_element"}
             {strip}
-            <video class="emotion--element-video-element"
-                   data-video-resize="true"
-                    {if $Data.fallback_picture} poster="{$Data.fallback_picture}"{/if}
+            <video class="video--element"
+                    {if $Data.fallback_picture} poster="{link file=$Data.fallback_picture}"{/if}
                     {if $Data.autobuffer} preload{/if}
                     {if $Data.autoplay} autoplay{/if}
                     {if $Data.loop} loop{/if}
                     {if $Data.controls} controls{/if}
-                    {if $Data.muted} muted{/if}
-                    {if $Data.originLeft} data-origin-y="{$Data.originLeft}"{/if}
-                    {if $Data.originTop} data-origin-x="{$Data.originTop}"{/if}
-                    {if $Data.scale} data-scale="{$Data.scale}"{/if}>
-                <source src="{$Data.webm_video}" type="video/webm">
-                <source src="{$Data.h264_video}" type="video/mp4">
-                <source src="{$Data.ogg_video}" type="video/ogg" />
+                    {if $Data.muted} muted{/if}>
+                <source src="{link file=$Data.webm_video}" type="video/webm">
+                <source src="{link file=$Data.h264_video}" type="video/mp4">
+                <source src="{link file=$Data.ogg_video}" type="video/ogg" />
             </video>
             {/strip}
         {/block}
 
         {block name="widget_emotion_component_video_play_button"}
-            <a href="#play-video" class="play--video" data-play="icon--play" data-pause="icon--pause">
-                <i class="icon--play"></i>
-            </a>
+            {if !$Data.controls}
+                <a href="#play-video"
+                   class="video--play-btn"
+                   data-playIconCls="icon--play"
+                   data-pauseIconCls="icon--pause">
+                    <i class="video--play-icon icon--play"></i>
+                </a>
+            {/if}
         {/block}
 
         {block name="widget_emotion_component_video_text"}
             {if $Data.html_text}
-                <div class="emotion--element-video--text"{if $Data.overlay} style="background: {$Data.overlay}"{/if}>
+                <div class="video--text{if $Data.controls} no--events{/if}"
+                    {if $Data.overlay} style="background: {$Data.overlay}"{/if}>
                     {$Data.html_text}
                 </div>
             {/if}

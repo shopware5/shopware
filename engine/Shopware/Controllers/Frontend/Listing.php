@@ -125,23 +125,38 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $categoryContent = array_merge($categoryContent, $manufacturerContent);
         }
 
-        //check category emotions
-        $emotion = $this->getCategoryEmotion($categoryId);
-        $hasEmotion = !empty($emotion);
-        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
-
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
             'sCategoryInfo' => $categoryContent,
             'sCategoryContent' => $categoryContent,
             'campaigns' => $this->getCampaigns($categoryId),
-            'showListing' => $showListing,
-            'hasEmotion' => $hasEmotion,
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup')
         );
 
-        if (!$showListing) {
+        // fetch devices on responsive template or load full emotions for older templates.
+        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
+        if ($templateVersion >= 3) {
+            if ($this->Request()->getParam('sPage')) {
+                $viewAssignments['hasEmotion'] = false;
+            } else {
+                $emotions = $this->get('emotion_device_configuration')->get($categoryId);
+                $viewAssignments['emotions'] = $emotions;
+                $viewAssignments['hasEmotion'] = (!empty($emotions));
+            }
+
+            $viewAssignments['showListing'] = (bool) max(array_column($emotions, 'showListing'));
+
+        } else {
+            //check category emotions
+            $emotion = $this->getCategoryEmotion($categoryId);
+            $viewAssignments['hasEmotion'] = !empty($emotion);
+        }
+
+        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
+        $viewAssignments['showListing'] = $showListing;
+
+        if (!$showListing && $templateVersion < 3) {
             $this->View()->assign($viewAssignments);
             return;
         }

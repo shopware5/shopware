@@ -87,11 +87,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $limit = $this->Request()->getParam('limit', null);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filterBy', null);
+        $filter = $this->Request()->getParam('filter', null);
+        $filterBy = $this->Request()->getParam('filterBy', null);
         $categoryId = $this->Request()->getParam('categoryId', null);
 
 
-        $query = $this->getRepository()->getListQuery($filter, $sort, $offset, $limit, $categoryId);
+        $query = $this->getRepository()->getListQuery($filter, $filterBy, $sort, $offset, $limit, $categoryId);
         $count = Shopware()->Models()->getQueryCount($query);
         $emotions = $query->getArrayResult();
         foreach ($emotions as &$emotion) {
@@ -99,7 +100,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             foreach ($emotion["categories"] as $category) {
                 $categories[] = $category["name"];
             }
-            $emotion["categoriesNames"] = implode(",",$categories);
+            $emotion["categoriesNames"] = implode(",", $categories);
         }
         $this->View()->assign(array(
             'success' => true,
@@ -279,9 +280,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($emotion);
             Shopware()->Models()->flush();
 
+            $alreadyExists = $this->hasEmotionForSameDeviceType($data['categoryId']);
+
             $this->View()->assign(array(
                 'data' => $data,
-                'success' => true
+                'success' => true,
+                'alreadyExists' => $alreadyExists
             ));
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array(
@@ -293,17 +297,51 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Fetch all emotions with same category Id and
+     * mark existing emotions with same devices and category
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function hasEmotionForSameDeviceType($categoryId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder
+            ->select(['emotions', 'categories'])
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->leftJoin('emotions.categories', 'categories')
+            ->where('categories.id = :categoryId');
+
+        $builder->setParameters(['categoryId' => $categoryId]);
+        $result = $builder->getQuery()->getArrayResult();
+
+        $usedDevices = [];
+        foreach ($result as $emotion) {
+            $devices = explode(",", $emotion['device']);
+            foreach ($devices as $device) {
+                if (!in_array($device, $usedDevices)) {
+                    $usedDevices[] = $device;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Internal helper function which deletes all data for the passed emotion.
      * @param $emotion
      */
     private function clearEmotionData($emotion)
     {
         $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Data u WHERE u.emotionId = ?1');
-        $query->setParameter(1,$emotion->getId());
+        $query->setParameter(1, $emotion->getId());
         $query->execute();
 
         $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Element u WHERE u.emotionId = ?1');
-        $query->setParameter(1,$emotion->getId());
+        $query->setParameter(1, $emotion->getId());
         $query->execute();
     }
 
@@ -398,7 +436,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $device = (int) $this->Request()->getParam('forDevice');
 
-        if(!$emotionId) {
+        if (!$emotionId) {
             $this->View()->assign(array('success' => false));
             return;
         }
@@ -406,7 +444,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         /** @var \Shopware\Models\Emotion\Emotion $emotion */
         $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
 
-        if(!$emotion) {
+        if (!$emotion) {
             $this->View()->assign(array('success' => false));
             return;
         }
@@ -729,7 +767,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             Shopware()->Models()->flush();
 
             $result = $this->getGrid($grid->getId());
-
         } catch (Exception $e) {
             return array('success' => false, 'error' => $e->getMessage());
         }
@@ -911,6 +948,58 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         );
     }
 
+    public function checkAvailabilityAction()
+    {
+        $emotionId = $this->Request()->getParam('emotionId', null);
+        $deviceId = $this->Request()->getParam('deviceId', null);
+
+        if (!$emotionId || !$deviceId) {
+            return;
+        }
+
+        // get main Emotion
+        $query = $this->getRepository()->getEmotionDetailQuery($emotionId);
+        $emotion = $query->getArrayResult();
+        $emotion = $emotion[0];
+
+        // get emotion category
+        $categoryId = $emotion['categories'][0]['id'];
+
+        // return if no categoryId is defined, probably due to a landingpage.
+        if (!$categoryId) {
+            return;
+        }
+
+        // Search for categories with same device
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('emotions', 'categories'))
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->leftJoin('emotions.categories', 'categories')
+            ->where('categories.id = :categoryId')
+            ->andWhere('emotions.id != :emotionId');
+
+        $builder->setParameters(array(
+            'categoryId' => $categoryId,
+            'emotionId' => $emotionId
+        ));
+        $result = $builder->getQuery()->getArrayResult();
+
+        $alreadyExists = false;
+        foreach ($result as $emotion) {
+            $devices = explode(",", $emotion['device']);
+
+            if (in_array($deviceId, $devices)) {
+                $alreadyExists = true;
+                break;
+            }
+        }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'alreadyExists' => $alreadyExists
+        ));
+    }
+
     /**
      * Returns a list with all defined templates.
      * The function return value is every time an array.
@@ -1079,7 +1168,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             Shopware()->Models()->flush();
 
             $result = $this->getTemplate($template->getId());
-
         } catch (Exception $e) {
             return array('success' => false, 'error' => $e->getMessage());
         }
@@ -1113,5 +1201,4 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
     }
-
 }

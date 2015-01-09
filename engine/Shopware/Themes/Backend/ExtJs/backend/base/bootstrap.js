@@ -192,7 +192,3 @@
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
 {include file='backend/base/component/element/product_box_layout_select.js'}
-
-
-
-

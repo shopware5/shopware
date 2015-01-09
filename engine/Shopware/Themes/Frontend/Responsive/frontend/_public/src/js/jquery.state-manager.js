@@ -724,8 +724,8 @@
                 width = me.getViewportWidth();
 
             if (width !== me._viewportWidth) {
-                me.trigger('resize', width);
                 me._checkBreakpoints(width);
+                me.trigger('resize', width);
                 me._setDeviceCookie();
             }
 

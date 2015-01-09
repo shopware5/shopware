@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields;
+        var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields, boxLabel = '';
 
         sortedFields = Ext.Array.sort(
             me.getSettings('fields', true),
@@ -118,6 +118,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 store = Ext.create(item.get('store'));
             }
 
+            if (item.get('xType') === 'checkbox') {
+                boxLabel = supportText;
+                supportText = '';
+            }
+
             items.push({
                 xtype: item.get('xType'),
                 helpText: item.get('helpText') || '',
@@ -133,7 +138,9 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 uncheckedValue: false,
                 supportText: supportText || '',
                 allowBlank: (item.get('allowBlank') ? true : false),
-                value: item.get('defaultValue') || ''
+                value: item.get('defaultValue') || '',
+                labelWidth: 100,
+                boxLabel: boxLabel
             });
         });
 

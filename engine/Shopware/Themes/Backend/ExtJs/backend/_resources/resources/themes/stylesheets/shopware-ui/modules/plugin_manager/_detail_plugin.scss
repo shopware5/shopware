@@ -340,29 +340,6 @@
     }
 }
 
-@mixin animation($value) {
-    -webkit-animation: unquote($value);
-    -moz-animation: unquote($value);
-    -o-animation: unquote($value);
-    animation: unquote($value);
-}
-
-@mixin keyframes($name) {
-    @-webkit-keyframes #{$name} { @content; }
-    @-moz-keyframes #{$name} { @content; }
-    @-o-keyframes #{$name} { @content; }
-    @keyframes #{$name} { @content; }
-}
-
-@include keyframes(keyframe--spin) {
-    from {
-        @include rotate(0);
-    }
-    to {
-        @include rotate(360deg);
-    }
-}
-
 .plugin-manager-action-button {
     padding: 8px 25px;
     font-family: 'Open Sans', Arial, sans-serif;
@@ -415,6 +392,34 @@
 .plugin-manager-loading-indicator-wrapper {
     text-align: center;
     margin: 0 auto;
+}
+
+@-webkit-keyframes keyframe--spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes keyframe--spin {
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(360deg); }
+}
+@-ms-keyframes keyframe--spin {
+  0% { -ms-transform: rotate(0deg); }
+  100% { -ms-transform: rotate(360deg); }
+}
+@-o-keyframes keyframe--spin {
+    0% { -o-transform: rotate(0deg); }
+    100% { -o-transform: rotate(360deg); }
+}
+@keyframes keyframe--spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@mixin animation($value) {
+  -webkit-animation: unquote($value);
+  -moz-animation: unquote($value);
+  -o-animation: unquote($value);
+  animation: unquote($value);
 }
 
 .plugin-manager-loading-indicator {

@@ -104,8 +104,13 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }, {
             header: '{s name=grid/column/type}Type{/s}',
             flex: 2,
-            tdCls: 'emotion-device-column',
+            tdCls: 'emotion-type-column',
             renderer: me.typeColumn
+        }, {
+            header: '{s name=grid/column/devices}Devices{/s}',
+            flex: 2,
+            tdCls: 'emotion-device-column',
+            renderer: me.deviceColumn
         }, {
             xtype: 'datecolumn',
             header: '{s name=grid/column/date}Last edited{/s}',
@@ -189,7 +194,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             stopSelection: true,        //don't select record on button click
                 items: [
             {
-                iconCls: 'sprite-imac-icon',
+                iconCls: 'sprite-imac',
                 text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
@@ -197,19 +202,35 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             },
             {
-                iconCls: 'sprite-ipad-icon',
-                text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
+                iconCls: 'sprite-ipad--landscape',
+                text: '{s name="list/action_column/copy_tablet_landscape"}Als Tablet Landscape Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
                     me.fireEvent('duplicateemotion', me, record, 1);
                 }
             },
             {
-                iconCls: 'sprite-iphone-icon',
-                text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
+                iconCls: 'sprite-ipad--portrait',
+                text: '{s name="list/action_column/copy_tablet_portrait"}Als Tablet Portrait Einkaufswelt{/s}',
                 handler: function (item, scope) {
                     var record = scope.record;
                     me.fireEvent('duplicateemotion', me, record, 2);
+                }
+            },
+            {
+                iconCls: 'sprite-iphone--landscape',
+                text: '{s name="list/action_column/copy_mobile_landscape"}Als mobile Landscape Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 3);
+                }
+            },
+            {
+                iconCls: 'sprite-iphone--portrait',
+                text: '{s name="list/action_column/copy_mobile_portrait"}Als mobile Portrait Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 4);
                 }
             }
         ]
@@ -254,22 +275,50 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             return false;
         }
 
-        var type = '{s name=grid/renderer/emotion}Emotion{/s}',
-            device = '<div class="sprite-imac-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
+        var type = '{s name=grid/renderer/emotion}Emotion{/s}';
 
         // Type detection
         if(record.get('isLandingPage')) {
             type = '{s name=grid/renderer/landingpage}Landingpage{/s}'
         }
 
-        // Device detection
-        if(record.get('device') == 1) {
-            device = '<div class="sprite-ipad-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Tablets sichtbar">&nbsp;</div>';
-        } else if(record.get('device') == 2) {
-            device = '<div class="sprite-iphone-icon" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
+        return type;
+    },
+
+    deviceColumn: function(value, metaData, record) {
+        if(!record) {
+            return false;
         }
 
-        return device + type;
+        var devices = '',
+            iconStyling = 'width:16px; height:16px; display:inline-block; margin-right:5px';
+
+        var snippets = {
+                desktop: '{s name=grid/renderer/desktop}For desktop{/s}',
+                tabletLandscape: '{s name=grid/renderer/tabletLandscape}For tablet landscape{/s}',
+                tablet: '{s name=grid/renderer/tablet}For tablet{/s}',
+                mobileLandscape: '{s name=grid/renderer/mobileLandscape}For mobile landscape{/s}',
+                mobile: '{s name=grid/renderer/mobile}For mobile{/s}'
+        };
+
+        // Device detection
+        if(record.get('device').indexOf('0') >= 0) {
+            devices += '<div class="sprite-imac" style="' + iconStyling + '" title="' + snippets.desktop + '">&nbsp;</div>';
+        }
+        if(record.get('device').indexOf('1') >= 0) {
+            devices += '<div class="sprite-ipad--landscape" style="' + iconStyling + '" title="' + snippets.tabletLandscape + '">&nbsp;</div>';
+        }
+        if(record.get('device').indexOf('2') >= 0) {
+            devices += '<div class="sprite-ipad--portrait" style="' + iconStyling + '" title="' + snippets.tablet + '">&nbsp;</div>';
+        }
+        if(record.get('device').indexOf('3') >= 0) {
+            devices += '<div class="sprite-iphone--landscape" style="' + iconStyling + '" title="' + snippets.mobileLandscape + '">&nbsp;</div>';
+        }
+        if(record.get('device').indexOf('4') >= 0) {
+            devices += '<div class="sprite-iphone--portrait" style="' + iconStyling + '" title="' + snippets.mobile + '">&nbsp;</div>';
+        }
+
+        return devices;
     },
 
     /**
