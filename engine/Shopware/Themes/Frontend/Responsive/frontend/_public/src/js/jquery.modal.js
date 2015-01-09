@@ -212,6 +212,11 @@
              */
             onClose: emptyFn,
 
+            /**
+             * Class that will be added to the modalbox.
+             *
+             * @type {String}
+             */
             additionalClass: ''
         },
 
