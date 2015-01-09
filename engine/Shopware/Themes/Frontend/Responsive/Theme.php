@@ -105,7 +105,7 @@ class Theme extends \Shopware\Components\Theme
         'layout' => 'column',
         'height' => 170,
         'flex' => 0,
-        'defaults' => array('columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0')
+        'defaults' => array('columnWidth' => 0.5, 'labelWidth' => 155, 'margin' => '3 16 3 0')
     );
 
     /**
@@ -1034,7 +1034,7 @@ class Theme extends \Shopware\Components\Theme
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => array('anchor' => '100%', 'labelWidth' => 150)
+                    'defaults' => array('anchor' => '100%', 'labelWidth' => 155)
                 )
             )
         );
