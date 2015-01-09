@@ -167,13 +167,11 @@
                 me.basicModePageKey = $.inArray('sPage', me.basicModeSegments);
                 me.basicModePageValue = me.basicModeSegments[ me.basicModePageKey +1];
 
-                if(!me.basicModePageValue) {
-                    return;
+                if(me.basicModePageValue) {
+                    me.urlBasicMode = true;
+                    me.params.p = me.basicModePageValue;
+                    me.upperParams.p = me.basicModePageValue;
                 }
-
-                me.urlBasicMode = true;
-                me.params.p = me.basicModePageValue;
-                me.upperParams.p = me.basicModePageValue;
             }
 
             // set page index to one if not assigned
