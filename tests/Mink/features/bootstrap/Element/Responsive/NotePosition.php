@@ -10,9 +10,7 @@ class NotePosition extends \Element\Emotion\NotePosition
     /** @var array $namedSelectors */
     protected $namedSelectors = array(
         'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
-        'order'   => array('de' => 'Kaufen',        'en' => 'Purchase'),
-        'compare' => array('de' => 'Produkt vergleichen',   'en' => 'Compare'),
-        'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
+        'compare' => array('de' => 'Vergleichen',   'en' => 'Compare')
     );
 
     public $cssLocator = array(
@@ -23,6 +21,6 @@ class NotePosition extends \Element\Emotion\NotePosition
         'div-supplier' => 'div.note--supplier',
         'p-number' => 'div.note--ordernumber',
         'strong-price' => 'div.note--price',
-        'a-detail' => 'a.action--details'
+        'a-detail' => 'a.note--title'
     );
 }
