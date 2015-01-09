@@ -409,10 +409,6 @@
              */
             me.maxZoom = parseFloat(opts.maxZoom) || 1;
 
-            if (opts.arrowControls) {
-                me.createArrows();
-            }
-
             if (opts.thumbnails) {
                 me.$thumbnailContainer = me.$el.find(opts.thumbnailContainerSelector);
                 me.$thumbnailSlide = me.$thumbnailContainer.find(opts.thumbnailSlideSelector);
@@ -428,6 +424,10 @@
             }
 
             me.trackItems();
+
+            if (opts.arrowControls) {
+                me.createArrows();
+            }
 
             if (opts.thumbnails) {
                 me.trackThumbnailControls();
@@ -1074,14 +1074,15 @@
          */
         createArrows: function () {
             var me = this,
-                opts = me.opts;
+                opts = me.opts,
+                hiddenClass = ' ' + opts.hiddenClass;
 
             me.$arrowLeft = $('<a>', {
-                'class': opts.leftArrowCls + (!opts.loopSlides && (me.slideIndex <= 0) ? ' ' + opts.hiddenClass : '')
+                'class': opts.leftArrowCls + ((opts.loopSlides || me.slideIndex > 0) && me.itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me.$slideContainer);
 
             me.$arrowRight = $('<a>', {
-                'class': opts.rightArrowCls + (!opts.loopSlides && (me.slideIndex >= me.itemCount - 1) ? ' ' + opts.hiddenClass : '')
+                'class': opts.rightArrowCls + ((opts.loopSlides || me.slideIndex < me.itemCount - 1) && me.itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me.$slideContainer);
         },
 
@@ -1134,10 +1135,6 @@
             }
 
             me.itemCount = me.$items.length;
-
-            if (me.itemCount <= 1) {
-                opts.arrowControls = false;
-            }
         },
 
         /**

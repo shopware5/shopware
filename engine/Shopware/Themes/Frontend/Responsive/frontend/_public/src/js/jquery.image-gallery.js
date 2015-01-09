@@ -449,7 +449,7 @@
                 width: '100%',
                 height: '100%',
                 animationSpeed: 350,
-                additionalClass: 'no--border-radius',
+                additionalClass: 'image-gallery--modal no--border-radius',
                 onClose: me.onCloseModal.bind(me)
             });
 
