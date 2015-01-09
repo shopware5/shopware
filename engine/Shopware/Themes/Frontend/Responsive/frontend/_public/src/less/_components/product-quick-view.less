@@ -1,0 +1,81 @@
+.product--quick-view {
+    .unitize-padding(20, 20);
+
+    .quick-view--image {
+        .unitize-height(200);
+        .border-radius(3px);
+        .unitize-margin(0, 0, 20, 0);
+        border: 1px solid @border-color;
+        width: 100%;
+        display: block;
+        position: relative;
+        float: left;
+
+        img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+
+    .quick-view--title {
+        .unitize(18, 16, font-size);
+        color: @brand-secondary-dark;
+        display: block;
+        font-weight: bold;
+
+        &:hover {
+            color: @brand-primary;
+        }
+    }
+
+    .quick-view--supplier {
+        .unitize(14, 16, font-size);
+        .unitize-padding(10, 0, 5, 0);
+        font-weight: bold;
+    }
+
+    .quick-view--description-title {
+        .unitize(16, 16, font-size);
+        .unitize(5, 16, padding-bottom);
+        .unitize(15, 16, margin-top);
+        color: @brand-secondary-dark;
+        border-bottom: 1px solid @border-color;
+        font-weight: bold;
+        clear: both;
+    }
+
+    .quick-view--description {
+        .unitize(14, 16, font-size);
+        .unitize(10, 16, padding-top);
+        color: @brand-secondary;
+    }
+
+    .quick-view--description,
+    .quick-view--description > p {
+        margin: 0;
+    }
+}
+
+@media screen and(min-width: @phoneLandscapeViewportWidth) {
+    .product--quick-view {
+        .unitize-padding(20, 20);
+
+        .quick-view--image {
+            width: 50%;
+        }
+
+        .quick-view--header {
+            .unitize(20, 16, padding-left);
+            width: 50%;
+            float: right;
+        }
+
+        .quick-view--description-title {
+            margin-top: 0;
+        }
+    }
+}
