@@ -18,6 +18,7 @@ Feature: Note
         When  I remove the article on position 1 of my note
         Then  I should see 0 elements of type "NotePosition"
 
+    @noResponsive
     Scenario: I can put articles from my note into the basket
         When  I put the article on position 1 of my note in the basket
         And   I follow "Merkzettel"
@@ -49,14 +50,14 @@ Feature: Note
 
     @noEmotion
     Scenario: I can put articles from the listing to my note
-        When  I visit the detail page of the article on position 1 of my note
+        When  I follow "Abschlag bei Zahlungsarten"
         And   I follow "Zahlungsarten"
         Then  I should see "Zahlungsarten & Riskmanagement"
 
         When  I follow the link "remember" of the element "ArticleBox" on position 2
         Then  I should see 2 element of type "NotePosition"
 
-        When  I visit the detail page of the article on position 2 of my note
+        When  I follow "Zahlungsarten & Riskmanagement"
         And   I follow "Zahlungsarten"
         Then  I should see "Zahlungsarten & Riskmanagement"
 
