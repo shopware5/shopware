@@ -127,7 +127,7 @@
              * @property swipeTolerance
              * @type {Number}
              */
-            swipeTolerance: 100,
+            swipeTolerance: 50,
 
             /**
              * The image index that will be set when the plugin gets initialized.
@@ -302,13 +302,13 @@
              * @property imageSelector
              * @type {String}
              */
-            imageSelector: '.image--element',
+            imageSelector: '.image-slider--item img',
 
             /**
              * Selector for a single slide item.
              * Those elements should be contained in the image slide element.
              *
-             * @property imageSelector
+             * @property itemSelector
              * @type {String}
              */
             itemSelector: '.image-slider--item',
@@ -391,7 +391,23 @@
              */
             me.$currentImage = null;
 
-            opts.maxZoom = parseFloat(opts.maxZoom) || 'auto';
+            /**
+             * Minimal zoom factor for image scaling
+             *
+             * @private
+             * @property maxZoom
+             * @type {Number}
+             */
+            me.minZoom = parseFloat(opts.minZoom) || 1;
+
+            /**
+             * Maximum zoom factor for image scaling
+             *
+             * @private
+             * @property maxZoom
+             * @type {Number}
+             */
+            me.maxZoom = parseFloat(opts.maxZoom) || 1;
 
             if (opts.arrowControls) {
                 me.createArrows();
@@ -498,7 +514,7 @@
                 me._on($slide, 'mouseleave', me.onMouseLeave.bind(me));
 
                 if (opts.pinchToZoom) {
-                    me._on($slide, 'mousewheel', me.onScroll.bind(me));
+                    me._on($slide, 'mousewheel DOMMouseScroll scroll', me.onScroll.bind(me));
                 }
 
                 if (opts.doubleTap) {
@@ -521,8 +537,6 @@
                     me._on(me.$thumbnailSlide, 'touchstart', $.proxy(me.onThumbnailSlideTouch, me));
                     me._on(me.$thumbnailSlide, 'touchmove', $.proxy(me.onThumbnailSlideMove, me));
                 }
-
-                StateManager.on('resize', me.onResize, me);
             }
 
             if (opts.dotNavigation && me.$dots) {
@@ -535,6 +549,8 @@
                 me._on(me.$el, 'mouseenter', $.proxy(me.stopAutoSlide, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.startAutoSlide, me));
             }
+
+            StateManager.on('resize', me.onResize, me);
         },
 
         /**
@@ -702,9 +718,10 @@
          * @param {jQuery.Event} event
          */
         onScroll: function (event) {
-            var me = this;
+            var me = this,
+                e = event.originalEvent;
 
-            if (event.originalEvent.deltaY < 0) {
+            if ((e.detail ? e.detail * -1 : e.wheelDelta) > 0) {
                 me.scale(0.25);
             } else {
                 me.scale(-0.25);
@@ -822,8 +839,15 @@
          * @event onResize
          */
         onResize: function () {
-            if (this.opts.thumbnails) {
-                this.trackThumbnailControls();
+            var me = this;
+
+            me.updateMaxZoomValue();
+
+            me.scale(0);
+            me.translate(0, 0);
+
+            if (me.opts.thumbnails) {
+                me.trackThumbnailControls();
             }
         },
 
@@ -894,13 +918,10 @@
          */
         getTransformedPosition: function (x, y, scale) {
             var me = this,
-                image = me.$currentImage,
-                width = image.width(),
-                height = image.height(),
-                scaledWidth = width * scale,
-                scaledHeight = height * scale,
-                minX = (scaledWidth - width) / scale / 2,
-                minY = (scaledHeight - height) / scale / 2;
+                $image = me.$currentImage,
+                $container = me.$slideContainer,
+                minX = Math.max(0, (($image.width() * scale - $container.width()) / scale) / 2),
+                minY = Math.max(0, (($image.height() * scale - $container.height()) / scale) / 2);
 
             return new Vector(
                 Math.max(minX * -1, Math.min(minX, x)),
@@ -954,18 +975,13 @@
          */
         setScale: function (scale, animate, callback) {
             var me = this,
-                opts = me.opts,
-                $currImage = me.$currentImage,
-                img = $currImage[0],
-                minZoom = opts.minZoom,
-                maxZoom = opts.maxZoom,
                 oldScale = me.imageScale;
 
-            if (typeof maxZoom !== 'number') {
-                maxZoom = Math.max(img.naturalWidth, img.naturalHeight) / Math.max($currImage.width(), $currImage.height());
+            if (!me.maxZoom) {
+                me.updateMaxZoomValue();
             }
 
-            me.imageScale = Math.max(minZoom, Math.min(maxZoom, scale));
+            me.imageScale = Math.max(me.minZoom, Math.min(me.maxZoom, scale));
 
             if (me.imageScale === oldScale) {
                 if (typeof callback === 'function') {
@@ -1013,6 +1029,8 @@
             if (!animate || !Modernizr.csstransitions) {
                 me.$currentImage.css('transform', 'scale(' + scale + ') translate(' + translation.x + 'px, ' + translation.y + 'px)');
 
+                $.publish('plugin/imageSlider/updateTransform', [ me ]);
+
                 if (callback) {
                     callback.call(me);
                 }
@@ -1024,6 +1042,8 @@
                 'x': translation.x,
                 'y': translation.y
             }, me.opts.animationSpeed, 'cubic-bezier(.2,.76,.5,1)', callback);
+
+            $.publish('plugin/imageSlider/updateTransform', [ me ]);
         },
 
         /**
@@ -1098,6 +1118,9 @@
                 opts = me.opts;
 
             me.$items = me.$slide.find(opts.itemSelector);
+
+            picturefill();
+
             me.$images = me.$slide.find(opts.imageSelector);
 
             if (opts.thumbnails) {
@@ -1125,11 +1148,35 @@
          * @param {Number} index
          */
         setIndex: function (index) {
-            var me = this,
-                i = index || me.slideIndex;
+            var me = this;
 
-            me.$slide.css('left', (i * 100 * -1) + '%');
+            me.$slide.css('left', ((index || me.slideIndex) * -100) + '%');
             me.$currentImage = $(me.$images[index]);
+
+            me.updateMaxZoomValue();
+        },
+
+        /**
+         * Updates the max zoom factor specific to the current image.
+         *
+         * @private
+         * @method updateMaxZoomValue
+         */
+        updateMaxZoomValue: function () {
+            var me = this,
+                $currentImage = me.$currentImage,
+                image = $currentImage[0];
+
+            if (typeof me.opts.maxZoom === 'number') {
+                return;
+            }
+
+            if (!image) {
+                me.maxZoom = me.minZoom;
+                return;
+            }
+
+            me.maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
         },
 
         /**
@@ -1164,6 +1211,7 @@
                 posA = thumbnailPos[orientation] * -1,
                 posB = thumbnailPos[orientation] + (isHorizontal ? $thumbnail.outerWidth() : $thumbnail.outerHeight()),
                 containerSize = isHorizontal ? $container.width() : $container.height(),
+                activeClass = me.opts.activeStateClass,
                 newPos;
 
             if (posA < slideOffset && posB * -1 < slideOffset + (containerSize * -1)) {
@@ -1172,8 +1220,9 @@
                 newPos = Math.max(posA, slideOffset);
             }
 
-            me.$thumbnails.removeClass(me.opts.activeStateClass);
-            $thumbnail.addClass(me.opts.activeStateClass);
+            me.$thumbnails.removeClass(activeClass);
+
+            $thumbnail.addClass(activeClass);
 
             me.setThumbnailSlidePosition(newPos, true);
         },
@@ -1335,8 +1384,12 @@
 
             me.$currentImage = $(me.$images[index]);
 
+            me.updateMaxZoomValue();
+
             me.$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
             me.$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me.itemCount - 1);
+
+            $.publish('plugin/imageSlider/slide', [ me ]);
         },
 
         /**
@@ -1387,7 +1440,7 @@
 
             me.slide(newIndex);
 
-            $.publish('plugin/imageSlider/slideNext');
+            $.publish('plugin/imageSlider/slideNext', [ me ]);
         },
 
         /**
@@ -1410,7 +1463,7 @@
 
             me.slide(newIndex);
 
-            $.publish('plugin/imageSlider/slidePrev');
+            $.publish('plugin/imageSlider/slidePrev', [ me ]);
         },
 
         /**
@@ -1423,6 +1476,8 @@
         destroy: function () {
             var me = this,
                 opts = me.opts;
+
+            me.resetTransformation(false);
 
             me.$slideContainer = null;
             me.$slides = null;
@@ -1448,15 +1503,13 @@
 
                 me.$thumbnails.removeClass(me.opts.activeStateClass);
                 me.$thumbnails = null;
-
-                StateManager.off('resize', me.onResize, me);
             }
 
             if (opts.autoSlide) {
                 me.stopAutoSlide();
             }
 
-            me.resetTransformation(false);
+            StateManager.off('resize', me.onResize, me);
 
             me._destroy();
         }

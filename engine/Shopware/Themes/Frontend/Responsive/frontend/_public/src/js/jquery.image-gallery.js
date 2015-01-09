@@ -79,7 +79,39 @@
              * @property disabledClass
              * @type {String}
              */
-            disabledClass: 'is--disabled'
+            disabledClass: 'is--disabled',
+
+            /**
+             * Base class that will be applied to every gallery button.
+             *
+             * @property btnClass
+             * @type {String}
+             */
+            btnClass: 'btn is--small',
+
+            /**
+             * Class that will be applied to the zoom in button.
+             *
+             * @property zoomInClass
+             * @type {String}
+             */
+            zoomInClass: 'icon--plus3 button--zoom-in',
+
+            /**
+             * Class that will be applied to the zoom out button.
+             *
+             * @property zoomOutClass
+             * @type {String}
+             */
+            zoomOutClass: 'icon--minus3 button--zoom-out',
+
+            /**
+             * Class that will be applied to the reset zoom button.
+             *
+             * @property zoomResetClass
+             * @type {String}
+             */
+            zoomResetClass: 'icon--resize-shrink button--zoom-reset'
         },
 
         /**
@@ -92,40 +124,88 @@
          * @method init
          */
         init: function () {
-            var me = this,
-                $el,
-                img;
+            var me = this;
 
             me.applyDataAttributes();
 
+            /**
+             * Reference of the image container that should be cloned.
+             *
+             * @private
+             * @property $imageContainer
+             * @type {jQuery}
+             */
             me.$imageContainer = me.$el.find(me.opts.imageContainerSelector);
+
+            if (!me.$imageContainer.length) {
+                return;
+            }
+
+            /**
+             * Reference of the thumbnail container that should be cloned.
+             *
+             * @private
+             * @property $thumbContainer
+             * @type {jQuery}
+             */
             me.$thumbContainer = me.$el.find(me.opts.thumbnailContainerSelector);
+
+            /**
+             * Clone of the given image container.
+             * This clone will be used in the image gallery template.
+             *
+             * @private
+             * @property $imageContainerClone
+             * @type {jQuery}
+             */
             me.$imageContainerClone = me.$imageContainer.clone();
+
+            /**
+             * Clone of the given thumbnail container.
+             * This clone will be used in the image gallery template.
+             *
+             * @private
+             * @property $thumbContainerClone
+             * @type {jQuery}
+             */
             me.$thumbContainerClone = me.$thumbContainer.clone();
+
+            /**
+             * Buttons that zooms the current image out by the factor of 1.
+             *
+             * @public
+             * @property $zoomOutBtn
+             * @type {jQuery}
+             */
             me.$zoomOutBtn = me.createZoomOutButton().appendTo(me.$imageContainerClone);
+
+            /**
+             * Buttons that resets the current image zoom..
+             *
+             * @public
+             * @property $zoomResetBtn
+             * @type {jQuery}
+             */
             me.$zoomResetBtn = me.createZoomResetButton().appendTo(me.$imageContainerClone);
+
+            /**
+             * Buttons that zooms the current image in by the factor of 1.
+             *
+             * @public
+             * @property $zoomInBtn
+             * @type {jQuery}
+             */
             me.$zoomInBtn = me.createZoomInButton().appendTo(me.$imageContainerClone);
 
-            me.opened = false;
-
-            me.$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
-                $el = $(el);
-
-                img = $('<img>', {
-                    'class': 'image--element',
-                    'src': $el.attr('data-img-original')
-                });
-
-                $el.replaceWith(img);
-            });
-
-            me.$template = $('<div>', {
-                'class': me.opts.imageGalleryClass,
-                'html': [
-                    me.$imageContainerClone,
-                    me.$thumbContainerClone
-                ]
-            });
+            /**
+             * Image gallery template that will be used in the modal box.
+             * Will be lazy created only when its needed (on this.$el click).
+             *
+             * @public
+             * @property $template
+             * @type {jQuery|null}
+             */
+            me.$template = null;
 
             me.registerEvents();
         },
@@ -137,8 +217,10 @@
          * @method createZoomInButton
          */
         createZoomInButton: function () {
+            var opts = this.opts;
+
             return $('<div>', {
-                'class': 'btn icon--plus3 is--small button--zoom-in'
+                'class': opts.btnClass + ' ' + opts.zoomInClass
             });
         },
 
@@ -149,8 +231,10 @@
          * @method createZoomOutButton
          */
         createZoomOutButton: function () {
+            var opts = this.opts;
+
             return $('<div>', {
-                'class': 'btn icon--minus3 is--small button--zoom-out'
+                'class': opts.btnClass + ' ' + opts.zoomOutClass
             });
         },
 
@@ -161,8 +245,10 @@
          * @method createZoomResetButton
          */
         createZoomResetButton: function () {
+            var opts = this.opts;
+
             return $('<div>', {
-                'class': 'btn icon--resize-shrink is--small button--zoom-reset'
+                'class': opts.btnClass + ' ' + opts.zoomResetClass
             });
         },
 
@@ -176,9 +262,45 @@
             var me = this;
 
             me._on(me.opts.imageSlideSelector, 'click', $.proxy(me.onClick, me));
-            $.subscribe('plugin/imageZoom/onLensClick', $.proxy(me.onClick, me));
+
+            $.subscribe('plugin/imageSlider/slide', $.proxy(me.onImageUpdate, me));
+            $.subscribe('plugin/imageSlider/updateTransform', $.proxy(me.onImageUpdate, me));
 
             me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
+        },
+
+        /**
+         * Returns the image slider plugin instance of the gallery.
+         * If its not available, returns null instead.
+         *
+         * @public
+         * @method getImageSlider
+         * @returns {$.PluginBase|null}
+         */
+        getImageSlider: function () {
+            var $template = this.$template;
+
+            return ($template && $template.data('plugin_imageSlider')) || null;
+        },
+
+        /**
+         * Will be called when an image or its transformation
+         * in the slider was updated.
+         * Toggles the buttons specific to the image slider zoom options.
+         *
+         * @event onImageUpdate
+         * @param {jQuery.Event} event
+         * @param {$.PluginBase} context
+         */
+        onImageUpdate: function (event, context) {
+            var me = this,
+                plugin = me.getImageSlider();
+
+            if (plugin !== context) {
+                return;
+            }
+
+            me.toggleButtons(plugin);
         },
 
         /**
@@ -190,7 +312,7 @@
          */
         onResetZoom: function (event) {
             var me = this,
-                plugin = me.$template.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             event.preventDefault();
 
@@ -200,7 +322,9 @@
 
             me.disableButtons();
 
-            plugin.resetTransformation(true, me.enableButtons.bind(me));
+            plugin.resetTransformation(true, function () {
+                me.toggleButtons(plugin);
+            });
         },
 
         /**
@@ -212,7 +336,7 @@
          */
         onZoomIn: function (event) {
             var me = this,
-                plugin = me.$template.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             event.preventDefault();
 
@@ -222,7 +346,9 @@
 
             me.disableButtons();
 
-            plugin.scale(1, true, me.enableButtons.bind(me));
+            plugin.scale(1, true, function () {
+                me.toggleButtons(plugin);
+            });
         },
 
         /**
@@ -234,7 +360,7 @@
          */
         onZoomOut: function (event) {
             var me = this,
-                plugin = me.$template.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             event.preventDefault();
 
@@ -244,7 +370,9 @@
 
             me.disableButtons();
 
-            plugin.scale(-1, true, me.enableButtons.bind(me));
+            plugin.scale(-1, true, function () {
+                me.toggleButtons(plugin);
+            });
         },
 
         /**
@@ -258,7 +386,7 @@
         onKeyDown: function (event) {
             var me = this,
                 opts = me.opts,
-                plugin = me.$template.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             if (!plugin) {
                 return;
@@ -274,6 +402,40 @@
         },
 
         /**
+         * Creates and returns the gallery template.
+         * Will be used to lazy create the slider template
+         * with all its large images.
+         *
+         * @private
+         * @method createTemplate
+         * @returns {jQuery}
+         */
+        createTemplate: function () {
+            var me = this,
+                $el,
+                img;
+
+            me.$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
+                $el = $(el);
+
+                img = $('<img>', {
+                    'class': 'image--element',
+                    'src': $el.attr('data-img-original')
+                });
+
+                $el.replaceWith(img);
+            });
+
+            return $('<div>', {
+                'class': me.opts.imageGalleryClass,
+                'html': [
+                    me.$imageContainerClone,
+                    me.$thumbContainerClone
+                ]
+            });
+        },
+
+        /**
          * Will be called when the detail page image slider was clicked..
          * Opens the lightbox with an image slider clone in it.
          *
@@ -283,12 +445,7 @@
             var me = this,
                 plugin = me.$el.data('plugin_imageSlider');
 
-            if (me.opened) {
-                return;
-            }
-            me.opened = true;
-
-            $.modal.open(me.$template, {
+            $.modal.open(me.$template || (me.$template = me.createTemplate()), {
                 width: '100%',
                 height: '100%',
                 animationSpeed: 350,
@@ -311,6 +468,8 @@
                 maxZoom: me.opts.maxZoom,
                 startIndex: plugin ? plugin.slideIndex : 0
             });
+
+            me.toggleButtons(me.getImageSlider());
         },
 
         /**
@@ -321,9 +480,7 @@
          */
         onCloseModal: function () {
             var me = this,
-                plugin = me.$template.data('plugin_imageSlider');
-
-            me.opened = false;
+                plugin = me.getImageSlider();
 
             if (!plugin) {
                 return;
@@ -349,29 +506,35 @@
         },
 
         /**
-         * This function enables all three control buttons.
-         * Will be called when an animation has finished.
+         * This function disables all three control buttons.
+         * Will be called when an animation begins.
          *
          * @public
-         * @method enableButtons
+         * @method toggleButtons
          */
-        enableButtons: function () {
+        toggleButtons: function (plugin) {
             var me = this,
                 disabledClass = me.opts.disabledClass;
 
-            me.$zoomResetBtn.removeClass(disabledClass);
-            me.$zoomOutBtn.removeClass(disabledClass);
-            me.$zoomInBtn.removeClass(disabledClass);
+            if (!plugin) {
+                return;
+            }
+
+            me.$zoomResetBtn.toggleClass(disabledClass, plugin.imageScale === plugin.minZoom);
+            me.$zoomOutBtn.toggleClass(disabledClass, plugin.imageScale === plugin.minZoom);
+            me.$zoomInBtn.toggleClass(disabledClass, plugin.imageScale === plugin.maxZoom);
         },
 
         /**
+         * Destroys the plugin and removes
+         * all elements created by the plugin.
          *
          * @public
          * @method destroy
          */
         destroy: function () {
             var me = this,
-                plugin = me.$template.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             if (plugin) {
                 plugin.destroy();
