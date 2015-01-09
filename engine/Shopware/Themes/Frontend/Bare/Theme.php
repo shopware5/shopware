@@ -43,7 +43,6 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab('bareMain', '__bare_tab_header__', array('attributes' => array('layout' => 'anchor', 'autoScroll' => true, 'padding' => '0')));
 
         $fieldSet = $this->createFieldSet('bareGlobal', '__global_configuration__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
-        $fieldSet->addElement($this->createCheckboxField('scrollableHeader', '__scrollable_header__', false, $this->getLabelAttribute('scrollable_header_description')));
         $fieldSet->addElement($this->createCheckboxField('offcanvasCart', '__offcanvas_cart__', true, $this->getLabelAttribute('offcanvas_cart_description')));
         $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
         $fieldSet->addElement($this->createCheckboxField('displaySidebar', '__display_sidebar__', true, $this->getLabelAttribute('display_sidebar_description')));
