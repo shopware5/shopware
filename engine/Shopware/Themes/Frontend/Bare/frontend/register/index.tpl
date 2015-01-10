@@ -154,31 +154,27 @@
         <div class="register--advantages block">
             <h2 class="panel--title">{s name='RegisterInfoAdvantagesTitle'}{/s}</h2>
             {block name='frontend_index_content_advantages_list'}
-                <ul class="register--advantages-list">
+                <ul class="list--unordered is--checked register--advantages-list">
                     {block name='frontend_index_content_advantages_entry1'}
                         <li class="register--advantages-entry">
-                            <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry1'}{/s}
                         </li>
                     {/block}
 
                     {block name='frontend_index_content_advantages_entry2'}
                         <li class="register--advantages-entry">
-                            <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry2'}{/s}
                         </li>
                     {/block}
 
                     {block name='frontend_index_content_advantages_entry3'}
                         <li class="register--advantages-entry">
-                            <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry3'}{/s}
                         </li>
                     {/block}
 
                     {block name='frontend_index_content_advantages_entry4'}
                         <li class="register--advantages-entry">
-                            <i class="icon--check"></i>
                             {s name='RegisterInfoAdvantagesEntry4'}{/s}
                         </li>
                     {/block}

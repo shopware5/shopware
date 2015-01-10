@@ -37,6 +37,7 @@
         .logo-main { width: 100%; }
         .logo--shop { width: 50% }
         .logo--supportinfo { display: none; }
+        border-bottom: 1px solid @brand-primary;
 
         .btn--back-top-shop {
             .unitize(10, 16, margin-top);
@@ -492,63 +493,139 @@
         }
 
         .top-bar--navigation {
+            width: auto;
+            float: right;
+
+            .navigation--entry {
+                .unitize-padding(0, 15);
+                .unitize(25, 16, line-height);
+                float: left;
+                display: block;
+
+                li { line-height: normal; }
+            }
+
+            .navigation--entry,
+            .navigation--link {
+                color: @text-color;
+                cursor: pointer;
+
+                &:hover { color: @brand-primary; }
+            }
+
+            .field--select,
+            .navigation--entry,
+            .js--fancy-select,
+            .js--fancy-select-text,
+            .js--fancy-select-trigger {
+                .unitize-height(25, 16);
+            }
+
+            // Normalize fancy select appearance
             .field--select {
-                margin-bottom: 0;
                 position: relative;
+                margin: 0;
+                padding: 0;
             }
 
             .js--fancy-select {
                 .reset-border-radius();
-                .reset-box-shadow();
-                .unitize(17, 16, line-height);
-                .unitize(5, 16, margin-right);
-                padding: 0;
-                margin: 0;
-                background: #fff;
+                background: none;
+                border: 0 none;
+                width: auto;
+
+                select { border: 0 none; }
+            }
+
+            .js--fancy-select-text {
+                .unitize-padding(0, 18, 0, 0);
+                .unitize(25, 16, line-height);
+                border: 0 none;
+            }
+
+            .js--fancy-select-trigger {
+                .unitize(27, 16, line-height);
                 width: auto;
                 border: 0 none;
+            }
 
-                &.js--is--focused {
-                    border-color: @border-color;
+            // Language switcher
+            .top-bar--language {
+                .js--fancy-select-text {
+                    .unitize-width(32, 16);
+                    text-indent: -9999px;
+                    text-align: left;
+                    white-space: nowrap;
+                    overflow: hidden;
                 }
 
-                select { height: auto }
+                .language--flag {
+                    .unitize(-6, 16, margin-top);
+                    position: absolute;
+                    z-index: 900;
+                    top: 50%;
+                    left: 0;
+                }
             }
 
-            .js--fancy-select-text {
-                .unitize-padding(0, 30, 0, 5);
-                .unitize-height(15, 16);
-                font-weight: normal;
-                width: auto;
-            }
-
-            .js--fancy-select-trigger {
-                .unitize(1, 16, top);
-                border-left: 0 none;
-            }
-        }
-
-        .top-bar--language {
-            .js--fancy-select-trigger {
-                .unitize(2, 16, top);
-            }
-
-            .js--fancy-select-text {
-                .unitize-width(45, 16);
+            // Service list
+            .entry--service {
                 position: relative;
-                text-indent: -9999px;
-                text-align: left;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-block;
-            }
-        }
 
-        .language--flag {
-            .unitize(5, 16, top);
-            left: 0;
-            position: absolute;
-            z-index: 100;
+                &:after,
+                &::after {
+                    .unitize(-3, 16, top);
+                    .unitize(5, 16, margin-left);
+                    content: "\e612";
+                    font-family: 'shopware';
+                    position: relative;
+                }
+
+                &.js--is--dropdown-active {
+                    color: @brand-primary;
+                }
+            }
+
+            .service--list {
+                .unitize-width(166);
+                .unitize-padding(5, 0);
+                .unitize(32, 16, top);
+                .unitize(12, 16, right);
+                text-align: left;
+                position: absolute;
+                display: none;
+                list-style: none;
+                background: #fff;
+                z-index: 1000;
+                border: 1px solid @border-color;
+
+                &::after {
+                    .rotate(135deg);
+                    .unitize-width(8);
+                    .unitize-height(8);
+                    .unitize(-5, 16, top);
+                    .unitize(18, 16, right);
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    background: #fff;
+                    border-color: @border-color;
+                    border-width: 0 0 1px 1px;
+                    border-style: solid;
+                }
+            }
+
+            .js--is--dropdown-active .service--list {
+                display: block;
+
+                .service--link {
+                    .unitize-padding(5, 10);
+                    display: block;
+                    color: @text-color;
+
+                    &:hover { color: @brand-primary; }
+                }
+            }
         }
 
         .logo-main {
@@ -590,86 +667,6 @@
     .logo-main,
     .shop--navigation {
         float: left;
-    }
-
-    .top-bar--navigation {
-        text-align: right;
-
-        .navigation--entry {
-            .unitize-padding(0, 6);
-            display: inline-block;
-
-            &:last-child {
-                .unitize(12, 16, padding-right);
-            }
-        }
-
-        .navigation--entry,
-        .navigation--link {
-            color: @text-color;
-            cursor: pointer;
-
-            &:hover {
-                color: @brand-primary;
-            }
-        }
-
-        .entry--service {
-            position: relative;
-
-            &:after,
-            &::after {
-                .unitize(-2, 16, top);
-                content: "\e612";
-                font-family: 'shopware';
-                position: relative;
-            }
-
-            &.js--is--dropdown-active {
-                color: @brand-primary;
-            }
-        }
-
-        .service--list {
-            .unitize-width(166);
-            .unitize-padding(5, 0);
-            .unitize(30, 16, top);
-            .unitize(12, 16, right);
-            text-align: left;
-            position: absolute;
-            display: none;
-            list-style: none;
-            background: #fff;
-            z-index: 1000;
-            border: 1px solid @border-color;
-
-            &::after {
-                .rotate(135deg);
-                .unitize-width(8);
-                .unitize-height(8);
-                .unitize(-5, 16, top);
-                .unitize(18, 16, right);
-                content: '';
-                display: block;
-                position: absolute;
-                background: #fff;
-                border-color: @border-color;
-                border-width: 0 0 1px 1px;
-                border-style: solid;
-            }
-        }
-
-        .js--is--dropdown-active .service--list {
-            display: block;
-
-            .service--link {
-                .unitize-padding(5, 10);
-                display: block;
-                color: @text-color;
-
-                &:hover { color: @brand-primary; }
-            }
-        }
     }
 
     .shop--navigation {
@@ -876,7 +873,7 @@
     }
 
     // Topbar navigation
-    .top-bar--navigation {
+    .header-main .top-bar--navigation {
         .service--list {
             .unitize-width(152);
             right:  0;

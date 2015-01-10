@@ -32,7 +32,10 @@
             compareEntriesSelector: '.compare--list .compare--entry',
 
             /** @string compareEntry Selector for single compare item inside the dropdown */
-            compareEntrySelector: '.compare--entry'
+            compareEntrySelector: '.compare--entry',
+
+            /** @string hiddenCls Class which indicates that the element is hidden */
+            hiddenCls: 'is--hidden'
         },
 
         /**
@@ -41,7 +44,12 @@
          * @returns {Plugin}
          */
         init: function () {
-            var me = this;
+            var me = this,
+                $compareMenu = $(me.opts.compareMenuSelector);
+
+            if(!$compareMenu.is(':empty')) {
+                $compareMenu.removeClass(me.opts.hiddenCls);
+            }
 
             // on start compare
             me._on(me.opts.startCompareSelector, 'touchstart click', $.proxy(me.onStartCompare, me));
