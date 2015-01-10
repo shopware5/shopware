@@ -49,6 +49,18 @@ input[type="tel"] {
             float: left;
         }
     }
+
+    &.is--small {
+        .unitize(34, 16, height);
+    }
+
+    &.is--medium {
+        .unitize(38, 16, height);
+    }
+
+    &.is--large {
+        .unitize(42, 16, height);
+    }
 }
 
 textarea {
@@ -103,6 +115,10 @@ label.has--error {
         display: block;
         cursor: pointer;
         z-index: 1000;
+
+        option {
+            color: @text-color-dark;
+        }
 
         // Removes the blue glow around the select field
         // see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/

@@ -10,7 +10,7 @@
 				{* Article Compare *}
 				{block name='frontend_index_navigation_inline'}
 					{if {config name="compareShow"}}
-						<div class="navigation--entry entry--compare" role="menuitem" aria-haspopup="true" data-drop-down-menu="true">
+						<div class="navigation--entry entry--compare is--hidden" role="menuitem" aria-haspopup="true" data-drop-down-menu="true">
 							{block name='frontend_index_navigation_compare'}
 								{action module=widgets controller=compare}
 							{/block}

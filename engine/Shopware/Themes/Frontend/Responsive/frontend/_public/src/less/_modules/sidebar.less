@@ -11,47 +11,68 @@ body > .sidebar-main {
 
 .mobile--switches {
     .unitize-padding(10, 10);
+    .clearfix();
     display: block;
 
-    .top-bar--currency,
+    .navigation--entry {
+        .unitize(20, 16, margin-right);
+        float: left;
+    }
+
+    .field--select,
+    .navigation--entry,
+    .js--fancy-select,
+    .js--fancy-select-text,
+    .js--fancy-select-trigger {
+        .unitize-height(30, 16);
+    }
+
+    // Normalize fancy select appearance
+    .field--select {
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    .js--fancy-select {
+        .reset-border-radius();
+        background: none;
+        border: 0 none;
+        width: auto;
+
+        select { border: 0 none; }
+    }
+
+    .js--fancy-select-text {
+        .unitize-padding(0, 18, 0, 0);
+        .unitize(30, 16, line-height);
+        .unitize(16, 16, font-size);
+        border: 0 none;
+    }
+
+    .js--fancy-select-trigger {
+        .unitize(32, 16, line-height);
+        width: auto;
+        border: 0 none;
+    }
+
+    // Language switcher
     .top-bar--language {
-        display: inline-block;
-
-        .js--fancy-select {
-            width: 100%;
-        }
-
         .js--fancy-select-text {
-            font-weight: normal;
-        }
-    }
-
-    .top-bar--currency {
-        width: 40%;
-    }
-
-    .top-bar--language {
-        width: 30%;
-        margin-right: 2%;
-
-        .field--select {
-            position: relative;
+            .unitize-width(32, 16);
+            text-indent: -9999px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .language--flag {
-            .unitize(18, 16, top);
-            .unitize(12, 16, left);
+            .unitize(-6, 16, margin-top);
             position: absolute;
-            z-index: 500;
+            z-index: 900;
+            top: 50%;
+            left: 0;
         }
-
-        .js--fancy-select-text {
-            text-indent: -9999em;
-        }
-    }
-
-    .language--flag {
-        .unitize-margin(0, 0, 0, 5);
     }
 }
 

@@ -11,7 +11,10 @@
         /** Your default options */
         defaults: {
             /** @string compareMenuSelector Listener Class for compare button */
-            compareMenuSelector: '.entry--compare'
+            compareMenuSelector: '.entry--compare',
+
+            /** @string hiddenCls Class which indicates that the element is hidden */
+            hiddenCls: 'is--hidden'
         },
 
         /**
@@ -50,6 +53,10 @@
             // Ajax request for adding article to compare list
             $.get(addArticleUrl, function(data) {
                 var compareMenu = $(me.opts.compareMenuSelector);
+
+                if (compareMenu.hasClass(me.opts.hiddenCls)) {
+                    compareMenu.removeClass(me.opts.hiddenCls);
+                }
 
                 // Check if error thrown
                 if (data.indexOf('data-max-reached="true"') !== -1) {
