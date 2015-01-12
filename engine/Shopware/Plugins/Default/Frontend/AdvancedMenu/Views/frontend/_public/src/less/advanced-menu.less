@@ -79,19 +79,22 @@
         font-weight: bold;
 
         .button--category {
+            .unitize-padding(20, 20);
             color: @btn-secondary-text-color;
             position: relative;
         }
 
         .icon--arrow-right {
             .unitize(12, 16, font-size);
-            .unitize(-26, 16, right);
             .unitize(-6, 16, margin-top);
             position: absolute;
             top: 50%;
+            right: 0;
         }
 
         .button--close {
+            .unitize-padding(20, 20);
+            .unitize(-20, 16, margin-top);
             float: right;
             cursor: pointer;
         }
@@ -187,7 +190,7 @@
         }
 
         .button-container {
-            .unitize-padding(20, 50);
+            .unitize-padding(20, 30);
         }
     }
 }

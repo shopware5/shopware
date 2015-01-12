@@ -74,7 +74,9 @@
                                         {if !empty($mainCategory.cmsText)}
                                             <div class="teaser--text">
                                                 {$mainCategory.cmsText|truncate:250:"..."}
-                                                <a class="teaser--text-link" href="{$mainCategory.link}">mehr erfahren</a>
+                                                <a class="teaser--text-link" href="{$mainCategory.link}" title="{s name="learnMoreLink" namespace="frontend/plugins/advanced_menu/advanced_menu"}mehr erfahren{/s}">
+                                                    {s name="learnMoreLink" namespace="frontend/plugins/advanced_menu/advanced_menu"}mehr erfahren{/s}
+                                                </a>
                                             </div>
                                         {/if}
                                     </div>
