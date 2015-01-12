@@ -95,7 +95,7 @@
              * @type {Array}
              */
             listingSelectors: [
-                '.listing .product--box .box--image',
+                '.listing .product--box .product--image',
                 '.listing .product--box .product--title',
                 '.listing .product--box .product--actions .action--more'
             ]
