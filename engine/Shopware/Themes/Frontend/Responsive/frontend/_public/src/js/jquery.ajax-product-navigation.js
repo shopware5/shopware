@@ -210,7 +210,6 @@
          * @param {Object} params
          */
         setProductState: function (params) {
-            console.log(params);
             this.storage.setItem('lastProductState', JSON.stringify(params));
         },
 
