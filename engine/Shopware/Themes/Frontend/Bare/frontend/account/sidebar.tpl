@@ -35,11 +35,13 @@
 
 				{* Link to the user downloads *}
 				{block name="frontend_account_menu_link_downloads"}
-					<li class="navigation--entry">
-						<a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
-							{s name="AccountLinkDownloads"}{/s}
-						</a>
-					</li>
+                    {if {config name=showDownloads}}
+					    <li class="navigation--entry">
+						    <a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
+							    {s name="AccountLinkDownloads"}{/s}
+						    </a>
+					    </li>
+                    {/if}
 				{/block}
 
 				{* Link to the user billing address settings *}
