@@ -56,6 +56,13 @@ class Configuration extends BaseConfiguration
     protected $fileCacheDir;
 
     /**
+     * Custom namespace for doctrine cache provider
+     *
+     * @var string
+     */
+    protected $cacheNamespace = null;
+
+    /**
      * @param array $options
      * @param \Zend_Cache_Core $cache
      * @param \Enlight_Hook_HookManager $hookManager
@@ -87,6 +94,11 @@ class Configuration extends BaseConfiguration
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
+        // Load custom namespace for doctrine cache provider, if provided
+        if (isset($options['cacheNamespace'])) {
+            $this->cacheNamespace = $options['cacheNamespace'];
+        }
+
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
         }
@@ -102,7 +114,9 @@ class Configuration extends BaseConfiguration
      */
     public function setCache(CacheProvider $cache)
     {
-        $cache->setNamespace("dc2_" . md5($this->getProxyDir() . \Shopware::REVISION) . "_"); // to avoid collisions
+        // Set namespace for doctrine cache provider to avoid collisions
+        $namespace =  ! is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
+        $cache->setNamespace("dc2_" . $namespace  . "_");
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
