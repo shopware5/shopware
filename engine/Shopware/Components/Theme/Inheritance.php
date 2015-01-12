@@ -402,10 +402,13 @@ class Inheritance
 
         $data = $builder->getQuery()->getArrayResult();
 
-
         foreach ($data as &$row) {
             if (!isset($row['value'])) {
                 $row['value'] = $row['defaultValue'];
+            }
+
+            if ($lessCompatible && $row['type'] === 'theme-media-selection') {
+                $row['value'] = '"' . $row['value'] . '"';
             }
         }
 
@@ -425,10 +428,9 @@ class Inheritance
      * current shop.
      *
      * @param \Shopware\Models\Shop\Template $template
-     * @param $lessCompatible
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
-    private function getShopConfigQuery(Shop\Template $template, $lessCompatible)
+    private function getShopConfigQuery(Shop\Template $template)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(
@@ -442,21 +444,9 @@ class Inheritance
             ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
             ->where('element.templateId = :templateId');
 
-        if ($lessCompatible) {
-            $validLessFields = $this->validLessFields;
-
-            $validLessFields = $this->eventManager->filter('Theme_Inheritance_Collect_Valid_Less_Fields', $validLessFields, array(
-                'template' => $template
-            ));
-
-            $builder->andWhere('element.type IN (:type)')
-                ->setParameter('type', $validLessFields);
-        }
-
         $this->eventManager->notify('Theme_Inheritance_Shop_Query_Built', array(
             'builder' => $builder,
-            'template' => $template,
-            'lessCompatible' => $lessCompatible
+            'template' => $template
         ));
 
         return $builder;

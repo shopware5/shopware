@@ -26,8 +26,8 @@ namespace Shopware\Models\Shop;
 
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
+    Shopware\Components\Theme\Inheritance,
     Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Theme\Inheritance;
 
 /**
  *
@@ -717,17 +717,7 @@ class Shop extends ModelEntity
             $localeName = $this->getLocale()->toString();
 
             if ($template->getVersion() == 3) {
-                /**@var $inheritance Inheritance*/
-                $inheritance = Shopware()->Container()->get('theme_inheritance');
-                $config = $inheritance->buildConfig($template, $this, false);
-                $path = $inheritance->getTemplateDirectories($template);
-
-                $templateManager->addPluginsDir(
-                    $inheritance->getSmartyDirectories($template)
-                );
-
-                $templateManager->setTemplateDir($path);
-                $templateManager->assign('theme', $config);
+                $this->registerTheme($template);
 
             } else if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
@@ -757,6 +747,22 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    /**
+     * @param Template $template
+     * @throws \Exception
+     */
+    private function registerTheme(Template $template)
+    {
+        /**@var $templateManager \Enlight_Template_Manager*/
+        $templateManager = Shopware()->Container()->get('template');
+
+        /**@var $inheritance Inheritance*/
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $path = $inheritance->getTemplateDirectories($template);
+        $templateManager->setTemplateDir($path);
     }
 
     /**
