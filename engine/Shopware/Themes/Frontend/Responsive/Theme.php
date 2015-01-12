@@ -105,7 +105,7 @@ class Theme extends \Shopware\Components\Theme
         'layout' => 'column',
         'height' => 170,
         'flex' => 0,
-        'defaults' => array('columnWidth' => 0.5, 'labelWidth' => 155, 'margin' => '3 16 3 0')
+        'defaults' => array('columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0')
     );
 
     /**
@@ -1027,8 +1027,36 @@ class Theme extends \Shopware\Components\Theme
         );
 
         $fieldSet = $this->createFieldSet(
+                'bareGlobal',
+                '__global_configuration__',
+                array(
+                    'attributes' => array(
+                        'padding' => '10',
+                        'margin'=> '5',
+                        'layout' => 'anchor',
+                        'defaults' => array('labelWidth' => 155, 'anchor' => '100%')
+                    )
+                )
+        );
+
+        $fieldSet->addElement($this->createCheckboxField('offcanvasCart', '__offcanvas_cart__', true, $this->getLabelAttribute('offcanvas_cart_description')));
+        $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
+        $fieldSet->addElement($this->createCheckboxField('displaySidebar', '__display_sidebar__', true, $this->getLabelAttribute('display_sidebar_description')));
+        $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
+        $fieldSet->addElement($this->createCheckboxField('infiniteScrolling', '__enable_infinite_scrolling__', true, $this->getLabelAttribute('enable_infinite_scrolling_description')));
+        $fieldSet->addElement($this->createNumberField('infiniteThreshold', '__infinite_threshold__', 4, $this->getLabelAttribute('infinite_threshold_description', 'supportText')));
+        $fieldSet->addElement($this->createSelectField('lightboxZoomFactor', '__lightbox_zoom_factor__', 0, array(
+                array('value' => 0, 'text' => '__lightbox_zoom_factor_auto__'),
+                array('value' => 1, 'text' => '__lightbox_zoom_factor_none__'),
+                array('value' => 2, 'text' => '__lightbox_zoom_factor_2x__'),
+                array('value' => 3, 'text' => '__lightbox_zoom_factor_3x__'),
+                array('value' => 5, 'text' => '__lightbox_zoom_factor_5x__')
+        ), $this->getLabelAttribute('lightbox_zoom_factor_description', 'supportText')));
+        $tab->addElement($fieldSet);
+
+        $fieldSet = $this->createFieldSet(
             'responsiveGlobal',
-            '__global_configuration__',
+            '__advanced_settings__',
             array(
                 'attributes' => array(
                     'padding' => '10',
@@ -1059,6 +1087,17 @@ class Theme extends \Shopware\Components\Theme
         $tab->addElement($fieldSet);
 
         return $tab;
+    }
+
+    /**
+     * Helper function to get the attribute of a checkbox field which shows a description label
+     * @param $snippetName
+     * @return array
+     */
+    private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
+    {
+        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+        return array('attributes' => array($labelType => $description));
     }
 
     /**
