@@ -84,7 +84,7 @@
                 {* Right of revocation notice *}
                 {block name='frontend_checkout_confirm_tos_revocation_notice'}
                     {if {config name=revocationnotice}}
-                        <div class="body--revocation" data-modalbox="true">
+                        <div class="body--revocation" data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">
                             {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                         </div>
                     {/if}
@@ -169,10 +169,10 @@
         </div>
     {/block}
 
-    {* Billing address *}
-    <div class="panel--group block-group">
+    <div class="panel--group block-group information--panel-wrapper">
+        {* Billing address *}
         {block name='frontend_checkout_confirm_billing_address_panel'}
-            <div class="panel has--border block">
+            <div class="panel has--border block information--panel billing--panel">
 
                 {* Headline *}
                 {block name='frontend_checkout_confirm_left_billing_address_headline'}
@@ -221,7 +221,7 @@
 
         {* Shipping address *}
         {block name='frontend_checkout_confirm_shipping_address_panel'}
-            <div class="panel has--border block">
+            <div class="panel has--border block information--panel shipping--panel">
                 {block name='frontend_checkout_confirm_left_shipping_address_headline'}
                     <div class="panel--title is--underline">
                         {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm_left"}{/s}
@@ -269,32 +269,33 @@
 
         {* Payment method *}
         {block name='frontend_checkout_confirm_payment_method_panel'}
-            <div class="panel has--border block">
+            <div class="panel has--border block information--panel payment--panel">
 
                 {block name='frontend_checkout_confirm_left_payment_method_headline'}
-                    <div class="panel--title is--underline">
+                    <div class="panel--title is--underline payment--title">
                         {s name="ConfirmHeaderPaymentShipping" namespace="frontend/checkout/confirm_left"}{/s}
                     </div>
                 {/block}
 
-                <div class="panel--body is--wide">
+                <div class="panel--body is--wide payment--content">
                     {block name='frontend_checkout_confirm_left_payment_method'}
-                        <strong>{$sUserData.additional.payment.description}</strong><br />
+                        <strong class="payment--description">{$sUserData.additional.payment.description}</strong><br />
 
                         {if !$sUserData.additional.payment.esdactive}
-                            <p>{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
+                            <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
                         {/if}
                     {/block}
 
                     {block name='frontend_checkout_confirm_left_shipping_method'}
-                        <p>
-                            <strong>{s name="ConfirmHeadDispatch"}{/s}</strong> {$sDispatch.name}
-                        </p>
+                        <div class="shipping--method">
+                            <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
+                            <span class="shipping--name" title="{$sDispatch.name}">{$sDispatch.name|truncate:20:"...":true}</span>
+                        </div>
                     {/block}
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
-                        <div class="panel--actions">
-                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small">
+                        <div class="panel--actions payment--actions">
+                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small btn--change-payment">
                                 {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
