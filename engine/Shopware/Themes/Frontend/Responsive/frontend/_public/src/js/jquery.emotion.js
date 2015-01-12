@@ -513,7 +513,7 @@
             var me = this,
                 width = (me.opts.fullscreen) ? $window.outerWidth() : me.$wrapper.outerWidth(),
                 factor = width / me.baseWidth,
-                origin = (factor > 1) ? '50% 0 0' : '0 0 0',
+                origin = (factor > 1) ? '50% 0px' : '0px 0px',
                 wrapperHeight = width / me.ratio;
 
             me.$el.css({
@@ -522,8 +522,8 @@
                 '-moz-transform-origin': origin,
                 '-webkit-transform-origin': origin,
                 'transform-origin': origin,
-                '-o-transform': 'scale('+ factor +')',
                 '-ms-transform': 'scale('+ factor +')',
+                '-o-transform': 'scale('+ factor +')',
                 '-moz-transform': 'scale('+ factor +')',
                 '-webkit-transform': 'scale('+ factor +')',
                 'transform': 'scale('+ factor +')'
