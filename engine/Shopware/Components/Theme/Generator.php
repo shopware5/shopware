@@ -108,12 +108,6 @@ EOD;
                         '_modules',
                         '_variables'
                     )
-                ),
-                'vendors' => array(
-                    'css',
-                    'fonts',
-                    'js',
-                    'less'
                 )
             ),
             '_includes',
