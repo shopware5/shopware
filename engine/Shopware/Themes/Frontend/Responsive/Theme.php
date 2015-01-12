@@ -1055,17 +1055,6 @@ class Theme extends \Shopware\Components\Theme
                 array('attributes' => array('xtype' => 'textarea'))
             )
         );
-        $description = Shopware()->Snippets()->getNamespace('themes/responsive/backend/config')->get(
-            'desktop_responsive_description'
-        );
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'desktopResponsive',
-                '__desktop_responsive__',
-                true,
-                array('attributes' => array('boxLabel' => $description))
-            )
-        );
 
         $tab->addElement($fieldSet);
 
