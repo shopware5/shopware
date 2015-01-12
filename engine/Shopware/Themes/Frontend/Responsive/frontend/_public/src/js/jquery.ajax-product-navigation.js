@@ -95,7 +95,7 @@
              * @type {Array}
              */
             listingSelectors: [
-                '.listing .product--box .box--image',
+                '.listing .product--box .product--image',
                 '.listing .product--box .product--title',
                 '.listing .product--box .product--actions .action--more'
             ]
@@ -210,6 +210,7 @@
          * @param {Object} params
          */
         setProductState: function (params) {
+            console.log(params);
             this.storage.setItem('lastProductState', JSON.stringify(params));
         },
 
