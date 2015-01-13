@@ -1,16 +1,13 @@
 <?php
 
-class Migrations_Migration407 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration438 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
         $this->addConfigFields();
-
-        if ($modus === \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL) {
-            $this->fixContextData();
-            $this->updateTemplates();
-            $this->updateTranslations();
-        }
+        $this->fixContextData();
+        $this->updateTemplates();
+        $this->updateTranslations();
     }
 
     /**
@@ -53,15 +50,150 @@ SQL;
     private function fixContextData()
     {
         $sql = <<<SQL
-UPDATE `s_core_config_mails` SET
-`context` = REPLACE (`context`, 's:8:"Banjimen"', 's:3:"Max"'),
-`context` = REPLACE (`context`, 's:6:"Ercmer"', 's:10:"Mustermann"')
-WHERE `context` LIKE '%Banjimen%'
-OR `context` LIKE '%Ercmer%';
+            UPDATE `s_core_config_mails` SET
+            `context` = REPLACE (`context`, 's:8:"Banjimen"', 's:3:"Max"'),
+            `context` = REPLACE (`context`, 's:6:"Ercmer"', 's:10:"Mustermann"')
+            WHERE (
+              `context` LIKE '%Banjimen%' OR `context` LIKE '%Ercmer%'
+            ) AND dirty = 0;
 SQL;
 
         $this->addSql($sql);
     }
+
+    /**
+     * Update a mail template
+     *
+     * @param string $name
+     * @param string $content
+     * @param string $contentHtml
+     */
+    private function updateTemplate($name, $content, $contentHtml = null)
+    {
+        $content = $this->convertTemplatePlain($content);
+
+        if ($contentHtml) {
+            $contentHtml = $this->convertTemplateHtml($contentHtml);
+        }
+
+        $this->updateEmailTemplate($name, $content, $contentHtml);
+    }
+
+    /**
+     * Helper method to update the translations of a mail template
+     * @param string $name
+     * @param string $content
+     * @param string $contentHtml
+     */
+    private function updateTranslation($name, $content, $contentHtml = null)
+    {
+        $content = stripslashes($this->convertTemplatePlain($content));
+
+        $contentHtml = stripslashes($this->convertTemplateHtml($contentHtml));
+
+        $this->updateEmailTemplateTranslation($name, $content, $contentHtml);
+    }
+
+    /**
+     * Updates an email template
+     *
+     * @param string $name
+     * @param string $content
+     * @param string $contentHtml
+     */
+    private function updateEmailTemplate($name, $content, $contentHtml = null)
+    {
+        $sql = <<<SQL
+UPDATE `s_core_config_mails` SET `content` = "$content" WHERE `name` = "$name" AND dirty = 0
+SQL;
+        $this->addSql($sql);
+
+        if ($contentHtml != null) {
+            $sql = <<<SQL
+UPDATE `s_core_config_mails` SET `content` = "$content", `contentHTML` = "$contentHtml" WHERE `name` = "$name" AND dirty = 0
+SQL;
+            $generatedQueries[] = $sql;
+        }
+
+        $this->addSql($sql);
+    }
+
+    /**
+     * Updates an email template's translation
+     *
+     * @param string $name
+     * @param string $content
+     * @param string $contentHtml
+     */
+    private function updateEmailTemplateTranslation($name, $content, $contentHtml = null)
+    {
+        $sql = <<<SQL
+SELECT s_core_translations.id, s_core_translations.objectdata
+FROM
+    s_core_translations
+INNER JOIN
+    s_core_config_mails
+ON
+    s_core_translations.objectkey = s_core_config_mails.id
+WHERE
+    s_core_translations.objecttype = 'config_mails'
+AND
+    s_core_config_mails.name = "$name"
+AND s_core_translations.dirty = 0
+SQL;
+
+        $translation = $this->getConnection()->query($sql)->fetch();
+
+        if (!$translation) {
+            return;
+        }
+
+        $id = $translation['id'];
+        $data = unserialize($translation['objectdata']);
+
+        $data['content'] = $content;
+
+        if ($contentHtml != null) {
+            $data['contentHtml'] = $contentHtml;
+        }
+
+        $data = serialize($data);
+
+        $sql = <<<SQL
+UPDATE `s_core_translations` SET `objectdata`= '$data' WHERE `id` = $id
+SQL;
+
+        $this->addSql($sql);
+    }
+
+    /**
+     * Helper method to prefix and suffix the mail templates with the configuration values
+     *
+     * @param string $content
+     * @return string
+     */
+    private function convertTemplatePlain($content)
+    {
+        $header = '{include file=\"string:{config name=emailheaderplain}\"}';
+        $footer = '{include file=\"string:{config name=emailfooterplain}\"}';
+
+        return $header."\r\n\r\n".$content."\r\n\r\n".$footer;
+    }
+
+    /**
+     * Helper method to prefix and suffix the mail templates with the configuration values
+     *
+     * @param string $content
+     * @return string
+     */
+    private function convertTemplateHtml($content)
+    {
+        $header = '{include file=\"string:{config name=emailheaderhtml}\"}';
+        $footer = '{include file=\"string:{config name=emailfooterhtml}\"}';
+
+        return $header."\r\n<br/><br/>\r\n".$content."\r\n<br/><br/>\r\n".$footer;
+    }
+
 
     /**
      * Update all mail templates
@@ -208,33 +340,6 @@ SQL;
     }
 
     /**
-     * Update a mail template
-     *
-     * @param string $name
-     * @param string $content
-     * @param string $contentHtml
-     */
-    private function updateTemplate($name, $content, $contentHtml = '')
-    {
-        $content = $this->convertTemplatePlain($content);
-
-        if (empty($contentHtml)) {
-            $sql = <<<SQL
-UPDATE `s_core_config_mails` SET `content` = "$content" WHERE `name` = "$name"
-SQL;
-            $this->addSql($sql);
-            return;
-        }
-
-        $contentHtml = $this->convertTemplateHtml($contentHtml);
-
-        $sql = <<<SQL
-UPDATE `s_core_config_mails` SET `content` = "$content", `contentHTML` = "$contentHtml" WHERE `name` = "$name"
-SQL;
-        $this->addSql($sql);
-    }
-
-    /**
      * Update translations of mail templates
      */
     private function updateTranslations()
@@ -376,78 +481,5 @@ SQL;
             "Hello {\$paymentInstance.firstName} {\$paymentInstance.lastName}, attached you will find the direct debit mandate form for your order {\$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.",
             "<div>Hello {\$paymentInstance.firstName} {\$paymentInstance.lastName},<br><br>attached you will find the direct debit mandate form for your order {\$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.</div>"
         );
-    }
-
-    /**
-     * Helper method to update the translations of a mail template
-     * @param string $name
-     * @param string $content
-     * @param string $contentHtml
-     */
-    private function updateTranslation($name, $content, $contentHtml = '')
-    {
-        $sql = <<<SQL
-SELECT s_core_translations.id, s_core_translations.objectdata
-FROM
-    s_core_translations
-INNER JOIN
-    s_core_config_mails
-ON
-    s_core_translations.objectkey = s_core_config_mails.id
-WHERE
-    s_core_translations.objecttype = 'config_mails'
-AND
-    s_core_config_mails.name = "$name"
-SQL;
-
-        $translation = $this->connection->query($sql)->fetch();
-        if (!$translation) {
-            return;
-        }
-
-        $id = $translation['id'];
-        $data = unserialize($translation['objectdata']);
-
-        $data['content'] = stripslashes($this->convertTemplatePlain($content));
-
-        if (!empty($contentHtml)) {
-            $data['contentHtml'] = stripslashes($this->convertTemplateHtml($contentHtml));
-        }
-
-        $data = serialize($data);
-
-        $sql = <<<SQL
-UPDATE `s_core_translations` SET `objectdata`= '$data' WHERE `id` = $id
-SQL;
-
-        $this->addSql($sql);
-    }
-
-    /**
-     * Helper method to prefix and suffix the mail templates with the configuration values
-     *
-     * @param string $content
-     * @return string
-     */
-    private function convertTemplatePlain($content)
-    {
-        $header = '{include file=\"string:{config name=emailheaderplain}\"}';
-        $footer = '{include file=\"string:{config name=emailfooterplain}\"}';
-
-        return $header."\r\n\r\n".$content."\r\n\r\n".$footer;
-    }
-
-    /**
-     * Helper method to prefix and suffix the mail templates with the configuration values
-     *
-     * @param string $content
-     * @return string
-     */
-    private function convertTemplateHtml($content)
-    {
-        $header = '{include file=\"string:{config name=emailheaderhtml}\"}';
-        $footer = '{include file=\"string:{config name=emailfooterhtml}\"}';
-
-        return $header."\r\n<br/><br/>\r\n".$content."\r\n<br/><br/>\r\n".$footer;
     }
 }
