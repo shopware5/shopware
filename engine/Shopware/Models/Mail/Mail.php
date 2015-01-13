@@ -56,8 +56,6 @@ class Mail extends ModelEntity
     const MAILTYPE_STATE  = 3;
 
     /**
-     *
-     *
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -116,6 +114,13 @@ class Mail extends ModelEntity
      * @ORM\Column(name="ishtml", type="boolean", nullable=false)
      */
     private $isHtml = false;
+
+    /**
+     * @var boolean $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean", nullable=true)
+     */
+    private $dirty = false;
 
     /**
      * Defines the mailtype
@@ -556,4 +561,19 @@ class Mail extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Mail', 'attribute', 'mail');
     }
 
+    /**
+     * @return boolean
+     */
+    public function isDirty()
+    {
+        return $this->dirty;
+    }
+
+    /**
+     * @param boolean $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
 }

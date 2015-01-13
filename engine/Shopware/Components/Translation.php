@@ -392,10 +392,10 @@ class Shopware_Components_Translation
         if (!empty($data)) {
             $sql = '
                 INSERT INTO `s_core_translations` (
-                  `objecttype`, `objectdata`, `objectkey`, `objectlanguage`
+                  `objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`
                 ) VALUES (
-                  ?, ?, ?, ?
-                ) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
+                  ?, ?, ?, ?, 1
+                ) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`), `dirty` = 1;
             ';
             Shopware()->Db()->query($sql, array(
                 $type, $data, $merge ? 1 : $key, $language

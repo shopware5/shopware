@@ -246,6 +246,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $mail = new Mail();
         $params['attribute'] = $params['attribute'][0];
+        $params['dirty'] = 1;
         $mail->fromArray($params);
 
         try {
@@ -261,8 +262,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
-
-
 
     /**
      * Updates mail
@@ -285,6 +284,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $params = $this->Request()->getParams();
         $params['attribute'] = $params['attribute'][0];
+        $params['dirty'] = 1;
 
         $mail->fromArray($params);
 
