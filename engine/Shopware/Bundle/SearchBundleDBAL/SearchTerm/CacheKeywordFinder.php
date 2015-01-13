@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
 /**
  * @category  Shopware
@@ -39,7 +40,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
     private $keywordFinder;
 
     /**
-     * @var \Zend_Cache_Core
+     * @var CacheInterface
      */
     private $cache;
 
@@ -49,12 +50,13 @@ class CacheKeywordFinder implements KeywordFinderInterface
     private $config;
 
     /**
-     * @param \Zend_Cache_Core $cache
+     * @param CacheInterface $cache
      * @param \Shopware_Components_Config $config
      * @param KeywordFinderInterface $keywordFinder
+     * @internal param $CacheInterface
      */
     public function __construct(
-        \Zend_Cache_Core $cache,
+        CacheInterface $cache,
         \Shopware_Components_Config $config,
         KeywordFinderInterface $keywordFinder
     ) {
@@ -71,7 +73,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
     {
         $id = md5('Shopware_Modules_Search_' . $term);
 
-        if (($keywords = $this->cache->load($id)) !== false) {
+        if (($keywords = $this->cache->fetch($id)) !== false) {
             return $keywords;
         }
 
@@ -80,7 +82,6 @@ class CacheKeywordFinder implements KeywordFinderInterface
         $this->cache->save(
             $keywords,
             $id,
-            array('Shopware_Modules_Search'),
             $this->config->get('cachesearch')
         );
 
