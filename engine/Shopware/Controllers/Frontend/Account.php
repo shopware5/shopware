@@ -60,6 +60,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
         $this->View()->sUserData = $this->admin->sGetUserData();
         $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
+        $this->View()->sAction = $this->Request()->getActionName();
     }
 
     /**
