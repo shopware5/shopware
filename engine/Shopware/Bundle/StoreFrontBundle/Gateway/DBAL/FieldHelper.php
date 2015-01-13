@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
@@ -42,7 +43,7 @@ class FieldHelper
      *
      * @var array
      */
-    private $attributeFields = array();
+    private $attributeFields = [];
 
     /**
      * @var Connection
@@ -50,11 +51,18 @@ class FieldHelper
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var CacheInterface
      */
-    public function __construct(Connection $connection)
+    private $cache;
+
+    /**
+     * @param Connection $connection
+     * @param CacheInterface $cache
+     */
+    public function __construct(Connection $connection, CacheInterface $cache)
     {
         $this->connection = $connection;
+        $this->cache = $cache;
     }
 
     /**
@@ -67,24 +75,29 @@ class FieldHelper
      */
     public function getTableFields($table, $alias)
     {
-        $key = $table . '_' . $alias;
+        $key = $table;
 
-        if (isset($this->attributeFields[$key]) && $this->attributeFields[$key] !== null) {
+        if (isset($this->attributeFields[$key])) {
             return $this->attributeFields[$key];
         }
 
-        $schemaManager = $this->connection->getSchemaManager();
+        if ($columns = $this->cache->fetch($key)) {
+            return $columns;
+        }
 
+        $schemaManager = $this->connection->getSchemaManager();
         $tableColumns = $schemaManager->listTableColumns($table);
+
         $columns = array();
 
         foreach ($tableColumns as $column) {
             $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
         }
 
+        $this->cache->save($columns, $key);
         $this->attributeFields[$key] = $columns;
 
-        return $this->attributeFields[$key];
+        return $columns;
     }
 
     /**

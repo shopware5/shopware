@@ -299,6 +299,7 @@
         <!-- Helper classes -->
         <service id="field_helper_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper">
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="storefront_cache" />
         </service>
 
         <!-- Shopware hydrator definitions -->
@@ -367,5 +368,8 @@
             <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
+        <service id="storefront_cache" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache">
+            <argument type="service" id="models_metadata_cache"/>
+        </service>
     </services>
 </container>

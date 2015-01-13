@@ -30,7 +30,7 @@
         </service>
 
         <service id="cache_keyword_finder" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\CacheKeywordFinder">
-            <argument type="service" id="cache" />
+            <argument type="service" id="storefront_cache" />
             <argument type="service" id="config" />
             <argument type="service" id="keyword_finder_dbal" />
         </service>
