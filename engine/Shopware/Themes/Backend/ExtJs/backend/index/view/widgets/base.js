@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Base', {
     anchor: '100%',
     minHeight: 200,
     cls: Ext.baseCSSPrefix + 'widget-component',
-    bodyPadding: 10,
+    bodyPadding: '16 28',
     frame: true,
     closable: false,
     collapsible: false,
@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Base', {
             tools = me.tools || [],
             defaults = [{
                 type: 'close',
+                margin: '0 8',
                 scope: me,
                 handler: function() {
                     me.fireEvent('closeWidget', me);
@@ -55,3 +56,51 @@ Ext.define('Shopware.apps.Index.view.widgets.Base', {
         me.callParent();
     }
 });
+
+Ext.define('Ext.chart.theme.Widget', {
+    extend: 'Ext.chart.theme.Base',
+
+    constructor: function (config) {
+        this.callParent([Ext.apply({
+            axis: {
+                stroke: '#536773',
+                'stroke-width': 1
+            },
+            series: {
+                'stroke-width': 0
+            },
+            marker: {
+                stroke: '#2EDC79',
+                radius: 3,
+                size: 3
+            },
+            colors: [ '#2EDC79', '#13C6A2' ],
+            seriesThemes: [{
+                fill: '#2EDC79'
+            }, {
+                fill: '#13C6A2'
+            },{
+                fill: '#2EDC79'
+            }, {
+                fill: '#13C6A2'
+            }],
+            markerThemes: [{
+                fill: '#2EDC79',
+                type: 'circle'
+            }, {
+                fill: '#2EDC79',
+                type: 'cross'
+            }, {
+                fill: '#2EDC79',
+                type: 'plus'
+            }, {
+                fill: '#13C6A2',
+                type: 'circle'
+            }, {
+                fill: '#13C6A2',
+                type: 'cross'
+            }]
+        }, config)]);
+    }
+});
+
