@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
 
     turnoverStore: null,
 
-    height: 225,
+    height: 340,
 
     /**
      * Initializes the widget.
@@ -223,6 +223,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
 
         return Ext.create('Ext.chart.Chart', {
             xtype: 'chart',
+            theme: 'Widget',
             height: 110,
             listeners: {
                 /**
@@ -252,8 +253,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
                     position: 'left',
                     fields: [ 'name' ],
                     label: {
-                        fill: '#77828b',
-                        font: '11px/14px Arial, sans-serif',
+                        fill: '#ffffff',
+                        font: '12px/14px Arial, sans-serif',
                         align: 'left'
                     }
                 },
@@ -300,7 +301,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
                     // Color renderer
                     renderer: function (sprite, record, attr, index) {
                         return Ext.apply(attr, {
-                            fill: (index % 2) ? '#2f79b1' : '#77b3e0'
+                            fill: (index % 2) ? '#13c6a2' : '#2edc79'
                         });
                     }
                 }
@@ -321,6 +322,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
         return Ext.create('Ext.grid.Panel', {
             flex: 2,
             border: 0,
+            maxHeight: 75,
             stripeRows: false,
             columns: me.createColumns(),
             store: me.turnoverStore,
