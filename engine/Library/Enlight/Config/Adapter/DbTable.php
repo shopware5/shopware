@@ -337,8 +337,8 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
      * Removes the data from the data store.
      *
      * @param      Enlight_Config $config
-     * @param      array          $fields
-     * @param      bool           $update
+     * @param      array $fields
+     * @param      bool $deleteDirty
      * @return     Enlight_Config_Adapter_DbTable
      */
     public function delete(Enlight_Config $config, $fields = null, $deleteDirty = false)
@@ -378,19 +378,12 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             }
         }
 
-        foreach ((array) $fields as $field) {
-            $fieldWhere = $where;
-            $fieldWhere[] = $db->quoteInto($this->_nameColumn . '=?', $field);
-            if (!$deleteDirty) {
-                $fieldWhere[] = $db->quoteInto($this->_dirtyColumn . '=?', 0);
-            }
-
-            $row = $dbTable->fetchRow($fieldWhere);
-
-            if ($row !== null) {
-                $row->delete();
-            }
+        $where[] = $db->quoteInto($this->_nameColumn . ' IN (?)', $fields);
+        if (!$deleteDirty) {
+            $where[] = $db->quoteInto($this->_dirtyColumn . '=?', 0);
         }
+
+        $dbTable->delete($where);
 
         return $this;
     }
