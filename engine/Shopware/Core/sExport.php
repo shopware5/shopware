@@ -419,6 +419,7 @@ class sExport
         $this->sSYSTEM->sSMARTY->debugging = 0;
         $this->sSYSTEM->sSMARTY->caching = 0;
 
+        $this->sSmarty->registerPlugin('modifier', 'htmlentities', array(&$this,'sHtmlEntities'));
         $this->sSmarty->registerPlugin('modifier', 'format', array(&$this,'sFormatString'));
         $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this,'sEscapeString'));
         $this->sSmarty->registerPlugin('modifier', 'category', array(&$this,'sGetArticleCategoryPath'));
@@ -452,6 +453,15 @@ class sExport
         $this->sSmarty->config_vars['EN'] = $this->sSettings['encoding'];
     }
 
+    public function sHtmlEntities($string, $char_set = null)
+    {
+        if (empty($char_set)) {
+            $char_set = $this->sSettings['encoding'];
+        }
+        
+        return htmlentities($string, ENT_COMPAT | ENT_HTML401 , $char_set);
+    }
+    
     public function sFormatString($string, $esc_type = '', $char_set = null)
     {
         return $this->sEscapeString($string, $esc_type, $char_set);
