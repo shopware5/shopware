@@ -289,7 +289,7 @@
                     {block name='frontend_checkout_confirm_left_shipping_method'}
                         <div class="shipping--method">
                             <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
-                            <span class="shipping--name" title="{$sDispatch.name}">{$sDispatch.name|truncate:20:"...":true}</span>
+                            <span class="shipping--name" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
                         </div>
                     {/block}
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
