@@ -3055,7 +3055,50 @@ class sAdmin
     }
 
     /**
-     * Risk management - customer had payment problems in past
+     * Risk management
+     * Check if at least one order of the customer has a payment status 13
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskDUNNINGLEVELONE($user, $order, $value)
+    {
+        return $this->riskCheckClearedLevel(13);
+    }
+
+    /**
+     * Risk management
+     * Check if at least one order of the customer has a payment status 14
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskDUNNINGLEVELTWO($user, $order, $value)
+    {
+        return $this->riskCheckClearedLevel(14);
+    }
+
+    /**
+     * Risk management
+     * Check if at least one order of the customer has a payment status 15
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskDUNNINGLEVELTHREE($user, $order, $value)
+    {
+        return $this->riskCheckClearedLevel(15);
+    }
+
+    /**
+     * Risk management
+     * Check if at least one order of the customer has a payment status 16 (Encashment)
      *
      * @param  $user User data
      * @param  $order Order data
@@ -3064,16 +3107,7 @@ class sAdmin
      */
     public function sRiskINKASSO($user, $order, $value)
     {
-        if ($this->session->offsetGet('sUserId')) {
-            $checkOrder = $this->db->fetchRow("
-                SELECT id FROM s_order
-                WHERE cleared = 16 AND userID = ?",
-                array($this->session->offsetGet('sUserId'))
-            );
-            return ($checkOrder && $checkOrder["id"]);
-        } else {
-            return false;
-        }
+        return $this->riskCheckClearedLevel(16);
     }
 
     /**
@@ -4961,5 +4995,29 @@ class sAdmin
             );
         }
         return $payment;
+    }
+
+    /**
+     * Convenience function to check if there is at least one order with the
+     * provided cleared status.
+     * 
+     * @param int $cleared
+     * @return boolean
+     */
+    private function riskCheckClearedLevel($cleared)
+    {
+        if (!$this->session->offsetGet('sUserId')) {
+            return false;
+        }
+
+        $checkOrder = $this->db->fetchRow("
+            SELECT id FROM s_order
+            WHERE cleared = ? AND userID = ?",
+            array(
+                $cleared,
+                $this->session->offsetGet('sUserId')
+            )
+        );
+        return ($checkOrder && $checkOrder["id"]);
     }
 }
