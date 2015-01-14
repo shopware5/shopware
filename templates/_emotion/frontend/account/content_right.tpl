@@ -23,7 +23,7 @@
 	{/block}
 	{block name="frontend_account_content_right_downloads"}
 		{* My esd articles *}
-		{if {config name=showDownloads}}
+		{if {config name=showEsd}}
 			<li>
 				<a href="{url controller='account' action='downloads'}">
 					{se name="AccountLinkDownloads"}{/se}
