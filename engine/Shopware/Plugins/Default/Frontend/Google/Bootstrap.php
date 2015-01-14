@@ -67,7 +67,8 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
     public function getInfo()
     {
         return array(
-            'label' => 'Google Analytics'
+            'label' => 'Google Analytics (deprecated)',
+            'description' => '<h3>This plugin is no longer supported. Please use the new "Google Services" plugin instead, available on the community store.</h3>'
         );
     }
 
