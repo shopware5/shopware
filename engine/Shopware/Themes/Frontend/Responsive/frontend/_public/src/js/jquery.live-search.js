@@ -179,7 +179,8 @@
          */
         onKeyboardNavigation: function(key) {
             var me = this,
-                selected = me.$results.find('.' + me.defaults.activeCls);
+                selected = me.$results.find('.' + me.defaults.activeCls),
+                form = me.$el.closest('form');
 
             if (key === keyMap.DOWN) {
                 if(!selected.length) {
@@ -218,7 +219,10 @@
                 if (selected.length) {
                     
                     window.location.href = selected.find('a').attr('href');
+                    return;
                 }
+
+                form.submit();
             }
         },
 
