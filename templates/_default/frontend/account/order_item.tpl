@@ -41,6 +41,7 @@
 	</div>
 	
 	<div class="grid_2">
+        {block name="frontend_account_order_item_overview_row_actions"}
 		<div class="textright">
 			<strong>
 			<a href="#order{$offerPosition.ordernumber}" title="{s name='OrderActionSlide'}{/s} {$offerPosition.ordernumber}" class="orderdetails button-middle small" rel="order{$offerPosition.ordernumber}">
@@ -48,6 +49,7 @@
 			</a>
 			</strong>
 		</div>
+        {/block}
 	</div>
 	{/block}
 </div>
