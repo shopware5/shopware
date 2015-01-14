@@ -75,6 +75,14 @@
             fallbackContentSelector: '.listing--wrapper',
 
             /**
+             * The DOM selector of the show listing link.
+             *
+             * @property showListingSelector
+             * @type {string}
+             */
+            showListingSelector: '.emotion--show-listing',
+
+            /**
              * The markup for the loading indicator.
              *
              * @property loadingIndicator
@@ -103,6 +111,7 @@
             me.availableDevices = me.opts.availableDevices.split(',');
 
             me.$fallbackContent = $(me.opts.fallbackContentSelector);
+            me.$showListingLink = $(me.opts.showListingSelector);
 
             if (!me.opts.showListing) {
                 me.hideFallbackContent();
@@ -166,6 +175,9 @@
              * If the emotion world was already loaded show it.
              */
             if (me.$emotion.length) {
+
+                if (!me.opts.showListing) me.hideFallbackContent();
+
                 me.showEmotion();
                 return;
             }
@@ -245,6 +257,7 @@
             var me = this;
 
             me.$fallbackContent.removeClass('is--hidden');
+            me.$showListingLink.addClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
 
@@ -258,6 +271,7 @@
             var me = this;
 
             me.$fallbackContent.addClass('is--hidden');
+            me.$showListingLink.removeClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
 
@@ -395,6 +409,7 @@
 
             me.$bannerElements = me.$elements.find(me.opts.bannerElSelector);
             me.$videoElements = me.$elements.find(me.opts.videoElSelector);
+            me.$productSliderElements = me.$elements.find('*[data-product-slider="true"]');
 
             if (me.opts.fullscreen) {
                 me.initFullscreen();
@@ -428,8 +443,8 @@
                 $(item).emotionVideo();
             });
 
-            me.$el.find('*[data-product-slider="true"]').productSlider();
-            me.$el.find('*[data-image-slider="true"]').imageSlider();
+            StateManager.updatePlugin('*[data-product-slider="true"]', 'productSlider');
+            StateManager.updatePlugin('*[data-image-slider="true"]', 'imageSlider');
 
             window.picturefill();
 
@@ -474,7 +489,8 @@
             me.$elements.css({
                 'padding-left': remSpacing + 'rem',
                 'padding-right': 0,
-                'padding-bottom': 0
+                'padding-top': 0,
+                'padding-bottom': remSpacing + 'rem'
             });
 
             me.$el.masonry({
@@ -483,6 +499,8 @@
                 'transitionDuration': me.opts.transitionDuration,
                 'columnWidth': me.$gridSizer[0]
             });
+
+            me.$el.masonry('on', 'layoutComplete', $.proxy(me.onMasonryLayout, me));
 
             $.publish('plugin/emotion/initMasonryGrid', me);
         },
@@ -535,6 +553,19 @@
 
             me.$bannerElements.trigger('emotionResize');
             me.$videoElements.trigger('emotionResize');
+        },
+
+        /**
+         * Called by the masonry plugin on layout change.
+         */
+        onMasonryLayout: function() {
+            var me = this;
+
+            me.$productSliderElements.each(function(index, item) {
+                var $item = $(item);
+
+                console.log(Math.round(100/ me.$el.outerWidth() * $item.parents('.emotion--product-slider').outerWidth()));
+            });
         },
 
         /**

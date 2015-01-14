@@ -75,13 +75,12 @@
 
 // Emotion content
 .content--emotions {
-	.unitize-margin(0, 0, 20, 0);
 	display: block;
 }
 
 // Emotion show listing link
 .emotion--show-listing {
-	.unitize-padding(20, 0, 0, 0);
+	.unitize-margin(20, 0);
 }
 
 // Emotion wrapper
@@ -240,6 +239,11 @@
 	.product-slider--content {
 		.unitize-padding(20, 20);
 	}
+
+	.product-slider--arrow {
+		&.arrow--next { border-right: 0 none; }
+		&.arrow--prev { border-left: 0 none; }
+	}
 }
 
 // Product-Box element
@@ -324,8 +328,14 @@
 	.manufacturer--slider {
 		height: 100%;
 
-		.arrow--next { .unitize(-10, 16, right); }
-		.arrow--prev { .unitize(-10, 16, left); }
+		.arrow--next {
+			.unitize(-20, 16, right);
+			border-right: 0 none;
+		}
+		.arrow--prev {
+			.unitize(-20, 16, left);
+			border-left: 0 none;
+		}
 	}
 
 	.manufacturer--item {
