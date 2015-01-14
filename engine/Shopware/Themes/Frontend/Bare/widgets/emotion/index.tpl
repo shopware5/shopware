@@ -15,10 +15,7 @@
 
                 {$lastRow = 0}
 
-                <section class="emotion--container
-                                emotion--column-{$emotion.grid.cols}
-                                emotion--mode-{$emotion.mode}
-                                emotion--{$emotion@index}"
+                <section class="emotion--container emotion--column-{$emotion.grid.cols} emotion--mode-{$emotion.mode} emotion--{$emotion@index}"
                          data-emotion="true"
                          data-gridMode="{$emotion.mode}"
                          data-cellSpacing="{$cellSpacing}"
@@ -47,7 +44,7 @@
                                 {strip}
                                 <div class="emotion--element column--{$itemCols} row--{$itemRows}"
                                      style="{if $element.endCol !== $emotion.grid.cols}padding-right: {$cellSpacing / 16}rem;{/if}
-                                            padding-top: {$cellSpacing / 16}rem;
+                                            {if $element.startRow !== 1}padding-top: {$cellSpacing / 16}rem;{/if}
                                             height: {$itemHeight / 16}rem;
                                             top: {$itemTop / 16}rem;
                                             left: {$itemLeft}%;">

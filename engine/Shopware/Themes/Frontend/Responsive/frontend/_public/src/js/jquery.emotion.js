@@ -58,6 +58,14 @@
             },
 
             /**
+             * The DOM selector of emotion wrapper elements
+             *
+             * @property wrapperSelector,
+             * @type {string}
+             */
+            wrapperSelector: '.emotion--wrapper',
+
+            /**
              * The DOM selector of the fallback content
              * if no emotion world is available.
              *
@@ -91,7 +99,7 @@
 
             me.$emotion = false;
 
-            me.hasSiblings = !!me.$el.siblings().length;
+            me.hasSiblings = !!me.$el.siblings(me.opts.wrapperSelector).length;
             me.availableDevices = me.opts.availableDevices.split(',');
 
             me.$fallbackContent = $(me.opts.fallbackContentSelector);
@@ -182,6 +190,8 @@
                     me.initEmotion(response);
                 }
             });
+
+            $.publish('plugin/emotionLoader/loadEmotion', me);
         },
 
         /**
@@ -202,6 +212,8 @@
             }
 
             me.$emotion.emotion();
+
+            $.publish('plugin/emotionLoader/initEmotion', me);
         },
 
         /**
@@ -211,6 +223,8 @@
             var me = this;
 
             me.$el.css('display', 'block');
+
+            $.publish('plugin/emotionLoader/showEmotion', me);
         },
 
         /**
@@ -220,6 +234,8 @@
             var me = this;
 
             me.$el.css('display', 'none');
+
+            $.publish('plugin/emotionLoader/hideEmotion', me);
         },
 
         /**
@@ -228,9 +244,11 @@
         showFallbackContent: function() {
             var me = this;
 
-            me.$fallbackContent.css('display', 'block');
+            me.$fallbackContent.removeClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+
+            $.publish('plugin/emotionLoader/showFallbackContent', me);
         },
 
         /**
@@ -239,9 +257,11 @@
         hideFallbackContent: function() {
             var me = this;
 
-            me.$fallbackContent.css('display', 'none');
+            me.$fallbackContent.addClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+
+            $.publish('plugin/emotionLoader/hideFallbackContent', me);
         },
 
         /**
@@ -429,6 +449,18 @@
         },
 
         /**
+         * Removes the fullscreen mode.
+         */
+        removeFullscreen: function(showSidebar) {
+            var me = this;
+
+            if (showSidebar) $body.removeClass('is--no-sidebar');
+            me.$contentMain.removeClass('is--fullscreen');
+
+            $.publish('plugin/emotion/removeFullscreen', me);
+        },
+
+        /**
          * Initializes the grid for the masonry type.
          */
         initMasonryGrid: function() {
@@ -436,12 +468,10 @@
                 remSpacing = me.opts.cellSpacing / 16;
 
             me.$el.css({
-                'margin-top': -remSpacing + 'rem',
                 'margin-left': -remSpacing + 'rem'
             });
 
             me.$elements.css({
-                'padding-top': remSpacing + 'rem',
                 'padding-left': remSpacing + 'rem',
                 'padding-right': 0,
                 'padding-bottom': 0
@@ -461,16 +491,12 @@
          * Initializes the grid for the resizing type.
          */
         initScaleGrid: function() {
-            var me = this,
-                remSpacing = me.opts.cellSpacing / 16;
+            var me = this;
 
             me.baseWidth = ~~me.opts.baseWidth;
             me.ratio = me.baseWidth / me.$el.outerHeight();
 
-            me.$el.css({
-                'width': me.baseWidth,
-                'margin-top': -remSpacing + 'rem'
-            });
+            me.$el.css('width', me.baseWidth);
 
             if (!me.opts.fullscreen) {
                 me.$wrapper.css('max-width', me.baseWidth);
@@ -488,6 +514,11 @@
             var me = this;
 
             $window.on('resize', $.proxy(me.onResize, me));
+
+            if (me.opts.fullscreen) {
+                $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.initFullscreen, me));
+                $.subscribe('plugin/emotionLoader/hideEmotion', $.proxy(me.removeFullscreen, me));
+            }
 
             $.publish('plugin/emotion/registerEvents', me);
         },
