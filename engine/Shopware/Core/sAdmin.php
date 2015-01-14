@@ -110,6 +110,13 @@ class sAdmin
     private $moduleManager;
 
     /**
+     * Email address validator
+     *
+     * @var \Shopware\Components\Validator\EmailValidator
+     */
+    private $emailValidator;
+
+    /**
      * Pointer to sSystem object
      * Used for legacy purposes
      *
@@ -128,7 +135,8 @@ class sAdmin
         Shopware_Components_Snippet_Manager              $snippetManager     = null,
         Shopware_Components_Modules                      $moduleManager      = null,
         sSystem                                          $systemModule       = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null
+        StoreFrontBundle\Service\ContextServiceInterface $contextService     = null,
+        Shopware\Components\Validator\EmailValidator     $emailValidator     = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -145,6 +153,7 @@ class sAdmin
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
         $this->contextService = $contextService ? : Shopware()->Container()->get('context_service');
+        $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
     }
 
@@ -3306,9 +3315,7 @@ class sAdmin
                         ->get('NewsletterFailureMail', 'Enter eMail address')
             );
         }
-        $validator = new Zend_Validate_EmailAddress();
-        $validator->getHostnameValidator()->setValidateTld(false);
-        if (!$validator->isValid($email)) {
+        if (!$this->emailValidator->isValid($email)) {
             return array(
                 "code" => 1,
                 "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -4123,10 +4130,7 @@ class sAdmin
         if (isset($postData["emailConfirmation"]) || isset($postData["email"])) {
             $postData["email"] = strtolower(trim($postData["email"]));
 
-            $validator = new Zend_Validate_EmailAddress();
-			$validator->getHostnameValidator()->setValidateTld(false);
-
-			if (empty($postData["email"]) || !$validator->isValid($postData["email"])) {
+			if (empty($postData["email"]) || !$this->emailValidator->isValid($postData["email"])) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                     ->get('MailFailure', 'Please enter a valid mail address');

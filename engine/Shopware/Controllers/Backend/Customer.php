@@ -697,10 +697,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $customer = $query->getArrayResult();
 
-        if (empty($customer) && preg_match('/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i', $mail)) {
-            echo true;
-        } else {
+        if (!empty($customer)) {
             echo false;
+        } else {
+            $this->forward('validateEmail', 'Base');
         }
     }
 

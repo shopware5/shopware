@@ -87,7 +87,9 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Editor', {
             items: [
                 {
                     xtype: 'textfield',
-                    vtype: 'email',
+                    vtype: 'remote',
+                    validationUrl: '{url controller="base" action="validateEmail"}',
+                    validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
                     name: 'mailAddress',
                     checkChangeBuffer: 200,
                     padding: '0 0 0 8',
