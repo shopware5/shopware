@@ -23,11 +23,13 @@
 	{/block}
 	{block name="frontend_account_content_right_downloads"}
 		{* My esd articles *}
-		<li>
-			<a href="{url controller='account' action='downloads'}">
-				{se name="AccountLinkDownloads"}{/se}
-			</a>
-		</li>
+		{if {config name=showEsd}}
+			<li>
+				<a href="{url controller='account' action='downloads'}">
+					{se name="AccountLinkDownloads"}{/se}
+				</a>
+			</li>
+		{/if}
 	{/block}
 	{block name="frontend_account_content_right_billing"}
 		{* Change billing address *}
