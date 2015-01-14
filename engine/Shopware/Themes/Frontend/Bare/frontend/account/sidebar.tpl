@@ -35,7 +35,7 @@
 
 				{* Link to the user downloads *}
 				{block name="frontend_account_menu_link_downloads"}
-                    {if {config name=showDownloads}}
+                    {if {config name=showEsd}}
 					    <li class="navigation--entry">
 						    <a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
 							    {s name="AccountLinkDownloads"}{/s}
