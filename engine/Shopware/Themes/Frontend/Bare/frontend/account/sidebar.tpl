@@ -13,7 +13,7 @@
 		<div class="account--menu-container">
 
 			{* Sidebar navigation *}
-			<ul class="sidebar--navigation navigation--list is--level0">
+			<ul class="sidebar--navigation navigation--list is--level0 show--active-items">
 
 				{* Link to the account overview page *}
 				{block name="frontend_account_menu_link_overview"}

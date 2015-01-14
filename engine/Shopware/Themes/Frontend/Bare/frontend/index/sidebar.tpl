@@ -30,11 +30,21 @@
 	{/block}
 
     {* if sCategoryContent is not available use sArticle.categoryID *}
-    {if !$sCategoryContent || !$sCategoryContent.id && ($sArticle && $sArticle.categoryID)}
-        {$sCategoryContent.id = $sArticle.categoryID}
+    {if isset($sCategoryContent) && $sCategoryContent.id}
+        {$subCategoryId = $sCategoryContent.id}
+    {elseif isset($sArticle) && $sArticle.categoryID}
+        {$subCategoryId = $sArticle.categoryID}
+    {elseif isset($sCustomPage) && $sCustomPage.id}
+        {$subCategoryId = $sCustomPage.id}
+    {else}
+        {$subCategoryId = 0}
     {/if}
 
-    <div class="sidebar--categories-wrapper" data-subcategory-nav="true" data-mainCategoryId="{$Shop->get('parentID')}" data-categoryId="{$sCategoryContent.id}" data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}">
+    <div class="sidebar--categories-wrapper"
+         data-subcategory-nav="true"
+         data-mainCategoryId="{$Shop->get('parentID')}"
+         data-categoryId="{$subCategoryId}"
+         data-fetchUrl="{if $subCategoryId}{if $sCustomPage}{url module=widgets controller=listing action=getCustomPage pageId={$subCategoryId}}{else}{url module=widgets controller=listing action=getCategory categoryId={$subCategoryId}}{/if}{/if}">
 
         {* Sidebar category tree *}
         {block name='frontend_index_left_categories'}

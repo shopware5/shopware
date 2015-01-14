@@ -94,10 +94,11 @@ Ext.define('Shopware.apps.Site.controller.Form', {
 			toStore = ddselector.toStore,
             values = form.getValues(),
 			record = form.getRecord(),
-			data = Ext.Object.merge(record.data, values);
+            model;
 
-			record.data = data;
-			var model = record;
+        record.data = Ext.Object.merge(record.data, values);
+
+        model = record;
 
         //return if no description or grouping is set
         if (values.description == "" || toStore.first() == null) {
@@ -119,11 +120,11 @@ Ext.define('Shopware.apps.Site.controller.Form', {
             values.target = "_blank";
         }
 
-		var tree = me.getNavigationTree();
+		var tree = me.getNavigationTree(),
+            data = tree.getSelectionModel().getSelection()[0].parentNode.data;
+
 		//if it's a nested site
-		if(tree.getSelectionModel().getSelection()[0] && tree.getSelectionModel().getSelection()[0].parentNode.data.depth >= 2){
-			model.set('parentId', tree.getSelectionModel().getSelection()[0].parentNode.data.helperId);
-		}
+        model.set('parentId', ~~(values.parentId) || ~~(data.helperId));
 
 		//save the current form state
         model.save({
