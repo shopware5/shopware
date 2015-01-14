@@ -259,21 +259,14 @@
         }
 
         // Personal information panels like billing and shipping address
-        .panel--group {
+        .information--panel {
+            .unitize-height(300);
+            margin: 0 2% 0 0;
+            width: 32%;
+            position: relative;
 
             .panel--body {
                 position: static;
-            }
-
-            .panel {
-                .unitize-height(290);
-                margin: 0 2% 0 0;
-                width: 32%;
-                position: relative;
-
-                &:last-child {
-                    margin: 0;
-                }
             }
 
             .panel--actions {
@@ -285,6 +278,14 @@
                     float: left;
                 }
             }
+
+            &:last-child {
+                margin: 0;
+            }
+        }
+
+        .payment--panel .shipping--name {
+            white-space: nowrap;
         }
 
         // Additional features
