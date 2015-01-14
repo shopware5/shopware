@@ -359,5 +359,7 @@
         <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">
             <argument type="service" id="dbal_connection" />
         </service>
+
+        <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
     </services>
 </container>

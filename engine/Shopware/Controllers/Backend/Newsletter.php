@@ -238,10 +238,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             $mail->setSubject($subject);
             $mail->clearRecipients();
             $mail->addTo($user['email']);
-            /**
-             * SW-44 Check if mail-address is valid
-             */
-            $validator = new Zend_Validate_EmailAddress();
+            $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
                 // SW-4526

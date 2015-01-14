@@ -237,7 +237,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         me.newRegistrationEmail = Ext.create('Ext.form.field.Text', {
             fieldLabel:me.snippets.newRegistrationForm.email,
             name:'email',
-            vtype:'email',
+            vtype: 'remote',
+            validationUrl: '{url controller="base" action="validateEmail"}',
+            validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
             allowBlank:false,
             required:true,
             enableKeyEvents:true,

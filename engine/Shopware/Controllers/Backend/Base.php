@@ -62,6 +62,19 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
     }
 
+    /**
+     * Disable template engine for all actions
+     *
+     * @codeCoverageIgnore
+     * @return void
+     */
+    public function preDispatch()
+    {
+        if ($this->Request()->getActionName() != 'validateEmail') {
+            parent::preDispatch();
+        }
+    }
+
    /**
     * Add the table alias to the passed filter and sort parameters.
     * @param $properties
@@ -832,5 +845,26 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'data' => $options,
             'total' => $count+2
         ));
+    }
+
+    /**
+     * Validates the inserted email address
+     */
+    public function validateEmailAction()
+    {
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        if (!($email = $this->Request()->getParam('value'))) {
+            echo false;
+            return;
+        }
+
+        $emailValidator = $this->container->get('validator.email');
+
+        if ($emailValidator->isValid($email)) {
+            echo true;
+        } else {
+            echo false;
+        }
     }
 }
