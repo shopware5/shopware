@@ -100,6 +100,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
         } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                $this->Request()->setParam('ordernumber', $article['ordernumber']);
+                return $this->forward('productQuickView');
+            }
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
@@ -142,6 +146,25 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sCategoryInfo = $categoryInfo;
         $this->View()->sArticle = $article;
         $this->View()->rand = md5(uniqid(rand()));
+    }
+
+    /**
+     * product quick view method
+     *
+     * Fetches the correct product corresponding to the given order number.
+     * Assigns the product information to the sArticle view variable.
+     */
+    public function productQuickViewAction()
+    {
+        $orderNumber = (string) $this->Request()->get('ordernumber');
+
+        if (empty($orderNumber)) {
+            throw new \InvalidArgumentException('Argument ordernumber missing');
+        }
+
+        /** @var sArticles $articleModule */
+        $articleModule = Shopware()->Modules()->Articles();
+        $this->View()->sArticle = $articleModule->sGetProductByOrdernumber($orderNumber);
     }
 
     /**

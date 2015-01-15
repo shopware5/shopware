@@ -213,6 +213,13 @@
             onClose: emptyFn,
 
             /**
+             * Whether or not the picturefill function will be called when setting content.
+             *
+             * @type {Boolean}
+             */
+            updateImages: false,
+
+            /**
              * Class that will be added to the modalbox.
              *
              * @type {String}
@@ -411,35 +418,41 @@
                 window.setTimeout(me.center.bind(me), 25);
             }
 
+            if (me.options.updateImages) {
+                picturefill();
+            }
+
             $.publish('plugin/modal/onSetContent');
         },
 
         /**
          * Sets the width of the modal box.
+         * If a string was passed containing a only number, it will be parsed as a pixel value.
          *
          * @public
          * @method setWidth
-         * @param {Number} width
+         * @param {Number|String} width
          */
         setWidth: function (width) {
             var me = this;
 
-            me._$modalBox.css('width', width);
+            me._$modalBox.css('width', (typeof width === 'string' && !(/^\d+$/.test(width))) ? width : parseInt(width, 10));
 
             $.publish('plugin/modal/onSetWidth');
         },
 
         /**
          * Sets the height of the modal box.
+         * If a string was passed containing a only number, it will be parsed as a pixel value.
          *
          * @public
          * @method setHeight
-         * @param {Number} height
+         * @param {Number|String} height
          */
         setHeight: function (height) {
             var me = this;
 
-            me._$modalBox.css('height', height);
+            me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : parseInt(height, 10));
 
             $.publish('plugin/modal/onSetHeight');
         },
@@ -654,11 +667,13 @@
             var me = this,
                 opts;
 
+            me.opts = $.extend({}, Object.create($.modal.defaults), me.opts);
+
             me.applyDataAttributes();
 
             opts = me.opts;
 
-            me.$target = (me.$target = me.$el.find(opts.targetSelector)).length ? me.$target : me.$el;
+            me.$target = opts.targetSelector && (me.$target = me.$el.find(opts.targetSelector)).length ? me.$target : me.$el;
 
             me._isOpened = false;
 
@@ -680,7 +695,7 @@
 
             var me = this;
 
-            $.modal.open(me.opts.content || me.opts.mode !== 'local' ? me.$target.attr('href') : me.$target, me.opts);
+            $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? me.$target.attr('href') : me.$target), me.opts);
 
             me._isOpened = true;
         },
