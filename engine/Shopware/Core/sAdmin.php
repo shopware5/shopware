@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\Validator\EmailValidatorInterface;
 
 /**
  * Deprecated Shopware Class that handles several
@@ -112,7 +113,7 @@ class sAdmin
     /**
      * Email address validator
      *
-     * @var \Shopware\Components\Validator\EmailValidator
+     * @var EmailValidatorInterface
      */
     private $emailValidator;
 
@@ -136,9 +137,8 @@ class sAdmin
         Shopware_Components_Modules                      $moduleManager      = null,
         sSystem                                          $systemModule       = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService     = null,
-        Shopware\Components\Validator\EmailValidator     $emailValidator     = null
-    )
-    {
+        EmailValidatorInterface                          $emailValidator     = null
+    ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
         $this->config = $config ? : Shopware()->Config();
