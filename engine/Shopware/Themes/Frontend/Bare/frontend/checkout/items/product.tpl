@@ -23,7 +23,16 @@
 										<div class="table--media-inner">
 											{block name="frontend_checkout_cart_item_image_container_inner"}
 												{if $sBasketItem.image.src.2}
-													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
+                                                        {if {config name=detailmodal}}
+                                                       data-modalbox="true"
+                                                       data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                                                       data-mode="ajax"
+                                                       data-width="750"
+                                                       data-sizing="content"
+                                                       data-title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
+                                                       data-updateImages="true"
+                                                        {/if}>
 														<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
 													</a>
 												{else}
@@ -32,7 +41,6 @@
 											{/block}
 										</div>
 									{/block}
-
 								</div>
 							{/block}
 						</div>
@@ -45,7 +53,16 @@
 
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
-                            <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}">
+                            <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
+                                {if {config name=detailmodal}}
+                               data-modalbox="true"
+                               data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                               data-mode="ajax"
+                               data-width="750"
+                               data-sizing="content"
+                               data-title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
+                               data-updateImages="true"
+                                {/if}>
                                 {$sBasketItem.articlename|strip_tags|truncate:60}
                             </a>
                         {/block}

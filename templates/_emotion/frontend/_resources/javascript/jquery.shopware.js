@@ -3205,13 +3205,14 @@ jQuery.fn.liveSearch = function (conf) {
             event.preventDefault();
 
             var $this = $(this),
-                    title = $this.parents('form').find('a.title').html();
+                title = $this.parents('form').find('a.title').html(),
+                url = $this.attr('href');
 
             if(title.length > 65) {
                 title = title.substring(0, 65) + '...';
             }
 
-            $.modalFrame($this.attr('href') + '?template=ajax', title, {
+            $.modalFrame(url + (url.indexOf('?') === -1 ? '?' : '&') + 'template=ajax', title, {
                 width: 600,
                 frameHeight: 500,
                 useOverlay: true,
