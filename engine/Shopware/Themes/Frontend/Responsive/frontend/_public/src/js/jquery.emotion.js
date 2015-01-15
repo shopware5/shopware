@@ -500,8 +500,6 @@
                 'columnWidth': me.$gridSizer[0]
             });
 
-            me.$el.masonry('on', 'layoutComplete', $.proxy(me.onMasonryLayout, me));
-
             $.publish('plugin/emotion/initMasonryGrid', me);
         },
 
@@ -531,7 +529,7 @@
         registerEvents: function() {
             var me = this;
 
-            $window.on('resize', $.proxy(me.onResize, me));
+            StateManager.on('resize', $.proxy(me.onResize, me));
 
             if (me.opts.fullscreen) {
                 $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.initFullscreen, me));
@@ -553,19 +551,6 @@
 
             me.$bannerElements.trigger('emotionResize');
             me.$videoElements.trigger('emotionResize');
-        },
-
-        /**
-         * Called by the masonry plugin on layout change.
-         */
-        onMasonryLayout: function() {
-            var me = this;
-
-            me.$productSliderElements.each(function(index, item) {
-                var $item = $(item);
-
-                console.log(Math.round(100/ me.$el.outerWidth() * $item.parents('.emotion--product-slider').outerWidth()));
-            });
         },
 
         /**
@@ -784,6 +769,14 @@
             videoSelector: '.video--element',
 
             /**
+             * The DOM selector for the video cover element.
+             *
+             * @property coverSelector
+             * @type {string}
+             */
+            coverSelector: '.video--cover',
+
+            /**
              * The DOM selector for the play button.
              *
              * @property playBtnSelector
@@ -809,10 +802,18 @@
             me.applyDataAttributes();
 
             me.$video = me.$el.find(me.opts.videoSelector);
+            me.$videoCover = me.$el.find(me.opts.coverSelector);
             me.$playBtn = me.$el.find(me.opts.playBtnSelector);
             me.$playBtnIcon = me.$playBtn.find(me.opts.playIconSelector);
 
             me.player = me.$video.get(0);
+
+            /**
+             * Cross browser mute support.
+             */
+            if (me.$video.attr('muted') !== undefined) {
+                me.player.volume = 0.0;
+            }
 
             me.setScaleOrigin(me.opts.scaleOriginX, me.opts.scaleOriginY);
 
@@ -827,10 +828,12 @@
 
             me._on(me.$video, 'loadedmetadata', $.proxy(me.onLoadMeta, me));
             me._on(me.$video, 'canplay', $.proxy(me.onCanPlay, me));
+            me._on(me.$video, 'play', $.proxy(me.onVideoPlay, me));
             me._on(me.$video, 'ended', $.proxy(me.onVideoEnded, me));
 
             me._on(me.$el, 'emotionResize', $.proxy(me.resizeVideo, me));
 
+            me._on(me.$videoCover, 'click', $.proxy(me.onPlayClick, me));
             me._on(me.$playBtn, 'click', $.proxy(me.onPlayClick, me));
         },
 
@@ -861,6 +864,15 @@
         },
 
         /**
+         * Called on play event.
+         */
+        onVideoPlay: function() {
+            var me = this;
+
+            me.$videoCover.hide();
+        },
+
+        /**
          * Called on ended event.
          * Sets the correct play button icon.
          */
@@ -874,8 +886,10 @@
          * Called on click event on the the play button.
          * Starts or pauses the video.
          */
-        onPlayClick: function() {
+        onPlayClick: function(event) {
             var me = this;
+
+            event.preventDefault();
 
             (me.player.paused) ? me.playVideo() : me.stopVideo();
         },

@@ -14,19 +14,9 @@
         {* Slider content based on the configuration *}
         {block name="widget_emotion_component_product_slider_content"}
 
-            {if $itemCols == 1}
-                {$itemsPerPage = 1}
-            {elseif $itemCols == 2}
-                {$itemsPerPage = 3}
-            {elseif $itemCols == 3}
-                {$itemsPerPage = 4}
-            {else}
-                {$itemsPerPage = 5}
-            {/if}
-
             <div class="product-slider--content"
                  data-product-slider="true"
-                 data-itemsPerPage="{$itemsPerPage}"
+                 data-itemsPerPage="{$itemCols}"
                  {if $Data.article_slider_type !== 'selected_article'}data-mode="ajax"{/if}
                  {if $Data.ajaxFeed}data-ajaxCtrlUrl="{$Data.ajaxFeed}"{/if}
                  {if $Data.article_slider_category}data-ajaxCategoryID="{$Data.article_slider_category}"{/if}
