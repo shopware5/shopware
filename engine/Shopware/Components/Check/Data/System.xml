@@ -11,7 +11,7 @@
 	 	<name>ionCube Loader</name><group>core</group><required>4.0.0</required>
 	</requirement>
 	<requirement>
-	 	<name>mysql</name><group>core</group><required>5.1.0</required>
+	 	<name>mysql</name><group>core</group><required>5.5.0</required>
 	</requirement>
 	<requirement>
 	 	<name>pdo</name><group>core</group><required>1</required>

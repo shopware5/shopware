@@ -117,8 +117,8 @@ class Database
         try {
             $sql = "SELECT VERSION()";
             $result = $this->database->query($sql)->fetchColumn(0);
-            if (version_compare($result, '5.1.0', '<')) {
-                $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.1.0.<br/>");
+            if (version_compare($result, '5.5.0', '<')) {
+                $this->setError("Database-Error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5.0.<br/>");
 
                 return false;
             }
