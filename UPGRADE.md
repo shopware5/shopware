@@ -97,6 +97,7 @@ In this document you will find a changelog of the important changes related to t
     * On theme change
     * On theme settings change
     * On plugin install, by adding `theme` to the optional caches array returned in `install()`
+* Added `http cache warmer` modal window in the performance module and console command `sw:warm:http:cache`
 * Dropped unused table `s_cms_groups`
 * Deprecate Legacy API `Shopware->Api()`, will be removed in SW 5.1
 * Removed deprecated class `Enlight_Components_Log` (also accessed as `Shopware->Log()`)

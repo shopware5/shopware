@@ -71,6 +71,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         seo:  {
             title: '{s name=multi_request/sei}Build index for SEO{/s}',
+            snippetResource: 'seo',
             totalCountUrl: '{url controller="Seo" action="getCount"}',
             requestUrls: {
                 init: '{url controller="Seo" action="initSeo"}',
@@ -102,6 +103,19 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             totalCountUrl: '{url controller="Performance" action="prepareTree"}',
             requestUrl: '{url controller="Performance" action="fixCategories"}',
             batchSize: 100
+        },
+        httpCacheWarmer:  {
+            title: '{s name=multi_request/http_cache_warmer/windowTitle}Warm up cache{/s}',
+            snippetResource: 'httpCacheWarmer',
+            totalCountUrl: '{url controller="Performance" action="getHttpURLs"}',
+            requestUrls: {
+                article: '{url controller="Performance" action="warmUpCache" resource=article}',
+                category: '{url controller="Performance" action="warmUpCache" resource=category}',
+                blog: '{url controller="Performance" action="warmUpCache" resource=blog}',
+                static: '{url controller="Performance" action="warmUpCache" resource=static}',
+                supplier: '{url controller="Performance" action="warmUpCache" resource=supplier}'
+            },
+            batchSize: 10
         }
     },
 
@@ -116,6 +130,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             'performance-main-multi-request-tasks': {
                 'onShopSelected': me.onShopSelected,
                 'startSeoIndex': me.onStartSeoIndex,
+                'startHttpCacheWarmUp': me.onStartHttpCacheWarmUp,
                 'multiRequestTasksCancelProcess': me.onCancelMultiRequest
             },
             'performance-main-multi-request-dialog': {
@@ -142,133 +157,62 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 var json = Ext.decode(response.responseText);
                 taskConfig.totalCounts = json.data.counts;
 
-                window.articleProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.article, 0, taskConfig.totalCounts.article)
-                );
-                window.categoryProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.category, 0, taskConfig.totalCounts.category)
-                );
-                window.emotionProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.emotion, 0, taskConfig.totalCounts.emotion)
-                );
-                window.statisticProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.statistic, 0, taskConfig.totalCounts.statistic)
-                );
-                window.blogProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.blog, 0, taskConfig.totalCounts.blog)
-                );
-                window.contentProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.content, 0, taskConfig.totalCounts.content)
-                );
-                window.supplierProgress.updateProgress(
-                    0, Ext.String.format(window.snippets.seo.supplier, 0, taskConfig.totalCounts.supplier)
-                );
+                if(taskConfig.totalCounts.article) {
+                    window.articleProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
+                    );
+                }
+                if(taskConfig.totalCounts.category) {
+                    window.categoryProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
+                    );
+                }
+                if(taskConfig.totalCounts.emotion) {
+                    window.emotionProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
+                    );
+                }
+
+                if(taskConfig.totalCounts.statistic) {
+                    window.statisticProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].statistic, 0, taskConfig.totalCounts.statistic)
+                    );
+                }
+                if(taskConfig.totalCounts.static) {
+                    window.staticProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
+                    );
+                }
+                if(taskConfig.totalCounts.blog) {
+                    window.blogProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
+                    );
+                }
+                if(taskConfig.totalCounts.content) {
+                    window.contentProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
+                    );
+                }
+                if(taskConfig.totalCounts.supplier) {
+                    window.supplierProgress.updateProgress(
+                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
+                    );
+                }
 
                 window.startButton.enable();
             }
         });
     },
 
-    getSeoArticleRequestConfig: function(window) {
+    getRequestConfig: function(window, progress, taskName, resource) {
         var me = this;
 
         return {
             batchSize: window.batchSizeCombo.getValue(),
-            progress: window.articleProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.article,
-            totalCount: window.taskConfig.totalCounts.article * 1,
-            snippet: window.snippets.seo.article,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoCategoryRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.categoryProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.category,
-            totalCount: window.taskConfig.totalCounts.category * 1,
-            snippet: window.snippets.seo.category,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoEmotionRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.emotionProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.emotion,
-            totalCount: window.taskConfig.totalCounts.emotion * 1,
-            snippet: window.snippets.seo.emotion,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoBlogRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.blogProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.blog,
-            totalCount: window.taskConfig.totalCounts.blog * 1,
-            snippet: window.snippets.seo.blog,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoStatisticRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.statisticProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.statistic,
-            totalCount: window.taskConfig.totalCounts.statistic * 1,
-            snippet: window.snippets.seo.statistic,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoContentRequestConfig: function(window) {
-        var me = this;
-
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.contentProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.content,
-            totalCount: window.taskConfig.totalCounts.content * 1,
-            snippet: window.snippets.seo.content,
-            params: {
-                shopId: window.shopCombo.getValue()
-            }
-        };
-    },
-
-    getSeoSupplierRequestConfig: function(window) {
-        var me = this;
-
-        return {
-            batchSize: window.batchSizeCombo.getValue(),
-            progress: window.supplierProgress,
-            requestUrl: me.requestConfig.seo.requestUrls.supplier,
-            totalCount: window.taskConfig.totalCounts.supplier * 1,
-            snippet: window.snippets.seo.supplier,
+            progress: window[progress],
+            requestUrl: me.requestConfig[taskName].requestUrls[resource],
+            totalCount: window.taskConfig.totalCounts[resource] * 1,
+            snippet: window.snippets[taskName][resource],
             params: {
                 shopId: window.shopCombo.getValue()
             }
@@ -296,20 +240,39 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     onStartSeoIndex: function(window) {
         var me = this, configs = [];
 
-        configs.push(me.getSeoInitRequestConfig(window));
+        configs.push(me.getSeoInitRequestConfig(window, me.requestConfig.seo));
 
-        configs.push(me.getSeoArticleRequestConfig(window));
-        configs.push(me.getSeoCategoryRequestConfig(window));
-        configs.push(me.getSeoEmotionRequestConfig(window));
-        configs.push(me.getSeoBlogRequestConfig(window));
-        configs.push(me.getSeoStatisticRequestConfig(window));
-        configs.push(me.getSeoContentRequestConfig(window));
-        configs.push(me.getSeoSupplierRequestConfig(window));
+        configs.push(me.getRequestConfig(window, 'articleProgress', 'seo', 'article'));
+        configs.push(me.getRequestConfig(window, 'categoryProgress', 'seo', 'category'));
+        configs.push(me.getRequestConfig(window, 'emotionProgress', 'seo', 'emotion'));
+        configs.push(me.getRequestConfig(window, 'blogProgress', 'seo', 'blog'));
+        configs.push(me.getRequestConfig(window, 'statisticProgress', 'seo', 'statistic'));
+        configs.push(me.getRequestConfig(window, 'contentProgress', 'seo', 'content'));
+        configs.push(me.getRequestConfig(window, 'supplierProgress', 'seo', 'supplier'));
+
+        window.startButton.disable();
+        window.cancelButton.enable();
 
         me.runRequest(0, window, null, configs);
 
-        window.startButton.show();
-        window.cancelButton.hide();
+    },
+    /**
+     * Called after the user hits the 'start' button of the multiRequestDialog
+     */
+    onStartHttpCacheWarmUp: function(window) {
+        var me = this, configs = [];
+
+        configs.push(me.getRequestConfig(window, 'articleProgress', 'httpCacheWarmer', 'article'));
+        configs.push(me.getRequestConfig(window, 'categoryProgress', 'httpCacheWarmer', 'category'));
+        configs.push(me.getRequestConfig(window, 'blogProgress', 'httpCacheWarmer', 'blog'));
+        configs.push(me.getRequestConfig(window, 'staticProgress', 'httpCacheWarmer', 'static'));
+        configs.push(me.getRequestConfig(window, 'supplierProgress', 'httpCacheWarmer', 'supplier'));
+
+        window.startButton.disable();
+        window.cancelButton.enable();
+
+        me.runRequest(0, window, null, configs);
+
     },
 
 
