@@ -385,7 +385,7 @@ class Zend_Session extends Zend_Session_Abstract
     {
         if ((bool)ini_get('session.use_cookies') == true && isset($_COOKIE[session_name()])) {
             return true;
-        } elseif ((bool)ini_get('session.use_only_cookies') == false && isset($_REQUEST[session_name()])) {
+        } elseif (isset($_REQUEST[session_name()])) {
             return true;
         } elseif (self::$_unitTestEnabled) {
             return true;
@@ -441,11 +441,11 @@ class Zend_Session extends Zend_Session_Abstract
             self::setOptions(is_array($options) ? $options : array());
         }
 
-        if(!self::getId() && ini_get('session.use_cookies')==1 && !empty($_COOKIE[session_name()])) {
-            self::setId($_COOKIE[session_name()]);
-        }
         if(!self::getId() && !empty($_REQUEST[session_name()])) {
             self::setId($_REQUEST[session_name()]);
+        }
+        if(!self::getId() && ini_get('session.use_cookies')==1 && !empty($_COOKIE[session_name()])) {
+            self::setId($_COOKIE[session_name()]);
         }
         if(!self::getId()) {
             self::setId(sha1(uniqid('', true)));
