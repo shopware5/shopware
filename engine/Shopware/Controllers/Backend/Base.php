@@ -34,9 +34,8 @@
  *  - Payments
  *  - Suppliers
  *  - Shops
- *  - Locales (By sth)
- *  - User (By ps)
- *
+ *  - Locales
+ *  - User
  */
 class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs
 {
@@ -53,7 +52,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         if (!$this->Request()->getActionName()
             || in_array($this->Request()->getActionName(), array('index', 'load'))
         ) {
-
             $this->View()->addTemplateDir('.');
             $this->Front()->Plugins()->ScriptRenderer()->setRender();
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -832,5 +830,26 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'data' => $options,
             'total' => $count+2
         ));
+    }
+
+    /**
+     * Validates the email address in parameter "value"
+     * Sets the response body to "1" if valid, to an empty string otherwise
+     */
+    public function validateEmailAction()
+    {
+        // disable template renderer and automatic json renderer
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+
+        $email = $this->Request()->getParam('value');
+
+        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get('validator.email');
+        if ($emailValidator->isValid($email)) {
+            $this->Response()->setBody(1);
+        } else {
+            $this->Response()->setBody("");
+        }
     }
 }

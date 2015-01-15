@@ -691,16 +691,24 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function validateEmailAction()
     {
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-        $mail = $this->Request()->value;
 
-        $query = $this->getRepository()->getValidateEmailQuery($mail, $this->Request()->param,$this->Request()->subshopId);
+        $mail = $this->Request()->get('value');
+
+        $query = $this->getRepository()->getValidateEmailQuery(
+            $mail,
+            $this->Request()->get('param'),
+            $this->Request()->get('subshopId')
+        );
 
         $customer = $query->getArrayResult();
 
-        if (empty($customer) && preg_match('/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i', $mail)) {
-            echo true;
+        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get('validator.email');
+
+        if (empty($customer) && $emailValidator->isValid($mail)) {
+            $this->Response()->setBody(1);
         } else {
-            echo false;
+            $this->Response()->setBody("");
         }
     }
 

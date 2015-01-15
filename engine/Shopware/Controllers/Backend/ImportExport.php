@@ -1949,8 +1949,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $errors = array();
 
-        $emailValidator = new Zend_Validate_EmailAddress();
-        $emailValidator->getHostnameValidator()->setValidateTld(false);
+        $emailValidator = $this->container->get('validator.email');
         foreach ($results as $newsletterData) {
             if (empty($newsletterData['email'])) {
                 $errors[] = "Empty email field";

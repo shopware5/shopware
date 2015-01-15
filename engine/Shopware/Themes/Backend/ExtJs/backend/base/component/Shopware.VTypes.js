@@ -45,6 +45,8 @@ Ext.apply(Ext.form.field.VTypes, {
 
     missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property',
 
+    emailMask: /[a-z\u00C0-\u00FF0-9_\.\-@\+]/i,
+
     /**
      * Remote validation method which sets an event listener on the blur event of
      * the field and validates the value with the server-side.
