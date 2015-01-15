@@ -403,8 +403,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $sErrorFlag['sCaptcha'] = true;
                 }
             }
-            $validator = new Zend_Validate_EmailAddress();
-            $validator->getHostnameValidator()->setValidateTld(false);
+            $validator = $this->container->get('validator.email');
             if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                 $sErrorFlag['eMail'] = true;
             }

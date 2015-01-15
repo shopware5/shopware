@@ -292,6 +292,7 @@ In this document you will find a changelog of the important changes related to t
 * Added category selection for blog emotion widget
 * Changed default sorting of pictures in the backend's Media Manager. Newer pictures are now displayed first.
 * `widgets/campaign` is now included in the HTTP cache's default configuration
+* Email validation is now done using the `egulias/email-validator` library. `Zend_Validate_EmailAddress` is deprecated.
 
 ## 4.3.1
 

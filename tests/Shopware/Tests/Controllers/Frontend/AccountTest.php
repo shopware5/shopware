@@ -82,12 +82,13 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
             // new non released domains
             'test@example.active',
             'test@example.love',
-            'test@example.video'
+            'test@example.video',
+
+            'test@example'
         );
 
         $invalidEmailAddresses = array(
             'test',
-            'test@example',
             'test@.de',
             '@example',
             '@example.de',
@@ -95,8 +96,7 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
             ' @ .de',
         );
 
-        $validator = new Zend_Validate_EmailAddress();
-        $validator->getHostnameValidator()->setValidateTld(false);
+        $validator = Shopware()->Container()->get('validator.email');
 
         foreach($emailAddresses as $email) {
             $this->assertTrue($validator->isValid($email));

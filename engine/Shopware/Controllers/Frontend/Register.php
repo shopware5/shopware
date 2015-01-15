@@ -646,8 +646,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $error_flags = array();
         $error_messages = array();
-        $validator = new Zend_Validate_EmailAddress();
-        $validator->getHostnameValidator()->setValidateTld(false);
+        $validator = $this->container->get('validator.email');
 
         if (empty($this->post['personal']['email'])) {
 

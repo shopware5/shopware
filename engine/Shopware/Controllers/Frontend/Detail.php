@@ -184,8 +184,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $sErrorFlag['sCaptcha'] = true;
             }
         }
-        $validator = new Zend_Validate_EmailAddress();
-        $validator->getHostnameValidator()->setValidateTld(false);
+        $validator = $this->container->get('validator.email');
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])
                 || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))

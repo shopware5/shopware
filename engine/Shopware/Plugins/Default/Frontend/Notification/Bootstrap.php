@@ -126,9 +126,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $action->View()->NotifyEmailError = false;
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
-            $validator = new Zend_Validate_EmailAddress();
-            $validator->getHostnameValidator()->setValidateTld(false);
-            if (empty($email) || !$validator->isValid($email)) {
+            $validator = Shopware()->Container()->get('validator.email');
+            if (empty($email) || !$validator->isValid($email, false, true)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
             } elseif (!empty($notifyOrderNumber)) {
