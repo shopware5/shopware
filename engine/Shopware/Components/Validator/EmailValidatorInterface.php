@@ -21,10 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Components\Validator;
-
-use Egulias\EmailValidator\EmailValidator as BaseEmailValidator;
 
 /**
  * The Validator\EmailValidator class is used to validate emails addresses consistently across the system
@@ -33,20 +30,13 @@ use Egulias\EmailValidator\EmailValidator as BaseEmailValidator;
  * @package   Shopware\Components\Validator
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class EmailValidator implements EmailValidatorInterface
+interface EmailValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * Validates the provided email address
+     *
+     * @param string $emailAddress
+     * @return bool
      */
-    public function isValid($emailAddress)
-    {
-        /**
-         * Creates a new instance of the underlying validator class
-         * on each validation request to avoid problems related to
-         * state in the validator implementation
-         */
-        $baseValidator = new BaseEmailValidator();
-
-        return $baseValidator->isValid($emailAddress, false, true);
-    }
+    public function isValid($emailAddress);
 }
