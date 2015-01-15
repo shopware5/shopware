@@ -497,8 +497,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
-        // NEVER cache a filled mini-basket
-        if ($controllerName == 'widgets/checkout' && !empty(Shopware()->Session()->sBasketQuantity)) {
+        // Don't cache filled basket or wishlist
+        if ($controllerName == 'widgets/checkout' && (!empty(Shopware()->Session()->sBasketQuantity) || !empty(Shopware()->Session()->sNotesQuantity))) {
             $this->response->setHeader('Cache-Control', 'private, no-cache');
             return false;
         }
