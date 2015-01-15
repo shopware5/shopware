@@ -107,8 +107,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     {
         if (!empty(Shopware()->System()->_GET['sCategory'])) {
             return (int)Shopware()->System()->_GET['sCategory'];
-        } elseif (Shopware()->Front()->Request()->getQuery('sCategory')) {
-            return (int)Shopware()->Front()->Request()->getQuery('sCategory');
+        } elseif (Shopware()->Front()->Request()->get('sCategory')) {
+            return (int)Shopware()->Front()->Request()->get('sCategory');
         } else {
             return (int)$default;
         }
