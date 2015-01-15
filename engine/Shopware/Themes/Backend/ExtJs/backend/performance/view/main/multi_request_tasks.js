@@ -117,12 +117,24 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             statistic: '{s name=progress/statistic}[0] of [1] statistic urls{/s}',
             content: '{s name=progress/content}[0] of [1] content urls{/s}',
             supplier: '{s name=progress/supplier}[0] of [1] supplier urls{/s}'
+        },
+        httpCacheWarmer: {
+            initialArticle: '{s name=progress/initialArticles}Article URLs...{/s}',
+            initialCategory: '{s name=progress/initialCategory}Category URLs...{/s}',
+            initialBlog: '{s name=progress/initialBlog}Blog URLs...{/s}',
+            initialStatic: '{s name=progress/initialStatic}Static URLs...{/s}',
+            initialSupplier: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
+            article: '{s name=progress/articles}[0] of [1] article URLs{/s}',
+            category: '{s name=progress/category}[0] of [1] category URLs{/s}',
+            blog: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
+            static: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
+            supplier: '{s name=progress/supplier}[0] of [1] supplier URLs{/s}'
         }
     },
 
     batchSize: 50,
 
-    taskType: 'seo',
+    currentType: 'seo',
 
 
     /**
@@ -149,8 +161,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     createItems: function() {
         var me = this;
 
-        if (me.taskType === 'seo') {
+        if (me.currentType === 'seo') {
             return me.createSeoItems();
+        } else if (me.currentType === 'httpCacheWarmer') {
+            return me.createHttpCacheWarmerItems();
         } else {
             return me.createSearchIndexItems();
         }
@@ -184,6 +198,37 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     me.blogProgress,
                     me.statisticProgress,
                     me.contentProgress,
+                    me.supplierProgress
+                ]
+            },
+            me.createBatchSizeCombo(),
+            me.createButtons()
+        ];
+    },
+
+    /**
+     * Helper function to create the window items for the seo index
+     * @returns Array
+     */
+    createHttpCacheWarmerItems: function() {
+        var me = this;
+
+        me.articleProgress = me.createProgressBar('article', me.snippets.httpCacheWarmer.initialArticle);
+        me.categoryProgress = me.createProgressBar('category', me.snippets.httpCacheWarmer.initialCategory);
+        me.staticProgress = me.createProgressBar('static', me.snippets.httpCacheWarmer.initialStatic);
+        me.blogProgress = me.createProgressBar('blog', me.snippets.httpCacheWarmer.initialBlog);
+        me.supplierProgress = me.createProgressBar('supplier', me.snippets.httpCacheWarmer.initialSupplier);
+
+        return [
+            me.createShopCombo(),
+            {
+                xtype: 'container',
+                padding: '20 0',
+                items: [
+                    me.articleProgress,
+                    me.categoryProgress,
+                    me.blogProgress,
+                    me.staticProgress,
                     me.supplierProgress
                 ]
             },
@@ -309,8 +354,11 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 this.hide();
                 me.cancelButton.show();
                 me.closeButton.disable();
-                if (me.taskType === 'seo') {
+                if (me.currentType === 'seo') {
                     me.fireEvent('startSeoIndex', me);
+                }
+                else if (me.currentType === 'httpCacheWarmer') {
+                    me.fireEvent('startHttpCacheWarmUp', me);
                 }
             }
         });
