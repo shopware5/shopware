@@ -87,6 +87,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $selection
         );
 
+        if (!$this->Request()->get('sCategory')) {
+            $this->Request()->setParam('sCategory', $article['categoryID']);
+        }
+
         if (empty($article) || empty($article["articleName"])) {
             return $this->forward('error');
         }
