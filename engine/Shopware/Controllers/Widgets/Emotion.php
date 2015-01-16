@@ -644,10 +644,29 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function previewAction()
     {
         $emotionId = $this->Request()->getParam('emotionId');
-        $showShopLayout = $this->Request()->getParam('showShopLayout');
 
-        $this->View()->emotionId = $emotionId;
-        $this->View()->showShopLayout = $showShopLayout;
+        // fetch devices on responsive template or load full emotions for older templates.
+        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
+
+        if ($templateVersion >= 3) {
+            
+            $emotions = $this->get('emotion_device_configuration')->getById($emotionId);
+
+            $viewAssignments['emotions'] = $emotions;
+            $viewAssignments['hasEmotion'] = (!empty($emotions));
+
+            $viewAssignments['showListing'] = (bool) max(array_column($emotions, 'showListing'));
+
+        } else {
+            //check category emotions
+            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+            $viewAssignments['hasEmotion'] = !empty($emotion);
+        }
+
+        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
+        $viewAssignments['showListing'] = $showListing;
+        
+        $this->View()->assign($viewAssignments);
 
         //fake to prevent rendering the templates with the widgets module.
         //otherwise the template engine don't accept to load templates of the `frontend` module

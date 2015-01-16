@@ -76,4 +76,55 @@ class DeviceConfiguration
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @param $emotionId
+     * @throws \Exception
+     * @return array
+     */
+    public function getById($emotionId)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(array(
+            'emotion.id',
+            'emotion.device as devices',
+            'emotion.show_listing as showListing'
+        ));
+
+        $query->from('s_emotion', 'emotion')
+            ->where('emotion.id = :emotionId')
+            ->setParameter(':emotionId', $emotionId);
+
+        /**@var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param $emotionId
+     * @throws \Exception
+     * @return array
+     */
+    public function getLandingPageById($emotionId)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(array(
+            'emotion.id',
+            'emotion.device as devices',
+        ));
+
+        $query->from('s_emotion', 'emotion')
+            ->where('emotion.id = :emotionId')
+            ->andWhere('valid_from IS NULL || valid_from <= now()')
+            ->andWhere('valid_to IS NULL || valid_to >= now()')
+            ->setParameter('emotionId', $emotionId);
+
+        /**@var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_ASSOC);
+    }
 }
