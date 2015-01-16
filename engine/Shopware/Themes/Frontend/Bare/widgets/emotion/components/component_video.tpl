@@ -8,17 +8,27 @@
         {block name="widget_emotion_component_video_element"}
             {strip}
             <video class="video--element"
-                    {if $Data.fallback_picture} poster="{link file=$Data.fallback_picture}"{/if}
-                    {if $Data.autobuffer} preload{/if}
-                    {if $Data.autoplay} autoplay{/if}
-                    {if $Data.loop} loop{/if}
-                    {if $Data.controls} controls{/if}
-                    {if $Data.muted} muted{/if}>
-                <source src="{link file=$Data.webm_video}" type="video/webm">
-                <source src="{link file=$Data.h264_video}" type="video/mp4">
+                   poster="none"
+                   {if $Data.autobuffer} preload{/if}
+                   {if $Data.autoplay} autoplay{/if}
+                   {if $Data.loop} loop{/if}
+                   {if $Data.controls} controls{/if}
+                   {if $Data.muted} muted{/if}>
+                <source src="{link file=$Data.webm_video}" type="video/webm" />
+                <source src="{link file=$Data.h264_video}" type="video/mp4" />
                 <source src="{link file=$Data.ogg_video}" type="video/ogg" />
             </video>
             {/strip}
+        {/block}
+
+        {block name="widget_emotion_component_video_cover_image"}
+            {if $Data.fallback_picture}
+                <a href="#play-video"
+                   class="video--cover"
+                   style="background-image: url('{link file=$Data.fallback_picture}');">
+                    <i class="video--play-icon icon--play"></i>
+                </a>
+            {/if}
         {/block}
 
         {block name="widget_emotion_component_video_play_button"}
