@@ -131,25 +131,32 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.ShopwareId', {
             url: url,
             method: 'POST',
             params: params,
-            success: function(response) {
-                var result = Ext.JSON.decode(response.responseText);
+            callback: function(options, success, response) {
+                var result = Ext.JSON.decode(response.responseText, true),
+                    message;
 
-                if (!result || result.success == false) {
+                if (!Ext.isEmpty(result) && !Ext.isEmpty(result.message)) {
+                    message = result.message;
+                } else {
+                    message = response.responseText;
+                }
+
+                if (!success || !result || result.success == false) {
                     Shopware.Notification.createGrowlMessage(
                         snippetNamespace.errorTitle,
-                        Ext.String.format(snippetNamespace.errorServerMessage, result.message),
+                        Ext.String.format(snippetNamespace.errorServerMessage, message),
                         me.snippets.growlMessage
                     );
                     me.splashScreen.close();
-                } else if(result.success) {
+                } else if (success && result.success) {
                     Shopware.Notification.createGrowlMessage(
                         snippetNamespace.successTitle,
                         snippetNamespace.successMessage,
                         me.snippets.growlMessage
                     );
 
-                    if (params.skipDomainRegistration === false) {
-                        me.submitShopwareDomainRequest(me, params);
+                    if (params.registerDomain !== false) {
+                        me.submitShopwareDomainRequest(params);
                     } else {
                         me.lockView();
                     }

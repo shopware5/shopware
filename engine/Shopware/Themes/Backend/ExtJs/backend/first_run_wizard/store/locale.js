@@ -30,16 +30,18 @@
  */
 
 //{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/store/plugin"}
+//{block name="backend/first_run_wizard/store/locale"}
 
-Ext.define('Shopware.apps.FirstRunWizard.store.Plugin', {
-    extend:'Shopware.store.Listing',
-    model: 'Shopware.apps.FirstRunWizard.model.Plugin',
-
-    configure: function() {
-        return {
-            controller: 'FirstRunWizardPlugin'
-        };
+Ext.define('Shopware.apps.FirstRunWizard.store.Locale', {
+	extend: 'Ext.data.Store',
+	model : 'Shopware.apps.FirstRunWizard.model.Locale',
+    proxy: {
+        type: 'ajax',
+        url: '{url action=getAlternativeLocales}',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     }
 });
 

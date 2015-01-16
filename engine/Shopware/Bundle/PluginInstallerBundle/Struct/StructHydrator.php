@@ -112,13 +112,16 @@ class StructHydrator
     }
 
     /**
-     * @param $data
-     * @param $shopwareId
+     * @param array $data
+     * @param string $shopwareId
      * @return AccessTokenStruct
      */
     public function hydrateAccessToken($data, $shopwareId)
     {
-        $time = new \DateTime($data['expire']['date']);
+        $time = new \DateTime(
+            $data['expire']['date'],
+            new \DateTimeZone($data['expire']['timezone'])
+        );
 
         $struct = new AccessTokenStruct(
             $data['token'],

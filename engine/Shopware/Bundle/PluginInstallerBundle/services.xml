@@ -50,6 +50,7 @@
         <service id="account_manager_service" class="Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService">
             <argument type="service" id="store_client" />
             <argument type="service" id="plugin_installer_struct_hydrator" />
+            <argument type="service" id="snippets" />
         </service>
 
         <service id="plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />

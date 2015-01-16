@@ -38,10 +38,11 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     extend:'Enlight.app.Window',
     cls: 'first-run-wizard',
     alias: 'widget.first-run-wizard',
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
+    layout: 'border',
+
+    minHeight: 750,
+
+    width: 900,
 
     /**
      * Flag to only close the window when the process is finished or the user
@@ -78,10 +79,16 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         }
     },
 
+    basePath: '{link file=""}',
+
     initComponent: function() {
         var me = this;
 
         me.title = me.snippets.title;
+
+        if (me.basePath.substr(-1) == '/') {
+            me.basePath = me.basePath.substr(0, me.basePath.length - 1);
+        }
 
         me.items = me.createItems();
 
@@ -112,19 +119,40 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     createItems: function() {
         var me = this, items = [];
 
-        items.push(me.createNavigation());
+        items.push(
+            Ext.create('Ext.container.Container', {
+                region: 'north',
+                name: 'header',
+                cls: 'header',
+                height: 76,
+                items: [
+                    Ext.create('Ext.Img', {
+                        src: me.basePath + '/engine/Shopware/Themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/frw-logo.png',
+                        renderTo: Ext.getBody()
+                    })
+                ]
+            })
+        );
 
         me.cardContainer = Ext.create('Ext.container.Container', {
             layout: 'card',
+            region: 'center',
+            autoScroll: true,
             name: 'card-container',
             cls: 'card-container',
-            flex: 1,
             items: me.createProcessItems()
         });
 
-        me.cardContainer.layout.setActiveItem(me.currentStep - 1);
-
-        items.push(me.cardContainer);
+        items.push(
+            Ext.create('Ext.container.Container', {
+                region: 'center',
+                layout: 'border',
+                items: [
+                    me.createNavigation(),
+                    me.cardContainer
+                ]
+            })
+        );
 
         return items;
     },
@@ -139,9 +167,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         );
         items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Localization')
-        );
-        items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.Payment')
         );
         items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.DemoData')
@@ -168,14 +193,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         var store = Ext.create('Ext.data.Store', {
             fields: ['name', 'disabled'],
             data: [
-                { name: 'Home',                 disabled: false },
-                { name: 'Localization',         disabled: !(me.isConnected === true) },
-                { name: 'Payment',              disabled: !(me.isConnected === true) },
-                { name: 'Demo data',            disabled: !(me.isConnected === true) },
-                { name: 'Recommendations',      disabled: !(me.isConnected === true) },
-                { name: 'Configuration',        disabled: false },
-                { name: 'Shopware ID',          disabled: !(me.isConnected === true) },
-                { name: 'Finished',             disabled: false }
+                { name: '{s name=home/content/title}Welcome to Shopware{/s}',       disabled: false },
+                { name: '{s name=localization/content/title}Localization{/s}',      disabled: !(me.isConnected === true) },
+                { name: '{s name=demo_data/content/title}Demo Data{/s}',            disabled: !(me.isConnected === true) },
+                { name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: !(me.isConnected === true) },
+                { name: '{s name=config/content/title}Configuration{/s}',           disabled: false },
+                { name: '{s name=shopware_id/content/title}Shopware ID{/s}',        disabled: !(me.isConnected === true) },
+                { name: '{s name=finish/content/title}Finished{/s}',                disabled: false }
             ]
         });
 
@@ -184,6 +208,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             width: 200,
             name: 'navigation',
             store: store,
+            region: 'west',
             itemSelector: '.item',
             cls: 'wizard-navigation'
         });
@@ -223,7 +248,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             text: me.snippets.buttons.back,
             cls: 'secondary',
             name: 'previous-button',
-            disabled: true,
             width: 180,
             handler: function() {
                 var currentContainer = me.cardContainer.layout.getActiveItem(),

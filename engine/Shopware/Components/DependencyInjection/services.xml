@@ -350,7 +350,7 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service id="first_run_wizard_plugin_store" class="Shopware\Components\FirstRunWizard\PluginStoreService">
+        <service id="first_run_wizard_plugin_store" class="Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService">
             <argument type="service" id="plugin_installer_struct_hydrator" />
             <argument type="service" id="plugin_service_local" />
             <argument type="service" id="store_client" />

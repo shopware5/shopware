@@ -49,10 +49,10 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
     init: function () {
         var me = this;
 
-        me.firstRunWizardStep = parseInt(Ext.util.Cookies.get('firstRunWizardStep'));
+        me.firstRunWizardStep = parseInt(Ext.util.Cookies.get('firstRunWizardStep'), 10);
         me.firstRunWizardIsConnected = Ext.util.Cookies.get('firstRunWizardIsConnected');
 
-        if (Ext.isEmpty(me.firstRunWizardStep)) {
+        if (Ext.isEmpty(me.firstRunWizardStep) || isNaN(me.firstRunWizardStep)) {
             me.firstRunWizardStep = 0;
         }
         if (Ext.isEmpty(me.firstRunWizardIsConnected)) {
@@ -69,22 +69,27 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             }
         });
 
-        me.getView('main.Window').create({
+        me.mainWindow = me.getView('main.Window').create({
             currentStep: me.firstRunWizardStep,
-            isConnected: me.firstRunWizardIsConnected
-        }).show();
+            isConnected: me.firstRunWizardIsConnected,
+            listeners: {
+                afterrender: function() {
+                    me.navigateTo(me.firstRunWizardStep-1);
+                }
+            }
+        });
+
+        me.mainWindow.show();
 
         me.validateButtons();
 
         me.callParent(arguments);
+
     },
 
     navigateNext: function() {
         var me = this,
-            cardContainer = me.getCardContainer(),
-            calculatedStep;
-
-        calculatedStep = me.switchNavigation(+1);
+            calculatedStep = me.switchNavigation(+1);
 
         if (calculatedStep == null) {
             me.getWizardWindow().confirmedClose = true;
@@ -92,18 +97,26 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             return;
         }
 
-        cardContainer.getLayout().setActiveItem(calculatedStep);
-        me.validateButtons();
+        me.navigateTo(calculatedStep);
     },
 
     navigateBack: function() {
         var me = this,
+            calculatedStep = me.switchNavigation(-1);
+
+        me.navigateTo(calculatedStep);
+    },
+
+    navigateTo: function(index) {
+        var me = this,
             cardContainer = me.getCardContainer(),
-            calculatedStep;
+            nextItem;
 
-        calculatedStep = me.switchNavigation(-1);
-
-        cardContainer.getLayout().setActiveItem(calculatedStep);
+        nextItem = cardContainer.items.get(index);
+        cardContainer.getLayout().setActiveItem(index);
+        if (nextItem && Ext.isFunction(nextItem.refreshData)) {
+            nextItem.refreshData();
+        }
         me.validateButtons();
     },
 
@@ -180,17 +193,17 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             toolbar = me.getButtonToolbar();
 
         activeLayout = layout.getActiveItem();
-        if (typeof activeLayout.getButtons === "function") {
+        if (Ext.isFunction(activeLayout.getButtons)) {
             customButtons = activeLayout.getButtons();
         }
 
         defaultButtons = {
             previous: {
-                enabled: true,
+                visible: true,
                 text: me.getWizardWindow().snippets.buttons.back
             },
             next: {
-                enabled: true,
+                visible: true,
                 text: me.getWizardWindow().snippets.buttons.next
             },
             extraButtonSettings: null
@@ -199,25 +212,26 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         buttons = Ext.Object.merge(defaultButtons, customButtons);
 
         me.getPreviousButton().setText(buttons.previous.text);
-        if (buttons.previous.enabled === true) {
-            me.getPreviousButton().enable();
+        if (buttons.previous.visible === true) {
+            me.getPreviousButton().show();
         } else {
-            me.getPreviousButton().disable();
+            me.getPreviousButton().hide();
         }
 
         me.getNextButton().setText(buttons.next.text);
-        if (buttons.next.enabled === true) {
-            me.getNextButton().enable();
+        if (buttons.next.visible === true) {
+            me.getNextButton().show();
         } else {
-            me.getNextButton().disable();
+            me.getNextButton().hide();
         }
 
-        if (!Ext.isEmpty(buttons.extraButtonSettings)) {
-            toolbar.extraButton = new Ext.create('Ext.button.Button', buttons.extraButtonSettings);
-            toolbar.add(toolbar.extraButton);
-        } else if (!Ext.isEmpty(toolbar.extraButton)) {
+        if (!Ext.isEmpty(toolbar.extraButton)) {
             toolbar.remove(toolbar.extraButton);
             toolbar.extraButton = null;
+        }
+        if (!Ext.isEmpty(buttons.extraButtonSettings)) {
+            toolbar.extraButton = new Ext.create('Ext.button.Button', buttons.extraButtonSettings);
+            toolbar.insert(2, toolbar.extraButton);
         }
     }
 });
