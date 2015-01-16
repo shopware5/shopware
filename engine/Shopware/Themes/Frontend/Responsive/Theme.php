@@ -1247,6 +1247,7 @@ class Theme extends \Shopware\Components\Theme
     }
 
     /**
+     * Helper function to merge default theme colors with color schemes
      * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
