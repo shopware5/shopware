@@ -21,7 +21,7 @@ Visit the forum at <http://forum.shopware.de/>
 - PHP's `cURL` and `GD` library
 - An Apache web server
 - Apache's `mod_rewrite` module
-- MySQL 5.1.0 or above
+- MySQL 5.5.0 or above
 
 ### Installation via Git
 
