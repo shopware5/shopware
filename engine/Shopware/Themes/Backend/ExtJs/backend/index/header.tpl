@@ -57,7 +57,7 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 				controller: {$controller},
 				params: {$params},
                 localizedName: 'Shopware',
-                firstRunWizardStep: {$firstRunWizardStep},
+                firstRunWizardEnabled: {$firstRunWizardEnabled|intval},
                 sbpLogin: {$sbpLogin}
 			});
 {else}

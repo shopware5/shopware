@@ -51,13 +51,13 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $conn = $this->container->get('dbal_connection');
-        $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardStep"');
+        $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardEnabled"');
         $valueid = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
 
         $data = [
             'element_id' => $elementId,
             'shop_id'    => 1,
-            'value'      => serialize(0),
+            'value'      => serialize(false),
         ];
 
         if ($valueid) {
@@ -70,7 +70,7 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
             $conn->insert('s_core_config_values', $data);
         }
 
-        $output->writeln("<info>First run Wizard disabled</info>");
+        $output->writeln("<info>First Run Wizard disabled</info>");
     }
 }
 

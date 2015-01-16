@@ -43,10 +43,13 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	 */
 	init: function() {
         var me = this,
-            firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep');
+            firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
+            firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled;
 
-        if (Ext.isEmpty(firstRunWizardStep)) {
-            firstRunWizardStep = me.subApplication.firstRunWizardStep;
+        if (!firstRunWizardEnabled) {
+            firstRunWizardStep = 0;
+        } else if (Ext.isEmpty(firstRunWizardStep)) {
+            firstRunWizardStep = firstRunWizardEnabled;
         }
 
         if (firstRunWizardStep > 0) {

@@ -34,7 +34,7 @@ EOD;
     private function fetchElementId()
     {
         $sql = <<<'EOD'
-SET @elementId = (SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardStep" LIMIT 1);
+SET @elementId = (SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardEnabled" LIMIT 1);
 EOD;
         $this->addSql($sql);
     }
@@ -43,7 +43,7 @@ EOD;
     {
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
-(NULL, @formId, 'firstRunWizardStep', 'i:1;', '\'First Fun Wizard\' beim Aufruf des Backends starten', NULL, 'checkbox', 0, 0, 0);
+(NULL, @formId, 'firstRunWizardEnabled', 'b:1;', '\'First Fun Wizard\' beim Aufruf des Backends starten', NULL, 'checkbox', 0, 0, 0);
 EOD;
         $this->addSql($sql);
     }

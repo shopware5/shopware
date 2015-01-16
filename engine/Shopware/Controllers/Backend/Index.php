@@ -109,23 +109,16 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $this->View()->assign('product', '', true);
         $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
 
-        // Only admins can see the wizard
-        if ($identity->role->getAdmin()) {
-            // This value can be stored either as a bool or as an int, so we need an explicit cast
-            // because smarty does not render false properly
-            $firstRunWizardStep = (int) $this->container->get('config')->get('firstRunWizardStep', 0);
-        } else {
-            $firstRunWizardStep = 0;
-        }
+        $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
         $sbpLogin = 0;
-        if ($firstRunWizardStep > 0) {
+        if ($firstRunWizardEnabled) {
             /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
             $tokenData = Shopware()->BackendSession()->accessToken;
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime("+30 seconds"));
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
-        $this->View()->assign('firstRunWizardStep', $firstRunWizardStep, true);
+        $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
 
         if (Shopware()->Bootstrap()->issetResource('License')) {
             $l = Shopware()->License();
@@ -133,6 +126,23 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             $o = $l->getLicenseInfo($m);
             $r = isset($o['product']) ? $o['product'] : null;
             $this->View()->assign('product', $r, true);
+        }
+    }
+
+    /**
+     * Returns if the first run wizard should be loaded in the current backend instance
+     * 
+     * @param $identity
+     * @return bool
+     * @throws Exception
+     */
+    private function isFirstRunWizardEnabled($identity)
+    {
+        // Only admins can see the wizard
+        if ($identity->role->getAdmin()) {
+            return $this->container->get('config')->get('firstRunWizardEnabled', false);
+        } else {
+            return false;
         }
     }
 
