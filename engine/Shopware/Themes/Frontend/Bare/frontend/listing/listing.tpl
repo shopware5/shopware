@@ -32,7 +32,7 @@
 
 {* Listing wrapper *}
 {block name="frontend_listing_listing_wrapper"}
-    <div class="listing--wrapper">
+    <div class="listing--wrapper{if !$showListing} is--hidden{/if}">
 
         {* Sorting and changing layout *}
         {block name="frontend_listing_top_actions"}

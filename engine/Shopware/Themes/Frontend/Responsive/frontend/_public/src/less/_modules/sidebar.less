@@ -55,9 +55,9 @@ body > .sidebar-main {
     }
 }
 
-// Landingpage campaign banner
-.campaign-outer-container {
-    .unitize-margin(20, 0);
+// Landingpage banner
+.campaign--box {
+    display: none;
 }
 
 .sidebar--navigation {
@@ -257,7 +257,12 @@ body > .sidebar-main {
         .unitize-margin(20, 10, 10, 10);
     }
 
-    .categories--headline {
+	.campaign--box {
+		.unitize-margin(20, 0);
+		display: block;
+	}
+
+	.categories--headline {
         display: none;
     }
 

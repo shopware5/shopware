@@ -58,6 +58,14 @@
             },
 
             /**
+             * The DOM selector of emotion wrapper elements
+             *
+             * @property wrapperSelector,
+             * @type {string}
+             */
+            wrapperSelector: '.emotion--wrapper',
+
+            /**
              * The DOM selector of the fallback content
              * if no emotion world is available.
              *
@@ -65,6 +73,14 @@
              * @type {string}
              */
             fallbackContentSelector: '.listing--wrapper',
+
+            /**
+             * The DOM selector of the show listing link.
+             *
+             * @property showListingSelector
+             * @type {string}
+             */
+            showListingSelector: '.emotion--show-listing',
 
             /**
              * The markup for the loading indicator.
@@ -91,10 +107,11 @@
 
             me.$emotion = false;
 
-            me.hasSiblings = !!me.$el.siblings().length;
+            me.hasSiblings = !!me.$el.siblings(me.opts.wrapperSelector).length;
             me.availableDevices = me.opts.availableDevices.split(',');
 
             me.$fallbackContent = $(me.opts.fallbackContentSelector);
+            me.$showListingLink = $(me.opts.showListingSelector);
 
             if (!me.opts.showListing) {
                 me.hideFallbackContent();
@@ -158,6 +175,9 @@
              * If the emotion world was already loaded show it.
              */
             if (me.$emotion.length) {
+
+                if (!me.opts.showListing) me.hideFallbackContent();
+
                 me.showEmotion();
                 return;
             }
@@ -182,6 +202,8 @@
                     me.initEmotion(response);
                 }
             });
+
+            $.publish('plugin/emotionLoader/loadEmotion', me);
         },
 
         /**
@@ -202,6 +224,8 @@
             }
 
             me.$emotion.emotion();
+
+            $.publish('plugin/emotionLoader/initEmotion', me);
         },
 
         /**
@@ -211,6 +235,8 @@
             var me = this;
 
             me.$el.css('display', 'block');
+
+            $.publish('plugin/emotionLoader/showEmotion', me);
         },
 
         /**
@@ -220,6 +246,8 @@
             var me = this;
 
             me.$el.css('display', 'none');
+
+            $.publish('plugin/emotionLoader/hideEmotion', me);
         },
 
         /**
@@ -228,9 +256,12 @@
         showFallbackContent: function() {
             var me = this;
 
-            me.$fallbackContent.css('display', 'block');
+            me.$fallbackContent.removeClass('is--hidden');
+            me.$showListingLink.addClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+
+            $.publish('plugin/emotionLoader/showFallbackContent', me);
         },
 
         /**
@@ -239,9 +270,12 @@
         hideFallbackContent: function() {
             var me = this;
 
-            me.$fallbackContent.css('display', 'none');
+            me.$fallbackContent.addClass('is--hidden');
+            me.$showListingLink.removeClass('is--hidden');
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+
+            $.publish('plugin/emotionLoader/hideFallbackContent', me);
         },
 
         /**
@@ -375,6 +409,7 @@
 
             me.$bannerElements = me.$elements.find(me.opts.bannerElSelector);
             me.$videoElements = me.$elements.find(me.opts.videoElSelector);
+            me.$productSliderElements = me.$elements.find('*[data-product-slider="true"]');
 
             if (me.opts.fullscreen) {
                 me.initFullscreen();
@@ -408,8 +443,8 @@
                 $(item).emotionVideo();
             });
 
-            me.$el.find('*[data-product-slider="true"]').productSlider();
-            me.$el.find('*[data-image-slider="true"]').imageSlider();
+            StateManager.updatePlugin('*[data-product-slider="true"]', 'productSlider');
+            StateManager.updatePlugin('*[data-image-slider="true"]', 'imageSlider');
 
             window.picturefill();
 
@@ -429,6 +464,18 @@
         },
 
         /**
+         * Removes the fullscreen mode.
+         */
+        removeFullscreen: function(showSidebar) {
+            var me = this;
+
+            if (showSidebar) $body.removeClass('is--no-sidebar');
+            me.$contentMain.removeClass('is--fullscreen');
+
+            $.publish('plugin/emotion/removeFullscreen', me);
+        },
+
+        /**
          * Initializes the grid for the masonry type.
          */
         initMasonryGrid: function() {
@@ -436,15 +483,14 @@
                 remSpacing = me.opts.cellSpacing / 16;
 
             me.$el.css({
-                'margin-top': -remSpacing + 'rem',
                 'margin-left': -remSpacing + 'rem'
             });
 
             me.$elements.css({
-                'padding-top': remSpacing + 'rem',
                 'padding-left': remSpacing + 'rem',
                 'padding-right': 0,
-                'padding-bottom': 0
+                'padding-top': 0,
+                'padding-bottom': remSpacing + 'rem'
             });
 
             me.$el.masonry({
@@ -461,16 +507,12 @@
          * Initializes the grid for the resizing type.
          */
         initScaleGrid: function() {
-            var me = this,
-                remSpacing = me.opts.cellSpacing / 16;
+            var me = this;
 
             me.baseWidth = ~~me.opts.baseWidth;
             me.ratio = me.baseWidth / me.$el.outerHeight();
 
-            me.$el.css({
-                'width': me.baseWidth,
-                'margin-top': -remSpacing + 'rem'
-            });
+            me.$el.css('width', me.baseWidth);
 
             if (!me.opts.fullscreen) {
                 me.$wrapper.css('max-width', me.baseWidth);
@@ -487,7 +529,12 @@
         registerEvents: function() {
             var me = this;
 
-            $window.on('resize', $.proxy(me.onResize, me));
+            StateManager.on('resize', $.proxy(me.onResize, me));
+
+            if (me.opts.fullscreen) {
+                $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.initFullscreen, me));
+                $.subscribe('plugin/emotionLoader/hideEmotion', $.proxy(me.removeFullscreen, me));
+            }
 
             $.publish('plugin/emotion/registerEvents', me);
         },
@@ -513,7 +560,7 @@
             var me = this,
                 width = (me.opts.fullscreen) ? $window.outerWidth() : me.$wrapper.outerWidth(),
                 factor = width / me.baseWidth,
-                origin = (factor > 1) ? '50% 0 0' : '0 0 0',
+                origin = (factor > 1) ? '50% 0px' : '0px 0px',
                 wrapperHeight = width / me.ratio;
 
             me.$el.css({
@@ -522,8 +569,8 @@
                 '-moz-transform-origin': origin,
                 '-webkit-transform-origin': origin,
                 'transform-origin': origin,
-                '-o-transform': 'scale('+ factor +')',
                 '-ms-transform': 'scale('+ factor +')',
+                '-o-transform': 'scale('+ factor +')',
                 '-moz-transform': 'scale('+ factor +')',
                 '-webkit-transform': 'scale('+ factor +')',
                 'transform': 'scale('+ factor +')'
@@ -722,6 +769,14 @@
             videoSelector: '.video--element',
 
             /**
+             * The DOM selector for the video cover element.
+             *
+             * @property coverSelector
+             * @type {string}
+             */
+            coverSelector: '.video--cover',
+
+            /**
              * The DOM selector for the play button.
              *
              * @property playBtnSelector
@@ -747,10 +802,18 @@
             me.applyDataAttributes();
 
             me.$video = me.$el.find(me.opts.videoSelector);
+            me.$videoCover = me.$el.find(me.opts.coverSelector);
             me.$playBtn = me.$el.find(me.opts.playBtnSelector);
             me.$playBtnIcon = me.$playBtn.find(me.opts.playIconSelector);
 
             me.player = me.$video.get(0);
+
+            /**
+             * Cross browser mute support.
+             */
+            if (me.$video.attr('muted') !== undefined) {
+                me.player.volume = 0.0;
+            }
 
             me.setScaleOrigin(me.opts.scaleOriginX, me.opts.scaleOriginY);
 
@@ -765,10 +828,12 @@
 
             me._on(me.$video, 'loadedmetadata', $.proxy(me.onLoadMeta, me));
             me._on(me.$video, 'canplay', $.proxy(me.onCanPlay, me));
+            me._on(me.$video, 'play', $.proxy(me.onVideoPlay, me));
             me._on(me.$video, 'ended', $.proxy(me.onVideoEnded, me));
 
             me._on(me.$el, 'emotionResize', $.proxy(me.resizeVideo, me));
 
+            me._on(me.$videoCover, 'click', $.proxy(me.onPlayClick, me));
             me._on(me.$playBtn, 'click', $.proxy(me.onPlayClick, me));
         },
 
@@ -799,6 +864,15 @@
         },
 
         /**
+         * Called on play event.
+         */
+        onVideoPlay: function() {
+            var me = this;
+
+            me.$videoCover.hide();
+        },
+
+        /**
          * Called on ended event.
          * Sets the correct play button icon.
          */
@@ -812,8 +886,10 @@
          * Called on click event on the the play button.
          * Starts or pauses the video.
          */
-        onPlayClick: function() {
+        onPlayClick: function(event) {
             var me = this;
+
+            event.preventDefault();
 
             (me.player.paused) ? me.playVideo() : me.stopVideo();
         },
