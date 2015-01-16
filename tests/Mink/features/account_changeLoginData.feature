@@ -70,7 +70,7 @@ Feature: Successful changes of login data
             | salutation           | mr                 |                   | ms                 |
             | firstname            | Max                |                   | Erika              |
             | lastname             | Mustermann         |                   | Musterfrau         |
-            | email                | a@b.c              |                   |                    |
+            | email                | ab.c               |                   |                    |
             | password             | abcdefgh           |                   |                    |
             | passwordConfirmation | ijklmnop           |                   |                    |
             | company              |                    | Muster GmbH       |                    |
