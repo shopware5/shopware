@@ -1,16 +1,16 @@
 {block name="widget_emotion_component_html_panel"}
-    <div class="emotion--html panel has--border">
+    <div class="emotion--html{if !$Data.needsNoStyling} panel has--border{/if}">
 
         {block name="widget_emotion_component_html_title"}
             {if $Data.cms_title}
-                <div class="panel--title is--underline html--title">
+                <div class="html--title{if !$Data.needsNoStyling} panel--title is--underline{/if}">
                     {$Data.cms_title}
                 </div>
             {/if}
         {/block}
 
         {block name="widget_emotion_component_html_content"}
-            <div class="html--content{if $Data.cms_title} panel--body is--wide{/if}">
+            <div class="html--content{if !$Data.needsNoStyling && $Data.cms_title} panel--body is--wide{/if}">
                 {$Data.text}
             </div>
         {/block}
