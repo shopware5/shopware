@@ -50,10 +50,23 @@ Ext.define('Shopware.apps.Index.controller.Main', {
         }
 
         if (firstRunWizardStep > 0) {
-            Ext.util.Cookies.set('firstRunWizardStep', firstRunWizardStep)
+            Ext.util.Cookies.set('firstRunWizardStep', firstRunWizardStep);
+
             Shopware.app.Application.addSubApplication({
-                name: 'Shopware.apps.FirstRunWizard'
-            });
+                    name: 'Shopware.apps.PluginManager',
+                    params: {
+                        hidden: true
+                    }
+                },
+                undefined,
+                function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.FirstRunWizard'
+                    });
+                }
+            );
+
+
         } else {
             me.initBackendDesktop();
         }

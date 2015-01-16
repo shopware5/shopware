@@ -53,7 +53,16 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
         },
         buttons: {
             next: '{s name=home/buttons/next}Next{/s}',
-            skip: '{s name=home/buttons/skip}Skip{/s}'
+            skip: '{s name=home/buttons/skip}Skip{/s}',
+            retry: '{s name=home/buttons/retry}Retry{/s}'
+        },
+        isConnected: {
+            text: '{s name=home/is_connected/text}Connection to Shopware server available{/s}',
+            icon: 'tick-circle'
+        },
+        isNotConnected: {
+            text: '{s name=home/is_not_connected/text}Could not connect to Shopware server{/s}',
+            icon: 'cross-circle'
         }
     },
 
@@ -78,10 +87,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
                 xtype: 'container',
                 border: false,
                 bodyPadding: 20,
-                style: 'margin-bottom: 10px;',
-                html: '<p>' + me.snippets.content.message + '</p>'
+                style: 'margin-bottom: 40px;',
+                html: '<p>' + me.snippets.content.message + '</p>',
+                width: '100%'
             },
-            me.createLoadingIndicator()
+            me.createLoadingIndicator(),
+            me.refreshLoadingResultContainer()
         ];
 
         me.callParent(arguments);
@@ -91,8 +102,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
         var me = this,
             buttons = {
                 previous: {
-                    enabled: false,
-                    text: ''
+                    visible: false
                 },
                 next: {
                 }
@@ -102,45 +112,75 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
             buttons.next.text = me.snippets.buttons.skip;
         }
 
+        if (me.firstRunWizardIsConnected === false || me.firstRunWizardIsConnected === 'false') {
+            buttons.extraButtonSettings = {
+                text: me.snippets.buttons.retry,
+                    cls: 'primary',
+                    name: 'retry-button',
+                    width: 180,
+                    handler: function() {
+                        me.fireEvent('retryConnectivityTest');
+                }
+            }
+        }
+
         return buttons;
     },
 
     createLoadingIndicator: function() {
         var me = this;
 
-        if (me.firstRunWizardIsConnected === null) {
-            me.loadingIndicator = Ext.create('Ext.ProgressBar', {
-                animate: true,
-                width: 300
-            });
+        me.loadingIndicator = Ext.create('Ext.ProgressBar', {
+            animate: true,
+            hidden: me.firstRunWizardIsConnected !== null,
+            style: {
+                marginLeft: '145px',
+                width: '265px'
+            }
+        });
 
-            me.loadingIndicator.wait({
-                text: 'Checking Shopware server connection...',
-                scope: this
-            });
-
-            Ext.Ajax.request({
-                url: '{url controller="firstRunWizard" action="pingServer"}',
-                method: 'GET',
-                timeout: 10000,
-                success: function(response) {
-                    var result = Ext.JSON.decode(response.responseText);
-
-                    if(!result || result.success == false || result.message == false) {
-                        me.fireEvent('setConnectivityMode', false);
-                    } else {
-                        me.fireEvent('setConnectivityMode', true);
-                    }
-                },
-                failure: function (response, request) {
-                    me.fireEvent('setConnectivityMode', false);
-                }
-            });
-        } else {
-            me.loadingIndicator = null;
-        }
+        me.loadingIndicator.wait({
+            text: 'Checking Shopware server connection...',
+            scope: this
+        });
 
         return me.loadingIndicator;
+    },
+
+    refreshLoadingResultContainer: function() {
+        var me = this;
+
+        if (typeof me.loadingResultContainer == 'undefined') {
+            me.loadingResultContainer = Ext.create('Ext.container.Container', {
+                html: '',
+                style: {
+                    marginLeft: '145px',
+                    width: '265px'
+                }
+            });
+        }
+
+        if (me.firstRunWizardIsConnected == true || me.firstRunWizardIsConnected == 'true') {
+            me.loadingResultContainer.update(
+                Ext.String.format(
+                    '<div style="width: 16px; height: 16px; float: left;" class="sprite-[0]"></div><div>[1]</div>',
+                    me.snippets.isConnected.icon, me.snippets.isConnected.text
+                )
+            );
+            me.loadingResultContainer.show();
+        } else if (me.firstRunWizardIsConnected == false || me.firstRunWizardIsConnected == 'false') {
+            me.loadingResultContainer.update(
+                Ext.String.format(
+                    '<div style="width: 16px; height: 16px; float: left;" class="sprite-[0]"></div><div>[1]</div>',
+                    me.snippets.isNotConnected.icon, me.snippets.isNotConnected.text
+                )
+            );
+            me.loadingResultContainer.show();
+        } else {
+            me.loadingResultContainer.hide();
+        }
+
+        return me.loadingResultContainer;
     }
 });
 

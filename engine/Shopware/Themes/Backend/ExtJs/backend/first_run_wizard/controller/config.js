@@ -78,13 +78,10 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
 
         var fields = [
             configPanel.themeMainLogo,
-            configPanel.themePrimaryColor,
-            configPanel.themeSecondaryColor,
             configPanel.addressField,
             configPanel.bankAccountField,
             configPanel.companyField,
-            configPanel.metaIsFamilyFriendlyField,
-            configPanel.captchaColorField
+            configPanel.metaIsFamilyFriendlyField
         ];
 
         var formValidation = me.validateForm(fields);
@@ -113,13 +110,10 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Config', {
                     var formData = result.data
 
                     configPanel.themeMainLogo.setValue(formData.desktopLogo);
-                    configPanel.themePrimaryColor.setValue(formData['_brand-primary']);
-                    configPanel.themeSecondaryColor.setValue(formData['_brand-secondary']);
                     configPanel.addressField.setValue(formData.address);
                     configPanel.bankAccountField.setValue(formData.bankAccount);
                     configPanel.companyField.setValue(formData.company);
                     configPanel.metaIsFamilyFriendlyField.setValue(formData.metaIsFamilyFriendly);
-                    configPanel.captchaColorField.setValue(formData.captchaColor);
                 }
             }
         });

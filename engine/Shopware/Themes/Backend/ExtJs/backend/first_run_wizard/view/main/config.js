@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
         },
         content: {
             title: '{s name=config/content/title}Configuration{/s}',
-            message: '{s name=config/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{/s}'
+            message: '{s name=config/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
         },
         shopSettings: {
             title: '{s name=config/shopSettings/title}Shop settings{/s}',
@@ -70,21 +70,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             },
             metaIsFamilyFriendly: {
                 label: '{s name=config/shopSettings/metaIsFamilyFriendly/label}Shop is family friendly{/s}'
-            },
-            captchaColor: {
-                label: '{s name=config/shopSettings/captchaColor/label}Captcha font color (R,G,B){/s}'
             }
         },
         themeSettings: {
             title: '{s name=config/themeSettings/title}Theme settings{/s}',
-            themePrimaryColor: {
-                label: '{s name=config/themeSettings/primaryColor/label}Shop\'s primary color{/s}'
-            },
-            themeSecondaryColor: {
-                label: '{s name=config/themeSettings/secondaryColor/label}Shop\'s secondary color{/s}'
-            },
             desktopLogo: {
-                label: '{s name=config/themeSettings/desktopLogo/label}Shop\'s logo{/s}'
+                label: '{s name=config/themeSettings/desktopLogo/label}Shop\'s logo (desktop){/s}'
             }
         }
     },
@@ -125,18 +116,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             minimizable: false
         });
 
-        me.themePrimaryColor = Ext.create('Shopware.form.field.ColorField', {
-            name: '_brand-primary',
-            fieldLabel: me.snippets.themeSettings.themePrimaryColor.label,
-            supportText: me.snippets.themeSettings.themePrimaryColor.support
-        });
-
-        me.themeSecondaryColor = Ext.create('Shopware.form.field.ColorField', {
-            name: '_brand-secondary',
-            fieldLabel: me.snippets.themeSettings.themeSecondaryColor.label,
-            supportText: me.snippets.themeSettings.themeSecondaryColor.support
-        });
-
         me.themeConfigFieldSet = Ext.create('Ext.form.FieldSet', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             title: me.snippets.themeSettings.title,
@@ -148,8 +127,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             },
             items: [
                 me.themeMainLogo,
-                me.themePrimaryColor,
-                me.themeSecondaryColor
             ]
         });
 
@@ -182,12 +159,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             supportText: me.snippets.shopSettings.metaIsFamilyFriendly.support
         });
 
-        me.captchaColorField = Ext.create('Ext.form.field.Text', {
-            name: 'captchaColor',
-            fieldLabel: me.snippets.shopSettings.captchaColor.label,
-            supportText: me.snippets.shopSettings.captchaColor.support
-        });
-
         me.shopConfigFieldSet = Ext.create('Ext.form.FieldSet', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             title: me.snippets.shopSettings.title,
@@ -201,8 +172,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
                 me.addressField,
                 me.bankAccountField,
                 me.companyField,
-                me.metaIsFamilyFriendlyField,
-                me.captchaColorField
+                me.metaIsFamilyFriendlyField
             ]
         });
 
@@ -217,10 +187,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Config', {
             extraButtonSettings: {
                 text: me.snippets.buttons.skip,
                 cls: 'primary',
-                name: 'next-button',
+                name: 'skip-button',
                 width: 180,
                 handler: function() {
-                    me.fireEvent('navigate-next', me);
+                    me.fireEvent('navigate-next');
                 }
             }
         };

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,26 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Bundle\PluginInstallerBundle\Exception;
+
 /**
- * Shopware Application
- *
- * @category  Shopware
- * @package   Shopware
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @package Shopware\Bundle\PluginInstallerBundle\Exception
  */
-
-//{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/model/plugin"}
-
-Ext.define('Shopware.apps.FirstRunWizard.model.Plugin', {
-    extend: 'Shopware.data.Model',
-
-    fields: [
-        //{block name="backend/first_run_wizard/model/plugin/fields"}{/block}
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string' }
-    ]
-
-});
-
-//{/block}
+class DomainVerificationException extends StoreException
+{
+}

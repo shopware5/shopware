@@ -119,9 +119,10 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         }
         $sbpLogin = 0;
         if ($firstRunWizardStep > 0) {
+            /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
             $tokenData = Shopware()->BackendSession()->accessToken;
 
-            $sbpLogin = (int) !(empty($tokenData) || strtotime($tokenData->expire->date) >= strtotime("+30 seconds"));
+            $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime("+30 seconds"));
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardStep', $firstRunWizardStep, true);
@@ -148,17 +149,27 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
      */
     public function changeLocaleAction()
     {
-        $localeCode = $this->Request()->getParam('locale');
-        if ($localeCode == null) {
-            return null;
+        $this->Front()->Plugins()->Json()->setRenderer();
+
+        $localeId = $this->Request()->getParam('localeId');
+        if ($localeId == null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
         }
 
         $locale = $this->container->get('models')
             ->getRepository('Shopware\Models\Shop\Locale')
-            ->findOneBy(array('locale' => $localeCode));
+            ->find($localeId);
 
         if ($locale == null) {
-            return null;
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
         }
 
         $auth = $this->auth->checkAuth();
@@ -167,6 +178,11 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             $identity = $auth->getIdentity();
             if (!empty($identity)) {
                 $identity->locale = $locale;
+
+                $this->View()->assign(array(
+                    'success' => true,
+                    'message' => true
+                ));
             }
         }
     }

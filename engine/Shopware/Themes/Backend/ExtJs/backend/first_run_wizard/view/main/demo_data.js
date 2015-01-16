@@ -46,12 +46,68 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
      */
     name:'demo-data',
 
+    overflowY: 'auto',
+
+    snippets: {
+        content: {
+            title: '{s name=demo_data/content/title}Demo Data{/s}',
+            message: '{s name=demo_data/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+        }
+    },
+
     initComponent: function() {
         var me = this;
 
-        me.html = '<h1>Demo data</h1>';
+        me.items = [
+            {
+                xtype: 'container',
+                border: false,
+                bodyPadding: 20,
+                style: 'font-weight: 700; line-height: 20px;',
+                html: '<h1>' + me.snippets.content.title + '</h1>'
+            },
+            {
+                xtype: 'container',
+                border: false,
+                bodyPadding: 20,
+                style: 'margin-bottom: 10px;',
+                html: '<p>' + me.snippets.content.message + '</p>'
+            },
+            me.createStoreListing()
+        ];
 
         me.callParent(arguments);
+    },
+
+    createStoreListing: function() {
+        var me = this;
+
+        me.communityStore = Ext.create('Shopware.apps.FirstRunWizard.store.DemoPlugin');
+        me.storeListing = Ext.create('Shopware.apps.PluginManager.view.components.Listing', {
+            store: me.communityStore,
+            scrollContainer: me,
+            width: 632
+        });
+
+        me.communityStore.on('load', function(store, records) {
+            me.storeListing.setLoading(false);
+        });
+
+        me.content = Ext.create('Ext.container.Container', {
+            items: [
+                me.storeListing
+            ]
+        });
+
+        return me.content;
+    },
+
+    refreshData: function() {
+        var me = this;
+
+        me.storeListing.setLoading(true);
+        me.storeListing.resetListing();
+        me.communityStore.load();
     }
 });
 

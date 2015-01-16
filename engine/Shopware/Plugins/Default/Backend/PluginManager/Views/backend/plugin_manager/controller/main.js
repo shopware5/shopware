@@ -23,7 +23,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                 Shopware.app.Application.sbpAvailable = response.success;
 
                 if (me.subApplication.params && me.subApplication.params.hidden) {
-                    me.callParent(arguments);
                     return;
                 }
 
