@@ -130,10 +130,18 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      * Switches the shop template.
      */
     onAssignTheme: function () {
-        var me = this, shop, theme;
+        var me = this, shop, theme, activeTheme;
 
         shop = me.getSelectedShop();
         theme = me.getSelectedTheme();
+        activeTheme = me.getActiveTheme();
+
+        if (activeTheme.get('version') == 2 && theme.get('version') == 3) {
+            Shopware.Notification.createStickyGrowlMessage({
+                title: '{s name="application"}Theme manager 2.0{/s}',
+                text:  '{s name="theme_version_switch"}{/s}'
+            });
+        }
 
         // If preview mode is enabled, disable it
         if (me.previewWindow) {
@@ -291,6 +299,22 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         } else {
             return null;
         }
+    },
+
+    /**
+     * Returns the active theme model
+     * 
+     * @returns { Shopware.apps.Theme.model.Theme }
+     */
+    getActiveTheme: function() {
+        var me = this;
+
+        if (!(me.getListingView())) {
+            return null;
+        }
+
+        var store = me.getListingView().getStore();
+        return store.findRecord('enabled', true);
     },
 
     /**
