@@ -2,8 +2,8 @@
     <ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
         {strip}
             {block name='frontend_index_navigation_categories_top_home'}
-                <li class="navigation--entry{if $sCategoryCurrent eq $sCategoryStart} is--active{/if} is--home" role="menuitem">
-                    <a class="navigation--link is--first{if $sCategoryCurrent eq $sCategoryStart} active{/if}" href="{url controller='index'}" title="{s name='IndexLinkHome' namespace="frontend/index/categories_top"}{/s}" itemprop="url">
+                <li class="navigation--entry{if $sCategoryCurrent == $sCategoryStart && $Controller == 'index'} is--active{/if} is--home" role="menuitem">
+                    <a class="navigation--link is--first{if $sCategoryCurrent == $sCategoryStart && $Controller == 'index'} active{/if}" href="{url controller='index'}" title="{s name='IndexLinkHome' namespace="frontend/index/categories_top"}{/s}" itemprop="url">
                         <span itemprop="name">{s name='IndexLinkHome' namespace="frontend/index/categories_top"}Home{/s}</span>
                     </a>
                 </li>

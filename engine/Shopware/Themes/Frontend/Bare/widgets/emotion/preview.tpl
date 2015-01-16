@@ -10,9 +10,15 @@
 {block name='frontend_index_content_left'}{/block}
 
 {block name="frontend_index_content"}
-    {action module=widgets controller=emotion categoryId=$emotionId}
 
-    <div class="clear"></div>
+    {foreach $emotions as $emotion}
+        <div class="emotion--wrapper"
+             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+             data-availableDevices="{$emotion.devices}"
+             data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
+        </div>
+    {/foreach}
+
 {/block}
 
 {* hide right sidebar *}
