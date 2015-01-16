@@ -112,7 +112,7 @@
                                 {* AGB label *}
                                 {block name='frontend_checkout_confirm_agb_label'}
                                     <div class="block column--label">
-                                        <label for="sAGB"{if $sAGBError} class="has--error"{/if} data-modal="true">{s name="ConfirmTerms"}{/s}</label>
+                                        <label for="sAGB"{if $sAGBError} class="has--error"{/if} data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">{s name="ConfirmTerms"}{/s}</label>
                                     </div>
                                 {/block}
                             </li>
