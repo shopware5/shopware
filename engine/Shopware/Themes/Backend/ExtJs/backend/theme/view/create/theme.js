@@ -93,7 +93,8 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
             anchor: '100%',
             valueField: 'id',
             allowBlank: false,
-            fieldLabel: '{s name=extension_of}Extension of{/s}'
+            fieldLabel: '{s name=extension_of}Extension of{/s}',
+            supportText: '{s name=extension_of_support}Select a theme as a building block{/s}'
         });
 
         return me.extendCombo;

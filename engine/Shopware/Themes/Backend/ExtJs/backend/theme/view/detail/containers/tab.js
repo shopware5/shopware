@@ -24,6 +24,7 @@
 Ext.define('Shopware.apps.Theme.view.detail.containers.Tab', {
     extend: 'Ext.container.Container',
     alias: 'widget.theme-tab',
+    style: 'background: #F9FAFA',
     layout: {
         type: 'vbox',
         align: 'stretch'
