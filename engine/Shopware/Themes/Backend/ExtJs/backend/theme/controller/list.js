@@ -301,6 +301,11 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         }
     },
 
+    /**
+     * Returns the active theme model
+     * 
+     * @returns { Shopware.apps.Theme.model.Theme }
+     */
     getActiveTheme: function() {
         var me = this;
 
