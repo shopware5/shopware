@@ -212,8 +212,12 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
 
-        // fallback to parent shop, parent locale
-        if ($main !== null) {
+        /**
+         * Fallback to parent shop, parent locale
+         * If parent locale is the same as current locale, skip this step
+         * as it was already added previously ("fallback to parent shop, current locale")
+         **/ 
+        if ($main !== null && $locale->getId() != $main->getLocale()->getId()) {
             $extends[] = array(
                 $main->getId(),
                 $main->getLocale()->getId(),
