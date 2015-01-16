@@ -939,7 +939,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         position = Math.max(min, Math.min(max, position));
 
         if (position !== max) {
-            topStyle = me.getPrefixedBoxShadowStyle('0px 10px 10px -7px rgba(0, 0, 0, 0.5)');
+            topStyle = me.getPrefixedBoxShadowStyle('0 14px 4px -8px rgba(0, 0, 0, 0.1)');
         }
 
         if (position > min + dropProxyHeight) {

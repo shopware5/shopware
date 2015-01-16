@@ -265,6 +265,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
 
         me.chart = Ext.create('Ext.chart.Chart', {
             xtype: 'chart',
+            theme: 'Widget',
             height: 110,
             animate: false,
             store: store,
@@ -306,7 +307,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                     position: 'bottom',
                     fields: [ 'timestamp' ],
                     label: {
-                        fill: '#77828b',
+                        fill: '#ffffff',
                         font: '11px/14px Arial, sans-serif'
                     },
 
@@ -352,17 +353,18 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                         }
                     },
                     style: {
-                        fill: '#77b3e0'
+                        fill: '#2edc79',
+                        stroke: '#2edc79'
                     },
                     highlight: {
                         size: 5,
                         radius: 5,
-                        fill: '#2f79b1',
-                        stroke: '#2f79b1'
+                        fill: '#2edc79',
+                        stroke: '#2edc79'
                     },
                     markerConfig: {
                         type: 'circle',
-                        fill: '#2f79b1',
+                        fill: '#2edc79',
                         size: 4,
                         radius: 4,
                         'stroke-width': 0
