@@ -57,6 +57,7 @@ In this document you will find a changelog of the important changes related to t
     * Will be removed in the next minor release.
     * Use `http_client` from container instead.
 * Increased minimum required PHP version to PHP >= 5.4.0.
+* Increased minimum required MySQL version to MySQl >= 5.5.0.
 * When duplicating articles in the backend, attributes and translations will also be copied
 * When applying main data to variants, translations will also be overwritten, if selected
 * It is now possible to rename variant configurator options
@@ -285,7 +286,7 @@ In this document you will find a changelog of the important changes related to t
     * `showbundlemainarticle`
 * New commands: `sw:cron:list` and `sw:cron:run`
 * Running cronjobs using `php shopware.php backend/cron` is not recommended and should be seen as deprecated
-* `sVoteAverange` and `averange` properties of article and blog data structures have been renamed to fix the typo in their names. 
+* `sVoteAverange` and `averange` properties of article and blog data structures have been renamed to fix the typo in their names.
     * Old versions are kept for compatibility reasons, but are deprecated and will be removed
     * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
 * Removed configuration variable `deactivateNoInstock`
