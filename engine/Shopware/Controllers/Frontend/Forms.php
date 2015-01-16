@@ -458,6 +458,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     {
         $errors = array();
 
+        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get('validator.email');
+
         foreach ($elements as $element) {
             $valide = true;
             $value = "";
@@ -497,7 +500,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         break;
                     case "email":
                         $value = strtolower($value);
-                        if (!Zend_Validate::is($value, 'EmailAddress')) {
+                        if (!$emailValidator->isValid($value)) {
                             unset($value);
                             $valide = false;
                         }
