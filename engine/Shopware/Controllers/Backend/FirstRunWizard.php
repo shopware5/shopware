@@ -8,14 +8,14 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Saves the current wizard step to the database
+     * Saves the current wizard status (enabled/disabled) to the database
      */
-    public function saveStepAction()
+    public function saveEnabledAction()
     {
-        $value = (int) $this->Request()->getParam('value');
+        $value = (bool) $this->Request()->getParam('value');
         $element = Shopware()->Models()
             ->getRepository('Shopware\Models\Config\Element')
-            ->findOneBy(array('name' => 'firstRunWizardStep'));
+            ->findOneBy(array('name' => 'firstRunWizardEnabled'));
 
         $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
