@@ -181,11 +181,11 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.ShopwareId', {
                 var result = Ext.JSON.decode(response.responseText);
 
                 if(!result || result.success == false) {
-                    Shopware.Notification.createGrowlMessage(
-                        me.snippets.domainRegistration.errorTitle,
-                        Ext.String.format(me.snippets.domainRegistration.errorServerMessage, result.message),
-                        me.snippets.growlMessage
-                    );
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: me.snippets.domainRegistration.errorTitle,
+                        text: Ext.String.format(me.snippets.domainRegistration.errorServerMessage, result.message),
+                        log: true
+                    });
                 } else if(result.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.domainRegistration.successTitle,
