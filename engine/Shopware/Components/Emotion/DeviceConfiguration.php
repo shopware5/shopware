@@ -99,7 +99,7 @@ class DeviceConfiguration
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
