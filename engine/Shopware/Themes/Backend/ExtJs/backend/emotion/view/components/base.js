@@ -78,17 +78,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         });
     },
 
-
-    afterRender: function() {
-        var me = this;
-        me.callParent(arguments);
-
-        // We need to force the first call to set the initial value of the display field
-        if(me.settings.gridSettings.cols < me.settings.gridSettings.rows) {
-            me.onUpdateSizeDisplay();
-        }
-    },
-
     createFormElements: function() {
         var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields, boxLabel = '';
 
@@ -144,92 +133,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             });
         });
 
-        // ...create the size field only in the vertical mode of an emotion world
-        if(me.settings.gridSettings.cols < me.settings.gridSettings.rows) {
-            items.push(me.createSizingFields());
-        }
-
         return items;
-    },
-
-    /**
-     * @private
-     * @return [object] Ext.container.Container which contains the sizing fields
-     */
-    createSizingFields: function() {
-        var me = this, grid = me.getSettings('grid', true), record = me.getSettings('record', true),
-            colStoreData, colStore, rowStoreData, rowStore,
-            cols = record.endCol - record.startCol + 1,
-            rows = record.endRow - record.startRow + 1;
-
-        // Create column store
-        colStoreData = [];
-        for(var i = 1; grid.cols >= i; i++) {
-            colStoreData.push({ display: i + ' {s name=base/columns}Column(s){/s}', value: i });
-        }
-        colStore = Ext.create('Ext.data.Store', {
-            fields: [ 'display', 'value' ],
-            data: colStoreData
-        });
-
-        // Create row store
-        rowStoreData = [];
-        for(var i = 1; grid.rows >= i; i++) {
-            rowStoreData.push({ display: i + ' {s name=base/rows}Row(s){/s}', value: i });
-        }
-        rowStore = Ext.create('Ext.data.Store', {
-            fields: [ 'display', 'value' ],
-            data: rowStoreData
-        });
-
-        me.colComboBox = Ext.create('Ext.form.field.ComboBox', {
-            store: colStore,
-            fieldLabel: '{s name=base/width}Width{/s}',
-            disabled: true,
-            valueField: 'value',
-            displayField: 'display',
-            value: cols || 1,
-            listeners: {
-                scope: me,
-                change: me.onUpdateSizeDisplay
-            }
-        });
-
-        me.rowComboBox = Ext.create('Ext.form.field.ComboBox', {
-            store: rowStore,
-            fieldLabel: '{s name=base/height}Height{/s}',
-            valueField: 'value',
-            disabled: true,
-            displayField: 'display',
-            value: rows || 1,
-            listeners: {
-                scope: me,
-                change: me.onUpdateSizeDisplay
-            }
-        });
-
-        me.displayField = Ext.create('Ext.form.field.Display', {
-            fieldLabel: '{s name=base/height_frontend}Frontend height{/s}',
-            labelWidth: 135,
-            supportText: '{s name=base/height_frontend_info}Width x Height in Pixel{/s}'
-        });
-
-        return Ext.create('Ext.container.Container', {
-            layout: 'hbox',
-            items: [{
-                xtype: 'container',
-                defaults: me.defaults,
-                layout: 'anchor',
-                flex: 1,
-                items: [ me.colComboBox, me.rowComboBox ]
-            }, {
-                xtype: 'container',
-                flex: 1,
-                margin: '0 0 0 15',
-                defaults: me.defaults,
-                items:  [ me.displayField ]
-            }]
-        })
     },
 
     /**
@@ -269,31 +173,5 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             return this.settings[type];
         }
         return this.settings;
-    },
-
-    /**
-     * Updates the displayed size of the element
-     * in the frontend.
-     *
-     * @public
-     * @return void
-     */
-    onUpdateSizeDisplay: function() {
-        var me = this,
-            cols = ~~(1 * me.colComboBox.getValue()),
-            rows = ~~(1 * me.rowComboBox.getValue()),
-            grid = me.getSettings('grid', true),
-            rowHeight = grid.cellHeight,
-            colWidth = grid.containerWidth / grid.cols,
-            field = me.displayField,
-            offset = 10,
-            width = (cols * colWidth) - offset + '',
-            height = (rows * rowHeight) - offset + '';
-
-        width = width.replace('.', ',');
-        height = height.replace('.', ',');
-        width += 'px';
-        height += 'px';
-        field.setValue(width + ' x '  + height);
     }
 });
