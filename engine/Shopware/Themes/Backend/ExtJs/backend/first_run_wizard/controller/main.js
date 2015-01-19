@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             Ext.util.Cookies.clear('firstRunWizardStep');
             Ext.util.Cookies.clear('firstRunWizardIsConnected');
             Ext.Ajax.request({
-                url: '{url controller="firstRunWizard" action="saveStep"}',
+                url: '{url controller="firstRunWizard" action="saveEnabled"}',
                 method: 'POST',
                 params: {
                     value: newStep
