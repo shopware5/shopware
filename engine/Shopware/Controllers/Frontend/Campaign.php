@@ -28,22 +28,24 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
 {
     public function indexAction()
     {
-        $emotionData = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_emotion
-            WHERE id = ? and active = 1
-            AND (valid_from IS NULL || valid_from <= now())
-            AND (valid_to IS NULL || valid_to >= now())
-        ', array($this->Request()->getParam('emotionId')));
+        $emotionId = $this->Request()->getParam('emotionId');
 
-        if (empty($emotionData)) {
+        $emotion = $this->get('emotion_device_configuration')->getLandingPageById($emotionId);
+
+        if (!$emotion) {
             $this->Response()->setHttpResponseCode(404);
-            return $this->forward('index', 'index');
+            return $this->redirect('index');
         }
-        $this->View()->assign('sBreadcrumb', array(0 => array('name' => $emotionData['name'])));
-        $this->View()->assign('seo_keywords', $emotionData['seo_keywords']);
-        $this->View()->assign('seo_description', $emotionData['seo_description']);
 
-        $this->View()->assign('emotionId', intval($this->Request()->getParam('emotionId')));
-        $this->View()->assign('isEmotionLandingPage', true);
+        $viewData = [
+            'sBreadcrumb' => [['name' => $emotion['name']]],
+            'seo_keywords' => $emotion['seo_keywords'],
+            'seo_description' => $emotion['seo_description'],
+            'emotion' => $emotion,
+            'emotionId' => $emotionId,
+            'isEmotionLandingPage' => true
+        ];
+
+        $this->View()->assign($viewData);
     }
 }
