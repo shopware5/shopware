@@ -505,7 +505,6 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             as_tooltip: config.as_tooltip || 0
         });
         record = record[0];
-
         Ext.defer(function() {
             cmp.doComponentLayout();
             size = imageEl.getSize();
@@ -522,8 +521,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 var y = cmp.getEl().getTop() - imageEl.getTop(),
                     x = cmp.getEl().getLeft() - imageEl.getLeft();
                 record.set({
-                    width: width + 10,
-                    height: height + 10,
+                    width: width,
+                    height: height,
                     x: x,
                     y: y
                 });
