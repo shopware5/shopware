@@ -1,8 +1,13 @@
-// The mixins provides you a cross-browser compatible method to set the hyphenation.
-//
-// Please refer to <http://caniuse.com/css-hyphens> to see the browser support table of the feature.
-//
-// @param: {String} hyphenation: The hyphenation that should be used (Default: auto)
+/*
+Hypheration mixin
+======================================
+The mixins provides you a cross-browser compatible method to set the hyphenation.
+
+Please refer to <http://caniuse.com/css-hyphens> to see the browser support table of the feature.
+
+`@param: {String} hyphenation: The hyphenation that should be used (Default: auto)`
+*/
+
 .hyphens(@hyphenation: auto) {
     -webkit-hyphens: @hyphenation;
     -moz-hyphens: @hyphenation;

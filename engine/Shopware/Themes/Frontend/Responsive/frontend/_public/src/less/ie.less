@@ -1,4 +1,12 @@
-// HTML5 required fields fix
+/*
+Internet Explorer fixes
+====================================
+The `ie.less` contains the required specific internet explorer fixes.
+
+More precise designations are commented inside the document.
+*/
+
+    // HTML5 required fields fix
 .forms--inner-form {
     textarea:required,
     input:required {
@@ -6,10 +14,10 @@
     }
 }
 
-/**
- * Fixing the IE rem-based line-height issue on :after and :before elements
- * http://bit.ly/1ybSEei
- */
+    /*
+    * Fixing the IE rem-based line-height issue on :after and :before elements
+    * http://bit.ly/1ybSEei
+    */
 .checkbox {
 	.checkbox--state {
 		&:checked ~ .checkbox--state {

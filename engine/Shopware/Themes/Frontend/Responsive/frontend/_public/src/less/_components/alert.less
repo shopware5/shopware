@@ -1,17 +1,26 @@
-/* Alert box for displaying status messages.
+/*
+Alerts
+===================================================================
+######Displays an alert box for status messages to the user.
 
+Alerts always have to have the `.alert` class assigned, and in addition one of four color schemes.
+
+Options: `is--success`, `is--info`, `is--warning`, `is--error`.
 ```
-<p class="alert success">Success message</p>
+<p class="alert is--success">Success message</p>
+<p class="alert is--info">Info message</p>
+<p class="alert is--warning">Warning message</p>
+<p class="alert is--error">Error message</p>
 ```
 */
+
 .alert {
     .unitize(14, 16, font-size);
     .unitize(24, 16, line-height);
     .clearfix();
     position: relative;
-    overflow: hidden; // Necessary for faux columns
+    overflow: hidden;
 
-    // State: Success
     &.is--success {
         color: darken(@highlight-success, 15%);
         background: desaturate(lighten(@highlight-success, 42%),20%);
@@ -21,7 +30,6 @@
         }
     }
 
-    // State: Info
     &.is--info {
         color: darken(@highlight-info, 15%);
         background: desaturate(lighten(@highlight-info, 36%),20%);
@@ -31,7 +39,6 @@
         }
     }
 
-    // State: Notice
     &.is--warning {
         color: darken(@highlight-notice, 14%);
         background: desaturate(lighten(@highlight-notice, 42%),10%);
@@ -41,16 +48,36 @@
         }
     }
 
-    // State: Error
     &.is--error {
         color: @highlight-error;
-        background: desaturate(lighten(@highlight-error, 38%),20%);
+        background: desaturate(lighten(@highlight-error, 38%), 20%);
 
         .alert--icon {
             background: @highlight-error;
         }
     }
+/*
+######With an Icon inside of the box.</h6>
+```
+<div class="alert is--success is--rounded">
+    <div class="alert--icon">
+    <i class="icon--element icon--check"></i>
+    </div>
+    <div class="alert--content">
+    Success message with Icon
+    </div>
+</div>
 
+<div class="alert is--warning is--rounded">
+    <div class="alert--icon">
+    <i class="icon--element icon--warning"></i>
+    </div>
+    <div class="alert--content">
+    Warning message with Icon
+    </div>
+</div>
+```
+*/
     .icon--element {
         position: absolute;
         top: 50%; left: 0;

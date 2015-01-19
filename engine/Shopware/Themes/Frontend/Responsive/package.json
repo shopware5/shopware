@@ -21,7 +21,6 @@
     "bower": "latest",
     "grunt": "~0.4.2",
     "grunt-bower-task": "^0.4.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "styledocco": "latest"
+    "grunt-contrib-clean": "^0.6.0"
   }
 }

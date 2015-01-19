@@ -1,9 +1,13 @@
-/**
- * The mixins provides you a cross-browser compatible method to set a keyframe.
- *
- * Please refer to <http://caniuse.com/css-animation> to see the browser support table of the feature.
- * @param: {String} value: All animation values
- */
+/*
+Animations mixin
+============================================
+The mixins provides you a cross-browser compatible method to set animation values.
+
+Please refer to <http://caniuse.com/css-animation> to see the browser support table of the feature.
+
+`@param: {String} value: All animation values`
+*/
+
 .animation(@value) {
     -webkit-animation: @value;
     -moz-animation: @value;
