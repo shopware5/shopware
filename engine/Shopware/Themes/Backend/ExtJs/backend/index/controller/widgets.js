@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
         firstRunWizardStep = parseInt(Ext.util.Cookies.get('firstRunWizardStep'), 10);
 
-        if (Ext.isEmpty(firstRunWizardStep) || isNaN(firstRunWizardStep) || firstRunWizardStep == 0) {
+        if (!me.subApplication.firstRunWizardEnabled || Ext.isEmpty(firstRunWizardStep) || isNaN(firstRunWizardStep) || firstRunWizardStep == 0) {
             me.loadWidgetPanel();
         }
 
