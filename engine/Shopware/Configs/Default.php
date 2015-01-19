@@ -109,7 +109,7 @@ return array_merge($customConfig, array(
             'automatic_cleaning_factor' => 0,
             'lifetime' => 3600
         ), $customConfig['cache']['frontendOptions']),
-        'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
+        'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'auto', // e.G auto, apc, xcache
         'backendOptions' => array_merge(array(
             'hashed_directory_perm' => 0771,
             'cache_file_perm' => 0644,

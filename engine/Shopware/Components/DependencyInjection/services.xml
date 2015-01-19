@@ -153,25 +153,16 @@
             <argument type="service" id="guzzle_http_client"/>
         </service>
 
-        <service id="cache_zend"
-                 class="Zend_Cache_Core"
-                 factory-class="Zend_Cache"
-                 factory-method="factory"
-                 public="false">
-
-            <argument>Core</argument>
-            <argument>%shopware.cache.backend%</argument>
-            <argument>%shopware.cache.frontendOptions%</argument>
-            <argument>%shopware.cache.backendOptions%</argument>
-        </service>
-
         <service id="cache_factory" class="Shopware\Components\DependencyInjection\Bridge\Cache"/>
+
         <service id="cache"
                  class="Zend_Cache_Core"
                  factory-service="cache_factory"
                  factory-method="factory">
 
-            <argument type="service" id="cache_zend"/>
+            <argument>%shopware.cache.backend%</argument>
+            <argument>%shopware.cache.frontendOptions%</argument>
+            <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
         <service id="config_factory" class="Shopware\Components\DependencyInjection\Bridge\Config" />

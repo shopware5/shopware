@@ -241,7 +241,7 @@ class CacheManager
     {
         $cacheConfig = $this->container->getParameter('shopware.cache');
 
-        if ($cacheConfig['backend'] == 'apc' && extension_loaded('apc')) {
+        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apc) {
             $apcInfo = apc_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
@@ -255,7 +255,11 @@ class CacheManager
         }
 
         $info['name'] = 'Shopware configuration';
-        $info['backend'] = empty($cacheConfig['backend']) ? 'File' : $cacheConfig['backend'];
+
+        $backend = get_class($this->cache->getBackend());
+        $backend = str_replace('Zend_Cache_Backend_', '', $backend);
+
+        $info['backend'] = $backend;
 
         return $info;
     }
