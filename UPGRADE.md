@@ -298,7 +298,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed `frontend/detail/ajax.tpl`
 * Added `frontend/detail/product_quick_view.tpl`
 * Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
-* Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true) 
+* Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true)
 
 ## 4.3.1
 
@@ -322,6 +322,7 @@ In this document you will find a changelog of the important changes related to t
     * Exceptions are logged in a logfile since 4.2.0 (/logs)
     * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
 * Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
+* Added automatic APC detection for the general cache.
 
 ## 4.3.0
 
