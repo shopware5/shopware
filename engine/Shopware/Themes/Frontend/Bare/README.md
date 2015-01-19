@@ -1,30 +1,14 @@
 # Shopware 5 Bare Theme
 
-- **License**: [New BSD](http://opensource.org/licenses/BSD-3-Clause)
-- **Issue-Tracker**: [http://jira.shopware.de/jira](http://jira.shopware.de/jira)
-
 ## Description
-The bare theme is a simple boilerplate template, which contains the necessary HTML and Smarty structure. All provided javascript files are not included by default, so you can pick whatever you want for your next project.
+The Bare Theme is boilerplate theme for Shopware 5. It only contains the HTML structure and Smarty blocks of the theme but no styling or any client side functionality.
 
-## Installation
-The theme supports [Grunt](http://gruntjs.com/) and [Bower](http://bower.io/), so you need to install the tools.
+Frameworks are great, but sometimes they make things more complicated than they need to be. Our boilerplate theme is as bare and minimal as possible. It's meant to be your starting for a fully customizable Shopware 5 theme.
 
-First of all, please install [node.js](http://nodejs.org/), [npm](https://www.npmjs.org/) and [grunt-cli](https://github.com/gruntjs/grunt-cli).
 
-After that, head over to ```/engine/Shopware/Themes/Bare``` and execute the following command:
+## Bug reporting
+If you find any bugs in the theme, please use our public tracker at [http://jira.shopware.de/jira](http://jira.shopware.de/jira) to report them.
 
-```
-npm install
-bower install
-```
 
-Now you're ready to go and can start installing additional web components with [Bower](http://bower.io/) and validate your LESS, CSS and Javascript source code using ```grunt test```.
-
-## Watch mode
-We'd included a watch mode into ```grunt```, so you can continously work on your source files and each time you save any of the files, ```grunt``` validates your sources and compiles your LESS files.
-
-If you want to use the mode, please execute the following command in your terminal:
-
-```
-grunt watch
-```
+## License
+The theme is licensed under the MIT License. Please see the included License File for more information.
