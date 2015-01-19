@@ -92,6 +92,10 @@ class Cache
      */
     private function isApcAvailable()
     {
+        if (PHP_SAPI === 'cli') {
+            return false;
+        }
+
         return extension_loaded('apc') && version_compare(phpversion('apc'), '3.1.13', '>=');
     }
 
