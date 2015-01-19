@@ -11,13 +11,11 @@
 
 {block name="frontend_index_content"}
 
-    {foreach $emotions as $emotion}
-        <div class="emotion--wrapper"
-             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-             data-availableDevices="{$emotion.devices}"
-             data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
-        </div>
-    {/foreach}
+    <div class="emotion--wrapper"
+         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+         data-availableDevices="{$emotion.devices}"
+         data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
+    </div>
 
 {/block}
 

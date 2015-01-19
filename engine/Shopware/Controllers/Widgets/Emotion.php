@@ -650,12 +650,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         if ($templateVersion >= 3) {
             
-            $emotions = $this->get('emotion_device_configuration')->getById($emotionId);
+            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
 
-            $viewAssignments['emotions'] = $emotions;
-            $viewAssignments['hasEmotion'] = (!empty($emotions));
+            $viewAssignments['emotion'] = $emotion;
+            $viewAssignments['hasEmotion'] = (!empty($emotion));
 
-            $viewAssignments['showListing'] = (bool) max(array_column($emotions, 'showListing'));
+            $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
 
         } else {
             //check category emotions
