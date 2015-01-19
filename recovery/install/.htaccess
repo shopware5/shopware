@@ -1,49 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule .* - [E=MOD_REWRITE:1]
-    RewriteCond %{REQUEST_URI} !(\/(templates)\/)
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
+
 DirectoryIndex index.php
-
-<Files *.*>
-    # Deny all requests from Apache 2.4+.
-    <IfModule mod_authz_core.c>
-          Require all denied
-    </IfModule>
-
-    # Deny all requests from Apache 2.0-2.2.
-    <IfModule !mod_authz_core.c>
-        Order Deny,Allow
-        Deny from all
-    </IfModule>
-</Files>
-
-<Files index.php>
-    # Allow all requests from Apache 2.4+.
-    <IfModule mod_authz_core.c>
-          Require all granted
-    </IfModule>
-
-    # Allow all requests from Apache 2.0-2.2.
-    <IfModule !mod_authz_core.c>
-        Order Allow,Deny
-        Allow from all
-    </IfModule>
-</Files>
-
-<FilesMatch "\.(css|js|png|jpg|jpeg)$">
-    # Allow all requests from Apache 2.4+.
-    <IfModule mod_authz_core.c>
-          Require all granted
-    </IfModule>
-
-    # Allow all requests from Apache 2.0-2.2.
-    <IfModule !mod_authz_core.c>
-        Order Allow,Deny
-        Allow from all
-    </IfModule>
-</FilesMatch>
-
-

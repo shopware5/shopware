@@ -1,4 +1,112 @@
-;(function($, undefined) {
+;
+(function ($, window, document, undefined) {
+    "use strict";
+
+    /**
+     * Formats a string and replaces the placeholders.
+     *
+     * @example format('<div class="%0"'>%1</div>, [value for %0], [value for %1], ...)
+     *
+     * @param {String} str
+     * @param {Mixed}
+     * @returns {String}
+     */
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    var pluginName = 'ajaxDatabaseSelection',
+            defaults = {
+                url: 'your-url.json'
+            };
+
+    function Plugin(element, options) {
+
+        this.$el = $(element);
+        this.opts = $.extend({}, defaults, options);
+
+        this._defaults = defaults;
+        this._name = pluginName;
+
+        this.init();
+    }
+
+    Plugin.prototype.init = function () {
+        var me = this,
+                $el = me.$el;
+
+        $el.on('focus', $.proxy(me.onFocus, me));
+    };
+
+    Plugin.prototype.onFocus = function () {
+        var me = this,
+                $el = me.$el,
+                url = $el.attr('data-url') || me.opts.url;
+
+        $.ajax({
+            method: 'post',
+            url: url,
+            data: $el.parents('form').serialize(),
+            dataType: 'json',
+            success: $.proxy(me.onSuccess, me)
+        });
+    };
+
+    Plugin.prototype.onSuccess = function (data) {
+        if (data.length === 0) {
+            return;
+        }
+
+        var me = this,
+                oldValue = me.$el.val() || '',
+                fieldName = me.$el.attr('name'),
+                opts = me.createSelectOptions(data, oldValue),
+                select;
+
+        select = $('<select>', {
+            'name': fieldName,
+            'class': 'js--database-selection',
+            'html': opts.join('')
+        });
+
+        me.$el.replaceWith(select);
+        select.trigger('focus');
+    };
+
+    Plugin.prototype.createSelectOptions = function (data, oldValue) {
+        var me = this,
+                opts = [];
+
+        $.each(data, function (i, item) {
+            if (oldValue === item.value) {
+                opts.push(format('<option selected value="%0">%1</option>', item.value, item.display));
+            } else {
+                opts.push(format('<option value="%0">%1</option>', item.value, item.display));
+            }
+
+        });
+
+        return opts;
+    };
+
+    $.fn[pluginName] = function (options) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                        new Plugin(this, options));
+            }
+        });
+    };
+
+    $(function () {
+        $('*[data-ajaxDatabaseSelection="true"]').ajaxDatabaseSelection();
+    })
+})(jQuery, window, document);
+
+;(function ($, window, undefined) {
     "use strict";
 
     var progressConfig = [
@@ -9,10 +117,11 @@
         {
             requestUrl: 'importSnippets',
             counterText: shopwareTranslations.counterTextMigrations,
-            finalFcnt: function() {
-                $('.primary').removeClass('invisible');
+            finalFcnt: function () {
+                $('.btn-primary').removeClass('is--hidden');
+                $('div .actions').show();
                 $('.progress').removeClass('progress-info').addClass('progress-success').removeClass('active');
-                $('.progress .bar').width("100%");
+                $('.progress .progress-bar').width("100%");
                 $('#start-ajax').hide();
                 $(window).unbind('beforeunload');
                 refreshCounterText(2, shopwareTranslations.updateSuccess, false);
@@ -20,14 +129,14 @@
         }
     ], counter = 1, configLen = progressConfig.length;
 
-    var format = function(str) {
+    var format = function (str) {
         for (var i = 1; i < arguments.length; i++) {
             str = str.replace('%' + (i - 1), arguments[i]);
         }
         return str;
     };
 
-    var refreshCounterText = function(step, stepText, showSuffix) {
+    var refreshCounterText = function (step, stepText, showSuffix) {
         var len = configLen, suffix, container = $('.counter-text');
 
         showSuffix = (showSuffix !== undefined) ? showSuffix : true;
@@ -39,11 +148,12 @@
         return true;
     };
 
-    var startProgress = function(config) {
+    var startProgress = function (config) {
         var currentConfig = config.shift(),
-            progressBar = $('.progress .bar');
+                progressBar = $('.progress .progress-bar');
 
         $('.progress').addClass('active');
+
         progressBar.width("0%");
         refreshCounterText(counter, currentConfig.counterText || '');
         counter++;
@@ -52,14 +162,14 @@
         doRequest(0, currentConfig, config);
     };
 
-    var doRequest = function(offset, currentConfig, config) {
+    var doRequest = function (offset, currentConfig, config) {
         var maxCount = currentConfig.maxCount,
-            progressBar = $('.progress .bar');
+                progressBar = $('.progress .progress-bar');
 
         $.ajax({
             url: currentConfig.requestUrl,
             data: { offset: offset, totalCount: currentConfig.maxCount }
-        }).done(function(data) {
+        }).done(function (data) {
             if (!data.success) {
                 $('.alert-error').show().html('<h2>Error</h2>');
                 if (data.errorMsg) {
@@ -94,115 +204,71 @@
         });
     };
 
-    $(document).ajaxError(function(event, jqxhr, settings, exception) {
+    $(document).ajaxError(function (event, jqxhr, settings, exception) {
         $('.alert-error').show().html('<h2>Error</h2> Received an error message.<br><strong>URL:</strong> ' + settings.url + '<br><strong>Message:</strong> ' + exception + "<br><br>Please try to fix this error and restart the update.");
         $('.alert-error').append("<h3>Response</h3>");
         $('.alert-error').append("<pre>" + jqxhr.responseText + "</pre>");
         return;
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Set js class on the html tag
         $('html').removeClass('no-js').addClass('js');
 
-        $('#start-ajax').click(function() {
+        $('#start-ajax').click(function () {
             startProgress(progressConfig);
             $('#start-ajax').hide();
-            $('.secondary').hide();
-            $('.counter-text').removeClass('hidden').next('.progress-text').addClass('hidden');
+            $('div .actions').hide();
+            $('.counter-text').removeClass('is--hidden').next('.progress-text').addClass('is--hidden');
 
-            $(window).bind('beforeunload', function() {
+            $(window).bind('beforeunload', function () {
                 return 'A system update is running.';
             });
         });
 
-        $('.language-selection').bind('change', function() {
+        $('.language-selection').bind('change', function () {
             var $this = $(this),
-                form = $this.parents('form'),
-                action = form.find('.hidden-action').val();
+                    form = $this.parents('form'),
+                    action = form.find('.hidden-action').val();
 
             form.attr('action', action).trigger('submit');
         });
 
-        $('.primary').bind('click', function(event) {
+        $('.btn-primary').bind('click', function (event) {
             var $this = $(this),
-                form = $this.parents('form');
+                    form = $this.parents('form');
 
-            if(!$.checkForm(form)) {
-                event.preventDefault();
-                return false;
-            }
+            form.addClass('is--submitted');
         });
 
-        $('.secondary').bind('click', function() {
-            var active = $('.navi-tabs li.active'),
-                prev = active.prev('li');
-
-            prev.addClass('active');
-        });
-
-        $('input').bind('keyup', function() {
+        $('input').bind('keyup', function () {
             var required = $(this).attr('required');
-            if(required) {
+            if (required) {
                 var $this = $(this);
 
-                if(!$this.val().length) {
+                if (!$this.val().length) {
                     $this.removeClass('inline-success').addClass('inline-error');
                 } else {
                     $this.removeClass('inline-error').addClass('inline-success');
                 }
             }
-
-            var active = $('.navi-tabs li.active'),
-                next = active.next('li');
-
-            next.removeClass('disabled');
         });
-        $('select').bind('change', function() {
-            if(!$.checkForm($(this).parents('form'))) {
-                return false;
+
+
+        var changeLogo = function() {
+            var win = $(window),
+                winWidth = win.width(),
+                logo = $('.header-logo');
+
+            if(winWidth <= 360) {
+                logo.attr('src', logo.attr('data-small'));
+            } else {
+                logo.attr('src', logo.attr('data-normal'));
             }
-            var active = $('.navi-tabs li.active'),
-                next = active.next('li');
+        };
 
-            next.removeClass('disabled');
-        });
-
+        $(window).on('resize', changeLogo);
+        changeLogo();
     });
+})(jQuery, window);
 
-    $.checkForm = function(form) {
-        var inputs = form.find('input'),
-            selects = form.find('select'),
-            success = true;
-
-        $.each(inputs, function(i, input) {
-            var $input = $(input);
-
-            if(!success) { return false; }
-
-            if($input.hasClass('allowBlank')) {
-                return success;
-            }
-
-            if($input.val().length === 0) {
-                success = false;
-            }
-        });
-
-        $.each(selects, function(i, select) {
-            var $select = $(select);
-
-            if(!success) { return false; }
-
-            if($select.hasClass('allowBlank')) {
-                return false;
-            }
-
-            if($select.val().length === 0) {
-                success = false;
-            }
-        });
-
-        return success;
-    };
-})(jQuery);

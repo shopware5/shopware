@@ -60,6 +60,8 @@ class Generator
 
 namespace Shopware\Themes\$TEMPLATE$;
 
+use Shopware\Components\Form as Form;
+
 class Theme extends \Shopware\Components\Theme
 {
     protected $extend = '$PARENT$';
@@ -72,7 +74,7 @@ class Theme extends \Shopware\Components\Theme
 
     protected $license = '$LICENSE$';
 
-    public function createConfig()
+    public function createConfig(Form\Container\TabContainer $container)
     {
     }
 }

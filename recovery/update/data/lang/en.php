@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'title'         => "Shopware 5 - Update Script",
     'meta_text'     => '<strong>Shopware update:</strong>',
 
@@ -52,4 +52,4 @@ return array(
     'done_delete'   => 'Your shop is currently in maintenance mode.<br/>Please delete the updater (/update-assets) from your server via FTP.',
     'done_frontend' => 'Open shop frontend',
     'done_backend'  => 'Open shop backend',
-);
+];
