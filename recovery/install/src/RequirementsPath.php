@@ -143,10 +143,10 @@ class RequirementsPath implements \IteratorAggregate, \Countable
      */
     public function toArray()
     {
-        $list = array();
+        $list = [];
         $getList = $this->getList();
         foreach ($getList->file as $requirement) {
-            $listResult = array();
+            $listResult = [];
 
             $listResult["name"] = (string) $requirement->name;
             $listResult["existsAndWriteable"] = (string) $requirement->existsAndWriteable;

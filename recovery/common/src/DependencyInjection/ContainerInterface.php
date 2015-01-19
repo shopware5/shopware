@@ -107,5 +107,4 @@ interface ContainerInterface
      * @api
      */
     public function setParameter($name, $value);
-
 }

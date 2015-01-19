@@ -2,6 +2,7 @@
 <shopware>
 <files>
     <file><name>logs/</name></file>
+    <file><name>config.php</name></file>
     <file><name>cache/</name></file>
     <file><name>web/cache/</name></file>
     <file><name>files/documents/</name></file>

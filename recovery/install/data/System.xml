@@ -22,7 +22,7 @@
 	 	<name>pdo_mysql</name><group>core</group><required>1</required>
 	</requirement>
 	<requirement>
-	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info><error>true</error>
+	 	<name>disk_free_space</name><group>core</group><required>5 GB</required>
 	</requirement>
 	<requirement>
 	 	<name>gd</name><group>extension</group><required>2.0.0</required>
@@ -73,7 +73,7 @@
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
-	 	<name>memory_limit</name><group>config</group><required>128M</required>
+	 	<name>memory_limit</name><group>config</group><required>128M</required><error>1</error>
 	</requirement>
 	<requirement>
 	 	<name>max_execution_time</name><group>config</group><required>30</required>
@@ -98,7 +98,7 @@
         <notice>When the "suhosin" PHP extension is loaded and the "get.max_value_length" is less than 2000, the Ext JS files cannot be loaded via GET request in the Shopware backend. This means that the Shopware backend can be partially uncached.</notice>
     </requirement>
 	<requirement>
-	 	<name>zip</name><group>other</group><required>1</required>
+	 	<name>zip</name><group>other</group><required>1</required><error>1</error>
 	</requirement>
 	<requirement>
 	 	<name>ftp</name><group>other</group><required>1</required>
