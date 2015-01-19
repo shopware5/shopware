@@ -33,18 +33,18 @@
         "doctrine/dbal": "2.4.2",
         "doctrine/orm": "2.4.4",
         "oyejorge/less.php": "1.7.0.2",
-        "guzzlehttp/guzzle": "5.0.1",
+        "guzzlehttp/guzzle": "5.1.0",
         "egulias/email-validator": "1.2.7"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable",
-        "phpunit/dbunit": "@stable",
-        "behat/behat": "@stable",
-        "behat/mink": "@stable",
-        "behat/mink-extension": "@stable",
-        "behat/mink-sahi-driver": "@stable",
-        "behat/mink-goutte-driver": "@stable",
-        "sensiolabs/behat-page-object-extension": "*"
+        "phpunit/phpunit": "~4.4",
+        "phpunit/dbunit": "~1.3",
+        "behat/behat": "~2.5",
+        "behat/mink": "~1.5",
+        "behat/mink-extension": "~1.3",
+        "behat/mink-sahi-driver": "~1.1",
+        "behat/mink-goutte-driver": "~1.0",
+        "sensiolabs/behat-page-object-extension": "~1.0"
     },
     "autoload": {
         "psr-0": {
