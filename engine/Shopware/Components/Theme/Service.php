@@ -220,7 +220,9 @@ class Service
 
             if (isset($element['selection'])) {
                 foreach ($element['selection'] as &$selection) {
-                    $selection = $this->convertSnippet($selection, $namespace);
+                    foreach($selection as &$value) {
+                        $value = $this->convertSnippet($value, $namespace);
+                    }
                 }
             }
         }
