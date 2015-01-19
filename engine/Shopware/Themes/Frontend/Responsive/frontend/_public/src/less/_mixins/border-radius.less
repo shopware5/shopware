@@ -1,8 +1,13 @@
-// The mixins provides you a cross-browser compatible method to set a border-radius.
-//
-// Please refer to <http://caniuse.com/border-radius> to see the browser support table of the feature.
-//
-// @param {String} radius The radius you want to set
+/*
+Border-radius mixin
+=============================================
+The mixins provides you a cross-browser compatible method to set a border-radius.
+
+Please refer to <http://caniuse.com/border-radius> to see the browser support table of the feature.
+
+`@param {String} radius The radius you want to set`
+*/
+
 .border-radius(@radius: 3px) {
 	border-radius: @radius;
 	// Prevent the background color leaks out

@@ -1,7 +1,13 @@
-// Contains all dirty hacks like !important or negative margins, so you get a single place to document and set them.
+/*
+Hacks
+====================================
+The `hacks.less` contains all dirty hacks like !important or negative margins, so you get a single place to document and set them.
 
-// The product tax information will be filled using a snippet through the administration. The WYSIWYG adds inline styles
-// which needs to be overridden with a ```!important```
+More precise designations are commented inside the document.
+*/
+
+    // The product tax information will be filled using a snippet through the administration. The WYSIWYG adds inline styles
+    // which needs to be overridden with a ```!important```
 .product--tax a {
     text-decoration: none !important;
 
@@ -10,14 +16,14 @@
     }
 }
 
-// Webkit based has problems with small "rem"-values which results in an much bigger font as declared.
-// To fix the behavior we need to set the icon size using "px"-values
+    // Webkit based has problems with small "rem"-values which results in an much bigger font as declared.
+    // To fix the behavior we need to set the icon size using "px"-values
 .js--fancy-select-trigger,
 .js--fancy-select-trigger i {
     font-size: 5px;
 }
 
-// Arrow icon is too big on default font size. We have to reduce it manually
+    // Arrow icon is too big on default font size. We have to reduce it manually
 .entry--all-results-link i {
     font-size: 8px;
 }
@@ -48,13 +54,13 @@
     }
 }
 
-// List items in the menu scroller are not allowed to float or have another display mode then inline-block.
-// This is because we allow items to overflow the list itself and do not have cropping issues.
+    // List items in the menu scroller are not allowed to float or have another display mode then inline-block.
+    // This is because we allow items to overflow the list itself and do not have cropping issues.
 .js--menu-scroller--item {
     display: inline-block !important;
 }
 
-// Changing the appearance of the scrollbar in filter panels.
+    // Changing the appearance of the scrollbar in filter panels.
 .filter-panel--content {
 
     // IE styles
@@ -80,7 +86,7 @@
     }
 }
 
-// inactive class for disabling scrolling on different parts of shopware
+    // inactive class for disabling scrolling on different parts of shopware
 .is--inactive {
     overflow: hidden !important;
 }

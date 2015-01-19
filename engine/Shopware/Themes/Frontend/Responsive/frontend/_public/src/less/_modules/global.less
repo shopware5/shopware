@@ -1,8 +1,41 @@
+/*
+Global
+==========================================
+Defines the global styles of shopware.
+
+It contains the global modifier classes that help working with the shopware elements and the typographic styles.
+
+######Global modifier classes
+Add a `is--` class to an element to easily change the properties.
+
+`.is--rounded` - changes the border-radius<br/>
+`.is--block` - sets element to display: block<br/>
+`.is--inline` - sets element to display: inline<br/>
+`.is--inline-block` - sets element to display: inline-block<br/>
+`.is--hidden` - sets element to display: none<br/>
+`.is--invisible` - sets element to  visibility: none<br/>
+
+`.is--align-left` - sets element to text-align: left;<br/>
+`.is--align-right` - sets element to text-align: right<br/>
+`.is--align-center` - sets element to text-align: center<br/>
+`.is--underline` - sets element to text-decoration: underline<br/>
+`.is--line-through` - sets element to text-decoration: line-through<br/>
+`.is--uppercase` - sets element to text-transform: uppercase<br/>
+`.is--strong` - sets element to font-weight: 600<br/>
+`.is--bold` - sets element to font-weight: bold<br/>
+`.is--italic` - sets element to font-style: italic<br/>
+`.is--nowrap` - sets element to white-space: nowrap<br/>
+
+`.is--dark` - changes color to @text-color-dark<br/>
+`.is--light` - changes color to darken(@gray-dark, 20%)<br/>
+`.is--soft` - changes color to @gray-dark<br/>
+*/
+
 * {
     .box-sizing();
 }
 
-// Fix the body for off-canvas handling
+    // Fix the body for off-canvas handling
 html, body {
     width: 100%;
     height: 100%;
@@ -18,7 +51,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-// All images should be responsive by default
+    // All images should be responsive by default
 img {
     display: block;
     max-width: 100%;
@@ -36,13 +69,13 @@ ul {
     padding: 0;
 }
 
-// Star rating
+    // Star rating
 .product--rating {
     i[class^=icon] { color: @rating-star-color; }
     i.icon--star-empty { color: @border-color; }
 }
 
-// Font
+    // Font
 h1, h2, h3, h4, h5, h6 {
     .unitize(26, 16, line-height);
     .unitize-margin(28, 0, 10, 0);
@@ -93,10 +126,10 @@ blockquote {
     margin: 0;
 }
 
-// Hide ajax loader by default
+    // Hide ajax loader by default
 .ajax-loader { display: none }
 
-// Global Modifier
+    // Global Modifier
 .is--rounded { .border-radius(); }
 
 .is--block { display: block !important; }

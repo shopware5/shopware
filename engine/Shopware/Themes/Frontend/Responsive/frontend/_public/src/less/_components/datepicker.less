@@ -1,5 +1,11 @@
-/* Layout helpers
-----------------------------------*/
+/*
+Datepicker
+=========================================
+The datepicker is a calendar overlay tool that simplyfies the selection of dates for input elements.
+
+The styling includes the state styles, the styling with multiple calendars and the rtl-support .
+*/
+
 .ui-helper-hidden {
     display: none;
 }
@@ -33,7 +39,7 @@
     clear: both;
 }
 .ui-helper-clearfix {
-    min-height: 0; /* support: IE7 */
+    min-height: 0; // support: IE7
 }
 .ui-helper-zfix {
     width: 100%;
@@ -48,31 +54,19 @@
 .ui-front {
     z-index: 1000;
 }
-
-
-/* Interaction Cues
-----------------------------------*/
+    // Interaction Cues
 .ui-state-disabled {
     cursor: default !important;
 }
+    // Icons
 
-
-/* Icons
-----------------------------------*/
-
-/* states and images */
+    // states and images
 .ui-icon {
     display: block;
     text-indent: -99999px;
     overflow: hidden;
     background-repeat: no-repeat;
 }
-
-
-/* Misc visuals
-----------------------------------*/
-
-/* Overlays */
 .ui-widget-overlay {
     position: fixed;
     top: 0;
@@ -229,7 +223,7 @@
     }
 }
 
-/* with multiple calendars */
+    // with multiple calendars
 .ui-datepicker.ui-datepicker-multi {
     width: auto;
 }
@@ -262,7 +256,7 @@
     font-size: 0;
 }
 
-/* RTL support */
+    // RTL support
 .ui-datepicker-rtl {
     direction: rtl;
     

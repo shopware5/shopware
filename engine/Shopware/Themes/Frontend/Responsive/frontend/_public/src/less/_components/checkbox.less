@@ -1,22 +1,36 @@
-/* Checkbox custom styling
+/*
+Checkboxes
+==========================================
+######Checkboxes elements
 
-As a real checkbox:
+Checkbox element for selections or checkbox inside a link.
+
+Either in a `span` element with an `input` tag inside / or inside a link.
 ```
 <span class="checkbox">
-	<input type="checkbox" />
-	<span class="checkbox--state"></span>
-</span>
-```
+    <input type="checkbox" />
+    <span class="checkbox--state"></span>
+</span> Option (actual checkbox)<br/>
 
-In a link:
-```
+<span class="checkbox">
+    <input type="checkbox" />
+    <span class="checkbox--state"></span>
+</span> Option (actual checkbox)<br/>
+
 <a href="#">
-	<span class="checkbox">
-		<span class="checkbox--state"></span>
-	</span>
-</a>
+    <span class="checkbox">
+        <span class="checkbox--state"></span>
+    </span>
+</a> Option (inside a link)<br/>
+
+<a href="#">
+    <span class="checkbox">
+        <span class="checkbox--state"></span>
+    </span>
+</a> Option (inside a link)<br/>
 ```
 */
+
 .checkbox {
 	.unitize-width(16);
 	.unitize-height(16);
