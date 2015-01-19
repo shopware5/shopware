@@ -59,7 +59,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * Render form - onSubmit checkFields -
      *
      * @throws Enlight_Exception
-     * @return void
      */
     public function indexAction()
     {
@@ -68,10 +67,55 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $this->View()->forceMail = intval($this->Request()->getParam('forceMail'));
         $this->View()->id        = $id;
+        $this->View()->sSupport  = $this->getContent($id);
+        $this->View()->rand      = md5(uniqid(rand()));
 
+        $success = $this->Request()->getParam('success');
+        if ($success) {
+            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
+        }
+
+        $this->View()->assign('success', $success);
+
+        if ($this->Request()->isPost()) {
+            $this->handleFormPost($id);
+        }
+    }
+
+    /**
+     * @param int $formId
+     * @throws Enlight_Exception
+     */
+    private function handleFormPost($formId)
+    {
+        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
+            $this->commitForm();
+
+            $this->redirect(
+                array(
+                    'controller' => 'ticket',
+                    'action' => 'index',
+                    'sFid' => $formId,
+                    'success' => 1
+                )
+            );
+            return;
+        }
+    }
+
+    /**
+     * @param integer $formId
+     * @return array
+     * @throws Enlight_Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    protected function getContent($formId)
+    {
+        $fields = array();
+        $labels = array();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id);
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -146,21 +190,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             'email_subject'  => $form->getEmailSubject(),
         );
 
-        $this->View()->sSupport = array_merge($formData, array(
+        return array_merge($formData, array(
             'sErrors'   => $this->_errors,
             'sElements' => $this->_elements,
             'sFields'   => $fields,
             'sLabels'   => $labels
         ));
-
-        $this->View()->rand = md5(uniqid(rand()));
-
-        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
-            $this->commitForm();
-            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
-        }
     }
-
 
     /**
      * Validate input - check form field rules defined by merchant
