@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
         });
 
         me.loadingIndicator.wait({
-            text: 'Checking Shopware server connection...',
+            text: '{s name=home/content/checking_connection}Checking Shopware server connection{/s}',
             scope: this
         });
 
@@ -154,8 +154,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
             me.loadingResultContainer = Ext.create('Ext.container.Container', {
                 html: '',
                 style: {
-                    marginLeft: '145px',
-                    width: '265px'
+                    'text-align': 'center'
                 }
             });
         }
@@ -163,7 +162,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
         if (me.firstRunWizardIsConnected == true || me.firstRunWizardIsConnected == 'true') {
             me.loadingResultContainer.update(
                 Ext.String.format(
-                    '<div style="width: 16px; height: 16px; float: left;" class="sprite-[0]"></div><div>[1]</div>',
+                    '<div style="width: 16px; height: 16px; float: none; display: inline-block;" class="sprite-[0]"></div><div style="display: inline-block;">[1]</div>',
                     me.snippets.isConnected.icon, me.snippets.isConnected.text
                 )
             );
@@ -171,7 +170,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
         } else if (me.firstRunWizardIsConnected == false || me.firstRunWizardIsConnected == 'false') {
             me.loadingResultContainer.update(
                 Ext.String.format(
-                    '<div style="width: 16px; height: 16px; float: left;" class="sprite-[0]"></div><div>[1]</div>',
+                    '<div style="width: 16px; height: 16px; float: none; display: inline-block;" class="sprite-[0]"></div><div style="display: inline-block;">[1]</div>',
                     me.snippets.isNotConnected.icon, me.snippets.isNotConnected.text
                 )
             );
