@@ -50,7 +50,7 @@ class Repository extends ModelRepository
         $builder = $this->getListQueryBuilder($filter, $filterBy, $orderBy, $categoryId);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -70,8 +70,8 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('emotions', 'categories'))
-                ->from('Shopware\Models\Emotion\Emotion', 'emotions')
-                ->leftJoin('emotions.categories', 'categories');
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->leftJoin('emotions.categories', 'categories');
 
         // filter by search
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
@@ -205,16 +205,16 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute','categories', 'grid', 'template'))
-                ->from('Shopware\Models\Emotion\Emotion', 'emotions')
-                ->leftJoin('emotions.grid', 'grid')
-                ->leftJoin('emotions.template', 'template')
-                ->leftJoin('emotions.elements', 'elements')
-                ->leftJoin('emotions.attribute', 'attribute')
-                ->leftJoin('elements.component', 'component')
-                ->leftJoin('component.fields', 'fields')
-                ->leftJoin('emotions.categories', 'categories')
-                ->where('emotions.id = ?1')
-                ->setParameter(1, $emotionId);
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->leftJoin('emotions.grid', 'grid')
+            ->leftJoin('emotions.template', 'template')
+            ->leftJoin('emotions.elements', 'elements')
+            ->leftJoin('emotions.attribute', 'attribute')
+            ->leftJoin('elements.component', 'component')
+            ->leftJoin('component.fields', 'fields')
+            ->leftJoin('emotions.categories', 'categories')
+            ->where('emotions.id = ?1')
+            ->setParameter(1, $emotionId);
 
         return $builder;
     }
@@ -245,13 +245,13 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('data.value', 'field.name', 'field.id', 'field.valueType'))
-                ->from('Shopware\Models\Emotion\Data', 'data')
-                ->join('data.field', 'field')
-                ->leftJoin('field.component', 'component')
-                ->where('component.id = ?1')
-                ->andWhere('data.elementId = ?2')
-                ->setParameter(1, $componentId)
-                ->setParameter(2, $elementId);
+            ->from('Shopware\Models\Emotion\Data', 'data')
+            ->join('data.field', 'field')
+            ->leftJoin('field.component', 'component')
+            ->where('component.id = ?1')
+            ->andWhere('data.elementId = ?2')
+            ->setParameter(1, $componentId)
+            ->setParameter(2, $elementId);
 
         return $builder;
     }
@@ -280,9 +280,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('attribute'))
-                      ->from('Shopware\Models\Attribute\Emotion', 'attribute')
-                      ->where('attribute.emotionId = ?1')
-                      ->setParameter(1, $emotionId);
+            ->from('Shopware\Models\Attribute\Emotion', 'attribute')
+            ->where('attribute.emotionId = ?1')
+            ->setParameter(1, $emotionId);
 
         return $builder;
     }
@@ -306,15 +306,16 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions', 'grid', 'template'))
-                ->leftJoin('emotions.grid', 'grid')
-                ->leftJoin('emotions.template', 'template')
-                ->innerJoin('emotions.categories','categories')
-                ->where('categories.id = ?1')
-                ->andWhere('(emotions.validFrom <= CURRENT_TIMESTAMP() OR emotions.validFrom IS NULL)')
-                ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
-                ->andWhere('emotions.isLandingPage = 0 ')
-                ->andWhere('emotions.active = 1 ')
-                ->setParameter(1, $categoryId);
+            ->leftJoin('emotions.grid', 'grid')
+            ->leftJoin('emotions.template', 'template')
+            ->innerJoin('emotions.categories','categories')
+            ->where('categories.id = ?1')
+            ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
+            ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
+            ->andWhere('emotions.isLandingPage = 0 ')
+            ->andWhere('emotions.active = 1 ')
+            ->setParameter(1, $categoryId)
+            ->setParameter('now', new \DateTime());
 
         return $builder;
     }
@@ -346,13 +347,14 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions'))
-                ->innerJoin('emotions.categories','categories')
-                ->where('categories.id = ?1')
-                ->andWhere('(emotions.validFrom <= CURRENT_TIMESTAMP() OR emotions.validFrom IS NULL)')
-                ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
-                ->andWhere('emotions.isLandingPage = 1 ')
-                ->andWhere('emotions.active = 1 ')
-                ->setParameter(1, $categoryId);
+            ->innerJoin('emotions.categories','categories')
+            ->where('categories.id = ?1')
+            ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
+            ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
+            ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.active = 1 ')
+            ->setParameter(1, $categoryId)
+            ->setParameter('now', new \DateTime());
 
         return $builder->getQuery();
     }
@@ -366,10 +368,10 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions','categories.id AS categoryId', 'attribute'))
-                ->innerJoin('emotions.categories','categories')
-                ->leftJoin('emotions.attribute','attribute')
-                ->where('emotions.isLandingPage = 1 ')
-                ->andWhere('emotions.active = 1');
+            ->innerJoin('emotions.categories','categories')
+            ->leftJoin('emotions.attribute','attribute')
+            ->where('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.active = 1');
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -406,14 +408,15 @@ class Repository extends ModelRepository
 
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions', 'elements', 'component', 'grid', 'template'))
-                ->leftJoin('emotions.elements', 'elements')
-                ->leftJoin('elements.component', 'component')
-                ->leftJoin('emotions.grid', 'grid')
-                ->leftJoin('emotions.template', 'template')
-                ->where('emotions.id = ?1')
-                ->andWhere('(emotions.validFrom <= CURRENT_TIMESTAMP() OR emotions.validFrom IS NULL)')
-                ->andWhere('(emotions.validTo >= CURRENT_TIMESTAMP() OR emotions.validTo IS NULL)')
-                ->setParameter(1, $id);
+            ->leftJoin('emotions.elements', 'elements')
+            ->leftJoin('elements.component', 'component')
+            ->leftJoin('emotions.grid', 'grid')
+            ->leftJoin('emotions.template', 'template')
+            ->where('emotions.id = ?1')
+            ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
+            ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
+            ->setParameter(1, $id)
+            ->setParameter('now', new \DateTime());
 
         return $builder;
     }

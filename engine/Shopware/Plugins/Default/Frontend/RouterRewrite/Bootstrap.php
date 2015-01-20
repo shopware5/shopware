@@ -90,12 +90,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
         Shopware()->Events()->registerListener($event);
 
         $event = new Enlight_Event_EventHandler(
-            'Enlight_Controller_Router_Assemble',
-            array($this, 'onAssemble')
-        );
-        Shopware()->Events()->registerListener($event);
-
-        $event = new Enlight_Event_EventHandler(
             'Enlight_Controller_Front_PreDispatch',
             array($this, 'onPreDispatch')
         );
