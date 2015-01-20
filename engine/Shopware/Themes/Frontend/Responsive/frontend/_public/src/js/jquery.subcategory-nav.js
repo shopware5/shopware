@@ -233,13 +233,14 @@
             me.$sidebarWrapper = $(opts.sidebarWrapperSelector);
 
             /**
-             *
+             * Wrapper of the offcanvas animation
              *
              * @private
              * @property $navigation
              * @type {jQuery}
              */
             me.$navigation = $(opts.mobileNavigationSelector);
+            me.$navigation.show();
 
             /**
              * Loading icon element that will be appended to the
@@ -549,6 +550,8 @@
             if ($sidebar) {
                 $sidebar.off(me.getEventName(opts.eventName), '**');
             }
+
+            me.$navigation.hide();
 
             // make category children visible
             $(opts.sidebarCategorySelector + ' ul').not('.navigation--level-high').css('display', 'block');

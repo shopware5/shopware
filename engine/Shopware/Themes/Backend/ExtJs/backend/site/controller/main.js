@@ -109,16 +109,16 @@ Ext.define('Shopware.apps.Site.controller.Main', {
 			detailForm = me.getDetailForm(),
 			ddselector = detailForm.down('ddselector'),
             tree = me.getNavigationTree(),
-            saveSiteButton = me.getSaveSiteButton();
-
-        var record = Ext.create('Shopware.apps.Site.model.Nodes');
+            saveSiteButton = me.getSaveSiteButton(),
+            record = Ext.create('Shopware.apps.Site.model.Nodes'),
+            data = tree.getSelectionModel().hasSelection() ? tree.getSelectionModel().getSelection()[0].data : {};
 
         //if the current selection is not a root note (like gLeft)
-        if (tree.getSelectionModel().hasSelection() && tree.getSelectionModel().getSelection()[0].data.parentId != 'root' ) {
+        if (data.parentId !== 'root') {
 
             //get parentName and parentId
-            var parentName = tree.getSelectionModel().getSelection()[0].data.description,
-                parentId = tree.getSelectionModel().getSelection()[0].data.helperId;
+            var parentName = data.description,
+                parentId = data.helperId;
 
             //ask if the user wants to create a subSite of the currently selected one
             Ext.Msg.confirm('{s name=onCreateNewSiteConfirmationBoxCaption}Create subpage?{/s}', Ext.String.format('{s name=onCreateNewSiteConfirmationBoxText}Are you sure you want to create a subpage of \'[0]\'?{/s}', parentName), function(btn){

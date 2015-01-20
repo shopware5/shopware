@@ -9,7 +9,7 @@
                     <a class="navigation--link{if $page.active} is--active{/if}{if $page.childrenCount} link--go-forward{/if}"
                        href="{if $page.link}{$page.link}{else}{url controller='custom' sCustom=$page.id title=$page.description}{/if}"
                        title="{$page.description|escape}"
-                       data-category-id="{$page.id}"
+                       data-categoryId="{$page.id}"
                        data-fetchUrl="{url module=widgets controller=listing action=getCustomPage pageId={$page.id}}"
                        {if $page.target}target="{$page.page}"{/if}>
                         {$page.description}
