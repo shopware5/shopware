@@ -71,6 +71,31 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
         $this->View()->sUserData = $this->getUserData();
+
+        if ($this->Request()->getActionName() !== 'finish' && $this->Request()->getActionName() !== 'payment') {
+            return;
+        }
+
+        $basket = $this->getBasket();
+        $errors = array();
+
+        $serviceChecked = $this->Request()->getParam('serviceAgreementChecked');
+        if ($this->basketHasServiceArticles($basket) && empty($serviceChecked)) {
+            $errors['serviceError'] = true;
+        }
+
+        if (Shopware()->Config()->showEsdWarning) {
+            $esdChecked = $this->Request()->getParam('esdAgreementChecked');
+            if ($this->basketHasEsdArticles($basket) && empty($esdChecked)) {
+                $errors['esdError'] = true;
+            }
+        }
+
+        if (!empty($errors)) {
+            $this->forward('confirm', null, null, array(
+                'agreementErrors' => $errors
+            ));
+        }
     }
 
     /**
@@ -192,6 +217,28 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->View()->sTargetAction = 'confirm';
+
+        $this->View()->assign('hasMixedArticles', $this->basketHasMixedArticles($this->View()->sBasket));
+        $this->View()->assign('hasServiceArticles', $this->basketHasServiceArticles($this->View()->sBasket));
+
+        if (Shopware()->Config()->get('showEsdWarning')) {
+            $this->View()->assign('hasEsdArticles', $this->basketHasEsdArticles($this->View()->sBasket));
+        }
+
+        $serviceChecked = $this->Request()->getParam('serviceAgreementChecked');
+        if (!empty($serviceChecked)) {
+            $this->View()->assign('serviceAgreementChecked', true);
+        }
+
+        $esdChecked = $this->Request()->getParam('esdAgreementChecked');
+        if (!empty($esdChecked)) {
+            $this->View()->assign('esdAgreementChecked', true);
+        }
+
+        $errors = $this->Request()->getParam('agreementErrors');
+        if (!empty($errors)) {
+            $this->View()->assign('agreementErrors', $errors);
+        }
     }
 
     /**
@@ -1320,5 +1367,89 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         Enlight()->Plugins()->Controller()->Json()->setPadding();
+    }
+
+    /**
+     * Helper function that checks whether or not the given basket has an esd article in it.
+     *
+     * @param array $basket
+     * @return bool
+     */
+    private function basketHasEsdArticles($basket)
+    {
+        if (!isset($basket['content'])) {
+            return false;
+        }
+
+        foreach ($basket['content'] as $article) {
+            if ($article['esd']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function that iterates through the basket articles.
+     * It checks if an article is a service article by comparing its attributes
+     * with the plugin config serviceAttrField value.
+     *
+     * @param array $basket
+     * @return bool
+     */
+    private function basketHasServiceArticles($basket)
+    {
+        $config = Shopware()->Config();
+
+        if (!$config->offsetExists('serviceAttrField')) {
+            return false;
+        }
+
+        $attrName = $config->serviceAttrField;
+        if (empty($attrName) || !isset($basket['content'])) {
+            return false;
+        }
+
+        foreach ($basket['content'] as $article) {
+            $serviceAttr = $article['additional_details'][$attrName];
+
+            if ($serviceAttr && $serviceAttr != 'false') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function that iterates through the basket articles.
+     * If checks if the basket has a normal article e.g. not an esd article
+     * and not a article with the service attribute is set to true.
+     *
+     * @param array $basket
+     * @return bool
+     */
+    private function basketHasMixedArticles($basket)
+    {
+        $config = Shopware()->Config();
+        $attrName = $config->serviceAttrField;
+
+        if (!isset($basket['content'])) {
+            return false;
+        }
+
+        foreach ($basket['content'] as $article) {
+            if ($article['modus'] == 4 || $article['esd']) {
+                continue;
+            }
+
+            $serviceAttr = $article['additional_details'][$attrName];
+            if (empty($attrName) || ( $serviceAttr && $serviceAttr != 'false')) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

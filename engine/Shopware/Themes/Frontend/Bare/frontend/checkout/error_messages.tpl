@@ -30,3 +30,17 @@
 		{include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmInfoMinimumSurcharge'}{/s}"}
 	{/if}
 {/block}
+
+{* Service article tos not accepted *}
+{block name='frontend_checkout_error_messages_service_error'}
+    {if $agreementErrors && $agreementErrors.serviceError}
+        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="ServiceErrorMessage"}Bitte bestätigen Sie die Wiederrufsbelehrung bezüglich der Dienstleistungen.{/s}"}
+    {/if}
+{/block}
+
+{* ESD article tos not accepted *}
+{block name='frontend_checkout_error_messages_esd_error'}
+    {if $agreementErrors && $agreementErrors.esdError && {config name="showEsdWarning"}}
+        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="EsdErrorMessage"}Bitte bestätigen Sie die Wiederrufsbelehrung bezüglich der digitalen Inhalte.{/s}"}
+    {/if}
+{/block}
