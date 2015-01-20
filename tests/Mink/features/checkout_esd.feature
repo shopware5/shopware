@@ -28,7 +28,9 @@ Feature: Checkout esd article
             | percent | value  |
             | 19 %    | 6,07 € |
 
-        When  I proceed to checkout
+        When  I check "sAGB"
+        And   I check "esdAgreementChecked"
+        And   I press "Zahlungspflichtig bestellen"
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
         And   my finished order should look like this:
             | product                  | quantity | price   | sum     | esd |
@@ -65,7 +67,11 @@ Feature: Checkout esd article
             | 19 %    | 6,07 € |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
-        And   I proceed to checkout
+
+        When  I check "sAGB"
+        And   I check "esdAgreementChecked"
+        And   I press "Zahlungspflichtig bestellen"
+
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
         And   my finished order should look like this:
             | product                  | quantity | price   | sum     | esd |
