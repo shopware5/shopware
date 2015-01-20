@@ -250,8 +250,10 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getRequestConfig(window, 'contentProgress', 'seo', 'content'));
         configs.push(me.getRequestConfig(window, 'supplierProgress', 'seo', 'supplier'));
 
-        window.startButton.disable();
+        window.startButton.hide();
+        window.cancelButton.show();
         window.cancelButton.enable();
+        me.cancelOperation = false;
 
         me.runRequest(0, window, null, configs);
 
@@ -268,11 +270,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getRequestConfig(window, 'staticProgress', 'httpCacheWarmer', 'static'));
         configs.push(me.getRequestConfig(window, 'supplierProgress', 'httpCacheWarmer', 'supplier'));
 
-        window.startButton.disable();
+        window.startButton.hide();
+        window.cancelButton.show();
         window.cancelButton.enable();
+        me.cancelOperation = false;
 
         me.runRequest(0, window, null, configs);
-
     },
 
 
@@ -322,8 +325,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             //no more request configurations exists?
             if (configs.length === 0) {
                 // Enable close button, set progressBar to 'finish'
-                dialog.cancelButton.disable();
                 dialog.closeButton.enable();
+                dialog.startButton.show();
+                dialog.cancelButton.hide();
 
                 // Show 'finished' message
                 Shopware.Notification.createGrowlMessage(me.snippets.done.title, me.snippets.done.message);
@@ -331,6 +335,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 //cancel button pushed?
                 if (me.cancelOperation) {
                     dialog.closeButton.enable();
+                    dialog.startButton.show();
+                    dialog.cancelButton.hide();
                     return;
                 }
 
@@ -344,6 +350,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         //cancel button pushed?
         if (me.cancelOperation) {
             dialog.closeButton.enable();
+            dialog.startButton.show();
+            dialog.cancelButton.hide();
             return;
         }
 

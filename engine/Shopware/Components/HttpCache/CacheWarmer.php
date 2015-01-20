@@ -193,14 +193,16 @@ class CacheWarmer
         $httpClient = new Client();
         $shop = $this->getShopDataById($shopId);
 
-        foreach ($urls as $url) {
-            if (empty($shop["main_id"])) {
-                //is main, shop call url without shop cookie encoded in it
-                $request = $httpClient->createRequest('GET', $url);
-            } else {
-                $request = $httpClient->createRequest('GET', $url, ['cookies' => ['shop' => $shopId]]);
-            }
+        //don't verify the ssl certificate
+        $guzzleConfig['verify'] = false;
 
+        if (!empty($shop["main_id"])) {
+            //is not the main shop call url without shop cookie encoded in it
+            $guzzleConfig['cookies'] = ['shop' => $shopId];
+        }
+
+        foreach ($urls as $url) {
+            $request = $httpClient->createRequest('GET', $url, $guzzleConfig);
             try {
                 $httpClient->send($request);
             } catch (\Exception $e) {
@@ -222,15 +224,21 @@ class CacheWarmer
     {
         $shop = $this->getShopDataById($shopId);
 
-        if (!empty($shop['main_id'])) {
-            // not the main shop get it
-            $shop = $this->getShopDataById($shop['main_id']);
+        //if not already the main shop get it
+        $mainShop = !empty($shop['main_id']) ? $this->getShopDataById($shop['main_id']) : $shop;
+        $httpHost = $mainShop['always_secure'] ? 'https://' : 'http://';
+        if ($shop['base_url']) {
+            $baseUrl = $shop['base_url'];
+        } else {
+            // if no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
+            $baseUrl = $mainShop['base_url'] ? $mainShop['base_url'] : $mainShop['base_path'];
         }
+        // use the main host if no language host ist available
+        $shopHost = empty($shop['host']) ? $mainShop['host'] : $shop['host'];
+
         foreach ($urls as &$url) {
             $url = strtolower($url);
-            $httpHost = $shop['always_secure'] ? 'https://' : 'http://';
-            $baseUrl = $shop['base_url'] ? $shop['base_url'] : $shop['base_path'];
-            $url = $httpHost . $shop['host'] . $baseUrl . "/" . $url;
+            $url = $httpHost . $shopHost . $baseUrl . "/" . $url;
         }
 
         return $urls;
