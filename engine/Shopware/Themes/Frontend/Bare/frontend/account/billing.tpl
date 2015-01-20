@@ -31,7 +31,7 @@
 
 							{* Personal fieldset *}
 							{block name="frontend_account_personal_information"}
-								{include file="frontend/register/personal_fieldset.tpl" update=true form_data=$sFormData error_flags=$sErrorFlag}
+								{include file="frontend/register/personal_fieldset.tpl" fieldset_title="{s name='RegisterPersonalBaseDataHeadline' namespace='frontend/register/personal_fieldset'}{/s}" update=true form_data=$sFormData error_flags=$sErrorFlag}
 							{/block}
 
 							{* Billing fieldset *}

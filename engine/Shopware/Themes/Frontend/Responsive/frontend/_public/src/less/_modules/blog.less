@@ -130,10 +130,11 @@
     .unitize(20, 16, margin-bottom);
 
     .blog--box-metadata {
-        .unitize-margin(0, 20, 0, 20, 16);
         .unitize(14, 16, padding-bottom);
 		.unitize(5, 16, padding-top);
 		.unitize(12, 16, font-size);
+        .unitize-margin(0, 20, 0, 20);
+
         border-bottom: 1px solid @border-color;
 
         .blog--metadata {
@@ -142,7 +143,7 @@
             display: inline-block;
             border-right: 1px solid @border-color;
 
-            &.is--last {
+            &:last-child {
                 border-right: 0 none;
             }
         }
@@ -180,6 +181,8 @@
 
         .blog--box-description-short {
             .unitize(16, 16, margin-bottom);
+            .unitize(-6, 16, margin-top);
+
         }
     }
 
@@ -250,6 +253,10 @@
         display: block;
         float: left;
 
+        &:first-child {
+            margin-left: 0;
+        }
+
         &:last-child {
             margin-right: 0;
         }
@@ -257,7 +264,7 @@
 
     // Comments
     .blog--comments {
-        .unitize(20, 16, padding);
+        .unitize-padding(20, 0, 20, 0);
 
         .comments--actions .btn--create-entry {
             width: 100%;
@@ -338,8 +345,18 @@
         margin-top: 0;
     }
 
+    .blog--comments-form {
+        .unitize-margin(0, 20, 0, 20);
+
+        .form--comment-add {
+            margin-top: 20px;
+        }
+    }
+
     .blog--comments-form-errors {
-        .unitize-margin(20, 0, 20, 0);
+        .alert {
+            .unitize-margin(20, 0, 20, 0);
+        }
     }
 
     .blog--comments-voting {
@@ -361,12 +378,26 @@
     // Blog Listing
     .blog--listing {
         .unitize(16, 16, margin-top);
+
+        .blog--box-metadata {
+            .unitize-margin(0, 20, 0, 20);
+        }
+
+        .panel--title {
+            .unitize-margin(0, 20, 0, 20);
+        }
+
+        .panel--body {
+            .unitize(20, 16, padding-left);
+            .unitize(20, 16, padding-right);
+        }
     }
 
     // Blog-Entry Box
     .blog--box {
         .blog--box-metadata {
             .unitize(14, 16, font-size);
+            .unitize-margin(0, 20, 0, 20);
         }
 
         .blog--box-picture {
@@ -516,6 +547,15 @@
             .unitize(5, 16, margin-bottom)
         }
 
+        .blog--box-metadata, .panel--title {
+            margin: 0;
+        }
+
+        .panel--body {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
         // Thumbnails & Image
         .blog--detail-thumbnails {
             .unitize(10, 16, margin-bottom);
@@ -525,8 +565,8 @@
             }
 
             .block {
-                .unitize(60, 16, height);
-                width: 18%;
+                .unitize(80, 16, width);
+                .unitize(80, 16, height);
             }
         }
 
