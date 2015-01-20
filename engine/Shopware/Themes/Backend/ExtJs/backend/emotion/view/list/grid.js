@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         var me = this;
         return {
             xtype: 'buttoncolumn',
-                width: 50,
+            width: 60,
             header: '',
             sortable: false,
             borderLeftWidth: 0,

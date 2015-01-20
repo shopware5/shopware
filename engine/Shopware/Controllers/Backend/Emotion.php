@@ -434,7 +434,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     public function duplicateAction()
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
-        $device = (int) $this->Request()->getParam('forDevice');
+        $device = $this->Request()->getParam('forDevice');
 
         if (!$emotionId) {
             $this->View()->assign(array('success' => false));
