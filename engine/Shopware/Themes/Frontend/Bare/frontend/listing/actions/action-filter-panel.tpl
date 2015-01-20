@@ -31,7 +31,7 @@
 							{block name="frontend_listing_actions_filter_submit_button"}
 								<div class="filter--actions">
 									<button type="submit"
-									        class="btn is--primary filter--btn-apply is--large"
+									        class="btn is--primary filter--btn-apply is--large is--icon-right"
 									        disabled="disabled">
 										<span class="filter--count"></span>
 										{s name="ListingFilterApplyButton"}Produkte anzeigen{/s}

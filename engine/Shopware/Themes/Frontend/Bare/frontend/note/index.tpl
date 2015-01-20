@@ -36,25 +36,7 @@
 			<div class="note--overview">
 				{if $sNotes}
 					{block name="frontend_note_index_table"}
-						<div class="note--table panel--table has--border is--rounded">
-
-							{* Table head *}
-							{block name="frontend_note_index_table_head"}
-								<div class="note--table-head panel--tr">
-
-									{* Article informations *}
-									{block name="frontend_note_index_table_head_name"}
-										<div class="panel--th note--info">{s name="NoteColumnName"}{/s}</div>
-									{/block}
-
-									{* Unit price *}
-									{block name="frontend_note_index_table_head_price"}
-										<div class="panel--th note--sale">{s name="NoteColumnPrice"}{/s}</div>
-									{/block}
-
-									{block name="frontend_note_index_table_columns"}{/block}
-								</div>
-							{/block}
+						<div class="panel--table is--rounded">
 
 							{block name="frontend_note_index_table_items"}
 								{foreach $sNotes as $sBasketItem}
@@ -69,3 +51,10 @@
 
 	</div>
 {/block}
+
+{* Hide article information *}
+{block name="frontend_note_index_table_head_name"}{/block}
+
+{* Hide unit price *}
+{block name="frontend_note_index_table_head_price"}{/block}
+{block name="frontend_note_index_table_columns"}{/block}

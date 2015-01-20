@@ -18,12 +18,9 @@
 							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
 								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
 							</a>
+
 							{* Zoom picture *}
-							{block name="frontend_note_item_image_zoom"}
-								<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom" data-lightbox="true">
-									{s name="NoteLinkZoom"}{/s}
-								</a>
-							{/block}
+							{block name="frontend_note_item_image_zoom"}{/block}
 						{else}
 							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
 								<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
@@ -120,7 +117,7 @@
                         <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}"
                            data-product-compare-add="true"
                            class="compare--link"
-                           title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}"
+                           title="{"{s name='ListingBoxLinkCompare'|escape}{/s}"|escape}"
                            rel="nofollow">
                             <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
                         </a>
@@ -131,9 +128,12 @@
 
 		{* Remove article *}
 		{block name="frontend_note_item_delete"}
-			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
+			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{s name='NoteLinkDelete'|escape}{/s}" class="note--delete">
 				<i class="icon--cross"></i>
 			</a>
 		{/block}
 	</div>
 {/block}
+
+{* Place article in basket *}
+{block name="frontend_note_item_actions_buy"}{/block}

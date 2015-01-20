@@ -87,6 +87,29 @@ $(function () {
         }, ['xs', 's'])
         .addPlugin('body', 'ajaxProductNavigation', [ 'xl' ]);
 
+    // Product slider for topseller items
+    var _topsellerConfig = {
+        s: { itemsPerPage: 1 },
+        m: { itemsPerPage: 3 },
+        l: { itemsPerPage: 4 },
+        xl: { itemsPerPage: 5 }
+    };
+
+    if(!$('body').hasClass('is--no-sidebar')) {
+        _topsellerConfig = $.extend(_topsellerConfig, {
+            s: { itemsPerPage: 1 },
+            m: { itemsPerPage: 2 },
+            l: { itemsPerPage: 3 },
+            xl: { itemsPerPage: 4 }
+        });
+    }
+
+    StateManager
+        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.s, ['xs', 's'])
+        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.m, 'm')
+        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.l, 'l')
+        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.xl, 'xl');
+
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
     $('*[data-auto-submit="true"]').autoSubmit();

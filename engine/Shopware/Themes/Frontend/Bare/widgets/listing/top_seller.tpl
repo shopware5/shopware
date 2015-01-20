@@ -1,7 +1,7 @@
 {block name="widgets_listing_top_seller"}
     {if $sCharts|@count}
         {block name="widgets_listing_top_seller_panel"}
-            <div class="topseller panel">
+            <div class="topseller panel has--border is--rounded">
                 {block name="widgets_listing_top_seller_panel_inner"}
 
                     {block name="widgets_listing_top_seller_title"}
@@ -11,7 +11,7 @@
                     {/block}
 
                     {block name="widgets_listing_top_seller_slider"}
-                        <div class="topseller--content panel--body product-slider" data-product-slider="true">
+                        <div class="topseller--content panel--body product-slider" data-topseller-slider="true">
                             {block name="widgets_listing_top_seller_slider_container"}
                                 <div class="product-slider--container">
                                     {block name="widgets_listing_top_seller_slider_container_inner"}
