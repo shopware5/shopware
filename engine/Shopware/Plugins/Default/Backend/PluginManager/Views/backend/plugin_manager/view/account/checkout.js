@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
                 change: function(combo, records) {
                     var record = combo.lastSelection[0];
 
-                    me.basket.set('licenceDomain', record.get('domain'));
+                    me.basket.set('bookingDomain', record.get('domain'));
 
                     me.bookingDomainAmount.update(
                         me.formatPrice(record.get('balance'))
@@ -156,7 +156,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
             ]
         });
 
-        me.bookingDomainSelection.select(me.basket.get('licenceDomain'));
+        me.basket.set('bookingDomain', me.basket.get('licenceDomain'));
+        me.bookingDomainSelection.select(me.basket.get('bookingDomain'));
 
         return Ext.create('Ext.container.Container', {
             cls: 'booking-information',
@@ -249,7 +250,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
 
         var tax =  Ext.create('Ext.Component', {
             cls: 'tax',
-            html: '<div class="label">{s name="tax_rate_label"}{/s} '+ me.basket.get('taxRate') +' {s name="tax_value_label"}{/s}</div>' +
+            html: '<div class="label">{s name="tax_rate_label"}{/s} '+ me.basket.get('taxRate') +'% {s name="tax_value_label"}{/s}</div>' +
                   '<div class="value">'+ me.formatPrice(me.basket.get('taxPrice')) +'</div>'
         });
 

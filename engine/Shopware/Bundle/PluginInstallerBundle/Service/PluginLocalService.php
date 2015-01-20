@@ -204,6 +204,8 @@ class PluginLocalService
             'plugin.capability_update',
             'plugin.capability_install',
             'plugin.capability_enable',
+            'plugin.capability_secure_uninstall',
+
             'plugin.installation_date',
             'forms.id as form_id',
             'plugin.update_date',

@@ -5,7 +5,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     extend:'Ext.app.Controller',
 
     refs: [
-        { ref: 'localListing', selector: 'plugin-manager-local-plugin-listing' },
+        { ref: 'localListing', selector: 'plugin-manager-local-plugin-listing' }
     ],
 
     mixins: {
@@ -55,8 +55,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         form.submit({
-            success: function() {
-
+            onSuccess: function() {
                 Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}{/s}');
 
                 if (Ext.isFunction(callback)) {
@@ -121,6 +120,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 {
                     orderNumber: plugin.get('code'),
                     price: basket.get('netPrice'),
+                    bookingDomain: basket.get('bookingDomain'),
                     priceType: price.get('type')
                 },
                 function(response) {
@@ -141,6 +141,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     importPluginLicence: function(licence, callback) {
         var me = this;
 
+        if (!licence.get('licenseKey')) {
+            callback();
+            return;
+        }
+
         me.checkIonCube(licence, function() {
 
             me.checkLicencePlugin(licence, function () {
@@ -155,8 +160,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     callback
                 );
 
-            });
-
+            }, true);
         });
     },
 
@@ -197,6 +201,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     checkout: function(plugin, price, callback) {
         var me = this;
 
+        me.displayLoadingMask(plugin, '{s name="open_basket"}{/s}');
         me.checkIonCube(plugin, function() {
 
             me.checkLicencePlugin(plugin, function() {
@@ -240,10 +245,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         });
     },
 
-    checkLicencePlugin: function(plugin, callback) {
+    checkLicencePlugin: function(plugin, callback, force) {
         var me = this;
 
-        if (plugin && !plugin.get('licenceCheck')) {
+        if (plugin && !plugin.get('licenceCheck') && !force) {
             callback();
             return;
         }
@@ -263,14 +268,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                 switch(response.state) {
                     case 'download':
-                        Ext.MessageBox.confirm(
+                        me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
                             '{s name="licence_plugin_download_and_install"}{/s}',
-                            function (apply) {
-                                if (apply !== 'yes') {
-                                    return;
-                                }
-
+                            function() {
                                 me.updateDummyPlugin(licence, function () {
                                     me.installPlugin(licence, function () {
                                         me.activatePlugin(licence, callback);
@@ -280,35 +281,24 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                         );
                         break;
 
-
                     case 'install':
-                        Ext.MessageBox.confirm(
+                        me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
                             '{s name="licence_plugin_install_and_activate"}{/s}',
-
-                            function (apply) {
-                                if (apply !== 'yes') {
-                                    return;
-                                }
-
+                            function() {
                                 me.installPlugin(licence, function() {
                                     me.activatePlugin(licence, callback);
                                 });
                             }
                         );
 
-
                         break;
 
                     case 'activate':
-                        Ext.MessageBox.confirm(
+                        me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
                             '{s name="licence_plugin_activate"}{/s}',
-                            function (apply) {
-                                if (apply !== 'yes') {
-                                    return;
-                                }
-
+                            function() {
                                 me.activatePlugin(licence, callback);
                             }
                         );
@@ -364,8 +354,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     me.sendAjaxRequest(
                         '{url controller=PluginInstaller action=update}',
                         { technicalName: plugin.get('technicalName') },
-                        callback
+                        function(response) {
+                            callback(response);
+                        }
                     );
+
                 }
             );
         });
@@ -427,7 +420,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         );
     },
 
-
     installPlugin: function(plugin, callback) {
         var me = this;
 
@@ -436,11 +428,34 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=installPlugin}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                callback(response);
+            }
         );
     },
 
     uninstallPlugin: function(plugin, callback) {
+        var me = this;
+
+        if (plugin.allowSecureUninstall()) {
+            me.confirmMessage(
+                '',
+                '{s name="uninstall_remove_data"}{/s}',
+                function() {
+                    me.doUninstall(plugin, callback);
+                },
+                function() {
+                    me.secureUninstallPlugin(plugin, callback);
+                }
+            );
+        } else {
+            me.doUninstall(plugin, callback);
+        }
+
+    },
+
+    doUninstall: function(plugin, callback) {
         var me = this;
 
         me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}{/s}');
@@ -448,7 +463,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=uninstallPlugin}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                callback(response);
+            }
         );
     },
 
@@ -475,23 +493,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=secureUninstallPlugin}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                callback(response);
+            }
         );
     },
 
     deletePlugin: function(plugin, callback) {
         var me = this;
 
-        Ext.MessageBox.confirm(
+        me.confirmMessage(
             '{s name="delete_plugin_title"}{/s}',
             '{s name="delete_plugin_confirm"}{/s} ' + plugin.get('label'),
-            function (apply) {
-                if (apply !== 'yes') {
-                    return;
-                }
-
+            function() {
                 me.displayLoadingMask(plugin, '{s name="plugin_is_being_deleted"}{/s}');
-
                 me.sendAjaxRequest(
                     '{url controller=PluginInstaller action=deletePlugin}',
                     { technicalName: plugin.get('technicalName') },
@@ -500,7 +516,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             }
         );
     },
-
 
     activatePlugin: function(plugin, callback) {
         var me = this;
@@ -523,6 +538,57 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=deactivatePlugin}',
             { technicalName: plugin.get('technicalName') },
             callback
+        );
+    },
+
+    handleCrudResponse: function(response, plugin) {
+
+        if (response.hasOwnProperty('message')) {
+            var message = response.message;
+
+            if (Ext.isObject(message)) {
+                Shopware.Notification.createStickyGrowlMessage(response.message);
+            } else if (Ext.isString(message)) {
+                Shopware.Notification.createStickyGrowlMessage({ text: response.message });
+            }
+        }
+
+        if (response.hasOwnProperty('invalidateCache')) {
+            this.clearCache(response.invalidateCache, plugin);
+        }
+    },
+
+    clearCache: function(caches, plugin) {
+        var me = this;
+
+        var message = Ext.String.format(
+            '{s name=clear_cache}{/s}',
+            caches.join(', ') + '<br><br>'
+        );
+
+        me.confirmMessage(
+            '',
+            message,
+            function() {
+                if (plugin) {
+                    me.displayLoadingMask(plugin, '{s name="cache_process"}{/s}');
+                }
+
+                var params = {};
+
+                Ext.each(caches, function(cacheKey) {
+                    params['cache[' + cacheKey + ']'] = 'on';
+                });
+
+                Ext.Ajax.request({
+                    url:'{url controller="Cache" action="clearCache"}',
+                    method: 'POST',
+                    params: params,
+                    callback: function() {
+                        me.hideLoadingMask();
+                    }
+                });
+            }
         );
     }
 });

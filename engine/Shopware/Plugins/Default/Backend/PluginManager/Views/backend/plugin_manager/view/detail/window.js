@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
     alias: 'widget.plugin-manager-detail-window',
 
     height: '90%',
-    width: 980,
+    minWidth: 980,
     autoScroll: true,
     layout: {
         type: 'vbox',
@@ -31,6 +31,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
 
     loadRecord: function(plugin) {
         var me = this;
+
+        me.setTitle(plugin.get('label'));
 
         me.plugin = plugin;
         me.detailContainer.loadRecord(plugin);

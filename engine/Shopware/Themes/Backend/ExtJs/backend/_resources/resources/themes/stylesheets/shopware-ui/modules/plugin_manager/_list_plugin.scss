@@ -19,7 +19,7 @@
             vertical-align: top;
             background: #fff;
             width: 315px;
-            height: 162px;
+            height: 172px;
             display: inline-block;
             position: relative;
             padding: 15px 15px 0;
@@ -67,7 +67,7 @@
     vertical-align: top;
     background: #fff;
     width: 315px;
-    height: 162px;
+    height: 172px;
     display: inline-block;
     position: relative;
     padding: 15px 15px 0;
@@ -80,14 +80,13 @@
         color: #415b68;
 
         .meta-information {
-            height: 100px;
+            height: 115px;
         }
 
         .name {
             font-size: 14px;
             font-weight: 700;
             word-wrap: break-word !important;
-            white-space: pre;
         }
         .author {
             padding-top: 5px;
@@ -230,16 +229,16 @@
     left: 15px;
 }
 
-.store-plugin-rating.star1  { background-position-y: -18px; }
-.store-plugin-rating.star2  { background-position-y: -36px; }
-.store-plugin-rating.star3  { background-position-y: -54px; }
-.store-plugin-rating.star4  { background-position-y: -72px; }
-.store-plugin-rating.star5  { background-position-y: -90px; }
-.store-plugin-rating.star6  { background-position-y: -108px; }
-.store-plugin-rating.star7  { background-position-y: -126px; }
-.store-plugin-rating.star8  { background-position-y: -144px; }
-.store-plugin-rating.star9  { background-position-y: -162px; }
-.store-plugin-rating.star10 { background-position-y: -180px; }
+.store-plugin-rating.star1  { background-position: 0 -18px; }
+.store-plugin-rating.star2  { background-position: 0 -36px; }
+.store-plugin-rating.star3  { background-position: 0 -54px; }
+.store-plugin-rating.star4  { background-position: 0 -72px; }
+.store-plugin-rating.star5  { background-position: 0 -90px; }
+.store-plugin-rating.star6  { background-position: 0 -108px; }
+.store-plugin-rating.star7  { background-position: 0 -126px; }
+.store-plugin-rating.star8  { background-position: 0 -144px; }
+.store-plugin-rating.star9  { background-position: 0 -162px; }
+.store-plugin-rating.star10 { background-position: 0 -180px; }
 
 
 .plugin-manager-filter-picker {

@@ -47,7 +47,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Meta', {
                 var result = type;
 
                 if (expiration) {
-                    result += '<span class="date"> ({s name="till"}{/s}: '+ Ext.util.Format.date(expiration.date) + ')</span>';
+                    var date = me.formatDate(expiration.date);
+                    result += '<span class="date"> ({s name="till"}{/s}: '+ Ext.util.Format.date(date) + ')</span>';
                 }
 
                 items.push({

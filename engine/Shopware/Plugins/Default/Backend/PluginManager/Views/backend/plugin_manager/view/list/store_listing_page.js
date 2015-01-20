@@ -77,6 +77,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
             displayField: 'name',
             valueField: 'key',
             value: 'release',
+            forceSelection: true,
+            editable: false,
             fieldLabel: '{s name="sorting"}{/s}',
             margin: '0 0 0 10',
             listeners: {

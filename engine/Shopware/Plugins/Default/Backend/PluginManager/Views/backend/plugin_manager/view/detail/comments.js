@@ -4,6 +4,10 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {
     extend: 'Ext.container.Container',
     commentCount: 0,
 
+    mixins: {
+        events: 'Shopware.apps.PluginManager.view.PluginHelper'
+    },
+
     initComponent: function() {
         var me = this, items = [];
 
@@ -56,7 +60,9 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {
     },
 
     createCommentItem: function(comment) {
-        var date = comment.get('creationDate').date;
+        var me = this;
+
+        var date = me.formatDate(comment.get('creationDate').date);
 
         var left = Ext.create('Ext.container.Container', {
             cls: 'comment-left',
