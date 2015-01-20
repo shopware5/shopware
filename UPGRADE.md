@@ -264,6 +264,8 @@ In this document you will find a changelog of the important changes related to t
 * Renamed `ENV` to `SHOPWARE_ENV` to avoid accidentally set `ENV` variable, please update your .htaccess if you use a custom envirenment or you are using the staging plugin
 * Removed Facebook Plugin from core (`Shopware_Plugins_Frontend_Facebook_Bootstrap`). Will be released as plugin on Github.
 * Removed Google Plugin from core (`Shopware_Plugins_Frontend_Google_Bootstrap`). Will be released as plugin on Github.
+* All downloaded dummy plugins are now installed in the engine/Shopware/Plugins/Community directory.
+* Install, update, uninstall function of a plugin supports now a "message" return parameter which allows to display different messages.
 * Removed the following unused configuration variables:
     * `articlelimit`
     * `configcustomfields`

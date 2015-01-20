@@ -112,6 +112,11 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var boolean
      */
+    private $capabilitySecureUninstall = fallse;
+
+    /**
+     * @var boolean
+     */
     private $capabilityDummy = false;
 
     /**
@@ -785,5 +790,21 @@ class PluginStruct implements \JsonSerializable
     public function setLicence($licence)
     {
         $this->licence = $licence;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilitySecureUninstall()
+    {
+        return $this->capabilitySecureUninstall;
+    }
+
+    /**
+     * @param boolean $capabilitySecureUninstall
+     */
+    public function setCapabilitySecureUninstall($capabilitySecureUninstall)
+    {
+        $this->capabilitySecureUninstall = $capabilitySecureUninstall;
     }
 }

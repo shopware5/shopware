@@ -171,6 +171,7 @@ Ext.define('Shopware.form.PluginPanel',
         }
         me.add(me.getItems(form));
         me.loadRecord(form);
+        me.fireEvent('form-initialized', me);
     },
 
     /**

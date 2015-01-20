@@ -72,7 +72,9 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
     },
 
     updatePluginEvent: function(record) {
-        this.firePluginEvent('update-plugin', record);
+        this.firePluginEvent('update-plugin', record, function() {
+            Shopware.app.Application.fireEvent('load-update-listing');
+        });
     },
 
     installPluginEvent: function(record) {
@@ -120,7 +122,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         );
     },
 
-    reloadPlugin: function(plugin) {
+    reloadPlugin: function(plugin, callback) {
         var me = this;
 
         plugin.reload({
@@ -131,6 +133,10 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
                 Shopware.app.Application.fireEvent(event, merged);
 
                 Shopware.app.Application.fireEvent('plugin-reloaded', merged);
+
+                if (Ext.isFunction(callback)) {
+                    callback();
+                }
             }
         });
     },
@@ -171,24 +177,25 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         );
     },
 
-    firePluginEvent: function(event, record) {
+    firePluginEvent: function(event, record, callback) {
         var me = this;
 
         Shopware.app.Application.fireEvent(
             event,
             record,
             function() {
-                me.fireReloadEvent(record);
+                me.fireReloadEvent(record, callback);
             }
         );
     },
 
-    fireReloadEvent: function(record) {
+    fireReloadEvent: function(record, callback) {
         var me = this;
 
         Shopware.app.Application.fireEvent(
             'reload-plugin',
-            record
+            record,
+            callback
         );
     },
 
@@ -235,7 +242,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
             me.hideLoadingMask();
 
-        }, 8000, this, [plugin]);
+        }, 15000, this, [plugin]);
 
         Shopware.app.Application.loadingMask.show();
     },
@@ -246,6 +253,23 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         }
     },
 
+    confirmMessage: function(title, message, callback, declineCallback) {
+        var me = this;
+
+        Ext.MessageBox.confirm(title, message, function (apply) {
+            if (apply !== 'yes') {
+                me.hideLoadingMask();
+
+                if (Ext.isFunction(declineCallback)) {
+                     declineCallback();
+                }
+
+                return;
+            }
+            callback();
+        });
+    },
+
     displayErrorMessage: function(response) {
         var message = response.message;
 
@@ -254,6 +278,12 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             text: message,
             width: 350
         });
+
+        if (response.hasOwnProperty('authentication') && response.authentication) {
+            Shopware.app.Application.fireEvent('open-login', function() { });
+        }
+
+        this.hideLoadingMask();
     },
 
     getPriceByType: function(prices, type) {
@@ -265,6 +295,16 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             }
         });
         return price;
+    },
+
+    formatDate: function(date) {
+        var value = date.replace(' ', 'T');
+
+        value += '+00:00';
+        value = new Date(value);
+        value = new Date((value.getTime() + (value.getTimezoneOffset() * 60 * 1000)));
+
+        return value;
     },
 
     getTextForPriceType: function(type) {

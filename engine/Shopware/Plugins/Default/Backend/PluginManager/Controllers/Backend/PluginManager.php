@@ -29,6 +29,7 @@ use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
+use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
@@ -63,7 +64,7 @@ class Shopware_Controllers_Backend_PluginManager
 
     public function checkIonCubeLoaderAction()
     {
-        $this->View()->assign(array('success' => extension_loaded('ionCube Loader')));
+        $this->View()->assign(['success' => extension_loaded('ionCube Loader')]);
     }
 
     public function getCategoriesAction()
@@ -72,25 +73,25 @@ class Shopware_Controllers_Backend_PluginManager
             $this->getLocale()
         );
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $categories
-        ));
+        ]);
     }
 
     public function storeListingAction()
     {
         if (!$this->isApiAvailable()) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'data' => array()
-            ));
+                'data' => []
+            ]);
             return;
         }
 
         $categoryId = $this->Request()->getParam('categoryId', null);
 
-        $filter = $this->Request()->getParam('filter', array());
+        $filter = $this->Request()->getParam('filter', []);
 
         $sort = $this->Request()->getParam('sort',
             [['property' => 'release']]
@@ -125,11 +126,11 @@ class Shopware_Controllers_Backend_PluginManager
         $listingResult = $this->get('plugin_service_view')
             ->getStoreListing($context);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => array_values($listingResult->getPlugins()),
             'total' => $listingResult->getTotalCount()
-        ));
+        ]);
     }
 
     public function localListingAction()
@@ -161,10 +162,10 @@ class Shopware_Controllers_Backend_PluginManager
                 ->getListing($context)->getPlugins();
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => array_values($plugins)
-        ));
+        ]);
     }
 
     public function detailAction()
@@ -179,7 +180,7 @@ class Shopware_Controllers_Backend_PluginManager
 
         $plugin = $this->get('plugin_service_local')->getPlugin($context);
 
-        $this->View()->assign(array('success' => true, 'data' => $plugin));
+        $this->View()->assign(['success' => true, 'data' => $plugin]);
     }
 
     public function licenceListAction()
@@ -191,13 +192,18 @@ class Shopware_Controllers_Backend_PluginManager
             $this->getAccessToken()
         );
 
-        $licences = $this->get('plugin_service_store_production')
-            ->getLicences($context);
+        try {
+            $licences = $this->get('plugin_service_store_production')
+                ->getLicences($context);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => array_values($licences)
-        ));
+        ]);
     }
 
     public function updateListingAction()
@@ -216,9 +222,17 @@ class Shopware_Controllers_Backend_PluginManager
             $plugins
         );
 
-        $updates = $this->get('plugin_service_view')->getUpdates($context);
+        try {
+            $updates = $this->get('plugin_service_view')->getUpdates($context);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
-        $this->View()->assign(array('data' => array_values($updates)));
+        $this->View()->assign([
+            'success' => true,
+            'data' => array_values($updates)
+        ]);
     }
 
     public function checkLicencePluginAction()
@@ -249,13 +263,18 @@ class Shopware_Controllers_Backend_PluginManager
             ['SwagLicense']
         );
 
-        $data = $this->get('plugin_service_view')->getPlugin($context);
+        try {
+            $data = $this->get('plugin_service_view')->getPlugin($context);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => false,
             'data' => $data,
             'state' => $state
-        ));
+        ]);
     }
 
     public function purchasePluginAction()
@@ -266,11 +285,13 @@ class Shopware_Controllers_Backend_PluginManager
 
         $type = $this->Request()->getParam('priceType');
 
+        $domain = $this->Request()->getParam('bookingDomain');
+
         $token = $this->getAccessToken();
 
         $context = new OrderRequest(
             $this->getDomain(),
-            $this->getDomain(),
+            $domain,
             $orderNumber,
             $price,
             $type
@@ -280,20 +301,14 @@ class Shopware_Controllers_Backend_PluginManager
             $this->get('store_order_service')
                 ->orderPlugin($token, $context);
         } catch (StoreException $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $this->getExceptionMessage($e)
-            ));
+            $this->handleException($e);
             return;
         } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            $this->handleException($e);
             return;
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     public function checkoutAction()
@@ -317,17 +332,38 @@ class Shopware_Controllers_Backend_PluginManager
 
             $this->loadBasketPlugins($basket, $positions);
         } catch (StoreException $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $this->getExceptionMessage($e)
-            ));
+            $this->handleException($e);
+            return;
+        } catch (Exception $e) {
+            $this->handleException($e);
             return;
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $basket
-        ));
+        ]);
+    }
+
+    private function handleException(Exception $e)
+    {
+        if ($e instanceof StoreException) {
+            $message = $this->getExceptionMessage($e);
+            if (empty($message)) {
+                $message = $e->getMessage();
+            }
+
+            $this->View()->assign([
+                'success' => false,
+                'message' => $message,
+                'authentication' => ($e instanceof AuthenticationException)
+            ]);
+        } else {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function downloadLicenceDirectAction()
@@ -343,10 +379,7 @@ class Shopware_Controllers_Backend_PluginManager
         try {
             $this->downloadPluginLicence($struct);
         } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            $this->handleException($e);
             return;
         }
 
@@ -373,10 +406,7 @@ class Shopware_Controllers_Backend_PluginManager
         try {
             $this->downloadPluginLicence($licence);
         } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            $this->handleException($e);
             return;
         }
 
@@ -387,7 +417,12 @@ class Shopware_Controllers_Backend_PluginManager
     {
         $key = $this->Request()->getParam('licenceKey');
 
-        $this->importLicence($key);
+        try {
+            $this->importLicence($key);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
         $this->View()->assign('success', true);
     }
@@ -428,10 +463,10 @@ class Shopware_Controllers_Backend_PluginManager
         if ($token == null) {
             $this->View()->assign('success', false);
         } else {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
                 'shopwareId' => $token->getShopwareId()
-            ));
+            ]);
         }
     }
 
@@ -451,10 +486,7 @@ class Shopware_Controllers_Backend_PluginManager
                 $password
             );
         } catch (StoreException $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $this->getExceptionMessage($e)
-            ));
+            $this->handleException($e);
             return;
         }
 
@@ -509,13 +541,7 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function getVersion()
     {
-        $version = Shopware::VERSION;
-
-        if ($version == '___VERSION___') {
-            return '4.2.0';
-        } else {
-            return $version;
-        }
+        return Shopware::VERSION;
     }
 
     /**
@@ -525,7 +551,7 @@ class Shopware_Controllers_Backend_PluginManager
     private function getPluginModel($technicalName)
     {
         $repo = Shopware()->Models()->getRepository('Shopware\Models\Plugin\Plugin');
-        $plugin = $repo->findOneBy(array('name' => $technicalName));
+        $plugin = $repo->findOneBy(['name' => $technicalName]);
         return $plugin;
     }
 

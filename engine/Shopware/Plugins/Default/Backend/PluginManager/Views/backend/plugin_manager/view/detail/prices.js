@@ -41,12 +41,15 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
     createContactTab: function() {
         var me = this, items = [];
 
-        var link = '{s name="contact_link"}{/s}?technicalName=' + me.plugin.get('technicalName');
 
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button contact',
-            html: '<div class="text"><a target="_blank" href="'+link+'">{s name="contact_text"}{/s}</a></div>'
+            html: '<div class="text">{s name="contact_text"}{/s}</div>',
+            handler: function() {
+                var link = '{s name="contact_link"}{/s}?technicalName=' + me.plugin.get('technicalName');
+                window.open(link);
+            }
         });
 
         return Ext.create('Ext.container.Container', {

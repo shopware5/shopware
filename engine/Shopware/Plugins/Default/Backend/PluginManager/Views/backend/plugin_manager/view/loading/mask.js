@@ -38,12 +38,18 @@ Ext.define('Shopware.apps.PluginManager.view.loading.Mask', {
     },
 
     createIcon: function() {
-        var me = this;
+        var me = this, path = '';
+
+        if (!me.plugin.get('iconPath')) {
+            path = '{link file="engine/Shopware/Themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}';
+        } else {
+            path = me.plugin.get('iconPath');
+        }
 
         return Ext.create('Ext.Component', {
             width: 128,
             height: 128,
-            html: '<img src="'+ me.plugin.get('iconPath') +'" />'
+            html: '<img src="'+ path +'" />'
         });
     },
 

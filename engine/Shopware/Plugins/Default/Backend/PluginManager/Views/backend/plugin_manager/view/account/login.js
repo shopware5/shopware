@@ -93,19 +93,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             html: '{s name="login"}{/s}',
             cls: 'plugin-manager-action-button primary',
             handler: function() {
-                if (!me.formPanel.getForm().isValid()) {
-                    return;
-                }
-
-                Shopware.app.Application.fireEvent(
-                    'store-login',
-                    me.shopwareIdField.getValue(),
-                    me.passwordField.getValue(),
-                    function(response) {
-                        me.destroy();
-                        me.callback();
-                    }
-                );
+                me.applyLogin();
             }
         });
 
@@ -114,6 +102,24 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             cls: 'toolbar',
             items: [ cancelButton ,'->', applyButton]
         });
+    },
+
+    applyLogin: function() {
+        var me = this;
+
+        if (!me.formPanel.getForm().isValid()) {
+            return;
+        }
+
+        Shopware.app.Application.fireEvent(
+            'store-login',
+            me.shopwareIdField.getValue(),
+            me.passwordField.getValue(),
+            function(response) {
+                me.destroy();
+                me.callback();
+            }
+        );
     },
 
     createShopwareIdField: function() {
@@ -125,7 +131,14 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             cls: 'shopware-id',
             emptyText: '{s name="shopware_id"}{/s}',
             margin: '10 0',
-            flex: 1
+            flex: 1,
+            listeners: {
+                specialkey: function(field, e){
+                    if (e.getKey() == e.ENTER) {
+                        me.applyLogin();
+                    }
+                }
+            }
         });
 
         return me.shopwareIdField;
@@ -140,7 +153,14 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             flex: 1,
             cls: 'password',
             emptyText: '{s name="password"}{/s}',
-            inputType: 'password'
+            inputType: 'password',
+            listeners: {
+                specialkey: function(field, e){
+                    if (e.getKey() == e.ENTER) {
+                        me.applyLogin();
+                    }
+                }
+            }
         });
 
         return me.passwordField;

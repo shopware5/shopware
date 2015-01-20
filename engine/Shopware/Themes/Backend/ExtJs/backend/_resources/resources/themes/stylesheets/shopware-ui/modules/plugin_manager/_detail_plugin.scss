@@ -3,6 +3,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
+
 .plugin-description-container {
     max-width: 875px;
     margin: 0 auto;
@@ -22,6 +23,13 @@
         min-height: 360px !important;
         min-width:640px !important;
     }
+}
+
+
+.store-plugin-detail-installation-manual-container {
+    line-height: 31px;
+    font-size: 16px;
+    color: #555;
 }
 
 .plugin-comment-container {
@@ -337,6 +345,10 @@
         text-shadow: none;
         top: 0;
         right: 0;
+    }
+    .button.contact a {
+        color: #fff;
+        text-decoration: none;
     }
 }
 
