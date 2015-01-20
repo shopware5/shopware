@@ -455,6 +455,7 @@
 
             me.$items = me.$container.find(me.opts.itemSelector);
 
+            $.publish('plugin/productSlider/trackItems');
             return me.itemsCount = me.$items.length;
         },
 
@@ -478,6 +479,8 @@
             var slideEnd = me.currentPosition + me.$container[(me.opts.orientation === 'vertical') ? 'outerHeight': 'outerWidth']();
             me.$arrowPrev[(me.currentPosition > 5) ? 'show' : 'hide']();
             me.$arrowNext[(slideEnd >= parseInt(me.itemSize * me.itemsCount, 10) - 5) ? 'hide' : 'show']();
+
+            $.publish('plugin/productSlider/trackArrows');
         },
 
         /**
@@ -514,6 +517,8 @@
                     }
                 }
             });
+
+            $.publish('plugin/productSlider/loadItems');
         },
 
         /**
@@ -538,6 +543,7 @@
 
             $container.addClass(orientationCls);
 
+            $.publish('plugin/productSlider/createContainer');
             return me.$container = $container;
         },
 
@@ -574,6 +580,8 @@
 
                 me._on(me.$arrowNext, 'click', $.proxy(me.onArrowClick, me, 'next'));
             }
+
+            $.publish('plugin/productSlider/createArrows');
         },
 
         /**
@@ -647,6 +655,8 @@
             if (scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
                 me.loadItems(me.itemsCount, Math.min(me.opts.itemsPerPage, itemsLeftToLoad));
             }
+
+            $.publish('plugin/productSlider/onScroll');
         },
 
         /**
@@ -661,6 +671,8 @@
 
             me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
+
+            $.publish('plugin/productSlider/slideNext');
         },
 
         /**
@@ -675,6 +687,8 @@
 
             me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
+
+            $.publish('plugin/productSlider/slidePrev');
         },
 
         /**
@@ -692,6 +706,8 @@
                 slide = (o === 'vertical') ? position.top : position.left;
 
             me.slide(slide);
+
+            $.publish('plugin/productSlider/slideToElement');
         },
 
         /**
@@ -713,6 +729,8 @@
                 me.currentPosition = me.getScrollPosition();
                 me.isAnimating = false;
             });
+
+            $.publish('plugin/productSlider/slide');
         },
 
         /**
@@ -730,6 +748,8 @@
                 method = (direction === 'prev') ? me.slidePrev : me.slideNext;
 
             me.autoSlideAnimation = window.setInterval($.proxy(method, me), speed * 1000);
+
+            $.publish('plugin/productSlider/autoSlide');
         },
 
         /**
@@ -743,6 +763,8 @@
 
             window.clearInterval(me.autoSlideAnimation);
             me.autoSlideAnimation = false;
+
+            $.publish('plugin/productSlider/stopAutoSlide');
         },
 
         /**
@@ -758,6 +780,8 @@
             me.currentPosition += scrollDistance || me.opts.scrollDistance;
 
             me.slide(me.currentPosition);
+
+            $.publish('plugin/productSlider/scrollNext');
         },
 
         /**
@@ -773,6 +797,8 @@
             me.currentPosition -= scrollDistance || me.opts.scrollDistance;
 
             me.slide(me.currentPosition);
+
+            $.publish('plugin/productSlider/scrollPrev');
         },
 
         /**
@@ -792,6 +818,8 @@
             me.autoScrollAnimation = requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
+
+            $.publish('plugin/productSlider/autoScroll');
         },
 
         /**
@@ -805,6 +833,8 @@
 
             cancelAnimationFrame(me.autoScrollAnimation);
             me.autoScrollAnimation = false;
+
+            $.publish('plugin/productSlider/stopAutoScroll');
         },
 
         /**
@@ -819,6 +849,8 @@
              window.clearTimeout(me.bufferedCall);
 
              me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime)
+
+            $.publish('plugin/productSlider/buffer');
         },
 
         /**
