@@ -395,7 +395,7 @@
              * Minimal zoom factor for image scaling
              *
              * @private
-             * @property maxZoom
+             * @property minZoom
              * @type {Number}
              */
             me.minZoom = parseFloat(opts.minZoom) || 1;
@@ -407,7 +407,16 @@
              * @property maxZoom
              * @type {Number}
              */
-            me.maxZoom = parseFloat(opts.maxZoom) || 1;
+            me.maxZoom = parseFloat(opts.maxZoom);
+
+            /**
+             * Whether or not the scale should be recalculated for each image.
+             *
+             * @private
+             * @property autoScale
+             * @type {Boolean}
+             */
+            me.autoScale = !me.maxZoom && (me.maxZoom = me.minZoom);
 
             if (opts.thumbnails) {
                 me.$thumbnailContainer = me.$el.find(opts.thumbnailContainerSelector);
@@ -977,9 +986,7 @@
             var me = this,
                 oldScale = me.imageScale;
 
-            if (!me.maxZoom) {
-                me.updateMaxZoomValue();
-            }
+            me.updateMaxZoomValue();
 
             me.imageScale = Math.max(me.minZoom, Math.min(me.maxZoom, scale));
 
@@ -1164,7 +1171,7 @@
                 $currentImage = me.$currentImage,
                 image = $currentImage[0];
 
-            if (typeof me.opts.maxZoom === 'number') {
+            if (!me.autoScale) {
                 return;
             }
 
@@ -1292,11 +1299,6 @@
 
             if (me.thumbnailOrientation !== orientation) {
 
-                me.$thumbnailSlide.css({
-                    'left': 0,
-                    'top': 0
-                });
-
                 $prevArr
                     .toggleClass(opts.thumbnailArrowLeftCls, !isHorizontal)
                     .toggleClass(opts.thumbnailArrowTopCls, isHorizontal);
@@ -1306,6 +1308,8 @@
                     .toggleClass(opts.thumbnailArrowBottomCls, isHorizontal);
 
                 me.thumbnailOrientation = orientation;
+
+                me.setActiveThumbnail(me.slideIndex);
             }
 
             if (me.thumbnailOrientation === 'horizontal') {
