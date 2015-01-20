@@ -86,11 +86,11 @@ body > .sidebar-main {
         &:hover {
             color: @brand-primary;
         }
+    }
 
-        &.is--active {
-            color: @brand-primary;
-            font-weight: 600;
-        }
+    &.show--active-items .navigation--link.is--active {
+        color: @brand-primary;
+        font-weight: 600;
     }
 }
 
@@ -367,34 +367,12 @@ body > .sidebar-main {
             font-weight: bold;
         }
 
-        .shop-sites--navigation, .navigation--entry {
+        .shop-sites--navigation,
+        .navigation--entry {
             border: 0 none;
-        }
-
-        .navigation--link {
-            .unitize-padding(5, 0);
-
-            &.is--active {
-                background: none;
-                border: 0 none;
-                text-shadow: none;
-                color: @brand-primary;
-            }
-        }
-
-        .is--level1 {
 
             .navigation--link {
-                .unitize-padding(3, 0, 3, 10);
-                .unitize(12, 16, font-size);
-
-                &::before {
-                    display: none;
-                }
-
-                &.is--active {
-                    font-weight: normal;
-                }
+                .unitize-padding(5, 10);
             }
         }
     }
@@ -402,13 +380,16 @@ body > .sidebar-main {
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .is--ctl-custom .sidebar-main {
-        .sidebar--categories-navigation {
-            display: none;
-        }
+    .is--ctl-forms,
+    .is--ctl-custom {
+        .sidebar-main {
+            .sidebar--categories-navigation {
+                display: none;
+            }
 
-        .shop-sites--container {
-            display: block;
+            .shop-sites--container {
+                display: block;
+            }
         }
     }
 

@@ -135,93 +135,14 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $shopId = Shopware()->Shop()->getId();
-        }
-        $sql = "
-            SELECT
-              p.id, p.description, p.link, p.target,
-              g.key as `group`, m.key as mapping,
-              (
-                SELECT COUNT(*)
-                FROM s_cms_static
-                WHERE parentID=p.id
-                AND (
-                    shop_ids IS NULL OR
-                    shop_ids LIKE :staticShopId
-                )
-              ) as childrenCount
-
-            FROM s_cms_static p, s_cms_static_groups g
-
-            LEFT JOIN s_cms_static_groups m
-            ON m.id=g.mapping_id
-
-            LEFT JOIN s_core_shop_pages s
-            ON s.group_id=g.id
-            AND s.shop_id = :shopId
-
-            WHERE g.active=1 AND parentID=0
-            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', g.key, '|%')
-            AND (m.id IS NULL OR s.shop_id IS NOT NULL)
-            AND (m.id IS NULL OR m.active=1)
-            AND (
-                p.shop_ids IS NULL OR
-                p.shop_ids LIKE :staticShopId
-            )
-
-            ORDER BY `mapping`, p.position, p.description
-        ";
-        $links = Shopware()->Db()->fetchAll(
-            $sql,
-            array(
-                'shopId' => $shopId,
-                'staticShopId' => '%|' . $shopId . '|%'
-
-            )
-        );
-
-        $menu = array();
-        foreach ($links as $link) {
-            if ($activePageId !== null) {
-                $link['active'] = $activePageId == $link['id'];
-            }
-            if (!empty($link['childrenCount'])) {
-                $sql = "
-                    SELECT p.id, p.description, p.link, p.target
-                    FROM s_cms_static p
-                    WHERE p.parentID = :linkId
-                    AND (
-                        shop_ids IS NULL OR
-                        shop_ids LIKE :staticShopId
-                    )
-                    ORDER BY p.position
-                ";
-                $link['subPages'] = Shopware()->Db()->fetchAll(
-                    $sql,
-                    array(
-                        'linkId' => $link['id'],
-                        'staticShopId' => '%|' . $shopId . '|%'
-                    )
-                );
-                if ($activePageId !== null) {
-                    foreach ($link['subPages'] as $subKey => $subPage) {
-                        $active = $activePageId == $subPage['id'];
-                        $link['subPages'][$subKey]['active'] = $active;
-                        if ($active) {
-                            $link['active'] = true;
-                        }
-                    }
-                }
-            }
-            $group = !empty($link['mapping']) ? $link['mapping'] : $link['group'];
-            if (!isset($menu[$group]) || (!empty($link['mapping']) && empty($menu[$group][0]['mapping']))) {
-                $menu[$group] = array($link);
-            } else {
-                $menu[$group][] = $link;
-            }
+            $context = Shopware()->Container()->get('context_service')->getShopContext();
+            $shopId = $context->getShop()->getId();
         }
 
-        return $menu;
+        $data = Shopware()->Container()->get('shop_page_menu')
+            ->getTree($shopId, $activePageId);
+
+        return $data;
     }
 
     /**
