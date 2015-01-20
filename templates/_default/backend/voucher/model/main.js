@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Voucher.model.Main', {
         { name : 'description', type : 'string' },
         { name : 'voucherCode', type : 'string' },
         { name : 'modus', type : 'string' },
-        { name : 'numberOfUnits', type : 'string' },
+        { name : 'numberOfUnits', type : 'int' },
         { name : 'value', type : 'double' },
         { name : 'validFrom', type : 'date'},
         { name : 'validTo', type : 'date'},
         { name : 'percental', type : 'int' },
-        { name : 'checkedIn', type : 'string' }
+        { name : 'checkedIn', type : 'int' }
     ],
 	/**
 	* If the name of the field is 'id' extjs assumes autmagical that
