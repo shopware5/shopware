@@ -15,7 +15,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
         align: 'stretch'
     },
 
-
     width: 500,
     height: 250,
 
@@ -96,6 +95,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
 
                 Shopware.app.Application.fireEvent('upload-plugin', me.form, function(success) {
                     me.destroy();
+                    Shopware.app.Application.fireEvent('reload-local-listing');
                 });
             }
         });

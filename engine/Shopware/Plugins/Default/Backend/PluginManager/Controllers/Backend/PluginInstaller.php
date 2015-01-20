@@ -50,11 +50,15 @@ class Shopware_Controllers_Backend_PluginInstaller
         }
 
         try {
-            $this->get('shopware.plugin_manager')->installPlugin($plugin);
+            $result = $this->get('shopware.plugin_manager')->installPlugin($plugin);
 
-            $this->View()->assign('success', true);
+            if ($result === true || $result === false) {
+                $result = ['success' => $result];
+            }
+            $this->View()->assign($result);
+
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -73,15 +77,16 @@ class Shopware_Controllers_Backend_PluginInstaller
 
         try {
             if ($plugin->getInstalled()) {
-                $this->get('shopware.plugin_manager')->updatePlugin($plugin);
+                $result = $this->get('shopware.plugin_manager')->updatePlugin($plugin);
             } else {
-                $this->get('shopware.plugin_manager')->installPlugin($plugin);
+                $result = $this->get('shopware.plugin_manager')->installPlugin($plugin);
             }
+
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
                 'message' => $e->getMessage()
-            ));
+            ]);
 
             return;
         }
@@ -91,7 +96,10 @@ class Shopware_Controllers_Backend_PluginInstaller
         $plugin->setActive($active);
         $this->get('models')->flush();
 
-        $this->View()->assign('success', true);
+        if ($result === true || $result === false) {
+            $result = ['success' => $result];
+        }
+        $this->View()->assign($result);
     }
 
     public function uninstallPluginAction()
@@ -99,11 +107,14 @@ class Shopware_Controllers_Backend_PluginInstaller
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $this->get('shopware.plugin_manager')->uninstallPlugin($plugin);
+            $result = $this->get('shopware.plugin_manager')->uninstallPlugin($plugin);
 
-            $this->View()->assign('success', true);
+            if ($result === true || $result === false) {
+                $result = ['success' => $result];
+            }
+            $this->View()->assign($result);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -112,14 +123,18 @@ class Shopware_Controllers_Backend_PluginInstaller
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $this->get('shopware.plugin_manager')->uninstallPlugin(
+            $result = $this->get('shopware.plugin_manager')->uninstallPlugin(
                 $plugin,
                 !$plugin->hasCapabilitySecureUninstall()
             );
 
-            $this->View()->assign('success', true);
+            if ($result === true || $result === false) {
+                $result = ['success' => $result];
+            }
+            $this->View()->assign($result);
+
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -136,7 +151,11 @@ class Shopware_Controllers_Backend_PluginInstaller
             case ($plugin->getInstalled()):
                 return $this->View()->assign(['success' => false, 'message' => 'Installed plugins can not be deleted']);
             default:
-                $this->removeDirectory($directory);
+                try {
+                    $this->removeDirectory($directory);
+                } catch (Exception $e) {
+                    return $this->handleException($this->View(), $e);
+                }
         }
 
         return $this->View()->assign('success', true);
@@ -150,7 +169,7 @@ class Shopware_Controllers_Backend_PluginInstaller
             $this->get('shopware.plugin_manager')->activatePlugin($plugin);
             $this->View()->assign('success', true);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -162,7 +181,7 @@ class Shopware_Controllers_Backend_PluginInstaller
             $this->get('shopware.plugin_manager')->deactivatePlugin($plugin);
             $this->View()->assign('success', true);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -172,10 +191,10 @@ class Shopware_Controllers_Backend_PluginInstaller
         $root .= '/engine/Shopware/Plugins/Community';
 
         if (!is_writable($root)) {
-            $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'Plugin Community directory is not writable'
-                ));
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Plugin Community directory is not writable'
+            ]);
             return;
         }
 
@@ -185,28 +204,30 @@ class Shopware_Controllers_Backend_PluginInstaller
             /** @var $file UploadedFile */
             $file = $fileBag->get('plugin');
         } catch (Exception $e) {
-            $this->View()->assign(array(
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
             return;
         }
 
         $information = pathinfo($file->getClientOriginalName());
 
         if ($information['extension'] !== 'zip') {
-            $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'Wrong archive extension %s. Zip archive expected'
-                ));
+            $this->View()->assign([
+                'success' => false,
+                'message' => 'Wrong archive extension %s. Zip archive expected'
+            ]);
+            unlink($file->getPathname());
+            unlink($file);
             return;
         }
 
         $name = $information['basename'];
 
+        $path = $root . '/' . $name;
         try {
             $file->move($root, $name);
-            $path = $root . '/' . $name;
 
             $extractor = new PluginExtractor();
             $extractor->extract($path, $root);
@@ -215,10 +236,19 @@ class Shopware_Controllers_Backend_PluginInstaller
             unlink($file->getPathname());
             unlink($file);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign(
+                [
                 'success' => false,
                 'message' => $e->getMessage()
-            ));
+                ]
+            );
+            unlink($path);
+            unlink($file->getPathname());
+            unlink($file);
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
             return;
         }
 
@@ -231,9 +261,7 @@ class Shopware_Controllers_Backend_PluginInstaller
      */
     public function getPluginModel($technicalName)
     {
-        return $this->getRepository()->findOneBy(array(
-            'name' => $technicalName
-        ));
+        return $this->getRepository()->findOneBy(['name' => $technicalName]);
     }
 
     /**
@@ -244,7 +272,7 @@ class Shopware_Controllers_Backend_PluginInstaller
     {
         $it = new RecursiveDirectoryIterator($path);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-        $returns = array();
+        $returns = [];
         foreach ($files as $file) {
             if ($file->isDir()) {
                 $returns[] = rmdir($file->getRealPath());

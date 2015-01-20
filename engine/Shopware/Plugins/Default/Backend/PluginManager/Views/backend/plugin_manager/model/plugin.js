@@ -13,6 +13,8 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
         { name: 'label',              type: 'string' },
         { name: 'technicalName',      type: 'string' },
+        { name: 'installationManual', type: 'string' },
+        { name: 'source',             type: 'string' },
         { name: 'code',               type: 'string', useNull: true, defaultValue: null },
         { name: 'description',        type: 'string' },
         { name: 'author',             type: 'string' },
@@ -31,6 +33,7 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         { name: 'updateAvailable',    type: 'boolean',  defaultValue: false },
         { name: 'capabilityDummy',    type: 'boolean',  defaultValue: false },
         { name: 'capabilityInstall',  type: 'boolean',  defaultValue: false },
+        { name: 'capabilitySecureUninstall',  type: 'boolean',  defaultValue: false },
         { name: 'capabilityUpdate',   type: 'boolean',  defaultValue: false },
         { name: 'capabilityActivate', type: 'boolean',  defaultValue: false },
         { name: 'useContactForm',     type: 'boolean',  defaultValue: false },
@@ -82,6 +85,11 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
             && this.get('installationDate') != null
         );
     },
+
+    allowSecureUninstall: function() {
+        return (this.get('capabilitySecureUninstall'));
+    },
+
 
     allowReinstall: function () {
         return (

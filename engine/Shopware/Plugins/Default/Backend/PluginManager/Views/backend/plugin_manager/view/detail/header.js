@@ -56,7 +56,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Header', {
                 {
                     xtype: 'component',
                     html: '<div>'+ me.plugin.get('label') + '</div>',
-                    cls: 'headline-name'
+                    cls: 'headline-name',
+                    width: 750
                 },
                 certified,
                 producer

@@ -257,6 +257,8 @@ class StructHydrator
         $storePlugin->setLicence($localPlugin->getLicence());
         $storePlugin->setCapabilityActivate($localPlugin->hasCapabilityActivate());
         $storePlugin->setCapabilityInstall($localPlugin->hasCapabilityInstall());
+        $storePlugin->setCapabilitySecureUninstall($localPlugin->hasCapabilitySecureUninstall());
+
         $storePlugin->setCapabilityUpdate($localPlugin->hasCapabilityUpdate());
 
         $updateAvailable = version_compare(
@@ -396,7 +398,7 @@ class StructHydrator
             $addons = $data['addons'];
 
             $plugin->setAddons($addons);
-            $plugin->setCapabilityDummy(in_array('integrated', $addons));
+            $plugin->setCapabilityDummy(in_array('SW5_integrated', $addons));
             $plugin->setFreeDownload(in_array('integrated', $addons));
             $plugin->setEncrypted(in_array('encryptionIonCube', $addons));
             $plugin->setLicenceCheck(in_array('licenseCheck', $addons));
@@ -418,6 +420,8 @@ class StructHydrator
         $plugin->setCapabilityActivate((bool) $data['capability_enable']);
         $plugin->setCapabilityUpdate((bool) $data['capability_update']);
         $plugin->setCapabilityInstall((bool) $data['capability_install']);
+        $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
+
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);
         $plugin->setLocalIcon($data['iconPath']);
@@ -495,7 +499,6 @@ class StructHydrator
         $pictures = [];
         foreach ($data as $row) {
             $picture = new PictureStruct();
-            $picture->setId((int) $row['id']);
             $picture->setCover((bool) $row['preview']);
             $picture->setRemoteLink($row['remoteLink']);
 

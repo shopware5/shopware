@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.Listing', {
                 var scrollTop = el.scrollTop + el.offsetHeight;
                 var height = me.listingContainer.getHeight();
 
-                var itemHeight = 160;
+                var itemHeight = 170;
 
                 if ((height - scrollTop) <= itemHeight * 4) {
                     me.running = true;

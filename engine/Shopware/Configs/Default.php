@@ -61,7 +61,7 @@ return array_merge($customConfig, array(
     ), $customConfig['front']),
     'config' => array_merge(array(), $customConfig['config']),
     'store' => array_merge(array(
-        'apiEndpoint' => 'https://api.shopware.com'
+        'apiEndpoint' => 'https://api.shopware.com',
     ), $customConfig['store']),
     'plugins' => array_merge(array(), $customConfig['plugins']),
     'template' => array_merge(array(

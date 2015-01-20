@@ -22,6 +22,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
     },
 
     animationSpeed: 150,
+    mixins: {
+        events: 'Shopware.apps.PluginManager.view.PluginHelper'
+    },
 
     init: function () {
         var me = this;
@@ -68,27 +71,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             storePage = me.getStorePage(),
             storeListing = me.getStoreListing();
 
-        var price = storePage.priceFilter.getValue();
-        var sort = storePage.sortField.getValue();
-        var certified = storePage.certifiedField.getValue();
+        me.addPriceFilter();
 
-        storeListing.store.clearFilter();
+        me.addCertifiedFilter();
 
-        storeListing.store.filter({
-            property: 'price',
-            value: price
-        });
-
-        if (certified) {
-            storeListing.store.filter({
-                property: 'certified',
-                value: true
-            });
-        }
-
-        storeListing.store.sort({
-            property: sort
-        });
+        me.addSorting();
 
         storeListing.setLoading(true);
         storeListing.resetListing();
@@ -99,6 +86,58 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
                 if (Ext.isFunction(callback)) {
                     callback();
                 }
+            }
+        });
+    },
+
+    addPriceFilter: function() {
+        var me = this,
+            storePage = me.getStorePage(),
+            storeListing = me.getStoreListing();
+
+        me.removeFilterByName('price');
+
+        storeListing.store.filter({
+            property: 'price',
+            value: storePage.priceFilter.getValue()
+        });
+    },
+
+    addCertifiedFilter: function() {
+        var me = this,
+            storePage = me.getStorePage(),
+            storeListing = me.getStoreListing();
+
+        me.removeFilterByName('certified');
+
+        if (storePage.certifiedField.getValue()) {
+            storeListing.store.filter({
+                property: 'certified',
+                value: true
+            });
+        }
+    },
+
+    addSorting: function() {
+        var me = this,
+            storePage = me.getStorePage(),
+            storeListing = me.getStoreListing();
+
+        storeListing.store.sort({
+            property: storePage.sortField.getValue()
+        });
+    },
+
+    removeFilterByName: function(name) {
+        var me = this,
+            store = me.getStoreListing().store;
+
+        Ext.each(store.filters.items, function(filter, index) {
+            if (Ext.isObject(filter)
+                && filter.hasOwnProperty('property')
+                && filter.property == name) {
+
+                store.filters.removeAt(index);
             }
         });
     },
@@ -120,6 +159,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             property: 'search',
             value: term
         });
+
+        me.addPriceFilter();
+        me.addCertifiedFilter();
+        me.addSorting();
+
         storeListing.store.getProxy().extraParams.categoryId = null;
 
         storeListing.store.load({
@@ -159,6 +203,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
     displayPluginUpdatesPage: function () {
         var me = this,
+            updatePage = me.getUpdatePage(),
             navigation = me.getNavigation();
 
         me.switchView(me.cards.pluginUpdatesPage);
@@ -192,6 +237,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             navigation = me.getNavigation();
 
         Shopware.app.Application.fireEvent('check-store-login', function() {
+
+            page.getStore().getProxy().on('exception', function (proxy, response) {
+                var responseText = Ext.decode(response.responseText);
+                me.displayErrorMessage(responseText);
+            }, me, { single: true });
 
             page.getStore().load();
 
@@ -272,16 +322,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
         storeListing.store.clearFilter();
 
-        if (!storeListing.category || storeListing.category.get('id') !== category.get('id')) {
+        navigation.disable();
+        storeListing.resetListing();
+        storeListing.store.getProxy().extraParams.categoryId = category.get('id');
 
-            navigation.disable();
-            storeListing.resetListing();
-            storeListing.store.getProxy().extraParams.categoryId = category.get('id');
-
-            me.filterStoreListing(function() {
-                navigation.enable();
-            });
-        }
+        me.filterStoreListing(function() {
+            navigation.enable();
+        });
 
         storeListing.category = category;
     },

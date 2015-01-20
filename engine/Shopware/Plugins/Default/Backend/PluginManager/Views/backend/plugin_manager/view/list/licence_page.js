@@ -12,9 +12,12 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
             deleteColumn: false,
             editColumn: false,
             columns: {
-                label: null,
-                shop: null,
-                subscription: null,
+                label: {
+                    header: '{s name="plugin_name"}{/s}'
+                },
+                shop: {
+                    header: '{s name="shop"}{/s}'
+                },
                 creationDate: {
                     header: '{s name="creation_date"}{/s}',
                     renderer: this.dateRenderer
@@ -24,9 +27,12 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
                     renderer: this.dateRenderer
                 },
                 priceColumn: {
+                    header: '{s name="version"}{/s}',
                     renderer: this.priceRenderer
                 },
-                binaryVersion: null
+                binaryVersion: {
+                    header: '{s name="binary_version"}{/s}'
+                }
             }
         };
     },
@@ -114,7 +120,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
         if (!value || !value.hasOwnProperty('date')) {
             return value;
         }
-        return Ext.util.Format.date(value.date);
+        var date = this.formatDate(value.date);
+        return Ext.util.Format.date(date);
     },
 
     priceRenderer: function(value, metaData, record) {
@@ -137,6 +144,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
         items.push({
             iconCls: 'sprite-key',
             tooltip: '{s name="import_licence"}{/s}',
+            getClass: function(value, metaData, record) {
+                if (!record.get('licenseKey')) {
+                    return Ext.baseCSSPrefix + 'hidden';
+                }
+            },
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 Shopware.app.Application.fireEvent(
                     'import-plugin-licence',
@@ -156,9 +168,15 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
                     'download-plugin-licence',
                     record,
                     function() {
+                        Shopware.app.Application.fireEvent('reload-local-listing');
                         me.hideLoadingMask();
                     }
                 );
+            },
+            getClass: function(value, metaData, record) {
+                if (!record.get('binaryLink')) {
+                    return Ext.baseCSSPrefix + 'hidden';
+                }
             }
         });
 

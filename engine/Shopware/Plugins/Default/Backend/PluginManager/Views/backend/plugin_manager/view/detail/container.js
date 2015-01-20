@@ -43,6 +43,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
 
         me.updateConfiguration(plugin);
 
+        me.updateInstallationManual(plugin);
+
         var event = 'plugin-reloaded-' + me.plugin.get('technicalName');
 
         Shopware.app.Application.on(event, function(updated) {
@@ -77,6 +79,28 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         }, 6000);
     },
 
+    updateInstallationManual: function(plugin) {
+        var me = this;
+
+        me.installationManualContainer.hide();
+        me.installationManualContainer.removeAll();
+
+        var text = plugin.get('installationManual') + '';
+
+        if (!text || text.length <= 0) {
+            me.informationTab.hideTab(4);
+            return
+        }
+        me.informationTab.showTab(4);
+
+        me.installationManualContainer.add({
+            xtype: 'component',
+            padding: 10,
+            html: plugin.get('installationManual')
+        });
+        me.installationManualContainer.show();
+    },
+
     updateConfiguration: function(plugin) {
         var me = this;
 
@@ -89,14 +113,23 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         } else {
             me.informationTab.hideTab(0);
             me.informationTab.navigationClick(1);
-            me.configurationContainer.show();
             return;
         }
+        me.configurationContainer.show();
 
         me.configurationForm = Ext.create('Shopware.form.PluginPanel', {
             padding: 10,
             formId: plugin.get('formId'),
-            descriptionField: false
+            descriptionField: false,
+            listeners: {
+                'form-initialized': function(panel) {
+                    if (panel && panel.items.length > 0) {
+                        return;
+                    }
+                    me.informationTab.hideTab(0);
+                    me.informationTab.navigationClick(1);
+                }
+            }
         });
 
         me.configurationContainer.add(me.configurationForm);
@@ -195,10 +228,6 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
 
         me.pictureContainer.removeAll();
 
-        if (!plugin.hasStoreData()) {
-            return null;
-        }
-
         me.pictureContainer.add(content);
     },
 
@@ -237,8 +266,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             var version = value.version;
 
             if (value.creationDate) {
-                var date = Ext.util.Format.date(value.creationDate.date);
-                version = version + '<div class="date">' + date + '</div>';
+                var date = me.formatDate(value.creationDate.date);
+                version = version + '<div class="date">' + Ext.util.Format.date(date) + '</div>';
             }
 
             items.push({
@@ -340,6 +369,16 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             }
         });
 
+        me.installationManualContainer = Ext.create('Ext.container.Container', {
+            title: '{s name="installation_manual"}{/s}',
+            cls: 'store-plugin-detail-installation-manual-container',
+            flex: 1,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            }
+        });
+
         me.descriptionContainer = Ext.create('Ext.container.Container', {
             title: '{s name="description"}{/s}',
             cls: 'plugin-description-container',
@@ -366,7 +405,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
                 me.configurationContainer,
                 me.descriptionContainer,
                 me.changelogContainer,
-                me.commentContainer
+                me.commentContainer,
+                me.installationManualContainer
             ]
         });
 
