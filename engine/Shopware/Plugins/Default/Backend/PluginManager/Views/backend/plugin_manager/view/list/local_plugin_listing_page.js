@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                     renderer: this.licenceRenderer,
                     editor: null
                 },
-                active: '{s name="active"}{/s}',
+                active: this.createActiveColumn,
                 author: {
                     header: '{s name="from_producer"}{/s}',
                     renderer: this.authorRenderer,
@@ -71,19 +71,70 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 }
             });
 
-            plugin.set('groupingState', null);
-            plugin.dirty = false;
+            if (plugin.get('id') > 0) {
+                plugin.set('groupingState', null);
+                plugin.dirty = false;
+                try {
+                    me.store.add(plugin);
+                } catch (e) {
+                    me.store.load();
+                }
+            }
 
-            me.store.add(plugin);
             me.store.sort();
             me.store.group();
-
             me.reconfigure(me.store);
             me.hideLoadingMask();
         });
     },
 
+    createActionColumn: function () {
+        var me = this;
+
+        var actionColumn = me.callParent(arguments);
+
+        actionColumn.width = 120;
+        return actionColumn;
+    },
+
     createSelectionModel: function() { },
+
+    createActiveColumn: function() {
+        var me = this,
+            items = [];
+
+        items.push({
+            tooltip: '{s name="activate_deactivate"}{/s}',
+            handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                if (record.allowActivate()) {
+                    me.activatePluginEvent(record);
+
+                } else if (record.allowDeactivate()) {
+                    me.deactivatePluginEvent(record);
+                }
+            },
+            getClass: function(value, metaData, record) {
+                if (!record.allowActivate() && !record.allowDeactivate()) {
+                    return Ext.baseCSSPrefix + 'hidden';
+                }
+
+                if (record.allowActivate()) {
+                    return 'sprite-battery-empty';
+                } else {
+                    return 'sprite-battery-full';
+                }
+            }
+        });
+
+        return {
+            xtype: 'actioncolumn',
+            width: 60,
+            align: 'center',
+            header: '{s name="active"}{/s}',
+            items: items
+        };
+    },
+
 
     searchEvent: function(field, value) {
         var me = this;
@@ -101,10 +152,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
             return (
                 name.indexOf(value) > -1
-                ||
-                description.indexOf(value) > -1
-                ||
-                producer.indexOf(value) > -1
+                || description.indexOf(value) > -1
+                || producer.indexOf(value) > -1
             );
         });
     },
@@ -168,7 +217,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         if (!value || !value.hasOwnProperty('date')) {
             return value;
         }
-        return Ext.util.Format.date(value.date);
+        var date = this.formatDate(value.date);
+        return Ext.util.Format.date(date);
     },
 
     licenceRenderer: function(value, metaData, record) {
@@ -266,28 +316,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 }
             }
         });
-
-        items.push({
-            iconCls: 'sprite-battery-empty',
-            tooltip: '{s name="activate_deactivate"}{/s}',
-            handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
-                if (record.allowActivate()) {
-                    me.activatePluginEvent(record);
-                } else if (record.allowDeactivate()) {
-                    me.deactivatePluginEvent(record);
-                }
-            },
-            getClass: function(value, metaData, record) {
-                if (!record.allowActivate() && !record.allowDeactivate()) {
-                    return Ext.baseCSSPrefix + 'hidden';
-                }
-
-                if (record.allowActivate()) {
-                    return 'sprite-battery-full';
-                }
-            }
-        });
-
 
         items.push({
             iconCls: 'sprite-arrow-continue',

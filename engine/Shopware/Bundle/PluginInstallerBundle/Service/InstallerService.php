@@ -140,6 +140,8 @@ class InstallerService
                 throw new \Exception(sprintf('Unable to install %s, an unknown error occured.', $plugin->getName()));
             }
         }
+
+        return $result;
     }
 
     /**
@@ -172,6 +174,8 @@ class InstallerService
                 throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
             }
         }
+
+        return $result;
     }
 
     /**
@@ -203,6 +207,7 @@ class InstallerService
                 throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
             }
         }
+        return $result;
     }
 
     /**

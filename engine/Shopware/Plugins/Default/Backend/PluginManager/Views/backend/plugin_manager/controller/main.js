@@ -10,7 +10,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         { ref: 'updatePage', selector: 'plugin-manager-update-page' }
     ],
 
-
     init: function() {
         var me = this;
 
@@ -37,14 +36,33 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             }
         });
 
+        Shopware.app.Application.on({
+            'load-update-listing': me.loadUpdateListing,
+            scope: me
+        });
+
         this.callParent(arguments);
+    },
+
+    loadUpdateListing: function() {
+        var me = this,
+            navigation = me.getNavigation(),
+            updatePage = me.getUpdatePage();
+
+        updatePage.listing.resetListing();
+
+        updatePage.updateStore.load({
+            callback: function(records) {
+                if (records) {
+                    navigation.setUpdateCount(records.length);
+                }
+            }
+        });
     },
 
     afterPluginManagerLoaded: function() {
         var me = this,
-            navigation = me.getNavigation(),
-            localListing = me.getLocalListing(),
-            updatePage = me.getUpdatePage();
+            localListing = me.getLocalListing();
 
         if (!Shopware.app.Application.sbpAvailable) {
             var navController = me.subApplication.getController('Navigation');
@@ -57,13 +75,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                 }
             });
 
-            updatePage.updateStore.load({
-                callback: function(records) {
-                    if (records) {
-                        navigation.setUpdateCount(records.length);
-                    }
-                }
-            });
+            Shopware.app.Application.fireEvent('load-update-listing');
 
         }, 1000);
     }

@@ -105,12 +105,12 @@ class PluginCategoryService
 
         foreach ($categories as $category) {
             foreach ($category->getName() as $locale => $name) {
-                $statement->execute(array(
+                $statement->execute([
                     ':id' => $category->getId(),
                     ':name' => $name,
                     ':locale' => $locale,
                     ':parent_id' => $category->getParentId()
-                ));
+                ]);
             }
         }
     }
@@ -163,12 +163,12 @@ class PluginCategoryService
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select([
             'categories.parent_id',
             'categories.name',
             'categories.id as categoryId',
             'categories.parent_id as parentId'
-        ));
+        ]);
 
         $query->from('s_core_plugin_categories', 'categories')
             ->where('categories.locale = :locale')

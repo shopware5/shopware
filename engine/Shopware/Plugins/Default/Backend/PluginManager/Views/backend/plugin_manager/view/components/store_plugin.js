@@ -143,10 +143,6 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             '</div>' +
             '<div class="badge-text">';
 
-        if (me.record.get('capabilityDummy')) {
-            return null;
-        }
-
         if (me.record.get('id')) {
             items.push({
                 cls: 'installed badge',
@@ -235,6 +231,8 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     cls: 'button contact-form',
                     html: '{s name="request"}{/s}',
                     handler: function() {
+                        var link = '{s name="contact_link"}{/s}?technicalName=' + me.record.get('technicalName');
+                        window.open(link);
                     }
                 });
 
