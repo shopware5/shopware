@@ -62,61 +62,22 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     protected $extends = array();
 
+    /**
+     * @param ModelManager $modelManager
+     * @param array $snippetConfig
+     */
     public function __construct(ModelManager $modelManager, $snippetConfig = array())
     {
         $this->snippetConfig = $snippetConfig;
         $this->modelManager  = $modelManager;
 
-        $configDir = array();
-        if (file_exists(Shopware()->DocPath('snippets'))) {
-            $configDir[] = Shopware()->DocPath('snippets');
-        }
-
-        //Add plugins dirs
-        $plugins = $modelManager->getRepository('Shopware\Models\Plugin\Plugin')->findByActive(true);
-        $pluginBasePath = Shopware()->AppPath('Plugins');
-
-        foreach ($plugins as $plugin) {
-            $pluginPath = implode(DIRECTORY_SEPARATOR, array(
-                rtrim($pluginBasePath, DIRECTORY_SEPARATOR),
-                $plugin->getSource(),
-                $plugin->getNamespace(),
-                $plugin->getName()
+        if ($this->snippetConfig['readFromIni']) {
+            $configDir = $this->getConfigDirs();
+            $this->fileAdapter = new Enlight_Config_Adapter_File(array(
+                'configDir'   => $configDir,
+                'allowWrites' => $snippetConfig['writeToIni']
             ));
-
-            // Add plugin snippets
-            $pluginSnippetPath =
-                $pluginPath .
-                DIRECTORY_SEPARATOR .
-                'Snippets' .
-                DIRECTORY_SEPARATOR;
-
-            array_unshift($configDir, $pluginSnippetPath);
-
-            $pluginThemePath = $pluginPath . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR;
-            if (file_exists($pluginThemePath)) {
-                // Add plugin theme snippets
-                $directories = new \DirectoryIterator(
-                    $pluginThemePath
-                );
-
-                /** @var $directory \DirectoryIterator */
-                foreach ($directories as $directory) {
-                    //check valid directory
-
-                    if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() == '_cache') {
-                        continue;
-                    }
-
-                    $configDir['themes/' . strtolower($directory->getFilename()).'/'] = $directory->getPathname().'/_private/snippets/';
-                }
-            }
         }
-
-        $this->fileAdapter = new Enlight_Config_Adapter_File(array(
-            'configDir'   => $configDir,
-            'allowWrites' => $snippetConfig['writeToIni']
-        ));
 
         $this->adapter = new Enlight_Config_Adapter_DbTable(array(
             'table'           => 's_core_snippets',
@@ -162,6 +123,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             }
 
             if ($this->snippetConfig['readFromIni'] && (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0) && isset($this->fileAdapter)) {
+
+                /** @var \Enlight_Components_Snippet_Namespace $fullNamespace */
                 $fullNamespace = new $this->defaultNamespaceClass(array(
                     'adapter' => $this->fileAdapter,
                     'name' => $namespace,
@@ -220,6 +183,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return $this;
     }
 
+    /**
+     * @return \Shopware\Models\Shop\Locale
+     */
     protected function getDefaultLocale()
     {
         return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->getDefault()->getLocale();
@@ -256,7 +222,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             );
         }
 
-
         // fallback to parent shop, parent locale
         if ($main !== null) {
             $extends[] = array(
@@ -283,7 +248,65 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     public function addConfigDir($dir)
     {
+        if (!$this->fileAdapter) {
+            return $this;
+        }
+
         $this->fileAdapter->addConfigDir($dir);
+
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getConfigDirs()
+    {
+        $configDir = array();
+        if (file_exists(Shopware()->DocPath('snippets'))) {
+            $configDir[] = Shopware()->DocPath('snippets');
+        }
+
+        //Add plugins dirs
+        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
+        $plugins = $this->modelManager->getRepository('Shopware\Models\Plugin\Plugin')->findByActive(true);
+        $pluginBasePath = Shopware()->AppPath('Plugins');
+
+        foreach ($plugins as $plugin) {
+            $pluginPath = implode(
+                DIRECTORY_SEPARATOR,
+                array(
+                    rtrim($pluginBasePath, DIRECTORY_SEPARATOR),
+                    $plugin->getSource(),
+                    $plugin->getNamespace(),
+                    $plugin->getName()
+                )
+            );
+
+            // Add plugin snippets
+            $pluginSnippetPath = $pluginPath . DIRECTORY_SEPARATOR . 'Snippets' . DIRECTORY_SEPARATOR;
+
+            array_unshift($configDir, $pluginSnippetPath);
+
+            $pluginThemePath = $pluginPath . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR;
+            if (file_exists($pluginThemePath)) {
+                // Add plugin theme snippets
+                $directories = new \DirectoryIterator(
+                    $pluginThemePath
+                );
+
+                /** @var $directory \DirectoryIterator */
+                foreach ($directories as $directory) {
+                    //check valid directory
+                    if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() == '_cache') {
+                        continue;
+                    }
+
+                    $configDir['themes/' . strtolower($directory->getFilename()) . '/'] = $directory->getPathname() . '/_private/snippets/';
+                }
+            }
+        }
+
+        return $configDir;
     }
 }

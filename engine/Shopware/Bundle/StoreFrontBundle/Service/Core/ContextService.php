@@ -179,12 +179,14 @@ class ContextService implements Service\ContextServiceInterface
             $key = $fallback;
         }
 
+        $groups = $this->customerGroupGateway->getList([$key, $fallback]);
+
         $this->shopContext = new Struct\ShopContext(
             $this->buildBaseUrl(),
             Struct\Shop::createFromShopEntity($shop),
             Struct\Currency::createFromCurrencyEntity($shop->getCurrency()),
-            $this->customerGroupGateway->get($key),
-            $this->customerGroupGateway->get($fallback)
+            $groups[$key],
+            $groups[$fallback]
         );
     }
 
