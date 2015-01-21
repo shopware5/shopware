@@ -100,10 +100,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
         } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
-            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                $this->Request()->setParam('ordernumber', $article['ordernumber']);
-                return $this->forward('productQuickView');
-            }
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
