@@ -90,6 +90,83 @@ EOD;
         '_private' => array(
             'smarty',
             'snippets'
+        ),
+        'documents',
+        'frontend' => array(
+            '_public' => array(
+                'src' => array(
+                    'css',
+                    'fonts',
+                    'img' => array(
+                        'icons',
+                        'logos'
+                    ),
+                    'js' => array(
+                        'vendors'
+                    ),
+                    'less' => array(
+                        '_components',
+                        '_mixins',
+                        '_modules',
+                        '_variables'
+                    )
+                )
+            ),
+            '_includes',
+            'account',
+            'blog' => array(
+                'comment'
+            ),
+            'campaign',
+            'checkout' => array(
+                'items'
+            ),
+            'compare',
+            'custom',
+            'detail' => array(
+                'comment',
+                'tabs'
+            ),
+            'error',
+            'forms',
+            'home',
+            'index',
+            'listing' => array(
+                'actions',
+                'filter',
+                'product-box'
+            ),
+            'newsletter',
+            'note',
+            'paypal',
+            'plugins' => array(
+                'compare',
+                'index',
+                'notification',
+                'payment',
+                'seo'
+            ),
+            'register',
+            'robots_txt',
+            'search',
+            'sitemap',
+            'sitemap_xml',
+            'tellafriend'
+        ),
+        'newsletter' => array(
+            'alt',
+            'container',
+            'index'
+        ),
+        'widgets' => array(
+            'checkout',
+            'compare',
+            'emotion' => array(
+                'components'
+            ),
+            'index',
+            'listing',
+            'recommendation'
         )
     );
 
