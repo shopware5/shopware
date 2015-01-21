@@ -66,6 +66,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
 
     public function testWithMainId()
     {
+
         $first1  = $this->helper->createCategory(array('name' => 'first1', 'parent' => 3));
         $first2  = $this->helper->createCategory(array('name' => 'first2', 'parent' => 3));
         $second1 = $this->helper->createCategory(array('name' => 'second1', 'parent' => $first1->getId()));
@@ -170,6 +171,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($third1->getId());
 
+        Shopware()->Db()->delete('s_categories', 'description = "ListingTest"');
 
         $this->assertCount(8, $result);
         $this->assertArrayHasKey($first1->getId(), $result);
