@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
     layout: 'fit',
     height: '90%',
 
+    _scrollbarOffset: 30,
     _deviceWidth: {
         desktop: 1280,
         tabletLandscape: 1024,
@@ -66,7 +67,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
             layout: 'fit',
             items: [ me.previewElement ]
         }];
+        
+        if(me.deviceId % 1 !== 0) {
+            var devices = me.deviceId.split(',');
 
+            me.deviceId = parseInt(devices[0], 10);
+        }
+        
         if(me.deviceId > -1) {
             var device = 'desktop';
             switch(me.deviceId) {
@@ -87,7 +94,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
                     device = 'desktop';
                     break;
             }
-            me.width = me._deviceWidth[device];
+            me.width = me._deviceWidth[device] + me._scrollbarOffset;
         }
 
         me.callParent(arguments);
@@ -197,15 +204,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
 
     onReload: function() {
         var me = this,
-            iframe = me.previewElement.getEl();
+            iframe = me.previewElement.getEl().dom;
 
         me.setLoading(true);
-        iframe.dom.addEventListener('load', function() {
-            iframe.dom.removeEventListener('load');
-            me.setLoading(false);
-        });
 
-        iframe.dom.contentDocument.location.href = me._previewSrc;
+        iframe.contentWindow.location.reload();
+
+        me.setLoading(false);
     }
 });
 //{/block}
