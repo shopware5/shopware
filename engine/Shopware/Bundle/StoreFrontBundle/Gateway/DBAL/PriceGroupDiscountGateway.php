@@ -102,7 +102,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $priceGroups = array();
+        $priceGroups = [];
 
         foreach ($data as $row) {
             $priceGroup = $this->priceHydrator->hydratePriceGroup($row);

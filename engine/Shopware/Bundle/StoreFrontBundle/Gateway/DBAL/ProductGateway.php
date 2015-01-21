@@ -39,7 +39,7 @@ class ProductGateway extends ListProductGateway implements Gateway\ProductGatewa
      */
     public function get($number, Struct\ShopContextInterface $context)
     {
-        $products = $this->getList(array($number), $context);
+        $products = $this->getList([$number], $context);
 
         return array_shift($products);
     }
@@ -56,7 +56,7 @@ class ProductGateway extends ListProductGateway implements Gateway\ProductGatewa
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $products = array();
+        $products = [];
         foreach ($data as $product) {
             $key = $product['__variant_ordernumber'];
 
@@ -65,5 +65,4 @@ class ProductGateway extends ListProductGateway implements Gateway\ProductGatewa
 
         return $products;
     }
-
 }

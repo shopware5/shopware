@@ -34,7 +34,7 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
     /**
      * @var string[]
      */
-    private $states = array();
+    private $states = [];
 
     /**
      * @return string[]

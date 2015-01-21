@@ -95,9 +95,9 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $covers = $this->getCovers(array($product), $context);
+        $covers = $this->getCovers([$product], $context);
 
         return array_shift($covers);
     }
@@ -119,7 +119,7 @@ class MediaService implements Service\MediaServiceInterface
             $context
         );
 
-        $fallback = array();
+        $fallback = [];
         foreach ($products as $product) {
             if (!array_key_exists($product->getNumber(), $covers)) {
                 $fallback[] = $product;
@@ -134,9 +134,9 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function getProductMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getProductMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $media = $this->getProductsMedia(array($product), $context);
+        $media = $this->getProductsMedia([$product], $context);
 
         return array_shift($media);
     }
@@ -150,11 +150,10 @@ class MediaService implements Service\MediaServiceInterface
 
         $globalMedia = $this->productMediaGateway->getList($products, $context);
 
-        $result = array();
+        $result = [];
 
         foreach ($products as $product) {
-
-            $variantMedia = array();
+            $variantMedia = [];
 
             if (array_key_exists($product->getNumber(), $specifyMedia)) {
                 $variantMedia = $specifyMedia[$product->getNumber()];

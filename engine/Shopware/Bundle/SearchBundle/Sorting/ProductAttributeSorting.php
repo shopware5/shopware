@@ -69,5 +69,4 @@ class ProductAttributeSorting extends Sorting
     {
         return $this->field;
     }
-
 }

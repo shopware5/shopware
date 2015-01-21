@@ -117,7 +117,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
             $context
         );
 
-        $results = array();
+        $results = [];
         $actives = $this->getFilteredValues($criteria);
 
         foreach ($properties as $property) {
@@ -157,7 +157,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
      */
     private function getFilteredValues(Criteria $criteria)
     {
-        $values = array();
+        $values = [];
         foreach ($criteria->getConditions() as $condition) {
             if ($condition instanceof PropertyCondition) {
                 $values = array_merge($values, $condition->getValueIds());
@@ -178,10 +178,10 @@ class PropertyFacetHandler implements FacetHandlerInterface
         Struct\Property\Set $set,
         $actives
     ) {
-        $results = array();
+        $results = [];
 
         foreach ($set->getGroups() as $group) {
-            $items = array();
+            $items = [];
             $useMedia = false;
             $isActive = false;
 
@@ -208,7 +208,6 @@ class PropertyFacetHandler implements FacetHandlerInterface
                     $this->fieldName
                 );
             } else {
-
                 $results[] = new ValueListFacetResult(
                     $facet->getName(),
                     $isActive,

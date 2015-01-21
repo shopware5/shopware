@@ -41,12 +41,12 @@ class ManufacturerHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationMapping = array(
+    private $translationMapping = [
         'description' => '__manufacturer_description',
         'metaTitle' => '__manufacturer_meta_title',
         'metaDescription' => '__manufacturer_meta_description',
         'metaKeywords' => '__manufacturer_meta_keywords',
-    );
+    ];
 
     /**
      * @param AttributeHydrator $attributeHydrator
@@ -82,7 +82,6 @@ class ManufacturerHydrator extends Hydrator
      */
     private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
-
         if (isset($data['__manufacturer_id'])) {
             $manufacturer->setId((int) $data['__manufacturer_id']);
         }
@@ -138,7 +137,7 @@ class ManufacturerHydrator extends Hydrator
         if (!isset($data['__manufacturer_translation'])
             || empty($data['__manufacturer_translation'])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
             $translation = unserialize($data['__manufacturer_translation']);
         }
@@ -151,7 +150,7 @@ class ManufacturerHydrator extends Hydrator
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
         return $this->convertArrayKeys(

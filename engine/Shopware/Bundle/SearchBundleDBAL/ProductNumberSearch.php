@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
 
@@ -66,7 +67,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         QueryBuilderFactory $queryBuilderFactory,
         AttributeHydrator $attributeHydrator,
         \Enlight_Event_EventManager $eventManager,
-        $facetHandlers = array()
+        $facetHandlers = []
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->attributeHydrator = $attributeHydrator;
@@ -118,11 +119,14 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $products = array();
+        $products = [];
 
         foreach ($data as $row) {
-            $product = new SearchBundle\SearchProduct();
-            $product->setNumber($row['ordernumber']);
+            $product = new BaseProduct(
+                (int) $row['__product_id'],
+                (int) $row['__variant_id'],
+                $row['__variant_ordernumber']
+            );
 
             unset($row['ordernumber']);
 
@@ -166,9 +170,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
         $select = $query->getQueryPart('select');
 
-        $query->select(array(
-            'SQL_CALC_FOUND_ROWS variant.ordernumber'
-        ));
+        $query->select([
+            'SQL_CALC_FOUND_ROWS product.id as __product_id',
+            'variant.id                     as __variant_id',
+            'variant.ordernumber            as __variant_ordernumber'
+        ]);
 
         foreach ($select as $selection) {
             $query->addSelect($selection);
@@ -194,7 +200,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private function createFacets(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
-        $facets = array();
+        $facets = [];
 
         foreach ($criteria->getFacets() as $facet) {
             $handler = $this->getFacetHandler($facet);
@@ -206,7 +212,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             }
 
             if (!is_array($result)) {
-                $result = array($result);
+                $result = [$result];
             }
 
             $facets = array_merge($facets, $result);

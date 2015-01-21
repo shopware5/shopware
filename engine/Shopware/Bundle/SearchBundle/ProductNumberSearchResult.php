@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
 /**
  * Defines the search result of the search gateway.
@@ -36,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 class ProductNumberSearchResult implements \JsonSerializable
 {
     /**
-     * @var SearchProduct[] Indexed by the product order number
+     * @var BaseProduct[] Indexed by the product order number
      */
     protected $products;
 
@@ -56,7 +57,7 @@ class ProductNumberSearchResult implements \JsonSerializable
     protected $attribute;
 
     /**
-     * @param SearchProduct[] $products Indexed by the product order number
+     * @param BaseProduct[] $products Indexed by the product order number
      * @param int $totalCount
      * @param FacetResultInterface[] $facets
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Attribute $attribute
@@ -70,7 +71,7 @@ class ProductNumberSearchResult implements \JsonSerializable
     }
 
     /**
-     * @return SearchProduct[] Indexed by the product order number
+     * @return BaseProduct[] Indexed by the product order number
      */
     public function getProducts()
     {

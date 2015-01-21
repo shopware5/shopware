@@ -75,7 +75,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getArea($id, Struct\ShopContextInterface $context)
     {
-        $areas = $this->getAreas(array($id), $context);
+        $areas = $this->getAreas([$id], $context);
 
         return array_shift($areas);
     }
@@ -85,7 +85,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getCountry($id, Struct\ShopContextInterface $context)
     {
-        $countries = $this->getCountries(array($id), $context);
+        $countries = $this->getCountries([$id], $context);
 
         return array_shift($countries);
     }
@@ -95,7 +95,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getState($id, Struct\ShopContextInterface $context)
     {
-        $states = $this->getStates(array($id), $context);
+        $states = $this->getStates([$id], $context);
 
         return array_shift($states);
     }
@@ -117,7 +117,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $areas = array();
+        $areas = [];
         foreach ($data as $row) {
             $areas[] = $this->countryHydrator->hydrateArea($row);
         }
@@ -146,7 +146,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $countries = array();
+        $countries = [];
         foreach ($data as $row) {
             $countries[] = $this->countryHydrator->hydrateCountry($row);
         }
@@ -176,7 +176,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $states = array();
+        $states = [];
         foreach ($data as $row) {
             $states[] = $this->countryHydrator->hydrateState($row);
         }

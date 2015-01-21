@@ -77,7 +77,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
         Struct\ListProduct $product,
         Struct\Customer\Group $customerGroup
     ) {
-        $prices = $this->getList(array($product), $customerGroup);
+        $prices = $this->getList([$product], $customerGroup);
 
         return array_shift($prices);
     }
@@ -87,7 +87,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
      */
     public function getList($products, Struct\Customer\Group $customerGroup)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
@@ -115,7 +115,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $prices = array();
+        $prices = [];
         foreach ($data as $row) {
             $product = $row['number'];
 

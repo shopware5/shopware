@@ -50,9 +50,9 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $cheapestPrices = $this->getList(array($product), $context);
+        $cheapestPrices = $this->getList([$product], $context);
 
         return array_shift($cheapestPrices);
     }
@@ -71,7 +71,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         //check if one of the products have no assigned price within the prices variable.
         $fallbackProducts = array_filter(
             $products,
-            function (Struct\ListProduct $product) use ($prices) {
+            function (Struct\BaseProduct $product) use ($prices) {
                 return !array_key_exists($product->getNumber(), $prices);
             }
         );
@@ -100,14 +100,14 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * Helper function which iterates the products and builds a price array which indexed
      * with the product order number.
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\Product\PriceRule[] $priceRules
      * @param Struct\Customer\Group $group
      * @return array
      */
     private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
     {
-        $prices = array();
+        $prices = [];
 
         foreach ($products as $product) {
             $key = $product->getId();

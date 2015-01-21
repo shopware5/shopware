@@ -74,7 +74,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
      */
     public function get($key)
     {
-        $groups = $this->getList(array($key));
+        $groups = $this->getList([$key]);
 
         return array_shift($groups);
     }
@@ -103,7 +103,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $customerGroups = array();
+        $customerGroups = [];
         foreach ($data as $group) {
             $key = $group['__customerGroup_groupkey'];
 
@@ -112,5 +112,4 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
 
         return $customerGroups;
     }
-
 }

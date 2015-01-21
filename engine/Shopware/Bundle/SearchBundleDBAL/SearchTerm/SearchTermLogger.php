@@ -69,11 +69,11 @@ class SearchTermLogger
         $condition = $criteria->getCondition('search');
 
         $now = new \DateTime();
-        $this->connection->insert('s_statistics_search', array(
+        $this->connection->insert('s_statistics_search', [
             'datum' => $now->format('Y-m-d h:i:s'),
             'searchterm' => $condition->getTerm(),
             'results' => $result->getTotalCount(),
             'shop_id' => $shop->getId()
-        ));
+        ]);
     }
 }

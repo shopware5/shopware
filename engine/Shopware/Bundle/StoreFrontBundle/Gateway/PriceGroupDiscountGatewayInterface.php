@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface PriceGroupDiscountGatewayInterface
 {
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup requires the folling data:
+     * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup requires the following data:
      * - Price group base data
      * - Price group discounts for the provided customer group
      *

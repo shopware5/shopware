@@ -88,7 +88,7 @@ class ProductSearch implements ProductSearchInterface
 
     /**
      * @param StoreFrontBundle\Struct\ListProduct[] $products
-     * @param SearchProduct[] $searchProducts
+     * @param StoreFrontBundle\Struct\BaseProduct[] $searchProducts
      * @return StoreFrontBundle\Struct\ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)

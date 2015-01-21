@@ -62,7 +62,7 @@ class MediaListItem extends Extendable
      * @param Media $media
      * @param Attribute[] $attributes
      */
-    public function __construct($id, $label, $active, Media $media = null, $attributes = array())
+    public function __construct($id, $label, $active, Media $media = null, $attributes = [])
     {
         $this->id = $id;
         $this->label = $label;

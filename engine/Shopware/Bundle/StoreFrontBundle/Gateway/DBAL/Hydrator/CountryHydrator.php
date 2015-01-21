@@ -42,17 +42,17 @@ class CountryHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationCountryFields = array(
+    private $translationCountryFields = [
         'countryname' => '__country_countryname',
         'notice' => '__country_notice'
-    );
+    ];
 
     /**
      * @var array
      */
-    private $translationStateFields = array(
+    private $translationStateFields = [
         'name' => '__countryState_name'
-    );
+    ];
 
     /**
      * @param AttributeHydrator $attributeHydrator
@@ -156,12 +156,12 @@ class CountryHydrator extends Hydrator
      * @param array $mapping
      * @return array|mixed
      */
-    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $id, $mapping = array())
+    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $id, $mapping = [])
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
             $translation = unserialize($data[$arrayKey]);
         }
@@ -174,7 +174,7 @@ class CountryHydrator extends Hydrator
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
         return $this->convertArrayKeys($translation[$id], $mapping);

@@ -38,7 +38,7 @@ class PropertyCondition implements ConditionInterface
      *
      * @var array
      */
-    private $valueIds = array();
+    private $valueIds = [];
 
     /**
      * @param array $valueIds

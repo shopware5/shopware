@@ -46,7 +46,7 @@ class PriceGroup extends Extendable implements \JsonSerializable
     /**
      * @var PriceDiscount[]
      */
-    protected $discounts = array();
+    protected $discounts = [];
 
     /**
      * @param int $id

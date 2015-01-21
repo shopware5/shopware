@@ -61,7 +61,7 @@ class TreeItem extends Extendable
      * @param TreeItem[] $values
      * @param Attribute[] $attributes
      */
-    public function __construct($id, $label, $active, $values, $attributes = array())
+    public function __construct($id, $label, $active, $values, $attributes = [])
     {
         $this->id = $id;
         $this->label = $label;

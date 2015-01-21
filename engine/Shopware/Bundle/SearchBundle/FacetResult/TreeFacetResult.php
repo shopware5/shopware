@@ -70,7 +70,7 @@ class TreeFacetResult
      * @param TreeItem[] $values
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $fieldName, $active, $label, $values, $attributes = array())
+    public function __construct($facetName, $fieldName, $active, $label, $values, $attributes = [])
     {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;

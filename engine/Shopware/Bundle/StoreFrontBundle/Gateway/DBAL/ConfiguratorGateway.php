@@ -82,7 +82,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery();
 
@@ -110,7 +110,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
         $subQuery = $this->connection->createQueryBuilder();
 
@@ -126,10 +126,12 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select(
+            [
             'optionRelation.option_id',
             '(' . $subQuery->getSQL() . ') as media_id'
-        ));
+            ]
+        );
 
         $query->from('s_articles', 'product')
             ->innerJoin(
@@ -153,7 +155,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $media = $this->mediaGateway->getList($data, $context);
 
-        $result = array();
+        $result = [];
         foreach ($data as $optionId => $mediaId) {
             if (!isset($media[$mediaId])) {
                 continue;
@@ -167,14 +169,16 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getProductCombinations(Struct\ListProduct $product)
+    public function getProductCombinations(Struct\BaseProduct $product)
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select(
+            [
             'relations.option_id',
             "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations"
-        ));
+            ]
+        );
 
         $query->from('s_article_configurator_option_relations', 'relations');
 

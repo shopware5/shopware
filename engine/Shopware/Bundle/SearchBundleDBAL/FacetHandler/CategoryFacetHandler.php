@@ -115,10 +115,12 @@ class CategoryFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        $query->select(array(
+        $query->select(
+            [
             'category.id',
             'category.path'
-        ));
+            ]
+        );
 
         $query->innerJoin(
             'product',
@@ -151,7 +153,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
         if (!$query->getParameter(':category')) {
             $query->setParameter(
                 ':category',
-                array(1),
+                [1],
                 Connection::PARAM_INT_ARRAY
             );
         }
@@ -173,7 +175,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
 
         $categories = $this->categoryService->getList($ids, $context);
 
-        $active = array();
+        $active = [];
         if ($criteria->hasCondition('category')) {
             /**@var $condition CategoryCondition*/
             $condition = $criteria->getCondition('category');
@@ -193,7 +195,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
     {
         $items = $this->getCategoriesOfParent($categories, null);
 
-        $values = array();
+        $values = [];
         foreach ($items as $item) {
             $values[] = $this->createTreeItem($categories, $item, $active);
         }
@@ -214,7 +216,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
      */
     private function getCategoriesOfParent($categories, $parentId)
     {
-        $result = array();
+        $result = [];
 
         foreach ($categories as $category) {
             if (!$category->getPath() && $parentId !== null) {
@@ -232,7 +234,6 @@ class CategoryFacetHandler implements FacetHandlerInterface
             if ($lastParent == $parentId) {
                 $result[] = $category;
             }
-
         }
         return $result;
     }
@@ -250,7 +251,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
             $category->getId()
         );
 
-        $values = array();
+        $values = [];
         foreach ($children as $child) {
             $values[] = $this->createTreeItem($categories, $child, $active);
         }

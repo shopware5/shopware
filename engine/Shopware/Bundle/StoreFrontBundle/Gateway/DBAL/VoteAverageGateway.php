@@ -53,9 +53,9 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $votes = $this->getList(array($product), $context);
+        $votes = $this->getList([$product], $context);
 
         return array_shift($votes);
     }
@@ -65,7 +65,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -74,11 +74,11 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->select(
-            array(
+            [
                 'articleID',
                 'COUNT(id) as total',
                 'points'
-            )
+            ]
         );
 
         $query->from('s_articles_vote', 'vote')
@@ -94,7 +94,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             if (!isset($data[$product->getId()])) {
                 continue;

@@ -111,10 +111,12 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $this->addToleranceCondition($query);
 
-        $query->select(array(
+        $query->select(
+            [
           "a.id as product_id",
           "(" . $this->getRelevanceSelection() . ") as ranking"
-        ));
+            ]
+        );
 
         return $query->getSQL();
     }
@@ -128,18 +130,18 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      */
     private function buildQueryFromKeywords($keywords, $tables)
     {
-        $keywordSelection = array();
+        $keywordSelection = [];
         foreach ($keywords as $match) {
             $keywordSelection[] = 'SELECT ' . $match->getRelevance() . ' as relevance, ' . $this->connection->quote($match->getTerm()) . ' as term, ' . $match->getId() . ' as keywordID';
         }
         $keywordSelection = implode("\n             UNION ALL ", $keywordSelection);
 
-        $tablesSql = array();
+        $tablesSql = [];
         foreach ($tables as $table) {
             $query = $this->connection->createQueryBuilder();
             $alias = 'st' . $table['tableID'];
 
-            $query->select(array('MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID'));
+            $query->select(['MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID']);
             $query->from('(' . $keywordSelection . ')', 'sm');
             $query->innerJoin('sm', 's_search_index', 'si', 'sm.keywordID = si.keywordID');
             $query->innerJoin('si', 's_search_fields', 'sf', 'si.fieldID = sf.id AND sf.relevance != 0 AND sf.tableID = ' . $table['tableID']);
@@ -151,11 +153,9 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             if (!empty($table['referenz_table'])) {
                 $query->addSelect($alias . '.articleID as articleID');
                 $query->innerJoin('si', $table['referenz_table'], $alias, 'si.elementID = ' . $alias . '.' . $table['foreign_key']);
-
             } elseif (!empty($table['foreign_key'])) {
                 $query->addSelect($alias . '.id as articleID');
                 $query->innerJoin('si', 's_articles', $alias, 'si.elementID = ' . $alias . '.' . $table['foreign_key']);
-
             } else {
                 $query->addSelect('si.elementID as articleID');
             }
@@ -166,7 +166,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $tablesSql = "\n" .  implode("\n     UNION ALL\n", $tablesSql);
 
         $subQuery = $this->connection->createQueryBuilder();
-        $subQuery->select(array('srd.articleID', 'SUM(srd.relevance) as relevance'));
+        $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance']);
         $subQuery->from("(" . $tablesSql  . ')', 'srd')
             ->groupBy('srd.articleID')
             ->setMaxResults(5000);

@@ -51,7 +51,7 @@ class Group extends Extendable implements \JsonSerializable
     /**
      * @var Option[]
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @param int $id

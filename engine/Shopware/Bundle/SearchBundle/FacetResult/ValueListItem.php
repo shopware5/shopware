@@ -55,7 +55,7 @@ class ValueListItem extends Extendable
      * @param boolean $active
      * @param Attribute[] $attributes
      */
-    public function __construct($id, $label, $active, $attributes = array())
+    public function __construct($id, $label, $active, $attributes = [])
     {
         $this->id = $id;
         $this->label = $label;

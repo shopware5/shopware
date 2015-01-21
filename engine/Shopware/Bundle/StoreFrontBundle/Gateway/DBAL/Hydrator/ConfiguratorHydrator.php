@@ -63,7 +63,7 @@ class ConfiguratorHydrator extends Hydrator
      */
     public function hydrateGroups(array $data)
     {
-        $groups = array();
+        $groups = [];
 
         foreach ($data as $row) {
             $groupId = $row['__configuratorGroup_id'];
@@ -108,7 +108,7 @@ class ConfiguratorHydrator extends Hydrator
             $data,
             '__configuratorGroup_translation',
             '__configuratorGroup_translation_fallback',
-            array('name' => '__configuratorGroup_name', 'description' => '__configuratorGroup_description')
+            ['name' => '__configuratorGroup_name', 'description' => '__configuratorGroup_description']
         );
         $data = array_merge($data, $translation);
 
@@ -130,7 +130,7 @@ class ConfiguratorHydrator extends Hydrator
             $data,
             '__configuratorOption_translation',
             '__configuratorOption_translation_fallback',
-            array('name' => '__configuratorOption_name')
+            ['name' => '__configuratorOption_name']
         );
         $data = array_merge($data, $translation);
 
@@ -152,7 +152,7 @@ class ConfiguratorHydrator extends Hydrator
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
             $translation = unserialize($data[$arrayKey]);
         }
@@ -165,7 +165,7 @@ class ConfiguratorHydrator extends Hydrator
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
         return $this->convertArrayKeys($translation, $mapping);

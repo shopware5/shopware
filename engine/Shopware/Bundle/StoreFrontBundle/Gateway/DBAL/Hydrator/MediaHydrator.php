@@ -89,7 +89,6 @@ class MediaHydrator extends Hydrator
 
         if ($media->getType() == Models\Media\Media::TYPE_IMAGE
             && $data['__mediaSettings_create_thumbnails']) {
-
             $media->setThumbnails(
                 $this->getMediaThumbnails($data)
             );
@@ -153,7 +152,7 @@ class MediaHydrator extends Hydrator
         if (!isset($data['__image_translation'])
             || empty($data['__image_translation'])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
             $translation = unserialize($data['__image_translation']);
         }
@@ -166,11 +165,11 @@ class MediaHydrator extends Hydrator
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
-        return array(
+        return [
             '__image_description' => $translation['description']
-        );
+        ];
     }
 }
