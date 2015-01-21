@@ -152,5 +152,4 @@ class CategoryHydrator extends Hydrator
             );
         }
     }
-
 }

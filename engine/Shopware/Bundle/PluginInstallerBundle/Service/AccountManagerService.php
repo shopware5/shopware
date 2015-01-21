@@ -63,7 +63,6 @@ class AccountManagerService
         $this->storeClient = $storeClient;
         $this->hydrator = $structHydrator;
         $this->snippetManager = $snippetManager;
-
     }
 
     /**
@@ -93,12 +92,12 @@ class AccountManagerService
      */
     public function registerAccount($shopwareId, $email, $password, $localeId)
     {
-        $postData = array(
+        $postData = [
             'shopwareId' => $shopwareId,
             'email'      => $email,
             'password'   => $password,
             'localeId'   => $localeId
-        );
+        ];
 
         try {
             return $this->storeClient->doPostRequest('/users', $postData);
@@ -153,9 +152,7 @@ class AccountManagerService
      */
     public function getDomainHash($domain, AccessTokenStruct $token)
     {
-        $postData = array(
-            'domain' => $domain,
-        );
+        $postData = ['domain' => $domain];
 
         try {
             return $this->storeClient->doAuthPostRequest($token, "/domainhashes", $postData);
@@ -174,10 +171,10 @@ class AccountManagerService
      */
     public function verifyDomain($domain, AccessTokenStruct $token)
     {
-        $postData = array(
+        $postData = [
             'shopwareId' => $token->getShopwareId(),
             'domain' => $domain
-        );
+        ];
 
         try {
             return $this->storeClient->doAuthPostRequest($token, "/domainverifications", $postData);

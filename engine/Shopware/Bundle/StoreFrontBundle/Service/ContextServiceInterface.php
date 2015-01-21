@@ -114,5 +114,4 @@ interface ContextServiceInterface
      * @return void
      */
     public function initializeProductContext();
-
 }

@@ -26,6 +26,7 @@
         <service id="configurator_service" alias="configurator_service_core"/>
         <service id="category_service" alias="category_service_core"/>
         <service id="vote_service" alias="vote_service_core"/>
+        <service id="base_product_factory" alias="base_product_factory_core"/>
 
         <service id="list_product_gateway" alias="list_product_gateway_dbal"/>
         <service id="product_gateway" alias="product_gateway_dbal"/>
@@ -70,6 +71,10 @@
             <argument type="service" id="marketing_service"/>
             <argument type="service" id="vote_service"/>
             <argument type="service" id="events"/>
+        </service>
+
+        <service id="base_product_factory_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\BaseProductFactoryService">
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="product_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductService">
@@ -155,7 +160,7 @@
         </service>
 
         <service id="additional_text_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService">
-            <argument type="service" id="configurator_service_core"/>
+            <argument type="service" id="configurator_service"/>
         </service>
 
         <!-- DBAL gateway classes, which used as shopware default -->

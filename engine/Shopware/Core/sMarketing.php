@@ -393,7 +393,11 @@ class sMarketing
         );
 
         foreach ($variantsData as $variantData) {
-            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product = new StoreFrontBundle\Struct\ListProduct(
+                $articleId,
+                $variantData['id'],
+                $variantsData['ordernumber']
+            );
 
             if ($variantData['id'] == $mainDetailId) {
                 $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
@@ -410,8 +414,6 @@ class sMarketing
             }
 
             $product->setAdditional($variantData['additionaltext']);
-            $product->setVariantId($variantData['id']);
-            $product->setNumber($variantData['ordernumber']);
             $products[$variantData['ordernumber']] = $product;
         }
 

@@ -49,11 +49,11 @@ interface ConfiguratorGatewayInterface
      * - Option position
      * - Option name
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Configurator\Set
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Selects the first possible product image for the provided product configurator.
@@ -61,11 +61,11 @@ interface ConfiguratorGatewayInterface
      * The image mapping defines which product image should be displayed for which configurator selection.
      * Returns for each configurator option the first possible image
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $product
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the configurator option id.
      */
-    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns all possible configurator combinations for the provided product.
@@ -79,8 +79,8 @@ interface ConfiguratorGatewayInterface
      *     'red'   => array('S', ...)
      * )
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @return array Indexed by the option id
      */
-    public function getProductCombinations(Struct\ListProduct $product);
+    public function getProductCombinations(Struct\BaseProduct $product);
 }

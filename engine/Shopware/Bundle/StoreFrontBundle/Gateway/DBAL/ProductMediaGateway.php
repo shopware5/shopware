@@ -68,9 +68,9 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $media = $this->getList(array($product), $context);
+        $media = $this->getList([$product], $context);
 
         return array_shift($media);
     }
@@ -78,9 +78,9 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $covers = $this->getCovers(array($product), $context);
+        $covers = $this->getCovers([$product], $context);
 
         return array_shift($covers);
     }
@@ -90,7 +90,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -111,7 +111,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $productId = $row['__image_articleID'];
             $imageId   = $row['__image_id'];
@@ -127,7 +127,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
      */
     public function getCovers($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -144,7 +144,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $covers = array();
+        $covers = [];
         foreach ($data as $row) {
             $id = $row['__image_articleID'];
 
@@ -156,12 +156,12 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
     /**
      * @param array $media
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @return array
      */
     private function assignProductMedia(array $media, array $products)
     {
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             $number = $product->getNumber();
 

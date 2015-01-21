@@ -87,7 +87,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $rules = array();
+        $rules = [];
 
         $query = $this->getAreaQuery(
             $customerGroup,
@@ -131,7 +131,6 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         Struct\Country $country = null,
         Struct\Country\State $state = null
     ) {
-
         $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getTaxRuleFields());
@@ -167,5 +166,4 @@ class TaxGateway implements Gateway\TaxGatewayInterface
 
         return $query;
     }
-
 }

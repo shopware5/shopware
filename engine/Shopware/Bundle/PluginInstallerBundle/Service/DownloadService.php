@@ -75,10 +75,10 @@ class DownloadService
         $content = $this->storeClient->doAuthGetRequestRaw(
             $context->getToken(),
             '/pluginFiles/'. $context->getPluginName() . '/file',
-            array(
+            [
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain()
-            )
+            ]
         );
 
         $file = $this->download($content);
@@ -106,7 +106,7 @@ class DownloadService
     {
         $content = $this->storeClient->doGetRequestRaw(
             '/pluginFiles/' . $pluginName . '/file',
-            array('shopwareVersion' => $version)
+            ['shopwareVersion' => $version]
         );
 
         $file = $this->download($content);
@@ -155,7 +155,7 @@ class DownloadService
     private function getPluginSource($name)
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array('plugin.source'))
+        $query->select(['plugin.source'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name = :name')
             ->setParameter(':name', $name)

@@ -70,7 +70,7 @@ class ValueListFacetResult
      * @param string $fieldName
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $active, $label, $values, $fieldName, $attributes = array())
+    public function __construct($facetName, $active, $label, $values, $fieldName, $attributes = [])
     {
         $this->facetName = $facetName;
         $this->active = $active;

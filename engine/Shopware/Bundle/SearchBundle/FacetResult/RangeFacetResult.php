@@ -104,7 +104,7 @@ class RangeFacetResult
         $activeMax,
         $minFieldName,
         $maxFieldName,
-        $attributes = array()
+        $attributes = []
     ) {
         $this->facetName = $facetName;
         $this->active = $active;

@@ -48,7 +48,7 @@ interface RelatedProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @return array Indexed by the product number.
      */
     public function getList($products);
@@ -59,8 +59,8 @@ interface RelatedProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @return array Array of order numbers
      */
-    public function get(Struct\ListProduct $product);
+    public function get(Struct\BaseProduct $product);
 }

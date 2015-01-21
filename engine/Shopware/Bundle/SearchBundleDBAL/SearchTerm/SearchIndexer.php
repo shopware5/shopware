@@ -136,7 +136,9 @@ class SearchIndexer
                 $sql = 'SELECT ' . $table['elementID'] . ' as id, ' . $table['fields'] . ' FROM ' . $table['table'];
 
                 // If any where condition is set, add to query
-                if (!empty($table['where'])) $sql .= 'WHERE ' . $table['where'];
+                if (!empty($table['where'])) {
+                    $sql .= 'WHERE ' . $table['where'];
+                }
 
                 // Get all fields & values from current table
 
@@ -149,15 +151,13 @@ class SearchIndexer
 
                 // Build array from columns fieldIDs and fields
                 $fields = array_combine(explode(', ', $table["fieldIDs"]), explode(', ', $table["fields"]));
-                $keywords = array();
-                $sql_index = array();
+                $keywords = [];
+                $sql_index = [];
 
                 // Go through every row of result
                 foreach ($getTableKeywords as $currentRow => $row) {
-
                     // Go through every column of result
                     foreach ($fields as $fieldID => $field) {
-
                         // Split string from column into keywords
                         $field_keywords = $this->termHelper->splitTerm($row[$field]);
                         if (empty($field_keywords)) {
@@ -189,14 +189,14 @@ class SearchIndexer
                         // Insert Keywords
                         $this->connection->executeUpdate($sql_keywords);
 
-                        $keywords = array();
+                        $keywords = [];
 
                         // Update index
                         $sql_index = implode("\n\nUNION ALL\n\n", $sql_index);
                         $sql_index = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
 
                         $this->connection->executeUpdate($sql_index);
-                        $sql_index = array();
+                        $sql_index = [];
                     }
                 }
             }
@@ -230,8 +230,12 @@ class SearchIndexer
 
         $sql_join = '';
         foreach ($tables as $table) {
-            if (empty($table["foreign_key"])) continue;
-            if (empty($table['referenz_table'])) $table['referenz_table'] = 's_articles';
+            if (empty($table["foreign_key"])) {
+                continue;
+            }
+            if (empty($table['referenz_table'])) {
+                $table['referenz_table'] = 's_articles';
+            }
             $sql_join .= "
                 LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
                 ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}
@@ -259,7 +263,7 @@ class SearchIndexer
                 DELETE FROM s_search_index
                 WHERE keywordID=? AND fieldID=?
             ';
-            $this->connection->executeUpdate($sql, array($delete['keywordID'], $delete['fieldID']));
+            $this->connection->executeUpdate($sql, [$delete['keywordID'], $delete['fieldID']]);
         }
     }
 

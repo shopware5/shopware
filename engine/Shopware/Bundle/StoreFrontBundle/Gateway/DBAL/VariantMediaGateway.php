@@ -68,9 +68,9 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $media = $this->getList(array($product), $context);
+        $media = $this->getList([$product], $context);
 
         return array_shift($media);
     }
@@ -78,9 +78,9 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $covers = $this->getCovers(array($product), $context);
+        $covers = $this->getCovers([$product], $context);
 
         return array_shift($covers);
     }
@@ -90,7 +90,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
@@ -109,7 +109,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $productId = $row['number'];
             $imageId   = $row['__image_id'];
@@ -125,7 +125,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
      */
     public function getCovers($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
@@ -144,7 +144,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $result = array();
+        $result = [];
         foreach ($data as $number => $row) {
             $cover = array_shift($row);
 

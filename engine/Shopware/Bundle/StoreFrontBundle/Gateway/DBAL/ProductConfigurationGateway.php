@@ -73,9 +73,9 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $groups = $this->getList(array($product), $context);
+        $groups = $this->getList([$product], $context);
 
         return array_shift($groups);
     }
@@ -86,10 +86,10 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     public function getList($products, Struct\ShopContextInterface $context)
     {
         if (empty($products)) {
-            return array();
+            return [];
         }
 
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
@@ -113,7 +113,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $result = array();
+        $result = [];
         foreach ($data as $key => $groups) {
             $result[$key] = $this->configuratorHydrator->hydrateGroups($groups);
         }

@@ -163,7 +163,7 @@ class PluginLocalService
     public function getPluginsForUpdateCheck()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array('plugin.name', 'plugin.version'))
+        $query->select(['plugin.name', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.capability_update = 1');
 
@@ -193,7 +193,7 @@ class PluginLocalService
     private function getQuery()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array(
+        $query->select([
             'plugin.id',
             'plugin.name',
             'plugin.label',
@@ -219,7 +219,7 @@ class PluginLocalService
             'licence.creation as __licence_creation',
             'licence.expiration as __licence_expiration',
             'licence.license as __licence_license'
-        ));
+        ]);
 
         $query->from('s_core_plugins', 'plugin')
             ->leftJoin('plugin', 's_core_config_forms', 'forms', 'forms.plugin_id = plugin.id')

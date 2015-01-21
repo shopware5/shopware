@@ -51,9 +51,9 @@ class PriceHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationMapping = array(
+    private $translationMapping = [
         'txtpackunit' => '__unit_packunit',
-    );
+    ];
 
     /**
      * @param CustomerGroupHydrator $customerGroupHydrator
@@ -68,7 +68,6 @@ class PriceHydrator extends Hydrator
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->unitHydrator = $unitHydrator;
         $this->attributeHydrator = $attributeHydrator;
-
     }
 
     /**
@@ -134,7 +133,7 @@ class PriceHydrator extends Hydrator
      */
     private function getVariantTranslation(array $data)
     {
-        $translation = array();
+        $translation = [];
 
         if (isset($data['__variant_translation'])) {
             $translation = unserialize($data['__variant_translation']);
@@ -164,7 +163,7 @@ class PriceHydrator extends Hydrator
 
         $group->setName($first['__priceGroup_description']);
 
-        $discounts = array();
+        $discounts = [];
         foreach ($data as $row) {
             $discounts[] = $this->hydratePriceDiscount($row);
         }

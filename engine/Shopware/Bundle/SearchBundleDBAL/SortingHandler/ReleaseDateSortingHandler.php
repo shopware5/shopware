@@ -64,5 +64,4 @@ class ReleaseDateSortingHandler implements SortingHandlerInterface
             ->addOrderBy('product.changetime', $sorting->getDirection())
             ->addOrderBy('product.id', $sorting->getDirection());
     }
-
 }

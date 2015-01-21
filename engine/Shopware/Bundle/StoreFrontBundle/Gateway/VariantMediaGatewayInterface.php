@@ -57,7 +57,7 @@ interface VariantMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return array Indexed by product number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
@@ -77,11 +77,11 @@ interface VariantMediaGatewayInterface
      * - Selects only product media which has no configurator configuration
      * - Sorted ascending by the image main flag and position
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Media requires the following data:
@@ -97,11 +97,11 @@ interface VariantMediaGatewayInterface
      * - Selects only product media which has a configurator configuration for the provided variants.
      * - Sorted ascending by the image main flag and image position
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Media[]
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -122,7 +122,7 @@ interface VariantMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by the product order number
      */

@@ -80,10 +80,10 @@ class KeywordFinder implements KeywordFinderInterface
 
         // If any term in search request
         if (empty($keywords)) {
-            return array();
+            return [];
         }
 
-        $matches = array();
+        $matches = [];
         foreach ($keywords as $searchTerm) {
             $matches = array_merge($matches, $this->searchMatchingKeywords($searchTerm));
         }
@@ -98,7 +98,7 @@ class KeywordFinder implements KeywordFinderInterface
      */
     private function searchMatchingKeywords($term)
     {
-        $results = array();
+        $results = [];
 
         $sql = '
             SELECT `id` , `keyword`
@@ -107,7 +107,7 @@ class KeywordFinder implements KeywordFinderInterface
             OR keyword LIKE CONCAT(LEFT(?,2),\'%\')
         ';
 
-        $result = $this->connection->fetchAll($sql, array($term, $term));
+        $result = $this->connection->fetchAll($sql, [$term, $term]);
 
         foreach ($result as $keyword) {
             $keywordID = $keyword['id'];
@@ -129,7 +129,6 @@ class KeywordFinder implements KeywordFinderInterface
 
             // Check for sub term matching
             } elseif (strpos($term1, $term2) !== false) {
-
                 if (strlen($term1) < 4) {
                     $relevance = $this->config->get('fuzzySearchMatchFactor', 5);
 

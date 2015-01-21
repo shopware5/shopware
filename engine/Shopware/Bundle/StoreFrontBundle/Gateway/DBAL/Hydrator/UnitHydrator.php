@@ -36,10 +36,10 @@ class UnitHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationMapping = array(
+    private $translationMapping = [
         'unit' => '__unit_unit',
         'description' => '__unit_description'
-    );
+    ];
 
     /**
      * @param array $data
@@ -65,22 +65,22 @@ class UnitHydrator extends Hydrator
         if (!isset($data['__unit_translation'])
             || empty($data['__unit_translation'])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
-            $result = unserialize($data['__unit_translation']) ? : array();
-            $translation = $result[$data['__unit_id']] ? : array();
+            $result = unserialize($data['__unit_translation']) ? : [];
+            $translation = $result[$data['__unit_id']] ? : [];
         }
 
         if (isset($data['__unit_translation_fallback'])
             && !empty($data['__unit_translation_fallback'])
         ) {
-            $fallbackResult = unserialize($data['__unit_translation_fallback']) ? : array();
-            $fallbackTranslation = $fallbackResult[$data['__unit_id']] ? : array();
+            $fallbackResult = unserialize($data['__unit_translation_fallback']) ? : [];
+            $fallbackTranslation = $fallbackResult[$data['__unit_id']] ? : [];
             $translation += $fallbackTranslation;
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
         return $this->convertArrayKeys(

@@ -50,9 +50,9 @@ class PropertyService implements Service\PropertyServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $properties = $this->getList(array($product), $context);
+        $properties = $this->getList([$product], $context);
 
         return array_shift($properties);
     }

@@ -123,5 +123,4 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
     {
         return ($facet instanceof Facet\ShippingFreeFacet);
     }
-
 }
