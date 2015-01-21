@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
 
 /**
  * @category  Shopware
@@ -45,13 +46,9 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
     {
         @set_time_limit(1200);
 
-        $adapter = new Shopware_Components_Search_Adapter_Default(
-            Shopware()->Db(),
-            Shopware()->Cache(),
-            new Shopware_Components_Search_Result_Default(),
-            Shopware()->Config()
-        );
-        $adapter->buildSearchIndex();
+        /**@var $indexer SearchIndexer*/
+        $indexer = $this->get('search_indexer');
+        $indexer->build();
 
         $this->View()->assign(array('success' => true));
     }

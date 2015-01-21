@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
 
 /**
  * Shopware Plugin Frontend CronRefresh
@@ -96,12 +97,9 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      */
     public function onCronJobSearch(Shopware_Components_Cron_CronJob $job)
     {
-        $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
-        if (empty($adapter)) {
-             $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
-        }
-        //$adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
-        $adapter->buildSearchIndex();
+        /**@var $indexer SearchIndexer*/
+        $indexer = $this->get('search_indexer');
+        $indexer->build();
     }
 
     /**
