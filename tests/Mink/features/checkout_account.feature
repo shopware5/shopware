@@ -68,8 +68,6 @@ Feature: Checkout articles (scenario origin is account without articles in baske
             | lastname             | Mustermann         |                   |
             | email                | <email>            |                   |
             | password             | shopware           |                   |
-            | passwordConfirmation | shopware           |                   |
-            | phone                | 05555 / 555555     |                   |
             | company              |                    | Muster GmbH       |
             | street               |                    | Musterstr. 55     |
             | zipcode              |                    | 55555             |
@@ -109,8 +107,6 @@ Feature: Checkout articles (scenario origin is account without articles in baske
             | lastname             | Mustermann         |                   |
             | email                | <email>            |                   |
             | password             | shopware           |                   |
-            | passwordConfirmation | shopware           |                   |
-            | phone                | 05555 / 555555     |                   |
             | company              |                    | Muster GmbH       |
             | street               |                    | Musterstr. 55     |
             | zipcode              |                    | 55555             |

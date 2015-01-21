@@ -21,7 +21,6 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | lastname      | Mustermann         |                   |
             | skipLogin     | 1                  |                   |
             | email         | test@example.de    |                   |
-            | phone         | 05555 / 555555     |                   |
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
@@ -57,7 +56,6 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | lastname      | Mustermann         |                   |
             | skipLogin     | 1                  |                   |
             | email         | test@example.de    |                   |
-            | phone         | 05555 / 555555     |                   |
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
