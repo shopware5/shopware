@@ -72,33 +72,29 @@ Feature: Successful changes of login data
             | lastname             | Mustermann         |                   | Musterfrau         |
             | email                | ab.c               |                   |                    |
             | password             | abcdefgh           |                   |                    |
-            | passwordConfirmation | ijklmnop           |                   |                    |
             | company              |                    | Muster GmbH       |                    |
-            | street               |                    | Musterstr. 55     | Heidestraße        |
+            | street               |                    |                   | Heidestraße        |
             | zipcode              |                    | 55555             | 12345              |
             | city                 |                    | Musterhausen      | Bern               |
             | country              |                    | Deutschland       | Schweiz            |
 
         Then  I should see "Bitte geben Sie eine gültige eMail-Adresse ein"
-        And   I should see "Die Passwörter stimmen nicht überein."
         And   I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
         When  I register me:
-            | field                | register[personal] |
-            | email                | test@example.com   |
-            | password             | abc                |
-            | passwordConfirmation | abc                |
-            | phone                | 05555 / 555555     |
+            | field                | register[personal] | register[billing] |
+            | email                | test@example.com   |                   |
+            | password             | abc                |                   |
+            | street               |                    | Musterstr. 55     |
 
         Then  I should see "Diese eMail-Adresse ist bereits registriert"
         And   I should see "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht."
         But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
 
         When  I register me:
-            | field                | register[personal] |
+            | field                | register[personal] | 
             | email                | test@example.net   |
             | password             | abcdefgh           |
-            | passwordConfirmation | abcdefgh           |
 
         Then  I should see "Willkommen, Max Mustermann"
 
