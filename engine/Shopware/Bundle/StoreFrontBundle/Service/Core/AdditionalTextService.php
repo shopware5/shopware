@@ -55,7 +55,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalText(ListProduct $product, ShopContextInterface $context)
     {
-        $products = $this->buildAdditionalTextLists(array($product), $context);
+        $products = $this->buildAdditionalTextLists([$product], $context);
 
         return array_shift($products);
     }
@@ -65,7 +65,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
-        $required = array();
+        $required = [];
         foreach ($products as &$product) {
             if (!$product->getAdditional()) {
                 $required[] = $product;
@@ -101,7 +101,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     private function buildTextDynamic($configurations)
     {
-        $text = array();
+        $text = [];
         foreach ($configurations as $group) {
             foreach ($group->getOptions() as $option) {
                 $text[] = $option->getName();
@@ -109,5 +109,4 @@ class AdditionalTextService implements AdditionalTextServiceInterface
         }
         return implode(' ', $text);
     }
-
 }

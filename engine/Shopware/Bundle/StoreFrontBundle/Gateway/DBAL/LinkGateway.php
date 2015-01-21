@@ -73,9 +73,9 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $links = $this->getList(array($product), $context);
+        $links = $this->getList([$product], $context);
 
         return array_shift($links);
     }
@@ -85,7 +85,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -111,7 +111,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $links = array();
+        $links = [];
         foreach ($data as $row) {
             $key = $row['__link_articleID'];
 
@@ -120,7 +120,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
             $links[$key][] = $link;
         }
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             if (isset($links[$product->getId()])) {
                 $result[$product->getNumber()] = $links[$product->getId()];

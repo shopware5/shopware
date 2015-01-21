@@ -52,7 +52,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $manufacturers = $this->getList(array($id), $context);
+        $manufacturers = $this->getList([$id], $context);
 
         return array_shift($manufacturers);
     }

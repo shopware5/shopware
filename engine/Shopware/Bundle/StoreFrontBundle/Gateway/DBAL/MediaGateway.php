@@ -70,7 +70,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $media = $this->getList(array($id), $context);
+        $media = $this->getList([$id], $context);
 
         return array_shift($media);
     }
@@ -89,7 +89,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $mediaId = $row['__media_id'];
             $result[$mediaId] = $this->hydrator->hydrate($row);

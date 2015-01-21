@@ -58,7 +58,7 @@ class FacetResultGroup
      * @param string $facetName
      * @param Attribute[] $attributes
      */
-    public function __construct($facetResults, $headline, $facetName, $attributes = array())
+    public function __construct($facetResults, $headline, $facetName, $attributes = [])
     {
         $this->facetResults = $facetResults;
         $this->label = $headline;

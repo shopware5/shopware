@@ -73,14 +73,14 @@ class PluginStoreService
      */
     public function getListing(ListingRequest $context)
     {
-        $params = array(
+        $params = [
             'locale'          => $context->getLocale(),
             'shopwareVersion' => $context->getShopwareVersion(),
             'offset'          => $context->getOffset(),
             'limit'           => $context->getLimit(),
             'sort'            => json_encode($context->getSortings()),
             'filter'          => json_encode($context->getConditions()),
-        );
+        ];
 
         $data = $this->storeClient->doGetRequest(
             '/pluginStore/plugins',
@@ -112,11 +112,11 @@ class PluginStoreService
      */
     public function getPlugins(PluginsByTechnicalNameRequest $context)
     {
-        $params = array(
+        $params = [
             'locale'          => $context->getLocale(),
             'shopwareVersion' => $context->getShopwareVersion(),
             'technicalNames'  => $context->getTechnicalNames()
-        );
+        ];
 
         $data = $this->storeClient->doGetRequest(
             '/pluginStore/pluginsByName',
@@ -136,12 +136,12 @@ class PluginStoreService
     {
         $result = $this->storeClient->doGetRequest(
             '/pluginStore/updateablePlugins',
-            array(
+            [
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain(),
                 'locale' => $context->getLocale(),
                 'pluginNames' => array_keys($context->getPlugins())
-            )
+            ]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
@@ -162,10 +162,10 @@ class PluginStoreService
         return $this->storeClient->doAuthGetRequestRaw(
             $token,
             '/pluginFiles/'. $context->getPluginName() .'/file',
-            array(
+            [
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain()
-            )
+            ]
         );
     }
 
@@ -178,11 +178,11 @@ class PluginStoreService
         $content = $this->storeClient->doAuthGetRequest(
             $context->getToken(),
             '/licenses',
-            array(
+            [
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain(),
                 'pluginName' => $context->getTechnicalName(),
-            )
+            ]
         );
 
         $licence = $this->hydrator->hydrateLicences($content);
@@ -201,10 +201,10 @@ class PluginStoreService
         $result = $this->storeClient->doAuthGetRequest(
             $context->getToken(),
             '/licenses',
-            array(
+            [
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain()
-            )
+            ]
         );
 
         return $this->hydrator->hydrateLicences($result);

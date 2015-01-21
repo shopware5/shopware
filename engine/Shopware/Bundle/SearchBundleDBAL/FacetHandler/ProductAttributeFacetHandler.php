@@ -86,9 +86,11 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        $query->select(array(
+        $query->select(
+            [
             'COUNT(DISTINCT product.id) as total'
-        ));
+            ]
+        );
 
         switch ($facet->getMode()) {
             case (ProductAttributeFacet::MODE_EMPTY):
@@ -141,7 +143,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
      */
     private function createValueListResult(ProductAttributeFacet $facet, Criteria $criteria, $result)
     {
-        $items = array();
+        $items = [];
         $actives = null;
 
         /**@var $condition ProductAttributeCondition*/
@@ -177,5 +179,4 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     {
         return ($facet instanceof ProductAttributeFacet);
     }
-
 }

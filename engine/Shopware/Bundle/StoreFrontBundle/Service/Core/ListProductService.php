@@ -109,7 +109,7 @@ class ListProductService implements Service\ListProductServiceInterface
      */
     public function get($number, Struct\ProductContextInterface $context)
     {
-        $products = $this->getList(array($number), $context);
+        $products = $this->getList([$number], $context);
 
         return array_shift($products);
     }
@@ -129,7 +129,7 @@ class ListProductService implements Service\ListProductServiceInterface
 
         $voteAverages = $this->voteService->getAverages($products, $context);
 
-        $result = array();
+        $result = [];
         foreach ($numbers as $number) {
             if (!array_key_exists($number, $products)) {
                 continue;

@@ -799,7 +799,7 @@ class sArticles
             return array();
         }
 
-        /** @var $currentProduct SearchBundle\SearchProduct */
+        /** @var $currentProduct StoreFrontBundle\Struct\BaseProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;
@@ -1791,10 +1791,14 @@ class sArticles
 
         // If article has variants, we need to append the additional text to the name
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct();
+
+            $product = new StoreFrontBundle\Struct\ListProduct(
+                (int) $article['id'],
+                (int) $article["did"],
+                $orderNumber
+            );
+
             $product->setAdditional($article['additionaltext']);
-            $product->setVariantId($article["did"]);
-            $product->setNumber($orderNumber);
 
             $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);

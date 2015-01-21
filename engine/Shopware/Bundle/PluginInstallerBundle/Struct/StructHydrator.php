@@ -172,7 +172,7 @@ class StructHydrator
      */
     public function hydrateStorePlugins($data)
     {
-        $plugins = array();
+        $plugins = [];
 
         foreach ($data as $pluginData) {
             $plugin = new PluginStruct($pluginData['name']);
@@ -194,7 +194,7 @@ class StructHydrator
      */
     public function hydrateLocalPlugins($data)
     {
-        $plugins = array();
+        $plugins = [];
         foreach ($data as $pluginData) {
             $plugin = new PluginStruct($pluginData['name']);
 
@@ -284,7 +284,7 @@ class StructHydrator
      */
     public function hydrateCategories($data)
     {
-        $categories = array();
+        $categories = [];
 
         foreach ($data as $categoryData) {
             $categories[] = $this->hydrateCategory($categoryData);

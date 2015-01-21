@@ -48,7 +48,7 @@ interface SimilarProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product number
      */
@@ -60,11 +60,11 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return array Array of order numbers
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -76,11 +76,11 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return array Array of order numbers
      */
-    public function getByCategory(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function getByCategory(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -100,7 +100,7 @@ interface SimilarProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product number
      */

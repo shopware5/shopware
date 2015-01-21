@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
@@ -68,22 +67,22 @@ class StoreOrderService
         AccessTokenStruct $token,
         OrderRequest $context
     ) {
-        $data = array(
-            'origin' => array('name' => 'Shopware Backend'),
+        $data = [
+            'origin' => ['name' => 'Shopware Backend'],
             'shopwareId' => $token->getShopwareId(),
-            'positions' => array(
-                array(
+            'positions' => [
+                [
                     'licenseShopDomain' => $context->getLicenceShop(),
                     'bookingShopDomain' => $context->getBookingShop(),
                     'orderNumber' => $context->getOrderNumber(),
                     'isArticle' => true,
-                    'priceModel' => array(
+                    'priceModel' => [
                         'price' => $context->getPrice(),
                         'type' => $context->getPriceType(),
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
 
         $response = $this->storeClient->doAuthPostRequest(
             $token,
@@ -107,22 +106,22 @@ class StoreOrderService
         AccessTokenStruct $accessToken,
         OrderRequest $context
     ) {
-        $data = array(
-            'origin' => array('name' => 'Shopware Backend'),
+        $data = [
+            'origin' => ['name' => 'Shopware Backend'],
             'shopwareId' => $accessToken->getShopwareId(),
-            'positions' => array(
-                array(
+            'positions' => [
+                [
                     'licenseShopDomain' => $context->getLicenceShop(),
                     'bookingShopDomain' => $context->getBookingShop(),
                     'orderNumber' => $context->getOrderNumber(),
                     'isArticle' => true,
-                    'priceModel' => array(
+                    'priceModel' => [
                         'type' => $context->getPriceType(),
                         'price' => $context->getPrice()
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
 
         $response = $this->storeClient->doAuthPostRequestRaw(
             $accessToken,

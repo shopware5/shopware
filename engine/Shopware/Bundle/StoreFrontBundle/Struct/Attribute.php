@@ -36,12 +36,12 @@ class Attribute extends Struct implements \JsonSerializable
      *
      * @var array
      */
-    protected $storage = array();
+    protected $storage = [];
 
     /**
      * @param $data
      */
-    function __construct($data = array())
+    public function __construct($data = [])
     {
         $this->storage = $data;
     }
@@ -106,5 +106,4 @@ class Attribute extends Struct implements \JsonSerializable
     {
         return $this->storage;
     }
-
 }

@@ -82,10 +82,10 @@ class StoreClient
     {
         $response = $this->doPostRequest(
             '/accesstokens',
-            array(
+            [
                 'shopwareId' => $shopwareId,
                 'password'   => $password
-            )
+            ]
         );
 
         return $this->structHydrator->hydrateAccessToken($response, $shopwareId);
@@ -97,7 +97,7 @@ class StoreClient
      * @return array
      * @throws \Exception
      */
-    public function doGetRequest($resource, $params = array())
+    public function doGetRequest($resource, $params = [])
     {
         $response = $this->getRequest(
             $resource,
@@ -134,7 +134,7 @@ class StoreClient
      * @return mixed
      * @throws \Exception
      */
-    public function doGetRequestRaw($resource, $params = array())
+    public function doGetRequestRaw($resource, $params = [])
     {
         $response = $this->getRequest(
             $resource,
@@ -258,7 +258,7 @@ class StoreClient
      * @throws StoreException
      * @throws \Exception
      */
-    private function postRequest($resource, $params = array(), AccessTokenStruct $token = null)
+    private function postRequest($resource, $params = [], AccessTokenStruct $token = null)
     {
         $url = $this->apiEndPoint . $resource;
 

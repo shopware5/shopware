@@ -46,9 +46,9 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product)
+    public function get(Struct\BaseProduct $product)
     {
-        $numbers = $this->getList(array($product));
+        $numbers = $this->getList([$product]);
 
         return array_shift($numbers);
     }
@@ -58,7 +58,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
      */
     public function getList($products)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -66,7 +66,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array('product.id'))
+        $query->select(['product.id'])
             ->addSelect('relatedVariant.ordernumber as number');
 
         $query->from('s_articles_relationships', 'relation');
@@ -100,7 +100,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $related = array();
+        $related = [];
         foreach ($data as $productId => $row) {
             $related[$productId] = array_column($row, 'number');
         }

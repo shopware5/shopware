@@ -73,9 +73,9 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $properties = $this->getList(array($product), $context);
+        $properties = $this->getList([$product], $context);
 
         return array_shift($properties);
     }
@@ -85,7 +85,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -183,12 +183,12 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $properties = array();
+        $properties = [];
         foreach ($data as $productId => $values) {
             $properties[$productId] = $this->propertyHydrator->hydrateValues($values);
         }
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             if (!isset($properties[$product->getId()])) {
                 continue;

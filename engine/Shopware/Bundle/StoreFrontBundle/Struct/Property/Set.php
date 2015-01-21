@@ -51,7 +51,7 @@ class Set extends Extendable implements \JsonSerializable
     /**
      * @var Group[]
      */
-    protected $groups = array();
+    protected $groups = [];
 
     /**
      * @param int $id

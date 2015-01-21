@@ -136,7 +136,7 @@ class CriteriaFactory
         );
 
         $criteriaContext->setManufacturers(
-            explode('|', $request->getParam('sSupplier', array()))
+            explode('|', $request->getParam('sSupplier', []))
         );
 
         $criteriaContext->setShippingFree(
@@ -166,7 +166,7 @@ class CriteriaFactory
             $criteriaContext->setSearch($search);
         }
 
-        $properties = $request->getParam('sFilterProperties', array());
+        $properties = $request->getParam('sFilterProperties', []);
         $criteriaContext->setFilters(
             explode('|', $properties)
         );
@@ -188,7 +188,7 @@ class CriteriaFactory
 
         $criteria->addCondition(
             $this->createCustomerGroupCondition(
-                array($context->getCurrentCustomerGroup()->getId())
+                [$context->getCurrentCustomerGroup()->getId()]
             )
         );
 
@@ -199,7 +199,7 @@ class CriteriaFactory
         if ($criteriaContext->getCategory()) {
             $criteria->addBaseCondition(
                 $this->createCategoryCondition(
-                    array($criteriaContext->getCategory())
+                    [$criteriaContext->getCategory()]
                 )
             );
         }
@@ -322,11 +322,11 @@ class CriteriaFactory
 
         $data = $this->connection->fetchAll(
             $sql,
-            array($filters),
-            array(Connection::PARAM_INT_ARRAY)
+            [$filters],
+            [Connection::PARAM_INT_ARRAY]
         );
 
-        $result = array();
+        $result = [];
         foreach ($data as $value) {
             $optionId = $value['optionID'];
             $valueIds = explode('|', $value['valueIds']);

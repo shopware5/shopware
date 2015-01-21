@@ -1117,10 +1117,13 @@ class sExport
 
                     if (!empty($row['group_ordernumber'])) {
                         foreach ($row['group_ordernumber'] as $orderNumber) {
-                            $product = new StoreFrontBundle\Struct\ListProduct();
+                            $product = new StoreFrontBundle\Struct\ListProduct(
+                                (int) $row['articleID'],
+                                (int) $row["articledetailsID"],
+                                $orderNumber
+                            );
+
                             $product->setAdditional($row['additionaltext']);
-                            $product->setVariantId($row["articledetailsID"]);
-                            $product->setNumber($orderNumber);
 
                             $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
@@ -1133,10 +1136,13 @@ class sExport
                         }
                     }
                 }
-                $product = new StoreFrontBundle\Struct\ListProduct();
+                $product = new StoreFrontBundle\Struct\ListProduct(
+                    (int) $row['articleID'],
+                    (int) $row["articledetailsID"],
+                    $row['ordernumber']
+                );
+
                 $product->setAdditional($row['additionaltext']);
-                $product->setVariantId($row["articledetailsID"]);
-                $product->setNumber($row['ordernumber']);
 
                 $product = $this->additionalTextService->buildAdditionalText($product, $context);
 

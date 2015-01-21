@@ -67,8 +67,8 @@ class QueryBuilderFactory
     public function __construct(
         Connection $connection,
         \Enlight_Event_EventManager $eventManager,
-        $conditionHandlers = array(),
-        $sortingHandlers = array()
+        $conditionHandlers = [],
+        $sortingHandlers = []
     ) {
         $this->connection = $connection;
         $this->conditionHandlers = $conditionHandlers;
@@ -234,5 +234,4 @@ class QueryBuilderFactory
 
         return array_merge($conditionHandlers->toArray(), $this->conditionHandlers);
     }
-
 }

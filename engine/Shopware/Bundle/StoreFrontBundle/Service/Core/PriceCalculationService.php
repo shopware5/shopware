@@ -56,7 +56,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
-        $prices = array();
+        $prices = [];
         foreach ($product->getPriceRules() as $rule) {
             $prices[] = $this->calculatePriceStruct(
                 $rule,

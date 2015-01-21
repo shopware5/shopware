@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ListProduct extends Extendable implements \JsonSerializable
+class ListProduct extends BaseProduct implements \JsonSerializable
 {
     /**
      * State for a calculated product price
@@ -50,35 +50,11 @@ class ListProduct extends Extendable implements \JsonSerializable
     const STATE_TRANSLATED = 'translated';
 
     /**
-     * Unique identifier of the product (s_articles).
-     *
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * Unique identifier of the product variation (s_articles_details).
-     *
-     * @var int
-     */
-    protected $variantId;
-
-    /**
      * Contains the product name.
      *
      * @var string
      */
     protected $name;
-
-    /**
-     * Unique identifier field.
-     * Shopware order number for the product, which
-     * is used to load the product or add the product
-     * to the basket.
-     *
-     * @var string
-     */
-    protected $number;
 
     /**
      * Stock value of the product.
@@ -249,7 +225,7 @@ class ListProduct extends Extendable implements \JsonSerializable
     /**
      * @var array
      */
-    protected $blockedCustomerGroupIds = array();
+    protected $blockedCustomerGroupIds = [];
 
     /**
      * @var string
@@ -275,13 +251,13 @@ class ListProduct extends Extendable implements \JsonSerializable
     /**
      * @var PriceRule[]
      */
-    protected $priceRules = array();
+    protected $priceRules = [];
 
     /**
      * Price of the current variant.
      * @var Price[]
      */
-    protected $prices = array();
+    protected $prices = [];
 
     /**
      * @var Unit
@@ -318,7 +294,7 @@ class ListProduct extends Extendable implements \JsonSerializable
      *
      * @var array
      */
-    protected $states = array();
+    protected $states = [];
 
     /**
      * @var Esd
@@ -512,38 +488,6 @@ class ListProduct extends Extendable implements \JsonSerializable
     public function getVariantPrice()
     {
         return $this->prices[0];
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $number
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNumber()
-    {
-        return $this->number;
     }
 
     /**
@@ -764,22 +708,6 @@ class ListProduct extends Extendable implements \JsonSerializable
         }
 
         return $this->getStock() >= $this->getUnit()->getMinPurchase();
-    }
-
-    /**
-     * @param int $variantId
-     */
-    public function setVariantId($variantId)
-    {
-        $this->variantId = $variantId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getVariantId()
-    {
-        return $this->variantId;
     }
 
     /**

@@ -53,7 +53,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
-        $prices = $this->getList(array($product), $context);
+        $prices = $this->getList([$product], $context);
 
         return array_shift($prices);
     }
@@ -155,7 +155,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
         Struct\Customer\Group $customerGroup,
         array $discounts
     ) {
-        $prices = array();
+        $prices = [];
 
         $firstDiscount = $discounts[0];
 
@@ -171,7 +171,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
         foreach ($discounts as $discount) {
             $rule = clone $reference;
 
-            $percent = (100 - $discount->getPercent() ) / 100;
+            $percent = (100 - $discount->getPercent()) / 100;
 
             $price = $reference->getPrice() * $percent;
 
@@ -208,7 +208,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      */
     private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
     {
-        $prices = array();
+        $prices = [];
 
         foreach ($products as $product) {
             $key = $product->getNumber();

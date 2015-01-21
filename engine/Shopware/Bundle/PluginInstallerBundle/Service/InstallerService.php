@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Config\Value;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
@@ -85,7 +86,7 @@ class InstallerService
         $repository = $this->em->getRepository('Shopware\Models\Plugin\Plugin');
 
         /** @var Plugin $plugin */
-        $plugin = $repository->findOneBy(array('name' => $pluginName, 'capabilityEnable' => 1));
+        $plugin = $repository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
 
         if ($plugin === null) {
             throw new \Exception(sprintf('Unknown plugin: %s.', $pluginName));
@@ -307,10 +308,10 @@ class InstallerService
         $valueRepository   = $this->em->getRepository('Shopware\Models\Config\Value');
 
         /** @var $form \Shopware\Models\Config\Form*/
-        $form = $formRepository->findOneBy(array('pluginId' => $plugin->getId()));
+        $form = $formRepository->findOneBy(['pluginId' => $plugin->getId()]);
 
         /** @var $element \Shopware\Models\Config\Element */
-        $element = $elementRepository->findOneBy(array('form' => $form, 'name' => $name));
+        $element = $elementRepository->findOneBy(['form' => $form, 'name' => $name]);
         if (!$element) {
             throw new \Exception(sprintf('Config element "%s" not found.', $name));
         }
@@ -320,14 +321,14 @@ class InstallerService
         }
 
         $defaultValue = $element->getValue();
-        $valueModel = $valueRepository->findOneBy(array('shop' => $shop, 'element' => $element));
+        $valueModel = $valueRepository->findOneBy(['shop' => $shop, 'element' => $element]);
 
         if (!$valueModel) {
             if ($value == $defaultValue || $value === null) {
                 return;
             }
 
-            $valueModel = new \Shopware\Models\Config\Value();
+            $valueModel = new Value();
             $valueModel->setElement($element);
             $valueModel->setShop($shop);
             $valueModel->setValue($value);
@@ -358,7 +359,7 @@ class InstallerService
             if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
                 continue;
             }
-            foreach (array('Local', 'Community', 'Commercial', 'Default') as $source) {
+            foreach (['Local', 'Community', 'Commercial', 'Default'] as $source) {
                 $path = Shopware()->AppPath('Plugins_' . $source . '_' . $namespace);
                 if (!is_dir($path)) {
                     continue;
@@ -376,10 +377,10 @@ class InstallerService
                     $plugin = $collection->get($name);
 
                     if ($plugin === null) {
-                        $plugin = $collection->initPlugin($name, new \Enlight_Config(array(
+                        $plugin = $collection->initPlugin($name, new \Enlight_Config([
                             'source' => $source,
                             'path' => $dir->getPathname() . DIRECTORY_SEPARATOR
-                        )));
+                        ]));
                     }
                     $collection->registerPlugin($plugin);
                 }
@@ -387,7 +388,7 @@ class InstallerService
         }
 
         $sql = 'SELECT id, refresh_date FROM s_core_plugins WHERE refresh_date<?';
-        $pluginIds = Shopware()->Db()->fetchCol($sql, array($refreshed));
+        $pluginIds = Shopware()->Db()->fetchCol($sql, [$refreshed]);
         foreach ($pluginIds as $pluginId) {
             $plugin = $repository->find($pluginId);
             $this->em->remove($plugin);

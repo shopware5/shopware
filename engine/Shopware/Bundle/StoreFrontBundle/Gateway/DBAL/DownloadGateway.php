@@ -73,9 +73,9 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $downloads = $this->getList(array($product), $context);
+        $downloads = $this->getList([$product], $context);
 
         return array_shift($downloads);
     }
@@ -85,7 +85,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -111,7 +111,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $downloads = array();
+        $downloads = [];
         foreach ($data as $row) {
             $key = $row['__download_articleID'];
 
@@ -119,7 +119,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
             $downloads[$key][] = $download;
         }
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             if (isset($downloads[$product->getId()])) {
                 $result[$product->getNumber()] = $downloads[$product->getId()];

@@ -115,7 +115,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $categories = array();
+        $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
 
@@ -124,5 +124,4 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         return $categories;
     }
-
 }

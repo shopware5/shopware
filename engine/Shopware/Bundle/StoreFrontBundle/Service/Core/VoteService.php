@@ -59,9 +59,9 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $votes = $this->getList(array($product), $context);
+        $votes = $this->getList([$product], $context);
 
         return array_shift($votes);
     }
@@ -69,9 +69,9 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * @inheritdoc
      */
-    public function getAverage(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $average = $this->getAverages(array($product), $context);
+        $average = $this->getAverages([$product], $context);
 
         return array_shift($average);
     }
@@ -91,5 +91,4 @@ class VoteService implements Service\VoteServiceInterface
     {
         return $this->voteAverageGateway->getList($products, $context);
     }
-
 }

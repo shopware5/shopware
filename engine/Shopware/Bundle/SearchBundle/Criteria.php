@@ -54,22 +54,22 @@ class Criteria implements \JsonSerializable
     /**
      * @var ConditionInterface[]
      */
-    private $baseConditions = array();
+    private $baseConditions = [];
 
     /**
      * @var ConditionInterface[]
      */
-    private $conditions = array();
+    private $conditions = [];
 
     /**
      * @var FacetInterface[]
      */
-    private $facets = array();
+    private $facets = [];
 
     /**
      * @var SortingInterface[]
      */
-    private $sortings = array();
+    private $sortings = [];
 
     /**
      * @param $offset
@@ -253,7 +253,7 @@ class Criteria implements \JsonSerializable
      */
     public function resetSorting()
     {
-        $this->sortings = array();
+        $this->sortings = [];
         return $this;
     }
 
@@ -264,7 +264,7 @@ class Criteria implements \JsonSerializable
      */
     public function resetBaseConditions()
     {
-        $this->baseConditions = array();
+        $this->baseConditions = [];
         return $this;
     }
 
@@ -275,7 +275,7 @@ class Criteria implements \JsonSerializable
      */
     public function resetConditions()
     {
-        $this->conditions = array();
+        $this->conditions = [];
         return $this;
     }
 
@@ -286,7 +286,7 @@ class Criteria implements \JsonSerializable
      */
     public function resetFacets()
     {
-        $this->facets = array();
+        $this->facets = [];
         return $this;
     }
 
@@ -345,22 +345,22 @@ class Criteria implements \JsonSerializable
     {
         $data = get_object_vars($this);
 
-        $data['baseConditions'] = array();
+        $data['baseConditions'] = [];
         foreach ($this->baseConditions as $object) {
             $data['baseConditions'][get_class($object)] = $object;
         }
 
-        $data['conditions'] = array();
+        $data['conditions'] = [];
         foreach ($this->conditions as $object) {
             $data['conditions'][get_class($object)] = $object;
         }
 
-        $data['sortings'] = array();
+        $data['sortings'] = [];
         foreach ($this->sortings as $object) {
             $data['sortings'][get_class($object)] = $object;
         }
 
-        $data['facets'] = array();
+        $data['facets'] = [];
         foreach ($this->facets as $object) {
             $data['facets'][get_class($object)] = $object;
         }
