@@ -155,10 +155,20 @@
             /**
              * Length in pixel the menu has to scroll when clicked on a button.
              *
-             * @type {Number}
              * @private
+             * @property scrollStep
+             * @type {Number}
              */
             me.scrollStep = (opts.scrollStep === 'auto') ? me.$el.width() / 2 : parseFloat(opts.scrollStep);
+
+            /**
+             * Length in pixel the menu has to scroll when clicked on a button.
+             *
+             * @private
+             * @property $list
+             * @type {jQuery}
+             */
+            me.$list = me.$el.find(opts.listSelector);
 
             // Initializes the template by adding classes to the existing elements and creating the buttons
             me.initTemplate();
@@ -185,16 +195,23 @@
         initTemplate: function () {
             var me = this,
                 opts = me.opts,
-                $el = me.$el;
+                $el = me.$el,
+                $list = me.$list,
+                scrollBarOffset;
 
             $el.addClass(opts.wrapperClass);
 
-            me.$list = $el.find(opts.listSelector);
+            $list.addClass(opts.listClass);
 
-            me.$list.addClass(opts.listClass);
+            scrollBarOffset = Math.abs($list[0].scrollHeight - $list.height()) * -1;
+
+            $list.css({
+                'bottom': scrollBarOffset,
+                'margin-top': scrollBarOffset
+            });
 
             // Add the item class to every list item
-            me.$list.children().addClass(opts.itemClass);
+            $list.children().addClass(opts.itemClass);
 
             me.$leftArrow = $('<div>', {
                 'html': $('<span>', {
@@ -383,6 +400,11 @@
 
             me.$el.removeClass(opts.wrapperClass);
             me.$list.removeClass(opts.listClass);
+
+            me.$list.css({
+                'bottom': '',
+                'margin-top': ''
+            });
 
             // Remove the item class of every list item
             me.$list.children().removeClass(opts.itemClass);
