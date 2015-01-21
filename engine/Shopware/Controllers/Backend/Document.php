@@ -63,6 +63,33 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
                 "forceTaxCheck" => $this->Request()->forceTaxCheck
             )
         );
+
         $document->render();
+    }
+
+    /**
+     * Duplicate document properties
+     */
+    public function duplicatePropertiesAction()
+    {
+        $this->View()->setTemplate();
+        $id = $this->Request()->id;
+
+        // Update statement
+        $getDocumentTypes = Shopware()->Db()->fetchAll(
+            "SELECT DISTINCT id FROM s_core_documents WHERE id != ?",
+            array($id)
+        );
+        foreach ($getDocumentTypes as $targetID) {
+            $deleteOldRows = Shopware()->Db()->query(
+                "DELETE FROM s_core_documents_box WHERE documentID = ?",
+                array($targetID["id"])
+            );
+            $sqlDuplicate = "INSERT IGNORE INTO s_core_documents_box
+                SELECT NULL AS id, ? AS documentID , name, style, value
+                FROM s_core_documents_box WHERE `documentID` = ?;
+            ";
+            Shopware()->Db()->query($sqlDuplicate, array($targetID["id"], $id));
+        }
     }
 }
