@@ -118,6 +118,22 @@ class Set extends Extendable implements \JsonSerializable
     }
 
     /**
+     * Returns a bool indicating if the set is fully configured (each group has a selected value)
+     *
+     * @return bool
+     */
+    public function isSelectionSpecified()
+    {
+        foreach ($this->groups as $group) {
+            if (!$group->isSelected()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public function jsonSerialize()

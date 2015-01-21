@@ -634,6 +634,43 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param StoreFrontBundle\Struct\Configurator\Set $set
+     * @return array
+     */
+    public function convertConfiguratorPrice(
+        StoreFrontBundle\Struct\ListProduct $product,
+        StoreFrontBundle\Struct\Configurator\Set $set
+    ) {
+        if ($set->isSelectionSpecified()) {
+            return [];
+        }
+
+        $data = [];
+
+        $variantPrice = $product->getVariantPrice();
+
+        $cheapestPrice = $product->getCheapestPrice();
+
+        if (count($product->getPrices()) > 1) {
+            $data['priceStartingFrom'] = $this->sFormatPrice(
+                $cheapestPrice->getCalculatedPrice()
+            );
+        }
+
+        if ($variantPrice->getCalculatedPrice() > $cheapestPrice->getCalculatedPrice()) {
+            $data['priceStartingFrom'] = $this->sFormatPrice(
+                $cheapestPrice->getCalculatedPrice()
+            );
+        }
+
+        $data['price'] = $data['priceStartingFrom'] ? : $this->sFormatPrice(
+            $variantPrice->getCalculatedPrice()
+        );
+
+        return $data;
+    }
 
     /**
      * Creates the settings array for the passed configurator set
