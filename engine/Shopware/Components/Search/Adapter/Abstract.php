@@ -23,6 +23,7 @@
  */
 
 /**
+ * @deprecated Use \Shopware\Bundle\SearchBundle\ProductNumberSearch, will be removed in SW 5.1
  */
 abstract class Shopware_Components_Search_Adapter_Abstract
 {
