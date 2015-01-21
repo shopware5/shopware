@@ -59,9 +59,9 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
     {
-        $similar = $this->getList(array($product), $context);
+        $similar = $this->getList([$product], $context);
 
         return array_shift($similar);
     }
@@ -85,8 +85,8 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             $context
         );
 
-        $result = array();
-        $fallback = array();
+        $result = [];
+        $fallback = [];
 
         foreach ($products as $product) {
             if (!isset($numbers[$product->getId()])) {
@@ -114,7 +114,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             $context
         );
 
-        $fallbackResult = array();
+        $fallbackResult = [];
         foreach ($products as $product) {
             if (!isset($fallback[$product->getId()])) {
                 continue;
@@ -130,13 +130,13 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param array $numbers
-     * @return Struct\ListProduct[]
+     * @return Struct\BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {
-        $result = array();
+        $result = [];
 
         foreach ($products as $product) {
             if (in_array($product->getNumber(), $numbers)) {
@@ -154,7 +154,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     private function extractNumbers($numbers)
     {
         //collect all numbers to send a single list product request.
-        $related = array();
+        $related = [];
         foreach ($numbers as $value) {
             $related = array_merge($related, $value);
         }

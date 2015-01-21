@@ -68,5 +68,4 @@ class TaxHydrator extends Hydrator
 
         return $tax;
     }
-
 }

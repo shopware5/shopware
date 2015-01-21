@@ -73,9 +73,9 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $votes = $this->getList(array($product), $context);
+        $votes = $this->getList([$product], $context);
 
         return array_shift($votes);
     }
@@ -85,7 +85,7 @@ class VoteGateway implements Gateway\VoteGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -107,13 +107,13 @@ class VoteGateway implements Gateway\VoteGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $votes = array();
+        $votes = [];
         foreach ($data as $row) {
             $id = $row['__vote_articleID'];
             $votes[$id][] = $this->voteHydrator->hydrate($row);
         }
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             $id = $product->getId();
 
@@ -123,7 +123,6 @@ class VoteGateway implements Gateway\VoteGatewayInterface
 
             $number = $product->getNumber();
             $result[$number] = $votes[$id];
-
         }
 
         return $result;

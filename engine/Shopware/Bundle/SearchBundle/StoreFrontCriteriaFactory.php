@@ -188,7 +188,7 @@ class StoreFrontCriteriaFactory
             $categoryId = $context->getShop()->getCategory()->getId();
 
             $criteria->addBaseCondition(
-                new CategoryCondition(array($categoryId))
+                new CategoryCondition([$categoryId])
             );
         }
 

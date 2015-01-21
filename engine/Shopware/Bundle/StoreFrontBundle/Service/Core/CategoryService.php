@@ -52,7 +52,7 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $categories = $this->getList(array($id), $context);
+        $categories = $this->getList([$id], $context);
 
         return array_shift($categories);
     }
@@ -76,7 +76,7 @@ class CategoryService implements Service\CategoryServiceInterface
     {
         $customerGroup = $context->getCurrentCustomerGroup();
 
-        return array_filter($categories, function(Struct\Category $category) use ($customerGroup) {
+        return array_filter($categories, function (Struct\Category $category) use ($customerGroup) {
             return !(in_array($customerGroup->getId(), $category->getBlockedCustomerGroupIds()));
         });
     }

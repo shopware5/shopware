@@ -62,7 +62,7 @@ class PropertyConditionHandler implements ConditionHandlerInterface
     ) {
         $tableKey = $condition->getName();
 
-        $where = array();
+        $where = [];
         foreach ($condition->getValueIds() as $valueId) {
             $valueKey = $tableKey . '_' . $valueId;
 

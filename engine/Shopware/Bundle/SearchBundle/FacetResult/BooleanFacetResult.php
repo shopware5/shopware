@@ -64,7 +64,7 @@ class BooleanFacetResult
      * @param string  $label
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $fieldName, $active, $label, $attributes = array())
+    public function __construct($facetName, $fieldName, $active, $label, $attributes = [])
     {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;

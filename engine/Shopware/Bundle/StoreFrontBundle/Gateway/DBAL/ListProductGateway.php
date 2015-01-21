@@ -75,7 +75,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      */
     public function get($number, Struct\ShopContextInterface $context)
     {
-        $products = $this->getList(array($number), $context);
+        $products = $this->getList([$number], $context);
 
         return array_shift($products);
     }
@@ -92,7 +92,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $products = array();
+        $products = [];
         foreach ($data as $product) {
             $key = $product['__variant_ordernumber'];
             $products[$key] = $this->hydrator->hydrateListProduct($product);
@@ -174,6 +174,5 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->where('customerGroups.articleID = product.id');
 
         return $query;
-
     }
 }

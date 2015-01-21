@@ -53,10 +53,10 @@ class TermHelper
     {
         $string = strtolower(html_entity_decode($string));
 
-        $substitution = array(
+        $substitution = [
             "ä" => "a", "Ä" => "a", "ö" => "o", "Ö" => "o", "ü" => "u", "Ü" => "u", "ß" => "ss", "\" " => " zoll ",
             "`" => "", "´" => "", "'" => "", "-" => ""
-        );
+        ];
 
         // Remove not required chars from string
         $string = str_replace(array_keys($substitution), array_values($substitution), $string);
@@ -65,9 +65,13 @@ class TermHelper
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (count($wordsTmp)) $words = array_unique($wordsTmp);
-        elseif (!empty($string)) $words = array($string);
-        else return array();
+        if (count($wordsTmp)) {
+            $words = array_unique($wordsTmp);
+        } elseif (!empty($string)) {
+            $words = [$string];
+        } else {
+            return [];
+        }
 
         // Check if any keyword is on blacklist
         $words = $this->filterBadWordsFromString($words);
@@ -84,9 +88,11 @@ class TermHelper
      */
     private function filterBadWordsFromString(array $words)
     {
-        if (!count($words) || !is_array($words)) return false;
+        if (!count($words) || !is_array($words)) {
+            return false;
+        }
 
-        $result = array();
+        $result = [];
 
         foreach ($words as $word) {
             if ($this->filterBadWordFromString($word)) {
@@ -106,12 +112,14 @@ class TermHelper
     {
         static $badWords;
 
-        if (!isset($badWords)) $badWords = preg_split(
+        if (!isset($badWords)) {
+            $badWords = preg_split(
             "#[\s,;]+#msi",
             $this->config->get('badwords')
             -1,
             PREG_SPLIT_NO_EMPTY
         );
+        }
 
         if (in_array((string) $word, $badWords)) {
             return false;
@@ -119,6 +127,4 @@ class TermHelper
 
         return true;
     }
-
-
 }

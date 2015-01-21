@@ -38,7 +38,7 @@ interface ProductPropertyGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return Struct\Property\Set[] Indexed by the product order number
      */
@@ -63,9 +63,9 @@ interface ProductPropertyGatewayInterface
      * - Sort mode equals to 3, the values are sorted by the position
      * - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Property\Set
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

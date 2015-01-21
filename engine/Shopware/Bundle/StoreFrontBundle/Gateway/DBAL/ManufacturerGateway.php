@@ -75,7 +75,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $manufacturers = $this->getList(array($id), $context);
+        $manufacturers = $this->getList([$id], $context);
 
         return array_shift($manufacturers);
     }
@@ -107,7 +107,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $manufacturers = array();
+        $manufacturers = [];
         foreach ($data as $row) {
             $id = $row['__manufacturer_id'];
             $manufacturers[$id] = $this->manufacturerHydrator->hydrate($row);

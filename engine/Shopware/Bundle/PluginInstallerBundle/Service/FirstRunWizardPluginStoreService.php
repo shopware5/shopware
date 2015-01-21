@@ -46,7 +46,7 @@ class FirstRunWizardPluginStoreService
      */
     private $localPluginService;
 
-    function __construct(
+    public function __construct(
         StructHydrator $hydrator,
         PluginLocalService $localPluginService,
         StoreClient $storeClient
@@ -175,7 +175,7 @@ class FirstRunWizardPluginStoreService
 
         $merged = [];
 
-        foreach($plugins as &$plugin) {
+        foreach ($plugins as &$plugin) {
             $key = strtolower($plugin->getTechnicalName());
 
             if (!array_key_exists($key, $local)) {

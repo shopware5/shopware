@@ -131,7 +131,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
      */
     private function createFacetResult($manufacturers, $activeIds)
     {
-        $listItems = array();
+        $listItems = [];
 
         foreach ($manufacturers as $manufacturer) {
             $listItem = new ValueListItem(
@@ -159,7 +159,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     private function getActiveIds($criteria)
     {
         if (!$criteria->hasCondition('manufacturer')) {
-            return array();
+            return [];
         }
 
         /**@var $condition Condition\ManufacturerCondition*/

@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Bundle\SearchBundle\Condition;
+
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**

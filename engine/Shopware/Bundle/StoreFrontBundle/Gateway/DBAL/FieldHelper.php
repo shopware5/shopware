@@ -88,8 +88,7 @@ class FieldHelper
         $schemaManager = $this->connection->getSchemaManager();
         $tableColumns = $schemaManager->listTableColumns($table);
 
-        $columns = array();
-
+        $columns = [];
         foreach ($tableColumns as $column) {
             $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
         }
@@ -106,7 +105,7 @@ class FieldHelper
      */
     public function getArticleFields()
     {
-        $fields = array(
+        $fields = [
             'product.id as __product_id',
             'product.supplierID as __product_supplierID',
             'product.name as __product_name',
@@ -133,7 +132,7 @@ class FieldHelper
             'product.available_from as __product_available_from',
             'product.available_to as __product_available_to',
             'product.configurator_set_id as __product_configurator_set_id',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -141,7 +140,6 @@ class FieldHelper
         );
 
         return $fields;
-
     }
 
     /**
@@ -149,9 +147,9 @@ class FieldHelper
      */
     public function getTopSellerFields()
     {
-        return array(
+        return [
             'topSeller.sales as __topSeller_sales'
-        );
+        ];
     }
 
     /**
@@ -160,7 +158,7 @@ class FieldHelper
      */
     public function getVariantFields()
     {
-        return array(
+        return [
             'variant.id as __variant_id',
             'variant.ordernumber as __variant_ordernumber',
             'variant.suppliernumber as __variant_suppliernumber',
@@ -180,7 +178,7 @@ class FieldHelper
             'variant.releasedate as __variant_releasedate',
             'variant.shippingfree as __variant_shippingfree',
             'variant.shippingtime as __variant_shippingtime',
-        );
+        ];
     }
 
     /**
@@ -188,7 +186,7 @@ class FieldHelper
      */
     public function getEsdFields()
     {
-        $fields = array (
+        $fields = [
             'esd.id as __esd_id',
             'esd.articleID as __esd_articleID',
             'esd.articledetailsID as __esd_articledetailsID',
@@ -197,7 +195,7 @@ class FieldHelper
             'esd.notification as __esd_notification',
             'esd.maxdownloads as __esd_maxdownloads',
             'esd.datum as __esd_datum',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -213,11 +211,11 @@ class FieldHelper
      */
     public function getTaxFields()
     {
-        return array(
+        return [
             'tax.id as __tax_id',
             'tax.tax as __tax_tax',
             'tax.description as __tax_description'
-        );
+        ];
     }
 
     /**
@@ -226,10 +224,10 @@ class FieldHelper
      */
     public function getPriceGroupFields()
     {
-        return array(
+        return [
             'priceGroup.id as __priceGroup_id',
             'priceGroup.description as __priceGroup_description'
-        );
+        ];
     }
 
     /**
@@ -238,7 +236,7 @@ class FieldHelper
      */
     public function getManufacturerFields()
     {
-        $fields = array(
+        $fields = [
             'manufacturer.id as __manufacturer_id',
             'manufacturer.name as __manufacturer_name',
             'manufacturer.img as __manufacturer_img',
@@ -247,7 +245,7 @@ class FieldHelper
             'manufacturer.meta_title as __manufacturer_meta_title',
             'manufacturer.meta_description as __manufacturer_meta_description',
             'manufacturer.meta_keywords as __manufacturer_meta_keywords'
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -262,7 +260,7 @@ class FieldHelper
      */
     public function getCategoryFields()
     {
-        $fields = array(
+        $fields = [
             'category.id as __category_id',
             'category.path as __category_path',
             'category.description as __category_description',
@@ -277,7 +275,7 @@ class FieldHelper
             'category.external as __category_external',
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -292,7 +290,7 @@ class FieldHelper
      */
     public function getPriceFields()
     {
-        $fields = array(
+        $fields = [
             'price.id as __price_id',
             'price.pricegroup as __price_pricegroup',
             'price.from as __price_from',
@@ -303,7 +301,7 @@ class FieldHelper
             'price.pseudoprice as __price_pseudoprice',
             'price.baseprice as __price_baseprice',
             'price.percent as __price_percent',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -318,7 +316,7 @@ class FieldHelper
      */
     public function getUnitFields()
     {
-        return array(
+        return [
             'unit.id as __unit_id',
             'unit.description as __unit_description',
             'unit.unit as __unit_unit',
@@ -328,7 +326,7 @@ class FieldHelper
             'variant.purchasesteps as __unit_purchasesteps',
             'variant.minpurchase as __unit_minpurchase',
             'variant.maxpurchase as __unit_maxpurchase'
-        );
+        ];
     }
 
     /**
@@ -336,11 +334,11 @@ class FieldHelper
      */
     public function getConfiguratorSetFields()
     {
-        return array(
+        return [
             'configuratorSet.id as __configuratorSet_id',
             'configuratorSet.name as __configuratorSet_name',
             'configuratorSet.type as __configuratorSet_type'
-        );
+        ];
     }
 
     /**
@@ -348,12 +346,12 @@ class FieldHelper
      */
     public function getConfiguratorGroupFields()
     {
-        return array(
+        return [
             'configuratorGroup.id as __configuratorGroup_id',
             'configuratorGroup.name as __configuratorGroup_name',
             'configuratorGroup.description as __configuratorGroup_description',
             'configuratorGroup.position as __configuratorGroup_position'
-        );
+        ];
     }
 
     /**
@@ -361,11 +359,11 @@ class FieldHelper
      */
     public function getConfiguratorOptionFields()
     {
-        return array(
+        return [
             'configuratorOption.id as __configuratorOption_id',
             'configuratorOption.name as __configuratorOption_name',
             'configuratorOption.position as __configuratorOption_position'
-        );
+        ];
     }
 
     /**
@@ -373,11 +371,11 @@ class FieldHelper
      */
     public function getAreaFields()
     {
-        return array(
+        return [
             'countryArea.id as __countryArea_id',
             'countryArea.name as __countryArea_name',
             'countryArea.active as __countryArea_active',
-        );
+        ];
     }
 
     /**
@@ -385,7 +383,7 @@ class FieldHelper
      */
     public function getCountryFields()
     {
-        $fields = array(
+        $fields = [
             'country.id as __country_id',
             'country.countryname as __country_countryname',
             'country.countryiso as __country_countryiso',
@@ -401,7 +399,7 @@ class FieldHelper
             'country.iso3 as __country_iso3',
             'country.display_state_in_registration as __country_display_state_in_registration',
             'country.force_state_in_registration as __country_force_state_in_registration',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -416,14 +414,14 @@ class FieldHelper
      */
     public function getStateFields()
     {
-        $fields = array(
+        $fields = [
             'countryState.id as __countryState_id',
             'countryState.countryID as __countryState_countryID',
             'countryState.name as __countryState_name',
             'countryState.shortcode as __countryState_shortcode',
             'countryState.position as __countryState_position',
             'countryState.active as __countryState_active',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -438,7 +436,7 @@ class FieldHelper
      */
     public function getCustomerGroupFields()
     {
-        $fields = array(
+        $fields = [
             'customerGroup.id as __customerGroup_id',
             'customerGroup.groupkey as __customerGroup_groupkey',
             'customerGroup.description as __customerGroup_description',
@@ -448,7 +446,7 @@ class FieldHelper
             'customerGroup.discount as __customerGroup_discount',
             'customerGroup.minimumorder as __customerGroup_minimumorder',
             'customerGroup.minimumordersurcharge as __customerGroup_minimumordersurcharge',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -463,13 +461,13 @@ class FieldHelper
      */
     public function getDownloadFields()
     {
-        $fields = array(
+        $fields = [
             'download.id as __download_id',
             'download.articleID as __download_articleID',
             'download.description as __download_description',
             'download.filename as __download_filename',
             'download.size as __download_size',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -484,13 +482,13 @@ class FieldHelper
      */
     public function getLinkFields()
     {
-        $fields = array(
+        $fields = [
             'link.id as __link_id',
             'link.articleID as __link_articleID',
             'link.description as __link_description',
             'link.link as __link_link',
             'link.target as __link_target',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -505,7 +503,7 @@ class FieldHelper
      */
     public function getImageFields()
     {
-        $fields = array(
+        $fields = [
             'image.id as __image_id',
             'image.articleID as __image_articleID',
             'image.img as __image_img',
@@ -517,7 +515,7 @@ class FieldHelper
             'image.extension as __image_extension',
             'image.parent_id as __image_parent_id',
             'image.media_id as __image_media_id'
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -535,7 +533,7 @@ class FieldHelper
      */
     public function getMediaFields()
     {
-        $fields = array(
+        $fields = [
             'media.id as __media_id',
             'media.albumID as __media_albumID',
             'media.name as __media_name',
@@ -546,7 +544,7 @@ class FieldHelper
             'media.file_size as __media_file_size',
             'media.userID as __media_userID',
             'media.created as __media_created'
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -566,12 +564,12 @@ class FieldHelper
      */
     public function getMediaSettingFields()
     {
-        return array(
+        return [
             'mediaSettings.id as __mediaSettings_id',
             'mediaSettings.create_thumbnails as __mediaSettings_create_thumbnails',
             'mediaSettings.thumbnail_size as __mediaSettings_thumbnail_size',
             'mediaSettings.icon as __mediaSettings_icon',
-        );
+        ];
     }
 
     /**
@@ -579,12 +577,12 @@ class FieldHelper
      */
     public function getPriceGroupDiscountFields()
     {
-        return array(
+        return [
             'priceGroupDiscount.id as __priceGroupDiscount_id',
             'priceGroupDiscount.groupID as __priceGroupDiscount_groupID',
             'priceGroupDiscount.discount as __priceGroupDiscount_discount',
             'priceGroupDiscount.discountstart as __priceGroupDiscount_discountstart'
-        );
+        ];
     }
 
     /**
@@ -592,13 +590,13 @@ class FieldHelper
      */
     public function getPropertySetFields()
     {
-        $fields = array(
+        $fields = [
             'propertySet.id as __propertySet_id',
             'propertySet.name as __propertySet_name',
             'propertySet.position as __propertySet_position',
             'propertySet.comparable as __propertySet_comparable',
             'propertySet.sortmode as __propertySet_sortmode',
-        );
+        ];
 
         $fields = array_merge(
             $fields,
@@ -613,12 +611,12 @@ class FieldHelper
      */
     public function getPropertyGroupFields()
     {
-        return array(
+        return [
             'propertyGroup.id as __propertyGroup_id',
             'propertyGroup.name as __propertyGroup_name',
             'propertyGroup.filterable as __propertyGroup_filterable',
             'propertyGroup.default as __propertyGroup_default',
-        );
+        ];
     }
 
     /**
@@ -626,13 +624,13 @@ class FieldHelper
      */
     public function getPropertyOptionFields()
     {
-        return array(
+        return [
             'propertyOption.id as __propertyOption_id',
             'propertyOption.optionID as __propertyOption_optionID',
             'propertyOption.value as __propertyOption_value',
             'propertyOption.position as __propertyOption_position',
             'propertyOption.value_numeric as __propertyOption_value_numeric',
-        );
+        ];
     }
 
     /**
@@ -640,11 +638,11 @@ class FieldHelper
      */
     public function getTaxRuleFields()
     {
-        return array(
+        return [
             'taxRule.groupID as __taxRule_groupID',
             'taxRule.tax as __taxRule_tax',
             'taxRule.name as __taxRule_name',
-        );
+        ];
     }
 
     /**
@@ -652,7 +650,7 @@ class FieldHelper
      */
     public function getVoteFields()
     {
-        return array(
+        return [
             'vote.id as __vote_id',
             'vote.articleID as __vote_articleID',
             'vote.name as __vote_name',
@@ -664,7 +662,7 @@ class FieldHelper
             'vote.email as __vote_email',
             'vote.answer as __vote_answer',
             'vote.answer_date as __vote_answer_date',
-        );
+        ];
     }
 
     /**
@@ -726,11 +724,13 @@ class FieldHelper
             ->setParameter(':optionTranslation', 'propertyvalue')
         ;
 
-        $query->addSelect(array(
+        $query->addSelect(
+            [
             'propertySetTranslation' . $suffix . '.objectdata as __propertySet_translation' . $selectSuffix,
             'propertyGroupTranslation' . $suffix . '.objectdata as __propertyGroup_translation' . $selectSuffix,
             'propertyOptionTranslation' . $suffix . '.objectdata as __propertyOption_translation' . $selectSuffix
-        ));
+            ]
+        );
     }
 
     /**
@@ -768,9 +768,11 @@ class FieldHelper
              imageTranslation' . $suffix . '.objectkey = image.id AND
              imageTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
-        $query->addSelect(array(
+        $query->addSelect(
+            [
             'imageTranslation' . $suffix . '.objectdata as __image_translation' . $selectSuffix,
-        ));
+            ]
+        );
 
         $query->setParameter(':imageType', 'articleimage');
     }
@@ -823,10 +825,12 @@ class FieldHelper
         $query->setParameter(':configuratorGroupType', 'configuratorgroup')
            ->setParameter(':configuratorOptionType', 'configuratoroption');
 
-        $query->addSelect(array(
+        $query->addSelect(
+            [
             'configuratorGroupTranslation' . $suffix . '.objectdata as __configuratorGroup_translation' . $selectSuffix,
             'configuratorOptionTranslation' . $suffix . '.objectdata as __configuratorOption_translation' . $selectSuffix
-        ));
+            ]
+        );
     }
 
     /**
@@ -865,7 +869,7 @@ class FieldHelper
              unitTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->addSelect(array('unitTranslation' . $suffix . '.objectdata as __unit_translation' . $selectSuffix))
+        $query->addSelect(['unitTranslation' . $suffix . '.objectdata as __unit_translation' . $selectSuffix])
             ->setParameter(':unitType', 'config_units');
     }
 
@@ -1024,7 +1028,7 @@ class FieldHelper
              productTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->addSelect(array('productTranslation' . $suffix . '.objectdata as __product_translation' . $selectSuffix))
+        $query->addSelect(['productTranslation' . $suffix . '.objectdata as __product_translation' . $selectSuffix])
             ->setParameter(':productType', 'article');
     }
 
@@ -1063,7 +1067,9 @@ class FieldHelper
              manufacturerTranslation' . $suffix . '.objectkey = manufacturer.id AND
              manufacturerTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
-        $query->addSelect(array('manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix))
+        $query->addSelect(
+            ['manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix]
+        )
             ->setParameter(':manufacturerType', 'supplier');
     }
 }

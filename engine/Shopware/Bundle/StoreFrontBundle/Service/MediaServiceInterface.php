@@ -60,7 +60,7 @@ interface MediaServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
@@ -79,16 +79,16 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::getCover()
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::getCover()
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Media
      */
-    public function getCover(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getCover()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      * @return Struct\Media[] Indexed by product number
      */
@@ -104,9 +104,9 @@ interface MediaServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::get()
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return Struct\Media[]
      */
-    public function getProductMedia(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function getProductMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

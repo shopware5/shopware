@@ -111,7 +111,7 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var int[]
      */
-    protected $blockedCustomerGroupIds = array();
+    protected $blockedCustomerGroupIds = [];
 
     /**
      * @param CategoryEntity $category
@@ -126,7 +126,7 @@ class Category extends Extendable implements \JsonSerializable
 
         $path = $category->getPath();
         if ($path) {
-            $path = ltrim($path , '|');
+            $path = ltrim($path, '|');
             $path = rtrim($path, '|');
 
             $path = explode('|', $path);

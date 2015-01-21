@@ -518,10 +518,13 @@ class sBasket
                 $premium, $premium["variantID"], "variant"
             );
 
-            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product = new StoreFrontBundle\Struct\ListProduct(
+                $premium['articleID'],
+                $premium["variantID"],
+                $premium['ordernumber']
+            );
+
             $product->setAdditional($premium['additionaltext']);
-            $product->setVariantId($premium["variantID"]);
-            $product->setNumber($premium['ordernumber']);
 
             $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
@@ -2578,10 +2581,12 @@ class sBasket
         }
 
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product = new StoreFrontBundle\Struct\ListProduct(
+                (int) $article['articleID'],
+                (int) $article["articledetailsID"],
+                $article['ordernumber']
+            );
             $product->setAdditional($article['additionaltext']);
-            $product->setVariantId($article["articledetailsID"]);
-            $product->setNumber($article['ordernumber']);
 
             $context = $this->contextService->getShopContext();
             $product = $this->additionalTextService->buildAdditionalText($product, $context);

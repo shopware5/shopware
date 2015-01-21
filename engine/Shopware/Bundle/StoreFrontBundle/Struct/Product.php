@@ -222,7 +222,6 @@ class Product extends ListProduct implements \JsonSerializable
         }
 
         return $selection;
-
     }
 
     /**

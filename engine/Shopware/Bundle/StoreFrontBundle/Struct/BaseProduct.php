@@ -22,34 +22,57 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
-
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * Specify class for the search result.
- * Contains the unique product order number
- * and additionally attribute classes which can be used
- * by the different gateway engines.
- *
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SearchProduct extends Extendable implements \JsonSerializable
+class BaseProduct extends Extendable implements \JsonSerializable
 {
     /**
-     * Order number of the product
-     * @var string
+     * Unique identifier of the product (s_articles).
+     *
+     * @var int
      */
-    private $number;
+    protected $id;
 
     /**
-     * @param string $number
+     * Unique identifier of the product variation (s_articles_details).
+     *
+     * @var int
      */
-    public function setNumber($number)
+    protected $variantId;
+
+    /**
+     * Unique identifier field.
+     * Shopware order number for the product, which
+     * is used to load the product or add the product
+     * to the basket.
+     *
+     * @var string
+     */
+    protected $number;
+
+    /**
+     * @param $id
+     * @param $variantId
+     * @param $number
+     */
+    public function __construct($id, $variantId, $number)
     {
+        $this->id = $id;
+        $this->variantId = $variantId;
         $this->number = $number;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -61,10 +84,10 @@ class SearchProduct extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * @return int
      */
-    public function jsonSerialize()
+    public function getVariantId()
     {
-        return get_object_vars($this);
+        return $this->variantId;
     }
 }

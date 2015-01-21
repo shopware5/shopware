@@ -181,7 +181,6 @@ class Unit extends Extendable implements \JsonSerializable
     public function setPackUnit($packUnit)
     {
         $this->packUnit = $packUnit;
-
     }
 
     /**

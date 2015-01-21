@@ -63,7 +63,7 @@ class VoteHydrator extends Hydrator
      */
     private function sortByPointsDescending($data)
     {
-        usort($data, function($a, $b) {
+        usort($data, function ($a, $b) {
             if ($a['points'] == $b['points']) {
                 return 0;
             }
@@ -121,5 +121,4 @@ class VoteHydrator extends Hydrator
 
         return $struct;
     }
-
 }

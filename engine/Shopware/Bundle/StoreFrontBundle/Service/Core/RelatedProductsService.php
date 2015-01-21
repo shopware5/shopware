@@ -59,9 +59,9 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
     {
-        $related = $this->getList(array($product), $context);
+        $related = $this->getList([$product], $context);
 
         return array_shift($related);
     }
@@ -85,7 +85,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
             $context
         );
 
-        $result = array();
+        $result = [];
         foreach ($products as $product) {
             if (!isset($numbers[$product->getId()])) {
                 continue;
@@ -101,13 +101,13 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[] $products
+     * @param Struct\BaseProduct[] $products
      * @param string[] $numbers
-     * @return Struct\ListProduct[]
+     * @return Struct\BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {
-        $result = array();
+        $result = [];
 
         foreach ($products as $product) {
             if (in_array($product->getNumber(), $numbers)) {
@@ -125,7 +125,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     private function extractNumbers($numbers)
     {
         //collect all numbers to send a single list product request.
-        $related = array();
+        $related = [];
         foreach ($numbers as $value) {
             $related = array_merge($related, $value);
         }

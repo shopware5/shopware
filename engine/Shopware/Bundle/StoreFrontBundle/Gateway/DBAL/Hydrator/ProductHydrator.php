@@ -61,7 +61,7 @@ class ProductHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationMapping = array(
+    private $translationMapping = [
         'metaTitle' => '__product_metaTitle',
         'txtArtikel' => '__product_name',
         'txtshortdescription' => '__product_description',
@@ -69,7 +69,7 @@ class ProductHydrator extends Hydrator
         'txtzusatztxt' => '__variant_additionaltext',
         'txtkeywords' => '__product_keywords',
         'txtpackunit' => '__unit_packunit',
-    );
+    ];
 
     /**
      * @param AttributeHydrator $attributeHydrator
@@ -98,7 +98,11 @@ class ProductHydrator extends Hydrator
      */
     public function hydrateProduct(array $data)
     {
-        $product = new Struct\Product();
+        $product = new Struct\Product(
+            (int) $data['__product_id'],
+            (int) $data['__variant_id'],
+            $data['__variant_ordernumber']
+        );
 
         return $this->assignData($product, $data);
     }
@@ -112,7 +116,11 @@ class ProductHydrator extends Hydrator
      */
     public function hydrateListProduct(array $data)
     {
-        $product = new Struct\ListProduct();
+        $product = new Struct\ListProduct(
+            (int) $data['__product_id'],
+            (int) $data['__variant_id'],
+            $data['__variant_ordernumber']
+        );
 
         return $this->assignData($product, $data);
     }
@@ -180,10 +188,6 @@ class ProductHydrator extends Hydrator
      */
     private function assignProductData(Struct\ListProduct $product, $data)
     {
-        if (isset($data['__product_id'])) {
-            $product->setId((int) $data['__product_id']);
-        }
-
         if (isset($data['__product_name'])) {
             $product->setName($data['__product_name']);
         }
@@ -254,14 +258,6 @@ class ProductHydrator extends Hydrator
             $product->setSales((int) $data['__topSeller_sales']);
         }
 
-        if (isset($data['__variant_id'])) {
-            $product->setVariantId((int) $data['__variant_id']);
-        }
-
-        if (isset($data['__variant_ordernumber'])) {
-            $product->setNumber($data['__variant_ordernumber']);
-        }
-
         if (isset($data['__variant_shippingtime'])) {
             $product->setShippingTime($data['__variant_shippingtime']);
         } elseif (isset($data['__product_shippingtime'])) {
@@ -313,7 +309,6 @@ class ProductHydrator extends Hydrator
         if (isset($data['__variant_width'])) {
             $product->setWidth((float) $data['__variant_width']);
         }
-
     }
 
     /**
@@ -345,7 +340,7 @@ class ProductHydrator extends Hydrator
      */
     private function getProductTranslation($data)
     {
-        $translation = array();
+        $translation = [];
         if (isset($data['__product_translation_fallback'])) {
             $translation = array_merge(
                 $translation,
@@ -404,6 +399,6 @@ class ProductHydrator extends Hydrator
      */
     private function unserializeTranslation($serializedTranslation)
     {
-        return unserialize($serializedTranslation) ? : array();
+        return unserialize($serializedTranslation) ? : [];
     }
 }

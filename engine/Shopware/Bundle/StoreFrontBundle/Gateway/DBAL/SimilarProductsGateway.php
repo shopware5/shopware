@@ -60,9 +60,9 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $numbers = $this->getList(array($product), $context);
+        $numbers = $this->getList([$product], $context);
 
         return array_shift($numbers);
     }
@@ -72,7 +72,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -81,10 +81,10 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->select(
-            array(
+            [
                 'product.id',
                 'similarVariant.ordernumber as number'
-            )
+            ]
         );
 
         $query->from('s_articles_similar', 'similar');
@@ -118,7 +118,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $related = array();
+        $related = [];
         foreach ($data as $productId => $row) {
             $related[$productId] = array_column($row, 'number');
         }
@@ -129,9 +129,9 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getByCategory(Struct\ListProduct $product, Struct\ShopContextInterface $context)
+    public function getByCategory(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $products = $this->getListByCategory(array($product), $context);
+        $products = $this->getListByCategory([$product], $context);
 
         return array_shift($products);
     }
@@ -141,7 +141,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getListByCategory($products, Struct\ShopContextInterface $context)
     {
-        $ids = array();
+        $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
         }
@@ -154,10 +154,12 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select(
+            [
             'main.articleID',
             "GROUP_CONCAT(subVariant.ordernumber SEPARATOR '|') as similar"
-        ));
+            ]
+        );
 
         $query->from('s_articles_categories', 'main');
 
@@ -198,7 +200,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
             $limit = (int) $this->config->get('similarLimit');
         }
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $similar = explode('|', $row['similar']);
             $result[$row['articleID']] = array_slice($similar, 0, $limit);

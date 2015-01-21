@@ -95,7 +95,7 @@ class PriceHelper
             ($discount ? " * " . (100 - (float) $discount) / 100 : '') .
 
             //multiplied with the shop currency factor
-            ($currency->getFactor() ? " * " . $currency->getFactor() : '' ) .
+            ($currency->getFactor() ? " * " . $currency->getFactor() : '') .
 
         ', 2)';
     }

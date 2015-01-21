@@ -63,5 +63,4 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         $query->addOrderBy('product.name', $sorting->getDirection())
             ->addOrderBy('product.id', $sorting->getDirection());
     }
-
 }

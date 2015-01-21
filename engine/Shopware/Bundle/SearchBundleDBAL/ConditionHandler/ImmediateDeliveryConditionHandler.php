@@ -37,7 +37,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
  */
 class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
 {
-    CONST STATE_INCLUDES_ALL_VARIANTS = 'all_variants';
+    const STATE_INCLUDES_ALL_VARIANTS = 'all_variants';
 
     /**
      * {@inheritdoc}

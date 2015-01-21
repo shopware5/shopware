@@ -36,7 +36,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      *
      * @var Attribute[]
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * Adds a new attribute struct into the class storage.

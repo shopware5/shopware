@@ -60,7 +60,7 @@ class PropertyHydrator extends Hydrator
      */
     public function hydrateValues(array $data)
     {
-        $sets = array();
+        $sets = [];
 
         foreach ($data as $row) {
             $setId = $row['__propertySet_id'];
@@ -105,7 +105,7 @@ class PropertyHydrator extends Hydrator
             $data,
             '__propertySet_translation',
             '__propertySet_translation_fallback',
-            array('groupName' => '__propertySet_name')
+            ['groupName' => '__propertySet_name']
         );
         $data = array_merge($data, $translation);
 
@@ -132,7 +132,7 @@ class PropertyHydrator extends Hydrator
             $data,
             '__propertyGroup_translation',
             '__propertyGroup_translation_fallback',
-            array('optionName' => '__propertyGroup_name')
+            ['optionName' => '__propertyGroup_name']
         );
         $data = array_merge($data, $translation);
 
@@ -154,7 +154,7 @@ class PropertyHydrator extends Hydrator
             $data,
             '__propertyOption_translation',
             '__propertyOption_translation_fallback',
-            array('optionValue' => '__propertyOption_value')
+            ['optionValue' => '__propertyOption_value']
         );
         $data = array_merge($data, $translation);
 
@@ -182,7 +182,7 @@ class PropertyHydrator extends Hydrator
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-            $translation = array();
+            $translation = [];
         } else {
             $translation = unserialize($data[$arrayKey]);
         }
@@ -195,10 +195,9 @@ class PropertyHydrator extends Hydrator
         }
 
         if (empty($translation)) {
-            return array();
+            return [];
         }
 
         return $this->convertArrayKeys($translation, $mapping);
     }
-
 }
