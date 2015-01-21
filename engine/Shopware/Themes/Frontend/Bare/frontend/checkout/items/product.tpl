@@ -24,7 +24,7 @@
 											{block name="frontend_checkout_cart_item_image_container_inner"}
 												{if $sBasketItem.image.src.2}
 													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
-                                                        {if {config name=detailmodal}}
+                                                        {if {config name=detailmodal} && {controllerAction} === 'confirm'}
                                                        data-modalbox="true"
                                                        data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
                                                        data-mode="ajax"
@@ -54,7 +54,7 @@
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
                             <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
-                                {if {config name=detailmodal}}
+                                {if {config name=detailmodal} && {controllerAction} === 'confirm'}
                                data-modalbox="true"
                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
                                data-mode="ajax"
