@@ -3,6 +3,7 @@
     .clearfix();
     .unitize-max-width(1260, 16);
     .box-shadow(0 10px 25px -15px #000);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
     background: @btn-secondary-text-color;
     width: 100%;
     position: absolute;
@@ -16,26 +17,23 @@
 
     .content--wrapper {
         .unitize-margin(20, 20);
-        overflow: hidden;
+        position: relative;
+    }
+
+    .menu--delimiter {
+        content: "";
+        width: 1px;
+        background: @border-color;
+        position: absolute;
+        display: block;
+        top: 0;
+        bottom: 0;
     }
 
     .menu--teaser {
         .unitize-padding(10, 10, 0, 20);
         position: relative;
         float: left;
-
-        &.has--border:before,
-        &.has--border::before {
-            content: "";
-            width: 1px;
-            background: @border-color;
-            position: absolute;
-            padding-bottom: 99999px;
-            margin-bottom: -99999px;
-            display: block;
-            top: 0;
-            left: 0;
-        }
     }
 
     .teaser--image {
@@ -73,7 +71,7 @@
 
     .button-container {
         .unitize(16, 16, font-size);
-        .unitize-padding(25, 30);
+        .unitize-padding(20, 30);
         background: @text-color-dark;
         color: @btn-secondary-text-color;
         font-weight: bold;
@@ -184,13 +182,7 @@
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-    .advanced-menu {
-        .content--wrapper {
-            .unitize-margin(40, 40);
-        }
-
-        .button-container {
-            .unitize-padding(20, 30);
-        }
+    .advanced-menu .content--wrapper {
+        .unitize-margin(40, 40);
     }
 }

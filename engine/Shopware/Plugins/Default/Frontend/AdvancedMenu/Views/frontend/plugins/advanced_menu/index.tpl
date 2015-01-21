@@ -62,7 +62,10 @@
                                 {/if}
 
                                 {if $hasTeaser}
-                                    <div class="menu--teaser{if $hasCategories} has--border{/if}"{if $hasCategories} style="width: {$columnAmount * 25}%;"{else} style="width: 100%;"{/if}>
+                                    {if $hasCategories}
+                                        <div class="menu--delimiter" style="right: {$columnAmount * 25}%;"></div>
+                                    {/if}
+                                    <div class="menu--teaser"{if $hasCategories} style="width: {$columnAmount * 25}%;"{else} style="width: 100%;"{/if}>
                                         {if !empty($mainCategory.media)}
                                             <div class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></div>
                                         {/if}
