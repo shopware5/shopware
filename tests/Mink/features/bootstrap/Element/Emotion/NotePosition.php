@@ -9,10 +9,10 @@ class NotePosition extends CartPosition
 
     /** @var array $namedSelectors */
     protected $namedSelectors = array(
-        'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
-        'order'   => array('de' => 'Kaufen',        'en' => 'Purchase'),
-        'compare' => array('de' => 'Vergleichen',   'en' => 'Compare'),
-        'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
+        'remove'  => array('de' => 'Löschen',           'en' => 'Delete'),
+        'order'   => array('de' => 'In den Warenkorb',  'en' => 'Add to cart'),
+        'compare' => array('de' => 'Vergleichen',       'en' => 'Compare'),
+        'details' => array('de' => 'Zum Produkt',       'en' => 'View product')
     );
 
     public $cssLocator = array(
