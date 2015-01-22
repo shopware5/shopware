@@ -175,7 +175,7 @@
 
             me.$el
                 .html(response)
-                .find('.item--container .alert')
+                .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
         },
 
