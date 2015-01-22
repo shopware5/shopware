@@ -75,7 +75,7 @@
 	}
 
     .alert {
-        .unitize-margin(0, 0, 20, 0);
+        .unitize-margin(0, 0, 10, 0);
     }
 
 	.product--tax {
@@ -444,12 +444,21 @@
 	}
 	.notification--field {
 		.border-radius-multi(3px, 0, 0, 3px);
+        position: relative;
 		width: 80%;
+
+        &:focus { z-index: 1; }
 	}
 	.notification--button {
 		.unitize-padding(3, 10);
         .border-radius-multi(0, 3px, 3px, 0);
+        .unitize(-1, 16, margin-left);
+        position: relative;
 		width: 20%;
+
+        .icon--mail {
+            .unitize(12, 16, font-size);
+        }
 	}
 }
 
