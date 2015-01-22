@@ -43,20 +43,12 @@
 
 {* Footer *}
 {block name="frontend_index_footer"}
-    {if !$theme.checkoutHeader}
+    {if !$theme.checkoutFooter}
         {$smarty.block.parent}
     {else}
-        <div class="container footer-vat">
-            <div class="footer--vat-info">
-                <p class="vat-info--text">
-                    {if $sOutputNet}
-                        {s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
-                    {else}
-                        {s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
-                    {/if}
-                </p>
-            </div>
-        </div>
+        {block name='frontend_index_checkout_confirm_footer'}
+            {include file="frontend/index/footer_minimal.tpl"}
+        {/block}
     {/if}
 {/block}
 

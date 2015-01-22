@@ -76,14 +76,14 @@ class Theme extends \Shopware\Components\Theme
     {
 
         $set = new ConfigSet();
-        $set->setName('Minimale Darstellung')
-            ->setDescription('Deaktiviert alle nicht notwendigen Features des Bare Themes. Dadurch werden Sitebar Element und Slider deaktiviert')
+        $set->setName('__bare_min_appearance__')
+            ->setDescription('__bare_min_appearance_description__')
             ->setValues(array('color' => '#fff'));
         $collection->add($set);
 
         $set = new ConfigSet();
-        $set->setName('Maximale Darstellung')
-            ->setDescription('Aktiviert alle zusätzlichen Features des Bare Themes. Slider, Einkaufswelten und Sitebars werden in der Storefront darstellt')
+        $set->setName('__bare_max_appearance__')
+            ->setDescription('__bare_max_appearance_description__')
             ->setValues(array('color' => '#fff'));
 
         $collection->add($set);
