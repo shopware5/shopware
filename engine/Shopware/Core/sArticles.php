@@ -2316,6 +2316,9 @@ class sArticles
             );
             $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
             $data = array_merge($data, $convertedConfigurator);
+            
+            $convertedConfiguratorPrice = $this->legacyStructConverter->convertConfiguratorPrice($product, $configurator);
+            $data = array_merge($data, $convertedConfiguratorPrice);
         }
 
         $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
