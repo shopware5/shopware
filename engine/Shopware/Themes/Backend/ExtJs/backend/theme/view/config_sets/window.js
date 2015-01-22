@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: '{s name=save}Save{/s}',
+            text: '{s name=load}Load{/s}',
             handler: function () {
                 me.fireEvent(
                     'assign-config-sets',

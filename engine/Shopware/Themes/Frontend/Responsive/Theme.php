@@ -1157,6 +1157,17 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSet->addElement(
             $this->createCheckboxField(
+                'checkoutFooter',
+                '__checkout_footer__',
+                true,
+                $this->getLabelAttribute(
+                    'checkout_footer_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
                 'infiniteScrolling',
                 '__enable_infinite_scrolling__',
                 true,
