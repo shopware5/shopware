@@ -109,9 +109,17 @@
 
         .alert--icon,
         .icon--element {
-			color: @highlight-success;
-			background: desaturate(lighten(@highlight-success, 42%),20%);
-			width: 15%;
+            width: 15%;
+            
+            .is--warning {
+                color: @highlight-notice;
+                background: desaturate(lighten(@highlight-notice, 42%),20%);
+            }
+            
+            .is--success {
+                color: @highlight-success;
+                background: desaturate(lighten(@highlight-success, 42%),20%);
+            }
         }
 
         .alert--content {
