@@ -14,4 +14,3 @@
 {else}
 	{se name="InformText"}Wir wurden bereits über das Problem informiert und arbeiten an einer Lösung, bitte versuchen Sie es in Kürze erneut.{/se}
 {/if}
-<div class="doublespace">&nbsp;</div>
