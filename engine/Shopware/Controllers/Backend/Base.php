@@ -86,7 +86,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $pluginService = Shopware()->Container()->get('plugin_service_local');
         $licences = $pluginService->getExpiredPluginLicenses();
 
-        if (empty($licenses)) {
+        if (empty($licences)) {
             return $this->View()->assign('success', false);
         }else {
             $this->View()->assign(array('success' => true, 'data' => $licences));
