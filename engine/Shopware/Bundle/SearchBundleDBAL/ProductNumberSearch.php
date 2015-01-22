@@ -228,7 +228,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     {
         $facetHandlers = new ArrayCollection();
         $facetHandlers = $this->eventManager->collect(
-            'Shopware_Search_Gateway_DBAL_Collect_Facet_Handlers',
+            'Shopware_SearchBundleDBAL_Collect_Facet_Handlers',
             $facetHandlers
         );
 

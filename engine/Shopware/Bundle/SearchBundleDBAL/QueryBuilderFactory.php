@@ -214,7 +214,7 @@ class QueryBuilderFactory
     {
         $sortingHandlers = new ArrayCollection();
         $sortingHandlers = $this->eventManager->collect(
-            'Shopware_Search_Gateway_DBAL_Collect_Sorting_Handlers',
+            'Shopware_SearchBundleDBAL_Collect_Sorting_Handlers',
             $sortingHandlers
         );
 
@@ -228,7 +228,7 @@ class QueryBuilderFactory
     {
         $conditionHandlers = new ArrayCollection();
         $conditionHandlers = $this->eventManager->collect(
-            'Shopware_Search_Gateway_DBAL_Collect_Condition_Handlers',
+            'Shopware_SearchBundleDBAL_Collect_Condition_Handlers',
             $conditionHandlers
         );
 
