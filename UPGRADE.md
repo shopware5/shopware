@@ -302,6 +302,7 @@ In this document you will find a changelog of the important changes related to t
 * Added `frontend/detail/product_quick_view.tpl`
 * Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
 * Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true)
+* Default value for controllers in which to display tag clouds no longer includes homepage.
 
 ## 4.3.1
 
