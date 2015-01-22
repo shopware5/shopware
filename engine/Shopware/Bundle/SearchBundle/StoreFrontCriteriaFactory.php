@@ -24,15 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -43,10 +37,13 @@ use Shopware\Components\QueryAliasMapper;
  */
 class StoreFrontCriteriaFactory
 {
-    /**
-     * @var CriteriaFactory
-     */
-    private $criteriaFactory;
+    const SORTING_RELEASE_DATE = 1;
+    const SORTING_POPULARITY = 2;
+    const SORTING_CHEAPEST_PRICE = 3;
+    const SORTING_HIGHEST_PRICE = 4;
+    const SORTING_PRODUCT_NAME_ASC = 5;
+    const SORTING_PRODUCT_NAME_DESC = 6;
+    const SORTING_SEARCH_RANKING = 7;
 
     /**
      * @var \Shopware_Components_Config
@@ -59,18 +56,28 @@ class StoreFrontCriteriaFactory
     private $queryAliasMapper;
 
     /**
-     * @param CriteriaFactory $criteriaFactory
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param QueryAliasMapper $queryAliasMapper
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param CriteriaRequestHandlerInterface[] $requestHandlers
      */
     public function __construct(
-        CriteriaFactory $criteriaFactory,
         \Shopware_Components_Config $config,
-        QueryAliasMapper $queryAliasMapper
+        QueryAliasMapper $queryAliasMapper,
+        \Enlight_Event_EventManager $eventManager,
+        $requestHandlers = []
     ) {
-        $this->criteriaFactory = $criteriaFactory;
         $this->config = $config;
         $this->queryAliasMapper = $queryAliasMapper;
+        $this->eventManager = $eventManager;
+
+        $this->requestHandlers = $requestHandlers;
+        $this->requestHandlers = $this->registerRequestHandlers();
     }
 
     /**
@@ -82,8 +89,31 @@ class StoreFrontCriteriaFactory
     {
         $criteria = $this->getSearchCriteria($request, $context);
 
-        $this->addFacets($criteria);
-        $criteria->addFacet(new CategoryFacet());
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Search_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
+
+        return $criteria;
+    }
+
+    /**
+     * @param Request $request
+     * @param ShopContextInterface $context
+     * @return Criteria
+     */
+    public function createListingCriteria(Request $request, ShopContextInterface $context)
+    {
+        $criteria = $this->createCriteriaFromRequest($request, $context);
+
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Listing_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
+
+        $criteria->removeFacet('category');
 
         return $criteria;
     }
@@ -99,6 +129,14 @@ class StoreFrontCriteriaFactory
 
         $criteria->limit($this->config->get('MaxLiveSearchResults', 6));
 
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Search_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
+
+        $criteria->resetFacets();
+
         return $criteria;
     }
 
@@ -107,11 +145,41 @@ class StoreFrontCriteriaFactory
      * @param ShopContextInterface $context
      * @return Criteria
      */
-    public function createListingCriteria(Request $request, ShopContextInterface $context)
+    public function createAjaxListingCriteria(Request $request, ShopContextInterface $context)
     {
-        $criteria = $this->criteriaFactory->createCriteriaFromRequest($request, $context);
+        $criteria = $this->createCriteriaFromRequest($request, $context);
 
-        $this->addFacets($criteria);
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Listing_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
+
+        $criteria->resetFacets();
+
+        return $criteria;
+    }
+
+    /**
+     * @param Request $request
+     * @param ShopContextInterface $context
+     * @return Criteria
+     */
+    public function createAjaxCountCriteria(Request $request, ShopContextInterface $context)
+    {
+        $criteria = $this->createCriteriaFromRequest($request, $context);
+
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Count_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
+
+        $criteria
+            ->offset(0)
+            ->limit(1)
+            ->resetSorting()
+            ->resetFacets();
 
         return $criteria;
     }
@@ -127,7 +195,7 @@ class StoreFrontCriteriaFactory
         ShopContextInterface $context,
         $categoryId
     ) {
-        $criteria = $this->criteriaFactory->createCriteriaFromRequest($request, $context);
+        $criteria = $this->createCriteriaFromRequest($request, $context);
 
         $criteria
             ->offset(0)
@@ -136,32 +204,13 @@ class StoreFrontCriteriaFactory
         $criteria->removeCondition('category');
         $criteria->addBaseCondition(new CategoryCondition([$categoryId]));
 
-        return $criteria;
-    }
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Product_Navigation_Criteria', [
+            'criteria' => $criteria,
+            'request'  => $request,
+            'context'  => $context
+        ]);
 
-    /**
-     * @param Request $request
-     * @param ShopContextInterface $context
-     * @return Criteria
-     */
-    public function createAjaxListingCriteria(Request $request, ShopContextInterface $context)
-    {
-        return $this->criteriaFactory->createCriteriaFromRequest($request, $context);
-    }
-
-    /**
-     * @param Request $request
-     * @param ShopContextInterface $context
-     * @return Criteria
-     */
-    public function createAjaxCountCriteria(Request $request, ShopContextInterface $context)
-    {
-        $criteria = $this->criteriaFactory->createCriteriaFromRequest($request, $context);
-
-        $criteria
-            ->offset(0)
-            ->limit(1)
-            ->resetSorting();
+        $criteria->resetFacets();
 
         return $criteria;
     }
@@ -176,10 +225,10 @@ class StoreFrontCriteriaFactory
         $this->queryAliasMapper->replaceShortRequestQueries($request);
 
         if (!$request->has('sSort')) {
-            $request->setParam('sSort', CriteriaFactory::SORTING_SEARCH_RANKING);
+            $request->setParam('sSort', StoreFrontCriteriaFactory::SORTING_SEARCH_RANKING);
         }
 
-        $criteria = $this->criteriaFactory->createCriteriaFromRequest(
+        $criteria = $this->createCriteriaFromRequest(
             $request,
             $context
         );
@@ -192,38 +241,39 @@ class StoreFrontCriteriaFactory
             );
         }
 
-        $this->addFacets($criteria);
+        return $criteria;
+    }
+
+    /**
+     * @param Request $request
+     * @param ShopContextInterface $context
+     * @return Criteria
+     */
+    private function createCriteriaFromRequest(Request $request, ShopContextInterface $context)
+    {
+        $this->queryAliasMapper->replaceShortRequestQueries($request);
+
+        $criteria = new Criteria();
+
+        foreach ($this->requestHandlers as $handler) {
+            $handler->handleRequest($request, $criteria, $context);
+        }
 
         return $criteria;
     }
 
     /**
-     * @param Criteria $criteria
+     * @return array
+     * @throws \Enlight_Event_Exception
      */
-    private function addFacets(Criteria $criteria)
+    private function registerRequestHandlers()
     {
-        if ($this->config->get('showImmediateDeliveryFacet')) {
-            $criteria->addFacet(new ImmediateDeliveryFacet());
-        }
+        $requestHandlers = new ArrayCollection();
+        $requestHandlers = $this->eventManager->collect(
+            'Shopware_SearchBundle_Register_Request_Handlers',
+            $requestHandlers
+        );
 
-        if ($this->config->get('showShippingFreeFacet')) {
-            $criteria->addFacet(new ShippingFreeFacet());
-        }
-
-        if ($this->config->get('showPriceFacet')) {
-            $criteria->addFacet(new PriceFacet());
-        }
-
-        if ($this->config->get('showVoteAverageFacet')) {
-            $criteria->addFacet(new VoteAverageFacet());
-        }
-
-        if ($this->config->get('showSupplierInCategories')) {
-            $criteria->addFacet(new ManufacturerFacet());
-        }
-
-        if ($this->config->get('displayFiltersInListings')) {
-            $criteria->addFacet(new PropertyFacet());
-        }
+        return array_merge($this->requestHandlers, $requestHandlers->toArray());
     }
 }

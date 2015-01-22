@@ -21,16 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaFactory;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
