@@ -22,7 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
+use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
+use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
+use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\Model\Query\SqlWalker;
 
 /**
@@ -567,42 +574,27 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getProductSliderData($category, $customerGroupId, $offset = 0, $limit, $sort = null)
     {
         $context = Shopware()->Container()->get('context_service')->getProductContext();
-        $factory = Shopware()->Container()->get('criteria_factory');
         $criteria = new Criteria();
 
-        $criteria->addBaseCondition(
-            $factory->createCategoryCondition(array($category))
-        );
-        $criteria->addBaseCondition(
-            $factory->createCustomerGroupCondition(array($customerGroupId))
-        );
-        $criteria->addBaseCondition(
-            $factory->createHasPriceCondition()
-        );
+        $criteria->addBaseCondition(new CategoryCondition([$category]));
+        $criteria->addBaseCondition(new CustomerGroupCondition([$customerGroupId]));
+        $criteria->addBaseCondition(new HasPriceCondition());
 
         $criteria->offset($offset)
             ->limit($limit);
 
         switch ($sort) {
              case 'price_asc':
-                 $criteria->addSorting(
-                    $factory->createPriceSorting('ASC')
-                 );
+                 $criteria->addSorting(new PriceSorting(SortingInterface::SORT_ASC));
                  break;
              case 'price_desc':
-                 $criteria->addSorting(
-                    $factory->createPriceSorting('DESC')
-                    );
+                 $criteria->addSorting(new PriceSorting(SortingInterface::SORT_DESC));
                  break;
              case 'topseller':
-                 $criteria->addSorting(
-                    $factory->createPopularitySorting('DESC')
-                 );
+                 $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
                  break;
              case 'newcomer':
-                $criteria->addSorting(
-                    $factory->createReleaseDateSorting('DESC')
-                );
+                $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
                 break;
             }
 
