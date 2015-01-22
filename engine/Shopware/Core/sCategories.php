@@ -525,15 +525,15 @@ class sCategories
         if ($id === null) {
             $id = $this->baseId;
         }
-        $category = $this->repository->getActiveByIdQuery($id, $this->customerGroupId)->getArrayResult();
 
-        if (empty($category[0])) {
+        $category = $this->getActiveCategoryData($id, $this->customerGroupId);
+
+        if (empty($category)) {
             return null;
         }
-        $category = $category[0];
 
-        $detailUrl = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
-        $detailUrl .= $category['category']['id'];
+        $detailUrl = $category['blog'] ? $this->blogBaseUrl : $this->baseUrl;
+        $detailUrl .= $category['id'];
 
         $canonical = $detailUrl;
         if ($this->config->get('forceCanonicalHttp')) {
@@ -542,14 +542,14 @@ class sCategories
 
 
         $category = array_merge(
-            $category['category'],
+            $category,
             array(
-                'description'     => $category['category']['name'],
-                'cmsheadline'     => $category['category']['cmsHeadline'],
-                'cmstext'         => $category['category']['cmsText'],
-                'metaKeywords'    => $category['category']['metaKeywords'],
-                'metaDescription' => $category['category']['metaDescription'],
-                'noviewselect'    => $category['category']['noViewSelect'],
+                'description'     => $category['name'],
+                'cmsheadline'     => $category['cmsHeadline'],
+                'cmstext'         => $category['cmsText'],
+                'metaKeywords'    => $category['metaKeywords'],
+                'metaDescription' => $category['metaDescription'],
+                'noviewselect'    => $category['noViewSelect'],
                 'childrenCount'   => (int) $category['childrenCount'],
                 'articleCount'    => (int) $category['articleCount'],
                 'sSelf'           => $detailUrl,
@@ -623,4 +623,77 @@ class sCategories
 
         return $path;
     }
+
+    /**
+     * @param $id
+     * @param $customerGroupId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function getActiveCategoryData($id, $customerGroupId)
+    {
+        $query = Shopware()->Models()->createQueryBuilder();
+        $query->select(array('category', 'attribute', 'media'));
+        $query->from('Shopware\Models\Category\Category', 'category')
+            ->leftJoin('category.attribute', 'attribute')
+            ->leftJoin('category.media', 'media')
+            ->where('category.id = :id')
+            ->andWhere('category.active = 1')
+            ->setParameter('id', $id);
+
+        $query->leftJoin('category.customerGroups', 'customerGroups', 'with', 'customerGroups.id = :customerGroupId')
+            ->setParameter('customerGroupId', $customerGroupId)
+            ->andHaving('COUNT(customerGroups.id) = 0');
+
+        $data = $query->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
+        );
+
+        $data['articleCount'] = $this->getCategoryArticleCount($id);
+        $data['childrenCount'] = $this->getCategoryChildrenCount($id);
+
+        return $data;
+    }
+
+    /**
+     * Returns the count of active products in the provided category
+     * @param $id
+     * @return PDOStatement
+     * @throws Exception
+     */
+    private function getCategoryArticleCount($id)
+    {
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select('COUNT(ro.id)')
+            ->from('s_articles_categories_ro', 'ro')
+            ->innerJoin('ro', 's_articles', 'a', 'a.id = ro.articleID AND a.active = 1')
+            ->where('ro.categoryID = :id')
+            ->setParameter(':id', $id);
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+        return $statement->fetch(PDO::FETCH_COLUMN);
+    }
+
+
+    /**
+     * Returns the count of children categories of the provided category
+     * @param int $id
+     * @return int
+     * @throws Exception
+     */
+    private function getCategoryChildrenCount($id)
+    {
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select('COUNT(category.id)')
+            ->from('s_categories', 'category')
+            ->where('category.parent = :id')
+            ->setParameter(':id', $id);
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(PDO::FETCH_COLUMN);
+    }
+
 }
