@@ -134,8 +134,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
             animate: true,
             hidden: me.firstRunWizardIsConnected !== null,
             style: {
-                marginLeft: '145px',
-                width: '265px'
+                marginLeft: '135px',
+                width: '365px'
             }
         });
 
