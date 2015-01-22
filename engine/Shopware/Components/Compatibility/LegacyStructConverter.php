@@ -122,7 +122,7 @@ class LegacyStructConverter
             $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
         }
 
-        if (count($product->getPrices()) > 1) {
+        if (count($product->getPrices()) > 1 || $product->hasConfigurator()) {
             $promotion['priceStartingFrom'] = $price;
         }
 
@@ -653,7 +653,7 @@ class LegacyStructConverter
 
         $cheapestPrice = $product->getCheapestPrice();
 
-        if (count($product->getPrices()) > 1) {
+        if (count($product->getPrices()) > 1 || $product->hasConfigurator()) {
             $data['priceStartingFrom'] = $this->sFormatPrice(
                 $cheapestPrice->getCalculatedPrice()
             );
