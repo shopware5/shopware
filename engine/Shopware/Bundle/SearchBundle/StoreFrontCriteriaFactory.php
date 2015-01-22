@@ -270,7 +270,7 @@ class StoreFrontCriteriaFactory
     {
         $requestHandlers = new ArrayCollection();
         $requestHandlers = $this->eventManager->collect(
-            'Shopware_SearchBundle_Register_Request_Handlers',
+            'Shopware_SearchBundle_Collect_Criteria_Request_Handlers',
             $requestHandlers
         );
 
