@@ -59,6 +59,100 @@ class PluginLocalService
     }
 
     /**
+     * fucntion to get expired plugins
+     * @return array
+     */
+    public function getExpiredPluginLicenses()
+    {
+        if ($this->checkLicensePluginIsInstalled() == false) {
+            return [];
+        }
+
+        //get all licenses
+        $expiredPlugins = [];
+        $expireDays = 14; //Days to warn before plugin gets expired
+        $licenses = $this->getLicences();
+
+        if (empty($licenses)) {
+            return [];
+        }
+
+        //decode all license and get info, check for expiring
+        foreach ($licenses as $license) {
+            $info = \Shopware_Components_License::readLicenseInfo($license['license']);
+
+            $expirationDate = $this->getLicenceExpirationDate($info);
+
+            if ($expirationDate === null) {
+                continue;
+            }
+
+            $diff = $expirationDate->diff(new \DateTime('now'));
+
+            if ($diff->invert == 1 && $diff->days <= $expireDays) {
+                $expiredPlugins[] = [
+                    'expireDate' => $expirationDate,
+                    'plugin' => $info['label']
+                ];
+            }
+        }
+
+        return $expiredPlugins;
+    }
+
+    /**
+     * check if license plugin is installed
+     * @return boolean
+     */
+    private function checkLicensePluginIsInstalled()
+    {
+        $connection = $this->connection;
+        $builder = $connection->createQueryBuilder();
+
+        $builder->select(['plugin.id'])
+            ->from('s_core_plugins', 'plugin')
+            ->where("plugin.name = 'License'")
+            ->andWhere('plugin.active = 1')
+            ->andWhere('plugin.installation_date IS NOT NULL');
+
+        $builderExecute = $builder->execute();
+        $exist = $builderExecute->fetchColumn();
+
+        return (empty($exist)) ? false : true;
+    }
+
+    /**
+     * function to get all plugin licenses
+     * @return array
+     */
+    private function getLicences()
+    {
+        /**@var $connection Connection */
+        $connection = $this->connection;
+        $builder = $connection->createQueryBuilder();
+
+        $builder->select(['license.label', 'license.license'])
+            ->from('s_core_licenses', 'license');
+
+        $builderExecute = $builder->execute();
+        return $builderExecute->fetchAll();
+    }
+
+    /**
+     * get expiration date of license-info-array
+     * @param $info
+     * @return null|\DateTime
+     */
+    private function getLicenceExpirationDate($info)
+    {
+        if (empty($info['expiration'])) {
+            return null;
+        }
+
+        return new \DateTime($info['expiration']);
+    }
+
+    /**
      * @param ListingRequest $context
      * @return ListingResultStruct
      */
@@ -163,7 +257,7 @@ class PluginLocalService
     public function getPluginsForUpdateCheck()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array('plugin.name', 'plugin.version'))
+        $query->select(['plugin.name', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.capability_update = 1');
 
@@ -193,7 +287,7 @@ class PluginLocalService
     private function getQuery()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array(
+        $query->select([
             'plugin.id',
             'plugin.name',
             'plugin.label',
@@ -217,7 +311,7 @@ class PluginLocalService
             'licence.creation as __licence_creation',
             'licence.expiration as __licence_expiration',
             'licence.license as __licence_license'
-        ));
+        ]);
 
         $query->from('s_core_plugins', 'plugin')
             ->leftJoin('plugin', 's_core_config_forms', 'forms', 'forms.plugin_id = plugin.id')

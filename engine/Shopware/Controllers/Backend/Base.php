@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\DBAL\Connection;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -64,19 +65,34 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
    /**
     * Add the table alias to the passed filter and sort parameters.
-    * @param $properties
-    * @param $fields
-    * @return array|mixed
+    * @param array $properties
+    * @param array $fields
+    * @return array
     */
     private function prepareParam($properties, $fields)
     {
         foreach ($properties as $key => $property) {
-        if (array_key_exists($property['property'], $fields)) {
-            $property['property'] = $fields[$property['property']];
-        }
+            if (array_key_exists($property['property'], $fields)) {
+                $property['property'] = $fields[$property['property']];
+            }
             $properties[$key] = $property;
         }
         return $properties;
+    }
+
+    /**
+     * Returns all expired plugins to the json-view
+     */
+    public function checkExpiredPluginAction()
+    {
+        $pluginService = Shopware()->Container()->get('plugin_service_local');
+        $licences = $pluginService->getExpiredPluginLicenses();
+
+        if (empty($licenses)) {
+            return $this->View()->assign('success', false);
+        }else {
+            $this->View()->assign(array('success' => true, 'data' => $licences));
+        }
     }
 
     /**
