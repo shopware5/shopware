@@ -53,8 +53,8 @@ class ConfigLoader implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'onDispatch',
-            'Enlight_Controller_Action_PostDispatchSecure_Widgets'  => 'onDispatch',
+            'Enlight_Controller_Action_PostDispatch_Frontend' => 'onDispatch',
+            'Enlight_Controller_Action_PostDispatch_Widgets'  => 'onDispatch',
         ];
     }
 
