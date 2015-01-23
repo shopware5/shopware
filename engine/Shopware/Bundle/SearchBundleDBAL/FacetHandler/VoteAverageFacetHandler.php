@@ -145,7 +145,9 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
             $criteria->hasCondition($facet->getName()),
             $this->snippetNamespace->get($facet->getName(), 'Ranking'),
             $values,
-            $this->fieldName
+            $this->fieldName,
+            [],
+            'frontend/listing/filter/facet-rating.tpl'
         );
     }
 

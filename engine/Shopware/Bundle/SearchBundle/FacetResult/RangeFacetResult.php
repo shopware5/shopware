@@ -83,15 +83,21 @@ class RangeFacetResult
     private $activeMin;
 
     /**
+     * @var null|string
+     */
+    private $template = null;
+
+    /**
      * @param string $facetName
      * @param boolean $active
      * @param string $label
      * @param float $min
-     * @param float $activeMin
-     * @param string $minFieldName
      * @param float $max
+     * @param float $activeMin
      * @param float $activeMax
+     * @param string $minFieldName
      * @param string $maxFieldName
+     * @param string|null $template
      * @param Attribute[] $attributes
      */
     public function __construct(
@@ -104,7 +110,8 @@ class RangeFacetResult
         $activeMax,
         $minFieldName,
         $maxFieldName,
-        $attributes = []
+        $attributes = [],
+        $template = 'frontend/listing/filter/facet-range.tpl'
     ) {
         $this->facetName = $facetName;
         $this->active = $active;
@@ -116,6 +123,7 @@ class RangeFacetResult
         $this->activeMax = $activeMax;
         $this->maxFieldName = $maxFieldName;
         $this->attributes = $attributes;
+        $this->template = $template;
     }
 
     /**
@@ -188,5 +196,13 @@ class RangeFacetResult
     public function getMinFieldName()
     {
         return $this->minFieldName;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }

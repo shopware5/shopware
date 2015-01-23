@@ -161,7 +161,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->get('context_service_core')->getShopContext();
+        $context = $this->get('context_service')->getShopContext();
 
         /**@var $criteria \Shopware\Bundle\SearchBundle\Criteria*/
         $criteria = $this->get('store_front_criteria_factory')
