@@ -55,6 +55,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             callback: function(records) {
                 if (records) {
                     navigation.setUpdateCount(records.length);
+
+                    Ext.create('Shopware.notification.ExpiredLicence').check();
                 }
             }
         });
