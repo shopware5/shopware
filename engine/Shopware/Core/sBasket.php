@@ -2143,13 +2143,19 @@ class sBasket
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
             }
 
-            if (empty($value["modus"])) {
-                // Article-Image
+            $articleId = $getArticles[$key]["articleID"];
+            if ($value["modus"] == "1") {
+                $premiumNumber = $getArticles[$key]["ordernumber"];
+                $articleId = $this->getArticleIdOfPremium($premiumNumber);
+            }
+
+            if ($articleId) {
+                // Article image
                 if (!empty($getArticles[$key]["ob_attr1"])) {
                     $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetConfiguratorImage(
                             $this->moduleManager->Articles()->sGetArticlePictures(
-                                $getArticles[$key]["articleID"],
+                                $articleId,
                                 false,
                                 $this->config->get('sTHUMBBASKET'),
                                 false,
@@ -2160,7 +2166,7 @@ class sBasket
                 } else {
                     $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetArticlePictures(
-                            $getArticles[$key]["articleID"],
+                            $articleId,
                             true,
                             $this->config->get('sTHUMBBASKET'),
                             $getArticles[$key]["ordernumber"]
@@ -2594,5 +2600,22 @@ class sBasket
         }
 
         return $article;
+    }
+
+    /**
+     * @param string $premiumNumber
+     * @return string|null
+     */
+    private function getArticleIdOfPremium($premiumNumber)
+    {
+        return $this->db->fetchOne(
+            "SELECT variant.articleID
+             FROM s_addon_premiums premium
+                INNER JOIN s_articles_details variant
+                  ON premium.ordernumber = variant.ordernumber
+             WHERE premium.ordernumber_export = :ordernumber
+             LIMIT 1",
+            ['ordernumber' => $premiumNumber]
+        );
     }
 }
