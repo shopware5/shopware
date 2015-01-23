@@ -165,7 +165,15 @@
              * @property easingOut
              * @type {String}
              */
-            'easingOut': 'cubic-bezier(.2,.76,.5,1)'
+            'easingOut': 'cubic-bezier(.2,.76,.5,1)',
+
+            /**
+             * The animation easing used when transitions are not supported.
+             *
+             * @property easingFallback
+             * @type {String}
+             */
+            'easingFallback': 'swing'
         };
 
     /**
@@ -217,7 +225,8 @@
      */
     Plugin.prototype.init = function () {
         var me = this,
-            opts = me.opts;
+            opts = me.opts,
+            transitionSupport = Modernizr.csstransitions;
 
         // Cache the necessary elements
         me.$pageWrap = $(opts.wrapSelector);
@@ -225,7 +234,9 @@
         me.$closeButton = $(opts.closeButtonSelector);
         me.$overlay = $(opts.wrapSelector + ':before');
         me.$body = $('body');
-        me.fadeEffect = Modernizr.csstransitions && !opts.disableTransitions ? 'transition' : 'animate';
+        me.fadeEffect = transitionSupport && !opts.disableTransitions ? 'transition' : 'animate';
+        me.easingEffectIn = transitionSupport ? opts.easingIn : opts.easingFallback;
+        me.easingEffectOut = transitionSupport ? opts.easingOut : opts.easingFallback;
 
         me.opened = false;
 
@@ -315,10 +326,10 @@
 
         var css = {};
         css[fromLeft ? 'left' : 'right'] = 0;
-        me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.opts.easingIn);
+        me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.easingEffectIn);
 
         var left = (opts.fullscreen) ? (fromLeft ? '100%' : '-100%') : me.offCanvasWidth * (fromLeft ? 1 : -1);
-        me.$pageWrap[me.fadeEffect]({'left': left}, me.opts.animationSpeed, me.opts.easingIn);
+        me.$pageWrap[me.fadeEffect]({'left': left}, me.opts.animationSpeed, me.easingEffectOut);
 
         if (opts.mode === 'ajax') {
             $.ajax({
@@ -352,8 +363,8 @@
         var css = {};
         css[fromLeft ? 'left' : 'right'] = opts.fullscreen ? '-100%' : me.offCanvasWidth * -1;
 
-        me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.opts.easingOut);
-        me.$pageWrap[me.fadeEffect]({'left': 0}, me.opts.animationSpeed, me.opts.easingOut);
+        me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.easingEffectOut);
+        me.$pageWrap[me.fadeEffect]({'left': 0}, me.opts.animationSpeed, me.easingEffectOut);
 
         me.$pageWrap.off('scroll.' + pluginName);
         $.publish('plugin/offCanvasMenu/closeMenu');
