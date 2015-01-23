@@ -111,10 +111,7 @@ class FacetResultGroup
     }
 
     /**
-     * Returns the full path of the frontend template file beginning with frontend/...
-     * If the function returns null, the facet result isn't rendered automatically
-     *
-     * @return string|null
+     * @inheritdoc
      */
     public function getTemplate()
     {
