@@ -463,8 +463,6 @@
 
 .filter--active-container {
     .unitize-padding(20, 0, 0, 0);
-    margin-left: 1%;
-    margin-right: 1%;
 }
 
 .filter--active {
@@ -515,8 +513,6 @@
 .filter--actions {
     .unitize-padding(10, 0);
     .unitize(10, 16, margin-bottom);
-    margin-left: 1%;
-    margin-right: 1%;
     border-bottom: 1px solid @border-color;
     clear: both;
 }
@@ -524,12 +520,10 @@
 .filter--btn-apply {
     position: relative;
     font-weight: 600;
+    width: 100%;
 
     [class^="icon--"] {
-        .unitize-margin(0, 0, 0, 10);
         .unitize(14, 16, font-size);
-        .unitize(1, 16, top);
-        position: relative;
     }
 
     .filter--count {
@@ -562,6 +556,8 @@
 
     .filter--active-container {
         .unitize-padding(15, 0, 5, 0);
+        margin-left: 1%;
+        margin-right: 1%;
 
         &.is--disabled {
             .filter--active:not([data-filter-param="reset"]),
@@ -579,6 +575,15 @@
                 }
             }
         }
+    }
+
+    .filter--actions {
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+
+    .filter--btn-apply {
+        width: auto;
     }
 }
 

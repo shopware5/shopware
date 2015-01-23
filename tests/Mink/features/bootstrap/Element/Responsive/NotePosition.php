@@ -16,7 +16,6 @@ class NotePosition extends \Element\Emotion\NotePosition
     public $cssLocator = array(
         'a-thumb' => 'a.note--image-link',
         'img' => 'img',
-        'a-zoom' => 'a.note--zoom',
         'a-title' => 'a.note--title',
         'div-supplier' => 'div.note--supplier',
         'p-number' => 'div.note--ordernumber',
