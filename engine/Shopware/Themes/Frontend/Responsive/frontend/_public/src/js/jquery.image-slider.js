@@ -1,6 +1,31 @@
 ;(function ($, Modernizr, window, Math) {
     'use strict';
 
+    var div = document.createElement('div');
+
+    function getVendorPropertyName(property) {
+        if (property in div.style) {
+            return property;
+        }
+
+        var prefixes = ['Moz', 'Webkit', 'O', 'ms'],
+            prop = property.charAt(0).toUpperCase() + property.substr(1),
+            len = prefixes.length,
+            i = 0,
+            vendorProp;
+
+        for (; i < len; i++) {
+            vendorProp = prefixes[i] + prop;
+
+            if (vendorProp in div.style) {
+                return vendorProp;
+            }
+        }
+    }
+
+    var transitionProperty = getVendorPropertyName('transition'),
+        transformProperty = getVendorPropertyName('transform');
+
     /**
      * Image Slider Plugin.
      *
@@ -1029,28 +1054,28 @@
             var me = this,
                 translation = me.imageTranslation,
                 scale = me.imageScale,
-                newPosition = me.getTransformedPosition(translation.x, translation.y, scale);
+                newPosition = me.getTransformedPosition(translation.x, translation.y, scale),
+                image = me.$currentImage[0],
+                animationSpeed = me.opts.animationSpeed;
 
             translation.set(newPosition.x, newPosition.y);
 
-            if (!animate || !Modernizr.csstransitions) {
-                me.$currentImage.css('transform', 'scale(' + scale + ') translate(' + translation.x + 'px, ' + translation.y + 'px)');
+            image.style[transitionProperty] = animate ? ('all ' + animationSpeed + 'ms') : '';
 
-                $.publish('plugin/imageSlider/updateTransform', [ me ]);
+            image.style[transformProperty] = 'scale(' + scale + ') translate(' + translation.x + 'px, ' + translation.y + 'px)';
 
-                if (callback) {
-                    callback.call(me);
-                }
+            $.publish('plugin/imageSlider/updateTransform', [ me ]);
+
+            if (!callback) {
                 return;
             }
 
-            me.$currentImage.transition({
-                'scale': scale,
-                'x': translation.x,
-                'y': translation.y
-            }, me.opts.animationSpeed, 'cubic-bezier(.2,.76,.5,1)', callback);
+            if (!animate) {
+                callback.call(me);
+                return;
+            }
 
-            $.publish('plugin/imageSlider/updateTransform', [ me ]);
+            setTimeout($.proxy(callback, me), animationSpeed);
         },
 
         /**
@@ -1481,7 +1506,7 @@
             me.resetTransformation(false);
 
             me.$slideContainer = null;
-            me.$slides = null;
+            me.$items = null;
             me.$currentImage = null;
 
             if (opts.dotNavigation && me.$dots) {
