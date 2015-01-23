@@ -105,6 +105,7 @@
 
     .table--media {
         width: 100%;
+        position: relative;
 
         .table--media-outer {
             .border-radius(2px);
@@ -252,6 +253,30 @@
 
     .product--delivery {
         margin: 0;
+    }
+
+    .cart--badge {
+        .border-radius(3px 0 0 3px);
+        position: absolute;
+        width: 20px;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: @brand-primary;
+
+        span{
+            .rotate(-90deg);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: block;
+            position: absolute;
+            width: 70px;
+            top: 0;
+            bottom: 0;
+        }
     }
 
     .basket--badge {
