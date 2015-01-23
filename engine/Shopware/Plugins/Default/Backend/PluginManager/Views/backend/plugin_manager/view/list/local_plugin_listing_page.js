@@ -119,9 +119,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 }
 
                 if (record.allowActivate()) {
-                    return 'sprite-battery-empty';
+                    return 'sprite-ui-check-box-uncheck';
                 } else {
-                    return 'sprite-battery-full';
+                    return 'sprite-ui-check-box';
                 }
             }
         });
