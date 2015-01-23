@@ -75,7 +75,7 @@
 	}
 
     .alert {
-        .unitize-margin(0, 0, 20, 0);
+        .unitize-margin(0, 0, 10, 0);
     }
 
 	.product--tax {
@@ -444,16 +444,20 @@
 	}
 	.notification--field {
 		.border-radius-multi(3px, 0, 0, 3px);
+        position: relative;
 		width: 80%;
+
+        &:focus { z-index: 1; }
 	}
 	.notification--button {
-        .unitize(23, 16, line-height);
+		.unitize-padding(3, 10);
         .border-radius-multi(0, 3px, 3px, 0);
+        .unitize(-1, 16, margin-left);
+        position: relative;
 		width: 20%;
-        text-align: center;
 
         .icon--mail {
-            margin: 0;
+            .unitize(12, 16, font-size);
         }
 	}
 }
@@ -911,10 +915,6 @@
 
         .alert {
             .unitize-margin(0, 0, 10, 0);
-        }
-
-        .notification--button {
-            .unitize(20, 16, line-height);
         }
     }
 }
