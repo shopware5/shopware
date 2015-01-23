@@ -3,7 +3,7 @@
 {* Categorie headline *}
 {block name="frontend_listing_text"}
     {if $sCategoryContent.cmsheadline && $sCategoryContent.cmstext}
-        <div class="hero-unit category--teaser panel">
+        <div class="hero-unit category--teaser panel has--border is--rounded">
 
             {* Headline *}
             {block name="frontend_listing_text_headline"}

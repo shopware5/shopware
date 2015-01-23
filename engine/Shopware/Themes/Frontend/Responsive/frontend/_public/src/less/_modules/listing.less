@@ -12,10 +12,8 @@
 .category--teaser {
     .unitize-margin(0, 0, 20, 0);
 
-    .panel--title { margin: 0 }
-
     .hero--text {
-        .unitize-padding(10, 0);
+        .unitize-padding(10, 20);
     }
 }
 
@@ -65,8 +63,6 @@
 
 // Filter options
 .action--filter-options {
-    border-right: 1px solid @border-color;
-
     .filter--container {
         .unitize-padding(0, 10);
     }
@@ -77,8 +73,6 @@
         display: block;
         color: #fff;
         font-weight: bold;
-        text-shadow: 1px 1px 0 @text-color-dark;
-        border-bottom: 1px solid @border-color;
 
         &:hover {
             color: #fff;
@@ -186,11 +180,11 @@
 	.category--teaser {
 		.hero--headline {
 			.unitize(@font-size-h1, 16, font-size);
-			.unitize-padding(20, 0, 0, 0);
-			.unitize-margin(0, 0);
+			.unitize-padding(40, 0, 0, 0);
+			.unitize-margin(0, 40);
 		}
 		.hero--text {
-			.unitize-padding(25, 0, 10, 0);
+			.unitize-padding(25, 40, 10, 40);
 		}
 	}
 
@@ -225,8 +219,8 @@
     }
 
     .action--per-page {
-        display: inline-block;
         .unitize(32, 16, line-height);
+        display: inline-block;
         width: 30%;
         text-align: right;
         float: right;

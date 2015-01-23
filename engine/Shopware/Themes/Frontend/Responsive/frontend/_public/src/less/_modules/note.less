@@ -2,17 +2,18 @@
 	.unitize-margin(20, 0);
 }
 
-.note--table-head {
-    display: none;
+.panel--td {
+    padding: 0;
 }
 
 .note--item {
+    .unitize-padding(20, 0);
     position: relative;
 }
 
 .note--info,
 .note--sale {
-    width: 100%;
+    width: 80%;
 }
 
 .note--image-container {
@@ -40,10 +41,6 @@
     margin: 0 auto;
 }
 
-.note--zoom {
-    display: none;
-}
-
 .note--title {
     .unitize-margin(0, 0, 5, 95);
     .unitize(18, 16, font-size);
@@ -69,16 +66,17 @@
 }
 
 .note--ordernumber,
-.note--date {
+.note--date,
+.product--rating {
     .unitize-margin(0, 0, 0, 95);
+    display: block;
 }
 
 .note--delivery {
     .unitize-margin(0, 0, 0, 95);
 
     .delivery--status-icon {
-        .unitize(7, 16, top);
-        float: left;
+        display: none;
     }
 
     .delivery--text-available {
@@ -104,11 +102,13 @@
 .note--price-unit {
     .unitize-margin(5, 0, 0, 95);
     .unitize(12, 16, font-size);
+    .unitize(18, 16, line-height);
+    display: block;
 }
 
 .note--price {
     .unitize(18, 16, font-size);
-    .unitize-margin(0, 0, 0, 95);
+    .unitize-margin(15, 0, 0, 95);
     color: @text-color-dark;
     font-weight: bold;
 }
@@ -116,12 +116,13 @@
 .note--delete {
     .unitize-width(40);
     .unitize-height(40);
-    .unitize(100, 16, top);
-    .unitize(26, 16, left);
     .unitize(10, 16, font-size);
     .unitize(38, 16, line-height);
     .linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
     .border-radius();
+    .unitize(20, 16, top);
+    right: 0;
+    left: auto;
     display: block;
     position: absolute;
     border: 1px solid @btn-default-border-color;
@@ -133,84 +134,75 @@
         color: @btn-default-hover-text-color;
         border-color: @btn-default-hover-border-color;
     }
+
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .note--table {
+        .unitize-padding(0, 20);
+
+        &.has--border {
+            border: 1px solid @panel-border;
+        }
+    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
-
     .note--table {
-        .unitize-padding(0, 20);
         background: @table-row-bg;
-    }
 
-    .note--table-head {
-        display: block;
-    }
-
-    .note--item {
-        .unitize-padding(20, 0);
-        position: relative;
-    }
-
-    .note--info {
-        .unitize(20, 16, padding-right);
-        width: 70%;
-    }
-
-    .note--sale {
-        width: 30%;
-    }
-
-    .note--zoom {
-        .unitize(12, 16, font-size);
-        display: block;
-        color: @text-color;
-        text-align: center;
-
-        &:hover {
-            color: @brand-primary;
+        .note--info {
+            .unitize(20, 16, padding-right);
+            width: 70%;
         }
-    }
 
-    .note--title {
-        .unitize-margin(0, 0, 5, 135);
-    }
+        .note--sale {
+            .unitize(55, 16, padding-right);
+            width: 30%;
+        }
 
-    .note--rating {
-        .unitize-margin(0, 0, 10, 135);
-    }
+        .note--zoom {
+            .unitize(12, 16, font-size);
+            display: block;
+            color: @text-color;
+            text-align: center;
 
-    .note--supplier,
-    .note--ordernumber,
-    .note--date {
-        .unitize-margin(0, 0, 0, 135);
-        display: block;
-    }
+            &:hover {
+                color: @brand-primary;
+            }
+        }
 
-    .note--delivery {
-        .unitize-margin(0, 0, 0, 135);
-    }
+        .note--title {
+            .unitize-margin(0, 0, 5, 105);
+        }
 
-    .note--compare {
-        .unitize-margin(10, 0, 0, 0);
-    }
+        .note--supplier,
+        .note--ordernumber,
+        .note--date,
+        .product--rating {
+            .unitize-margin(0, 0, 0, 105);
+            display: block;
+        }
 
-    .note--price {
-        margin: 0;
-    }
+        .note--delivery {
+            .unitize-margin(0, 0, 0, 105);
+        }
 
-    .note--price-unit {
-        .unitize-margin(5, 0, 0, 0);
-    }
+        .note--compare {
+            .unitize-margin(5, 0, 0, 0);
+        }
 
-    .note--delete {
-        .unitize(30, 16, top);
-        .unitize(10, 16, right);
-        left: auto;
+        .note--price {
+            margin: 0;
+        }
+
+        .note--price-unit {
+            .unitize-margin(5, 0, 0, 0);
+        }
     }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-
     .note--content {
         .unitize-margin(45, 0, 0, 0);
     }

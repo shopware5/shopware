@@ -166,14 +166,21 @@ body {
         .sidebar--navigation .navigation--link {
             .unitize-padding(10, 10);
             line-height: inherit;
-
-            .is--icon-right,
-            .is--icon-left {
-                display: none;
-            }
         }
 
-        .navigation--entry .entry--close-off-canvas {
+        .account--menu .navigation--link {
+            .unitize-padding(5, 0);
+            line-height: inherit;
+        }
+    }
+
+    .sidebar-main {
+        .entry--close-off-canvas {
+            display: none;
+        }
+
+        .icon--arrow-right,
+        .icon--arrow-left {
             display: none;
         }
     }

@@ -2,13 +2,18 @@
     .clearfix();
     .unitize-margin(0, 0 , 20, 0);
 
-    .panel--title {
-        margin: 0;
+    .topseller--content {
+        .unitize-padding(0, 10);
     }
 
     .product-slider--arrow {
-        &.arrow--next { right: 10; }
-        &.arrow--prev { left: 10; }
+        &.arrow--next {
+            .unitize(-1, 16, right);
+        }
+
+        &.arrow--prev {
+            .unitize(-1, 16, left);
+        }
     }
 }
 
