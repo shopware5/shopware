@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.Performance', {
         'Settings',
         'Cache',
         'MultiRequest',
-        'Direct'
+        'Direct',
+        'Start'
     ],
 
 
@@ -67,6 +68,8 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.cache.Main',
         'tabs.cache.Form',
         'tabs.cache.Info',
+
+        'tabs.start.Main',
 
         'tabs.settings.Main',
         'tabs.settings.Navigation',

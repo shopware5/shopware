@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * Shopware Performance Controller
@@ -44,6 +48,90 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     protected function initAcl()
     {
+    }
+
+    /**
+     * get productive mode
+     */
+    public function getProductiveModeAction()
+    {
+        $httpCache = $this->getPluginByName('HttpCache');
+
+        $active = ($httpCache->getActive() && $httpCache->getInstalled() != null);
+
+        $this->View()->assign([
+            'success' => true,
+            'productiveMode' => $active
+        ]);
+    }
+
+    /**
+     * set productive mode true or false
+     * enable and disable caching by enable or disable plugin 'HttpCache'
+     */
+    public function toggleProductiveModeAction()
+    {
+        $httpCache = $this->getPluginByName('HttpCache');
+
+        if (!$httpCache) {
+            $this->View()->assign(['success' => false, 'state' => 'not_found']);
+            return;
+        }
+
+        switch($httpCache->getActive()) {
+            case true:
+                $this->deactivateHttpCache($httpCache);
+                break;
+            case false:
+                $this->activeHttpCache($httpCache);
+                break;
+        }
+
+        $this->View()->assign(['success' => true]);
+    }
+
+    /**
+     * activate httpCache-Plugin
+     * @param Plugin $httpCache
+     */
+    private function activeHttpCache($httpCache)
+    {
+        /**@var $service InstallerService*/
+        $service = Shopware()->Container()->get('shopware.plugin_manager');
+
+        if (!$httpCache->getInstalled()) {
+            $service->installPlugin($httpCache);
+        }
+        if (!$httpCache->getActive()) {
+            $service->activatePlugin($httpCache);
+        }
+    }
+
+    /**
+     * deactivate httpCache-Plugin
+     * @param Plugin $httpCache
+     */
+    public function deactivateHttpCache($httpCache)
+    {
+        if (!$httpCache->getActive()) {
+            return;
+        }
+
+        /**@var $service InstallerService*/
+        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service->deactivatePlugin($httpCache);
+    }
+
+    /**
+     * Get plugin orm-model by name
+     * @param $name
+     * @return null|Plugin
+     */
+    private function getPluginByName($name)
+    {
+        $repo = $this->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
+
+        return $repo->findOneBy(['name' => $name]);
     }
 
     /**
@@ -256,16 +344,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
-        $repo = Shopware()->Models()->getRepository(
-            'Shopware\Models\Plugin\Plugin'
-        );
-
-        /** @var \Shopware\Models\Plugin\Plugin $plugin */
-        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
-        $plugin->setActive($data['enabled']);
-
-        Shopware()->Models()->flush($plugin);
-
         $lines = array();
         foreach ($data['cacheControllers'] as $entry) {
             $lines[] = $entry['key'] . ' ' . $entry['value'];
@@ -484,15 +562,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $repo = Shopware()->Models()->getRepository(
-            'Shopware\Models\Plugin\Plugin'
-        );
-
-        /** @var \Shopware\Models\Plugin\Plugin $plugin */
-        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
-
         return array(
-            'enabled'            => $plugin->getActive(),
             'cacheControllers'   => $cacheControllers,
             'noCacheControllers' => $noCacheControllers,
             'HttpCache:proxyPrune' => $this->readConfig('HttpCache:proxyPrune'),
@@ -551,9 +621,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $shopId = (int)$this->Request()->getParam('shopId', 1);
 
-        /** @var Shopware\Components\HttpCacheWarmer\CacheWarmer $cacheWarmer */
+        /**@var $cacheWarmer \Shopware\Components\HttpCache\CacheWarmer*/
         $cacheWarmer = $this->get('http_cache_warmer');
-
 
         $this->View()->assign(
             array(

@@ -98,13 +98,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.HttpCache', {
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/http/enabled}Enable{/s}',
-                        name: 'httpCache[enabled]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
                         fieldLabel: '{s name=fieldset/http/ban}Enable Proxy BAN{/s}',
                         name: 'httpCache[HttpCache:proxyPrune]',
                         xtype: 'checkbox',
