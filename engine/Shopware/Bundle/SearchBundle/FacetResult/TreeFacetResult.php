@@ -63,21 +63,35 @@ class TreeFacetResult
     private $values;
 
     /**
+     * @var string|null
+     */
+    private $template = null;
+
+    /**
      * @param string $facetName
      * @param string $fieldName
      * @param boolean $active
      * @param string $label
      * @param TreeItem[] $values
+     * @param null|string $template
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $fieldName, $active, $label, $values, $attributes = [])
-    {
+    public function __construct(
+        $facetName,
+        $fieldName,
+        $active,
+        $label,
+        $values,
+        $attributes = [],
+        $template = null
+    ) {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;
         $this->active = $active;
         $this->label = $label;
         $this->values = $values;
         $this->attributes = $attributes;
+        $this->template = $template;
     }
 
     /**
@@ -118,5 +132,13 @@ class TreeFacetResult
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }

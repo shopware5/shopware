@@ -63,21 +63,35 @@ class ValueListFacetResult
     private $values;
 
     /**
+     * @var string|null
+     */
+    private $template = null;
+
+    /**
      * @param string $facetName
      * @param boolean $active
      * @param string $label
      * @param ValueListItem[] $values
      * @param string $fieldName
+     * @param string|null $template
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $active, $label, $values, $fieldName, $attributes = [])
-    {
+    public function __construct(
+        $facetName,
+        $active,
+        $label,
+        $values,
+        $fieldName,
+        $attributes = [],
+        $template = 'frontend/listing/filter/facet-value-list.tpl'
+    ) {
         $this->facetName = $facetName;
         $this->active = $active;
         $this->label = $label;
         $this->values = $values;
         $this->fieldName = $fieldName;
         $this->attributes = $attributes;
+        $this->template = $template;
     }
 
     /**
@@ -118,5 +132,13 @@ class ValueListFacetResult
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }
