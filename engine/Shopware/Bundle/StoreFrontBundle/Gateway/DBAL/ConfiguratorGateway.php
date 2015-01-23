@@ -173,12 +173,10 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(
-            [
+        $query->select([
             'relations.option_id',
             "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations"
-            ]
-        );
+        ]);
 
         $query->from('s_article_configurator_option_relations', 'relations');
 
@@ -186,7 +184,9 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             'relations',
             's_articles_details',
             'variant',
-            'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1'
+            'variant.id = relations.article_id
+             AND variant.articleID = :articleId
+             AND variant.active = 1'
         );
 
         $query->innerJoin(
@@ -197,7 +197,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
         );
 
-        $query->innerJoin(
+        $query->leftJoin(
             'relations',
             's_article_configurator_option_relations',
             'assignedRelations',

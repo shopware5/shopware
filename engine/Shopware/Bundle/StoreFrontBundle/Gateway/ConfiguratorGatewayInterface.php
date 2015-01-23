@@ -79,6 +79,15 @@ interface ConfiguratorGatewayInterface
      *     'red'   => array('S', ...)
      * )
      *
+     * If the configurator contains only one group the function has to return an array indexed
+     * by the ids, which are selectable:
+     *
+     * Example (written with the configurator option names)
+     * array(
+     *     'white' => array(),
+     *     'red'   => array()
+     * )
+     *
      * @param Struct\BaseProduct $product
      * @return array Indexed by the option id
      */
