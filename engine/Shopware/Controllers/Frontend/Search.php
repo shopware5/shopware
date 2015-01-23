@@ -75,10 +75,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $criteria = Shopware()->Container()->get('store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
-        $criteria = $this->get('events')->filter('Shopware_Search_Create_Criteria', $criteria, array(
-            'context' => $context
-        ));
-
         /**@var $result ProductSearchResult*/
         $result   = $this->get('product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);
