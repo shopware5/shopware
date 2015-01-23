@@ -11,13 +11,13 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader} is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}">
+<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader && ({controllerName} == "checkout" && {controllerAction} != "cart") || {controllerName} == "register" } is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}">
 	<div class="page-wrap">
 
 		{* Message if javascript is disabled *}
 		{block name="frontend_index_no_script_message"}
 			<noscript class="noscript-main">
-				{s name="IndexNoscriptNotice"}{/s}
+                {include file="frontend/_includes/messages.tpl" type="warning" content="{s name="IndexNoscriptNotice"}{/s}" borderRadius=false}
 			</noscript>
 		{/block}
 

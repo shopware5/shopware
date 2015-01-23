@@ -8,32 +8,28 @@
 			{/block}
 
 			{block name="frontend_checkout_footer_benefits_list"}
-				<ul class="list--unstyled benefit--list">
+				<ul class="list--unordered is--checked benefit--list">
 
 					{block name="frontend_checkout_footer_benefits_list_entry_1"}
 						<li class="list--entry">
-							<i class="icon--check"></i>
 							{s name='RegisterInfoAdvantagesEntry1' namespace="frontend/register/index"}{/s}
 						</li>
 					{/block}
 
 					{block name="frontend_checkout_footer_benefits_list_entry_2"}
 						<li class="list--entry">
-							<i class="icon--check"></i>
 							{s name='RegisterInfoAdvantagesEntry2' namespace="frontend/register/index"}{/s}
 						</li>
 					{/block}
 
 					{block name="frontend_checkout_footer_benefits_list_entry_3"}
 						<li class="list--entry">
-							<i class="icon--check"></i>
 							{s name='RegisterInfoAdvantagesEntry3' namespace="frontend/register/index"}{/s}
 						</li>
 					{/block}
 
 					{block name="frontend_checkout_footer_benefits_list_entry_4"}
 						<li class="list--entry">
-							<i class="icon--check"></i>
 							{s name='RegisterInfoAdvantagesEntry4' namespace="frontend/register/index"}{/s}
 						</li>
 					{/block}

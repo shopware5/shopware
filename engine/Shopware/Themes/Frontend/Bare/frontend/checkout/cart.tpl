@@ -51,7 +51,7 @@
                                     {block name="frontend_checkout_actions_link_last"}
                                         <a href="{$sBasket.sLastActiveArticle.link}"
                                            title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                           class="btn is--secondary left continue-shopping--action is--icon-left is--large">
+                                           class="btn btn--checkout-continue is--secondary left continue-shopping--action is--icon-left is--large">
                                             <i class="icon--arrow-left"> </i>{s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                         </a>
                                     {/block}
@@ -64,7 +64,7 @@
                                         {block name="frontend_checkout_actions_checkout"}
                                             <a href="{url action=confirm}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                               class="btn is--primary right is--icon-right is--large">
+                                               class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
                                                 <i class="icon--arrow-right"></i>
                                             </a>
@@ -121,7 +121,7 @@
                                         {block name="frontend_checkout_actions_link_last_bottom"}
                                             <a href="{$sBasket.sLastActiveArticle.link}"
                                                title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                               class="btn is--secondary is--left continue-shopping--action is--icon-left is--large">
+                                               class="btn btn--checkout-continue is--secondary is--left continue-shopping--action is--icon-left is--large">
                                                 <i class="icon--arrow-left"></i> {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                             </a>
                                         {/block}
@@ -132,7 +132,7 @@
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                             <a href="{url action=confirm}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                               class="btn is--primary right is--icon-right is--large">
+                                               class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
                                                 <i class="icon--arrow-right"></i>
                                             </a>
@@ -144,7 +144,7 @@
                                     {block name="frontend_checkout_actions_inquiry"}
                                         <a href="{$sInquiryLink}"
                                            title="{"{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}"|escape}"
-                                           class="btn is--secondary btn--inquiry is--large is--full is--center">
+                                           class="btn btn--inquiry is--large is--full is--center">
                                             {s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
                                         </a>
                                     {/block}
