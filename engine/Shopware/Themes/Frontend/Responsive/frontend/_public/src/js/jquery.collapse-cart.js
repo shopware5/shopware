@@ -68,42 +68,7 @@
              *
              * @type {String} displayMode
              */
-            'displayMode': 'collapsible',
-
-            /**
-             * Message that will be shown in the success alert box.
-             *
-             * @type {String}
-             */
-            'successMessage': 'The product was successfully added to your shopping cart',
-
-            /**
-             * Class that will be used for the alert box itself.
-             *
-             * @type {String}
-             */
-            'successAlertClass': 'alert is--success is--rounded',
-
-            /**
-             * Class that will be used for the alert content.
-             *
-             * @type {String}
-             */
-            'successAlertContentClass': 'alert--content',
-
-            /**
-             * Class that will be used for the alert icon wrapper.
-             *
-             * @type {String}
-             */
-            'successAlertIconWrapperClass': 'alert--icon',
-
-            /**
-             * Class that will be used for the alert icon itself.
-             *
-             * @type {String}
-             */
-            'successAlertIconClass': 'icon--element icon--check'
+            'displayMode': 'collapsible'
         },
 
         /**
@@ -146,47 +111,6 @@
              * @type {Boolean}
              */
             me._isOpened = false;
-
-            /**
-             * The Icon wrapper and icon of the success message.
-             *
-             * @private
-             * @property _$successIcon
-             * @type {jQuery}
-             */
-            me._$successIcon = $('<div>', {
-                'class': opts.successAlertIconWrapperClass,
-                'html': $('<div>', {
-                    'class': opts.successAlertIconClass
-                })
-            });
-
-            /**
-             * Content wrapper for the success message.
-             *
-             * @private
-             * @property _$successContent
-             * @type {jQuery}
-             */
-            me._$successContent = $('<div>', {
-                'class': opts.successAlertContentClass,
-                'html': opts.successMessage
-            });
-
-            /**
-             * The success message that contains the icon wrapper and content element.
-             *
-             * @private
-             * @property _$successMessage
-             * @type {jQuery}
-             */
-            me._$successMessage = $('<div>', {
-                'class': opts.successAlertClass,
-                'html': [
-                    me._$successIcon,
-                    me._$successContent
-                ]
-            });
 
             // if the display mode is "offcanvas", call the offcanvas plugin.
             if (me.isDisplayMode('offcanvas')) {
@@ -238,7 +162,7 @@
 
         /**
          * Will be fired from the addArticle plugin before the add-AJAX request is finished.
-         * Loads the cart and adds a success message to the item container.
+         * Loads the cart via AJAX and appends it to the basket.
          *
          * @event onArticleAdded
          */
@@ -249,9 +173,10 @@
                 return;
             }
 
-            me.$el.html(response);
-
-            me.$el.find(me.opts.itemContainerSelector).before(me._$successMessage.clone());
+            me.$el
+                .html(response)
+                .find('.ajax--cart .alert')
+                .removeClass('is--hidden');
         },
 
         /**
