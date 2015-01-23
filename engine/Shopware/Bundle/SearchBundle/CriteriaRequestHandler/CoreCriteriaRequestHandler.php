@@ -314,7 +314,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $condition = new CustomerGroupCondition(
             [$context->getCurrentCustomerGroup()->getId()]
         );
-        $criteria->addCondition($condition);
+        $criteria->addBaseCondition($condition);
     }
 
     /**

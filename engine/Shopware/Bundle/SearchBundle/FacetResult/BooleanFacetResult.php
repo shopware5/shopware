@@ -58,19 +58,32 @@ class BooleanFacetResult
     private $label;
 
     /**
-     * @param string  $facetName
-     * @param string  $fieldName
+     * @var string|null
+     */
+    private $template = null;
+
+    /**
+     * @param string $facetName
+     * @param string $fieldName
      * @param boolean $active
-     * @param string  $label
+     * @param string $label
+     * @param string|null $template
      * @param Attribute[] $attributes
      */
-    public function __construct($facetName, $fieldName, $active, $label, $attributes = [])
-    {
+    public function __construct(
+        $facetName,
+        $fieldName,
+        $active,
+        $label,
+        $attributes = [],
+        $template = 'frontend/listing/filter/facet-boolean.tpl'
+    ) {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;
         $this->active = $active;
         $this->label = $label;
         $this->attributes = $attributes;
+        $this->template = $template;
     }
 
     /**
@@ -104,4 +117,13 @@ class BooleanFacetResult
     {
         return $this->label;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
 }

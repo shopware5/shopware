@@ -53,17 +53,29 @@ class FacetResultGroup
     private $label;
 
     /**
+     * @var string|null
+     */
+    private $template = null;
+
+    /**
      * @param FacetResultInterface[] $facetResults
      * @param string|null $headline
      * @param string $facetName
      * @param Attribute[] $attributes
+     * @param string|null $template
      */
-    public function __construct($facetResults, $headline, $facetName, $attributes = [])
-    {
+    public function __construct(
+        $facetResults,
+        $headline,
+        $facetName,
+        $attributes = [],
+        $template = 'frontend/listing/filter/facet-group.tpl'
+    ) {
         $this->facetResults = $facetResults;
         $this->label = $headline;
         $this->facetName = $facetName;
         $this->attributes = $attributes;
+        $this->template = $template;
     }
 
     /**
@@ -97,4 +109,14 @@ class FacetResultGroup
     {
         return $this->facetResults;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+
 }
