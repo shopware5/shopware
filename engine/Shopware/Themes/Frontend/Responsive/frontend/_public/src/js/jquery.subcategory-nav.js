@@ -179,18 +179,26 @@
             /**
              * Easing function for sliding a slide into the viewport.
              *
-             * @property fadeInEasing
+             * @property easingIn
              * @type {String}
              */
-            'fadeInEasing': 'cubic-bezier(.16,.04,.14,1)',
+            'easingIn': 'cubic-bezier(.16,.04,.14,1)',
 
             /**
              * Easing function for sliding a slide out of the viewport.
              *
-             * @property fadeOutEasing
+             * @property easingOut
              * @type {String}
              */
-            'fadeOutEasing': 'cubic-bezier(.2,.76,.5,1)'
+            'easingOut': 'cubic-bezier(.2,.76,.5,1)',
+
+            /**
+             * The animation easing used when transitions are not supported.
+             *
+             * @property easingFallback
+             * @type {String}
+             */
+            'easingFallback': 'swing'
         },
 
         /**
@@ -202,6 +210,7 @@
          */
         init: function () {
             var me = this,
+                transitionSupport = Modernizr.csstransitions,
                 opts;
 
             // Overwrite plugin configuration with user configuration
@@ -261,7 +270,25 @@
              * @property slideFunction
              * @type {String}
              */
-            me.slideFunction = (Modernizr.csstransitions) ? 'transition' : 'animate';
+            me.slideFunction = transitionSupport ? 'transition' : 'animate';
+
+            /**
+             * Easing used for the slide in.
+             *
+             * @private
+             * @property easingEffectIn
+             * @type {String}
+             */
+            me.easingEffectIn = transitionSupport ? opts.easingIn : opts.easingFallback;
+
+            /**
+             * Easing used for the slide out.
+             *
+             * @private
+             * @property easingEffectOut
+             * @type {String}
+             */
+            me.easingEffectOut = transitionSupport ? opts.easingOut : opts.easingFallback;
 
             /**
              * Flag to determine whether or not a slide is in a current
@@ -447,7 +474,7 @@
 
             $slide = $overlays.not('.' + opts.backSlideClass);
 
-            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, opts.fadeOutEasing, function () {
+            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, me.easingEffectOut, function () {
                 $slide.remove();
 
                 me.inProgress = false;
@@ -482,7 +509,7 @@
                 'display': 'block'
             });
 
-            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeed, opts.fadeInEasing, function () {
+            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeed, me.easingEffectIn, function () {
                 // remove background layer
                 $overlays.each(function (i, el) {
                     $el = $(el);
@@ -523,7 +550,7 @@
             // fade in arrow icons
             me.$sidebarWrapper.find(me.opts.iconRightSelector).fadeIn('slow');
 
-            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, opts.fadeOutEasing, function () {
+            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, me.easingEffectOut, function () {
                 $overlay.remove();
 
                 // enable scrolling on main menu
