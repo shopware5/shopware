@@ -103,7 +103,9 @@ Ext.define('Shopware.apps.Index.view.Menu', {
                     return;
                 }
 
-                callback(responseData);
+                if (responseData.success == true) {
+                    callback(responseData.data);
+                }
             }
         });
     },
