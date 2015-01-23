@@ -55,7 +55,8 @@ Ext.define('Shopware.apps.Index.view.Menu', {
             success: function(response) {
                 me.items = Ext.decode(response.responseText);
                 me.fireEvent('menu-created', me.items);
-                me.checkExpiredPlugin();
+
+                Ext.create('Shopware.notification.ExpiredLicence').check();
             }
         });
 
@@ -65,48 +66,6 @@ Ext.define('Shopware.apps.Index.view.Menu', {
         // Add event listener which sets the width of the toolbar to the viewport width
         Ext.EventManager.onWindowResize(function(width, height) {
             me.setWidth(width);
-        });
-    },
-
-    /**
-     * Check if any plugins are expired
-     */
-    checkExpiredPlugin: function() {
-        var me = this;
-
-        me.getExpiredPlugins(function(data) {
-            var text = (Ext.Object.getSize(data) > 1) ? '{s name="licenses_expired_long"}{/s}:<br/>' : '{s name="license_expired_long"}{/s}:<br/>';
-
-            Ext.each(data, function(data){
-                var dateStr = Ext.util.Format.date(data.expireDate);
-                var snippet = '{s name="license_expired_line_text"}{/s}<br/>';
-                text += Ext.String.format(snippet, data.plugin, dateStr);
-            });
-
-            Shopware.Notification.createStickyGrowlMessage({
-                title : (Ext.Object.getSize(data) > 1) ? '{s name="licenses_expired"}{/s}' : '{s name="license_expired"}{/s}',
-                text  : text,
-                width : 440,
-                height: 300
-            });
-        });
-    },
-
-    getExpiredPlugins: function(callback) {
-        Ext.Ajax.request({
-            url: '{url controller="base" action="checkExpiredPlugin"}',
-            async: false,
-            success: function (response) {
-                var responseData = Ext.decode(response.responseText);
-
-                if (Ext.isEmpty(responseData.data)) {
-                    return;
-                }
-
-                if (responseData.success == true) {
-                    callback(responseData.data);
-                }
-            }
         });
     },
 
