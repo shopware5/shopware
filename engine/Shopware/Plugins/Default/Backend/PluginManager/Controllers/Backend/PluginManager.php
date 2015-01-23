@@ -122,9 +122,14 @@ class Shopware_Controllers_Backend_PluginManager
             $sort
         );
 
-        /**@var $listingResult ListingResultStruct*/
-        $listingResult = $this->get('plugin_service_view')
-            ->getStoreListing($context);
+        try {
+            /**@var $listingResult ListingResultStruct */
+            $listingResult = $this->get('plugin_service_view')
+                ->getStoreListing($context);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
         $this->View()->assign([
             'success' => true,
