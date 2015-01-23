@@ -64,11 +64,18 @@
         .clearfix();
         .unitize(10, 16, margin-top);
         position: relative;
+
+        .btn--checkout-proceed,
+        .btn--checkout-continue {
+            width: 100%;
+            text-align: center;
+            .unitize(10, 16, margin-bottom);
+        }
     }
 
     .actions--bottom {
         .main--actions {
-            .unitize(10, 16, margin-bottom);
+            .unitize(0, 16, margin-bottom);
         }
     }
 
@@ -159,7 +166,7 @@
 
     // Product title
     .content--title {
-        .unitize(18, 16, font-size);
+        .unitize(16, 16, font-size);
         font-weight: bold;
         color: @text-color;
     }
@@ -366,13 +373,6 @@
 
         .benefit--text {
             .unitize(14, 16, font-size);
-        }
-        .benefit--list .list--entry {
-            .unitize(24, 16, line-height);
-        }
-        .benefit--list .icon--check {
-            .unitize(10, 16, font-size);
-            .unitize(10, 16, padding-right);
         }
     }
 
@@ -757,6 +757,16 @@
             width: 85%;
         }
 
+        .table--actions {
+
+            .btn--checkout-proceed,
+            .btn--checkout-continue {
+                width: 49%;
+                text-align: center;
+                .unitize(0, 16, margin-bottom);
+            }
+        }
+
         .column--product .column--image {
             width: 15%;
         }
@@ -779,6 +789,10 @@
 
             .js--fancy-select {
                 float: left;
+            }
+
+            .js--fancy-select-text {
+                font-weight: bold;
             }
         }
         .column--unit-price {
@@ -815,6 +829,12 @@
 
         .add-product--field {
             width: 55%;
+        }
+
+        .actions--bottom {
+            .main--actions {
+                .unitize(10, 16, margin-bottom);
+            }
         }
     }
 
@@ -1112,7 +1132,14 @@
                 .unitize-width(260);
                 top: 0;
                 position: absolute;
-                left: 55%;
+                left: 50%;
+            }
+
+            .btn--checkout-proceed,
+            .btn--checkout-continue {
+                width: 25%;
+                text-align: center;
+                .unitize(0, 16, margin-bottom);
             }
         }
 

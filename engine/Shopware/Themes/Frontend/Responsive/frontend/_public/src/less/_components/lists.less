@@ -1,0 +1,27 @@
+.list--unordered {
+    .unitize(20, 16, padding-left);
+    list-style-type: none;
+
+    // Default styling for unordered lists
+    li {
+        .icon-element();
+        .unitize(24, 16, line-height)
+    }
+
+    // Other list icons
+    &.is--disc li { .icon-element('\e656'); }
+    &.is--checked li { .icon-element('\e60c'); }
+    &.is--arrow-right li { .icon-element('\e60f', 10); }
+    &.is--star li { .icon-element('\e600', 10); }
+    &.is--cross li { .icon-element('\e60d'); }
+    &.is--tag li { .icon-element('\e640'); }
+    &.is--plus li { .icon-element('\e689'); }
+}
+
+.list--unstyled { list-style: none }
+
+.list--inline {
+    list-style: none;
+
+    li { display: inline }
+}
