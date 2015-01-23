@@ -11,6 +11,26 @@
             </div>
         {/block}
 
+        {block name='frontend_checkout_ajax_cart_alert_box'}
+            {if $theme.offcanvasCart}
+                {if $basketInfoMessage}
+                    <div class="alert is--info is--rounded is--hidden">
+                        <div class="alert--icon">
+                            <div class="icon--element icon--info"></div>
+                        </div>
+                        <div class="alert--content">{$basketInfoMessage}</div>
+                    </div>
+                {else}
+                    <div class="alert is--success is--rounded is--hidden">
+                        <div class="alert--icon">
+                            <div class="icon--element icon--check"></div>
+                        </div>
+                        <div class="alert--content">{s name="AjaxCartSuccessText" namespace="frontend/checkout/ajax_cart"}{/s}</div>
+                    </div>
+                {/if}
+            {/if}
+        {/block}
+
         {block name='frontend_checkout_ajax_cart_item_container'}
             <div class="item--container">
                 {block name='frontend_checkout_ajax_cart_item_container_inner'}
