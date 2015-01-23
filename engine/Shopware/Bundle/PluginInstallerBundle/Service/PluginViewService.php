@@ -166,7 +166,7 @@ class PluginViewService
                 $context
             );
         } catch (\Exception $e) {
-            return $local;
+            return $local->getPlugins();
         }
 
         return $merged;
