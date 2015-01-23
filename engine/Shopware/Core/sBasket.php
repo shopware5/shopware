@@ -2143,14 +2143,10 @@ class sBasket
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
             }
 
-            $articleId = null;
-            if (empty($value["modus"])) {
-                $articleId = $getArticles[$key]["articleID"];
-            } elseif ($value["modus"] == "1") {
-                $articleId = $this->db->fetchOne(
-                    "SELECT articleID FROM s_articles_details WHERE ordernumber = :ordernumber",
-                    array('ordernumber' => $getArticles[$key]["ordernumber"])
-                );
+            $articleId = $getArticles[$key]["articleID"];
+            if ($value["modus"] == "1") {
+                $premiumNumber = $getArticles[$key]["ordernumber"];
+                $articleId = $this->getArticleIdOfPremium($premiumNumber);
             }
 
             if ($articleId) {
@@ -2604,5 +2600,22 @@ class sBasket
         }
 
         return $article;
+    }
+
+    /**
+     * @param string $premiumNumber
+     * @return string|null
+     */
+    private function getArticleIdOfPremium($premiumNumber)
+    {
+        return $this->db->fetchOne(
+            "SELECT variant.articleID
+             FROM s_addon_premiums premium
+                INNER JOIN s_articles_details variant
+                  ON premium.ordernumber = variant.ordernumber
+             WHERE premium.ordernumber_export = :ordernumber
+             LIMIT 1",
+            ['ordernumber' => $premiumNumber]
+        );
     }
 }
