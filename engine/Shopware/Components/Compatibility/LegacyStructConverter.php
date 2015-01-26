@@ -669,6 +669,8 @@ class LegacyStructConverter
             $variantPrice->getCalculatedPrice()
         );
 
+        $data['sBlockPrices'] = [];
+
         return $data;
     }
 
