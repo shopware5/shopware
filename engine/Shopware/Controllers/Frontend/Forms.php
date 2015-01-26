@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Form\Form,
-    Shopware\Models\Form\Field;
+use Shopware\Models\Form\Form;
+use Shopware\Models\Form\Field;
 
 /**
  * Shopware Frontend Controller for the form module
@@ -59,7 +59,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * Render form - onSubmit checkFields -
      *
      * @throws Enlight_Exception
-     * @return void
      */
     public function indexAction()
     {
@@ -68,11 +67,57 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $this->View()->forceMail = intval($this->Request()->getParam('forceMail'));
         $this->View()->id        = $id;
+        $this->View()->sSupport  = $this->getContent($id);
+        $this->View()->rand      = md5(uniqid(rand()));
+
+        $success = $this->Request()->getParam('success');
+        if ($success) {
+            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
+        }
+
+        $this->View()->assign('success', $success);
+
+        if ($this->Request()->isPost()) {
+            $this->handleFormPost($id);
+        }
+    }
+
+    /**
+     * @param int $formId
+     * @throws Enlight_Exception
+     */
+    private function handleFormPost($formId)
+    {
+        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
+            $this->commitForm();
+
+            $this->redirect(
+                array(
+                    'controller' => 'ticket',
+                    'action' => 'index',
+                    'sFid' => $formId,
+                    'success' => 1
+                )
+            );
+            return;
+        }
+    }
+
+    /**
+     * @param integer $formId
+     * @return array
+     * @throws Enlight_Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    protected function getContent($formId)
+    {
+        $fields = array();
+        $labels = array();
 
         $shopId = $this->container->get('context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id, $shopId);
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -103,7 +148,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
-
                 if ($element["name"] == "inquiry" && !empty($this->Request()->sInquiry)) {
                     switch ($this->Request()->sInquiry) {
                         case "basket":
@@ -121,7 +165,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             }
                             break;
                         case "detail":
-                            if ($this->Request()->getParam('sOrdernumber', null) !== null ) {
+                            if ($this->Request()->getParam('sOrdernumber', null) !== null) {
                                 $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
                                 $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
                                 $text .= " " . $getName;
@@ -133,11 +177,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
 
                 $fields[$id] = $this->_createInputElement($element, $this->_postData[$id]);
-			    $labels[$id] = $this->_createLabelElement($element);
+                $labels[$id] = $this->_createLabelElement($element);
             }
         }
 
-	    // prepare form data for view
+        // prepare formadata for view
         $formData = array(
             'id'                => (string) $form->getId(),  // intended string cast to keep compatibility
             'name'              => $form->getName(),
@@ -151,21 +195,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             'metaKeywords'      => $form->getMetaKeywords(),
         );
 
-        $this->View()->sSupport = array_merge($formData, array(
+        return array_merge($formData, array(
             'sErrors'   => $this->_errors,
             'sElements' => $this->_elements,
             'sFields'   => $fields,
             'sLabels'   => $labels
-	    ));
-
-	    $this->View()->rand = md5(uniqid(rand()));
-
-        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
-            $this->commitForm();
-            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
-        }
+        ));
     }
-
 
     /**
      * Validate input - check form field rules defined by merchant
@@ -179,10 +215,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     private function checkFields()
     {
         $this->_errors = $this->_validateInput($this->Request()->getPost(), $this->_elements);
-
-        if (empty($this->Request()->Submit)) {
-            return;
-        }
 
         if (!empty(Shopware()->Config()->CaptchaColor)) {
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));

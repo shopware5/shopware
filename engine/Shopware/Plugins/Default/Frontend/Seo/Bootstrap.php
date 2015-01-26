@@ -119,9 +119,11 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
                 unset($queryBlacklist[$index]);
             }
 
-            $queryBlacklist[] = 'sCategory';
-            if (array_key_exists('sCategory', $alias)) {
-                $queryBlacklist[] = $alias['sCategory'];
+            if ($request->getQuery('sCategory') !== Shopware()->Shop()->getCategory()->getId()) {
+                $queryBlacklist[] = 'sCategory';
+                if (array_key_exists('sCategory', $alias)) {
+                    $queryBlacklist[] = $alias['sCategory'];
+                }
             }
         }
 

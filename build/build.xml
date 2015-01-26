@@ -244,7 +244,7 @@
     </target>
 
     <target name="unit-shopware-continuous" depends="build-unit">
-        <exec executable="${script.phpunit}" dir="${test.dir.shopware}">
+        <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
         </exec>
     </target>

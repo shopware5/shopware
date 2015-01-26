@@ -11,6 +11,10 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
 
         me.callParent(arguments);
 
+        if (Ext.isEmpty(me.record.getPayment().first())) {
+            return;
+        }
+
         if (me.record.getPayment().first().get('name') === 'sepa') {
             me.fieldContainer.show();
             me.accountHolderField.hide();

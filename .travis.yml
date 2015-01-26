@@ -5,8 +5,15 @@ php:
     - "5.5"
     - "5.4"
 
+sudo: false
+
+cache:
+   directories:
+     - $HOME/.composer/cache
+
 script:
     - ant -f build/build.xml -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
 
 notifications:
     email: false
+    irc: "chat.freenode.net#shopware-dev"

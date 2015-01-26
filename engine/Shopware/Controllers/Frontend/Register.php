@@ -465,7 +465,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateBilling()
     {
         $countryData = $this->admin->sGetCountryList();
-        $countryIds = array_column($countryData, 'id');
+        $countryIds = array();
+
+        foreach ($countryData as $key => $country) {
+            $countryIds[$key] = $country['id'];
+        }
 
         $rules = array(
             'company'       => array('required' => 0),
@@ -545,7 +549,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateShipping()
     {
         $countryData = $this->admin->sGetCountryList();
-        $countryIds = array_column($countryData, 'id');
+        $countryIds = array();
+
+        foreach ($countryData as $key => $country) {
+            $countryIds[$key] = $country['id'];
+        }
 
         $rules = array(
             'salutation'    => array('required' => 1),

@@ -352,7 +352,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         if ($this->Request()->isPost()) {
             $countryData = $this->admin->sGetCountryList();
-            $countryIds = array_column($countryData, 'id');
+            $countryIds = array();
+
+            foreach ($countryData as $key => $country) {
+                $countryIds[$key] = $country['id'];
+            }
 
             $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
                 && Shopware()->Config()->get('requirePhoneField'));
@@ -401,7 +405,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                ;
 
                 if ($stateSelectionRequired["display_state_in_registration"]) {
-                    $countryDataIndex = array_search($values["shipping"]["country"], $countryIds);
+                    $countryDataIndex = array_search($values["billing"]["country"], $countryIds);
                     $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
 
                     // if not required, allow empty values
@@ -476,7 +480,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         if ($this->Request()->isPost()) {
             $countryData = $this->admin->sGetCountryList();
-            $countryIds = array_column($countryData, 'id');
+            $countryIds = array();
+
+            foreach ($countryData as $key => $country) {
+                $countryIds[$key] = $country['id'];
+            }
 
             $rules = array(
                 'salutation'        => array('required' => 1),

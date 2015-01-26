@@ -107,6 +107,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
 
+        if (!$category || !$pages || !$limit) {
+            $this->Response()->setHttpResponseCode(404);
+            return;
+        }
+
         $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
 
         if (!$category) {

@@ -11,6 +11,16 @@
 		<div class="teaser">
 			<h2 class="center">{se name="FinishHeaderThankYou"}{/se} {$sShopname}!</h2>
 
+			{if $confirmMailDeliveryFailed}
+				<p class="error">
+					{se name="FinishInfoConfirmationMailFailed"}{/se}
+				</p>
+			{else}
+				<p>
+					{se name="FinishInfoConfirmationMail"}{/se}
+				</p>
+			{/if}
+
 			<p class="center">
 				{se name="FinishInfoConfirmationMail"}{/se}<br />{s name="FinishInfoPrintOrder"}{/s}
 			</p>
