@@ -117,7 +117,7 @@
                         <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}"
                            data-product-compare-add="true"
                            class="compare--link"
-                           title="{"{s name='ListingBoxLinkCompare'|escape}{/s}"|escape}"
+						   title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}"
                            rel="nofollow">
                             <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
                         </a>
@@ -128,7 +128,7 @@
 
 		{* Remove article *}
 		{block name="frontend_note_item_delete"}
-			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{s name='NoteLinkDelete'|escape}{/s}" class="note--delete">
+			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
 				<i class="icon--cross"></i>
 			</a>
 		{/block}
