@@ -226,10 +226,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $action = $args->getSubject();
 
-        $action->View()->NotifyValid = false;
-        $action->View()->NotifyInvalid = false;
-
         $sArticleDetails = null;
+        $json_data = null;
+        $notifyValid = false;
+        $notifyInValid = false;
 
         if (!empty($action->Request()->sNotificationConfirmation) && !empty($action->Request()->sNotify)) {
             $getConfirmation = Shopware()->Db()->fetchRow('
@@ -262,18 +262,16 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $json_data['sLanguage'],
                     $json_data['sShopPath']
                 ));
-                $action->View()->NotifyValid = true;
+                $notifyValid = true;
                 Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
+            }
+            else {
+                $notifyInValid = true;
+            }
 
-                $sArticleDetails = Shopware()->Db()->fetchRow('
+            $sArticleDetails = Shopware()->Db()->fetchRow('
                     SELECT * FROM s_articles_details WHERE ordernumber = ?
                     ', array($json_data['notifyOrdernumber']));
-
-
-            } else {
-
-                $action->View()->NotifyInvalid = true;
-            }
         }
 
 
@@ -281,7 +279,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $link = $action->Front()->Router()->assemble(array(
                 'sViewport' => 'detail',
                 'sArticle' => $sArticleDetails["articleID"],
-                'NotifyValid' => true
+                'NotifyValid' => $notifyValid,
+                'NotifyInValid' => $notifyInValid
             ));
             return $action->redirect($link);
         }
