@@ -7,7 +7,8 @@
          data-animationSpeed="{$Data.banner_slider_scrollspeed}"
          data-arrowControls="{if $Data.banner_slider_arrows}true{else}false{/if}"
          data-autoSlideInterval="{$Data.banner_slider_rotatespeed}"
-         data-autoSlide="{if $Data.banner_slider_rotation}true{else}false{/if}">
+         data-autoSlide="{if $Data.banner_slider_rotation}true{else}false{/if}"
+         data-imageSelector=".image-slider--item">
 
         {if $Data.banner_slider_title}
             <div class="banner-slider--title">{$Data.banner_slider_title}</div>

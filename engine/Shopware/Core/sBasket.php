@@ -2637,12 +2637,14 @@ class sBasket
     private function getArticleIdOfPremium($premiumNumber)
     {
         return $this->db->fetchOne(
-            "SELECT variant.articleID
-             FROM s_addon_premiums premium
-                INNER JOIN s_articles_details variant
-                  ON premium.ordernumber = variant.ordernumber
-             WHERE premium.ordernumber_export = :ordernumber
-             LIMIT 1",
+            "SELECT main_article.articleID
+            FROM s_addon_premiums premium
+            INNER JOIN s_articles_details main_article
+              ON premium.ordernumber = main_article.ordernumber
+            INNER JOIN s_articles_details variant
+              ON main_article.articleID = variant.articleID
+            WHERE variant.ordernumber = :ordernumber
+            LIMIT 1",
             ['ordernumber' => $premiumNumber]
         );
     }
