@@ -93,13 +93,13 @@ class PropertyFacetTest extends TestCase
             array(new PropertyFacet())
         );
 
-        $this->assertCount(2, $result->getFacets());
+        $this->assertCount(1, $result->getFacets());
 
         /**@var $facet FacetResultGroup*/
         foreach($result->getFacets() as $facet) {
             $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
-            $this->assertCount(2, $facet->getFacetResults());
+            $this->assertCount(4, $facet->getFacetResults());
             foreach($facet->getFacetResults() as $result) {
                 /**@var $result ValueListFacetResult*/
                 $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
