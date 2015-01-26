@@ -396,7 +396,7 @@ class sMarketing
             $product = new StoreFrontBundle\Struct\ListProduct(
                 $articleId,
                 $variantData['id'],
-                $variantsData['ordernumber']
+                $variantData['ordernumber']
             );
 
             if ($variantData['id'] == $mainDetailId) {
