@@ -110,7 +110,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
          * on the first graduated price of the product.
          */
         foreach ($products as $product) {
-            if (!$product->isPriceGroupActive() && !$product->getPriceGroup()) {
+            if (!$product->isPriceGroupActive() || !$product->getPriceGroup()) {
                 continue;
             }
 
