@@ -86,6 +86,7 @@
 
 .note--compare {
     .unitize-margin(10, 0, 0, 95);
+    display: none;
 
     .compare--link {
         color: @text-color;
@@ -138,13 +139,12 @@
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
-    .note--table {
+    .note--overview .panel--table {
         .unitize-padding(0, 20);
-
-        &.has--border {
-            border: 1px solid @panel-border;
-        }
+        border: 1px solid @border-color;
     }
+
+    .note--compare { display: block; }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
