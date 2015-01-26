@@ -303,6 +303,9 @@ class StructHydrator
             $licence->setLabel($row['description']);
             $licence->setTechnicalName($row['plugin']['name']);
             $licence->setShop($row['shop']);
+            if ($row['domain']) {
+                $licence->setShop($row['domain']);
+            }
             $licence->setIconPath($row['plugin']['iconPath']);
 
             $subscription = null;
@@ -334,7 +337,7 @@ class StructHydrator
             $licence->setBinaryLink($binary['filePath']);
             $licence->setBinaryVersion($binary['version']);
 
-            $licences[$licence->getTechnicalName()] = $licence;
+            $licences[] = $licence;
         }
 
         return $licences;
