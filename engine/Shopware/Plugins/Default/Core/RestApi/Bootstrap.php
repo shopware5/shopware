@@ -57,6 +57,18 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        return array(
+            'install' => false,
+            'enable' => false,
+            'update' => true
+        );
+    }
+
+    /**
      * Is executed after the collection has been added.
      */
     public function afterInit()

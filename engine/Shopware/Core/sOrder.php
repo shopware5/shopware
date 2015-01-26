@@ -731,7 +731,14 @@ class sOrder
 
         $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?",array($this->getSession()->offsetGet('sessionId')));
 
-        $this->sendMail($variables);
+        $confirmMailDeliveryFailed = false;
+        try {
+            $this->sendMail($variables);
+        } catch (\Exception $e) {
+            $confirmMailDeliveryFailed = true;
+            $email = $this->sUserData['additional']['user']['email'];
+            $this->logOrderMailException($e, $orderNumber, $email);
+        }
 
         // Check if voucher is affected
         $this->sTellFriend();
@@ -739,6 +746,7 @@ class sOrder
         if ($this->getSession()->offsetExists('sOrderVariables')) {
             $variables = $this->getSession()->offsetGet('sOrderVariables');
             $variables['sOrderNumber'] = $orderNumber;
+            $variables['confirmMailDeliveryFailed'] = $confirmMailDeliveryFailed;
             $this->getSession()->offsetSet('sOrderVariables', $variables);
         }
 
@@ -1866,5 +1874,22 @@ EOT;
         $row = $this->db->fetchRow($sql, ['orderId' => $orderId]);
 
         return $row;
+    }
+
+    /**
+     * @param \Exception $e
+     * @param string     $orderNumber
+     * @param string     $email
+     */
+    private function logOrderMailException(\Exception $e, $orderNumber, $email)
+    {
+        $message = sprintf(
+            "Could not send order mail for ordernumber %s to address %s",
+            $orderNumber,
+            $email
+        );
+
+        $context = array('exception' => $e);
+        Shopware()->Container()->get('corelogger')->error($message, $context);
     }
 }

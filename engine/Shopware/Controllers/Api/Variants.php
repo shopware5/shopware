@@ -25,7 +25,7 @@
 class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Variants
+     * @var Shopware\Components\Api\Resource\Variant
      */
     protected $resource = null;
 

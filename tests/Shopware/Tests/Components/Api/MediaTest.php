@@ -64,6 +64,30 @@ class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_
         $this->assertFileExists($path);
     }
 
+    public function testUploadNameWithOver50Characters()
+    {
+        $data = $this->getSimpleTestData();
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-with-more-than-50-characaters-more-more-more-more-used.jpg';
+
+        //copy image to execute test case multiple times.
+        unlink($dest);
+        copy($source, $dest);
+
+        $data['file'] = $dest;
+        $media = $this->resource->create($data);
+
+        $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
+        $this->assertFileExists($pathPicture);
+
+        //check if the thumbnails are generated
+        $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
+        $this->assertFileExists($path);
+
+        unlink(Shopware()->DocPath('media_image') . $media->getFileName());
+        unlink($path);
+    }
+
 
     protected function getSimpleTestData()
     {

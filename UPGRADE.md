@@ -303,6 +303,12 @@ In this document you will find a changelog of the important changes related to t
 * Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
 * Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true)
 * Default value for controllers in which to display tag clouds no longer includes homepage.
+* Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
+
+## 4.3.3
+* The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
+* New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
+* The `Google Analytics` plugin is deprecated and will be removed in the next release. Please use the new `Google Services` plugin instead, available on the community store. 
 
 ## 4.3.1
 
@@ -435,7 +441,6 @@ In this document you will find a changelog of the important changes related to t
 * The methods `sGetOpenOrderData` and `sGetDownloads` in `/engine/core/class/sAdmin.php` will now return a different array structure and will accept new optional parameters to provide a pager functionality
 * Added X-Sendfile support for ESD downloads. `redirectDownload` configuration variable is now deprecated, `esdDownloadStrategy` should be used instead
 * Deprecation: `/engine/Shopware/Models/Payment/Repository.php:` `getPaymentsQuery` and `getPaymentsQueryBuilder` use `getActivePaymentsQuery` and `getActivePaymentsQueryBuilder` instead.
-* Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
 
 ## 4.2.0
 

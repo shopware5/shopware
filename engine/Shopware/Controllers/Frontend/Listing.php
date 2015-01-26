@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $facets = array();
-        foreach($categoryArticles['facets'] as $facet) {
+        foreach ($categoryArticles['facets'] as $facet) {
             if (!$facet instanceof FacetResultInterface || $facet->getFacetName() == 'manufacturer') {
                 continue;
             }
@@ -96,6 +96,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $mapper->replaceShortRequestQueries($this->Request());
 
         $categoryId = $this->Request()->getParam('sCategory');
+
+        if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
+            return $this->forward('index', 'index');
+        }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
@@ -146,7 +150,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             }
 
             $viewAssignments['showListing'] = (bool) max(array_column($emotions, 'showListing'));
-
         } else {
             //check category emotions
             $emotion = $this->getCategoryEmotion($categoryId);
@@ -189,7 +192,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
-
         } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
             $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
         }
@@ -206,10 +208,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
-
         } elseif (empty($categoryContent)) {
             $location = array('controller' => 'index');
-
         } elseif (Shopware()->Config()->categoryDetailLink && $categoryContent['articleCount'] == 1) {
             /**@var $repository \Shopware\Models\Category\Repository*/
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
@@ -221,6 +221,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                     'sArticle' => $articleId
                 );
             }
+        } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
+            $location = array('controller' => 'index');
         }
 
         return $location;
@@ -243,10 +245,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $content['metaKeywords'] = $manufacturer->getMetaKeywords();
 
         $path = $this->Front()->Router()->assemble(array(
-                'sViewport' => 'listing',
-                'sAction'   => 'manufacturer',
-                'sSupplier' => $manufacturer->getId(),
-            ));
+            'sViewport' => 'listing',
+            'sAction'   => 'manufacturer',
+            'sSupplier' => $manufacturer->getId(),
+        ));
 
         if ($path) {
             $content['sSelfCanonical'] = $path;
@@ -254,7 +256,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if ($manufacturer->getMetaTitle()) {
             $content['title'] = $manufacturer->getMetaTitle() . ' | ' . $this->get('shop')->getName();
-
         } elseif ($manufacturer->getName()) {
             $content['title'] = $manufacturer->getName();
         }
@@ -330,17 +331,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     private function getCategoryTemplate($categoryContent, $categoryArticles)
     {
         $template = array();
-        if(empty($categoryContent['noViewSelect'])
+        if (empty($categoryContent['noViewSelect'])
             && !empty($categoryArticles['sTemplate'])
             && !empty($categoryContent['layout'])) {
-
             if ($categoryArticles['sTemplate'] == 'table') {
-
                 if ($categoryContent['layout'] == '1col') {
                     $template['layout'] = '3col';
                     $template['template'] = 'article_listing_3col.tpl';
                 }
-
             } else {
                 $template['layout'] = '1col';
                 $template['template'] = 'article_listing_1col.tpl';
@@ -369,5 +367,46 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
         return array_reverse($breadcrumb);
+    }
+
+    /**
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function isValidCategoryPath($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $categoryRepository->getPathById($categoryId);
+
+        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+            $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
+
+            $this->Response()->setHttpResponseCode(404);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function used in the listing action to detect if
+     * the user is trying to open the page matching the shop's root category
+     *
+     * @param $categoryId
+     * @return bool
+     */
+    private function isShopsBaseCategoryPage($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory');
+        $queryParamsNames = array_keys($this->Request()->getParams());
+
+        return ($defaultShopCategoryId == $categoryId && !array_diff($queryParamsNames, $queryParamsWhiteList));
     }
 }

@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             var selectedRecord = store.findRecord('id', field.getValue()),
             input = Ext.get(field.getEl().down('.x-form-field'));
 
-        if (!selectedRecord.get('active')) {
+        if (!selectedRecord || !selectedRecord.get('active')) {
             input.setStyle({ 'color': '#A94442', 'background': '#F2DEDE' });
         }
         else {

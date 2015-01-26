@@ -128,7 +128,8 @@ return array_merge($customConfig, array(
         'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
         'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => 'auto' // supports null, auto, Apc, Array, Wincache and Xcache
+        'cacheProvider' => 'auto', // supports null, auto, Apc, Array, Wincache and Xcache
+        'cacheNamespace' => null // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
     ), $customConfig['model']),
     'backendSession' => array_merge(array(
         'name' => 'SHOPWAREBACKEND',

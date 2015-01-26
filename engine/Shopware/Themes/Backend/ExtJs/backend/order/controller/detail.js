@@ -653,8 +653,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, successMessage, me.snippets.growlMessage);
                     order.set('invoiceAmount', rawData.data.invoiceAmount);
 
-                    //Check if a status mail created and create a model with the returned data and open the mail window.
-                    if (!Ext.isEmpty(rawData.data.mail)) {
+                    //Check if a status mail content created and create a model with the returned data and open the mail window.
+                    if (!Ext.isEmpty(rawData.data.mail.content)) {
                         var mail = Ext.create('Shopware.apps.Order.model.Mail', rawData.data.mail);
                         me.showOrderMail(mail)
                     }

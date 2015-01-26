@@ -137,7 +137,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
          * If the system is configured to display the exception data, we need
          * to pass it to the template
         */
-        if ($this->Front()->getParam('showException')) {
+        if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() == 'backend') {
             $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
             $replace = array('', Enlight()->App() . '/', '');
 

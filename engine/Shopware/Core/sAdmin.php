@@ -2775,20 +2775,33 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])) {
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])) {
                     return true;
                 }
             } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
                 $rule["rule2"] = "sRisk".$rule["rule2"];
-                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])
-                    && $this->$rule["rule2"]($user, $basket, $rule["value2"])
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])
+                    && $this->executeRiskRule($rule["rule2"], $user, $basket, $rule["value2"])
                 ) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * function to execute risk rules
+     * @param string $rule
+     * @param array $user
+     * @param array $basket
+     * @param string $value
+     * @return bool
+     */
+    public function executeRiskRule($rule, $user, $basket, $value)
+    {
+        return $this->$rule($user, $basket, $value);
     }
 
     /**
@@ -3377,50 +3390,11 @@ class sAdmin
      */
     public function sCreateHolidaysTable()
     {
-        if (!function_exists('easter_days')) {
-            function easter_days($year)
-            {
-                $G = $year % 19;
-                $C = (int) ($year / 100);
-                $H = (int) ($C - (int) ($C / 4) - (int) ((8*$C+13) / 25) + 19*$G + 15) % 30;
-                $I = (int) $H - (int) ($H / 28)*(1 - (int) ($H / 28)*(int) (29 / ($H + 1))*((int) (21 - $G) / 11));
-                $J = ($year + (int) ($year/4) + $I + 2 - $C + (int) ($C/4)) % 7;
-                $L = $I - $J;
-                $m = 3 + (int) (($L + 40) / 44);
-                $d = $L + 28 - 31 * ((int) ($m / 4));
-                $E = mktime(0,0,0, $m, $d, $year)-mktime(0,0,0,3,21,$year);
-                return intval(round($E/(60*60*24),0));
-            }
-        }
-        $holidays = $this->db->fetchAssoc("
-            SELECT id, calculation, `date`
-            FROM `s_premium_holidays`
-            WHERE `date` < CURDATE()
-        ");
-        if(empty($holidays)) {
-            return true;
-        }
+        /** @var \Shopware\Components\HolidayTableUpdater $updater */
+        $updater = Shopware()->Container()->get('shopware.holiday_table_updater');
+        $updater->update();
 
-        foreach ($holidays as $id => $holiday) {
-            $calculation = $holiday['calculation'];
-            $datestamp = strtotime($holiday['date']);
-            $date = date('Y-m-d', $datestamp);
-            $year = date('Y', $datestamp)+1;
-            $easterDate = date('Y-m-d', mktime(0, 0, 0, 3, 21+easter_days($year), $year));
-
-            $calculation = preg_replace(
-                "#DATE\('(\d+)[\-/](\d+)'\)#i","DATE(CONCAT(YEAR(),'-','\$1-\$2'))",
-                $calculation
-            );
-            $calculation = str_replace("EASTERDATE()", "'$easterDate'", $calculation);
-            $calculation = str_replace("YEAR()", "'$year'", $calculation);
-            $calculation = str_replace("DATE()", "'$date'", $calculation);
-            $this->db->update(
-                's_premium_holidays',
-                array('date' => $calculation),
-                array('id = ?' => $id)
-            );
-        }
+        return true;
     }
 
     /**

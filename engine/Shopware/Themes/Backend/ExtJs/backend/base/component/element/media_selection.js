@@ -32,6 +32,8 @@ Ext.define('Shopware.apps.Base.view.element.MediaSelection', {
         'widget.base-element-media',
         'widget.base-element-mediaselection',
         'widget.base-element-mediafield',
-        'widget.base-element-mediaselectionfield'
+        'widget.base-element-mediaselectionfield',
+        'widget.config-element-media',
+        'widget.config-element-mediaselection'
     ]
 });

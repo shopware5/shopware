@@ -496,8 +496,9 @@ class Translation extends Resource implements BatchInterface
     {
         switch (strtolower($type)) {
             case self::TYPE_PRODUCT:
-            case self::TYPE_VARIANT:
                 return $this->getProductIdByNumber($number);
+            case self::TYPE_VARIANT:
+                return $this->getProductVariantIdByNumber($number);
             case self::TYPE_PRODUCT_LINK:
                 return $this->getLinkIdByNumber($number);
             case self::TYPE_PRODUCT_DOWNLOAD:
@@ -532,7 +533,7 @@ class Translation extends Resource implements BatchInterface
 
     /**
      * Returns the identifier of the product (s_articles.id).
-     * The function expects a variant order number as alphanumeric identifier (s_articles_details.id)
+     * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
      *
      * @param $number - Alphanumeric order number of the variant.
      * @return int - Identifier of the article.
@@ -553,6 +554,32 @@ class Translation extends Resource implements BatchInterface
         }
 
         return $entity->getArticle()->getId();
+    }
+
+
+    /**
+     * Returns the identifier of the product (s_articles_details.id).
+     * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
+     *
+     * @param $number - Alphanumeric order number of the variant.
+     * @return int - Identifier of the article.
+     * @throws \Exception
+     */
+    protected function getProductVariantIdByNumber($number)
+    {
+        /**@var $entity Detail */
+        $entity = $this->findEntityByConditions(
+            'Shopware\Models\Article\Detail',
+            array(array('number' => $number))
+        );
+
+        if (!$entity) {
+            throw new ApiException\NotFoundException(
+                sprintf("Variant by order number %s not found", $number)
+            );
+        }
+
+        return $entity->getId();
     }
 
 

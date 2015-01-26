@@ -441,7 +441,7 @@ class sBasket
                 'SELECT basket.id
                 FROM s_order_basket basket
                 LEFT JOIN s_addon_premiums premium
-                ON premium.id = basket.articleID
+                ON premium.ordernumber_export = basket.ordernumber
                 AND premium.startprice <= ?
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
@@ -542,7 +542,7 @@ class sBasket
             array(
                 'sessionID' => $this->session->get('sessionId'),
                 'articlename' => trim($premium["articleName"] . " " . $premium["additionaltext"]),
-                'articleID' => $premium['id'],
+                'articleID' => $premium['articleID'],
                 'ordernumber' => $number,
                 'quantity' => 1,
                 'price' => 0,
@@ -1537,19 +1537,11 @@ class sBasket
             return false;
         }
 
-        // Check if article is already in basket
-        $chkBasketForArticle = $this->db->fetchRow(
-            'SELECT id, quantity
-            FROM s_order_basket
-            WHERE articleID = ?
-            AND sessionID = ?
-            AND ordernumber = ?',
-            array(
-                $article["articleID"],
-                $sessionId,
-                $article["ordernumber"]
-            )
-        ) ? : array();
+        $chkBasketForArticle = $this->checkIfArticleIsInBasket(
+            $article["articleID"],
+            $article["ordernumber"],
+            $sessionId
+        );
 
         // Shopware 3.5.0 / sth / laststock - instock check
         if (!empty($chkBasketForArticle["id"])) {
@@ -1656,6 +1648,42 @@ class sBasket
         $this->sUpdateArticle($insertId, $quantity);
 
         return $insertId;
+    }
+
+    /**
+     * Check if article is already in basket
+     *
+     * @param int    $articleId
+     * @param string $ordernumber
+     * @param string $sessionId
+     * @return array Example: ["id" => "731", "quantity" => "100"]
+     */
+    private function checkIfArticleIsInBasket($articleId, $ordernumber, $sessionId)
+    {
+        $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
+
+        $builder->select('id', 'quantity')
+            ->from('s_order_basket', 'basket')
+            ->where('articleID = :articleId')
+            ->andWhere('sessionID = :sessionId')
+            ->andWhere('ordernumber = :ordernumber')
+            ->andWhere('modus != 1')
+            ->setParameter('articleId', $articleId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('ordernumber', $ordernumber);
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_AddArticle_CheckBasketForArticle',
+            array(
+                'queryBuilder' => $builder,
+                'subject'      => $this
+            )
+        );
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+
+        return $statement->fetch() ?: array();
     }
 
     /**

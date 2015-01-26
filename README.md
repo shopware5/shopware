@@ -1,9 +1,9 @@
 # Shopware 5
 
-[![Build Status](https://travis-ci.org/ShopwareAG/shopware-4.svg?branch=master)](https://travis-ci.org/ShopwareAG/shopware-4)
+[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=master)](https://travis-ci.org/shopware/shopware)
 
 - **License**: Dual license AGPL v3 / Proprietary
-- **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
+- **Github Repository**: <https://github.com/shopware/shopware>
 - **Issue-Tracker**: <http://jira.shopware.de/jira>
 
 ## Overview
@@ -13,7 +13,7 @@
 Shopware 5 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next eCommerce project.
 Furthermore Shopware 5 provides an event-driven plugin-system and an advanced hook system, which unleashes the truth power and gives you the ability to customize every part of it.
 
-Visit the forum at <http://forum.shopware.de/>
+Visit the forum at <http://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
@@ -29,7 +29,7 @@ Follow the instruction below if you want to install Shopware 5 using Git.
 
 1.) Clone the git repository to the desired location using:
 
-    git clone https://github.com/ShopwareAG/shopware-4.git
+    git clone https://github.com/shopware/shopware.git
 
 In case you wish to contribute to Shopware, fork the master tree rather than cloning it and create a pull request via Github. For further information please visit the section "Get involved" in this document.
 
@@ -90,13 +90,13 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/ShopwareAG/shopware-4/commits/master>.
+The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/master>.
 
 ## Further reading
 
-* [Shopware AG](http://www.shopware.de) - Homepage of shopware AG
-* [Shopware Wiki](http://wiki.shopware.de) - Shopware Wiki
-* [Shopware Forum](http://forum.shopware.de) - Community forum
-* [Shopware Marketplace](http://store.shopware.de) - Shopware Store
-* [Shopware Developer Guide](http://wiki.shopware.de/Developers-Guide_cat_796.html) - Shopware 5 Developer Guide
-* [Shopware Designer Guide](http://wiki.shopware.de/Designers-Guide_cat_486.html) - Shopware 5 Designer Guide
+* [Shopware AG](http://www.shopware.com) - Homepage of shopware AG
+* [Shopware Wiki](http://wiki.shopware.com) - Shopware Wiki
+* [Shopware Forum](http://forum.shopware.com) - Community forum
+* [Shopware Marketplace](http://store.shopware.com) - Shopware Store
+* [Shopware Developer Guide](http://en.wiki.shopware.com/Developer-s-Guide_cat_888.html) - Shopware 5 Developer Guide
+* [Shopware Designer Guide](http://en.wiki.shopware.com/Designer-s-Guide_cat_884.html) - Shopware 5 Designer Guide
