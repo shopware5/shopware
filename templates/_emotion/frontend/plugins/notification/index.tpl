@@ -6,7 +6,7 @@
         <div class="success">
             {se name='DetailNotifyInfoValid'}{/se}
         </div>
-    {elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
+    {elseif $NotifyInValid == true && $NotifyAlreadyRegistered != true}
         <div class="notice">
             {se name='DetailNotifyInfoInvalid'}{/se}
         </div>
