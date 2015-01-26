@@ -3,7 +3,7 @@
     {* no search results *}
     {block name="search_ajax_inner_no_results"}
         <ul class="results--list">
-            <li class="list--entry entry--no-results">{s name="SearchAjaxNoResults"}Keine Suchergenisse gefunden{/s}</li>
+            <li class="list--entry entry--no-results result--item">{s name="SearchAjaxNoResults"}Keine Suchergenisse gefunden{/s}</li>
         </ul>
     {/block}
 
@@ -15,7 +15,7 @@
 
                 {* Each product in the search result *}
                 {block name="search_ajax_list_entry"}
-                    <li class="list--entry block-group">
+                    <li class="list--entry block-group result--item">
 						<a class="search-result--link" href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
 
 							{* Product image *}
@@ -49,11 +49,11 @@
 
             {* Link to show all founded products using the built-in search *}
             {block name="search_ajax_all_results"}
-                <li class="entry--all-results block-group">
+                <li class="entry--all-results block-group result--item">
 
                     {* Link to the built-in search *}
                     {block name="search_ajax_all_results_link"}
-                        <a href="{url controller='search' sSearch=$sSearchRequest.sSearch}" class="entry--all-results-link block">
+                        <a href="{url controller='search' sSearch=$sSearchRequest.sSearch}" class="search-result--link entry--all-results-link block">
                             <i class="icon--arrow-right"></i>
                             {s name="SearchAjaxLinkAllResults"}{/s}
                         </a>
