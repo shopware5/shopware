@@ -120,15 +120,11 @@ class PropertyFacetHandler implements FacetHandlerInterface
         $results = [];
         $actives = $this->getFilteredValues($criteria);
 
-        foreach ($properties as $property) {
-            $results[] = $this->createCollectionResult(
-                $facet,
-                $property,
-                $actives
-            );
-        }
-
-        return $results;
+        return $this->createCollectionResult(
+            $facet,
+            $properties,
+            $actives
+        );
     }
 
     /**
@@ -169,60 +165,65 @@ class PropertyFacetHandler implements FacetHandlerInterface
 
     /**
      * @param Facet\PropertyFacet $facet
-     * @param Struct\Property\Set $set
+     * @param Struct\Property\Set[] $sets
      * @param int[] $actives
      * @return FacetResultGroup
      */
     private function createCollectionResult(
         Facet\PropertyFacet $facet,
-        Struct\Property\Set $set,
+        array $sets,
         $actives
     ) {
         $results = [];
 
-        foreach ($set->getGroups() as $group) {
-            $items = [];
-            $useMedia = false;
-            $isActive = false;
+        foreach($sets as $set) {
 
-            foreach ($group->getOptions() as $option) {
-                $listItem = new MediaListItem(
-                    $option->getId(),
-                    $option->getName(),
-                    in_array($option->getId(), $actives),
-                    $option->getMedia()
-                );
+            foreach ($set->getGroups() as $group) {
+                $items = [];
+                $useMedia = false;
+                $isActive = false;
 
-                $isActive = ($isActive || $listItem->isActive());
-                $useMedia = ($useMedia || $listItem->getMedia() !== null);
+                foreach ($group->getOptions() as $option) {
+                    $listItem = new MediaListItem(
+                        $option->getId(),
+                        $option->getName(),
+                        in_array(
+                            $option->getId(),
+                            $actives
+                        ),
+                        $option->getMedia()
+                    );
 
-                $items[] = $listItem;
-            }
+                    $isActive = ($isActive || $listItem->isActive());
+                    $useMedia = ($useMedia || $listItem->getMedia() !== null);
 
-            if ($useMedia) {
-                $results[] = new MediaListFacetResult(
-                    $facet->getName(),
-                    $isActive,
-                    $group->getName(),
-                    $items,
-                    $this->fieldName
-                );
-            } else {
-                $results[] = new ValueListFacetResult(
-                    $facet->getName(),
-                    $isActive,
-                    $group->getName(),
-                    $items,
-                    $this->fieldName
-                );
+                    $items[] = $listItem;
+                }
+
+                if ($useMedia) {
+                    $results[] = new MediaListFacetResult(
+                        $facet->getName(),
+                        $isActive,
+                        $group->getName(),
+                        $items,
+                        $this->fieldName
+                    );
+                } else {
+                    $results[] = new ValueListFacetResult(
+                        $facet->getName(),
+                        $isActive,
+                        $group->getName(),
+                        $items,
+                        $this->fieldName
+                    );
+                }
             }
         }
 
         return new FacetResultGroup(
             $results,
-            $set->getName(),
-            $facet->getName(),
-            $set->getAttributes()
+            null,
+            $facet->getName()
         );
     }
 }
