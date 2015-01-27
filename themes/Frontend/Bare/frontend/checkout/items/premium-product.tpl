@@ -16,11 +16,11 @@
                                     <div class="table--media-inner">
                                         <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
                                             <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                            <span class="cart--badge">
+                                                <span>{s name="CartItemInfoFree"}{/s}</span>
+                                            </span>
                                         </a>
                                     </div>
-                                </div>
-                                <div class="cart--badge">
-                                    <span>{s name="CartItemInfoFree"}{/s}</span>
                                 </div>
                             {/block}
                         {else}
