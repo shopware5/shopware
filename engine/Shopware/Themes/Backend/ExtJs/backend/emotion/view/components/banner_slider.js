@@ -101,6 +101,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         me.mediaSelection = Ext.create('Shopware.form.field.MediaSelection', {
             fieldLabel: me.snippets.select_banner,
             labelWidth: 155,
+            albumId: -3,
             listeners: {
                 scope: me,
                 selectMedia: me.onAddBannerToGrid

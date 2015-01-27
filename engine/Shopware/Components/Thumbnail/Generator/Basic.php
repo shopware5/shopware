@@ -41,7 +41,7 @@ class Basic implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false)
+    public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false, $quality = 90)
     {
         if (!file_exists($imagePath)) {
             throw new \Exception("File not found: " . $imagePath);
@@ -66,7 +66,7 @@ class Basic implements GeneratorInterface
         }
 
         $newImage = $this->createNewImage($image, $originalSize, $newSize);
-        $this->saveImage($destination, $newImage);
+        $this->saveImage($destination, $newImage, $quality);
 
         // Removes both the original and the new created image from memory
         imagedestroy($newImage);
@@ -188,8 +188,9 @@ class Basic implements GeneratorInterface
     /**
      * @param string $destination
      * @param resource $newImage
+     * @param int $quality - JPEG quality
      */
-    private function saveImage($destination, $newImage)
+    private function saveImage($destination, $newImage, $quality)
     {
         // saves the image information into a specific file extension
         switch (strtolower($this->getImageExtension($destination))) {
@@ -200,7 +201,7 @@ class Basic implements GeneratorInterface
                 imagegif($newImage, $destination);
                 break;
             default:
-                imagejpeg($newImage, $destination, 90);
+                imagejpeg($newImage, $destination, $quality);
                 break;
         }
     }

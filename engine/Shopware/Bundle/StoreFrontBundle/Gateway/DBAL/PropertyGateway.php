@@ -158,6 +158,13 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             'mediaAttribute.mediaID = media.id'
         );
 
+        $query->leftJoin(
+            'media',
+            's_media_album_settings',
+            'mediaSettings',
+            'mediaSettings.albumID = media.albumID'
+        );
+
         $this->fieldHelper->addPropertySetTranslation($query, $context);
 
         $query->groupBy('propertyOption.id');

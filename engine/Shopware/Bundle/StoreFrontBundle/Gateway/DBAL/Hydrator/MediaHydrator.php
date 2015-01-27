@@ -87,8 +87,9 @@ class MediaHydrator extends Hydrator
             $media->setFile($data['__media_path']);
         }
 
-        if ($media->getType() == Models\Media\Media::TYPE_IMAGE
+        if ($media->getType() == Struct\Media::TYPE_IMAGE
             && $data['__mediaSettings_create_thumbnails']) {
+
             $media->setThumbnails(
                 $this->getMediaThumbnails($data)
             );
@@ -135,12 +136,30 @@ class MediaHydrator extends Hydrator
      */
     private function getMediaThumbnails(array $data)
     {
-        return $this->thumbnailManager->getMediaThumbnails(
+        $thumbnailData = $this->thumbnailManager->getMediaThumbnails(
             $data['__media_name'],
             $data['__media_type'],
             $data['__media_extension'],
             explode(';', $data['__mediaSettings_thumbnail_size'])
         );
+
+        $thumbnails = [];
+        foreach ($thumbnailData as $row) {
+            $retina = $row['retinaSource'];
+
+            if (!$data['__mediaSettings_thumbnail_high_dpi']) {
+                $retina = null;
+            }
+
+            $thumbnails[] = new Struct\Thumbnail(
+                $row['source'],
+                $retina,
+                $row['maxWidth'],
+                $row['maxHeight']
+            );
+        }
+
+        return $thumbnails;
     }
 
     /**

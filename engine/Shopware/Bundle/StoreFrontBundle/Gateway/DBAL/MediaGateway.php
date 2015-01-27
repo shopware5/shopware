@@ -105,8 +105,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getMediaSettingFields());
+        $query->select($this->fieldHelper->getMediaFields());
 
         $query->from('s_media', 'media')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')

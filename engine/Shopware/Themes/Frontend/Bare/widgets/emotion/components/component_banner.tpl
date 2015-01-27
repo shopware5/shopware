@@ -4,9 +4,59 @@
          data-height="{$Data.fileInfo.height}"
          {if $Data.bannerMapping}data-bannerMapping="true"{/if}>
 
+        {$images = $Data.thumbnails}
+
+        {strip}
+        <style type="text/css">
+
+            #banner--{$Data.objectId} {
+                background-image: url('{$images[0].source}');
+            }
+
+            {if isset($images[0].retinaSource)}
+            @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                #banner--{$Data.objectId} {
+                    background-image: url('{$images[0].retinaSource}');
+                }
+            }
+            {/if}
+
+            @media screen and (min-width: 48em) {
+                #banner--{$Data.objectId} {
+                    background-image: url('{$images[1].source}');
+                }
+            }
+
+            {if isset($images[1].retinaSource)}
+            @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
+                   screen and (min-width: 48em) and (min-resolution: 192dpi) {
+                #banner--{$Data.objectId} {
+                    background-image: url('{$images[1].retinaSource}');
+                }
+            }
+            {/if}
+
+            @media screen and (min-width: 78.75em) {
+                .is--fullscreen #banner--{$Data.objectId} {
+                    background-image: url('{$images[2].source}');
+                }
+            }
+
+            {if isset($images[2].retinaSource)}
+            @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
+                   screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
+                .is--fullscreen #banner--{$Data.objectId} {
+                    background-image: url('{$images[2].retinaSource}');
+                }
+            }
+            {/if}
+        </style>
+        {/strip}
+
         {block name="widget_emotion_component_banner_inner"}
             <div class="banner--content"
-                 style="background-image: url('{link file=$Data.file}');{if $Data.bannerPosition} background-position: {$Data.bannerPosition}{/if}">
+                 id="banner--{$Data.objectId}"
+                 {if $Data.bannerPosition}style="background-position: {$Data.bannerPosition}"{/if}>
 
                 {* Banner mapping, based on the same technic as an image map *}
                 {block name="widget_emotion_component_banner_mapping"}

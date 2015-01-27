@@ -195,6 +195,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
                         $blogArticle["media"][0]['mediaId']);
                     if ($mediaModel != null) {
                         $blogArticleData[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
+                        $blogArticleData[$key]["preview"]["srchd"] = array_values($mediaModel->getHighDpiThumbnails());
                     }
                 }
 

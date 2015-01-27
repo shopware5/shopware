@@ -31,6 +31,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  */
 class Media extends Extendable implements \JsonSerializable
 {
+    const TYPE_IMAGE = 'IMAGE';
+
     /**
      * @var int
      */
@@ -186,7 +188,7 @@ class Media extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return Thumbnail[]
      */
     public function getThumbnails()
     {
@@ -195,7 +197,7 @@ class Media extends Extendable implements \JsonSerializable
 
     /**
      * @param $index
-     * @return string
+     * @return Thumbnail
      */
     public function getThumbnail($index)
     {
@@ -203,7 +205,7 @@ class Media extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param array $thumbnails
+     * @param Thumbnail[] $thumbnails
      * @return $this
      */
     public function setThumbnails(array $thumbnails)

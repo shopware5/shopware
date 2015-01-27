@@ -22,7 +22,7 @@
 	<div align="center" style="overflow:hidden;">
 	    <a target="_blank" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}">
 	    {if $sArticle.image.src}
-		<img src="{$sArticle.image.src.2}"  border="0">
+		<img src="{$sArticle.image.src.1}"  border="0">
 	    {else}
 		<img src="{link file='frontend/_public/src/img/no-picture.jpg' fullPath}" alt="Kein Bild vorhanden" border="0" />
 	   {/if}

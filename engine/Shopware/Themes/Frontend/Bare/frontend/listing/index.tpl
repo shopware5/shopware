@@ -14,7 +14,9 @@
 
 		{* Banner *}
 		{block name="frontend_listing_index_banner"}
-			{include file='frontend/listing/banner.tpl'}
+            {if !$hasEmotion}
+			    {include file='frontend/listing/banner.tpl'}
+			{/if}
 		{/block}
 
 		{* Category headline *}

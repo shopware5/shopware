@@ -164,8 +164,7 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
 
         $query->addSelect('variant.ordernumber as number')
             ->addSelect($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getImageFields())
-            ->addSelect($this->fieldHelper->getMediaSettingFields());
+            ->addSelect($this->fieldHelper->getImageFields());
 
         $this->fieldHelper->addImageTranslation($query, $context);
 

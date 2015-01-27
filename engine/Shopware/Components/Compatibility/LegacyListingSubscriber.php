@@ -44,7 +44,61 @@ class LegacyListingSubscriber implements SubscriberInterface
         return array(
             'Enlight_Controller_Action_PostDispatch_Frontend_Listing' => array('convertListing', 0),
             'Enlight_Controller_Action_PreDispatch_Frontend_Listing' => array('redirectManufacturerListing', 0),
+            'Legacy_Struct_Converter_Convert_Media' => 'convertMedia',
+            'Enlight_Controller_Action_PostDispatch_Frontend_Blog' => ['convertBlogMedia', 200]
         );
+    }
+
+    public function convertBlogMedia(\Enlight_Event_EventArgs $args)
+    {
+        $controller = $args->getSubject();
+        if ($controller->Request()->getActionName() !== 'detail') {
+            return;
+        }
+
+        /**@var $shop Shop */
+        $shop = $this->container->get('shop');
+        if ($shop->getTemplate()->getVersion() >= 3) {
+            return;
+        }
+
+        $imageDir = Shopware()->Container()->get('shopware_storefron.context_service')->getShopContext()->getBaseUrl() . '/media/image/';
+        $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
+
+        $data = $controller->View()->getAssign();
+        foreach ($data['sArticle']['media'] as &$media) {
+            foreach($media['src'] as &$thumb) {
+                $thumb = str_replace($imageDir, '', $thumb);
+            }
+            $media['thumbNails'] = $media['src'];
+        }
+
+        foreach ($data['sArticle']['preview']['src'] as &$thumb) {
+            $thumb = str_replace($imageDir, '', $thumb);
+        }
+        $data['sArticle']['preview']['thumbNails'] = $data['sArticle']['preview']['src'];
+        $controller->View()->assign($data);
+    }
+
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     * @return array
+     * @throws \Exception
+     */
+    public function convertMedia(\Enlight_Event_EventArgs $args)
+    {
+        $data = $args->getReturn();
+
+        /**@var $shop Shop */
+        $shop = $this->container->get('shop');
+        if ($shop->getTemplate()->getVersion() >= 3) {
+            return $data;
+        }
+
+        $data['src'] = array_column($data['thumbnails'], 'source');
+        $data['src']['original'] = $data['source'];
+
+        return $data;
     }
 
     /**

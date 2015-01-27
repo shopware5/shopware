@@ -810,7 +810,10 @@ class sArticles
                 $navigation["previousProduct"]["orderNumber"] = $previousProduct->getNumber();
                 $navigation["previousProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["previousProduct"]["name"] = $previousProduct->getName();
-                $navigation["previousProduct"]["image"] = $previousProduct->getCover()->getThumbnail(4);
+
+                $navigation["previousProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
+                    $previousProduct->getCover()
+                );
             }
 
             if ($nextProduct) {
@@ -819,7 +822,10 @@ class sArticles
                 $navigation["nextProduct"]["orderNumber"] = $nextProduct->getNumber();
                 $navigation["nextProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["nextProduct"]["name"] = $nextProduct->getName();
-                $navigation["nextProduct"]["image"] = $nextProduct->getCover()->getThumbnail(4);
+
+                $navigation["nextProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
+                    $nextProduct->getCover()
+                );
             }
 
             $navigation["currentListing"]["position"] = $index + 1;
@@ -1504,12 +1510,16 @@ class sArticles
         //first we get all thumbnail sizes of the article album
         $sizes = $articleAlbum->getSettings()->getThumbnailSize();
 
+        $highDpiThumbnails = $articleAlbum->getSettings()->isThumbnailHighDpi();
+
         //now we get the configured image and thumbnail dir.
         $imageDir = $this->sSYSTEM->sPathArticleImg;
         $thumbDir = $imageDir. 'thumbnail/';
 
         //if no extension is configured, shopware use jpg as default extension
-        if (empty($image['extension'])) $image['extension'] = 'jpg';
+        if (empty($image['extension'])) {
+            $image['extension'] = 'jpg';
+        }
 
         $imageData['src']['original'] = $imageDir . $image["path"] . "." . $image["extension"];
         $imageData["res"]["original"]["width"] = $image["width"];
@@ -1548,6 +1558,9 @@ class sArticles
                 $size = $size.'x'.$size;
             }
             $imageData["src"][$key] = $thumbDir . $image['path'] . '_'. $size .'.'. $image['extension'];
+            if ($highDpiThumbnails) {
+                $imageData["srchd"][$key] = $thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension'];
+            }
         }
 
         $translation = $this->sGetTranslation(array(), $imageData['id'], "articleimage");
@@ -1615,7 +1628,9 @@ class sArticles
      */
     public function getArticleMainCover($articleId, $articleAlbum)
     {
-        $cover = $this->getArticleRepository()->getArticleFallbackCoverQuery($articleId)->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $cover = $this->getArticleRepository()
+            ->getArticleFallbackCoverQuery($articleId)
+            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         return $this->getDataOfArticleImage($cover, $articleAlbum);
     }
 
@@ -1656,7 +1671,10 @@ class sArticles
         //first we convert the passed article id into an integer to prevent sql injections
         $articleId = (int) $sArticleID;
 
-        Enlight()->Events()->notify('Shopware_Modules_Articles_GetArticlePictures_Start', array('subject' => $this, 'id' => $articleId));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Articles_GetArticlePictures_Start',
+            array('subject' => $this, 'id' => $articleId)
+        );
 
         //first we get the article cover
         if ($forceMainImage) {
@@ -1667,7 +1685,11 @@ class sArticles
 
 
         if ($onlyCover) {
-            $cover = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticlePictures_FilterResult', $cover, array('subject' => $this, 'id' => $articleId));
+            $cover = Enlight()->Events()->filter(
+                'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
+                $cover,
+                array('subject' => $this, 'id' => $articleId)
+            );
             return $cover;
         }
 
@@ -1718,7 +1740,11 @@ class sArticles
             }
         }
 
-        $images = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticlePictures_FilterResult', $images, array('subject' => $this, 'id' => $articleId));
+        $images = Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
+            $images,
+            array('subject' => $this, 'id' => $articleId)
+        );
 
         return $images;
     }

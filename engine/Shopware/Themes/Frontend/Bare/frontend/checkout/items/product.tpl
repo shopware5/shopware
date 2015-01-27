@@ -22,7 +22,10 @@
 									{block name="frontend_checkout_cart_item_image_container_outer"}
 										<div class="table--media-inner">
 											{block name="frontend_checkout_cart_item_image_container_inner"}
-												{if $sBasketItem.image.src.2}
+
+											    {$image = $sBasketItem.additional_details.image}
+
+												{if $image.thumbnails[0]}
 													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
                                                         {if {config name=detailmodal} && {controllerAction} === 'confirm'}
                                                        data-modalbox="true"
@@ -32,8 +35,8 @@
                                                        data-sizing="content"
                                                        data-title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
                                                        data-updateImages="true"
-                                                        {/if}>
-														<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                                       {/if}>
+                                                        <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$sBasketItem.articlename|escape}" />
 													</a>
 												{else}
 													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />

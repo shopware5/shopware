@@ -35,7 +35,19 @@ Ext.define('Shopware.apps.MediaManager.model.Album', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/media_manager/model/album/fields"}{/block}
-		'id', 'text', 'position', 'mediaCount', 'parentId', 'createThumbnails', 'thumbnailSize', 'iconCls', 'albumID' ],
+		'id',
+		'text',
+		'position',
+		'mediaCount',
+		'parentId',
+		'createThumbnails',
+		'thumbnailSize',
+		'iconCls',
+		'albumID' ,
+		'thumbnailHighDpi',
+		'thumbnailQuality',
+		'thumbnailHighDpiQuality'
+	],
 	proxy: {
 		type: 'ajax',
         api: {

@@ -91,6 +91,22 @@ class Product extends ListProduct implements \JsonSerializable
     }
 
     /**
+     * @param int $index
+     * @return Thumbnail[]
+     */
+    public function getThumbnailsBySize($index)
+    {
+        /**@var $media Media*/
+        $result = array_filter($this->media, function(Media $media) {
+            return ($media->getType() === Media::TYPE_IMAGE);
+        });
+
+        return array_map(function(Media $media) use ($index) {
+            return $media->getThumbnail($index);
+        }, $result);
+    }
+
+    /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set $propertySet
      */
     public function setPropertySet($propertySet)
