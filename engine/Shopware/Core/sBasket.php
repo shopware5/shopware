@@ -136,11 +136,11 @@ class sBasket
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('context_service');
+            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
+            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
         }
     }
     /**
@@ -1210,15 +1210,15 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('context_service')->getProductContext();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
 
-        $products = Shopware()->Container()->get('list_product_service')
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $products = Shopware()->Container()->get('additional_text_service')
+        $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
             ->buildAdditionalTextLists($products, $context);
 
-        $votes = Shopware()->Container()->get('vote_service')
+        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')
             ->getAverages($products, $context);
 
         $promotions = array();

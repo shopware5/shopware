@@ -9,7 +9,7 @@ The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\
 
 ```
 //load or create a context object to define which user context is set
-$context = Shopware()->Container()->get('context_service')->getShopContext();
+$context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
 $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
@@ -27,14 +27,14 @@ $criteria->offset(0);
 $criteria->limit(20);
 
 //executes a search request to find only the product numbers
-$productNumberResult = Shopware()->Container()->get('product_number_search')->search(
+$productNumberResult = Shopware()->Container()->get('shopware_searchdbal.product_number_search')->search(
     $criteria,
     $context
 );
 
 //executes a search request to find a list of \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct.
-$context = Shopware()->Container()->get('context_service')->getProductContext();
-$productResult = Shopware()->Container()->get('product_search')->search(
+$context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+$productResult = Shopware()->Container()->get('shopware_search.product_search')->search(
     $criteria,
     $context
 );

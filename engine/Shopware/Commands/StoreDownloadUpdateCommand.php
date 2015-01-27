@@ -84,7 +84,7 @@ class StoreDownloadUpdateCommand extends StoreCommand
         $product = $this->getLicensedProduct($auth, $domain, $pluginId);
 
         /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
 
         $result = $this->downloadProduct($product);
 

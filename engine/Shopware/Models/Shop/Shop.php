@@ -708,7 +708,7 @@ class Shop extends ModelEntity
             }
         }
 
-        Shopware()->Container()->get('context_service')->initializeShopContext();
+        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
 
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */

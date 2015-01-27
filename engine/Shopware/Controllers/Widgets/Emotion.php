@@ -578,7 +578,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $customerGroupId, $offset = 0, $limit, $sort = null)
     {
-        $context = Shopware()->Container()->get('context_service')->getProductContext();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
         $criteria = new Criteria();
 
         $criteria->addBaseCondition(new CategoryCondition([$category]));
@@ -605,7 +605,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
 
         /** @var $result \Shopware\Bundle\SearchBundle\ProductSearchResult */
-        $result = Shopware()->Container()->get('product_search')
+        $result = Shopware()->Container()->get('shopware_search.product_search')
             ->search($criteria, $context);
 
         $data = array();

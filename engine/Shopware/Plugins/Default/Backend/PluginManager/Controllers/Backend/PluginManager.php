@@ -49,7 +49,7 @@ class Shopware_Controllers_Backend_PluginManager
                 $this->getCategoryService()->synchronize();
             }
 
-            $this->get('shopware.plugin_manager')->refreshPluginList();
+            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
         }
 
         parent::preDispatch();
@@ -124,7 +124,7 @@ class Shopware_Controllers_Backend_PluginManager
 
         try {
             /**@var $listingResult ListingResultStruct */
-            $listingResult = $this->get('plugin_service_view')
+            $listingResult = $this->get('shopware_plugininstaller.plugin_service_view')
                 ->getStoreListing($context);
         } catch (Exception $e) {
             $this->handleException($e);
@@ -140,7 +140,7 @@ class Shopware_Controllers_Backend_PluginManager
 
     public function localListingAction()
     {
-        $this->get('shopware.plugin_manager')->refreshPluginList();
+        $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
 
         $sort = [];
         foreach ($this->Request()->getParam('sort', []) as $sortData) {
@@ -160,10 +160,10 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         if ($this->isApiAvailable()) {
-            $plugins = $this->get('plugin_service_view')
+            $plugins = $this->get('shopware_plugininstaller.plugin_service_view')
                 ->getLocalListing($context);
         } else {
-            $plugins = $this->get('plugin_service_local')
+            $plugins = $this->get('shopware_plugininstaller.plugin_service_local')
                 ->getListing($context)->getPlugins();
         }
 
@@ -183,7 +183,7 @@ class Shopware_Controllers_Backend_PluginManager
             [$technicalName]
         );
 
-        $plugin = $this->get('plugin_service_local')->getPlugin($context);
+        $plugin = $this->get('shopware_plugininstaller.plugin_service_local')->getPlugin($context);
 
         $this->View()->assign(['success' => true, 'data' => $plugin]);
     }
@@ -198,7 +198,7 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         try {
-            $licences = $this->get('plugin_service_store_production')
+            $licences = $this->get('shopware_plugininstaller.plugin_service_store_production')
                 ->getLicences($context);
         } catch (Exception $e) {
             $this->handleException($e);
@@ -218,7 +218,7 @@ class Shopware_Controllers_Backend_PluginManager
             return;
         }
 
-        $plugins = $this->get('plugin_service_local')->getPluginsForUpdateCheck();
+        $plugins = $this->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
 
         $context = new UpdateListingRequest(
             $this->getLocale(),
@@ -228,7 +228,7 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         try {
-            $updates = $this->get('plugin_service_view')->getUpdates($context);
+            $updates = $this->get('shopware_plugininstaller.plugin_service_view')->getUpdates($context);
         } catch (Exception $e) {
             $this->handleException($e);
             return;
@@ -269,7 +269,7 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         try {
-            $data = $this->get('plugin_service_view')->getPlugin($context);
+            $data = $this->get('shopware_plugininstaller.plugin_service_view')->getPlugin($context);
         } catch (Exception $e) {
             $this->handleException($e);
             return;
@@ -303,7 +303,7 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         try {
-            $this->get('store_order_service')
+            $this->get('shopware_plugininstaller.store_order_service')
                 ->orderPlugin($token, $context);
         } catch (StoreException $e) {
             $this->handleException($e);
@@ -332,7 +332,7 @@ class Shopware_Controllers_Backend_PluginManager
         );
 
         try {
-            $basket = $this->get('store_order_service')
+            $basket = $this->get('shopware_plugininstaller.store_order_service')
                 ->getCheckout($token, $context);
 
             $this->loadBasketPlugins($basket, $positions);
@@ -405,7 +405,7 @@ class Shopware_Controllers_Backend_PluginManager
             $technicalName
         );
 
-        $licence = $this->get('plugin_service_store_production')
+        $licence = $this->get('shopware_plugininstaller.plugin_service_store_production')
             ->getPluginLicence($context);
 
         try {
@@ -436,7 +436,7 @@ class Shopware_Controllers_Backend_PluginManager
     {
         $technicalName = $this->Request()->getParam('technicalName', null);
 
-        $this->get('plugin_download_service')->downloadDummy(
+        $this->get('shopware_plugininstaller.plugin_download_service')->downloadDummy(
             $technicalName,
             $this->getVersion()
         );
@@ -455,7 +455,7 @@ class Shopware_Controllers_Backend_PluginManager
             $this->getVersion()
         );
 
-        $this->get('plugin_download_service')
+        $this->get('shopware_plugininstaller.plugin_download_service')
             ->downloadUpdate($context);
 
         $this->View()->assign('success', true);
@@ -486,7 +486,7 @@ class Shopware_Controllers_Backend_PluginManager
         $password = $this->Request()->getParam('password');
 
         try {
-            $token = $this->get('store_client')->getAccessToken(
+            $token = $this->get('shopware_plugininstaller.store_client')->getAccessToken(
                 $shopwareId,
                 $password
             );
@@ -599,7 +599,7 @@ class Shopware_Controllers_Backend_PluginManager
     private function checkStoreApi()
     {
         try {
-            $this->get('account_manager_service')->pingServer();
+            $this->get('shopware_plugininstaller.account_manager_service')->pingServer();
             $this->get('BackendSession')->offsetSet('sbp_available', 1);
         } catch (Exception $e) {
             $this->get('BackendSession')->offsetSet('sbp_available', 0);
@@ -615,9 +615,9 @@ class Shopware_Controllers_Backend_PluginManager
     private function getCategoryService()
     {
         return new PluginCategoryService(
-            $this->get('plugin_service_store'),
+            $this->get('shopware_plugininstaller.plugin_service_store'),
             $this->get('dbal_connection'),
-            $this->get('plugin_installer_struct_hydrator')
+            $this->get('shopware_plugininstaller.plugin_installer_struct_hydrator')
         );
     }
 
@@ -646,14 +646,14 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function downloadPluginLicence(LicenceStruct $licence)
     {
-        $success = $this->get('plugin_download_service')
+        $success = $this->get('shopware_plugininstaller.plugin_download_service')
             ->downloadPlugin($this->getAccessToken(), $licence);
 
         if ($success && strlen($licence->getLicenseKey()) > 0) {
             $this->importLicence($licence->getLicenseKey());
         }
 
-        $this->get('shopware.plugin_manager')->refreshPluginList();
+        $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
     }
 
     private function loadBasketPlugins(BasketStruct $basket, $positions)
@@ -664,7 +664,7 @@ class Shopware_Controllers_Backend_PluginManager
             array_column($positions, 'technicalName')
         );
 
-        $plugins = $this->get('plugin_service_store_production')
+        $plugins = $this->get('shopware_plugininstaller.plugin_service_store_production')
             ->getPlugins($context);
 
         foreach ($basket->getPositions() as $position) {

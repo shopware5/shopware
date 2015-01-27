@@ -198,7 +198,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function pingServerAction()
     {
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('account_manager_service');
+        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $isConnected = $accountManagerService->pingServer();
@@ -272,7 +272,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $email = $this->Request()->getParam('email');
 
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('account_manager_service');
+        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $locale = $this->getCurrentLocale();
@@ -357,7 +357,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('account_manager_service');
+        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $domainHashData = $accountManagerService->getDomainHash($domain, $token);
@@ -434,7 +434,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         if (empty($locales)) {
             /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('account_manager_service');
+            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             try {
                 /** @var LocaleStruct[] $serverLocales */
@@ -470,7 +470,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getDomains(AccessTokenStruct $token)
     {
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('account_manager_service');
+        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $shopsData = $accountManagerService->getShops($token);
@@ -507,7 +507,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
 
             /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('account_manager_service');
+            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             $token = $accountManagerService->getToken($shopwareId, $password);
 

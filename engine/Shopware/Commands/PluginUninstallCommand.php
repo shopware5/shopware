@@ -70,7 +70,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {

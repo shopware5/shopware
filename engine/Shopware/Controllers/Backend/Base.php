@@ -83,7 +83,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getExpiredLicencesAction()
     {
-        $pluginService = Shopware()->Container()->get('plugin_service_local');
+        $pluginService = Shopware()->Container()->get('shopware_plugininstaller.plugin_service_local');
         $licences = $pluginService->getExpiredPluginLicenses();
 
         if (empty($licences)) {

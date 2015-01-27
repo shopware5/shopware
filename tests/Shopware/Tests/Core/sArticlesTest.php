@@ -92,7 +92,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch("/");
 
-        Shopware()->Container()->get('context_service_core')->initializeProductContext();
+        Shopware()->Container()->get('shopware_storefront.context_service_core')->initializeProductContext();
 
         $correctPrice = "18,99";
         $article = Shopware()->Modules()->Articles()->sGetArticleById(

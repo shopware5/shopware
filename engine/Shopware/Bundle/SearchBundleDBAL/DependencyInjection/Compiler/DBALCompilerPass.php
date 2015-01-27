@@ -41,14 +41,14 @@ class DBALCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('product_number_search_dbal')) {
+        if (!$container->hasDefinition('shopware_searchdbal.product_number_search_dbal')) {
             return;
         }
 
-        $definition = $container->getDefinition('product_number_search_dbal');
+        $definition = $container->getDefinition('shopware_searchdbal.product_number_search_dbal');
         $this->replaceArgument($container, $definition, 'facet_handler_dbal', 3);
 
-        $definition = $container->getDefinition('dbal_query_builder_factory');
+        $definition = $container->getDefinition('shopware_searchdbal.dbal_query_builder_factory');
         $this->replaceArgument($container, $definition, 'condition_handler_dbal', 2);
         $this->replaceArgument($container, $definition, 'sorting_handler_dbal', 3);
     }

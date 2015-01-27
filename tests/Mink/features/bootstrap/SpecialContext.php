@@ -15,7 +15,7 @@ class SpecialContext extends SubContext
     public function thePluginIsEnabled($name)
     {
         /** @var \Shopware\Components\Plugin\Manager $pluginManager */
-        $pluginManager = $this->getContainer()->get('shopware.plugin_Manager');
+        $pluginManager = $this->getContainer()->get('shopware_plugininstaller.plugin_manager');
 
         // hack to prevent behat error handler kicking in.
         $oldErrorReporting = error_reporting(0);
