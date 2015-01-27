@@ -198,6 +198,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $blogArticle["media"][0]['mediaId']);
                 if ($mediaModel != null) {
                     $blogArticles[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
+                    $blogArticles[$key]["preview"]["srchd"] = array_values($mediaModel->getHighDpiThumbnails());
                 }
             }
         }
@@ -293,22 +294,18 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             );
         }
 
+        $mediaIds = array_column($blogArticleData["media"], 'mediaId');
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         //adding thumbnails to the blog article
         foreach ($blogArticleData["media"] as &$media) {
-            if (!$media["preview"]) {
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if ($mediaModel !== null) {
-                    $media["thumbNails"] = array_values($mediaModel->getThumbnails());
-                }
-            } else {
-                $blogArticleData["preview"] = $media;
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if ($mediaModel !== null) {
-                    $blogArticleData["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
-                }
+            $mediaId = $media['mediaId'];
+            $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($mediaStructs[$mediaId]);
+            if ($media['preview']) {
+                $blogArticleData["preview"] = $mediaData;
             }
+            $media = array_merge($media, $mediaData);
         }
 
         //add sRelatedArticles

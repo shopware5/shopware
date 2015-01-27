@@ -323,6 +323,7 @@
         <service id="legacy_struct_converter" class="Shopware\Components\Compatibility\LegacyStructConverter">
             <argument type="service" id="config" />
             <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="events" />
         </service>
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">

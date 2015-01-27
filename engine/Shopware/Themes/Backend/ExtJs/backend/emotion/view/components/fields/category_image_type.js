@@ -89,6 +89,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategoryImageType', {
 
         // Show/hide article search field based on selected entry
         me.mediaSelection.setVisible(value !== 'selected_image' ? false : true);
+        me.mediaSelection.albumId = -3;
     },
 
     /**

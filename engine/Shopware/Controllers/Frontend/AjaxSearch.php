@@ -93,9 +93,6 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
                 $article['sVoteAverange']['averange'] /= 2;
             }
 
-            $article['thumbNails'] = $article['image']['src'];
-            $article['image'] = $article['image']['src'][1];
-
             $article['link'] = $this->Front()->Router()->assemble(array(
                 'controller' => 'detail',
                 'sArticle' => $product->getId(),

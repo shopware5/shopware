@@ -373,7 +373,7 @@
             if (typeof prevProduct === 'object') {
                 $prevBtn.attr('data-ordernumber', prevProduct.orderNumber);
 
-                $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image + ')');
+                $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image.thumbnails[0].source + ')');
 
                 $prevBtn
                     .attr('href', prevProduct.href)
@@ -390,7 +390,7 @@
             if (typeof nextProduct === 'object') {
                 $nextBtn.attr('data-ordernumber', nextProduct.orderNumber);
 
-                $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image + ')');
+                $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image.thumbnails[0].source + ')');
 
                 $nextBtn
                     .attr('href', nextProduct.href)

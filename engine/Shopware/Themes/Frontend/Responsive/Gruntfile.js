@@ -19,7 +19,8 @@ module.exports = function(grunt) {
             './frontend/_public/vendors/get-size',
             './frontend/_public/vendors/get-style-property',
             './frontend/_public/vendors/matches-selector',
-            './frontend/_public/vendors/outlayer'
+            './frontend/_public/vendors/outlayer',
+            './frontend/_public/vendors/jquery.transit'
         ]
     });
 

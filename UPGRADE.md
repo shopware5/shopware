@@ -302,9 +302,13 @@ In this document you will find a changelog of the important changes related to t
 * Added `frontend/detail/product_quick_view.tpl`
 * Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
 * Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true)
+* Article image album sizes have been changed to match the requirements of the new template (only new installations)
+* Removed `src` property of article images. Each images contains now a `thumbnails` property which all thumbnails.
+        * `src` property is restored for old templates.
 * Default value for controllers in which to display tag clouds no longer includes homepage.
 * Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
 * `sSelfCanonical` is deprecated. Use the `canonicalParams` array instead
+* Chane array structure of thumbnail images in emotions, product detail pages, product listings, blog pages.
 
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.

@@ -7403,20 +7403,20 @@ INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
 (1, 'Hersteller', NULL, 8);
 
 TRUNCATE TABLE `s_media_album_settings`;
-INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thumbnail_size`, `icon`) VALUES
-(1, -10, 0, '', 'sprite-blue-folder'),
-(2, -9, 0, '', 'sprite-blue-folder'),
-(3, -8, 0, '', 'sprite-blue-folder'),
-(4, -7, 0, '', 'sprite-blue-folder'),
-(5, -6, 0, '', 'sprite-blue-folder'),
-(6, -5, 0, '', 'sprite-inbox-document-text'),
-(7, -4, 0, '', 'sprite-target'),
-(8, -3, 0, '', 'sprite-target'),
-(9, -2, 0, '', 'sprite-pictures'),
-(10, -1, 1, '30x30;57x57;105x105;140x140;285x255;720x600', 'sprite-inbox'),
-(11, -11, 1, '57x57;140x140;285x255;720x600', 'sprite-leaf'),
-(12, 1, 0, '', 'sprite-hard-hat'),
-(13, -12, 0, '', 'sprite-blue-folder');
+INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thumbnail_size`, `icon`, `thumbnail_high_dpi`, `thumbnail_quality`, `thumbnail_high_dpi_quality`) VALUES
+(1, -10, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(2, -9, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(3, -8, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(4, -7, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(5, -6, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(6, -5, 0, '', 'sprite-inbox-document-text', 0, 90, 60),
+(7, -4, 0, '', 'sprite-target', 0, 90, 60),
+(8, -3, 1, '800x800;1280x1280;1920x1920', 'sprite-target', 1, 90, 60),
+(9, -2, 1, '800x800;1280x1280;1920x1920', 'sprite-pictures', 1, 90, 60),
+(10, -1, 1, '200x200;600x600;1280x1280', 'sprite-inbox', 1, 90, 60),
+(11, -11, 1, '200x200;600x600;1280x1280', 'sprite-leaf', 1, 90, 60),
+(12, 1, 0, '', 'sprite-hard-hat', 0, 90, 60),
+(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60);
 
 TRUNCATE TABLE `s_media_association`;
 TRUNCATE TABLE `s_media_attributes`;

@@ -10,58 +10,71 @@
         {strip}
 		<div class="image-slider--container{if !count($sArticle.images)} no--thumbnails{/if}">
 			<div class="image-slider--slide">
-
 				<div class="image--box image-slider--item">
-					<span data-picture="true"
-						  data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
-						  data-img-large="{$sArticle.image.src.5}"
-						  data-img-small="{$sArticle.image.src.2}"
-						  data-img-original="{$sArticle.image.src.original}"
-						  class="image--element">
 
-						{*Image based on our default media queries *}
-						{block name='frontend_detail_image_default_queries'}
-							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-							<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-						{/block}
+                    {block name='frontend_detail_image_default_image_element'}
 
-						{*Block to add additional image based on media queries *}
-						{block name='frontend_detail_image_additional_queries'}{/block}
+                        {$alt = $sArticle.articleName|escape:"html"}
 
-						{*If the browser doesn't support JS, the following image will be used *}
-						{block name='frontend_detail_image_fallback'}
-							<noscript>
-								<img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
-							</noscript>
-						{/block}
-					</span>
+                        {if $sArticle.image.description}
+                            {$alt = $sArticle.image.description|escape:"html"}
+                        {/if}
+
+                        <span class="image--element"
+                              data-img-large="{$sArticle.image.thumbnails[2].source}"
+                              data-img-small="{$sArticle.image.thumbnails[0].source}"
+                              data-img-original="{$sArticle.image.source}"
+                              data-alt="{$alt}">
+
+                            {block name='frontend_detail_image_default_image_media'}
+                                <span class="image--media">
+                                    {if isset($sArticle.image.thumbnails)}
+                                        {block name='frontend_detail_image_default_picture_element'}
+                                            <img srcset="{$sArticle.image.thumbnails[1].sourceSet}" alt="{$alt}" itemprop="image" />
+                                        {/block}
+                                    {else}
+                                        {block name='frontend_detail_image_fallback'}
+                                            <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" itemprop="image" />
+                                        {/block}
+                                    {/if}
+                                </span>
+                            {/block}
+                        </span>
+                    {/block}
 				</div>
 
 				{foreach $sArticle.images as $image}
 					<div class="image--box image-slider--item">
-						<span data-picture="true"
-							  data-alt="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
-							  data-img-large="{$image.src.5}"
-							  data-img-small="{$image.src.2}"
-							  data-img-original="{$image.src.original}"
-							  class="image--element">
 
-							{*Image based on our default media queries *}
-							{block name='frontend_detail_image_default_queries'}
-								<span class="image--media" data-src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-								<span class="image--media" data-src="{if isset($image.src)}{$image.src.5}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-							{/block}
+                        {block name='frontend_detail_images_image_element'}
 
-							{*Block to add additional image based on media queries *}
-							{block name='frontend_detail_image_additional_queries'}{/block}
+                            {$alt = $sArticle.articleName|escape:"html"}
 
-							{*If the browser doesn't support JS, the following image will be used *}
-							{block name='frontend_detail_image_fallback'}
-								<noscript>
-									<img itemprop="image" src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
-								</noscript>
-							{/block}
-						</span>
+                            {if $image.description}
+                                {$alt = $image.description|escape:"html"}
+                            {/if}
+
+                            <span class="image--element"
+                                  data-img-large="{$image.thumbnails[2].source}"
+                                  data-img-small="{$image.thumbnails[0].source}"
+                                  data-img-original="{$image.source}"
+                                  data-alt="{$alt}">
+
+                                {block name='frontend_detail_images_image_media'}
+                                    <span class="image--media">
+                                        {if isset($image.thumbnails)}
+                                            {block name='frontend_detail_images_picture_element'}
+                                                <img srcset="{$image.thumbnails[1].sourceSet}" alt="{$alt}" itemprop="image" />
+                                            {/block}
+                                        {else}
+                                            {block name='frontend_detail_images_fallback'}
+                                                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" itemprop="image" />
+                                            {/block}
+                                        {/if}
+                                    </span>
+                                {/block}
+                            </span>
+                        {/block}
 					</div>
 				{/foreach}
 			</div>

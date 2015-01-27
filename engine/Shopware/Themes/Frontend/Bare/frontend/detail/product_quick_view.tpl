@@ -1,25 +1,26 @@
 {block name='frontend_detail_product_quick_view'}
     <div class="product--quick-view">
         {block name='frontend_detail_product_quick_view_inner'}
+
             {block name='frontend_detail_product_quick_view_image_link'}
                 <a class="quick-view--image-link" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
                     {block name='frontend_detail_product_quick_view_image'}
-                        <span class="quick-view--image" data-picture="true" data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
+
+                        {$alt = $sArticle.articlename|escape:"html"}
+
+                        {if $sArticle.image.description}
+                            {$alt = $sArticle.image.description|escape:"html"}
+                        {/if}
+
+                        <span class="quick-view--image">
                             {block name='frontend_detail_product_quick_view_image_inner'}
-                                {*Image based on our default media queries*}
-                                {block name='product_quick_view_image_default_queries'}
-                                    <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-                                {/block}
-
-                                {*Block to add additional image based on media queries*}
-                                {block name='product_quick_view_image_additional_queries'}{/block}
-
-                                {*If the browser doesn't support JS, the following image will be used*}
-                                {block name='product_quick_view_image_fallback'}
-                                    <noscript>
-                                        <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
-                                    </noscript>
-                                {/block}
+                                {if $sArticle.image.thumbnails}
+                                    <img srcset="{$sArticle.image.thumbnails[1].sourceSet}" alt="{$alt}" />
+                                {else}
+                                    {block name='product_quick_view_image_fallback'}
+                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}">
+                                    {/block}
+                                {/if}
                             {/block}
                         </span>
                     {/block}

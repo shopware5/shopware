@@ -46,15 +46,23 @@ class LegacyStructConverter
     private $contextService;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param ContextService $contextService
+     * @param \Enlight_Event_EventManager $eventManager
      */
     function __construct(
         \Shopware_Components_Config $config,
-        ContextService $contextService
+        ContextService $contextService,
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->config = $config;
         $this->contextService = $contextService;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -74,6 +82,7 @@ class LegacyStructConverter
             'user_selected' => $group->isSelected()
         );
     }
+
     /**
      * Converts the passed ListProduct struct to a shopware 3-4 array structure.
      *
@@ -394,27 +403,30 @@ class LegacyStructConverter
         $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
 
-        $src = $media->getThumbnails();
-        foreach ($src as &$thumbnail) {
-            $thumbnail = $imageDir . $thumbnail;
+        $thumbnails = [];
+        foreach($media->getThumbnails() as $thumbnail) {
+            $retina = null;
+            if ($thumbnail->hasRetinaSource()) {
+                $retina = $imageDir . $thumbnail->getRetinaSource();
+            }
+            $thumbnails[] = [
+                'source' => $imageDir . $thumbnail->getSource(),
+                'retinaSource' => $retina,
+                'sourceSet' => $thumbnail->getSourceSet($imageDir),
+                'maxWidth' => $thumbnail->getMaxWidth(),
+                'maxHeight' => $thumbnail->getmaxHeight()
+            ];
         }
-
-        $src['original'] = $imageDir . $media->getFile();
 
         $data = array(
             'id' => $media->getId(),
             'position' => 1,
+            'source' => $imageDir . $media->getFile(),
+            'description' => $media->getName(),
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
             'parentId' => null,
-            'src' => $src,
-            'res' => array(
-                'original' => array(
-                    'width' => 0,
-                    'height' => 0,
-                ),
-                'description' => $media->getName(),
-            )
+            'thumbnails' => $thumbnails
         );
 
         $attributes = $media->getAttributes();
@@ -426,7 +438,9 @@ class LegacyStructConverter
             $data['attribute'] = [];
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Media', $data, [
+            'media' => $media
+        ]);
     }
 
     /**

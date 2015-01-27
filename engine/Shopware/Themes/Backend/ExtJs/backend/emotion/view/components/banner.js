@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
 
         me.mediaSelection = me.down('mediaselectionfield');
         me.mediaSelection.on('selectMedia', me.onSelectMedia, me);
+        me.mediaSelection.albumId = -3;
 
         me.bannerFile = me.getFieldByName('file');
         if(me.bannerFile && me.bannerFile.value && me.bannerFile.value.length) {

@@ -13,14 +13,13 @@
 				{block name='frontend_index_logo'}
 					<div class="logo--shop block">
 						<a class="logo--link" href="{url controller='index'}" title="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault'}{/s}"|escape}">
-							<span data-picture data-alt="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}"|escape}">
-								<span data-src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}"></span>
-								<span data-src="{link file='frontend/_public/src/img/logos/logo--tablet.png'}" data-media="(min-width: 47.75em)"></span>
+                            <picture>
+                                <source srcset="{link file=$theme.desktopLogo}" media="(min-width: 78.75em)">
+                                <source srcset="{link file=$theme.tabletLandscapeLogo}" media="(min-width: 64em)">
+                                <source srcset="{link file=$theme.tabletLogo}" media="(min-width: 48em)">
 
-								<noscript>
-									<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault'}{/s}"|escape}">
-								</noscript>
-							</span>
+                                <img srcset="{link file=$theme.mobileLogo}" alt="{"{config name=shopName}"|escape} - {"{s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}"|escape}" />
+                            </picture>
 						</a>
 					</div>
 				{/block}
