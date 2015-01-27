@@ -212,7 +212,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $forceCanonicalHttp = Shopware()->Config()->get('forceCanonicalHttp');
 
         //check if the current link is a canonical link
-        $isCanonical = (strpos($src[0], 'rel="canonical"') !== false);
+        $isCanonical = (
+            strpos($src[0], 'rel="canonical"') !== false ||
+            strpos($src[0], 'rel="prev"') !== false ||
+            strpos($src[0], 'rel="next"') !== false
+        );
 
         $replaceCanonical = !($isCanonical && $forceCanonicalHttp);
 

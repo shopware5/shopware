@@ -21,6 +21,29 @@ class ListingContext extends SubContext
     }
 
     /**
+     * @Given /^I am on the listing page for category (?P<categoryId>\d+)$/
+     * @Given /^I am on the listing page for category (?P<categoryId>\d+) on page (?P<page>\d+)$/
+     */
+    public function iAmOnTheListingPageForCategoryOnPage($categoryId, $page = null)
+    {
+        $params = array(
+            array(
+                'parameter' => 'sCategory',
+                'value'=> $categoryId
+            )
+        );
+
+        if ($page) {
+            $params[] = array(
+                'parameter' => 'sPage',
+                'value'=> $page
+            );
+        }
+
+        $this->getPage('Listing')->openListing($params);
+    }
+
+        /**
      * @When /^I set the filter to:$/
      * @When /^I reset all filters$/
      */
