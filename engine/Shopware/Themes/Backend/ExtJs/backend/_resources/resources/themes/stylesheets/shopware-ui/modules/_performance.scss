@@ -1,0 +1,53 @@
+
+.performance-view-start-body {
+  background: #fff !important;
+}
+
+.performance-view-start * {
+  color: #5c6f7c;
+}
+
+.performance-view-start {
+  background: #fff !important;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+
+  .toggle-container {
+    margin: 20px 0 30px;
+    border: 1px solid #c4c4c4;
+    padding: 10px;
+    border-radius: 4px;
+    user-select: none;
+
+    .toggle-button {
+      cursor: pointer;
+      margin-top: 25px;
+      background: theme-image($theme, 'plugin_manager/toggle-button-sprite.png') no-repeat;;
+    }
+    .toggle-button.active {
+      background-position-y: -25px;
+    }
+  }
+
+  ul {
+    padding-left: 20px;
+    margin-top: 5px;
+
+    li {
+      background: theme-image($theme, 'plugin_manager/desc-list-dot.png') no-repeat;
+      background-position-y: -1px;
+      color: #5c6f7c;
+      line-height: 20px;
+      padding: 0 0 5px 30px;
+    }
+  }
+}
