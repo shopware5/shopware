@@ -90,7 +90,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
 
 
         /** @var \Shopware\Components\Plugin\Manager $pluginManager */
-        $pluginManager = self::$statickernel->getContainer()->get('shopware.plugin_Manager');
+        $pluginManager = self::$statickernel->getContainer()->get('shopware_plugininstaller.plugin_Manager');
 
         // hack to prevent behat error handler kicking in.
         $oldErrorReporting = error_reporting(0);

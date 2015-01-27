@@ -17,7 +17,7 @@ class ListProductTest extends TestCase
      */
     private function getListProduct($number, Context $context)
     {
-        return Shopware()->Container()->get('list_product_service')
+        return Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
     }
 

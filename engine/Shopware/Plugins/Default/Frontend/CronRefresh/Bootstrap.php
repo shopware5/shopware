@@ -98,7 +98,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     public function onCronJobSearch(Shopware_Components_Cron_CronJob $job)
     {
         /**@var $indexer SearchIndexer*/
-        $indexer = $this->get('search_indexer');
+        $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
     }
 

@@ -190,7 +190,7 @@ class sOrder
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
 
-        $this->contextService = $contextService ? : Shopware()->Container()->get('context_service');
+        $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
     }
 
     /**

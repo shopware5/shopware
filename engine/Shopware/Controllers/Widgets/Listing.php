@@ -127,13 +127,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $context = $this->get('context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        $criteria = $this->get('store_front_criteria_factory')
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createAjaxCountCriteria($this->Request(), $context);
 
         /**@var $result ProductNumberSearchResult*/
-        $result = $this->get('product_number_search')->search(
+        $result = $this->get('shopware_searchdbal.product_number_search')->search(
             $criteria,
             $context
         );

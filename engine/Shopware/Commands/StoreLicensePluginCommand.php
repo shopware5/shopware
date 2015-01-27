@@ -108,7 +108,7 @@ class StoreLicensePluginCommand extends StoreCommand
         $output->writeln("License manager downloaded.");
 
         /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
 
         $output->writeln("Refresh PluginList.");
         $pluginManager->refreshPluginList();

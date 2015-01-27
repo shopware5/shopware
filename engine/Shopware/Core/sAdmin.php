@@ -152,7 +152,7 @@ class sAdmin
         $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
-        $this->contextService = $contextService ? : Shopware()->Container()->get('context_service');
+        $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
         $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
     }

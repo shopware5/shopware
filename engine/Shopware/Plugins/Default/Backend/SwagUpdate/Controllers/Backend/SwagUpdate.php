@@ -428,7 +428,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $shop = $this->get('models')->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
 
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $plugin = $pluginManager->getPluginByName('SwagUpdate');
         $pluginManager->saveConfigElement($plugin, 'update-unique-id', $uniqueid, $shop);
 

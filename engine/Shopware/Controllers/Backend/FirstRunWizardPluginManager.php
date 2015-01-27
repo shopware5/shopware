@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         if (empty($locales)) {
             /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('account_manager_service');
+            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             /** @var LocaleStruct[] $serverLocales */
             $serverLocales = $accountManagerService->getLocales();

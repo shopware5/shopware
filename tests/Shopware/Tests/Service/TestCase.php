@@ -80,7 +80,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $result = Shopware()->Container()->get('product_number_search_dbal')
+        $result = Shopware()->Container()->get('shopware_searchdbal.product_number_search_dbal')
             ->search($criteria, $context);
 
         $this->assertSearchResult($result, $expectedNumbers);
@@ -243,14 +243,12 @@ class TestCase extends \Enlight_Components_Test_TestCase
      * @param $number
      * @param Context $context
      * @param Category $category
-     * @param $additionally
      * @return array
      */
     protected function getProduct(
         $number,
         Context $context,
-        Category $category = null,
-        $additionally
+        Category $category = null
     ) {
         $product = $this->helper->getSimpleProduct(
             $number,

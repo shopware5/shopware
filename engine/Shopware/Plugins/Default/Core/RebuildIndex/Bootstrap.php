@@ -212,7 +212,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         }
 
         /**@var $indexer SearchIndexer*/
-        $indexer = $this->get('search_indexer');
+        $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 
         return true;

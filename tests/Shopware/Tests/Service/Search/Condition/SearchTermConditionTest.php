@@ -66,7 +66,7 @@ class SearchTermConditionTest extends TestCase
     {
         $articles = parent::createProducts($products, $context, $category);
 
-        Shopware()->Container()->get('search_indexer')->build();
+        Shopware()->Container()->get('shopware_searchdbal.search_indexer')->build();
 
         Shopware()->Container()->get('cache')->clean('all', array('Shopware_Modules_Search'));
 

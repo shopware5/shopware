@@ -114,8 +114,8 @@ class sExport
     ) {
         $container = Shopware()->Container();
 
-        $this->contextService = $contextService ?: $container->get('context_service');
-        $this->additionalTextService = $container->get('additional_text_service');
+        $this->contextService = $contextService ?: $container->get('shopware_storefront.context_service');
+        $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
         $this->db = $db ?: $container->get('db');
     }
 
