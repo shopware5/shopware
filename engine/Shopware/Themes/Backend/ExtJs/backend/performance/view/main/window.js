@@ -134,6 +134,9 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
 
         return [
             {
+                xtype: 'performance-tabs-start-main'
+            },
+            {
                 xtype: 'performance-tabs-cache-main',
                 infoStore: me.infoStore
             },
