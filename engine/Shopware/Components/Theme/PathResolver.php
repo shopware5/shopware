@@ -105,10 +105,7 @@ class PathResolver
 
     private function getBaseThemeDirectory()
     {
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes';
+        return $this->rootDir . DIRECTORY_SEPARATOR . 'themes';
     }
 
     /**
