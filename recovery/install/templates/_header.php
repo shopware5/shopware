@@ -23,8 +23,9 @@
 
     <script>
         var shopwareTranslations = {
-            'counterTextMigrations': 'Database import in progress',
-            'updateSuccess': 'Database import complete'
+            'counterTextMigrations': '<?= $t->t("migration_counter_text_migrations") ?>',
+            'counterTextSnippets':   '<?= $t->t("migration_counter_text_snippets") ?>',
+            'updateSuccess':         '<?= $t->t("migration_update_success") ?>'
         }
     </script>
 </head>
