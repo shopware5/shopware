@@ -10,9 +10,14 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\R
 class Listing extends Page
 {
     /**
+     * @var string $basePath
+     */
+    protected $basePath = '/listing/index/sCategory/{sCategory}';
+
+    /**
      * @var string $path
      */
-    protected $path = '/listing/index/sCategory/{sCategory}?sPage={sPage}&sTemplate={sTemplate}&sPerPage={sPerPage}&sSort={sSort}';
+    protected $path = '';
 
     public $cssLocator = array(
         'view' => array(
@@ -37,11 +42,12 @@ class Listing extends Page
             $parameters[$param['parameter']] = $param['value'];
         }
 
-        $parameters['sCategory'] = isset($parameters['sCategory']) ? $parameters['sCategory'] : '3';
-        $parameters['sPage']     = isset($parameters['sPage'])     ? $parameters['sPage']     : '1';
-        $parameters['sTemplate'] = isset($parameters['sTemplate']) ? $parameters['sTemplate'] : '';
-        $parameters['sPerPage'] = isset($parameters['sPerPage']) ? $parameters['sPerPage'] : '12';
-        $parameters['sSort'] = isset($parameters['sSort']) ? $parameters['sSort'] : '1';
+        $categoryId = isset($parameters['sCategory']) ? $parameters['sCategory'] : "3";
+        unset($parameters['sCategory']);
+
+        $this->path = $this->basePath . '?' . http_build_query($parameters);
+
+        $parameters['sCategory'] = $categoryId;
 
         $this->open($parameters);
     }
@@ -109,17 +115,17 @@ class Listing extends Page
     }
 
     /**
-     * Checks the view-method of the listing. Only $view have to be active!
+     * Checks the view method of the listing. Only $view has to be active
      * @param $view
      */
     public function checkView($view)
     {
         foreach ($this->cssLocator['view'] as $key => $viewCssLocator) {
-            $message = sprintf('The %s-view is active! (should be %s-view)', $key, $view);
+            $message = sprintf('The %s view is active! (should be %s view)', $key, $view);
             $count = 0;
 
             if ($key === $view) {
-                $message = sprintf('The %s-view is not active!', $view);
+                $message = sprintf('The %s view is not active!', $view);
                 $count = $this->viewSwitchCount;
             }
 

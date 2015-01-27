@@ -9,7 +9,21 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle}{elseif $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
+
+    {if {config name=seoIndexPaginationLinks} 
+        && $showListing 
+        && $criteria 
+        && ceil($sNumberArticles / $criteria->getLimit()) > 1
+    }
+        {* Count of available product pages *}
+        {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+        {include file="frontend/listing/header_seo_pagination.tpl"}
+    {elseif !({config name=seoIndexPaginationLinks} && !$showListing)}
+        <link rel="canonical"
+              href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{else}{$sCategoryContent.sSelfCanonical}{/if}"
+              title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle}{elseif $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}"
+                />
+    {/if}
 {/block}
 
 {* Title *}

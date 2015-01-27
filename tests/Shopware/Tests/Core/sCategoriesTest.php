@@ -200,7 +200,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertArrayHasKey('description', $categoryArray);
         $this->assertArrayHasKey('template', $categoryArray);
         $this->assertArrayHasKey('sSelf', $categoryArray);
-        $this->assertArrayHasKey('sSelfCanonical', $categoryArray);
+        $this->assertArrayHasKey('canonicalParams', $categoryArray);
         $this->assertArrayHasKey('atomFeed', $categoryArray);
         $this->assertArrayHasKey('layout', $categoryArray);
 
