@@ -22,6 +22,14 @@ class SeoContext extends SubContext
     }
 
     /**
+     * @Then /^I should not see canonical link$/
+     */
+    public function iShouldNotSeeCanonicalLinkWithQuery()
+    {
+        $this->getPage('GenericPage')->checkCanonical();
+    }
+
+    /**
      * @Given /^I should not see pagination metas$/
      */
     public function iShouldNotSeePaginationMetas()
