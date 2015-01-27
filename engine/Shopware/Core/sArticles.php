@@ -184,20 +184,20 @@ class sArticles
         $this->config                    = $container->get('config');
         $this->db                        = $container->get('db');
         $this->eventManager              = $container->get('events');
-        $this->contextService            = $container->get('context_service');
-        $this->listProductService        = $container->get('list_product_service');
-        $this->productService            = $container->get('product_service');
-        $this->productNumberSearch       = $container->get('product_number_search');
-        $this->configuratorService       = $container->get('configurator_service');
-        $this->propertyService           = $container->get('property_service');
-        $this->additionalTextService     = $container->get('additional_text_service');
-        $this->searchService             = $container->get('product_search');
+        $this->contextService            = $container->get('shopware_storefront.context_service');
+        $this->listProductService        = $container->get('shopware_storefront.list_product_service');
+        $this->productService            = $container->get('shopware_storefront.product_service');
+        $this->productNumberSearch       = $container->get('shopware_searchdbal.product_number_search');
+        $this->configuratorService       = $container->get('shopware_storefront.configurator_service');
+        $this->propertyService           = $container->get('shopware_storefront.property_service');
+        $this->additionalTextService     = $container->get('shopware_storefront.additional_text_service');
+        $this->searchService             = $container->get('shopware_search.product_search');
         $this->queryAliasMapper          = $container->get('query_alias_mapper');
         $this->frontController           = $container->get('front');
         $this->legacyStructConverter     = $container->get('legacy_struct_converter');
         $this->legacyEventManager        = $container->get('legacy_event_manager');
         $this->session                   = $container->get('session');
-        $this->storeFrontCriteriaFactory = $container->get('store_front_criteria_factory');
+        $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }

@@ -74,7 +74,7 @@ class sArticlesComparisons
         $this->db             = $container->get('db');
         $this->config         = $container->get('config');
         $this->session        = $container->get('session');
-        $this->contextService = $container->get('context_service');
+        $this->contextService = $container->get('shopware_storefront.context_service');
     }
 
     /**

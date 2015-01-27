@@ -46,10 +46,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
         /**@var $context ShopContextInterface*/
-        $context = $this->get('context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         /**@var $criteria \Shopware\Bundle\SearchBundle\Criteria*/
-        $criteria = $this->get('store_front_criteria_factory')
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createListingCriteria($this->Request(), $context);
 
         if ($criteria->hasCondition('manufacturer')) {
@@ -64,9 +64,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         /**@var $manufacturer Manufacturer*/
-        $manufacturer = $this->get('manufacturer_service')->get(
+        $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
-            $this->get('context_service')->getShopContext()
+            $this->get('shopware_storefront.context_service')->getShopContext()
         );
 
         $facets = array();
@@ -119,9 +119,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($seoSupplier === true && $categoryContent['parentId'] == 1 && $manufacturerId) {
 
             /**@var $manufacturer Manufacturer*/
-            $manufacturer = $this->get('manufacturer_service')->get(
+            $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $this->get('context_service')->getShopContext()
+                $this->get('shopware_storefront.context_service')->getShopContext()
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -164,10 +164,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->get('context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         /**@var $criteria \Shopware\Bundle\SearchBundle\Criteria*/
-        $criteria = $this->get('store_front_criteria_factory')
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createListingCriteria($this->Request(), $context);
 
         if ($categoryContent['hideFilter']) {
