@@ -136,8 +136,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
-        $result = $this->dispatch('/genusswelten/?p=1');
-        $this->assertEquals(200, $result->getHttpResponseCode());
+        Shopware()->Modules()->Articles()->sGetArticleCharts(3);
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         $this->assertCount(50, $topSeller);
