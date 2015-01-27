@@ -278,7 +278,9 @@
 
         // Button click
         me.$el.on(clickEvt + '.' + pluginName, function (event) {
-            event.preventDefault();
+            if (!$.contains(me.$offCanvas[0], (event.target || event.currentTarget))) {
+                event.preventDefault();
+            }
 
             me.openMenu();
         });
@@ -286,6 +288,7 @@
         // Allow the user to close the off canvas menu
         me.$body.delegate(opts.closeButtonSelector, clickEvt + '.' + pluginName, function (event) {
             event.preventDefault();
+
             me.closeMenu();
         });
 
