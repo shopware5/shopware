@@ -67,6 +67,10 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
         display: none;
     }
 
+    .js--fancy-select-text {
+        font-weight: bold;
+    }
+
     // Actions above the actual table body
     .table--actions {
         .clearfix();
@@ -337,11 +341,13 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
     .add-product--field,
     .add-voucher--field {
         .border-radius-multi(3px, 0, 0, 3px);
+        .unitize(38, 16, height);
         width: 90%;
     }
 
     .add-product--button,
     .add-voucher--button {
+        .unitize(38, 16, height);
         .unitize-padding(3, 0);
         .border-radius-multi(0, 3px, 3px, 0);
         width: 10%;
@@ -365,6 +371,8 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
     }
 
     .table--shipping-costs .js--fancy-select {
+        .unitize(38, 16, height);
+        .unitize(36, 16, line-height);
         width: 100%;
     }
 
@@ -501,6 +509,10 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
 
         .js--fancy-select {
             width: 100%;
+        }
+
+        .js--fancy-select-text {
+            font-weight: bold;
         }
 
         // Premium articles with variants
