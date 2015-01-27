@@ -535,12 +535,14 @@ class sCategories
         $detailUrl = $category['blog'] ? $this->blogBaseUrl : $this->baseUrl;
         $detailUrl .= $category['id'];
 
+        /** @deprecated sSelfCanonical, use $canonicalParams instead */
         $canonical = $detailUrl;
         if ($this->config->get('forceCanonicalHttp')) {
             $canonical = str_replace('https://', 'http://', $canonical);
         }
 
-
+        $canonicalParams = $this->getCategoryCanonicalParams($category);
+        
         $category = array_merge(
             $category,
             array(
@@ -554,9 +556,9 @@ class sCategories
                 'articleCount'    => (int) $category['articleCount'],
                 'sSelf'           => $detailUrl,
                 'sSelfCanonical'  => $canonical,
+                'canonicalParams' => $canonicalParams,
                 'rssFeed'         => $detailUrl . '&sRss=1',
-                'atomFeed'        => $detailUrl . '&sAtom=1',
-                'seoLink'         => $this->frontController->Router()->assemble($canonical)
+                'atomFeed'        => $detailUrl . '&sAtom=1'
             )
         );
 
@@ -575,6 +577,30 @@ class sCategories
         }
 
         return $category;
+    }
+
+    /**
+     * @param array $category
+     * @return string
+     */
+    private function getCategoryCanonicalParams($category)
+    {
+        $request = $this->frontController->Request();
+        $page = $request->getQuery('sPage');
+        
+        $emotion = $this->manager->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getCategoryBaseEmotionsQuery($category['category']['id'])->getArrayResult();
+
+        $canonicalParams = array(
+            'sViewport' => $category['blog'] ? 'blog' : 'cat',
+            'sCategory' => $category['id'],
+        );
+        
+        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
+            $canonicalParams['sPage'] = $page ? : 1;
+        }
+        
+        return $canonicalParams;
     }
 
     /**

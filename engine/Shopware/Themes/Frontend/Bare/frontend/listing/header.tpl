@@ -8,31 +8,24 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
+    {* Count of available product pages *}
+    {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+    
+    {if {config name=seoIndexPaginationLinks} && $showListing && $pages > 1}
+        {* Previous rel tag *}
+        {if $sPage > 1}
+            {$sCategoryContent.canonicalParams.sPage = $sPage - 1}
+            <link rel="prev" href="{url params = $sCategoryContent.canonicalParams}">
+        {/if}
 
-{* Count of available product pages *}
-{if $showListing}
-{$pages = ceil($sNumberArticles / $criteria->getLimit())}
-
-{if $pages >= $sPage + 1}
-{$pageNext = $sPage + 1}
-{/if}
-
-{if $sPage >= 1}
-{$pagePrevious = $sPage - 1}
-{/if}
-
-{* Previous rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $pagePrevious}
-<link rel="cannonical" href="{$sCategoryContent.sSelfCanonical}">
-<link rel="prev" href="{$sCategoryContent.seoLink}?p={$pagePrevious}">
-{/if}
-
-{* Next rel tag for infinite scrolling *}
-{if $theme.infiniteScrolling && $pageNext}
-<link rel="next" href="{$sCategoryContent.seoLink}?p={$pageNext}">
-{/if}
-{/if}
+        {* Next rel tag *}
+        {if $pages >= $sPage + 1}
+            {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
+            <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
+        {/if}
+    {elseif !({config name=seoIndexPaginationLinks} && !$showListing)}
+        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
+    {/if}
 {/block}
 
 {* Title *}

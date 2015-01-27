@@ -306,10 +306,33 @@ class Repository extends ModelRepository
      */
     public function getCategoryEmotionsQueryBuilder($categoryId)
     {
-        $builder = $this->createQueryBuilder('emotions');
+        $builder = $this->getCategoryBaseEmotionsQueryBuilder($categoryId);
         $builder->select(array('emotions', 'grid', 'template'))
-            ->leftJoin('emotions.grid', 'grid')
-            ->leftJoin('emotions.template', 'template')
+                ->leftJoin('emotions.grid', 'grid')
+                ->leftJoin('emotions.template', 'template');
+
+        return $builder;
+    }
+
+    /**
+     * @param integer $categoryId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getCategoryBaseEmotionsQuery($categoryId)
+    {
+        $builder = $this->getCategoryBaseEmotionsQueryBuilder($categoryId);
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * @param integer $categoryId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCategoryBaseEmotionsQueryBuilder($categoryId)
+    {
+        $builder = $this->createQueryBuilder('emotions');
+        $builder->select(array('emotions'))
             ->innerJoin('emotions.categories','categories')
             ->where('categories.id = ?1')
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')

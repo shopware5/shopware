@@ -304,6 +304,7 @@ In this document you will find a changelog of the important changes related to t
 * Added configuration `showEsd` to show/hide the ESD-Downloads in the customer accounts menu. (default = true)
 * Default value for controllers in which to display tag clouds no longer includes homepage.
 * Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
+* `sSelfCanonical` is deprecated. Use the `canonicalParams` array instead
 
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.

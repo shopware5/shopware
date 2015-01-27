@@ -143,23 +143,21 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($templateVersion >= 3) {
             if ($this->Request()->getParam('sPage')) {
                 $viewAssignments['hasEmotion'] = false;
+                $viewAssignments['showListing'] = true;
             } else {
                 $emotions = $this->get('emotion_device_configuration')->get($categoryId);
                 $viewAssignments['emotions'] = $emotions;
                 $viewAssignments['hasEmotion'] = (!empty($emotions));
+                $viewAssignments['showListing'] = empty($emotions) || (bool) max(array_column($emotions, 'showListing'));
             }
-
-            $viewAssignments['showListing'] = (bool) max(array_column($emotions, 'showListing'));
         } else {
             //check category emotions
             $emotion = $this->getCategoryEmotion($categoryId);
             $viewAssignments['hasEmotion'] = !empty($emotion);
+            $viewAssignments['showListing'] = (empty($emotion) || !empty($emotion['showListing']));
         }
 
-        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
-        $viewAssignments['showListing'] = $showListing;
-
-        if (!$showListing && $templateVersion < 3) {
+        if (!$viewAssignments['showListing'] && $templateVersion < 3) {
             $this->View()->assign($viewAssignments);
             return;
         }
@@ -244,13 +242,18 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $content['metaDescription'] = $manufacturer->getMetaDescription();
         $content['metaKeywords'] = $manufacturer->getMetaKeywords();
 
-        $path = $this->Front()->Router()->assemble(array(
+        $canonicalParams = array(
             'sViewport' => 'listing',
             'sAction'   => 'manufacturer',
             'sSupplier' => $manufacturer->getId(),
-        ));
+        );
+
+        $content['canonicalParams'] = $canonicalParams;
+        
+        $path = $this->Front()->Router()->assemble($canonicalParams);
 
         if ($path) {
+            /** @deprecated */
             $content['sSelfCanonical'] = $path;
         }
 
@@ -302,30 +305,17 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return array();
         }
 
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $data = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getCategoryBaseEmotionsQuery($categoryId)->getArrayResult();
 
-        $query->select(array('emotion.id', 'emotion.show_listing'))
-            ->from('s_emotion', 'emotion')
-            ->where('emotion.active = 1')
-            ->andWhere('emotion.is_landingpage = 0')
-            ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
-            ->andWhere('(emotion.valid_from <= NOW() OR emotion.valid_from IS NULL)')
-            ->setParameter(':categoryId', $categoryId);
-
-        $query->innerJoin(
-            'emotion',
-            's_emotion_categories',
-            'category',
-            'category.emotion_id = emotion.id
-             AND category.category_id = :categoryId'
+        if (empty($data)) {
+            return array();
+        }
+        
+        return array(
+            'id' => $data[0]['id'],
+            'showListing' => $data[0]['showListing']
         );
-
-        /**@var $statement PDOStatement*/
-        $statement = $query->execute();
-
-        $data = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return $data;
     }
 
     private function getCategoryTemplate($categoryContent, $categoryArticles)
