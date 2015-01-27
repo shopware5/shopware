@@ -59,12 +59,12 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
         $this->assertCount(2, $directories);
 
         $this->assertStringEndsWith(
-            'Themes/Frontend/' . $custom->getTemplate() . '',
+            'themes/Frontend/' . $custom->getTemplate() . '',
             $directories[0]
         );
 
         $this->assertStringEndsWith(
-            'Themes/Frontend/' . $custom->getParent()->getTemplate() . '',
+            'themes/Frontend/' . $custom->getParent()->getTemplate() . '',
             $directories[1]
         );
     }
