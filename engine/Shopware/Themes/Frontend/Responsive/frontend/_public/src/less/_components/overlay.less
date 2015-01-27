@@ -1,3 +1,21 @@
+/*
+Overlay
+================================================
+Creates a fixed full-screen overlay.
+
+The `js--overlay` element is used when a modal window is shown.
+
+The `js--overlay` element is empty while the html of the modal box will be created just before the closing body-tag.
+
+The opacity of the full-screen overlay can be modified with javascript.
+
+```
+<div class="js--overlay" style="opacity: 0.8; display: block; cursor: pointer;"></div>
+```
+
+default color:`#555555` default opacity:`0.01`
+*/
+
 .js--overlay {
     .opacity(0.01);
     background: @overlay-bg;

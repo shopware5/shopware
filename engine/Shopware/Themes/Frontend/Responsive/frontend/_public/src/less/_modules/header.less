@@ -1,4 +1,10 @@
-// Basic header
+/*
+Header
+==========================================
+Contains the styles of the main header and its components.
+*/
+
+    // Basic header
 .header-main {
     .unitize(10, 16, padding-bottom);
     background: #fff;
@@ -28,7 +34,7 @@
     .header--navigation { position: relative; }
 }
 
-// Small Checkout & Registration Header
+    // Small Checkout & Registration Header
 .is--ctl-checkout.is--minimal-header,
 .is--ctl-register.is--minimal-header.is--target-checkout {
 
@@ -54,7 +60,7 @@
     }
 }
 
-// Shop navigation
+    // Shop navigation
 .shop--navigation {
     position: relative;
 
@@ -163,7 +169,7 @@
     }
 }
 
-// Default ajax search form
+    // Default ajax search form
 .main-search--form {
     .unitize-padding(10, 10);
     width: 100%;
@@ -200,7 +206,7 @@
     }
 }
 
-// Creating the arrow on active search field
+    // Creating the arrow on active search field
 .has--csstransforms .entry--search .entry--trigger {
     &.is--active::after {
         .rotate(-45deg);
@@ -230,7 +236,7 @@
     .unitize(70, 16, padding-bottom);
 }
 
-// Loading indicator for css animations supported browsers
+    // Loading indicator for css animations supported browsers
 .has--cssanimations {
     .form--ajax-loader {
         .unitize(20, 16, top);
@@ -251,7 +257,7 @@
     }
 }
 
-// Loading indicator for non css animations supported browsers
+    // Loading indicator for non css animations supported browsers
 .has--no-cssanimations .form--ajax-loader {
     .unitize(24, 16, top);
     .unitize(55, 16, right);
@@ -262,7 +268,7 @@
     background-image: url('../../img/icons/loading-indicator.gif');
 }
 
-// Search results modal
+    // Search results modal
 .main-search--results {
     .clearfix();
     .unitize(110, 16, top);
@@ -397,7 +403,7 @@
     }
 }
 
-// Phone Landscape styling for the global shop header
+    // Phone Landscape styling for the global shop header
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
 
     .is--ctl-checkout.is--minimal-header,
@@ -474,7 +480,7 @@
     }
 }
 
-// Tablet styling for the global shop header
+    // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 
     .header-main.is--active-searchfield  {
@@ -740,7 +746,7 @@
     }
 }
 
-// Tablet Landscape styling for the global shop header
+    // Tablet Landscape styling for the global shop header
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
 
     .header-main {
@@ -818,7 +824,7 @@
     }
 }
 
-// Desktop styling for the global shop header
+    // Desktop styling for the global shop header
 @media screen and (min-width: @desktopViewportWidth) {
 
     .header-main {

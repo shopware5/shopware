@@ -1,3 +1,39 @@
+/*
+Modalbox
+==============================================
+Creates a transitioned fixed modalbox overlay that displays above all other elements.
+
+The `sizing--content` class lets the modal window get its height from the inner content.
+
+```
+<div class="js--modal sizing--content no--header">
+    <div class="header">
+        <div class="title">
+            <!-- Optional modal header -->
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="modal--title">
+            Title of the modal window
+        </div>
+
+        <!-- Main content of the modal box -->
+
+        <div class="modal--actions">
+            <a href="" data-modal-close="true" title="" class="btn">
+                Modal action buttons
+            </a>
+            <a href="" data-modal-close="true" title="" class="btn">
+                Modal action buttons
+            </a>
+        </div>
+    </div>
+</div>
+```
+
+*/
+
 .js--modal {
     .transition(all 0.5s);
     .box-shadow(0px 0px 0px 7px rgba(0, 0, 0, 0.25));

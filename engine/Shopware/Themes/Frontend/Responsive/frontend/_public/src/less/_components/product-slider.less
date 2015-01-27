@@ -1,3 +1,32 @@
+/*
+Product Slider
+===================================================
+######Shopware Product slider element
+The shopware product slider element displays a selection of articles the user chooses inside a slim slider element.
+
+The product slider uses the product box component for displaying and sliding articles.
+
+The slider has `is--vertical` and `is-horizontal` properties to set the layout of the element.
+
+For initializing a product slider the outer `product-slider` wrapper has to have the attribute `data-product-slider="true"`.
+
+```
+<div class="product-slider" data-product-slider="true">
+
+    <a class="product-slider--arrow arrow--next is--horizontal"></a>
+    <a class="product-slider--arrow arrow--prev is--horizontal"></a>
+
+    <div class="product-slider--container is--horizontal">
+
+        <div class="product-slider--item">
+            <!-- Product box will be placed here. -->
+        </div>
+
+    </div>
+
+</div>
+```
+*/
 
 .product-slider {
     display: block;

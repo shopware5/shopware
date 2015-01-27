@@ -1,9 +1,14 @@
-// The mixins provides you a cross-browser compatible method to set a linear gradient which goes from top to bottom.
-//
-// Please refer to <http://caniuse.com/css-gradients> to see the browser support table of the feature.
-//
-// @param {String} start The start color of the gradient
-// @param {String} end The end color of the gradient
+/*
+Gradient mixin
+====================================================
+The mixins provides you a cross-browser compatible method to set a linear gradient which goes from top to bottom.
+
+Please refer to <http://caniuse.com/css-gradients> to see the browser support table of the feature.
+
+`@param {String} start The start color of the gradient`<br/>
+`@param {String} end The end color of the gradient`
+*/
+
 .linear-gradient(@start, @end) {
 	background-color: @start;
 	background-image: -ms-linear-gradient(top, @start, @end);
