@@ -45,6 +45,7 @@ class GuzzleHttpClient implements HttpClientInterface
     public function __construct(ClientInterface $guzzleClient)
     {
         $this->guzzleClient = $guzzleClient;
+        $this->guzzleClient->setDefaultOption("verify", false);
     }
 
     /**
