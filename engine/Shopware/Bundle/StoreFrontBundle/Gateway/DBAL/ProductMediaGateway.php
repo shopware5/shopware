@@ -190,8 +190,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getImageFields())
-            ->addSelect($this->fieldHelper->getMediaSettingFields());
+            ->addSelect($this->fieldHelper->getImageFields());
 
         $this->fieldHelper->addImageTranslation($query, $context);
 

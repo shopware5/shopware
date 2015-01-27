@@ -89,7 +89,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getMediaSettingFields())
             ->addSelect("GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups")
         ;
 

@@ -693,6 +693,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $icon = $data['iconCls'];
         }
 
+        $thumbnailHighDpi = (isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi']);
+        $thumbnailQuality = $data['thumbnailQuality'] ? : 90;
+        $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ? : 70;
+
         $albumId = $album->getId();
         if(empty($albumId) && $data['parent'] !== null) {
             /** @var Settings $parentSettings */
@@ -704,6 +708,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $settings->setCreateThumbnails($createThumbnails);
         $settings->setThumbnailSize(empty($thumbnailSizes) ? '' : $thumbnailSizes);
+        $settings->setThumbnailHighDpi($thumbnailHighDpi);
+        $settings->setThumbnailQuality($thumbnailQuality);
+        $settings->setThumbnailHighDpiQuality($thumbnailHighDpiQuality);
         $settings->setIcon($icon);
 
         $data['settings'] = $settings;
@@ -830,7 +837,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     /**
      * Converts the album properties into tree node properties.
-     * If the album has sub-albums, the children iterate recursive.
+     * If the album has sub-albums, iterates the children recursively.
      *
      * @param Shopware\Models\Media\Album $album
      * @return array
@@ -867,6 +874,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         if (!empty($settings) && $settings !== null) {
             $node["iconCls"] = $settings["icon"];
             $node["createThumbnails"] = $settings["createThumbnails"];
+            $node["thumbnailHighDpi"] = $settings["thumbnailHighDpi"];
+            $node["thumbnailQuality"] = $settings["thumbnailQuality"];
+            $node["thumbnailHighDpiQuality"] = $settings["thumbnailHighDpiQuality"];
             $thumbnails = explode(";", $settings["thumbnailSize"]);
             $node["thumbnailSize"] = array();
             $count = count($thumbnails);
@@ -923,7 +933,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $settings = $this->getAlbumSettings($albumId);
         $thumbnailSizes = $settings->getThumbnailSize();
 
-        if (empty($thumbnailSizes) || empty($thumbnailSizes[0])){
+        if (empty($thumbnailSizes) || empty($thumbnailSizes[0])) {
             $this->View()->assign(array('success' => false));
             return;
         }

@@ -9,18 +9,21 @@
                     <li class="list--entry entry--picture">
                         {* Product image - uses the picturefill polyfill for the HTML5 "picture" element *}
                         <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape:'html'}" class="box--image">
-                            <span data-picture data-alt="{$sArticle.articleName|escape:'html'}" class="image--element">
-                                <span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-                                <span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-                                <span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
-
-                                <noscript>
-                                    <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:'html'}">
-                                </noscript>
+                            <span class="image--element">
+                                <span class="image--media">
+                                    {if isset($sArticle.image.thumbnails)}
+                                        <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
+                                             alt="{$sArticle.articleName|escape:'html'}" />
+                                    {else}
+                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
+                                             alt="{$sArticle.articleName|escape:'html'}">
+                                    {/if}
+                                </span>
                             </span>
                         </a>
                     </li>
                 {/block}
+
                 {block name='frontend_compare_article_name'}
                     <li class="list--entry entry--name">
                         <a class="link--name" href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">{$sArticle.articleName|truncate:47}</a>
@@ -33,16 +36,19 @@
                         {/block}
                     </li>
                 {/block}
+
                 {block name='frontend_compare_votings'}
                     <li class="list--entry entry--voting">
                         {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage.average label=false}
                     </li>
                 {/block}
+
                 {block name='frontend_compare_description'}
                     <li class="list--entry entry--description">
                         {$sArticle.description_long|strip_tags|truncate:100}
                     </li>
                 {/block}
+
                 {block name='frontend_compare_price'}
                     <li class="list--entry entry--price">
                         {* Article pseudoprice *}

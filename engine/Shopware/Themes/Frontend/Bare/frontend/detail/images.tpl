@@ -9,29 +9,39 @@
 			{block name='frontend_detail_image_thumbnail_items'}
 
 				{* Thumbnail - Main image *}
-				{if $sArticle.image.src.5}
-					<a href="{$sArticle.image.src.5}"
-					   class="thumbnail--link is--active"
-					   title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+				{if $sArticle.image.thumbnails}
 
+				    {$alt = $sArticle.articleName|escape:"html"}
+
+                    {if $sArticle.image.description}
+                        {$alt = $sArticle.image.description|escape:"html"}
+                    {/if}
+
+					<a href="{$sArticle.image.src.1}" title="{$alt}" class="thumbnail--link is--active">
 						{block name='frontend_detail_image_thumbs_main_img'}
-							<img class="thumbnail--image" src="{$sArticle.image.src.1}" alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}" alt="{$alt}" class="thumbnail--image" />
 						{/block}
 					</a>
 				{/if}
 
 				{* Thumbnails *}
 				{foreach $sArticle.images as $image}
-					{block name='frontend_detail_image_thumbnail_images'}
-						<a href="{$image.src.5}"
-						   class="thumbnail--link"
-						   title="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+                    {if $image.thumbnails}
+                        {block name='frontend_detail_image_thumbnail_images'}
 
-							{block name='frontend_detail_image_thumbs_images_img'}
-								<img class="thumbnail--image" src="{$image.src.1}" alt="{if $image.res.description}{$image.res.description|escape}{else}{$sArticle.articleName|escape:"html"}{/if}">
-							{/block}
-						</a>
-					{/block}
+                            {$alt = $sArticle.articleName|escape:"html"}
+
+                            {if $image.description}
+                                {$alt = $image.description|escape:"html"}
+                            {/if}
+
+                            <a href="{$image.src.1}" title="{$alt}" class="thumbnail--link">
+                                {block name='frontend_detail_image_thumbs_images_img'}
+                                    <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$alt}" class="thumbnail--image" />
+                                {/block}
+                            </a>
+                        {/block}
+                    {/if}
 				{/foreach}
 			{/block}
 		</div>

@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     alias: 'widget.mediamanager-album-setting',
     border: false,
     width: 600,
-    height: 450,
+    height: 600,
     layout: 'fit',
     autoShow: true,
 
@@ -64,9 +64,14 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
 			createThumb: '{s name="settings/createThumb"}Create thumbnail{/s}',
 			thumbSize: '{s name="settings/thumbSize"}Thumbnail size{/s}',
 			albumIcon: '{s name="settings/albumIcon"}Album icon{/s}',
-			chooseThumb: '{s name="settings/chooseThumb"}Choose your thumbnail{/s}',
+			chooseThumb: '{s name="settings/chooseThumb"}Thumbnail configuration{/s}',
 			duplicateThumb: '{s name="settings/duplicateThumb"}Duplicate thumbnail{/s}',
-			deleteThumb: '{s name="settings/deleteThumb"}Delete thumbnail{/s}'
+			deleteThumb: '{s name="settings/deleteThumb"}Delete thumbnail{/s}',
+            highDpiThumbs: '{s name="settings/highDpiThumbs"}High dpi thumbnails{/s}',
+            highDpiThumbsHelper: '{s name="settings/highDpiThumbsHelper"}Also generate high dpi versions of thumbnails{/s}',
+            thumbQuality: '{s name="settings/thumbQuality"}Thumbnail quality{/s}',
+            thumbQualitySupport: '{s name="settings/thumbQualitySupport"}Value between 1 and 100. Higher means more quality but bigger files{/s}',
+            highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}'
 		}
 	},
     /**
@@ -280,6 +285,44 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             ]
         });
 
+        me.highDpiThumbsField = Ext.create('Ext.form.field.Checkbox', {
+            name: 'thumbnailHighDpi',
+            anchor: '100%',
+            fieldLabel: me.snippets.settings.highDpiThumbs,
+            inputValue: 1,
+            uncheckedValue: 0,
+            boxLabel: me.snippets.settings.highDpiThumbsHelper,
+            listeners: {
+                scope: me,
+                change: function(value) {
+                    if(value.checked) {
+                        me.highDpiQuality.show();
+                    } else {
+                        me.highDpiQuality.hide();
+                    }
+                }
+            }
+        });
+
+        me.thumbQuality = Ext.create('Ext.form.field.Number', {
+            fieldLabel: me.snippets.settings.thumbQuality,
+            name: 'thumbnailQuality',
+            supportText: me.snippets.settings.thumbQualitySupport,
+            anchor: '100%',
+            minValue: 1,
+            maxValue: 100
+        });
+
+        me.highDpiQuality = Ext.create('Ext.form.field.Number', {
+            fieldLabel: me.snippets.settings.highDpiQuality,
+            name: 'thumbnailHighDpiQuality',
+            supportText: me.snippets.settings.thumbQualitySupport,
+            anchor: '100%',
+            hidden: (me.settings.get('thumbnailHighDpi')) ? false : true,
+            minValue: 1,
+            maxValue: 100
+        });
+
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.settings.chooseThumb,
             padding: 12,
@@ -291,8 +334,21 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 xtype: 'container',
                 layout: 'hbox',
                 padding: '0 0 8',
-                items: [ me.thumbnailField, me.thumbnailSubmit, me.thumbnailGenerate ]
+                items: [
+                    me.thumbnailField,
+                    me.thumbnailSubmit,
+                    me.thumbnailGenerate,
+                ]
             },
+                {
+                    xtype: 'container',
+                    layout: 'anchor',
+                    items: [
+                        me.thumbQuality,
+                        me.highDpiThumbsField,
+                        me.highDpiQuality
+                    ]
+                },
                 me.thumbnailView
             ]
         });

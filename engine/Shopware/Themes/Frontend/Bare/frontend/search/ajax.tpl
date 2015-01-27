@@ -21,8 +21,8 @@
 							{* Product image *}
 							{block name="search_ajax_list_entry_media"}
 								<span class="entry--media block">
-									{if $search_result.thumbNails.0}
-										<img src="{$search_result.thumbNails.0}" class="media--image">
+									{if $search_result.image.thumbnails[0]}
+										<img srcset="{$search_result.image.thumbnails[0].sourceSet}" alt="{$search_result.name|escape:'html'}" class="media--image">
 									{else}
 										<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" class="media--image">
 									{/if}

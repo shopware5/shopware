@@ -26,21 +26,22 @@
             {block name='checkout_ajax_add_information_image'}
                 <div class="article--image block">
                     <a href="{$detailLink}" class="link--article-image" title="{$sArticle.articlename|escape:"html"}">
-                        <span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
-                            {*Image based on our default media queries*}
-                            {block name='frontend_detail_image_default_queries'}
-                                <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-                            {/block}
 
-                            {*Block to add additional image based on media queries*}
-                            {block name='frontend_detail_image_additional_queries'}{/block}
+                        {$image = $sArticle.additional_details.image}
+                        {$alt = $sArticle.articlename|escape:"html"}
 
-                            {*If the browser doesn't support JS, the following image will be used*}
-                            {block name='frontend_detail_image_fallback'}
-                                <noscript>
-                                    <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
-                                </noscript>
-                            {/block}
+                        {if $image.description}
+                            {$alt = $image.description|escape:"html"}
+                        {/if}
+
+                        <span class="image--media">
+                            {if isset($image.thumbnails)}
+                                <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$alt}" />
+                            {else}
+                                {block name='frontend_detail_image_fallback'}
+                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}">
+                                {/block}
+                            {/if}
                         </span>
                     </a>
                 </div>

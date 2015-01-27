@@ -26,6 +26,7 @@
 													   id="group[{$option.groupID}]"
 													   name="group[{$option.groupID}]"
 													   value="{$option.optionID}"
+													   title="{$option.optionname}"
 													   data-auto-submit="true"
 													   {if !$option.selectable}disabled="disabled"{/if}
 													   {if $option.selected && $option.selectable}checked="checked"{/if} />
@@ -38,14 +39,14 @@
 														{$media = $option.media}
 
 														{block name='frontend_detail_configurator_variant_group_option_label_image'}
-															<span data-picture data-alt="{$configuratorOption.optionname}" class="image--element">
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.2}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-																<span class="image--media" data-src="{if isset($media.src)}{$media.src.3}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
-
-																<noscript>
-																	<img src="{if isset($media.src)}{$media.src.1}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$option.optionname}">
-																</noscript>
+															<span class="image--element">
+																<span class="image--media">
+                                                                    {if isset($media.thumbnails)}
+                                                                        <img srcset="{$media.thumbnails[0].sourceSet}" alt="{$option.optionname}" />
+                                                                    {else}
+                                                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$option.optionname}">
+                                                                    {/if}
+																</span>
 															</span>
 														{/block}
 													{else}

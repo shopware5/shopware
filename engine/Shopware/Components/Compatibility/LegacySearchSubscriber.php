@@ -38,7 +38,24 @@ class LegacySearchSubscriber implements SubscriberInterface
         return array(
             'Enlight_Controller_Action_PreDispatch_Frontend_Search' => array('convertSearchParameter', 0),
             'Enlight_Controller_Action_PostDispatch_Frontend_Search' => array('convertSearch', 100),
+            'Enlight_Controller_Action_PostDispatch_Frontend_AjaxSearch' => ['convertAjaxSearch', 100]
         );
+    }
+
+    public function convertAjaxSearch(\Enlight_Event_EventArgs $args)
+    {
+        /**@var $shop Shop */
+        $shop = $this->container->get('shop');
+        if ($shop->getTemplate()->getVersion() >= 3) {
+            return;
+        }
+
+        $data = $args->getSubject()->View()->getAssign();
+        foreach ($data['sSearchResults']['sResults'] as &$article) {
+            $article['thumbNails'] = $article['image']['src'];
+            $article['image'] = $article['image']['src'][1];
+        }
+        $args->getSubject()->View()->assign($data);
     }
 
     public function convertSearchParameter(\Enlight_Controller_EventArgs $args)

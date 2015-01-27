@@ -27,6 +27,7 @@ namespace Shopware\Components\Thumbnail;
 use Shopware\Components\Thumbnail\Generator\GeneratorInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Media\Settings;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -98,8 +99,19 @@ class Manager
         }
 
         if (empty($thumbnailSizes)) {
-            $thumbnailSizes = $this->getThumnailSizesFromMedia($media);
+            $thumbnailSizes = $this->getThumbnailSizesFromMedia($media);
             $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
+        }
+
+        $albumSettings = $this->getAlbumSettingsFromMedia($media);
+        if ($albumSettings) {
+            $highDpi = $albumSettings->isThumbnailHighDpi();
+            $standardQuality = $albumSettings->getThumbnailQuality();
+            $highDpiQuality = $albumSettings->getThumbnailHighDpiQuality();
+        } else {
+            $highDpi = false;
+            $standardQuality = 90;
+            $highDpiQuality = 90;
         }
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
@@ -130,7 +142,28 @@ class Manager
                     $destination,
                     $size['width'],
                     $size['height'],
-                    $parameters['keepProportions']
+                    $parameters['keepProportions'],
+                    $standardQuality
+                );
+            }
+        }
+
+        if (!$highDpi) {
+            return;
+        }
+
+        foreach ($parameters['sizes'] as $size) {
+            $suffix = $size['width'] . 'x' . $size['height'] . '@2x';
+
+            $destinations = $this->getDestination($media, $suffix);
+            foreach ($destinations as $destination){
+                $this->generator->createThumbnail(
+                    $parameters['path'],
+                    $destination,
+                    $size['width']*2,
+                    $size['height']*2,
+                    $parameters['keepProportions'],
+                    $highDpiQuality
                 );
             }
         }
@@ -157,7 +190,12 @@ class Manager
 
             $path = $this->getPathOfType($type) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
 
-            $thumbnails[] = $path . $name . '_' . $suffix . '.' . $extension;
+            $thumbnails[] = [
+                'maxWidth'        => $size['width'],
+                'maxHeight'       => $size['height'],
+                'source'       => $path . $name . '_' . $suffix . '.' . $extension,
+                'retinaSource' => $path . $name . '_' . $suffix . '@2x' . '.' . $extension
+            ];
         }
 
         return $thumbnails;
@@ -286,7 +324,10 @@ class Manager
      */
     public function removeMediaThumbnails(Media $media)
     {
-        $thumbnails = $media->getThumbnailFilePaths();
+        $thumbnails = array_merge(
+            array_values($media->getThumbnailFilePaths()),
+            array_values($media->getThumbnailFilePaths(true))
+        );
 
         foreach ($thumbnails as $thumbnail) {
             $thumbnailPath = $this->rootDir . DIRECTORY_SEPARATOR . $thumbnail;
@@ -302,7 +343,7 @@ class Manager
      * @return array
      * @throws \Exception
      */
-    private function getThumnailSizesFromMedia(Media $media)
+    private function getThumbnailSizesFromMedia(Media $media)
     {
         $album = $media->getAlbum();
 
@@ -324,5 +365,26 @@ class Manager
         }
 
         return $thumbnailSizes;
+    }
+
+    /**
+     * @param Media $media
+     * @return Settings|null
+     */
+    private function getAlbumSettingsFromMedia(Media $media)
+    {
+        $album = $media->getAlbum();
+
+        if (!$album) {
+            return null;
+        }
+
+        $settings = $album->getSettings();
+
+        if (!$settings) {
+            return null;
+        }
+
+        return $settings;
     }
 }
