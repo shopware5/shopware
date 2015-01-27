@@ -63,7 +63,7 @@
                                                         {block name='frontend_checkout_premium_select_article'}
                                                             {if $premium.sVariants && $premium.sVariants|@count > 1}
                                                                 <div class="premium--variant">
-																	<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
+																	<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium" required>
 																		<option value="">{s name="PremiumInfoSelect"}{/s}</option>
 																		{foreach from=$premium.sVariants item=variant}
 																			<option value="{$variant.ordernumber}">{$variant.additionaltext}</option>

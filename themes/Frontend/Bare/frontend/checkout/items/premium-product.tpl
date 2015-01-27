@@ -14,7 +14,7 @@
                             {block name="frontend_checkout_cart_item_image_container"}
                                 <div class="table--media-outer">
                                     <div class="table--media-inner">
-                                        <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                                        <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
                                             <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
                                         </a>
                                     </div>
@@ -40,9 +40,9 @@
 
                     {* Product name *}
                     {block name='frontend_checkout_cart_item_premium_premium_details_title'}
-                       <span class="content--title">
+                        <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="content--title">
                             {$sBasketItem.articlename|strip_tags|truncate:60}
-                        </span>
+                        </a>
                     {/block}
 
                     {* Additional product information *}
