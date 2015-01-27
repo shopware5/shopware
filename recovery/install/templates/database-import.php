@@ -25,7 +25,7 @@
     </div>
 
     <div class="progress-text">
-        <?= $t->t("migration_progress_text") ?>
+        <?= $t->t("database-import_progress_text") ?>
     </div>
 
     <div class="progress-actions actions clearfix">

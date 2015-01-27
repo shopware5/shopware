@@ -6,7 +6,7 @@
 
 <form action="<?= $menuHelper->getNextUrl() ?>" method="post">
     <input type="hidden" class="hidden-action" value="<?= $menuHelper->getCurrentUrl() ?>" />
-    <label for="language"><?= $t->t("select_language") ?></label>
+    <label for="language"><?= $t->t("language-selection_select_language") ?></label>
     <select id="language" name="language" class="language-selection">
         <?php foreach ($languages as $language): ?>
             <option value="<?= $language ?>" <?= ($selectedLanguage == $language) ? 'selected' : '' ?>>
