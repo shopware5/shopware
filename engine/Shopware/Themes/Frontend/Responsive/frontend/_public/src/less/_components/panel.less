@@ -1,17 +1,29 @@
-/* Basic panel component for boxes and bordered containers.
+/*
+Panels
+===================================================================
+######Basic panel component for boxes and bordered containers.
 
 The panel can be used with different content structures.
-See the documentation of the child elements for additional information.
+
+See the [documentation of the child elements](url) for additional information.
+
+Styling options: `has--border` and `has--shadow`
 
 ```
 <div class="panel">
-    <h3 class="panel--title">Panel title</h3>
     <div class="panel--body">
-        Panel content ...
+        Basic panel element
+    </div>
+</div>
+
+<div class="panel has--border">
+    <div class="panel--body">
+        Basic panel with border
     </div>
 </div>
 ```
 */
+
 .panel {
     display: block;
     background: @panel-bg;
@@ -24,11 +36,17 @@ See the documentation of the child elements for additional information.
         border: 1px solid @panel-border;
     }
 }
-
-/* A header box for a panel.
-
+/*
+<h6>A header box for a panel.</h6>
+<p>Can be used by adding the `panel--header`-element and `primary` or `secondary` classes.</p>
 ```
-<div class="panel--header primary">Panel header</div>
+<div class="panel">
+    <div class="panel--header primary">Panel header primary</div>
+    <div class="panel--header secondary">Panel header secondary</div>
+    <div class="panel--body">
+        Panel body
+    </div>
+</div>
 ```
 */
 .panel--header {
@@ -51,11 +69,17 @@ See the documentation of the child elements for additional information.
         background: #fff;
     }
 }
-
-/* A title heading for a panel.
-
+/*
+<h6>A title heading for a panel.</h6>
+<p>The `panel--title` can be used as an alternative to the `panel--header` element.</p>
+<p>When using the `panel--title` element, make sure that the `panel--body` element has the class `is--wide` assigned in order to work properly. Also the `is--underline` class was added here.
 ```
-<h3 class="panel--title primary">Panel title</h3>
+<div class="panel">
+    <h3 class="panel--title is--underline">Panel title</h3>
+    <div class="panel--body is--wide">
+        Panel body
+    </div>
+</div>
 ```
 */
 .panel--title {
@@ -80,11 +104,14 @@ See the documentation of the child elements for additional information.
         color: @brand-primary;
     }
 }
-
-/* The content body for a panel.
+/*
+<h6>The content body for a panel</h6>
+<p>Styling options: `is--slim`, `is--wide`, `is--flat`, `is--embossed`.</p>
 
 ```
-<div class="panel--body wide">Panel content ...</div>
+<div class="panel">
+<div class="panel--body is--wide">Panel content ...</div>
+</div>
 ```
 */
 .panel--body {
@@ -116,12 +143,12 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A container for action elements
-
+/*
+######A container for action elements
 ```
 <div class="panel--actions">
-    <a href="#" class="btn">Action Link</a>
-    <a href="#" class="btn">Action Link</a>
+    <a href="" class="btn">Action Link</a>
+    <a href="" class="btn">Action Link</a>
 </div>
 ```
 */
@@ -149,8 +176,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A table in a panel.
-
+/*
+######A table inside a panel.
 ```
 <div class="panel--table">
     <div class="panel--tr">
@@ -233,14 +260,15 @@ See the documentation of the child elements for additional information.
     color: @text-color-dark;
 }
 
-/* A list in a panel.
+/*
+######A list in a panel.
 
 ```
 <div class="panel">
     <ul class="panel--list">
-        <li></li>
-        <li class="secondary"></li>
-        <li class="primary"></li>
+        <li>list element 1</li>
+        <li class="secondary">list element 2</li>
+        <li class="primary">list element 3</li>
     </ul>
 </div>
 ```
@@ -272,14 +300,9 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* Arrow buttons for example for a slider panel.
-
-```
-<div class="panel--body">
-    <a href="" class="panel--arrow left"></a>
-    <a href="" class="panel--arrow right"></a>
-</div>
-```
+/*
+######Arrow buttons for example for a slider panel.
+Displays an arrow button that is used to navigate through the slider pages.
 */
 .panel--arrow {
     .unitize-width(22);
@@ -323,7 +346,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A small dot navigation for example for a slider panel.
+/*
+######A small dot navigation for example for a slider panel.
 
 ```
 <div class="panel--dot-nav">
@@ -353,7 +377,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A tab navigation for a tab-content panel.
+/*
+######A tab navigation for a tab-content panel.
 
 ```
 <div class="panel">
@@ -409,8 +434,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A content box for a tab-content panel.
-
+/*
+######A content box for a tab-content panel.
 ```
 <div class="panel">
     <ul class="panel--tab-nav">
@@ -437,8 +462,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A paging navigation for pagination content.
-
+/*
+######A paging navigation for pagination content.
 ```
 <div class="panel--paging">
     <a href=""><i class="icon--arrow-left"></i></a>
@@ -488,8 +513,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A btn for filter options in a filter action panel.
-
+/*
+######A btn for filter options in a filter action panel.
 ```
 <a href="" class="panel--filter-btn">
   <i class="icon--numbered-list"></i> Weitere Filtermöglichkeiten
@@ -520,8 +545,8 @@ See the documentation of the child elements for additional information.
     }
 }
 
-/* A combobox for a filter selection.
-
+/*
+######A combobox for a filter selection.
 ```
 <div class="panel--filter-select">
     <span class="arrow"></span>

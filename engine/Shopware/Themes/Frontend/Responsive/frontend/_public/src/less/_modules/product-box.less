@@ -1,4 +1,50 @@
-// Special mixin for positioning the product image on the left side of the product box
+/*
+Product-box
+===============================
+Defines the element styles of the default product box.
+
+```
+<div class="product--box">
+    <div class="box--content is--rounded">
+        <div class="product--info">
+
+            <a href="" class="product--image">
+                <!-- Article images -->
+            </a>
+
+            <div class="product--rating-container">
+                <!-- Product rating stars -->
+            </div>
+
+            <a href="" class="product--title" title="">
+                Product title
+            </a>
+
+            <div class="product--description">
+                Dux texo propino, hic tres, casus Ubertas, pax Alumnus catena, ut,
+                acer tero an, per edo in is arx Arma querul.
+            </div>
+
+            <div class="product--price-info">
+                <div class="price--unit">
+                </div>
+                <div class="product--price">
+                    <span class="price--default is--nowrap">
+                        35,00 €
+                    </span>
+                </div>
+            </div>
+
+            <div class="product--actions">
+                <!-- Product action links e.g. product compare
+            </div>
+
+        </div>
+    </div>
+</div>
+```
+*/
+
 .image--left(@imageWidth: 180) {
 	.product--image {
 		height: 100%;
@@ -27,7 +73,7 @@
 	}
 }
 
-// Special mixin for positioning the product image at the top of the product box
+    //  Special mixin for positioning the product image at the top of the product box
 .image--top(@imageHeight: 180) {
 	.product--image {
 		.unitize-margin(0, 0, 5, 0);
@@ -47,7 +93,7 @@
 	}
 }
 
-// Product box
+    //  Product box
 .product--box {
 	.clearfix();
 	display: block;
@@ -194,7 +240,22 @@
             color: @highlight-success;
         }
     }
+/*
+Product Badges
+==========================================
 
+<h6>Creates a corner product badge on a product-box.</h6>
+```
+<div class="product--box">
+    <div class="product--badges">
+        <div class="product--badge badge--discount">
+            <i class="icon--percent2"></i>
+        </div>
+    </div>
+</div>
+
+```
+*/
 	.product--badges {
 		.unitize(20, 16, top);
 		.unitize(-1, 16, left);

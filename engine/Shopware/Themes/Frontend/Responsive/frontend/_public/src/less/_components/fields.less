@@ -1,4 +1,24 @@
-/* Standard input fields. */
+/*
+Input Types
+==========================================
+Defines the basic styling of the shopware input element types.
+
+It contains the different states of the input fields.
+```
+<div>
+    <input type="text" placeholder="Text Input">
+</div>
+
+<div>
+    <input type="password" placeholder="Password Input">
+</div>
+
+<div class="textarea">
+    <textarea placeholder="Textarea"></textarea>
+</div>
+```
+*/
+
 textarea,
 input[type="text"],
 input[type="search"],
@@ -65,7 +85,7 @@ input[type="tel"] {
 }
 
 textarea {
-    resize: vertical; // Just allow vertical resizing of the text area
+    resize: vertical;
 }
 
 label {
@@ -77,7 +97,22 @@ label.has--error {
     color: @highlight-error;
     background: @input-error-bg;
 }
+/*
+Selectbox
+==========================================
+######Select-element
 
+Creates a styled dropdown menu as a replacement for the basic select element.
+
+[Github documentation](https://github.com/octopuscreative/FancySelect)
+```
+<select>
+    <option selected="selected" disabled="disabled" value="">Disabled Option</option>
+    <option>Option 1</option>
+    <option>Option 2</option>
+</select>
+```
+*/
 .js--fancy-select {
     .border-radius();
     .box-sizing();

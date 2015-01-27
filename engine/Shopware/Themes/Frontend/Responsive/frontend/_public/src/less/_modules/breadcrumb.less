@@ -1,3 +1,39 @@
+/*
+Breadcrumb
+=================================
+Defines the styling for the content breadcrumb elements that display the page location.
+
+Every breadcrumb entry is followed by a breadcrumb separator list-entry with an arrow icon.
+
+The main breadcrumb is positioned below the main navigation bar.
+
+```
+<nav class="content--breadcrumb">
+    <ul class="breadcrumb--list" role="menu">
+        <li class="breadcrumb--entry" role="menuitem" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="breadcrumb--link" href="" itemprop="url">
+                <span class="breadcrumb--title" itemprop="title">
+                     Breadcrumb entry 1
+                </span>
+            </a>
+        </li>
+
+        <li class="breadcrumb--separator">
+            <i class="icon--arrow-right"></i>
+        </li>
+
+        <li class="breadcrumb--entry" role="menuitem" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a class="breadcrumb--link" href="" itemprop="url">
+                <span class="breadcrumb--title" itemprop="title">
+                     Breadcrumb entry 2
+                </span>
+            </a>
+        </li>
+    </ul>
+</nav>
+```
+*/
+
 .content--breadcrumb {
     .unitize(14, 16, font-size);
     .clearfix();

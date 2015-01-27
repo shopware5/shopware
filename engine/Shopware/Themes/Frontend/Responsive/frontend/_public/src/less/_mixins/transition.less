@@ -1,10 +1,15 @@
-// The mixins provides you a cross-browser compatible method to set a transition.
-//
-// Please refer to <http://caniuse.com/css-transitions> to see the browser support table of the feature.
-//
-// @param: {String} properties: The properites which should be animated (Default: all)
-// @param: {String} duration: Duration of the transition including the unit (Default: 0.3s)
-// @param: {String} easing: The easing which should be used for the transition (Default: ease-out)
+/*
+Transition mixin
+=========================================
+The mixins provides you a cross-browser compatible method to set a transition.
+
+Please refer to <http://caniuse.com/css-transitions> to see the browser support table of the feature.
+
+`@param: {String} properties: The properites which should be animated (Default: all)`<br/>
+`@param: {String} duration: Duration of the transition including the unit (Default: 0.3s)`<br/>
+`@param: {String} easing: The easing which should be used for the transition (Default: ease-out)`
+*/
+
 .transition(@transition: all 0.3s ease-out) {
     transition: @transition;
 }

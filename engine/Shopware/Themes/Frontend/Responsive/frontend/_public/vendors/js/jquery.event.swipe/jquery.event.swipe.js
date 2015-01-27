@@ -13,13 +13,15 @@
 // jQuery.event.special.swipe.settings.threshold
 // jQuery.event.special.swipe.settings.sensitivity
 
-(function (module) {
+(function (thisModule) {
 	if (typeof define === 'function' && define.amd) {
-		// AMD. Register as an anonymous module.
-		define(['jquery'], module);
+        // AMD. Register as an anonymous module.
+        define(['jquery'], thisModule);
+    } else if ((typeof module !== "undefined" && module !== null) && module.exports) {
+        module.exports = thisModule;
 	} else {
 		// Browser globals
-		module(jQuery);
+        thisModule(jQuery);
 	}
 })(function(jQuery, undefined){
 	var add = jQuery.event.add,
@@ -44,8 +46,8 @@
 	function moveend(e) {
 		var w, h, event;
 
-		w = e.target.offsetWidth;
-		h = e.target.offsetHeight;
+		w = e.currentTarget.offsetWidth;
+		h = e.currentTarget.offsetHeight;
 
 		// Copy over some useful properties from the move event
 		event = {
