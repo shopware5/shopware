@@ -42,7 +42,7 @@
 
     <div class="sidebar--categories-wrapper"
          data-subcategory-nav="true"
-         data-mainCategoryId="{$Shop->get('parentID')}"
+         data-mainCategoryId="{$sCategoryStart}"
          data-categoryId="{$subCategoryId}"
          data-fetchUrl="{if $subCategoryId}{if $sCustomPage}{url module=widgets controller=listing action=getCustomPage pageId={$subCategoryId}}{else}{url module=widgets controller=listing action=getCategory categoryId={$subCategoryId}}{/if}{/if}">
 

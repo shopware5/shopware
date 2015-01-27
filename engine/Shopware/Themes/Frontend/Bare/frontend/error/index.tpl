@@ -19,3 +19,12 @@
 </script>
 {/literal}
 {/block}
+
+{* Disable left navigation *}
+{block name='frontend_index_content_left'}{/block}
+
+{* Disable top bar *}
+{block name='frontend_index_top_bar_container'}{/block}
+
+{* Disable search bar / my account button / basket button *}
+{block name='frontend_index_shop_navigation'}{/block}
