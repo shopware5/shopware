@@ -3,8 +3,7 @@ Feature: Show Listing
 
     @noResponsive
     Scenario: I can change the view method
-        Given I am on the listing page:
-            | parameter | value |
+        Given I am on the listing page for category 3 on page 1
         Then  the articles should be shown in a table-view
 
         When  I follow "Listen-Ansicht"
@@ -14,6 +13,7 @@ Feature: Show Listing
     Scenario Outline: I can filter the articles by supplier
         Given I am on the listing page:
             | parameter | value |
+            | sPage     | 1     |
             | sPerPage  | 24    |
         When  I set the filter to:
             | filter     | value      |

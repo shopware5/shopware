@@ -37,15 +37,17 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         self::$template = $parameters['template'];
 
         $this->useContext('shopware', new ShopwareContext($parameters));
-        $this->useContext('account',  new AccountContext($parameters));
+        $this->useContext('account', new AccountContext($parameters));
         $this->useContext('checkout', new CheckoutContext($parameters));
-        $this->useContext('listing',  new ListingContext($parameters));
-        $this->useContext('detail',   new DetailContext($parameters));
-        $this->useContext('note',     new NoteContext($parameters));
-        $this->useContext('form',     new FormContext($parameters));
-        $this->useContext('blog',     new BlogContext($parameters));
-        $this->useContext('sitemap',  new SitemapContext($parameters));
-        $this->useContext('special',  new SpecialContext($parameters));
+        $this->useContext('listing', new ListingContext($parameters));
+        $this->useContext('detail', new DetailContext($parameters));
+        $this->useContext('note', new NoteContext($parameters));
+        $this->useContext('form', new FormContext($parameters));
+        $this->useContext('blog', new BlogContext($parameters));
+        $this->useContext('sitemap', new SitemapContext($parameters));
+        $this->useContext('special', new SpecialContext($parameters));
+        $this->useContext('seo', new SeoContext($parameters));
+        $this->useContext('basicSettings', new BasicSettingsContext($parameters));
     }
 
     /**

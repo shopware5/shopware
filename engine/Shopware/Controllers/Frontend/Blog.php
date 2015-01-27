@@ -226,6 +226,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sCategoryContent' => $categoryContent,
             'sNumberArticles' => $totalResult,
             'sPage' => $sPage,
+            'sPerPage' => $sPerPage,
             'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
