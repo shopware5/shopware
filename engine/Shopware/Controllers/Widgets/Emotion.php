@@ -287,20 +287,52 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->setFirstResult(0)
                 ->setMaxResults($entryAmount)
                 ->setParameter('displayDate', date('Y-m-d H:i:s'))
-                ->setParameter('path', '%|' . $category->getId() . '|%');
+                ->setParameter('path', '%|' . $category->getId() . '|%')
+            ;
         }
         
         $query = $this->getForceIndexQuery($builder->getQuery(), 'emotion_get_blog_entry');
         $result = $query->getArrayResult();
 
+        $mediaIds = [];
+        foreach ($result as $entry) {
+            $mediaIds = array_merge(
+                array_column($entry['media'], 'mediaId'),
+                $mediaIds
+            );
+        }
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
+        //now we get the configured image and thumbnail dir.
+        $imageDir = $context->getBaseUrl() . '/media/image/';
+        $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
+
         foreach ($result as &$entry) {
             foreach ($entry['media'] as $media) {
-                if (!empty($media['mediaId'])) {
-                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                    if ($mediaModel != null) {
-                        $entry['media']['thumbnails'] = array_values($mediaModel->getThumbnails());
-                        $entry['media'] = array('path' => $mediaModel->getPath(), 'thumbnails' => array_values($mediaModel->getThumbnails()));
+                if (empty($media['mediaId'])) {
+                    continue;
+                }
+                $id = $media['mediaId'];
+
+                if (!isset($medias[$id])) {
+                    continue;
+                }
+
+                $struct = $medias[$id];
+
+                $mediaData = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($struct);
+                $entry['media'] = $mediaData;
+
+                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+                    $thumbs = [];
+                    foreach ($entry['media']['thumbnails'] as $thumb) {
+                        $thumbs[] = str_replace($imageDir, '', $thumb);
                     }
+                    $entry['media'] = [
+                        'path' => str_replace($imageDir, '', $mediaData['source']),
+                        'thumbnails' => $thumbs
+                    ];
                 }
             }
         }
@@ -350,19 +382,35 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($data["image_type"] != "selected_image") {
             if ($data['blog_category']) {
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
-                if (!empty($result['media']['thumbnails'])) {
-                    $data['image'] = $result['media']['thumbnails'][2];
-                    $data['images'] = $result['media']['thumbnails'];
-                } else {
-                    $data['image'] = $result['media']['path'];
+
+                $data['image'] = $result['media'];
+
+                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+                    if (!empty($result['media']['thumbnails'])) {
+                        $data['image'] = $result['media']['thumbnails'][2];
+                        $data['images'] = $result['media']['thumbnails'];
+                    } else {
+                        $data['image'] = $result['media']['path'];
+                    }
                 }
             } else {
                 // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
-                $data["image"] = $temp["image"]["src"][2];
-                $data['images'] = $temp['image']['src'];
+
+                $data['image'] = $temp['image'];
+                $data['images'] = $temp['images'];
+                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+                    $data['images'] = $temp['image']['src'];
+                    $data["image"] = $temp["image"]["src"][2];
+                }
             }
+        } else {
+            $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['image']]);
+            $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+            $media = Shopware()->Container()->get('shopware_storefront.media_service')->get($mediaId, $context);
+            $data['media'] = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
         }
+
         return $data;
     }
 
@@ -387,6 +435,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
+
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -427,6 +476,15 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $mappings[$key] = $mapping;
             }
         }
+
+        $mediaId = Shopware()->Db()->fetchOne("SELECT id FROM s_media WHERE path = ?", [$data['file']]);
+        if ($mediaId) {
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            $media = $this->get('shopware_storefront.media_service')->get($mediaId, $context);
+            $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+            $data = array_merge($mediaData, $data);
+        }
+
         $data['bannerMapping'] = $mappings;
 
         return $data;
@@ -489,6 +547,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $data["values"] = $data["banner_slider"];
 
+        $mediaIds = array_column($data['values'], 'mediaId');
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $media = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         foreach ($data["values"] as &$value) {
             if (!empty($value['link'])) {
                 preg_match('/^(http|https):\/\//', $value['link'], $matches);
@@ -497,6 +559,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $value['link'] = $this->Request()->getBaseUrl() . $value['link'];
                 }
             }
+            $single = $media[$value['mediaId']];
+
+            $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
+            $value = array_merge($value, $single);
         }
 
         return $data;

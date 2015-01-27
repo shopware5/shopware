@@ -164,8 +164,12 @@
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
                     'articleName': '{$sArticle.articleName|escape:"javascript"}',
                     'images': {ldelim}
-						{foreach $sArticle.image.src as $key => $value}
-							'{$key}': '{$value}',
+						{foreach $sArticle.image.thumbnails as $key => $image}
+							'{$key}': {ldelim}
+                                'source': '{$image.source}',
+                                'retinaSource': '{$image.retinaSource}',
+                                'sourceSet': '{$image.sourceSet}'
+                            {rdelim},
 						{/foreach}
 					{rdelim}
                 {/if}{rdelim}

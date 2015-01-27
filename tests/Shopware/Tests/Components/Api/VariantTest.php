@@ -508,7 +508,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
                 }
             }
 
-            $this->assertCount(6, $media->getThumbnails());
+            $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
             }

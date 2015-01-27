@@ -242,6 +242,12 @@ class sMarketing
             return false;
         }
 
+
+        $images = array_column($getBanners, 'image');
+        $mediaIds = $this->getMediaIdsOfPath($images);
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $medias = Shopware()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         foreach ($getBanners as &$getAffectedBanners) {
             // converting to old format
             $getAffectedBanners['valid_from'] = $getAffectedBanners['validFrom'];
@@ -250,6 +256,12 @@ class sMarketing
             $getAffectedBanners['categoryID'] = $getAffectedBanners['categoryId'];
 
             $getAffectedBanners['img'] = $getAffectedBanners['image'];
+
+            $media = $this->getMediaByPath($medias, $getAffectedBanners['image']);
+            if ($media !== null) {
+                $media = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
+                $getAffectedBanners['media'] = $media;
+            }
 
             // count views.
             /** @var $statRepository \Shopware\Models\Tracking\Repository */
@@ -274,6 +286,21 @@ class sMarketing
         }
 
         return $getBanners;
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Media[] $media
+     * @param string $path
+     * @return null|\Shopware\Bundle\StoreFrontBundle\Struct\Media
+     */
+    private function getMediaByPath($media, $path)
+    {
+        foreach ($media as $single) {
+            if ($single->getFile() == $path) {
+                return $single;
+            }
+        }
+        return null;
     }
 
     public function sGetPremiums()
@@ -680,5 +707,23 @@ class sMarketing
     public function sCampaignsGetSuggestions($id, $userid = 0)
     {
         return array();
+    }
+
+    /**
+     * @param $images
+     * @return int[]
+     * @throws Exception
+     */
+    private function getMediaIdsOfPath($images)
+    {
+        /**@var $query \Doctrine\DBAL\Query\QueryBuilder */
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select(['media.id'])
+            ->from('s_media', 'media')
+            ->where('media.path IN (:path)')
+            ->setParameter(':path', $images, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY);
+
+        $statement = $query->execute();
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 }

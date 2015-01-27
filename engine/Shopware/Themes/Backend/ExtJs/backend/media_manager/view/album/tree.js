@@ -116,23 +116,15 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         // Select the correct node if we're in the media selection
         me.store.on('load', function() {
-            var store = me.getStore(),
-                albumId = store.getProxy().extraParams.albumId,
-                rootNode = store.tree.getRootNode(), i = 0,
-                foundedNode;
-
-            if(!albumId || Ext.isArray(albumId)) {
-                return;
-            }
-
-            for( ; i < rootNode.childNodes.length; i++) {
-                var node = rootNode.childNodes[i];
-                if(node.data.id === albumId) {
-                    foundedNode = node;
-                    break;
+            if (me.store.getProxy().extraParams && me.store.getProxy().extraParams.albumId) {
+                var record = me.store.getById(
+                    me.store.getProxy().extraParams.albumId
+                );
+                if (record) {
+                    me.getSelectionModel().select(record);
+                    me.fireEvent('itemclick', this, record);
                 }
             }
-            me.fireEvent('reload', foundedNode);
         }, me, { single: true });
 
         me.callParent(arguments);

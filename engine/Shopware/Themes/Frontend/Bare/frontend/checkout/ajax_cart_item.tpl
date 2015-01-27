@@ -1,9 +1,9 @@
 <div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
     {* Article image *}
 	{block name='frontend_checkout_ajax_cart_articleimage'}
-		<div class="thumbnail--container{if $basketItem.image.src.0} has--image{/if}">
-			{if $basketItem.image.src.0}
-				<img class="thumbnail--image" src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape:"html"}" />
+		<div class="thumbnail--container{if $basketItem.image.thumbnails[0]} has--image{/if}">
+			{if $basketItem.additional_details.image.thumbnails}
+                <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
 			{/if}
 		</div>
 	{/block}

@@ -83,6 +83,27 @@ class Settings extends ModelEntity
     private $icon;
 
     /**
+     * Generate high dpi thumbnails
+     * @var bool $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=false)
+     */
+    private $thumbnailHighDpi;
+
+    /**
+     * Thumbnail quality
+     * @var int $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)
+     */
+    private $thumbnailQuality;
+
+    /**
+     * high dpi thumbnails quality
+     * @var int $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=false)
+     */
+    private $thumbnailHighDpiQuality;
+
+    /**
      * @var \Shopware\Models\Media\Album $album
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Media\Album", inversedBy="settings")
@@ -195,5 +216,53 @@ class Settings extends ModelEntity
     public function setAlbum($album)
     {
         $this->album = $album;
+    }
+
+    /**
+     * @return int
+     */
+    public function getThumbnailHighDpiQuality()
+    {
+        return $this->thumbnailHighDpiQuality;
+    }
+
+    /**
+     * @param int $thumbnailHighDpiQuality
+     */
+    public function setThumbnailHighDpiQuality($thumbnailHighDpiQuality)
+    {
+        $this->thumbnailHighDpiQuality = $thumbnailHighDpiQuality;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isThumbnailHighDpi()
+    {
+        return $this->thumbnailHighDpi;
+    }
+
+    /**
+     * @param boolean $thumbnailHighDpi
+     */
+    public function setThumbnailHighDpi($thumbnailHighDpi)
+    {
+        $this->thumbnailHighDpi = $thumbnailHighDpi;
+    }
+
+    /**
+     * @return int
+     */
+    public function getThumbnailQuality()
+    {
+        return $this->thumbnailQuality;
+    }
+
+    /**
+     * @param int $thumbnailQuality
+     */
+    public function setThumbnailQuality($thumbnailQuality)
+    {
+        $this->thumbnailQuality = $thumbnailQuality;
     }
 }

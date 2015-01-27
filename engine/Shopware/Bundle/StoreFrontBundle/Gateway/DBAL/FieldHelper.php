@@ -543,7 +543,12 @@ class FieldHelper
             'media.extension as __media_extension',
             'media.file_size as __media_file_size',
             'media.userID as __media_userID',
-            'media.created as __media_created'
+            'media.created as __media_created',
+            'mediaSettings.id as __mediaSettings_id',
+            'mediaSettings.create_thumbnails as __mediaSettings_create_thumbnails',
+            'mediaSettings.thumbnail_size as __mediaSettings_thumbnail_size',
+            'mediaSettings.icon as __mediaSettings_icon',
+            'mediaSettings.thumbnail_high_dpi as __mediaSettings_thumbnail_high_dpi'
         ];
 
         $fields = array_merge(
@@ -552,24 +557,6 @@ class FieldHelper
         );
 
         return $fields;
-    }
-
-    /**
-     * Returns an array with all required media settings fields.
-     * This fields are required to generate thumbnails of each media.
-     *
-     * Requires that the s_media_album_settings table is included with alias "settings"
-     *
-     * @return array
-     */
-    public function getMediaSettingFields()
-    {
-        return [
-            'mediaSettings.id as __mediaSettings_id',
-            'mediaSettings.create_thumbnails as __mediaSettings_create_thumbnails',
-            'mediaSettings.thumbnail_size as __mediaSettings_thumbnail_size',
-            'mediaSettings.icon as __mediaSettings_icon',
-        ];
     }
 
     /**

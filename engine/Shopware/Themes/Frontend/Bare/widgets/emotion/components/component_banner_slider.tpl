@@ -21,8 +21,57 @@
                     <div class="banner-slider--slide image-slider--slide">
                         {foreach $Data.values as $banner}
 
+                            {$images = $banner.thumbnails}
+
+                            {strip}
+                            <style type="text/css">
+
+                                #banner--{$Data.objectId}-{$banner@index} {
+                                    background-image: url('{$images[0].source}');
+                                }
+
+                                {if isset($images[0].retinaSource)}
+                                @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                                    #banner--{$Data.objectId}-{$banner@index} {
+                                        background-image: url('{$images[0].retinaSource}');
+                                    }
+                                }
+                                {/if}
+
+                                @media screen and (min-width: 48em) {
+                                    #banner--{$Data.objectId}-{$banner@index} {
+                                        background-image: url('{$images[1].source}');
+                                    }
+                                }
+
+                                {if isset($images[1].retinaSource)}
+                                @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
+                                       screen and (min-width: 48em) and (min-resolution: 192dpi) {
+                                    #banner--{$Data.objectId}-{$banner@index} {
+                                        background-image: url('{$images[1].retinaSource}');
+                                    }
+                                }
+                                {/if}
+
+                                @media screen and (min-width: 78.75em) {
+                                    .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
+                                        background-image: url('{$images[2].source}');
+                                    }
+                                }
+
+                                {if isset($images[2].retinaSource)}
+                                @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
+                                       screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
+                                    .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
+                                        background-image: url('{$images[2].retinaSource}');
+                                    }
+                                }
+                                {/if}
+                            </style>
+                            {/strip}
+
                             {block name="frontend_widgets_banner_slider_item"}
-                                <div class="banner-slider--item image-slider--item" style="background-image: url({link file=$banner.path})">
+                                <div class="banner-slider--item image-slider--item" id="banner--{$Data.objectId}-{$banner@index}">
                                     {if $banner.link}
                                         {block name="frontend_widgets_banner_slider_link"}
                                             <a class="banner-slider--link" href="{$banner.link}" title="{$banner.title|escape}">

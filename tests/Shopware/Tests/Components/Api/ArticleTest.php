@@ -461,7 +461,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(4, $article->getImages());
 
         foreach ($article->getImages() as $image) {
-            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
             }
@@ -494,7 +494,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertCount(5, $article->getImages());
         foreach ($article->getImages() as $image) {
-            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
             }
@@ -651,17 +651,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(2, $article->getImages());
 
         $proportionalSizes = array(
-            '30x30',
-            '57x57',
-            '105x105',
-            '140x140',
-            '255x255',
-            '600x600',
+            '200x200','600x600','1280x1280', '140x140'
         );
 
         foreach ($article->getImages() as $image) {
             $thumbnails = $image->getMedia()->getThumbnails();
-            $this->assertCount(6, $thumbnails);
+            $this->assertCount(4, $thumbnails);
 
             $thumbnails = array_values($thumbnails);
 

@@ -14,9 +14,9 @@
 				{* Article picture *}
 				{block name="frontend_note_item_image"}
 					<div class="note--image-container">
-						{if $sBasketItem.image.src.0}
+						{if $sBasketItem.image.thumbnails[0]}
 							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
-								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
+                                <img srcset="{$sBasketItem.image.thumbnails[0].sourceSet}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
 							</a>
 
 							{* Zoom picture *}

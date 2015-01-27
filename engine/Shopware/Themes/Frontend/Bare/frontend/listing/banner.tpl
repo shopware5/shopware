@@ -1,31 +1,37 @@
 {block name="frontend_listing_banner"}
-{if $sBanner}
+    {if $sBanner}
+        <div class="banner--container">
 
-	<div class="banner--container">
+            {if $sBanner.extension=="swf"}
 
-		{if $sBanner.extension=="swf"}
+                {* @deprecated Flash banner *}
+                {block name='frontend_listing_swf_banner'}{/block}
 
-			{* @deprecated Flash banner *}
-			{block name='frontend_listing_swf_banner'}{/block}
-		{elseif $sBanner.img}
-			{if $sBanner.link == "#" || $sBanner.link == ""}
+            {elseif $sBanner.media.thumbnails}
+                {if !$sBanner.link || $sBanner.link == "#" || $sBanner.link == ""}
 
-				{* Image only banner *}
-				{block name='frontend_listing_image_only_banner'}
-					<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description|escape}" title="{$sBanner.description|escape}" />
-				{/block}
-			{else}
+                    {* Image only banner *}
+                    {block name='frontend_listing_image_only_banner'}
+                        <picture>
+                            <source srcset="{$sBanner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
 
-				{* Normal banner *}
-				{block name='frontend_listing_normal_banner'}
-					<a href="{if $sBanner.link}{$sBanner.link}{else}#{/if}" class="banner--link" {if $sBanner.link_target}target="{$sBanner.link_target}"{/if} title="{$sBanner.description|escape}">
-						<img class="banner--img" src="{link file=$sBanner.img}" alt="{$sBanner.description|escape}" title="{$sBanner.description|escape}" />
-					</a>
-				{/block}
-			{/if}
-		{/if}
+                            <img srcset="{$sBanner.media.thumbnails[0].sourceSet}" alt="{$sBanner.description|escape}" class="banner--img" />
+                        </picture>
+                    {/block}
+                {else}
 
-	</div>
+                    {* Normal banner *}
+                    {block name='frontend_listing_normal_banner'}
+                        <a href="{$sBanner.link}" class="banner--link" {if $sBanner.link_target}target="{$sBanner.link_target}"{/if} title="{$sBanner.description|escape}">
+                            <picture>
+                                <source srcset="{$sBanner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
 
-{/if}
+                                <img srcset="{$sBanner.media.thumbnails[0].sourceSet}" alt="{$sBanner.description|escape}" class="banner--img" />
+                            </picture>
+                        </a>
+                    {/block}
+                {/if}
+            {/if}
+        </div>
+    {/if}
 {/block}

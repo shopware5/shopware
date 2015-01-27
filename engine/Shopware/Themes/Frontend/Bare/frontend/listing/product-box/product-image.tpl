@@ -1,12 +1,20 @@
-{* Product image - uses the picturefill polyfill for the HTML5 "picture" element *}
-<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape:'html'}" class="product--image">
-	<span data-picture data-alt="{$sArticle.articleName|escape:'html'}" class="image--element">
-		<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}"></span>
-		<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
-		<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
-
-		<noscript>
-			<img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_public/src/img/no-picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:'html'}">
-		</noscript>
-	</span>
+{* Product image - uses the picture element for responsive retina images. *}
+<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
+   title="{$sArticle.articleName|escape:'html'}"
+   class="product--image">
+    {block name='frontend_listing_box_article_image_element'}
+        <span class="image--element">
+            {block name='frontend_listing_box_article_image_media'}
+                <span class="image--media">
+                    {if isset($sArticle.image.thumbnails)}
+                        {block name='frontend_listing_box_article_image_picture_element'}
+                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}" alt="{$sArticle.articleName|escape:'html'}" />
+                        {/block}
+                    {else}
+                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape:'html'}" />
+                    {/if}
+                </span>
+            {/block}
+        </span>
+    {/block}
 </a>

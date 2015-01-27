@@ -46,9 +46,11 @@ interface GeneratorInterface
      *
      * @param string $image - original image path
      * @param string $destination - full path of the generated thumbnail
-     * @param int    $width - width in pixel
-     * @param int    $height - height in pixel
-     * @param bool   $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
+     * @param int $width - width in pixel
+     * @param int $height - height in pixel
+     * @param bool $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
+     * @param int $quality - JPEG quality
+     * @return
      */
-    public function createThumbnail($image, $destination, $width, $height, $keepProportions = false);
+    public function createThumbnail($image, $destination, $width, $height, $keepProportions = false, $quality = 90);
 }

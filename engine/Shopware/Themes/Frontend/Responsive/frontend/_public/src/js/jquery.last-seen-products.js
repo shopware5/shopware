@@ -200,45 +200,23 @@
          */
         createProductImage: function (data) {
             var me = this,
-                image = data.images[4] || me.opts.noPicture,
+                image = data.images[0],
                 element,
                 imageEl,
-                noScript;
+                imageMedia;
 
             element = $('<a>', {
                 'class': me.opts.imageCls,
                 'href': data.linkDetailsRewritten
             });
 
-            imageEl = $('<span>', {
-                'data-picture': 'true',
-                'class': 'image--element',
-                'data-alt': data.articleName
-            }).appendTo(element);
-
-            $('<span>', {
-                'class': 'image--media',
-                'data-src': image
-            }).appendTo(imageEl);
-
-            $('<span>', {
-                'class': 'image--media',
-                'data-src': image,
-                'data-media': '(min-width: 48em)'
-            }).appendTo(imageEl);
-
-            $('<span>', {
-                'class': 'image--media',
-                'data-src': image,
-                'data-media': '(min-width: 78.75em)'
-            }).appendTo(imageEl);
-
-            noScript = $('<noscript></noscript>').appendTo(imageEl);
+            imageEl = $('<span>', { 'class': 'image--element' }).appendTo(element);
+            imageMedia = $('<span>', { 'class': 'image--media' }).appendTo(imageEl);
 
             $('<img>', {
-                'src': image,
+                'srcset': image.sourceSet,
                 'alt': data.articleName
-            }).appendTo(noScript);
+            }).appendTo(imageMedia);
 
             return element;
         },
