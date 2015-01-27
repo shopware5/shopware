@@ -89,11 +89,11 @@ class sMarketing
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('context_service');
+            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
+            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
         }
 
         $this->db = Shopware()->Db();

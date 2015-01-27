@@ -62,13 +62,13 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         }
 
         /**@var $context ProductContextInterface*/
-        $context  = $this->get('context_service')->getProductContext();
+        $context  = $this->get('shopware_storefront.context_service')->getProductContext();
 
-        $criteria = $this->get('store_front_criteria_factory')
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createAjaxSearchCriteria($this->Request(), $context);
 
         /**@var $result ProductSearchResult*/
-        $result = $this->get('product_search')->search($criteria, $context);
+        $result = $this->get('shopware_search.product_search')->search($criteria, $context);
 
         if ($result->getTotalCount() > 0) {
             $articles = $this->convertProducts($result);

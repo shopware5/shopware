@@ -119,8 +119,8 @@ class sCategories
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->categoryService = Shopware()->Container()->get('category_service');
-        $this->contextService = Shopware()->Container()->get('context_service');
+        $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
+        $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
         $this->frontController = Shopware()->Container()->get('front');
     }
 

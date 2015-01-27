@@ -70,17 +70,17 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         }
 
         /**@var $context ProductContextInterface*/
-        $context  = $this->get('context_service')->getProductContext();
+        $context  = $this->get('shopware_storefront.context_service')->getProductContext();
 
-        $criteria = Shopware()->Container()->get('store_front_criteria_factory')
+        $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
         /**@var $result ProductSearchResult*/
-        $result   = $this->get('product_search')->search($criteria, $context);
+        $result   = $this->get('shopware_search.product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);
 
         if ($this->get('config')->get('traceSearch', true)) {
-            $this->get('search_term_logger')->logResult(
+            $this->get('shopware_searchdbal.search_term_logger')->logResult(
                 $criteria,
                 $result,
                 $context->getShop()

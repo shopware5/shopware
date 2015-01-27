@@ -322,13 +322,13 @@
 
         <service id="legacy_struct_converter" class="Shopware\Components\Compatibility\LegacyStructConverter">
             <argument type="service" id="config" />
-            <argument type="service" id="context_service" />
+            <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
             <argument type="service" id="events" />
             <argument type="service" id="config" />
-            <argument type="service" id="context_service" />
+            <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
         <service id="query_alias_mapper"
@@ -351,9 +351,9 @@
         </service>
 
         <service id="first_run_wizard_plugin_store" class="Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService">
-            <argument type="service" id="plugin_installer_struct_hydrator" />
-            <argument type="service" id="plugin_service_local" />
-            <argument type="service" id="store_client" />
+            <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
+            <argument type="service" id="shopware_plugininstaller.plugin_service_local" />
+            <argument type="service" id="shopware_plugininstaller.store_client" />
         </service>
 
         <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
