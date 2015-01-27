@@ -330,4 +330,26 @@ class Enlight_Loader
     {
         return !preg_match('/[^a-z0-9\\/\\\\_. :-]/i', $path);
     }
+
+    /**
+     * Returns an array containing all namespaces registered using registerNamespace().
+     * If the optional parameter $namespace is provided, only the entries having that
+     * namespace will be returned.
+     *
+     * @param   string $namespace
+     * @return  array
+     */
+    public function getRegisteredNamespaces($namespace = null)
+    {
+        if ($namespace !== null) {
+            // Return only the entries, whose 'namespace' matches the given namespace
+            return array_filter($this->namespaces, function($entry) use ($namespace) {
+                return $entry['namespace'] === $namespace;
+            });
+        } else {
+            // Return all entries
+            return $this->namespaces;
+        }
+    }
+
 }
