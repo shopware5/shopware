@@ -22,6 +22,19 @@ class CompareColumn extends \Element\Emotion\CompareColumn
     /**
      * @return array
      */
+    public function getImagesToCheck()
+    {
+        $locators = array('thumbnailImage');
+        $elements = \Helper::findElements($this, $locators);
+
+        return array(
+            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('srcset')
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function getRankingsToCheck()
     {
         $locators = array('stars');
