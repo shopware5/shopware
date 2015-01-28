@@ -389,7 +389,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
 
-        $params['shopIds'] = !empty(array_filter($params['shopIds'])) ? '|' . implode('|', $params['shopIds']) . '|' : null;
+        $params['shopIds'] = array_filter($params['shopIds']) ? '|' . implode('|', $params['shopIds']) . '|' : null;
 
         //check whether we create a new site or are updating one
         //also, check if we have the necessary rights
