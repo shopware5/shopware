@@ -525,7 +525,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=activatePlugin}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                callback(response);
+            }
         );
     },
 
@@ -537,7 +540,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=deactivatePlugin}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                callback(response);
+            }
         );
     },
 

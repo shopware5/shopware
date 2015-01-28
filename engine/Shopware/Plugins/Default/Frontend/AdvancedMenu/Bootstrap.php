@@ -41,6 +41,17 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return true;
     }
 
+    /**
+     * @return array
+     */
+    public function enable()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => ['template', 'theme']
+        ];
+    }
+
     private function subscribeEvents()
     {
         $this->subscribeEvent(

@@ -166,8 +166,8 @@ class Shopware_Controllers_Backend_PluginInstaller
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $this->get('shopware_plugininstaller.plugin_manager')->activatePlugin($plugin);
-            $this->View()->assign('success', true);
+            $result = $this->get('shopware_plugininstaller.plugin_manager')->activatePlugin($plugin);
+            $this->View()->assign($result);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -178,8 +178,8 @@ class Shopware_Controllers_Backend_PluginInstaller
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $this->get('shopware_plugininstaller.plugin_manager')->deactivatePlugin($plugin);
-            $this->View()->assign('success', true);
+            $result = $this->get('shopware_plugininstaller.plugin_manager')->deactivatePlugin($plugin);
+            $this->View()->assign($result);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
