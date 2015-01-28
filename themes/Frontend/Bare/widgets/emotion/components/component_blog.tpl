@@ -5,16 +5,69 @@
                 <div class="blog--container block-group">
                     {foreach $Data.entries as $entry}
                         {block name="widget_emotion_component_blog_entry"}
-                            {$image = $entry.media.thumbnails.{$Data.thumbnail_size}}
-
                             <div class="blog--entry blog--entry-{$entry@index} block"
                                  style="width:{{"100" / $Data.entries|count}|round:2}%">
 
                                 {block name="widget_emotion_component_blog_entry_image"}
-                                    {if $image}
-                                        <a class="blog--image" href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" style="background-image:url({link file=$image})" title="{$entry.title|escape}">&nbsp;</a>
+                                    {if $entry.media.thumbnails}
+
+                                        {$images = $entry.media.thumbnails}
+
+                                        {strip}
+                                            <style type="text/css">
+
+                                                #teaser--{$Data.objectId}-{$entry@index} {
+                                                    background-image: url('{$images[0].source}');
+                                                }
+
+                                                {if isset($images[0].retinaSource)}
+                                                @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                                                    #teaser--{$Data.objectId}-{$entry@index} {
+                                                        background-image: url('{$images[0].retinaSource}');
+                                                    }
+                                                }
+                                                {/if}
+
+                                                @media screen and (min-width: 48em) {
+                                                    #teaser--{$Data.objectId}-{$entry@index} {
+                                                        background-image: url('{$images[1].source}');
+                                                    }
+                                                }
+
+                                                {if isset($images[1].retinaSource)}
+                                                @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
+                                                screen and (min-width: 48em) and (min-resolution: 192dpi) {
+                                                    #teaser--{$Data.objectId}-{$entry@index} {
+                                                        background-image: url('{$images[1].retinaSource}');
+                                                    }
+                                                }
+                                                {/if}
+
+                                                @media screen and (min-width: 78.75em) {
+                                                    .is--fullscreen #teaser--{$Data.objectId}-{$entry@index} {
+                                                        background-image: url('{$images[2].source}');
+                                                    }
+                                                }
+
+                                                {if isset($images[2].retinaSource)}
+                                                @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
+                                                screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
+                                                    .is--fullscreen #teaser--{$Data.objectId}-{$entry@index} {
+                                                        background-image: url('{$images[2].retinaSource}');
+                                                    }
+                                                }
+                                                {/if}
+                                            </style>
+                                        {/strip}
+
+                                        <a class="blog--image"
+                                           id="teaser--{$Data.objectId}-{$entry@index}"
+                                           href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}"
+                                           title="{$entry.title|escape}">&nbsp;</a>
                                     {else}
-                                        <a class="blog--image" href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}" title="{$entry.title|escape}">
+                                        <a class="blog--image"
+                                           href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}"
+                                           title="{$entry.title|escape}">
                                             {s name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/s}
                                         </a>
                                     {/if}
