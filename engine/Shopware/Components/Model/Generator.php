@@ -65,6 +65,11 @@ class Generator
 ';
 
     /**
+     * The namespace which contains all generated attribute models.
+     */
+    const ATTRIBUTE_NAMESPACE = 'Shopware\Models\Attribute';
+
+    /**
      * Contains the required namespaces for a shopware model
      */
     const NAMESPACE_HEADER = '
@@ -108,7 +113,7 @@ class %className% extends ModelEntity
     /**
      * Definition of a standard shopware association property.
      */
-    const ASSOCIATION_PROPERTY = '
+    const ONE_TO_ONE_ASSOCIATION_PROPERTY = '
     /**
      * @var \%foreignClass%
      *
@@ -118,6 +123,30 @@ class %className% extends ModelEntity
      * })
      */
     protected $%property%;
+    ';
+
+    /**
+     * Definition of an OneToMany association property, which inverts
+     * an association property of a custom model.
+     */
+    const ONE_TO_MANY_ASSOCIATION_PROPERTY = '
+    /**
+     * INVERSE SIDE
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="%owningClass%", mappedBy="%owningProperty%")
+     */
+    protected $%property%;
+    ';
+
+    /**
+     * Definitition of a constructor for initializing properties.
+     */
+    const CONSTRUCTOR = '
+    public function __construct() {
+        %propertyInitializations%
+    }
     ';
 
     /**
@@ -155,6 +184,16 @@ class %className% extends ModelEntity
     ';
 
     /**
+     * Definition of the getter for a OneToMany association property.
+     */
+    const ONE_TO_MANY_ASSOCIATION_FUNCTION = '
+    public function get%upperPropertyName%()
+    {
+        return $this->%lowerPropertyName%;
+    }
+    ';
+
+    /**
      * Contains the schema manager which is used to get the database definition
      * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
      */
@@ -165,6 +204,13 @@ class %className% extends ModelEntity
      * @var array
      */
     protected $tableMapping = array();
+
+    /**
+     * Contains the table mapping for the custom models, that is
+     * models in Shopware\CustomModels namespace.
+     * @var array
+     */
+    protected $customModelsTableMapping = array();
 
     /**
      * Target path for the generated models
@@ -244,6 +290,17 @@ class %className% extends ModelEntity
             $this->tableMapping = $this->createTableMapping();
         }
         return $this->tableMapping;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomModelsTableMapping()
+    {
+        if (empty($this->customModelsTableMapping)) {
+            $this->customModelsTableMapping = $this->createCustomModelsTableMapping();
+        }
+        return $this->customModelsTableMapping;
     }
 
     /**
@@ -344,6 +401,10 @@ class %className% extends ModelEntity
      */
     protected function generateModel($table)
     {
+        // Determine all custom models, which have an owning OneToMany association to
+        // the given table
+        $owningOneToManyModels = $this->getOwningOneToManyModels($table);
+
         //first we have to create the file header for a standard php file
         $fileHeader = self::PHP_FILE_HEADER;
 
@@ -363,11 +424,20 @@ class %className% extends ModelEntity
         //after the normal column properties created, we can add the association properties.
         $associationProperties = $this->getAssociationProperties($table);
 
+        //add the properties for the inversed association.
+        $inversedAssociationProperties = $this->getInversedAssociationProperties($owningOneToManyModels);
+
+        //add the constructor.
+        $constructor = $this->getConstructor($owningOneToManyModels);
+
         //now all properties are declared, but the properties needs getter and setter function to get access from extern
         $columnFunctions = $this->getColumnsFunctions($table);
 
         //the association properties needs getter and setter, too.
         $associationFunctions = $this->getAssociationsFunctions($table);
+
+        //add the getter functions for the inversed association properties.
+        $inversedAssociationFunctions = $this->getInversedAssociationFunctions($owningOneToManyModels);
 
         //to concat the different source code paths, we create an array with all source code fragments
         $paths = array(
@@ -377,8 +447,11 @@ class %className% extends ModelEntity
             $classHeader,
             implode("\n", $columnProperties),
             implode("\n", $associationProperties),
+            implode("\n", $inversedAssociationProperties),
+            $constructor,
             implode("\n", $columnFunctions),
             implode("\n", $associationFunctions),
+            implode("\n", $inversedAssociationFunctions),
             '}'
         );
 
@@ -396,21 +469,7 @@ class %className% extends ModelEntity
     protected function getClassDefinition($table)
     {
         $source = self::CLASS_HEADER;
-        $className = $table->getName();
-
-        //check if the passed table is an shopware attribute table.
-        if (strpos($table->getName(), '_attributes')) {
-
-            //if the table is an attribute table we have to use the class name of the parent table.
-            $parentClass = str_replace('_attributes', '', $table->getName());
-            $className = $this->getClassNameOfTableName($parentClass);
-
-            //if the passed table is not an attribute table, we have to check if the table is already declared
-        } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
-
-            //if this is the case we will use the already declared class name
-            $className = $this->tableMapping[$table->getName()]['class'];
-        }
+        $className = $this->getClassNameOfTable($table);
 
         $source = str_replace('%className%', $className, $source);
         $source = str_replace('%tableName%', $table->getName(), $source);
@@ -646,7 +705,7 @@ class %className% extends ModelEntity
      */
     protected function getAssociationProperty($table, $foreignKey)
     {
-        $source = self::ASSOCIATION_PROPERTY;
+        $source = self::ONE_TO_ONE_ASSOCIATION_PROPERTY;
 
         if (!array_key_exists($foreignKey->getForeignTableName(), $this->tableMapping)) {
             return '';
@@ -663,6 +722,59 @@ class %className% extends ModelEntity
         $source = str_replace('%localColumn%', $localColumn[0], $source);
         $source = str_replace('%foreignColumn%', $foreignColumn[0], $source);
         $source = str_replace('%property%', lcfirst($className), $source);
+        return $source;
+    }
+
+    /**
+     * Creates the source code for the doctrine association properties,
+     * which inverse the passed models. That is, models having a property
+     * that references the currently generated model in an 'inversedBy' field
+     * of a ManyToOne annotation.
+     *
+     * @param array $referencingModels
+     * @return string[]
+     */
+    protected function getInversedAssociationProperties($referencingModels)
+    {
+        // Generate one property for each referncing model
+        $properties = array();
+        foreach ($referencingModels as $referencingModel => $relationProperties) {
+            // Compile the source snippet
+            $source = self::ONE_TO_MANY_ASSOCIATION_PROPERTY;
+            $source = str_replace('%owningClass%', $referencingModel, $source);
+            $source = str_replace('%owningProperty%', $relationProperties['owningProperty'], $source);
+            $source = str_replace('%property%', $relationProperties['invertingProperty'], $source);
+
+            $properties[] = $source;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Creates the source code for the custom constructor,
+     * which initializes each ManyToOne property with an empty
+     * ArrayCollection.
+     *
+     * @param array $referencingModels
+     * @return string
+     */
+    protected function getConstructor($referencingModels)
+    {
+        if (count($referencingModels) === 0) {
+            // No custom constructor required
+            return '';
+        }
+
+        // Create an ArrayCollection initializer for each inverting property
+        $initializations = array_map(function($item) {
+            return '$this->'.$item['invertingProperty'].' = new ArrayCollection();';
+        }, $referencingModels);
+
+        // Compile the source snippet
+        $source = self::CONSTRUCTOR;
+        $source = str_replace('%propertyInitializations%', implode("\n        ", $initializations), $source);
+
         return $source;
     }
 
@@ -738,15 +850,75 @@ class %className% extends ModelEntity
     }
 
     /**
+     * Creates the source code for getter of the association properties,
+     * which inverse the passed models. That is, models having a property
+     * that references the currently generated model in an 'inversedBy' field
+     * of a ManyToOne annotation.
+     *
+     * @param array $referencingModels
+     * @return string[]
+     */
+    protected function getInversedAssociationFunctions($referencingModels)
+    {
+        // Generate one getter for each referencing model
+        $getters = array();
+        foreach ($referencingModels as $relationProperties) {
+            // Compile the source snippet
+            $source = self::ONE_TO_MANY_ASSOCIATION_FUNCTION;
+            $source = str_replace('%upperPropertyName%', ucfirst($relationProperties['invertingProperty']), $source);
+            $source = str_replace('%lowerPropertyName%', lcfirst($relationProperties['invertingProperty']), $source);
+
+            $getters[] = $source;
+        }
+
+        return $getters;
+    }
+
+    /**
      * Helper function to create an table - class mapping of all defined
      * shopware models.
      * Used for the parent classes of attributes and association target entities.
+     *
      * @return array
      */
     public function createTableMapping()
     {
+        // Load the classes of the default path
+        return $this->createTableMappingForPath($this->getModelPath());
+    }
+
+    /**
+     * Helper function to create an table - class mapping of all models, which
+     * are defined in the Shopware\CustomModels namespace
+     *
+     * @return array
+     */
+    public function createCustomModelsTableMapping()
+    {
+        // Load the classes of all registered custom model paths
+        $classes = array();
+        $modelPaths = Shopware()->ModelAnnotations()->getPaths();
+        $registeredCustomModels = Shopware()->Loader()->getRegisteredNamespaces('Shopware\CustomModels');
+        foreach ($registeredCustomModels  as $customModel) {
+            if (in_array($customModel['path'], $modelPaths)) {
+                $classes += $this->createTableMappingForPath($customModel['path']);
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Helper function to create a table - class mapping of all models defined at
+     * the given path.
+     *
+     * @param string $path The path from which the model files will be loaded.
+     * @return An array containing the table mappings of the loaded model classes.
+     */
+    public function createTableMappingForPath($path)
+    {
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->getModelPath()),
+            new \RecursiveDirectoryIterator($path),
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
@@ -790,6 +962,89 @@ class %className% extends ModelEntity
             );
         }
         return $classes;
+    }
+
+    /**
+     * Uses the Doctrine annotation reader to check all models, which are
+     * contained in the Shopware\CustomModels namespace, for a OneToMany
+     * annotation which references the given table. All matching annotations
+     * are parsed and both the names of the mapping property ('owningProperty')
+     * and the inverting property ('invertingProperty') are added to an array,
+     * which is saved together with the full class name of the model.
+     *
+     * @param \Doctrine\DBAL\Schema\Table $table
+     * @return array
+     * @throws \Exception
+     */
+    private function getOwningOneToManyModels($table)
+    {
+        // Create the full name (incl. namespace) of the given table
+        $invertingClassName = $this->getClassNameOfTable($table);
+        $invertingNamespace = self::ATTRIBUTE_NAMESPACE . '\\' . $invertingClassName;
+
+        $referencingModels = array();
+        $invertingPropertyNames = array();
+        // Check all custom models
+        foreach ($this->getCustomModelsTableMapping() as $mapping) {
+            // Find the referencing property in the owning model as well as
+            // the designated name of the inverting property
+            $owningNamespace = $mapping['namespace'] . '\\' . $mapping['class'];
+            $metaData = Shopware()->Models()->getClassMetadata($owningNamespace);
+            foreach ($metaData->getReflectionProperties() as $property) {
+                // Try to find a ManyToOne annotation at the current property,
+                // which is inverted by the given table
+                $mappingAnnotation = Shopware()->ModelAnnotations()->getReader()->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\ManyToOne');
+                if ($mappingAnnotation === null || $mappingAnnotation->targetEntity !== $invertingNamespace) {
+                    continue;
+                }
+
+                // Check for duplicates
+                if (in_array($mappingAnnotation->inversedBy, $invertingPropertyNames)) {
+                    throw new \Exception('Duplicate association property named "' . $mappingAnnotation->inversedBy . '" for generated model ' . $invertingNamespace . '. Please use a unique prefix for you attribute associations.');
+                }
+                $invertingPropertyNames[] = $mappingAnnotation->inversedBy;
+
+                // Namespaces do match, hence save the property
+                $referencingModels[$owningNamespace] = array(
+                    'owningProperty' => $property->name,
+                    'invertingProperty' => $mappingAnnotation->inversedBy
+                );
+
+                // A model should reference the same foreign model only once, hence stop searching
+                break;
+            }
+        }
+
+        return $referencingModels;
+    }
+
+    /**
+     * Determines the class name for the given table. The difference to
+     * 'getClassNameOfTableName()' is, that this method handles attribute tables
+     * correctly, by returning the name of their parent class.
+     *
+     * @param \Doctrine\DBAL\Schema\Table $table
+     * @return string
+     */
+    private function getClassNameOfTable($table)
+    {
+        $className = $table->getName();
+
+        //check if the passed table is an shopware attribute table.
+        if (strpos($table->getName(), '_attributes')) {
+
+            //if the table is an attribute table we have to use the class name of the parent table.
+            $parentClass = str_replace('_attributes', '', $table->getName());
+            $className = $this->getClassNameOfTableName($parentClass);
+
+            //if the passed table is not an attribute table, we have to check if the table is already declared
+        } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
+
+            //if this is the case we will use the already declared class name
+            $className = $this->tableMapping[$table->getName()]['class'];
+        }
+
+        return $className;
     }
 
 }
