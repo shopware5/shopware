@@ -82,8 +82,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'saveComponent': me.onSaveComponent
             },
             'emotion-detail-designer': {
-                'openSettingsWindow': me.onOpenSettingsWindow,
                 'preview': me.onPreview
+            },
+            'emotion-detail-grid': {
+                'openSettingsWindow': me.onOpenSettingsWindow
             },
             'emotion-main-window button[action=emotion-list-toolbar-add]': {
                 'click': me.onOpenDetail
