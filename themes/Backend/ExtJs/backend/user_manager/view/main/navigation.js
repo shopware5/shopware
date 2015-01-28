@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.UserManager.view.main.Navigation', {
                 xtype: 'button',
                 text: '{s name=navigation/navigation_userlist}List of users{/s}',
                 action: 'open-user-view',
-                iconCls: 'sprite-user--pencil',
+                iconCls: 'sprite-user--list',
                 anchor: '100%',
                 cls: 'small secondary'
             }, {

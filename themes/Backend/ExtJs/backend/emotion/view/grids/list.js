@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Emotion.view.grids.List', {
                     me.fireEvent('editEntry', grid, rec, row, col);
                 }
             }, {
-                iconCls: 'sprite-blue-folder--plus',
+                iconCls: 'sprite-duplicate-grid',
                 tooltip: me.snippets.tooltips.duplicate,
                 handler: function(grid, row, col) {
                     var rec = grid.getStore().getAt(row);

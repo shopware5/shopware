@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Article.view.detail.sidebar.Option', {
         var me = this;
 
         me.duplicateButton = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-blue-folder--plus',
+            iconCls: 'sprite-duplicate-article',
             text: me.snippets.duplicate,
             cls: 'small secondary',
             margin: '0 10 0 0',

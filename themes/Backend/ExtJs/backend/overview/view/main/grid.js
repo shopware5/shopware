@@ -241,7 +241,7 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
 
         var filterButton = Ext.create('Ext.button.Button', {
             text: '{s name=buttonText_filter}Filter{/s}',
-            iconCls: 'sprite-arrow-circle-135',
+            iconCls: 'sprite-filter',
             scope : this,
             handler: function() {
                 me.fireEvent('dateChange', fromDate.getValue(), toDate.getValue());

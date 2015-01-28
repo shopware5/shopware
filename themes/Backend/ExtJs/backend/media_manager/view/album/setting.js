@@ -189,11 +189,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
     createIconSelection: function() {
         var me = this;
         var icons = [
-            { boxLabel: '<span class="sprite-blue-folder"></span>', name: 'iconCls', inputValue: 'sprite-blue-folder' },
+            { boxLabel: '<span class="sprite-inbox-document-folder"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-folder' },
             { boxLabel: '<span class="sprite-inbox-document-text"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-text' },
             { boxLabel: '<span class="sprite-inbox-document-music"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-music' },
             { boxLabel: '<span class="sprite-inbox-film"></span>', name: 'iconCls', inputValue: 'sprite-inbox-film' },
-            { boxLabel: '<span class="sprite-inbox-image"></span>', name: 'iconCls', inputValue: 'sprite-inbox-image' },
+            { boxLabel: '<span class="sprite-inbox-document-image"></span>', name: 'iconCls', inputValue: 'sprite-inbox-document-image' },
             { boxLabel: '<span class="sprite-images-stack"></span>', name: 'iconCls', inputValue: 'sprite-images-stack' },
             { boxLabel: '<span class="sprite-pictures"></span>', name: 'iconCls', inputValue: 'sprite-pictures' },
             { boxLabel: '<span class="sprite-films"></span>', name: 'iconCls', inputValue: 'sprite-films' },
