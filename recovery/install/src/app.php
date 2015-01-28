@@ -184,13 +184,9 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $shopwareSystemCheck = $container->offsetGet('install.requirements');
     $systemCheckResults  = $shopwareSystemCheck->toArray();
 
-    if ($shopwareSystemCheck->getContainsWarnings()) {
-        $app->view()->setData("warning", true);
-    }
+    $app->view()->setData("warning", (bool) $shopwareSystemCheck->getContainsWarnings());
 
-    if ($shopwareSystemCheck->getFatalError()) {
-        $app->view()->setData("error", true);
-    }
+    $app->view()->setData("error", (bool) $shopwareSystemCheck->getFatalError());
 
     // Check file & directory permissions
     /** @var $shopwareSystemCheckPath RequirementsPath */
