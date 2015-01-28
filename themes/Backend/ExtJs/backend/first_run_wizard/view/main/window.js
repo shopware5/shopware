@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
                 height: 76,
                 items: [
                     Ext.create('Ext.Img', {
-                        src: me.basePath + '/engine/Shopware/Themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/frw-logo.png',
+                        src: me.basePath + '/themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/frw-logo.png',
                         renderTo: Ext.getBody()
                     })
                 ]
