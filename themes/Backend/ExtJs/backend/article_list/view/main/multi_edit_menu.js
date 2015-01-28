@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.MultiEditMenu', {
                     padding: '10px',
                     margin: '5px',
                     name: 'batchEdit',
-                    iconCls: 'sprite-documents-stack',
+                    iconCls: 'sprite-multi-edit',
                     handler: function () {
                         me.fireEvent('openBatchProcessWindow');
                     }

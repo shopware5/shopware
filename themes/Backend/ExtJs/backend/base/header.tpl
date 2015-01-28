@@ -15,6 +15,7 @@
 {block name="backend/base/header/css"}
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/ext-all.css'}?{Shopware::REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set.css'}?{Shopware::REVISION}" />
+    <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set-new.css'}?{Shopware::REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/lib/codemirror.css'}?{Shopware::REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/theme/monokai.css'}?{Shopware::REVISION}" />
 {/block}
