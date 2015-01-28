@@ -524,7 +524,7 @@ class Compiler
             if ($settings->getCompressJs()) {
                 $content = $this->jsCompressor->compress($content);
             }
-
+            $content = $content . "\n";
             $output->fwrite($content);
         }
     }
@@ -574,7 +574,7 @@ class Compiler
             if ($settings->getCompressJs()) {
                 $content = $this->jsCompressor->compress($content);
             }
-
+            $content = $content . "\n";
             $output->fwrite($content);
         }
     }
