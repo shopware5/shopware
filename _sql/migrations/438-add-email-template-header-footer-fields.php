@@ -26,7 +26,7 @@ SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend60' LIMI
 INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
 (@formId, 'emailheaderplain', 's:0:"";', 'E-Mail Header Plaintext', 'textarea', 0, 0, 1, NULL, NULL, NULL),
 (@formId, 'emailfooterplain', 's:64:"\nMit freundlichen Grüßen,\n\nIhr Team von {config name=shopName}";', 'E-Mail Footer Plaintext', 'textarea', 0, 0, 1, NULL, NULL, NULL),
-(@formId, 'emailheaderhtml', 's:137:"<div>\n<img src=\"{\$sShopURL}/engine/Shopware/Themes/Frontend/Responsive/frontend/_public/src/img/logos/logo--tablet.png\" alt=\"Logo\"><br />";', 'E-Mail Header HTML', 'textarea', 0, 0, 1, NULL, NULL, NULL),
+(@formId, 'emailheaderhtml', 's:137:"<div>\n<img src=\"{\$sShopURL}/themes/Frontend/Responsive/frontend/_public/src/img/logos/logo--tablet.png\" alt=\"Logo\"><br />";', 'E-Mail Header HTML', 'textarea', 0, 0, 1, NULL, NULL, NULL),
 (@formId, 'emailfooterhtml', 's:85:"<br/>\nMit freundlichen Grüßen,<br/><br/>\n\nIhr Team von {config name=shopName}</div>";', 'E-Mail Footer HTML', 'textarea', 0, 0, 1, NULL, NULL, NULL);
 
 SET @emailheaderplainid = (SELECT id FROM s_core_config_elements WHERE name = 'emailheaderplain' LIMIT 1);

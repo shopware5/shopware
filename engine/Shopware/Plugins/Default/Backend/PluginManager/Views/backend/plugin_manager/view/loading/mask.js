@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.PluginManager.view.loading.Mask', {
         var me = this, path = '';
 
         if (!me.plugin.get('iconPath')) {
-            path = '{link file="engine/Shopware/Themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}';
+            path = '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}';
         } else {
             path = me.plugin.get('iconPath');
         }

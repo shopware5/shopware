@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
             me.previewContainer.update(first.data);
         } else {
             me.previewContainer.update({
-                link: '{link file="engine/Shopware/Themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}'
+                link: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}'
             });
         }
 
