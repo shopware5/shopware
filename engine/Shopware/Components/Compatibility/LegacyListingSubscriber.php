@@ -62,7 +62,7 @@ class LegacyListingSubscriber implements SubscriberInterface
             return;
         }
 
-        $imageDir = Shopware()->Container()->get('shopware_storefron.context_service')->getShopContext()->getBaseUrl() . '/media/image/';
+        $imageDir = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getBaseUrl() . '/media/image/';
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
 
         $data = $controller->View()->getAssign();
