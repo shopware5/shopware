@@ -34,7 +34,7 @@
       background: theme-image($theme, 'plugin_manager/toggle-button-sprite.png') no-repeat;;
     }
     .toggle-button.active {
-      background-position-y: -25px;
+      background-position: 0px -25px;
     }
   }
 
