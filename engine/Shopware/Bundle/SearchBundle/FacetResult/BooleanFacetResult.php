@@ -125,5 +125,4 @@ class BooleanFacetResult
     {
         return $this->template;
     }
-
 }

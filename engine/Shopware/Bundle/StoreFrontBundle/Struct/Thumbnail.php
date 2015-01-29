@@ -57,7 +57,7 @@ class Thumbnail extends Extendable implements \JsonSerializable
      * @param $maxWidth
      * @param $maxHeight
      */
-    function __construct($source, $retinaSource, $maxWidth, $maxHeight)
+    public function __construct($source, $retinaSource, $maxWidth, $maxHeight)
     {
         $this->source = $source;
         $this->retinaSource = $retinaSource;

@@ -169,6 +169,12 @@ class sArticles
      */
     private $articleComparisons;
 
+    /**
+     * @var StoreFrontBundle\Service\ProductNumberServiceInterface
+     */
+    private $productNumberService;
+
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
@@ -198,6 +204,7 @@ class sArticles
         $this->legacyEventManager        = $container->get('legacy_event_manager');
         $this->session                   = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
+        $this->productNumberService      = $container->get('shopware_storefront.product_number_service');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
@@ -1153,22 +1160,21 @@ class sArticles
             $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
         };
 
+        $providedNumber = $number;
+
         /**
          * Validates the passed configuration array for the configurator selection
          */
         $selection = $this->getCurrentSelection($selection);
 
-        /**
-         * Checks which product id should be used.
-         * If an order number passed, the id of the order number should be used.
-         */
-        $productId = $this->getCurrentProductId($id, $number);
+        if (!$number) {
+            $number = $this->productNumberService->getMainProductNumberById($id);
+        }
 
         /**
          * Checks which product number should be loaded. If a configuration passed.
          */
-        $productNumber = $this->getCurrentProductNumber(
-            $productId,
+        $productNumber = $this->productNumberService->getAvailableNumber(
             $number,
             $selection
         );
@@ -1199,7 +1205,7 @@ class sArticles
              * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
              * 3. $configuration is empty (Customer hasn't not set an own configuration)
              */
-            if ($number && $number == $productNumber && empty($configuration) || $type === 0) {
+            if ($providedNumber && $providedNumber == $productNumber && empty($configuration) || $type === 0) {
                 $selection = $product->getSelectedOptions();
             }
         }
@@ -1217,6 +1223,8 @@ class sArticles
 
         return $product;
     }
+
+
 
     /**
      * @param int $productId
@@ -2420,173 +2428,6 @@ class sArticles
             'UTF-8',
             false
         );
-    }
-
-    /**
-     * Returns a single order number for the passed product configuration selection.
-     * Used for the product detail page.
-     *
-     * @param $productId
-     * @param array $selection
-     * @return mixed
-     */
-    private function getNumberBySelection($productId, array $selection)
-    {
-        $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('variant.ordernumber'))
-            ->from('s_articles_details', 'variant')
-            ->where('variant.articleID = :productId')
-            ->andWhere('variant.active = 1')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->setParameter(':productId', $productId);
-
-        foreach ($selection as $optionId) {
-            $alias = 'option_' . (int) $optionId;
-
-            $query->innerJoin(
-                'variant',
-                's_article_configurator_option_relations',
-                $alias,
-                'variant.id = ' . $alias . '.article_id
-                 AND ' . $alias . '.option_id = :' . $alias
-            );
-            $query->setParameter(':' . $alias, (int) $optionId);
-        }
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_COLUMN);
-    }
-
-    /**
-     * Helper function which checks the different parameters which has to
-     * be considered on the product detail page.
-     *
-     * The passed $selection has the highest priority. This property contains
-     * the customer selection of the configuration options.
-     * If the selection isn't empty, the function returns the first possible
-     * variant number for the selection.
-     *
-     * The passed $number parameter has the second priority. If an order number
-     * passed to the product detail page, the detail page should be loaded
-     * directly for the specify product variation.
-     *
-     * At least the passed $id parameter is used to get the order number
-     * of the main variation.
-     *
-     * If all that does not lead to an valid ordernumber the
-     * first variants ordernumber is returned as fallback.
-     *
-     * @param int           $id
-     * @param string        $number
-     * @param array         $selection
-     * @return false|string
-     */
-    private function getCurrentProductNumber($id, $number, $selection)
-    {
-        $selected = null;
-        if (!empty($selection)) {
-            $selected = $this->getNumberBySelection($id, $selection);
-        }
-
-        if ($selected) {
-            return $selected;
-        }
-
-        if ($number !== null) {
-            $selected = $this->getOrdernumberByOrdernumber($number);
-        } else {
-            $selected = $this->getOrdernumberByProductId($id);
-        }
-
-        if ($selected) {
-            return $selected;
-        }
-
-        $selected = $this->getFallbackVariant($id);
-
-        return $selected;
-    }
-
-    /**
-     * @param string $number
-     * @return false|string
-     */
-    private function getOrdernumberByOrdernumber($number)
-    {
-        $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('variant.ordernumber'));
-        $query->from('s_articles_details', 'variant');
-        $query->innerJoin(
-            'variant',
-            's_articles',
-            'product',
-            'product.id = variant.articleID
-             AND variant.active = 1'
-        );
-
-        $query->where('variant.ordernumber = :number')
-            ->setParameter(':number', $number);
-
-        $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-
-        return $selected;
-    }
-
-    /**
-     * @param int $productId
-     * @return false|string
-     */
-    private function getOrdernumberByProductId($productId)
-    {
-        $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('variant.ordernumber'));
-        $query->from('s_articles_details', 'variant');
-        $query->innerJoin(
-            'variant',
-            's_articles',
-            'product',
-            'product.id = variant.articleID
-             AND variant.active = 1'
-        );
-        $query->where('variant.id = product.main_detail_id')
-            ->andWhere('product.id = :productId')
-            ->setParameter(':productId', $productId);
-
-        $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-
-        return $selected;
-    }
-
-    /**
-     * Returns the first active variant ordernumber
-     *
-     * @param int $productId
-     * @return string
-     */
-    private function getFallbackVariant($productId)
-    {
-        $query = Shopware()->Models()->getDBALQueryBuilder();
-        $query->select(array('variant.ordernumber'));
-        $query->from('s_articles_details', 'variant');
-        $query->innerJoin(
-            'variant',
-            's_articles',
-            'product',
-            'product.id = variant.articleID
-             AND variant.active = 1 AND product.id = :productId'
-        );
-        $query->setMaxResults(1);
-        $query->setParameter(':productId', $productId);
-
-        $statement = $query->execute();
-        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
-
-        return $selected;
     }
 
     /**
