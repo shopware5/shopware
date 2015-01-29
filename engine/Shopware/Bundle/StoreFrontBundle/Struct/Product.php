@@ -97,11 +97,11 @@ class Product extends ListProduct implements \JsonSerializable
     public function getThumbnailsBySize($index)
     {
         /**@var $media Media*/
-        $result = array_filter($this->media, function(Media $media) {
+        $result = array_filter($this->media, function (Media $media) {
             return ($media->getType() === Media::TYPE_IMAGE);
         });
 
-        return array_map(function(Media $media) use ($index) {
+        return array_map(function (Media $media) use ($index) {
             return $media->getThumbnail($index);
         }, $result);
     }

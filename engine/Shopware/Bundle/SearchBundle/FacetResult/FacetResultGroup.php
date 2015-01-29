@@ -117,6 +117,4 @@ class FacetResultGroup
     {
         return $this->template;
     }
-
-
 }
