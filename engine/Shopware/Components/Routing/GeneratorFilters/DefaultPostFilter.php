@@ -22,14 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Routing\GeneratorFilters;
+
+use Shopware\Components\Routing\PostFilterInterface;
+use Shopware\Components\Routing\Context;
+
 /**
- * Rewrites a given link
- *
- * @param array $params
- * @param       $compiler
- * @return string
+ * @category  Shopware
+ * @package   Shopware\Components\Routing
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-function smarty_modifiercompiler_rewrite($params, $compiler)
+class DefaultPostFilter implements PostFilterInterface
 {
-    return $params[0];
+    /**
+     * {@inheritdoc}
+     */
+    public function postFilter($url, Context $context)
+    {
+        if (!preg_match('|^[a-z]+://|', $url) && $url{0} !== '/') {
+            $url = rtrim($context->getBaseUrl(), '/') . '/' . $url;
+        }
+
+        return $url;
+    }
 }

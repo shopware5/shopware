@@ -28,7 +28,6 @@
 
         <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
             <argument type="service" id="config" />
-            <argument type="service" id="query_alias_mapper" />
             <argument type="service" id="events" />
 
             <!--criteria request handlers-->
