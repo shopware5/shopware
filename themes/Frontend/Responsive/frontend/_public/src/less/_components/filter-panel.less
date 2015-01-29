@@ -558,13 +558,17 @@ The styling includes the collapsed and expanded styling and the panel component 
 @media screen and(min-width: @tabletViewportWidth) {
 
     .filter-panel {
-        width: 32%;
+        width: 49%;
         margin-left: 1%;
         float: left;
 
         &.is--collapsed {
             .unitize-height(38);
         }
+    }
+
+    .is--no-sidebar .filter-panel {
+        width: 32%;
     }
 
     .filter-panel--flyout {
@@ -609,6 +613,11 @@ The styling includes the collapsed and expanded styling and the panel component 
     .filter--btn-apply {
         width: auto;
     }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+    .filter-panel { width: 32%; }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
