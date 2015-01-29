@@ -282,11 +282,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->leftJoin('blog.category', 'category')
                 ->where('blog.active = 1')
                 ->andWhere('blog.displayDate <= :displayDate')
-                ->andWhere('category.path LIKE :path')
+                ->andWhere('(category.path LIKE :path OR category.id = :categoryId)')
                 ->orderBy('blog.displayDate', 'DESC')
                 ->setFirstResult(0)
                 ->setMaxResults($entryAmount)
                 ->setParameter('displayDate', date('Y-m-d H:i:s'))
+                ->setParameter('categoryId', $category->getId())
                 ->setParameter('path', '%|' . $category->getId() . '|%')
             ;
         }
