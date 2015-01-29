@@ -4,7 +4,7 @@
 
 <?= $t->t('language-selection_welcome_message') ?>
 
-<form action="<?= $menuHelper->getNextUrl() ?>" method="post">
+<form action="<?= $menuHelper->getNextUrl() ?>" method="get">
     <input type="hidden" class="hidden-action" value="<?= $menuHelper->getCurrentUrl() ?>" />
     <label for="language"><?= $t->t("language-selection_select_language") ?></label>
     <select id="language" name="language" class="language-selection">
