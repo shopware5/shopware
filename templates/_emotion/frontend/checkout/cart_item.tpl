@@ -193,9 +193,13 @@
 		<div class="grid_6">
 			{block name='frontend_checkout_cart_item_premium_image'}
 			{if $sBasketItem.image.src.0}
-				<a class="thumbnail">
+				<a class="thumb_image">
 					<img src="{$sBasketItem.image.src.1}" border="0" alt="{$sBasketItem.articlename} "/>
 				</a>
+			{else}
+				<span class="premium_img">
+					{se name="sCartItemFree"}GRATIS!{/se}
+				</span>
 			{/if}
 			{/block}
 			
