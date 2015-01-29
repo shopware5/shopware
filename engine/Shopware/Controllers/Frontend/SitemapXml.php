@@ -340,7 +340,8 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
         foreach ($suppliers as &$supplier) {
             $supplier['urlParams'] = array(
-                'sViewport' => 'supplier',
+                'sViewport' => 'listing',
+                'sAction' => 'manufacturer',
                 'sSupplier' => $supplier['id']
             );
         }
