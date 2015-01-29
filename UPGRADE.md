@@ -309,6 +309,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
 * `sSelfCanonical` is deprecated. Use the `canonicalParams` array instead
 * Chane array structure of thumbnail images in emotions, product detail pages, product listings, blog pages.
+* Enable and disable function of a plugin bootstrap can now return same parameter as install, uninstall.
 
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
