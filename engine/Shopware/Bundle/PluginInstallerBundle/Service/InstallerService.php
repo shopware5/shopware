@@ -226,14 +226,16 @@ class InstallerService
         }
 
         $bootstrap = $this->getPluginBootstrap($plugin);
-        $isAllowed = $bootstrap->enable();
-        $isAllowed = is_bool($isAllowed) ? $isAllowed : !empty($isAllowed['success']);
-        if (!$isAllowed) {
+        $result = $bootstrap->enable();
+        $result = is_bool($result) ? ['success' => $result] : $result;
+
+        if ($result['success'] == false) {
             throw new \Exception('Not allowed to enable plugin.');
         }
 
         $plugin->setActive(true);
         $this->em->flush($plugin);
+        return $result;
     }
 
     /**
@@ -247,14 +249,16 @@ class InstallerService
         }
 
         $bootstrap = $this->getPluginBootstrap($plugin);
-        $isAllowed = $bootstrap->disable();
-        $isAllowed = is_bool($isAllowed) ? $isAllowed : !empty($isAllowed['success']);
-        if (!$isAllowed) {
+        $result = $bootstrap->disable();
+        $result = is_bool($result) ? ['success' => $result] : $result;
+
+        if ($result['success'] == false) {
             throw new \Exception('Not allowed to disable plugin.');
         }
 
         $plugin->setActive(false);
         $this->em->flush($plugin);
+        return $result;
     }
 
     /**
