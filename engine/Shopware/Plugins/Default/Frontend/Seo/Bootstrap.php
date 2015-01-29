@@ -108,7 +108,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $controller = $request->getControllerName();
 
-        if ($request->getQuery('sViewport') === 'supplier' || $request->getQuery('controller') === 'supplier') {
+        if ($request->get('action') === 'manufacturer' && $request->get('controller') === 'listing') {
             $alias = $mapper->getQueryAliases();
 
             if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
