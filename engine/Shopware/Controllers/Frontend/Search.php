@@ -46,10 +46,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function defaultSearchAction()
     {
-        /** @var $mapper \Shopware\Components\QueryAliasMapper */
-        $mapper = $this->get('query_alias_mapper');
-        $mapper->replaceShortRequestQueries($this->Request());
-
         if (!$this->Request()->has('sSort')) {
             $this->Request()->setParam('sSort', 7);
         }
@@ -91,6 +87,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $request = $this->Request()->getParams();
         $request['sSearchOrginal'] = $term;
+
+        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        $mapper = $this->get('query_alias_mapper');
 
         $this->View()->assign(array(
             'term' => $term,

@@ -89,6 +89,16 @@
             <argument>%shopware.plugins%</argument>
         </service>
 
+        <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
+        <service id="router"
+                 class="Shopware\Components\Routing\Router"
+                 factory-service="router_factory"
+                 factory-method="factory" >
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="events"/>
+        </service>
+
+        <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
 
         <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
         <service id="front"
@@ -102,15 +112,9 @@
             <argument>%shopware.front%</argument>
         </service>
 
-        <service id="router"
-                 class="Enlight_Controller_Router"
-                 factory-service="front"
-                 factory-method="Router" />
-
         <service id="date" class="Zend_Date">
             <argument type="service" id="locale"/>
         </service>
-
         <service id="shopware.loader" alias="Loader" />
         <service id="Loader"     class="Enlight_Loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">

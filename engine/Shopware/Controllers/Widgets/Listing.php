@@ -149,10 +149,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
 
-        /** @var $mapper \Shopware\Components\QueryAliasMapper */
-        $mapper = $this->get('query_alias_mapper');
-        $mapper->replaceShortRequestQueries($this->Request());
-
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
@@ -213,10 +209,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $category = $category[0];
 
-        $category['link'] = $this->getCategoryLink($categoryId, $category['name'], $category['blog']);
+        $category['link'] = $this->getCategoryLink($categoryId, $category['blog']);
 
         foreach ($category['children'] as &$child) {
-            $child['link'] = $this->getCategoryLink($child['id'], $child['name'], $child['blog']);
+            $child['link'] = $this->getCategoryLink($child['id'], $child['blog']);
 
             // search for childrens
             $childrenOfChildren = $categoryRepository->getCategoryByIdQuery($child['id'])->getArrayResult();
@@ -235,17 +231,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      * @param bool $blog
      * @return mixed|string
      */
-    private function getCategoryLink($categoryId, $categoryName, $blog = false)
+    private function getCategoryLink($categoryId, $blog = false)
     {
-        $sViewport = $blog ? 'blog' : 'cat';
-        $link = $this->Front()->Router()->assemble(
-            array(
-                'sViewport' => $sViewport,
-                'sCategory' => $categoryId,
-                'title' => $categoryName
-            )
-        );
-
-        return $link;
+        return $this->get('config')->get('baseFile') . '?' . http_build_query([
+            'sViewport' => $blog ? 'blog' : 'cat',
+            'sCategory' => $categoryId
+        ], '', '&');
     }
 }

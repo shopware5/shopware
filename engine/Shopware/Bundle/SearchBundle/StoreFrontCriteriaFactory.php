@@ -28,7 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
@@ -51,29 +50,21 @@ class StoreFrontCriteriaFactory
     private $config;
 
     /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
-
-    /**
      * @var \Enlight_Event_EventManager
      */
     private $eventManager;
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param QueryAliasMapper $queryAliasMapper
      * @param \Enlight_Event_EventManager $eventManager
      * @param CriteriaRequestHandlerInterface[] $requestHandlers
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        QueryAliasMapper $queryAliasMapper,
         \Enlight_Event_EventManager $eventManager,
         $requestHandlers = []
     ) {
         $this->config = $config;
-        $this->queryAliasMapper = $queryAliasMapper;
         $this->eventManager = $eventManager;
 
         $this->requestHandlers = $requestHandlers;
@@ -222,8 +213,6 @@ class StoreFrontCriteriaFactory
      */
     private function getSearchCriteria(Request $request, ShopContextInterface $context)
     {
-        $this->queryAliasMapper->replaceShortRequestQueries($request);
-
         if (!$request->has('sSort')) {
             $request->setParam('sSort', StoreFrontCriteriaFactory::SORTING_SEARCH_RANKING);
         }
@@ -251,8 +240,6 @@ class StoreFrontCriteriaFactory
      */
     private function createCriteriaFromRequest(Request $request, ShopContextInterface $context)
     {
-        $this->queryAliasMapper->replaceShortRequestQueries($request);
-
         $criteria = new Criteria();
 
         foreach ($this->requestHandlers as $handler) {
