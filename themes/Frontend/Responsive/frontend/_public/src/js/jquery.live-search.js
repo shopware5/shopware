@@ -215,7 +215,10 @@
                 'data': {
                     'sSearch': me.lastSearchTerm
                 },
-                'success': $.proxy(me.showResult, me)
+                'success': function (response) {
+                    me.showResult(response);
+                    $.publish('plugin/liveSearch/onResponseSearchRequest', [ me, searchTerm ]);
+                }
             });
         },
 
@@ -230,6 +233,7 @@
 
             me.$loader.fadeOut(opts.animationSpeed);
             me.$results.empty().html(response).slideDown().addClass(opts.activeCls);
+            $.publish('plugin/liveSearch/showResult');
         },
 
         /**
@@ -241,6 +245,7 @@
                 $results = me.$results;
 
             $results.removeClass(opts.activeCls).fadeOut(opts.animationSpeed, $results.empty.bind($results));
+            $.publish('plugin/liveSearch/closeResult');
         },
 
         /**
