@@ -199,7 +199,8 @@ class sCategories
         $query->from('s_categories', 'category')
             ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
             ->andWhere('category.active = 1')
-            ->orderBy('category.position')
+            ->orderBy('category.position', 'ASC')
+            ->addOrderBy('category.id')
             ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
         /**@var $statement PDOStatement*/
