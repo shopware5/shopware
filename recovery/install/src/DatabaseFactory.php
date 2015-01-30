@@ -115,7 +115,7 @@ class DatabaseFactory
         $sql = "SELECT VERSION()";
         $result = $conn->query($sql)->fetchColumn(0);
         if (version_compare($result, '5.5.0', '<')) {
-            throw new \RuntimeException(("Database-Error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.1.0."));
+            throw new \RuntimeException(("Database error!: Your database server is running MySQL $result, but Shopware 5 requires at least MySQL 5.5"));
         }
     }
 
@@ -127,7 +127,7 @@ class DatabaseFactory
     {
         $hasEngineSupport = $this->hasStorageEngine('InnoDB', $conn);
         if (!$hasEngineSupport) {
-            throw new \RuntimeException("Database-Error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.");
+            throw new \RuntimeException("Database error!: The MySQL storage engine InnoDB not found. Please consult your hosting provider to solve this problem.");
         }
     }
 
@@ -141,7 +141,7 @@ class DatabaseFactory
         $result = $conn->query($sql)->fetchColumn(0);
 
         if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
-            throw new \RuntimeException("Database-Error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
+            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
         }
     }
 
