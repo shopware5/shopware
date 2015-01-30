@@ -27,6 +27,7 @@
         <service id="shopware_storefront.category_service" alias="shopware_storefront.category_service_core"/>
         <service id="shopware_storefront.vote_service" alias="shopware_storefront.vote_service_core"/>
         <service id="shopware_storefront.base_product_factory" alias="shopware_storefront.base_product_factory_core"/>
+        <service id="shopware_storefront.product_number_service" alias="shopware_storefront.product_number_service_core"/>
 
         <service id="shopware_storefront.list_product_gateway" alias="shopware_storefront.list_product_gateway_dbal"/>
         <service id="shopware_storefront.product_gateway" alias="shopware_storefront.product_gateway_dbal"/>
@@ -53,7 +54,6 @@
         <service id="shopware_storefront.product_media_gateway" alias="shopware_storefront.product_media_gateway_dbal"/>
         <service id="shopware_storefront.variant_media_gateway" alias="shopware_storefront.variant_media_gateway_dbal"/>
 
-
         <!-- Shopware services definition. This classes contains the business logic-->
         <service id="shopware_storefront.context_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService">
             <argument type="service" id="service_container"/>
@@ -61,6 +61,10 @@
             <argument type="service" id="shopware_storefront.tax_gateway"/>
             <argument type="service" id="shopware_storefront.country_gateway"/>
             <argument type="service" id="shopware_storefront.price_group_discount_gateway" />
+        </service>
+
+        <service id="shopware_storefront.product_number_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductNumberService">
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware_storefront.list_product_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService">
