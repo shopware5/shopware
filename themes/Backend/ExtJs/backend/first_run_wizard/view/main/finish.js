@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     snippets: {
         content: {
             title: '{s name=finish/content/title}Finished{/s}',
-            message: '{s name=finish/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{/s}'
+            message: '{s name=finish/content/message}The First Run Wizard is now complete and you are ready to start using your new Shopware shop. Information, help, and the latest Shopware news can be found in the following pages:<br><br><a href="http://en.wiki.shopware.com/" target="_blank">Shopware Wiki</a><br><a href="http://store.shopware.com/en/" target="_blank">Community Store</a><br><a href="http://en.forum.shopware.com/" target="_blank">Community Forum</a><br><a href="https://www.facebook.com/shopware" target="_blank">Shopware on Facebook</a><br><a href="https://twitter.com/shopware_ag" target="_blank">Shopware on Twitter</a><br>{/s}'
         },
         buttons: {
             finish: '{s name=finish/buttons/finish}Finish{/s}'

@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
     snippets: {
         content: {
             title: '{s name=demo_data/content/title}Demo Data{/s}',
-            message: '{s name=demo_data/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+            message: '{s name=demo_data/content/message}Want to see Shopware in action right away? Install a demo data set. With it, you will be able to explore all the features that will make your Shopware shop an online success. Please note that demo data sets are for testing purposes only, and should not be installed in or modified for a production environment.{/s}',
+            noPlugins: '{s name=demo_data/content/noPlugins}No plugins found{/s}'
         }
     },
 
@@ -73,7 +74,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
-            me.createStoreListing()
+            me.createStoreListing(),
+            me.createNoResultMessage()
         ];
 
         me.callParent(arguments);
@@ -90,6 +92,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
         });
 
         me.communityStore.on('load', function(store, records) {
+            if (records.length <= 0) {
+                me.content.setVisible(false);
+                me.noResultMessage.setVisible(true);
+            }
             me.storeListing.setLoading(false);
         });
 
@@ -102,9 +108,23 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
         return me.content;
     },
 
+    createNoResultMessage: function() {
+        var me = this;
+
+        me.noResultMessage = Ext.create('Ext.Component', {
+            style: 'margin-top: 30px; font-size: 20px; text-align: center;',
+            html: '<h2>' + me.snippets.content.noPlugins + '</h2>',
+            hidden: true
+        });
+
+        return me.noResultMessage;
+    },
+
     refreshData: function() {
         var me = this;
 
+        me.content.setVisible(true);
+        me.noResultMessage.setVisible(false);
         me.storeListing.setLoading(true);
         me.storeListing.resetListing();
         me.communityStore.load();

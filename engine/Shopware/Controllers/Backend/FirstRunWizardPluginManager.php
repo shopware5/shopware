@@ -3,7 +3,7 @@
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
-use Shopware\Components\FirstRunWizard\PluginStoreService;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 
 class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_Controllers_Backend_ExtJs
 {

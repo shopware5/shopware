@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Home', {
     snippets: {
         content: {
             title: '{s name=home/content/title}Welcome to Shopware{/s}',
-            message: '{s name=home/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{/s}'
+            message: '{s name=home/content/message}Welcome to Shopware shop. The First Run Wizard will accompany you in your first steps with Shopware and give you valuable tips about the configuration options.{/s}'
         },
         buttons: {
             next: '{s name=home/buttons/next}Next{/s}',
