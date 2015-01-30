@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     snippets: {
         content: {
             title: '{s name=localization/content/title}Localization{/s}',
-            message: '{s name=localization/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+            message: '{s name=localization/content/message}Take your business abroad using localizations plugins. Start by selecting the language you want to add to your shop. You will receive a list of recommended plugins for your shop, that will add translations and other useful features to your Shopware installation.{/s}',
+            noPlugins: '{s name=localization/content/noPlugins}No plugins found{/s}'
         },
         languagePicker: '{s name=localization/languagePicker}Select a language to filter{/s}'
     },
@@ -59,7 +60,15 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     initComponent: function() {
         var me = this;
 
-        me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load();
+        me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load(
+            function(records) {
+                Ext.each(records, function(record) {
+                    if (record.get('locale') == '{s namespace="backend/base/index" name=script/ext/lang}{/s}') {
+                        me.languageFilter.setValue(record.get('locale'));
+                    }
+                });
+            }
+        );
 
         me.items = [
             {
@@ -77,7 +86,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
             me.createLanguagePicker(),
-            me.createStoreListing()
+            me.createStoreListing(),
+            me.createNoResultMessage()
         ];
 
         me.callParent(arguments);
@@ -130,6 +140,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         });
 
         me.communityStore.on('load', function(store, records) {
+            if (!records || records.length <= 0) {
+                me.content.setVisible(false);
+                me.noResultMessage.setVisible(true);
+            }
             me.storeListing.setLoading(false);
         });
 
@@ -142,10 +156,25 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         return me.content;
     },
 
+    createNoResultMessage: function() {
+        var me = this;
+
+        me.noResultMessage = Ext.create('Ext.Component', {
+            style: 'margin-top: 30px; font-size: 20px; text-align: center;',
+            html: '<h2>' + me.snippets.content.noPlugins + '</h2>',
+            hidden: true
+        });
+
+        return me.noResultMessage;
+    },
+
     refreshData: function() {
         var me = this;
 
         me.fireEvent('localizationResetData');
+
+        me.content.setVisible(true);
+        me.noResultMessage.setVisible(false);
 
         if (me.languageFilter.getValue()) {
             me.storeListing.setLoading(true);

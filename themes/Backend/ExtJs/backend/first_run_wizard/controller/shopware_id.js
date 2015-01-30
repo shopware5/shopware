@@ -179,32 +179,31 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.ShopwareId', {
             params: params,
             success: function(response) {
                 var result = Ext.JSON.decode(response.responseText);
-
-                if(!result || result.success == false) {
-                    Shopware.Notification.createStickyGrowlMessage({
-                        title: me.snippets.domainRegistration.errorTitle,
-                        text: Ext.String.format(me.snippets.domainRegistration.errorServerMessage, result.message),
-                        log: true
-                    });
-                } else if(result.success) {
+                
+                if (!result || result.success == false) {
+                    me.lockView(result.message);
+                } else if (result.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.domainRegistration.successTitle,
                         me.snippets.domainRegistration.successMessage,
                         me.snippets.growlMessage
                     );
+                    me.lockView();
                 }
 
-                me.lockView();
+                
             }
         });
     },
 
-    lockView: function() {
+    lockView: function(message) {
         var me = this;
 
-        me.getShopwareIdPanel().lock();
+        me.getShopwareIdPanel().lock(message);
         me.splashScreen.close();
-        me.getController('Main').navigateNext();
+        if (Ext.isEmpty(message)) {
+            me.getController('Main').navigateNext();
+        }
     },
 
     validateForm: function(fields, snippetNamespace) {
