@@ -39,6 +39,20 @@ namespace Shopware\Components\Thumbnail\Generator;
 class Basic implements GeneratorInterface
 {
     /**
+     * @var bool
+     */
+    private $fixGdImageBlur;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        // todo: inject config
+        $this->fixGdImageBlur = true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false, $quality = 90)
@@ -66,6 +80,11 @@ class Basic implements GeneratorInterface
         }
 
         $newImage = $this->createNewImage($image, $originalSize, $newSize);
+
+        if ($this->fixGdImageBlur) {
+            $this->fixGdImageBlur($newSize, $newImage);
+        }
+
         $this->saveImage($destination, $newImage, $quality);
 
         // Removes both the original and the new created image from memory
@@ -183,6 +202,30 @@ class Basic implements GeneratorInterface
         );
 
         return $newImage;
+    }
+
+    /**
+     * Fix #fefefe in white backgrounds
+     *
+     * @param array $newSize
+     * @param resource $newImage
+     */
+    private function fixGdImageBlur($newSize,  $newImage)
+    {
+        $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
+        $processHeight = $newSize['height'] + 0;
+        $processWidth = $newSize['width'] + 0;
+        for ($y = 0; $y < ($processHeight); ++$y) {
+            for ($x = 0; $x < ($processWidth); ++$x) {
+                $colorat = imagecolorat($newImage, $x, $y);
+                $r = ($colorat >> 16) & 0xFF;
+                $g = ($colorat >> 8) & 0xFF;
+                $b = $colorat & 0xFF;
+                if (($r == 253 && $g == 253 && $b == 253) || ($r == 254 && $g == 254 && $b == 254)) {
+                    imagesetpixel($newImage, $x, $y, $colorWhite);
+                }
+            }
+        }
     }
 
     /**
