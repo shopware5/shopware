@@ -64,7 +64,6 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.image-slider.js',
         'src/js/jquery.image-zoom.js',
         'src/js/jquery.collapse-panel.js',
-        'src/js/jquery.collapse-text.js',
         'src/js/jquery.auto-submit.js',
         'src/js/jquery.scroll.js',
         'src/js/jquery.product-slider.js',
@@ -98,6 +97,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.ajax-wishlist.js',
         'src/js/jquery.preloader-button.js',
         'src/js/jquery.image-gallery.js',
+        'src/js/jquery.offcanvas-html-panel.js',
         'src/js/jquery.shopware-responsive.js'
     );
 
