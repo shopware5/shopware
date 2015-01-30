@@ -1,10 +1,173 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-## 5.0.0
+## 5.0.0 Beta 2
 
+## 5.0.0 Beta 1
+* Deprecated classes:
+    * `Zend_Rest`
+    * `Zend_Http`
+    * `Enlight_Components_Adodb` (also accessed as `Shopware()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
+    * `Shopware_Components_Search_Adapter_Default` is now deprecated, use `\Shopware\Bundle\SearchBundle\ProductNumberSearch`
+    * `Zend_Validate_EmailAddress`
+* Deprecated methods/variables:
+    * `Shopware_Controllers_Frontend_Account::ajaxLoginAction()` is deprecated
+    * `Shopware_Controllers_Frontend_Account::loginAction()` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction()` instead for both registration and login
+    * `sSystem::sSubShop`
+    * `sExport::sGetMultishop()`
+    * `sExport::sLanguage` 
+    * `sExport::sMultishop`
+* Deprecated configuration variables from `Basic settings`:
+    * `basketHeaderColor`
+    * `basketHeaderFontColor`
+    * `basketTableColor`
+    * `detailModal`
+    * `paymentEditingInCheckoutPage`
+    * `showbundlemainarticle`
+* Deprecated tables/columns:
+    * `s_core_multilanguage`. Table will be removed in SW 5.1. Previously unused fields `mainID`, `flagstorefront`, `flagbackend`, `separate_numbers`, `scoped_registration` and `navigation` are no longer loaded from the database
+* Removed classes:
+    * `Enlight_Components_Currency`
+    * `Enlight_Components_Form` and subclasses
+    * `Enlight_Components_Locale`
+    * `Enlight_Components_Menu` and subclasses
+    * `Enlight_Components_Site` and subclasses
+    * `Enlight_Components_Test_Constraint_ArrayCount`
+    * `Enlight_Components_Test_Database_TestCase`
+    * `Enlight_Components_Test_Selenium_TestCase`
+    * `Enlight_Components_Test_TestSuite`
+    * `Enlight_Extensions_Benchmark_Bootstrap`
+    * `Enlight_Extensions_Debug_Bootstrap`
+    * `Enlight_Extensions_ErrorHandler_Bootstrap`
+    * `Enlight_Extensions_Log_Bootstrap`
+    * `Enlight_Extensions_Router_Bootstrap`
+    * `Enlight_Extensions_RouterSymfony_Bootstrap`
+    * `Enlight_Extensions_Site_Bootstrap`
+    * `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
+* Removed methods/variables:
+    * `sArticles::sGetAllArticlesInCategory()` 
+    * `sSystem::sSubShops`
+    * `sSystem::sLanguageData`. Please use `Shopware()->Shop()` instead
+    * `sSystem::sLanguage`. Please use `Shopware()->Shop()->getId()` instead
+    * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` 
+    * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
+    * `sExport::sGetLanguage()`
+    * `Shopware_Controllers_Backend_Article::getConfiguratorPriceSurchargeRepository()`
+    * `Shopware_Controllers_Backend_Article::saveConfiguratorPriceSurchargeAction()`
+    * `Shopware_Controllers_Backend_Article::deleteConfiguratorPriceSurchargeAction()`
+    * `Shopware_Controllers_Backend_Article::getArticlePriceSurcharges()`
+    * `Shopware_Controllers_Backend_Article::getSurchargeByOptionId()`
+    * `sArticles::sGetArticlesAverangeVote`
+    * `sArticles::getCategoryFilters` 
+    * `sArticles::getFilterSortMode` 
+    * `sArticles::addFilterTranslation`
+    * `sArticles::sGetArticleConfigTranslation`
+    * `sArticles::sGetArticlesByName`
+    * `sArticles::sGetConfiguratorImage`
+    * `sArticles::sCheckIfConfig`
+    * `sArticles::getCheapestVariant`
+    * `sArticles::calculateCheapestBasePriceData`
+    * `sArticles::displayFiltersOnArticleDetailPage`
+    * `sArticles::getFilterQuery`
+    * `sArticles::addArticleCountSelect`
+    * `sArticles::addActiveFilterCondition`
+    * `sArticles::displayFilterArticleCount`
+    * `sArticles::sGetLastArticles`
+    * `sArticles::sGetCategoryProperties`
+    * `sArticles::sGetArticlesVotes`
+    * `Enlight_Controller_Front::returnResponse()`
+    * `Shopware_Plugins_Core_Cron_Bootstrap::onAfterSendResponse()`
+    * `\Shopware\Models\User\User::setAdmin()`
+    * `\Shopware\Models\User\User::getAdmin()`
+    * `\Shopware\Models\User\User::setSalted()`
+    * `\Shopware\Models\User\User::getSalted()`
+    * `\Shopware\Models\Banner\Banner::setLiveShoppingId()`
+    * `\Shopware\Models\Banner\Banner::getLiveShoppingId()`
+    * `sArticles::getPromotionNumberByMode('premium')`
+    * `sArticles::sGetPromotions()`
+    * `sMarketing::sCampaignsGetDetail()`
+    * `sMarketing::sCampaignsGetList()`
+    * `\Shopware\Models\Plugin\Plugin::isDummy()`
+    * `\Shopware\Models\Plugin\Plugin::disableDummy()`
+    * Removed `sArticles::getPromotionNumberByMode('image')` and `sArticles::getPromotionNumberByMode('gfx')` support
+* Removed events:
+    * `Shopware_Modules_Articles_GetFilterQuery`
+    * `Shopware_Modules_Article_GetFilterSortMode`
+    * `Shopware_Modules_Article_GetCategoryFilters`
+    * `Enlight_Controller_Front_SendResponse` 
+    * `Enlight_Controller_Front_AfterSendResponse`
+    * `Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql`
+    * `Shopware_Modules_Articles_GetPromotions_FilterSQL`
+* Removed Smarty vars:
+    * `$sArticle.sNavigation` for product detail page
+* Removed configuration variables from `Basic settings`:
+    * `useDefaultControllerAlways`
+    * `articlelimit`
+    * `configcustomfields`
+    * `configmaxcombinations`
+    * `displayFilterArticleCount`
+    * `ignoreshippingfreeforsurcharges`
+    * `liveinstock`
+    * `mailer_encoding`
+    * `redirectDownload`
+    * `redirectnotfound`
+    * `seorelcanonical`
+    * `seoremovewhitespaces`
+    * `taxNumber`
+    * `deactivateNoInstock`
+* Removed database table/columns:
+    * `s_core_rewrite`
+    * `s_cms_groups`
+    * `s_core_auth.admin` 
+    * `s_core_auth.salted`
+    * `s_order_basket.liveshoppingID`
+    * `s_order_basket.liveshoppingID`
+    * `s_order_basket.liveshoppingID`
+    * `s_emarketing_banners.liveshoppingID`
+    * `s_core_sessions.expireref`
+    * `s_core_sessions.created`
+    * `s_core_sessions_backend.created`
+    * `s_emarketing_promotions*`
+    * `s_core_plugins.capability_dummy`
+* The new Shopware core selects all required data for `sGetArticleById`, `sGetPromotionById` and `sGetArticlesByCategory`. The following events and internal functions are no longer used in these functions:
+    * `sGetPromotionById` events
+        * `Shopware_Modules_Articles_GetPromotionById_FilterSql`
+    * `sGetPromotionById` functions
+        * `sGetTranslation`
+        * `sGetArticleProperties`
+        * `sGetCheapestPrice`
+        * `sCalculatingPrice`
+        * `calculateCheapestBasePriceData`
+        * `getArticleListingCover`
+    * `sGetAritcleById` events
+        * `Shopware_Modules_Articles_GetArticleById_FilterSQL`
+    * `sGetAritcleById` functions
+        * `sGetTranslation`
+        * `sGetPricegroupDiscount`
+        * `sGetPromotionById` (for similar and related products)
+        * `sCheckIfEsd`
+        * `sGetPricegroupDiscount`
+        * `sCalculatingPrice`
+        * `sGetCheapestPrice`
+        * `sGetArticleConfig`
+        * `calculateReferencePrice`
+        * `sGetArticlePictures`
+        * `sGetArticlesVotes`
+        * `sGetArticlesAverangeVote`
+        * `sGetArticleProperties`
+    * `sGetArticlesByCategory` events
+        * `Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql`
+        * `Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart`
+        * `Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd`
+    * `sGetArticlesByCategory` functions
+        * `sGetSupplierById`
+        * `sGetCheapestPrice`
+        * `sCalculatingPrice`
+        * `calculateCheapestBasePriceData`
+* Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
+* Moved `engine/core/class/*` to `engine/Shopware/Core/*`
 * Merged `_default` template into the `_emotion` template
-* Removed the template directory `_default` and all it's dependencies
+* Removed the template directory `_default` and all its dependencies
 * Added the ability to show campaign banners in blog categories
 * Refactored the template structure of the compare functionality. The plugin now uses based on a widget.
     * Added new block `frontend_listing_box_article_actions_compare` in the `listing/box_article.tpl`
@@ -13,23 +176,22 @@ In this document you will find a changelog of the important changes related to t
 * Add new optional address fields to the register account and checkout process
 * Added global messages template component to display e.g. error or success messages
 * Added global css classes for different device viewports
-* New checkout process:
-    * `Shopware_Controllers_Frontend_Account::ajaxLoginAction` is deprecated
-    * `Shopware_Controllers_Frontend_Account::loginAction` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction` instead for both registration and login
+* The registration and checkout workflows have been redesigned for the new template
 * New jQuery plugin helper which provides all the basic operations every jQuery plugin needs to do
 * Added several javascript libraries that enhance the supported features of the IE 8 and above
 * Added `controller_action` and `controller_name` smarty functions that return the correspondent variable values
 * The sitemap.xml uses now a smarty template
     * Added `Turnover by device type` in the backend statistics module
     * Added device type details to `Impressions` and `Visitors` in the backend statistics module
-* Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
-    * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
-    * (old) Bootstrap::uninstall() -> old logic
-* The ArticleList was merged with the former MultiEdit plugin. Plugins hooking the ArticleList-Controller or extending the ArticleList backend module will most probably break
+* Added `secureUninstall` method and capability for plugins. When 'secureUninstall'  capability is set, the user will be asked to select one of the uninstall methods:
+    * (new) `Bootstrap::secureUninstall()` should be remove only non-user data
+    * (old) `Bootstrap::uninstall()` current logic, should remove plugin and user data
+* The `ArticleList` was merged with the former `MultiEdit` plugin. Plugins hooking the `ArticleList` Controller or extending the `ArticleList` backend module should be reviewed
 * When using `selection` configurator type, shipping estimations will only be displayed when the user selects a value for all groups
 * It's no longer possible to disable variant support for article that still have variants
 * Added a new Theme Manager 2.0 with the possibility to create custom themes from the backend
     * Themes now support specific snippets that are used exclusively in the theme to which they belong
+    * Shop configuration no longer contains the template selection.
 * The snippet module in the backend now supports editing multiple translations for a single snippet at once
 * Forms: elements of type `text2` now support `;` as a separator between labels for the first and second field:
     * Responsive template: labels are used separately as `placeholder` attribute for each `input` element
@@ -39,23 +201,19 @@ In this document you will find a changelog of the important changes related to t
     * `street` fields were enlarged to 255 chars to accommodate this.
     * The API still accepts `street number` values on write operations. The values are internally merged into the `street` field. This is legacy support, and will be removed in the future.
     * Read operations on the API no longer return a `street number` field.
-* Shop configuration contains no more the template selection. The shop template selection is only available in the new theme manager 2.0.
-* The configuration for the thumbnail size of the product images in the "last seen products" module takes no effect on the responsive template. The size now changes by screen size.
-* The registration and checkout workflows have been redesigned for the new template
+* The configuration for the thumbnail size of the product images in the "last seen products" module no longer affects the responsive template. The size now changes by screen size.
 * Changed behavior of the `selection` configurator. Configurator options which have none available product variant disabled now in the select-tag. The new snippet `DetailConfigValueNotAvailable` can be used to append additional text after the value name.
-* Variant's `additional text` field is now automatically generated using the configurator group options. This can be optionally disabled
-* The sBasket::sGetNotes function is refactored with the new shopware service classes and calls no more the sGetPromotionById function.
+* Variant's `additional text` field is now automatically generated using the configurator group options. This can be optionally disabled.
+* The `sBasket::sGetNotes` function has been refactored with the new Shopware service classes and no longer calls the `sGetPromotionById` function.
 * The article slider now supports sorting by price (asc and desc) and category filtering
     * `Shopware_Controllers_Widgets_Emotion::emotionTopSellerAction` and `Shopware_Controllers_Widgets_Emotion::emotionNewcomerAction` are now deprecated and should be replaced by `Shopware_Controllers_Widgets_Emotion::emotionArticleSliderAction`
 * Removed `table` and `table_factory` from container.
 * The old table configurator was removed and replaced by the new image configurator in the emotion and responsive template.
 * Template inheritance using `{extends file="[default]backend/..."}` is no longer supported and should be replaced by `{extends file="parent:backend/..."}`
 * Added [Guzzle](https://github.com/guzzle/guzzle).
-* Added HTTP client `Shopware\Components\HttpClient\HttpClientInterface`.
+    * Added HTTP client `Shopware\Components\HttpClient\HttpClientInterface`.
     * Can be fetched from the container using the key `http_client`.
-* Deprecated Zend Framework components `Zend_Rest` and `Zend_Http`.
-    * Will be removed in the next minor release.
-    * Use `http_client` from container instead.
+    * Deprecated Zend Framework components `Zend_Rest` and `Zend_Http` will be removed in the next minor release.
 * Increased minimum required PHP version to PHP >= 5.4.0.
 * Increased minimum required MySQL version to MySQl >= 5.5.0.
 * When duplicating articles in the backend, attributes and translations will also be copied
@@ -64,34 +222,14 @@ In this document you will find a changelog of the important changes related to t
 * It is now possible to add translations to configurator templates, which will then be used when generating variants
 * Removed legacy `excuteParent` method alias from generated hook proxy files
 * Restructured cache directories. The whole `/cache` directory should be writable now
-* Removed the following unused Enlight classes:
-        * `Enlight_Components_Currency`
-        * `Enlight_Components_Form` and subclasses
-        * `Enlight_Components_Locale`
-        * `Enlight_Components_Menu` and subclasses
-        * `Enlight_Components_Site` and subclasses
-        * `Enlight_Components_Test_Constraint_ArrayCount`
-        * `Enlight_Components_Test_Database_TestCase`
-        * `Enlight_Components_Test_Selenium_TestCase`
-        * `Enlight_Components_Test_TestSuite`
-        * `Enlight_Extensions_Benchmark_Bootstrap`
-        * `Enlight_Extensions_Debug_Bootstrap`
-        * `Enlight_Extensions_ErrorHandler_Bootstrap`
-        * `Enlight_Extensions_Log_Bootstrap`
-        * `Enlight_Extensions_Router_Bootstrap`
-        * `Enlight_Extensions_RouterSymfony_Bootstrap`
-        * `Enlight_Extensions_Site_Bootstrap`
-* `useDefaultControllerAlways` configuration option was removed
-    * `PageNotFoundDestination` (backend `Basic settings`) extends the previous behaviour by adding support for Shopping worlds pages
-    * `PageNotFoundCode` (backend `Basic settings`) added to configure the 404 HTTP error when requesting non-existent pages
-* `Enlight_Components_Adodb` (also accessed as `Shopware()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
+* Added two new settings to handle 404 responses:
+    * `PageNotFoundDestination` extends the previous behaviour by adding support for Shopping worlds pages
+    * `PageNotFoundCode` added to configure the HTTP error code when requesting non-existent pages
 * Removed `Trusted Shops` from the basic settings. Functionality can now be found in `Trusted Shops Excellence` plugin
-* Removed `sArticles::sGetAllArticlesInCategory` and smarty variable `$sArticle.sNavigation` for product detail page
 * Added `sArticles::getProductNavigation`, product navigation is rendered asynchronous via ajax call to `\Shopware_Controllers_Widgets_Listing::productNavigationAction`
 * Add `isFamilyFriendly` core setting to enable or disable the correspondent meta tag.
 * Add new SEO fields to the forms module.
 * Add new SEO templates in the core settings for the form and the site data.
-* Dropped unused table `s_core_rewrite`
 * Added `Theme cache warm up` modal window and functionality:
     * On cache clear
     * On performance settings
@@ -99,23 +237,11 @@ In this document you will find a changelog of the important changes related to t
     * On theme settings change
     * On plugin install, by adding `theme` to the optional caches array returned in `install()`
 * Added `http cache warmer` modal window in the performance module and console command `sw:warm:http:cache`
-* Dropped unused table `s_cms_groups`
 * Deprecate Legacy API `Shopware->Api()`, will be removed in SW 5.1
-* Removed deprecated class `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
 * Removed unused `/backend/document` templates and several unused `Shopware_Controllers_Backend_Document` actions, methods and variables
 * Performance recommendations now accept a `warning` state (state was converted from boolean to integer)
-* Removed/deprecated `sSystem` variable
-    * `sSystem::sSubShops` was removed
-    * `sSystem::sSubShop` is deprecated
-    * `sSystem::sLanguageData` were removed. Please use Shopware()->Shop() instead
-    * `sSystem::sLanguage` were removed. Please use Shopware()->Shop()->getId() instead
-* Remove unused `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` and `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
 * Removed support for `engine/Shopware/Configs/Custom.php`
     * Use `config.php` or `config_$environment.php` e.g. `config_production.php`
-* Deprecated `s_core_multilanguage` table
-    * `s_core_multilanguage` table is kept up to date, but will be fully removed in SW 5.1
-    * Removed unused `sExport::sGetLanguage()` and deprecated `sExport::sGetMultishop()`, `sExport::$sLanguage` and `sExport::$sMultishop`
-    * Previously unused fields `mainID`, `flagstorefront`, `flagbackend`, `separate_numbers`, `scoped_registration` and `navigation` are no longer loaded from the database
 * The MailTemplates now have global header and footer fields in configuration -> storefront -> email settings
     * Header for Plaintext
     * Header for HTML
@@ -124,121 +250,28 @@ In this document you will find a changelog of the important changes related to t
 * Refactored price surcharge for variants
     * `s_article_configurator_price_surcharges` database table was fully restructured and renamed to `s_article_configurator_price_variations`. Existing data is migrated on update
     * Existing related ExtJs classes and events removed
-    * Existing price variation backend controller actions and methods removed:
-        + `getConfiguratorPriceSurchargeRepository`
-        + `saveConfiguratorPriceSurchargeAction`
-        + `deleteConfiguratorPriceSurchargeAction`
-        + `getArticlePriceSurcharges`
-        + `getSurchargeByOptionId`
+    * Existing price variation backend controller actions and methods removed
     * `Shopware\Models\Article\Configurator\PriceSurcharged` replaced by `Shopware\Models\Article\Configurator\PriceVariation`
-* Replace orderbydefault configuration by defaultListingSorting. The orderbydefault configuration worked with a plain sql input which is no longer possible. The defaultListingSorting contains now one of the default sSort parameters of a listing.
+* Replace `orderbydefault` configuration by `defaultListingSorting`. The `orderbydefault` configuration worked with a plain sql input which is no longer possible. The `defaultListingSorting` contains now one of the default `sSort` parameters of a listing.
 * Add configuration for each listing facet, which allows to disable each facet.
-* Move performace filter configuration into the category navigation item.
+* Move performance filter configuration into the category navigation item.
 * Uniform the sorting identifier in the search and listing. Search relevance id changed from 6 to 7 and search rating sorting changed from 2 to 7.
-* Generated listing links in the sGetArticlesByCategory function removed. The listing parameters are build now over a html form.
-    * sNumberPages value removed
-    * categoryParams value removed
-    * sPerPage contains now the page limit
-    * sPages value removed
-* The listing filters are now selected in the sArticles::getListingFacets and assigned to the template as Structs.
+* Generated listing links in the `sGetArticlesByCategory` function removed. The listing parameters are build now over a html form.
+    * `sNumberPages` value removed
+    * `categoryParams` value removed
+    * `sPerPage` contains now the page limit
+    * `sPages` value removed
+* The listing filters are now selected in the `sArticles::getListingFacets` and assigned to the template as structs.
 * Replaced "evaluation" sorting of the search result with the listing "popularity" sorting.
 * The search filters are now selected in the `getFacets` function of the frontend search controller.
 * The search filters are now assigned as structs to the template.
-* Shopware_Components_Search_Adapter_Default is now deprecated, use \Shopware\Bundle\SearchBundle\ProductNumberSearch.
-    * The search term is handled in the SearchTermConditionHandler.
-    * This handler can be overwritten by an own handler. Own handlers can be registered over the Shopware_Search_Gateway_DBAL_Collect_Condition_Handlers event.
+* `Shopware_Components_Search_Adapter_Default` is now deprecated, use `\Shopware\Bundle\SearchBundle\ProductNumberSearch`.
+    * The search term is handled in the `SearchTermConditionHandler`.
+    * This handler can be overwritten by custom handler. Custom handlers can be registered with the `Shopware_Search_Gateway_DBAL_Collect_Condition_Handlers` event.
 * sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
 * sConfigurator class exist no more. The configurator data can now selected over the Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService.php. To modify the configurator data you can use the sGetArticleById events.
-* The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
-    * sGetPromotionById events
-        * Shopware_Modules_Articles_GetPromotionById_FilterSql
-    * sGetPromotionById functions
-        * sGetTranslation
-        * sGetArticleProperties
-        * sGetCheapestPrice
-        * sCalculatingPrice
-        * calculateCheapestBasePriceData
-        * getArticleListingCover
-    * sGetAritcleById events
-        * Shopware_Modules_Articles_GetArticleById_FilterSQL
-    * sGetAritcleById functions
-        * sGetTranslation
-        * sGetPricegroupDiscount
-        * sGetPromotionById (for similar and related products)
-        * sCheckIfEsd
-        * sGetPricegroupDiscount
-        * sCalculatingPrice
-        * sGetCheapestPrice
-        * sGetArticleConfig
-        * calculateReferencePrice
-        * sGetArticlePictures
-        * sGetArticlesVotes
-        * sGetArticlesAverangeVote
-        * sGetArticleProperties
-    * sGetArticlesByCategory events
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart
-        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd
-    * sGetArticlesByCategory functions
-        * sGetSupplierById
-        * sGetCheapestPrice
-        * sCalculatingPrice
-        * calculateCheapestBasePriceData
-* sCategories::sGetCategories returns no more the articleCount and the position of each category. Categories always sorted by the position and filtered by the active flag.
-* Removed `Enlight_Controller_Front::returnResponse()` and config option `front.returnResponse`
-    * This option was hardcoded to `true` since SW 4.2
-* Removed `Shopware_Plugins_Core_Cron_Bootstrap::onAfterSendResponse`
-* Removed events `Enlight_Controller_Front_SendResponse` and `Enlight_Controller_Front_AfterSendResponse`
-* Removed table columns `s_core_auth.admin` and `s_core_auth.salted`
-* Removed methods
-    * `\Shopware\Models\User\User::setAdmin()`
-    * `\Shopware\Models\User\User::getAdmin()`
-    * `\Shopware\Models\User\User::setSalted()`
-    * `\Shopware\Models\User\User::getSalted()`
-* Removed table columns
-    * `s_order_basket.liveshoppingID`
-    * `s_order_basket.liveshoppingID`
-    * `s_order_basket.liveshoppingID`
-    * `s_emarketing_banners.liveshoppingID`
-    * `s_core_sessions.expireref`
-    * `s_core_sessions.created`
-    * `s_core_sessions_backend.created`
-* Removed methods
-    * `\Shopware\Models\Banner\Banner::setLiveShoppingId()`
-    * `\Shopware\Models\Banner\Banner::getLiveShoppingId()`
-* Removed the following methods from `sArtcles`
-    * `sArticles::sGetArticlesAverangeVote`
-    * `sArticles::getCategoryFilters` event `Shopware_Modules_Article_GetCategoryFilters`
-    * `sArticles::getFilterSortMode` event `Shopware_Modules_Article_GetFilterSortMode`
-    * `sArticles::addFilterTranslation`
-    * `sArticles::sGetArticleConfigTranslation`
-    * `sArticles::sGetArticlesByName`
-    * `sArticles::sGetConfiguratorImage`
-    * `sArticles::sCheckIfConfig`
-    * `sArticles::getCheapestVariant`
-    * `sArticles::calculateCheapestBasePriceData`
-    * `sArticles::displayFiltersOnArticleDetailPage`
-    * `sArticles::getFilterQuery` event `Shopware_Modules_Articles_GetFilterQuery`
-    * `sArticles::addArticleCountSelect`
-    * `sArticles::addActiveFilterCondition`
-    * `sArticles::displayFilterArticleCount`
-    * `sArticles::sGetLastArticles`
-    * `sArticles::sGetCategoryProperties`
-    * `sArticles::sGetArticlesVotes`
-* Removed event `Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql`
-* Removed legacy promotions system
-    * Removed method `sArticles::getPromotionNumberByMode('premium')`
-    * Removed method `sArticles::sGetPromotions()`
-    * Removed method `sMarketing::sCampaignsGetDetail()`
-    * Removed method `sMarketing::sCampaignsGetList()`
-    * Removed event `Shopware_Modules_Articles_GetPromotions_FilterSQL`
-    * Removed tables `s_emarketing_promotions*`
-* Removed sArticles::getPromotionNumberByMode('image')` and sArticles::getPromotionNumberByMode('gfx')`
-* Removed methods
-    * `\Shopware\Models\Plugin\Plugin::isDummy()`
-    * `\Shopware\Models\Plugin\Plugin::disableDummy()`
-* Removed table columns
-    * `s_core_plugins.capability_dummy`
+* `sCategories::sGetCategories` no longer returns the articleCount and the position of each category. Categories always sorted by the position and filtered by the active flag.
+* Removed config option `front.returnResponse`, which was hardcoded to `true` since SW 4.2
 * Added global JavaScript StateManager Singleton to handle different states based on registered breakpoints.
 * Added new default states to the state manager
     * `xs` that ranges from 0 to 479 pixels viewport width
@@ -260,44 +293,22 @@ In this document you will find a changelog of the important changes related to t
     * `widgets/emotion/slide_articles.tpl` includes it instead of its own implementation
 * Block named `frontend_detail_index_similar_viewed_slider` is now in the `widgets/recommendation/viewed.tpl` instead of `frontend/detail/index.tpl`
 * Block named `frontend_detail_index_also_bought_slider` is now in the `widgets/recommendation/bought.tpl` instead of `frontend/detail/index.tpl`
-* Moved `engine/core/class/*` to `engine/Shopware/Core/*`
 * Renamed `ENV` to `SHOPWARE_ENV` to avoid accidentally set `ENV` variable, please update your .htaccess if you use a custom envirenment or you are using the staging plugin
 * Removed Facebook Plugin from core (`Shopware_Plugins_Frontend_Facebook_Bootstrap`). Will be released as plugin on Github.
 * Removed Google Plugin from core (`Shopware_Plugins_Frontend_Google_Bootstrap`). Will be released as plugin on Github.
-* All downloaded dummy plugins are now installed in the engine/Shopware/Plugins/Community directory.
+* All downloaded dummy plugins are now installed in the `engine/Shopware/Plugins/Community` directory.
 * Install, update, uninstall function of a plugin supports now a "message" return parameter which allows to display different messages.
-* Removed the following unused configuration variables:
-    * `articlelimit`
-    * `configcustomfields`
-    * `configmaxcombinations`
-    * `displayFilterArticleCount`
-    * `ignoreshippingfreeforsurcharges`
-    * `liveinstock`
-    * `mailer_encoding`
-    * `redirectDownload`
-    * `redirectnotfound`
-    * `seorelcanonical`
-    * `seoremovewhitespaces`
-    * `taxNumber`
-* The following configuration variables are marked as deprecated, as they only apply to Emotion template:
-    * `basketHeaderColor`
-    * `basketHeaderFontColor`
-    * `basketTableColor`
-    * `detailModal`
-    * `paymentEditingInCheckoutPage`
-    * `showbundlemainarticle`
 * New commands: `sw:cron:list` and `sw:cron:run`
 * Running cronjobs using `php shopware.php backend/cron` is not recommended and should be seen as deprecated
 * `sVoteAverange` and `averange` properties of article and blog data structures have been renamed to fix the typo in their names.
     * Old versions are kept for compatibility reasons, but are deprecated and will be removed
     * Please notice that the new variable might not always have the same value (10 based vs 5 based ratings)
-* Removed configuration variable `deactivateNoInstock`
 * Added VRRL Plugin to Core. Service articles can be identified by article attributes. The field can be configured by general settings
 * Support text which is assigned to an checkbox element in the emotion world module will now be transformed to a box label
 * Added category selection for blog emotion widget
 * Changed default sorting of pictures in the backend's Media Manager. Newer pictures are now displayed first.
 * `widgets/campaign` is now included in the HTTP cache's default configuration
-* Email validation is now done using the `egulias/email-validator` library. `Zend_Validate_EmailAddress` is deprecated.
+* Email validation is now done using the `egulias/email-validator` library.
 * Removed `frontend/detail/ajax.tpl`
 * Added `frontend/detail/product_quick_view.tpl`
 * Added `\Shopware\Controllers\Frontend\Detail::productQuickViewAction` to retrieve a detail template with minimal information
@@ -306,9 +317,8 @@ In this document you will find a changelog of the important changes related to t
 * Removed `src` property of article images. Each images contains now a `thumbnails` property which all thumbnails.
         * `src` property is restored for old templates.
 * Default value for controllers in which to display tag clouds no longer includes homepage.
-* Removed plugin `Shopware_Plugins_Frontend_RouterOld_Bootstrap`
 * `sSelfCanonical` is deprecated. Use the `canonicalParams` array instead
-* Chane array structure of thumbnail images in emotions, product detail pages, product listings, blog pages.
+* Change array structure of thumbnail images in emotions, product detail pages, product listings, blog pages.
 * Enable and disable function of a plugin bootstrap can now return same parameter as install, uninstall.
 
 ## 4.3.3
