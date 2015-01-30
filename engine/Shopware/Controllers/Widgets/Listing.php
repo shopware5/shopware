@@ -131,7 +131,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             ->createAjaxCountCriteria($this->Request(), $context);
 
         /**@var $result ProductNumberSearchResult*/
-        $result = $this->get('shopware_searchdbal.product_number_search')->search(
+        $result = $this->get('shopware_search.product_number_search')->search(
             $criteria,
             $context
         );

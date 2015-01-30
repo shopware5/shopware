@@ -193,7 +193,7 @@ class sArticles
         $this->contextService            = $container->get('shopware_storefront.context_service');
         $this->listProductService        = $container->get('shopware_storefront.list_product_service');
         $this->productService            = $container->get('shopware_storefront.product_service');
-        $this->productNumberSearch       = $container->get('shopware_searchdbal.product_number_search');
+        $this->productNumberSearch       = $container->get('shopware_search.product_number_search');
         $this->configuratorService       = $container->get('shopware_storefront.configurator_service');
         $this->propertyService           = $container->get('shopware_storefront.property_service');
         $this->additionalTextService     = $container->get('shopware_storefront.additional_text_service');
