@@ -176,8 +176,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
     ) {
         $results = [];
 
-        foreach($sets as $set) {
-
+        foreach ($sets as $set) {
             foreach ($set->getGroups() as $group) {
                 $items = [];
                 $useMedia = false;

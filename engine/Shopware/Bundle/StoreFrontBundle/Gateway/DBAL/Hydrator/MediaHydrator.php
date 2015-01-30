@@ -89,7 +89,6 @@ class MediaHydrator extends Hydrator
 
         if ($media->getType() == Struct\Media::TYPE_IMAGE
             && $data['__mediaSettings_create_thumbnails']) {
-
             $media->setThumbnails(
                 $this->getMediaThumbnails($data)
             );
