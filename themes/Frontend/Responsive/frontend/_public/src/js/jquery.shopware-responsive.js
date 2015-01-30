@@ -56,8 +56,8 @@ $(function () {
         // Collapse panel
         .addPlugin('.blog-filter--trigger', 'collapsePanel', ['xs', 's', 'm', 'l'])
 
-        // Collapse texr
-        .addPlugin('.category--teaser .hero--text', 'collapseText', ['xs', 's'])
+        // Off canvas HTML Panel
+        .addPlugin('.category--teaser .hero--text', 'offcanvasHtmlPanel', ['xs', 's'])
 
         // Default product slider
         .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 1 }, ['xs', 's'])
@@ -118,7 +118,6 @@ $(function () {
     $('*[data-pseudo-text="true"]').pseudoText();
     $('*[data-preloader-button="true"]').preloaderButton();
 
-    $('*[data-collapse-text="true"]').collapseText();
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
     $('*[data-scroll="true"]').scroll();
