@@ -2,6 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 5.0.0 Beta 2
+* Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
 
 ## 5.0.0 Beta 1
 * Deprecated classes:
