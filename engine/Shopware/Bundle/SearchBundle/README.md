@@ -27,7 +27,7 @@ $criteria->offset(0);
 $criteria->limit(20);
 
 //executes a search request to find only the product numbers
-$productNumberResult = Shopware()->Container()->get('shopware_searchdbal.product_number_search')->search(
+$productNumberResult = Shopware()->Container()->get('shopware_search.product_number_search')->search(
     $criteria,
     $context
 );
