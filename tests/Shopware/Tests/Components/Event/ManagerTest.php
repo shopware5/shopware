@@ -301,23 +301,30 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testAddSubscriber()
     {
-        $eventSubscriber = new EventSubsciberTest();
+        $eventSubscriber = new EventSubscriberTest();
         $this->eventManager->addSubscriber($eventSubscriber);
 
         $this->assertCount(1, $this->eventManager->getListeners('eventName0'));
         $this->assertCount(1, $this->eventManager->getListeners('eventName1'));
         $this->assertCount(1, $this->eventManager->getListeners('eventName2'));
         $this->assertCount(3, $this->eventManager->getListeners('eventName3'));
+        $this->assertCount(1, $this->eventManager->getListeners('eventName4'));
 
         $listeners = $this->eventManager->getListeners('eventName3');
         $listener = $listeners[5];
         $this->assertEquals(5, $listener->getPosition());
+
+        $result = $this->eventManager->notifyUntil('eventName4');
+        $this->assertEquals("test", $result->getReturn());
+
+        $listeners = $this->eventManager->getListeners('eventName5');
+        $listener = $listeners[99];
+        $this->assertEquals(99, $listener->getPosition());
     }
 }
 
 
-
-class EventSubsciberTest implements SubscriberInterface
+class EventSubscriberTest implements SubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -329,6 +336,15 @@ class EventSubsciberTest implements SubscriberInterface
                 array('callback3_0', 5),
                 array('callback3_1'),
                 array('callback3_2')
+            ),
+            'eventName4' => function () {
+                    return "test";
+                },
+            'eventName5' => array(
+                function () {
+                    return "test";
+                },
+                99
             )
         );
     }
