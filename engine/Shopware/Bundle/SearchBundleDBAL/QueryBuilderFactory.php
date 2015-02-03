@@ -218,6 +218,8 @@ class QueryBuilderFactory
             $sortingHandlers
         );
 
+        $this->assertCollectionIsInstaceOf($sortingHandlers, __NAMESPACE__ . '\SortingHandlerInterface');
+
         return array_merge($sortingHandlers->toArray(), $this->sortingHandlers);
     }
 
@@ -232,6 +234,28 @@ class QueryBuilderFactory
             $conditionHandlers
         );
 
+        $this->assertCollectionIsInstaceOf($conditionHandlers, __NAMESPACE__ . '\ConditionHandlerInterface');
+
         return array_merge($conditionHandlers->toArray(), $this->conditionHandlers);
+    }
+
+
+    /**
+     * @param ArrayCollection $objects
+     * @param string $class
+     */
+    private function assertCollectionIsInstaceOf(ArrayCollection $objects, $class)
+    {
+        foreach ($objects as $object) {
+            if (!$object instanceof $class) {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Object of class "%s" must be instance of "%s".',
+                        get_class($object),
+                        $class
+                    )
+                );
+            }
+        }
     }
 }
