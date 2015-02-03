@@ -141,19 +141,28 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         me.store.clearFilter();
 
+        value = value.toLowerCase();
+
         me.store.filterBy(function(record, id) {
             var description = record.get('description') + '';
             var name = record.get('label') + '';
+            var technicalName = record.get('technicalName') + '';
             var producer = '';
 
             if (record['getProducerStore']) {
                 producer = record['getProducerStore'].first().get('name') + '';
             }
 
+            name = name.toLowerCase();
+            technicalName = technicalName.toLowerCase();
+            producer = producer.toLowerCase();
+            description = description.toLowerCase();
+
             return (
                 name.indexOf(value) > -1
                 || description.indexOf(value) > -1
                 || producer.indexOf(value) > -1
+                || technicalName.indexOf(value) > -1
             );
         });
     },
