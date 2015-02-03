@@ -127,16 +127,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             }
         }
 
-        if ($this->isSeoPaginated($request, $config)) {
-            if (($key = array_search('p', $queryBlacklist)) !== false) {
-                unset($queryBlacklist[$key]);
-            }
-
-            if (($key = array_search('sPage', $queryBlacklist)) !== false) {
-                unset($queryBlacklist[$key]);
-            }
-        }
-
         if (!empty($controllerBlacklist) && in_array($controller, $controllerBlacklist)) {
             $metaRobots = 'noindex,follow';
         } elseif (!empty($queryBlacklist)) {
@@ -156,25 +146,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
-    }
-
-    /**
-     * Checks if the current request should be treated as SEO paginated page
-     * 
-     * @param $request
-     * @param $config
-     * @return bool
-     */
-    private function isSeoPaginated($request, $config)
-    {
-        return $config->get('seoIndexPaginationLinks') &&
-        (
-            $request->getQuery('sViewport') === 'cat' 
-            || $request->getQuery('controller') === 'cat' 
-            || $request->getQuery('controller') === 'listing' 
-            || $request->getQuery('sViewport') === 'blog' 
-            || $request->getQuery('controller') === 'blog'
-        );
     }
 
     /**

@@ -590,7 +590,7 @@ class sCategories
         $page = $request->getQuery('sPage');
         
         $emotion = $this->manager->getRepository('Shopware\Models\Emotion\Emotion')
-            ->getCategoryBaseEmotionsQuery($category['category']['id'])->getArrayResult();
+            ->getCategoryBaseEmotionsQuery($category['id'])->getArrayResult();
 
         $canonicalParams = array(
             'sViewport' => $category['blog'] ? 'blog' : 'cat',
