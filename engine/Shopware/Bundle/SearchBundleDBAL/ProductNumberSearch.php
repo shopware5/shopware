@@ -232,6 +232,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $facetHandlers
         );
 
+        $this->assertCollectionIsInstaceOf($facetHandlers, __NAMESPACE__ . '\FacetHandlerInterface');
+
         return array_merge($facetHandlers->toArray(), $this->facetHandlers);
     }
 
@@ -249,5 +251,24 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         }
 
         throw new \Exception(sprintf("Facet %s not supported", get_class($facet)));
+    }
+
+    /**
+     * @param ArrayCollection $objects
+     * @param string $class
+     */
+    private function assertCollectionIsInstaceOf(ArrayCollection $objects, $class)
+    {
+        foreach ($objects as $object) {
+            if (!$object instanceof $class) {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Object of class "%s" must be instance of "%s".',
+                        get_class($object),
+                        $class
+                    )
+                );
+            }
+        }
     }
 }
