@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         theme = me.getSelectedTheme();
         activeTheme = me.getActiveTheme();
 
-        if (activeTheme.get('version') == 2 && theme.get('version') == 3) {
+        if (activeTheme && activeTheme.get('version') == 2 && theme.get('version') == 3) {
             Shopware.Notification.createStickyGrowlMessage({
                 title: '{s name="application"}Theme manager 2.0{/s}',
                 text:  '{s name="theme_version_switch"}{/s}'

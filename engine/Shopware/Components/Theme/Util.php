@@ -134,6 +134,14 @@ class Util
 
         require_once $file;
 
+        if (!class_exists($class)) {
+            throw new \Exception(sprintf(
+                "Theme file %s contains unexpected class %s",
+                $file,
+                $class
+            ));
+        }
+
         return new $class();
     }
 

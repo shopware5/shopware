@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
                                 '<h1>{name}</h1>' +
                                 '<div>{description}</div>' +
                             '</div>' +
-                            '<div class="x-clear" />'
+                            '<div class="x-clear" />' +
                         '</div>' +
                         '{/literal}';
                 }

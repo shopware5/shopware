@@ -227,7 +227,12 @@ class Installer
                 continue;
             }
 
-            $theme = $this->util->getThemeByDirectory($directory);
+            try {
+                $theme = $this->util->getThemeByDirectory($directory);
+            } catch (\Exception $e) {
+                continue;
+            }
+
 
             $data = $this->getThemeDefinition($theme);
 
