@@ -89,23 +89,19 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
                                 return (record.name !== undefined && record.name == 'cache[theme]' && record.checked == true);
                             });
 
-                            if (themeCacheCleared) {
-                                Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
-                            }
-                        }
-                    });
-                }
-            },
+                            me.getStore('Info').load({
+                                callback: function(records, operation) {
+                                    if (themeCacheCleared) {
+                                        Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
+                                    }
 
-            'performance-tabs-cache-form': {
-                actioncomplete: function(form, action) {
-                    me.getStore('Info').load({
-                        callback: function(records, operation) {
-                            Shopware.Notification.createGrowlMessage(
-                                    me.infoTitle,
-                                    me.infoMessageSuccess,
-                                    me.infoTitle
-                            );
+                                    Shopware.Notification.createGrowlMessage(
+                                        me.infoTitle,
+                                        me.infoMessageSuccess,
+                                        me.infoTitle
+                                    );
+                                }
+                            });
                         }
                     });
                 }

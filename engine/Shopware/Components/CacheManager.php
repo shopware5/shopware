@@ -380,6 +380,10 @@ class CacheManager
                 continue;
             }
 
+            if (!$entry->isFile()) {
+                continue;
+            }
+
             $info['size'] += $entry->getSize();
             $info['files']++;
         }
@@ -411,6 +415,9 @@ class CacheManager
             if ($path->isDir()) {
                 rmdir($path->__toString());
             } else {
+                if (!$path->isFile()) {
+                    continue;
+                }
                 unlink($path->__toString());
             }
         }
