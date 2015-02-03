@@ -66,13 +66,21 @@ class Theme extends \Shopware\Components\Theme
 {
     protected $extend = '$PARENT$';
 
-    protected $name = '$NAME$';
+    protected $name = <<<'SHOPWARE_EOD'
+$NAME$
+SHOPWARE_EOD;
 
-    protected $description = '$DESCRIPTION$';
+    protected $description = <<<'SHOPWARE_EOD'
+$DESCRIPTION$
+SHOPWARE_EOD;
 
-    protected $author = '$AUTHOR$';
+    protected $author = <<<'SHOPWARE_EOD'
+$AUTHOR$
+SHOPWARE_EOD;
 
-    protected $license = '$LICENSE$';
+    protected $license = <<<'SHOPWARE_EOD'
+$LICENSE$
+SHOPWARE_EOD;
 
     public function createConfig(Form\Container\TabContainer $container)
     {
@@ -318,11 +326,14 @@ EOD;
     {
         $placeholder = strtoupper($placeholder);
 
-        if (isset($content) && !empty($content)) {
-            return str_replace('$' . $placeholder . '$', $content, $source);
-        } else {
-            return str_replace('$' . $placeholder . '$', $default, $source);
+        if (!isset($content) || empty($content)) {
+            $content = $default;
         }
+
+        $content = addslashes($content);
+        $content = str_replace('SHOPWARE_EOD', '', $content);
+
+        return str_replace('$' . $placeholder . '$', $content, $source);
     }
 
     /**
