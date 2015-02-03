@@ -72,8 +72,6 @@ class PathResolver
         }
     }
 
-
-
     /**
      * Helper function to build the path to the passed plugin.
      * @param Plugin $plugin
@@ -235,9 +233,14 @@ class PathResolver
      */
     public function getCacheDirectory()
     {
-        return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
+        return $this->rootDir . '/web/cache';
     }
 
+    /**
+     * @param string $path
+     * @param Shop\Shop $shop
+     * @return string
+     */
     public function formatPathToUrl($path, Shop\Shop $shop)
     {
         return str_replace($this->rootDir, $shop->getBasePath(), $path);
@@ -278,7 +281,7 @@ class PathResolver
     public function getCssFilePaths(Shop\Shop $shop, $timestamp)
     {
         return array(
-            'default' => $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'css')
+            'default' => $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'css')
         );
     }
 
@@ -296,7 +299,7 @@ class PathResolver
     public function getJsFilePaths(Shop\Shop $shop, $timestamp)
     {
         return array(
-            'default' => $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'js')
+            'default' => $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'js')
         );
     }
 
@@ -349,5 +352,4 @@ class PathResolver
             $template->getTemplate()
         );
     }
-
 }
