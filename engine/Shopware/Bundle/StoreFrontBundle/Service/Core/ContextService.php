@@ -326,16 +326,16 @@ class ContextService implements Service\ContextServiceInterface
 
     /**
      * @param Struct\ShopContextInterface $context
-     * @param Struct\Country\Area $area
-     * @param Struct\Country $country
-     * @param Struct\Country\State $state
+     * @param Struct\Country\Area|null $area
+     * @param Struct\Country|null $country
+     * @param Struct\Country\State|null $state
      * @return Struct\Tax[]
      */
     protected function createTaxRulesStruct(
         Struct\ShopContextInterface $context,
-        Struct\Country\Area $area,
-        Struct\Country $country,
-        Struct\Country\State $state
+        Struct\Country\Area $area = null,
+        Struct\Country $country = null,
+        Struct\Country\State $state = null
     ) {
         $rules = $this->taxGateway->getRules(
             $context->getCurrentCustomerGroup(),

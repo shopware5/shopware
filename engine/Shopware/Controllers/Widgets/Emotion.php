@@ -238,8 +238,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getBlogEntry($data, $category)
     {
         $entryAmount = (int) $data['entry_amount'];
-        
-        $category = $data['blog_entry_selection'] ?: $category;
+
+        if (isset($data['blog_entry_selection']) && $data['blog_entry_selection']) {
+            $category = $data['blog_entry_selection'];
+        } else {
+            $category = $category;
+        }
 
         // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
         if (!isset($data['thumbnail_size'])) {
@@ -260,7 +264,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $builder = Shopware()->Models()->createQueryBuilder();
 
-        if ($data['blog_entry_selection']) {
+        if (isset($data['blog_entry_selection']) && $data['blog_entry_selection']) {
             $builder->select(array('blog', 'media', 'mappingMedia'))
                 ->from('Shopware\Models\Blog\Blog', 'blog')
                 ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')

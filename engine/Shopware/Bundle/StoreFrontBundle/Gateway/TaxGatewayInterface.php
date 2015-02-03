@@ -45,9 +45,9 @@ interface TaxGatewayInterface
      * - The above rules are prioritized, from first to last.
      *
      * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Country\Area $area
-     * @param Struct\Country $country
-     * @param Struct\Country\State $state
+     * @param Struct\Country\Area|null $area
+     * @param Struct\Country|null $country
+     * @param Struct\Country\State|null $state
      * @return Struct\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(
