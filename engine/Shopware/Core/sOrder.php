@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -175,16 +176,18 @@ class sOrder
     private $session;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
     /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
+     * @param ContextServiceInterface $contextService
+     * @throws Exception
      */
     public function __construct(
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null
+        ContextServiceInterface $contextService = null
     ) {
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
@@ -533,7 +536,7 @@ class sOrder
             '".$this->sSYSTEM->sCurrency["factor"]."',
             '".$mainShop->getId()."',
             ".$this->db->quote((string) $_SERVER['REMOTE_ADDR']).",
-            ".$this->db->quote((string) $_SERVER['HTTP_X_UA_DEVICE'])."
+            ".$this->db->quote((string) $_COOKIE['x-ua-device'])."
         )
         ";
 
