@@ -1,319 +1,352 @@
-;(function($, window, document, undefined) {
-    "use strict";
+;(function ($) {
+    'use strict';
 
-    var pluginName = 'register',
-        defaults = {
-            hiddenCls: 'is--hidden',
-            errorCls: 'has--error'
-        };
+    $.plugin('register', {
+        defaults: {
+            hiddenClass: 'is--hidden',
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings
-     * and parses the `data`-attributes of the incoming `element`.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @returns {Void}
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
+            errorCls: 'has--error',
 
-        me.$el = $(element);
-        me.opts = $.extend({}, defaults, userOpts);
+            formSelector: '.register--form',
 
-        me._defaults = defaults;
-        me._name = pluginName;
+            submitBtnSelector: '.register--submit',
 
-        me.init();
-    }
+            typeFieldSelector: '.register--customertype select',
 
-    /**
-     * Initializes the plugin, sets up event listeners and adds the necessary
-     * classes to get the plugin up and running.
-     *
-     * @returns {Void}
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
+            skipAccountSelector: '.register--check input',
 
-        me.$form = me.$el.find('.register--form');
-        me.$submitBtn = me.$el.find('.register--submit');
+            altShippingSelector: '.register--alt-shipping input',
 
-        me.$typeSelection = me.$el.find('.register--customertype select');
-        me.$skipAccount = me.$el.find('.register--check input');
-        me.$alternativeShipping = me.$el.find('.register--alt-shipping input');
+            companyFieldSelector: '.register--company',
 
-        me.$companyFieldset = me.$el.find('.register--company');
-        me.$accountFieldset = me.$el.find('.register--account-information');
-        me.$shippingFieldset = me.$el.find('.register--shipping');
+            accountFieldSelector: '.register--account-information',
 
-        me.$countySelectFields = me.$el.find('.select--country');
-        me.$stateSelectContainers = $('.register--state-selection');
+            shippingFieldSelector: '.register--account-information',
 
-        me.$paymentMethods = me.$el.find('.payment--method');
+            countryFieldSelector: '.select--country',
 
-        me.$inputs = me.$el.find('.is--required');
+            stateContainerSelector: '.register--state-selection',
 
-        me.checkType();
-        me.checkSkipAccount();
-        me.checkChangeShipping();
+            paymentMethodSelector: '.payment--method',
 
-        me.registerEvents();
-    };
+            inputSelector: '.is--required',
 
-    Plugin.prototype.registerEvents = function () {
-        var me = this;
+            errorMessageClass: 'register--error-msg'
+        },
 
-        me.$typeSelection.on('change.' + pluginName, $.proxy(me.checkType, me));
-        me.$skipAccount.on('change.' + pluginName, $.proxy(me.checkSkipAccount, me));
-        me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
-        me.$countySelectFields.on('change.' + pluginName, $.proxy(me.onCountryChanged, me));
-        me.$paymentMethods.on('change.' + pluginName, $.proxy(me.onPaymentChanged, me));
-        me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
-        me.$submitBtn.on('click.' + pluginName, $.proxy(me.onSubmitBtn, me));
-    };
+        init: function () {
+            var me = this,
+                opts = me.opts,
+                $el = me.$el;
 
-    Plugin.prototype.checkType = function () {
-        var me = this,
-            hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== 'business'),
-            requiredFields = me.$companyFieldset.find('.is--required'),
-            requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
-            classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
-        requiredMethod(requiredFields);
+            me.$form = $el.find(opts.formSelector);
+            me.$submitBtn = $el.find(opts.submitBtnSelector);
 
-        me.$companyFieldset[classMethod](me.opts.hiddenCls);
-    };
+            me.$typeSelection = $el.find(opts.typeFieldSelector);
+            me.$skipAccount = $el.find(opts.skipAccountSelector);
+            me.$alternativeShipping = $el.find(opts.altShippingSelector);
 
-    Plugin.prototype.checkSkipAccount = function () {
-        var me = this,
-            isChecked = me.$skipAccount.is(':checked'),
-            requiredFields = me.$accountFieldset.find('.is--required'),
-            requiredMethod = (!isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
-            classMethod = (isChecked) ? 'addClass' : 'removeClass';
+            me.$companyFieldset = $el.find(opts.companyFieldSelector);
+            me.$accountFieldset = $el.find(opts.accountFieldSelector);
+            me.$shippingFieldset = $el.find(opts.shippingFieldSelector);
 
-        requiredMethod(requiredFields);
+            me.$countySelectFields = $el.find(opts.countryFieldSelector);
+            me.$stateSelectContainers = $(opts.stateContainerSelector);
 
-        me.$accountFieldset[classMethod](me.opts.hiddenCls);
-    };
+            me.$paymentMethods = $el.find(opts.paymentMethodSelector);
 
-    Plugin.prototype.checkChangeShipping = function () {
-        var me = this,
-            isChecked = me.$alternativeShipping.is(':checked'),
-            requiredFields = me.$shippingFieldset.find('.is--required'),
-            requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
-            classMethod = (isChecked) ? 'removeClass' : 'addClass';
+            me.$inputs = $el.find(opts.inputSelector);
 
-        requiredMethod(requiredFields);
+            me.checkType();
+            me.checkSkipAccount();
+            me.checkChangeShipping();
 
-        me.$shippingFieldset[classMethod](me.opts.hiddenCls);
-    };
+            me.registerEvents();
+        },
 
-    Plugin.prototype.onCountryChanged = function(event) {
-        var $select = $(event.currentTarget),
-            selectId = $select.attr('id'),
-            val = $select.val(),
-            parent = $select.parents('.panel--body'),
-            areaSelection = parent.find('#' + selectId + '_' + val + '_states'),
-            select, plugin;
+        registerEvents: function () {
+            var me = this;
 
-        parent.find('.register--state-selection').addClass('is--hidden');
-        select = areaSelection.find('select');
-        plugin = select.data('plugin_selectboxReplacement');
+            me._on(me.$typeSelection, 'change', $.proxy(me.checkType, me));
+            me._on(me.$skipAccount, 'change', $.proxy(me.checkSkipAccount, me));
+            me._on(me.$alternativeShipping, 'change', $.proxy(me.checkChangeShipping, me));
+            me._on(me.$countySelectFields, 'change', $.proxy(me.onCountryChanged, me));
+            me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
+            me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
+            me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
+        },
 
-        plugin.$el.addClass('is--hidden');
-        plugin.$wrapEl.addClass('is--hidden');
-        areaSelection.addClass('is--hidden');
-        plugin.setDisabled();
-
-        if (areaSelection.length) {
-            // We have a state selection
-            select = areaSelection.find('select');
-            plugin = select.data('plugin_selectboxReplacement');
-
-            plugin.$el.removeClass('is--hidden');
-            plugin.$wrapEl.removeClass('is--hidden');
-            areaSelection.removeClass('is--hidden');
-            plugin.setEnabled();
-        }
-    };
-
-    Plugin.prototype.onPaymentChanged = function() {
-        var me = this,
-            isChecked,
-            requiredFields,
-            requiredMethod,
-            classMethod;
-
-        $.each(me.$paymentMethods, function( index, value ) {
-            var radio = $(value).find('.payment--selection-input input');
-            isChecked = radio[0].checked;
-
-            requiredFields = $(value).find('.is--required');
-            requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired;
-            classMethod = (!isChecked) ? 'addClass' : 'removeClass';
+        checkType: function () {
+            var me = this,
+                opts = me.opts,
+                $fieldSet = me.$companyFieldset,
+                hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== 'business'),
+                requiredFields = $fieldSet.find(opts.inputSelector),
+                requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
+                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
 
             requiredMethod(requiredFields);
 
-            var fieldset = $(value).find('.payment--content');
+            $fieldSet[classMethod](opts.hiddenClass);
+        },
 
-            fieldset[classMethod](me.opts.hiddenCls);
-        });
-    };
+        checkSkipAccount: function () {
+            var me = this,
+                opts = me.opts,
+                $fieldSet = me.$accountFieldset,
+                isChecked = me.$skipAccount.is(':checked'),
+                requiredFields = $fieldSet.find(opts.inputSelector),
+                requiredMethod = (!isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+                classMethod = (isChecked) ? 'addClass' : 'removeClass';
 
-    Plugin.prototype.onSubmitBtn = function(event) {
-        var me = this,
-            input,
-            valid = true;
+            requiredMethod(requiredFields);
 
-        me.$inputs.each(function() {
-            input = $(this);
+            $fieldSet[classMethod](opts.hiddenClass);
+        },
 
-            if (!input.val()) {
-                valid = false;
-                me.setFieldAsError(input);
+        checkChangeShipping: function () {
+            var me = this,
+                opts = me.opts,
+                $fieldSet = me.$shippingFieldset,
+                isChecked = me.$alternativeShipping.is(':checked'),
+                requiredFields = $fieldSet.find(opts.inputSelector),
+                requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+                classMethod = (isChecked) ? 'removeClass' : 'addClass';
+
+            requiredMethod(requiredFields);
+
+            $fieldSet[classMethod](opts.hiddenClass);
+        },
+
+        onCountryChanged: function (event) {
+            var me = this,
+                opts = me.opts,
+                hiddenClass = opts.hiddenClass,
+                $select = $(event.currentTarget),
+                selectId = $select.attr('id'),
+                val = $select.val(),
+                parent = $select.parents('.panel--body'),
+                areaSelection = parent.find('#' + selectId + '_' + val + '_states'),
+                select,
+                plugin;
+
+            parent.find(opts.stateContainerSelector).addClass(hiddenClass);
+            select = areaSelection.find('select');
+            areaSelection.addClass(hiddenClass);
+
+            if (!(plugin = select.data('plugin_selectboxReplacement'))) {
+                return;
             }
-        });
-    };
 
-    Plugin.prototype.onValidateInput = function (event) {
-        var me = this,
-            $el = $(event.currentTarget),
-            id = $el.attr('id'),
-            action;
+            if (!areaSelection.length)  {
+                plugin.$el.addClass(hiddenClass);
+                plugin.$wrapEl.addClass(hiddenClass);
+                plugin.setDisabled();
+                return;
+            }
 
-        switch (id) {
-            case 'register_personal_skipLogin':
-            case 'register_personal_email':
-            case 'register_personal_emailConfirmation':
-                action = 'ajax_validate_email';
-                break;
-            case 'register_billing_ustid':
-                action = 'ajax_validate_billing';
-                break;
-            case 'register_personal_password':
-            case 'register_personal_passwordConfirmation':
-                action = 'ajax_validate_password';
-                break;
-            default:
-                break;
-        }
+            plugin.$el.removeClass(hiddenClass);
+            plugin.$wrapEl.removeClass(hiddenClass);
+            areaSelection.removeClass(hiddenClass);
+            plugin.setEnabled();
+        },
 
-        if (!$el.val()) {
-            me.setFieldAsError($el);
-            return;
-        } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
-            me.setFieldAsError($el);
-            return;
-        } else if (action) {
-            me.validateUsingAjax($el, action);
-            return;
-        } else {
-            me.setFieldAsSuccess($el);
-        }
-    };
+        onPaymentChanged: function () {
+            var me = this,
+                opts = me.opts,
+                inputClass = opts.inputSelector,
+                hiddenClass = opts.hiddenClass,
+                isChecked,
+                requiredMethod,
+                classMethod,
+                fieldSet,
+                radio,
+                $el;
 
-    Plugin.prototype.setHtmlRequired = function($inputs) {
-        $inputs.attr({
-            'required': 'required',
-            'aria-required': 'true'
-        });
-    };
+            $.each(me.$paymentMethods, function (index, el) {
+                $el = $(el);
 
-    Plugin.prototype.removeHtmlRequired = function($inputs) {
-        $inputs.removeAttr('required aria-required');
-    };
+                radio = $el.find('.payment--selection-input input');
+                isChecked = radio[0].checked;
 
-    Plugin.prototype.setFieldAsError = function ($el) {
-        var me = this;
+                requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired;
+                classMethod = (!isChecked) ? 'addClass' : 'removeClass';
 
-        if ($el.is(':plugin-selectboxreplacement')) {
-            var plugin = $el.data('plugin_selectboxReplacement');
-            plugin.setError();
-        } else {
+                requiredMethod($el.find(inputClass));
+
+                fieldSet = $el.find('.payment--content');
+                fieldSet[classMethod](hiddenClass);
+            });
+        },
+
+        onSubmitBtn: function () {
+            var me = this,
+                $input;
+
+            me.$inputs.each(function () {
+                $input = $(this);
+
+                if (!$input.val()) {
+                    me.setFieldAsError($input);
+                }
+            });
+        },
+
+        onValidateInput: function (event) {
+            var me = this,
+                $el = $(event.currentTarget),
+                id = $el.attr('id'),
+                action;
+
+            switch (id) {
+                case 'register_personal_skipLogin':
+                case 'register_personal_email':
+                case 'register_personal_emailConfirmation':
+                    action = 'ajax_validate_email';
+                    break;
+                case 'register_billing_ustid':
+                    action = 'ajax_validate_billing';
+                    break;
+                case 'register_personal_password':
+                case 'register_personal_passwordConfirmation':
+                    action = 'ajax_validate_password';
+                    break;
+                default:
+                    break;
+            }
+
+            if (!$el.val()) {
+                me.setFieldAsError($el);
+            } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
+                me.setFieldAsError($el);
+            } else if (action) {
+                me.validateUsingAjax($el, action);
+            } else {
+                me.setFieldAsSuccess($el);
+            }
+        },
+
+        setHtmlRequired: function ($inputs) {
+            $inputs.attr({
+                'required': 'required',
+                'aria-required': 'true'
+            });
+        },
+
+        removeHtmlRequired: function ($inputs) {
+            $inputs.removeAttr('required aria-required');
+        },
+
+        setFieldAsError: function ($el) {
+            var me = this,
+                plugin;
+
+            if ((plugin = $el.data('plugin_selectboxReplacement'))) {
+                plugin.setError();
+                return;
+            }
+
             $el.addClass(me.opts.errorCls);
-        }
-    };
+        },
 
-    Plugin.prototype.validateUsingAjax = function ($el, action) {
-        var me = this,
-            data = 'action=' + action + '&' + me.$el.find('form').serialize();
+        setFieldAsSuccess: function ($el) {
+            var me = this,
+                plugin;
 
-        var collectMessages = function (result) {
-            var messages = [];
-            for (var error_key in result.error_messages) {
-                if(result.error_messages.length) {
-                    messages.push(result.error_messages[error_key]);
-                }
+            if ((plugin = $el.data('plugin_selectboxReplacement'))) {
+                plugin.removeError();
+                return;
             }
-            return messages.join('<br/>');
-        };
 
-        var onSuccess = function (result, data) {
-            if (result && result.error_flags) {
-                for (var error_flag in result.error_flags) {
-                    if (result.error_flags[error_flag]) {
-                        me.setFieldAsError(me.$el.find('.' + error_flag));
-                    } else {
-                        me.setFieldAsSuccess(me.$el.find('.' + error_flag));
-                    }
-                }
+            $el.removeClass(me.opts.errorCls);
+        },
+
+        validateUsingAjax: function ($input, action) {
+            var me = this,
+                data = 'action=' + action + '&' + me.$el.find('form').serialize(),
+                URL = $.controller.ajax_validate;
+
+            if (!URL) {
+                return;
             }
+
+            $.ajax({
+                'data': data,
+                'type': 'post',
+                'dataType': 'json',
+                'url': URL,
+                'success': $.proxy(me.onValidateSuccess, me, action, $input)
+            });
+        },
+
+        onValidateSuccess: function (action, $input, result) {
+            var me = this,
+                errorFlags,
+                errorMessages;
 
             $('#' + action + '--message').remove();
-            if (result && result.error_messages && result.error_messages.length) {
+
+            if (!result) {
+                return;
+            }
+
+            errorFlags = result.error_flags;
+            errorMessages = result.error_messages;
+
+            if (errorFlags) {
+                me.updateFieldFlags(errorFlags);
+            }
+
+            if (errorMessages && errorMessages.length) {
                 $('<div>', {
-                    'html': '<p>' + collectMessages(result) + '</p>',
+                    'html': '<p>' + me.collectMessages(result) + '</p>',
                     'id': action + '--message',
-                    'class': 'register--error-msg'
-                }).insertAfter($el);
-                me.setFieldAsError($el);
+                    'class': me.opts.errorMessageClass
+                }).insertAfter($input);
+
+                me.setFieldAsError($input);
             }
-        };
+        },
 
-        $.ajax({
-            'data': data,
-            'type': 'post',
-            'dataType': 'json',
-            'url': $.controller.ajax_validate,
-            'success': onSuccess
-        });
-    };
+        updateFieldFlags: function (flags) {
+            var me = this,
+                $el = me.$el,
+                keys = Object.keys(flags),
+                len = keys.length,
+                i = 0,
+                flag,
+                $input;
 
-    Plugin.prototype.setFieldAsSuccess = function ($el) {
-        var me = this;
+            for (; i < len; i++) {
+                flag = keys[i];
+                $input = $el.find('.' + flag);
 
-        if ($el.is(':plugin-selectboxreplacement')) {
-            var plugin = $el.data('plugin_selectboxReplacement');
-            plugin.removeError();
-        } else {
-            $el.removeClass(me.opts.errorCls);
+                if (flags[flag]) {
+                    me.setFieldAsError($input);
+                    continue;
+                }
+
+                me.setFieldAsSuccess($input);
+            }
+        },
+
+        collectMessages: function (result) {
+            var messages = [],
+                errorMessages = result.error_messages,
+                len = errorMessages.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                messages.push(errorMessages[i]);
+            }
+
+            return messages.join('<br/>');
+        },
+
+        destroy: function () {
+            var me = this;
+
+            me._destroy();
         }
-    };
-
-    /**
-     * Destroyes the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     *
-     * @returns {Boolean}
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
-
-        me.$typeSelection.off('change.' + pluginName);
-        me.$skipAccount.off('change.' + pluginName);
-        me.$alternativeShipping.off('change.' + pluginName);
-        me.$countySelectFields.off('change.' + pluginName);
-        me.$inputs.off('blur.' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
-            }
-        });
-    };
-})(jQuery, window, document);
+    });
+})(jQuery);

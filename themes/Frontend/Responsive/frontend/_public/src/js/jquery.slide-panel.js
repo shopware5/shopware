@@ -1,77 +1,73 @@
-;(function($, window, document, undefined) {
-    "use strict";
+;(function ($) {
+    'use strict';
 
-    var pluginName = 'slidePanel',
-        isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
-        clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
-        defaults = {
-            /** @string activeCls Class which will be added when the drop down was triggered */
+    /**
+     * Shopware Slide Panel Plugin.
+     */
+    $.plugin('slidePanel', {
+
+        /**
+         * Plugin default options.
+         * Get merged automatically with the user configuration.
+         */
+        defaults: {
+
+            /**
+             * Class which will be toggled when the drop down was triggered
+             *
+             * @property activeCls
+             * @type {String}
+             */
             activeCls: 'is--active'
-        };
+        },
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings
-     * and parses the `data`-attributes of the incoming `element`.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @returns {Void}
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
+        /**
+         * Initializes the plugin and sets up all needed event listeners.
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            var me = this;
 
-        me.$el = $(element);
-        me.opts = $.extend({}, defaults, userOpts);
+            me.applyDataAttributes();
 
-        me._defaults = defaults;
-        me._name = pluginName;
+            me._on(me.$el, 'touchstart MSPointerDown click', $.proxy(me.onTriggerEl, me));
+        },
 
-        me.init();
-    }
+        /**
+         * Called when the element was triggered by a click / touch.
+         * Toggles the active classes on the regarding elements.
+         *
+         * @public
+         * @method onTriggerEl
+         */
+        onTriggerEl: function (event) {
+            var me = this,
+                activeClass = me.opts.activeCls,
+                $el = me.$el,
+                $next = $el.next();
 
-    /**
-     * Initializes the plugin, sets up event listeners and adds the necessary
-     * classes to get the plugin up and running.
-     *
-     * @returns {Void}
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
-
-        me.$el.on(clickEvt + '.' + pluginName, function(event) {
-            var next = me.$el.next();
             event.preventDefault();
 
-            if(next.hasClass(me.opts.activeCls)) {
-                me.$el.removeClass(me.opts.activeCls);
-                next.removeClass(me.opts.activeCls);
+            if ($next.hasClass(activeClass)) {
+                $el.removeClass(activeClass);
+                $next.removeClass(activeClass);
             } else {
-                me.$el.addClass(me.opts.activeCls);
-                next.addClass(me.opts.activeCls);
+                $el.addClass(activeClass);
+                $next.addClass(activeClass);
             }
-        });
-    };
+        },
 
-    /**
-     * Destroyes the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     *
-     * @returns {Boolean}
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
-
-        me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
-            }
-        });
-    };
-})(jQuery, window, document);
+        /**
+         * Destroys the initialized plugin completely.
+         * All registered event listeners and references will be removed.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            this._destroy();
+        }
+    });
+})(jQuery);
