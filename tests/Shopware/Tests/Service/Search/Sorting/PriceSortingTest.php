@@ -196,6 +196,4 @@ class PriceSortingTest extends TestCase
 
         return $result;
     }
-
-
 }

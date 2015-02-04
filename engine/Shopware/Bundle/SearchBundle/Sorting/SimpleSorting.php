@@ -22,43 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\Bundle\SearchBundle\Sorting;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Condition
+ * @package   Shopware\Bundle\SearchBundle\Sorting
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CustomerGroupCondition implements ConditionInterface
+class SimpleSorting extends Sorting
 {
     /**
-     * @var array
+     * @var string
      */
-    private $customerGroupIds;
+    private $name;
 
     /**
-     * @param array $customerGroupIds
+     * @param string $name
+     * @param string $direction
      */
-    public function __construct(array $customerGroupIds)
+    public function __construct($name, $direction = SortingInterface::SORT_ASC)
     {
-        $this->customerGroupIds = $customerGroupIds;
+        parent::__construct($direction);
+
+        $this->name = $name;
+
+        if (empty($name)) {
+            throw new \RuntimeException('No sorting name provided');
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'customer_group';
-    }
-
-    /**
-     * @return int
-     */
-    public function getCustomerGroupIds()
-    {
-        return $this->customerGroupIds;
+        return $this->name;
     }
 }

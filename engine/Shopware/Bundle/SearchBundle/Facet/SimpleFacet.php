@@ -22,43 +22,39 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\Bundle\SearchBundle\Facet;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Condition
+ * @package   Shopware\Bundle\SearchBundle\Facet
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CustomerGroupCondition implements ConditionInterface
+class SimpleFacet implements FacetInterface
 {
     /**
-     * @var array
+     * @var string
      */
-    private $customerGroupIds;
+    private $name;
 
     /**
-     * @param array $customerGroupIds
+     * @param string $name
      */
-    public function __construct(array $customerGroupIds)
+    public function __construct($name)
     {
-        $this->customerGroupIds = $customerGroupIds;
+        $this->name = $name;
+
+        if (empty($name)) {
+            throw new \RuntimeException('No facet name provided');
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'customer_group';
-    }
-
-    /**
-     * @return int
-     */
-    public function getCustomerGroupIds()
-    {
-        return $this->customerGroupIds;
+        return $this->name;
     }
 }
