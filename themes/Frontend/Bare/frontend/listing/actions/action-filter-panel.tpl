@@ -63,7 +63,7 @@
 							{/block}
 
 							{block name="frontend_listing_actions_filter_form_category"}
-								{if $sCategoryCurrent != $sCategoryStart}
+								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart}
 									<input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent}" />
 								{/if}
 							{/block}
