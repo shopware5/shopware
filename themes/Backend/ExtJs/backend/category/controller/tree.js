@@ -356,10 +356,13 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 return;
             }
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
+                if (me.isItemInBlacklist(item)) {
+                    return false;
+                }
+
                 if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window') {
                     activeWindows.push(item);
                 }
-
                 if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window') {
                     activeWindows.push(item);
                 }
@@ -379,8 +382,26 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 cb.apply(me, cbArgs);
             }
         }
+    },
 
+    /**
+     * Checks if the provided item should be destroyed in the category crud operations
+     * @param item
+     * @returns { boolean }
+     */
+    isItemInBlacklist: function(item) {
+        var blacklist = ['widget.widget-sidebar-window'];
+        var inBlackList = false;
 
+        if (item && item.alias) {
+            Ext.each(item.alias, function(alias) {
+                if (blacklist.indexOf(alias) > -1) {
+                    inBlackList = true;
+                }
+            });
+        }
+
+        return inBlackList;
     },
 
    /**
