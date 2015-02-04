@@ -77,6 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
+            'cache_cookies'     => ['shop' , 'currency'],
         ), $options);
 
         parent::__construct(
@@ -269,7 +270,7 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies']);
     }
 
     /**
