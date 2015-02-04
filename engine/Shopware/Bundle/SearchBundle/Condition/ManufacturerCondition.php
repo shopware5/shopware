@@ -61,12 +61,4 @@ class ManufacturerCondition implements ConditionInterface
     {
         return $this->manufacturerIds;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

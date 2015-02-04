@@ -40,12 +40,4 @@ class HasPriceCondition implements ConditionInterface
     {
         return 'has_price';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

@@ -41,12 +41,4 @@ class ManufacturerFacet implements FacetInterface
     {
         return 'manufacturer';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }
