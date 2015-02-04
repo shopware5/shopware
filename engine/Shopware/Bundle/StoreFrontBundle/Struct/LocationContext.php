@@ -52,11 +52,11 @@ class LocationContext
     protected $state;
 
     /**
-     * @param Area $area
-     * @param Country $country
-     * @param State $state
+     * @param Area|null $area
+     * @param Country|null $country
+     * @param State|null $state
      */
-    public function __construct(Area $area, Country $country, State $state)
+    public function __construct(Area $area = null, Country $country = null, State $state = null)
     {
         $this->area = $area;
         $this->country = $country;

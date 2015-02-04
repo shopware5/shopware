@@ -181,7 +181,7 @@ class FirePHPHandler extends BaseFirePHPHandler
 
         $headers = $this->createRecordHeader($record);
 
-        if (is_array($headers[0])) {
+        if (isset($headers[0]) && is_array($headers[0])) {
             foreach ($headers as $header) {
                 $this->sendHeader(key($header), current($header));
             }

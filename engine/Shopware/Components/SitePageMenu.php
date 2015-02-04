@@ -105,7 +105,7 @@ class SitePageMenu
                 $activeId
             );
 
-            if (!$site['active']) {
+            if (!$site['active'] && count($site['subPages']) > 0) {
                 $site['active'] = max(array_column($site['subPages'], 'active'));
             }
 

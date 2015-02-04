@@ -197,7 +197,7 @@ class LegacyEventManager
 
         $result["sProperties"] = $this->eventManager->filter(
             'sArticles::sGetArticleProperties::replace',
-            $result["sProperties"],
+            (isset($result["sProperties"])) ? $result["sProperties"] : [],
             array(
                 'subject'  => $module,
                 'articleId' => $articleId,

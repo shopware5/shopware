@@ -2275,7 +2275,7 @@ class sArticles
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
 
-            if ($article['sVoteAverange']) {
+            if (isset($article['sVoteAverange']) && !empty($article['sVoteAverange'])) {
                 // the listing pages use a 0 - 5 based average
                 $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
             }
