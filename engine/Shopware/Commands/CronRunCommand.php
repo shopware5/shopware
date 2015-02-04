@@ -64,7 +64,7 @@ EOF
         $this->container->load('plugins');
 
         /** @var $manager $manager */
-        $manager = $this->container->get('cron_manager');
+        $manager = $this->container->get('cron');
 
         $stack = array();
         while (($job = $manager->getNextJob($input->getOption('force'))) !== null && !isset($stack[$job->getId()])) {

@@ -57,7 +57,7 @@ EOF
         $this->container->load('table');
 
         /** @var $manager $manager */
-        $manager = $this->container->get('cron_manager');
+        $manager = $this->container->get('cron');
         $rows = array();
 
         foreach ($manager->getAllJobs() as $job) {
