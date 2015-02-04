@@ -135,7 +135,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sCategoryInfo' => $categoryContent,
             'sCategoryContent' => $categoryContent,
             'campaigns' => $this->getCampaigns($categoryId),
-            'activeFilterGroup' => $this->request->getQuery('sFilterGroup')
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
         );
 
         // fetch devices on responsive template or load full emotions for older templates.
