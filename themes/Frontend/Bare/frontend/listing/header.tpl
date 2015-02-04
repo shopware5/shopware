@@ -38,3 +38,10 @@
 <link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.rssFeed}" />
 <link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.atomFeed}" />
 {/block}
+
+{* Google optimized crawling *}
+{block name='frontend_index_header_meta_tags' append}
+    {if $hasEmotion}
+        <meta name="fragment" content="!">
+    {/if}
+{/block}
