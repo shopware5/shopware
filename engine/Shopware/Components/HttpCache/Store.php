@@ -40,6 +40,22 @@ use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
 class Store extends BaseStore
 {
     /**
+     * @var string[]
+     */
+    private $cacheCookies;
+
+    /**
+     * @param string $root
+     * @param string[] $cacheCookies
+     */
+    public function __construct($root, array $cacheCookies)
+    {
+        $this->cacheCookies = $cacheCookies;
+
+        parent::__construct($root);
+    }
+
+    /**
      * Generate custom cache key including
      * additional state from cookie and headers.
      *
@@ -49,12 +65,10 @@ class Store extends BaseStore
     {
         $uri = $request->getUri();
 
-        if ($request->cookies->has('shop')) {
-            $uri .= '&__shop=' . $request->cookies->get('shop');
-        }
-
-        if ($request->cookies->has('currency')) {
-            $uri .= '&__currency=' . $request->cookies->get('currency');
+        foreach ($this->cacheCookies as $cookieName) {
+            if ($request->cookies->has($cookieName)) {
+                $uri .= '&__'. $cookieName . '=' . $request->cookies->get($cookieName);
+            }
         }
 
         return 'md'.hash('sha256', $uri);

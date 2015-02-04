@@ -88,6 +88,7 @@ return array_merge($customConfig, array(
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir().'/html',
+        'cache_cookies' => ['shop', 'currency'],
     ), $customConfig['httpCache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
