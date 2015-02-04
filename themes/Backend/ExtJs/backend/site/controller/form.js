@@ -120,15 +120,23 @@ Ext.define('Shopware.apps.Site.controller.Form', {
             values.target = "_blank";
         }
 
-		var tree = me.getNavigationTree(),
-            data = tree.getSelectionModel().getSelection()[0].parentNode.data;
+		var selectionModel = me.getNavigationTree().getSelectionModel(),
+		    data;
 
-		//if it's a nested site
-        model.set('parentId', ~~(values.parentId) || ~~(data.helperId));
+        if ((selectionModel.lastSelected) && (selectionModel.getSelection()[0].parentNode)) {
+            data = selectionModel.getSelection()[0].parentNode.data;
+
+            //if it's a nested site
+            model.set('parentId', ~~(values.parentId) || ~~(data.helperId));
+        }
 
 		//save the current form state
         model.save({
             success: function(record,response) {
+                var responseObject = Ext.decode(response.response.responseText);
+                record.set('helperId', responseObject.data.id);
+
+                form.loadRecord(record);
                 Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteSuccess}The site has been saved successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                 me.getStore('Nodes').load();
             },
