@@ -1267,7 +1267,12 @@ class sBasket
     private function getNoteProducts()
     {
         $responseCookies = $this->front->Response()->getCookies();
-        $uniqueId = $responseCookies['sUniqueID']['value'] ? : $this->front->Request()->getCookie('sUniqueID');
+
+        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
+            $uniqueId = $responseCookies['sUniqueID']['value'];
+        } else {
+            $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+        }
 
         $notes = $this->db->fetchAssoc('
             SELECT n.ordernumber as arrayKey, n.*
@@ -1294,7 +1299,12 @@ class sBasket
     public function sCountNotes()
     {
         $responseCookies = $this->front->Response()->getCookies();
-        $uniqueId = $responseCookies['sUniqueID']['value'] ? : $this->front->Request()->getCookie('sUniqueID');
+
+        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
+            $uniqueId = $responseCookies['sUniqueID']['value'];
+        } else {
+            $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+        }
 
         $count = (int) $this->db->fetchOne('
             SELECT COUNT(*) FROM s_order_notes n, s_articles a
