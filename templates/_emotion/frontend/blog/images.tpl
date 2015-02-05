@@ -2,7 +2,7 @@
 {if $sArticle.preview.thumbNails.2}
 	{block name='frontend_blog_images_main_image'}{/block}
     <div id="imgTarget">
-        <a href="{$sArticle.preview.media.path}"
+        <a href="{$sArticle.preview.source}"
            rel="lightbox[photos]"
            title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title}{/if}"
            class="main_image">
