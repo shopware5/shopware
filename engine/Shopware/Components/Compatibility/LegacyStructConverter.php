@@ -55,7 +55,7 @@ class LegacyStructConverter
      * @param ContextService $contextService
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         \Shopware_Components_Config $config,
         ContextService $contextService,
         \Enlight_Event_EventManager $eventManager
@@ -81,6 +81,15 @@ class LegacyStructConverter
             'selected' => $group->isSelected(),
             'user_selected' => $group->isSelected()
         );
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\ListProduct[] $products
+     * @return array
+     */
+    public function convertListProductStructList(array $products)
+    {
+        return array_map([$this, 'convertListProductStruct'], $products);
     }
 
     /**
@@ -405,7 +414,7 @@ class LegacyStructConverter
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
 
         $thumbnails = [];
-        foreach($media->getThumbnails() as $thumbnail) {
+        foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
             if ($thumbnail->hasRetinaSource()) {
                 $retina = $imageDir . $thumbnail->getRetinaSource();
@@ -710,11 +719,9 @@ class LegacyStructConverter
         if ($set->getType() == 1) {
             //Selection configurator
             $settings["template"] = "article_config_step.tpl";
-
         } elseif ($set->getType() == 2) {
             //Table configurator
             $settings["template"] = "article_config_picture.tpl";
-
         } else {
             //Other configurator types
             $settings["template"] = "article_config_upprice.tpl";
@@ -763,7 +770,6 @@ class LegacyStructConverter
         $price = str_replace(".", ",", $price); // Replaces points with commas
         $commaPos = strpos($price, ",");
         if ($commaPos) {
-
             $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
             switch (strlen($part)) {
                 case 1:
