@@ -129,7 +129,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
 
         me.changeSizeButton = Ext.create('Ext.button.Split', {
             text: '{s name="toolbar/show_as"}{/s}',
-            iconCls: 'sprite-switch',
+            iconCls: 'sprite-view-as',
             menu: Ext.create('Ext.menu.Menu', {
                 items: [
                     { text: '{s name="list/action_column/copy_desktop" namespace="backend/emotion/list/grid"}Als Desktop Einkaufswelt{/s}', iconCls: 'sprite-imac', handler: function() {
