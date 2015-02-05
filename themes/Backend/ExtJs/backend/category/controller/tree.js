@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // delete event
                 'deleteSubCategory' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) },
                 // event when ever someone tries to  add a new category into the category tree
-                'addSubCategory'    : me.onOpenNameDialog,
+                'addSubCategory'    : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) },
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
                 //
