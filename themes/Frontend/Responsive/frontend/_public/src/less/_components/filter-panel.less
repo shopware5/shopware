@@ -360,8 +360,9 @@ The styling includes the collapsed and expanded styling and the panel component 
     .clearfix();
     .unitize-width(150);
     .unitize-height(30);
-    .unitize-margin(10, 0, 0, 0);
-    margin: 0 auto;
+    .unitize(10, 16, margin-bottom);
+    margin-left: auto;
+    margin-right: auto;
     position: relative;
 
     .rating-star--input {
@@ -383,7 +384,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         &#star--5 { .unitize(120, 16, left); }
 
         &:checked ~ .rating-star--label,
-        &#star--all:checked:disabled ~ .rating-star--label {
+        &#star--reset:checked:disabled ~ .rating-star--label {
             color: @text-color;
 
             &:before {
@@ -413,24 +414,6 @@ The styling includes the collapsed and expanded styling and the panel component 
         &.star--4 { .unitize(90, 16, left); }
         &.star--5 { .unitize(120, 16, left); }
     }
-}
-
-.rating-star--label-reset {
-    .unitize(12, 16, font-size);
-    cursor: pointer;
-
-    &:hover {
-        color: @brand-primary;
-    }
-
-    [class^="icon--"] {
-        .unitize-margin(0, 3, 0, 0);
-    }
-}
-
-.filter-panel--rating-info {
-    .unitize-padding(10, 0);
-    text-align: center;
 }
 
 .filter--set-title {

@@ -50,25 +50,6 @@
                                         </li>
                                     {/block}
                                 {/foreach}
-
-                                {block name="frontend_listing_filter_facet_radio_list_option_reset"}
-                                    <li class="filter-panel--option">
-                                        <span class="filter-panel--radio">
-                                            <input type="radio"
-                                                   id="__{$facet->getFieldName()}__reset"
-                                                   name="{$facet->getFieldName()}"
-                                                   value="0"
-                                                   {if !$option->isActive()}checked="checked" {/if}/>
-
-                                            <span class="radio--state">&nbsp;</span>
-                                        </span>
-
-                                        <label class="filter-panel--label"
-                                               for="__{$facet->getFieldName()}__reset">
-                                            {s name="ListingFilterVoteReset"}Alle Produkte{/s}
-                                        </label>
-                                    </li>
-                                {/block}
                             </ul>
                         {/block}
                     </div>
