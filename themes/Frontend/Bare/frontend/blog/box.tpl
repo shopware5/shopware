@@ -70,10 +70,10 @@
 
 				{* Article pictures *}
 				{block name='frontend_blog_col_article_picture'}
-					{if $sArticle.preview.thumbNails.2}
+					{if $sArticle.media}
 						<div class="blog--box-picture">
 							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title|escape}">
-                                <img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.3}" />
+								<img srcset="{$sArticle.media.thumbnails[0].sourceSet}" alt="{$sArticle.title|escape}" />
                             </a>
 						</div>
 					{/if}
