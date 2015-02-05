@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'article_sales',
                 text: '{s name=nav/items_sales}Item by sales{/s}',
                 store: 'analytics-store-navigation-article_sales',
-                iconCls: 'sprite-inbox',
+                iconCls: 'sprite-article-sales',
                 comparable: true,
                 leaf: true
             },
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'article_impression',
                 text: '{s name=nav/article_impressions}Item by calls (impressions){/s}',
                 store: 'analytics-store-navigation-article_impressions',
-                iconCls: 'sprite-chart-up-color',
+                iconCls: 'sprite-chart-impressions',
                 comparable: true,
                 leaf: true,
                 multiShop: true

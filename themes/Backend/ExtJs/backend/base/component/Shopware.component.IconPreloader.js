@@ -42,7 +42,7 @@ Ext.define('Shopware.component.IconPreloader', {
     iconSheets: [
         'extra-icon-set-01', 'extra-icon-set-02', 'extra-icon-set-03', 'extra-icon-set-04',
         'extra-icon-set-05', 'extra-icon-set-06', 'extra-icon-set-07', 'extra-icon-set-08',
-        'extra-icon-set-keys', 'extra-icon-set-devices'
+        'extra-icon-set-keys', 'extra-icon-set-devices', 'core-icon-set-new'
     ],
 
     /**

@@ -215,7 +215,7 @@ Ext.define('Shopware.apps.Partner.view.partner.List', {
 
             /*{if {acl_is_allowed privilege=statistic}}*/
             actionColumnData.push({
-                iconCls:'sprite-chart-up-color',
+                iconCls:'sprite-partner-stats',
                 cls:'chart-up-color',
                 tooltip:'{s name=list/action_column/statistic}Statistics{/s}',
                 handler:function (view, rowIndex, colIndex, item) {

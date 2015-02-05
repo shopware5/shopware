@@ -356,7 +356,7 @@ Ext.define('Shopware.form.field.Media', {
 
         me.selectButton = Ext.create('Ext.button.Button', {
             text: me.selectButtonText,
-            iconCls: 'sprite-inbox-image',
+            iconCls: 'sprite-inbox-select',
             cls: 'secondary small',
             margin: '10 0',
             handler: function() {
