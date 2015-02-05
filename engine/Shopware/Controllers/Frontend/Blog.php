@@ -179,6 +179,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         //returns the blog article data
         $blogArticles = $paginator->getIterator()->getArrayCopy();
 
+        $mediaIds = array_map(function($blogArticle) {
+            if (isset($blogArticle['media']) && $blogArticle['media'][0]['mediaId']) {
+                return $blogArticle['media'][0]['mediaId'];
+            }
+        }, $blogArticles);
+
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         foreach ($blogArticles as $key => $blogArticle) {
             //adding number of comments to the blog article
             $blogArticles[$key]["numberOfComments"] = count($blogArticle["comments"]);
@@ -193,13 +202,24 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticles[$key]["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
             //adding thumbnails to the blog article
-            if (!empty($blogArticle["media"][0]['mediaId'])) {
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $blogArticle["media"][0]['mediaId']);
-                if ($mediaModel != null) {
-                    $blogArticles[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
-                    $blogArticles[$key]["preview"]["srchd"] = array_values($mediaModel->getHighDpiThumbnails());
-                }
+            if (empty($blogArticle["media"][0]['mediaId'])) {
+                continue;
+            }
+
+            $mediaId = $blogArticle["media"][0]['mediaId'];
+
+            if (!isset($medias[$mediaId])) {
+                continue;
+            }
+            
+            /**@var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media*/
+            $media = $medias[$mediaId];
+            $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+
+            if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+                $blogArticles[$key]["preview"]["thumbNails"] = array_column($media['thumbnails'], 'source');
+            } else {
+                $blogArticles[$key]['media'] = $media;
             }
         }
 
