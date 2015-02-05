@@ -37,7 +37,7 @@
 				{$sBoxMode = "table"}
 				{$showListing = true}
 				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
-				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" fullPath}"}
+				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
 			{/block}
 
 			{block name='frontend_search_headline'}
