@@ -103,6 +103,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'sRequests' => $request,
             'shortParameters' => $mapper->getQueryAliases(),
             'pageSizes' => array_values(explode("|", $pageCounts)),
+            'ajaxCountUrlParams' => ['sCategory' => $context->getShop()->getCategory()->getId()],
             'sSearchResults' => array(
                 'sArticles' => $articles,
                 'sArticlesCount' => $result->getTotalCount()
