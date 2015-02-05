@@ -1,7 +1,7 @@
 {extends file='frontend/index/header.tpl'}
 
 {* Keywords *}
-{block name="frontend_index_header_meta_keywords"}{if $sCategoryContent.metakeywords}{$sCategoryContent.metakeywords}{/if}{/block}
+{block name="frontend_index_header_meta_keywords"}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/block}
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sCategoryContent.metadescription}{$sCategoryContent.metadescription|strip_tags|escape}{/if}{/block}
