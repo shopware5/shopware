@@ -203,7 +203,8 @@
                 image = data.images[0],
                 element,
                 imageEl,
-                imageMedia;
+                imageMedia,
+                srcSet;
 
             element = $('<a>', {
                 'class': me.opts.imageCls,
@@ -213,8 +214,14 @@
             imageEl = $('<span>', { 'class': 'image--element' }).appendTo(element);
             imageMedia = $('<span>', { 'class': 'image--media' }).appendTo(imageEl);
 
+            if (image) {
+                srcSet = image.sourceSet;
+            } else {
+                srcSet = me.opts.noPicture
+            }
+            
             $('<img>', {
-                'srcset': image.sourceSet,
+                'srcset': srcSet,
                 'alt': data.articleName
             }).appendTo(imageMedia);
 
