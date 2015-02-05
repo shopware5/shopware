@@ -189,8 +189,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
                 $this->getSitemapArray(
                     $supplier['id'],
                     $supplier['name'],
-                    'supplier',
-                    'sSupplier'
+                    'listing',
+                    'sSupplier',
+                    array('sAction' => 'manufacturer')
                 )
             );
         }
