@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
         var me = this,
             data = [];
 
-        me.cancelOperation = false
+        me.cancelOperation = false;
 
         me.shopStore.each(function(elem) {
             data.push(elem);
