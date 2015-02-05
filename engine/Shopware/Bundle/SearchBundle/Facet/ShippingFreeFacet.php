@@ -41,12 +41,4 @@ class ShippingFreeFacet implements FacetInterface
     {
         return 'shipping_free';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

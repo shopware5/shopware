@@ -61,12 +61,4 @@ class SearchTermCondition implements ConditionInterface
     {
         return $this->term;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

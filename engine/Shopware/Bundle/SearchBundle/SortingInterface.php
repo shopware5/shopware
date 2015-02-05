@@ -35,7 +35,7 @@ namespace Shopware\Bundle\SearchBundle;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface SortingInterface extends \JsonSerializable
+interface SortingInterface
 {
     const SORT_ASC = 'ASC';
     const SORT_DESC = 'DESC';

@@ -73,6 +73,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $this->attributeHydrator = $attributeHydrator;
         $this->facetHandlers = $facetHandlers;
         $this->eventManager = $eventManager;
+        $this->facetHandlers = $this->registerFacetHandlers();
     }
 
     /**
@@ -89,8 +90,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
-        $this->facetHandlers = $this->registerFacetHandlers();
-
         $query = $this->getProductQuery($criteria, $context);
 
         $products = $this->getProducts($query);

@@ -63,12 +63,4 @@ class VoteAverageCondition implements ConditionInterface
     {
         return $this->average;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }
