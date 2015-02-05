@@ -22,25 +22,25 @@
 	  <table width="300px" cellpadding="0" cellspacing="0">
 	  <tbody>
 	  <tr>
-	  	<td align="right" width="100px" class="head">{s name="DocumentIndexTotalNet"}Gesamtkosten Netto:{/s}</td>
+	  	<td align="right" width="100px" class="head">{s name="DocumentIndexTotalNet"}{/s}</td>
 	  	<td align="right" width="200px" class="head">-{$Order._amountNetto|currency}</td>
 	  </tr>
 	  {if $Document.netto == false}
 		  {foreach from=$Order._tax key=key item=tax}
 		  <tr>
-		  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key} % MwSt:{/s}</td>
+		  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key}{/s}</td>
 		  	<td align="right">{$tax|currency}</td>
 		  </tr>
 		  {/foreach}
 	  {/if}
 	  {if $Document.netto == false}
 		  <tr>
-		    <td align="right"><b>{s name="DocumentIndexTotal"}Gesamtkosten:{/s}</b></td>
+		    <td align="right"><b>{s name="DocumentIndexTotal"}{/s}</b></td>
 		    <td align="right"><b>-{$Order._amount|currency}</b></td>
 		  </tr>
 	  {else}
 	 	  <tr>
-		    <td align="right"><b>{s name="DocumentIndexTotal"}Gesamtkosten:{/s}</b></td>
+		    <td align="right"><b>{s name="DocumentIndexTotal"}{/s}</b></td>
 		    <td align="right"><b>-{$Order._amountNetto|currency}</b></td>
 		  </tr>
 	  {/if}

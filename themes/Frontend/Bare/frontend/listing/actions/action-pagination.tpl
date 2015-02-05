@@ -55,7 +55,7 @@
     {block name='frontend_listing_actions_count'}
         {if $pages > 1}
             <span class="paging--display">
-                {s name="ListingTextFrom"}von{/s} <strong>{$pages}</strong>
+                {s name="ListingTextFrom"}{/s} <strong>{$pages}</strong>
             </span>
         {/if}
     {/block}

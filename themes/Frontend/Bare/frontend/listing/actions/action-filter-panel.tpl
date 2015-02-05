@@ -8,7 +8,7 @@
 
 			{block name='frontend_listing_actions_filter_close_button'}
 				<a href="#" class="filter--close-btn">
-					{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i>
+					{s name="ListingActionsCloseFilter"}{/s} <i class="icon--arrow-right"></i>
 				</a>
 			{/block}
 
@@ -17,7 +17,7 @@
 
 					{block name="frontend_listing_actions_filter_active_filters"}
 						<div class="filter--active-container"
-							 data-reset-label="{s name='ListingFilterResetAll'}Alle Filter zurücksetzen{/s}">
+							 data-reset-label="{s name='ListingFilterResetAll'}{/s}">
 						</div>
 					{/block}
 
@@ -34,7 +34,7 @@
 									        class="btn is--primary filter--btn-apply is--large is--icon-right"
 									        disabled="disabled">
 										<span class="filter--count"></span>
-										{s name="ListingFilterApplyButton"}Produkte anzeigen{/s}
+										{s name="ListingFilterApplyButton"}{/s}
 										<i class="icon--cycle"></i>
 									</button>
 								</div>

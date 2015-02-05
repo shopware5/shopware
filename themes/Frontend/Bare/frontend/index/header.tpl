@@ -15,7 +15,7 @@
 
 	{block name='frontend_index_header_meta_tags_schema_webpage'}
 		<meta itemprop="copyrightHolder" content="{config name=sShopname}" />
-		<meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}2014{/s}" />
+		<meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}{/s}" />
 		<meta itemprop="isFamilyFriendly" content="{if {config name=metaIsFamilyFriendly}}True{else}False{/if}" />
 		<meta itemprop="image" content="{link file=$theme.desktopLogo}" />
 	{/block}

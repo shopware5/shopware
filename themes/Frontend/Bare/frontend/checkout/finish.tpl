@@ -85,7 +85,7 @@
                             {* Print notice *}
                             {block name='frontend_checkout_finish_teaser_print_notice'}
                                 <p class="print--notice">
-                                    {s name="FinishPrintNotice"}Bitte beachten Sie dass die Druck-Funktion nicht auf allen verfügbaren Endgeräten zur Verfügung steht.{/s}
+                                    {s name="FinishPrintNotice"}{/s}
                                 </p>
                             {/block}
 						{/block}
@@ -112,9 +112,9 @@
 								{/if}
 
 								{if $sUserData.billingaddress.salutation eq "mr"}
-									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}Herr{/s}
+									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
 								{else}
-									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
+									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
 								{/if}
 
 								{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
@@ -144,9 +144,9 @@
 								{/if}
 
 								{if $sUserData.shippingaddress.salutation eq "mr"}
-									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}Herr{/s}
+									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
 								{else}
-									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
+									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
 								{/if}
 
 								{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>

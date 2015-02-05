@@ -12,7 +12,7 @@
     {block name='frontend_checkout_ajax_cart_actions'}
         <div class="action--container">
             {if $basketItem.modus != 4}
-                <a href="{url controller="checkout" action='ajaxDeleteArticleCart' sDelete=$basketItem.id}" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle" namespace="frontend/checkout/ajax_cart"}Remove article{/s}">
+                <a href="{url controller="checkout" action='ajaxDeleteArticleCart' sDelete=$basketItem.id}" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle" namespace="frontend/checkout/ajax_cart"}{/s}">
                     <i class="icon--cross"></i>
                 </a>
             {/if}

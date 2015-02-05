@@ -26,7 +26,7 @@
 					<div class="checkbox">
 						<p>
 							<input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" />
-							<strong>{s name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/s}</strong>
+							<strong>{s name="LoginLabelNoAccount"}{/s}</strong>
 						</p>
 					</div>
 				{/if}

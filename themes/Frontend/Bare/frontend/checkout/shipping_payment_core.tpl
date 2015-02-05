@@ -9,7 +9,7 @@
 		{* Action top *}
 		{block name='frontend_checkout_shipping_payment_core_buttons'}
 			<div class="confirm--actions table--actions block">
-				<button type="submit" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}<i class="icon--arrow-right"></i></button>
+				<button type="submit" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
 			</div>
 		{/block}
 
@@ -44,7 +44,7 @@
     {* Action bottom *}
     {block name='frontend_checkout_shipping_payment_core_buttons'}
         <div class="confirm--actions table--actions block">
-            <button type="submit" form="shippingPaymentForm" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}<i class="icon--arrow-right"></i></button>
+            <button type="submit" form="shippingPaymentForm" class="btn is--primary is--icon-right right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
         </div>
     {/block}
 

@@ -277,7 +277,7 @@
 		{if $offerPosition.customercomment}
 			<div class="order--user-comments panel">
 				{block name="frontend_account_order_item_user_comment_title"}
-					<div class="panel--title">{s name="OrderItemCustomerComment"}Ihr Kommentar{/s}</div>
+					<div class="panel--title">{s name="OrderItemCustomerComment"}{/s}</div>
 				{/block}
 
 				{block name="frontend_account_order_item_user_comment_content"}
@@ -294,7 +294,7 @@
 		{if $offerPosition.comment}
 			<div class="order--shop-comments panel">
 				{block name="frontend_account_order_item_shop_comment_title"}
-					<div class="panel--title">{s name="OrderItemComment"}Unser Kommentar{/s}</div>
+					<div class="panel--title">{s name="OrderItemComment"}{/s}</div>
 				{/block}
 
 				{block name="frontend_account_order_item_shop_comment_content"}

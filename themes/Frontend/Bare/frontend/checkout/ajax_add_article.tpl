@@ -1,7 +1,7 @@
 <div class="modal--checkout-add-article">
     {block name='checkout_ajax_add_title'}
         <div class="modal--title">
-            {if !$sBasketInfo}{s name="AjaxAddHeader"}{/s}{else}{s name='AjaxAddHeaderError'}Hinweis:{/s}{/if}
+            {if !$sBasketInfo}{s name="AjaxAddHeader"}{/s}{else}{s name='AjaxAddHeaderError'}{/s}{/if}
         </div>
     {/block}
 

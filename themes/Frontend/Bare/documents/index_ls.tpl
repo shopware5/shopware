@@ -12,7 +12,7 @@
 {/block}
 
 {block name="document_index_head_bottom"}
-	<h1>{s name="DocumentIndexShippingNumber"}Lieferschein Nr.{/s} {$Document.id}</h1>
+	<h1>{s name="DocumentIndexShippingNumber"}{/s} {$Document.id}</h1>
 	{s name="DocumentIndexPageCounter"}Seite {$page+1} von {$Pages|@count}{/s}
 {/block}
 {block name="document_index_selectAdress"}
@@ -20,5 +20,5 @@
 {/block}
 {block name="document_index_table_each"}{if $position.modus == 0 || $position.modus == 1}{$smarty.block.parent}{/if}{/block}
 {block name="document_index_head_right" append}
-{if $Document.bid}{s name="DocumentIndexInvoiceID"}Zur Rechnung:{/s} {$Document.bid}<br />{/if}
+{if $Document.bid}{s name="DocumentIndexInvoiceID"}{/s} {$Document.bid}<br />{/if}
 {/block}

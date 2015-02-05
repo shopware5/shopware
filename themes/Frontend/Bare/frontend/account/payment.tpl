@@ -13,7 +13,7 @@
 		{* Payment headline *}
 		{block name="frontend_account_payment_headline"}
 			<div class="account--welcome">
-				<h1 class="panel--title">{s name="PaymentHeadline"}Zahlungsart &auml;ndern{/s}</h1>
+				<h1 class="panel--title">{s name="PaymentHeadline"}{/s}</h1>
 		    </div>
 		{/block}
 

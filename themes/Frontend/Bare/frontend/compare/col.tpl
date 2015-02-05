@@ -65,7 +65,7 @@
                         {block name='frontend_compare_price_normal'}
                             <span class="price--normal{if $sArticle.pseudoprice} price--reduced{/if}">
                                 {if $sArticle.priceStartingFrom}
-                                    {s name="ComparePriceFrom"}from{/s}
+                                    {s name="ComparePriceFrom"}{/s}
                                 {/if}
 
                                 {$sArticle.price|currency}
