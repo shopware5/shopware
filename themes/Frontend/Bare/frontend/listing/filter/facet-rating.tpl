@@ -27,9 +27,9 @@
                                 {block name="frontend_listing_filter_facet_rating_reset_input"}
                                     <input type="radio"
                                            class="rating-star--input"
-                                           id="star--all"
+                                           id="star--reset"
                                            name="rating"
-                                           value="0"
+                                           value=""
                                            {if !$facet->isActive()}checked="checked" {/if}/>
                                 {/block}
 
@@ -48,17 +48,6 @@
                                     {/block}
                                 {/foreach}
                             </div>
-
-                            {block name="frontend_listing_filter_facet_rating_info"}
-                                <div class="filter-panel--rating-info">
-                                    {block name="frontend_listing_filter_facet_rating_reset_label"}
-                                        <label class="rating-star--label-reset" for="star--all">
-                                            <i class="icon--cross3"></i>
-                                            {s name="ListingFilterVoteReset"}Alle Produkte{/s}
-                                        </label>
-                                    {/block}
-                                </div>
-                            {/block}
                         {/block}
                     </div>
                 {/block}

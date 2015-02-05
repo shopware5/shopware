@@ -91,11 +91,7 @@
                 var me = this;
 
                 me._on(me.$radioInputs, 'change', function(event) {
-                    var $el = $(event.currentTarget);
-
-                    if ($el.is(':checked')) {
-                        me.onChange(event);
-                    }
+                    me.onChange(event);
                 });
             }
         }
