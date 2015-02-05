@@ -42,7 +42,7 @@
 
 			{block name='frontend_search_headline'}
 				<h1 class="search--headline">
-					{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}
+					{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount}{/s}
 				</h1>
 			{/block}
 

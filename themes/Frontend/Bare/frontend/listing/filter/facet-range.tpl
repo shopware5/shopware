@@ -64,7 +64,7 @@
 
 										{block name="frontend_listing_filter_facet_range_info_min"}
 											<span class="range-info--min">
-												{s name="ListingFilterRangeFrom"}von{/s}
+												{s name="ListingFilterRangeFrom"}{/s}
 											</span>
 										{/block}
 
@@ -78,7 +78,7 @@
 
 										{block name="frontend_listing_filter_facet_range_info_max"}
 											<span class="range-info--max">
-												{s name="ListingFilterRangeTo"}bis{/s}
+												{s name="ListingFilterRangeTo"}{/s}
 											</span>
 										{/block}
 

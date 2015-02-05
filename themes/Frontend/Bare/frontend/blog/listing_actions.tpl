@@ -36,7 +36,7 @@
                 {* Pagination - Number of pages *}
                 {block name='frontend_listing_actions_count'}
                     <span class="paging--display">
-                        {s name="ListingTextFrom"}von{/s} <strong>{$sNumberPages}</strong>
+                        {s name="ListingTextFrom"}{/s} <strong>{$sNumberPages}</strong>
                     </span>
                 {/block}
             </div>

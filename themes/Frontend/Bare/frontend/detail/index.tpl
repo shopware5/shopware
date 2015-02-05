@@ -229,7 +229,7 @@
                                     {if $sArticle.attr1}
                                         <li class="base-info--entry entry-attribute">
                                             <strong class="entry--label">
-                                                {s name="DetailAttributeField1Label"}Freitextfeld 1{/s}:
+                                                {s name="DetailAttributeField1Label"}{/s}:
                                             </strong>
     
                                             <span class="entry--content">
@@ -244,7 +244,7 @@
                                     {if $sArticle.attr2}
                                         <li class="base-info--entry entry-attribute">
                                             <strong class="entry--label">
-                                                {s name="DetailAttributeField2Label"}Freitextfeld 2{/s}:
+                                                {s name="DetailAttributeField2Label"}{/s}:
                                             </strong>
     
                                             <span class="entry--content">
@@ -299,8 +299,8 @@
                                     {* Tab navigation - Related products *}
                                     {block name="frontend_detail_tabs_entry_related"}
                                         {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-                                            <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}" class="tab--link">
-                                                {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                            <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}" class="tab--link">
+                                                {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}
                                                 <span class="product--rating-count-wrapper">
                                                     <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
                                                 </span>
@@ -311,7 +311,7 @@
                                     {* Similar products *}
                                     {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
                                         {if $sArticle.sSimilarArticles}
-                                            <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
+                                            <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
                                         {/if}
                                     {/block}
                                 {/block}
@@ -319,14 +319,14 @@
                                 {* Customer also bought *}
                                 {block name="frontend_detail_index_tabs_entry_also_bought"}
                                     {if $showAlsoBought}
-                                        <a href="#content--also-bought" title="{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}" class="tab--link">{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}</a>
+                                        <a href="#content--also-bought" title="{s name="DetailRecommendationAlsoBoughtLabel"}{/s}" class="tab--link">{s name="DetailRecommendationAlsoBoughtLabel"}{/s}</a>
                                     {/if}
                                 {/block}
 
                                 {* Customer also viewed *}
                                 {block name="frontend_detail_index_tabs_entry_also_viewed"}
                                     {if $showAlsoViewed}
-                                        <a href="#content--customer-viewed" title="{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}" class="tab--link">{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}</a>
+                                        <a href="#content--customer-viewed" title="{s name="DetailRecommendationAlsoViewedLabel"}{/s}" class="tab--link">{s name="DetailRecommendationAlsoViewedLabel"}{/s}</a>
                                     {/if}
                                 {/block}
                             {/block}
@@ -345,8 +345,8 @@
                                         <div class="tab--container">
                                             {block name="frontend_detail_index_tabs_related_inner"}
                                                 <div class="tab--header">
-                                                    <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}">
-                                                        {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s}
+                                                    <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}">
+                                                        {s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}
                                                         <span class="product--rating-count-wrapper">
                                                             <span class="product--rating-count">{$sArticle.sRelatedArticles|@count}</span>
                                                         </span>
@@ -363,7 +363,7 @@
                                     <div class="tab--container">
                                         {block name="frontend_detail_index_tabs_similar_inner"}
                                             <div class="tab--header">
-                                                <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}">{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}</a>
+                                                <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}{/s}">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
                                             </div>
                                             <div class="tab--content content--similar">{include file='frontend/detail/tabs/similar.tpl'}</div>
                                         {/block}
@@ -376,7 +376,7 @@
                                         <div class="tab--container">
                                             {block name="frontend_detail_index_tabs_also_bought_inner"}
                                                 <div class="tab--header">
-                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}">{s name='DetailRecommendationAlsoBoughtLabel'}Kunden kauften auch{/s}</a>
+                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoBoughtLabel'}{/s}">{s name='DetailRecommendationAlsoBoughtLabel'}{/s}</a>
                                                 </div>
                                                 <div class="tab--content content--also-bought">{$boughtArticles}</div>
                                             {/block}
@@ -390,7 +390,7 @@
                                         <div class="tab--container">
                                             {block name="frontend_detail_index_tabs_also_viewed_inner"}
                                                 <div class="tab--header">
-                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}">{s name='DetailRecommendationAlsoViewedLabel'}Kunden haben sich ebenfalls angesehen{/s}</a>
+                                                    <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoViewedLabel'}{/s}">{s name='DetailRecommendationAlsoViewedLabel'}{/s}</a>
                                                 </div>
                                                 <div class="tab--content content--also-viewed">{$viewedArticles}</div>
                                             {/block}

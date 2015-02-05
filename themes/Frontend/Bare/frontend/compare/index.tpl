@@ -21,7 +21,7 @@
             {/foreach}
             {block name='frontend_compare_product_dropdown_action_start'}
                 <li>
-                    <a href="{url controller='compare' action='overlay' forceSecure}" data-modal-title="{s name="CompareInfoCount"}Produktvergleich{/s}" rel="nofollow" class="btn--compare btn--compare-start btn is--primary is--full is--small is--icon-right">
+                    <a href="{url controller='compare' action='overlay' forceSecure}" data-modal-title="{s name="CompareInfoCount"}{/s}" rel="nofollow" class="btn--compare btn--compare-start btn is--primary is--full is--small is--icon-right">
                         {s name="CompareActionStart"}{/s}
                         <i class="icon--arrow-right"></i>
                     </a>

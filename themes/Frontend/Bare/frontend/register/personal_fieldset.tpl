@@ -119,7 +119,7 @@
 
                     <div class="register--birthday field--select">
                         <select id="register_personal_birthdate" name="register[personal][birthday]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthday && {config name=requireBirthdayField}} has--error{/if}">
-                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthday eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectDay'}day{/s}</option>
+                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthday eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectDay'}{/s}</option>
                             {section name="birthdate" start=1 loop=32 step=1}
                                 <option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
                             {/section}
@@ -128,7 +128,7 @@
 
                     <div class="register--birthmonth field--select">
                         <select name="register[personal][birthmonth]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthmonth && {config name=requireBirthdayField}} has--error{/if}">
-                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthmonth eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectMonth'}month{/s}</option>
+                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthmonth eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectMonth'}{/s}</option>
                             {section name="birthmonth" start=1 loop=13 step=1}
                                 <option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
                             {/section}
@@ -137,7 +137,7 @@
 
                     <div class="register--birthyear field--select">
                         <select name="register[personal][birthyear]"{if {config name=requireBirthdayField}} required="required" aria-required="true"{/if} class="{if {config name=requireBirthdayField}}is--required{/if}{if $error_flags.birthyear && {config name=requireBirthdayField}} has--error{/if}">
-                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthyear eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectYear'}year{/s}</option>
+                            <option value=""{if {config name=requireBirthdayField}} disabled="disabled"{/if}{if $form_data.birthyear eq ""} selected="selected"{/if}>{s name='RegisterBirthdaySelectYear'}{/s}</option>
                             {section name="birthyear" loop={$smarty.now|date_format:"%Y"} max={$smarty.now|date_format:"%Y"}-1900 step=-1}
                                 <option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
                             {/section}

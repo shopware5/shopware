@@ -37,7 +37,7 @@
 	<h2 class="headingbox_dark largesize">{se name="PaymentHeader"}Bitte führen Sie nun die Zahlung durch:{/se}</h2>
     <iframe id="payment_frame" width="100%" frameborder="0" border="0" src="{$sEmbedded}"></iframe>
     <div id="payment_loader" class="ajaxSlider" style="height:100px;border:0 none;display:none">
-    	<div class="loader" style="width:80px;margin-left:-50px;">{s name="PaymentInfoWait"}Bitte warten...{/s}</div>
+    	<div class="loader" style="width:80px;margin-left:-50px;">{s name="PaymentInfoWait"}{/s}</div>
     </div>
     
 </div>

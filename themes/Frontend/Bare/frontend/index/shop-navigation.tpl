@@ -5,7 +5,7 @@
         {block name='frontend_index_offcanvas_left_trigger'}
             <li class="navigation--entry entry--menu-left" role="menuitem">
                 <a class="entry--link entry--trigger btn is--icon-left" href="#offcanvas--left" data-offcanvas="true" data-offCanvasSelector=".sidebar-main">
-                    <i class="icon--menu"></i> {s namespace='frontend/index/menu_left' name="IndexLinkMenu"}Menü{/s}
+                    <i class="icon--menu"></i> {s namespace='frontend/index/menu_left' name="IndexLinkMenu"}{/s}
                 </a>
             </li>
         {/block}
@@ -13,11 +13,11 @@
         {* Search form *}
         {block name='frontend_index_search'}
             <li class="navigation--entry entry--search" role="menuitem" data-search-dropdown="true" aria-haspopup="true"{if $theme.focusSearch && {controllerName} == 'index'} data-activeOnStart="true"{/if}>
-                <a class="btn entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}"|escape}">
+                <a class="btn entry--link entry--trigger" href="#show-hide--search" title="{"{s name="IndexTitleSearchToggle"}{/s}"|escape}">
                     <i class="icon--search"></i>
 
                     {block name='frontend_index_search_display'}
-                        <span class="search--display">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
+                        <span class="search--display">{s name="IndexSearchFieldSubmit"}{/s}</span>
                     {/block}
                 </a>
 

@@ -55,7 +55,7 @@
                                     </a>
                                     <button type="submit"
                                             class="password-reset--link btn is--primary is--icon-right is--center">
-                                        {s name="PasswordSendAction"}Passwort anfordern{/s} <i class="icon--arrow-right"></i>
+                                        {s name="PasswordSendAction"}{/s} <i class="icon--arrow-right"></i>
                                     </button>
                                 </div>
 							{/block}

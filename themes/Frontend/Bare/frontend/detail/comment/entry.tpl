@@ -31,7 +31,7 @@
 
                     {* Review publish date label *}
                     {block name='frontend_detail_comment_date_label'}
-                        <strong class="content--label">{s name="DetailCommentInfoAt"}Am:{/s}</strong>
+                        <strong class="content--label">{s name="DetailCommentInfoAt"}{/s}</strong>
                     {/block}
 
                     {* Review publish date content *}

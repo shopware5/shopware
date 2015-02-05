@@ -43,7 +43,7 @@
 
                                     {block name='frontend_blog_commetns_comment_date_label'}
                                         <strong class="date--label">
-                                            {s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}Am:{/s}
+                                            {s name="DetailCommentInfoAt" namespace='frontend/detail/comment'}{/s}
                                         </strong>
                                     {/block}
 

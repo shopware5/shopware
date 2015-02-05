@@ -33,8 +33,8 @@
                         data-compare-ajax="true"
                         {if $theme.infiniteScrolling}
                         data-infinite-scrolling="true"
-                        data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}Vorherige Artikel laden{/s}"
-                        data-loadMoreSnippet="{s name="ListingActionsLoadMore"}Weitere Artikel laden{/s}"
+                        data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
+                        data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
                         data-categoryId="{$sCategoryContent.id}"
                         data-pages="{$pages}"
                         data-threshold="{$theme.infiniteThreshold}"{/if}>
