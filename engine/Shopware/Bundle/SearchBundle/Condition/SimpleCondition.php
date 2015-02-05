@@ -31,34 +31,30 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CustomerGroupCondition implements ConditionInterface
+class SimpleCondition implements ConditionInterface
 {
     /**
-     * @var array
+     * @var string
      */
-    private $customerGroupIds;
+    private $name;
 
     /**
-     * @param array $customerGroupIds
+     * @param string $name
      */
-    public function __construct(array $customerGroupIds)
+    public function __construct($name)
     {
-        $this->customerGroupIds = $customerGroupIds;
+        $this->name = $name;
+
+        if (empty($name)) {
+            throw new \RuntimeException('No condition name provided');
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
-        return 'customer_group';
-    }
-
-    /**
-     * @return int
-     */
-    public function getCustomerGroupIds()
-    {
-        return $this->customerGroupIds;
+        return $this->name;
     }
 }

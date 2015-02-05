@@ -126,12 +126,4 @@ class ProductAttributeCondition implements ConditionInterface
     {
         $this->operator = $operator;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

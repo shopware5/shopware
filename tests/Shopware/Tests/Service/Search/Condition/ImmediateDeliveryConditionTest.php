@@ -96,12 +96,11 @@ class ImmediateDeliveryConditionTest extends TestCase
             );
 
             $fourth = array_merge($fourth, $configurator);
-            foreach($fourth['variants'] as &$variant) {
+            foreach ($fourth['variants'] as &$variant) {
                 $variant['inStock'] = 4;
                 $variant['minPurchase'] = 3;
             }
             return $this->helper->createArticle($fourth);
-
         } else {
             return parent::createProduct(
                 $number,

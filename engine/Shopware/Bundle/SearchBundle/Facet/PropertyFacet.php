@@ -41,12 +41,4 @@ class PropertyFacet implements FacetInterface
     {
         return 'property';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }

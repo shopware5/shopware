@@ -28,7 +28,7 @@ class PriceConditionTest extends TestCase
         $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['prices'] = array();
-        foreach($prices as $key => $price) {
+        foreach ($prices as $key => $price) {
             if ($key === $context->getCurrentCustomerGroup()->getKey()) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
             } else {

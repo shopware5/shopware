@@ -40,12 +40,4 @@ class ImmediateDeliveryCondition implements ConditionInterface
     {
         return 'immediate_delivery';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
-    }
 }
