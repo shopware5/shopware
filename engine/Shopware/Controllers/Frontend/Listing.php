@@ -82,7 +82,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign($categoryArticles);
         $this->View()->assign('showListing', true);
         $this->View()->assign('manufacturer', $manufacturer);
-
+        $this->View()->assign('ajaxCountUrlParams', [
+            'sSupplier' => $manufacturerId,
+            'sCategory' => $context->getShop()->getCategory()->getId()
+        ]);
+        
         $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
     }
 
@@ -136,7 +140,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sCategoryContent' => $categoryContent,
             'campaigns' => $this->getCampaigns($categoryId),
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']]
         );
 
         // fetch devices on responsive template or load full emotions for older templates.

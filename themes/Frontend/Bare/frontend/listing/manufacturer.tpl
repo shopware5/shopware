@@ -2,10 +2,6 @@
 
 {namespace name="frontend/listing/listing"}
 
-{block name="frontend_listing_index_layout_variables" append}
-    {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" sSupplier=$manufacturer->getId() fullPath}"}
-{/block}
-
 {block name="frontend_listing_text"}
     <div class="vendor--info panel has--border">
 
