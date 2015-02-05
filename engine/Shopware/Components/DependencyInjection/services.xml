@@ -373,5 +373,10 @@
         </service>
 
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
+
+        <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber" public="false">
+            <argument type="service" id="models" />
+            <tag name="shopware.event_subscriber" />
+        </service>
     </services>
 </container>
