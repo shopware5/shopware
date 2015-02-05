@@ -391,7 +391,7 @@
                 tempParams = {};
 
             $.each(formData, function(index, item) {
-                tempParams[item['name']] = item['value'];
+                if (item['value']) tempParams[item['name']] = item['value'];
             });
 
             if (extend) {
@@ -724,7 +724,7 @@
                     rangeSlider.reset(param);
 
             } else if (param == 'rating') {
-                me.$el.find('#star--all').prop('checked', true).trigger('change');
+                me.$el.find('#star--reset').prop('checked', true).trigger('change');
 
             } else {
                 me.$el.find('[name="'+param+'"]')
