@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
             data = tree.getSelectionModel().hasSelection() ? tree.getSelectionModel().getSelection()[0].data : {};
 
         //if the current selection is not a root note (like gLeft)
-        if (data.parentId !== 'root') {
+        if ((data.parentId) && (data.parentId !== 'root')) {
 
             //get parentName and parentId
             var parentName = data.description,
