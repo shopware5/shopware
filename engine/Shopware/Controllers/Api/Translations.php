@@ -68,9 +68,9 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
             $translation = $this->resource->create($params);
         }
 
-        $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
+        $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
         $data = array(
-            'id'       => $translation['id'],
+            'id'       => $translation->getId(),
             'location' => $location
         );
 
@@ -96,9 +96,9 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
             $translation = $this->resource->update($id, $params);
         }
 
-        $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
+        $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
         $data = array(
-            'id'       => $translation['id'],
+            'id'       => $translation->getId(),
             'location' => $location
         );
 
