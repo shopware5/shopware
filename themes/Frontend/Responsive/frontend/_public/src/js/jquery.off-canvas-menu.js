@@ -371,15 +371,22 @@
 
         /**
          * Returns whether or not the off canvas menu is opened.
+         *
+         * @public
+         * @method isOpened
+         * @returns {Boolean}
          */
         isOpened: function () {
             return this.opened;
         },
 
         /**
-         * Destroyes the initialized plugin completely, so all event listeners will
+         * Destroys the initialized plugin completely, so all event listeners will
          * be removed and the plugin data, which is stored in-memory referenced to
          * the DOM node.
+         *
+         * @public
+         * @method destroy
          */
         destroy: function () {
             var me = this,
