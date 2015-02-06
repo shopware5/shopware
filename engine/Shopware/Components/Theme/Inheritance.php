@@ -270,8 +270,8 @@ class Inheritance
 
         if ($template->getParent() instanceof Shop\Template) {
             $files = array_merge(
-                $files,
-                $this->getJavascriptFilesRecursive($template->getParent())
+                $this->getJavascriptFilesRecursive($template->getParent()),
+                $files
             );
         }
 
