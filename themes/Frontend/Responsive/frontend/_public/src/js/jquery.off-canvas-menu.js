@@ -320,7 +320,7 @@
         });
 
         // Disable scrolling on body
-        $('html').addClass(opts.inactiveClass);
+        $('html, body').css('overflow', 'hidden');
 
         $.overlay.open({
             closeOnClick: true,
@@ -361,7 +361,7 @@
         $.overlay.close();
 
         // Disable scrolling on body
-        $('html').removeClass(opts.inactiveClass);
+        $('html, body').css('overflow', '');
 
         var css = {};
         css[fromLeft ? 'left' : 'right'] = opts.fullscreen ? '-100%' : me.offCanvasWidth * -1;
