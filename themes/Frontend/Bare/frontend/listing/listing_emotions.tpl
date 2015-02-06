@@ -1,4 +1,4 @@
-{namespace name="frontend/listing/listing"}
+{namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_emotions"}
     <div class="content--emotions">
