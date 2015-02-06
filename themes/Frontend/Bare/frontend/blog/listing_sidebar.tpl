@@ -33,7 +33,7 @@
 
 									{* Subscribe headline *}
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogSubscribe"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s namespace="frontend/blog/index" name="BlogSubscribe"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 									{/block}
 
 									{* Subscribe Content *}
