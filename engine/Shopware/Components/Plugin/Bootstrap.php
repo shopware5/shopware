@@ -206,7 +206,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function Path()
     {
-        return $this->info->path;
+        $return = '';
+
+        if ($this->info instanceof Enlight_Config) {
+            $return = $this->info->path;
+        } else {
+            $reflection = new \ReflectionClass($this);
+
+            if ($fileName = $reflection->getFileName()) {
+                $return = dirname($fileName) . DIRECTORY_SEPARATOR;
+            }
+        }
+
+        return $return;
     }
 
     /**
