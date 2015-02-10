@@ -33,9 +33,6 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 {
     public function preDispatch()
     {
-        if ($this->Request()->getActionName() != 'index') {
-            $this->forward('index'); return;
-        }
         $this->View()->loadTemplate('frontend/home/index.tpl');
     }
 
