@@ -8,7 +8,7 @@
 	{* Product image - Gallery *}
 	{block name="frontend_detail_image_box"}
         {strip}
-		<div class="image-slider--container{if !count($sArticle.images)} no--thumbnails{/if}">
+		<div class="image-slider--container{if !$sArticle.image} no--image{/if}{if !count($sArticle.images)} no--thumbnails{/if}">
 			<div class="image-slider--slide">
 				<div class="image--box image-slider--item">
 
@@ -21,9 +21,11 @@
                         {/if}
 
                         <span class="image--element"
+                              {if $sArticle.image}
                               data-img-large="{$sArticle.image.thumbnails[2].source}"
                               data-img-small="{$sArticle.image.thumbnails[0].source}"
                               data-img-original="{$sArticle.image.source}"
+                              {/if}
                               data-alt="{$alt}">
 
                             {block name='frontend_detail_image_default_image_media'}
