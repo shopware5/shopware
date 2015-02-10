@@ -72,20 +72,6 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function to get the supplier repository
-     *
-     * @return \Shopware\Components\Model\ModelRepository
-     */
-    private function getSupplierRepository()
-    {
-        if (empty($this->supplierRepository)) {
-            $this->supplierRepository = $this->get('models')->getRepository('Shopware\Models\Article\Supplier');
-        }
-
-        return $this->supplierRepository;
-    }
-
-    /**
      * Helper function to get the emotion repository
      *
      * @return \Shopware\Models\Emotion\Repository
@@ -335,16 +321,44 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     private function readSupplierUrls()
     {
-        $builder = $this->getSupplierRepository()->createQueryBuilder('Supplier');
-        $suppliers = $builder->getQuery()->getArrayResult();
-
+        $suppliers = $this->getSupplierForSitemap();
         foreach ($suppliers as &$supplier) {
             $supplier['urlParams'] = array(
-                'sViewport' => 'supplier',
+                'sViewport' => 'listing',
+                'sAction' => 'manufacturer',
                 'sSupplier' => $supplier['id']
             );
         }
 
+        return $suppliers;
+    }
+
+    /**
+     * Gets all suppliers that have products for the current shop
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getSupplierForSitemap()
+    {
+        $context = $this->get('shopware_storefront.context_service_core')->getShopContext();
+        $categoryId = $context->getShop()->getCategory()->getId();
+
+        /**@var $query QueryBuilder */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select(['manufacturer.id', 'manufacturer.name']);
+
+        $query->from('s_articles_supplier', 'manufacturer');
+        $query->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
+            ->innerJoin('product', 's_articles_categories_ro', 'categories', 'categories.articleID = product.id AND categories.categoryID = :categoryId')
+            ->setParameter(':categoryId', $categoryId);
+
+        $query->groupBy('manufacturer.id');
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+
+        $suppliers = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $suppliers;
     }
 
