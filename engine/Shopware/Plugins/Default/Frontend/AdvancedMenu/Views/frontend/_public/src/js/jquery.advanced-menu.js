@@ -117,7 +117,7 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
-                me._on($el, 'mouseenter click MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
+                me._on($el, 'mouseenter touchend MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
 
                 me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             });
@@ -139,6 +139,8 @@
         onListItemClick: function (index, $el, event) {
             var me = this,
                 opts = me.opts;
+
+            event.stopPropagation();
 
             me.setMenuIndex(index);
 
