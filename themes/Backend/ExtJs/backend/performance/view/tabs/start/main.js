@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     listeners: {
         afterrender: function () {
             var me = this;
-            me.fireEvent('init-toggle-productive', me.toggleButton);
+            me.fireEvent('init-toggle-productive', me);
         }
     },
 
@@ -98,21 +98,39 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         clearText += '</ul>';
 
         me.toggleButton = me.createToggleButton();
+        me.toggleText = me.createToggleText();
 
-        return [{
-            xtype: 'container',
-            cls: 'toggle-container',
-            layout: 'hbox',
-            padding: 20,
-            items: [me.toggleButton, {
+        return [
+            {
+                xtype: 'container',
+                cls: 'toggle-container',
+                layout: 'hbox',
+                padding: 20,
+                items: [
+                    me.toggleButton,
+                    me.toggleText
+                ]
+            },
+            {
                 xtype: 'component',
-                html: '<h2>{s name=tabs/start/productive_mode}{/s}</h2><br/>{s name=tabs/start/info_productive_mode}{/s}',
-                flex: 1
-            } ]
-        },{
-            xtype: 'component',
-            html: clearText
-        }];
+                html: clearText
+            }
+        ];
+    },
+
+    /**
+     * @return Ext.Component text
+     */
+    createToggleText: function() {
+        var me = this, html;
+        
+        html =
+            '<h2>{s name=tabs/start/productive_mode_loading}{/s}</h2>';
+        
+        return Ext.create('Ext.Component', {
+            html: html,
+            flex: 1
+        });
     },
 
     /**
@@ -130,11 +148,31 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
             listeners: {
                 afterrender: function(comp) {
                     comp.el.on('click', function() {
-                        me.fireEvent('toggle-productive', me.toggleButton);
+                        me.fireEvent('toggle-productive', me);
                     });
                 }
             }
         });
+    },
+    
+    setState: function(state) {
+        var me = this;
+
+        me.toggleButton.show();
+
+        if (state == true) {
+            me.toggleText.update(
+                '<h2>{s name=tabs/start/production_mode_title}{/s}</h2>' +
+                '<br/>{s name=tabs/start/production_mode_description}{/s}'
+            );
+            me.toggleButton.addCls('active');
+        } else {
+            me.toggleText.update(
+                '<h2>{s name=tabs/start/development_mode_title}{/s}</h2>' +
+                '<br/>{s name=tabs/start/development_mode_description}{/s}'
+            );
+            me.toggleButton.removeCls('active');
+        }
     }
 });
 //{/block}
