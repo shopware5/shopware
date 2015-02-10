@@ -51,7 +51,8 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId),
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId)
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
         ]);
     }
 }
