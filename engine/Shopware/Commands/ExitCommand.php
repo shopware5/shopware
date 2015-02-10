@@ -8,10 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Shopware ThumbnailCleanupCommand Class
+ * Shopware ExitCommand Class
  *
- * This class is used as a command to delete thumbnails from defined
- * media albums. If no album is defined, all album thumbnails will be removed.
+ * This class is used as a command to exit the console in shell mode.
  *
  * @category  Shopware
  * @package   Shopware\Components\Console\Command
