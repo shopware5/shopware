@@ -33,13 +33,14 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
     infoTitle: '{s name=form/message_title}Shop cache{/s}',
     infoMessageSuccess: '{s name=form/message}Shop cache has been cleared.{/s}',
-    infoTitleProductiveMode: '{s name=tabs/start/productive_mode}{/s}',
-    infoMessageProductiveMode1Success: '{s name=tabs/start/productive_mode_active}{/s}',
-    infoMessageProductiveMode0Success: '{s name=tabs/start/productive_mode_inactive}{/s}',
+    infoTitlePerformanceMode: '{s name=tabs/start/performance_mode}{/s}',
+    infoMessageProductionMode: '{s name=tabs/start/production_mode_active}{/s}',
+    infoMessageDevelopmentMode: '{s name=tabs/start/development_mode_active}{/s}',
     errorTitle: '{s name=errorTitle}{/s}',
     httpCacheError: '{s name=tabs/start/errorHttpCache}{/s}',
 
     running: false,
+    state: null,
 
     /**
      * init events
@@ -52,7 +53,7 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
                 click: me.clearWholeCache
             },
             'performance-tabs-start-main': {
-                'init-toggle-productive': me.getProductiveMode,
+                'init-toggle-productive': me.getPerformanceMode,
                 'toggle-productive': me.toggleProductive
             }
         });
@@ -62,9 +63,9 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
     /**
      * function to set toggle-button-state in the view on startup
-     * @param Ext.Component button
+     * @param Shopware.apps.Performance.view.tabs.start.Main window
      */
-    getProductiveMode: function (button) {
+    getPerformanceMode: function (window) {
         var me = this;
 
         Ext.Ajax.request({
@@ -73,12 +74,8 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
                 var response = Ext.decode(operation.responseText);
 
                 if (response.success == true) {
-                    button.show();
-
-                    me.setToggleButtonState(
-                        button,
-                        response.productiveMode
-                    );
+                    me.state = response.productiveMode;
+                    window.setState(me.state);
                 }
             }
         });
@@ -86,12 +83,12 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
     /**
      * set productive mode active/unactive
-     * @param Ext.Component button
+     * @param Shopware.apps.Performance.view.tabs.start.Main window
      */
-    toggleProductive: function (button) {
+    toggleProductive: function (window) {
         var me = this;
 
-        if (!button) {
+        if (!window) {
             return;
         }
 
@@ -108,7 +105,7 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
                 me.running = false;
 
                 if (response.success == true) {
-                    me.toggleProductiveCallback(button);
+                    me.toggleProductiveCallback(window);
                 } else {
                     if (response.state == 'not_found') {
                         Shopware.Notification.createGrowlMessage(
@@ -123,37 +120,27 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
     /**
      * callback function for toggleProductive
-     * @param Ext.Component button
+     * @param Shopware.apps.Performance.view.tabs.start.Main window
      */
-    toggleProductiveCallback: function (button) {
-        var me = this;
+    toggleProductiveCallback: function (window) {
+        var me = this,
+            message;
 
-        var message = me.infoMessageProductiveMode1Success;
-        if (button.hasCls('active')) {
-            message = me.infoMessageProductiveMode0Success;
-            me.setToggleButtonState(button, false);
+        if (me.state) {
+            message = me.infoMessageDevelopmentMode;
+            window.setState(false);
         } else {
-            me.setToggleButtonState(button, true);
+            message = me.infoMessageProductionMode;
+            window.setState(true);
         }
+
+        me.state = !me.state;
 
         Shopware.Notification.createGrowlMessage(
-            me.infoTitleProductiveMode,
+            me.infoTitlePerformanceMode,
             message,
-            me.infoTitleProductiveMode
+            me.infoTitlePerformanceMode
         );
-    },
-
-    /**
-     * set state of toggle button
-     * @param Ext.Component button
-     * @param boolean state
-     */
-    setToggleButtonState: function (button, state) {
-        if (state == true) {
-            button.addCls('active');
-        } else {
-            button.removeCls('active');
-        }
     },
 
     /**
