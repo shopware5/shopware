@@ -120,6 +120,14 @@
             swipeToSlide: true,
 
             /**
+             * Whether or not the pull preview feature should be active.
+             *
+             * @property pullPreview
+             * @type {Boolean}
+             */
+            pullPreview: false,
+
+            /**
              * Whether or not the double tap/click should be used to zoom in/out..
              *
              * @property doubleTap
@@ -150,9 +158,21 @@
              * The distance you have to travel to recognize a swipe in pixels.
              *
              * @property swipeTolerance
-             * @type {Number}
+             * @type {String|Number}
              */
             swipeTolerance: 50,
+
+            /**
+             * Tolerance of the pull preview.
+             * When this tolerance is exceeded,
+             * the image will slide to the next/previous image.
+             * Can either be a number that represent a pixel value or
+             * 'auto' to take a third of the viewport as the tolerance.
+             *
+             * @property pullTolerance
+             * @type {String|Number}
+             */
+            pullTolerance: 'auto',
 
             /**
              * The image index that will be set when the plugin gets initialized.
@@ -527,6 +547,16 @@
              */
             me.lastTouchTime = 0;
 
+            /**
+             * Last time the current image was touched.
+             * Used to determine a swipe instead of a pull.
+             *
+             * @private
+             * @property lastMoveTime
+             * @type {Number}
+             */
+            me.lastMoveTime = 0;
+
             me.registerEvents();
         },
 
@@ -545,7 +575,7 @@
                 me._on($slide, 'touchstart mousedown MSPointerDown', me.onTouchStart.bind(me));
                 me._on($slide, 'touchmove mousemove MSPointerMove', me.onTouchMove.bind(me));
                 me._on($slide, 'touchend mouseup MSPointerUp', me.onTouchEnd.bind(me));
-                me._on($slide, 'mouseleave', me.onMouseLeave.bind(me));
+                me._on($slide, 'mouseleave', me.onTouchEnd.bind(me));
 
                 if (opts.pinchToZoom) {
                     me._on($slide, 'mousewheel DOMMouseScroll scroll', me.onScroll.bind(me));
@@ -596,6 +626,7 @@
          */
         onTouchStart: function (event) {
             var me = this,
+                opts = me.opts,
                 pointers = me.getPointers(event),
                 pointerA = pointers[0],
                 currTime = Date.now(),
@@ -607,15 +638,21 @@
             startPoint.set(pointerA.clientX, pointerA.clientY);
 
             if (pointers.length === 1) {
+                me.lastMoveTime = currTime;
+
+                if (opts.autoSlide) {
+                    me.stopAutoSlide();
+                }
+
                 if (event.originalEvent instanceof MouseEvent) {
                     event.preventDefault();
 
                     me.grabImage = true;
-                    me.$slideContainer.addClass(me.opts.dragClass);
+                    me.$slideContainer.addClass(opts.dragClass);
                     return;
                 }
 
-                if (!me.opts.doubleTap) {
+                if (!opts.doubleTap) {
                     return;
                 }
 
@@ -660,8 +697,8 @@
                 return;
             }
 
-            if (touches.length === 1 && scale > 1) {
-                // If the image is zoomed, move it
+            if (touches.length === 1) {
+
                 if (event.originalEvent instanceof MouseEvent && !me.grabImage) {
                     return;
                 }
@@ -669,6 +706,12 @@
                 deltaX = touchA.clientX - me.startTouchPoint.x;
                 deltaY = touchA.clientY - me.startTouchPoint.y;
 
+                if (scale === 1) {
+                    me.$slide.css('left', (((me.slideIndex * -100) + (deltaX / me.$slide.width()) * 100) + '%'));
+                    return;
+                }
+
+                // If the image is zoomed, move it
                 me.startTouchPoint.set(touchA.clientX, touchA.clientY);
 
                 me.translate(deltaX / scale, deltaY / scale);
@@ -706,42 +749,58 @@
          */
         onTouchEnd: function (event) {
             var me = this,
+                opts = me.opts,
                 touches = event.changedTouches,
                 remaining = event.originalEvent.touches,
                 touchA = (touches && touches[0]) || event.originalEvent,
                 touchB = remaining && remaining[0],
-                swipeTolerance = me.opts.swipeTolerance,
+                swipeTolerance = opts.swipeTolerance,
+                pullTolerance = (typeof opts.pullTolerance === 'number') ? opts.pullTolerance : me.$slide.width() / 3,
                 deltaX,
-                deltaY;
+                deltaY,
+                absX,
+                absY,
+                swipeValid,
+                pullValid;
+
+            if (event.originalEvent instanceof MouseEvent && !me.grabImage) {
+                return;
+            }
 
             me.touchDistance = 0;
             me.grabImage = false;
-            me.$slideContainer.removeClass(me.opts.dragClass);
+            me.$slideContainer.removeClass(opts.dragClass);
 
             if (touchB) {
                 me.startTouchPoint.set(touchB.clientX, touchB.clientY);
                 return;
             }
 
-            if (!me.opts.swipeToSlide) {
+            if (opts.autoSlide) {
+                me.startAutoSlide();
+            }
+
+            if (!opts.swipeToSlide || me.imageScale > 1) {
                 return;
             }
 
             deltaX = me.startTouchPoint.x - touchA.clientX;
             deltaY = me.startTouchPoint.y - touchA.clientY;
+            absX = Math.abs(deltaX);
+            absY = Math.abs(deltaY);
 
-            if (Math.abs(deltaX) < swipeTolerance || Math.abs(deltaY) > swipeTolerance) {
+            swipeValid = (Date.now() - me.lastMoveTime) < 250 && absX > swipeTolerance && absY < swipeTolerance;
+            pullValid = (absX >= pullTolerance);
+
+            if (pullValid || swipeValid) {
+                event.preventDefault();
+
+                (deltaX < 0) ? me.slidePrev() : me.slideNext();
+
                 return;
             }
 
-            event.preventDefault();
-
-            if (deltaX < 0) {
-                me.slidePrev();
-                return;
-            }
-
-            me.slideNext();
+            me.slide(me.slideIndex);
         },
 
         /**
@@ -863,6 +922,8 @@
 
             me.grabImage = false;
             me.$slideContainer.removeClass(me.opts.dragClass);
+
+            me.slide(me.slideIndex);
         },
 
         /**
@@ -1264,11 +1325,12 @@
          * @param {Number} index
          */
         setActiveDot: function (index) {
-            var me = this;
+            var me = this,
+                $dots = me.$dots;
 
-            if (me.opts.dotNavigation && me.$dots) {
-                me.$dots.removeClass(me.opts.activeStateClass);
-                me.$dots.eq(index || me.slideIndex).addClass(me.opts.activeStateClass);
+            if (me.opts.dotNavigation && $dots) {
+                $dots.removeClass(me.opts.activeStateClass);
+                $dots.eq(index || me.slideIndex).addClass(me.opts.activeStateClass);
             }
         },
 
@@ -1382,7 +1444,6 @@
         slide: function (index, callback) {
             var me = this,
                 opts = me.opts,
-                newPosition = (index * 100 * -1) + '%',
                 method = (Modernizr.csstransitions) ? 'transition' : 'animate';
 
             me.slideIndex = index;
@@ -1403,7 +1464,7 @@
 
             me.resetTransformation(true, function () {
                 me.$slide[method]({
-                    'left': newPosition,
+                    'left': (index * -100) + '%',
                     'easing': 'cubic-bezier(.2,.89,.75,.99)'
                 }, opts.animationSpeed, $.proxy(callback, me));
             });
@@ -1456,12 +1517,10 @@
             var me = this,
                 newIndex = me.slideIndex + 1;
 
-            if (newIndex >= me.itemCount) {
-                if (!me.opts.loopSlides) {
-                    return;
-                }
-
+            if (newIndex >= me.itemCount && me.opts.loopSlides) {
                 newIndex = 0;
+            } else {
+                newIndex = Math.min(me.itemCount - 1, newIndex);
             }
 
             me.slide(newIndex);
@@ -1479,12 +1538,10 @@
             var me = this,
                 newIndex = me.slideIndex - 1;
 
-            if (newIndex < 0) {
-                if (!me.opts.loopSlides) {
-                    return;
-                }
-
+            if (newIndex < 0 && me.opts.loopSlides) {
                 newIndex = me.itemCount - 1;
+            } else {
+                newIndex = Math.max(0, newIndex);
             }
 
             me.slide(newIndex);

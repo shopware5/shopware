@@ -462,7 +462,6 @@
             me.$template.imageSlider({
                 dotNavigation: false,
                 swipeToSlide: true,
-                swipeTolerance: 50,
                 pinchToZoom: true,
                 doubleTap: true,
                 maxZoom: me.opts.maxZoom,
