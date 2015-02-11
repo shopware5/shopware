@@ -93,12 +93,22 @@
             orientation: 'horizontal',
 
             /**
-             * Number of items shown per page.
+             * The minimal width a slider item should have.
+             * Used for horizontal sliders.
              *
-             * @property itemsPerPage
+             * @property itemMinWidth
              * @type {Number}
              */
-            itemsPerPage: 4,
+            itemMinWidth: 220,
+
+            /**
+             * The minimal height a slider item should have.
+             * Used for vertical sliders.
+             *
+             * @property itemMinHeight
+             * @type {Number}
+             */
+            itemMinHeight: 240,
 
             /**
              * Number of items moved on each slide.
@@ -346,7 +356,7 @@
             me.currentPosition = me.getScrollPosition();
 
             if (me.itemsCount <= 0 && opts.mode === 'ajax') {
-                me.loadItems(0, Math.min(opts.itemsPerPage * 2, opts.ajaxMaxShow), $.proxy(me.initSlider, me));
+                me.loadItems(0, Math.min(me.itemsPerPage * 2, opts.ajaxMaxShow), $.proxy(me.initSlider, me));
                 return;
             }
 
@@ -382,7 +392,7 @@
         isActive: function () {
             var me = this;
 
-            return me.$items.length > me.opts.itemsPerPage;
+            return me.$items.length > me.itemsPerPage;
         },
 
         /**
@@ -425,9 +435,13 @@
          */
         setSizes: function (orientation) {
             var me = this,
-                o = orientation || me.opts.orientation;
+                o = orientation || me.opts.orientation,
+                containerSize = (o === 'vertical') ? me.$el.innerHeight() : me.$el.innerWidth(),
+                itemSize = (o === 'vertical') ? me.opts.itemMinHeight : me.opts.itemMinWidth;
 
-            me.itemSizePercent = 100 / me.opts.itemsPerPage;
+            me.itemsPerPage = Math.floor(containerSize / itemSize);
+
+            me.itemSizePercent = 100 / me.itemsPerPage;
 
             if (o === 'vertical') {
                 me.$items.css({ 'height': me.itemSizePercent + '%' });
@@ -511,6 +525,8 @@
                     me.trackItems();
                     me.trackArrows();
                     me.setSizes();
+
+                    $.publish('plugin/productSlider/itemsLoaded');
 
                     if (typeof callback === 'function') {
                         callback.call(me, response);
@@ -650,10 +666,10 @@
             var position = me.getScrollPosition(),
                 scrolledItems = Math.floor(position / me.itemSize),
                 itemsLeftToLoad = me.opts.ajaxMaxShow - me.itemsCount,
-                loadMoreCount = me.itemsCount - me.opts.itemsPerPage * 2;
+                loadMoreCount = me.itemsCount - me.itemsPerPage * 2;
 
             if (scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
-                me.loadItems(me.itemsCount, Math.min(me.opts.itemsPerPage, itemsLeftToLoad));
+                me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
             $.publish('plugin/productSlider/onScroll', me);

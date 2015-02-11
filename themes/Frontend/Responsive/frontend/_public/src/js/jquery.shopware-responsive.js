@@ -60,16 +60,10 @@ $(function () {
         .addPlugin('.category--teaser .hero--text', 'offcanvasHtmlPanel', ['xs', 's'])
 
         // Default product slider
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 1 }, ['xs', 's'])
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 3 }, 'm')
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 4 }, 'l')
-        .addPlugin('*[data-product-slider="true"]', 'productSlider', { itemsPerPage: 5 }, 'xl')
+        .addPlugin('*[data-product-slider="true"]', 'productSlider')
 
         // Product slider for premium items
-        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 1 })
-        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 2 }, 'm')
-        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 3 }, 'l')
-        .addPlugin('.premium-product--content', 'productSlider', { itemsPerPage: 4 }, 'xl')
+        .addPlugin('.premium-product--content', 'productSlider')
 
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
@@ -87,28 +81,8 @@ $(function () {
         }, ['xs', 's'])
         .addPlugin('body', 'ajaxProductNavigation', [ 'xl' ]);
 
-    // Product slider for topseller items
-    var _topsellerConfig = {
-        s: { itemsPerPage: 1 },
-        m: { itemsPerPage: 3 },
-        l: { itemsPerPage: 4 },
-        xl: { itemsPerPage: 5 }
-    };
 
-    if(!$('body').hasClass('is--no-sidebar')) {
-        _topsellerConfig = $.extend(_topsellerConfig, {
-            s: { itemsPerPage: 1 },
-            m: { itemsPerPage: 2 },
-            l: { itemsPerPage: 3 },
-            xl: { itemsPerPage: 4 }
-        });
-    }
-
-    StateManager
-        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.s, ['xs', 's'])
-        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.m, 'm')
-        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.l, 'l')
-        .addPlugin('*[data-topseller-slider="true"]', 'productSlider', _topsellerConfig.xl, 'xl');
+    StateManager.addPlugin('*[data-topseller-slider="true"]', 'productSlider');
 
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();

@@ -104,7 +104,7 @@
                 originalIcon = $icon[0].className,
                 $text = $target.find('.action--text');
 
-            $target.addClass('js--is-animating ' + me.opts.savedCls);
+            $target.addClass(me.opts.savedCls);
             $text.html($target.attr('data-text') || me.opts.text);
             $icon.removeClass(originalIcon).addClass(me.opts.iconCls);
         },
