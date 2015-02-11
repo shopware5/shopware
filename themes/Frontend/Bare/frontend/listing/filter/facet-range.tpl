@@ -49,7 +49,7 @@
 								{/block}
 
 								{block name="frontend_listing_filter_facet_range_format_helper"}
-									<div class="range-slider--currency" data-range-currency="{'0'|currency}"></div>
+									<div class="range-slider--currency" data-range-currency=""></div>
 								{/block}
 
 								{block name="frontend_listing_filter_facet_range_info"}
@@ -65,7 +65,7 @@
 											<label class="range-info--label"
 												   for="{$facet->getMinFieldName()}"
 												   data-range-label="min">
-												{$startMin|currency}
+												{$startMin}
 											</label>
 										{/block}
 
@@ -79,7 +79,7 @@
 											<label class="range-info--label"
 												   for="{$facet->getMaxFieldName()}"
 												   data-range-label="max">
-												{$startMax|currency}
+												{$startMax}
 											</label>
 										{/block}
 									</div>

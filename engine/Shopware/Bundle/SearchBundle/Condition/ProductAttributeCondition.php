@@ -37,6 +37,7 @@ class ProductAttributeCondition implements ConditionInterface
     const OPERATOR_NEQ = '!=';
     const OPERATOR_LT = '<';
     const OPERATOR_LTE = '<=';
+    const OPERATOR_BETWEEN = 'BETWEEN';
     const OPERATOR_GT = '>';
     const OPERATOR_GTE = '>=';
     const OPERATOR_IN = 'IN';
@@ -50,7 +51,7 @@ class ProductAttributeCondition implements ConditionInterface
     private $field;
 
     /**
-     * @var string
+     * @var string|array
      */
     private $value;
 
@@ -62,7 +63,7 @@ class ProductAttributeCondition implements ConditionInterface
     /**
      * @param string $field
      * @param string $operator
-     * @param string $value
+     * @param string|array $value ['min' => 1, 'max' => 10] for between operator
      */
     public function __construct($field, $operator, $value)
     {
@@ -104,7 +105,7 @@ class ProductAttributeCondition implements ConditionInterface
     }
 
     /**
-     * @param string $value
+     * @param string|array $value
      */
     public function setValue($value)
     {

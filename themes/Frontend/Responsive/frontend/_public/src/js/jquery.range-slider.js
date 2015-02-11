@@ -421,6 +421,10 @@
         formatPrice: function(value) {
             var me = this;
 
+            if (me.currencyFormat == '') {
+                return value;
+            }
+
             value = Math.round(value * 100) / 100;
             value = value.toFixed(2);
 
