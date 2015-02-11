@@ -62,6 +62,12 @@
 								{/if}
 							{/block}
 
+							{block name="frontend_listing_actions_filter_form_category"}
+								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart}
+									<input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent}" />
+								{/if}
+							{/block}
+
                             {block name="frontend_listing_actions_filter_form_facets"}
                                 {include file="frontend/listing/actions/action-filter-facets.tpl" facets=$facets}
                             {/block}
