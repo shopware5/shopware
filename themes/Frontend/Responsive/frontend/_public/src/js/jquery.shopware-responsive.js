@@ -243,17 +243,22 @@ $(function () {
             return;
         }
 
-        $.getJSON(ajaxCartRefresh, function(cart) {
+        $.ajax({
+            'url': ajaxCartRefresh,
+            'dataType': 'jsonp',
+            'success': function (response) {
+                var cart = JSON.parse(response);
 
-            if(!cart.amount || !cart.quantity) {
-                return;
-            }
+                if(!cart.amount || !cart.quantity) {
+                    return;
+                }
 
-            $cartAmount.html(cart.amount);
-            $cartQuantity.html(cart.quantity).removeClass('is--hidden');
+                $cartAmount.html(cart.amount);
+                $cartQuantity.html(cart.quantity).removeClass('is--hidden');
 
-            if(cart.quantity == 0) {
-                $cartQuantity.addClass('is--hidden');
+                if(cart.quantity == 0) {
+                    $cartQuantity.addClass('is--hidden');
+                }
             }
         });
     }

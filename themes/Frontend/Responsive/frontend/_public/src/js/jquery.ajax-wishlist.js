@@ -60,13 +60,17 @@
                 $target = $(event.currentTarget),
                 href = $target.attr('href');
 
-            if ($target.hasClass(me.opts.savedCls)) {
-                return true;
-            }
-
             event.preventDefault();
 
-            $.getJSON(href, $.proxy(me.responseHandler, me, $target));
+            if ($target.hasClass(me.opts.savedCls)) {
+                return;
+            }
+
+            $.ajax({
+                'url': href,
+                'dataType': 'jsonp',
+                'success': $.proxy(me.responseHandler, me, $target)
+            });
         },
 
         /**
@@ -75,14 +79,14 @@
          * triggers the animation of the associated element.
          *
          * @param {object} $target - The associated element
-         * @param {object} response - The ajax response as a object
-         * @returns {boolean}
+         * @param {String} json - The ajax response as a JSON string
          */
-        responseHandler: function($target, response) {
-            var me = this;
+        responseHandler: function($target, json) {
+            var me = this,
+                response = JSON.parse(json);
 
             if (!response.success) {
-                return false;
+                return;
             }
 
             me.updateCounter(response.notesCount);

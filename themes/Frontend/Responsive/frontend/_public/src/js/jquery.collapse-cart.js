@@ -257,9 +257,9 @@
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
-                url: url,
-                type: 'POST',
-                success: function(result) {
+                'url': url,
+                'dataType': 'jsonp',
+                'success': function(result) {
 
                     me.$el.html(result);
 
@@ -361,8 +361,9 @@
             $.publish('plugin/collapseCart/onLoadCart');
 
             $.ajax({
-                url: opts.ajaxCartURL,
-                success: function (result) {
+                'url': opts.ajaxCartURL,
+                'dataType': 'jsonp',
+                'success': function (result) {
                     $el.html(result);
 
                     if (typeof callback === 'function') {
