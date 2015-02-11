@@ -797,7 +797,7 @@ class sRewriteTable
         $this->db->query("
             DELETE ru FROM s_core_rewrite_urls ru
             LEFT JOIN s_articles_supplier s
-              ON s.id = REPLACE(ru.org_path, 'sViewport=supplier&sSupplier=', '')
+              ON s.id = REPLACE(ru.org_path, 'sViewport=listing&sAction=manufacturer&sSupplier=', '')
             WHERE ru.org_path LIKE 'sViewport=listing&sAction=manufacturer&sSupplier=%'
             AND s.id IS NULL"
         );
