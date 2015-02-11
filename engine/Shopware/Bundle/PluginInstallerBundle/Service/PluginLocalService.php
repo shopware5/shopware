@@ -299,6 +299,7 @@ class PluginLocalService
             'plugin.capability_install',
             'plugin.capability_enable',
             'plugin.capability_secure_uninstall',
+            'plugin.update_version',
 
             'plugin.installation_date',
             'forms.id as form_id',

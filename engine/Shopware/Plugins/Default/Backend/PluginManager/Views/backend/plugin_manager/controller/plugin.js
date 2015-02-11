@@ -31,6 +31,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'activate-plugin':             me.activatePlugin,
             'deactivate-plugin':           me.deactivatePlugin,
             'update-plugin':               me.updatePlugin,
+            'execute-plugin-update':       me.executePluginUpdate,
             'update-dummy-plugin':         me.updateDummyPlugin,
             'upload-plugin':               me.uploadPlugin,
             'delete-plugin':               me.deletePlugin,
@@ -351,17 +352,20 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 '{url controller=PluginManager action=downloadUpdate}',
                 { technicalName: plugin.get('technicalName') },
                 function(response) {
-
-                    me.sendAjaxRequest(
-                        '{url controller=PluginInstaller action=update}',
-                        { technicalName: plugin.get('technicalName') },
-                        function(response) {
-                            callback(response);
-                        }
-                    );
+                    me.executePluginUpdate(plugin, callback);
                 }
             );
         });
+    },
+
+    executePluginUpdate: function(plugin, callback) {
+        var me = this;
+
+        me.sendAjaxRequest(
+            '{url controller=PluginInstaller action=update}',
+            { technicalName: plugin.get('technicalName') },
+            callback
+        );
     },
 
     checkLogin: function(callback) {
