@@ -64,10 +64,10 @@ class ProductMediaTest extends TestCase
             );
         }
 
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway_dbal')
+        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
             ->getList($listProducts, $context);
 
         $this->assertCount(2, $mediaList);
@@ -104,10 +104,10 @@ class ProductMediaTest extends TestCase
 
         $variantNumbers = array('testVariantMediaList1-1', 'testVariantMediaList1-2', 'testVariantMediaList2-1');
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($variantNumbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway_dbal')
+        $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway')
             ->getList($products, $context);
 
         $this->assertCount(3, $mediaList);
@@ -121,10 +121,10 @@ class ProductMediaTest extends TestCase
             }
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway_dbal')
+        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
             ->getList($products, $context);
 
         $this->assertCount(2, $mediaList);
@@ -152,7 +152,7 @@ class ProductMediaTest extends TestCase
         $this->helper->createArticle($data);
 
         $variantNumber = 'testProductImagesWithVariant-1';
-        $product = Shopware()->Container()->get('shopware_storefront.product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.product_service')
             ->get($variantNumber, $context);
 
         $this->assertCount(2, $product->getMedia());

@@ -80,7 +80,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $result = Shopware()->Container()->get('shopware_searchdbal.product_number_search_dbal')
+        $result = Shopware()->Container()->get('shopware_search.product_number_search')
             ->search($criteria, $context);
 
         $this->assertSearchResult($result, $expectedNumbers);

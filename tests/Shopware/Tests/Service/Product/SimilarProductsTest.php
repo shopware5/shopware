@@ -52,10 +52,10 @@ class SimilarProductsTest extends TestCase
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
-        $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service_core')
+        $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
         $this->assertCount(4, $similarProducts);
@@ -89,10 +89,10 @@ class SimilarProductsTest extends TestCase
         $this->linkSimilarProduct($article->getId(), $similarProducts);
         $this->linkSimilarProduct($article2->getId(), $similarProducts);
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList(array($number, $number2), $context);
 
-        $similarProductList = Shopware()->Container()->get('shopware_storefront.similar_products_service_core')
+        $similarProductList = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->getList($products, $context);
 
         $this->assertCount(2, $similarProductList);
@@ -123,10 +123,10 @@ class SimilarProductsTest extends TestCase
             $this->getProduct($similarNumber, $context, $category);
         }
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
-        $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service_core')
+        $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
         $this->assertCount(3, $similar);

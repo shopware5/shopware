@@ -904,7 +904,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Change current subshop id, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId(3);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
@@ -1008,7 +1008,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Change current subshop, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId(3);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success

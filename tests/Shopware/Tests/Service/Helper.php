@@ -88,10 +88,10 @@ class Helper
         ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
-            $productConfigurationGateway = Shopware()->Container()->get('shopware_storefront.product_configuration_gateway_dbal');
+            $productConfigurationGateway = Shopware()->Container()->get('shopware_storefront.product_configuration_gateway');
         }
         if ($configuratorGateway == null) {
-            $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway_dbal');
+            $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
         }
 
         $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
@@ -115,7 +115,7 @@ class Helper
     ) {
 
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway_dbal');
+            $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
         }
         $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
 
@@ -187,14 +187,14 @@ class Helper
         $voteService = null
     ) {
 
-        if ($productGateway === null)           $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway_dbal');
-        if ($graduatedPricesService === null)   $graduatedPricesService = Shopware()->Container()->get('shopware_storefront.graduated_prices_service_core');
-        if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('shopware_storefront.cheapest_price_service_core');
-        if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('shopware_storefront.price_calculation_service_core');
-        if ($mediaService === null)             $mediaService = Shopware()->Container()->get('shopware_storefront.media_service_core');
-        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service_core');
+        if ($productGateway === null)           $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
+        if ($graduatedPricesService === null)   $graduatedPricesService = Shopware()->Container()->get('shopware_storefront.graduated_prices_service');
+        if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('shopware_storefront.cheapest_price_service');
+        if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('shopware_storefront.price_calculation_service');
+        if ($mediaService === null)             $mediaService = Shopware()->Container()->get('shopware_storefront.media_service');
+        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service');
         if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
-        if ($voteService === null)              $voteService = Shopware()->Container()->get('shopware_storefront.vote_service_core');
+        if ($voteService === null)              $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
 
         $service = new StoreFrontBundle\Service\Core\ListProductService(
             $productGateway,

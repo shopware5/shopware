@@ -3,6 +3,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
+* Remove aliases from bundle services. Example: list_product_service is now directly set to the old list_product_service_core
 
 ## 5.0.0 Beta 1
 * Deprecated classes:
