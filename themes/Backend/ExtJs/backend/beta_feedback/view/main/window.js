@@ -65,7 +65,14 @@ Ext.define('Shopware.apps.BetaFeedback.view.main.Window', {
         me.items = [{
             xtype: 'container',
             // We need to hack the iframe to inject it into the Ext.window.Window
-            html: '<ifr' + 'ame id="iframe-' + Ext.id() + '" border="0" src="'+ me.requestUrl +'"></ifr' + 'ame>'
+            html: '<ifr' + 'ame id="iframe-' + Ext.id() + '" border="0" src="'+ me.requestUrl +'"></ifr' + 'ame>',
+            listeners: {
+                'afterrender': function () {
+                    this.getEl().dom.children[0].onload = function () {
+                        me.setWidth(me.getWidth() + 1);
+                    }
+                }
+            }
         }];
         me.callParent(arguments);
     }
