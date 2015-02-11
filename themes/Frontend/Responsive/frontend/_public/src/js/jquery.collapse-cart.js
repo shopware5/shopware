@@ -177,6 +177,8 @@
                 .html(response)
                 .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
+
+            picturefill();
         },
 
         /**
@@ -364,6 +366,7 @@
                 url: opts.ajaxCartURL,
                 success: function (result) {
                     $el.html(result);
+                    picturefill();
 
                     if (typeof callback === 'function') {
                         callback();

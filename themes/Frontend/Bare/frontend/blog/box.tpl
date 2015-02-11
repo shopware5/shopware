@@ -80,7 +80,7 @@
 										 alt="{$sArticle.title|escape}" />
 								{else}
 									<img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-										 alt="{$sArticle.title|escape}">
+										 alt="{$sArticle.title|escape}" />
 								{/if}
 							</a>
 						</div>
