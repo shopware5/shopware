@@ -13,7 +13,7 @@
 	{* New customer *}
 	{block name='frontend_register_login_newcustomer'}
 		<div class="register--new-customer">
-			<a href="#registration" class="btn is--secondary" id="new-customer-action" data-collapseTarget="#registration">{s name="LoginLinkRegister2"}{/s}</a>
+			<a href="#registration" class="btn" id="new-customer-action" data-collapseTarget="#registration">{s name="LoginLinkRegister2"}{/s}</a>
 		</div>
 	{/block}
 
