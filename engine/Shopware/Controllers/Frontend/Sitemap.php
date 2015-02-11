@@ -176,12 +176,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getSupplierPages()
     {
-        $builder = $this->get('models')->createQueryBuilder();
-        $builder->select(array('supplier', 'attribute'))
-            ->from('Shopware\Models\Article\Supplier', 'supplier')
-            ->leftJoin('supplier.attribute', 'attribute');
-
-        $suppliers = $builder->getQuery()->getArrayResult();
+        $suppliers = $this->getSupplierForSitemap();
 
         foreach ($suppliers as &$supplier) {
             $supplier = array_merge(
@@ -273,7 +268,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      * @param string $name
      * @param string $viewport
      * @param string $idParam
-     * @param string|array $link
+     * @param string|array|null $link
      * @return array
      */
     private function getSitemapArray($id, $name, $viewport, $idParam, $link = null)
@@ -303,5 +298,33 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             'name' => $name,
             'link' => $link
         );
+    }
+
+    /**
+     * Gets all suppliers that have products for the current shop
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getSupplierForSitemap()
+    {
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $categoryId = $context->getShop()->getCategory()->getId();
+
+        /**@var $query QueryBuilder */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select(['manufacturer.id', 'manufacturer.name']);
+
+        $query->from('s_articles_supplier', 'manufacturer');
+        $query->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
+            ->innerJoin('product', 's_articles_categories_ro', 'categories', 'categories.articleID = product.id AND categories.categoryID = :categoryId')
+            ->setParameter(':categoryId', $categoryId);
+
+        $query->groupBy('manufacturer.id');
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }
