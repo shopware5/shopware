@@ -6,10 +6,7 @@
 
     <services>
         <!--shopware_search.-->
-        <service id="shopware_search.product_search" alias="shopware_search.product_search_core"/>
-        <service id="shopware_search.product_number_search" alias="shopware_searchdbal.product_number_search_dbal"/>
-
-        <service id="shopware_search.product_search_core" class="Shopware\Bundle\SearchBundle\ProductSearch">
+        <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
             <argument type="service" id="shopware_storefront.list_product_service"/>
             <argument type="service" id="shopware_search.product_number_search"/>
         </service>

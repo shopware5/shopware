@@ -15,7 +15,7 @@ class CategoryServiceTest extends TestCase
         $third  = $this->helper->createCategory(array('name' =>  'third', 'parent' => $first->getId(), 'position' => 2));
         $fourth = $this->helper->createCategory(array('name' => 'fourth', 'parent' => $first->getId(), 'position' => 2));
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service_core')->getList(
+        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
             array(
                 $second->getId(),
                 $third->getId(),
@@ -52,7 +52,7 @@ class CategoryServiceTest extends TestCase
         );
 
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service_core')->getList(
+        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
             array(
                 $first->getId(),
                 $second->getId(),
@@ -72,7 +72,7 @@ class CategoryServiceTest extends TestCase
         $second = $this->helper->createCategory(array('name' => 'second', 'parent' => $first->getId(), 'active' => false));
         $third = $this->helper->createCategory(array('name' => 'third',   'parent' => $second->getId()));
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service_core')->getList(
+        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
             array(
                 $first->getId(),
                 $second->getId(),

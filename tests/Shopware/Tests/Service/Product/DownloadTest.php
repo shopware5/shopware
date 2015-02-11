@@ -46,9 +46,9 @@ class DownloadTest extends TestCase
         $data = $this->getProduct($number, $context);
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')->get($number, $context);
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service_core')->get($product, $context);
+        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')->get($product, $context);
 
         $this->assertCount(2, $downloads);
 
@@ -70,10 +70,10 @@ class DownloadTest extends TestCase
             $this->helper->createArticle($data);
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service_core')
+        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')
             ->getList($products, $context);
 
         $this->assertCount(2, $downloads);

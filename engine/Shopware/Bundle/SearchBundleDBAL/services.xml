@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="shopware_searchdbal.product_number_search_dbal" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
+        <service id="shopware_search.product_number_search" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
             <argument type="service" id="events" />
