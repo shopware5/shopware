@@ -3256,6 +3256,9 @@ div.agb_accept input {margin: 3px 0;}
 	text-align: center;
 	margin-bottom: 10px;
 }
+#content .blogdetail #imgTarget img {
+    max-width: 100%;
+}
 #content .blogdetail .thumbnail_box {float: right; width: 299px;}
 #content .blogdetail .thumbnail_box a {border: 1px solid #dfdfdf;margin: 0 10px 10px 0;}
 #content .blogdetail .thumbnail_box a:hover {border-color: #e1540f;}
