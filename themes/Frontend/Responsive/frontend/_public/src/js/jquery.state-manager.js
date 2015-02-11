@@ -1168,6 +1168,75 @@
         },
 
         /**
+         * First calculates the scroll bar width and height of the browser
+         * and saves it to a object that can be accessed.
+         *
+         * @private
+         * @property _scrollBarSize
+         * @type {Object}
+         */
+        _scrollBarSize: (function () {
+            var $el = $('<div>', {
+                    css: {
+                        width: 100,
+                        height: 100,
+                        overflow: 'scroll',
+                        position: 'absolute',
+                        top: -9999
+                    }
+                }),
+                el = $el[0],
+                width,
+                height;
+
+            $('body').append($el);
+
+            width = el.offsetWidth - el.clientWidth;
+            height = el.offsetHeight - el.clientHeight;
+
+            $($el).remove();
+
+            return {
+                width: width,
+                height: height
+            };
+        }()),
+
+        /**
+         * Returns an object containing the width and height of the default
+         * scroll bar sizes.
+         *
+         * @public
+         * @method getScrollBarSize
+         * @returns {Object} The width/height pair of the scroll bar size.
+         */
+        getScrollBarSize: function () {
+            return $.extend({}, this._scrollBarSize);
+        },
+
+        /**
+         * Returns the default scroll bar width of the browser.
+         *
+         * @public
+         * @method getScrollBarWidth
+         * @returns {Number} Width of the default browser scroll bar.
+         */
+        getScrollBarWidth: function () {
+            return this._scrollBarSize.width;
+        },
+
+        /**
+         * Returns the default scroll bar width of the browser.
+         *
+         * @public
+         * @method getScrollBarHeight
+         * @returns {Number} Height of the default browser scroll bar.
+         */
+        getScrollBarHeight: function () {
+            return this._scrollBarSize.height;
+        },
+
+        /**
          * matchMedia() polyfill
          * Test a CSS media type/query in JS.
          * Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas, David Knight.

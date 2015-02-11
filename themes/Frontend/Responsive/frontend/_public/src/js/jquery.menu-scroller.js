@@ -170,6 +170,15 @@
              */
             me.$list = me.$el.find(opts.listSelector);
 
+            /**
+             * The offset based on the current scroll bar height of the list.
+             *
+             * @private
+             * @property scrollBarOffset
+             * @type {Number}
+             */
+            me.scrollBarOffset = 0;
+
             // Initializes the template by adding classes to the existing elements and creating the buttons
             me.initTemplate();
 
@@ -196,19 +205,13 @@
             var me = this,
                 opts = me.opts,
                 $el = me.$el,
-                $list = me.$list,
-                scrollBarOffset;
+                $list = me.$list;
 
             $el.addClass(opts.wrapperClass);
 
             $list.addClass(opts.listClass);
 
-            scrollBarOffset = Math.abs($list[0].scrollHeight - $list.height()) * -1;
-
-            $list.css({
-                'bottom': scrollBarOffset,
-                'margin-top': scrollBarOffset
-            });
+            me.updateScrollBarOffset();
 
             // Add the item class to every list item
             $list.children().addClass(opts.itemClass);
@@ -228,6 +231,25 @@
                 }),
                 'class': opts.rightArrowClass
             }).appendTo($el);
+        },
+
+        /**
+         * Creates all needed control items and adds plugin classes
+         *
+         * @public
+         * @method initTemplate
+         */
+        updateScrollBarOffset: function () {
+            var me = this,
+                $list = me.$list,
+                offset;
+
+            offset = me.scrollBarOffset = Math.min(Math.abs($list[0].scrollHeight - $list.height()) * -1, me.scrollBarOffset);
+
+            $list.css({
+                'bottom': offset,
+                'margin-top': offset
+            });
         },
 
         /**
@@ -260,6 +282,8 @@
             var me = this,
                 opts = me.opts,
                 viewPortWidth = me.$el.width();
+
+            me.updateScrollBarOffset();
 
             if (opts.scrollStep === 'auto') {
                 me.scrollStep = viewPortWidth / 2;
