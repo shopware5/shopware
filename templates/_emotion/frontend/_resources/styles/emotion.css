@@ -3260,8 +3260,18 @@ div.agb_accept input {margin: 3px 0;}
     max-width: 100%;
 }
 #content .blogdetail .thumbnail_box {float: right; width: 299px;}
-#content .blogdetail .thumbnail_box a {border: 1px solid #dfdfdf;margin: 0 10px 10px 0;}
+#content .blogdetail .thumbnail_box a {border: 1px solid #dfdfdf;margin: 0 10px 10px 0; position: relative;}
 #content .blogdetail .thumbnail_box a:hover {border-color: #e1540f;}
+#content .blogdetail .thumbnail_box a img {
+    max-height: 100%;
+    max-width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+}
 
 #content .blogdetail #commentcontainer ul {width: 936px;}
 #content .blogdetail #commentcontainer .comment_right { width:756px; }
