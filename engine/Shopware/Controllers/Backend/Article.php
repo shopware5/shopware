@@ -3160,7 +3160,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getTaxRate(Shopware\Models\Article\Article $article, \Shopware\Models\Customer\Group $group) {
         $tax = $article->getTax();
         $sql = "SELECT tax FROM s_core_tax_rules WHERE active = 1 AND groupID = ? AND customer_groupID = ? LIMIT 1";
-        $params = [$tax->getId(), $group->getId()];
+        $params = array($tax->getId(), $group->getId());
         $res = Shopware()->Db()->fetchOne($sql, $params);
         $taxRate = $res ? floatval($res) : null;
         //use default tax rates if no rules are defined for the supplied customer group
