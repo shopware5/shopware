@@ -3137,8 +3137,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                $taxRate = $this->getTaxRate($article, $customerGroup);
+                $priceData['price'] = $priceData['price'] / (100 + $taxRate) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $taxRate) * 100;
             }
 
             //resolve the oneToMany association of ExtJs to an oneToOne association for doctrine.
@@ -3150,6 +3151,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return $prices;
     }
+
+    /**
+     * @param \Shopware\Models\Article\Article $article
+     * @param \Shopware\Models\Customer\Group $group
+     * @return float
+     */
+    protected function getTaxRate(Shopware\Models\Article\Article $article, \Shopware\Models\Customer\Group $group) {
+        $tax = $article->getTax();
+        $sql = "SELECT tax FROM s_core_tax_rules WHERE active = 1 AND groupID = ? AND customer_groupID = ? LIMIT 1";
+        $params = [$tax->getId(), $group->getId()];
+        $res = Shopware()->Db()->fetchOne($sql, $params);
+        $taxRate = $res ? floatval($res) : null;
+        //use default tax rates if no rules are defined for the supplied customer group
+        if($taxRate === null) {
+            $taxRate = $tax->getTax();
+        }
+        return $taxRate;
+    }
+
 
     /**
      * Prepares the link data of the article.
