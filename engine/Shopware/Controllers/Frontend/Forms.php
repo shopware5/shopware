@@ -269,6 +269,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $mail->AddAddress($content["email"], "");
 
+        $mail = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Froms_commitForm_Mail', $mail, array('subject' => $this));
+
         if (!$mail->Send()) {
             throw new Enlight_Exception("Could not send mail");
         }
