@@ -352,8 +352,10 @@
                     me.removeActiveFilter(key);
                     me.resetFilterProperty(key);
                 });
-
-                me.applyCategoryParams();
+                
+                if (!me.$filterCont.hasClass(me.opts.collapsedCls)) {
+                    me.applyCategoryParams();
+                }
 
             } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.removeActiveFilter(param);
