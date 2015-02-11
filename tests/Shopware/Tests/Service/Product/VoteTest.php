@@ -17,8 +17,8 @@ class VoteTest extends TestCase
         $points = array(1,2,2,3,3);
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service_core')->get($number, $context);
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service_core')->get($listProduct, $context);
+        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->get($listProduct, $context);
 
         $this->assertCount(5, $votes);
 
@@ -39,8 +39,8 @@ class VoteTest extends TestCase
         $points = array(1,2,2,3,3,3,3,3);
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service_core')->get($number, $context);
-        $voteAverage = Shopware()->Container()->get('shopware_storefront.vote_service_core')->getAverage($listProduct, $context);
+        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $voteAverage = Shopware()->Container()->get('shopware_storefront.vote_service')->getAverage($listProduct, $context);
 
         $this->assertEquals(5, $voteAverage->getAverage());
 

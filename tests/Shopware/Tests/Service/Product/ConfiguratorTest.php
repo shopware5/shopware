@@ -57,7 +57,7 @@ class ConfiguratorTest extends TestCase
         $this->helper->createArticle($productData);
 
         foreach ($productData['variants'] as $testVariant) {
-            $product = Shopware()->Container()->get('shopware_storefront.product_service_core')
+            $product = Shopware()->Container()->get('shopware_storefront.product_service')
                 ->get($testVariant['number'], $context);
 
             $this->assertCount(3, $product->getConfiguration());
@@ -80,10 +80,10 @@ class ConfiguratorTest extends TestCase
 
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
-        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service_core')
+        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, array());
 
         $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set', $configurator);
@@ -117,14 +117,14 @@ class ConfiguratorTest extends TestCase
 
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
         $selection = $this->createSelection($product, array(
             'rot', 'L'
         ));
 
-        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service_core')
+        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, $selection);
 
         foreach ($configurator->getGroups() as $group) {
@@ -182,21 +182,21 @@ class ConfiguratorTest extends TestCase
             )
         );
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service_core')
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
         $selection = $this->createSelection($product, array('rot'));
-        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service_core')
+        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, $selection);
         $this->assertInactiveOptions($configurator, array('L'));
 
         $selection = $this->createSelection($product, array('L'));
-        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service_core')
+        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, $selection);
         $this->assertInactiveOptions($configurator, array('rot'));
 
         $selection = $this->createSelection($product, array('blau', 'rund'));
-        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service_core')
+        $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, $selection);
 
         $this->assertInactiveOptions($configurator, array('M', 'S'));

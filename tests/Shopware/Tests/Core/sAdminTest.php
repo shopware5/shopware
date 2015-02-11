@@ -1116,8 +1116,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetCountryTranslation();
         $this->assertCount(2, $result);
@@ -1151,7 +1151,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1192,8 +1192,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetDispatchTranslation();
         $this->assertCount(2, $result);
@@ -1233,7 +1233,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1283,8 +1283,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId(2);
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetPaymentTranslation();
         $this->assertCount(5, $result);
@@ -1325,7 +1325,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setId($shopId);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1377,8 +1377,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('California', $result[24]['name']);
 
         // Create a stub of a Shop for fallback.
-        $shopFallbackId = Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->getFallbackId();
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setFallbackId(10000);
+        $shopFallbackId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getFallbackId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId(10000);
 
         Shopware()->Db()->insert('s_core_translations', array(
             'objectkey' => 1,
@@ -1414,7 +1414,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
         Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
 
-        Shopware()->Container()->get('shopware_storefront.context_service_core')->getShopContext()->getShop()->setFallbackId($shopFallbackId);
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId($shopFallbackId);
     }
 
     /**
