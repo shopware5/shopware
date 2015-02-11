@@ -51,36 +51,40 @@
             });
 
             // Ajax request for adding article to compare list
-            $.get(addArticleUrl, function(data) {
-                var compareMenu = $(me.opts.compareMenuSelector);
+            $.ajax({
+                'url': addArticleUrl,
+                'dataType': 'jsonp',
+                'success': function(data) {
+                    var compareMenu = $(me.opts.compareMenuSelector);
 
-                if (compareMenu.hasClass(me.opts.hiddenCls)) {
-                    compareMenu.removeClass(me.opts.hiddenCls);
-                }
+                    if (compareMenu.hasClass(me.opts.hiddenCls)) {
+                        compareMenu.removeClass(me.opts.hiddenCls);
+                    }
 
-                // Check if error thrown
-                if (data.indexOf('data-max-reached="true"') !== -1) {
+                    // Check if error thrown
+                    if (data.indexOf('data-max-reached="true"') !== -1) {
 
-                    $.loadingIndicator.close(function() {
+                        $.loadingIndicator.close(function() {
 
-                        $.modal.open(data, {
-                            sizing: 'content'
+                            $.modal.open(data, {
+                                sizing: 'content'
+                            });
                         });
-                    });
 
-                    return;
+                        return;
+                    }
+
+                    compareMenu.html(data);
+
+                    // Reload compare menu plugin
+                    $('*[data-product-compare-menu="true"]').productCompareMenu();
+
+                    // Prevent too fast closing of loadingIndicator and overlay
+                    $.loadingIndicator.close(function() {
+                        $('html, body').animate({ scrollTop: ($('.top-bar').offset().top)}, 'slow');
+                        $.overlay.close();
+                    })
                 }
-
-                compareMenu.html(data);
-
-                // Reload compare menu plugin
-                $('*[data-product-compare-menu="true"]').productCompareMenu();
-
-                // Prevent too fast closing of loadingIndicator and overlay
-                $.loadingIndicator.close(function() {
-                    $('html, body').animate({ scrollTop: ($('.top-bar').offset().top)}, 'slow');
-                    $.overlay.close();
-                });
             });
         },
 

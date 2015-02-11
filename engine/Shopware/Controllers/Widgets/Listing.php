@@ -147,6 +147,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function ajaxListingAction()
     {
+        Enlight()->Plugins()->Controller()->Json()->setPadding();
+
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
         $mapper->replaceShortRequestQueries($this->Request());

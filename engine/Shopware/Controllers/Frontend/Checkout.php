@@ -1354,6 +1354,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAmountAction()
     {
+        Enlight()->Plugins()->Controller()->Json()->setPadding();
+
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
 
@@ -1364,16 +1366,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-            $cart['amount'] = Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl');
-            $cart['quantity'] = $quantity;
-
-            $this->Response()->setBody(json_encode($cart));
-            $this->Response()->setHeader('Content-type', 'application/json', true);
-
-            return;
+            $this->Response()->setBody(
+                json_encode(
+                    [
+                        'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
+                        'quantity' => $quantity
+                    ]
+                )
+            );
         }
-
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
     }
 
     /**
