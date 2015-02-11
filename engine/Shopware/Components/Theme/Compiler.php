@@ -591,7 +591,7 @@ class Compiler
     private function formatPathToUrl(Shop\Shop $shop, $path)
     {
         $path = str_replace($this->rootDir, '', $path);
-        $path = '//' . $shop->getHost() . $shop->getBasePath() . $path;
+        $path = $shop->getBasePath() . $path;
         return $path;
     }
 
