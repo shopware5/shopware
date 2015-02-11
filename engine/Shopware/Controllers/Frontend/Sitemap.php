@@ -308,7 +308,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getSupplierForSitemap()
     {
-        $context = $this->get('shopware_storefront.context_service_core')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
         /**@var $query QueryBuilder */
@@ -325,7 +325,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /**@var $statement PDOStatement */
         $statement = $query->execute();
 
-        $suppliers = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $suppliers;
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }
