@@ -35,6 +35,7 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         { name: 'capabilityInstall',  type: 'boolean',  defaultValue: false },
         { name: 'capabilitySecureUninstall',  type: 'boolean',  defaultValue: false },
         { name: 'capabilityUpdate',   type: 'boolean',  defaultValue: false },
+        { name: 'localUpdateAvailable',   type: 'boolean',  defaultValue: false },
         { name: 'capabilityActivate', type: 'boolean',  defaultValue: false },
         { name: 'useContactForm',     type: 'boolean',  defaultValue: false },
         { name: 'formId',             type: 'int', useNull: true, defaultValue: null },
@@ -90,6 +91,9 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         return (this.get('capabilitySecureUninstall'));
     },
 
+    allowLocalUpdate: function() {
+        return this.get('localUpdateAvailable');
+    },
 
     allowReinstall: function () {
         return (

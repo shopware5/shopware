@@ -365,6 +365,19 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             }
         });
 
+        items.push({
+            iconCls: 'sprite-arrow-circle-225-left',
+            tooltip: '{s name="local_update"}{/s}',
+            handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                me.executePluginUpdateEvent(record);
+            },
+            getClass: function(value, metaData, record) {
+                if (!record.allowLocalUpdate()) {
+                    return Ext.baseCSSPrefix + 'hidden';
+                }
+            }
+        });
+
         return items;
     }
 });

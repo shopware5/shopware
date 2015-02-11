@@ -217,6 +217,11 @@ class PluginStruct implements \JsonSerializable
     private $licence;
 
     /**
+     * @var bool
+     */
+    private $localUpdateAvailable = false;
+
+    /**
      * @param string $technicalName
      */
     public function __construct($technicalName)
@@ -806,5 +811,21 @@ class PluginStruct implements \JsonSerializable
     public function setCapabilitySecureUninstall($capabilitySecureUninstall)
     {
         $this->capabilitySecureUninstall = $capabilitySecureUninstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isLocalUpdateAvailable()
+    {
+        return $this->localUpdateAvailable;
+    }
+
+    /**
+     * @param boolean $localUpdateAvailable
+     */
+    public function setLocalUpdateAvailable($localUpdateAvailable)
+    {
+        $this->localUpdateAvailable = $localUpdateAvailable;
     }
 }

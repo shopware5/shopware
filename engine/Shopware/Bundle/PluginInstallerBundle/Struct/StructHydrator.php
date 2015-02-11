@@ -424,6 +424,7 @@ class StructHydrator
         $plugin->setCapabilityUpdate((bool) $data['capability_update']);
         $plugin->setCapabilityInstall((bool) $data['capability_install']);
         $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
+        $plugin->setLocalUpdateAvailable(($data['update_version'] !== null));
 
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);
