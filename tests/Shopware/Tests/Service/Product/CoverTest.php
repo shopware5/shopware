@@ -135,9 +135,9 @@ class CoverTest extends TestCase
             ->will($this->returnValue(true));
 
         $mediaService = new MediaService(
-            Shopware()->Container()->get('shopware_storefront.media_gateway_dbal'),
-            Shopware()->Container()->get('shopware_storefront.product_media_gateway_dbal'),
-            Shopware()->Container()->get('shopware_storefront.variant_media_gateway_dbal'),
+            Shopware()->Container()->get('shopware_storefront.media_gateway'),
+            Shopware()->Container()->get('shopware_storefront.product_media_gateway'),
+            Shopware()->Container()->get('shopware_storefront.variant_media_gateway'),
             $config
         );
 
