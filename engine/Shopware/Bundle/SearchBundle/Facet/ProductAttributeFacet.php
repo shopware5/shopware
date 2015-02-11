@@ -33,11 +33,10 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
  */
 class ProductAttributeFacet implements FacetInterface
 {
-    const MODE_NOT_EMPTY = 'not_null';
-
-    const MODE_EMPTY = 'null';
-
-    const MODE_VALUES = 'values';
+    const MODE_VALUE_LIST_RESULT = 'value_list';
+    const MODE_RADIO_LIST_RESULT = 'radio';
+    const MODE_BOOLEAN_RESULT = 'boolean';
+    const MODE_RANGE_RESULT = 'range';
 
     /**
      * @var string
@@ -50,13 +49,39 @@ class ProductAttributeFacet implements FacetInterface
     private $mode;
 
     /**
-     * @param $field
-     * @param string $mode
+     * @var string
      */
-    public function __construct($field, $mode = self::MODE_VALUES)
-    {
+    private $formFieldName;
+
+    /**
+     * @var string
+     */
+    private $label;
+
+    /**
+     * @var string|null
+     */
+    private $template = null;
+
+    /**
+     * @param string $field
+     * @param string $mode
+     * @param string string $formFieldName
+     * @param string $label
+     * @param string|null $template
+     */
+    public function __construct(
+        $field,
+        $mode = self::MODE_VALUE_LIST_RESULT,
+        $formFieldName,
+        $label,
+        $template = null
+    ) {
         $this->field = $field;
         $this->mode = $mode;
+        $this->formFieldName = $formFieldName;
+        $this->label = $label;
+        $this->template = $template;
     }
 
     /**
@@ -97,5 +122,29 @@ class ProductAttributeFacet implements FacetInterface
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormFieldName()
+    {
+        return $this->formFieldName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }

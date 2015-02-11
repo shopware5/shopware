@@ -71,38 +71,53 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
         }
 
         $placeholder = ':' . $condition->getField();
+        $field = 'productAttribute.' . $condition->getField();
 
         switch (true) {
             case ($condition->getValue() === null):
                 if ($condition->getOperator() === ProductAttributeCondition::OPERATOR_EQ) {
-                    $query->andWhere('productAttribute.' . $condition->getField() . ' IS NULL');
+                    $query->andWhere($field . ' IS NULL');
                 } else {
-                    $query->andWhere('productAttribute.' . $condition->getField() . ' IS NOT NULL');
+                    $query->andWhere($field . ' IS NOT NULL');
                 }
                 break;
 
             case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_IN):
-                $query->andWhere('productAttribute.' . $condition->getField() . ' IN ('. $placeholder . ')');
+                $query->andWhere($field . ' IN ('. $placeholder . ')');
                 $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);
                 break;
 
             case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_CONTAINS):
-                $query->andWhere('productAttribute.' . $condition->getField() . ' LIKE ' . $placeholder);
+                $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, '%' . $condition->getValue() . '%');
                 break;
 
+            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_BETWEEN):
+                $value = $condition->getValue();
+
+                if (isset($value['min'])) {
+                    $query->andWhere($field . ' >= ' . $placeholder . 'Min')
+                        ->setParameter($placeholder . 'Min', $value['min']);
+                }
+
+                if (isset($value['max'])) {
+                    $query->andWhere($field . ' <= ' . $placeholder . 'Max')
+                        ->setParameter($placeholder . 'Max', $value['max']);
+                }
+
+                break;
             case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_STARTS_WITH):
-                $query->andWhere('productAttribute.' . $condition->getField() . ' LIKE ' . $placeholder);
+                $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, $condition->getValue() . '%');
                 break;
 
             case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_ENDS_WITH):
-                $query->andWhere('productAttribute.' . $condition->getField() . ' LIKE ' . $placeholder);
+                $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, '%' . $condition->getValue());
                 break;
 
             default:
-                $query->andWhere('productAttribute.' . $condition->getField() . ' ' . $condition->getOperator() . ' ' . $placeholder);
+                $query->andWhere($field . ' ' . $condition->getOperator() . ' ' . $placeholder);
                 $query->setParameter($placeholder, $condition->getValue());
                 break;
         }
