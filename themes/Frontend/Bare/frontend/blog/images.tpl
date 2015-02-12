@@ -12,7 +12,7 @@
             {/if}
 
 			<div class="blog--detail-images block">
-				<a href="{$sArticle.preview.thumbnails[2].source}"
+				<a href="{$sArticle.preview.thumbnails[2].retinaSource}"
                    data-lightbox="true"
 				   title="{$alt}"
 				   class="link--blog-image">
