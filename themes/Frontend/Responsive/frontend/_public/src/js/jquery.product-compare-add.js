@@ -26,7 +26,7 @@
             var me = this;
 
             // On add article to compare button
-            me._on(me.$el, 'click', $.proxy(me.onAddArticleCompare, me));
+            me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
         },
 
         /**
@@ -37,7 +37,8 @@
          */
         onAddArticleCompare: function (event) {
             var me = this,
-                addArticleUrl = me.$el.attr('href');
+                $target = $(event.target),
+                addArticleUrl = $target.attr('href');
 
             event.preventDefault();
 
@@ -86,6 +87,8 @@
 
         /** Destroys the plugin */
         destroy: function () {
+            this.$el.off(this.getEventName('click'));
+
             this._destroy();
         }
     });
