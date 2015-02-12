@@ -29,10 +29,6 @@
 
 table[id^=numberfield] {
 
-	td.#{$prefix}form-item-body {
-		display: table-cell;
-	}
-
 	table.#{$prefix}form-trigger-wrap tbody tr td:nth-child(2n) {
 		width: 19px !important;
 	}
