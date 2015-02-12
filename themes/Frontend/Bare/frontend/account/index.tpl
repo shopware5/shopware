@@ -98,7 +98,7 @@
 						<p>
 							<strong>{$sUserData.additional.payment.description}</strong><br />
 
-							{if !$sUserData.additional.payment.esdactive}
+							{if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
 								{s name="AccountInfoInstantDownloads"}{/s}
 							{/if}
 						</p>
