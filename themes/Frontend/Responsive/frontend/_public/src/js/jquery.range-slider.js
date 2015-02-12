@@ -125,9 +125,14 @@
             maxLabelElSelector: '*[data-range-label="max"]',
 
             /**
-             * The selector for the element which holds the currency format.
+             * An example string for the format of the value label.
              */
-            currencyHelperSelector: '*[data-range-currency]',
+            labelFormat: '',
+
+            /**
+             * Turn pretty rounding for cleaner steps on and off.
+             */
+            roundPretty: false,
 
             /**
              * The min value which the slider should show on start.
@@ -165,9 +170,6 @@
 
             me.$minLabel = me.$el.find(me.opts.minLabelElSelector);
             me.$maxLabel = me.$el.find(me.opts.maxLabelElSelector);
-
-            me.$currencyHelper = me.$el.find(me.opts.currencyHelperSelector);
-            me.currencyFormat = me.$currencyHelper.attr('data-range-currency');
 
             me.dragState = false;
             me.dragType = 'min';
@@ -232,8 +234,13 @@
         computeBaseValues: function() {
             var me = this;
 
-            me.minRange = roundPretty(int(me.opts.rangeMin), 'floor');
-            me.maxRange = roundPretty(int(me.opts.rangeMax), 'ceil');
+            me.minRange = int(me.opts.rangeMin);
+            me.maxRange = int(me.opts.rangeMax);
+
+            if (me.opts.roundPretty) {
+                me.minRange = roundPretty(me.minRange, 'floor');
+                me.maxRange = roundPretty(me.maxRange, 'ceil');
+            }
 
             me.range = me.maxRange - me.minRange;
             me.stepSize = me.range / int(me.opts.stepCount);
@@ -377,7 +384,7 @@
             var me = this;
 
             if (me.$minInputEl.length) {
-                me.$minInputEl.val(value)
+                me.$minInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
             }
@@ -387,7 +394,7 @@
             var me = this;
 
             if (me.$maxInputEl.length) {
-                me.$maxInputEl.val(value)
+                me.$maxInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
             }
@@ -397,7 +404,7 @@
             var me = this;
 
             if (me.$minLabel.length) {
-                me.$minLabel.html(me.formatPrice(value));
+                me.$minLabel.html(me.formatValue(value));
             }
         },
 
@@ -405,7 +412,7 @@
             var me = this;
 
             if (me.$maxLabel.length) {
-                me.$maxLabel.html(me.formatPrice(value));
+                me.$maxLabel.html(me.formatValue(value));
             }
         },
 
@@ -418,21 +425,21 @@
             me.updateMaxLabel(max);
         },
 
-        formatPrice: function(value) {
+        formatValue: function(value) {
             var me = this;
 
-            if (me.currencyFormat == '') {
-                return value;
+            if (!me.opts.labelFormat.length) {
+                return value.toFixed(2);
             }
 
             value = Math.round(value * 100) / 100;
             value = value.toFixed(2);
 
-            if (me.currencyFormat.indexOf('0.00') > 0) {
-                value = me.currencyFormat.replace('0.00', value);
+            if (me.opts.labelFormat.indexOf('0.00') > 0) {
+                value = me.opts.labelFormat.replace('0.00', value);
             } else {
                 value = value.replace('.', ',');
-                value = me.currencyFormat.replace('0,00', value);
+                value = me.opts.labelFormat.replace('0,00', value);
             }
 
             return value;

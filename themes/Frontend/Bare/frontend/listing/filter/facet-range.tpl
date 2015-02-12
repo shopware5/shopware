@@ -21,16 +21,27 @@
 				{block name="frontend_listing_filter_facet_range_content"}
 					<div class="filter-panel--content">
 
-						{$startMin = $facet->getActiveMin()}
-						{$startMax = $facet->getActiveMax()}
-
 						{block name="frontend_listing_filter_facet_range_slider"}
+
+                            {block name="frontend_listing_filter_facet_range_slider_config"}
+                                {$startMin = $facet->getActiveMin()}
+                                {$startMax = $facet->getActiveMax()}
+                                {$rangeMin = $facet->getMin()}
+                                {$rangeMax = $facet->getMax()}
+                                {$roundPretty = 'false'}
+                                {$format = ''}
+                                {$stepCount = 20}
+                            {/block}
+
 							<div class="range-slider"
 								 data-range-slider="true"
+                                 data-roundPretty="{$roundPretty}"
+                                 data-labelFormat="{$format}"
+                                 data-stepCount="{$stepCount}"
 								 data-startMin="{$startMin}"
 								 data-startMax="{$startMax}"
-								 data-rangeMin="{$facet->getMin()}"
-								 data-rangeMax="{$facet->getMax()}">
+								 data-rangeMin="{$rangeMin}"
+								 data-rangeMax="{$rangeMax}">
 
 								{block name="frontend_listing_filter_facet_range_input_min"}
 									<input type="hidden"
@@ -46,10 +57,6 @@
 										   name="{$facet->getMaxFieldName()}"
 										   data-range-input="max"
 										   value="{$startMax}" {if !$facet->isActive() || $startMax == 0}disabled="disabled" {/if}/>
-								{/block}
-
-								{block name="frontend_listing_filter_facet_range_format_helper"}
-									<div class="range-slider--currency" data-range-currency=""></div>
 								{/block}
 
 								{block name="frontend_listing_filter_facet_range_info"}

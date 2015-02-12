@@ -222,7 +222,7 @@
 
             me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
-            me.$el.delegate('.' + me.opts.activeFilterCls, 'click', $.proxy(me.onActiveFilterClick, me));
+            me.$el.delegate('.' + me.opts.activeFilterCls, me.getEventName('click'), $.proxy(me.onActiveFilterClick, me));
         },
 
         /**
@@ -721,17 +721,19 @@
         resetFilterProperty: function(param) {
             var me = this;
 
-            if (param == 'min' || param == 'max') {
-                var rangeSlider = me.$el.find('[data-range-slider="true"]').data('plugin_rangeSlider');
-                    rangeSlider.reset(param);
-
-            } else if (param == 'rating') {
+            if (param == 'rating') {
                 me.$el.find('#star--reset').prop('checked', true).trigger('change');
+                return;
+            }
+
+            var $input = me.$el.find('[name="'+param+'"]');
+
+            if ($input.is('[data-range-input]')) {
+                var rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_rangeSlider');
+                    rangeSlider.reset($input.attr('data-range-input'));
 
             } else {
-                me.$el.find('[name="'+param+'"]')
-                    .removeAttr('checked')
-                    .trigger('change');
+                $input.removeAttr('checked').trigger('change');
             }
         },
 
@@ -754,7 +756,7 @@
             } else {
                 $label = me.$filterForm.find('label[for="'+param+'"]');
 
-                if (param == 'min' || param == 'max') {
+                if ($label.is('[data-range-label]')) {
                     labelText = $label.prev('span').html() + $label.html();
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
@@ -834,7 +836,7 @@
         destroy: function() {
             var me = this;
 
-            me.$el.undelegate('.' + me.opts.activeFilterCls, 'click');
+            me.$el.undelegate('.' + me.opts.activeFilterCls, me.getEventName('click'));
 
             me._destroy();
         }
