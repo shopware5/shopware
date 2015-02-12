@@ -273,10 +273,10 @@
 				{block name="frontend_account_index_primary_shipping_actions"}
 					<div class="panel--actions is--wide">
 						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--small">
-							{se name="AccountLinkSelectShipping"}{/se}
+							{s name="AccountLinkSelectShipping"}{/s}
 						</a>
 						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--small">
-							{se name="AccountLinkChangeShipping"}{/se}
+							{s name="AccountLinkChangeShipping"}{/s}
 						</a>
 					</div>
 				{/block}

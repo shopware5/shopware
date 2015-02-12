@@ -2,7 +2,7 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}"]]}
+	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}{/s}"]]}
 {/block}
 
 {* Main content *}
@@ -42,7 +42,7 @@
 
 			{block name='frontend_search_headline'}
 				<h1 class="search--headline">
-					{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount}{/s}
+					{s name='SearchHeadline'}{/s}
 				</h1>
 			{/block}
 

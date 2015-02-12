@@ -33,7 +33,7 @@
 								<input type="checkbox" class="sValueChanger chkbox" name="sValueChange"
 									   id="CHECK{$sAccessoryChild.ordernumber}" value="{$sAccessoryChild.ordernumber}"/>
 								<label for="CHECK{$sAccessoryChild.ordernumber}">{$sAccessoryChild.optionname|truncate:35}
-									({se name="DetailBuyLabelSurcharge"}{/se}
+									({s name="DetailBuyLabelSurcharge"}{/s}
 									: {$sAccessoryChild.price} {$sConfig.sCURRENCYHTML})
 								</label>
 								<div id="DIV{$sAccessoryChild.ordernumber}" class="accessory--overlay">

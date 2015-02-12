@@ -1,4 +1,4 @@
-<h2 class="headingbox largesize">{se name="AccountHeaderNavigation"}{/se}</h2>
+<h2 class="headingbox largesize">{s name="AccountHeaderNavigation"}{/s}</h2>
 <div class="adminbox">
 	{block name="frontend_account_content_right_start"}
 	{/block}
@@ -7,7 +7,7 @@
 		{* Overview *}
 		<li>
 			<a href="{url controller='account'}">
-				{se name="AccountLinkOverview"}{/se}
+				{s name="AccountLinkOverview"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -15,7 +15,7 @@
 		{* My orders *}
 		<li>
 			<a href="{url controller='account' action='orders'}">
-				{se name="AccountLinkPreviousOrders"}{/se}
+				{s name="AccountLinkPreviousOrders"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -23,7 +23,7 @@
 		{* My esd articles *}
 		<li>
 			<a href="{url controller='account' action='downloads'}">
-				{se name="AccountLinkDownloads"}{/se}
+				{s name="AccountLinkDownloads"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -31,7 +31,7 @@
 		{* Change billing address *}
 		<li>
 			<a href="{url controller='account' action='billing'}">
-				{se name="AccountLinkBillingAddress"}{/se}
+				{s name="AccountLinkBillingAddress"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -39,7 +39,7 @@
 		{* Change shipping address *}
 		<li>
 			<a href="{url controller='account' action='shipping'}">
-				{se name="AccountLinkShippingAddress"}{/se}
+				{s name="AccountLinkShippingAddress"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -47,7 +47,7 @@
 		{* Change payment method *}
 		<li>
 			<a href="{url controller='account' action='payment'}">
-				{se name="AccountLinkPayment"}{/se}
+				{s name="AccountLinkPayment"}{/s}
 			</a>
 		</li>		
 	{/block}
@@ -56,7 +56,7 @@
 		{if $sTicketLicensed}
 			<li>
 				<a href="{url controller='ticket' action='listing'}">
-					{se name="sTicketSysSupportManagement"}{/se}
+					{s name="sTicketSysSupportManagement"}{/s}
 				</a>
 			</li>
 			
@@ -67,7 +67,7 @@
 		{* Leaflet *}
 		<li>
 			<a href="{url controller='note'}">
-				{se name="AccountLinkNotepad"}{/se}
+				{s name="AccountLinkNotepad"}{/s}
 			</a>
 		</li>
 	{/block}
@@ -78,7 +78,7 @@
 		{* Logout *}
 		<li class="last">
 			<a href="{url controller='account' action='logout'}" class="logout">
-				{se name="AccountLinkLogout"}{/se}
+				{s name="AccountLinkLogout"}{/s}
 			</a>
 		</li>
 	{/block}
