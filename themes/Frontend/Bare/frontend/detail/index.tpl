@@ -144,7 +144,7 @@
                     {/block}
 
                     {block name='frontend_detail_buy_laststock'}
-                        {if !$sArticle.isAvailable}
+                        {if !$sArticle.isAvailable && $sArticle.isSelectionSpecified}
                             {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
                         {/if}
                     {/block}
