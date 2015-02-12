@@ -71,13 +71,13 @@
 
     .button-container {
         .unitize(16, 16, font-size);
-        .unitize-padding(20, 30);
+        .unitize-padding(20, 30, 20, 0);
         background: @text-color-dark;
         color: @btn-secondary-text-color;
         font-weight: bold;
 
         .button--category {
-            .unitize-padding(20, 20);
+            .unitize-padding(20, 50);
             color: @btn-secondary-text-color;
             position: relative;
         }
@@ -87,7 +87,7 @@
             .unitize(-6, 16, margin-top);
             position: absolute;
             top: 50%;
-            right: 0;
+            .unitize(30, 16, right);
         }
 
         .button--close {
