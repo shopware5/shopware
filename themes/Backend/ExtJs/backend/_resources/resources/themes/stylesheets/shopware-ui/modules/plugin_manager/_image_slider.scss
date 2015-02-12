@@ -3,9 +3,14 @@
     border: 1px solid #c4c4c4;
     border-radius: 5px;
 
+    .preview-container.default-icon {
+        img {
+            margin-top: 125px;
+        }
+    }
+
     .preview-container {
         padding: 10px;
-
         background: #fff;
 
         img {
