@@ -3137,7 +3137,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             if ($customerGroup->getTaxInput()) {
-                $taxRate = $this->getTaxRate($article, $customerGroup);
+                $taxRate = $this->getTaxRate($customerGroup, $tax);
                 $priceData['price'] = $priceData['price'] / (100 + $taxRate) * 100;
                 $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $taxRate) * 100;
             }
@@ -3153,13 +3153,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $article
      * @param \Shopware\Models\Customer\Group $group
+     * @param \Shopware\Models\Tax\Tax $tax
      * @return float
      */
-    protected function getTaxRate(Shopware\Models\Article\Article $article, \Shopware\Models\Customer\Group $group)
+    protected function getTaxRate(\Shopware\Models\Customer\Group $group, \Shopware\Models\Tax\Tax $tax)
     {
-        $tax = $article->getTax();
         $sql = "SELECT tax FROM s_core_tax_rules WHERE active = 1 AND groupID = ? AND customer_groupID = ? LIMIT 1";
         $params = array($tax->getId(), $group->getId());
         $res = Shopware()->Db()->fetchOne($sql, $params);
