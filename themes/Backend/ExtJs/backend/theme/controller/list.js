@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
 
         if (activeTheme && activeTheme.get('version') == 2 && theme.get('version') == 3) {
             Shopware.Notification.createStickyGrowlMessage({
-                title: '{s name="application"}Theme manager 2.0{/s}',
+                title: '{s name="application"}Theme manager{/s}',
                 text:  '{s name="theme_version_switch"}{/s}'
             });
         }
@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
                 );
 
                 Shopware.Notification.createGrowlMessage(
-                    '{s name="application"}Theme manager 2.0{/s}',
+                    '{s name="application"}Theme manager{/s}',
                     message,
                     'Theme manager'
                 );
