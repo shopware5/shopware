@@ -55,16 +55,17 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         form.submit({
-            onSuccess: function() {
-                Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}{/s}');
+            onSuccess: function(response) {
+                var result = Ext.decode(response.responseText);
 
-                if (Ext.isFunction(callback)) {
-                    callback();
+                if (result.success) {
+                    Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}{/s}');
+                    if (Ext.isFunction(callback)) {
+                        callback();
+                    }
+                } else {
+                    me.displayErrorMessage(result);
                 }
-            },
-            failure: function(form, action) {
-                var response = Ext.decode(action.response.responseText);
-                me.displayErrorMessage(response);
             }
         });
     },
@@ -358,7 +359,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                             callback(response);
                         }
                     );
-
                 }
             );
         });
