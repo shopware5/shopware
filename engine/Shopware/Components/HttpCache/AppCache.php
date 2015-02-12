@@ -289,7 +289,7 @@ class AppCache extends HttpCache
     protected function isPurgeRequestAllowed(Request $request)
     {
         if ($request->server->has('SERVER_ADDR')) {
-            if ($request->server->has('SERVER_ADDR') == $request->getClientIp()) {
+            if ($request->server->get('SERVER_ADDR') == $request->getClientIp()) {
                 return true;
             }
         }
