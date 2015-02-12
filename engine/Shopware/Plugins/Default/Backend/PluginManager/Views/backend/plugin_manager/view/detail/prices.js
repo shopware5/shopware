@@ -105,12 +105,14 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
             html: me.formatPrice(price.get('price')) + ' *'
         });
 
-        items.push({
-            xtype: 'component',
-            cls: 'subscription',
-            html: '<div class="icon">U</div>' +
-            '<div class="text">{s name="subscription_info"}{/s}</div>'
-        });
+        if (price.get('subscription')) {
+            items.push({
+                xtype: 'component',
+                cls: 'subscription',
+                html: '<div class="icon">U</div>' +
+                '<div class="text">{s name="subscription_info"}{/s}</div>'
+            });
+        }
 
         return Ext.create('Ext.container.Container', {
             title: '{s name="buy_version"}{/s}',

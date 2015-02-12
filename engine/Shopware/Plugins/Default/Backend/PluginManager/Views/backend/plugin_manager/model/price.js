@@ -6,6 +6,7 @@ Ext.define('Shopware.apps.PluginManager.model.Price', {
         { name: 'id', type: 'int' },
         { name: 'type', type: 'string' },
         { name: 'duration', type: 'string' },
-        { name: 'price', type: 'float' }
+        { name: 'price', type: 'float' },
+        { name: 'subscription', type: 'boolean' }
     ]
 });
