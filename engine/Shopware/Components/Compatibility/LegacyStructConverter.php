@@ -853,6 +853,7 @@ class LegacyStructConverter
             'ean' => $product->getEan(),
             'keywords' => $product->getKeywords(),
             'sReleasedate' => $product->getReleaseDate(),
+            'template' => $product->getTemplate(),
         );
 
         if ($product->hasAttribute('core')) {
