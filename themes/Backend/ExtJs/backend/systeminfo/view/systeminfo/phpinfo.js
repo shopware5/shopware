@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Phpinfo', {
     * Extend from the standard ExtJS 4
     * @string
     */
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.Container',
 
     ui: 'shopware-ui',
 
@@ -61,6 +61,17 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Phpinfo', {
     * of the view through Ext.widget('systeminfo-main-list')
     * @string
     */
-    alias: 'widget.systeminfo-main-phpinfo'
+    alias: 'widget.systeminfo-main-phpinfo',
+
+    listeners: {
+        'afterrender': function () {
+            var me = this;
+            var win = me.up('window');
+
+            this.getEl().dom.children[0].onload = function () {
+                win.setWidth(win.getWidth() + 1);
+            }
+        }
+    }
 });
 //{/block}
