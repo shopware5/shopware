@@ -233,6 +233,11 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $manufacturerNumber;
 
     /**
+     * @var string
+     */
+    protected $template;
+
+    /**
      * Contains the absolute cheapest price of each product variation.
      * This price is calculated over the shopware price service
      * getCheapestPrice function.
@@ -828,6 +833,22 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setManufacturerNumber($manufacturerNumber)
     {
         $this->manufacturerNumber = $manufacturerNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
     /**
