@@ -81,7 +81,7 @@
                     <div class="blog--comments-summary">
                         <input name="headline"
                                type="text"
-                               placeholder="{s name="BlogLabelSummary"|escape}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                               placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                required="required" aria-required="true"
                                value="{$sFormData.headline|escape}"
                                class="input--field{if $sErrorFlag.headline} has--error{/if}" />
@@ -91,7 +91,7 @@
                 {* Opinion *}
                 {block name='frontend_blog_comments_input_comment'}
                     <div class="blog--comments-opinion">
-                        <textarea name="comment" type="text" placeholder="{s name="BlogLabelComment"|escape}{/s}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">
+                        <textarea name="comment" type="text" placeholder="{"{s name='BlogLabelComment'}{/s}"|escape}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">
                             {$sFormData.comment|escape}
                         </textarea>
                     </div>
