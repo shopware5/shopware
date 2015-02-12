@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
     alias: 'widget.theme-list-window',
     height: '80%',
     width: '75%',
-    title : '{s name=listing}Theme manager 2.0{/s}',
+    title : '{s name=listing}Theme manager{/s}',
     minWidth: 600,
 
 

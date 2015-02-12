@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
         });
 
-        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme Manager 2.0{/s}';
+        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme Manager{/s}';
         me.dropZone.snippets.messageText = '{s name=upload_message}Theme uploaded successfully{/s}';
 
         return me.dropZone;
