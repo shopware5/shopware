@@ -77,6 +77,10 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         });
     },
 
+    executePluginUpdateEvent: function(record, callback) {
+        this.firePluginEvent('execute-plugin-update', record, callback);
+    },
+
     installPluginEvent: function(record) {
         this.firePluginEvent('install-plugin', record);
     },
