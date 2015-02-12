@@ -32,10 +32,16 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
 
         if (me.store && me.store.first()) {
             var first = me.store.first();
+
+            try {
+                me.previewContainer.removeCls('default-icon');
+            } catch (e) { }
+
             me.previewContainer.update(first.data);
         } else {
+            me.previewContainer.addCls('default-icon');
             me.previewContainer.update({
-                link: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}'
+                remoteLink: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}'
             });
         }
 
