@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/listings}Listings{/s}',
                 items: [{
-                    fieldLabel: 'Default listing sorting',
+                    fieldLabel: '{s name=fieldset/categories/text/sort}Default listing sorting{/s}',
                     helpText: '',
                     name: 'categories[defaultListingSorting]',
                     xtype: 'combo',
