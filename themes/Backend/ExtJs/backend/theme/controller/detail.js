@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 
         Shopware.app.Application.on('theme-save-exception', function(controller, data, window, record, form) {
             Shopware.Notification.createGrowlMessage(
-                '{s name="application"}Theme manager 2.0{/s}',
+                '{s name="application"}Theme manager{/s}',
                 data.message,
                 'Theme manager'
             );
@@ -297,7 +297,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         theme.save({
             callback: function() {
                 Shopware.Notification.createGrowlMessage(
-                    '{s name="application"}Theme manager 2.0{/s}',
+                    '{s name="application"}Theme manager{/s}',
                     '{s name="save_message"}Theme configuration saved{/s}',
                     'Theme manager'
                 );
