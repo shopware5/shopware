@@ -652,7 +652,8 @@ class LegacyStructConverter
 
         $data = array(
             'sConfigurator' => $groups,
-            'sConfiguratorSettings' => $settings
+            'sConfiguratorSettings' => $settings,
+            'isSelectionSpecified' => $set->isSelectionSpecified()
         );
 
         return $data;
