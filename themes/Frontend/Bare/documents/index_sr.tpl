@@ -28,7 +28,7 @@
 	  {if $Document.netto == false}
 		  {foreach from=$Order._tax key=key item=tax}
 		  <tr>
-		  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key}{/s}</td>
+		  	<td align="right">{s name="DocumentIndexTax"}{/s}</td>
 		  	<td align="right">{$tax|currency}</td>
 		  </tr>
 		  {/foreach}
@@ -50,6 +50,6 @@
 {/block}
 
 {block name="document_index_head_bottom"}
-	<h1>{s name="DocumentIndexCancelationNumber"}Stornorechnung zur Rechnung Nr. {$Document.bid}{/s}</h1>
-	{s name="DocumentIndexPageCounter"}Seite {$page+1} von {$Pages|@count}{/s}
+	<h1>{s name="DocumentIndexCancelationNumber"}{/s}</h1>
+	{s name="DocumentIndexPageCounter"}{/s}
 {/block}

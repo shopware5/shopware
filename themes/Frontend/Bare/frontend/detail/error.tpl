@@ -5,8 +5,8 @@
 	
    
 	<div id="related">
-        <h2>{se name='DetailRelatedHeader'}{/se}</h2>
-        <h2>{se name='DetailRelatedHeaderSimilarArticles'}{/se}</h2>
+        <h2>{s name='DetailRelatedHeader'}{/s}</h2>
+        <h2>{s name='DetailRelatedHeaderSimilarArticles'}{/s}</h2>
         
         	<div class="listing" id="listing">
 	        {foreach from=$sRelatedArticles item=sArticleSub key=key name="counter"}

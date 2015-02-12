@@ -13,7 +13,7 @@
 
 {block name="document_index_head_bottom"}
 	<h1>{s name="DocumentIndexShippingNumber"}{/s} {$Document.id}</h1>
-	{s name="DocumentIndexPageCounter"}Seite {$page+1} von {$Pages|@count}{/s}
+	{s name="DocumentIndexPageCounter"}{/s}
 {/block}
 {block name="document_index_selectAdress"}
 	{assign var="address" value="shipping"}
