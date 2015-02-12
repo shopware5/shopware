@@ -29,3 +29,6 @@
         {/block}
     </div>
 {/block}
+
+{block name="frontend_listing_index_topseller"}
+{/block}
