@@ -227,7 +227,7 @@ $(function () {
 
     $('*[data-collapse-cart="true"]').collapseCart();
 
-    $('*[data-product-compare-add="true"]').productCompareAdd();
+    $('*[data-compare-ajax="true"]').productCompareAdd();
 
     $('*[data-product-compare-menu="true"]').productCompareMenu();
 
