@@ -238,7 +238,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
                     width: 50,
                     items: [
                         {
-                            iconCls: 'sprite-inbox--plus',
+                            iconCls: 'sprite-inbox',
                             tooltip: '{s name=detail/sidebar/assigned_articles/grid/action/open_articel}Open article{/s}',
                             handler: function (view, rowIndex, colIndex, item, opts, record) {
                                 me.fireEvent('openArticleModule', record);
