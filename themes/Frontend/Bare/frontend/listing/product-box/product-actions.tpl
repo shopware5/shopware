@@ -15,7 +15,7 @@
 
     {* Note button *}
     {block name='frontend_listing_box_article_actions_save'}
-        <a href="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}"
+        <a href="{url controller='note' action='ajaxAdd' ordernumber=$sArticle.ordernumber}"
            title="{"{s name='DetailLinkNotepad' namespace='frontend/detail/actions'}{/s}"|escape}"
            class="product--action action--note"
            data-text="{s name="DetailNotepadMarked"}Gemerkt{/s}"
