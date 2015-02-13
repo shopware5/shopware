@@ -54,27 +54,46 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->forward('index');
     }
 
+    private function addNote($orderNumber)
+    {
+        if (empty($orderNumber)) {
+            return false;
+        }
+
+        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
+        $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
+
+        if (empty($articleID)) {
+            return false;
+        }
+
+        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
+
+        return true;
+    }
+
     public function addAction()
     {
-        $sAddedToNoteSuccessful = false;
-        $ordernumber = $this->Request()->ordernumber;
+        $orderNumber = $this->Request()->getParam('ordernumber');
 
-        if (!empty($ordernumber)) {
-            $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
-            $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
-            $this->View()->sArticleName = $articleName;
-            if (!empty($articleID)) {
-                Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $ordernumber);
-                $sAddedToNoteSuccessful = true;
-                $this->View()->sNotesQuantity = Shopware()->Modules()->Basket()->sCountNotes();
-            }
+        if ($this->addNote($orderNumber)) {
+            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
         }
 
-        if ($this->Request()->isXmlHttpRequest()) {
-            $this->View()->sAddedToNoteSuccessful = $sAddedToNoteSuccessful;
-            $this->View()->loadTemplate('frontend/note/ajax.tpl');
-        } else {
-            $this->forward('index');
-        }
+        $this->forward('index');
+    }
+
+    public function ajaxAddAction()
+    {
+        Enlight()->Plugins()->Controller()->Json()->setPadding();
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $this->Response()->setBody(json_encode(
+            [
+                'success' => $this->addNote($this->Request()->getParam('ordernumber')),
+                'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes()
+            ]
+        ));
     }
 }

@@ -81,49 +81,52 @@
             });
 
             // Load compare modal before opening modal box
-            $.get(modalUrl, function(template) {
+            $.ajax({
+                'url': modalUrl,
+                'dataType': 'jsonp',
+                'success': function(template) {
+                    $.loadingIndicator.close(function() {
 
-                $.loadingIndicator.close(function() {
+                        $.modal.open(template, {
+                            title: modalTitle,
+                            sizing: 'content'
+                        });
 
-                    $.modal.open(template, {
-                        title: modalTitle,
-                        sizing: 'content'
-                    });
+                        // Auto sizing for width
+                        var templateWidth = $(me.opts.modalSelector).find(me.opts.modalContentInnerSelector).outerWidth();
+                        $(me.opts.modalSelector).css('width', templateWidth);
 
-                    // Auto sizing for width
-                    var templateWidth = $(me.opts.modalSelector).find(me.opts.modalContentInnerSelector).outerWidth();
-                    $(me.opts.modalSelector).css('width', templateWidth);
+                        picturefill();
 
-                    picturefill();
-
-                    // Resize every property row height to biggest height in cell
-                    var maxRows = 0;
-                    $(".entry--property").each(function () {
-                        var row = $(this).attr('data-property-row');
-                        if(row > maxRows) {
-                            maxRows = row;
-                        }
-                    });
-
-                    var maximumHeight,
-                        rowSelector,
-                        i = 1;
-
-                    for( ; i <= maxRows; i++) {
-                        rowSelector = '.entry--property[data-property-row="' + i + '"]';
-
-                        maximumHeight = 0;
-                        $(rowSelector).each(function () {
-                            var rowHeight = $(this).height();
-
-                            if (rowHeight > maximumHeight ) {
-                                maximumHeight = rowHeight;
+                        // Resize every property row height to biggest height in cell
+                        var maxRows = 0;
+                        $(".entry--property").each(function () {
+                            var row = $(this).attr('data-property-row');
+                            if(row > maxRows) {
+                                maxRows = row;
                             }
                         });
 
-                        $(rowSelector).height(maximumHeight);
-                    }
-                });
+                        var maximumHeight,
+                            rowSelector,
+                            i = 1;
+
+                        for( ; i <= maxRows; i++) {
+                            rowSelector = '.entry--property[data-property-row="' + i + '"]';
+
+                            maximumHeight = 0;
+                            $(rowSelector).each(function () {
+                                var rowHeight = $(this).height();
+
+                                if (rowHeight > maximumHeight ) {
+                                    maximumHeight = rowHeight;
+                                }
+                            });
+
+                            $(rowSelector).height(maximumHeight);
+                        }
+                    });
+                }
             });
         },
 
@@ -135,12 +138,15 @@
         onDeleteCompare: function (event) {
             var me = this,
                 deleteCompareBtn = me.$el.find(me.opts.deleteCompareSelector),
-                deleteUrl = deleteCompareBtn.attr('href');
+                deleteUrl = deleteCompareBtn.attr('href'),
+                $menu = $(me.opts.compareMenuSelector);
 
             event.preventDefault();
 
-            $.get(deleteUrl, function() {
-                $(me.opts.compareMenuSelector).empty();
+            $.ajax({
+                'url': deleteUrl,
+                'dataType': 'jsonp',
+                'success': $.proxy($menu.empty, $menu)
             });
         },
 
@@ -166,19 +172,27 @@
                 });
 
                 // update compare counter
-                var newCompareCount = compareCount - 1;
-                $('.compare--quantity').html('(' + newCompareCount + ')');
+                $('.compare--quantity').html('(' + (compareCount - 1) + ')');
 
                 // remove product silent in the background
-                $.get(deleteUrl);
+                $.ajax({
+                    'url': deleteUrl,
+                    'dataType': 'jsonp'
+                });
 
                 return;
             }
 
             // remove last product, reload full compare plugin
-            $(me.opts.compareMenuSelector).load(deleteUrl, function() {
-                //Reload compare menu plugin
-                $('*[data-product-compare-menu="true"]').productCompareMenu();
+            $.ajax({
+                'url': deleteUrl,
+                'dataType': 'jsonp',
+                'success': function (response) {
+                    $(me.opts.compareMenuSelector).html(response);
+
+                    //Reload compare menu plugin
+                    $('*[data-product-compare-menu="true"]').productCompareMenu();
+                }
             });
         },
 
