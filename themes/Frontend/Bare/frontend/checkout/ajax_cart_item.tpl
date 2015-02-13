@@ -1,10 +1,70 @@
+{* Constants for the different basket item types *}
+{$IS_PRODUCT = 0}
+{$IS_PREMIUM_PRODUCT = 1}
+{$IS_VOUCHER = 2}
+{$IS_REBATE = 3}
+{$IS_SURCHARGE_DISCOUNT = 4}
+
 <div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
     {* Article image *}
 	{block name='frontend_checkout_ajax_cart_articleimage'}
 		<div class="thumbnail--container{if $basketItem.image.thumbnails[0]} has--image{/if}">
-			{if $basketItem.additional_details.image.thumbnails}
-                <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
-			{/if}
+
+            {* Real product *}
+            {block name='frontend_checkout_ajax_cart_articleimage_product'}
+                {if $basketItem.modus == $IS_PRODUCT || $basketItem.modus == $IS_PREMIUM_PRODUCT}
+                    {if $basketItem.additional_details.image.thumbnails}
+                        <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
+
+                    {elseif $basketItem.image.src.0}
+                        <img src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
+                    {/if}
+                {/if}
+            {/block}
+
+            {* Premium article product badge *}
+            {block name='frontend_checkout_ajax_cart_articleimage_badge_premium'}
+                {if $basketItem.modus == $IS_PREMIUM_PRODUCT}
+                    <span class="cart--badge">
+                        <span>GRATIS</span>
+                    </span>
+                {/if}
+            {/block}
+
+            {* Cart surcharge discount *}
+            {block name='frontend_checkout_ajax_cart_articleimage_badge_surcharge'}
+                {if $basketItem.modus == $IS_SURCHARGE_DISCOUNT}
+                    <div class="basket--badge">
+                        {if $sBasketItem.price >= 0}
+                            <i class="icon--arrow-right"></i>
+                        {else}
+                            <i class="icon--percent2"></i>
+                        {/if}
+                    </div>
+                {/if}
+            {/block}
+
+            {* Voucher *}
+            {block name='frontend_checkout_ajax_cart_articleimage_badge_voucher'}
+                {if $basketItem.modus == $IS_VOUCHER}
+                    <div class="basket--badge">
+                        <i class="icon--coupon"></i>
+                    </div>
+                {/if}
+            {/block}
+
+            {* Rebate article *}
+            {block name='frontend_checkout_ajax_cart_articleimage_badge_rebate'}
+                {if $basketItem.modus == $IS_REBATE}
+                    <div class="basket--badge">
+                        {if $sBasketItem.price >= 0}
+                            <i class="icon--arrow-right"></i>
+                        {else}
+                            <i class="icon--percent2"></i>
+                        {/if}
+                    </div>
+                {/if}
+            {/block}
 		</div>
 	{/block}
 
