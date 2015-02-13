@@ -51,7 +51,14 @@
              *
              * @type {String}
              */
-            'itemHoverClass': 'is--hovered'
+            'itemHoverClass': 'is--hovered',
+
+            /**
+             * Tolerance the touch should be counted as a tap.
+             *
+             * @type {Number}
+             */
+            'touchTimeTolerance': 100
         },
 
         /**
@@ -97,6 +104,15 @@
              */
             me._$closeButton = me.$el.find(me.opts.closeButtonSelector);
 
+            /**
+             * Timestamp of the last touch start on a list item.
+             *
+             * @private
+             * @property _touchStartTimestamp
+             * @type {Number}
+             */
+            me._touchStartTimestamp = 0;
+
             // Register all needed events
             me.registerEvents();
         },
@@ -117,6 +133,8 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
+                me._on($el, 'touchstart', $.proxy(me.onTouchStart, me));
+
                 me._on($el, 'mouseenter touchend MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
 
                 me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
@@ -126,6 +144,17 @@
             me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
 
             me._on(me._$closeButton, 'click touchstart MSPointerDown', $.proxy(me.onCloseButtonClick, me));
+        },
+
+        /**
+         * Called when a touch started on a list item.
+         * Updates the timestamp property to determine a tap on touch end.
+         *
+         * @public
+         * @method onTouchStart
+         */
+        onTouchStart: function () {
+            this._touchStartTimestamp = Date.now();
         },
 
         /**
@@ -141,6 +170,11 @@
                 opts = me.opts;
 
             event.stopPropagation();
+
+            if (!(event.originalEvent instanceof MouseEvent) && (Date.now() - me._touchStartTimestamp > opts.touchTimeTolerance)) {
+                event.preventDefault();
+                return;
+            }
 
             me.setMenuIndex(index);
 
