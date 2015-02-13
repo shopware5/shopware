@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 store = Ext.create(item.get('store'));
             }
 
-            if (item.get('xType') === 'checkbox') {
+            if (item.get('xType') === 'checkbox' || item.get('xType') === 'checkboxfield') {
                 boxLabel = supportText;
                 supportText = '';
             }

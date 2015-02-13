@@ -73,8 +73,8 @@ Ext.define('Shopware.apps.Emotion', {
      * Required views for module (subapplication)
      * @array
      */
-    views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Settings',
-        'components.SettingsWindow', 'components.Base', 'components.Banner', 'components.BannerMapping',
+    views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Grid',
+        'detail.Settings', 'components.SettingsWindow', 'components.Base', 'components.Banner', 'components.BannerMapping',
         'components.Article', 'components.CategoryTeaser', 'components.fields.Article', 'components.fields.ArticleType',
         'components.fields.CategoryImageType', 'components.fields.CategorySelection', 'components.Blog', 'components.BannerSlider',
         'components.fields.SliderSelect', 'components.fields.ManufacturerType', 'components.ManufacturerSlider',
