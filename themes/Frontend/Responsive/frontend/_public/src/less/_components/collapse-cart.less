@@ -163,6 +163,56 @@ The collapse cart element contains the current items in the users shopping cart 
                 border: 1px solid @border-color;
                 background: #FFFFFF;
             }
+
+            .cart--badge {
+                .border-radius(3px 0 0 3px);
+                display: block;
+                position: absolute;
+                width: 14px;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background: @brand-primary;
+
+                span{
+                    .rotate(-90deg);
+                    .unitize(8, 16, font-size);
+                    line-height: 12px;
+                    color: white;
+                    text-transform: uppercase;
+                    text-align: center;
+                    font-weight: bold;
+                    display: block;
+                    position: absolute;
+                    width: 40px;
+                    padding: 0;
+                    margin: 0;
+                    top: 0;
+                    bottom: 0;
+                }
+            }
+
+            .basket--badge {
+                .unitize(37, 16, line-height);
+                .unitize(12, 16, font-size);
+                .border-radius(100%);
+                .unitize-height(35);
+                .unitize-width(35);
+                margin: 0 auto;
+                text-align: center;
+                font-weight: bold;
+                background: @text-color;
+                color: #fff;
+
+                .icon--arrow-right {
+                    .unitize(10, 16, font-size);
+                }
+
+                .icon--coupon {
+                    .unitize(20, 16, font-size);
+                    .unitize(37, 16, line-height);
+                }
+            }
         }
 
         .thumbnail--image {
