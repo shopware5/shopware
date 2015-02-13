@@ -22,9 +22,8 @@
 				{if !$sArticleMedia.preview}
                     <a href="{link file=$sArticleMedia.media.path}"
                        rel="lightbox"
-                       title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title}{/if}"
-                       style="background: #fff url({link file=$sArticleMedia.thumbNails.0}) no-repeat center center;">
-                        &nbsp;
+                       title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title}{/if}">
+                        <img src="{link file=$sArticleMedia.thumbNails.0}">
                     </a>
 			    {/if}
 			{/foreach}
