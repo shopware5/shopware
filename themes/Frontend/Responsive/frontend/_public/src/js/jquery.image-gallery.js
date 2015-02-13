@@ -132,12 +132,12 @@
              * Reference of the image container that should be cloned.
              *
              * @private
-             * @property $imageContainer
+             * @property _$imageContainer
              * @type {jQuery}
              */
-            me.$imageContainer = me.$el.find(me.opts.imageContainerSelector);
+            me._$imageContainer = me.$el.find(me.opts.imageContainerSelector);
 
-            if (!me.$imageContainer.length) {
+            if (!me._$imageContainer.length) {
                 return;
             }
 
@@ -145,30 +145,30 @@
              * Reference of the thumbnail container that should be cloned.
              *
              * @private
-             * @property $thumbContainer
+             * @property _$thumbContainer
              * @type {jQuery}
              */
-            me.$thumbContainer = me.$el.find(me.opts.thumbnailContainerSelector);
+            me._$thumbContainer = me.$el.find(me.opts.thumbnailContainerSelector);
 
             /**
              * Clone of the given image container.
              * This clone will be used in the image gallery template.
              *
              * @private
-             * @property $imageContainerClone
+             * @property _$imageContainerClone
              * @type {jQuery}
              */
-            me.$imageContainerClone = me.$imageContainer.clone();
+            me._$imageContainerClone = me._$imageContainer.clone();
 
             /**
              * Clone of the given thumbnail container.
              * This clone will be used in the image gallery template.
              *
              * @private
-             * @property $thumbContainerClone
+             * @property _$thumbContainerClone
              * @type {jQuery}
              */
-            me.$thumbContainerClone = me.$thumbContainer.clone();
+            me._$thumbContainerClone = me._$thumbContainer.clone();
 
             /**
              * Buttons that zooms the current image out by the factor of 1.
@@ -177,7 +177,7 @@
              * @property $zoomOutBtn
              * @type {jQuery}
              */
-            me.$zoomOutBtn = me.createZoomOutButton().appendTo(me.$imageContainerClone);
+            me.$zoomOutBtn = me.createZoomOutButton().appendTo(me._$imageContainerClone);
 
             /**
              * Buttons that resets the current image zoom..
@@ -186,7 +186,7 @@
              * @property $zoomResetBtn
              * @type {jQuery}
              */
-            me.$zoomResetBtn = me.createZoomResetButton().appendTo(me.$imageContainerClone);
+            me.$zoomResetBtn = me.createZoomResetButton().appendTo(me._$imageContainerClone);
 
             /**
              * Buttons that zooms the current image in by the factor of 1.
@@ -195,7 +195,7 @@
              * @property $zoomInBtn
              * @type {jQuery}
              */
-            me.$zoomInBtn = me.createZoomInButton().appendTo(me.$imageContainerClone);
+            me.$zoomInBtn = me.createZoomInButton().appendTo(me._$imageContainerClone);
 
             /**
              * Image gallery template that will be used in the modal box.
@@ -415,7 +415,7 @@
                 $el,
                 img;
 
-            me.$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
+            me._$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
                 $el = $(el);
 
                 img = $('<img>', {
@@ -429,8 +429,8 @@
             return $('<div>', {
                 'class': me.opts.imageGalleryClass,
                 'html': [
-                    me.$imageContainerClone,
-                    me.$thumbContainerClone
+                    me._$imageContainerClone,
+                    me._$thumbContainerClone
                 ]
             });
         },
@@ -462,11 +462,10 @@
             me.$template.imageSlider({
                 dotNavigation: false,
                 swipeToSlide: true,
-                swipeTolerance: 50,
                 pinchToZoom: true,
                 doubleTap: true,
                 maxZoom: me.opts.maxZoom,
-                startIndex: plugin ? plugin.slideIndex : 0
+                startIndex: plugin ? plugin.getIndex() : 0
             });
 
             me.toggleButtons(me.getImageSlider());
@@ -514,15 +513,22 @@
          */
         toggleButtons: function (plugin) {
             var me = this,
-                disabledClass = me.opts.disabledClass;
+                disabledClass = me.opts.disabledClass,
+                scale,
+                minScale,
+                maxScale;
 
             if (!plugin) {
                 return;
             }
 
-            me.$zoomResetBtn.toggleClass(disabledClass, plugin.imageScale === plugin.minZoom);
-            me.$zoomOutBtn.toggleClass(disabledClass, plugin.imageScale === plugin.minZoom);
-            me.$zoomInBtn.toggleClass(disabledClass, plugin.imageScale === plugin.maxZoom);
+            scale = plugin.getScale();
+            minScale = plugin.getMinScale();
+            maxScale = plugin.getMaxScale();
+
+            me.$zoomResetBtn.toggleClass(disabledClass, scale === minScale);
+            me.$zoomOutBtn.toggleClass(disabledClass, scale === minScale);
+            me.$zoomInBtn.toggleClass(disabledClass, scale === maxScale);
         },
 
         /**
@@ -547,10 +553,10 @@
             me.$zoomResetBtn.remove();
             me.$zoomInBtn.remove();
 
-            me.$imageContainer = null;
-            me.$thumbContainer = null;
-            me.$imageContainerClone = null;
-            me.$thumbContainerClone = null;
+            me._$imageContainer = null;
+            me._$thumbContainer = null;
+            me._$imageContainerClone = null;
+            me._$thumbContainerClone = null;
         }
     });
 
