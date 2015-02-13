@@ -47,17 +47,17 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('sw:thumbnail:cleanup')
-                ->setDescription('Deletes unused Album thumbnails.')
-                ->addOption(
-                    'albumid',
-                    null,
-                    InputOption::VALUE_OPTIONAL,
-                    'ID of the album which contains the images'
-                )->setHelp(
-                    <<<EOF
+            ->setDescription('Deletes thumbnails for images whose original file has been deleted.')
+            ->addOption(
+                'albumid',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'ID of the album which contains the images'
+            )->setHelp(
+                <<<EOF
                     The <info>%command.name%</info> deletes unused thumbnails.
 EOF
-                );
+            );
     }
 
     /**
@@ -71,9 +71,9 @@ EOF
 
         $builder = $em->createQueryBuilder();
         $builder->select(array('album', 'settings', 'media'))
-                ->from('Shopware\Models\Media\Album', 'album')
-                ->leftJoin('album.settings', 'settings')
-                ->leftJoin('album.media', 'media');
+            ->from('Shopware\Models\Media\Album', 'album')
+            ->leftJoin('album.settings', 'settings')
+            ->leftJoin('album.media', 'media');
 
         if (!empty($albumId)) {
             $builder->where('album.id = :albumId')->setParameter('albumId', $albumId);
@@ -82,7 +82,7 @@ EOF
         $albumArray = $builder->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($albumArray as $album) {
-            $output->writeln("Deleting unused Thumbnails for Album {$album['name']} (ID: {$album['id']})");
+            $output->writeln("Deleting unused Thumbnails for album {$album['name']} (ID: {$album['id']})");
 
             $sizes = $album['settings']['thumbnailSize'];
 
@@ -92,15 +92,18 @@ EOF
 
             foreach ($album['media'] as $media) {
                 $path = Shopware()->oldPath() . $media['path'];
-                if(file_exists($path) || file_exists($path)){
+                if (file_exists($path)) {
                     continue;
                 }
 
                 $paths = $this->getMediaThumbnailPaths($media, explode(';', $sizes));
 
-                foreach($paths as $path){
-                    if(file_exists($path)){
+                foreach ($paths as $path) {
+                    if (file_exists($path)) {
                         unlink($path);
+                        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                            $output->writeln("Deleting {$path}");
+                        }
                     }
                 }
             }
@@ -137,7 +140,7 @@ EOF
 
             $thumbnails[] = $path . '.jpg';
 
-            if($media['extension'] !== 'jpg'){
+            if ($media['extension'] !== 'jpg') {
                 $thumbnails[] = $path . '.' . $media['extension'];
             }
         }
