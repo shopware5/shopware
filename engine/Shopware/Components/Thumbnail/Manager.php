@@ -116,7 +116,7 @@ class Manager
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
 
-        $imagePath = $this->rootDir . DIRECTORY_SEPARATOR . $media->getPath();
+        $imagePath = $this->rootDir . '/' . $media->getPath();
 
         $parameters = array(
             'path' => $imagePath,
@@ -188,7 +188,7 @@ class Manager
         foreach ($sizes as $size) {
             $suffix = $size['width'] . 'x' . $size['height'];
 
-            $path = $this->getPathOfType($type) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
+            $path = $this->getPathOfType($type) . '/thumbnail/';
 
             $thumbnails[] = [
                 'maxWidth'        => $size['width'],
@@ -203,7 +203,7 @@ class Manager
 
     private function getPathOfType($type)
     {
-        return 'media' . DIRECTORY_SEPARATOR . strtolower($type) ;
+        return 'media/' . strtolower($type) ;
     }
 
     /**
@@ -251,13 +251,7 @@ class Manager
      */
     protected function getThumbnailDir($media)
     {
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR .
-        'media' .
-        DIRECTORY_SEPARATOR .
-        strtolower($media->getType()) .
-        DIRECTORY_SEPARATOR .
-        'thumbnail' . DIRECTORY_SEPARATOR;
+        return $this->rootDir . '/media/' . strtolower($media->getType()) . '/thumbnail/';
     }
 
     /**
@@ -330,7 +324,7 @@ class Manager
         );
 
         foreach ($thumbnails as $thumbnail) {
-            $thumbnailPath = $this->rootDir . DIRECTORY_SEPARATOR . $thumbnail;
+            $thumbnailPath = $this->rootDir . '/' . $thumbnail;
 
             if (file_exists($thumbnailPath)) {
                 unlink($thumbnailPath);
