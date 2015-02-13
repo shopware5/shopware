@@ -39,17 +39,22 @@ namespace Shopware\Components\Thumbnail\Generator;
 class Basic implements GeneratorInterface
 {
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @var bool
      */
     private $fixGdImageBlur;
 
     /**
-     *
+     * @param $config \Shopware_Components_Config
      */
-    public function __construct()
+    public function __construct($config)
     {
-        // todo: inject config
-        $this->fixGdImageBlur = true;
+        $this->config = $config;
+        $this->fixGdImageBlur = $this->config->get('thumbnailNoiseFilter');
     }
 
     /**
