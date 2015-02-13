@@ -23,7 +23,7 @@
                     <a href="{link file=$sArticleMedia.media.path}"
                        rel="lightbox"
                        title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title}{/if}">
-                        <img src="{link file=$sArticleMedia.thumbNails.0}" style="max-height: 100%; max-width: 100%">
+                        <img src="{link file=$sArticleMedia.thumbNails.0}">
                     </a>
 			    {/if}
 			{/foreach}
