@@ -35,7 +35,7 @@ EOD;
             (@parent, 'thumbnailNoiseFilter', 'b:0;', 'Rauschfilterung bei Thumbnails', 'Filtert beim Generieren der Thumbnails Bildfehler heraus. Achtung! Bei aktivierter Option kann das Generieren der Thumbnails wesentlich länger dauern', 'checkbox', 0, 0, 0, NULL, NULL, 'a:0:{}');
 EOD;
         $this->addSql($sql);
-//
+
         $sql = <<<'EOD'
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'thumbnailNoiseFilter' LIMIT 1);
 EOD;
