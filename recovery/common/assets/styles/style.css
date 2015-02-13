@@ -17,7 +17,7 @@ h4,
 h5,
 h6 {
     color: #0e384f;
-    margin-top: 0;
+    margin-top: 15px;
 }
 h1 {
     font-weight: 300;
@@ -178,7 +178,7 @@ label {
     text-decoration: none;
     font-size: 16px;
     display: inline-block;
-    padding: 12px 20px;
+    padding: 12px 22px;
     position: relative;
     margin: 0;
     font-weight: 600;
@@ -214,7 +214,7 @@ label {
 
 .btn-default {
     border: 2px solid #cad9e0;
-    padding: 10px 18px;
+    padding: 10px 20px;
     color: #5c6f7c;
 }
 .btn-default.btn-lg {
@@ -253,7 +253,7 @@ label {
     color: #fff;
 }
 .btn-primary:focus {
-    border: 2px solid #2794C9;
+     border-color: #2794C9;
 }
 .btn-lg {
     padding: 18px 25px;
@@ -271,56 +271,67 @@ label {
 .btn-arrow-left:before {
     font-family: "scc";
     content: "\e6cd";
-    display: block;
-    float: left;
-    margin-top: 3px;
-    margin-right: 5px;
+    display: inline-block;
+    margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right:after {
     font-family: "scc";
     content: "\e6d0";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-left-up:before {
     font-family: "scc";
     content: "\e6cf";
-    display: block;
-    float: left;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-left-down:before {
     font-family: "scc";
     content: "\e6ce";
-    display: block;
-    float: left;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right-up:after {
     font-family: "scc";
     content: "\e6cf";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right-down:after {
     font-family: "scc";
     content: "\e6ce";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
+}
+/* IMPORT DB BUTTON */
+.btn-database-right:after {
+    font-family: "scc";
+    content: "\f1c0";
+    display: inline-block;
+    font-weight: normal;
+    margin-right: -2px;
+    margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 
 .is--inline{
@@ -613,6 +624,15 @@ table .error {
 }
 .progress-actions {
     margin: 20px 0 0;
+}
+
+.progress-container {
+    border: 1px solid #CAD9E0;
+    background: #fff;
+    padding: 20px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 .progress-container .progress {
