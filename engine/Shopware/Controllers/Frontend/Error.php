@@ -42,15 +42,21 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
     public function preDispatch()
     {
         if ($this->Request()->getActionName() !== 'service') {
+            $templateModule = 'frontend';
+            if ($this->Request()->getModuleName() == 'backend') {
+                $templateModule = 'backend';
+            }
             if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
                 $this->Front()->Plugins()->Json()->setRenderer();
                 $this->View()->assign('success', false);
             } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Bootstrap()->issetResource('Db')) {
-                $this->View()->loadTemplate('frontend/error/exception.tpl');
-            } elseif (isset($_ENV['SHELL']) || empty($_SERVER['SERVER_NAME'])) {
-                $this->View()->loadTemplate('frontend/error/ajax.tpl');
+                $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
+            } elseif (isset($_ENV['SHELL']) || php_sapi_name() == 'cli') {
+                $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
+            } elseif (empty($_SERVER['SERVER_NAME'])) {
+                $this->View()->loadTemplate($templateModule . '/error/ajax.tpl');
             } else {
-                $this->View()->loadTemplate('frontend/error/index.tpl');
+                $this->View()->loadTemplate($templateModule . '/error/index.tpl');
             }
         }
     }
