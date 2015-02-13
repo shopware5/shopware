@@ -43,7 +43,8 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
             'seo_description' => $emotion['seo_description'],
             'emotion' => $emotion,
             'emotionId' => $emotionId,
-            'isEmotionLandingPage' => true
+            'isEmotionLandingPage' => true,
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
         ];
 
         $this->View()->assign($viewData);

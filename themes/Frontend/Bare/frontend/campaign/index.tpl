@@ -4,6 +4,12 @@
 <link rel="canonical" href="{url emotionId=$emotionId}" />
 {/block}
 
+{* Google optimized crawling *}
+{block name='frontend_index_header_meta_tags' append}
+    {if !$hasEscapedFragment}
+        <meta name="fragment" content="!">
+    {/if}
+{/block}
 
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords}{/if}{/block}
@@ -17,11 +23,18 @@
 
 {* Promotion *}
 {block name='frontend_home_index_promotions'}
-    <div class="emotion--wrapper"
-         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-         data-availableDevices="{$emotion.devices}"
-         data-showListing="false">
-    </div>
+
+    {if $hasEscapedFragment}
+        <div class="content--emotions">
+            {action module=widgets controller=campaign action=index emotionId=$emotionId}
+        </div>
+    {else}
+        <div class="emotion--wrapper"
+             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+             data-availableDevices="{$emotion.devices}"
+             data-showListing="false">
+        </div>
+    {/if}
 {/block}
 
 {* Sidebar left *}
