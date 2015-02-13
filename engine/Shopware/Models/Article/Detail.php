@@ -499,6 +499,14 @@ class Detail extends ModelEntity
     }
 
     /**
+     * @return integer
+     */
+    public function getArticleId()
+    {
+        return $this->articleId;
+    }
+
+    /**
      * @return Article
      */
     public function getArticle()
