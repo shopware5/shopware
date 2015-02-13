@@ -29,7 +29,7 @@
     </div>
 
     <div class="progress-actions actions clearfix">
-        <button id="start-ajax" class="btn btn-primary btn-arrow-right is--right"><?= $t->t("start") ?></button>
+        <button id="start-ajax" class="btn btn-primary btn-database-right is--right"><?= $t->t("start") ?></button>
     </div>
 </div>
 
