@@ -139,6 +139,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->subscribeEvent('Shopware\Models\Blog\Blog::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Blog\Blog::postUpdate', 'onPostPersist');
 
+        $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postUpdate', 'onPostPersist');
+
         $this->installForm();
 
         return true;
@@ -720,6 +723,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
             case 'widgets/emotion':
                 foreach ($view->getAssign('sEmotions') as $emotion) {
+                    $cacheIds[] = 'e' . $emotion['id'];
                     foreach ($emotion['elements'] as $element) {
                         if ($element['component']['name'] == 'Artikel') {
                             $articleIds[] = $element['data']['articleID'];
@@ -872,6 +876,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
             case 'Shopware\Models\Blog\Blog':
                 $cacheIds[] = 'c' . $entity->getCategoryId();
+                break;
+            case 'Shopware\Models\Emotion\Emotion':
+                $cacheIds[] = 'e' . $entity->getId();
                 break;
         }
 
