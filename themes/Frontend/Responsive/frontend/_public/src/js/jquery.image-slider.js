@@ -1,9 +1,8 @@
 ;(function ($, Modernizr, window, Math) {
     'use strict';
 
-    var div = document.createElement('div');
-
-    function getVendorPropertyName(property) {
+    var div = document.createElement('div'),
+        getVendorPropertyName = function (property) {
         if (property in div.style) {
             return property;
         }
@@ -21,7 +20,9 @@
                 return vendorProp;
             }
         }
-    }
+
+        return property;
+    };
 
     var transitionProperty = getVendorPropertyName('transition'),
         transformProperty = getVendorPropertyName('transform');
@@ -120,6 +121,14 @@
             swipeToSlide: true,
 
             /**
+             * Whether or not the pull preview feature should be active.
+             *
+             * @property pullPreview
+             * @type {Boolean}
+             */
+            pullPreview: false,
+
+            /**
              * Whether or not the double tap/click should be used to zoom in/out..
              *
              * @property doubleTap
@@ -150,9 +159,21 @@
              * The distance you have to travel to recognize a swipe in pixels.
              *
              * @property swipeTolerance
-             * @type {Number}
+             * @type {String|Number}
              */
             swipeTolerance: 50,
+
+            /**
+             * Tolerance of the pull preview.
+             * When this tolerance is exceeded,
+             * the image will slide to the next/previous image.
+             * Can either be a number that represent a pixel value or
+             * 'auto' to take a third of the viewport as the tolerance.
+             *
+             * @property pullTolerance
+             * @type {String|Number}
+             */
+            pullTolerance: 'auto',
 
             /**
              * The image index that will be set when the plugin gets initialized.
@@ -369,10 +390,10 @@
              * elements like arrows.
              *
              * @private
-             * @property $slideContainer
+             * @property _$slideContainer
              * @type {jQuery}
              */
-            me.$slideContainer = me.$el.find(opts.imageContainerSelector);
+            me._$slideContainer = me.$el.find(opts.imageContainerSelector);
 
             /**
              * Container of the slide element.
@@ -383,17 +404,17 @@
              * @property $slide
              * @type {jQuery}
              */
-            me.$slide = me.$slideContainer.find(opts.imageSlideSelector);
+            me._$slide = me._$slideContainer.find(opts.imageSlideSelector);
 
             /**
              * Current index of the active slide.
              * Will be used for correctly showing the active thumbnails / dot.
              *
              * @private
-             * @property slideIndex
+             * @property _slideIndex
              * @type {Number}
              */
-            me.slideIndex = opts.startIndex;
+            me._slideIndex = opts.startIndex;
 
             /**
              * ID of the setTimeout that will be called if the
@@ -401,60 +422,60 @@
              * Wil be used for removing / resetting the timer.
              *
              * @private
-             * @property slideInterval
+             * @property _slideInterval
              * @type {Number}
              */
-            me.slideInterval = 0;
+            me._slideInterval = 0;
 
             /**
              * References the currently active image.
              * This element is contained in a jQuery wrapper.
              *
              * @private
-             * @property $currentImage
+             * @property _$currentImage
              * @type {jQuery}
              */
-            me.$currentImage = null;
+            me._$currentImage = null;
 
             /**
              * Minimal zoom factor for image scaling
              *
              * @private
-             * @property minZoom
+             * @property _minZoom
              * @type {Number}
              */
-            me.minZoom = parseFloat(opts.minZoom) || 1;
+            me._minZoom = parseFloat(opts.minZoom) || 1;
 
             /**
              * Maximum zoom factor for image scaling
              *
              * @private
-             * @property maxZoom
+             * @property _maxZoom
              * @type {Number}
              */
-            me.maxZoom = parseFloat(opts.maxZoom);
+            me._maxZoom = parseFloat(opts.maxZoom);
 
             /**
              * Whether or not the scale should be recalculated for each image.
              *
              * @private
-             * @property autoScale
+             * @property _autoScale
              * @type {Boolean}
              */
-            me.autoScale = !me.maxZoom && (me.maxZoom = me.minZoom);
+            me._autoScale = !me._maxZoom && (me._maxZoom = me._minZoom);
 
             if (opts.thumbnails) {
-                me.$thumbnailContainer = me.$el.find(opts.thumbnailContainerSelector);
-                me.$thumbnailSlide = me.$thumbnailContainer.find(opts.thumbnailSlideSelector);
-                me.thumbnailOrientation = me.getThumbnailOrientation();
-                me.thumbnailOffset = 0;
+                me._$thumbnailContainer = me.$el.find(opts.thumbnailContainerSelector);
+                me._$thumbnailSlide = me._$thumbnailContainer.find(opts.thumbnailSlideSelector);
+                me._thumbnailOrientation = me.getThumbnailOrientation();
+                me._thumbnailOffset = 0;
                 me.createThumbnailArrows();
             }
 
             if (opts.dotNavigation) {
-                me.$dotNav = me.$el.find(opts.dotNavSelector);
-                me.$dots = me.$dotNav.find(opts.dotLinkSelector);
-                me.setActiveDot(me.slideIndex);
+                me._$dotNav = me.$el.find(opts.dotNavSelector);
+                me._$dots = me._$dotNav.find(opts.dotLinkSelector);
+                me.setActiveDot(me._slideIndex);
             }
 
             me.trackItems();
@@ -465,67 +486,77 @@
 
             if (opts.thumbnails) {
                 me.trackThumbnailControls();
-                me.setActiveThumbnail(me.slideIndex);
+                me.setActiveThumbnail(me._slideIndex);
             }
 
-            me.setIndex(me.slideIndex);
+            me.setIndex(me._slideIndex);
 
             /**
              * Whether or not the user is grabbing the image with the mouse.
              *
              * @private
-             * @property grabImage
+             * @property _grabImage
              * @type {Boolean}
              */
-            me.grabImage = false;
+            me._grabImage = false;
 
             /**
              * First touch point position from touchstart event.
              * Will be used to determine the swiping gesture.
              *
              * @private
-             * @property startTouchPoint
+             * @property _startTouchPoint
              * @type {Vector}
              */
-            me.startTouchPoint = new Vector(0, 0);
+            me._startTouchPoint = new Vector(0, 0);
 
             /**
              * Translation (positioning) of the current image.
              *
              * @private
-             * @property imageTranslation
+             * @property _imageTranslation
              * @type {Vector}
              */
-            me.imageTranslation = new Vector(0, 0);
+            me._imageTranslation = new Vector(0, 0);
 
             /**
              * Scaling (both X and Y equally) of the current image.
              *
              * @private
-             * @property imageScale
+             * @property _imageScale
              * @type {Number}
              */
-            me.imageScale = 1;
+            me._imageScale = 1;
 
             /**
              * Relative distance when pinching.
              * Will be used for the pinch to zoom gesture.
              *
              * @private
-             * @property touchDistance
+             * @property _touchDistance
              * @type {Number}
              */
-            me.touchDistance = 0;
+            me._touchDistance = 0;
 
             /**
              * Last time the current image was touched.
              * Used to determine double tapping.
              *
              * @private
-             * @property lastTouchTime
+             * @property _lastTouchTime
              * @type {Number}
              */
-            me.lastTouchTime = 0;
+            me._lastTouchTime = 0;
+
+            /**
+             * Last time the current image was touched.
+             * Used to determine a swipe instead of a pull.
+             *
+             * @private
+             * @property _lastMoveTime
+             * @type {Number}
+             */
+            me._lastMoveTime = 0;
 
             me.registerEvents();
         },
@@ -539,42 +570,41 @@
         registerEvents: function () {
             var me = this,
                 opts = me.opts,
-                $slide = me.$slide;
+                $slide = me._$slide;
 
             if (opts.touchControls) {
-                me._on($slide, 'touchstart mousedown MSPointerDown', me.onTouchStart.bind(me));
-                me._on($slide, 'touchmove mousemove MSPointerMove', me.onTouchMove.bind(me));
-                me._on($slide, 'touchend mouseup MSPointerUp', me.onTouchEnd.bind(me));
-                me._on($slide, 'mouseleave', me.onMouseLeave.bind(me));
+                me._on($slide, 'touchstart mousedown MSPointerDown', $.proxy(me.onTouchStart, me));
+                me._on($slide, 'touchmove mousemove MSPointerMove', $.proxy(me.onTouchMove, me));
+                me._on($slide, 'touchend mouseup mouseleave MSPointerUp', $.proxy(me.onTouchEnd, me));
 
                 if (opts.pinchToZoom) {
-                    me._on($slide, 'mousewheel DOMMouseScroll scroll', me.onScroll.bind(me));
+                    me._on($slide, 'mousewheel DOMMouseScroll scroll', $.proxy(me.onScroll, me));
                 }
 
                 if (opts.doubleTap) {
-                    me._on($slide, 'dblclick', me.onDoubleClick.bind(me));
+                    me._on($slide, 'dblclick', $.proxy(me.onDoubleClick, me));
                 }
             }
 
             if (opts.arrowControls) {
-                me._on(me.$arrowLeft, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
-                me._on(me.$arrowRight, 'click touchstart', $.proxy(me.onRightArrowClick, me));
+                me._on(me._$arrowLeft, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
+                me._on(me._$arrowRight, 'click touchstart', $.proxy(me.onRightArrowClick, me));
             }
 
             if (opts.thumbnails) {
-                me.$thumbnails.each($.proxy(me.applyClickEventHandler, me));
+                me._$thumbnails.each($.proxy(me.applyClickEventHandler, me));
 
-                me._on(me.$thumbnailArrowPrev, 'click touchstart', $.proxy(me.onThumbnailPrevArrowClick, me));
-                me._on(me.$thumbnailArrowNext, 'click touchstart', $.proxy(me.onThumbnailNextArrowClick, me));
+                me._on(me._$thumbnailArrowPrev, 'click touchstart', $.proxy(me.onThumbnailPrevArrowClick, me));
+                me._on(me._$thumbnailArrowNext, 'click touchstart', $.proxy(me.onThumbnailNextArrowClick, me));
 
                 if (opts.touchControls) {
-                    me._on(me.$thumbnailSlide, 'touchstart', $.proxy(me.onThumbnailSlideTouch, me));
-                    me._on(me.$thumbnailSlide, 'touchmove', $.proxy(me.onThumbnailSlideMove, me));
+                    me._on(me._$thumbnailSlide, 'touchstart', $.proxy(me.onThumbnailSlideTouch, me));
+                    me._on(me._$thumbnailSlide, 'touchmove', $.proxy(me.onThumbnailSlideMove, me));
                 }
             }
 
-            if (opts.dotNavigation && me.$dots) {
-                me.$dots.each($.proxy(me.applyClickEventHandler, me));
+            if (opts.dotNavigation && me._$dots) {
+                me._$dots.each($.proxy(me.applyClickEventHandler, me));
             }
 
             if (opts.autoSlide) {
@@ -596,10 +626,11 @@
          */
         onTouchStart: function (event) {
             var me = this,
+                opts = me.opts,
                 pointers = me.getPointers(event),
                 pointerA = pointers[0],
                 currTime = Date.now(),
-                startPoint = me.startTouchPoint,
+                startPoint = me._startTouchPoint,
                 distance,
                 deltaX,
                 deltaY;
@@ -607,15 +638,21 @@
             startPoint.set(pointerA.clientX, pointerA.clientY);
 
             if (pointers.length === 1) {
+                me._lastMoveTime = currTime;
+
+                if (opts.autoSlide) {
+                    me.stopAutoSlide();
+                }
+
                 if (event.originalEvent instanceof MouseEvent) {
                     event.preventDefault();
 
-                    me.grabImage = true;
-                    me.$slideContainer.addClass(me.opts.dragClass);
+                    me._grabImage = true;
+                    me._$slideContainer.addClass(opts.dragClass);
                     return;
                 }
 
-                if (!me.opts.doubleTap) {
+                if (!opts.doubleTap) {
                     return;
                 }
 
@@ -624,11 +661,11 @@
 
                 distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                if (currTime - me.lastTouchTime < 500 && distance < 30) {
+                if (currTime - me._lastTouchTime < 500 && distance < 30) {
                     me.onDoubleClick(event);
                 }
 
-                me.lastTouchTime = currTime;
+                me._lastTouchTime = currTime;
             } else {
                 event.preventDefault();
             }
@@ -651,7 +688,7 @@
                 touches = me.getPointers(event),
                 touchA = touches[0],
                 touchB = touches[1],
-                scale = me.imageScale,
+                scale = me._imageScale,
                 distance,
                 deltaX,
                 deltaY;
@@ -660,16 +697,22 @@
                 return;
             }
 
-            if (touches.length === 1 && scale > 1) {
-                // If the image is zoomed, move it
-                if (event.originalEvent instanceof MouseEvent && !me.grabImage) {
+            if (touches.length === 1) {
+
+                if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
                     return;
                 }
 
-                deltaX = touchA.clientX - me.startTouchPoint.x;
-                deltaY = touchA.clientY - me.startTouchPoint.y;
+                deltaX = touchA.clientX - me._startTouchPoint.x;
+                deltaY = touchA.clientY - me._startTouchPoint.y;
 
-                me.startTouchPoint.set(touchA.clientX, touchA.clientY);
+                if (scale === 1) {
+                    me._$slide.css('left', (((me._slideIndex * -100) + (deltaX / me._$slide.width()) * 100) + '%'));
+                    return;
+                }
+
+                // If the image is zoomed, move it
+                me._startTouchPoint.set(touchA.clientX, touchA.clientY);
 
                 me.translate(deltaX / scale, deltaY / scale);
 
@@ -686,14 +729,14 @@
 
             distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            if (me.touchDistance === 0) {
-                me.touchDistance = distance;
+            if (me._touchDistance === 0) {
+                me._touchDistance = distance;
                 return;
             }
 
-            me.scale((distance - me.touchDistance) / 100);
+            me.scale((distance - me._touchDistance) / 100);
 
-            me.touchDistance = distance;
+            me._touchDistance = distance;
         },
 
         /**
@@ -706,42 +749,58 @@
          */
         onTouchEnd: function (event) {
             var me = this,
+                opts = me.opts,
                 touches = event.changedTouches,
                 remaining = event.originalEvent.touches,
                 touchA = (touches && touches[0]) || event.originalEvent,
                 touchB = remaining && remaining[0],
-                swipeTolerance = me.opts.swipeTolerance,
+                swipeTolerance = opts.swipeTolerance,
+                pullTolerance = (typeof opts.pullTolerance === 'number') ? opts.pullTolerance : me._$slide.width() / 3,
                 deltaX,
-                deltaY;
+                deltaY,
+                absX,
+                absY,
+                swipeValid,
+                pullValid;
 
-            me.touchDistance = 0;
-            me.grabImage = false;
-            me.$slideContainer.removeClass(me.opts.dragClass);
+            if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
+                return;
+            }
+
+            me._touchDistance = 0;
+            me._grabImage = false;
+            me._$slideContainer.removeClass(opts.dragClass);
 
             if (touchB) {
-                me.startTouchPoint.set(touchB.clientX, touchB.clientY);
+                me._startTouchPoint.set(touchB.clientX, touchB.clientY);
                 return;
             }
 
-            if (!me.opts.swipeToSlide) {
+            if (opts.autoSlide) {
+                me.startAutoSlide();
+            }
+
+            if (!opts.swipeToSlide || me._imageScale > 1) {
                 return;
             }
 
-            deltaX = me.startTouchPoint.x - touchA.clientX;
-            deltaY = me.startTouchPoint.y - touchA.clientY;
+            deltaX = me._startTouchPoint.x - touchA.clientX;
+            deltaY = me._startTouchPoint.y - touchA.clientY;
+            absX = Math.abs(deltaX);
+            absY = Math.abs(deltaY);
 
-            if (Math.abs(deltaX) < swipeTolerance || Math.abs(deltaY) > swipeTolerance) {
+            swipeValid = (Date.now() - me._lastMoveTime) < 250 && absX > swipeTolerance && absY < swipeTolerance;
+            pullValid = (absX >= pullTolerance);
+
+            if (pullValid || swipeValid) {
+                event.preventDefault();
+
+                (deltaX < 0) ? me.slidePrev() : me.slideNext();
+
                 return;
             }
 
-            event.preventDefault();
-
-            if (deltaX < 0) {
-                me.slidePrev();
-                return;
-            }
-
-            me.slideNext();
+            me.slide(me._slideIndex);
         },
 
         /**
@@ -782,7 +841,7 @@
 
             event.preventDefault();
 
-            if (me.imageScale <= 1) {
+            if (me._imageScale <= 1) {
                 me.scale(1, true);
                 return;
             }
@@ -830,10 +889,10 @@
             event.preventDefault();
 
             var me = this,
-                $container = me.$thumbnailContainer,
-                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
+                $container = me._$thumbnailContainer,
+                size = me._thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
 
-            me.setThumbnailSlidePosition(me.thumbnailOffset + (size / 2), true);
+            me.setThumbnailSlidePosition(me._thumbnailOffset + (size / 2), true);
         },
 
         /**
@@ -846,10 +905,10 @@
             event.preventDefault();
 
             var me = this,
-                $container = me.$thumbnailContainer,
-                size = me.thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
+                $container = me._$thumbnailContainer,
+                size = me._thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
 
-            me.setThumbnailSlidePosition(me.thumbnailOffset - (size / 2), true);
+            me.setThumbnailSlidePosition(me._thumbnailOffset - (size / 2), true);
         },
 
         /**
@@ -861,8 +920,10 @@
         onMouseLeave: function () {
             var me = this;
 
-            me.grabImage = false;
-            me.$slideContainer.removeClass(me.opts.dragClass);
+            me._grabImage = false;
+            me._$slideContainer.removeClass(me.opts.dragClass);
+
+            me.slide(me._slideIndex);
         },
 
         /**
@@ -896,7 +957,7 @@
                 pointers = me.getPointers(event),
                 pointerA = pointers[0];
 
-            me.startTouchPoint.set(pointerA.clientX, pointerA.clientY);
+            me._startTouchPoint.set(pointerA.clientX, pointerA.clientY);
         },
 
         /**
@@ -913,15 +974,15 @@
             var me = this,
                 pointers = me.getPointers(event),
                 pointerA = pointers[0],
-                startPoint = me.startTouchPoint,
-                isHorizontal = me.thumbnailOrientation === 'horizontal',
+                startPoint = me._startTouchPoint,
+                isHorizontal = me._thumbnailOrientation === 'horizontal',
                 posA = isHorizontal ? pointerA.clientX : pointerA.clientY,
                 posB = isHorizontal ? startPoint.x : startPoint.y,
                 delta = posA - posB;
 
             startPoint.set(pointerA.clientX, pointerA.clientY);
 
-            me.setThumbnailSlidePosition(me.thumbnailOffset + delta, false);
+            me.setThumbnailSlidePosition(me._thumbnailOffset + delta, false);
 
             me.trackThumbnailControls();
         },
@@ -952,8 +1013,8 @@
          */
         getTransformedPosition: function (x, y, scale) {
             var me = this,
-                $image = me.$currentImage,
-                $container = me.$slideContainer,
+                $image = me._$currentImage,
+                $container = me._$slideContainer,
                 minX = Math.max(0, (($image.width() * scale - $container.width()) / scale) / 2),
                 minY = Math.max(0, (($image.height() * scale - $container.height()) / scale) / 2);
 
@@ -961,6 +1022,28 @@
                 Math.max(minX * -1, Math.min(minX, x)),
                 Math.max(minY * -1, Math.min(minY, y))
             );
+        },
+
+        /**
+         * Returns the minimum possible zoom factor.
+         *
+         * @public
+         * @method getMinScale
+         * @returns {Number}
+         */
+        getMinScale: function () {
+            return this._minZoom;
+        },
+
+        /**
+         * Returns the maximum possible zoom factor.
+         *
+         * @public
+         * @method getMaxScale
+         * @returns {Number}
+         */
+        getMaxScale: function () {
+            return this._maxZoom;
         },
 
         /**
@@ -973,9 +1056,9 @@
          */
         setTranslation: function (x, y) {
             var me = this,
-                newPos = me.getTransformedPosition(x, y, me.imageScale);
+                newPos = me.getTransformedPosition(x, y, me._imageScale);
 
-            me.imageTranslation.set(newPos.x, newPos.y);
+            me._imageTranslation.set(newPos.x, newPos.y);
 
             me.updateTransform(false);
         },
@@ -991,7 +1074,7 @@
          */
         translate: function (x, y) {
             var me = this,
-                translation = me.imageTranslation;
+                translation = me._imageTranslation;
 
             me.setTranslation(translation.x + x, translation.y + y);
         },
@@ -1009,13 +1092,13 @@
          */
         setScale: function (scale, animate, callback) {
             var me = this,
-                oldScale = me.imageScale;
+                oldScale = me._imageScale;
 
             me.updateMaxZoomValue();
 
-            me.imageScale = Math.max(me.minZoom, Math.min(me.maxZoom, scale));
+            me._imageScale = Math.max(me._minZoom, Math.min(me._maxZoom, scale));
 
-            if (me.imageScale === oldScale) {
+            if (me._imageScale === oldScale) {
                 if (typeof callback === 'function') {
                     callback.call(me);
                 }
@@ -1023,6 +1106,17 @@
             }
 
             me.updateTransform(animate, callback);
+        },
+
+        /**
+         * Returns the current image scaling.
+         *
+         * @public
+         * @method getScale
+         * @returns {Number}
+         */
+        getScale: function () {
+            return this._imageScale;
         },
 
         /**
@@ -1036,7 +1130,7 @@
          * @param {Function} callback
          */
         scale: function (factor, animate, callback) {
-            this.setScale(this.imageScale + factor, animate, callback);
+            this.setScale(this._imageScale + factor, animate, callback);
         },
 
         /**
@@ -1052,10 +1146,10 @@
          */
         updateTransform: function (animate, callback) {
             var me = this,
-                translation = me.imageTranslation,
-                scale = me.imageScale,
+                translation = me._imageTranslation,
+                scale = me._imageScale,
                 newPosition = me.getTransformedPosition(translation.x, translation.y, scale),
-                image = me.$currentImage[0],
+                image = me._$currentImage[0],
                 animationSpeed = me.opts.animationSpeed;
 
             translation.set(newPosition.x, newPosition.y);
@@ -1109,13 +1203,27 @@
                 opts = me.opts,
                 hiddenClass = ' ' + opts.hiddenClass;
 
-            me.$arrowLeft = $('<a>', {
-                'class': opts.leftArrowCls + ((opts.loopSlides || me.slideIndex > 0) && me.itemCount > 1 ? '' : hiddenClass)
-            }).appendTo(me.$slideContainer);
+            /**
+             * Left slide arrow element.
+             *
+             * @private
+             * @property _$arrowLeft
+             * @type {jQuery}
+             */
+            me._$arrowLeft = $('<a>', {
+                'class': opts.leftArrowCls + ((opts.loopSlides || me._slideIndex > 0) && me._itemCount > 1 ? '' : hiddenClass)
+            }).appendTo(me._$slideContainer);
 
-            me.$arrowRight = $('<a>', {
-                'class': opts.rightArrowCls + ((opts.loopSlides || me.slideIndex < me.itemCount - 1) && me.itemCount > 1 ? '' : hiddenClass)
-            }).appendTo(me.$slideContainer);
+            /**
+             * Right slide arrow element.
+             *
+             * @private
+             * @property _$arrowRight
+             * @type {jQuery}
+             */
+            me._$arrowRight = $('<a>', {
+                'class': opts.rightArrowCls + ((opts.loopSlides || me._slideIndex < me._itemCount - 1) && me._itemCount > 1 ? '' : hiddenClass)
+            }).appendTo(me._$slideContainer);
         },
 
         /**
@@ -1127,17 +1235,31 @@
         createThumbnailArrows: function () {
             var me = this,
                 opts = me.opts,
-                isHorizontal = (me.thumbnailOrientation === 'horizontal'),
+                isHorizontal = (me._thumbnailOrientation === 'horizontal'),
                 prevClass = isHorizontal ? opts.thumbnailArrowLeftCls : opts.thumbnailArrowTopCls,
                 nextClass = isHorizontal ? opts.thumbnailArrowRightCls : opts.thumbnailArrowBottomCls;
 
-            me.$thumbnailArrowPrev = $('<a>', {
+            /**
+             * Left/Top thumbnail slide arrow element.
+             *
+             * @private
+             * @property _$thumbnailArrowPrev
+             * @type {jQuery}
+             */
+            me._$thumbnailArrowPrev = $('<a>', {
                 'class': opts.thumbnailArrowCls + ' ' + prevClass
-            }).appendTo(me.$thumbnailContainer);
+            }).appendTo(me._$thumbnailContainer);
 
-            me.$thumbnailArrowNext = $('<a>', {
+            /**
+             * Right/Bottom thumbnail slide arrow element.
+             *
+             * @private
+             * @property _$thumbnailArrowNext
+             * @type {jQuery}
+             */
+            me._$thumbnailArrowNext = $('<a>', {
                 'class': opts.thumbnailArrowCls + ' ' + nextClass
-            }).appendTo(me.$thumbnailContainer);
+            }).appendTo(me._$thumbnailContainer);
         },
 
         /**
@@ -1150,23 +1272,60 @@
             var me = this,
                 opts = me.opts;
 
-            me.$items = me.$slide.find(opts.itemSelector);
+            /**
+             * This property contains every item in the slide.
+             *
+             * @private
+             * @property _$items
+             * @type {jQuery}
+             */
+            me._$items = me._$slide.find(opts.itemSelector);
 
             picturefill();
 
-            me.$images = me.$slide.find(opts.imageSelector);
+            /**
+             * This property contains every item in the slide.
+             *
+             * @private
+             * @property _$images
+             * @type {jQuery}
+             */
+            me._$images = me._$slide.find(opts.imageSelector);
 
             if (opts.thumbnails) {
-                me.$thumbnails = me.$thumbnailContainer.find(opts.thumbnailSelector);
-                me.thumbnailCount = me.$thumbnails.length;
 
-                if (me.thumbnailCount === 0) {
+                /**
+                 * Array of all thumbnail elements.
+                 *
+                 * @private
+                 * @property _$thumbnails
+                 * @type {jQuery}
+                 */
+                me._$thumbnails = me._$thumbnailContainer.find(opts.thumbnailSelector);
+
+                /**
+                 * Amount of all thumbnails.
+                 *
+                 * @private
+                 * @property _thumbnailCount
+                 * @type {Number}
+                 */
+                me._thumbnailCount = me._$thumbnails.length;
+
+                if (me._thumbnailCount === 0) {
                     me.$el.addClass(opts.noThumbClass);
                     opts.thumbnails = false;
                 }
             }
 
-            me.itemCount = me.$items.length;
+            /**
+             * This property contains every item in the slide.
+             *
+             * @private
+             * @property _itemCount
+             * @type {jQuery}
+             */
+            me._itemCount = me._$items.length;
         },
 
         /**
@@ -1179,10 +1338,21 @@
         setIndex: function (index) {
             var me = this;
 
-            me.$slide.css('left', ((index || me.slideIndex) * -100) + '%');
-            me.$currentImage = $(me.$images[index]);
+            me._$slide.css('left', ((index || me._slideIndex) * -100) + '%');
+            me._$currentImage = $(me._$images[index]);
 
             me.updateMaxZoomValue();
+        },
+
+        /**
+         * Returns the current slide index.
+         *
+         * @public
+         * @method getIndex
+         * @returns {Number}
+         */
+        getIndex: function (event) {
+            return this._slideIndex;
         },
 
         /**
@@ -1193,19 +1363,19 @@
          */
         updateMaxZoomValue: function () {
             var me = this,
-                $currentImage = me.$currentImage,
+                $currentImage = me._$currentImage,
                 image = $currentImage[0];
 
-            if (!me.autoScale) {
+            if (!me._autoScale) {
                 return;
             }
 
             if (!image) {
-                me.maxZoom = me.minZoom;
+                me._maxZoom = me._minZoom;
                 return;
             }
 
-            me.maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
+            me._maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
         },
 
         /**
@@ -1216,7 +1386,7 @@
          * @returns {String}
          */
         getThumbnailOrientation: function () {
-            var $container = this.$thumbnailContainer;
+            var $container = this._$thumbnailContainer;
 
             return ($container.innerWidth() > $container.innerHeight()) ? 'horizontal' : 'vertical';
         },
@@ -1230,12 +1400,12 @@
          */
         setActiveThumbnail: function (index) {
             var me = this,
-                isHorizontal = me.thumbnailOrientation === 'horizontal',
+                isHorizontal = me._thumbnailOrientation === 'horizontal',
                 orientation = isHorizontal ? 'left' : 'top',
-                $thumbnail = me.$thumbnails.eq(index),
-                $container = me.$thumbnailContainer,
+                $thumbnail = me._$thumbnails.eq(index),
+                $container = me._$thumbnailContainer,
                 thumbnailPos = $thumbnail.position(),
-                slidePos = me.$thumbnailSlide.position(),
+                slidePos = me._$thumbnailSlide.position(),
                 slideOffset = slidePos[orientation],
                 posA = thumbnailPos[orientation] * -1,
                 posB = thumbnailPos[orientation] + (isHorizontal ? $thumbnail.outerWidth() : $thumbnail.outerHeight()),
@@ -1249,7 +1419,7 @@
                 newPos = Math.max(posA, slideOffset);
             }
 
-            me.$thumbnails.removeClass(activeClass);
+            me._$thumbnails.removeClass(activeClass);
 
             $thumbnail.addClass(activeClass);
 
@@ -1264,11 +1434,12 @@
          * @param {Number} index
          */
         setActiveDot: function (index) {
-            var me = this;
+            var me = this,
+                $dots = me._$dots;
 
-            if (me.opts.dotNavigation && me.$dots) {
-                me.$dots.removeClass(me.opts.activeStateClass);
-                me.$dots.eq(index || me.slideIndex).addClass(me.opts.activeStateClass);
+            if (me.opts.dotNavigation && $dots) {
+                $dots.removeClass(me.opts.activeStateClass);
+                $dots.eq(index || me._slideIndex).addClass(me.opts.activeStateClass);
             }
         },
 
@@ -1283,17 +1454,17 @@
          */
         setThumbnailSlidePosition: function (offset, animate) {
             var me = this,
-                $slide = me.$thumbnailSlide,
-                $container = me.$thumbnailContainer,
-                isHorizontal = me.thumbnailOrientation === 'horizontal',
+                $slide = me._$thumbnailSlide,
+                $container = me._$thumbnailContainer,
+                isHorizontal = me._thumbnailOrientation === 'horizontal',
                 sizeA = isHorizontal ? $container.innerWidth() : $container.innerHeight(),
                 sizeB = isHorizontal ? $slide.outerWidth(true) : $slide.outerHeight(true),
                 min = Math.min(0, sizeA - sizeB),
                 css = {};
 
-            me.thumbnailOffset = Math.max(min, Math.min(0, offset));
+            me._thumbnailOffset = Math.max(min, Math.min(0, offset));
 
-            css[isHorizontal ? 'left' : 'top'] = me.thumbnailOffset;
+            css[isHorizontal ? 'left' : 'top'] = me._thumbnailOffset;
             css[isHorizontal ? 'top' : 'left'] = 'auto';
 
             if (!animate) {
@@ -1301,7 +1472,7 @@
                 return;
             }
 
-            $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, me.trackThumbnailControls.bind(me));
+            $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, $.proxy(me.trackThumbnailControls, me));
         },
 
         /**
@@ -1313,16 +1484,16 @@
         trackThumbnailControls: function () {
             var me = this,
                 opts = me.opts,
-                isHorizontal = me.thumbnailOrientation === 'horizontal',
-                $container = me.$thumbnailContainer,
-                $slide = me.$thumbnailSlide,
-                $prevArr = me.$thumbnailArrowPrev,
-                $nextArr = me.$thumbnailArrowNext,
+                isHorizontal = me._thumbnailOrientation === 'horizontal',
+                $container = me._$thumbnailContainer,
+                $slide = me._$thumbnailSlide,
+                $prevArr = me._$thumbnailArrowPrev,
+                $nextArr = me._$thumbnailArrowNext,
                 activeCls = me.opts.activeStateClass,
                 pos = $slide.position(),
                 orientation = me.getThumbnailOrientation();
 
-            if (me.thumbnailOrientation !== orientation) {
+            if (me._thumbnailOrientation !== orientation) {
 
                 $prevArr
                     .toggleClass(opts.thumbnailArrowLeftCls, !isHorizontal)
@@ -1332,12 +1503,12 @@
                     .toggleClass(opts.thumbnailArrowRightCls, !isHorizontal)
                     .toggleClass(opts.thumbnailArrowBottomCls, isHorizontal);
 
-                me.thumbnailOrientation = orientation;
+                me._thumbnailOrientation = orientation;
 
-                me.setActiveThumbnail(me.slideIndex);
+                me.setActiveThumbnail(me._slideIndex);
             }
 
-            if (me.thumbnailOrientation === 'horizontal') {
+            if (me._thumbnailOrientation === 'horizontal') {
                 $prevArr.toggleClass(activeCls, pos.left < 0);
                 $nextArr.toggleClass(activeCls, ($slide.innerWidth() + pos.left) > $container.innerWidth());
                 return;
@@ -1356,9 +1527,9 @@
         startAutoSlide: function () {
             var me = this;
 
-            me.stopAutoSlide(me.slideInterval);
+            me.stopAutoSlide(me._slideInterval);
 
-            me.slideInterval = window.setTimeout(me.slideNext.bind(me), me.opts.autoSlideInterval);
+            me._slideInterval = window.setTimeout($.proxy(me.slideNext, me), me.opts.autoSlideInterval);
         },
 
         /**
@@ -1368,7 +1539,7 @@
          * @method stopAutoSlide
          */
         stopAutoSlide: function () {
-            window.clearTimeout(this.slideInterval);
+            window.clearTimeout(this._slideInterval);
         },
 
         /**
@@ -1382,17 +1553,16 @@
         slide: function (index, callback) {
             var me = this,
                 opts = me.opts,
-                newPosition = (index * 100 * -1) + '%',
                 method = (Modernizr.csstransitions) ? 'transition' : 'animate';
 
-            me.slideIndex = index;
+            me._slideIndex = index;
 
             if (opts.thumbnails) {
                 me.setActiveThumbnail(index);
                 me.trackThumbnailControls();
             }
 
-            if (opts.dotNavigation && me.$dots) {
+            if (opts.dotNavigation && me._$dots) {
                 me.setActiveDot(index);
             }
 
@@ -1402,18 +1572,18 @@
             }
 
             me.resetTransformation(true, function () {
-                me.$slide[method]({
-                    'left': newPosition,
+                me._$slide[method]({
+                    'left': (index * -100) + '%',
                     'easing': 'cubic-bezier(.2,.89,.75,.99)'
                 }, opts.animationSpeed, $.proxy(callback, me));
             });
 
-            me.$currentImage = $(me.$images[index]);
+            me._$currentImage = $(me._$images[index]);
 
             me.updateMaxZoomValue();
 
-            me.$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
-            me.$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me.itemCount - 1);
+            me._$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
+            me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
 
             $.publish('plugin/imageSlider/slide', [ me ]);
         },
@@ -1429,15 +1599,15 @@
          */
         resetTransformation: function (animate, callback) {
             var me = this,
-                translation = me.imageTranslation;
+                translation = me._imageTranslation;
 
-            me.touchDistance = 0;
+            me._touchDistance = 0;
 
-            if (me.imageScale !== 1 || translation.x !== 0 || translation.y !== 0) {
+            if (me._imageScale !== 1 || translation.x !== 0 || translation.y !== 0) {
 
-                me.imageScale = 1;
+                me._imageScale = 1;
 
-                me.imageTranslation.set(0, 0);
+                me._imageTranslation.set(0, 0);
 
                 me.updateTransform(animate, callback);
 
@@ -1454,17 +1624,11 @@
          */
         slideNext: function () {
             var me = this,
-                newIndex = me.slideIndex + 1;
+                newIndex = me._slideIndex + 1,
+                itemCount = me._itemCount,
+                isLooping = me.opts.loopSlides;
 
-            if (newIndex >= me.itemCount) {
-                if (!me.opts.loopSlides) {
-                    return;
-                }
-
-                newIndex = 0;
-            }
-
-            me.slide(newIndex);
+            me.slide((newIndex >= itemCount && isLooping) ? 0 : Math.min(itemCount - 1, newIndex));
 
             $.publish('plugin/imageSlider/slideNext', [ me ]);
         },
@@ -1477,17 +1641,11 @@
          */
         slidePrev: function () {
             var me = this,
-                newIndex = me.slideIndex - 1;
+                newIndex = me._slideIndex - 1,
+                itemCount = me._itemCount,
+                isLooping = me.opts.loopSlides;
 
-            if (newIndex < 0) {
-                if (!me.opts.loopSlides) {
-                    return;
-                }
-
-                newIndex = me.itemCount - 1;
-            }
-
-            me.slide(newIndex);
+            me.slide((newIndex < 0 && isLooping) ? itemCount - 1 : Math.max(0, newIndex));
 
             $.publish('plugin/imageSlider/slidePrev', [ me ]);
         },
@@ -1505,30 +1663,30 @@
 
             me.resetTransformation(false);
 
-            me.$slideContainer = null;
-            me.$items = null;
-            me.$currentImage = null;
+            me._$slideContainer = null;
+            me._$items = null;
+            me._$currentImage = null;
 
-            if (opts.dotNavigation && me.$dots) {
-                me.$dots.removeClass(me.opts.activeStateClass);
-                me.$dotNav = null;
-                me.$dots = null;
+            if (opts.dotNavigation && me._$dots) {
+                me._$dots.removeClass(me.opts.activeStateClass);
+                me._$dotNav = null;
+                me._$dots = null;
             }
 
             if (opts.arrowControls) {
-                me.$arrowLeft.remove();
-                me.$arrowRight.remove();
+                me._$arrowLeft.remove();
+                me._$arrowRight.remove();
             }
 
             if (opts.thumbnails) {
-                me.$thumbnailArrowPrev.remove();
-                me.$thumbnailArrowNext.remove();
+                me._$thumbnailArrowPrev.remove();
+                me._$thumbnailArrowNext.remove();
 
-                me.$thumbnailContainer = null;
-                me.$thumbnailSlide = null;
+                me._$thumbnailContainer = null;
+                me._$thumbnailSlide = null;
 
-                me.$thumbnails.removeClass(me.opts.activeStateClass);
-                me.$thumbnails = null;
+                me._$thumbnails.removeClass(me.opts.activeStateClass);
+                me._$thumbnails = null;
             }
 
             if (opts.autoSlide) {
