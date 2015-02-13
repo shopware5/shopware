@@ -43,11 +43,7 @@
                         {* Product description *}
                         {block name='frontend_listing_box_article_description'}
                             <div class="product--description">
-                                {if $sArticle.description}
-                                    {$sArticle.description|strip_tags|truncate:240}
-                                {else}
-                                    {$sArticle.description_long|strip_tags|truncate:240}
-                                {/if}
+                                {$sArticle.description_long|strip_tags|truncate:240}
                             </div>
                         {/block}
 
