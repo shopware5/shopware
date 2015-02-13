@@ -104,6 +104,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected $propertyValueRepository = null;
 
+    /**
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $taxRepository = null;
+
     public function initAcl()
     {
         $this->addAclPermission("loadStores","read","Insufficient Permissions");
@@ -301,6 +306,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->propertyValueRepository;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    protected function getTaxRepository()
+    {
+        if($this->taxRepository === null) {
+            $this->taxRepository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+        }
+
+        return $this->taxRepository;
     }
 
     /**
@@ -2116,8 +2133,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Internal helper function to convert gross prices to net prices.
-     * @param $prices
-     * @param $tax
+     * @param array $prices
+     * @param array $tax
      * @return array
      */
     protected function formatPricesFromNetToGross($prices, $tax)
@@ -2125,8 +2142,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
             if ($customerGroup['taxInput']) {
-                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']) ;
-                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']) ;
+                $taxRate = $this->getTaxRate(
+                    $this->getCustomerGroupRepository()->find($customerGroup['id']),
+                    $this->getTaxRepository()->find($tax['id'])
+                );
+
+                $price['price'] = $price['price'] / 100 * (100 + $taxRate) ;
+                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $taxRate) ;
             }
             $prices[$key] = $price;
         }
@@ -3166,7 +3188,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         //use default tax rates if no rules are defined for the supplied customer group
         if ($taxRate === null) {
-            $taxRate = $tax->getTax();
+            $taxRate = floatval($tax->getTax());
         }
 
         return $taxRate;
