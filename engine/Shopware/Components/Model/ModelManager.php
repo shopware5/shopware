@@ -283,12 +283,7 @@ class ModelManager extends EntityManager
      */
     public function generateAttributeModels($tableNames = array())
     {
-        /** @var $generator \Shopware\Components\Model\Generator*/
-        $generator = new \Shopware\Components\Model\Generator();
-
-        $generator->setPath($this->getConfiguration()->getAttributeDir());
-        $generator->setModelPath(Shopware()->AppPath('Models'));
-        $generator->setSchemaManager($this->getConnection()->getSchemaManager());
+        $generator = $this->createModelGenerator();
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateAttributeProxies($tableNames);
@@ -505,5 +500,19 @@ class ModelManager extends EntityManager
     public function enableDebugMode()
     {
         $this->debugMode = true;
+    }
+
+    /**
+     * @return Generator
+     */
+    public function createModelGenerator()
+    {
+        $generator = new Generator(
+            $this->getConnection()->getSchemaManager(),
+            $this->getConfiguration()->getAttributeDir(),
+            Shopware()->AppPath('Models')
+        );
+
+        return $generator;
     }
 }

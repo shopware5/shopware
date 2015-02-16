@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+
 class Generator
 {
     /**
@@ -156,7 +158,7 @@ class %className% extends ModelEntity
 
     /**
      * Contains the schema manager which is used to get the database definition
-     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @var AbstractSchemaManager
      */
     protected $schemaManager = null;
 
@@ -178,13 +180,16 @@ class %className% extends ModelEntity
      */
     protected $modelPath = '';
 
-
     /**
+     * @param AbstractSchemaManager $schemaManager
+     * @param string $path
      * @param string $modelPath
      */
-    public function setModelPath($modelPath)
+    public function __construct(AbstractSchemaManager $schemaManager, $path, $modelPath)
     {
-        $this->modelPath = $modelPath;
+        $this->schemaManager = $schemaManager;
+        $this->path          = $path;
+        $this->modelPath     = $modelPath;
     }
 
     /**
@@ -196,14 +201,6 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
      * @return string
      */
     public function getPath()
@@ -212,15 +209,7 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
-     */
-    public function setSchemaManager($schemaManager)
-    {
-        $this->schemaManager = $schemaManager;
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return AbstractSchemaManager
      */
     public function getSchemaManager()
     {
