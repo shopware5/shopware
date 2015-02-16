@@ -93,7 +93,7 @@ class FieldHelper
             $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
         }
 
-        $this->cache->save($columns, $key);
+        $this->cache->save($key, $columns);
         $this->attributeFields[$key] = $columns;
 
         return $columns;
