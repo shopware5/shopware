@@ -311,9 +311,11 @@
 
                 <div class="panel--body is--wide payment--content">
                     {block name='frontend_checkout_confirm_left_payment_method'}
-                        <strong class="payment--description">{$sUserData.additional.payment.description}</strong><br />
+                        <strong class="payment--title">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm_left"}{/s}</strong>
+                        <span class="payment--description">{$sUserData.additional.payment.description}</span>
+                        <br />
 
-                        {if !$sUserData.additional.payment.esdactive}
+                        {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
                             <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
                         {/if}
                     {/block}
