@@ -2142,9 +2142,31 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
             if ($customerGroup['taxInput']) {
+
+                /** @internal the tax array sometimes only contains the tax field. hydrate a matching tax object. this should always work since the tax rate will always be a default tax rate.
+                 */
+                if(!isset($tax['id'])) {
+                    /**
+                     * @var \Doctrine\ORM\QueryBuilder $builder
+                     */
+                    $builder = \Shopware()->Container()->get('models')->createQueryBuilder();
+                    $taxEntity = $builder->select('taxes')
+                        ->from('Shopware\Models\Tax\Tax', 'taxes')
+                        ->where('taxes.tax = :tax')
+                        ->setParameter('tax', $tax['tax'])
+                        ->getQuery()
+                        ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+                } else {
+                    $taxEntity = $this->getTaxRepository()->find($tax['id']);
+                }
+
+                if($taxEntity === null) {
+                    throw new \Exception('Unable to load a tax entity matching tax data: '.var_export($tax.true));
+                }
+
                 $taxRate = $this->getTaxRate(
                     $this->getCustomerGroupRepository()->find($customerGroup['id']),
-                    $this->getTaxRepository()->find($tax['id'])
+                    $taxEntity
                 );
 
                 $price['price'] = $price['price'] / 100 * (100 + $taxRate) ;
