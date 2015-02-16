@@ -2,6 +2,13 @@
 
 {block name="frontend_index_content_top"}{/block}
 
+{* Google optimized crawling *}
+{block name='frontend_index_header_meta_tags' append}
+    {if $hasEmotion && !$hasEscapedFragment}
+        <meta name="fragment" content="!">
+    {/if}
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="content content--home">

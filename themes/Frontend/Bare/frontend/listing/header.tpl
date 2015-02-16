@@ -41,7 +41,7 @@
 
 {* Google optimized crawling *}
 {block name='frontend_index_header_meta_tags' append}
-    {if $hasEmotion}
+    {if $hasEmotion && !$hasEscapedFragment}
         <meta name="fragment" content="!">
     {/if}
 {/block}
