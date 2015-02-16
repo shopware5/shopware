@@ -222,7 +222,7 @@
 
             me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
-            me.$el.delegate('.' + me.opts.activeFilterCls, me.getEventName('click'), $.proxy(me.onActiveFilterClick, me));
+            me.$el.on(me.getEventName('click'), '.' + me.opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
         },
 
         /**
@@ -836,7 +836,7 @@
         destroy: function() {
             var me = this;
 
-            me.$el.undelegate('.' + me.opts.activeFilterCls, me.getEventName('click'));
+            me.$el.off(me.getEventName('click'), '.' + me.opts.activeFilterCls);
 
             me._destroy();
         }
