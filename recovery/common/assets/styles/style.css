@@ -216,6 +216,7 @@ label {
     border: 2px solid #cad9e0;
     padding: 10px 20px;
     color: #5c6f7c;
+    margin: 2px;
 }
 .btn-default.btn-lg {
     padding: 16px 23px;
@@ -369,6 +370,7 @@ label {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     line-height: 26px;
+    overflow: auto;
 }
 .alert-success {
     color: #15591c;
@@ -389,6 +391,30 @@ label {
     color: #541a25;
     border-color: rgba(197, 66, 91, 0.4);
     background: rgba(197, 66, 91, 0.2);
+}
+
+.alert h1,
+.alert h2,
+.alert h3,
+.alert h4,
+.alert h5,
+.alert h6 {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    line-height: 100%;
+    margin: 20px 0 5px 0;
+    padding: 0;
+    border: 0 none;
+}
+
+.alert h1 { font-size: 20px; }
+.alert h2 { font-size: 18px; }
+.alert h3 { font-size: 16px; }
+.alert h4 { font-size: 14px; }
+.alert h5 { font-size: 12px; }
+.alert h6 { font-size: 10px; }
+
+.alert pre {
+    overflow: visible;
 }
 
 /** Table */
