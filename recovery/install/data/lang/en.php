@@ -23,6 +23,10 @@ return [
     'language-selection_info_message'    => 'This language selection applies solely to the installation assistant. Of couse you can operate your shop in various other languages after the installation.',
     'language-selection_welcome_message' => <<<EOT
 <p>
+    You are only a few clicks away from being part of the big shopware community,
+    which consists of over 30000 online merchants worldwide.
+</p>
+<p>
     Our Support team is available to answer your questions at any time.
     Please contact us via telephone <a href="tel:+492555928850">(+49) 2555 92 8850</a> or via email <a href="mailto:info@shopware.com">info@shopware.com</a>.
 </p>
