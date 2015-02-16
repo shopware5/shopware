@@ -272,9 +272,11 @@ class %className% extends ModelEntity
             if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
                 continue;
             }
-            if (strpos($table->getName(), '_attributes') === false) {
+
+            if (!$this->stringEndsWith($table->getName(), '_attributes')) {
                 continue;
             }
+
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
@@ -784,4 +786,20 @@ class %className% extends ModelEntity
         return $classes;
     }
 
+    /**
+     * Checks if given string in $haystack end the with string in $needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    private function stringEndsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
 }
