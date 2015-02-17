@@ -117,6 +117,7 @@ It is displayed as the second step for the checkout process.
     .table-footer--country-notice {
         .unitize-margin(11, 0, 0, 0);
     }
+
     .table--aggregation {
         display: none
     }
@@ -133,6 +134,18 @@ It is displayed as the second step for the checkout process.
         border-top: 2px solid darken(@border-color, 50%);
         display: block;
         position: absolute;
+    }
+
+    .payment--panel {
+        .payment--method-info,
+        .shipping--method-info {
+            .unitize(10, 16, margin-bottom);
+        }
+
+        .payment--description,
+        .shipping--description {
+            white-space: nowrap;
+        }
     }
 }
 
@@ -290,10 +303,6 @@ It is displayed as the second step for the checkout process.
             &:last-child {
                 margin: 0;
             }
-        }
-
-        .payment--panel .shipping--name {
-            white-space: nowrap;
         }
 
         // Additional features
