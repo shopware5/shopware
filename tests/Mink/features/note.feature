@@ -6,6 +6,7 @@ Feature: Note
         And   I follow "Auf den Merkzettel"
         And   I am on the detail page for article 228
         And   I follow "Auf den Merkzettel"
+        And   I go to the page "Note"
         Then  My note should look like this:
             | name                           | supplier | ordernumber | text                                                                                                                                               | price    | image                           | link                                                          |
             | Zahlungsarten & Riskmanagement | Example  | SW100025211 | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster Faktoren... | 119,99 € | Kwon-Tasche-Coach-schwarz       | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
@@ -55,6 +56,7 @@ Feature: Note
         Then  I should see "Zahlungsarten & Riskmanagement"
 
         When  I follow the link "remember" of the element "ArticleBox" on position 2
+        And   I go to the page "Note"
         Then  I should see 2 element of type "NotePosition"
 
         When  I follow "Zahlungsarten & Riskmanagement"
@@ -62,4 +64,5 @@ Feature: Note
         Then  I should see "Zahlungsarten & Riskmanagement"
 
         When  I follow the link "remember" of the element "ArticleBox" on position 1
+        And   I go to the page "Note"
         Then  I should see 3 element of type "NotePosition"
