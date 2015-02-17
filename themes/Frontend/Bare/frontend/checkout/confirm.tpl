@@ -312,7 +312,7 @@
                 <div class="panel--body is--wide payment--content">
                     {block name='frontend_checkout_confirm_left_payment_method'}
                         <p class="payment--method-info">
-                            <span class="payment--title"><strong>{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm_left"}{/s}</strong></span>
+                            <span class="payment--title is--strong">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm_left"}{/s}</span>
                             <span class="payment--description">{$sUserData.additional.payment.description}</span>
                         </p>
 
@@ -323,7 +323,7 @@
 
                     {block name='frontend_checkout_confirm_left_shipping_method'}
                         <p class="shipping--method-info">
-                            <span class="shipping--title"><strong>{s name="ConfirmHeadDispatch"}{/s}</strong></span>
+                            <span class="shipping--title is--strong">{s name="ConfirmHeadDispatch"}{/s}</span>
                             <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
                         </p>
                     {/block}
