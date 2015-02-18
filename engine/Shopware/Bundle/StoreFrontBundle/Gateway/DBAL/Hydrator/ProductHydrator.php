@@ -224,6 +224,10 @@ class ProductHydrator extends Hydrator
             $product->setKeywords($data['__product_keywords']);
         }
 
+        if (isset($data['__product_template'])) {
+            $product->setTemplate($data['__product_template']);
+        }
+
         if ($data['__product_datum']) {
             $product->setCreatedAt(
                 new \DateTime($data['__product_datum'])
