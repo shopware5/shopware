@@ -137,6 +137,23 @@
             doubleTap: false,
 
             /**
+             * Time in milliseconds in which two touches should be
+             * registered as a double tap.
+             *
+             * @property doubleTapPeriod
+             * @type {Number}
+             */
+            doubleTapPeriod: 400,
+
+            /**
+             * Whether or not the scrolling should be prevented when moving on the slide.
+             *
+             * @property preventScrolling
+             * @type {Boolean}
+             */
+            preventScrolling: false,
+
+            /**
              * The minimal zoom factor an image can have.
              *
              * @property minZoom
@@ -156,12 +173,28 @@
             maxZoom: 'auto',
 
             /**
+             * The distance in which a pointer move is registered.
+             *
+             * @property moveTolerance
+             * @type {Number}
+             */
+            moveTolerance: 30,
+
+            /**
              * The distance you have to travel to recognize a swipe in pixels.
              *
              * @property swipeTolerance
-             * @type {String|Number}
+             * @type {Number}
              */
             swipeTolerance: 50,
+
+            /**
+             * Time period in which the swipe gesture will be registered.
+             *
+             * @property swipePeriod
+             * @type {Number}
+             */
+            swipePeriod: 250,
 
             /**
              * Tolerance of the pull preview.
@@ -577,6 +610,15 @@
                 me._on($slide, 'touchmove mousemove MSPointerMove', $.proxy(me.onTouchMove, me));
                 me._on($slide, 'touchend mouseup mouseleave MSPointerUp', $.proxy(me.onTouchEnd, me));
 
+                if (!opts.preventScrolling) {
+                    me._on($slide, 'movestart', function(e) {
+                        // Allows the normal up and down scrolling from the browser
+                        if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
+                            e.preventDefault();
+                        }
+                    });
+                }
+
                 if (opts.pinchToZoom) {
                     me._on($slide, 'mousewheel DOMMouseScroll scroll', $.proxy(me.onScroll, me));
                 }
@@ -631,6 +673,8 @@
                 pointerA = pointers[0],
                 currTime = Date.now(),
                 startPoint = me._startTouchPoint,
+                startX = startPoint.x,
+                startY = startPoint.y,
                 distance,
                 deltaX,
                 deltaY;
@@ -656,13 +700,14 @@
                     return;
                 }
 
-                deltaX = Math.abs(pointerA.clientX - startPoint.x);
-                deltaY = Math.abs(pointerA.clientY - startPoint.y);
+                deltaX = Math.abs(pointerA.clientX - startX);
+                deltaY = Math.abs(pointerA.clientY - startY);
 
                 distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                if (currTime - me._lastTouchTime < 500 && distance < 30) {
+                if (currTime - me._lastTouchTime < opts.doubleTapPeriod && distance <= opts.moveTolerance) {
                     me.onDoubleClick(event);
+                    return;
                 }
 
                 me._lastTouchTime = currTime;
@@ -685,10 +730,13 @@
          */
         onTouchMove: function (event) {
             var me = this,
+                opts = me.opts,
                 touches = me.getPointers(event),
                 touchA = touches[0],
                 touchB = touches[1],
                 scale = me._imageScale,
+                startTouch = me._startTouchPoint,
+                touchDistance = me._touchDistance,
                 distance,
                 deltaX,
                 deltaY;
@@ -703,16 +751,31 @@
                     return;
                 }
 
-                deltaX = touchA.clientX - me._startTouchPoint.x;
-                deltaY = touchA.clientY - me._startTouchPoint.y;
+                deltaX = touchA.clientX - startTouch.x;
+                deltaY = touchA.clientY - startTouch.y;
 
                 if (scale === 1) {
-                    me._$slide.css('left', (((me._slideIndex * -100) + (deltaX / me._$slide.width()) * 100) + '%'));
+                    var offset = (me._slideIndex * -100),
+                        percentage = (deltaX / me._$slide.width()) * 100;
+
+                    if (me._slideIndex === 0 && deltaX > 0) {
+                        percentage *= Math.atan(percentage) / Math.PI;
+                    }
+
+                    if (me._slideIndex === me._itemCount - 1 && deltaX < 0) {
+                        percentage *= Math.atan(percentage) / -Math.PI;
+                    }
+
+                    me._$slide.css('left', (offset + percentage) + '%');
+
+                    if (opts.preventScrolling) {
+                        event.preventDefault();
+                    }
                     return;
                 }
 
                 // If the image is zoomed, move it
-                me._startTouchPoint.set(touchA.clientX, touchA.clientY);
+                startTouch.set(touchA.clientX, touchA.clientY);
 
                 me.translate(deltaX / scale, deltaY / scale);
 
@@ -720,7 +783,7 @@
                 return;
             }
 
-            if (!me.opts.pinchToZoom || !touchB) {
+            if (!opts.pinchToZoom || !touchB) {
                 return;
             }
 
@@ -729,12 +792,12 @@
 
             distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            if (me._touchDistance === 0) {
+            if (touchDistance === 0) {
                 me._touchDistance = distance;
                 return;
             }
 
-            me.scale((distance - me._touchDistance) / 100);
+            me.scale((distance - touchDistance) / 100);
 
             me._touchDistance = distance;
         },
@@ -756,6 +819,7 @@
                 touchB = remaining && remaining[0],
                 swipeTolerance = opts.swipeTolerance,
                 pullTolerance = (typeof opts.pullTolerance === 'number') ? opts.pullTolerance : me._$slide.width() / 3,
+                startPoint = me._startTouchPoint,
                 deltaX,
                 deltaY,
                 absX,
@@ -772,7 +836,7 @@
             me._$slideContainer.removeClass(opts.dragClass);
 
             if (touchB) {
-                me._startTouchPoint.set(touchB.clientX, touchB.clientY);
+                startPoint.set(touchB.clientX, touchB.clientY);
                 return;
             }
 
@@ -784,19 +848,20 @@
                 return;
             }
 
-            deltaX = me._startTouchPoint.x - touchA.clientX;
-            deltaY = me._startTouchPoint.y - touchA.clientY;
+            deltaX = startPoint.x - touchA.clientX;
+            deltaY = startPoint.y - touchA.clientY;
             absX = Math.abs(deltaX);
             absY = Math.abs(deltaY);
 
-            swipeValid = (Date.now() - me._lastMoveTime) < 250 && absX > swipeTolerance && absY < swipeTolerance;
+            swipeValid = (Date.now() - me._lastMoveTime) < opts.swipePeriod && absX > swipeTolerance && absY < swipeTolerance;
             pullValid = (absX >= pullTolerance);
 
-            if (pullValid || swipeValid) {
+            if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) > opts.moveTolerance) {
                 event.preventDefault();
+            }
 
+            if (pullValid || swipeValid) {
                 (deltaX < 0) ? me.slidePrev() : me.slideNext();
-
                 return;
             }
 
@@ -1628,6 +1693,8 @@
                 itemCount = me._itemCount,
                 isLooping = me.opts.loopSlides;
 
+            me._lastTouchTime = 0;
+
             me.slide((newIndex >= itemCount && isLooping) ? 0 : Math.min(itemCount - 1, newIndex));
 
             $.publish('plugin/imageSlider/slideNext', [ me ]);
@@ -1644,6 +1711,8 @@
                 newIndex = me._slideIndex - 1,
                 itemCount = me._itemCount,
                 isLooping = me.opts.loopSlides;
+
+            me._lastTouchTime = 0;
 
             me.slide((newIndex < 0 && isLooping) ? itemCount - 1 : Math.max(0, newIndex));
 
