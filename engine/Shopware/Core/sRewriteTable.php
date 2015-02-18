@@ -907,7 +907,7 @@ class sRewriteTable
         );
 
         $result = Shopware()->Events()->filter(
-            'Shopware_Seo_Filter_Articles',
+            'Shopware_Modules_RewriteTable_sCreateRewriteTableArticles_filterArticles',
             $result,
             array(
                 'shop' => Shopware()->Shop()->getId()

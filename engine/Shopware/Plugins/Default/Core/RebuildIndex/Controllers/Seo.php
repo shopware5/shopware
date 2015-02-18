@@ -216,7 +216,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         ));
 
         $articles = $this->get('events')->filter(
-            'Shopware_Seo_Filter_Articles',
+            'Shopware_Controllers_Backend_Seo_seoArticle_filterArticles',
             $articles,
             array(
                 'shop' => $shop->getId()
