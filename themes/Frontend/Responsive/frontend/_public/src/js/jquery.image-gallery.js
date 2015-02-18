@@ -465,7 +465,8 @@
                 pinchToZoom: true,
                 doubleTap: true,
                 maxZoom: me.opts.maxZoom,
-                startIndex: plugin ? plugin.getIndex() : 0
+                startIndex: plugin ? plugin.getIndex() : 0,
+                preventScrolling: true
             });
 
             me.toggleButtons(me.getImageSlider());
