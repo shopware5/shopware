@@ -209,9 +209,23 @@ It is displayed as the last step for the checkout process.
 
     .finish--teaser,
     .navigation-main,
-    .footer-main,
-    .header-main {
+    .footer--columns,
+    .shop--navigation,
+    .top-bar,
+    .btn--back-top-shop,
+    .header-main .container--ajax-cart {
         display: none;
+    }
+
+    .is--ctl-checkout.is--minimal-header .header-main,
+    .header-main {
+        border-bottom: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .content-main {
+        margin-bottom: 0;
     }
 
     .finish--info {
@@ -237,14 +251,44 @@ It is displayed as the last step for the checkout process.
             page-break-inside: avoid;
         }
 
+        .table--content {
+            width: 85%;
+        }
+
+        .column--product .column--image {
+            width: 15%;
+        }
+
+        .column--label.quantity--label {
+            margin: 0;
+        }
+
         .column--product {
             .clearfix();
-            width: 70%;
+            width: 100%;
         }
 
         .column--total-price,
         .column--quantity {
+            margin-left: 70%;
             width: 30%;
+        }
+    }
+
+    .footer-minimal,
+    .footer-main {
+        .footer--service-menu,
+        .footer--copyright,
+        .footer--logo {
+            display: none;
+        }
+
+        .vat-info--text {
+            .unitize(9, 16, font-size);
+        }
+
+        a {
+            color: @text-color
         }
     }
 }
