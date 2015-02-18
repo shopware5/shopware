@@ -352,8 +352,8 @@
                     me.removeActiveFilter(key);
                     me.resetFilterProperty(key);
                 });
-                
-                if (!me.$filterCont.hasClass(me.opts.collapsedCls)) {
+
+                if (!StateManager.isCurrentState(['xs', 's']) && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
 
