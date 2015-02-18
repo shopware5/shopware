@@ -311,18 +311,21 @@
 
                 <div class="panel--body is--wide payment--content">
                     {block name='frontend_checkout_confirm_left_payment_method'}
-                        <strong class="payment--description">{$sUserData.additional.payment.description}</strong><br />
+                        <p class="payment--method-info">
+                            <span class="payment--title is--bold">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm_left"}{/s}</span>
+                            <span class="payment--description">{$sUserData.additional.payment.description}</span>
+                        </p>
 
-                        {if !$sUserData.additional.payment.esdactive}
+                        {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
                             <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
                         {/if}
                     {/block}
 
                     {block name='frontend_checkout_confirm_left_shipping_method'}
-                        <div class="shipping--method">
-                            <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
-                            <span class="shipping--name" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
-                        </div>
+                        <p class="shipping--method-info">
+                            <span class="shipping--title is--bold">{s name="ConfirmHeadDispatch"}{/s}</span>
+                            <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
+                        </p>
                     {/block}
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}

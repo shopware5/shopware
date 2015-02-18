@@ -195,7 +195,7 @@
                             <p>
                                 <strong>{$sUserData.additional.payment.description}</strong><br />
 
-                                {if !$sUserData.additional.payment.esdactive}
+                                {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
                                     {s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}
                                 {/if}
                             </p>
