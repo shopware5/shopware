@@ -209,7 +209,11 @@
 							</p>
 						{/if}
 						<p>
-							{if $sUserData.billingaddress.salutation eq "mr"}{s name="AccountSalutationMr"}{/s}{else}{s name="AccountSalutationMs"}{/s}{/if}
+							{if $sUserData.billingaddress.salutation eq "mr"}
+								{s name="AccountSalutationMr"}{/s}
+							{else}
+								{s name="AccountSalutationMs"}{/s}
+							{/if}
 							{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
 							{$sUserData.billingaddress.street}<br />
 							{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
@@ -250,7 +254,11 @@
 							</p>
 						{/if}
 						<p>
-							{if $sUserData.shippingaddress.salutation eq "mr"}{s name="AccountSalutationMr"}{/s}{else}{s name="AccountSalutationMs"}{/s}{/if}
+							{if $sUserData.shippingaddress.salutation eq "mr"}
+								{s name="AccountSalutationMr"}{/s}
+							{else}
+								{s name="AccountSalutationMs"}{/s}
+							{/if}
 							{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
 							{$sUserData.shippingaddress.street}<br />
 							{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
