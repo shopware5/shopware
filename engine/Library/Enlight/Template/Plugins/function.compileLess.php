@@ -47,6 +47,10 @@ function smarty_function_compileLess($params, $template)
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 
+    /** @var $front Enlight_Controller_Front */
+    $front = Enlight_Application::Instance()->Front();
+    $secure = $front->Request()->isSecure();
+
     $files = $pathResolver->getCssFilePaths($shop, $time);
 
     $urls = array();
@@ -56,7 +60,8 @@ function smarty_function_compileLess($params, $template)
     foreach($files as $key => $file) {
         $urls[$key] = $pathResolver->formatPathToUrl(
             $file,
-            $shop
+            $shop, 
+            $secure
         );
 
         if (!file_exists($file)) {
@@ -75,5 +80,5 @@ function smarty_function_compileLess($params, $template)
 
     $compiler->compileLess($time, $shop->getTemplate(), $shop);
 
-    $template->assign($output, $urls);;
+    $template->assign($output, $urls);
 }
