@@ -13,7 +13,7 @@
     </requirement>
     <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>
-        <notice>The Apache Module "mod_rewrite" should be active, when you use Shopware together with the Apache Server.</notice>
+        <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
     </requirement>
 	<requirement>
 	 	<name>pdo</name><group>core</group><required>1</required>
