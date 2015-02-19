@@ -26,7 +26,7 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs as EventArgs;
-use Shopware\Components\Model\ModelManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -40,7 +40,7 @@ class AttributeSubscriber implements SubscriberInterface
     /**
      * @var ModelManager
      */
-    private $em;
+    private $container;
 
     /**
      * {@inheritdoc}
@@ -55,11 +55,11 @@ class AttributeSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param ModelManager $em
+     * @param ContainerInterface $container
      */
-    public function __construct(ModelManager $em)
+    public function __construct(ContainerInterface $container)
     {
-        $this->em = $em;
+        $this->container = $container;
     }
 
     /**
@@ -88,7 +88,7 @@ class AttributeSubscriber implements SubscriberInterface
         $response = new \Enlight_Controller_Response_ResponseHttp();
 
         if ($this->isModelException($exception)) {
-            $generator = $this->em->createModelGenerator();
+            $generator = $this->container->get('models')->createModelGenerator();
             $result = $generator->generateAttributeModels();
             if ($result['success'] === true) {
                 $response->setRedirect(
