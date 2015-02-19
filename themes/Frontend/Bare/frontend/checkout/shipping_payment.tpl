@@ -40,6 +40,10 @@
 {block name="frontend_index_footer"}
     {if !$theme.checkoutHeader}
         {$smarty.block.parent}
+    {else}
+        {block name='frontend_index_checkout_confirm_payment_footer'}
+            {include file="frontend/index/footer_minimal.tpl"}
+        {/block}
     {/if}
 {/block}
 
