@@ -85,7 +85,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function emotionNewcomerAction()
     {
-        $this->Request()->setParam('sort', 'newcommer');
+        $this->Request()->setParam('sort', 'newcomer');
         $this->emotionArticleSliderAction();
     }
 
@@ -99,18 +99,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $limit = (int) $this->Request()->getParam("limit", 5);
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-        $sort = $this->Request()->getParam('sort', 'newcommer');
+        $sort = $this->Request()->getParam('sort', 'newcomer');
 
         $pages = $this->Request()->getParam("pages");
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
-
-        if (!$category || !$pages || !$limit) {
-            $this->Response()->setHttpResponseCode(404);
-            return;
-        }
 
         $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
 
