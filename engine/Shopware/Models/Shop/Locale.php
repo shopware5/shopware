@@ -66,17 +66,6 @@ class Locale extends ModelEntity
     private $territory;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Translation\Translation", mappedBy="locale")
-     */
-    protected $translations;
-
-    public function __construct()
-    {
-        $this->translations = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return integer
@@ -158,21 +147,5 @@ class Locale extends ModelEntity
     public function toString()
     {
         return $this->getLocale();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
-     * @param mixed $translations
-     */
-    public function setTranslations($translations)
-    {
-        $this->translations = $translations;
     }
 }

@@ -25,7 +25,7 @@
 
 namespace Shopware\Models\Translation;
 
-use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
 use Shopware\Components\Model\ModelEntity;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -80,19 +80,19 @@ class Translation extends ModelEntity
     /**
      * Foreign-Key for the local Association.
      * Has no getter and setter function to prevent inconsistent data
-     * @var string $iso
+     * @var integer $shopId
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="objectlanguage", type="string", nullable=false)
+     * @ORM\Column(name="objectlanguage", type="integer", nullable=false)
      */
-    private $localeId;
+    private $shopId;
 
     /**
-     * @var Locale
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale", inversedBy="translations")
+     * @var Shop
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
      */
-    protected $locale;
+    protected $shop;
 
     /**
      * @param string $data
@@ -151,19 +151,34 @@ class Translation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Locale $locale
+     * @param \Shopware\Models\Shop\Shop $shop
      */
-    public function setLocale(Locale $locale)
+    public function setShop(Shop $shop)
     {
-        $this->locale = $locale;
+        $this->shop = $shop;
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return \Shopware\Models\Shop\Shop
      */
-    public function getLocale()
+    public function getShop()
     {
-        return $this->locale;
+        return $this->shop;
     }
 
+    /**
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+    }
 }
