@@ -56,6 +56,13 @@ class SnippetsToDbCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'If given, the file will be overwritten if it already exists'
             )
+            ->addOption(
+                'source',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The folder from where the snippets should be imported, relative to Shopware\'s root folder',
+                'snippets'
+            )
         ;
     }
 
@@ -68,8 +75,10 @@ class SnippetsToDbCommand extends ShopwareCommand
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $force = $input->getOption('force');
 
+        $sourceDir = $this->container->get('application')->DocPath($input->getOption('source'));
+        
         $databaseLoader->setOutput($output);
-        $databaseLoader->loadToDatabase(null, $force);
+        $databaseLoader->loadToDatabase($sourceDir, $force);
 
         //Import plugin snippets
         if ($input->getOption('include-plugins')) {
