@@ -33,7 +33,7 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Article\Configurator;
 use Shopware\Components\Api\BatchInterface;
-use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
 
 
 /**
@@ -211,15 +211,15 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($options['language']) && !empty($options['language'])) {
-                /**@var $locale Locale */
-                $locale = $this->findEntityByConditions('Shopware\Models\Shop\Locale', array(
+                /**@var $shop Shop */
+                $shop = $this->findEntityByConditions('Shopware\Models\Shop\Shop', array(
                     array('id' => $options['language']),
-                    array('locale' => $options['language'])
+                    array('shop' => $options['language'])
                 ));
 
                 $article = $this->translateArticle(
                     $article,
-                    $locale
+                    $shop
                 );
             }
         }
@@ -493,16 +493,15 @@ class Article extends Resource implements BatchInterface
             && isset($options['language'])
             && !empty($options['language'])) {
 
-            /**@var $locale Locale */
-            $locale = $this->findEntityByConditions('Shopware\Models\Shop\Locale', array(
-                array('id' => $options['language']),
-                array('locale' => $options['language'])
+            /**@var $shop Shop */
+            $shop = $this->findEntityByConditions('Shopware\Models\Shop\Shop', array(
+                array('id' => $options['language'])
             ));
 
             foreach ($articles as &$article) {
                 $article = $this->translateArticle(
                     $article,
-                    $locale
+                    $shop
                 );
             }
         }
@@ -1981,17 +1980,17 @@ class Article extends Resource implements BatchInterface
      * Translate the whole article array.
      *
      * @param array $data
-     * @param Locale $locale
+     * @param Shop $shop
      * @return array
      */
-    protected function translateArticle(array $data, Locale $locale)
+    protected function translateArticle(array $data, Shop $shop)
     {
         $this->getTranslationResource()->setResultMode(
             self::HYDRATE_ARRAY
         );
         $translation = $this->getSingleTranslation(
             'article',
-            $locale->getId(),
+            $shop->getId(),
             $data['id']
         );
 
@@ -2011,7 +2010,7 @@ class Article extends Resource implements BatchInterface
                 if ($data['mainDetail']['configuratorOptions']) {
                     $data['mainDetail']['configuratorOptions'] = $this->translateAssociation(
                         $data['mainDetail']['configuratorOptions'],
-                        $locale,
+                        $shop,
                         'configuratoroption'
                     );
                 }
@@ -2020,50 +2019,50 @@ class Article extends Resource implements BatchInterface
 
         $data['details'] = $this->translateVariants(
             $data['details'],
-            $locale
+            $shop
         );
 
         $data['links'] = $this->translateAssociation(
             $data['links'],
-            $locale,
+            $shop,
             'link'
         );
 
         $data['downloads'] = $this->translateAssociation(
             $data['downloads'],
-            $locale,
+            $shop,
             'download'
         );
 
-        $data['supplier'] = $this->translateSupplier($data['supplier'], $locale);
+        $data['supplier'] = $this->translateSupplier($data['supplier'], $shop);
 
-        $data['propertyValues'] = $this->translatePropertyValues($data['propertyValues'], $locale);
+        $data['propertyValues'] = $this->translatePropertyValues($data['propertyValues'], $shop);
 
-        $data['propertyGroup'] = $this->translatePropertyGroup($data['propertyGroup'], $locale);
+        $data['propertyGroup'] = $this->translatePropertyGroup($data['propertyGroup'], $shop);
 
         if (!empty($data['configuratorSet']) && !empty($data['configuratorSet']['groups'])) {
             $data['configuratorSet']['groups'] = $this->translateAssociation(
                 $data['configuratorSet']['groups'],
-                $locale,
+                $shop,
                 'configuratorgroup'
             );
         }
 
         $data['related'] = $this->translateAssociation(
             $data['related'],
-            $locale,
+            $shop,
             'article'
         );
 
         $data['similar'] = $this->translateAssociation(
             $data['similar'],
-            $locale,
+            $shop,
             'article'
         );
 
         $data['images'] = $this->translateAssociation(
             $data['images'],
-            $locale,
+            $shop,
             'articleimage'
         );
 
@@ -2071,13 +2070,13 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Translates the passed values array with the passed locale entity.
+     * Translates the passed values array with the passed shop entity.
      *
      * @param $values
-     * @param Locale $locale
+     * @param Shop $shop
      * @return mixed
      */
-    protected function translatePropertyValues($values, Locale $locale)
+    protected function translatePropertyValues($values, Shop $shop)
     {
         if (empty($values)) {
             return $values;
@@ -2086,7 +2085,7 @@ class Article extends Resource implements BatchInterface
         foreach ($values as &$value) {
             $translation = $this->getSingleTranslation(
                 'propertyvalue',
-                $locale->getId(),
+                $shop->getId(),
                 $value['id']
             );
             if (empty($translation)) {
@@ -2108,17 +2107,17 @@ class Article extends Resource implements BatchInterface
      * Translates the passed supplier data.
      *
      * @param $supplier
-     * @param Locale $locale
+     * @param Shop $shop
      * @return array
      */
-    protected function translateSupplier($supplier, Locale $locale)
+    protected function translateSupplier($supplier, Shop $shop)
     {
         if (empty($supplier)) {
             return $supplier;
         }
         $translation = $this->getSingleTranslation(
             'supplier',
-            $locale->getId(),
+            $shop->getId(),
             $supplier['id']
         );
 
@@ -2135,10 +2134,10 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed property group data.
      * @param $groupData
-     * @param Locale $locale
+     * @param Shop $shop
      * @return array
      */
-    protected function translatePropertyGroup($groupData, Locale $locale)
+    protected function translatePropertyGroup($groupData, Shop $shop)
     {
         if (empty($groupData)) {
             return $groupData;
@@ -2146,7 +2145,7 @@ class Article extends Resource implements BatchInterface
 
         $translation = $this->getSingleTranslation(
             'propertygroup',
-            $locale->getId(),
+            $shop->getId(),
             $groupData['id']
         );
 
@@ -2165,10 +2164,10 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed variants array and all associated data.
      * @param $details
-     * @param Locale $locale
+     * @param Shop $shop
      * @return mixed
      */
-    protected function translateVariants($details, Locale $locale)
+    protected function translateVariants($details, Shop $shop)
     {
         if (empty($details)) {
             return $details;
@@ -2177,7 +2176,7 @@ class Article extends Resource implements BatchInterface
         foreach ($details as &$variant) {
             $translation = $this->getSingleTranslation(
                 'variant',
-                $locale->getId(),
+                $shop->getId(),
                 $variant['id']
             );
             if (empty($translation)) {
@@ -2195,7 +2194,7 @@ class Article extends Resource implements BatchInterface
             if ($variant['configuratorOptions']) {
                 $variant['configuratorOptions'] = $this->translateAssociation(
                     $variant['configuratorOptions'],
-                    $locale,
+                    $shop,
                     'configuratoroption'
                 );
             }
@@ -2204,7 +2203,7 @@ class Article extends Resource implements BatchInterface
                 foreach ($variant['images'] as &$image) {
                     $translation = $this->getSingleTranslation(
                         'articleimage',
-                        $locale->getId(),
+                        $shop->getId(),
                         $image['parentId']
                     );
                     if (empty($translation)) {
@@ -2242,16 +2241,16 @@ class Article extends Resource implements BatchInterface
      * Helper function which translates associated array data.
      *
      * @param array $association
-     * @param Locale $locale
+     * @param Shop $shop
      * @param $type
      * @return array
      */
-    protected function translateAssociation(array $association, Locale $locale, $type)
+    protected function translateAssociation(array $association, Shop $shop, $type)
     {
         foreach ($association as &$item) {
             $translation = $this->getSingleTranslation(
                 $type,
-                $locale->getId(),
+                $shop->getId(),
                 $item['id']
             );
             if (empty($translation)) {
@@ -2265,16 +2264,16 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to get a single translation.
      * @param $type
-     * @param $localeId
+     * @param $shopId
      * @param $key
      * @return array
      */
-    protected function getSingleTranslation($type, $localeId, $key)
+    protected function getSingleTranslation($type, $shopId, $key)
     {
         $translation = $this->getTranslationResource()->getList(0, 1, array(
             array('property' => 'translation.type', 'value' => $type),
             array('property' => 'translation.key', 'value' => $key),
-            array('property' => 'translation.localeId', 'value' => $localeId),
+            array('property' => 'translation.shopId', 'value' => $shopId),
         ));
 
         return $translation['data'][0];

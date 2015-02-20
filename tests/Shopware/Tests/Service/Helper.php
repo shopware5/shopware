@@ -352,7 +352,7 @@ class Helper
         $data = array(
             'type' => 'article',
             'key' => $articleId,
-            'localeId' => $shopId,
+            'shopId' => $shopId,
             'data' => $this->getArticleTranslation()
         );
         $this->translationApi->create($data);
@@ -363,7 +363,7 @@ class Helper
         $data = array(
             'type' => 'supplier',
             'key' => $manufacturerId,
-            'localeId' => $shopId,
+            'shopId' => $shopId,
             'data' => $this->getManufacturerTranslation()
         );
 
@@ -375,7 +375,7 @@ class Helper
         $this->translationApi->create(array(
             'type' => 'propertygroup',
             'key' => $properties['id'],
-            'localeId' => $shopId,
+            'shopId' => $shopId,
             'data' => array('groupName' => 'Dummy Translation')
         ));
 
@@ -383,7 +383,7 @@ class Helper
             $this->translationApi->create(array(
                 'type' => 'propertyoption',
                 'key' => $group['id'],
-                'localeId' => $shopId,
+                'shopId' => $shopId,
                 'data' => array('optionName' => 'Dummy Translation group - ' . $group['id'])
             ));
 
@@ -391,7 +391,7 @@ class Helper
                 $this->translationApi->create(array(
                     'type' => 'propertyvalue',
                     'key' => $option['id'],
-                    'localeId' => $shopId,
+                    'shopId' => $shopId,
                     'data' => array('optionValue' => 'Dummy Translation option - ' . $group['id'] . ' - ' . $option['id'])
                 ));
             }
@@ -404,7 +404,7 @@ class Helper
             $this->translationApi->create(array(
                 'type' => 'configuratorgroup',
                 'key' => $group['id'],
-                'localeId' => $shopId,
+                'shopId' => $shopId,
                 'data' => array(
                     'name' => 'Dummy Translation group - ' . $group['id'],
                     'description' => 'Dummy Translation description - ' . $group['id']
@@ -415,7 +415,7 @@ class Helper
                 $this->translationApi->create(array(
                     'type' => 'configuratoroption',
                     'key' => $option['id'],
-                    'localeId' => $shopId,
+                    'shopId' => $shopId,
                     'data' => array(
                         'name' => 'Dummy Translation option - ' . $group['id'] . ' - ' . $option['id']
                     )
@@ -429,7 +429,7 @@ class Helper
         $data = array(
             'type' => 'config_units',
             'key' => 1,
-            'localeId' => $shopId,
+            'shopId' => $shopId,
             'data' => array()
         );
 

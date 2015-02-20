@@ -34,6 +34,20 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
         $this->resource = \Shopware\Components\Api\Manager::getResource('translation');
     }
 
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        // We still support the old behavior
+        $request = $this->Request();
+        $localeId = $request->getPost('localeId');
+
+        if ($localeId !== null) {
+            $request->setPost('shopId', $localeId);
+            $request->setPost('localeId', null);
+        }
+    }
+
     /**
      * Get list of translations
      *
