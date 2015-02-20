@@ -1,29 +1,23 @@
 <?php $app->render('_header.php', ['tab' => 'system']) ?>
 
+<h2><?= $language["step2_header_files"];?></h2>
+
 <?php if ($error): ?>
     <div class="alert alert-error">
         <?= $language["step2_error"];?>
     </div>
 <?php endif ?>
 
-<h2><?= $language["step2_header_files"];?></h2>
+<p>
+    <?= $language["step2_files_info"] ?>
+</p>
 
-<span class="help-block">
-    <?= $language["step2_files_info"];?>
-</span>
 <table class="table table-striped">
-    <thead>
-    <tr>
-        <th><?= $language["step2_tablefiles_colcheck"];?></th>
-        <th><?= $language["step2_tablefiles_colstatus"];?></th>
-    </tr>
-    </thead>
     <tbody>
     <?php foreach ($systemCheckResultsWritePermissions as $systemCheckResult): ?>
         <?php $class = ($systemCheckResult["result"]) ? 'success' : 'error'; ?>
         <tr class="<?= $class; ?>">
             <td><?= $systemCheckResult["name"] ?></td>
-            <td><?= $systemCheckResult["result"] == true ? '<i class="icon-ok-sign"></i>' : '<i class="icon-minus-sign"></i>' ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

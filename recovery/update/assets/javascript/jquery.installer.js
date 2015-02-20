@@ -16,7 +16,7 @@
             finalFcnt: function() {
                 $('.primary').removeClass('invisible');
 
-                $('.progress .bar').width("100%");
+                $('.progress .progress-bar').width("100%");
                 $('#start-ajax').hide();
 
                 $('.progress').removeClass('progress-info').addClass('progress-success').removeClass('active');
@@ -49,7 +49,7 @@
 
     var startProgress = function(config) {
         var currentConfig = config.shift(),
-            progressBar = $('.progress .bar');
+            progressBar = $('.progress .progress-bar');
 
         $('.progress').addClass('active');
         progressBar.width("0%");
@@ -62,7 +62,7 @@
 
     var doRequest = function(offset, currentConfig, config) {
         var maxCount = currentConfig.maxCount,
-            progressBar = $('.progress .bar');
+            progressBar = $('.progress .progress-bar');
 
         $.ajax({
             url: currentConfig.requestUrl,
@@ -116,9 +116,7 @@
         $('html').removeClass('no-js').addClass('js');
 
         var $button = $('#start-ajax').click(function() {
-            startProgress(progressConfig, function() {
-
-            });
+            startProgress(progressConfig);
             $('#start-ajax').hide();
             $('.secondary').hide();
             $('.counter-text').removeClass('hidden').next('.progress-text').addClass('hidden');
