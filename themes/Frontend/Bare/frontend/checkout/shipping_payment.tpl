@@ -36,12 +36,12 @@
 	{include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
 {/block}
 
-{* Hide footer *}
+{* Footer *}
 {block name="frontend_index_footer"}
-    {if !$theme.checkoutHeader}
+    {if !$theme.checkoutFooter}
         {$smarty.block.parent}
     {else}
-        {block name='frontend_index_checkout_confirm_payment_footer'}
+        {block name="frontend_index_checkout_shipping_payment_footer"}
             {include file="frontend/index/footer_minimal.tpl"}
         {/block}
     {/if}
