@@ -26,7 +26,7 @@
 
 /** Misc icons */
 .sprite-minus-circle-frame { background-position: -36px -36px !important }
-.sprite-minus-circle { background-position: -36px -36px !important }
+.sprite-minus-circle, .sprite-picture--minus { background-position: -36px -36px !important }
 .sprite-plus-circle-frame { background-position: -36px 0px !important }
 .sprite-plus-circle { background-position: -36px 0px !important } /* has to be under the minus icons */
 .sprite-tick-circle, .sprite-money--arrow { background-position: -36px -72px !important }
@@ -34,7 +34,7 @@
 .sprite-pencil, .sprite-mail--pencil { background-position: -36px -216px !important }
 .sprite-bin-metal-full { background-position: -36px -252px !important }
 .sprite-globe-green, .sprite-globe, .sprite-google { background-position: -36px -288px !important }
-.sprite-duplicate-article, .sprite-duplicate-grid, .sprite-duplicate-template { background-position: -36px -180px !important }
+.sprite-duplicate-article, .sprite-duplicate-grid, .sprite-duplicate-template, .sprite-picture--arrow { background-position: -36px -180px !important }
 .sprite-blue-folder--plus { background-position: -36px -1080px !important }
 .sprite-document-copy, .sprite-blue-document-copy { background-position: -36px -180px !important }
 .sprite-inbox-image { background-position: -36px -360px !important }
