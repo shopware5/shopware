@@ -55,7 +55,7 @@ EOT
     'database-configuration_field_user'          => 'Datenbank Benutzer:',
     'database-configuration_field_password'      => 'Datenbank Passwort:',
     'database-configuration_field_database'      => 'Datenbank Name:',
-    'database-configuration_info'                => 'Geben Sie hier Ihre Datenbank-Zugangsdaten ein, wenn Sie sich nicht sicher sind, welche Dateien Sie eintragen müssen, kontaktieren Sie Ihren Provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
+    'database-configuration_info'                => 'Geben Sie hier Ihre Datenbank-Zugangsdaten ein. Wenn Sie sich nicht sicher sind, welche Daten Sie eintragen müssen, kontaktieren Sie Ihren Provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
     'database-configuration-create_new_database' => "Neue Datenbank anlegen",
 
     'database-import_header'            => 'Datenbank importieren',
@@ -67,7 +67,7 @@ EOT
     'migration_update_success'          => 'Datenbank Update wurde erfolgreich durchgeführt',
 
     'edition_header'        => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten',
-    'edition_info'          => 'Wenn Sie eine kommerzielle Shopware Lizenz erworben haben ,bitte wählen Sie die zutreffene Edition aus der Liste und geben Sie Ihren Lizenzschlüssel ein!',
+    'edition_info'          => 'Wenn Sie eine kommerzielle Shopware Lizenz erworben haben, so wählen Sie bitte die zutreffene Edition aus der Liste und geben Sie Ihren Lizenzschlüssel ein.',
     'edition_ce'            => 'Shopware Community Version (Lizenz: Open-Source AGPL)',
     'edition_pe'            => 'Shopware Professional (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)',
     'edition_ee'            => 'Shopware Enterprise Basic (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)',
