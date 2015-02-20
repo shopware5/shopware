@@ -55,5 +55,11 @@
         </service>
 
         <service id="shopware_plugininstaller.plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
+
+        <service id="shopware_plugininstaller.subscription_service" class="Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_plugininstaller.store_client" />
+            <argument type="service" id="models"/>
+        </service>
     </services>
 </container>
