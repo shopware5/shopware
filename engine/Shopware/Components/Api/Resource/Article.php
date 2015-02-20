@@ -807,7 +807,7 @@ class Article extends Resource implements BatchInterface
         // if another variant has set isMain to true, this variant will become
         // a usual variant again
         if ($setFirstVariantMain) {
-            $data['variants']['isMain'] = true;
+            $data['variants'][0]['isMain'] = true;
         }
 
         $variants = array();
