@@ -906,6 +906,14 @@ class sRewriteTable
             )
         );
 
+        $result = Shopware()->Events()->filter(
+            'Shopware_Modules_RewriteTable_sCreateRewriteTableArticles_filterArticles',
+            $result,
+            array(
+                'shop' => Shopware()->Shop()->getId()
+            )
+        );
+
         foreach ($result as $row) {
             $this->data->assign('sArticle', $row);
             $path = $this->template->fetch('string:' . $routerArticleTemplate, $this->data);
