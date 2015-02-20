@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
                         me.setWidth(me._deviceWidth.tabletPortrait);
                         me.center();
                     } },
-                    { text: '{s name="list/action_column/copy_mobile_landsacpe" namespace="backend/emotion/list/grid"}Als Mobile Landscape Einkaufswelt{/s}', iconCls: 'sprite-iphone--landscape', handler: function() {
+                    { text: '{s name="list/action_column/copy_mobile_landscape" namespace="backend/emotion/list/grid"}Als Mobile Landscape Einkaufswelt{/s}', iconCls: 'sprite-iphone--landscape', handler: function() {
 
                         me.checkAvailability(3);
                         me.setWidth(me._deviceWidth.mobileLandscape);
