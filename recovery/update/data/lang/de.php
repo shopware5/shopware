@@ -27,8 +27,6 @@ return [
     'step2_header_files'         => "Dateien und Verzeichnisse",
     'step2_files_info'           => "Die nachfolgenden Dateien und Verzeichnisse müssen vorhanden sein und Schreibrechte besitzen",
     'step2_files_delete_info'    => "Die nachfolgenden Verzeichnisse müssen <strong>gelöscht</strong> sein.",
-    'step2_tablefiles_colcheck'  => 'Datei/Verzeichnis',
-    'step2_tablefiles_colstatus' => 'Status',
     'step2_error'                => 'Einige Voraussetzungen werden nicht erfüllt',
     'step2_php_info'             => "Ihr Server muss die folgenden Systemvoraussetzungen erfüllen, damit Shopware lauffähig ist",
     'step2_system_colcheck'      => 'Voraussetzung',

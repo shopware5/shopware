@@ -17,7 +17,7 @@ h4,
 h5,
 h6 {
     color: #0e384f;
-    margin-top: 0;
+    margin-top: 15px;
 }
 h1 {
     font-weight: 300;
@@ -178,7 +178,7 @@ label {
     text-decoration: none;
     font-size: 16px;
     display: inline-block;
-    padding: 12px 20px;
+    padding: 12px 22px;
     position: relative;
     margin: 0;
     font-weight: 600;
@@ -214,8 +214,9 @@ label {
 
 .btn-default {
     border: 2px solid #cad9e0;
-    padding: 10px 18px;
+    padding: 10px 20px;
     color: #5c6f7c;
+    margin: 2px;
 }
 .btn-default.btn-lg {
     padding: 16px 23px;
@@ -253,7 +254,7 @@ label {
     color: #fff;
 }
 .btn-primary:focus {
-    border: 2px solid #2794C9;
+     border-color: #2794C9;
 }
 .btn-lg {
     padding: 18px 25px;
@@ -271,56 +272,67 @@ label {
 .btn-arrow-left:before {
     font-family: "scc";
     content: "\e6cd";
-    display: block;
-    float: left;
-    margin-top: 3px;
-    margin-right: 5px;
+    display: inline-block;
+    margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right:after {
     font-family: "scc";
     content: "\e6d0";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-left-up:before {
     font-family: "scc";
     content: "\e6cf";
-    display: block;
-    float: left;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-left-down:before {
     font-family: "scc";
     content: "\e6ce";
-    display: block;
-    float: left;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: 10px;
     margin-left: -5px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right-up:after {
     font-family: "scc";
     content: "\e6cf";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 .btn-arrow-right-down:after {
     font-family: "scc";
     content: "\e6ce";
-    display: block;
-    float: right;
-    margin-top: 3px;
+    display: inline-block;
     margin-right: -5px;
     margin-left: 10px;
+    position: relative;
+    top: 1px;
+}
+/* IMPORT DB BUTTON */
+.btn-database-right:after {
+    font-family: "scc";
+    content: "\f1c0";
+    display: inline-block;
+    font-weight: normal;
+    margin-right: -2px;
+    margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 
 .is--inline{
@@ -358,6 +370,7 @@ label {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     line-height: 26px;
+    overflow: auto;
 }
 .alert-success {
     color: #15591c;
@@ -378,6 +391,30 @@ label {
     color: #541a25;
     border-color: rgba(197, 66, 91, 0.4);
     background: rgba(197, 66, 91, 0.2);
+}
+
+.alert h1,
+.alert h2,
+.alert h3,
+.alert h4,
+.alert h5,
+.alert h6 {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    line-height: 100%;
+    margin: 20px 0 5px 0;
+    padding: 0;
+    border: 0 none;
+}
+
+.alert h1 { font-size: 20px; }
+.alert h2 { font-size: 18px; }
+.alert h3 { font-size: 16px; }
+.alert h4 { font-size: 14px; }
+.alert h5 { font-size: 12px; }
+.alert h6 { font-size: 10px; }
+
+.alert pre {
+    overflow: visible;
 }
 
 /** Table */
@@ -613,6 +650,15 @@ table .error {
 }
 .progress-actions {
     margin: 20px 0 0;
+}
+
+.progress-container {
+    border: 1px solid #CAD9E0;
+    background: #fff;
+    padding: 20px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 .progress-container .progress {

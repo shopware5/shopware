@@ -70,8 +70,8 @@ function selectLanguage()
         $selectedLanguage = "de";
     }
 
-    if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)) {
-        $selectedLanguage = $_POST["language"];
+    if (isset($_REQUEST["language"]) && in_array($_REQUEST["language"], $allowedLanguages)) {
+        $selectedLanguage = $_REQUEST["language"];
         unset($_SESSION["parameters"]["c_config_shop_language"]);
         unset($_SESSION["parameters"]["c_config_shop_currency"]);
         unset($_SESSION["parameters"]["c_config_admin_language"]);
