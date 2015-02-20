@@ -27,8 +27,6 @@ return [
     'step2_header_files'         => "Bestanden en Folders",
     'step2_files_info'           => "De volgende Bestanden en Folders moeten beschikbaar zijn en de juiste rechten bezitten",
     'step2_files_delete_info'    => "De volgende Folders moeten <strong>verwijderd</strong> worden.",
-    'step2_tablefiles_colcheck'  => 'Bestanden/Folders',
-    'step2_tablefiles_colstatus' => 'Status',
     'step2_error'                => 'Sommige vereisten zijn niet vervuld',
     'step2_php_info'             => "Uw server moet de volgende systeemvereisten vervullen, voordat Shopware uit te voeren is.",
     'step2_system_colcheck'      => 'Voorwaarde',
