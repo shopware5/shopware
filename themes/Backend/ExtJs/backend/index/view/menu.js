@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
                 me.fireEvent('menu-created', me.items);
 
                 Ext.create('Shopware.notification.ExpiredLicence').check();
+                Ext.create('Shopware.notification.SubscriptionWarning').check();
             }
         });
 

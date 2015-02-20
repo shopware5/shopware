@@ -79,17 +79,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Returns all expired plugins to the json-view
+     * Get all expired plugins
+     * return data as json to the view
      */
     public function getExpiredLicencesAction()
     {
-        $pluginService = Shopware()->Container()->get('shopware_plugininstaller.plugin_service_local');
-        $licences = $pluginService->getExpiredPluginLicenses();
+        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $licences = $subscriptionService->getExpiredPluginLicenses();
 
         if (empty($licences)) {
             $this->View()->assign('success', false);
-        }else {
-            $this->View()->assign(array('success' => true, 'data' => $licences));
+        } else {
+            $this->View()->assign(['success' => true, 'data' => $licences]);
         }
     }
 
