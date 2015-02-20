@@ -276,24 +276,27 @@
 
 		.product--info {
 			height: 100%;
+			position: relative;
 			overflow: hidden;
 		}
 
 		.product--image {
 			height: 70%;
+			margin: 0 auto;
 
 			&.is--large {
 				height: 100%;
 			}
 		}
 
-		.product--title {
-			height: 15%;
-			text-overflow: ellipsis;
+		.product--details {
+			max-height: 30%;
+			position: absolute;
+			bottom: 0; left: 0;
 		}
 
-		.product--price-info {
-			height: 15%;
+		.product--title {
+			text-overflow: ellipsis;
 		}
 	}
 }
