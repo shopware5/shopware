@@ -101,8 +101,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryId = $this->Request()->getParam('sCategory');
 
-        if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
-            return $this->forward('index', 'index');
+        if (!$categoryId || !$this->isValidCategoryPath($categoryId)) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
@@ -400,9 +403,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        $queryParamsWhiteList = array('controller', 'action', 'sCategory');
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl');
         $queryParamsNames = array_keys($this->Request()->getParams());
-
-        return ($defaultShopCategoryId == $categoryId && !array_diff($queryParamsNames, $queryParamsWhiteList));
+        $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
+        
+        return ($defaultShopCategoryId == $categoryId && !$paramsDiff);
     }
 }
