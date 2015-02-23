@@ -20,6 +20,8 @@
 ;(function ($) {
     "use strict";
 
+    var isNumber = /^\d+\.?\d*$/;
+
     /**
      * Constructor method of the PluginBase class. This method will try to
      * call the ```init```-method, where you can place your custom initialization of the plugin.
@@ -277,6 +279,11 @@
                 attr = me.$el.attr('data-' + key);
 
                 if (typeof attr === 'undefined') {
+                    return true;
+                }
+
+                if (isNumber.test(attr)) {
+                    me.opts[key] = parseFloat(attr);
                     return true;
                 }
 
