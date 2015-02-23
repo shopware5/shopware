@@ -89,13 +89,13 @@ The collapse cart element contains the current items in the users shopping cart 
 
     &:after {
         .unitize(11, 16, right);
+        .unitize(9, 16, border-width);
         border-bottom-color: #fff;
-        border-width: 9px;
     }
 
     &:before {
+        .unitize(10, 16, border-width);
         border-bottom-color: @border-color;
-        border-width: 10px;
     }
 
     .content--loader {
@@ -109,7 +109,6 @@ The collapse cart element contains the current items in the users shopping cart 
     .item--container {
         .unitize-padding(0, 10);
         .unitize-max-height(353);
-        //background: #fff;
         overflow-y: auto;
     }
 
@@ -165,26 +164,26 @@ The collapse cart element contains the current items in the users shopping cart 
             }
 
             .cart--badge {
-                .border-radius(3px 0 0 3px);
+                .border-radius-multi(3px, 0, 0, 3px);
+                .unitize-width(14);
                 display: block;
                 position: absolute;
-                width: 14px;
                 height: 100%;
                 top: 0;
                 left: 0;
                 background: @brand-primary;
 
-                span{
+                span {
                     .rotate(-90deg);
                     .unitize(8, 16, font-size);
-                    line-height: 12px;
+                    .unitize(12, 16, line-height);
+                    .unitize-width(40);
                     color: white;
                     text-transform: uppercase;
                     text-align: center;
                     font-weight: bold;
                     display: block;
                     position: absolute;
-                    width: 40px;
                     padding: 0;
                     margin: 0;
                     top: 0;
@@ -348,8 +347,10 @@ The collapse cart element contains the current items in the users shopping cart 
         .icon--loading-indicator {
             .unitize-width(21);
             .unitize-height(21);
+            .unitize-margin(9, 0, 0, 0);
             position: relative;
-            margin: 9px auto 0;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         *[class*="icon--"] {
