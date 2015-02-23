@@ -105,7 +105,8 @@
 ;(function ($, window, document) {
     'use strict';
 
-    var $html = $('html');
+    var $html = $('html'),
+        vendorPropertyDiv = document.createElement('div');
 
     /**
      * @class EventEmitter
@@ -346,6 +347,15 @@
          * @type {Number}
          */
         _viewportWidth: 0,
+
+        /**
+         *
+         *
+         * @private
+         * @property _vendorPropertyCache
+         * @type {Object}
+         */
+        _vendorPropertyCache: {},
 
         /**
          * Initializes the StateManager with the incoming breakpoint
@@ -1351,7 +1361,36 @@
             }
 
             return caf || window.clearTimeout;
-        }()).bind(window)
+        }()).bind(window),
+
+        getVendorProperty: function (property) {
+            var cache = this._vendorPropertyCache,
+                style = vendorPropertyDiv.style;
+
+            if (cache[property]) {
+                return cache[property];
+            }
+
+            if (property in style) {
+                return (cache[property] = property);
+            }
+
+            var prefixes = ['webkit', 'moz', 'ms', 'o'],
+                prop = property.charAt(0).toUpperCase() + property.substr(1),
+                len = prefixes.length,
+                i = 0,
+                vendorProp;
+
+            for (; i < len; i++) {
+                vendorProp = prefixes[i] + prop;
+
+                if (vendorProp in style) {
+                    return (cache[property] = vendorProp);
+                }
+            }
+
+            return (cache[property] = property);
+        }
     });
 
 })(jQuery, window, document);
