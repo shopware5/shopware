@@ -8,7 +8,7 @@
 		<div class="panel--body is--wide block-group">
 			{foreach $sDispatches as $dispatch}
 				{block name="frontend_checkout_dispatch_container"}
-					<div class="dispatch--method method block">
+					<div class="dispatch--method{if $dispatch@last} method_last{else} method{/if} block">
 
 						{* Radio Button *}
 						{block name='frontend_checkout_dispatch_shipping_input_radio'}
