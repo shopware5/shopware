@@ -102,19 +102,12 @@
 
             me.applyDataAttributes();
 
-            me.$shortText = $el.find(opts.shortDescription);
-            me.$longText = $el.find(opts.offcanvasContent);
-            me.$offcanvasTrigger = $el.find(opts.offcanvasTrigger);
-            me._$offCanvas = $el.find(opts.offCanvasSelector);
+            me._$shortText = $el.find(opts.shortDescription).removeClass(opts.hiddenCls);
+            me._$longText = $el.find(opts.offcanvasContent).addClass(opts.hiddenCls);
+            me._$offCanvas = $el.find(opts.offCanvasSelector).removeClass(opts.hiddenCls);
+            me._$offcanvasTrigger = $el.find(opts.offcanvasTrigger);
 
-            // hide long text, show short
-            me.$longText.addClass(opts.hiddenCls);
-            me.$shortText.removeClass(opts.hiddenCls);
-
-            // prepare off canvas menu
-            me._$offCanvas.removeClass(opts.hiddenCls);
-
-            me.$offcanvasTrigger.offcanvasMenu({
+            me._$offcanvasTrigger.offcanvasMenu({
                 'offCanvasSelector': opts.offCanvasSelector,
                 'closeButtonSelector': opts.offCanvasCloseSelector,
                 'direction': opts.offCanvasDirection
@@ -130,14 +123,19 @@
          */
         destroy: function () {
             var me = this,
-                opts = me.opts;
+                hiddenClass = me.opts.hiddenCls,
+                plugin = me._$offcanvasTrigger.data('plugin_offcanvasMenu');
 
             // redesign content to old structure
-            me.$longText.removeClass(opts.hiddenCls);
-            me.$shortText.addClass(opts.hiddenCls);
+            me._$longText.removeClass(hiddenClass);
+            me._$shortText.addClass(hiddenClass);
 
             // hide offcanvas menu
-            me._$offCanvas.addClass(opts.hiddenCls);
+            me._$offCanvas.addClass(hiddenClass);
+
+            if (plugin) {
+                plugin.destroy();
+            }
 
             me._destroy();
         }
