@@ -12,9 +12,9 @@
         <div class="footer--vat-info">
             <p class="vat-info--text">
                 {if $sOutputNet}
-                    {s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}{/s}
                 {else}
-                    {s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}
+                    {s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}{/s}
                 {/if}
             </p>
         </div>
@@ -23,7 +23,7 @@
     {* Copyright *}
     {block name="frontend_index_minimal_footer_copyright"}
         <div class="footer--copyright">
-            {s name="IndexCopyright" namespace="frontend/index/footer"}Copyright &copy; shopware AG{/s}
+            {s name="IndexCopyright" namespace="frontend/index/footer"}{/s}
         </div>
     {/block}
 </div>

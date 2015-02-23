@@ -1,4 +1,4 @@
-{namespace name="frontend/listing/listing"}
+{namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_emotions"}
     <div class="content--emotions">
@@ -19,7 +19,7 @@
             {if !$showListing}
                 <div class="emotion--show-listing">
                     <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" class="link--show-listing">
-                        {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
+                        {s name="ListingActionsOffersLink"}{/s}
                     </a>
                 </div>
             {/if}

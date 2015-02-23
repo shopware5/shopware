@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <atom:link href="{$sCategoryContent.rssFeed}" rel="self" type="application/rss+xml" />
-        <title>{block name='frontend_atom_title'}{s name="BlogRssFeedHeader"}{$sCategoryContent.description} / RSS Feed{/s}{/block}</title>
+        <title>{block name='frontend_atom_title'}{s name="BlogRssFeedHeader"}{$sCategoryContent.description}{/s}{/block}</title>
         <link>{url controller='index'}</link>
         <description>{$sShopname} - {$sCategoryContent.description}</description>
         <language>de-de</language>

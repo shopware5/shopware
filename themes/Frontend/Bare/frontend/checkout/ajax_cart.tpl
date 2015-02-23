@@ -5,7 +5,7 @@
                 {block name='frontend_checkout_ajax_cart_buttons_offcanvas_inner'}
                     <a href="#close-categories-menu" class="close--off-canvas">
                         <i class="icon--arrow-left"></i>
-                        {s name="AjaxCartContinueShopping"}Continue shopping{/s}
+                        {s name="AjaxCartContinueShopping"}{/s}
                     </a>
                 {/block}
             </div>
@@ -44,7 +44,7 @@
                         {block name='frontend_checkout_ajax_cart_empty'}
                             <div class="cart--item is--empty">
                                 {block name='frontend_checkout_ajax_cart_empty_inner'}
-                                    <span class="cart--empty-text">{s name='AjaxCartInfoEmpty'}Your shopping cart is empty{/s}</span>
+                                    <span class="cart--empty-text">{s name='AjaxCartInfoEmpty'}{/s}</span>
                                 {/block}
                             </div>
                         {/block}
@@ -58,7 +58,7 @@
                 <div class="prices--container">
                     {block name='frontend_checkout_ajax_cart_prices_container_inner'}
                         <div class="prices--articles">
-                            <span class="prices--articles-text">{s name="AjaxCartTotalAmount"}Total amount{/s}</span>
+                            <span class="prices--articles-text">{s name="AjaxCartTotalAmount"}{/s}</span>
                             <span class="prices--articles-amount">{$sBasket.Amount|currency}</span>
                         </div>
                     {/block}
@@ -73,13 +73,13 @@
                     {block name='frontend_checkout_ajax_cart_open_checkout'}
                         <a href="{url controller='checkout' action='confirm'}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape:"html"}">
                             <i class="icon--arrow-right"></i>
-                            {s name='AjaxCartLinkConfirm'}Proceed to checkout{/s}
+                            {s name='AjaxCartLinkConfirm'}{/s}
                         </a>
                     {/block}
                     {block name='frontend_checkout_ajax_cart_open_basket'}
                         <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape:"html"}">
                             <i class="icon--arrow-right"></i>
-                            {s name='AjaxCartLinkBasket'}View shopping cart{/s}
+                            {s name='AjaxCartLinkBasket'}{/s}
                         </a>
                     {/block}
                 {/block}

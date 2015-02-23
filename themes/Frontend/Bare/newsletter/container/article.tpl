@@ -53,12 +53,12 @@
 		{if $sArticle.purchaseunit}
 	    <div style="font-size:13px;color:#888;margin-bottom:8px;">
 		<p style="font-size:13px;margin:0;">
-		    <strong>{se name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/se}:</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
+		    <strong>{s name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/s}:</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
 		</p>
 		{if $sArticle.purchaseunit != $sArticle.referenceunit}
 		    <p style="font-size:13px;margin:0">
 			{if $sArticle.referenceunit}
-			    <strong class="baseprice">{se name="ListingBoxBaseprice"  namespace="frontend/listing/box_article"}{/se}:</strong> {$sArticle.referenceunit} {$sArticle.sUnit.description} = {$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+			    <strong class="baseprice">{s name="ListingBoxBaseprice"  namespace="frontend/listing/box_article"}{/s}:</strong> {$sArticle.referenceunit} {$sArticle.sUnit.description} = {$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 			{/if}
 		    </p>
 		{/if}
@@ -67,12 +67,12 @@
 	{if $sArticle.pseudoprice}
 	<span style="color:#999; font-size:13px; line-height:13px;"><s>{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s></span><br />
 	    <strong style="color:#990000;font-size:14px;">
-		{if $sArticle.priceStartingFrom}{se name='NewsletterBoxArticleStartsAt'}ab{/se} {/if}
+		{if $sArticle.priceStartingFrom}{s name='NewsletterBoxArticleStartsAt'}ab{/s} {/if}
 		{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 	    </strong>
 	{else}
 	    <strong style="color:#000;font-size:14px;">
-		{if $sArticle.priceStartingFrom}{se name='NewsletterBoxArticleStartsAt'}ab{/se} {/if}
+		{if $sArticle.priceStartingFrom}{s name='NewsletterBoxArticleStartsAt'}ab{/s} {/if}
 		{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 	    </strong>
 	{/if}

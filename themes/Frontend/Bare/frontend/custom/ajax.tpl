@@ -1,9 +1,9 @@
 {block name='frontend_custom_ajax_buttons_offcanvas'}
     <div class="buttons--off-canvas">
         {block name='frontend_custom_ajax_buttons_offcanvas_inner'}
-            <a href="#" title="{"{s name="CustomAjaxActionClose"}Close{/s}"|escape}" class="close--off-canvas">
+            <a href="#" title="{"{s name="CustomAjaxActionClose"}{/s}"|escape}" class="close--off-canvas">
                 <i class="icon--arrow-left"></i>
-                {s name="CustomAjaxActionClose"}Close{/s}
+                {s name="CustomAjaxActionClose"}{/s}
             </a>
         {/block}
     </div>

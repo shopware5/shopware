@@ -10,7 +10,7 @@
 
         {* Search field *}
 		{block name='frontend_index_search_field'}
-        	<input type="search" name="sSearch" class="main-search--field" data-live-search="true" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}Suchbegriff...{/s}" maxlength="30"  />
+        	<input type="search" name="sSearch" class="main-search--field" data-live-search="true" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}{/s}" maxlength="30"  />
 		{/block}
 
         {* Search input *}
@@ -24,7 +24,7 @@
 
                 {* Search text *}
                 {block name='frontend_index_search_field_submit_text'}
-                    <span class="main-search--text">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
+                    <span class="main-search--text">{s name="IndexSearchFieldSubmit"}{/s}</span>
                 {/block}
             </button>
 		{/block}

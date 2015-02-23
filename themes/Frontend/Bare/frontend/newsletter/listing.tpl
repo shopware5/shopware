@@ -10,7 +10,7 @@
 			{if $sContent}
 				{block name="frontend_newsletter_listing_headline"}
 					<div class="newsletter-listing--headline panel--body is--wide has--border is--rounded">
-						<h1 class="newsletter--title">{s name="NewsletterListingHeadline"}Newsletter-Archiv{/s}</h1>
+						<h1 class="newsletter--title">{s name="NewsletterListingHeadline"}{/s}</h1>
 					</div>
 				{/block}
 
@@ -24,7 +24,7 @@
 
 								{block name="frontend_newsletter_listing_header_name"}
 									<div class="newsletter-listing--headline-name block">
-										{s name="NewsletterListingHeaderName"}Name{/s}
+										{s name="NewsletterListingHeaderName"}{/s}
 									</div>
 								{/block}
 

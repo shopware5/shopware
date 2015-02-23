@@ -7,13 +7,13 @@
     {block name='frontend_blog_listing_filter_button'}
         <div class="blog--filter-btn">
             <a href="#"
-               title="{"{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}"|escape}"
+               title="{"{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}{/s}"|escape}"
                class="filter--trigger btn is--icon-left"
                data-collapseTarget=".blog--filter-options"
                data-offcanvas="true"
                data-offCanvasSelector=".blog--filter-options"
                data-closeButtonSelector=".blog--filter-close-btn">
-                <i class="icon--filter"></i> {s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}
+                <i class="icon--filter"></i> {s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}{/s}
             </a>
         </div>
     {/block}

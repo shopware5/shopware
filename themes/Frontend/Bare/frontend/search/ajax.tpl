@@ -3,7 +3,7 @@
     {* no search results *}
     {block name="search_ajax_inner_no_results"}
         <ul class="results--list">
-            <li class="list--entry entry--no-results result--item">{s name="SearchAjaxNoResults"}Keine Suchergenisse gefunden{/s}</li>
+            <li class="list--entry entry--no-results result--item">{s name="SearchAjaxNoResults"}{/s}</li>
         </ul>
     {/block}
 
@@ -62,7 +62,7 @@
                     {* Result of all founded products *}
                     {block name="search_ajax_all_results_number"}
                         <span class="entry--all-results-number block">
-                            {$sSearchResults.sArticlesCount} {s name='SearchAjaxInfoResults'}Treffer{/s}
+                            {$sSearchResults.sArticlesCount} {s name='SearchAjaxInfoResults'}{/s}
                         </span>
                     {/block}
                 </li>

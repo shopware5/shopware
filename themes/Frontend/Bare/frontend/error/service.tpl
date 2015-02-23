@@ -1,13 +1,13 @@
 {extends file='frontend/index/index.tpl'}
 
-{block name='frontend_index_header_title' prepend}{s name="ServiceIndexTitle"}Wartungsarbeiten{/s} | {/block}
+{block name='frontend_index_header_title' prepend}{s name="ServiceIndexTitle"}{/s} | {/block}
 
 {block name='frontend_index_content'}
     {block name="frontend_error_service_content_outer"}
         <div class="error--service-wrapper">
             {block name="frontend_error_service_content_inner"}
-                <h2 class="error--service-header">{s name="ServiceHeader"}Wegen Wartungsarbeiten nicht erreichbar!{/s}</h2>
-                <p class="error--service-text">{s name="ServiceText"}Aufgrund nötiger Wartungsarbeiten ist der Shop zur Zeit nicht erreichbar.{/s}</p>
+                <h2 class="error--service-header">{s name="ServiceHeader"}{/s}</h2>
+                <p class="error--service-text">{s name="ServiceText"}{/s}</p>
             {/block}
         </div>
     {/block}

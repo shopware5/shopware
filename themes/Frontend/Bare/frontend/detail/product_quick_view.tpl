@@ -52,7 +52,7 @@
             {block name='frontend_detail_product_quick_view_description_title'}
                 <div class="quick-view--description-title">
                     {block name='frontend_detail_product_quick_view_description_title_inner'}
-                        {s name="DetailDescriptionHeader" namespace="frontend/detail/description"}Produktinformationen{/s}
+                        {s name="DetailDescriptionHeader" namespace="frontend/detail/description"}{/s}
                     {/block}
                 </div>
             {/block}

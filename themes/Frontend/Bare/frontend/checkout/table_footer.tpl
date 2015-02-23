@@ -1,10 +1,12 @@
+{namespace name="frontend/checkout/cart"}
+
 <footer class="table--footer block-group">
 
 	{* Benefits *}
 	{block name="frontend_checkout_footer_benefits"}
 		<div class="footer--benefit block">
 			{block name="frontend_checkout_footer_headline_benefit"}
-				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlineForYou"}Unserer Vorteil für Sie{/s}</h4>
+				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlineForYou"}{/s}</h4>
 			{/block}
 
 			{block name="frontend_checkout_footer_benefits_list"}
@@ -42,12 +44,12 @@
 	{block name="frontend_checkout_footer_dispatch"}
 		<div class="footer--benefit block">
 			{block name="frontend_checkout_footer_headline_dispatch"}
-				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlineDispatch"}Wir verschicken mit{/s}</h4>
+				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlineDispatch"}{/s}</h4>
 			{/block}
 
 			{block name="frontend_checkout_footer_text_dispatch"}
 				<p class="benefit--text">
-					{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitTextDispatch"}Ihre Versandanbieter-Logos{/s}
+					{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitTextDispatch"}{/s}
 				</p>
 			{/block}
 		</div>
@@ -57,12 +59,12 @@
 	{block name="frontend_checkout_footer_payment"}
 		<div class="footer--benefit block">
 			{block name="frontend_checkout_footer_headline_payment"}
-				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlinePayment"}Zahlungsmethoden{/s}</h4>
+				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlinePayment"}{/s}</h4>
 			{/block}
 
 			{block name="frontend_checkout_footer_text_payment"}
 				<p class="benefit--text">
-					{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitTextPayment"}Ihre Zahlungsanbieter-Logos{/s}
+					{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitTextPayment"}{/s}
 				</p>
 			{/block}
 		</div>

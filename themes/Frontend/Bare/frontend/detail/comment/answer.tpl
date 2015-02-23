@@ -15,14 +15,14 @@
 			{* Answer author content *}
 			{block name='frontend_detail_answer_author_field'}
 				<span class="content--field">
-					{s name="DetailCommentInfoFromAdmin"}Admin{/s}
+					{s name="DetailCommentInfoFromAdmin"}{/s}
 				</span>
 			{/block}
 
 			{* Review publish date label *}
 			{block name='frontend_detail_answer_date_label'}
 				<strong class="content--label">
-					{s name="DetailCommentInfoAt"}Am:{/s}
+					{s name="DetailCommentInfoAt"}{/s}
 				</strong>
 			{/block}
 

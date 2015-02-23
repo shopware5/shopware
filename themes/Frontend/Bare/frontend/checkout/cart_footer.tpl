@@ -26,7 +26,7 @@
                     {/block}
 
                     {block name='frontend_checkout_cart_footer_add_voucher_label'}
-                        <label for="add-voucher--trigger" class="add-voucher--label">{s name="CheckoutFooterVoucherTrigger"}Ich habe einen Gutschein{/s}</label>
+                        <label for="add-voucher--trigger" class="add-voucher--label">{s name="CheckoutFooterVoucherTrigger"}{/s}</label>
                     {/block}
 
                     <div class="add-voucher--panel is--hidden block-group">

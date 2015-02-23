@@ -94,9 +94,9 @@
 
 							{block name='frontend_account_orders_actions_paging_count'}
 								<div class="paging--display">
-									{s name="ListingTextSite" namespace="frontend/listing/listing_actions"}Seite{/s}
+									{s name="ListingTextSite" namespace="frontend/listing/listing_actions"}{/s}
 									<span class="is--bold">{if $sPage}{$sPage}{else}1{/if}</span>
-									{s name="ListingTextFrom" namespace="frontend/listing/listing_actions"}von{/s}
+									{s name="ListingTextFrom" namespace="frontend/listing/listing_actions"}{/s}
 									<span class="is--bold">{$sNumberPages}</span>
 								</div>
 							{/block}

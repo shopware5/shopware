@@ -13,8 +13,8 @@
 				{* Trigger to close the off canvas menu *}
 				{block name="frontend_index_left_categories_close_menu"}
 					<li class="navigation--entry entry--close-off-canvas">
-						<a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}Menü schließen{/s}" class="navigation--link">
-							{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}Menü schließen{/s} <i class="icon--arrow-right"></i>
+						<a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}" class="navigation--link">
+							{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
 						</a>
 					</li>
 				{/block}
@@ -51,7 +51,7 @@
 
             {* Categories headline *}
             {block name="frontend_index_left_categories_headline"}
-                <h2 class="categories--headline navigation--headline">{s namespace='frontend/index/menu_left' name="IndexSidebarCategoryHeadline"}Kategorien{/s}</h2>
+                <h2 class="categories--headline navigation--headline">{s namespace='frontend/index/menu_left' name="IndexSidebarCategoryHeadline"}{/s}</h2>
             {/block}
 
             {* Actual include of the categories *}

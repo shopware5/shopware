@@ -108,7 +108,7 @@
 						{block name='frontend_blog_col_tags'}
 							<div class="blog--box-tags">
 								{if $sArticle.tags|@count > 1}
-									<strong>{s name="BlogInfoTags"}Tags:{/s}</strong>
+									<strong>{s name="BlogInfoTags"}{/s}</strong>
 									{foreach $sArticle.tags as $tag}
 										<a href="{$tag.link}" title="{$tag.name|escape:'html'}">{$tag.name}</a>{if !$tag@last}, {/if}
 									{/foreach}
