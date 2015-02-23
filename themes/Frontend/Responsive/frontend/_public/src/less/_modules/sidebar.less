@@ -1,7 +1,32 @@
 /*
 Sidebar
 ==============================================
-Defines the styling of the storefront sidebar main navigation and its components.
+Defines the styling of the storefront sidebar navigation and its components.
+
+The sidebar is displayed inside the off-canvas menu on small devices.
+
+```
+<ul class="sidebar--navigation">
+    <li class="navigation--entry is--active has--sub-categories has--sub-children">
+        <a class="navigation--link is--active has--sub-categories">
+            Sidebar Head
+        </a>
+        <ul class="sidebar--navigation is--level1">
+            <li class="navigation--entry has--sub-children" role="menuitem">
+                <a class="navigation--link">
+                    Navigation entry
+                </a>
+                <a class="navigation--link">
+                    Navigation entry
+                </a>
+                <a class="navigation--link">
+                    Navigation entry
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+```
 */
 
 body > .sidebar-main {

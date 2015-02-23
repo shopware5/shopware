@@ -5,29 +5,37 @@ Checkboxes
 
 Checkbox element for selections or checkbox inside a link.
 
-Either in a `span` element with an `input` tag inside / or inside a link.
+Either in a `span` element with an `input` tag inside / or inside a link. (Example inside a panel element)
 ```
-<span class="checkbox">
-    <input type="checkbox" />
-    <span class="checkbox--state"></span>
-</span> Option (actual checkbox)<br/>
 
-<span class="checkbox">
-    <input type="checkbox" />
-    <span class="checkbox--state"></span>
-</span> Option (actual checkbox)<br/>
+<div class="panel">
+    <div class="panel--body">
 
-<a href="#">
-    <span class="checkbox">
-        <span class="checkbox--state"></span>
-    </span>
-</a> Option (inside a link)<br/>
+        <span class="checkbox">
+            <input type="checkbox" />
+            <span class="checkbox--state"></span>
+        </span> Option (actual checkbox)<br/>
 
-<a href="#">
-    <span class="checkbox">
-        <span class="checkbox--state"></span>
-    </span>
-</a> Option (inside a link)<br/>
+        <span class="checkbox">
+            <input type="checkbox" />
+            <span class="checkbox--state"></span>
+        </span> Option (actual checkbox)<br/>
+
+        <a href="#">
+            <span class="checkbox">
+                <span class="checkbox--state"></span>
+            </span>
+        </a> Option (inside a link)<br/>
+
+        <a href="#">
+            <span class="checkbox">
+                <span class="checkbox--state"></span>
+            </span>
+        </a> Option (inside a link)<br/>
+
+    </div>
+</div>
+
 ```
 */
 
