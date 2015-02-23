@@ -3,7 +3,7 @@
 {* Service hotline *}
 {block name="frontend_index_footer_column_service_hotline"}
     <div class="footer--column column--hotline is--first block">
-        <h4 class="column--headline" data-slide-panel="true">{s name="sFooterServiceHotlineHead"}{/s}</h4>
+        <h4 class="column--headline">{s name="sFooterServiceHotlineHead"}{/s}</h4>
 
 		{block name="frontend_index_footer_column_service_hotline_content"}
 			<div class="column--content">
@@ -15,7 +15,7 @@
 
 {block name="frontend_index_footer_column_service_menu"}
 	<div class="footer--column column--menu block">
-		<h4 class="column--headline" data-slide-panel="true">{s name="sFooterShopNavi1"}{/s}</h4>
+		<h4 class="column--headline">{s name="sFooterShopNavi1"}{/s}</h4>
 
 		{block name="frontend_index_footer_column_service_menu_content"}
 			<nav class="column--navigation column--content">
@@ -54,7 +54,7 @@
 
 {block name="frontend_index_footer_column_information_menu"}
 	<div class="footer--column column--menu block">
-		<h4 class="column--headline" data-slide-panel="true">{s name="sFooterShopNavi2"}{/s}</h4>
+		<h4 class="column--headline">{s name="sFooterShopNavi2"}{/s}</h4>
 
 		{block name="frontend_index_footer_column_information_menu_content"}
 			<nav class="column--navigation column--content">
@@ -92,7 +92,7 @@
 
 {block name="frontend_index_footer_column_newsletter"}
 	<div class="footer--column column--newsletter is--last block">
-		<h4 class="column--headline" data-slide-panel="true">{s name="sFooterNewsletterHead"}{/s}</h4>
+		<h4 class="column--headline">{s name="sFooterNewsletterHead"}{/s}</h4>
 
 		{block name="frontend_index_footer_column_newsletter_content"}
 			<div class="column--content">
