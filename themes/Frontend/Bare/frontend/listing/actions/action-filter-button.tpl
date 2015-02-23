@@ -11,7 +11,7 @@
 			   data-offCanvasSelector=".action--filter-options"
 			   data-closeButtonSelector=".filter--close-btn">
 				<i class="icon--filter"></i>
-				{s name='ListingFilterButton'}Filter{/s}
+				{s name='ListingFilterButton'}{/s}
 				<span class="action--collapse-icon"></span>
 			</a>
 		</div>

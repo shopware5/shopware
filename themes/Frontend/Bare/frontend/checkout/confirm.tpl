@@ -67,7 +67,7 @@
 
             {block name='frontend_checkout_confirm_tos_panel_headline'}
                 <div class="panel--title primary is--underline">
-                    {s name="ConfirmHeadlineAGBandRevocation"}AGB und Widerrufsbelehrung{/s}
+                    {s name="ConfirmHeadlineAGBandRevocation"}{/s}
                 </div>
             {/block}
 
@@ -77,7 +77,7 @@
                 {block name='frontend_checkout_confirm_tos_revocation_notice'}
                     {if {config name=revocationnotice}}
                         <div class="body--revocation" data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">
-                            {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
+                            {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}{/s}
                         </div>
                     {/if}
                 {/block}
@@ -123,7 +123,7 @@
                                         {block name='frontend_checkout_confirm_service_label'}
                                             <div class="block column--label">
                                                 <label for="swagCRDServiceBox"{if $agreementErrors && $agreementErrors.serviceError} class="has--error"{/if}>
-                                                    {s name="AcceptServiceMessage"}Ja, bitte beginnen Sie sofort mit der Dienstleistung. Mein Widerrufsrecht erlischt mit vollständiger Ausführung.{/s}
+                                                    {s name="AcceptServiceMessage"}{/s}
                                                 </label>
                                             </div>
                                         {/block}
@@ -141,7 +141,7 @@
                                         {block name='frontend_checkout_confirm_esd_label'}
                                             <div class="block column--label">
                                                 <label for="esdAgreementChecked"{if $agreementErrors && $agreementErrors.esdError} class="has--error"{/if}>
-                                                    {s name="AcceptEsdMessage"}Ja, ich möchte sofort Zugang zu dem digitalen Inhalt und weiß, dass mein Widerrufsrecht mit dem Zugang erlischt.{/s}
+                                                    {s name="AcceptEsdMessage"}{/s}
                                                 </label>
                                             </div>
                                         {/block}
@@ -222,9 +222,9 @@
                         {/if}
 
                         {if $sUserData.billingaddress.salutation eq "mr"}
-                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}Herr{/s}
+                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
                         {else}
-                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
+                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
                         {/if}
 
                         {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
@@ -269,9 +269,9 @@
                         {/if}
 
                         {if $sUserData.shippingaddress.salutation eq "mr"}
-                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}Herr{/s}
+                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
                         {else}
-                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
+                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
                         {/if}
 
                         {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
@@ -346,7 +346,7 @@
             <div class="panel has--border additional--features">
                 {block name="frontend_checkout_confirm_additional_features_headline"}
                     <div class="panel--title is--underline">
-                        {s name="ConfirmHeadlineAdditionalOptions"}Weitere Optionen{/s}
+                        {s name="ConfirmHeadlineAdditionalOptions"}{/s}
                     </div>
                 {/block}
 
@@ -456,7 +456,7 @@
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
                                     <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">
-                                        {s name='ConfirmDoPayment'}Zahlung durchführen{/s}<i class="icon--arrow-right"></i>
+                                        {s name='ConfirmDoPayment'}{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {else}
                                     <button type="submit" class="btn is--primary is--large right is--icon-right" form="confirm--form" data-form-polyfill="true" data-preloader-button="true">

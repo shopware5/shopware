@@ -4,7 +4,7 @@
 {/block}
 
 {block name='frontend_index_html'}
-<html class="no-js" lang="{s name='IndexXmlLang'}de{/s}" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<html class="no-js" lang="{s name='IndexXmlLang'}{/s}" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 {/block}
 
 {block name='frontend_index_header'}

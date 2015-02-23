@@ -109,13 +109,13 @@ td.head  {
 				<strong>
 				{block name="document_index_head_right"}
 					{$Containers.Header_Box_Right.value}
-					{s name="DocumentIndexCustomerID"}Kunden-Nr.:{/s} {$User.billing.customernumber|string_format:"%06d"}<br />
+					{s name="DocumentIndexCustomerID"}{/s} {$User.billing.customernumber|string_format:"%06d"}<br />
 					{if $User.billing.ustid}
-					{s name="DocumentIndexUstID"}USt-IdNr.:{/s} {$User.billing.ustid|replace:" ":""|replace:"-":""}<br />
+					{s name="DocumentIndexUstID"}{/s} {$User.billing.ustid|replace:" ":""|replace:"-":""}<br />
 					{/if}
-					{s name="DocumentIndexOrderID"}Bestell-Nr.:{/s} {$Order._order.ordernumber}<br />
-					{s name="DocumentIndexDate"}Datum:{/s} {$Document.date}<br />
-					{if $Document.deliveryDate}{s name="DocumentIndexDeliveryDate"}Liefertermin:{/s} {$Document.deliveryDate}<br />{/if}
+					{s name="DocumentIndexOrderID"}{/s} {$Order._order.ordernumber}<br />
+					{s name="DocumentIndexDate"}{/s} {$Document.date}<br />
+					{if $Document.deliveryDate}{s name="DocumentIndexDeliveryDate"}{/s} {$Document.deliveryDate}<br />{/if}
 				{/block}
 				</strong>
 		</div>
@@ -135,45 +135,45 @@ td.head  {
 	<tr>
 		{block name="document_index_table_head_pos"}
 			<td align="left" width="5%" class="head">
-				<strong>{s name="DocumentIndexHeadPosition"}Pos.{/s}</strong>
+				<strong>{s name="DocumentIndexHeadPosition"}{/s}</strong>
 			</td>
 		{/block}
 		{block name="document_index_table_head_nr"}
 			<td align="left" width="10%" class="head">
-				<strong>{s name="DocumentIndexHeadArticleID"}Art-Nr.{/s}</strong>
+				<strong>{s name="DocumentIndexHeadArticleID"}{/s}</strong>
 			</td>
 		{/block}
 		{block name="document_index_table_head_name"}
 			<td align="left" width="48%" class="head">
-				<strong>{s name="DocumentIndexHeadName"}Bezeichnung{/s}</strong>
+				<strong>{s name="DocumentIndexHeadName"}{/s}</strong>
 			</td>
 		{/block}
 		{block name="document_index_table_head_quantity"}
 			<td align="right" width="5%" class="head">
-				<strong>{s name="DocumentIndexHeadQuantity"}Anz.{/s}</strong>
+				<strong>{s name="DocumentIndexHeadQuantity"}{/s}</strong>
 			</td>
 		{/block}
 		{block name="document_index_table_head_tax"}
 			{if $Document.netto != true}
 				<td align="right" width="6%" class="head">
-					<strong>{s name="DocumentIndexHeadTax"}MwSt.{/s}</strong>
+					<strong>{s name="DocumentIndexHeadTax"}{/s}</strong>
 				</td>
 			{/if}
 		{/block}
 		{block name="document_index_table_head_price"}
 			{if $Document.netto != true && $Document.nettoPositions != true}
 			    <td align="right" width="10%" class="head">
-					<strong>{s name="DocumentIndexHeadPrice"}Brutto Preis{/s}</strong>
+					<strong>{s name="DocumentIndexHeadPrice"}{/s}</strong>
 				</td>
 			    <td align="right" width="12%" class="head">
-					<strong>{s name="DocumentIndexHeadAmount"}Brutto Gesamt{/s}</strong>
+					<strong>{s name="DocumentIndexHeadAmount"}{/s}</strong>
 				</td>
 			{else}
 				 <td align="right" width="10%" class="head">
-					<strong>{s name="DocumentIndexHeadNet"}Netto Preis{/s}</strong>
+					<strong>{s name="DocumentIndexHeadNet"}{/s}</strong>
 				 </td>
 			     <td align="right" width="12%" class="head">
-					<strong>{s name="DocumentIndexHeadNetAmount"}Netto Gesamt{/s}</strong>
+					<strong>{s name="DocumentIndexHeadNetAmount"}{/s}</strong>
 				 </td>
 			{/if}
 		{/block}
@@ -242,25 +242,25 @@ td.head  {
 			  <table width="300px" cellpadding="0" cellspacing="0">
 			  <tbody>
 			  <tr>
-			  	<td align="right" width="100px" class="head">{s name="DocumentIndexTotalNet"}Gesamtkosten Netto:{/s}</td>
+			  	<td align="right" width="100px" class="head">{s name="DocumentIndexTotalNet"}{/s}</td>
 			  	<td align="right" width="200px" class="head">{$Order._amountNetto|currency}</td>
 			  </tr>
 			  {if $Document.netto == false}
 				  {foreach from=$Order._tax key=key item=tax}
 				  <tr>
-				  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key} % MwSt:{/s}</td>
+				  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key}{/s}</td>
 				  	<td align="right">{$tax|currency}</td>
 				  </tr>
 				  {/foreach}
 			  {/if}
 			  {if $Document.netto == false}
 				  <tr>
-				    <td align="right"><b>{s name="DocumentIndexTotal"}Gesamtkosten:{/s}</b></td>
+				    <td align="right"><b>{s name="DocumentIndexTotal"}{/s}</b></td>
 				    <td align="right"><b>{$Order._amount|currency}</b></td>
 				  </tr>
 			  {else}
 			 	  <tr>
-				    <td align="right"><b>{s name="DocumentIndexTotal"}Gesamtkosten:{/s}</b></td>
+				    <td align="right"><b>{s name="DocumentIndexTotal"}{/s}</b></td>
 				    <td align="right"><b>{$Order._amountNetto|currency}</b></td>
 				  </tr>
 			  {/if}
@@ -279,9 +279,9 @@ td.head  {
 			{/block}
 			{block name="document_index_info_net"}
 				{if $Document.netto == true}
-				<p>{s name="DocumentIndexAdviceNet"}Hinweis: Der Empfänger der Leistung schuldet die Steuer.{/s}</p>
+				<p>{s name="DocumentIndexAdviceNet"}{/s}</p>
 				{/if}
-				<p>{s name="DocumentIndexSelectedPayment"}Gew&auml;hlte Zahlungsart{/s} {$Order._payment.description}</p>
+				<p>{s name="DocumentIndexSelectedPayment"}{/s} {$Order._payment.description}</p>
 			{/block}
 			{block name="document_index_info_voucher"}
 				{if $Document.voucher}
@@ -296,7 +296,7 @@ td.head  {
 			{block name="document_index_info_ordercomment"}
 				{if $Order._order.customercomment}
 					<div style="font-size:11px;color:#333;">
-						{s name="DocumentIndexComment"}Kommentar:{/s}
+						{s name="DocumentIndexComment"}{/s}
 						{$Order._order.customercomment|replace:"€":"&euro;"}
 					</div>
 				{/if}
@@ -304,7 +304,7 @@ td.head  {
 			{block name="document_index_info_dispatch"}
 				{if $Order._dispatch.name}
 					<div style="font-size:11px;color:#333;">
-						{s name="DocumentIndexSelectedDispatch"}Gewählte Versandart:{/s}
+						{s name="DocumentIndexSelectedDispatch"}{/s}
 						{$Order._dispatch.name}
 					</div>
 				{/if}

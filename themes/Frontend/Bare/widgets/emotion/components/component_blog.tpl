@@ -68,7 +68,7 @@
                                         <a class="blog--image"
                                            href="{url controller=blog action=detail sCategory=$entry.categoryId blogArticle=$entry.id}"
                                            title="{$entry.title|escape}">
-                                            {s name="EmotionBlogPreviewNopic"}Kein Bild vorhanden{/s}
+                                            {s name="EmotionBlogPreviewNopic"}{/s}
                                         </a>
                                     {/if}
                                 {/block}

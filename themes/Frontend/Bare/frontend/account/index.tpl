@@ -134,14 +134,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
+									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
 								</p>
 								<p>
-									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
+									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}
@@ -171,14 +171,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword2"}Ihr aktuelles Passwort{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
+									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
 								</p>
 								<p>
-									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
+									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}
@@ -273,10 +273,10 @@
 				{block name="frontend_account_index_primary_shipping_actions"}
 					<div class="panel--actions is--wide">
 						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--small">
-							{se name="AccountLinkSelectShipping"}{/se}
+							{s name="AccountLinkSelectShipping"}{/s}
 						</a>
 						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--small">
-							{se name="AccountLinkChangeShipping"}{/se}
+							{s name="AccountLinkChangeShipping"}{/s}
 						</a>
 					</div>
 				{/block}

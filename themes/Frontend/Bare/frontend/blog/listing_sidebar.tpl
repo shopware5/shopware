@@ -6,14 +6,14 @@
 		{block name='frontend_listing_actions_filter_container'}
 
 			{block name='frontend_listing_actions_filter_closebtn'}
-				<a href="#" title="{"{s name="ListingActionsCloseFilter"}{/s}"|escape}" class="blog--filter-close-btn">{s namespace='frontend/listing/listing_actions' name='ListingActionsCloseFilter'}Filter schließen{/s} <i class="icon--arrow-right"></i></a>
+				<a href="#" title="{"{s name="ListingActionsCloseFilter"}{/s}"|escape}" class="blog--filter-close-btn">{s namespace='frontend/listing/listing_actions' name='ListingActionsCloseFilter'}{/s} <i class="icon--arrow-right"></i></a>
 			{/block}
 
 			<div class="filter--container">
 
 				{* Filter headline *}
 				{block name="frontend_listing_actions_filter_container_inner"}
-					<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
+					<h2 class="filter--headline">{s name='FilterHeadline'}{/s}</h2>
 				{/block}
 
 				<div class="blog--sidebar">
@@ -33,7 +33,7 @@
 
 									{* Subscribe headline *}
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s namespace="frontend/blog/index" name="BlogSubscribe"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 									{/block}
 
 									{* Subscribe Content *}

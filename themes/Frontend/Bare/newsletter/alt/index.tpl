@@ -23,7 +23,7 @@
 
 {if $sArticle.pseudoprice}
 
-{s name="NewsletterIndexPseudoInsteadOf"}statt {/s}{$sArticle.pseudoprice|currency:use_shortname}
+{s name="NewsletterIndexPseudoInsteadOf"}{/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
 
 {$sArticle.price|currency:use_shortname}
@@ -44,7 +44,7 @@
 
 {if $sArticle.pseudoprice}
 
-{s name="NewsletterIndexPseudoInsteadOf"}statt {/s}{$sArticle.pseudoprice|currency:use_shortname}
+{s name="NewsletterIndexPseudoInsteadOf"}{/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
 
 {$sArticle.price|currency:use_shortname}
@@ -57,10 +57,10 @@
 {/if}
 {/foreach}
 
-{s name="NewsletterIndexInfoPlain"}Sie erhalten diesen Newsletter in der Text-Darstellung, besuchen Sie bitte unseren Shop um auf die Angebote zugreifen zu können.{/s}
+{s name="NewsletterIndexInfoPlain"}{/s}
 {if $sUserGroupData.tax}
-{s name="NewsletterIndexInfoIncludeVat"}* Alle Preise inkl. gesetzl. Mehrwertsteuer zzgl. Versand{/s}
+{s name="NewsletterIndexInfoIncludeVat"}{/s}
 {else}
-{s name="NewsletterIndexInfoExcludeVat"}* Alle Preise verstehen sich zzgl. Mehrwertsteuer und Versand{/s}
+{s name="NewsletterIndexInfoExcludeVat"}{/s}
 {/if}
-{s name="NewsletterIndexCopyright"}Copyright &copy; shopware AG - Alle Rechte vorbehalten{/s}
+{s name="NewsletterIndexCopyright"}{/s}

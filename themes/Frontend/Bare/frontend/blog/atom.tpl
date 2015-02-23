@@ -4,7 +4,7 @@
     <author>
         <name>{$sShopname}</name>
     </author>
-    <title>{block name='frontend_listing_atom_title'}{s name="BlogAtomFeedHeader"}{$sCategoryContent.description|escape} / Atom Feed{/s}{/block}</title>
+    <title>{block name='frontend_listing_atom_title'}{s name="BlogAtomFeedHeader"}{$sCategoryContent.description|escape}{/s}{/block}</title>
     <id>{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape}</id>
     <updated>{time()|date:atom}</updated>
 {foreach from=$sBlogArticles item=sArticle key=key name="counter"}

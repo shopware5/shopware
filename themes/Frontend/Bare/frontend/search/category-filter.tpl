@@ -4,7 +4,7 @@
 
     {if $level == 0}
         {$activeCategoryTree[] = [
-            'label' => "{s name="SearchFilterMainCategories"}Hauptkategorien{/s}",
+            'label' => "{s name="SearchFilterMainCategories"}{/s}",
             'link' => '#?c=reset'
         ]}
     {else}
@@ -19,7 +19,7 @@
 
             {block name="frontend_search_category_filter_headline"}
                 <h3 class="cat-filter--headline">
-                    {s name="SearchFilterByCategory"}Filtern nach Kategorien{/s}
+                    {s name="SearchFilterByCategory"}{/s}
                 </h3>
             {/block}
 

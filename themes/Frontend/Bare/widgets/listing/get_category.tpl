@@ -6,8 +6,8 @@
         {block name="widgets_listing_get_category_mainmenu"}
             <div class="overlay--headline">
                 {block name="widgets_listing_get_category_mainmenu_link"}
-                    <a class="navigation--link link--go-main" href="#" title="{s name="MainMenu"}Hauptmenü{/s}">
-                        <i class="icon--menu"></i> {s name="MainMenu"}Hauptmenü{/s}
+                    <a class="navigation--link link--go-main" href="#" title="{s name="MainMenu"}{/s}">
+                        <i class="icon--menu"></i> {s name="MainMenu"}{/s}
                     </a>
                 {/block}
             </div>
@@ -30,7 +30,7 @@
                 {block name="widgets_listing_get_category_categories_back"}
                     <li class="navigation--entry" role="menuitem">
                         {block name="widgets_listing_get_category_categories_back_link"}
-                            <a href="{url module=widgets controller=listing action=getCategory categoryId={$category.parentId}}" data-parentId="{$category.parentId}" class="navigation--link is--back-button link--go-back" title="{s name="ButtonBack"}Zurück{/s}">
+                            <a href="{url module=widgets controller=listing action=getCategory categoryId={$category.parentId}}" data-parentId="{$category.parentId}" class="navigation--link is--back-button link--go-back" title="{s name="ButtonBack"}{/s}">
                                 {block name="widgets_listing_get_category_categories_back_link_arrow_left"}
                                     <span class="is--icon-left">
                                         <i class="icon--arrow-left"></i>
@@ -38,7 +38,7 @@
                                 {/block}
 
                                 {block name="widgets_listing_get_category_categories_back_link_name"}
-                                    {s name="ButtonBack"}Zurück{/s}
+                                    {s name="ButtonBack"}{/s}
                                 {/block}
                             </a>
                         {/block}
@@ -49,7 +49,7 @@
                 {block name="widgets_listing_get_category_categories_show"}
                     <li class="navigation--entry" role="menuitem">
                         {block name="widgets_listing_get_category_categories_show_link"}
-                            <a href="{$category.link}" title="{$category.name|escape} {s name="ButtonShow"}anzeigen{/s}" class="navigation--link is--display-button">
+                            <a href="{$category.link}" title="{$category.name|escape} {s name="ButtonShow"}{/s}" class="navigation--link is--display-button">
                                 {block name="widgets_listing_get_category_categories_show_link_name"}
                                     {s name="ButtonShowPrepend"}{/s} {$category.name} {s name="ButtonShowAppend"}{/s}
                                 {/block}

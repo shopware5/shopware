@@ -15,7 +15,7 @@
                 {if $sArticle.pseudoprice}
                     <span class="price--discount is--nowrap">
                         {$sArticle.pseudoprice|currency}
-                        {s name="Star"}*{/s}
+                        {s name="Star"}{/s}
                     </span>
                 {/if}
             {/block}
@@ -25,7 +25,7 @@
                 <span class="price--default is--nowrap{if $sArticle.pseudoprice} is--discount{/if}">
                     {if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}
                     {$sArticle.price|currency}
-                    {s name="Star"}*{/s}
+                    {s name="Star"}{/s}
                 </span>
             {/block}
         </div>
