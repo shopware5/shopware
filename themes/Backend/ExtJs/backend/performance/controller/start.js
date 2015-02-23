@@ -112,6 +112,7 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
                             me.errorTitle,
                             me.httpCacheError
                         );
+                        window.resetState();
                     }
                 }
             }
@@ -128,10 +129,8 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
         if (me.state) {
             message = me.infoMessageDevelopmentMode;
-            window.setState(false);
         } else {
             message = me.infoMessageProductionMode;
-            window.setState(true);
         }
 
         me.state = !me.state;
@@ -150,7 +149,13 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller=Cache action=clearDirect}?cache=Config',
+            url: '{url controller=Cache action=clearCache}?cache=Config',
+            params:{
+              'cache[template]' : 'on',
+              'cache[theme]'    : 'on',
+              'cache[search]'   : 'on',
+              'cache[router]'   : 'on'
+            },
             success: function () {
                 me.reloadInfoStore();
             }
@@ -165,6 +170,7 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
         Ext.getStore('Info').load({
             callback: function (records, operation) {
+                Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
                 Shopware.Notification.createGrowlMessage(
                     me.infoTitle,
                     me.infoMessageSuccess,

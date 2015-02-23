@@ -10,31 +10,19 @@
 .performance-view-start {
   background: #fff !important;
 
-  h1 {
-    font-size: 24px;
-    font-weight: 400;
-  }
-
-  h2 {
-    font-size: 20px;
-    font-weight: 400;
-  }
-
-
-  .toggle-container {
+  .radiogroup-container {
     margin: 20px 0 30px;
     border: 1px solid #c4c4c4;
     padding: 10px;
     border-radius: 4px;
     user-select: none;
 
-    .toggle-button {
-      cursor: pointer;
-      margin-top: 25px;
-      background: theme-image($theme, 'plugin_manager/toggle-button-sprite.png') no-repeat;;
+    .x-component {
+      margin-left: 32px;
+      margin-top: -10px;
     }
-    .toggle-button.active {
-      background-position: 0px -25px;
+    .component-first {
+      margin-bottom: 15px;
     }
   }
 
