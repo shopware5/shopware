@@ -24,17 +24,19 @@
 {* Promotion *}
 {block name='frontend_home_index_promotions'}
 
-    {if $hasEscapedFragment}
-        <div class="content--emotions">
-            {action module=widgets controller=campaign action=index emotionId=$emotionId}
-        </div>
-    {else}
-        <div class="emotion--wrapper"
-             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-             data-availableDevices="{$emotion.devices}"
-             data-showListing="false">
-        </div>
-    {/if}
+    <div class="content--emotions">
+        {if $hasEscapedFragment}
+            <div class="emotion--fragment">
+                {action module=widgets controller=campaign action=index emotionId=$emotionId}
+            </div>
+        {else}
+            <div class="emotion--wrapper"
+                 data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+                 data-availableDevices="{$emotion.devices}"
+                 data-showListing="false">
+            </div>
+        {/if}
+    </div>
 {/block}
 
 {* Sidebar left *}
