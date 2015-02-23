@@ -143,7 +143,6 @@ More precise designations are commented inside the document.
         .unitize(14, 16, padding-bottom);
 		.unitize(5, 16, padding-top);
 		.unitize(12, 16, font-size);
-        .unitize-margin(0, 20, 0, 20);
 
         border-bottom: 1px solid @border-color;
 
@@ -215,6 +214,15 @@ More precise designations are commented inside the document.
         margin-bottom: 0;
     }
 
+    .blog--detail-header {
+        .unitize(20, 16, margin-bottom);
+    }
+
+    .blog--detail-headline {
+        .unitize-margin(0, 0, 5, 0);
+    }
+
+    .blog--detail-headline,
     .blog--detail-box-headline {
         .unitize(18, 16, font-size);
     }
@@ -272,9 +280,13 @@ More precise designations are commented inside the document.
         }
     }
 
+    .blog--comments-wrapper {
+        .unitize-padding(20, 0);
+    }
+
     // Comments
     .blog--comments {
-        .unitize-padding(20, 0, 20, 0);
+        .unitize-padding(20, 20);
 
         .comments--actions .btn--create-entry {
             width: 100%;
@@ -286,23 +298,24 @@ More precise designations are commented inside the document.
 
         .list--entry {
             .clearfix();
-            .unitize(20, 16, margin-top);
+            .unitize(10, 16, margin-top);
         }
 
         .entry--meta {
             width: 100%;
-            float: left;
-            text-align: center;
+
+            .meta--rating {
+                .unitize(5, 16, margin-bottom);
+            }
         }
 
         .entry--content {
             width: 100%;
-            float: left;
         }
 
         .content--headline {
-            .unitize(2, 16, margin-bottom);
-            margin-top: 0;
+            .unitize-margin(10, 0, 5, 0);
+            .unitize(16, 16, font-size);
         }
     }
 
@@ -356,8 +369,6 @@ More precise designations are commented inside the document.
     }
 
     .blog--comments-form {
-        .unitize-margin(0, 20, 0, 20);
-
         .form--comment-add {
             margin-top: 20px;
         }
@@ -407,7 +418,6 @@ More precise designations are commented inside the document.
     .blog--box {
         .blog--box-metadata {
             .unitize(14, 16, font-size);
-            .unitize-margin(0, 20, 0, 20);
         }
 
         .blog--box-picture {
@@ -550,7 +560,7 @@ More precise designations are commented inside the document.
 
     // Blog Detail
     .blog--detail {
-        .unitize-margin(20, 0, 0, 0);
+        .unitize(30, 16, margin-top);
 
         .blog--detail-headline {
             .unitize(18, 16, font-size);
@@ -655,7 +665,6 @@ More precise designations are commented inside the document.
 
     // Blog Listing
     .blog--listing {
-
         .listing--actions {
             .unitize(15, 16, margin-top);
             padding-top: 0;
@@ -669,6 +678,8 @@ More precise designations are commented inside the document.
 
     // Blog Detail
     .blog--detail {
+        .unitize(50, 16, margin-top);
+
         .blog--detail-headline {
             .unitize(21, 16, font-size);
         }
