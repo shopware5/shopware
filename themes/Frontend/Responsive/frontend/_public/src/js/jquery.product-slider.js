@@ -441,6 +441,8 @@
 
             me.itemsPerPage = Math.floor(containerSize / itemSize);
 
+            if (me.itemsPerPage < 1) me.itemsPerPage = 1;
+
             me.itemSizePercent = 100 / me.itemsPerPage;
 
             if (o === 'vertical') {
