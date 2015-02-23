@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load(
             function(records) {
                 Ext.each(records, function(record) {
-                    if (record.get('locale') == '{s namespace="backend/base/index" name=script/ext/lang}{/s}') {
+                    if (record.get('locale') == '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
                         me.languageFilter.setValue(record.get('locale'));
                     }
                 });
