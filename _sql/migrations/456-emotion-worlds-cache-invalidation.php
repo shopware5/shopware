@@ -4,11 +4,7 @@ class Migrations_Migration456 Extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        if ($modus === self::MODUS_INSTALL) {
-            return;
-        }
-
-        $statement = $this->getConnection()->prepare("SELECT id FROM s_core_plugins WHERE name = 'HttpCache' AND active = 1 LIMIT 1;");
+        $statement = $this->getConnection()->prepare("SELECT id FROM s_core_plugins WHERE `name` = 'HttpCache' AND installation_date IS NOT NULL LIMIT 1;");
         $statement->execute();
         $data = $statement->fetchAll();
 
@@ -16,7 +12,7 @@ class Migrations_Migration456 Extends Shopware\Components\Migrations\AbstractMig
             return;
         }
 
-        $sql = "SET @pluginID = (SELECT id FROM s_core_plugins WHERE name = 'HttpCache' LIMIT 1);";
+        $sql = "SET @pluginID = (SELECT id FROM s_core_plugins WHERE `name` = 'HttpCache' AND installation_date IS NOT NULL LIMIT 1);";
         $this->addSql($sql);
 
         $sql = <<<'SQL'
