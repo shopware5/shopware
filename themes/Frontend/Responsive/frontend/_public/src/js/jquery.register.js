@@ -95,7 +95,7 @@
              * @property shippingFieldSelector
              * @type {String}
              */
-            shippingFieldSelector: '.register--account-information',
+            shippingFieldSelector: '.register--shipping',
 
             /**
              * Selector for the payment field set.
