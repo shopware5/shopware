@@ -51,7 +51,9 @@
 
             {* Categories headline *}
             {block name="frontend_index_left_categories_headline"}
-                <h2 class="categories--headline navigation--headline">{s namespace='frontend/index/menu_left' name="IndexSidebarCategoryHeadline"}{/s}</h2>
+                <div class="categories--headline navigation--headline">
+                    {s namespace='frontend/index/menu_left' name="IndexSidebarCategoryHeadline"}{/s}
+                </div>
             {/block}
 
             {* Actual include of the categories *}

@@ -13,7 +13,7 @@
 
 				{* Filter headline *}
 				{block name="frontend_listing_actions_filter_container_inner"}
-					<h2 class="filter--headline">{s name='FilterHeadline'}{/s}</h2>
+					<div class="filter--headline">{s name='FilterHeadline'}{/s}</div>
 				{/block}
 
 				<div class="blog--sidebar">
@@ -33,7 +33,9 @@
 
 									{* Subscribe headline *}
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">{s namespace="frontend/blog/index" name="BlogSubscribe"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+										<div class="blog--subscribe-headline blog--sidebar-title collapse--header blog-filter--trigger">
+											{s name="BlogSubscribe"}{/s}<span class="filter--expand-collapse collapse--toggler"></span>
+										</div>
 									{/block}
 
 									{* Subscribe Content *}

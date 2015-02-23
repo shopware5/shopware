@@ -17,9 +17,9 @@
 	
 	{* Headline *}
 	{block name='frontend_detail_description_title'}
-		<h2 class="content--title">
+		<div class="content--title">
 			{s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName}"
-		</h2>
+		</div>
 	{/block}
 	
 	{* Product description *}
@@ -57,9 +57,9 @@
 
 		{* Further links title *}
 		{block name='frontend_detail_description_links_title'}
-			<h2 class="content--title">
+			<div class="content--title">
 				{s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName}"
-			</h2>
+			</div>
 		{/block}
 
 		{* Links list *}
@@ -93,7 +93,10 @@
 						{* Links which will be added throught the administration *}
 						{block name='frontend_detail_description_links_link'}
 							<li class="list--entry">
-								<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
+								<a href="{$information.link}"
+								   target="{if $information.target}{$information.target}{else}_blank{/if}"
+								   class="content--link link--further-links"
+								   title="{$information.description}">
                                     <i class="icon--arrow-right"></i> {$information.description}
 								</a>
 							</li>
@@ -110,9 +113,9 @@
 
 			{* Vendor title *}
 			{block name='frontend_detail_description_supplier_title'}
-				<h2 class="content--title">
+				<div class="content--title">
 					{s name="DetailDescriptionSupplier"}{/s} "{$sArticle.supplierName}"
-				</h2>
+				</div>
 			{/block}
 
 			{* Vendor content *}
@@ -128,9 +131,9 @@
 
 			{* Downloads title *}
 			{block name='frontend_detail_description_downloads_title'}
-				<h2 class="content--title">
+				<div class="content--title">
 					{s name="DetailDescriptionHeaderDownloads"}{/s}
-				</h2>
+				</div>
 			{/block}
 
 			{* Downloads list *}
@@ -156,9 +159,9 @@
 
 			{* Comment title  *}
 			{block name='frontend_detail_description_our_comment_title'}
-				<h2 class="content--title">
+				<div class="content--title">
 					{s name='DetailDescriptionComment'}{/s} "{$sArticle.articleName}"
-				</h2>
+				</div>
 			{/block}
 
 			{block name='frontend_detail_description_our_comment_title_content'}
