@@ -16,5 +16,13 @@
     {include file="frontend/register/steps.tpl" sStepActive="address"}
 {/block}
 
-{* Hide footer *}
-{block name="frontend_index_footer"}{/block}
+{* Footer *}
+{block name="frontend_index_footer"}
+    {if !$theme.checkoutFooter}
+        {$smarty.block.parent}
+    {else}
+        {block name="frontend_index_account_select_shipping_checkout_footer"}
+            {include file="frontend/index/footer_minimal.tpl"}
+        {/block}
+    {/if}
+{/block}

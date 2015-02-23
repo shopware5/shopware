@@ -61,10 +61,14 @@
 	{include file='frontend/index/sidebar.tpl'}
 {/block}
 
-{* Hide footer *}
+{* Footer *}
 {block name="frontend_index_footer"}
-    {if !$theme.checkoutHeader || $sTarget == "account"}
+    {if !$theme.checkoutFooter || $sTarget == "account"}
         {$smarty.block.parent}
+    {else}
+        {block name="frontend_index_register_footer"}
+            {include file="frontend/index/footer_minimal.tpl"}
+        {/block}
     {/if}
 {/block}
 
