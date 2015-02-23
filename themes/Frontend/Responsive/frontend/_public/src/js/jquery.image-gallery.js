@@ -261,7 +261,7 @@
         registerEvents: function () {
             var me = this;
 
-            me._on(me.opts.imageSlideSelector, 'click', $.proxy(me.onClick, me));
+            me._on(me._$imageContainer.find(me.opts.imageSlideSelector), 'click', $.proxy(me.onClick, me));
 
             $.subscribe('plugin/imageSlider/slide', $.proxy(me.onImageUpdate, me));
             $.subscribe('plugin/imageSlider/updateTransform', $.proxy(me.onImageUpdate, me));
@@ -559,9 +559,5 @@
             me._$imageContainerClone = null;
             me._$thumbContainerClone = null;
         }
-    });
-
-    $(function () {
-        $('*[data-image-gallery="true"]').imageGallery();
     });
 })(jQuery);
