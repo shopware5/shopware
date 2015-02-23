@@ -175,10 +175,18 @@ class CacheManager
      */
     public function clearConfigCache()
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_Config',
-            'Shopware_Plugin'
-        ));
+        $capabilities = $this->cache->getBackend()->getCapabilities();
+        if (!empty($capabilities['tags'])) {
+            $this->cache->clean(
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                array(
+                    'Shopware_Config',
+                    'Shopware_Plugin'
+                )
+            );
+        } else {
+            $this->cache->clean();
+        }
     }
 
     /**
