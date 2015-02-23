@@ -161,7 +161,9 @@ class PriceFacetHandler implements FacetHandlerInterface
             (float) $activeMin,
             (float) $activeMax,
             $this->minFieldName,
-            $this->maxFieldName
+            $this->maxFieldName,
+            [],
+            'frontend/listing/filter/facet-currency-range.tpl'
         );
     }
 }

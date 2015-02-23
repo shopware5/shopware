@@ -205,4 +205,12 @@ class RangeFacetResult
     {
         return $this->template;
     }
+
+    /**
+     * @param null|string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
 }
