@@ -390,9 +390,10 @@ class Repository extends ModelRepository
      */
     protected function fixActive($shop)
     {
-        $this->getEntityManager()->getUnitOfWork()->markReadOnly($shop);
+        $this->getEntityManager()->detach($shop);
         $main = $shop->getMain();
         if ($main !== null) {
+            $this->getEntityManager()->detach($main);
             $shop->setHost($main->getHost());
             $shop->setSecure($main->getSecure());
             $shop->setAlwaysSecure($main->getAlwaysSecure());
