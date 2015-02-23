@@ -1,7 +1,8 @@
 ;(function ($, window) {
     'use strict';
 
-    var emptyFn = function () { };
+    var emptyFn = function () {},
+        $html = $('html');
 
     /**
      * Shopware Modal Module
@@ -245,9 +246,8 @@
          * @method open
          * @param {String|jQuery|HTMLElement} content
          * @param {Object} options
-         * @param {Object} overlayOptions
          */
-        open: function (content, options, overlayOptions) {
+        open: function (content, options) {
             var me = this,
                 $modalBox = me._$modalBox,
                 opts;
@@ -255,9 +255,9 @@
             me.options = opts = $.extend({}, me.defaults, options);
 
             if (opts.overlay) {
-                $.overlay.open($.extend({}, overlayOptions, {
+                $.overlay.open($.extend({}, {
                     closeOnClick: opts.closeOnOverlay,
-                    onClick: $.proxy(me.onOverlayClick, me)
+                    onClose: $.proxy(me.onOverlayClose, me)
                 }));
             }
 
@@ -312,7 +312,7 @@
                 opacity: 1
             }, me.options.animationSpeed, 'linear');
 
-            $('html, body').addClass('no--scroll');
+            $html.addClass('no--scroll');
 
             $.publish('plugin/modal/onOpen', me);
 
@@ -335,7 +335,7 @@
                 $.overlay.close();
             }
 
-            $('html, body').removeClass('no--scroll');
+            $html.removeClass('no--scroll');
 
             if ($modalBox !== null) {
                 me.setTransition({
@@ -369,6 +369,7 @@
          */
         setTransition: function (css, duration, animation, callback) {
             var me = this,
+                $modalBox = me._$modalBox,
                 opts = $.extend({
                     animation: 'ease',
                     duration: me.options.animationSpeed
@@ -378,11 +379,11 @@
                 });
 
             if (!$.support.transition) {
-                me._$modalBox.stop(true).animate(css, opts.duration, opts.animation, callback);
+                $modalBox.stop(true).animate(css, opts.duration, opts.animation, callback);
                 return;
             }
 
-            me._$modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
+            $modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
         },
 
         /**
@@ -393,9 +394,7 @@
          * @param {String} title
          */
         setTitle: function (title) {
-            var me = this;
-
-            me._$title.html(title);
+            this._$title.html(title);
         },
 
         /**
@@ -406,11 +405,12 @@
          * @param {String|jQuery|HTMLElement} content
          */
         setContent: function (content) {
-            var me = this;
+            var me = this,
+                opts = me.options;
 
             me._$content.html(content);
 
-            if (me.options.sizing === 'content') {
+            if (opts.sizing === 'content') {
                 // initial centering
                 me.center();
 
@@ -418,7 +418,7 @@
                 window.setTimeout(me.center.bind(me), 25);
             }
 
-            if (me.options.updateImages) {
+            if (opts.updateImages) {
                 picturefill();
             }
 
@@ -576,9 +576,9 @@
          * Closes the modalbox when the 'closeOnOverlay' option is active.
          *
          * @public
-         * @method onOverlayClick
+         * @method onOverlayClose
          */
-        onOverlayClick: function () {
+        onOverlayClose: function () {
             var me = this;
 
             if (!me.options.closeOnOverlay) {
@@ -719,7 +719,6 @@
          */
         destroy: function () {
             var me = this;
-
 
             if (me._isOpened) {
                 $.modal.close();

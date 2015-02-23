@@ -1,5 +1,7 @@
-;(function ($, window, Modernizr) {
+;(function ($) {
     'use strict';
+
+    var $html = $('html');
 
     /**
      * Off canvas menu plugin
@@ -36,6 +38,14 @@
             'wrapSelector': '.page-wrap',
 
             /**
+             * Whether or not the wrapper should be moved.
+             *
+             * @property moveWrapper
+             * @type {Boolean}
+             */
+            'moveWrapper': false,
+
+            /**
              * Selector of the off-canvas element
              *
              * @property offCanvasSelector
@@ -58,14 +68,6 @@
              * @type {String}
              */
             'direction': 'fromLeft',
-
-            /**
-             * Container selector which should catch the swipe gesture
-             *
-             * @property swipeContainerSelector
-             * @type {String}
-             */
-            'swipeContainerSelector': '.page-wrap',
 
             /**
              * Additional class for the off-canvas menu for necessary styling
@@ -100,12 +102,12 @@
             'activeMenuCls': 'is--active',
 
             /**
-             * Flag whether to use transitions or not
+             * Class which indicates if the off-canvas menu is visible
              *
-             * @property disableTransitions
-             * @type {Boolean}
+             * @property openClass
+             * @type {String}
              */
-            'disableTransitions': false,
+            'openClass': 'is--open',
 
             /**
              * Flag whether to show the offcanvas menu in full screen or not.
@@ -121,7 +123,25 @@
              * @property fullscreenCls
              * @type {String}
              */
-            'fullscreenCls': 'js--full-screen',
+            'fullscreenCls': 'is--full-screen',
+
+            /**
+             * When this flag is set to true, the off canvas menu
+             * will pop open instead of sliding.
+             *
+             * @property disableTransitions
+             * @type {Boolean}
+             */
+            'disableTransitions': false,
+
+            /**
+             * The class that will be applied to the off canvas menu
+             * to disable the transition property.
+             *
+             * @property disableTransitionCls
+             * @type {String}
+             */
+            'disableTransitionCls': 'no--transitions',
 
             /**
              * The mode in which the off canvas menu should be showing.
@@ -136,48 +156,11 @@
             'mode': 'local',
 
             /**
-             * The inactive class will be set on the body to disable scrolling
-             * while the off canvas is opened.
+             * The URL that will be called when the menu is in 'ajax' mode.
              *
-             * This will be also used to improve the performance of the mobile
-             * scroll behaviour of the off canvas and off canvas sub navigation menu.
-             *
-             * @property inactiveClass
              * @type {String}
              */
-            'inactiveClass': 'is--inactive',
-
-            /**
-             * This is the animation duration time in ms
-             *
-             * @porperty animationSpeed
-             * @type {Number}
-             */
-            'animationSpeed': 400,
-
-            /**
-             * The animation easing for the menu open action
-             *
-             * @property easingIn
-             * @type {String}
-             */
-            'easingIn': 'cubic-bezier(.16,.04,.14,1)',
-
-            /**
-             * The animation easing for the menu close action
-             *
-             * @property easingOut
-             * @type {String}
-             */
-            'easingOut': 'cubic-bezier(.2,.76,.5,1)',
-
-            /**
-             * The animation easing used when transitions are not supported.
-             *
-             * @property easingFallback
-             * @type {String}
-             */
-            'easingFallback': 'swing'
+            'ajaxURL': ''
         },
 
         /**
@@ -190,42 +173,42 @@
         init: function () {
             var me = this,
                 opts = me.opts,
-                transitionSupport = Modernizr.csstransitions;
+                themeConfig = $.themeConfig,
+                $offCanvas;
+
+            opts.moveWrapper = opts.moveWrapper || !!(themeConfig && !~~themeConfig.offcanvasOverlayPage);
 
             me.applyDataAttributes();
 
             // Cache the necessary elements
             me.$pageWrap = $(opts.wrapSelector);
-            me.$swipe = $(opts.swipeContainerSelector);
-            me.$overlay = $(opts.wrapSelector + ':before');
-            me.$body = $('body');
-            me.fadeEffect = transitionSupport && !opts.disableTransitions ? 'transition' : 'animate';
-            me.easingEffectIn = transitionSupport ? opts.easingIn : opts.easingFallback;
-            me.easingEffectOut = transitionSupport ? opts.easingOut : opts.easingFallback;
 
-            me.opened = false;
+            me.isOpened = false;
 
             if (opts.mode === 'ajax') {
-                me.$offCanvas = $('<div>', {
-                    'class': opts.offCanvasElementCls + ' ' + ((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
-                }).appendTo(me.$body).css('display');
+                $offCanvas = me.$offCanvas = $('<div>', {
+                    'class': opts.offCanvasElementCls
+                }).appendTo('body');
             } else {
-                me.$offCanvas = $(opts.offCanvasSelector);
-                me.$offCanvas.addClass(opts.offCanvasElementCls)
-                    .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
-                    .removeAttr('style');
+                $offCanvas = me.$offCanvas = $(opts.offCanvasSelector);
+                $offCanvas.addClass(opts.offCanvasElementCls);
+            }
+
+            $offCanvas.addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls);
+            $offCanvas.addClass(opts.disableTransitionCls);
+
+            if (!opts.disableTransitions) {
+                $offCanvas.removeClass(opts.disableTransitionCls);
             }
 
             if (opts.fullscreen) {
-                me.$offCanvas.addClass(opts.fullscreenCls);
+                $offCanvas.addClass(opts.fullscreenCls);
             }
 
-            me.offCanvasWidth = me.$offCanvas.width();
-
-            if (!opts.fullscreen) {
-                me.$offCanvas.css((opts.direction === 'fromLeft' ? 'left' : 'right'), me.offCanvasWidth * -1);
-            }
-            me.$offCanvas.addClass(opts.activeMenuCls);
+            // Add active class with a timeout to properly register the disable transition class.
+            setTimeout(function () {
+                $offCanvas.addClass(opts.activeMenuCls);
+            }, 0);
 
             me.registerEventListeners();
         },
@@ -244,7 +227,24 @@
             me._on(me.$el, 'click', $.proxy(me.onClickElement, me));
 
             // Allow the user to close the off canvas menu
-            me.$body.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickBody, me));
+            me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
+
+            $.subscribe('plugin/' + me.getName() + '/beforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+        },
+
+        /**
+         * Called when a off canvas menu opens.
+         * Closes all other off canvas menus if its not the opening menu instance.
+         *
+         * @param {jQuery.Event} event
+         * @param {PluginBase} plugin
+         */
+        onBeforeOpenMenu: function (event, plugin) {
+            var me = this;
+
+            if (plugin !== me) {
+                me.closeMenu();
+            }
         },
 
         /**
@@ -274,8 +274,9 @@
          * @method onClickBody
          * @param {jQuery.Event} event
          */
-        onClickBody: function (event) {
+        onClickCloseButton: function (event) {
             event.preventDefault();
+            event.stopPropagation();
 
             this.closeMenu();
         },
@@ -291,45 +292,37 @@
             var me = this,
                 opts = me.opts,
                 fromLeft = opts.direction === 'fromLeft',
-                pluginName = me.getName(),
-                plugin,
-                css,
-                left;
+                menuWidth = me.$offCanvas.outerWidth(),
+                plugin;
 
-            if (me.opened) {
+            if (me.isOpened) {
                 return;
             }
-            me.opened = true;
+            me.isOpened = true;
 
-            // Close all other opened off-canvas menus
-            $('.' + opts.offCanvasElementCls).each(function (i, el) {
-                if (!(plugin = $(el).data('plugin_' + pluginName))) {
-                    return true;
-                }
+            $.publish('plugin/' + me.getName() + '/beforeOpenMenu', me);
 
-                plugin.closeMenu();
-            });
-
-            // Disable scrolling on body
-            $('html, body').css('overflow', 'hidden');
+            $html.addClass('no--scroll');
 
             $.overlay.open({
-                closeOnClick: true,
-                onClick: $.proxy(me.closeMenu, me)
+                onClose: $.proxy(me.closeMenu, me)
             });
 
-            css = {};
-            css[fromLeft ? 'left' : 'right'] = 0;
-            me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.easingEffectIn);
+            if (opts.moveWrapper) {
+                if (opts.direction === 'fromRight') {
+                    menuWidth *= -1;
+                }
 
-            left = (opts.fullscreen) ? (fromLeft ? '100%' : '-100%') : me.offCanvasWidth * (fromLeft ? 1 : -1);
-            me.$pageWrap[me.fadeEffect]({'left': left}, me.opts.animationSpeed, me.easingEffectOut);
+                me.$pageWrap.css('left', menuWidth);
+            }
+
+            me.$offCanvas.addClass(opts.openClass);
 
             $.publish('plugin/offCanvasMenu/openMenu', me);
 
-            if (opts.mode === 'ajax') {
+            if (opts.mode === 'ajax' && opts.ajaxURL) {
                 $.ajax({
-                    url: opts.offCanvasSelector,
+                    url: opts.ajaxURL,
                     success: function (result) {
                         me.$offCanvas.html(result);
                     }
@@ -346,38 +339,25 @@
          */
         closeMenu: function () {
             var me = this,
-                opts = me.opts,
-                fromLeft = opts.direction === 'fromLeft',
-                css;
+                opts = me.opts;
 
-            if (!me.opened) {
+            if (!me.isOpened) {
                 return;
             }
-            me.opened = false;
+            me.isOpened = false;
 
             $.overlay.close();
 
             // Disable scrolling on body
-            $('html, body').css('overflow', '');
+            $html.removeClass('no--scroll');
 
-            css = {};
-            css[fromLeft ? 'left' : 'right'] = opts.fullscreen ? '-100%' : me.offCanvasWidth * -1;
+            if (opts.moveWrapper) {
+                me.$pageWrap.css('left', 0);
+            }
 
-            me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.easingEffectOut);
-            me.$pageWrap[me.fadeEffect]({'left': 0}, me.opts.animationSpeed, me.easingEffectOut);
+            me.$offCanvas.removeClass(opts.openClass);
 
             $.publish('plugin/offCanvasMenu/closeMenu', me);
-        },
-
-        /**
-         * Returns whether or not the off canvas menu is opened.
-         *
-         * @public
-         * @method isOpened
-         * @returns {Boolean}
-         */
-        isOpened: function () {
-            return this.opened;
         },
 
         /**
@@ -392,20 +372,22 @@
             var me = this,
                 opts = me.opts;
 
-            // check if overlay exists
-            if (me.opened) {
-                $.overlay.close();
-            }
+            me.closeMenu();
 
             me.$offCanvas.removeClass(opts.offCanvasElementCls)
                 .removeClass(opts.activeMenuCls)
+                .removeClass(opts.openClass)
                 .removeAttr('style');
 
-            me.$pageWrap.removeAttr('style');
+            if (opts.moveWrapper) {
+                me.$pageWrap.removeAttr('style');
+            }
 
-            me.$body.off(me.getEventName('click'), opts.closeButtonSelector);
+            me.$el.off(me.getEventName('click'), opts.closeButtonSelector);
+
+            $.unsubscribe('plugin/' + me.getName() + '/beforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
 
             me._destroy();
         }
     });
-})(jQuery, window, Modernizr);
+})(jQuery);

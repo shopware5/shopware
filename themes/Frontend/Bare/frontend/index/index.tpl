@@ -151,6 +151,10 @@
                 'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}'
             {rdelim};
 
+            jQuery.themeConfig = {ldelim}
+                'offcanvasOverlayPage': '{$theme.offcanvasOverlayPage}'
+            {rdelim};
+
             var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
                 'baseUrl': '{$Shop->getBaseUrl()}',
                 'shopId': '{$Shop->getId()}',
