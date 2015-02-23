@@ -122,6 +122,7 @@ $(function () {
     $('*[data-listing-actions="true"]').listingActions();
     $('*[data-scroll="true"]').scroll();
     $('*[data-ajax-wishlist="true"]').ajaxWishlist();
+    $('*[data-image-gallery="true"]').imageGallery();
 
     // Emotion Ajax Loader
     $('.emotion--wrapper').emotionLoader();
