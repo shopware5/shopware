@@ -29,20 +29,18 @@
 	{block name='frontend_home_index_promotions'}
         {if $hasEmotion}
             <div class="content--emotions">
-                {if $hasEscapedFragment}
-                    <div class="content--emotions">
-                        {foreach $emotions as $emotion}
+                {foreach $emotions as $emotion}
+                    {if $hasEscapedFragment}
+                        <div class="emotion--fragment">
                             {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
-                        {/foreach}
-                    </div>
-                {else}
-                    {foreach $emotions as $emotion}
+                        </div>
+                    {else}
                         <div class="emotion--wrapper"
                              data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
                              data-availableDevices="{$emotion.devices}">
                         </div>
-                    {/foreach}
-                {/if}
+                    {/if}
+                {/foreach}
             </div>
         {/if}
 	{/block}
