@@ -31,9 +31,9 @@
 
 	{* Review title *}
 	{block name="frontend_detail_tabs_rating_title"}
-		<h2 class="content--title">
+		<div class="content--title">
 			{s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"
-		</h2>
+		</div>
 	{/block}
 
 	{* Display review *}

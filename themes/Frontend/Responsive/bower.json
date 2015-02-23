@@ -24,7 +24,6 @@
   "dependencies": {
     "normalize-less": "*",
     "jquery": "2.1.1",
-    "pocketgrid": "*",
     "picturefill": "2.2.0",
     "open-sans-fontface": "1.0.4",
     "jquery.event.swipe": "0.5.2",
@@ -50,9 +49,6 @@
         },
         "normalize-less": {
             "less": ["normalize.less", "README.md"]
-        },
-        "pocketgrid": {
-            "css": [ "README.md", "LICENCE", "pocketgrid.min.css" ]
         },
         "picturefill": {
             "js": [ "dist/picturefill.js", "README.md" ]

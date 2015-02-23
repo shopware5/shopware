@@ -130,7 +130,7 @@
 
                     {* Headline *}
                     {block name='frontend_blog_detail_crossselling_headline'}
-                        <h2 class="blog--crossselling-headline panel--title is--underline">{s name="BlogHeaderCrossSelling"}{/s}</h2>
+                        <div class="blog--crossselling-headline panel--title is--underline">{s name="BlogHeaderCrossSelling"}{/s}</div>
                     {/block}
 
                     {* Listing *}

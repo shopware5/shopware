@@ -19,7 +19,8 @@
 
                     <img srcset="{$sArticle.preview.thumbnails[1].sourceSet}"
                          class="blog--image panel has--border is--rounded"
-                         alt="{$alt}" />
+                         alt="{$alt}"
+						 title="{$alt|truncate:25:""}" />
 				</a>
 			</div>
 		{/block}
@@ -30,21 +31,22 @@
 				<div class="blog--detail-thumbnails block">
 					{foreach $sArticle.media as $sArticleMedia}
 
-                        {$alt = $sArticle.title|escape}
+						{$alt = $sArticle.title|escape}
 
-                        {if $sArticleMedia.description}
-                            {$alt = $sArticleMedia.description}
-                        {/if}
+						{if $sArticleMedia.description}
+							{$alt = $sArticleMedia.description}
+						{/if}
 
 						{if !$sArticleMedia.preview}
 							<a href="{$sArticleMedia.thumbnails[2].source}"
 							   data-lightbox="true"
                                class="blog--thumbnail panel has--border is--rounded block"
-							   title="{$alt}">
+							   title="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt}">
 
                                <img srcset="{$sArticleMedia.thumbnails[0].sourceSet}"
                                     class="blog--thumbnail-image"
-                                    alt="{$alt}" />
+                                    alt="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt}"
+                                    title="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt|truncate:25:""}" />
 							</a>
 						{/if}
 					{/foreach}

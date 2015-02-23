@@ -71,7 +71,7 @@
                                         {/if}
 
                                         {if !empty($mainCategory.cmsHeadline)}
-                                            <h2 class="teaser--headline">{$mainCategory.cmsHeadline}</h2>
+                                            <div class="teaser--headline">{$mainCategory.cmsHeadline}</div>
                                         {/if}
 
                                         {if !empty($mainCategory.cmsText)}

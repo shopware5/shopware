@@ -2,9 +2,9 @@
 
 {* Review title *}
 {block name='frontend_detail_comment_post_title'}
-	<h2 id="product--publish-comment" class="content--title">
+	<div id="product--publish-comment" class="content--title">
 		{s name="DetailCommentHeaderWriteReview"}{/s}
-	</h2>
+	</div>
 {/block}
 
 {* Display notice if the shop owner needs to unlock a comment before it will be listed *}

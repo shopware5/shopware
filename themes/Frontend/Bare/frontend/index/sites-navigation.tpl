@@ -35,7 +35,9 @@
 {if $sMenu.gLeft}
     <div class="shop-sites--container is--rounded">
         {block name='frontend_index_left_menu_headline'}
-            <h2 class="shop-sites--headline navigation--headline">{s namespace='frontend/index/menu_left' name="MenuLeftHeadingInformation"}{/s}</h2>
+            <div class="shop-sites--headline navigation--headline">
+                {s namespace='frontend/index/menu_left' name="MenuLeftHeadingInformation"}{/s}
+            </div>
         {/block}
 
         {call name=customPages customPages=$sMenu.gLeft}
