@@ -609,8 +609,9 @@
                 me._on($slide, 'touchstart mousedown MSPointerDown', $.proxy(me.onTouchStart, me));
                 me._on($slide, 'touchmove mousemove MSPointerMove', $.proxy(me.onTouchMove, me));
                 me._on($slide, 'touchend mouseup mouseleave MSPointerUp', $.proxy(me.onTouchEnd, me));
+                me._on($slide, 'click', $.proxy(me.onClick, me));
 
-                if (!opts.preventScrolling) {
+                if (!opts.preventScrolling && ('ontouchstart' in window)) {
                     me._on($slide, 'movestart', function(e) {
                         // Allows the normal up and down scrolling from the browser
                         if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
@@ -866,6 +867,29 @@
             }
 
             me.slide(me._slideIndex);
+        },
+
+        /**
+         * Will be called when the user clicks on the slide.
+         * This event will cancel its bubbling when the move tolerance
+         * was exceeded.
+         *
+         * @event onClick
+         * @param {jQuery.Event} event
+         */
+        onClick: function (event) {
+            var me = this,
+                opts = me.opts,
+                touches = event.changedTouches,
+                touchA = (touches && touches[0]) || event.originalEvent,
+                startPoint = me._startTouchPoint,
+                deltaX = startPoint.x - touchA.clientX,
+                deltaY = startPoint.y - touchA.clientY;
+
+            if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) > opts.moveTolerance) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            }
         },
 
         /**
