@@ -2,7 +2,7 @@
 {if $Data}
     <div class="blog-outer-container">
         {foreach $Data.entries as $entry}
-			{$image = $entry.media.thumbnails.{$Data.thumbnail_size}}
+			{$image = $entry.media.thumbnails.{$Data.thumbnail_size}.source}
             <div class="blog-entry" style="width:{"100" / $Data.entries|count}%">
             	<div class="blog-entry-inner{if $entry@last} last{/if}">
                     <div class="blog_img">
