@@ -79,8 +79,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         },
         content: {
             title: '{s name=shopware_id/content/title}Shopware ID{/s}',
-            descriptionMessage: '{s name=shopware_id/content/description_message}Description lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut in dui aliquam, luctus leo ut, euismod mauris. Nunc ac ultrices sapien. Curabitur augue nunc, euismod a ullamcorper vel, pulvinar in lorem. Nam ornare leo a mi semper porta. Pellentesque faucibus nisl massa, nec ultrices ante condimentum et.{/s}',
-            lockedMessage: '{s name=shopware_id/content/locked_message}Locked lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut in dui aliquam, luctus leo ut, euismod mauris. Nunc ac ultrices sapien. Curabitur augue nunc, euismod a ullamcorper vel, pulvinar in lorem. Nam ornare leo a mi semper porta. Pellentesque faucibus nisl massa, nec ultrices ante condimentum et.{/s}'
+            descriptionMessage: '{s name=shopware_id/content/description_message}Here you can create you personal Shopware ID. The Shopware ID will give you access to your Shopware account in our forum, wiki and other community resources. It will also grant you access to our plugin store, where you can find many more plugins that will help you easily customize your shop to your needs.{/s}',
+            lockedMessage: '{s name=shopware_id/content/locked_message}You are already logged in using your Shopware ID.{/s}',
+            lockedErrorMessage: "{s name=shopware_id/content/locked_error_message}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed with the following error message:</p><br><br><pre>[0]</pre><br><br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation, or click the 'Next' button to continue without validating your domain.</p>{/s}"
         },
         buttons: {
             skip: '{s name=shopware_id/buttons/skip}Skip{/s}'
@@ -101,7 +102,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.content.lockedMessage + '</p>'
             });
-
+        
             me.items = [
                 {
                     xtype: 'container',
@@ -112,9 +113,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
                 },
                 me.descriptionContainer
             ];
-
+        
             me.snippets.buttons.next = null;
-
+        
         } else {
             me.existingAccountForm = me.createExistingAccountForm();
             me.newRegistrationForm = me.createNewRegistrationForm();
@@ -145,11 +146,18 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         me.callParent(arguments);
     },
 
-    lock: function() {
+    lock: function(message) {
         var me = this;
+        
         me.existingAccountForm.hide();
         me.newRegistrationForm.hide();
-        me.descriptionContainer.update('<p>' + me.snippets.content.lockedMessage + '</p>');
+        if (Ext.isEmpty(message)) {
+            me.descriptionContainer.update('<p>' + me.snippets.content.lockedMessage + '</p>');
+        } else {
+            me.descriptionContainer.update(
+                Ext.String.format(me.snippets.content.lockedErrorMessage, message)
+            );
+        }
         me.sbpLogin = 1;
     },
 
@@ -251,7 +259,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         });
 
         me.newRegistrationRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel:me.snippets.newRegistrationForm.registerDomain,
+            fieldLabel: me.snippets.newRegistrationForm.registerDomain,
             name:'registerDomain',
             labelWidth:150,
             checked: true
