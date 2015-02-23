@@ -337,22 +337,35 @@ Contains the styles of the main header and its components.
         display: block;
     }
 
+    .entry--name,
+    .entry--price,
+    .entry--all-results-link,
+    .entry--all-results-number {
+        .unitize-height(30, 16);
+        .unitize(30, 16, line-height);
+        display: block;
+    }
+
     .entry--media {
+        .unitize-height(30, 16);
 		width: 10%;
 		min-width: 10%;
         position: relative;
-        line-height: 30px;
         text-align: center;
 
         .media--image {
             display: inline-block;
-            vertical-align: middle;
+            position: absolute;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
         }
     }
 
 	.entry--name {
 		.unitize(10, 16, padding-left);
-        display: block;
 		width: 60%;
 		color: @text-color;
 
@@ -367,22 +380,17 @@ Contains the styles of the main header and its components.
         width: 30%;
         text-align: right;
         color: @text-color;
-		display: block;
         white-space: nowrap;
     }
 
-    .entry--all-results-link,
-    .entry--all-results-number {
-        display: block;
-    }
-
     .entry--all-results {
-        .unitize-padding(10, 5);
+        .unitize-padding(6, 5);
         font-weight: normal;
     }
 
     .entry--all-results-link {
         width: 70%;
+        padding: 0;
 
         .icon--arrow-right {
             .unitize(-1, 16, top);

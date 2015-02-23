@@ -177,6 +177,8 @@
                 .html(response)
                 .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
+
+            picturefill();
         },
 
         /**
@@ -365,6 +367,7 @@
                 'dataType': 'jsonp',
                 'success': function (result) {
                     $el.html(result);
+                    picturefill();
 
                     if (typeof callback === 'function') {
                         callback();

@@ -233,6 +233,8 @@
 
             me.$loader.fadeOut(opts.animationSpeed);
             me.$results.empty().html(response).slideDown().addClass(opts.activeCls);
+            picturefill();
+
             $.publish('plugin/liveSearch/showResult');
         },
 
