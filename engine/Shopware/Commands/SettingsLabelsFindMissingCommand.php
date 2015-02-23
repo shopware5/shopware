@@ -57,8 +57,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
                 InputOption::VALUE_REQUIRED,
                 'The folder where the exported files should be placed. Defaults to Shopware\'s root folder',
                 null
-            )
-        ;
+            );
     }
 
     /**
@@ -75,62 +74,98 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
         }
         if (!is_writeable($dir)) {
             $output->writeln('<error>Output dir '.$input->getOption('file').' is not writable, aborting</error>');
+
             return 1;
         }
 
         /** @var Locale $locale */
-        $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getArgument('locale'));
+        $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale(
+            $input->getArgument('locale')
+        );
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
+
             return;
         }
 
-        // Export form labels
+        $this->exportFormLabels($output, $locale, $dir);
+
+        $this->exportElementLabels($output, $locale, $dir);
+    }
+
+    /**
+     * Exports form labels from the database into a php file containing an array
+     *
+     * @param OutputInterface $output
+     * @param $locale
+     * @param $dir
+     * @throws \Exception
+     */
+    protected function exportFormLabels(OutputInterface $output, $locale, $dir)
+    {
         $formQueryBuilder = $this->container->get('models')->getDBALQueryBuilder();
         $statement = $formQueryBuilder
             ->select('form.name AS name', 'form.label AS label', 'form.description AS description')
             ->from('s_core_config_forms', 'form')
-            ->leftJoin('form', 's_core_config_form_translations', 'trans', ' form.id = trans.form_id AND trans.locale_id = :localeId')
+            ->leftJoin(
+                'form',
+                's_core_config_form_translations',
+                'trans',
+                ' form.id = trans.form_id AND trans.locale_id = :localeId'
+            )
             ->where('trans.form_id IS NULL')
             ->andWhere('form.name IS NOT NULL')
             ->setParameter('localeId', $locale->getId())
-            ->execute()
-        ;
+            ->execute();
 
         $missingFormLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
         $output->writeln('<info>'.count($missingFormLabels).' missing form labels detected</info>');
         if ($missingFormLabels) {
-            $formLabelFilePath = $dir . 'formTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
-            
-            $output->writeln('<info>Writing to ' . $formLabelFilePath . '</info>');
-            file_put_contents($formLabelFilePath, '<?php return ' . var_export($missingFormLabels, true) . ';');
-        }
+            $formLabelFilePath = $dir.'formTranslations'.str_replace('_', '', $locale->getLocale()).'.php';
 
-        // Export element labels
+            $output->writeln('<info>Writing to '.$formLabelFilePath.'</info>');
+            file_put_contents($formLabelFilePath, '<?php return '.var_export($missingFormLabels, true).';');
+        }
+    }
+
+    /**
+     * Exports element labels from the database into a php file containing an array
+     *
+     * @param OutputInterface $output
+     * @param $locale
+     * @param $dir
+     * @throws \Exception
+     */
+    protected function exportElementLabels(OutputInterface $output, $locale, $dir)
+    {
         $elementsQueryBuilder = $this->container->get('models')->getDBALQueryBuilder();
         $statement = $elementsQueryBuilder
             ->select('form.name AS formName', 'elem.name AS elementName', 'elem.label AS label')
             ->from('s_core_config_forms', 'form')
             ->leftJoin('form', 's_core_config_elements', 'elem', 'form.id = elem.form_id')
-            ->leftJoin('elem', 's_core_config_element_translations', 'trans', ' elem.id = trans.element_id AND trans.locale_id = :localeId')
+            ->leftJoin(
+                'elem',
+                's_core_config_element_translations',
+                'trans',
+                ' elem.id = trans.element_id AND trans.locale_id = :localeId'
+            )
             ->where('trans.element_id IS NULL')
             ->andWhere('elem.name IS NOT NULL')
             ->andWhere('form.name IS NOT NULL')
             ->setParameter('localeId', $locale->getId())
-            ->execute()
-        ;
+            ->execute();
 
         $missingElementLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
         $output->writeln('<info>'.count($missingElementLabels).' missing element labels detected</info>');
         if ($missingElementLabels) {
-            $elementLabelFilePath = $dir . 'elementTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
-            
-            $output->writeln('<info>Writing to '. $elementLabelFilePath . '</info>');
-            file_put_contents($elementLabelFilePath, '<?php return ' . var_export($missingElementLabels, true) . ';');
+            $elementLabelFilePath = $dir.'elementTranslations'.str_replace('_', '', $locale->getLocale()).'.php';
+
+            $output->writeln('<info>Writing to '.$elementLabelFilePath.'</info>');
+            file_put_contents($elementLabelFilePath, '<?php return '.var_export($missingElementLabels, true).';');
         }
     }
 }
