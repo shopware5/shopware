@@ -75,11 +75,11 @@
          */
         init: function () {
             var me = this,
-                opts;
+                opts = me.opts;
 
             me.applyDataAttributes();
 
-            opts = me.opts;
+            opts.animationSpeed = parseFloat(opts.animationSpeed);
 
             if (opts.collapseTarget) {
                 me.$targetEl = $(opts.collapseTarget);
@@ -132,19 +132,19 @@
          */
         openPanel: function () {
             var me = this,
-                options = me.opts,
+                opts = me.opts,
                 $targetEl = me.$targetEl,
-                siblings = $('.' + options.collapseTargetCls).not($targetEl);
+                siblings = $('.' + opts.collapseTargetCls).not($targetEl);
 
-            me.$el.addClass(options.activeTriggerCls);
+            me.$el.addClass(opts.activeTriggerCls);
 
-            $targetEl.slideDown(options.duration, function() {
+            $targetEl.slideDown(opts.animationSpeed, function () {
                 $.publish('plugin/collapsePanel/onOpen');
-            }).addClass(options.collapsedStateCls);
+            }).addClass(opts.collapsedStateCls);
 
-            if (options.closeSiblings) {
-                siblings.slideUp(options.duration, function () {
-                    siblings.removeClass(options.collapsedStateCls);
+            if (opts.closeSiblings) {
+                siblings.slideUp(opts.animationSpeed, function () {
+                    siblings.removeClass(opts.collapsedStateCls);
                 });
             }
         },
@@ -156,10 +156,11 @@
          * @method openPanel
          */
         closePanel: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
-            me.$el.removeClass(me.opts.activeTriggerCls);
-            me.$targetEl.slideUp(me.opts.duration).removeClass(me.opts.collapsedStateCls);
+            me.$el.removeClass(opts.activeTriggerCls);
+            me.$targetEl.slideUp(opts.animationSpeed).removeClass(opts.collapsedStateCls);
 
             $.publish('plugin/collapsePanel/onClose');
         },
@@ -173,11 +174,12 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
-            me.$el.removeClass(me.opts.activeTriggerCls);
-            me.$targetEl.removeClass(me.opts.collapsedStateCls)
-                .removeClass(me.opts.collapseTargetCls)
+            me.$el.removeClass(opts.activeTriggerCls);
+            me.$targetEl.removeClass(opts.collapsedStateCls)
+                .removeClass(opts.collapseTargetCls)
                 .removeAttr('style');
 
             me._destroy();

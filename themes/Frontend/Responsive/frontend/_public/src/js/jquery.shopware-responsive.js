@@ -42,7 +42,9 @@ $(function () {
         .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['l', 'xl'])
 
         // Slide panel
-        .addPlugin('*[data-slide-panel="true"]', 'slidePanel', ['xs', 's'])
+        .addPlugin('.footer--column .column--headline', 'collapsePanel', {
+            contentSiblingSelector: '.column--content'
+        }, ['xs', 's'])
 
         // Collapse panel
         .addPlugin('#new-customer-action', 'collapsePanel', ['xs', 's'])

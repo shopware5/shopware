@@ -59,7 +59,6 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.storage-manager.js',
         'src/js/jquery.off-canvas-menu.js',
         'src/js/jquery.search-field.js',
-        'src/js/jquery.slide-panel.js',
         'src/js/jquery.tab-menu.js',
         'src/js/jquery.image-slider.js',
         'src/js/jquery.image-zoom.js',
