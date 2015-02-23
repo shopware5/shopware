@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     snippets: {
         content: {
             title: '{s name=finish/content/title}Finished{/s}',
-            message: '{s name=finish/content/message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{/s}'
+            message: '{s name=finish/content/message}The First Run Wizard is now complete and you are ready to start using your new Shopware shop. Information, help, and the latest Shopware news can be found in the following pages:{/s}'
         },
         buttons: {
             finish: '{s name=finish/buttons/finish}Finish{/s}'
@@ -57,19 +57,89 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Finish', {
     },
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            content = me.snippets.content;
 
-        me.html =
-            '<h1>' + me.snippets.content.title + '</h1>' +
-            '<p>' + me.snippets.content.message + '</p>';
+        me.items = [
+            {
+                xtype: 'container',
+                border: false,
+                style: 'font-weight: 700; line-height: 20px;',
+                html: '<h1>' + content.title + '</h1>'
+            },
+            {
+                xtype: 'container',
+                border: false,
+                style: 'margin-bottom: 20px;',
+                html: '<p>' + content.message + '</p>',
+                width: '100%'
+            },
+            {
+                xtype: 'container',
+                border: false,
+                width: '100%',
+                html: me.createTiles()
+            }
+        ];
 
         me.callParent(arguments);
+    },
+
+    createTiles: function () {
+        var tileData = [
+            {
+                'link': '{s name="finish/links/help"}http://en.wiki.shopware.com/{/s}',
+                'icon': 'help',
+                'text': '{s name="finish/tile/help"}Shopware Help{/s}'
+            },
+            {
+                'link': '{s name="finish/links/templater"}http://en.wiki.shopware.com/Designer-s-Guide_cat_884.html{/s}',
+                'icon': 'templater',
+                'text': '{s name="finish/tile/templater"}Shopware for templaters{/s}'
+            },
+            {
+                'link': '{s name="finish/links/developer"}http://en.wiki.shopware.com/Developer-s-Guide_cat_888.html{/s}',
+                'icon': 'developer',
+                'text': '{s name="finish/tile/developer"}Shopware for developers{/s}'
+            },
+            {
+                'link': '{s name="finish/links/forum"}http://en.forum.shopware.com/{/s}',
+                'icon': 'forum',
+                'text': '{s name="finish/tile/forum"}Shopware Forum{/s}'
+            },
+            {
+                'link': '{s name="finish/links/account"}http://account.shopware.com/{/s}',
+                'icon': 'account',
+                'text': '{s name="finish/tile/account"}Shopware Account{/s}'
+            },
+            {
+                'link': '{s name="finish/links/store"}http://store.shopware.com/en/{/s}',
+                'icon': 'store',
+                'text': '{s name="finish/tile/store"}Shopware Store{/s}'
+            }
+        ],
+        tiles = [];
+
+        Ext.each(tileData, function (tile) {
+            tiles.push(Ext.String.format(
+                '<a class="tile-link" href="[0]" target="_blank"><span class="tile-icon icon-[1]"></span>[2]</a>',
+                tile.link,
+                tile.icon,
+                tile.text
+            ));
+        });
+
+        return tiles.join('');
     },
 
     getButtons: function() {
         var me = this;
 
-        return { next: { text: me.snippets.buttons.finish }};
+        return {
+            next: {
+                text: me.snippets.buttons.finish
+            }
+        };
     }
 });
 

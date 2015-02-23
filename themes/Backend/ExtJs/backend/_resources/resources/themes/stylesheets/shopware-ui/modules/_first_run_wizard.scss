@@ -129,4 +129,58 @@
   .store-plugin:nth-child(3n+0) {
     border-right: 1px solid #d3e0e6;
   }
+
+  .tile-link {
+    display: inline-block;
+    width: 170px;
+    height: 90px;
+    background: #fff;
+    border: 1px solid #e7ecf2;
+    padding: 15px;
+    text-decoration: none;
+    color: #3F5D71;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 10px 10px 0;
+    overflow: hidden;
+    border-radius: 3px;
+
+    &:hover {
+      color: #2eb5f9;
+      border-color: #2eb5f9;
+    }
+
+    .tile-icon {
+      width: 28px;
+      height: 28px;
+      display: block;
+      margin: 0 auto 10px;
+
+      $dir-frw-icons: '../themes/images/shopware-ui/first_run_wizard/';
+
+      &.icon-help {
+        background: url(#{$dir-frw-icons}help.png);
+      }
+
+      &.icon-account {
+        background: url(#{$dir-frw-icons}account.png);
+      }
+
+      &.icon-templater {
+        background: url(#{$dir-frw-icons}templater.png);
+      }
+
+      &.icon-developer {
+        background: url(#{$dir-frw-icons}developer.png);
+      }
+
+      &.icon-forum {
+        background: url(#{$dir-frw-icons}forum.png);
+      }
+
+      &.icon-store {
+        background: url(#{$dir-frw-icons}store.png);
+      }
+    }
+  }
 }
