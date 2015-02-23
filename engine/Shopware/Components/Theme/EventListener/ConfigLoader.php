@@ -78,9 +78,13 @@ class ConfigLoader implements SubscriberInterface
             return;
         }
 
-        $inheritance = $this->container->get('theme_inheritance');
         $templateManager = $this->container->get('template');
+        $themeSettings = $templateManager->getTemplateVars('theme');
+        if (!empty($themeSettings)) {
+            return;
+        }
 
+        $inheritance = $this->container->get('theme_inheritance');
         $config = $inheritance->buildConfig(
             $shop->getTemplate(),
             $shop,
