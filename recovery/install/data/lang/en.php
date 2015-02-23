@@ -14,9 +14,9 @@ return [
     'forward'      => 'Forward',
     'start'        => 'Start',
 
-    'select_language_de' => 'German',
+    'select_language_de' => 'Deutsch',
     'select_language_en' => 'English',
-    'select_language_nl' => 'Dutch',
+    'select_language_nl' => 'Nederlands',
 
     'language-selection_header'          => 'Start installation',
     'language-selection_select_language' => 'Choose language',

@@ -14,9 +14,8 @@ return [
     'forward'      => 'Verder',
     'start'        => 'Starten',
 
-    "select_language_choose" => "Kies taal",
-    "select_language_de"     => "Duits",
-    "select_language_en"     => "Engels",
+    "select_language_de"     => "Deutsch",
+    "select_language_en"     => "English",
     "select_language_nl"     => "Nederlands",
 
     "language-selection_select_language" => "Selecteer taal",

@@ -16,7 +16,7 @@ return [
 
     'select_language_de' => 'Deutsch',
     'select_language_en' => 'English',
-    'select_language_nl' => 'Niederländisch',
+    'select_language_nl' => 'Nederlands',
 
     'language-selection_select_language' => 'Sprache wählen',
     'language-selection_header'          => 'Installation starten',
