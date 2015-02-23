@@ -6,7 +6,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="blog--detail panel block-group listing listing--listing-1col">
+    <div class="blog--detail panel block-group">
 
         {* Content *}
         {block name='frontend_blog_detail_content'}
@@ -27,7 +27,7 @@
 
                         {* Article name *}
                         {block name='frontend_blog_detail_title'}
-                            <h1 class="blog--detail-headline panel--title" itemprop="name">{$sArticle.title}</h1>
+                            <h1 class="blog--detail-headline" itemprop="name">{$sArticle.title}</h1>
                         {/block}
 
                         {* Metadata *}
@@ -74,7 +74,7 @@
 
                 {* Detail Box Content *}
                 {block name='frontend_blog_detail_box_content'}
-                    <div class="blog--detail-box-content panel--body is--wide block">
+                    <div class="blog--detail-box-content block">
 
                         {* Description *}
                         {block name='frontend_blog_detail_description'}
