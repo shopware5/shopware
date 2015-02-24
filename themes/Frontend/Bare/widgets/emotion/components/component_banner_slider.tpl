@@ -21,12 +21,13 @@
                         {foreach $Data.values as $banner}
                             {strip}
                             <style type="text/css">
-                                {if $banner.thumbnails|sizeof == 0}
+                                {if empty($banner.thumbnails)}
                                     #banner--{$Data.objectId}-{$banner@index} {
                                         background-image: url('{$banner.source}');
                                     }
                                 {else}
                                     {$images = $banner.thumbnails}
+                                
                                     #banner--{$Data.objectId}-{$banner@index} {
                                         background-image: url('{$images[0].source}');
                                     }
