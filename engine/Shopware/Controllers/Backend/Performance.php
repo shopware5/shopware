@@ -344,6 +344,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
+        $repo = Shopware()->Models()->getRepository(
+            'Shopware\Models\Plugin\Plugin'
+        );
+
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
+        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
+        $plugin->setActive($data['enabled']);
+
+        Shopware()->Models()->flush($plugin);
+
         $lines = array();
         foreach ($data['cacheControllers'] as $entry) {
             $lines[] = $entry['key'] . ' ' . $entry['value'];
@@ -562,7 +572,15 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
+        $repo = Shopware()->Models()->getRepository(
+            'Shopware\Models\Plugin\Plugin'
+        );
+
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
+        $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
+
         return array(
+            'enabled'            => $plugin->getActive(),
             'cacheControllers'   => $cacheControllers,
             'noCacheControllers' => $noCacheControllers,
             'HttpCache:proxyPrune' => $this->readConfig('HttpCache:proxyPrune'),
