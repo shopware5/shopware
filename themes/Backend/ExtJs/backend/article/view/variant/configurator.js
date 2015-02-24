@@ -571,7 +571,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             } , {
                 iconCls:'sprite-pencil',
                 action:'editGroup',
-                tooltip:me.snippets.groups,
+                tooltip:me.snippets.groups.edit,
                 handler:function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('editGroup', record);
                 }
