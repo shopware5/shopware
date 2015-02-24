@@ -184,9 +184,44 @@
 	}
 
 	.banner--mapping {
+		.transform(translate(-50%, -50%));
 		display: block;
 		position: absolute;
+		top: 50%; left: 50%;
 		margin: auto;
+
+		&.left.top {
+			.transform(translate(0, 0));
+			left: 0; top: 0;
+		}
+		&.left.center {
+			.transform(translate(0, -50%));
+			left: 0; top: 50%;
+		}
+		&.left.bottom {
+			.transform(translate(0, -100%));
+			left: 0; top: 100%;
+		}
+		&.center.top {
+			.transform(translate(-50%, 0));
+			left: 50%; top: 0;
+		}
+		&.center.bottom {
+			.transform(translate(-50%, -100%));
+			left: 50%; top: 100%;
+		}
+		&.right.top {
+			.transform(translate(-100%, 0));
+			left: 100%; top: 0;
+		}
+		&.right.center {
+			.transform(translate(-100%, -50%));
+			left: 100%; top: 50%;
+		}
+		&.right.bottom {
+			.transform(translate(-100%, 0));
+			left: 100%; bottom: 0;
+		}
 	}
 
 	.banner--mapping-link {

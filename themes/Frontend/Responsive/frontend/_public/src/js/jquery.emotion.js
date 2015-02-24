@@ -684,11 +684,7 @@
 
             me.$mapping.css({
                 'width': mappingWidth,
-                'height': mappingHeight,
-                'top': orientation ? 0 : '50%',
-                'left': orientation ? '50%' : 0,
-                'margin-top': orientation ? 0 : -(mappingHeight / 2),
-                'margin-left': orientation ? -(mappingWidth / 2) : 0
+                'height': mappingHeight
             });
         },
 
