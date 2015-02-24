@@ -6,7 +6,7 @@
 
         {strip}
         <style type="text/css">
-            {if $Data.thumbnails|sizeof == 0}
+            {if empty($Data.thumbnails)}
                 #banner--{$Data.objectId} {
                     background-image: url('{$Data.source}');
                 }
