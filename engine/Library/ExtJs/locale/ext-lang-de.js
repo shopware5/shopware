@@ -485,6 +485,7 @@ Ext.onReady(function() {
         override:'Ext.util.FileUpload',
         snippets: {
             uploadReady: 'Dateien hochgeladen',
+            filesFrom: 'von',
             messageText: '[0] Dateien hochgeladen',
             messageTitle: 'Medienverwaltung',
             legacyMessage: "Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ",
