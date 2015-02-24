@@ -1,4 +1,4 @@
-<div class="blog--comments-wrapper block">
+<div id="blog--comments-start" class="blog--comments-wrapper block">
     <div class="blog--comments panel has--border is--rounded">
 
     {* Detail Comment Form *}
