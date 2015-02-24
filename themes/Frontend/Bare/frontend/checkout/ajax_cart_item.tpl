@@ -26,7 +26,7 @@
             {block name='frontend_checkout_ajax_cart_articleimage_badge_premium'}
                 {if $basketItem.modus == $IS_PREMIUM_PRODUCT}
                     <span class="cart--badge">
-                        <span>GRATIS</span>
+                        <span class="badge--free">{s name='AjaxCartInfoFree' namespace="frontend/checkout/ajax_cart"}{/s}</span>
                     </span>
                 {/if}
             {/block}
