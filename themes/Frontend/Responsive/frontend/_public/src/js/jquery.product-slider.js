@@ -332,6 +332,7 @@
              * Always set back to the first item on update
              */
             me.setPosition(0);
+            me.trackArrows();
         },
 
         /**
@@ -485,7 +486,14 @@
         trackArrows: function() {
             var me = this;
 
-            if(!me.$arrowPrev || !me.$arrowNext || !me.isActive()) {
+            if(!me.$arrowPrev || !me.$arrowNext) {
+                if (me.isActive() && me.opts.arrowControls) me.createArrows();
+                return;
+            }
+
+            if (!me.isActive()) {
+                me.$arrowPrev.hide();
+                me.$arrowNext.hide();
                 return;
             }
 
@@ -525,8 +533,8 @@
                     me.isLoading = false;
                     me.$container.append(response);
                     me.trackItems();
-                    me.trackArrows();
                     me.setSizes();
+                    me.trackArrows();
 
                     $.publish('plugin/productSlider/itemsLoaded');
 
@@ -584,7 +592,7 @@
                     'class': me.opts.arrowCls + ' ' +
                         me.opts.prevArrowCls + ' ' +
                         orientationCls
-                }).hide().prependTo(me.$el);
+                }).prependTo(me.$el);
 
                 me._on(me.$arrowPrev, 'click', $.proxy(me.onArrowClick, me, 'prev'));
             }
@@ -598,6 +606,8 @@
 
                 me._on(me.$arrowNext, 'click', $.proxy(me.onArrowClick, me, 'next'));
             }
+
+            me.trackArrows();
 
             $.publish('plugin/productSlider/createArrows', me);
         },
