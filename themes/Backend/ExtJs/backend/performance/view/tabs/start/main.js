@@ -31,6 +31,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     cls: 'performance-view-start',
     bodyCls: 'performance-view-start-body',
 
+    submitChange: false,
+
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -41,7 +43,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     listeners: {
         afterrender: function () {
             var me = this;
-            me.fireEvent('init-toggle-productive', me.toggleButton);
+
+            me.fireEvent('init-toggle-productive', me);
         }
     },
 
@@ -97,44 +100,66 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line4}{/s}</li>';
         clearText += '</ul>';
 
-        me.toggleButton = me.createToggleButton();
-
+        me.radioGroup = me.createRadioGroup();
         return [{
-            xtype: 'container',
-            cls: 'toggle-container',
-            layout: 'hbox',
-            padding: 20,
-            items: [me.toggleButton, {
-                xtype: 'component',
-                html: '<h2>{s name=tabs/start/productive_mode}{/s}</h2><br/>{s name=tabs/start/info_productive_mode}{/s}',
-                flex: 1
-            } ]
-        },{
-            xtype: 'component',
-            html: clearText
+            xtype   : 'container',
+            cls     : 'radiogroup-container',
+            padding : 20,
+            items   : [me.radioGroup]
+        }, {
+            xtype   : 'component',
+            flex    : 1,
+            html    : clearText
         }];
     },
 
     /**
-     * get Button to toggle productive mode
+     * get Radiogroup to change productive mode
      * @return Ext.Component button
      */
-    createToggleButton: function() {
+    createRadioGroup: function() {
         var me = this;
 
-        return Ext.create('Ext.Component', {
-            cls: 'toggle-button',
-            height: 24,
-            width: 90,
-            hidden: true,
+        return Ext.create('Ext.form.RadioGroup', {
+            columns : 1,
+            hidden  : true,
+            items   : [
+                { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name=tabs/start/production_mode_title}{/s}</b>' },
+                { xtype: 'component', cls:'component-first', html: '{s name=tabs/start/production_mode_description}{/s}'},
+                { name: 'productiveMode', inputValue: false, boxLabel: '<b>{s name=tabs/start/development_mode_title}{/s}</b>' },
+                { xtype: 'component', html: '{s name=tabs/start/development_mode_description}{/s}' }
+            ],
             listeners: {
-                afterrender: function(comp) {
-                    comp.el.on('click', function() {
-                        me.fireEvent('toggle-productive', me.toggleButton);
-                    });
+                change: function(comp, value) {
+                    if (me.submitChange) {
+                        me.fireEvent('toggle-productive', me);
+                    }
                 }
             }
         });
+    },
+    
+    setState: function(state) {
+        var me = this;
+        me.radioGroup.show();
+
+        if (state === true) {
+            me.radioGroup.setValue({ productiveMode: true });
+        } else {
+            me.radioGroup.setValue({ productiveMode: false });
+        }
+
+        if (me.submitChange == false) {
+            me.submitChange = true;
+        }
+    },
+
+    resetState: function(state) {
+        var me =  this;
+
+        me.submitChange = false;
+        me.radioGroup.setValue({ productiveMode: !me.radioGroup.getValue().productiveMode });
+        me.submitChange = true;
     }
 });
 //{/block}
