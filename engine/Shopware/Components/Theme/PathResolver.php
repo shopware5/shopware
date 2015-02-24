@@ -239,11 +239,17 @@ class PathResolver
     /**
      * @param string $path
      * @param Shop\Shop $shop
+     * @param bool $isSecureRequest
      * @return string
      */
-    public function formatPathToUrl($path, Shop\Shop $shop)
+    public function formatPathToUrl($path, Shop\Shop $shop, $isSecureRequest = false)
     {
-        return str_replace($this->rootDir, $shop->getBasePath(), $path);
+        if ($isSecureRequest && $shop->getSecureBasePath()) {
+            $targetPath = $shop->getSecureBasePath();
+        } else {
+            $targetPath = $shop->getBasePath();
+        }
+        return str_replace($this->rootDir, $targetPath, $path);
     }
 
     /**

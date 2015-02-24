@@ -257,9 +257,7 @@ class Compiler
 
             //creates the url for the compiler, this url will be prepend to each relative path.
             //the url is additionally used for the source map generation.
-            $url = $this->formatPathToUrl(
-                $shop, $file
-            );
+            $url = $this->formatPathToUrl($file);
 
             $this->compiler->compile($file, $url);
         }
@@ -584,20 +582,21 @@ class Compiler
      * This urls are used for the less compiler, to create the source map
      * and to prepend this url for each relative path.
      *
-     * @param \Shopware\Models\Shop\Shop $shop
      * @param $path
      * @return string
      */
-    private function formatPathToUrl(Shop\Shop $shop, $path)
+    private function formatPathToUrl($path)
     {
         $path = str_replace($this->rootDir, '', $path);
-        $path = $shop->getBasePath() . $path;
+        $path = '../..' . $path;
         return $path;
     }
 
     /**
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
+     * 
+     * @param array $names
      */
     public function clearDirectory($names = array())
     {
