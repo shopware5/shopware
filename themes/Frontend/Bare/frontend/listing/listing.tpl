@@ -28,7 +28,7 @@
                 {block name="frontend_listing_list_promotion_link_show_listing"}
                     {if !$showListing}
                         <div class="emotion--show-listing">
-                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" class="link--show-listing">
+                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" class="link--show-listing" rel="nofollow">
                                 {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
                             </a>
                         </div>

@@ -17,7 +17,7 @@
     
     {if {config name=seoIndexPaginationLinks} && $pages > 1}
         {include file="frontend/listing/header_seo_pagination.tpl"}
-    {else}
+    {elseif $pages > 1}
         <link rel="canonical"
               href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{elseif $sCategoryContent.sSelfCanonical}{$sCategoryContent.sSelfCanonical}{else}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/if}"
               title="{if $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}"/>
