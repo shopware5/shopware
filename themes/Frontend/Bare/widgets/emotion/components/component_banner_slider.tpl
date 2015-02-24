@@ -16,56 +16,58 @@
 
         {block name="frontend_widgets_banner_slider_container"}
             <div class="banner-slider--container image-slider--container">
-
                 {block name="frontend_widgets_banner_slider_slide"}
                     <div class="banner-slider--slide image-slider--slide">
                         {foreach $Data.values as $banner}
-
-                            {$images = $banner.thumbnails}
-
                             {strip}
                             <style type="text/css">
-
-                                #banner--{$Data.objectId}-{$banner@index} {
-                                    background-image: url('{$images[0].source}');
-                                }
-
-                                {if isset($images[0].retinaSource)}
-                                @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                                {if $banner.thumbnails|sizeof == 0}
                                     #banner--{$Data.objectId}-{$banner@index} {
-                                        background-image: url('{$images[0].retinaSource}');
+                                        background-image: url('{$banner.source}');
                                     }
-                                }
-                                {/if}
-
-                                @media screen and (min-width: 48em) {
+                                {else}
+                                    {$images = $banner.thumbnails}
                                     #banner--{$Data.objectId}-{$banner@index} {
-                                        background-image: url('{$images[1].source}');
+                                        background-image: url('{$images[0].source}');
                                     }
-                                }
 
-                                {if isset($images[1].retinaSource)}
-                                @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
-                                       screen and (min-width: 48em) and (min-resolution: 192dpi) {
-                                    #banner--{$Data.objectId}-{$banner@index} {
-                                        background-image: url('{$images[1].retinaSource}');
+                                    {if isset($images[0].retinaSource)}
+                                    @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                                        #banner--{$Data.objectId}-{$banner@index} {
+                                            background-image: url('{$images[0].retinaSource}');
+                                        }
                                     }
-                                }
-                                {/if}
+                                    {/if}
 
-                                @media screen and (min-width: 78.75em) {
-                                    .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
-                                        background-image: url('{$images[2].source}');
+                                    @media screen and (min-width: 48em) {
+                                        #banner--{$Data.objectId}-{$banner@index} {
+                                            background-image: url('{$images[1].source}');
+                                        }
                                     }
-                                }
 
-                                {if isset($images[2].retinaSource)}
-                                @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
-                                       screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
-                                    .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
-                                        background-image: url('{$images[2].retinaSource}');
+                                    {if isset($images[1].retinaSource)}
+                                    @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
+                                           screen and (min-width: 48em) and (min-resolution: 192dpi) {
+                                        #banner--{$Data.objectId}-{$banner@index} {
+                                            background-image: url('{$images[1].retinaSource}');
+                                        }
                                     }
-                                }
+                                    {/if}
+
+                                    @media screen and (min-width: 78.75em) {
+                                        .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
+                                            background-image: url('{$images[2].source}');
+                                        }
+                                    }
+
+                                    {if isset($images[2].retinaSource)}
+                                    @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
+                                           screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
+                                        .is--fullscreen #banner--{$Data.objectId}-{$banner@index} {
+                                            background-image: url('{$images[2].retinaSource}');
+                                        }
+                                    }
+                                    {/if}
                                 {/if}
                             </style>
                             {/strip}
