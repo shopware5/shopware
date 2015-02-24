@@ -103,6 +103,11 @@ class sExport
     private $db;
 
     /**
+     * @var Shopware_Components_Config
+     */
+    private $config;
+    
+    /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
@@ -110,13 +115,15 @@ class sExport
     public function __construct(
         ContextServiceInterface $contextService = null,
         AdditionalTextServiceInterface $additionalTextService = null,
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        Shopware_Components_Config $config = null
     ) {
         $container = Shopware()->Container();
 
         $this->contextService = $contextService ?: $container->get('shopware_storefront.context_service');
         $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
         $this->db = $db ?: $container->get('db');
+        $this->config = $config ?: $container->get('config');
     }
 
     /**
@@ -846,6 +853,9 @@ class sExport
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
+        if ($this->config->offsetGet('hideNoInstock')) {
+            $sql_add_where[] = "(v.instock > 0 OR d.instock > 0)";
+        }
 
         $sql_add_join = implode(" ",$sql_add_join);
         if (!empty($sql_add_select)) {
@@ -1006,6 +1016,7 @@ class sExport
         if (!empty($this->sSettings["count_filter"])) {
             $sql .= "LIMIT ".$this->sSettings["count_filter"];
         }
+        
         return $sql;
     }
 
