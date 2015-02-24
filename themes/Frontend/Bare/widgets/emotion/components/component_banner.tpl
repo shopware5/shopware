@@ -4,51 +4,56 @@
          data-height="{$Data.fileInfo.height}"
          {if $Data.bannerMapping}data-bannerMapping="true"{/if}>
 
-        {$images = $Data.thumbnails}
-
         {strip}
         <style type="text/css">
-
-            #banner--{$Data.objectId} {
-                background-image: url('{$images[0].source}');
-            }
-
-            {if isset($images[0].retinaSource)}
-            @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            {if $Data.thumbnails|sizeof == 0}
                 #banner--{$Data.objectId} {
-                    background-image: url('{$images[0].retinaSource}');
+                    background-image: url('{$Data.source}');
                 }
-            }
-            {/if}
+            {else}
+                {$images = $Data.thumbnails}
 
-            @media screen and (min-width: 48em) {
                 #banner--{$Data.objectId} {
-                    background-image: url('{$images[1].source}');
+                    background-image: url('{$images[0].source}');
                 }
-            }
 
-            {if isset($images[1].retinaSource)}
-            @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
-                   screen and (min-width: 48em) and (min-resolution: 192dpi) {
-                #banner--{$Data.objectId} {
-                    background-image: url('{$images[1].retinaSource}');
+                {if isset($images[0].retinaSource)}
+                @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                    #banner--{$Data.objectId} {
+                        background-image: url('{$images[0].retinaSource}');
+                    }
                 }
-            }
-            {/if}
+                {/if}
 
-            @media screen and (min-width: 78.75em) {
-                .is--fullscreen #banner--{$Data.objectId} {
-                    background-image: url('{$images[2].source}');
+                @media screen and (min-width: 48em) {
+                    #banner--{$Data.objectId} {
+                        background-image: url('{$images[1].source}');
+                    }
                 }
-            }
 
-            {if isset($images[2].retinaSource)}
-            @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
-                   screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
-                .is--fullscreen #banner--{$Data.objectId} {
-                    background-image: url('{$images[2].retinaSource}');
+                {if isset($images[1].retinaSource)}
+                @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
+                       screen and (min-width: 48em) and (min-resolution: 192dpi) {
+                    #banner--{$Data.objectId} {
+                        background-image: url('{$images[1].retinaSource}');
+                    }
                 }
-            }
+                {/if}
+
+                @media screen and (min-width: 78.75em) {
+                    .is--fullscreen #banner--{$Data.objectId} {
+                        background-image: url('{$images[2].source}');
+                    }
+                }
+
+                {if isset($images[2].retinaSource)}
+                @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
+                       screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
+                    .is--fullscreen #banner--{$Data.objectId} {
+                        background-image: url('{$images[2].retinaSource}');
+                    }
+                }
+                {/if}
             {/if}
         </style>
         {/strip}
