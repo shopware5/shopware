@@ -52,18 +52,6 @@
             'addArticleUrl': $.controller['ajax_add_article'],
 
             /**
-             * Object that maps different device types with their per-page amount.
-             *
-             * @type {Object}
-             */
-            'sliderPerPage': {
-                'desktop': 3,
-                'tabletLandscape': 3,
-                'tablet': 2,
-                'smartphone': 1
-            },
-
-            /**
              * Default value that is used for the per-page amount when the current device is not mapped.
              * An extra option because the mapping table can be accidentally overwritten.
              *
@@ -109,21 +97,7 @@
             // Close modal on continue shopping button
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
 
-            StateManager.addPlugin(opts.productSliderSelector, 'productSlider', {
-                'itemsPerPage': opts.sliderPerPageDefault
-            })
-            .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'itemsPerPage': opts.sliderPerPage.smartphone
-            }, 'xs')
-            .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'itemsPerPage': opts.sliderPerPage.tablet
-            }, 'm')
-            .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'itemsPerPage': opts.sliderPerPage.tabletLandscape
-            }, 'l')
-            .addPlugin(opts.productSliderSelector, 'productSlider', {
-                'itemsPerPage': opts.sliderPerPage.desktop
-            }, 'xl');
+            StateManager.addPlugin(opts.productSliderSelector, 'productSlider');
         },
 
         /**

@@ -147,6 +147,10 @@
                     siblings.removeClass(opts.collapsedStateCls);
                 });
             }
+
+            $.each($targetEl.find('.product-slider'), function(index, item) {
+                $(item).data('plugin_productSlider').update();
+            });
         },
 
         /**
