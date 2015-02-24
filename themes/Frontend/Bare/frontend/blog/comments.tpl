@@ -1,5 +1,5 @@
-<div class="blog--comments block">
-    <div class="blog--comments panel panel--body has--border is--rounded">
+<div class="blog--comments-wrapper block">
+    <div class="blog--comments panel has--border is--rounded">
 
     {* Detail Comment Form *}
     {block name='frontend_blog_comments_form'}
