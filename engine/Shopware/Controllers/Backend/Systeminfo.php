@@ -41,6 +41,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $this->addAclPermission("getEnconder", "read", "You're not allowed to open the module.");
         $this->addAclPermission("info", "read", "You're not allowed to open the module.");
     }
+
     /**
      * Disable template engine for all actions
      *
@@ -63,13 +64,13 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $list = new Shopware_Components_Check_System();
         $data = $list->toArray();
-        foreach ($data as $key=>&$config) {
+        foreach ($data as $key => &$config) {
             //Those configs mustn't be displayed in the grid
-            if ($config['name'] == 'ionCube Loader' || $config['name'] == 'Zend Optimizer') {
+            if ($config['name'] == 'ionCube Loader') {
                 unset($data[$key]);
             }
         }
-        $this->View()->assign(array('success'=>true, 'data'=>array_merge($data)));
+        $this->View()->assign(array('success' => true, 'data' => array_merge($data)));
     }
 
     /**
@@ -78,7 +79,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     public function getPathListAction()
     {
         $list = new Shopware_Components_Check_Path();
-        $this->View()->assign(array('success'=>true, 'data'=>$list->toArray()));
+        $this->View()->assign(array('success' => true, 'data' => $list->toArray()));
     }
 
     /**
@@ -110,18 +111,18 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $select = Shopware()->Db()->select()->from(
             's_core_plugins',
-            array('version','name', 'namespace', 'source')
+            array('version', 'name', 'namespace', 'source')
         );
 
         $rows = Shopware()->Db()->fetchAll($select);
 
-        foreach ($rows as $key=>$row) {
-            $rows[$key]['name'] = $row['namespace'].'/'.$row['source'].'/'.$row['name'];
+        foreach ($rows as $key => $row) {
+            $rows[$key]['name'] = $row['namespace'] . '/' . $row['source'] . '/' . $row['name'];
         }
 
-       array_unshift($rows, array('name'=>'Shopware', 'version'=>Shopware()->Config()->Version));
+        array_unshift($rows, array('name' => 'Shopware', 'version' => Shopware()->Config()->Version));
 
-        $this->View()->assign(array('success'=>true, 'data'=>$rows));
+        $this->View()->assign(array('success' => true, 'data' => $rows));
     }
 
     /**
@@ -131,18 +132,20 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $list = new Shopware_Components_Check_System();
         $data = $list->toArray();
-        foreach ($data as $key=>&$config) {
-            if ($config['name'] != 'ionCube Loader' && $config['name'] != 'Zend Optimizer') {
-                unset($data[$key]);
+        foreach ($data as $key => &$config) {
+            if ($config['name'] != 'ionCube Loader') {
                 continue;
             }
-            if ($config['result']===true) {
+            if ($config['name'] === 'ionCube Loader' && $config['result'] === true) {
                 $encoder = $config;
+                break;
             }
         }
-        if(empty($encoder)) $encoder = "none";
+        if (empty($encoder)) {
+            $encoder = "none";
+        }
 
-        $this->View()->assign(array('success'=>true, 'data'=>$encoder));
+        $this->View()->assign(array('success' => true, 'data' => $encoder));
     }
 
     /**
