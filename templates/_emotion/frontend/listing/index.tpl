@@ -57,7 +57,7 @@
 		{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
 	    {if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
 	        <div class="emotion-link">
-	            <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
+	            <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" rel="nofollow">
 	                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
 	            </a>
 	        </div>
