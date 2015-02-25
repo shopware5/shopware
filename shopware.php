@@ -49,10 +49,10 @@ if (is_dir('recovery/install') && !is_file('recovery/install/data/install.lock')
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Shopware 5 must be configured before use. Please run the <a href="recovery/install/">installer</a>.';
+    echo 'Shopware 5 must be configured before use. Please run the <a href="recovery/install/?language=en">installer</a>.';
 
     echo '<h2>Fehler</h2>';
-    echo 'Shopware 5 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a> aus.';
+    echo 'Shopware 5 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/?language=de">Installer</a> aus.';
 
     return;
 }
