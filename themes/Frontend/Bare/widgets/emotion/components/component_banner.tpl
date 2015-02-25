@@ -66,7 +66,7 @@
                 {* Banner mapping, based on the same technic as an image map *}
                 {block name="widget_emotion_component_banner_mapping"}
                     {if $Data.bannerMapping}
-                        <div class="banner--mapping">
+                        <div class="banner--mapping {$Data.bannerPosition}">
                             {foreach $Data.bannerMapping as $mapping}
                                 <a href="{$mapping.link}"
                                    class="banner--mapping-link"
