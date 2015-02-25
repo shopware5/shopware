@@ -18,7 +18,21 @@
 }(jQuery));
 
 ;(function ($) {
-    "use strict";
+    'use strict';
+
+    function deserializeValue(value) {
+        try {
+            return !value ? value : value === 'true' || (
+                value === 'false' ? false
+                    : value === 'null' ? null
+                    : +value + '' === value ? +value
+                    : /^[\[\{]/.test(value) ? $.parseJSON(value)
+                    : value
+                )
+        } catch (e) {
+            return value;
+        }
+    }
 
     /**
      * Constructor method of the PluginBase class. This method will try to
@@ -215,16 +229,13 @@
          * @returns {String}
          */
         getEventName: function (event) {
-            var suffix = this.eventSuffix,
-                parts = event.split(' '),
-                len = parts.length,
-                i = 0;
+            var suffix = this.eventSuffix;
 
-            for (; i < len; i++) {
-                parts[i] += suffix;
+            if (!event || typeof event !== 'string') {
+                return '';
             }
 
-            return parts.join(' ');
+            return event.trim().split(' ').join(suffix + ' ') + suffix;
         },
 
         /**
@@ -280,15 +291,9 @@
                     return true;
                 }
 
-                if (attr === 'true') {
-                    return (me.opts[key] = true);
-                }
+                me.opts[key] = deserializeValue(attr);
 
-                if (attr === 'false') {
-                    return !(me.opts[key] = false);
-                }
-
-                me.opts[key] = attr;
+                return true;
             });
 
             $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);

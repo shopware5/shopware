@@ -79,8 +79,6 @@
 
             me.applyDataAttributes();
 
-            opts.animationSpeed = parseFloat(opts.animationSpeed);
-
             if (opts.collapseTarget) {
                 me.$targetEl = $(opts.collapseTarget);
             } else {
