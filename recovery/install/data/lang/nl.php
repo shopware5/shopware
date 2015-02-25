@@ -81,7 +81,6 @@ EOT
     'configuration_sconfig_name_info'       => 'Geeft u alstublieft de naam van uw shop aan',
     'configuration_sconfig_mail'            => 'Uw email-adres:',
     'configuration_sconfig_mail_info'       => 'Geeft u alstublieft uw email-adres voor uitgaande emails aan.',
-    'configuration_sconfig_admin_mail_info' => 'Geeft u alstublieft uw email-adres voor uitgaande emails aan',
     'configuration_sconfig_domain'          => 'Shop-Domain:',
     'configuration_sconfig_language'        => 'Shop-standaard-taal:',
     'configuration_sconfig_currency'        => 'Shop-standaard-valuta:',
