@@ -148,26 +148,6 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     }
 
     /**
-     * Checks the zend optimizer
-     *
-     * @return bool|string
-     */
-    public function checkZendOptimizer()
-    {
-        if (!extension_loaded('Zend Optimizer')) {
-            return false;
-        }
-        ob_start();
-        phpinfo(1);
-        $s = ob_get_contents();
-        ob_end_clean();
-        if (preg_match('/Zend&nbsp;Optimizer&nbsp;v([0-9.]+)/',$s,$match)) {
-            return $match[1];
-        }
-        return false;
-    }
-
-    /**
      * Checks the ion cube loader
      *
      * @return bool|string

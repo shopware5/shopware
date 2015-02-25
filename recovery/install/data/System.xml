@@ -4,7 +4,7 @@
 	 	<name>php</name><group>core</group><required>5.4.0</required>
 	</requirement>
 	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>4.0.2</required>
+	 	<name>ionCube Loader</name><group>core</group><required>4.6.0</required>
         <notice>The ionCube Loader is only required if you wish to use commercial plugins with the Shopware Community Edition, or if you have purchased the Cluster, Enterprise or Professional Edition of Shopware.</notice>
     </requirement>
     <requirement>

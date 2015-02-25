@@ -6,6 +6,7 @@ In this document you will find a changelog of the important changes related to t
 * Remove aliases from bundle services. Example: list_product_service is now directly set to the old list_product_service_core
 * Extend ProductAttributeFacet with different FacetResult properties, to allow full FacetResult configuration over the facet.
 * Out of stock articles and variants are now not included in the product feed if the `Do not show on sale products that are out of stock ` option is enabled
+* IonCube Loader version requirement bumped to 4.6.0 or higher
 
 ## 5.0.0 Beta 1
 * Deprecated classes:
