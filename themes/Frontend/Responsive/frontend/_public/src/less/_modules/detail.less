@@ -213,12 +213,13 @@ It contains the product actions, the product information and the user ratings.
         }
     }
 
+
 	// Content headlines
 	.content--title {
 		.unitize(18, 16, font-size);
-		.unitize(10, 16, margin-bottom);
+        .unitize-margin(10, 0, 15, 0);
+        font-weight: 700;
 		color: @text-color-dark;
-		margin-top: 0;
 	}
 
     .content--link [class^=icon] {
@@ -392,7 +393,6 @@ It contains the product actions, the product information and the user ratings.
 
 	.content--title {
 		.unitize(16, 16, font-size);
-		.unitize-margin(0, 0, 8, 0);
 	}
 
 	.review--content {

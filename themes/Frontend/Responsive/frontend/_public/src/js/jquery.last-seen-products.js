@@ -208,7 +208,8 @@
 
             element = $('<a>', {
                 'class': me.opts.imageCls,
-                'href': data.linkDetailsRewritten
+                'href': data.linkDetailsRewritten,
+                'title': data.articleName
             });
 
             imageEl = $('<span>', { 'class': 'image--element' }).appendTo(element);
@@ -222,7 +223,8 @@
             
             $('<img>', {
                 'srcset': srcSet,
-                'alt': data.articleName
+                'alt': data.articleName,
+                'title': data.articleName
             }).appendTo(imageMedia);
 
             return element;
