@@ -55,9 +55,13 @@ class Front
         /** @var $front \Enlight_Controller_Front */
         $front = \Enlight_Class::Instance('Enlight_Controller_Front', array($eventManager));
 
+        $front->setDispatcher($container->get('Dispatcher'));
+
         $front->Dispatcher()->addModuleDirectory(
             Shopware()->AppPath('Controllers')
         );
+
+        $front->setRouter($container->get('Router'));
 
         $front->setParams($options);
 

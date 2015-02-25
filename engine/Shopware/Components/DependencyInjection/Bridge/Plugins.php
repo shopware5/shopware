@@ -36,7 +36,6 @@ class Plugins
     /**
      * @param Container $container
      * @param \Enlight_Loader $loader
-     * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Shopware $application
      * @param array $config

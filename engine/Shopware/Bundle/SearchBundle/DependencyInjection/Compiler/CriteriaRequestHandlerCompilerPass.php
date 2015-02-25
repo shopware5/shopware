@@ -45,7 +45,7 @@ class CriteriaRequestHandlerCompilerPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('shopware_search.store_front_criteria_factory');
-        $this->replaceArgument($container, $definition, 'criteria_request_handler', 3);
+        $this->replaceArgument($container, $definition, 'criteria_request_handler', 2);
     }
 
     /**

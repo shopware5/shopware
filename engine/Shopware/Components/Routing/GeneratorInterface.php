@@ -22,14 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Routing;
+
 /**
- * Rewrites a given link
- *
- * @param array $params
- * @param       $compiler
- * @return string
+ * @category  Shopware
+ * @package   Shopware\Components\Routing
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-function smarty_modifiercompiler_rewrite($params, $compiler)
+interface GeneratorInterface
 {
-    return $params[0];
+    /**
+     * @param array|string $params
+     * @param Context $context
+     * @return array|string
+     */
+    public function generate(array $params, Context $context);
 }

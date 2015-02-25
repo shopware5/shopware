@@ -34,19 +34,6 @@
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * Router config
-     *
-     * @var mixed
-     */
-    protected $removeCategory = false,
-        $baseFile = null,
-        $basePath = null,
-        $secureBasePath = null,
-        $secureControllers = array('account', 'checkout', 'register', 'ticket', 'note', 'compare'),
-        $shop,
-        $secure = false;
-
-    /**
      * Init plugin method
      *
      * @return bool
@@ -61,19 +48,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             'Enlight_Controller_Front_RouteShutdown',
             'onRouteShutdown'
         );
-        $this->subscribeEvent(
-            'Enlight_Controller_Router_FilterAssembleParams',
-            'onFilterAssemble'
-        );
-        $this->subscribeEvent(
-            'Enlight_Controller_Router_FilterUrl',
-            'onFilterUrl'
-        );
-        $this->subscribeEvent(
-            'Enlight_Controller_Router_Assemble',
-            'onAssemble',
-            100
-        );
         return true;
     }
 
@@ -85,10 +59,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     public function onRouteStartup(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
-        $response = $args->getResponse();
 
         if (strpos($request->getPathInfo(), '/backend') === 0
-            || strpos($request->getPathInfo(), '/api') === 0
+            || strpos($request->getPathInfo(), '/api/') === 0
         ) {
             return;
         }
@@ -159,6 +132,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $shop->registerResources(Shopware()->Bootstrap());
     }
 
+
     /**
      * Event listener method
      *
@@ -171,12 +145,15 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         $bootstrap = $this->Application()->Bootstrap();
         if ($bootstrap->issetResource('Shop')) {
+            /** @var Shopware\Models\Shop\Shop $shop */
             $shop = $this->Application()->Shop();
 
-            if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
-                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $shop->getBasePath();
+            if ($shop->getAlwaysSecure() && !$request->isSecure()) {
+                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $request->getRequestUri();
+            } elseif ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
+                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $request->getRequestUri();
             } elseif (!$request->isSecure() && $request->getHttpHost() !== $shop->getHost()) {
-                $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost() . $shop->getBasePath();
+                $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost() . $shop->getBaseUrl();
             }
 
             // Strip /shopware.php/ from string and perform a redirect
@@ -195,9 +172,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $this->initServiceMode($request);
             }
         }
-
-        $this->fixRequest($request);
-        $this->initConfig($request);
     }
 
     /**
@@ -258,24 +232,25 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $newShop = $repository->getActiveById($cookieValue);
             if ($newShop !== null) {
+                $url = $request->getRequestUri();
+                $baseUrl = $request->getBaseUrl();
+                if(strpos($url, $baseUrl) === 0) {
+                    $url = substr($url, strlen($baseUrl));
+                }
+                $baseUrl = $newShop->getBaseUrl() ?: $baseUrl;
+                $response->setRedirect($baseUrl . $url);
+                // On host change
                 if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
                     || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
                 ) {
-                    $url = sprintf('%s://%s%s%s',
-                        $request::SCHEME_HTTP,
-                        $newShop->getHost(),
-                        $newShop->getBaseUrl(),
-                        '/'
-                    );
                     $path = rtrim($newShop->getBasePath(), '/') . '/';
                     $response->setCookie($cookieKey, $cookieValue, 0, $path);
-                    $response->setRedirect($url);
                     return;
                 }
             }
         }
 
-        // Refresh on shop change
+        // Refresh on template change
         if ($cookieKey !== null && $cookieKey != 'template') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->setCookie($cookieKey, $cookieValue, 0, $path);
@@ -339,196 +314,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $template = $bootstrap->getResource('Template');
             $template->setCompileId($template->getCompileId() . '_secure');
         }
-
-    }
-
-    /**
-     * @param $request
-     */
-    protected function initConfig($request)
-    {
-        $this->basePath = $request->getHttpHost() . $request->getBaseUrl();
-        $this->secureBasePath = $this->basePath;
-    }
-
-    /**
-     * Init router shop config
-     */
-    protected function initShopConfig()
-    {
-        $bootstrap = $this->Application()->Bootstrap();
-
-        if (!$bootstrap->hasResource('Shop')) {
-            return;
-        }
-
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $this->shop = $shop = $bootstrap->getResource('Shop');
-        $this->secure = $shop->getSecure();
-        $this->basePath = $shop->getHost() . $shop->getBaseUrl();
-        if ($shop->getSecure()) {
-            $this->secureBasePath = $shop->getSecureHost() . $shop->getSecureBaseUrl();
-        } else {
-            $this->secureBasePath = $this->basePath;
-        }
-
-        /** @var $config Shopware_Components_Config */
-        $config = $bootstrap->getResource('Config');
-        $this->removeCategory = $config->routerRemoveCategory;
-        $this->baseFile = $config->baseFile;
-    }
-
-    /**
-     * @param Enlight_Controller_Request_RequestHttp $request
-     */
-    protected function fixRequest($request)
-    {
-        $aliases = array(
-            'sViewport' => 'controller',
-            'sAction' => 'action',
-        );
-        foreach ($aliases as $key => $alias) {
-            if (($value = $request->getParam($key)) !== null) {
-                $request->setParam($alias, $value);
-                $request->setAlias($key, $alias);
-            }
-        }
-        $request->setQuery($request->getUserParams() + $request->getQuery());
-    }
-
-    /**
-     * Event listener method
-     *
-     * @param Enlight_Controller_Router_EventArgs $args
-     * @return array|mixed
-     */
-    public function onFilterAssemble(Enlight_Controller_Router_EventArgs $args)
-    {
-        $params = $args->getReturn();
-        $request = $args->getRequest();
-
-        $aliases = array(
-            'sDetails' => 'sArticle',
-            'cCUSTOM' => 'sCustom',
-            'controller' => 'sViewport',
-            'action' => 'sAction',
-        );
-        foreach ($aliases as $key => $alias) {
-            if (isset($params[$key])) {
-                $params[$alias] = $params[$key];
-                unset ($params[$key]);
-            }
-        }
-
-        if (!empty($params['sDetails']) && !empty($params['sViewport']) && $params['sViewport'] == 'detail') {
-            $params['sArticle'] = $params['sDetails'];
-            unset($params['sDetails']);
-        }
-
-        if (empty($params['module'])) {
-            $params['module'] = $request->getModuleName() ? : '';
-            if ($params['module'] == 'widgets') {
-                $params['module'] = 'frontend';
-            } elseif (empty($params['sViewport'])) {
-                $params['sViewport'] = $request->getControllerName() ? : 'index';
-                if (empty($params['sAction'])) {
-                    $params['sAction'] = $request->getActionName() ? : 'index';
-                }
-            }
-        }
-
-        if (isset($params['sAction'])) {
-            $params = array_merge(array('sAction' => null), $params);
-        }
-        if (isset($params['sViewport'])) {
-            $params = array_merge(array('sViewport' => null), $params);
-        }
-
-        unset($params['sUseSSL'], $params['fullPath'], $params['appendSession'], $params['forceSecure'], $params['sCoreId']);
-        unset($params['rewriteOld'], $params['rewriteAlias'], $params['rewriteUrl']);
-
-        if (!empty($params['sViewport']) && $params['sViewport'] == 'detail' && !empty($this->removeCategory)) {
-            unset($params['sCategory']);
-        }
-
-        return $params;
-    }
-
-    /**
-     * Event listener method
-     *
-     * @param Enlight_Controller_Router_EventArgs $args
-     * @return mixed|string
-     */
-    public function onFilterUrl(Enlight_Controller_Router_EventArgs $args)
-    {
-        $params = $args->getParams();
-        $userParams = $args->getUserParams();
-
-        if (!empty($params['module']) && $params['module'] != 'frontend'
-            && empty($userParams['forceSecure'])
-            && empty($userParams['fullPath'])
-        ) {
-            return $args->getReturn();
-        }
-
-        if ($this->shop === null && $params['module'] == 'frontend') {
-            $this->initShopConfig();
-        }
-
-        if (empty($this->secure)) {
-            $secure = false;
-        } elseif (!empty($userParams['sUseSSL']) || !empty($userParams['forceSecure'])) {
-            $secure = true;
-        } elseif (!empty($params['sViewport']) &&
-            in_array($params['sViewport'], $this->secureControllers)
-        ) {
-            $secure = true;
-        } else {
-            $secure = false;
-        }
-
-        if ($this->shop && $this->shop->getAlwaysSecure()) {
-            $secure = true;
-        }
-
-        $url = '';
-
-        if (!isset($userParams['fullPath']) || !empty($userParams['fullPath'])) {
-            $url = $secure ? 'https://' : 'http://';
-            $url .= $secure ? $this->secureBasePath : $this->basePath;
-            $url .= '/';
-        }
-
-        $url .= $args->getReturn();
-
-        if (!empty($userParams['appendSession'])) {
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= session_name() . '=' . session_id();
-            $url .= '&__shop=' . $this->shop->getId();
-        }
-
-        return $url;
-    }
-
-    /**
-     * Event listener method
-     *
-     * @param Enlight_Controller_Router_EventArgs $args
-     * @return array
-     */
-    public function onAssemble(Enlight_Controller_Router_EventArgs $args)
-    {
-        $params = $args->getParams();
-
-        if (isset($params['sViewport'])) {
-            $params['controller'] = $params['sViewport'];
-        }
-        if (isset($params['sAction'])) {
-            $params['action'] = $params['sAction'];
-        }
-        unset($params['title'], $params['sViewport'], $params['sAction']);
-        return $args->getSubject()->assembleDefault($params);
     }
 
     /**

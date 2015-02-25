@@ -156,7 +156,7 @@ class ShopwareContext extends SubContext
         else {
             parse_str($query, $args);
 
-            switch($args['sAction']) {
+            switch($args['action']) {
                 //Artikel-Benachrichtigungen
                 case 'notify':
                     $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';

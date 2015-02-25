@@ -148,9 +148,10 @@ class Shopware_Components_Config implements ArrayAccess
 
         $result = array();
         foreach ($data as $row) {
-            $result[$row['name']] = unserialize($row['value']);
+            $value = !empty($row['value']) ? @unserialize($row['value']) : null;
+            $result[$row['name']] = $value;
             // Take namespaces (form names) into account
-            $result[$row['form'] . '::' . $row['name']] = unserialize($row['value']);
+            $result[$row['form'] . '::' . $row['name']] = $value;
         }
 
         $result['version'] = Shopware::VERSION;

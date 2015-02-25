@@ -547,7 +547,8 @@ class sArticles
                 );
             }
 
-            $getSupplier[$supplierKey]["link"] = Shopware()->Router()->assemble($query);
+            $getSupplier[$supplierKey]["link"] = Shopware()->Config()->get('baseFile')
+                . '?' . http_build_query($query, '', '&');
         }
 
         return $getSupplier;

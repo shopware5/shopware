@@ -41,8 +41,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function manufacturerAction()
     {
-        $this->get('query_alias_mapper')->replaceShortRequestQueries($this->Request());
-
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
         /**@var $context ShopContextInterface*/
@@ -95,10 +93,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /** @var $mapper \Shopware\Components\QueryAliasMapper */
-        $mapper = $this->get('query_alias_mapper');
-        $mapper->replaceShortRequestQueries($this->Request());
-
         $categoryId = $this->Request()->getParam('sCategory');
 
         if ($categoryId && !$this->isValidCategoryPath($categoryId)) {
