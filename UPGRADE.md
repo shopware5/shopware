@@ -7,6 +7,22 @@ In this document you will find a changelog of the important changes related to t
 * Extend ProductAttributeFacet with different FacetResult properties, to allow full FacetResult configuration over the facet.
 * Out of stock articles and variants are now not included in the product feed if the `Do not show on sale products that are out of stock ` option is enabled
 * IonCube Loader version requirement bumped to 4.6.0 or higher
+* Refactored routing component
+    * Removed classes:
+        * `Enlight_Controller_Router_Default`
+        * `Enlight_Controller_Router_EventArgs`
+    * Removed events:
+        * `Enlight_Controller_Router_FilterAssembleParams`
+        * `Enlight_Controller_Router_FilterUrl`
+        * `Enlight_Controller_Router_Assemble`
+    * Removed methods:
+        * `Shopware_Plugins_Core_Router_Bootstrap::onFilterAssemble`
+        * `Shopware_Plugins_Core_Router_Bootstrap::onFilterUrl`
+        * `Shopware_Plugins_Core_Router_Bootstrap::onAssemble`
+        * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onAfterSendResponse`
+        * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onRoute`
+        * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onAssemble`
+        * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::sRewriteQuery`
 
 ## 5.0.0 Beta 1
 * Deprecated classes:
@@ -20,7 +36,7 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Controllers_Frontend_Account::loginAction()` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction()` instead for both registration and login
     * `sSystem::sSubShop`
     * `sExport::sGetMultishop()`
-    * `sExport::sLanguage` 
+    * `sExport::sLanguage`
     * `sExport::sMultishop`
 * Deprecated configuration variables from `Basic settings`:
     * `basketHeaderColor`
