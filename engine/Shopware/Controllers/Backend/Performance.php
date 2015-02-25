@@ -344,7 +344,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
-        $repo = $this->container->get('models')->getRepository(
+        $modelManager = $this->container->get('models');
+        $repo = $modelManager->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
 
@@ -352,7 +353,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
         $plugin->setActive($data['enabled']);
 
-        $repo->flush($plugin);
+        $modelManager->flush($plugin);
 
         $lines = array();
         foreach ($data['cacheControllers'] as $entry) {
@@ -376,9 +377,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function saveConfig($name, $value)
     {
-        $shopRepository    = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
-        $elementRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Element');
-        $formRepository    = $this->container->get('models')->getRepository('Shopware\Models\Config\Form');
+        $modelManager = $this->container->get('models');
+        $shopRepository    = $modelManager->getRepository('Shopware\Models\Shop\Shop');
+        $elementRepository = $modelManager->getRepository('Shopware\Models\Config\Element');
+        $formRepository    = $modelManager->getRepository('Shopware\Models\Config\Form');
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -416,7 +418,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         $element->setValues($values);
-        $this->container->get('models')->flush($element);
+        $modelManager->flush($element);
     }
 
     /**
