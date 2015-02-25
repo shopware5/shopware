@@ -279,9 +279,11 @@
 
         /**
          * Fetches the configured options based on the {@link PluginBase.$el}.
+         *
+         * @param {Boolean} deserializeValues
          * @returns {mixed} configuration
          */
-        applyDataAttributes: function () {
+        applyDataAttributes: function (deserializeValues) {
             var me = this, attr;
 
             $.each(me.opts, function (key) {
@@ -291,7 +293,7 @@
                     return true;
                 }
 
-                me.opts[key] = deserializeValue(attr);
+                me.opts[key] = deserializeValues !== false ? deserializeValue(attr) : attr;
 
                 return true;
             });
