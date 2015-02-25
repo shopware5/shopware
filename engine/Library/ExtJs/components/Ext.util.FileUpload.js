@@ -157,22 +157,6 @@ Ext.define('Ext.util.FileUpload', {
     inputConfig: {},
 
     /**
-     * Rendering template for the drop zone
-     *
-     * @array
-     */
-    dropZoneTpl: [
-        '{literal}<div class="inner-dropzone">',
-            '<span class="text">',
-                '<tpl if="actualQuantity">',
-                    "{actualQuantity} " + "{s name=file_upload/progress_bar_text}from{/s}" + " {totalQuantity}&nbsp;",
-                '</tpl>',
-                '{text}',
-            '</span>',
-        '</div>{/literal}'
-    ],
-
-    /**
      * Default class name for the drop zone
      *
      * @string
@@ -298,6 +282,7 @@ Ext.define('Ext.util.FileUpload', {
      */
     snippets: {
         uploadReady: '{s name=file_upload/upload_ready_info}files uploaded{/s}',
+        filesFrom: '{s name=file_upload/progress_bar_text}from{/s}',
         messageText: '{s name=file_upload/upload_ready_message}[0] files uploaded{/s}',
         messageTitle: '{s name=file_upload/upload_ready_title}Media manager{/s}',
         legacyMessage: "{s name=file_upload/legacy_message}Your browser doesn't support the neccessary feature to support drag'n'drop uploads.{/s}",
@@ -408,8 +393,8 @@ Ext.define('Ext.util.FileUpload', {
 
         //create default drop zone
         var text = Ext.create('Ext.Component', {
-            renderTpl: me.dropZoneTpl,
-            tpl : me.dropZoneTpl,
+            renderTpl: me.createDropZoneTemplate(),
+            tpl : me.createDropZoneTemplate(),
             renderData: {
                 text: me.dropZoneText
             }
@@ -431,7 +416,7 @@ Ext.define('Ext.util.FileUpload', {
             '{literal}<div class="inner-dropzone">',
                 '<span class="text">',
                     '<tpl if="actualQuantity">',
-                        "{actualQuantity} " + "{s name=file_upload/progress_bar_text}from{/s}" + " {totalQuantity}&nbsp;",
+                        "{actualQuantity} " + me.snippets.filesFrom + " {totalQuantity}&nbsp;",
                     '</tpl>',
                     '{text}',
                 '</span>',
@@ -599,8 +584,8 @@ Ext.define('Ext.util.FileUpload', {
             me.dropZone.removeAll();
 
             var text = Ext.create('Ext.Component', {
-                renderTpl: me.dropZoneTpl,
-                tpl: me.dropZoneTpl,
+                renderTpl: me.createDropZoneTemplate(),
+                tpl: me.createDropZoneTemplate(),
                 renderData: {
                     actualQuantity: '0',
                     totalQuantity: files.length,
@@ -826,8 +811,8 @@ Ext.define('Ext.util.FileUpload', {
 
                     //create default drop zone
                     var text = Ext.create('Ext.Component', {
-                        renderTpl: me.dropZoneTpl,
-                        tpl : me.dropZoneTpl,
+                        renderTpl: me.createDropZoneTemplate(),
+                        tpl : me.createDropZoneTemplate(),
                         renderData: {
                             text: me.dropZoneText
                         }
