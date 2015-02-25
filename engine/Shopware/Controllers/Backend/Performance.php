@@ -344,7 +344,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
-        $repo = Shopware()->Models()->getRepository(
+        $repo = $this->container->get('models')->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
 
