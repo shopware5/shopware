@@ -25,7 +25,7 @@ Feature: Listing Seo BasicSettings
       Given basic settings element "seoIndexPaginationLinks" has value 1
       And I am on the listing page for category 5
 
-      Then I should not see canonical link
+      Then I should see canonical link "genusswelten"
       And I should not see pagination metas
       And I should robots metas "index" and "follow"
 
