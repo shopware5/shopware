@@ -23,8 +23,8 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif !{config name=seoIndexPaginationLinks} || !$showListing}
-        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle|escape}{elseif $sCategoryContent.description}{$sCategoryContent.description|escape}{else}{$sShopname|escape}{/if}" />
+    {elseif !{config name=seoIndexPaginationLinks} || $showListing}
+        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" />
     {/if}
 {/block}
 

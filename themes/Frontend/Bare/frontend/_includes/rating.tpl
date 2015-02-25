@@ -145,7 +145,7 @@
         {block name='frontend_rating_content_label'}
             {if $hasLabel && $count}
                 <span class="rating--count-wrapper">
-                    (<span itemprop="ratingCount" class="rating--count">{$count}</span>)
+                    (<span {if $hasMicroData}itemprop="ratingCount"{/if} class="rating--count">{$count}</span>)
                 </span>
             {/if}
         {/block}

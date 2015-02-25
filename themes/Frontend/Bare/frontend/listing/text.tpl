@@ -47,7 +47,7 @@
                                 {* Off Canvas Content *}
                                 {block name="frontend_listing_text_content_offcanvas_content"}
                                     <div class="offcanvas--content">
-                                        <h2 class="content--title">{$sCategoryContent.cmsheadline}</h2>
+                                        <div class="content--title">{$sCategoryContent.cmsheadline}</div>
                                         {$sCategoryContent.cmstext}
                                     </div>
                                 {/block}

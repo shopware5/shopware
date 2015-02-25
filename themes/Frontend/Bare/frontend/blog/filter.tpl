@@ -6,7 +6,9 @@
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_date_headline"}
-				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<div class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">
+					{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span>
+				</div>
 			{/block}
 
 			{* Filter content *}
@@ -40,7 +42,9 @@
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_author_headline"}
-				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<div class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">
+					{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span>
+				</div>
 			{/block}
 
 			{* Filter content *}
@@ -74,7 +78,9 @@
 
 			{* Filter headline *}
 			{block name="frontend_blog_filter_tags_headline"}
-				<h1 class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<div class="blog--filter-headline blog--sidebar-title collapse--header blog-filter--trigger">
+					{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span>
+				</div>
 			{/block}
 
 			{* Filter content *}

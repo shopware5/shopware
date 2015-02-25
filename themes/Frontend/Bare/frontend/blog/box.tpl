@@ -7,9 +7,9 @@
 
 				{* Article name *}
 				{block name='frontend_blog_col_article_name'}
-					<h1 class="blog--box-headline panel--title">
+					<h2 class="blog--box-headline panel--title">
 						<a class="blog--box-link" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape}">{$sArticle.title}</a>
-					</h1>
+					</h2>
 				{/block}
 
 				{* Meta data *}
@@ -46,7 +46,10 @@
 						{* Comments *}
 						{block name='frontend_blog_col_meta_data_comments'}
 							<span class="blog--metadata-comments blog--metadata is--nowrap{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
-								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#blog--comments-start" title="{$sArticle.articleName|escape}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
+								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#blog--comments-start"
+								   title="{"{s name="BlogLinkComments" namespace="frontend/blog/detail"}{/s}"|escape}">
+									{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}
+								</a>
 							</span>
 						{/block}
 
@@ -77,10 +80,12 @@
 							   title="{$sArticle.title|escape}">
 								{if isset($sArticle.media.thumbnails)}
 									<img srcset="{$sArticle.media.thumbnails[0].sourceSet}"
-										 alt="{$sArticle.title|escape}" />
+										 alt="{$sArticle.title|escape}"
+										 title="{$sArticle.title|escape|truncate:25:""}" />
 								{else}
 									<img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-										 alt="{$sArticle.title|escape}" />
+										 alt="{$sArticle.title|escape}"
+										 title="{$sArticle.title|escape|truncate:25:""}" />
 								{/if}
 							</a>
 						</div>
