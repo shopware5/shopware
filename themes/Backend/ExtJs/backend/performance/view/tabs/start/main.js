@@ -122,7 +122,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
 
         return Ext.create('Ext.form.RadioGroup', {
             columns : 1,
-            hidden  : true,
             items   : [
                 { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name=tabs/start/production_mode_title}{/s}</b>' },
                 { xtype: 'component', cls:'component-first', html: '{s name=tabs/start/production_mode_description}{/s}'},
@@ -141,7 +140,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     
     setState: function(state) {
         var me = this;
-        me.radioGroup.show();
 
         if (state === true) {
             me.radioGroup.setValue({ productiveMode: true });
