@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getActiveShopsAction()
     {
-        $shops = Shopware()->Models()->getRepository(
+        $shops = $this->container->get('models')->getRepository(
             'Shopware\Models\Shop\Shop'
         )->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array(
@@ -344,7 +344,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
-        $repo = Shopware()->Models()->getRepository(
+        $modelManager = $this->container->get('models');
+        $repo = $modelManager->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
 
@@ -352,7 +353,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $plugin = $repo->findOneBy(array('name' => 'HttpCache'));
         $plugin->setActive($data['enabled']);
 
-        Shopware()->Models()->flush($plugin);
+        $modelManager->flush($plugin);
 
         $lines = array();
         foreach ($data['cacheControllers'] as $entry) {
@@ -376,9 +377,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function saveConfig($name, $value)
     {
-        $shopRepository    = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
-        $formRepository    = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+        $modelManager = $this->container->get('models');
+        $shopRepository    = $modelManager->getRepository('Shopware\Models\Shop\Shop');
+        $elementRepository = $modelManager->getRepository('Shopware\Models\Config\Element');
+        $formRepository    = $modelManager->getRepository('Shopware\Models\Config\Form');
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -402,7 +404,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         foreach ($element->getValues() as $valueModel) {
-            Shopware()->Models()->remove($valueModel);
+            $this->container->get('models')->remove($valueModel);
         }
 
         $values = array();
@@ -416,7 +418,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         $element->setValues($values);
-        Shopware()->Models()->flush($element);
+        $modelManager->flush($element);
     }
 
     /**
@@ -436,8 +438,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
-        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
-        $formRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+        $elementRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Element');
+        $formRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Form');
 
         $form = $formRepository->findOneBy(array('name' => $scope));
 
@@ -572,7 +574,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $repo = Shopware()->Models()->getRepository(
+        $repo = $this->container->get('models')->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
 
