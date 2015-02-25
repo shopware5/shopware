@@ -1,4 +1,4 @@
-;(function($, window) {
+;(function($, window, undefined) {
     'use strict';
 
     /**
@@ -18,10 +18,45 @@
 
         /** @object Default configuration */
         defaults: {
-            iconCls: 'icon--check',
+
+            /**
+             * The DOM selector for the counter.
+             *
+             * @property counterSelector
+             * @type {String}
+             */
             counterSelector: '.notes--quantity',
+
+            /**
+             * The DOM selector for the wishlist link.
+             *
+             * @property wishlistSelector
+             * @type {String}
+             */
             wishlistSelector: '.entry--notepad',
+
+            /**
+             * The css class for the check icon.
+             *
+             * @property iconCls
+             * @type {String}
+             */
+            iconCls: 'icon--check',
+
+            /**
+             * The css class for the saved state.
+             *
+             * @property savedCls
+             * @type {String}
+             */
             savedCls: 'js--is-saved',
+
+            /**
+             * The snippet text for the saved state.
+             *
+             * @property text
+             * @type {String}
+             */
             text: 'Gemerkt'
         },
 
@@ -58,16 +93,16 @@
         triggerRequest: function(event) {
             var me = this,
                 $target = $(event.currentTarget),
-                href = $target.attr('href');
+                url = $target.attr('data-ajaxUrl');
 
-            event.preventDefault();
-
-            if ($target.hasClass(me.opts.savedCls)) {
+            if (url == undefined || $target.hasClass(me.opts.savedCls)) {
                 return;
             }
 
+            event.preventDefault();
+
             $.ajax({
-                'url': href,
+                'url': url,
                 'dataType': 'jsonp',
                 'success': $.proxy(me.responseHandler, me, $target)
             });
