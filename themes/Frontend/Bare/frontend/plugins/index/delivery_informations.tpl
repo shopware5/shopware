@@ -2,9 +2,11 @@
 {block name='frontend_widgets_delivery_infos'}
 	<div class="product--delivery">
 		{if $sArticle.shippingfree}
-			<p class="delivery--shipping-free">
-                <i class="delivery--shipping-free-icon icon--truck"></i>
-                <span class="delivery--text delivery--text-shipping-free">{s name="DetailDataInfoShippingfree"}{/s}</span>
+			<p class="delivery--information">
+                <span class="delivery--text delivery--text-shipping-free">
+                    <i class="delivery--status-icon delivery--status-shipping-free"></i>
+                    {s name="DetailDataInfoShippingfree"}{/s}
+                </span>
 			</p>
 		{/if}
 		{if isset($sArticle.active) && !$sArticle.active}
