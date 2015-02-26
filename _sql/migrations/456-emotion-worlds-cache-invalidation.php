@@ -16,14 +16,14 @@ class Migrations_Migration456 Extends Shopware\Components\Migrations\AbstractMig
         $this->addSql($sql);
 
         $sql = <<<'SQL'
-INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
+INSERT IGNORE INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
 ('Shopware\\Models\\Emotion\\Emotion::postUpdate', 0, 'Shopware_Plugins_Core_HttpCache_Bootstrap::onPostPersist', @pluginID, 0);
 SQL;
 
         $this->addSql($sql);
 
         $sql = <<<'SQL'
-INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
+INSERT IGNORE INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES
 ('Shopware\\Models\\Emotion\\Emotion::postPersist', 0, 'Shopware_Plugins_Core_HttpCache_Bootstrap::onPostPersist', @pluginID, 0);
 SQL;
 
