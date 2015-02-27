@@ -14,7 +14,7 @@ SQL;
         $this->addSql($sql);
 
         $sql = <<<'EOD'
-INSERT INTO `s_library_component_field` (`componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`, `position`) VALUES
+INSERT IGNORE INTO `s_library_component_field` (`componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`, `position`) VALUES
 (@parent, 'videoMode', 'emotion-components-fields-video-mode', '', 'Modus', 'Bestimmen Sie das Verhalten des Videos. Legen Sie fest, ob das Video skalierend, füllend oder gestreckt dargestellt werden soll.', '', '', '', 'label', 'key', '', 0, 40),
 (@parent, 'overlay', 'textfield', '', 'Overlay Farbe', 'Legen Sie eine Hintergrundfarbe für das Overlay fest. Ein RGBA-Wert wird empfohlen.', '', '', '', '', '', 'rgba(0, 0, 0, .2)', 1, 71),
 (@parent, 'originTop', 'numberfield', '', 'Oberer Ausgangspunkt', 'Legt den oberen Ausgangspunkt für die Skalierung des Videos fest. Die Angabe erfolgt in Prozent.', '', '', '', '', '', '50', 1, 69),

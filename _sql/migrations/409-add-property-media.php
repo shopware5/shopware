@@ -9,7 +9,7 @@ EOD;
         $this->addSql($sql);
 
         $sql = <<<EOD
-INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
+INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`) VALUES
 (NULL, 0, 'showImmediateDeliveryFacet', 'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
 (NULL, 0, 'showShippingFreeFacet',      'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
 (NULL, 0, 'showPriceFacet',             'i:0;', '', '', 'boolean', 1, 0, 0, NULL, NULL, NULL),
