@@ -224,12 +224,16 @@ Ext.define('Shopware.form.field.ArticleSearch',
 
         me.registerEvents();
 
+        me.articleClass = me.showVariants ?
+            'Shopware.apps.Base.store.ArticleDetail' :
+            'Shopware.apps.Base.store.Article';
+
         if (!(me.articleStore instanceof Ext.data.Store)) {
-            me.articleStore = Ext.create('Shopware.apps.Base.store.Article');
+            me.articleStore = Ext.create(me.articleClass);
         }
 
         // We need to filter the store on loading to prevent to show the first article in the store on startup
-        me.dropDownStore = Ext.create('Shopware.apps.Base.store.Article', {
+        me.dropDownStore = Ext.create(me.articleClass, {
             listeners: {
                 single: true,
                 load: function() {
@@ -483,7 +487,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
             '<div class="content">',
                 '{literal}<tpl for=".">',
                     '<div class="item">',
-                        '<strong class="name">{name}</strong>',
+                        '<strong class="name">{name}<tpl if="additionalText">' + (me.showVariants ? ', {additionalText}' : '') + '</tpl></strong>',
                         '<span class="ordernumber">{number}</span>',
                     '</div>',
                 '</tpl>{/literal}',
@@ -701,7 +705,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var me = this;
 
         if(!me.multiSelect) {
-            me.getSearchField().setValue(record.get(me.returnValue));
+            me.getSearchField().setValue(me.getReturnValue(record));
             me.getHiddenField().setValue(record.get(me.hiddenReturnValue));
             me.returnRecord = record;
             me.getDropDownMenu().hide();
@@ -713,7 +717,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
             me.multiSelectStore.add(record);
             me.getDropDownMenu().getSelectionModel().deselectAll();
         }
-        me.fireEvent('valueselect', me, record.get(me.returnValue), record.get(me.hiddenReturnValue), record);
+        me.fireEvent('valueselect', me, me.getReturnValue(record), record.get(me.hiddenReturnValue), record);
     },
 
     /**
@@ -757,7 +761,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
             hiddenReturnValue = '';
 
         Ext.each(records, function(record) {
-            returnValue += record.get(me.returnValue) + me.separator;
+            returnValue += me.getReturnValue(record) + me.separator;
             hiddenReturnValue += record.get(me.hiddenReturnValue) + me.separator;
         });
         returnValue = returnValue.substring(0, returnValue.length - 1);
@@ -794,13 +798,35 @@ Ext.define('Shopware.form.field.ArticleSearch',
     },
 
     /**
-     * Helper methiod which returns the multi select article store.
+     * Helper method which returns the multi select article store.
      *
      * @public
      * @return [object] store - Ext.data.Store
      */
     getArticleStore: function() {
         return this.multiSelectStore
+    },
+
+    /**
+     * Helper method which returns the value which will be set into the search field
+     * if the user clicks on an entry in the drop down menu.
+     *
+     * @public
+     * @param [object] record - Shopware.apps.Base.model.Article|Shopware.apps.Base.model.ArticleDetail
+     * @return [string]
+     */
+    getReturnValue: function(record) {
+        if(this.returnValue == 'name') {
+            if(this.showVariants) {
+                var additionalText = record.get('additionalText');
+                return record.get('name') + (additionalText ? ' ' + additionalText : '');
+            } else {
+                return record.get('name');
+            }
+        } else {
+            return record.get(this.returnValue);
+        }
     }
+
 });
 //{/block}
