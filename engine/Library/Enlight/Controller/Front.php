@@ -56,8 +56,8 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     protected $dispatcher;
 
     /**
-     * @var Enlight_Controller_Request_RequestHttp contains an instance of the
-     * Enlight_Controller_Request_RequestHttp. Used for the routing,
+     * @var Enlight_Controller_Request_Request contains an instance of the
+     * Enlight_Controller_Request_Request. Used for the routing,
      * the different events which will be notified in the dispatch function and for the
      * dispatch itself.
      */
@@ -428,7 +428,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the request instance.
      *
-     * @return  Enlight_Controller_Request_RequestHttp
+     * @return  Enlight_Controller_Request_Request
      */
     public function Request()
     {

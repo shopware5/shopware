@@ -143,7 +143,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
      */
     public function onRoute(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var $request Enlight_Controller_Request_Request */
         $request = $args->getRequest();
         $url = $request->getPathInfo();
         if (strpos($url, '/backend') === 0 || strpos($url, '/api') === 0) {

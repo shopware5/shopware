@@ -41,7 +41,7 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
     /**
      * Class property which contains the enlight http request object
      *
-     * @var Enlight_Controller_Request_RequestHttp
+     * @var Enlight_Controller_Request_Request
      */
     protected $request = null;
 

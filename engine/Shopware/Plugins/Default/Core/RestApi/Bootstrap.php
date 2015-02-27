@@ -30,7 +30,7 @@
 class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * @var Enlight_Controller_Request_RequestHttp
+     * @var Enlight_Controller_Request_Request
      */
     protected $request;
 

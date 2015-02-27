@@ -85,7 +85,7 @@ class Enlight_Controller_Request_RequestTestCase
      * Set SERVER remote address
      *
      * @param string $address
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address)
     {
@@ -178,11 +178,19 @@ class Enlight_Controller_Request_RequestTestCase
      * Sets the request URI scheme
      *
      * @param $value
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true)
     {
         $_SERVER['HTTPS'] = $value ? 'on' : null;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModuleName()
+    {
+        return strtolower(trim(parent::getModuleName()));
     }
 }

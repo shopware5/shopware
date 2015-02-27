@@ -50,7 +50,7 @@ class Enlight_Controller_Router_Default extends Enlight_Controller_Router
      * Before the router will route the request, the Enlight_Controller_Router_Route will be notified
      * so specified router extensions can trace this event and cancel the standard routing. If the
      * event returns a value the default routing will be canceled.
-     * If the given request instance is not an instance of the Enlight_Controller_Request_RequestHttp
+     * If the given request instance is not an instance of the Enlight_Controller_Request_Request
      * enlight will thrown an Enlight_Controller_Exceptions.
      *
      * @throws Enlight_Controller_Exception
@@ -66,7 +66,7 @@ class Enlight_Controller_Router_Default extends Enlight_Controller_Router
         ) {
             $params = $event->getReturn();
         } elseif ($request instanceof Enlight_Controller_Request_Request) {
-            /** @var $request Enlight_Controller_Request_RequestHttp */
+            /** @var $request Enlight_Controller_Request_Request */
             $params = $this->routeDefault($request);
         } else {
             throw new Enlight_Controller_Exception(
@@ -90,7 +90,7 @@ class Enlight_Controller_Router_Default extends Enlight_Controller_Router
      * The default routing uses the dispatcher of the front controller to route
      * the request to the corresponding controller method.
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return array
      */
     public function routeDefault(Enlight_Controller_Request_Request $request)

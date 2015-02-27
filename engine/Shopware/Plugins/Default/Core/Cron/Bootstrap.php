@@ -120,7 +120,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
     /**
      * Secure cron actions according to system settings
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return bool If cron action is authorized
      */
     public function authorizeCronAction($request)
