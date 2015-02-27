@@ -81,10 +81,8 @@ $(function () {
         .addPlugin('.tab-menu--cross-selling .tab--header', 'collapsePanel', {
             'contentSiblingSelector': '.tab--content'
         }, ['xs', 's'])
-        .addPlugin('body', 'ajaxProductNavigation', [ 'xl' ]);
-
-
-    StateManager.addPlugin('*[data-topseller-slider="true"]', 'productSlider');
+        .addPlugin('body', 'ajaxProductNavigation')
+        .addPlugin('*[data-topseller-slider="true"]', 'productSlider');
 
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-range-slider="true"]').rangeSlider();
