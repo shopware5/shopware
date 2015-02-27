@@ -5,7 +5,7 @@ class Migrations_Migration441 Extends Shopware\Components\Migrations\AbstractMig
     {
         $sql = <<<'EOD'
 SET @parent = (SELECT id FROM `s_core_config_forms` WHERE `name`='Esd');
-INSERT INTO `s_core_config_elements`
+INSERT IGNORE INTO `s_core_config_elements`
 (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
 VALUES (NULL, @parent, 'showEsd', 'b:1;', 'Sofortdownloads im Account anzeigen', 'Sofortdownloads können weiterhin über die Bestellübersicht heruntergeladen werden.', 'boolean', '1', '5', '1', NULL, NULL, NULL);
 
