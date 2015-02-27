@@ -308,6 +308,8 @@ class CommunityStore
             )
         ));
         $filter->filter($file);
+
+        $this->clearOpcodeCache();
     }
 
     /**
@@ -911,6 +913,21 @@ class CommunityStore
                 }
             }
             return true;
+        }
+    }
+
+    /**
+     * Clear opcode caches to make sure that the
+     * updated plugin files are used in the following requests.
+     */
+    private function clearOpcodeCache()
+    {
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
         }
     }
 }
