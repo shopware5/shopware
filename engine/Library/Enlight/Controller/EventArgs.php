@@ -42,7 +42,7 @@ class Enlight_Controller_EventArgs extends Enlight_Event_EventArgs
     }
 
     /**
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function getRequest()
     {

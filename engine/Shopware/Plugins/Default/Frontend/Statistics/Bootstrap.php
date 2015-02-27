@@ -143,7 +143,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @param $response
      */
     public function updateLog($request, $response)
@@ -160,7 +160,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      */
     public function refreshBasket($request)
     {
@@ -219,7 +219,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh current users
      *
-     * @param \Enlight_Controller_Request_RequestHttp $request
+     * @param \Enlight_Controller_Request_Request $request
      */
     public function refreshCurrentUsers($request)
     {
@@ -234,7 +234,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh visitor log
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      */
     public function refreshLog($request)
     {
@@ -266,7 +266,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh referrer log
      *
-     * @param   \Enlight_Controller_Request_RequestHttp $request
+     * @param   \Enlight_Controller_Request_Request $request
      */
     public function refreshReferer($request)
     {
@@ -294,7 +294,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh article impressions
      *
-     * @param   \Enlight_Controller_Request_RequestHttp $request
+     * @param   \Enlight_Controller_Request_Request $request
      * @return null|object|\Shopware\Models\Tracking\Banner
      */
     public function refreshArticleImpression($request)
@@ -323,7 +323,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh partner log
      *
-     * @param   \Enlight_Controller_Request_RequestHttp $request
+     * @param   \Enlight_Controller_Request_Request $request
      * @param   \Enlight_Controller_Response_ResponseHttp $response
      */
     public function refreshPartner($request, $response)

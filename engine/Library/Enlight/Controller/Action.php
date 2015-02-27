@@ -338,7 +338,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function Request()
     {

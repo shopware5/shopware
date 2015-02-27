@@ -71,7 +71,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * The current request instance
      *
-     * @var Enlight_Controller_Request_RequestHttp
+     * @var Enlight_Controller_Request_Request
      */
     protected $request;
 
