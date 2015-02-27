@@ -486,8 +486,8 @@ class Repository extends ModelRepository
                         $builder->setParameter('orderTimeTo', $tmp->get('yyyy-MM-dd HH:mm:ss'));
                         break;
                     case 'details.articleNumber':
-                        $builder->andWhere('details.articleNumber LIKE :articleNumber');
-                        $builder->setParameter('articleNumber',  $filter['value'] . "%");
+                        $builder->andWhere('details.articleNumber = :articleNumber');
+                        $builder->setParameter('articleNumber',  $filter['value']);
                         break;
                     case 'customer.groupKey':
                         $builder->andWhere($expr->eq($filter['property'], "'" . $filter['value'] . "'"));
