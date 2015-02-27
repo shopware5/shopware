@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Deprecated.view.main.Window', {
 		params.target_action = this.actionName;
 
 		request = Ext.Ajax.request({
-			url: '{url module=backend}/' + controllerName + '/skeleton',
+			url: '{url controller=index}/' + controllerName + '/skeleton',
 			params: params,
             async: false,
 			success: function(response) {
