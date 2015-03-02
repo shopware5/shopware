@@ -5,6 +5,8 @@ In this document you will find a changelog of the important changes related to t
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
 * New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
 * The `Google Analytics` plugin is deprecated and will be removed in the next release. Please use the new `Google Services` plugin instead, available on the community store.
+* Removed event `Shopware_Modules_Order_SaveOrder_FilterSQL`
+* New event `Shopware_Modules_Order_SaveOrder_FilterParams`
 * Implemented the `Enlight_Controller_Request_Request` interface. Please typehint to this class instead to `Enlight_Controller_Request_RequestHttp`
 * New config option `trustedProxies`
 
