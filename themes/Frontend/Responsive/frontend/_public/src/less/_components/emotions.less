@@ -1,4 +1,10 @@
-// Mixin for creating column sets for emotion items.
+/*
+Emotions
+=========================================
+Contains the basic styles for the shopware 5 shopping worlds and its elements.
+
+Shopware 5 provides 11 integrated elements inside the shopping worlds that can be chosen and modified inside the backend shopping world editor such as sliders, video elements and blog-articles.
+*/
 .createColumnSizes(@n, @i: 1) when (@i =< @n) {
 
 	&.emotion--mode-resize {
@@ -61,7 +67,7 @@
 }
 
 
-// Content fullscreen mode
+    // Content fullscreen mode
 .content-main.is--fullscreen {
 	.box-shadow(none);
 	max-width: none;
@@ -82,17 +88,17 @@
 	}
 }
 
-// Emotion content
+    // Emotion content
 .content--emotions {
 	display: block;
 }
 
-// Emotion show listing link
+    // Emotion show listing link
 .emotion--show-listing {
 	.unitize-margin(20, 0);
 }
 
-// Emotion wrapper
+    // Emotion wrapper
 .emotion--wrapper {
 	.unitize(200, 16, min-height);
 	display: block;
@@ -123,7 +129,7 @@
 	}
 }
 
-// Emotion container
+    // Emotion container
 .emotion--container {
 	.clearfix();
 	display: block;
@@ -151,14 +157,14 @@
 	.createColumnSizes(12); // Container with twelve columns
 }
 
-// Emotion element
+    // Emotion element
 .emotion--element {
 	display: block;
 	position: absolute;
 	top: 0; left: 0;
 }
 
-// Banner element
+    // Banner element
 .emotion--banner {
 	height: 100%;
 	width: 100%;
@@ -232,7 +238,7 @@
 	}
 }
 
-// Banner-Slider element
+    // Banner-Slider element
 .emotion--banner-slider {
 	width: 100%;
 	height: 100%;
@@ -281,7 +287,7 @@
 	}
 }
 
-// Product-Slider element
+    // Product-Slider element
 .emotion--product-slider {
 	width: 100%;
 	height: 100%;
@@ -296,7 +302,7 @@
 	}
 }
 
-// Product-Box element
+    // Product-Box element
 .emotion--product {
 	width: 100%;
 	height: 100%;
@@ -339,7 +345,7 @@
 	}
 }
 
-// Category-Teaser element
+    // Category-Teaser element
 .emotion--category-teaser {
 	width: 100%;
 	height: 100%;
@@ -370,7 +376,7 @@
 	}
 }
 
-// Manufacturer element
+    // Manufacturer element
 .emotion--manufacturer {
 	width: 100%;
 	height: 100%;
@@ -415,13 +421,13 @@
 	}
 }
 
-// YouTube element
+    // YouTube element
 .emotion--youtube {
 	width: 100%;
 	height: 100%;
 }
 
-// Video element
+    // Video element
 .emotion--video {
 	width: 100%;
 	height: 100%;
@@ -503,13 +509,13 @@
 	}
 }
 
-// Iframe element
+    // Iframe element
 .emotion--iframe {
 	width: 100%;
 	height: 100%;
 }
 
-// Blog element
+    // Blog element
 .emotion--blog {
 	width: 100%;
 	height: 100%;
@@ -554,7 +560,7 @@
 	}
 }
 
-// HTML element
+    // HTML element
 .emotion--html {
 	width: 100%;
 	height: 100%;
