@@ -106,6 +106,13 @@ class Emotion extends ModelEntity
     private $containerWidth;
 
     /**
+     * @var integer $position
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position = 1;
+
+    /**
      * @var integer $device
      *
      * @ORM\Column(name="device", type="string", length=255, nullable=true)
@@ -752,5 +759,21 @@ class Emotion extends ModelEntity
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 }
