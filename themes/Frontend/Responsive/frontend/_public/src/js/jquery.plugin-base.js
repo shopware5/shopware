@@ -20,6 +20,15 @@
 ;(function ($) {
     'use strict';
 
+    /**
+     * Tries to deserialize the given string value and returns the right
+     * value if its successful.
+     *
+     * @private
+     * @method deserializeValue
+     * @param {String} value
+     * @returns {String|Boolean|Number|Object|Array|null}
+     */
     function deserializeValue(value) {
         try {
             return !value ? value : value === 'true' || (
@@ -283,10 +292,10 @@
         /**
          * Fetches the configured options based on the {@link PluginBase.$el}.
          *
-         * @param {Boolean} deserializeValues
+         * @param {Boolean} shouldDeserialize
          * @returns {mixed} configuration
          */
-        applyDataAttributes: function (deserializeValues) {
+        applyDataAttributes: function (shouldDeserialize) {
             var me = this, attr;
 
             $.each(me.opts, function (key) {
@@ -296,7 +305,7 @@
                     return true;
                 }
 
-                me.opts[key] = deserializeValues !== false ? deserializeValue(attr) : attr;
+                me.opts[key] = shouldDeserialize !== false ? deserializeValue(attr) : attr;
 
                 return true;
             });
