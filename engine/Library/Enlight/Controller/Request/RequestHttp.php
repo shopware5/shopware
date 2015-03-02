@@ -173,6 +173,10 @@ class Enlight_Controller_Request_RequestHttp
      */
     public function getModuleName()
     {
+        if (parent::getModuleName() === null) {
+            return null;
+        }
+
         return strtolower(trim(parent::getModuleName()));
     }
 }
