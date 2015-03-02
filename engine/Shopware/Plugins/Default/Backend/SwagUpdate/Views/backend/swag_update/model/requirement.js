@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.SwagUpdate.model.Requirement', {
 
     proxy: {
         type: 'ajax',
+        timeout: 180000,
 
         api: {
             read: '{url controller="SwagUpdate" action="requirements"}'
