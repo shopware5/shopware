@@ -32,7 +32,7 @@
 {* Set favicons and touch icons for all different sizes *}
 {block name="frontend_index_header_favicons"}
     <meta name="apple-mobile-web-app-status-bar-style" content="none">
-    <link rel="apple-touch-icon" href="{link file=$theme.appleTouchIcon}">
+    <link rel="apple-touch-icon{if $theme.setPrecomposed}-precomposed{/if}" href="{link file=$theme.appleTouchIcon}">
 	<link rel="shortcut icon" href="{link file=$theme.favicon}">
 {/block}
 
