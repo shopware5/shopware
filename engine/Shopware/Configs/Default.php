@@ -17,6 +17,7 @@ if (!is_array($customConfig)) {
 
 // Allow partial override
 $customConfig = array_merge(array(
+    'trustedProxies' => array(),
     'db' => array(),
     'snippet' => array(),
     'front' => array(),
@@ -39,6 +40,7 @@ $customConfig = array_merge(array(
 
 return array_merge($customConfig, array(
     'custom' => $customConfig['custom'],
+    'trustedProxies' => array(),
     'snippet' => array_merge(array(
         'readFromDb' => true,
         'writeToDb' => true,

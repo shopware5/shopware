@@ -240,6 +240,10 @@ class Kernel implements HttpKernelInterface
             SymfonyRequest::setTrustedProxies(array('127.0.0.1'));
         }
 
+        if ($trustedProxies = $this->container->getParameter('shopware.trustedProxies')) {
+            SymfonyRequest::setTrustedProxies($trustedProxies);
+        }
+
         $this->booted = true;
     }
 
