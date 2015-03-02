@@ -114,7 +114,7 @@ class FeedbackCollector
             ORDER BY s_core_shops.default DESC;'
         );
         $mainLanguage = array_shift($shopLanguages);
-        array_walk($shopLanguages, function(&$item){
+        array_walk($shopLanguages, function (&$item) {
             $item = $item['locale'];
         });
 
