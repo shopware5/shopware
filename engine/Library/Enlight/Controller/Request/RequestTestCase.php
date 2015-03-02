@@ -191,6 +191,10 @@ class Enlight_Controller_Request_RequestTestCase
      */
     public function getModuleName()
     {
+        if (parent::getModuleName() === null) {
+            return null;
+        }
+
         return strtolower(trim(parent::getModuleName()));
     }
 }
