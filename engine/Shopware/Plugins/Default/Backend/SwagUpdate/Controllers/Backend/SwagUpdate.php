@@ -24,6 +24,12 @@
 
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Random;
+use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\MySQLVersionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -107,7 +113,18 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $userLang = $this->getUserLanguage($user);
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
-        $validation = new Validation($namespace, $userLang);
+
+        $fileSystem = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
+        $conn = $this->get('dbal_connection');
+        $checks = array(
+            new RegexCheck($namespace, $userLang),
+            new MySQLVersionCheck($conn, $namespace),
+            new PHPVersionCheck($namespace),
+            new PHPExtensionCheck($namespace),
+            new WritableCheck($fileSystem, $namespace),
+            new IonCubeLoaderCheck($namespace),
+        );
+        $validation = new Validation($namespace, $checks);
 
         $this->View()->assign(array(
             'success' => true,
@@ -394,11 +411,12 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         rewind($fp2);
 
         $same = true;
-        while (!feof($fp1) && !feof($fp2))
+        while (!feof($fp1) && !feof($fp2)) {
             if (fread($fp1, $blockSize) !== fread($fp2, $blockSize)) {
                 $same = false;
                 break;
             }
+        }
 
         if (feof($fp1) !== feof($fp2)) {
             $same = false;
