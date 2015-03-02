@@ -181,6 +181,7 @@ class Kernel implements HttpKernelInterface
 
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
+        $enlightRequest->setSecure($request->isSecure());
 
         return $enlightRequest;
     }
