@@ -1206,6 +1206,14 @@ class Theme extends \Shopware\Components\Theme
                 )
             )
         );
+        
+        $fieldSet->addElement(
+            $this->createTextField(
+                'appleWebAppTitle',
+                '__apple_web_app_title__',
+                ''
+            )
+        );
 
         $tab->addElement($fieldSet);
 
