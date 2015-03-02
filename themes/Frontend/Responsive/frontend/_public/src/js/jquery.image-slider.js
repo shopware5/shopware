@@ -591,6 +591,18 @@
              */
             me._lastMoveTime = 0;
 
+            /**
+             * Whether or not the slider should scroll while the finger is down.
+             * Used to determin if the user scrolls down to lock the horizontal
+             * scrolling.
+             * Gets unlocked when the user end the touch.
+             *
+             * @private
+             * @property _lockSlide
+             * @type {Boolean}
+             */
+            me._lockSlide = false;
+
             me.registerEvents();
         },
 
@@ -615,6 +627,7 @@
                     me._on($slide, 'movestart', function(e) {
                         // Allows the normal up and down scrolling from the browser
                         if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
+                            me._lockSlide = true;
                             e.preventDefault();
                         }
                     });
@@ -756,6 +769,10 @@
                 deltaY = touchA.clientY - startTouch.y;
 
                 if (scale === 1) {
+                    if (me._lockSlide) {
+                        return;
+                    }
+
                     var offset = (me._slideIndex * -100),
                         percentage = (deltaX / me._$slide.width()) * 100;
 
@@ -835,6 +852,7 @@
             me._touchDistance = 0;
             me._grabImage = false;
             me._$slideContainer.removeClass(opts.dragClass);
+            me._lockSlide = false;
 
             if (touchB) {
                 startPoint.set(touchB.clientX, touchB.clientY);
