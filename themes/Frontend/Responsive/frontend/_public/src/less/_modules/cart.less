@@ -32,7 +32,7 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
         margin-top: 0;
 
         .panel--body {
-            .unitize-padding(20, 20);
+            .unitize-padding(20, 20, 0, 20);
         }
     }
     .payment--method-list {
@@ -717,9 +717,14 @@ The shopping cart variant (`off-canvas`/`collapse cart`) is controllable inside 
         .unitize(10, 16, margin-bottom);
         border-bottom: 1px solid @panel-border;
 
-        &:nth-last-child(2) {
+        .method_last {
             border: 0 none;
         }
+    }
+  
+    .payment--method.method_last,
+    .dispatch--method.method_last {
+      border: 0 none;
     }
 
     .method--input {
