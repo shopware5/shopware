@@ -229,13 +229,16 @@
          * @returns {String}
          */
         getEventName: function (event) {
-            var suffix = this.eventSuffix;
+            var suffix = this.eventSuffix,
+                parts = event.split(' '),
+                len = parts.length,
+                i = 0;
 
-            if (!event || typeof event !== 'string') {
-                return '';
+            for (; i < len; i++) {
+                parts[i] += suffix;
             }
 
-            return event.trim().split(' ').join(suffix + ' ') + suffix;
+            return parts.join(' ');
         },
 
         /**
