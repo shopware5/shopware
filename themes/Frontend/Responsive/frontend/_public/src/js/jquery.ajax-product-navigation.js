@@ -231,10 +231,9 @@
          */
         registerListingEventListeners: function () {
             var me = this,
-                selectors = me.opts.listingSelectors.join(', '),
-                $listingEls = me.$el.find(selectors);
+                selectors = me.opts.listingSelectors.join(', ');
 
-            me._on($listingEls, 'click', $.proxy(me.onClickProductInListing, me));
+            me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
         },
 
         /**
@@ -414,9 +413,12 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            var me = this,
+                selectors = me.opts.listingSelectors.join(', ');
 
             StateManager.off('resize', me.checkPossibleSliding, me);
+
+            me.$el.off('click', selectors, $.proxy(me.onClickProductInListing, me));
 
             me._destroy();
         }
