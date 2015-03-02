@@ -54,10 +54,14 @@ class DefaultPreFilter implements PreFilterInterface
         if (isset($params['sAction'])) {
             $params['action'] = $params['sAction'];
         }
-        if (isset($params['controller'])) {
+        unset($params['title'], $params['sViewport'], $params['sAction']);
+
+        if (isset($params['controller']) || isset($params['module'])) {
+            if(isset($params['module'])) {
+                unset($globalParams['controller']);
+            }
             unset($globalParams['controller'], $globalParams['action']);
         }
-        unset($params['title'], $params['sViewport'], $params['sAction']);
 
         /** @see \sArticles::buildNavigation */
         if (isset($params['sDetails'])) {
@@ -68,12 +72,6 @@ class DefaultPreFilter implements PreFilterInterface
         if (!isset($params['controller']) && isset($params['action']) && $params['action'] == 'performOrderRedirect') {
             $params['module'] = 'backend';
             $params['controller'] = 'customer';
-        }
-        /** @see \Shopware_Controllers_Frontend_Sitemap::getSupplierPages */
-        if (isset($params['sSupplier']) && isset($params['controller']) && $params['controller'] == 'supplier') {
-            $params['module'] = 'frontend';
-            $params['controller'] = 'listing';
-            $params['action'] = 'manufacturer';
         }
         /** @see \Shopware_Controllers_Widgets_Emotion */
         if (!isset($params['module']) && isset($globalParams['module']) && $globalParams['module'] == 'widgets') {
