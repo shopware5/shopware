@@ -78,7 +78,7 @@ class Enlight_Controller_Request_RequestHttp
      * Sets the request URI scheme
      *
      * @param $value
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true)
     {
@@ -90,7 +90,7 @@ class Enlight_Controller_Request_RequestHttp
      * Set SERVER remote address
      *
      * @param string $address
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address)
     {
@@ -103,7 +103,7 @@ class Enlight_Controller_Request_RequestHttp
      * Sets HTTP host method
      *
      * @param string $host
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setHttpHost($host)
     {
@@ -159,12 +159,20 @@ class Enlight_Controller_Request_RequestHttp
      *
      * @param   string $header
      * @param   $value
-     * @return  Enlight_Controller_Request_RequestHttp
+     * @return  Enlight_Controller_Request_Request
      */
     public function setHeader($header, $value)
     {
         $temp = strtoupper(str_replace('-', '_', $header));
         $_SERVER['HTTP_' . $temp] = $value;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModuleName()
+    {
+        return strtolower(trim(parent::getModuleName()));
     }
 }

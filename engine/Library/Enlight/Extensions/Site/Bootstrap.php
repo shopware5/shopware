@@ -106,7 +106,7 @@ class Enlight_Extensions_Site_Bootstrap extends Enlight_Plugin_Bootstrap_Config
      */
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var $request Enlight_Controller_Request_Request */
         $request = $args->getRequest();
 
         if (($site = $request->getParam('__site')) !== null) {

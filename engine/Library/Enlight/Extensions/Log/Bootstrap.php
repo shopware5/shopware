@@ -173,7 +173,7 @@ class Enlight_Extensions_Log_Bootstrap extends Enlight_Plugin_Bootstrap_Config
      */
     public function onRouteStartup(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var $request Enlight_Controller_Request_Request */
         $request = $args->getSubject()->Request();
         /** @var $request Enlight_Controller_Request_ResponseHttp */
         $response = $args->getSubject()->Response();

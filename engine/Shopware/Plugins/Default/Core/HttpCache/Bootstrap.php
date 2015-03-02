@@ -47,7 +47,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     protected $action;
 
     /**
-     * @var \Enlight_Controller_Request_RequestHttp
+     * @var \Enlight_Controller_Request_Request
      */
     protected $request;
 
@@ -276,10 +276,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Fallbacks to autodetection if proxy-url is not configured and $request is given.
      * Returns null if $request is not given or autodetection fails.
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return string|null
      */
-    public function getProxyUrl(\Enlight_Controller_Request_RequestHttp $request = null)
+    public function getProxyUrl(\Enlight_Controller_Request_Request $request = null)
     {
         $proxyUrl = trim($this->Config()->get('proxy'));
         if (!empty($proxyUrl)) {
@@ -762,10 +762,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * )
      * </code>
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return array
      */
-    protected function getNoCacheTagsFromCookie(\Enlight_Controller_Request_RequestHttp $request)
+    protected function getNoCacheTagsFromCookie(\Enlight_Controller_Request_Request $request)
     {
         $noCacheCookie = $request->getCookie('nocache', false);
 
