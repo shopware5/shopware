@@ -111,7 +111,7 @@ class Enlight_Extensions_Router_Bootstrap extends Enlight_Plugin_Bootstrap_Confi
         /** @var $userParams array */
         $userParams = $args->get('userParams');
 
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var $request Enlight_Controller_Request_Request */
         $request = $args->get('subject')->Front()->Request();
         /** @var $url string */
         $url = $args->getReturn();

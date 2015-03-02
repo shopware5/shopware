@@ -105,7 +105,7 @@ class Enlight_Extensions_RouterSymfony_Bootstrap extends Enlight_Plugin_Bootstra
     /**
      * Returns the symfony request context.
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return Symfony\Component\Routing\RequestContext
      */
     protected function getRequestContext($request)
@@ -126,7 +126,7 @@ class Enlight_Extensions_RouterSymfony_Bootstrap extends Enlight_Plugin_Bootstra
      */
     public function onRoute(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var $request Enlight_Controller_Request_Request */
         $request = $args->getRequest();
         /** @var $routes Symfony\Component\Routing\RouteCollection */
         $routes = $this->Application()->SymfonyRoutes();
