@@ -131,7 +131,8 @@ class Repository extends ModelRepository
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         } else {
-            $builder->addOrderBy('emotions.id', 'ASC');
+            $builder->addOrderBy('categories.id', 'ASC');
+            $builder->addOrderBy('emotions.position', 'ASC');
         }
 
         return $builder;

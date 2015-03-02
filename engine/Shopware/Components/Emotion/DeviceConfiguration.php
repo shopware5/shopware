@@ -61,6 +61,8 @@ class DeviceConfiguration
             ->andWhere('emotion.is_landingpage = 0')
             ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
             ->andWhere('(emotion.valid_from <= NOW() OR emotion.valid_from IS NULL)')
+            ->addOrderBy('emotion.position', 'ASC')
+            ->addOrderBy('emotion.id', 'ASC')
             ->setParameter(':categoryId', $categoryId);
 
         $query->innerJoin(

@@ -232,6 +232,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             supportText: '{s name=settings/fieldset/container_width_support}{/s}'
         });
 
+        me.positionNumberField = Ext.create('Ext.form.field.Number', {
+            fieldLabel: '{s name=settings/fieldset/position_number}Position Number{/s}',
+            name: 'position',
+            minValue: 1,
+            value: 1,
+            helpText: '{s name=settings/fieldset/position_number_info}{/s}',
+            anchor: '100%',
+            width: '100%',
+            labelWidth: me.defaults.labelWidth - 20,
+            supportText: '{s name=settings/fieldset/position_number_help}{/s}'
+        });
+
         var responsiveModeStore = Ext.create('Ext.data.Store', {
             fields: [ 'display', 'value', 'supportText' ],
             data: [
@@ -318,7 +330,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ me.deviceComboGroup, fullscreen, me.containerWidthField ]
+                    items: [ me.deviceComboGroup, fullscreen, me.containerWidthField, me.positionNumberField ]
                 }
             ]
         });
