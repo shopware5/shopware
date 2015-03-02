@@ -128,7 +128,7 @@ class MediaService implements Service\MediaServiceInterface
 
         $fallback = $this->productMediaGateway->getCovers($fallback, $context);
 
-        return array_merge($covers, $fallback);
+        return $covers + $fallback;
     }
 
     /**
