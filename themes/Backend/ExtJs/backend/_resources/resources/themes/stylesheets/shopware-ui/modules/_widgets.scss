@@ -168,14 +168,9 @@
     @include border-radius(0);
     margin: 16px 0px;
     min-width: 300px;
-    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
-            svg-color-stop(rgba(255,255,255,0), 0%, 1),
-            svg-color-stop(rgba(202,235,255,0.075), 100%, 1)
-        )) center center no-repeat transparent !important;
+    background: rgba(240, 240, 255, 0.05) !important;
     border: 0 none !important;
     padding: 0;
-
-
 
 	/** Header */
 	.#{$prefix}panel-header {
