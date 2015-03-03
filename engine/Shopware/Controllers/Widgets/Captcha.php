@@ -35,6 +35,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Request()->setHeader('Surrogate-Capability', false);
     }
 
     /**
