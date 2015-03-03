@@ -77,7 +77,7 @@ ul {
 
     // Font
 h1, h2, h3, h4, h5, h6 {
-    .unitize(26, 16, line-height);
+    .unitize(line-height, 26);
     .unitize-margin(28, 0, 10, 0);
     font-family: @font-headline-stack;
     font-weight: @font-bold-weight;
@@ -86,7 +86,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     .unitize(@font-size-h1, 16, font-size);
-    .unitize(28, 16, line-height);
+    .unitize(line-height, 28);
     .unitize-margin(34, 0, 20, 0);
     color: @text-color-dark;
 }
@@ -113,7 +113,7 @@ h6 {
 
 p {
     .unitize(@font-size-base, 16, font-size);
-    .unitize(24, 16, line-height);
+    .unitize(line-height, 24);
     .unitize-margin(0, 0, 20, 0);
 }
 
@@ -186,7 +186,7 @@ blockquote {
 @media screen and(min-width: @tabletViewportWidth) {
     .content-main {
         .box-shadow(0 0 4px 1px @border-color);
-        .unitize(750, 16, min-height);
+        .unitize(min-height, 750);
     }
 
     .content-main--inner {
@@ -197,9 +197,9 @@ blockquote {
 
 @media screen and (min-width: @desktopViewportWidth) {
     .content-main {
-        .unitize(20, 16, margin-top);
-        .unitize(45, 16, margin-bottom);
-        .unitize(700, 16, min-height);
+        .unitize(margin-top, 20);
+        .unitize(margin-bottom, 45);
+        .unitize(min-height, 700);
     }
     
     .content-main--inner {

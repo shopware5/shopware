@@ -35,7 +35,7 @@ The main breadcrumb is positioned below the main navigation bar.
 */
 
 .content--breadcrumb {
-    .unitize(14, 16, font-size);
+    .unitize(font-size, 14);
     .clearfix();
     display: block;
     float: none;
@@ -61,13 +61,13 @@ The main breadcrumb is positioned below the main navigation bar.
 
     .breadcrumb--link,
     .breadcrumb--separator {
-        .unitize(24, 16, line-height);
+        .unitize(line-height, 24);
         .unitize-padding(10, 10);
     }
 
     // Separator
     .breadcrumb--separator {
-        .unitize(9, 16, font-size);
+        .unitize(font-size, 9);
     }
 
     // Link
@@ -91,13 +91,13 @@ The main breadcrumb is positioned below the main navigation bar.
         list-style: none;
 
         .breadcrumb--title {
-            .unitize(20, 16, padding-right);
+            .unitize(padding-right, 20);
             border-right: 1px solid @border-color;
         }
 
         .icon--arrow-left {
-            .unitize(9, 16, font-size);
-            .unitize(10, 16, margin-right);
+            .unitize(font-size, 9);
+            .unitize(margin-right, 10);
         }
     }
 }
@@ -117,11 +117,11 @@ The main breadcrumb is positioned below the main navigation bar.
 
         // Button
         .breadcrumb--button {
-            .unitize(10, 16, margin-right);
+            .unitize(margin-right, 10);
             .unitize-padding(10, 30, 10, 10);
 
             .breadcrumb--title {
-                .unitize(0, 16, padding-right);
+                .unitize(padding-right, 0);
                 border-right: 0 none;
             }
         }

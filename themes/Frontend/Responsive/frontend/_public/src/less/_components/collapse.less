@@ -40,8 +40,8 @@ Displays a folding box that responds if the content does not fit the element.
 .collapse--header {
     .unitize-padding(10, 20);
     .unitize-margin(10, 0, 0, 0);
-    .unitize(16, 16, font-size);
-    .unitize(16, 16, line-height);
+    .unitize(font-size, 16);
+    .unitize(line-height, 16);
     .linear-gradient(#ffffff, @gray-light);
     .border-radius();
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
@@ -53,10 +53,10 @@ Displays a folding box that responds if the content does not fit the element.
 
     .collapse--toggler {
         .unitize-height(16);
-        .unitize(10, 16, top);
-        .unitize(20, 16, right);
-        .unitize(6, 16, font-size);
-        .unitize(16, 16, line-height);
+        .unitize(top, 10);
+        .unitize(right, 20);
+        .unitize(font-size, 6);
+        .unitize(line-height, 16);
         position: absolute;
         font-weight: normal;
         font-family: 'shopware';

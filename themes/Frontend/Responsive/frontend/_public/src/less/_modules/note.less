@@ -39,7 +39,7 @@ The styling also contains the viewport specific styles inside media queries.
     .unitize-width(75);
     .unitize-height(75);
     .unitize-padding(5, 5);
-    .unitize(65, 16, line-height);
+    .unitize(line-height, 65);
     .border-radius();
     display: table-cell;
     text-align: center;
@@ -55,7 +55,7 @@ The styling also contains the viewport specific styles inside media queries.
 
 .note--title {
     .unitize-margin(0, 0, 5, 95);
-    .unitize(18, 16, font-size);
+    .unitize(font-size, 18);
     display: block;
     font-weight: 700;
     color: @text-color-dark;
@@ -108,19 +108,19 @@ The styling also contains the viewport specific styles inside media queries.
 
     [class^="icon--"] {
         .unitize-margin(0, 5, 0, 0);
-        .unitize(12, 16, font-size);
+        .unitize(font-size, 12);
     }
 }
 
 .note--price-unit {
     .unitize-margin(5, 0, 0, 95);
-    .unitize(12, 16, font-size);
-    .unitize(18, 16, line-height);
+    .unitize(font-size, 12);
+    .unitize(line-height, 18);
     display: block;
 }
 
 .note--price {
-    .unitize(18, 16, font-size);
+    .unitize(font-size, 18);
     .unitize-margin(15, 0, 0, 95);
     color: @text-color-dark;
     font-weight: bold;
@@ -129,11 +129,11 @@ The styling also contains the viewport specific styles inside media queries.
 .note--delete {
     .unitize-width(40);
     .unitize-height(40);
-    .unitize(10, 16, font-size);
-    .unitize(38, 16, line-height);
+    .unitize(font-size, 10);
+    .unitize(line-height, 38);
     .linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
     .border-radius();
-    .unitize(20, 16, top);
+    .unitize(top, 20);
     right: 0;
     left: auto;
     display: block;
@@ -164,17 +164,17 @@ The styling also contains the viewport specific styles inside media queries.
         background: @table-row-bg;
 
         .note--info {
-            .unitize(20, 16, padding-right);
+            .unitize(padding-right, 20);
             width: 70%;
         }
 
         .note--sale {
-            .unitize(55, 16, padding-right);
+            .unitize(padding-right, 55);
             width: 30%;
         }
 
         .note--zoom {
-            .unitize(12, 16, font-size);
+            .unitize(font-size, 12);
             display: block;
             color: @text-color;
             text-align: center;

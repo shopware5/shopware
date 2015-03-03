@@ -29,7 +29,7 @@ input[type="tel"] {
     .appearance(none);
     .border-radius();
     .box-sizing();
-	.unitize(19, 16, line-height);
+	.unitize(line-height, 19);
     .unitize(@input-font-size, 16, font-size);
     .unitize-width(290);
     .unitize-padding(10, 10, 9, 10);
@@ -56,7 +56,7 @@ input[type="tel"] {
 
     // Input field spacing
     &.input--field {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         width: 100%;
 
         &.input--field-zipcode {
@@ -72,15 +72,15 @@ input[type="tel"] {
     }
 
     &.is--small {
-        .unitize(34, 16, height);
+        .unitize(height, 34);
     }
 
     &.is--medium {
-        .unitize(38, 16, height);
+        .unitize(height, 38);
     }
 
     &.is--large {
-        .unitize(42, 16, height);
+        .unitize(height, 42);
     }
 }
 
@@ -117,7 +117,7 @@ The plugin `jquery.selectbox-replacement.js` automaticly changes every `select` 
     .border-radius();
     .box-sizing();
     .unitize-width(290);
-    .unitize(40, 16, line-height);
+    .unitize(line-height, 40);
     .white-gradient();
     .clearfix();
     display: inline-block;
@@ -211,7 +211,7 @@ The plugin `jquery.selectbox-replacement.js` automaticly changes every `select` 
 
     /* Standard input fields. */
     .input--field {
-        .unitize(15, 16, margin-bottom);
+        .unitize(margin-bottom, 15);
 
         .input--field-zipcode {
             margin-right: 2%;
@@ -227,6 +227,6 @@ The plugin `jquery.selectbox-replacement.js` automaticly changes every `select` 
 
     // Input field styling
     .input--field {
-        .unitize(15, 16, margin-bottom);
+        .unitize(margin-bottom, 15);
     }
 }

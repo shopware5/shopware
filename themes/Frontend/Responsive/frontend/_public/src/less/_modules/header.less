@@ -12,7 +12,7 @@ More precise designations are commented inside the document.
 
     // Basic header
 .header-main {
-    .unitize(10, 16, padding-bottom);
+    .unitize(padding-bottom, 10);
     background: #fff;
     border-bottom: 1px solid @brand-primary;
 
@@ -48,13 +48,13 @@ More precise designations are commented inside the document.
     .header-main {
         .logo-main { width: 100%; }
         .logo--shop { width: 50% }
-        .logo--link { .unitize(15, 16, margin-top); }
+        .logo--link { .unitize(margin-top, 15); }
 
         .logo--supportinfo { display: none; }
         border-bottom: 1px solid @brand-primary;
 
         .btn--back-top-shop {
-            .unitize(10, 16, margin-top);
+            .unitize(margin-top, 10);
             width: 40%;
             float: right;
             white-space: nowrap;
@@ -78,7 +78,7 @@ More precise designations are commented inside the document.
     }
 
     .navigation--entry {
-        .unitize(5, 16, margin-right);
+        .unitize(margin-right, 5);
         display: inline-block;
 
         // General button styling in shop navigation
@@ -93,7 +93,7 @@ More precise designations are commented inside the document.
 
         .icon--basket,
         .icon--account {
-            .unitize(21, 16, font-size);
+            .unitize(font-size, 21);
             display: inline;
             position: relative;
             vertical-align: middle;
@@ -102,12 +102,12 @@ More precise designations are commented inside the document.
         }
 
         .icon--heart {
-            .unitize(18, 16, font-size);
+            .unitize(font-size, 18);
             vertical-align: middle;
         }
 
         .icon--search {
-            .unitize(22, 16, font-size);
+            .unitize(font-size, 22);
             vertical-align: middle;
         }
     }
@@ -116,7 +116,7 @@ More precise designations are commented inside the document.
     .cart--quantity,
     .notes--quantity {
         .unitize(-4, 16, top);
-        .unitize(23, 16, left);
+        .unitize(left, 23);
         position: absolute;
         margin: 0;
     }
@@ -149,7 +149,7 @@ More precise designations are commented inside the document.
     }
 
 	.entry--cart {
-        .unitize(12, 16, margin-right);
+        .unitize(margin-right, 12);
         position: relative;
     }
 
@@ -163,9 +163,9 @@ More precise designations are commented inside the document.
         text-align: left;
 
         .btn {
-            .unitize(48, 16, padding-left);
-            .unitize(35, 16, line-height);
-            .unitize(17, 16, font-size);
+            .unitize(padding-left, 48);
+            .unitize(line-height, 35);
+            .unitize(font-size, 17);
             .unitize-height(40, 16);
             color: @brand-secondary;
             width: auto;
@@ -173,7 +173,7 @@ More precise designations are commented inside the document.
             border: 0 none;
         }
 
-        .icon--menu { .unitize(20, 16, font-size); }
+        .icon--menu { .unitize(font-size, 20); }
     }
 }
 
@@ -197,9 +197,9 @@ More precise designations are commented inside the document.
 
     .main-search--button {
         .appearance(none);
-        .unitize(20, 16, right);
-        .unitize(12, 16, top);
-        .unitize(20, 16, font-size);
+        .unitize(right, 20);
+        .unitize(top, 12);
+        .unitize(font-size, 20);
         padding: 0;
         position: absolute;
         z-index: 2;
@@ -220,8 +220,8 @@ More precise designations are commented inside the document.
         .rotate(-45deg);
         .unitize-width(15, 16);
         .unitize-height(15, 16);
-        .unitize(8, 16, margin-top);
-        .unitize(1, 16, margin-left);
+        .unitize(margin-top, 8);
+        .unitize(margin-left, 1);
         background: darken(@gray, 2%);
         content: '';
         display: block;
@@ -231,7 +231,7 @@ More precise designations are commented inside the document.
 .entry--search {
     &.is--active {
         .main-search--form {
-            .unitize(50, 16, top);
+            .unitize(top, 50);
             background: darken(@gray, 2%);
             left: 0;
             display: block;
@@ -241,14 +241,14 @@ More precise designations are commented inside the document.
 }
 
 .header-main.is--active-searchfield {
-    .unitize(70, 16, padding-bottom);
+    .unitize(padding-bottom, 70);
 }
 
     // Loading indicator for css animations supported browsers
 .has--cssanimations {
     .form--ajax-loader {
-        .unitize(20, 16, top);
-        .unitize(55, 16, right);
+        .unitize(top, 20);
+        .unitize(right, 55);
         position: absolute;
         display: none;
 
@@ -267,8 +267,8 @@ More precise designations are commented inside the document.
 
     // Loading indicator for non css animations supported browsers
 .has--no-cssanimations .form--ajax-loader {
-    .unitize(24, 16, top);
-    .unitize(55, 16, right);
+    .unitize(top, 24);
+    .unitize(right, 55);
     .unitize-width(16);
     .unitize-height(16);
     position: absolute;
@@ -279,7 +279,7 @@ More precise designations are commented inside the document.
     // Search results modal
 .main-search--results {
     .clearfix();
-    .unitize(110, 16, top);
+    .unitize(top, 110);
     position: absolute;
     width: 100%;
     left: 0;
@@ -324,7 +324,7 @@ More precise designations are commented inside the document.
     }
 
     .list--entry {
-        .unitize(30, 16, line-height);
+        .unitize(line-height, 30);
         border-bottom: 1px solid @border-color;
 
         &:last-child { border: 0 none; }
@@ -356,7 +356,7 @@ More precise designations are commented inside the document.
     .entry--all-results-link,
     .entry--all-results-number {
         .unitize-height(30, 16);
-        .unitize(30, 16, line-height);
+        .unitize(line-height, 30);
         display: block;
     }
 
@@ -379,7 +379,7 @@ More precise designations are commented inside the document.
     }
 
 	.entry--name {
-		.unitize(10, 16, padding-left);
+		.unitize(padding-left, 10);
 		width: 60%;
 		color: @text-color;
 
@@ -470,8 +470,8 @@ More precise designations are commented inside the document.
 
             // Icon position from here to @desktopViewportWidth
             .main-search--button {
-                .unitize(2, 16, top);
-                .unitize(12, 16, right);
+                .unitize(top, 2);
+                .unitize(right, 12);
             }
         }
     }
@@ -479,7 +479,7 @@ More precise designations are commented inside the document.
     // Search results modal
     .main-search--results {
         .clearfix();
-        .unitize(50, 16, top);
+        .unitize(top, 50);
         .unitize-width(450);
         .unitize(-110, 16, margin-left);
     }
@@ -487,19 +487,19 @@ More precise designations are commented inside the document.
     // Remove the active searchfield padding
     .header-main {
         &.is--active-searchfield {
-            .unitize(10, 16, padding-bottom);
+            .unitize(padding-bottom, 10);
         }
     }
 
     .has--cssanimations .form--ajax-loader {
-        .unitize(10, 16, top);
-        .unitize(45, 16, right);
+        .unitize(top, 10);
+        .unitize(right, 45);
         position: absolute;
     }
 
     .has--no-cssanimations .form--ajax-loader {
-        .unitize(14, 16, top);
-        .unitize(45, 16, right);
+        .unitize(top, 14);
+        .unitize(right, 45);
         position: absolute;
     }
 }
@@ -528,7 +528,7 @@ More precise designations are commented inside the document.
 
             .navigation--entry {
                 .unitize-padding(0, 15);
-                .unitize(25, 16, line-height);
+                .unitize(line-height, 25);
                 float: left;
                 display: block;
 
@@ -569,12 +569,12 @@ More precise designations are commented inside the document.
 
             .js--fancy-select-text {
                 .unitize-padding(0, 18, 0, 0);
-                .unitize(25, 16, line-height);
+                .unitize(line-height, 25);
                 border: 0 none;
             }
 
             .js--fancy-select-trigger {
-                .unitize(27, 16, line-height);
+                .unitize(line-height, 27);
                 width: auto;
                 border: 0 none;
             }
@@ -605,7 +605,7 @@ More precise designations are commented inside the document.
                 &:after,
                 &::after {
                     .unitize(-3, 16, top);
-                    .unitize(5, 16, margin-left);
+                    .unitize(margin-left, 5);
                     content: "\e612";
                     font-family: 'shopware';
                     position: relative;
@@ -619,8 +619,8 @@ More precise designations are commented inside the document.
             .service--list {
                 .unitize-width(166);
                 .unitize-padding(5, 0);
-                .unitize(32, 16, top);
-                .unitize(12, 16, right);
+                .unitize(top, 32);
+                .unitize(right, 12);
                 text-align: left;
                 position: absolute;
                 display: none;
@@ -634,7 +634,7 @@ More precise designations are commented inside the document.
                     .unitize-width(8);
                     .unitize-height(8);
                     .unitize(-5, 16, top);
-                    .unitize(18, 16, right);
+                    .unitize(right, 18);
                     content: '';
                     display: block;
                     position: absolute;
@@ -680,7 +680,7 @@ More precise designations are commented inside the document.
 
             .logo-main { width: 100%; }
             .logo--shop { width: 35% }
-            .logo--link { .unitize(5, 16, margin-top); }
+            .logo--link { .unitize(margin-top, 5); }
 
             .logo--supportinfo {
                 .unitize-padding(5, 0);
@@ -733,7 +733,7 @@ More precise designations are commented inside the document.
 
         // Search entry
         .entry--search {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             position: absolute;
             left: 3%;
             margin-right: 10%;
@@ -760,7 +760,7 @@ More precise designations are commented inside the document.
         .clearfix();
         .unitize-width(450);
         .unitize(-225, 16, margin-left);
-        .unitize(55, 16, top);
+        .unitize(top, 55);
         left: 50%;
     }
 
@@ -817,7 +817,7 @@ More precise designations are commented inside the document.
         // Custom styling cart button
         .entry--cart {
             .cart--link {
-                .unitize(50, 16, padding-left);
+                .unitize(padding-left, 50);
                 .cart--quantity { display: inline-block; }
                 .cart--amount {
                     display: inline-block;
@@ -827,7 +827,7 @@ More precise designations are commented inside the document.
             }
 
             .icon--basket {
-                .unitize(8, 16, left);
+                .unitize(left, 8);
                 display: block;
                 position: absolute;
                 top: 50%;
@@ -835,10 +835,10 @@ More precise designations are commented inside the document.
         }
 
         .entry--account {
-            .account--link { .unitize(36, 16, padding-left); }
+            .account--link { .unitize(padding-left, 36); }
 
             .icon--account {
-                .unitize(8, 16, left);
+                .unitize(left, 8);
                 display: block;
                 position: absolute;
                 top: 50%;
@@ -853,7 +853,7 @@ More precise designations are commented inside the document.
 @media screen and (min-width: @desktopViewportWidth) {
 
     .header-main {
-        .top-bar { .unitize(2, 16, margin-bottom); }
+        .top-bar { .unitize(margin-bottom, 2); }
         .logo--shop { width: 75% }
     }
 
@@ -889,11 +889,11 @@ More precise designations are commented inside the document.
         }
 
         .entry--link {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
         }
 
         .entry--trigger {
-            .unitize(14, 16, margin-right);
+            .unitize(margin-right, 14);
         }
 
         // Search entry

@@ -29,8 +29,8 @@ It contains the viewport specific styles inside media queries.
         .unitize-width(30);
         .unitize-height(70);
         .unitize(-35, 16, margin-top);
-        .unitize(68, 16, line-height);
-        .unitize(16, 16, font-size);
+        .unitize(line-height, 68);
+        .unitize(font-size, 16);
         .user-select(none);
         .touch-callout(none);
         .tap-highlight-color(rgba(0, 0, 0, 0));
@@ -46,7 +46,7 @@ It contains the viewport specific styles inside media queries.
         display: none;
 
         &.is--left {
-            .unitize(0, 16, left);
+            .unitize(left, 0);
             .border-radius-multi(0, 3px, 3px, 0);
 
             &:before,
@@ -56,7 +56,7 @@ It contains the viewport specific styles inside media queries.
         }
 
         &.is--right {
-            .unitize(0, 16, right);
+            .unitize(right, 0);
             .border-radius-multi(3px, 0, 0, 3px);
 
             &:before {
@@ -113,7 +113,7 @@ It contains the viewport specific styles inside media queries.
 
 .image-slider--thumbnails {
     .unitize-height(70);
-    .unitize(440, 16, top);
+    .unitize(top, 440);
     display: none;
     width: 100%;
     overflow: hidden;
@@ -132,7 +132,7 @@ It contains the viewport specific styles inside media queries.
         .unitize-height(70);
         .unitize-padding(5, 5);
         .unitize-margin(0, 10, 0, 0);
-        .unitize(57, 16, line-height);
+        .unitize(line-height, 57);
         .border-radius();
         .tap-highlight-color();
         display: inline-block;
@@ -152,8 +152,8 @@ It contains the viewport specific styles inside media queries.
     .thumbnails--arrow {
         .unitize-width(20);
         .unitize-height(70);
-        .unitize(70, 16, line-height);
-        .unitize(14, 16, font-size);
+        .unitize(line-height, 70);
+        .unitize(font-size, 14);
         .border-radius();
         .user-select(none);
         .touch-callout(none);
@@ -176,11 +176,11 @@ It contains the viewport specific styles inside media queries.
 
         &.is--top,
         &.is--bottom {
-            .unitize(8, 16, font-size);
+            .unitize(font-size, 8);
             .unitize-width(70);
             .unitize-height(24);
             .unitize-padding(2, 0, 0, 0);
-            .unitize(18, 16, line-height);
+            .unitize(line-height, 18);
             left: 0;
         }
 
@@ -249,7 +249,7 @@ It contains the viewport specific styles inside media queries.
 
     .image-slider--container {
         .unitize-height(400);
-        .unitize(110, 16, margin-bottom);
+        .unitize(margin-bottom, 110);
 
         &.no--thumbnails {
             margin-bottom: 0;
@@ -261,7 +261,7 @@ It contains the viewport specific styles inside media queries.
     }
 
     .image-slider--dots {
-        .unitize(405, 16, top);
+        .unitize(top, 405);
         position: absolute;
         width: 100%;
     }

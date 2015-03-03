@@ -14,7 +14,7 @@ The footer element sizes are defined with the unitize mixin.
 	background: #fff;
 
     .footer--phone-link {
-        .unitize(19, 16, font-size);
+        .unitize(font-size, 19);
         font-weight: bold;
         color: @brand-secondary;
     }
@@ -60,17 +60,17 @@ The footer element sizes are defined with the unitize mixin.
 
     // Second footer with the shopware logo and vat notice
     .footer--bottom {
-        .unitize(12, 16, font-size);
+        .unitize(font-size, 12);
         .unitize-padding(16, 12, 0, 12, 12);
         text-align: center;
     }
 
     .footer--copyright {
-        .unitize(13, 16, font-size);
+        .unitize(font-size, 13);
     }
 
     .footer--logo {
-        .unitize(28, 12, font-size);
+        .unitize(font-size, 28);
         color: #009fe3;
     }
 
@@ -79,10 +79,10 @@ The footer element sizes are defined with the unitize mixin.
         .unitize-padding(0, 0, 16, 0);
 
         .is--level1 {
-            .unitize(10, 16, padding-bottom);
+            .unitize(padding-bottom, 10);
 
             .navigation--entry {
-                .unitize(10, 16, margin-left);
+                .unitize(margin-left, 10);
             }
         }
     }
@@ -121,8 +121,8 @@ The footer element sizes are defined with the unitize mixin.
         float: left;
 
         .icon--mail {
-            .unitize(14, 16, font-size);
-            .unitize(0, 16, margin-right);
+            .unitize(font-size, 14);
+            .unitize(margin-right, 0);
         }
 
         .button--text { display: none }
@@ -134,21 +134,21 @@ The footer element sizes are defined with the unitize mixin.
 }
 
 .footer-vat {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
     .unitize-padding(0, 5);
     background: transparent;
 }
 
 .footer--vat-info {
 	.vat-info--text {
-		.unitize(12, 16, font-size);
-		.unitize(10, 16, margin-bottom);
+		.unitize(font-size, 12);
+		.unitize(margin-bottom, 10);
 		text-align: center;
 	}
 }
 
 .footer-minimal {
-    .unitize(13, 16, font-size);
+    .unitize(font-size, 13);
     .unitize-padding(40, 10, 20, 10);
     background: transparent;
     text-align: center;
@@ -185,7 +185,7 @@ The footer element sizes are defined with the unitize mixin.
         .unitize-margin(15, 0, 10, 0);
 
         .vat-info--text {
-            .unitize(18, 16, line-height);
+            .unitize(line-height, 18);
             margin: 0;
         }
     }
@@ -239,7 +239,7 @@ The footer element sizes are defined with the unitize mixin.
             width: 20%;
 
             .icon--mail {
-                .unitize(12, 16, font-size);
+                .unitize(font-size, 12);
             }
         }
     }
@@ -248,7 +248,7 @@ The footer element sizes are defined with the unitize mixin.
 
     .footer--vat-info  {
 		.vat-info--text {
-        	.unitize(20, 16, margin-bottom);
+        	.unitize(margin-bottom, 20);
     	}
 	}
 }
@@ -260,7 +260,7 @@ The footer element sizes are defined with the unitize mixin.
         }
 
         .footer--bottom {
-            .unitize(15, 16, font-size);
+            .unitize(font-size, 15);
         }
     }
 

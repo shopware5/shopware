@@ -20,7 +20,15 @@ Unitize margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue
 Unitize variable: `.unitize-variable(@value, @baseValue: 16)`<br/>
 */
 
-.unitize(@value, @baseValue: 16, @property: font-size) {
+	// @deprecated unitize mixin which should be called like ```.unitize(200, 16, height);```
+.unitize(@value, @baseValue: 16, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
+	@pxValue: @value;
+	@emValue: (@value / @baseValue);
+	@{property}: ~"@{pxValue}px";
+	@{property}: ~"@{emValue}rem";
+}
+	// New default unitize mixin which should be called like ```.unitize(height, 200);```
+.unitize(@property, @value, @baseValue: 16) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
 	@pxValue: @value;
 	@emValue: (@value / @baseValue);
 	@{property}: ~"@{pxValue}px";
