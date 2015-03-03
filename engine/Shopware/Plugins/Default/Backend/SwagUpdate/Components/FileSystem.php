@@ -31,6 +31,13 @@ namespace ShopwarePlugins\SwagUpdate\Components;
  */
 class FileSystem
 {
+    /**
+     * @var string[]
+     */
+    private $VCSDirs = array(
+        '.git',
+        '.svn',
+    );
 
     /**
      * @param  string $directory
@@ -76,7 +83,12 @@ class FileSystem
                 continue;
             }
 
-            if ($fixPermission &&  !$fileInfo->isWritable()) {
+            // skip VCS dirs
+            if (in_array($fileInfo->getBasename(), $this->VCSDirs, true)) {
+                continue;
+            }
+
+            if ($fixPermission && !$fileInfo->isWritable()) {
                 $this->fixDirectoryPermission($fileInfo);
             }
 
