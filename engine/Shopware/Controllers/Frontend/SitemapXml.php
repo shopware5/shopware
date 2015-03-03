@@ -37,9 +37,6 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     /** @var  \Shopware\Models\Site\Repository */
     private $siteRepository;
 
-    /** @var  \Shopware\Components\Model\ModelRepository */
-    private $supplierRepository;
-
     /** @var  \Shopware\Models\Emotion\Repository */
     private $emotionRepository;
 
@@ -101,9 +98,28 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+        $this->View()->sitemap = $this->getSitemapContent();
+    }
+
+    public function mobileAction()
+    {
+        if (!$this->container->get('config')->get('mobileSitemap')) {
+            $this->Response()->clearHeader('Content-Type');
+            throw new Enlight_Controller_Exception(
+                'Page not found',
+                404
+            );
+        }
+
+        $this->View()->loadTemplate('frontend/sitemap_mobile_xml/index.tpl');
+        $this->View()->sitemap = $this->getSitemapContent();
+    }
+
+    private function getSitemapContent()
+    {
         $parentId = $this->get('shop')->get('parentID');
 
-        $this->View()->sitemap = array(
+        return array(
             'categories' => $this->readCategoryUrls($parentId),
             'articles' => $this->readArticleUrls($parentId),
             'blogs' => $this->readBlogUrls($parentId),

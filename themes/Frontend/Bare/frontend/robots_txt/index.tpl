@@ -23,3 +23,10 @@ Disallow: {url controller=ticket fullPath=false}
 {block name="frontend_robots_txt_sitemap"}
 Sitemap: {url controller=index}sitemap.xml
 {/block}
+
+{block name="frontend_robots_txt_sitemap_mobile"}
+    {if {config name=mobileSitemap}}
+        Sitemap: {url controller=index}sitemapMobile.xml
+    {/if}
+{/block}
+
