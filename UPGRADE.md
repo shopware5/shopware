@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * New event `Shopware_Modules_Order_SaveOrder_FilterParams`
 * Implemented the `Enlight_Controller_Request_Request` interface. Please typehint to this class instead to `Enlight_Controller_Request_RequestHttp`
 * New config option `trustedProxies`
+* New event `Shopware_Controllers_Frontend_Froms_commitForm_Mail`
 
 ## 4.3.1
 * Fixed name used as reference when setting attributes of an order document.
