@@ -739,6 +739,11 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
+        if (!me.hasModelAction(store, 'read')) {
+            me.localGridSearch(store, value);
+            return true;
+        }
+
         store.on('load', function() {
             Shopware.app.Application.fireEvent(me.getEventName('after-search'), me, grid, store, searchField, value);
         }, me, { single: true });
@@ -749,8 +754,38 @@ Ext.define('Shopware.grid.Controller', {
             store.load();
         }
 
-        return true
+        return true;
     },
+
+    /**
+     * @param Ext.data.Store store
+     * @param string term
+     */
+    localGridSearch: function(store, term) {
+        var match = false;
+        term = Ext.String.trim(term.toLowerCase());
+
+        if (term.length <= 0) {
+            store.clearFilter();
+            return;
+        }
+
+        store.filter(function(item) {
+            match = false;
+
+            for (var key in item.data) {
+                var value = item.data[key];
+
+                if (Ext.isString(value)) {
+                    var temp = value.toLowerCase();
+                    match = match || (temp.indexOf(term) > -1);
+                }
+            }
+
+            return match;
+        });
+    },
+
 
     /**
      * Event listener function of the { @link Shopware.grid.Panel:pageSizeCombo }.
