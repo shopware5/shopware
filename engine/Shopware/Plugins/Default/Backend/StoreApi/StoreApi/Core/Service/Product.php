@@ -109,13 +109,13 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
         return $this->gateway->getProductFeedback($productModel->getId());
     }
 
-    public function getProductUpdates($plugins)
+    public function getProductUpdates($plugins, $domain = null)
     {
         if (!is_array($plugins)) {
             return new Shopware_StoreApi_Exception_Response('The parameter plugins is not an array', 10);
         }
 
-        return $this->gateway->getProductUpdates($plugins);
+        return $this->gateway->getProductUpdates($plugins, $domain);
     }
 
     public function getBannerHighlights($version = null)
