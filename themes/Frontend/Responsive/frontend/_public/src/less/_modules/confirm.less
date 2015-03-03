@@ -126,8 +126,8 @@ It is displayed as the third step of the checkout process of shopware and shows 
         .unitize-width(18);
         .unitize-height(18);
         .border-radius(100%);
-        .unitize(6, 16, right);
-        .unitize(2, 16, top);
+        .unitize(right, 6);
+        .unitize(top, 2);
         .unitize-margin(8, 5, 8, 5);
         .animation(keyframe--spin 1s linear infinite);
         border: 2px solid @border-color;
@@ -139,7 +139,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
     .payment--panel {
         .payment--method-info,
         .shipping--method-info {
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
         }
 
         .payment--description,
@@ -156,7 +156,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
             .column--quantity { width: 26%; }
             .column--total-price { width: 28.5%; }
             .column--tax-price {
-                .unitize(10, 16, padding-right);
+                .unitize(padding-right, 10);
                 float: left;
                 width: 32%;
             }
@@ -216,12 +216,12 @@ It is displayed as the third step of the checkout process of shopware and shows 
             }
 
             .row--product .column--tax-price {
-                .unitize(42, 16, line-height);
-                .unitize(26, 16, padding-top);
+                .unitize(line-height, 42);
+                .unitize(padding-top, 26);
             }
 
             .panel--body {
-                .unitize(20, 16, padding-bottom);
+                .unitize(padding-bottom, 20);
             }
 
             .basket--footer {
@@ -248,7 +248,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
 
         .product--table .column--tax-price {
             .tax-price--label {
-                .unitize(12, 16, margin-bottom);
+                .unitize(margin-bottom, 12);
                 margin: 0;
             }
         }
@@ -269,7 +269,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
         .tos--panel {
 
             .column--checkbox {
-                .unitize(12, 16, margin-right);
+                .unitize(margin-right, 12);
                 width: auto;
             }
 
@@ -292,7 +292,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
 
             .panel--actions {
                 .clearfix();
-                .unitize(20, 16, bottom);
+                .unitize(bottom, 20);
                 position: absolute;
 
                 .btn {
@@ -358,7 +358,7 @@ It is displayed as the third step of the checkout process of shopware and shows 
 
 @media screen and (min-width: @desktopViewportWidth) {
     .confirm--content {
-        .unitize(25, 16, padding-top);
+        .unitize(padding-top, 25);
 
         & > .alert {
             .unitize-margin(45, 0, 0, 0);

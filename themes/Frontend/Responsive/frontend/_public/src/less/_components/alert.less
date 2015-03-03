@@ -15,8 +15,8 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
 */
 
 .alert {
-    .unitize(14, 16, font-size);
-    .unitize(24, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 24);
     .clearfix();
     position: relative;
     overflow: hidden;
@@ -91,13 +91,13 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
         .unitize-padding(10, 10);
         float: left;
 
-        p { .unitize(0, 16, margin-bottom) }
+        p { .unitize(margin-bottom, 0) }
     }
 
     // Icon column
     .alert--icon {
-        .unitize(18, 16, font-size);
-        .unitize(26, 16, line-height);
+        .unitize(font-size, 18);
+        .unitize(line-height, 26);
         width: 15%;
         text-align: center;
         font-weight: bold;

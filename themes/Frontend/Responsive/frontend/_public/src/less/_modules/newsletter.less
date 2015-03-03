@@ -7,18 +7,18 @@ It contains the viewport specific styles inside media queries.
 */
 
 .newsletter--content {
-    .unitize(10, 16, padding-top);
+    .unitize(padding-top, 10);
     .clearfix();
 
     .newsletter--error-messages {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
     }
 
     .newsletter--headline {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
 
         .newsletter--title {
-            .unitize(10, 16, margin-top);
+            .unitize(margin-top, 10);
         }
 
         .newsletter--info {
@@ -27,12 +27,12 @@ It contains the viewport specific styles inside media queries.
     }
 
     .js--fancy-select {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         width: 100%;
     }
 
     .newsletter--required-info {
-        .unitize(16, 16, margin-bottom);
+        .unitize(margin-bottom, 16);
     }
 
     .newsletter--action {
@@ -42,10 +42,10 @@ It contains the viewport specific styles inside media queries.
 
     // Newsletter listing
 .newsletter-listing--content {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
 
     .newsletter-listing--headline {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
     }
     .newsletter--title {
         .unitize-margin(10, 0);
@@ -67,7 +67,7 @@ It contains the viewport specific styles inside media queries.
         border-bottom: 1px solid @border-color;
 
         .newsletter-listing--entry-description {
-            .unitize(4, 16, margin-top);
+            .unitize(margin-top, 4);
             width: 65%;
         }
 
@@ -83,7 +83,7 @@ It contains the viewport specific styles inside media queries.
 
     // Newsletter detail
 .newsletter-detail--content {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
 
     .newsletter-detail--container {
         .clearfix();
@@ -93,7 +93,7 @@ It contains the viewport specific styles inside media queries.
             -webkit-overflow-scrolling: touch;
 
             iframe {
-                .unitize(500, 16, min-height);
+                .unitize(min-height, 500);
                 width: 100%;
                 border: none;
                 outline: none;
@@ -109,7 +109,7 @@ It contains the viewport specific styles inside media queries.
         }
 
         .newsletter-detail--window {
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
             width: 100%;
         }
     }
@@ -151,34 +151,34 @@ It contains the viewport specific styles inside media queries.
 @media screen and (min-width: @tabletViewportWidth) {
 
     .newsletter--content {
-        .unitize(20, 16, padding-top);
+        .unitize(padding-top, 20);
 
         .newsletter--error-messages {
-            .unitize(20, 16, margin-bottom);
+            .unitize(margin-bottom, 20);
         }
 
         .newsletter--headline {
-            .unitize(20, 16, margin-bottom);
+            .unitize(margin-bottom, 20);
         }
 
         .js--fancy-select {
-            .unitize(15, 16, margin-bottom);
+            .unitize(margin-bottom, 15);
             .unitize-width(290);
         }
     }
 
     // Newsletter listing
     .newsletter-listing--content {
-        .unitize(20, 16, margin-top);
+        .unitize(margin-top, 20);
 
         .newsletter-listing--headline {
-            .unitize(20, 16, margin-bottom);
+            .unitize(margin-bottom, 20);
         }
     }
 
     // Newsletter detail
     .newsletter-detail--content {
-        .unitize(20, 16, margin-top);
+        .unitize(margin-top, 20);
 
         .newsletter-detail--buttons .newsletter-detail--window {
             width: auto;
@@ -191,22 +191,22 @@ It contains the viewport specific styles inside media queries.
 
 	// Padding Newsletter Error Message Desktop
 	.newsletter--error-messages {
-		.unitize(0, 16, padding-top);
+		.unitize(padding-top, 0);
 	}
 
     .newsletter--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
         padding: 0;
 
         .newsletter--headline .newsletter--title {
-            .unitize(0, 16, margin-top);
+            .unitize(margin-top, 0);
         }
 
     }
 
     // Newsletter listing
     .newsletter-listing--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
 
         .newsletter-listing--table-headline {
             .newsletter-listing--headline-name {
@@ -228,6 +228,6 @@ It contains the viewport specific styles inside media queries.
 
     // Newsletter detail
     .newsletter-detail--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
     }
 }

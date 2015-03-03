@@ -100,7 +100,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 
     // Emotion wrapper
 .emotion--wrapper {
-	.unitize(200, 16, min-height);
+	.unitize(min-height, 200);
 	display: block;
 	margin: 0 auto;
 	overflow: hidden;
@@ -404,7 +404,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	}
 
 	.manufacturer--link {
-		.unitize(18, 16, font-size);
+		.unitize(font-size, 18);
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -463,8 +463,8 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		.video--play-icon {
 			.unitize-width(100);
 			.unitize-height(100);
-			.unitize(100, 16, font-size);
-			.unitize(100, 16, font-size);
+			.unitize(font-size, 100);
+			.unitize(font-size, 100);
 			display: block;
 			position: absolute;
 			top: 0; bottom: 0;
@@ -477,10 +477,10 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 
 	.video--play-btn {
 		.transition();
-		.unitize(25, 16, top);
-		.unitize(25, 16, right);
-		.unitize(40, 16, line-height);
-		.unitize(21, 16, font-size);
+		.unitize(top, 25);
+		.unitize(right, 25);
+		.unitize(line-height, 40);
+		.unitize(font-size, 21);
 		.unitize-width(42);
 		.unitize-height(42);
 		.border-radius(100%);
@@ -542,7 +542,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	}
 
 	.blog--title {
-		.unitize(14, 16, font-size);
+		.unitize(font-size, 14);
 		display: block;
 		font-weight: bold;
 		color: @text-color-dark;
@@ -554,8 +554,8 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	}
 
 	.blog--description {
-		.unitize(14, 16, font-size);
-		.unitize(20, 16, line-height);
+		.unitize(font-size, 14);
+		.unitize(line-height, 20);
 		color: @text-color;
 	}
 }

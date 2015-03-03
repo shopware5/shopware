@@ -9,12 +9,12 @@ More precise designations are commented inside the document.
 */
 
 .blog--listing {
-    .unitize(16, 16, margin-top);
+    .unitize(margin-top, 16);
 }
 
     // Blog Filter Options
 .blog--filter-btn {
-    .unitize(20, 16, margin-bottom);
+    .unitize(margin-bottom, 20);
 
     .filter--trigger {
         display: block;
@@ -50,8 +50,8 @@ More precise designations are commented inside the document.
     }
 
     .filter--headline {
-        .unitize(16, 16, font-size);
-        .unitize(26, 16, line-height);
+        .unitize(font-size, 16);
+        .unitize(line-height, 26);
         .unitize-margin(16, 10, 6, 10);
         font-weight: 700;
         color: @text-color-dark;
@@ -59,7 +59,7 @@ More precise designations are commented inside the document.
 
     .filter--entry {
         .unitize-padding(10, 20);
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         display: block;
         border-bottom: 1px solid @border-color;
 
@@ -93,7 +93,7 @@ More precise designations are commented inside the document.
 
         .collapse--header {
             .unitize-padding(10, 20, 10, 20, 16);
-            .unitize(5, 16, margin-bottom);
+            .unitize(margin-bottom, 5);
             font-weight: normal;
             color: @text-color;
 
@@ -141,18 +141,18 @@ More precise designations are commented inside the document.
     // Blog-Entry Box
 .blog--box {
     .clearfix();
-    .unitize(20, 16, margin-bottom);
+    .unitize(margin-bottom, 20);
 
     .blog--box-metadata {
-        .unitize(14, 16, padding-bottom);
-		.unitize(5, 16, padding-top);
-		.unitize(12, 16, font-size);
+        .unitize(padding-bottom, 14);
+		.unitize(padding-top, 5);
+		.unitize(font-size, 12);
 
         border-bottom: 1px solid @border-color;
 
         .blog--metadata {
-            .unitize(8, 16, padding-right);
-            .unitize(8, 16, margin-right);
+            .unitize(padding-right, 8);
+            .unitize(margin-right, 8);
             display: inline-block;
             border-right: 1px solid @border-color;
 
@@ -162,13 +162,13 @@ More precise designations are commented inside the document.
         }
 
         .blog--metadata-rating {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             color: @text-color;
         }
     }
 
     .blog--box-headline {
-        .unitize(18, 16, font-size);
+        .unitize(font-size, 18);
     }
 
     .blog--box-link {
@@ -190,24 +190,24 @@ More precise designations are commented inside the document.
     }
 
     .blog--box-description {
-        .unitize(16, 16, margin-top);
+        .unitize(margin-top, 16);
 
         .blog--box-description-short {
-            .unitize(16, 16, margin-bottom);
+            .unitize(margin-bottom, 16);
             .unitize(-6, 16, margin-top);
 
         }
     }
 
     .blog--box-tags {
-        .unitize(8, 16, margin-top);
-        .unitize(12, 16, font-size);
+        .unitize(margin-top, 8);
+        .unitize(font-size, 12);
     }
 }
 
     // Blog Detail
 .blog--detail {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
 
     .listing {
         margin: 0
@@ -219,7 +219,7 @@ More precise designations are commented inside the document.
     }
 
     .blog--detail-header {
-        .unitize(20, 16, margin-bottom);
+        .unitize(margin-bottom, 20);
     }
 
     .blog--detail-headline {
@@ -228,7 +228,7 @@ More precise designations are commented inside the document.
 
     .blog--detail-headline,
     .blog--detail-box-headline {
-        .unitize(18, 16, font-size);
+        .unitize(font-size, 18);
     }
 
     .js--fancy-select {
@@ -236,30 +236,30 @@ More precise designations are commented inside the document.
     }
 
     .blog--rating-link {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
         color: @text-color;
     }
 
     // Bookmarks
     .blog--bookmarks-icons {
-        .unitize(10, 16, margin-top);
+        .unitize(margin-top, 10);
         float: right;
     }
 
     .blog--bookmark {
-        .unitize(40, 16, font-size);
+        .unitize(font-size, 40);
     }
 
     // Thumbnails & Image
     .blog--detail-thumbnails {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
 
         .blog--thumbnail-image {
             margin: 0 auto;
         }
 
         .block {
-            .unitize(80, 16, height);
+            .unitize(height, 80);
             width: 23%;
         }
     }
@@ -297,19 +297,19 @@ More precise designations are commented inside the document.
         }
 
         .comments--list {
-            .unitize(30, 16, margin-top);
+            .unitize(margin-top, 30);
         }
 
         .list--entry {
             .clearfix();
-            .unitize(10, 16, margin-top);
+            .unitize(margin-top, 10);
         }
 
         .entry--meta {
             width: 100%;
 
             .meta--rating {
-                .unitize(5, 16, margin-bottom);
+                .unitize(margin-bottom, 5);
             }
         }
 
@@ -319,17 +319,17 @@ More precise designations are commented inside the document.
 
         .content--headline {
             .unitize-margin(10, 0, 5, 0);
-            .unitize(16, 16, font-size);
+            .unitize(font-size, 16);
         }
     }
 
     .blog--comments-headline {
-        .unitize(21, 16, font-size);
+        .unitize(font-size, 21);
         .unitize-margin(0, 0, 20, 0, 16);
     }
 
     .blog--comments-entry {
-        .unitize(20, 16, margin-bottom);
+        .unitize(margin-bottom, 20);
 
         &:last-child {
             margin: 0;
@@ -358,7 +358,7 @@ More precise designations are commented inside the document.
     }
 
     .blog--comments-rating {
-        .unitize(18, 16, font-size);
+        .unitize(font-size, 18);
         color: @rating-star-color;
     }
 
@@ -367,7 +367,7 @@ More precise designations are commented inside the document.
     }
 
     .blog--comments-entry-headline {
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         color: @text-color-dark;
         margin-top: 0;
     }
@@ -385,7 +385,7 @@ More precise designations are commented inside the document.
     }
 
     .blog--comments-voting {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         line-height: 1;
     }
 
@@ -402,7 +402,7 @@ More precise designations are commented inside the document.
 
     // Blog Listing
     .blog--listing {
-        .unitize(16, 16, margin-top);
+        .unitize(margin-top, 16);
 
         .blog--box-metadata {
             .unitize-margin(0, 20, 0, 20);
@@ -413,15 +413,15 @@ More precise designations are commented inside the document.
         }
 
         .panel--body {
-            .unitize(20, 16, padding-left);
-            .unitize(20, 16, padding-right);
+            .unitize(padding-left, 20);
+            .unitize(padding-right, 20);
         }
     }
 
     // Blog-Entry Box
     .blog--box {
         .blog--box-metadata {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
         }
 
         .blog--box-picture {
@@ -437,13 +437,13 @@ More precise designations are commented inside the document.
         }
 
         .blog--box-tags {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
         }
     }
 
     // Blog Content
     .blog--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
 
         // Blog Navigation
         .blog--navigation {
@@ -513,7 +513,7 @@ More precise designations are commented inside the document.
             }
 
             .filter--entry {
-                .unitize(14, 16, font-size);
+                .unitize(font-size, 14);
                 padding: 0;
                 border: 0 none;
             }
@@ -541,7 +541,7 @@ More precise designations are commented inside the document.
         // Blog-Entry Box
         .blog--box {
             .blog--box-headline {
-                .unitize(18, 16, font-size);
+                .unitize(font-size, 18);
             }
 
             .blog--box-link {
@@ -553,7 +553,7 @@ More precise designations are commented inside the document.
             }
 
             .blog--box-metadata {
-                .unitize(5, 16, padding-top);
+                .unitize(padding-top, 5);
             }
 
             .blog--box-content .blog--box-description {
@@ -564,11 +564,11 @@ More precise designations are commented inside the document.
 
     // Blog Detail
     .blog--detail {
-        .unitize(30, 16, margin-top);
+        .unitize(margin-top, 30);
 
         .blog--detail-headline {
-            .unitize(18, 16, font-size);
-            .unitize(5, 16, margin-bottom)
+            .unitize(font-size, 18);
+            .unitize(margin-bottom, 5)
         }
 
         .blog--box-metadata, .panel--title {
@@ -582,15 +582,15 @@ More precise designations are commented inside the document.
 
         // Thumbnails & Image
         .blog--detail-thumbnails {
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
 
             .blog--thumbnail-image {
                 margin: 0 auto;
             }
 
             .block {
-                .unitize(80, 16, width);
-                .unitize(80, 16, height);
+                .unitize(width, 80);
+                .unitize(height, 80);
             }
         }
 
@@ -611,38 +611,38 @@ More precise designations are commented inside the document.
         }
 
         .blog--comments-name, .blog--comments-summary {
-            .unitize(10, 16, padding-right);
+            .unitize(padding-right, 10);
             width: 50%;
             float: left;
         }
 
         .blog--comments-email, .blog--comments-voting {
-            .unitize(10, 16, padding-left);
+            .unitize(padding-left, 10);
             width: 50%;
             float: right;
         }
 
         .blog--comments-voting {
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
         }
 
         .blog--comments-captcha {
             .clearfix();
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
         }
 
         .blog--comments-captcha {
             width: 50%;
 
             .captcha--placeholder {
-                .unitize(5, 16, margin-top);
-                .unitize(10, 16, padding-right);
+                .unitize(margin-top, 5);
+                .unitize(padding-right, 10);
                 width: 30%;
                 float: left;
             }
 
             .captcha--code {
-                .unitize(10, 16, padding-right);
+                .unitize(padding-right, 10);
                 width: 70%;
                 float: right;
             }
@@ -670,7 +670,7 @@ More precise designations are commented inside the document.
     // Blog Listing
     .blog--listing {
         .listing--actions {
-            .unitize(15, 16, margin-top);
+            .unitize(margin-top, 15);
             padding-top: 0;
             margin-bottom: 0;
         }
@@ -682,14 +682,14 @@ More precise designations are commented inside the document.
 
     // Blog Detail
     .blog--detail {
-        .unitize(50, 16, margin-top);
+        .unitize(margin-top, 50);
 
         .blog--detail-headline {
-            .unitize(21, 16, font-size);
+            .unitize(font-size, 21);
         }
 
         .blog--bookmark {
-            .unitize(32, 16, font-size);
+            .unitize(font-size, 32);
         }
     }
 }
