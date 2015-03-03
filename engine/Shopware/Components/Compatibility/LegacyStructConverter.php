@@ -858,7 +858,10 @@ class LegacyStructConverter
         );
 
         if ($product->hasAttribute('core')) {
-            $data = array_merge($data, $product->getAttribute('core')->toArray());
+            $attributes = $product->getAttribute('core')->toArray();
+            unset($attributes['id'], $attributes['articleID'], $attributes['articledetailsID']);
+
+            $data = array_merge($data, $attributes);
         }
 
         $data['attributes'] = $product->getAttributes();
