@@ -148,7 +148,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sCountry = $this->getSelectedCountry();
         $this->View()->sState = $this->getSelectedState();
         $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+
+        $userData = $this->View()->sUserData;
+        $userData["additional"]["payment"] = $this->View()->sPayment;
+        $this->View()->sUserData = $userData;
 
         $this->View()->sDispatch = $this->getSelectedDispatch();
         $this->View()->sPayments = $this->getPayments();
@@ -966,10 +969,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * checks if the current user selected an available payment method
      *
-     * @param integer $currentPayment
+     * @param array $currentPayment
      * @return bool
      */
-    public function checkPaymentAvailability($currentPayment)
+    private function checkPaymentAvailability($currentPayment)
     {
         $payments = $this->getPayments();
         foreach ($payments as $availablePayment) {
@@ -977,6 +980,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 return true;
             }
         }
+
         return false;
     }
 
@@ -987,20 +991,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getSelectedPayment()
     {
-        //if the customer didn't choose an available payment
-        if (!$this->checkPaymentAvailability($this->View()->sUserData['additional']['payment']['id'])
-            && !$this->checkPaymentAvailability($this->session['sPaymentID'])
-            && !empty($this->getPayments())) {
-            
-            $payment = $this->getPayments();
-            $payment = array_shift($payment);
+        $paymentMethods = $this->getPayments();
 
-            $this->admin->sSYSTEM->_POST['sPayment'] = $payment['id'];
-            $this->admin->sUpdatePayment();
-        } elseif (!empty($this->View()->sUserData['additional']['payment'])) {
+        if (!empty($this->View()->sUserData['additional']['payment'])) {
             $payment = $this->View()->sUserData['additional']['payment'];
         } elseif (!empty($this->session['sPaymentID'])) {
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
+        }
+
+        if ($payment && !$this->checkPaymentAvailability($payment)) {
+            $payment = null;
         }
 
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
@@ -1014,13 +1014,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($payment)) {
             return $payment;
         }
-        $payments = $this->getPayments();
-        if (empty($payments)) {
+
+        if (empty($paymentMethods)) {
             unset($this->session['sPaymentID']);
+
             return false;
         }
-        $payment = reset($payments);
-        $this->session['sPaymentID'] = (int) $payment['id'];
+
+        $payment = reset($paymentMethods);
+        $this->session['sPaymentID'] = (int)$payment['id'];
+        $this->front->Request()->setPost('sPayment', (int)$payment['id']);
+        $this->admin->sUpdatePayment();
+
         return $payment;
     }
 
