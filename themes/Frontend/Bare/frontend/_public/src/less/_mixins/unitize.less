@@ -23,16 +23,16 @@ Unitize variable: `.unitize-variable(@value, @baseValue: 16)`<br/>
 	// @deprecated unitize mixin which should be called like ```.unitize(200, 16, height);```
 .unitize(@value, @baseValue: 16, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
 	@pxValue: @value;
-	@emValue: (@value / @baseValue);
+	@remValue: (@value / @baseValue);
 	@{property}: ~"@{pxValue}px";
-	@{property}: ~"@{emValue}rem";
+	@{property}: ~"@{remValue}rem";
 }
 	// New default unitize mixin which should be called like ```.unitize(height, 200);```
 .unitize(@property, @value, @baseValue: 16) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
 	@pxValue: @value;
-	@emValue: (@value / @baseValue);
+	@remValue: (@value / @baseValue);
 	@{property}: ~"@{pxValue}px";
-	@{property}: ~"@{emValue}rem";
+	@{property}: ~"@{remValue}rem";
 }
 
 .unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16, @property: font-size) {
@@ -53,23 +53,23 @@ Unitize variable: `.unitize-variable(@value, @baseValue: 16)`<br/>
 }
 
 .unitize-height(@value, @baseValue: 16) {
-	.unitize(@value, @baseValue, height);
+	.unitize(height, @value, @baseValue: 16);
 }
 
 .unitize-width(@value, @baseValue: 16) {
-	.unitize(@value, @baseValue, width);
+	.unitize(width, @value, @baseValue: 16);
 }
 
 .unitize-max-height(@value, @baseValue: 16) {
-	.unitize(@value, @baseValue, max-height);
+	.unitize(max-height, @value, @baseValue: 16);
 }
 
 .unitize-max-width(@value, @baseValue: 16) {
-	.unitize(@value, @baseValue, max-width);
+	.unitize(max-width, @value, @baseValue: 16);
 }
 
 .unitize-min-width(@value, @baseValue: 16) {
-    .unitize(@value, @baseValue, min-width);
+    .unitize(min-width, @value, @baseValue: 16);
 }
 
 .unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
