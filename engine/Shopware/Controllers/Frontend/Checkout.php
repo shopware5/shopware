@@ -148,7 +148,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sCountry = $this->getSelectedCountry();
         $this->View()->sState = $this->getSelectedState();
         $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+
+        $userData = $this->View()->sUserData;
+        $userData["additional"]["payment"] = $this->View()->sPayment;
+        $this->View()->sUserData = $userData;
 
         $this->View()->sDispatch = $this->getSelectedDispatch();
         $this->View()->sPayments = $this->getPayments();
@@ -964,16 +967,40 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * checks if the current user selected an available payment method
+     *
+     * @param array $currentPayment
+     * @return bool
+     */
+    private function checkPaymentAvailability($currentPayment)
+    {
+        $payments = $this->getPayments();
+        foreach ($payments as $availablePayment) {
+            if ($availablePayment['id'] === $currentPayment['id']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get selected payment or do payment mean selection automatically
      *
      * @return array
      */
     public function getSelectedPayment()
     {
+        $paymentMethods = $this->getPayments();
+
         if (!empty($this->View()->sUserData['additional']['payment'])) {
             $payment = $this->View()->sUserData['additional']['payment'];
         } elseif (!empty($this->session['sPaymentID'])) {
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
+        }
+
+        if ($payment && !$this->checkPaymentAvailability($payment)) {
+            $payment = null;
         }
 
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
@@ -987,13 +1014,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($payment)) {
             return $payment;
         }
-        $payments = $this->getPayments();
-        if (empty($payments)) {
+
+        if (empty($paymentMethods)) {
             unset($this->session['sPaymentID']);
+
             return false;
         }
-        $payment = reset($payments);
-        $this->session['sPaymentID'] = (int) $payment['id'];
+
+        $payment = reset($paymentMethods);
+        $this->session['sPaymentID'] = (int)$payment['id'];
+        $this->front->Request()->setPost('sPayment', (int)$payment['id']);
+        $this->admin->sUpdatePayment();
+
         return $payment;
     }
 
