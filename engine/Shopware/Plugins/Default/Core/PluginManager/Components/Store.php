@@ -353,7 +353,22 @@ class CommunityStore
         return array('success' => true, 'data' => $votes);
     }
 
+    /**
+     * @return string
+     */
+    private function getDomain()
+    {
+        /**@var $repo \Shopware\Models\Shop\Repository*/
+        $repo = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
+        $default = $repo->getActiveDefault();
+
+        if (!$default) {
+            return null;
+        }
+
+        return $default->getHost();
+    }
 
     /**
      * The getLicencedProducts is an internal helper function to hold the action function getLicencedProductsActions
@@ -746,7 +761,10 @@ class CommunityStore
      */
     public function getUpdateablePlugins($plugins)
     {
-        $resultSet = $this->getProductService()->getProductUpdates($plugins);
+        $resultSet = $this->getProductService()->getProductUpdates(
+            $plugins,
+            $this->getDomain()
+        );
 
         if ($resultSet instanceof Shopware_StoreApi_Exception_Response) {
             if ($resultSet->getCode() == 200) {

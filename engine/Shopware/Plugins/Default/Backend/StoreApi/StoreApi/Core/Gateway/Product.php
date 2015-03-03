@@ -90,10 +90,11 @@ class Shopware_StoreApi_Core_Gateway_Product extends Shopware_StoreApi_Core_Gate
         return $this->get('product/feedback', $json);
     }
 
-    public function getProductUpdates($plugins)
+    public function getProductUpdates($plugins, $domain = null)
     {
         $json = array(
-            'plugins' => $plugins
+            'plugins' => $plugins,
+            'domain'  => $domain
         );
 
         return $this->get('product/updates', $json);
