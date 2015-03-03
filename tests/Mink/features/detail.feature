@@ -108,3 +108,18 @@ Feature: detail page
 
         When  I press "In den Warenkorb"
         Then  I can select every 3. option of "sQuantity" from "3" to "30"
+
+    @variants
+    Scenario: I can toggle between product variants
+        Given I am on the detail page for article 2
+        Then  I should see "19,99"
+
+        When  I select "33" from "group[5]"
+        And   I press "Auswählen"
+        Then  I should not see "19,99"
+        But   I should see "59,99"
+
+        When  I select "34" from "group[5]"
+        And   I press "Auswählen"
+        Then  I should not see "59,99"
+        But   I should see "199,00"
