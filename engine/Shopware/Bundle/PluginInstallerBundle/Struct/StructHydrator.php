@@ -258,6 +258,7 @@ class StructHydrator
         $storePlugin->setCapabilityActivate($localPlugin->hasCapabilityActivate());
         $storePlugin->setCapabilityInstall($localPlugin->hasCapabilityInstall());
         $storePlugin->setCapabilitySecureUninstall($localPlugin->hasCapabilitySecureUninstall());
+        $storePlugin->setLocalDescription($localPlugin->getLocalDescription());
 
         $storePlugin->setCapabilityUpdate($localPlugin->hasCapabilityUpdate());
 
@@ -308,14 +309,16 @@ class StructHydrator
             }
             $licence->setIconPath($row['plugin']['iconPath']);
 
+            if (isset($row['creationDate'])) {
+                $date = new \DateTime($row['creationDate']);
+                $licence->setCreationDate($date);
+            }
+
             $subscription = null;
             if (isset($row['subscription'])) {
                 $subscription = $row['subscription'];
 
                 $licence->setSubscription($subscription['type']['name']);
-
-                $date = new \DateTime($subscription['creationDate']);
-                $licence->setCreationDate($date);
             }
 
             if (isset($subscription) && $subscription['expirationDate']) {
@@ -429,6 +432,7 @@ class StructHydrator
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);
         $plugin->setLocalIcon($data['iconPath']);
+        $plugin->setLocalDescription($data['description']);
 
         if (isset($data['installation_date']) && !empty($data['installation_date'])) {
             $date = new \DateTime($data['installation_date']);

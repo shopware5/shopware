@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
             cls: 'toolbar',
+            padding: '0 40 30',
             items: [ cancelButton ,'->', applyButton]
         });
     },

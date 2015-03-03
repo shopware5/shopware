@@ -3,14 +3,42 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.store-plugin-detail-meta-data-wrapper .advanced-feature-container {
+    padding: 15px 25px;
+    background: #ebf0f3;
+    border-radius: 5px;
+    margin-top: 20px;
 
-.plugin-description-container {
+    img {
+        float: left;
+    }
+    span {
+        position: relative;
+        left: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 21px;
+    }
+}
+
+.plugin-description-container, .plugin-local-description-container {
     max-width: 875px;
     margin: 0 auto;
     color: #555;
     line-height: 31px;
     font-size: 16px;
     padding: 20px;
+
+    h1 {
+        font-size: 24px !important;
+        font-weight: 400 !important;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 20px !important;
+        font-weight: 400 !important;
+        margin-bottom: 18px;
+    }
 
     li {
         background: theme-image($theme, 'plugin_manager/desc-list-dot.png') no-repeat;;

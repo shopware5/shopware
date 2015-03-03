@@ -293,6 +293,7 @@ class PluginLocalService
             'plugin.label',
             'plugin.active',
             'plugin.namespace',
+            'plugin.description',
             'plugin.source',
             'plugin.version as version',
             'plugin.capability_update',

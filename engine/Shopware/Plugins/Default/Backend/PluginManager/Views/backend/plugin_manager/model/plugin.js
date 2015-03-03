@@ -17,6 +17,7 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         { name: 'source',             type: 'string' },
         { name: 'code',               type: 'string', useNull: true, defaultValue: null },
         { name: 'description',        type: 'string' },
+        { name: 'localDescription',   type: 'string' },
         { name: 'author',             type: 'string' },
         { name: 'addons',             type: 'array' },
         { name: 'certified',          type: 'boolean' },
@@ -104,6 +105,15 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         );
     },
 
+    isAdvancedFeature: function() {
+        var addons = this.get('addons');
+
+        if (!addons) {
+            return false;
+        }
+        return addons.indexOf('advancedFeature') > -1;
+    },
+
     allowActivate: function () {
         return (
             !this.allowDummyUpdate()
@@ -124,10 +134,6 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         );
     },
 
-    allowFreeDownload: function() {
-        return this.get('freeDownload');
-    },
-
     allowUpdate: function () {
         return (
             !this.allowDummyUpdate()
@@ -139,6 +145,10 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
 
     allowDummyUpdate: function () {
         return (this.get('capabilityDummy') && !this.isLocalPlugin());
+    },
+
+    flaggedAsDummyPlugin: function() {
+        return (this.get('capabilityDummy'));
     },
 
     allowConfigure: function () {

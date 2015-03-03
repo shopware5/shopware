@@ -137,6 +137,11 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var string
      */
+    private $localDescription;
+
+    /**
+     * @var string
+     */
     private $contactForm;
 
     /**
@@ -827,5 +832,21 @@ class PluginStruct implements \JsonSerializable
     public function setLocalUpdateAvailable($localUpdateAvailable)
     {
         $this->localUpdateAvailable = $localUpdateAvailable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocalDescription()
+    {
+        return $this->localDescription;
+    }
+
+    /**
+     * @param string $localDescription
+     */
+    public function setLocalDescription($localDescription)
+    {
+        $this->localDescription = $localDescription;
     }
 }

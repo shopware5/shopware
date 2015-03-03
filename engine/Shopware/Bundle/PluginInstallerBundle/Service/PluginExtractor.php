@@ -61,9 +61,7 @@ class PluginExtractor
     {
         $stream = $this->openZip($filePath);
 
-        $namespace = $this->validateNamespace($stream);
-
-        $pluginName = $this->validatePluginName($stream, $namespace);
+        $namespace = $this->getPluginNamespace($stream);
 
         for ($i = 2; $i < $stream->numFiles; $i++) {
             $stat = $stream->statIndex($i);
@@ -74,12 +72,12 @@ class PluginExtractor
                 );
             }
 
-            if (strpos($stat['name'], $pluginName) !== 0) {
+            if (strpos($stat['name'], $namespace) !== 0) {
                 throw new \RuntimeException(
                     sprintf(
                         'Detected invalid file/directory %s in the plugin zip: %s',
                         $stat['name'],
-                        $pluginName
+                        $namespace
                     )
                 );
             }
@@ -89,44 +87,26 @@ class PluginExtractor
     }
 
     /**
-     * Checks if the first directory is one of the known
-     * plugin namespaces (frontend, backend, core)
-     *
      * @param \ZipArchive $stream
-     * @throws \RuntimeException
      * @return string
      */
-    private function validateNamespace(\ZipArchive $stream)
+    private function getPluginNamespace(\ZipArchive $stream)
     {
-        $first = $stream->statIndex(0);
-        $name = basename($first['name']);
+        $segments = $stream->statIndex(0);
+        $segments = array_filter(explode('/', $segments['name']));
 
-        if (!in_array($name, ['Frontend', 'Backend', 'Core'])) {
+        if (count($segments) <= 1) {
+            $segments = $stream->statIndex(1);
+            $segments = array_filter(explode('/', $segments['name']));
+        }
+
+        if (!in_array($segments[0], ['Frontend', 'Backend', 'Core'])) {
             throw new \RuntimeException(
-                sprintf('Uploaded zip archive contains no plugin namespace directory: %s', $name)
+                sprintf('Uploaded zip archive contains no plugin namespace directory: %s', $segments[1])
             );
         }
 
-        return $name;
-    }
-
-    /**
-     * @param \ZipArchive $stream
-     * @param string $namespace
-     * @return string
-     */
-    private function validatePluginName(\ZipArchive $stream, $namespace)
-    {
-        $second = $stream->statIndex(1);
-        $name = $second['name'];
-
-        if (strpos($name, $namespace) === false) {
-            throw new \RuntimeException(
-                sprintf('Zip file can only contain one plugin: %s', $name)
-            );
-        }
-
-        return $name;
+        return implode('/', $segments);
     }
 
     /**

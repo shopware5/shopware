@@ -92,7 +92,7 @@ class DownloadService
     {
         $content = $this->storeClient->doGetRequestRaw(
             $licence->getBinaryLink(),
-            [ 'token' => $token->getToken() ]
+            [ 'token' => $token->getToken(), 'domain' => $licence->getShop() ]
         );
 
         $file = $this->download($content);
