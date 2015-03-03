@@ -183,6 +183,9 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		rules.push('<b> {s name=exampleFieldSet/rules/countryIs}Country IS{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/countryIsNot}Country IS NOT{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/orderPositionsGt}Order positions >={/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/dunninglevelone}Dunning level one IS TRUE{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/dunningleveltwo}Dunning level two IS TRUE{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/dunninglevelthree}Dunning level three IS TRUE{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/encashment}Encashment IS TRUE{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/lastOrderLess}No order before at least X days{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/ordersLess}Quantity orders <={/s} </b>');
@@ -212,6 +215,9 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		syntax.push('{s name=exampleFieldSet/syntax/countryIso}Country-Iso{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
 		syntax.push('');
+		syntax.push('');
+		syntax.push('');
+		syntax.push('');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/categoryId}ID of the category{/s}');
@@ -239,6 +245,9 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
 		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
 		example.push('5');
+		example.push('');
+		example.push('');
+		example.push('');
 		example.push('');
 		example.push('30');
 		example.push('30');
