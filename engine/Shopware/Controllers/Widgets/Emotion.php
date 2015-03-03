@@ -188,21 +188,35 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         if ($data["article_type"] == "newcomer") {
             // new product
-            $data = array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false));
+            $data = array_merge(
+                $data,
+                Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false)
+            );
         } elseif ($data["article_type"] == "topseller") {
             // top product
             $temp = Shopware()->Modules()->Articles()->sGetPromotionById('top', $categoryId, 0, false);
             if (empty($temp["articleID"])) {
-                $data = array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
+                $data = array_merge(
+                    $data,
+                    Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
+                );
             } else {
                 $data = array_merge($data, $temp);
             }
         } elseif ($data["article_type"] == "random_article") {
             // random product
-            $data = array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
+            $data = array_merge(
+                $data,
+                Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
+            );
         } else {
             // Fix product
             $data = array_merge($data, $this->articleByNumber($data["article"]));
+        }
+
+        if (isset($data['sVoteAverange']) && !empty($data['sVoteAverange'])) {
+            // the listing pages use a 0 - 5 based average
+            $data['sVoteAverange']['averange'] = $data['sVoteAverange']['averange'] / 2;
         }
 
         return $data;
