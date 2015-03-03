@@ -362,6 +362,8 @@
 
             me._viewportWidth = me.getViewportWidth();
 
+            me._baseFontSize = parseInt($('html').css('font-size'));
+
             me.registerBreakpoint(breakpoints);
 
             me._checkResize();
@@ -406,10 +408,13 @@
                 breakpoints = me._breakpoints,
                 existingBreakpoint,
                 state = breakpoint.state,
-                enter = breakpoint.enter,
-                exit = breakpoint.exit,
+                enter = me._convertRemValue(breakpoint.enter),
+                exit = me._convertRemValue(breakpoint.exit),
                 len = breakpoints.length,
                 i = 0;
+
+            breakpoint.enter = enter;
+            breakpoint.exit = exit;
 
             for (; i < len; i++) {
                 existingBreakpoint = breakpoints[i];
@@ -426,10 +431,16 @@
             breakpoints.push(breakpoint);
 
             me._plugins[state] = {};
-
             me._checkBreakpoint(breakpoint, me._viewportWidth);
 
             return me;
+        },
+
+        _convertRemValue: function(remValue) {
+            var me = this,
+                baseFontSize = me._baseFontSize;
+
+            return remValue * baseFontSize;
         },
 
         /**
@@ -640,6 +651,7 @@
          * @returns {StateManager}
          */
         updatePlugin: function (selector, pluginName) {
+
             var me = this,
                 state = me._currentState,
                 pluginConfigs = me._plugins[state][selector] || {},

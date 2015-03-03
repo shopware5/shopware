@@ -19,7 +19,7 @@ Adding the class `is--disabled` changes the element to a disabled button.
 
 .btn {
     .unitize-padding(2, 10);
-    .unitize(line-height, 34);
+    .unitize(line-height, 32);
     .border-radius(3px);
     .appearance();
     .unitize(@btn-font-size, 16, font-size);
@@ -44,31 +44,31 @@ Adding the class `is--disabled` changes the element to a disabled button.
         @largeFontSize: @btn-font-size + 2;
         .unitize(@largeFontSize, 16, font-size);
     }
-    
-/*
-######Icon alignment
 
-To work properly the button needs the class `is--icon-left` or `is--icon-right` and an `icon` inside it.
-```
-<button class="btn is--icon-left">
-    <i class="icon--account"></i>
-    Icon left
-</button>
+    /*
+    ######Icon alignment
 
-<button class="btn is--icon-right">
-    <i class="icon--account"></i>
-    Icon right
-</button>
-```
-*/
+    To work properly the button needs the class `is--icon-left` or `is--icon-right` and an `icon` inside it.
+    ```
+    <button class="btn is--icon-left">
+        <i class="icon--account"></i>
+        Icon left
+    </button>
+
+    <button class="btn is--icon-right">
+        <i class="icon--account"></i>
+        Icon right
+    </button>
+    ```
+    */
     &.is--icon-right {
-        .unitize(line-height, 34);
+        .unitize(padding-right, 36);
 
         [class^="icon--"] {
             .unitize-height(16);
-            .unitize(line-height, 34);
+            .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
-            .unitize(line-height, 34);
+            .unitize(right, 12);
             font-weight: normal;
             display: block;
             position: absolute;
@@ -77,13 +77,13 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
     }
 
     &.is--icon-left {
-        .unitize(line-height, 34);
+        .unitize(padding-left, 36);
 
         [class^="icon--"] {
             .unitize-height(16);
-            .unitize(line-height, 34);
+            .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
-            .unitize(12, 16, left);
+            .unitize(left, 12);
             font-weight: normal;
             display: block;
             position: absolute;
@@ -112,37 +112,37 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
         outline: none;
     }
 
-/*
-######Button size class
-Adding a button-size class creates a larger or smaller button or changes the button properies.
+    /*
+    ######Button size class
+    Adding a button-size class creates a larger or smaller button or changes the button properies.
 
-Options: `is--large`, `is--small`, `is--full`, `is--center`
-```
-<button class="btn is--large">
-    Large button
-</button>
+    Options: `is--large`, `is--small`, `is--full`, `is--center`
+    ```
+    <button class="btn is--large">
+        Large button
+    </button>
 
-<button class="btn is--small">
-    Small button
-</button>
-```
-*/
+    <button class="btn is--small">
+        Small button
+    </button>
+    ```
+    */
 
     /** State: Small button */
     &.is--small {
-        .unitize(line-height, 34);
+        .unitize(line-height, 28);
     }
 
     /** State: Medium button */
     &.is--medium {
-        .unitize(line-height, 34);
-        .unitize(line-height, 34);
+        .unitize(line-height, 32);
+        .unitize(height, 38);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize(line-height, 34);
-        .unitize(line-height, 34);
+        .unitize(line-height, 36);
+        .unitize(height, 42);
     }
 
     /** State: Button with 100% width */
@@ -184,12 +184,12 @@ Options: `is--primary`, `is--secondary`
 
     /** State: Small button */
     &.is--small {
-        .unitize(line-height, 34);
+        .unitize(line-height, 30);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize(line-height, 34);
+        .unitize(line-height, 38);
     }
 }
 
