@@ -5,37 +5,37 @@ The unitize mixins provide all the benefits of relative units like em and rem wi
 
 ######Syntax:
 `@value` = pixel-value<br/>
-`@basevalue` = default browser font-size (16 in most cases)<br/>
+`@basevalue` = default browser font-size (@remScaleFactor in most cases)<br/>
 `@property` = the property that should be unitized.
 
 ######Examples
-Unitize font-size: `.unitize(@value, @baseValue: 16, @property: font-size)`<br/>
-Unitize height: `.unitize-height(@value, @baseValue: 16)`<br/>
-Unitize width: `.unitize-width(@value, @baseValue: 16)`<br/>
-Unitize max-height: `.unitize-max-height(@value, @baseValue: 16)`<br/>
-Unitize max-width `.unitize-max-width(@value, @baseValue: 16)`<br/>
-Unitize min-width: `.unitize-min-width(@value, @baseValue: 16)`<br/>
-Unitize padding: `.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16)`<br/>
-Unitize margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16)`<br/>
-Unitize variable: `.unitize-variable(@value, @baseValue: 16)`<br/>
+Unitize font-size: `.unitize(@value, @baseValue: @remScaleFactor, @property: font-size)`<br/>
+Unitize height: `.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
+Unitize width: `.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
+Unitize max-height: `.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
+Unitize max-width `.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
+Unitize min-width: `.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
+Unitize padding: `.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+Unitize margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+Unitize variable: `.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
 */
 
-	// @deprecated unitize mixin which should be called like ```.unitize(200, 16, height);```
-.unitize(@value, @baseValue: 16, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
+	// @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
+.unitize(@value, @baseValue: @remScaleFactor, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
 	@pxValue: @value;
 	@remValue: (@value / @baseValue);
 	@{property}: ~"@{pxValue}px";
 	@{property}: ~"@{remValue}rem";
 }
 	// New default unitize mixin which should be called like ```.unitize(height, 200);```
-.unitize(@property, @value, @baseValue: 16) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
+.unitize(@property, @value, @baseValue: @remScaleFactor) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
 	@pxValue: @value;
 	@remValue: (@value / @baseValue);
 	@{property}: ~"@{pxValue}px";
 	@{property}: ~"@{remValue}rem";
 }
 
-.unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16, @property: font-size) {
+.unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor, @property: padding) {
 	@pxTopValue: @topValue;
 	@emTopValue: (@topValue / @baseValue);
 
@@ -52,34 +52,38 @@ Unitize variable: `.unitize-variable(@value, @baseValue: 16)`<br/>
 	@{property}: ~"@{emTopValue}rem @{emRightValue}rem @{emBottomValue}rem @{emLeftValue}rem";
 }
 
-.unitize-height(@value, @baseValue: 16) {
-	.unitize(height, @value, @baseValue: 16);
+.unitize-height(@value, @baseValue: @remScaleFactor) {
+	.unitize(height, @value, @baseValue);
 }
 
-.unitize-width(@value, @baseValue: 16) {
-	.unitize(width, @value, @baseValue: 16);
+.unitize-width(@value, @baseValue: @remScaleFactor) {
+	.unitize(width, @value, @baseValue);
 }
 
-.unitize-max-height(@value, @baseValue: 16) {
-	.unitize(max-height, @value, @baseValue: 16);
+.unitize-max-height(@value, @baseValue: @remScaleFactor) {
+	.unitize(max-height, @value, @baseValue);
 }
 
-.unitize-max-width(@value, @baseValue: 16) {
-	.unitize(max-width, @value, @baseValue: 16);
+.unitize-min-height(@value, @baseValue: @remScaleFactor) {
+	.unitize(min-height, @value, @baseValue);
 }
 
-.unitize-min-width(@value, @baseValue: 16) {
-    .unitize(min-width, @value, @baseValue: 16);
+.unitize-max-width(@value, @baseValue: @remScaleFactor) {
+	.unitize(max-width, @value, @baseValue);
 }
 
-.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
+.unitize-min-width(@value, @baseValue: @remScaleFactor) {
+    .unitize(min-width, @value, @baseValue);
+}
+
+.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
 }
 
-.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
+.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
 }
 
-.unitize-variable(@value, @baseValue: 16) {
+.unitize-variable(@value, @baseValue: @remScaleFactor) {
 	@emValue: (@value / @baseValue);
 }
