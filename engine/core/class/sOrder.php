@@ -493,47 +493,44 @@ class sOrder
             $this->sUserData["additional"]["user"]["affiliate"]
         );
 
-        $sql = "
-        INSERT INTO s_order (
-            ordernumber, userID, invoice_amount,invoice_amount_net,
-            invoice_shipping,invoice_shipping_net, ordertime, status,
-            cleared, paymentID, transactionID, customercomment,
-            net,taxfree, partnerID,temporaryID,referer,language,dispatchID,
-            currency,currencyFactor,subshopID,remote_addr
-        ) VALUES ('".$orderNumber."',
-            ".$this->sUserData["additional"]["user"]["id"].",
-            ".$this->sBasketData["AmountWithTaxNumeric"].",
-            ".$this->sBasketData["AmountNetNumeric"].",
-            ".floatval($this->sShippingcostsNumeric).",
-            ".floatval($this->sShippingcostsNumericNet).",
-            now(),
-            0,
-            17,
-            ".$this->sUserData["additional"]["user"]["paymentID"].",
-            '".$this->bookingId."',
-            ".$this->db->quote($this->sComment).",
-            $net,
-            $taxfree,
-            " . $this->db->quote((string) $partner) . ",
-            ".$this->db->quote((string) $this->uniqueID).",
-            ".$this->db->quote((string) $this->getSession()->offsetGet('sReferer')).",
-            '".$shop->getId()."',
-            '$dispatchId',
-            '".$this->sSYSTEM->sCurrency["currency"]."',
-            '".$this->sSYSTEM->sCurrency["factor"]."',
-            '".$mainShop->getId()."',
-            ".$this->db->quote((string) $_SERVER['REMOTE_ADDR'])."
-        )
-        ";
+        $orderParams = array(
+            'ordernumber'          => $orderNumber,
+            'userID'               => $this->sUserData["additional"]["user"]["id"],
+            'invoice_amount'       => $this->sBasketData["AmountWithTaxNumeric"],
+            'invoice_amount_net'   => $this->sBasketData["AmountNetNumeric"],
+            'invoice_shipping'     => floatval($this->sShippingcostsNumeric),
+            'invoice_shipping_net' => floatval($this->sShippingcostsNumericNet),
+            'ordertime'            => new Zend_Db_Expr('NOW()'),
+            'status'               => 0,
+            'cleared'              => 17,
+            'paymentID'            => $this->sUserData["additional"]["user"]["paymentID"],
+            'transactionID'        => (string) $this->bookingId,
+            'customercomment'      => $this->sComment,
+            'net'                  => $net,
+            'taxfree'              => $taxfree,
+            'partnerID'            => (string) $partner,
+            'temporaryID'          => (string) $this->uniqueID,
+            'referer'              => (string) $this->getSession()->offsetGet('sReferer'),
+            'language'             => $shop->getId(),
+            'dispatchID'           => $dispatchId,
+            'currency'             => $this->sSYSTEM->sCurrency["currency"],
+            'currencyFactor'       => $this->sSYSTEM->sCurrency["factor"],
+            'subshopID'            => $mainShop->getId(),
+            'remote_addr'          => (string) $_SERVER['REMOTE_ADDR']
+        );
 
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterSQL', $sql, array('subject'=>$this));
+        $orderParams = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterParams', $orderParams, array('subject' => $this));
 
         try {
-            $affectedRows = $this->db->executeUpdate($sql);
+            $this->db->beginTransaction();
+            $affectedRows = $this->db->insert('s_order', $orderParams);
             $orderID = $this->db->lastInsertId();
+            $this->db->commit();
         } catch (Exception $e) {
+            $this->db->rollBack();
             throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} :" . $e->getMessage(), 0, $e);
         }
+
         if (!$affectedRows || !$orderID) {
             throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER["HTTP_HOST"]} : No rows affected or no order id created.", 0);
         }
