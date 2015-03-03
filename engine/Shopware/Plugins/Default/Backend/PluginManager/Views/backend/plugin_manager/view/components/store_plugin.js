@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
 
         me.callParent(arguments);
 
-        event = 'plugin-reloaded-' + me.record.get('technicalName');
+        event = me.getPluginReloadedEventName(me.record);
         Shopware.app.Application.on(event, function(updated) {
             me.removeAll();
             me.add(me.loadRecord(updated));
@@ -176,6 +176,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     cls: 'button dummy',
                     html: '{s name="install"}{/s}',
                     handler: function() {
+                        me.registerConfigRequiredEvent(me.record);
                         me.updateDummyPluginEvent(me.record);
                     }
                 });
@@ -194,6 +195,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     cls: 'button install',
                     html: '{s name="install"}{/s}',
                     handler: function() {
+                        me.registerConfigRequiredEvent(me.record);
                         me.installPluginEvent(me.record);
                     }
                 });
@@ -216,6 +218,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     }
                 });
 
+            case me.record.isAdvancedFeature():
             case me.record.isLocalPlugin():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button locale',

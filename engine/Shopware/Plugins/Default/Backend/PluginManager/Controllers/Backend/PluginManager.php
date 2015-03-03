@@ -376,10 +376,12 @@ class Shopware_Controllers_Backend_PluginManager
         $link = $this->Request()->getParam('binaryLink');
 
         $licence = $this->Request()->getParam('licenceKey');
+        $domain  = $this->Request()->getParam('domain');
 
         $struct = new LicenceStruct();
         $struct->setBinaryLink($link);
         $struct->setLicenseKey($licence);
+        $struct->setShop($domain);
 
         try {
             $this->downloadPluginLicence($struct);
@@ -436,10 +438,15 @@ class Shopware_Controllers_Backend_PluginManager
     {
         $technicalName = $this->Request()->getParam('technicalName', null);
 
-        $this->get('shopware_plugininstaller.plugin_download_service')->downloadDummy(
-            $technicalName,
-            $this->getVersion()
-        );
+        try {
+            $this->get('shopware_plugininstaller.plugin_download_service')->downloadDummy(
+                $technicalName,
+                $this->getVersion()
+            );
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
 
         $this->View()->assign('success', true);
     }
