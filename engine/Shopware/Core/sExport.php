@@ -223,6 +223,7 @@ class sExport
               COALESCE (s.template_id, m.template_id) AS template_id,
               COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
               s.category_id,
+              s.currency_id,
               s.customer_group_id,
               s.fallback_id,
               s.customer_scope,
