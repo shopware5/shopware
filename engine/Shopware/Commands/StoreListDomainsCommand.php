@@ -24,7 +24,6 @@
 
 namespace Shopware\Commands;
 
-use CommunityStore;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,20 +55,20 @@ class StoreListDomainsCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $auth = $this->setupAuth($input, $output);
+        $token = $this->setupAuth($input, $output);
 
-        /** @var \CommunityStore $store */
-        $store = $this->container->get('CommunityStore');
+        $shops = $this->container->get('shopware_plugininstaller.account_manager_service')
+            ->getShops($token);
 
         $domains = array();
 
-        /** @var \Shopware_StoreApi_Models_Domain $domain */
-        foreach ($store->getAccountService()->getDomains($auth) as $domain) {
+        foreach ($shops as $shop) {
             $domains[] = array(
-               $domain->getDomain(),
-               number_format($domain->getBalance(), 2)
+               $shop['domain'],
+               number_format($shop['balance'], 2)
             );
         }
+
         $table = $this->getHelperSet()->get('table');
         $table->setHeaders(array('Domain', 'Balance'))
               ->setRows($domains);

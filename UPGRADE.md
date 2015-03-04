@@ -1,10 +1,5 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
-* Removed classes:
-    * `ConfigIframe.php` backend controller
-    * `Viewport.php` frontend controller
-* Removed template files:
-    * `backend\index\iframe.tpl`
 
 ## 5.0.0 Beta 3
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
@@ -27,6 +22,14 @@ In this document you will find a changelog of the important changes related to t
     * `themes/Backend/ExtJs/backend/config/store/form/template.js`
     * `themes/Backend/ExtJs/backend/config/store/model/template.js`
     * `themes/Backend/ExtJs/backend/config/store/controller/template.js`
+* Removed classes:
+    * `ConfigIframe.php` backend controller
+    * `Viewport.php` frontend controller
+* Removed template files:
+    * `backend\index\iframe.tpl`
+* Removed commands `sw:store:download:update` and `sw:store:licenseplugin`.
+* Added `sw:store:download` command to download install and updates of plugins.
+* Added `sw:store:list:integrated` command to list all shopware 5 integrated plugins.
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
@@ -95,11 +98,11 @@ In this document you will find a changelog of the important changes related to t
     * `Enlight_Extensions_Site_Bootstrap`
     * `Enlight_Components_Log` (also accessed as `Shopware->Log()`)
 * Removed methods/variables:
-    * `sArticles::sGetAllArticlesInCategory()` 
+    * `sArticles::sGetAllArticlesInCategory()`
     * `sSystem::sSubShops`
     * `sSystem::sLanguageData`. Please use `Shopware()->Shop()` instead
     * `sSystem::sLanguage`. Please use `Shopware()->Shop()->getId()` instead
-    * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()` 
+    * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()`
     * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
     * `sExport::sGetLanguage()`
     * `Shopware_Controllers_Backend_Article::getConfiguratorPriceSurchargeRepository()`
@@ -108,8 +111,8 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Controllers_Backend_Article::getArticlePriceSurcharges()`
     * `Shopware_Controllers_Backend_Article::getSurchargeByOptionId()`
     * `sArticles::sGetArticlesAverangeVote`
-    * `sArticles::getCategoryFilters` 
-    * `sArticles::getFilterSortMode` 
+    * `sArticles::getCategoryFilters`
+    * `sArticles::getFilterSortMode`
     * `sArticles::addFilterTranslation`
     * `sArticles::sGetArticleConfigTranslation`
     * `sArticles::sGetArticlesByName`
@@ -144,7 +147,7 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Modules_Articles_GetFilterQuery`
     * `Shopware_Modules_Article_GetFilterSortMode`
     * `Shopware_Modules_Article_GetCategoryFilters`
-    * `Enlight_Controller_Front_SendResponse` 
+    * `Enlight_Controller_Front_SendResponse`
     * `Enlight_Controller_Front_AfterSendResponse`
     * `Shopware_Modules_Articles_sGetProductByOrdernumber_FilterSql`
     * `Shopware_Modules_Articles_GetPromotions_FilterSQL`
@@ -168,7 +171,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed database table/columns:
     * `s_core_rewrite`
     * `s_cms_groups`
-    * `s_core_auth.admin` 
+    * `s_core_auth.admin`
     * `s_core_auth.salted`
     * `s_order_basket.liveshoppingID`
     * `s_order_basket.liveshoppingID`
@@ -374,7 +377,7 @@ In this document you will find a changelog of the important changes related to t
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
 * New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
-* The `Google Analytics` plugin is deprecated and will be removed in the next release. Please use the new `Google Services` plugin instead, available on the community store. 
+* The `Google Analytics` plugin is deprecated and will be removed in the next release. Please use the new `Google Services` plugin instead, available on the community store.
 
 ## 4.3.1
 

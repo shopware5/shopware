@@ -29,6 +29,7 @@ use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Components\Model\ModelManager;
 
 /**
  * @package Shopware\Bundle\PluginInstallerBundle\Service
@@ -49,20 +50,39 @@ class AccountManagerService
      * @var \Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
+    /**
+     * @var ModelManager
+     */
+    private $entityManager;
 
     /**
      * @param StoreClient $storeClient
      * @param StructHydrator $structHydrator
      * @param \Shopware_Components_Snippet_Manager $snippetManager
+     * @param ModelManager $entityManager
      */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $structHydrator,
-        \Shopware_Components_Snippet_Manager $snippetManager
+        \Shopware_Components_Snippet_Manager $snippetManager,
+        ModelManager $entityManager
     ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $structHydrator;
         $this->snippetManager = $snippetManager;
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomain()
+    {
+        $repo = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
+
+        $default = $repo->getActiveDefault();
+
+        return $default->getHost();
     }
 
     /**

@@ -66,28 +66,52 @@ class DownloadService
     }
 
     /**
-     * @param UpdateRequest $context
+     * @param UpdateRequest $request
      * @return bool
      * @throws \Exception
      */
-    public function downloadUpdate(UpdateRequest $context)
+    public function downloadUpdate(UpdateRequest $request)
     {
-        $content = $this->storeClient->doAuthGetRequestRaw(
-            $context->getToken(),
-            '/pluginFiles/'. $context->getPluginName() . '/file',
-            [
-                'shopwareVersion' => $context->getShopwareVersion(),
-                'domain' => $context->getDomain()
-            ]
-        );
+        $content = $this->executeDownloadRequest($request);
 
         $file = $this->download($content);
 
-        $this->extractPluginZip($file, $context->getPluginName());
+        $this->extractPluginZip($file, $request->getPluginName());
 
         return true;
     }
 
+    /**
+     * @param UpdateRequest $request
+     * @return string
+     */
+    private function executeDownloadRequest(UpdateRequest $request)
+    {
+        if ($request->getToken()) {
+            return $this->storeClient->doAuthGetRequestRaw(
+                $request->getToken(),
+                '/pluginFiles/' . $request->getPluginName() . '/file',
+                [
+                    'shopwareVersion' => $request->getShopwareVersion(),
+                    'domain' => $request->getDomain()
+                ]
+            );
+        }
+
+        return $this->storeClient->doGetRequestRaw(
+            '/pluginFiles/'. $request->getPluginName() . '/file',
+            [
+                'shopwareVersion' => $request->getShopwareVersion(),
+                'domain' => $request->getDomain()
+            ]
+        );
+    }
+
+    /**
+     * @param AccessTokenStruct $token
+     * @param LicenceStruct $licence
+     * @return bool
+     */
     public function downloadPlugin(AccessTokenStruct $token, LicenceStruct $licence)
     {
         $content = $this->storeClient->doGetRequestRaw(
@@ -102,6 +126,11 @@ class DownloadService
         return true;
     }
 
+    /**
+     * @param $pluginName
+     * @param $version
+     * @return bool
+     */
     public function downloadDummy($pluginName, $version)
     {
         $content = $this->storeClient->doGetRequestRaw(

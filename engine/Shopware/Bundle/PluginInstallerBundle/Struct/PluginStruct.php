@@ -112,7 +112,7 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var boolean
      */
-    private $capabilitySecureUninstall = fallse;
+    private $capabilitySecureUninstall = false;
 
     /**
      * @var boolean

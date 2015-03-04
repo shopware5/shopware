@@ -299,6 +299,10 @@ class StructHydrator
         $licences = [];
 
         foreach ($data as $row) {
+            if (!isset($row['plugin'])) {
+                continue;
+            }
+
             $licence = new LicenceStruct();
 
             $licence->setLabel($row['description']);
@@ -372,7 +376,9 @@ class StructHydrator
         $plugin->setCode($data['code']);
         $plugin->setDescription($data['description']);
         $plugin->setVersion($data['version']);
-        $plugin->setContactForm($data['contactForm']);
+        if (isset($data['contactForm'])) {
+            $plugin->setContactForm($data['contactForm']);
+        }
         $plugin->setChangelog($data['changelog']);
         $plugin->setInstallationManual($data['installationManual']);
         $plugin->setExampleUrl($data['examplePageUrl']);
@@ -551,9 +557,18 @@ class StructHydrator
             $price = new PriceStruct($type);
 
             $price->setId((int) $row['id']);
-            $price->setPrice((float) $row['price']);
-            $price->setSubscription((bool) $row['subscription']);
-            $price->setDuration($row['duration']);
+
+            if (isset($row['price'])) {
+                $price->setPrice((float) $row['price']);
+            }
+
+            if (isset($row['subscription'])) {
+                $price->setSubscription((bool) $row['subscription']);
+            }
+
+            if (isset($row['duration'])) {
+                $price->setDuration($row['duration']);
+            }
 
             $prices[] = $price;
         }
@@ -577,8 +592,7 @@ class StructHydrator
             $comment->setRating((int) $row['rating']);
 
             if (isset($row['creationDate']) && !empty($row['creationDate'])) {
-                $date = new \DateTime();
-                $date->setTimestamp($row['creationDate']);
+                $date = new \DateTime($row['creationDate']['date']);
                 $comment->setCreationDate($date);
             }
             $comments[] = $comment;
