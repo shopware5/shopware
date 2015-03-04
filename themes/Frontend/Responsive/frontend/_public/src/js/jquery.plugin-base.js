@@ -18,7 +18,33 @@
 }(jQuery));
 
 ;(function ($) {
-    "use strict";
+    'use strict';
+
+    var numberRegex = /^\-?\d*\.?\d*$/,
+        objectRegex = /^[\[\{]/;
+
+    /**
+     * Tries to deserialize the given string value and returns the right
+     * value if its successful.
+     *
+     * @private
+     * @method deserializeValue
+     * @param {String} value
+     * @returns {String|Boolean|Number|Object|Array|null}
+     */
+    function deserializeValue(value) {
+        try {
+            return !value ? value : value === 'true' || (
+                value === 'false' ? false
+                    : value === 'null' ? null
+                    : numberRegex.test(value) ? +value
+                    : objectRegex.test(value) ? $.parseJSON(value)
+                    : value
+                )
+        } catch (e) {
+            return value;
+        }
+    }
 
     /**
      * Constructor method of the PluginBase class. This method will try to
@@ -268,9 +294,11 @@
 
         /**
          * Fetches the configured options based on the {@link PluginBase.$el}.
+         *
+         * @param {Boolean} shouldDeserialize
          * @returns {mixed} configuration
          */
-        applyDataAttributes: function () {
+        applyDataAttributes: function (shouldDeserialize) {
             var me = this, attr;
 
             $.each(me.opts, function (key) {
@@ -280,15 +308,9 @@
                     return true;
                 }
 
-                if (attr === 'true') {
-                    return (me.opts[key] = true);
-                }
+                me.opts[key] = shouldDeserialize !== false ? deserializeValue(attr) : attr;
 
-                if (attr === 'false') {
-                    return !(me.opts[key] = false);
-                }
-
-                me.opts[key] = attr;
+                return true;
             });
 
             $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
