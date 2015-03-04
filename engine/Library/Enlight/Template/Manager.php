@@ -167,6 +167,8 @@ class Enlight_Template_Manager extends Smarty
             array($bareDir)
         );
 
+        $inheritance = $this->enforceEndingSlash($inheritance);
+
         $inheritance = array_unique($inheritance);
 
         return parent::setTemplateDir($inheritance);
@@ -232,5 +234,17 @@ class Enlight_Template_Manager extends Smarty
         //Enlight_Template_Manager_AddTemplateDir
         $this->eventManager = $eventManager;
         return $this;
+    }
+
+    /**
+     * @param string[] $inheritance
+     * @return string[]
+     */
+    private function enforceEndingSlash($inheritance)
+    {
+        return array_map(function ($dir) {
+            $dir = rtrim($dir, '/') . '/';
+            return $dir;
+        }, $inheritance);
     }
 }
