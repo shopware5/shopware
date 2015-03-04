@@ -6,6 +6,7 @@ In this document you will find a changelog of the important changes related to t
 * Fix translation API, rename all `localeId` references to `shopId`. Create / update / delete with `localeId` are still supported as legacy.
 * `\Shopware\Models\Translation\Translation` now correctly relates to `Shop` model instead of `Locale`.
 * widgets/recommendations - boughtAction & viewedAction calls no more the sGetPromotionById function.
+* Added emotion positioning number for ordering emotions by position number if there are more emotions on one page
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
