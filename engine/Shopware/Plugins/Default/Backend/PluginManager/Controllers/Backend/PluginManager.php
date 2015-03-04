@@ -32,6 +32,7 @@ use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
@@ -524,10 +525,10 @@ class Shopware_Controllers_Backend_PluginManager
         $technicalName = $this->Request()->getParam('technicalName');
 
         $context = new UpdateRequest(
-            $this->getAccessToken(),
             $technicalName,
             $this->getDomain(),
-            $this->getVersion()
+            $this->getVersion(),
+            $this->getAccessToken()
         );
 
         $this->get('shopware_plugininstaller.plugin_download_service')
@@ -609,11 +610,7 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function getDomain()
     {
-        $repo = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-
-        $default = $repo->getActiveDefault();
-
-        return $default->getHost();
+        return $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
     }
 
     /**
@@ -702,17 +699,9 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function importLicence($licenceKey)
     {
-        $persister = new \Shopware_Components_LicensePersister(
-            $this->get('dbal_connection')
-        );
-
-        $info = \Shopware_Components_License::readLicenseInfo($licenceKey);
-
-        if ($info == false) {
-            throw new RuntimeException();
-        }
-
-        return $persister->saveLicense($info, true);
+        /**@var $service PluginLicenceService*/
+        $service = $this->get('shopware_plugininstaller.plugin_licence_service');
+        return $service->importLicence($licenceKey);
     }
 
     /**
@@ -721,14 +710,9 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function downloadPluginLicence(LicenceStruct $licence)
     {
-        $success = $this->get('shopware_plugininstaller.plugin_download_service')
-            ->downloadPlugin($this->getAccessToken(), $licence);
-
-        if ($success && strlen($licence->getLicenseKey()) > 0) {
-            $this->importLicence($licence->getLicenseKey());
-        }
-
-        $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        /**@var $service PluginLicenceService*/
+        $service = $this->get('shopware_plugininstaller.plugin_licence_service');
+        $service->downloadPluginLicence($this->getAccessToken(), $licence);
     }
 
     private function loadBasketPlugins(BasketStruct $basket, $positions)

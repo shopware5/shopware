@@ -58,10 +58,10 @@ class UpdateRequest
      * @param $shopwareVersion
      */
     public function __construct(
-        AccessTokenStruct $token,
         $pluginName,
         $domain,
-        $shopwareVersion
+        $shopwareVersion,
+        $token = null
     ) {
         $this->domain = $domain;
         $this->shopwareVersion = $shopwareVersion;
