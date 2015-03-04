@@ -21,7 +21,7 @@
             }
         }
 
-        return property;
+        return null;
     };
 
     var transitionProperty = getVendorPropertyName('transition'),
@@ -751,6 +751,9 @@
                 scale = me._imageScale,
                 startTouch = me._startTouchPoint,
                 touchDistance = me._touchDistance,
+                slideStyle = me._$slide[0].style,
+                percentage,
+                offset,
                 distance,
                 deltaX,
                 deltaY;
@@ -773,8 +776,8 @@
                         return;
                     }
 
-                    var offset = (me._slideIndex * -100),
-                        percentage = (deltaX / me._$slide.width()) * 100;
+                    offset = (me._slideIndex * -100);
+                    percentage = (deltaX / me._$slide.width()) * 100;
 
                     if (me._slideIndex === 0 && deltaX > 0) {
                         percentage *= Math.atan(percentage) / Math.PI;
@@ -784,7 +787,12 @@
                         percentage *= Math.atan(percentage) / -Math.PI;
                     }
 
-                    me._$slide.css('left', (offset + percentage) + '%');
+                    if (transitionProperty && transformProperty) {
+                        slideStyle[transitionProperty] = 'none';
+                        slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%)';
+                    } else {
+                        slideStyle['left'] = (offset + percentage) + '%';
+                    }
 
                     if (opts.preventScrolling) {
                         event.preventDefault();
@@ -1443,9 +1451,17 @@
          * @param {Number} index
          */
         setIndex: function (index) {
-            var me = this;
+            var me = this,
+                slideStyle = me._$slide[0].style,
+                percentage = ((index || me._slideIndex) * -100);
 
-            me._$slide.css('left', ((index || me._slideIndex) * -100) + '%');
+            if (transformProperty && transitionProperty) {
+                slideStyle[transitionProperty] = 'none';
+                slideStyle[transformProperty] = 'translateX(' + percentage + '%)';
+            } else {
+                slideStyle['left'] = percentage + '%';
+            }
+
             me._$currentImage = $(me._$images[index]);
 
             me.updateMaxZoomValue();
@@ -1660,7 +1676,7 @@
         slide: function (index, callback) {
             var me = this,
                 opts = me.opts,
-                method = (Modernizr.csstransitions) ? 'transition' : 'animate';
+                slideStyle = me._$slide[0].style;
 
             me._slideIndex = index;
 
@@ -1679,10 +1695,19 @@
             }
 
             me.resetTransformation(true, function () {
-                me._$slide[method]({
-                    'left': (index * -100) + '%',
-                    'easing': 'cubic-bezier(.2,.89,.75,.99)'
-                }, opts.animationSpeed, $.proxy(callback, me));
+                if (transitionProperty && transformProperty) {
+                    slideStyle[transitionProperty] = 'all ' + opts.animationSpeed + 'ms cubic-bezier(.2,.89,.75,.99)';
+                    slideStyle[transformProperty] = 'translateX(' + (index * -100) + '%)';
+
+                    if (typeof callback === 'function') {
+                        setTimeout($.proxy(callback, me), opts.animationSpeed);
+                    }
+                } else {
+                    me._$slide.animate({
+                        'left': (index * -100) + '%',
+                        'easing': 'ease-out'
+                    }, opts.animationSpeed, $.proxy(callback, me));
+                }
             });
 
             me._$currentImage = $(me._$images[index]);
