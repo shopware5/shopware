@@ -3,11 +3,11 @@ return [
     'menuitem_language-selection'      => 'Start',
     'menuitem_requirements'            => 'System requirements',
     'menuitem_database-configuration'  => 'Database configuration',
-    'menuitem_database-import'         => 'Database import',
-    'menuitem_edition'                 => 'Edition',
+    'menuitem_database-import'         => 'Database creation',
+    'menuitem_edition'                 => 'Shopware Edition',
     'menuitem_configuration'           => 'Configuration',
     'menuitem_finish'                  => 'Finish',
-    'menuitem_license'                 => 'License',
+    'menuitem_license'                 => 'License agreement',
 
     'version_text' => '<strong>Version:</strong>',
     'back'         => 'Back',
@@ -19,11 +19,11 @@ return [
     'select_language_nl' => 'Nederlands',
 
     'language-selection_header'          => 'Start installation',
-    'language-selection_select_language' => 'Choose language',
-    'language-selection_info_message'    => 'This language selection applies solely to the installation assistant. Of couse you can operate your shop in various other languages after the installation.',
+    'language-selection_select_language' => 'Choose installer language',
+    'language-selection_info_message'    => 'This language selection applies only to the installation assistant. Once you finish installing Shopware, you will be able to configure multiple shop in different languages.',
     'language-selection_welcome_message' => <<<EOT
 <p>
-    You are only a few clicks away from being part of the big shopware community,
+    You are only a few clicks away from being part of the big Shopware community,
     which consists of over 30000 online merchants worldwide.
 </p>
 <p>
@@ -46,12 +46,12 @@ EOT
     'requirements_system_colfound'      => 'Found',
     'requirements_system_colstatus'     => 'Status',
 
-    'license_agreement_header'   => 'License agreement („EULA“)',
+    'license_agreement_header'   => 'License agreement (EULA)',
     'license_agreement_info'     => 'The Shopware Community Edition is AGPL licensed, whereas parts of the plugins and the theme are MIT licensed.',
     'license_agreement_error'    => 'You have to agree to our license',
     'license_agreement_checkbox' => 'I agree to the above terms and conditions',
 
-    'database-configuration_header'         => 'Configure database',
+    'database-configuration_header'         => 'Database configuration',
     'database-configuration_field_host'     => 'Database host:',
     'database-configuration_field_port'     => 'Database port:',
     'database-configuration_field_socket'   => 'Database socket (optional):',
@@ -60,12 +60,12 @@ EOT
     'database-configuration_field_database' => 'Database name:',
     'database-configuration_info'           => 'Enter your database connection - if you are not sure what data must be entered here, please contact your hosting provider.',
 
-    'database-import_header'            => 'Database import',
-    'database-import_skip_import'       => 'Skip database import',
-    'database-import_progress_text'     => 'Please start the database migration process by clicking the "Start" button <br> <strong>Existing Shopware tables will be deleted.</strong>',
-    'migration_counter_text_migrations' => 'Data update in progress',
+    'database-import_header'            => 'Database creation',
+    'database-import_skip_import'       => 'Skip database creation',
+    'database-import_progress_text'     => 'Please start the database creation process by clicking the "Start" button <br> <strong>Existing Shopware tables will be deleted.</strong>',
+    'migration_counter_text_migrations' => 'Creating database structure',
     'migration_counter_text_snippets'   => 'Update snippets',
-    'migration_update_success'          => 'Update complete',
+    'migration_update_success'          => 'Process complete',
 
     'edition_header'        => 'Choose your license',
     'edition_ce'            => 'Shopware Community Edition (License: AGPL)',
@@ -81,8 +81,7 @@ EOT
     'configuration_sconfig_name'            => 'Shop name:',
     'configuration_sconfig_name_info'       => 'Please enter the name of your shop',
     'configuration_sconfig_mail'            => 'Your email address:',
-    'configuration_sconfig_mail_info'       => 'Please enter your email address used for outgoing mail',
-    'configuration_sconfig_admin_mail_info' => 'This email address is used as backend login',
+    'configuration_sconfig_mail_info'       => 'Please enter your email address used for outgoing email',
     'configuration_sconfig_domain'          => 'Shop domain:',
     'configuration_sconfig_language'        => 'Default shop language:',
     'configuration_admin_title'             => 'Configure admin user',
