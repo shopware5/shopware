@@ -1244,7 +1244,7 @@ class Theme extends \Shopware\Components\Theme
                 'additionalJsLibraries',
                 '__additional_js_libraries__',
                 '',
-                array('attributes' => array('xtype' => 'textarea'), 'help' => '__aditional_js_libraries_description__')
+                array('attributes' => array('xtype' => 'textarea'), 'help' => '__additional_js_libraries_description__')
             )
         );
 
