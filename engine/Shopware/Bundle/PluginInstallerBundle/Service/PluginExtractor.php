@@ -47,6 +47,8 @@ class PluginExtractor
         }
 
         $stream->extractTo($destination);
+
+        $this->clearOpcodeCache();
     }
 
     /**
@@ -145,6 +147,21 @@ class PluginExtractor
         }
 
         return $stream;
+    }
+
+    /**
+     * Clear opcode caches to make sure that the
+     * updated plugin files are used in the following requests.
+     */
+    private function clearOpcodeCache()
+    {
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
     }
 
     /**
