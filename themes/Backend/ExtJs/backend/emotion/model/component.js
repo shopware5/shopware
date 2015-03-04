@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Emotion.model.Component', {
         'Hersteller-Slider' : '{s name=manufacturer}Manufacturer slider{/s}',
         'Artikel-Slider' : '{s name=article_slider}Article slider{/s}',
         'HTML-Element' : '{s name=html_element}HTML element{/s}',
-        'iFrame-Element' : '{s name=iframe}iFrame element{/s}'
+        'iFrame-Element' : '{s name=iframe}iFrame element{/s}',
+        'HTML5 Video-Element' : '{s name=html_video}HTML5 video element{/s}'
     },
 
     /**
