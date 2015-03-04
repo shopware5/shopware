@@ -54,15 +54,6 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		}
 	}
 
-	@media screen and(min-width: 100em) {
-		@columns: 6;
-		.is--fullscreen &.emotion--mode-masonry {
-			&.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-				width: (100% / @columns * @i);
-			}
-		}
-	}
-
 	.createColumnSizes(@n, (@i + 1));
 }
 
