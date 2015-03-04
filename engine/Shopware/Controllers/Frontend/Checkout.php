@@ -731,7 +731,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $order->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
         $order->sShippingcostsNumeric = $this->View()->sBasket['sShippingcostsWithTax'];
         $order->sShippingcostsNumericNet = $this->View()->sBasket['sShippingcostsNet'];
-        $order->bookingId = Shopware()->System()->_POST['sBooking'];
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
 
@@ -755,7 +754,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $order->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
         $order->sShippingcostsNumeric = $this->View()->sBasket['sShippingcostsWithTax'];
         $order->sShippingcostsNumericNet = $this->View()->sBasket['sShippingcostsNet'];
-        $order->bookingId = Shopware()->System()->_POST['sBooking'];
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
 
