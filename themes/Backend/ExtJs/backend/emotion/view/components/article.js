@@ -33,7 +33,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Article', {
     alias: 'widget.emotion-components-article',
 
     snippets: {
-        article: '{s name=article}Search article{/s}'
+        article: '{s name=article}Search article{/s}',
+        productImageOnly: {
+            fieldLabel: '{s name=productImageOnly/label}Do not add styling{/s}',
+            supportText: '{s name=productImageOnly/support}If selected, no other layout styling is applied.{/s}'
+        }
     },
 
     /**
