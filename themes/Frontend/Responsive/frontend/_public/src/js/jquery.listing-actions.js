@@ -361,10 +361,6 @@
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
-
-            if (!me.$activeFilterCont.children().length) {
-                me.$activeFilterCont.removeClass('has--children')
-            }
         },
 
         getPropertyFieldNames: function() {
@@ -689,7 +685,7 @@
                 'class': me.opts.activeFilterCls,
                 'html': me.getLabelIcon() + label,
                 'data-filter-param': param
-            }).appendTo(me.$activeFilterCont.addClass('has--children'));
+            }).appendTo(me.$activeFilterCont);
         },
 
         /**
@@ -713,8 +709,8 @@
             var me = this;
 
             me.activeFilterElements[param].remove();
-            delete me.activeFilterElements[param];
 
+            delete me.activeFilterElements[param];
         },
 
         /**
