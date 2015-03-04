@@ -20,6 +20,9 @@
 ;(function ($) {
     'use strict';
 
+    var numberRegex = /^\-?\d*\.?\d*$/,
+        objectRegex = /^[\[\{]/;
+
     /**
      * Tries to deserialize the given string value and returns the right
      * value if its successful.
@@ -34,8 +37,8 @@
             return !value ? value : value === 'true' || (
                 value === 'false' ? false
                     : value === 'null' ? null
-                    : +value + '' === value ? +value
-                    : /^[\[\{]/.test(value) ? $.parseJSON(value)
+                    : numberRegex.test(value) ? +value
+                    : objectRegex.test(value) ? $.parseJSON(value)
                     : value
                 )
         } catch (e) {
