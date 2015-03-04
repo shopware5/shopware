@@ -115,7 +115,9 @@ class sMarketing
         $sql = "
             SELECT STRAIGHT_JOIN
                  lastArticles.articleID as id,
-                 similarShown.viewed as hits
+                 similarShown.viewed as hits,
+                 detail.ordernumber as `number`
+
             FROM s_articles_similar_shown_ro as similarShown FORCE INDEX (viewed)
 
               INNER JOIN s_emarketing_lastarticles as lastArticles
@@ -132,6 +134,9 @@ class sMarketing
               INNER JOIN s_articles as a
                 ON  a.id = similarShown.related_article_id
                 AND a.active = 1
+
+              INNER JOIN s_articles_details as detail
+                ON detail.id = a.main_detail_id
 
               LEFT JOIN s_articles_avoid_customergroups ag
                 ON  ag.articleID = a.id
@@ -177,12 +182,16 @@ class sMarketing
         $sql = "
             SELECT DISTINCT
                 alsoBought.sales as sales,
-                alsoBought.related_article_id as id
+                alsoBought.related_article_id as id,
+                detail.ordernumber as `number`
 
             FROM   s_articles_also_bought_ro alsoBought
                 INNER JOIN s_articles articles
                     ON  alsoBought.related_article_id = articles.id
                     AND articles.active = 1
+
+                INNER JOIN s_articles_details detail
+                    ON detail.id = articles.main_detail_id
 
                 INNER JOIN s_articles_categories_ro articleCategories
                     ON  alsoBought.related_article_id = articleCategories.articleID
