@@ -1358,10 +1358,10 @@ Ext.define('Shopware.grid.Panel', {
         me.fireEvent(me.eventAlias + '-before-create-plugins', me, items);
 
         if (me.getConfig('rowEditing')) {
-            item = Ext.create('Ext.grid.plugin.RowEditing', {
+            me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
                 clicksToEdit: 2
             });
-            items.push(item)
+            items.push(me.rowEditor)
         }
 
         me.fireEvent(me.eventAlias + '-after-create-plugins', me, items);

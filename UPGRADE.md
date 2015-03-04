@@ -23,6 +23,8 @@ In this document you will find a changelog of the important changes related to t
         * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onRoute`
         * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::onAssemble`
         * `Shopware_Plugins_Frontend_RouterRewrite_Bootstrap::sRewriteQuery`
+* Shopware.grid.Panel executes now a local store search if no read url configured in the assigned store.
+* Shopware.grid.Panel has now the RowEditing plugin inside the local variable rowEditor.
 
 ## 5.0.0 Beta 1
 * Deprecated classes:
