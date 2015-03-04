@@ -75,10 +75,6 @@
                name="c_config_admin_email"
                id="c_config_admin_email"
                required="required"/>
-
-        <span class="help-block">
-           <?= $t->t("configuration_sconfig_admin_mail_info"); ?>
-        </span>
     </p>
 
     <p>
