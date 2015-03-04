@@ -3,6 +3,8 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.0.0 Beta 3
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
+* Fix translation API, rename all `localeId` references to `shopId`. Create / update / delete with `localeId` are still supported as legacy.
+* `\Shopware\Models\Translation\Translation` now correctly relates to `Shop` model instead of `Locale`.
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.

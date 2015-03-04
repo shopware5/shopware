@@ -166,9 +166,9 @@ class Translation extends Resource implements BatchInterface
     protected function getListQuery($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
     {
         $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('translation', 'locale'))
+        $builder->select(array('translation'))
             ->from('Shopware\Models\Translation\Translation', 'translation')
-            ->leftJoin('translation.locale', 'locale');
+            ->join('translation.shop', 'shop');
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -192,7 +192,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -223,7 +223,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -260,7 +260,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -296,7 +296,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -335,7 +335,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -358,16 +358,16 @@ class Translation extends Resource implements BatchInterface
         $translation = $this->getObjectTranslation(
             $data['type'],
             $id,
-            $data['localeId'],
+            $data['shopId'],
             AbstractQuery::HYDRATE_OBJECT
         );
 
         if (!$translation) {
             throw new ApiException\NotFoundException(
                 sprintf(
-                    "No translation found for type %s, locale id %s and foreign key %s",
+                    "No translation found for type %s, shop id %s and foreign key %s",
                     $data['type'],
-                    $data['localeId'],
+                    $data['shopId'],
                     $id
                 )
             );
@@ -386,7 +386,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -427,7 +427,7 @@ class Translation extends Resource implements BatchInterface
         $existing = $this->getObjectTranslation(
             $data['type'], //translation object type
             $data['key'], //identifier of the translatable entity (s_articles.id)
-            $data['localeId'] //identifier of the locale object
+            $data['shopId'] //identifier of the shop object
         );
 
         if (!$existing) {
@@ -443,7 +443,7 @@ class Translation extends Resource implements BatchInterface
         );
 
         $this->getTranslationComponent()->write(
-            $data['localeId'],
+            $data['shopId'],
             $data['type'],
             $data['key'],
             $data['data']
@@ -452,7 +452,7 @@ class Translation extends Resource implements BatchInterface
         return $this->getObjectTranslation(
             $data['type'],
             $data['key'],
-            $data['localeId'],
+            $data['shopId'],
             AbstractQuery::HYDRATE_OBJECT
         );
     }
@@ -462,11 +462,11 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $type - Type of the translatable object, see class constants
      * @param int $key - Identifier of the translatable object. (s_articles.id)
-     * @param int $localeId - Identifier of the locale object. (s_core_locales.id)
+     * @param int $shopId - Identifier of the shop object. (s_core_shops.id)
      * @param int $resultMode - Flag which handles the return value between array and \Shopware\Models\Translation\Translation
      * @return array|TranslationModel
      */
-    protected function getObjectTranslation($type, $key, $localeId, $resultMode = AbstractQuery::HYDRATE_ARRAY)
+    protected function getObjectTranslation($type, $key, $shopId, $resultMode = AbstractQuery::HYDRATE_ARRAY)
     {
         $builder = $this->getRepository()->createQueryBuilder('translations');
         $builder->setFirstResult(0)
@@ -475,7 +475,7 @@ class Translation extends Resource implements BatchInterface
         $builder->addFilter(array(
             'key' => $key,
             'type' => $type,
-            'localeId' => $localeId
+            'shopId' => $shopId
         ));
 
         return $builder->getQuery()->getOneOrNullResult($resultMode);
@@ -975,9 +975,9 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        if (!isset($data['localeId']) || empty($data['localeId'])) {
+        if (empty($data['shopId'])) {
             throw new ApiException\ParameterMissingException(
-                "Passed translation contains no locale id"
+                "Passed translation contains no shop id"
             );
         }
 
@@ -995,7 +995,4 @@ class Translation extends Resource implements BatchInterface
             }
         }
     }
-
-
-
 }

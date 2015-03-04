@@ -52,29 +52,7 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         $this->assertCount(5, $list['data']);
 
         foreach ($list['data'] as $item) {
-            $this->assertArrayHasKey('locale', $item);
-        }
-    }
-
-    public function testLocaleTranslations()
-    {
-        $list = $this->resource->getList(
-            0, 5,
-            array(
-                array('property' => 'translation.localeId', 'value' => 2)
-            ),
-            array(
-                array('property' => 'translation.type', 'direction' => 'ASC'),
-                array('property' => 'translation.key', 'direction' => 'ASC')
-            )
-        );
-        $shop = $this->getShopWithLocale(2);
-
-        foreach ($list['data'] as $item) {
-            $this->assertEquals(2, $item['localeId']);
-            $this->assertEquals($shop['locale']['locale'], $item['locale']['locale']);
-            $this->assertEquals($shop['locale']['language'], $item['locale']['language']);
-            $this->assertEquals($shop['locale']['territory'], $item['locale']['territory']);
+            $this->assertArrayHasKey('shopId', $item);
         }
     }
 
@@ -112,12 +90,11 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
             ),
             array(
                 array(
-                    'property' => 'translation.localeId',
+                    'property' => 'translation.shopId',
                     'value' => 2
                 )
             )
         ));
-        $shop = $this->getShopWithLocale(2);
 
         $this->assertCount(1, $list['data']);
         $data = $list['data'][0];
@@ -126,8 +103,6 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
             \Shopware\Components\Api\Resource\Translation::TYPE_PRODUCT,
             $data['type']
         );
-
-        $this->assertEquals(2, $shop['locale']['id']);
 
         $this->assertArrayHasKey('name', $data['data']);
         $this->assertArrayHasKey('descriptionLong', $data['data']);
@@ -241,7 +216,7 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         $translation = $this->resource->getList(0, 1, array(
             array('property' => 'translation.type', 'value' => 'article'),
             array('property' => 'translation.key', 'value' => $key),
-            array('property' => 'translation.localeId', 'value' => 2)
+            array('property' => 'translation.shopId', 'value' => 2)
         ));
 
         $translation = $translation['data'][0];
@@ -283,7 +258,7 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         $translation = $this->resource->getList(0, 1, array(
             array('property' => 'translation.type', 'value' => 'article'),
             array('property' => 'translation.key', 'value' => $key),
-            array('property' => 'translation.localeId', 'value' => 2)
+            array('property' => 'translation.shopId', 'value' => 2)
         ));
 
         $translation = $translation['data'][0];
@@ -399,7 +374,7 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
             $this->assertTrue($result['success']);
             $this->assertEquals('update', $result['operation']);
             $this->assertNotEmpty($result['data']);
-            $this->assertEquals(2, $result['data']['localeId']);
+            $this->assertEquals(2, $result['data']['shopId']);
         }
     }
 
@@ -435,13 +410,13 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
         }
     }
 
-    protected function getDummyData($type, $localeId = 2)
+    protected function getDummyData($type, $shopId = 2)
     {
         return array(
             'type' => $type,
             'key' => rand(2000, 10000),
             'data' => $this->getTypeFields($type),
-            'localeId' => $localeId
+            'shopId' => $shopId
         );
     }
 
@@ -492,20 +467,6 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
                     'link' => 'Dummy Translation',
                 );
         }
-    }
-
-    protected function getShopWithLocale($id)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('shop', 'locale'))
-            ->from('Shopware\Models\Shop\Shop', 'shop')
-            ->leftJoin('shop.locale', 'locale')
-            ->andWhere('shop.id = :id')
-            ->setParameter('id', $id);
-
-        return $builder->getQuery()->getOneOrNullResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-        );
     }
 
     public function testDelete()
@@ -1059,10 +1020,10 @@ class Shopware_Tests_Components_Api_TranslationTest extends Shopware_Tests_Compo
     /**
      * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
      */
-    public function testMissingLocaleIdException()
+    public function testMissingshopIdException()
     {
         $data = $this->getDummyData('article');
-        unset($data['localeId']);
+        unset($data['shopId']);
         $this->resource->create($data);
     }
 
