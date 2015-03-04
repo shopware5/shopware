@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.0.0 Beta 3
+* New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
+
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
 * Remove aliases from bundle services. Example: list_product_service is now directly set to the old list_product_service_core
