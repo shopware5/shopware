@@ -111,16 +111,16 @@
         init: function () {
             var me = this,
                 $el = me.$el,
+                opts = me.opts,
                 isListing = $el.hasClass('is--ctl-listing'),
                 isDetail = $el.hasClass('is--ctl-detail'),
-                opts = me.opts;
+                params = me.parseQueryString(location.href);
 
             if (!(isListing || isDetail)) {
                 return;
             }
 
             me.storage = StorageManager.getStorage('session');
-            me.urlParams = me.parseQueryString(location.href);
 
             if (isListing) {
                 me.registerListingEventListeners();
@@ -132,7 +132,7 @@
             me.$backButton = $el.find(opts.breadcrumbButtonSelector);
             me.$productDetails = $el.find(opts.productDetailsSelector);
 
-            me.categoryId = ~~(me.urlParams.c || me.$productDetails.attr('data-category-id'));
+            me.categoryId = ~~(params && params.c || me.$productDetails.attr('data-category-id'));
             me.orderNumber = me.$productDetails.attr('data-main-ordernumber');
             me.productState = me.getProductState();
 
@@ -231,10 +231,9 @@
          */
         registerListingEventListeners: function () {
             var me = this,
-                selectors = me.opts.listingSelectors.join(', '),
-                $listingEls = me.$el.find(selectors);
+                selectors = me.opts.listingSelectors.join(', ');
 
-            me._on($listingEls, 'click', $.proxy(me.onClickProductInListing, me));
+            me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
         },
 
         /**
@@ -249,12 +248,12 @@
                 opts = me.opts,
                 $target = $(event.target),
                 $parent = $target.parents(opts.productBoxSelector),
-                params = $.extend({}, me.urlParams, {
-                    'categoryId': ~~($parent.attr('data-category-id')),
-                    'ordernumber': $parent.attr('data-ordernumber')
-                });
+                params = me.parseQueryString(location.href);
 
-            me.setProductState(params);
+            me.setProductState($.extend({}, params, {
+                'categoryId': ~~($parent.attr('data-category-id')),
+                'ordernumber': $parent.attr('data-ordernumber')
+            }));
         },
 
         /**
@@ -414,9 +413,12 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            var me = this,
+                selectors = me.opts.listingSelectors.join(', ');
 
             StateManager.off('resize', me.checkPossibleSliding, me);
+
+            me.$el.off('click', selectors, $.proxy(me.onClickProductInListing, me));
 
             me._destroy();
         }
