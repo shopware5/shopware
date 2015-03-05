@@ -976,7 +976,7 @@
 
             this.slidePrev();
 
-            $.publish('plugin/imageSlider/onLeftArrowClick');
+            $.publish('plugin/imageSlider/onLeftArrowClick', this);
         },
 
         /**
@@ -991,7 +991,7 @@
 
             this.slideNext();
 
-            $.publish('plugin/imageSlider/onRightArrowClick');
+            $.publish('plugin/imageSlider/onRightArrowClick', this);
         },
 
         /**
