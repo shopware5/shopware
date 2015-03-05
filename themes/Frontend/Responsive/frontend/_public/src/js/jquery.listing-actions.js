@@ -709,6 +709,7 @@
             var me = this;
 
             me.activeFilterElements[param].remove();
+
             delete me.activeFilterElements[param];
         },
 
