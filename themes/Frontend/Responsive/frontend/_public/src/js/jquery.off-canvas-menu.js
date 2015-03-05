@@ -325,7 +325,7 @@
             left = (opts.fullscreen) ? (fromLeft ? '100%' : '-100%') : me.offCanvasWidth * (fromLeft ? 1 : -1);
             me.$pageWrap[me.fadeEffect]({'left': left}, me.opts.animationSpeed, me.easingEffectOut);
 
-            $.publish('plugin/offCanvasMenu/openMenu');
+            $.publish('plugin/offCanvasMenu/openMenu', me);
 
             if (opts.mode === 'ajax') {
                 $.ajax({
@@ -366,7 +366,7 @@
             me.$offCanvas[me.fadeEffect](css, me.opts.animationSpeed, me.easingEffectOut);
             me.$pageWrap[me.fadeEffect]({'left': 0}, me.opts.animationSpeed, me.easingEffectOut);
 
-            $.publish('plugin/offCanvasMenu/closeMenu');
+            $.publish('plugin/offCanvasMenu/closeMenu', me);
         },
 
         /**
