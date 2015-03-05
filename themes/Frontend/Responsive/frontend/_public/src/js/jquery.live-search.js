@@ -235,7 +235,7 @@
             me.$results.empty().html(response).slideDown().addClass(opts.activeCls);
             picturefill();
 
-            $.publish('plugin/liveSearch/showResult');
+            $.publish('plugin/liveSearch/showResult', me);
         },
 
         /**
@@ -247,7 +247,7 @@
                 $results = me.$results;
 
             $results.removeClass(opts.activeCls).fadeOut(opts.animationSpeed, $results.empty.bind($results));
-            $.publish('plugin/liveSearch/closeResult');
+            $.publish('plugin/liveSearch/closeResult', me);
         },
 
         /**
