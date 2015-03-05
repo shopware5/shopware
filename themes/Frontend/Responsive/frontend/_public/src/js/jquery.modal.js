@@ -314,7 +314,7 @@
 
             $('html, body').addClass('no--scroll');
 
-            $.publish('plugin/modal/onOpen');
+            $.publish('plugin/modal/onOpen', me);
 
             return me;
         },
@@ -352,7 +352,7 @@
                 });
             }
 
-            $.publish('plugin/modal/onClose');
+            $.publish('plugin/modal/onClose', me);
 
             return me;
         },
@@ -422,7 +422,7 @@
                 picturefill();
             }
 
-            $.publish('plugin/modal/onSetContent');
+            $.publish('plugin/modal/onSetContent', me);
         },
 
         /**
@@ -438,7 +438,7 @@
 
             me._$modalBox.css('width', (typeof width === 'string' && !(/^\d+$/.test(width))) ? width : parseInt(width, 10));
 
-            $.publish('plugin/modal/onSetWidth');
+            $.publish('plugin/modal/onSetWidth', me);
         },
 
         /**
@@ -454,7 +454,7 @@
 
             me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : parseInt(height, 10));
 
-            $.publish('plugin/modal/onSetHeight');
+            $.publish('plugin/modal/onSetHeight', me);
         },
 
         /**
@@ -489,7 +489,7 @@
 
             $('body').append(me._$modalBox);
 
-            $.publish('plugin/modal/onInit');
+            $.publish('plugin/modal/onInit', me);
         },
 
         /**
@@ -587,7 +587,7 @@
 
             me.close();
 
-            $.publish('plugin/modal/onOverlayClick');
+            $.publish('plugin/modal/onOverlayClick', me);
         },
 
         /**

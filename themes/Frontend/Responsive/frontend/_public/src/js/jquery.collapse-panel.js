@@ -137,7 +137,7 @@
             me.$el.addClass(opts.activeTriggerCls);
 
             $targetEl.slideDown(opts.animationSpeed, function () {
-                $.publish('plugin/collapsePanel/onOpen');
+                $.publish('plugin/collapsePanel/onOpen', me );
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
@@ -164,7 +164,7 @@
             me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.slideUp(opts.animationSpeed).removeClass(opts.collapsedStateCls);
 
-            $.publish('plugin/collapsePanel/onClose');
+            $.publish('plugin/collapsePanel/onClose', me);
         },
 
         /**

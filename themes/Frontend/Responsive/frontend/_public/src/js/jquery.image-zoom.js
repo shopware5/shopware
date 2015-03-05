@@ -330,7 +330,7 @@
             me.imageHeight = me.$activeImage.innerHeight();
             me.imageOffset = me.$activeImage.offset();
 
-            $.publish('plugin/imageZoom/onSetActiveImage');
+            $.publish('plugin/imageZoom/onSetActiveImage', this);
         },
 
         /**
@@ -359,7 +359,7 @@
                 me.zoomImage.src = me.zoomImageUrl;
             }
 
-            $.publish('plugin/imageZoom/onActivateZoom');
+            $.publish('plugin/imageZoom/onActivateZoom', this);
 
             me.active = true;
         },
@@ -375,7 +375,7 @@
             me.zoomImage = false;
             me.active = false;
 
-            $.publish('plugin/imageZoom/onStopZoom');
+            $.publish('plugin/imageZoom/onStopZoom', this);
         },
 
         /**
@@ -386,7 +386,7 @@
          * @param event
          */
         onLensClick: function(event) {
-            $.publish('plugin/imageZoom/onLensClick');
+            $.publish('plugin/imageZoom/onLensClick', this);
         },
 
         /**

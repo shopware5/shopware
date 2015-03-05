@@ -217,7 +217,7 @@
             var me = this,
                 target = event.toElement || event.relatedTarget || event.target;
 
-            $.publish('plugin/collapseCart/onMouseLeave');
+            $.publish('plugin/collapseCart/onMouseLeave', me);
 
             if (me.isElementOrChild(me.$el[0], target) || me.isElementOrChild(me._$triggerEl[0], target)) {
                 return;
@@ -235,7 +235,7 @@
         onCloseButtonClick: function (event) {
             event.preventDefault();
 
-            $.publish('plugin/collapseCart/onCloseButton');
+            $.publish('plugin/collapseCart/onCloseButton', this);
 
             this.closeMenu();
         },
@@ -254,7 +254,7 @@
                 $parent = $currentTarget.parent(),
                 url = $currentTarget.attr('href');
 
-            $.publish('plugin/collapseCart/onRemoveArticle');
+            $.publish('plugin/collapseCart/onRemoveArticle', me);
 
             $parent.html(me._$loadingIcon.clone());
 
@@ -265,7 +265,7 @@
 
                     me.$el.html(result);
 
-                    $.publish('plugin/collapseCart/afterRemoveArticle');
+                    $.publish('plugin/collapseCart/afterRemoveArticle', me);
                 }
             });
         },
@@ -344,7 +344,7 @@
                 plugin.openMenu();
             }
 
-            $.publish('plugin/collapseCart/onMenuOpen');
+            $.publish('plugin/collapseCart/onMenuOpen', me);
         },
 
         /**
@@ -360,7 +360,7 @@
                 opts = me.opts,
                 $el = me.$el;
 
-            $.publish('plugin/collapseCart/onLoadCart');
+            $.publish('plugin/collapseCart/onLoadCart', me);
 
             $.ajax({
                 'url': opts.ajaxCartURL,
@@ -373,7 +373,7 @@
                         callback();
                     }
 
-                    $.publish('plugin/collapseCart/afterLoadCart');
+                    $.publish('plugin/collapseCart/afterLoadCart', me);
                 }
             });
         },
@@ -397,7 +397,7 @@
                 plugin.closeMenu();
             }
 
-            $.publish('plugin/collapseCart/onCloseMenu');
+            $.publish('plugin/collapseCart/onCloseMenu', me);
         },
 
         /**
