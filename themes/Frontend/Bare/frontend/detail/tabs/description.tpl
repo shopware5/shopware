@@ -113,7 +113,7 @@
 
 			{* Vendor title *}
 			{block name='frontend_detail_description_supplier_title'}
-				<div class="content--title">
+				<div class="content--title title--description-supplier">
 					{s name="DetailDescriptionSupplier"}{/s} "{$sArticle.supplierName}"
 				</div>
 			{/block}
