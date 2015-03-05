@@ -45,6 +45,26 @@ class FrontendPostFilter implements PostFilterInterface
      */
     public function postFilter($url, Context $context)
     {
+        if ($this->isFullPath($context)) {
+            $secure = $this->isSecure($context);
+            $url = ($secure ? 'https://' : 'http://')
+                . ($secure ? $context->getSecureHost() : $context->getHost())
+                . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
+                . '/' . $url;
+        }
+
+        //@todo make session postfilter
+        if (!empty($userParams['appendSession'])) {
+            $url .= strpos($url, '?') === false ? '?' : '&';
+            $url .= session_name() . '=' . session_id();
+            $url .= '&__shop=' . $context->getShopId();
+        }
+
+        return $url;
+    }
+
+    private function isSecure(Context $context)
+    {
         $params = $context->getParams();
 
         if ($context->isAlwaysSecure()) {
@@ -60,8 +80,13 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $secure = false;
         }
+        return $secure;
+    }
 
-        if (!empty($params['fullPath']) || $secure) {
+    private function isFullPath(Context $context)
+    {
+        $params = $context->getParams();
+        if (!empty($params['fullPath']) || !empty($params['sUseSSL']) || !empty($params['forceSecure'])) {
             $fullPath = true;
         } elseif (isset($params['module']) && $params['module'] != 'frontend') {
             $fullPath = false;
@@ -70,21 +95,6 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $fullPath = true;
         }
-
-        if ($fullPath) {
-            $url = ($secure ? 'https://' : 'http://')
-                . ($secure ? $context->getSecureHost() : $context->getHost())
-                . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
-                . '/' . $url;
-        }
-
-        //@todo make session postfilter
-        if (!empty($userParams['appendSession'])) {
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= session_name() . '=' . session_id();
-            $url .= '&__shop=' . $context->getShopId();
-        }
-
-        return $url;
+        return $fullPath;
     }
 }
