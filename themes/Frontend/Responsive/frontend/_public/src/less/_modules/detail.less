@@ -217,9 +217,13 @@ It contains the product actions, the product information such as pictures and de
 	// Content headlines
 	.content--title {
 		.unitize(18, 16, font-size);
-        .unitize-margin(10, 0, 15, 0);
+        .unitize-margin(10, 0, 5, 0);
         font-weight: 700;
 		color: @text-color-dark;
+
+        &.title--description-supplier {
+            .unitize(25, 16, margin-top);
+        }
 	}
 
     .content--link [class^=icon] {
