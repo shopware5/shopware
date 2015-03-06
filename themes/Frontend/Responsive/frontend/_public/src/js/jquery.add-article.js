@@ -118,8 +118,12 @@
                 ajaxData = $el.serialize();
 
             if (opts.showModal) {
+                $.overlay.open({
+                    'closeOnClick': false
+                });
+
                 $.loadingIndicator.open({
-                    'closeOverlay': false
+                    'openOverlay': false
                 });
             }
 

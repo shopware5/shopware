@@ -46,9 +46,12 @@
                 return;
             }
 
-            $.loadingIndicator.open({
-                closeOverlay: false,
+            $.overlay.open({
                 closeOnClick: false
+            });
+
+            $.loadingIndicator.open({
+                openOverlay: false
             });
 
             // Ajax request for adding article to compare list
@@ -66,7 +69,6 @@
                     if (data.indexOf('data-max-reached="true"') !== -1) {
 
                         $.loadingIndicator.close(function() {
-
                             $.modal.open(data, {
                                 sizing: 'content'
                             });
@@ -82,7 +84,10 @@
 
                     // Prevent too fast closing of loadingIndicator and overlay
                     $.loadingIndicator.close(function() {
-                        $('html, body').animate({ scrollTop: ($('.top-bar').offset().top)}, 'slow');
+                        $('html, body').animate({
+                            scrollTop: ($('.top-bar').offset().top)
+                        }, 'slow');
+
                         $.overlay.close();
                     })
                 }
