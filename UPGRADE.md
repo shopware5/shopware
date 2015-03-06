@@ -7,6 +7,9 @@ In this document you will find a changelog of the important changes related to t
 * `\Shopware\Models\Translation\Translation` now correctly relates to `Shop` model instead of `Locale`.
 * widgets/recommendations - boughtAction & viewedAction calls no more the sGetPromotionById function.
 * Added emotion positioning number for ordering emotions by position number if there are more emotions on one page
+* Replaced `closeOverlay` with `openOverlay` option in the loading indicator to improve the simplicity.
+* Removed overlay options in the modal box and loading indicator jQuery plugin.
+* Overlay jQuery plugin now only provides the closeOnClick, onClick and onClose options. To style the overlay, use the corresponding less file.
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.

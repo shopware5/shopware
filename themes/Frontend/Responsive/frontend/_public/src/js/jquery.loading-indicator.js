@@ -28,7 +28,7 @@
             iconCls: 'icon--default',
             animationSpeed: 500,
             closeOnClick: true,
-            closeOverlay: true
+            openOverlay: true
         },
 
         /**
@@ -43,17 +43,18 @@
          * If the loader is not available, it will be created.
          *
          * @param {Object} indicatorOptions
-         * @param {Object} overlayOptions
          */
-        open: function (indicatorOptions, overlayOptions) {
+        open: function (indicatorOptions) {
             var me = this;
 
             me.options = $.extend({}, me.defaults, indicatorOptions);
 
-            $.overlay.open($.extend({}, overlayOptions, {
-                closeOnClick: me.options.closeOnClick,
-                onClick: me.close.bind(me)
-            }));
+            if (me.options.openOverlay !== false) {
+                $.overlay.open($.extend({}, {
+                    closeOnClick: me.options.closeOnClick,
+                    onClose: me.close.bind(me)
+                }));
+            }
 
             if (me.$loader === null) {
                 me.$loader = me._createLoader();
@@ -72,7 +73,7 @@
             var me = this,
                 opts = me.options;
 
-            if (opts.closeOverlay) {
+            if (opts.openOverlay !== false) {
                 $.overlay.close();
             }
 

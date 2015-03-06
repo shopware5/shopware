@@ -122,6 +122,7 @@ class Theme extends \Shopware\Components\Theme
         "_highlight-info" => "#4AA3DF",
         "_body-bg" => "darken(@gray-light, 5%)",
         "_overlay-bg" => "#000000",
+        "_overlay-opacity" => "0.7",
         "_text-color" => "@brand-secondary",
         "_text-color-dark" => "@brand-secondary-dark",
         "_link-color" => "@brand-primary",
@@ -371,13 +372,6 @@ class Theme extends \Shopware\Components\Theme
         );
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
-                '_overlay-bg',
-                '@overlay-bg',
-                '#000000'
-            )
-        );
-        $fieldSetScaffolding->addElement(
-            $this->createColorPickerField(
                 '_text-color',
                 '@text-color',
                 '@brand-secondary'
@@ -409,6 +403,20 @@ class Theme extends \Shopware\Components\Theme
                 '_rating-star-color',
                 '@rating-star-color',
                 '@highlight-notice'
+            )
+        );
+        $fieldSetScaffolding->addElement(
+            $this->createColorPickerField(
+                '_overlay-bg',
+                '@overlay-bg',
+                '#000000'
+            )
+        );
+        $fieldSetScaffolding->addElement(
+            $this->createColorPickerField(
+                '_overlay-opacity',
+                '@overlay-opacity',
+                '0.7'
             )
         );
 
@@ -1117,6 +1125,17 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 $this->getLabelAttribute(
                     'offcanvas_cart_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'offcanvasOverlayPage',
+                '__offcanvas_move_method__',
+                true,
+                $this->getLabelAttribute(
+                    'offcanvas_move_method_description'
                 )
             )
         );

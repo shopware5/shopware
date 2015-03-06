@@ -75,9 +75,12 @@
                 modalUrl = startCompareBtn.attr('href'),
                 modalTitle = startCompareBtn.attr('data-modal-title');
 
-            $.loadingIndicator.open({
-                closeOverlay: false,
+            $.overlay.open({
                 closeOnClick: false
+            });
+
+            $.loadingIndicator.open({
+                openOverlay: false
             });
 
             // Load compare modal before opening modal box

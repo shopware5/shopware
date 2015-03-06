@@ -36,9 +36,18 @@ Add a `is--` class to an element to easily change the properties.
 }
 
     // Fix the body for off-canvas handling
-html, body {
+html {
     width: 100%;
     height: 100%;
+
+    &.no--scroll {
+        position: relative;
+        overflow: hidden;
+
+        body {
+            overflow: hidden;
+        }
+    }
 }
 
 body {
@@ -155,10 +164,6 @@ blockquote {
 
 .left { float: left; }
 .right { float: right; }
-
-.no--scroll {
-    overflow: hidden;
-}
 
 ::-moz-placeholder { color: @input-placeholder-color; }
 ::-webkit-input-placeholder { color: @input-placeholder-color; }

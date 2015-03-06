@@ -10,40 +10,44 @@ It can be enabled/disabled inside the shopware 5 backend.
 The functionality is provided by the `jquery.off-canvas-menu.js` file.
 */
 
-    // Will be used for the off canvas animation
-body {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-    // Is used for the necessary styling of an off-canvas menu
+// Is used for the necessary styling of an off-canvas menu
 .off-canvas {
+    .transition(all 400ms cubic-bezier(.16,.04,.14,1));
+    .transform-style(preserve-3d);
     .unitize-width(280);
-    .unitize-variable(280, 16);
+    background: #fff;
     position: fixed;
     top: 0;
+    bottom: 0;
     display: none;
-    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     z-index: 8000;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #fff;
-    -webkit-overflow-scroll: touch;
+
+    &.is--left {
+        .transform(translateX(-100%));
+        left: 0;
+    }
+
+    &.is--right {
+        .transform(translateX(100%));
+        right: 0;
+    }
 
     &.is--active {
         display: block;
     }
 
-    &.is--left {
-        left: -100%;
+    &.is--open {
+        .transform(translateX(0));
     }
 
-    &.is--right {
-        right: -100%;
-    }
-
-    &.js--full-screen {
+    &.is--full-screen {
         width: 100%;
+    }
+
+    &.no--transitions {
+        .transition(none);
     }
 
     .buttons--off-canvas {
@@ -68,7 +72,10 @@ body {
 
     .link--go-main {
         .unitize(font-size, 16);
+        .unitize-padding(12, 15);
         font-weight: 700;
+        display: block;
+        width: 100%;
 
         .icon--menu {
             .unitize(font-size, 20);
@@ -97,6 +104,7 @@ body {
 }
 
 .page-wrap {
+    .transition(left 400ms cubic-bezier(.16,.04,.14,1));
     position: relative;
     left: 0;
 }

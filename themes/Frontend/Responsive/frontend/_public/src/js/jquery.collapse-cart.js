@@ -338,10 +338,10 @@
 
             me._isOpened = true;
 
-            me.$el.addClass(me.opts.activeClass);
-
             if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_offcanvasMenu'))) {
                 plugin.openMenu();
+            } else {
+                me.$el.addClass(me.opts.activeClass);
             }
 
             $.publish('plugin/collapseCart/onMenuOpen', me);
@@ -391,10 +391,10 @@
 
             me._isOpened = false;
 
-            me.$el.removeClass(me.opts.activeClass);
-
             if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_offcanvasMenu'))) {
                 plugin.closeMenu();
+            } else {
+                me.$el.removeClass(me.opts.activeClass);
             }
 
             $.publish('plugin/collapseCart/onCloseMenu', me);

@@ -1,31 +1,8 @@
 ;(function ($, Modernizr, window, Math) {
     'use strict';
 
-    var div = document.createElement('div'),
-        getVendorPropertyName = function (property) {
-        if (property in div.style) {
-            return property;
-        }
-
-        var prefixes = ['Moz', 'Webkit', 'O', 'ms'],
-            prop = property.charAt(0).toUpperCase() + property.substr(1),
-            len = prefixes.length,
-            i = 0,
-            vendorProp;
-
-        for (; i < len; i++) {
-            vendorProp = prefixes[i] + prop;
-
-            if (vendorProp in div.style) {
-                return vendorProp;
-            }
-        }
-
-        return null;
-    };
-
-    var transitionProperty = getVendorPropertyName('transition'),
-        transformProperty = getVendorPropertyName('transform');
+    var transitionProperty = StateManager.getVendorProperty('transition'),
+        transformProperty = StateManager.getVendorProperty('transform');
 
     /**
      * Image Slider Plugin.
