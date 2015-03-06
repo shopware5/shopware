@@ -6,7 +6,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
     alias: 'widget.plugin-manager-detail-window',
 
     height: '90%',
-    minWidth: 980,
+    minWidth: 995,
     autoScroll: true,
     layout: {
         type: 'vbox',
