@@ -257,6 +257,13 @@ class ProductFeed extends ModelEntity
     private $variantExport = 1;
 
     /**
+     * @var integer $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean")
+     */
+    protected $dirty = false;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Supplier")
@@ -1042,5 +1049,21 @@ class ProductFeed extends ModelEntity
     public function getCacheRefreshed()
     {
         return $this->cacheRefreshed;
+    }
+
+    /**
+     * @param bool $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDirty()
+    {
+        return $this->dirty;
     }
 }
