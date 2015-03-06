@@ -310,6 +310,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             tooltip: '{s name="install_uninstall"}{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 if (record.allowInstall()) {
+                    me.registerConfigRequiredEvent(record);
+
                     me.installPluginEvent(record);
                 } else {
                     me.uninstallPluginEvent(record);

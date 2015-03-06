@@ -11,6 +11,15 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         events: 'Shopware.apps.PluginManager.view.PluginHelper'
     },
 
+    tabIndex: {
+        configuration: 0,
+        description: 1,
+        localDescription: 2,
+        changelog: 3,
+        comment: 4,
+        installationManual: 5
+    },
+
     initComponent: function() {
         var me = this;
 
@@ -45,19 +54,45 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
 
         me.updateInstallationManual(plugin);
 
-        var event = 'plugin-reloaded-' + me.plugin.get('technicalName');
+        me.updateLocalDescription(plugin);
 
-        Shopware.app.Application.on(event, function(updated) {
-            me.updateMetaData(updated);
-            me.updateConfiguration(updated);
-            me.hideLoadingMask();
-        });
+        var event = me.getPluginReloadedEventName(me.plugin);
+        Shopware.app.Application.on(event, me.pluginReloadedEventListener, this);
 
-        event = 'plugin-bought-' + me.plugin.get('technicalName');
+        event = me.getPluginBoughEventName(me.plugin);
+        Shopware.app.Application.on(event, me.pluginBoughEventListener, this);
+    },
 
-        Shopware.app.Application.on(event, function(bought) {
-            me.displayBoughtMessage();
-        });
+    pluginReloadedEventListener: function(updated) {
+        var me = this;
+
+        me.updateMetaData(updated);
+        me.updateConfiguration(updated);
+        me.updateLocalDescription(updated);
+        me.hideLoadingMask();
+    },
+
+    pluginBoughEventListener: function(bought) {
+        var me = this;
+        me.displayBoughtMessage();
+    },
+
+    destroy: function() {
+        var me = this;
+
+        Shopware.app.Application.removeListener(
+            me.getPluginReloadedEventName(me.plugin),
+            me.pluginReloadedEventListener,
+            me
+        );
+
+        Shopware.app.Application.removeListener(
+            me.getPluginBoughEventName(me.plugin),
+            me.pluginBoughEventListener,
+            me
+        );
+
+        me.callParent(arguments);
     },
 
     displayBoughtMessage: function() {
@@ -88,10 +123,10 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         var text = plugin.get('installationManual') + '';
 
         if (!text || text.length <= 0) {
-            me.informationTab.hideTab(4);
+            me.informationTab.hideTab(me.tabIndex.installationManual);
             return
         }
-        me.informationTab.showTab(4);
+        me.informationTab.showTab(me.tabIndex.installationManual);
 
         me.installationManualContainer.add({
             xtype: 'component',
@@ -108,11 +143,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         me.configurationContainer.removeAll();
 
         if (plugin.get('formId') && plugin.get('installationDate') !== null) {
-            me.informationTab.showTab(0);
-            me.informationTab.navigationClick(0);
+            me.informationTab.showTab(me.tabIndex.configuration);
+            me.informationTab.navigationClick(me.tabIndex.configuration);
         } else {
-            me.informationTab.hideTab(0);
-            me.informationTab.navigationClick(1);
+            me.informationTab.hideTab(me.tabIndex.configuration);
+            me.informationTab.navigationClick(me.tabIndex.description);
             return;
         }
         me.configurationContainer.show();
@@ -126,8 +161,8 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
                     if (panel && panel.items.length > 0) {
                         return;
                     }
-                    me.informationTab.hideTab(0);
-                    me.informationTab.navigationClick(1);
+                    me.informationTab.hideTab(me.tabIndex.configuration);
+                    me.informationTab.navigationClick(me.tabIndex.description);
                 }
             }
         });
@@ -155,6 +190,25 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         me.configurationContainer.show();
     },
 
+    updateLocalDescription: function(plugin) {
+        var me = this;
+
+        me.localDescriptionContainer.removeAll();
+
+        var description = plugin.get('localDescription');
+
+        if (!description || description.length <= 0) {
+            me.informationTab.hideTab(me.tabIndex.localDescription);
+            return;
+        }
+        me.informationTab.showTab(me.tabIndex.localDescription);
+
+        me.localDescriptionContainer.add({
+            xtype: 'component',
+            html: description
+        });
+    },
+
     updateDescription: function(plugin) {
         var me = this;
 
@@ -163,11 +217,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         var description = plugin.get('description');
 
         if (!description || description.length <= 0) {
-            me.informationTab.hideTab(1);
+            me.informationTab.hideTab(me.tabIndex.description);
             return;
         }
 
-        me.informationTab.showTab(1);
+        me.informationTab.showTab(me.tabIndex.description);
 
         me.descriptionContainer.add({
             xtype: 'component',
@@ -191,6 +245,14 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             });
             me.metaDataContainer.add(content);
 
+        } else if (plugin.isAdvancedFeature()) {
+            var image = '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/advanced_feature_icon.png"}';
+            content = Ext.create('Ext.container.Container', {
+                html: '<img src="' + image + '">' +
+                      '<span class="advanced-feature-notice">{s name="advanced_feature_notice"}{/s}</span>',
+                cls: 'advanced-feature-container'
+            });
+            me.metaDataContainer.add(content);
         } else {
             content = Ext.create('Shopware.apps.PluginManager.view.detail.Prices', {
                 prices: plugin['getPricesStore'],
@@ -239,10 +301,10 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         });
 
         if (comments.commentCount <= 0) {
-            me.informationTab.hideTab(3);
+            me.informationTab.hideTab(me.tabIndex.comment);
             return;
         } else {
-            me.informationTab.showTab(3);
+            me.informationTab.showTab(me.tabIndex.comment);
         }
 
         me.commentContainer.add(comments);
@@ -256,11 +318,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         var changelog = plugin.get('changelog');
 
         if (!changelog || changelog.length <= 0) {
-            me.informationTab.hideTab(2);
+            me.informationTab.hideTab(me.tabIndex.changelog);
             return;
         }
 
-        me.informationTab.showTab(2);
+        me.informationTab.showTab(me.tabIndex.changelog);
 
         Ext.each(changelog, function(value) {
             var version = value.version;
@@ -389,6 +451,13 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             }
         });
 
+        me.localDescriptionContainer = Ext.create('Ext.container.Container', {
+            title: '{s name="local_description"}{/s}',
+            cls: 'plugin-local-description-container',
+            flex: 1,
+            layout: { type: 'vbox', align: 'stretch' }
+        });
+
         me.commentContainer = Ext.create('Ext.container.Container', {
             title: '{s name="comments"}{/s}',
             flex: 1,
@@ -404,6 +473,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             items: [
                 me.configurationContainer,
                 me.descriptionContainer,
+                me.localDescriptionContainer,
                 me.changelogContainer,
                 me.commentContainer,
                 me.installationManualContainer

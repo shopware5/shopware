@@ -9,6 +9,25 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         );
     },
 
+    getPluginReloadedEventName: function(plugin) {
+        return 'plugin-reloaded-' + plugin.get('technicalName');
+    },
+
+    getPluginBoughEventName: function(plugin) {
+        return 'plugin-bought-' + plugin.get('technicalName');
+    },
+
+    registerConfigRequiredEvent: function(record) {
+        var me = this;
+
+        var event = me.getPluginReloadedEventName(record);
+        Shopware.app.Application.on(event, function(plugin) {
+            if (plugin.get('formId') > 0) {
+                me.displayPluginEvent(plugin);
+            }
+        }, me, { single: true });
+    },
+
     downloadFreePluginEvent: function(record, price) {
         var me = this;
 
@@ -51,7 +70,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
     pluginBoughtEvent: function(record) {
         var me = this;
 
-        var event = 'plugin-bought-' + record.get('technicalName');
+        var event = me.getPluginBoughEventName(record);
 
         Shopware.app.Application.fireEvent(
             event,
@@ -106,9 +125,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
         Shopware.app.Application.fireEvent('delete-plugin', record, function() {
             me.removeLocalData(record);
-            var event = 'plugin-reloaded-' + record.get('technicalName');
-
-            Shopware.app.Application.fireEvent(event, record);
+            Shopware.app.Application.fireEvent(me.getPluginReloadedEventName(record), record);
             Shopware.app.Application.fireEvent('plugin-reloaded', record);
         });
     },
@@ -132,10 +149,9 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         plugin.reload({
             callback: function(updated) {
                 var merged = me.mergePlugin(plugin, updated.data);
-                var event = 'plugin-reloaded-' + plugin.get('technicalName');
+                var event = me.getPluginReloadedEventName(plugin);
 
                 Shopware.app.Application.fireEvent(event, merged);
-
                 Shopware.app.Application.fireEvent('plugin-reloaded', merged);
 
                 if (Ext.isFunction(callback)) {
@@ -147,7 +163,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
     mergePlugin: function(plugin, data) {
         var whiteList = [
-            'active', 'installationDate', 'version',
+            'active', 'installationDate', 'version', 'localDescription',
             'capabilityInstall', 'capabilityUpdate',
             'capabilityActivate', 'id', 'formId', 'localIcon'
         ];

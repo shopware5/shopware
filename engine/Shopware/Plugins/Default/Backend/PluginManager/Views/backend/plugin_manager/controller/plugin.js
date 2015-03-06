@@ -178,6 +178,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 me.sendAjaxRequest(
                     '{url controller="PluginManager" action="downloadLicenceDirect"}',
                     {
+                        domain    : licence.get('shop'),
                         binaryLink: licence.get('binaryLink'),
                         licenceKey: licence.get('licenseKey')
                     },
@@ -344,8 +345,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     updatePlugin: function(plugin, callback) {
         var me = this;
 
-        me.checkLogin(function() {
-
+        me.authenticateForUpdate(plugin, function() {
             me.displayLoadingMask(plugin, '{s name="download_update_and_install"}{/s}');
 
             me.sendAjaxRequest(
@@ -356,6 +356,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 }
             );
         });
+    },
+
+    authenticateForUpdate: function(plugin, callback) {
+        var me = this;
+        
+        if (plugin.flaggedAsDummyPlugin()) {
+            callback();
+        } else {
+            me.checkLogin(callback);
+        }
     },
 
     executePluginUpdate: function(plugin, callback) {
