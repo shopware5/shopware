@@ -31,7 +31,7 @@ The sidebar is displayed inside the off-canvas menu on small devices.
 
 body > .sidebar-main {
 	.clearfix();
-    .unitize(20, 16, padding-bottom);
+    .unitize(padding-bottom, 20);
     border-right: @border-color;
 }
 
@@ -45,7 +45,7 @@ body > .sidebar-main {
     display: block;
 
     .navigation--entry {
-        .unitize(20, 16, margin-right);
+        .unitize(margin-right, 20);
         float: left;
     }
 
@@ -75,13 +75,13 @@ body > .sidebar-main {
 
     .js--fancy-select-text {
         .unitize-padding(0, 18, 0, 0);
-        .unitize(30, 16, line-height);
-        .unitize(16, 16, font-size);
+        .unitize(line-height, 30);
+        .unitize(font-size, 16);
         border: 0 none;
     }
 
     .js--fancy-select-trigger {
-        .unitize(32, 16, line-height);
+        .unitize(line-height, 32);
         width: auto;
         border: 0 none;
     }
@@ -128,8 +128,8 @@ body > .sidebar-main {
         .unitize-padding(10, 20, 10, 20);
 
         .is--icon-right {
-            .unitize(5, 16, margin-top);
-            .unitize(10, 16, font-size);
+            .unitize(margin-top, 5);
+            .unitize(font-size, 10);
             display: inline-block;
             float: right;
         }
@@ -146,8 +146,8 @@ body > .sidebar-main {
 }
 
 .offcanvas--overlay {
-    .unitize(280, 16, width);
-    .unitize(44, 16, top);
+    .unitize(width, 280);
+    .unitize(top, 44);
     background: @gray;
     position: absolute;
     overflow-x: hidden;
@@ -162,7 +162,7 @@ body > .sidebar-main {
     }
 
     .overlay--headline {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         .unitize-padding(12, 15, 12, 15);
         border-bottom: 1px solid @border-color;
         width: 100%;
@@ -173,7 +173,7 @@ body > .sidebar-main {
         .unitize-margin(16, 10, 10, 10);
 
         .category--headline {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             color: @text-color-dark;
             margin: 0;
             padding: 0;
@@ -182,15 +182,15 @@ body > .sidebar-main {
     }
 
     .is--icon-left {
-        .unitize(5, 16, margin-top);
-        .unitize(5, 16, margin-right);
-        .unitize(10, 16, font-size);
+        .unitize(margin-top, 5);
+        .unitize(margin-right, 5);
+        .unitize(font-size, 10);
         display: inline-block;
     }
 
     .is--icon-right {
-        .unitize(5, 16, margin-top);
-        .unitize(10, 16, font-size);
+        .unitize(margin-top, 5);
+        .unitize(font-size, 10);
         display: inline-block;
         float: right;
     }
@@ -207,8 +207,8 @@ body > .sidebar-main {
 
 .has--cssanimations {
     .sidebar--ajax-loader {
-        .unitize(12, 16, top);
-        .unitize(15, 16, right);
+        .unitize(top, 12);
+        .unitize(right, 15);
         position: absolute;
         display: none;
 
@@ -226,8 +226,8 @@ body > .sidebar-main {
 }
 
 .sidebar--ajax-loader {
-    .unitize(12, 16, top);
-    .unitize(15, 16, right);
+    .unitize(top, 12);
+    .unitize(right, 15);
     position: absolute;
     display: none;
 
@@ -252,7 +252,7 @@ body > .sidebar-main {
     .sidebar-main {
     	.unitize-width(230);
         .unitize-margin(0, 0);
-		.unitize(30, 16, padding-top);
+		.unitize(padding-top, 30);
         display: none;
         float: left;
 
@@ -267,7 +267,7 @@ body > .sidebar-main {
 			display: block;
 
 			& + .content--wrapper {
-				.unitize(260, 16, margin-left);
+				.unitize(margin-left, 260);
 			}
 		}
 
@@ -339,7 +339,7 @@ body > .sidebar-main {
     }
 
     .sidebar--categories-navigation {
-        .unitize(20, 16, margin-bottom);
+        .unitize(margin-bottom, 20);
     }
 
     .sidebar--navigation {
@@ -379,7 +379,7 @@ body > .sidebar-main {
         }
 
         .is--level1 {
-            .unitize(10, 16, margin-bottom);
+            .unitize(margin-bottom, 10);
             border: 0 none;
 
             .navigation--entry {
@@ -401,7 +401,7 @@ body > .sidebar-main {
         }
 
         .is--level2 {
-            .unitize(12, 16, font-size);
+            .unitize(font-size, 12);
         }
 
         .navigation--level-high {
@@ -415,7 +415,7 @@ body > .sidebar-main {
 
         .shop-sites--headline {
             .unitize(10 ,15, padding-bottom);
-            .unitize(16, 16, font-size);
+            .unitize(font-size, 16);
             margin-top: 0;
             border-bottom: 1px solid @border-color;
             color: @text-color-dark;
@@ -462,7 +462,7 @@ body > .sidebar-main {
 
 @media screen and (min-width: @desktopViewportWidth) {
     .sidebar-main {
-        .unitize(45, 16, padding-top);
+        .unitize(padding-top, 45);
         display: block;
 
         &.off-canvas {

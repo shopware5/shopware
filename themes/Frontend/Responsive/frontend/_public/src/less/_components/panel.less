@@ -83,7 +83,7 @@ Styling options: `has--border` and `has--shadow`
 .panel--title {
     .unitize-padding(20, 0, 0, 0);
     .unitize-margin(0, 20);
-    .unitize(16, 16, font-size);
+    .unitize(font-size, 16);
     display: block;
     font-weight: bold;
     color: @text-color-dark;
@@ -114,8 +114,8 @@ Styling options: `has--border` and `has--shadow`
 */
 .panel--body {
     .unitize-padding(10, 10);
-    .unitize(14, 16, font-size);
-    .unitize(24, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 24);
     display: block;
     position: relative;
 
@@ -152,7 +152,7 @@ Styling options: `has--border` and `has--shadow`
 */
 .panel--actions {
     .unitize-padding(10, 10);
-    .unitize(40, 16, line-height);
+    .unitize(line-height, 40);
     display: block;
 
     &.has--border {
@@ -233,8 +233,8 @@ Styling options: `has--border` and `has--shadow`
 .panel--td {
     .clearfix();
     .unitize-padding(10, 10);
-    .unitize(14, 16, font-size);
-    .unitize(24, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 24);
     display: inline-block;
     float: left;
 
@@ -280,8 +280,8 @@ Styling options: `has--border` and `has--shadow`
 
     li {
         .unitize-padding(10, 10);
-        .unitize(14, 16, font-size);
-        .unitize(24, 16, line-height);
+        .unitize(font-size, 14);
+        .unitize(line-height, 24);
         border-bottom: 1px solid @panel-border;
 
         &:last-child {
@@ -306,8 +306,8 @@ Displays an arrow button that is used to navigate through the slider pages.
     .unitize-width(22);
     .unitize-height(30);
     .unitize(-15, 16, margin-top);
-    .unitize(28, 16, line-height);
-    .unitize(12, 16, font-size);
+    .unitize(line-height, 28);
+    .unitize(font-size, 12);
     display: none;
     position: absolute;
     top: 50%;
@@ -323,7 +323,7 @@ Displays an arrow button that is used to navigate through the slider pages.
     }
 
     &.left--arrow {
-        .unitize(10, 16, left);
+        .unitize(left, 10);
 
         &:before,
         &::before {
@@ -332,7 +332,7 @@ Displays an arrow button that is used to navigate through the slider pages.
     }
 
     &.right--arrow {
-        .unitize(10, 16, right);
+        .unitize(right, 10);
 
         &:before {
             content: "\e60f";
@@ -401,8 +401,8 @@ Displays an arrow button that is used to navigate through the slider pages.
     .navigation--link {
         .unitize-padding(10, 15);
         .unitize-margin(0, 5, 0, 0);
-        .unitize(24, 16, line-height);
-        .unitize(14, 16, font-size);
+        .unitize(line-height, 24);
+        .unitize(font-size, 14);
         .white-gradient();
         .border-radius-multi(3px, 3px, 0, 0);
         display: block;
@@ -417,7 +417,7 @@ Displays an arrow button that is used to navigate through the slider pages.
         white-space: nowrap;
 
         &.is--active {
-            .unitize(1, 16, top);
+            .unitize(top, 1);
             color: @text-color-dark;
             background: @panel-bg;
 
@@ -444,14 +444,14 @@ Displays an arrow button that is used to navigate through the slider pages.
 ```
 */
 .panel--paging {
-	.unitize(32, 16, line-height);
+	.unitize(line-height, 32);
     display: inline-block;
 
     .paging--link {
         .unitize-padding(0, 10);
         .unitize-margin(0, 1);
-        .unitize(14, 16, font-size);
-        .unitize(30, 16, line-height);
+        .unitize(font-size, 14);
+        .unitize(line-height, 30);
         .border-radius();
 		.linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
         display: inline-block;
@@ -461,12 +461,12 @@ Displays an arrow button that is used to navigate through the slider pages.
 		color: @btn-default-text-color;
 
         [class^="icon--"] {
-            .unitize(10, 16, font-size);
+            .unitize(font-size, 10);
         }
 
         &.is--active,
         &.is--active:hover {
-			.unitize(32, 16, line-height);
+			.unitize(line-height, 32);
 			.linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
 			color: @btn-primary-text-color;
 			border: 0 none;
@@ -493,8 +493,8 @@ Displays an arrow button that is used to navigate through the slider pages.
 .panel--filter-btn {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10);
-    .unitize(14, 16, font-size);
-    .unitize(26, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 26);
     .border-radius();
     .linear-gradient(#ffffff, @gray-light);
     .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
@@ -506,7 +506,7 @@ Displays an arrow button that is used to navigate through the slider pages.
 
     i {
         .unitize-margin(0, 10, 0, 0);
-        .unitize(10, 16, font-size);
+        .unitize(font-size, 10);
     }
 
     &:hover {
@@ -530,8 +530,8 @@ Displays an arrow button that is used to navigate through the slider pages.
 .panel--filter-select {
     .unitize-width(160);
     .unitize-height(28);
-    .unitize(14, 16, font-size);
-    .unitize(26, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 26);
     .border-radius();
     .box-sizing();
     .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
@@ -544,8 +544,8 @@ Displays an arrow button that is used to navigate through the slider pages.
 
     .arrow {
         .unitize-width(34);
-        .unitize(6, 16, font-size);
-        .unitize(28, 16, line-height);
+        .unitize(font-size, 6);
+        .unitize(line-height, 28);
         display: block;
         position: absolute;
         top: 0;
@@ -563,8 +563,8 @@ Displays an arrow button that is used to navigate through the slider pages.
     select {
         .unitize-width(180);
         .unitize-padding(0, 0, 0, 10);
-        .unitize(14, 16, font-size);
-        .unitize(26, 16, line-height);
+        .unitize(font-size, 14);
+        .unitize(line-height, 26);
         .appearance(none);
         color: @text-color;
         background: transparent;
@@ -600,8 +600,8 @@ Displays an arrow button that is used to navigate through the slider pages.
 
         &:after,
         &::after {
-            .unitize(16, 16, font-size);
-            .unitize(8, 16, right);
+            .unitize(font-size, 16);
+            .unitize(right, 8);
             content: '+';
             position: absolute;
             font-weight: bold;

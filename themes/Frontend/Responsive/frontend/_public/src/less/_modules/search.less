@@ -23,8 +23,8 @@ It contains the viewport specific styles inside media queries.
 	.cat-filter--headline {
 		.unitize-padding(0, 0, 5, 0);
 		.unitize-margin(0, 0, 20, 0);
-		.unitize(16, 16, font-size);
-		.unitize(24, 16, line-height);
+		.unitize(font-size, 16);
+		.unitize(line-height, 24);
 		border-bottom: 1px solid @border-color;
 	}
 
@@ -47,7 +47,7 @@ It contains the viewport specific styles inside media queries.
 
 		[class^="icon--"] {
 			.unitize-margin(0, 20);
-			.unitize(10, 16, font-size);
+			.unitize(font-size, 10);
 		}
 	}
 
@@ -69,7 +69,7 @@ It contains the viewport specific styles inside media queries.
 
 	.cat-filter--sub-cat {
 		.unitize-width(180);
-		.unitize(24, 16, line-height);
+		.unitize(line-height, 24);
 		.unitize-margin(0, 10, 0, 0);
 		display: block;
 	}

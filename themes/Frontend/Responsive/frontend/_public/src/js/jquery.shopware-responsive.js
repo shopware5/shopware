@@ -3,27 +3,27 @@ $(function () {
         {
             state: 'xs',
             enter: 0,
-            exit: 479
+            exit: 29.9375   // 479px
         },
         {
             state: 's',
-            enter: 480,
-            exit: 767
+            enter: 30,      // 480px
+            exit: 47.9375   // 767px
         },
         {
             state: 'm',
-            enter: 768,
-            exit: 1023
+            enter: 48,      // 768px
+            exit: 63.9375   // 1023px
         },
         {
             state: 'l',
-            enter: 1024,
-            exit: 1259
+            enter: 64,      // 1024px
+            exit: 78.6875   // 1259px
         },
         {
             state: 'xl',
-            enter: 1260,
-            exit: 5160
+            enter: 78.75,   // 1260px
+            exit: 322.5     // 5160px
         }
     ]);
 

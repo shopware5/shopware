@@ -8,16 +8,16 @@ The styling defines the basic layout of the shopware 5 custom pages that can be 
 
 
 .custom-page--content {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
 
 
     .custom-page--tab-headline {
-        .unitize(0, 16, margin-top);
-        .unitize(24, 16, font-size);
+        .unitize(margin-top, 0);
+        .unitize(font-size, 24);
     }
 
     .content--custom.panel--body {
-        .unitize(20, 16, padding);
+        .unitize(padding, 20);
     }
 
     .is--active-parent {
@@ -31,10 +31,10 @@ The styling defines the basic layout of the shopware 5 custom pages that can be 
 
 @media screen and (min-width: @tabletViewportWidth) {
     .custom-page--content {
-        .unitize(30, 16, margin-top);
+        .unitize(margin-top, 30);
 
         .custom-page--tab-headline {
-            .unitize(10, 16, margin-top);
+            .unitize(margin-top, 10);
         }
     }
 
@@ -51,6 +51,6 @@ The styling defines the basic layout of the shopware 5 custom pages that can be 
     }
 
     .custom-page--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
     }
 }
