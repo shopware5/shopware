@@ -17,22 +17,22 @@ The user can open the tool inside the product detail section.
 
 		// Compare quantity
 		.compare--quantity {
-			.unitize(5, 16, margin-left);
+			.unitize(margin-left, 5);
 			font-weight: 600;
 			display: inline-block;
 			color: @brand-primary;
 		}
 
 		.icon--compare {
-			.unitize(12, 16, font-size);
+			.unitize(font-size, 12);
 		}
     }
 
     .compare--list {
         .unitize-width(280);
         .unitize-padding(5, 10, 10, 10);
-        .unitize(32, 16, top);
-		.unitize(12, 16, right);
+        .unitize(top, 32);
+		.unitize(right, 12);
         text-align: left;
         position: absolute;
         display: none;
@@ -45,8 +45,8 @@ The user can open the tool inside the product detail section.
             .rotate(135deg);
             .unitize-width(8);
             .unitize-height(8);
-            .unitize(-5, 16, top);
-            .unitize(25, 16, left);
+            .unitize(top, -5);
+            .unitize(left, 25);
             content: '';
             display: block;
             position: absolute;
@@ -63,9 +63,9 @@ The user can open the tool inside the product detail section.
 		.compare--entry { cursor: default; }
 
         .compare--link {
-            .unitize(230, 16, width);
+            .unitize(width, 230);
             .unitize-padding(10, 0);
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             color: @text-color;
             display: inline-block;
             white-space: nowrap;
@@ -88,8 +88,8 @@ The user can open the tool inside the product detail section.
 			.unitize-width(21);
 			.unitize-padding(4, 5);
 			.unitize-margin(8, 0);
-			.unitize(8, 16, font-size);
-			.unitize(14, 16, line-height);
+			.unitize(font-size, 8);
+			.unitize(line-height, 14);
             float: right;
 
             .icon--cross {
@@ -104,7 +104,7 @@ The user can open the tool inside the product detail section.
         }
 
         .btn--compare {
-            .unitize(5, 16, margin-top);
+            .unitize(margin-top, 5);
         }
     }
 }
@@ -116,8 +116,8 @@ The user can open the tool inside the product detail section.
 }
 
 .modal--compare {
-    .unitize(14, 16, font-size);
-    .unitize(-4, 16, letter-spacing);
+    .unitize(font-size, 14);
+    .unitize(letter-spacing, -4);
     display: inline-block;
     white-space: nowrap;
     vertical-align: top;
@@ -129,7 +129,7 @@ The user can open the tool inside the product detail section.
 
     .modal--title {
         .unitize-padding(10, 40, 10, 20);
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         font-weight: 700;
         border-bottom: 1px solid @text-color;
         letter-spacing: 0;
@@ -169,7 +169,7 @@ The user can open the tool inside the product detail section.
     }
 
     .entry--picture {
-        .unitize(160, 16, height);
+        .unitize(height, 160);
         position: relative;
 
         .image--element img {
@@ -185,7 +185,7 @@ The user can open the tool inside the product detail section.
     }
 
     .entry--name {
-        .unitize(125, 16, height);
+        .unitize(height, 125);
     }
 
     .link--name {
@@ -197,7 +197,7 @@ The user can open the tool inside the product detail section.
     }
 
     .entry--voting {
-        .unitize(50, 16, height);
+        .unitize(height, 50);
 
         .icon--star,
         .icon--star-empty {
@@ -206,20 +206,20 @@ The user can open the tool inside the product detail section.
     }
 
     .entry--description {
-        .unitize(150, 16, height);
+        .unitize(height, 150);
         text-align: left;
         word-wrap: break-word;
     }
 
     .entry--price {
-        .unitize(130, 16, height);
+        .unitize(height, 130);
 
         .price--pseudoprice {
             text-decoration: line-through;
         }
 
         .price--normal {
-            .unitize(16, 16, font-size);
+            .unitize(font-size, 16);
             color: @brand-primary;
             font-weight: 700;
         }

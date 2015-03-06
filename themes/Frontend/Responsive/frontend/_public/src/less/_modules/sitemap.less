@@ -9,24 +9,24 @@ The sitemap link is located in the footer information column.
 */
 
 .sitemap--content {
-    .unitize(10, 16, margin-top);
+    .unitize(margin-top, 10);
 
     .sitemap--headline {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
 
         .sitemap--title {
             margin-top: 0;
         }
 
         .sitemap--headline-text  {
-            .unitize(0, 16, margin-bottom);
+            .unitize(margin-bottom, 0);
         }
     }
 
     .sitemap--category {
-        .unitize(10, 16, padding-bottom);
-        .unitize(16, 16, margin-bottom);
-        .unitize(60, 16, min-height);
+        .unitize(padding-bottom, 10);
+        .unitize(margin-bottom, 16);
+        .unitize(min-height, 60);
         background-color: @gray-light;
 
         .sitemap--navigation-link {
@@ -42,13 +42,13 @@ The sitemap link is located in the footer information column.
     .sitemap--navigation-entry-inner {
 
         .sitemap--navigation-link {
-            .unitize(35, 16, padding-left);
+            .unitize(padding-left, 35);
         }
 
     }
     .sitemap--navigation-head {
         .unitize-padding(4, 10, 4, 10);
-        .unitize(8, 16, margin-bottom);
+        .unitize(margin-bottom, 8);
         background: @brand-secondary;
 
         .sitemap--navigation-head-link {
@@ -60,10 +60,10 @@ The sitemap link is located in the footer information column.
 @media screen and (min-width: @tabletViewportWidth) {
 
     .sitemap--content {
-        .unitize(20, 16, margin-top);
+        .unitize(margin-top, 20);
 
         .sitemap--headline {
-            .unitize(20, 16, margin-bottom);
+            .unitize(margin-bottom, 20);
         }
 
         .sitemap--category {
@@ -73,7 +73,7 @@ The sitemap link is located in the footer information column.
 
             &:last-child,
             &:nth-child(2) {
-                .unitize(0, 16, margin-right);
+                .unitize(margin-right, 0);
             }
         }
     }
@@ -89,7 +89,7 @@ The sitemap link is located in the footer information column.
             margin-right: 1.25%;
 
             &:last-child {
-                .unitize(0, 16, margin-right)
+                .unitize(margin-right, 0)
             }
             &:nth-child(2) {
                 margin-right: 1.25%;
@@ -101,6 +101,6 @@ The sitemap link is located in the footer information column.
 @media screen and (min-width: @desktopViewportWidth) {
 
     .sitemap--content {
-        .unitize(45, 16, margin-top);
+        .unitize(margin-top, 45);
     }
 }

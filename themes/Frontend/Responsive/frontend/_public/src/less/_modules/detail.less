@@ -19,12 +19,12 @@ It contains the product actions, the product information such as pictures and de
 	.product--header {
 		.clearfix();
 		.unitize-padding(10, 0);
-        .unitize(70, 16, min-height);
+        .unitize(min-height, 70);
         box-sizing: content-box;
 
         // Product title
         .product--title {
-            .unitize(21, 16, font-size);
+            .unitize(font-size, 21);
             margin: 0;
             padding: 0;
             font-weight: bold;
@@ -42,16 +42,16 @@ It contains the product actions, the product information such as pictures and de
     }
 
     .product--rating {
-        .unitize(19, 16, font-size);
+        .unitize(font-size, 19);
         .clearfix();
         display: block;
         letter-spacing: -1px;
         color: @text-color;
 
         .rating--count-wrapper {
-            .unitize(16, 16, font-size);
-            .unitize(10, 16, margin-left);
-            .unitize(25, 16, line-height);
+            .unitize(font-size, 16);
+            .unitize(margin-left, 10);
+            .unitize(line-height, 25);
             vertical-align: text-top;
             letter-spacing: 1px;
         }
@@ -87,7 +87,7 @@ It contains the product actions, the product information such as pictures and de
     }
 
 	.product--tax {
-		.unitize(12, 16, font-size);
+		.unitize(font-size, 12);
 		margin: 0;
 	}
 
@@ -112,7 +112,7 @@ It contains the product actions, the product information such as pictures and de
         }
 
         .price--content {
-            .unitize(28, 16, font-size);
+            .unitize(font-size, 28);
             white-space: nowrap;
 			color: @text-color-dark;
             font-weight: bold;
@@ -121,7 +121,7 @@ It contains the product actions, the product information such as pictures and de
         }
 
         .content--discount {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             .unitize-padding(4, 0);
             white-space: nowrap;
             display: inline-block;
@@ -130,8 +130,8 @@ It contains the product actions, the product information such as pictures and de
         .price--discount-icon {
             .unitize-padding(6, 7);
             .unitize-margin(0, 5);
-            .unitize(13, 16, font-size);
-            .unitize(3, 16, border-radius);
+            .unitize(font-size, 13);
+            .unitize(border-radius, 3);
             display: inline-block;
             position: relative;
             background: @badge-discount-bg;
@@ -162,7 +162,7 @@ It contains the product actions, the product information such as pictures and de
             .js--fancy-select-text,
             .js--fancy-select-trigger {
                 .unitize-height(42);
-                .unitize(42, 16, line-height);
+                .unitize(line-height, 42);
             }
 		}
 	}
@@ -178,7 +178,7 @@ It contains the product actions, the product information such as pictures and de
 	// Product base information
 	.product--base-info {
 		.unitize-margin(10, 0);
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
 
 		.entry--label {
 			.unitize-margin(0, 8, 0, 0);
@@ -216,7 +216,7 @@ It contains the product actions, the product information such as pictures and de
 
 	// Content headlines
 	.content--title {
-		.unitize(18, 16, font-size);
+		.unitize(font-size, 18);
         .unitize-margin(10, 0, 5, 0);
         font-weight: 700;
 		color: @text-color-dark;
@@ -227,7 +227,7 @@ It contains the product actions, the product information such as pictures and de
 	}
 
     .content--link [class^=icon] {
-        .unitize(10, 16, font-size);
+        .unitize(font-size, 10);
         .unitize-margin(-2, 8, 0, 0);
     }
 
@@ -257,7 +257,7 @@ It contains the product actions, the product information such as pictures and de
 
     // Product action link
     .action--link {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
         .unitize-margin(0, 10, 5, 0);
         color: @text-color;
         white-space: nowrap;
@@ -276,13 +276,13 @@ It contains the product actions, the product information such as pictures and de
 
         // Icon
         *[class^="icon"] {
-            .unitize(12, 16, font-size);
+            .unitize(font-size, 12);
             .unitize-margin(0, 5, 0, 0);
         }
 
         // Icon
         *[class="icon--star"] {
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
             .unitize-margin(0, 5, 0, 0);
         }
     }
@@ -302,11 +302,11 @@ It contains the product actions, the product information such as pictures and de
     }
 
     .price--unit {
-        .unitize(12, 16, font-size);
+        .unitize(font-size, 12);
     }
 
     .delivery--text {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
     }
 
     .similar--content,
@@ -343,7 +343,7 @@ It contains the product actions, the product information such as pictures and de
     }
 
 	.review--notice {
-		.unitize(12, 16, font-size);
+		.unitize(font-size, 12);
 	}
 }
 
@@ -364,7 +364,7 @@ It contains the product actions, the product information such as pictures and de
 	.border-radius(3px);
 	.unitize-margin(0, 0, 25, 0);
 	.unitize-padding(20, 20);
-	.unitize(14, 16, font-size);
+	.unitize(font-size, 14);
 	background: #fff;
 	border: 1px solid @border-color;
 
@@ -378,7 +378,7 @@ It contains the product actions, the product information such as pictures and de
 	}
 
     .entry--header, .product--rating {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
     }
 
 	.content--label {
@@ -391,11 +391,11 @@ It contains the product actions, the product information such as pictures and de
     }
 
 	.content--title {
-		.unitize(16, 16, font-size);
+		.unitize(font-size, 16);
 	}
 
 	.review--content {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
         margin: 0;
     }
 }
@@ -427,13 +427,13 @@ It contains the product actions, the product information such as pictures and de
 		.unitize-margin(0, 0, 16, 0, 16);
 	}
 	.captcha--notice {
-		.unitize(12, 16, font-size);
+		.unitize(font-size, 12);
 		line-height: 1.2;
 	}
 }
 
 .product--rating-count {
-    .unitize(8, 16, margin-left);
+    .unitize(margin-left, 8);
     .unitize-padding(2, 7);
     .border-radius(3px);
     background: @brand-secondary;
@@ -464,7 +464,7 @@ It contains the product actions, the product information such as pictures and de
 		width: 20%;
 
         .icon--mail {
-            .unitize(12, 16, font-size);
+            .unitize(font-size, 12);
         }
 	}
 }
@@ -478,7 +478,7 @@ It contains the product actions, the product information such as pictures and de
 
 .configurator--label {
     .unitize-margin(6, 0, 4, 0);
-    .unitize(14, 16, font-size);
+    .unitize(font-size, 14);
     font-weight: bold;
 }
 
@@ -509,8 +509,8 @@ It contains the product actions, the product information such as pictures and de
     }
 
     &:after {
-        .unitize(10, 16, right);
-        .unitize(18, 16, font-size);
+        .unitize(right, 10);
+        .unitize(font-size, 18);
         position: absolute;
         top: 50%;
         margin-top: -9px;
@@ -569,19 +569,19 @@ It contains the product actions, the product information such as pictures and de
 
             // Icon
             *[class^="icon"] {
-                .unitize(12, 16, font-size);
+                .unitize(font-size, 12);
             }
 
             // Icon
             *[class="icon--star"] {
-                .unitize(14, 16, font-size);
+                .unitize(font-size, 14);
             }
         }
 
         // Product configurator
         .configurator--form {
             .js--fancy-select {
-                .unitize(36, 16, line-height);
+                .unitize(line-height, 36);
                 width: 80%;
             }
         }
@@ -613,8 +613,8 @@ It contains the product actions, the product information such as pictures and de
             .unitize-padding(30, 0, 20, 0, 16);
 
             .product--title {
-                .unitize(28, 16, font-size);
-                .unitize(30, 16, line-height);
+                .unitize(font-size, 28);
+                .unitize(line-height, 30);
                 width: 80%;
                 float: left;
                 border: 0 none;
@@ -669,7 +669,7 @@ It contains the product actions, the product information such as pictures and de
 
         // Block prices
 		.block-prices--container {
-			.unitize(12, 16, margin-top);
+			.unitize(margin-top, 12);
 		}
 
         .tab--navigation {
@@ -774,7 +774,7 @@ It contains the product actions, the product information such as pictures and de
 
         // Product actions
         .action--link {
-            .unitize(25, 16, margin-right);
+            .unitize(margin-right, 25);
             display: inline-block;
             float: left;
         }
@@ -798,7 +798,7 @@ It contains the product actions, the product information such as pictures and de
 
     .product--details {
         .product--header{
-            .unitize(45, 16, padding-top);
+            .unitize(padding-top, 45);
         }
 
         .review--form-container {
@@ -811,7 +811,7 @@ It contains the product actions, the product information such as pictures and de
         position: relative;
 
         .navigation--link {
-            .unitize(140, 16, top);
+            .unitize(top, 140);
             display: none;
             position: absolute;
         }
@@ -820,8 +820,8 @@ It contains the product actions, the product information such as pictures and de
         .link--next-button {
             .unitize-width(40);
             .unitize-height(255);
-            .unitize(255, 16, line-height);
-            .unitize(25, 16, font-size);
+            .unitize(line-height, 255);
+            .unitize(font-size, 25);
             .transition(background 0.3s ease);
             background: rgba(red(@brand-secondary), green(@brand-secondary), blue(@brand-secondary), 0.1);
             text-align: center;

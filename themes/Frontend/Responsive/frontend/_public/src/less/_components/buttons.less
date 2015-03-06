@@ -19,7 +19,7 @@ Adding the class `is--disabled` changes the element to a disabled button.
 
 .btn {
     .unitize-padding(2, 10);
-    .unitize(32, 16, line-height);
+    .unitize(line-height, 32);
     .border-radius(3px);
     .appearance();
     .unitize(@btn-font-size, 16, font-size);
@@ -44,31 +44,31 @@ Adding the class `is--disabled` changes the element to a disabled button.
         @largeFontSize: @btn-font-size + 2;
         .unitize(@largeFontSize, 16, font-size);
     }
-    
-/*
-######Icon alignment
 
-To work properly the button needs the class `is--icon-left` or `is--icon-right` and an `icon` inside it.
-```
-<button class="btn is--icon-left">
-    <i class="icon--account"></i>
-    Icon left
-</button>
+    /*
+    ######Icon alignment
 
-<button class="btn is--icon-right">
-    <i class="icon--account"></i>
-    Icon right
-</button>
-```
-*/
+    To work properly the button needs the class `is--icon-left` or `is--icon-right` and an `icon` inside it.
+    ```
+    <button class="btn is--icon-left">
+        <i class="icon--account"></i>
+        Icon left
+    </button>
+
+    <button class="btn is--icon-right">
+        <i class="icon--account"></i>
+        Icon right
+    </button>
+    ```
+    */
     &.is--icon-right {
-        .unitize(36, 16, padding-right);
+        .unitize(padding-right, 36);
 
         [class^="icon--"] {
             .unitize-height(16);
-            .unitize(32, 16, line-height);
+            .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
-            .unitize(12, 16, right);
+            .unitize(right, 12);
             font-weight: normal;
             display: block;
             position: absolute;
@@ -77,13 +77,13 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
     }
 
     &.is--icon-left {
-        .unitize(36, 16, padding-left);
+        .unitize(padding-left, 36);
 
         [class^="icon--"] {
             .unitize-height(16);
-            .unitize(32, 16, line-height);
+            .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
-            .unitize(12, 16, left);
+            .unitize(left, 12);
             font-weight: normal;
             display: block;
             position: absolute;
@@ -112,37 +112,37 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
         outline: none;
     }
 
-/*
-######Button size class
-Adding a button-size class creates a larger or smaller button or changes the button properies.
+    /*
+    ######Button size class
+    Adding a button-size class creates a larger or smaller button or changes the button properies.
 
-Options: `is--large`, `is--small`, `is--full`, `is--center`
-```
-<button class="btn is--large">
-    Large button
-</button>
+    Options: `is--large`, `is--small`, `is--full`, `is--center`
+    ```
+    <button class="btn is--large">
+        Large button
+    </button>
 
-<button class="btn is--small">
-    Small button
-</button>
-```
-*/
+    <button class="btn is--small">
+        Small button
+    </button>
+    ```
+    */
 
     /** State: Small button */
     &.is--small {
-        .unitize(28, 16, line-height);
+        .unitize(line-height, 28);
     }
 
     /** State: Medium button */
     &.is--medium {
-        .unitize(32, 16, line-height);
-        .unitize(38, 16, height);
+        .unitize(line-height, 32);
+        .unitize(height, 38);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize(36, 16, line-height);
-        .unitize(42, 16, height);
+        .unitize(line-height, 36);
+        .unitize(height, 42);
     }
 
     /** State: Button with 100% width */
@@ -172,7 +172,7 @@ Options: `is--primary`, `is--secondary`
 */
 .is--primary {
     .unitize-padding(2, 12);
-    .unitize(34, 16, line-height);
+    .unitize(line-height, 34);
     .linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
     border: 0 none;
     color: @btn-primary-text-color;
@@ -184,18 +184,18 @@ Options: `is--primary`, `is--secondary`
 
     /** State: Small button */
     &.is--small {
-        .unitize(30, 16, line-height);
+        .unitize(line-height, 30);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize(38, 16, line-height);
+        .unitize(line-height, 38);
     }
 }
 
 .is--secondary {
     .unitize-padding(2, 12);
-    .unitize(34, 16, line-height);
+    .unitize(line-height, 34);
     .linear-gradient(@btn-secondary-top-bg, @btn-secondary-bottom-bg);
     border: 0 none;
     color: @btn-secondary-text-color;
@@ -207,11 +207,11 @@ Options: `is--primary`, `is--secondary`
 
     /** State: Small button */
     &.is--small {
-        .unitize(30, 16, line-height);
+        .unitize(line-height, 30);
     }
 
     /** State: Large button */
     &.is--large {
-        .unitize(38, 16, line-height);
+        .unitize(line-height, 38);
     }
 }

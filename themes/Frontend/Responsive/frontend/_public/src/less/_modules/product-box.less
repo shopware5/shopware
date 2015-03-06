@@ -146,8 +146,8 @@ Shopware provides 3 product box types:<br/>
 	.product--title {
 		.unitize-height(40);
 		.unitize-margin(0, 0, 5, 0);
-		.unitize(16, 16, font-size);
-		.unitize(20, 16, line-height);
+		.unitize(font-size, 16);
+		.unitize(line-height, 20);
 		display: block;
 		width: 100%;
 		color: @text-color-dark;
@@ -162,8 +162,8 @@ Shopware provides 3 product box types:<br/>
 	.product--description {
 		.unitize-height(72);
 		.unitize-margin(0, 0, 10, 0);
-		.unitize(14, 16, font-size);
-		.unitize(18, 16, line-height);
+		.unitize(font-size, 14);
+		.unitize(line-height, 18);
 		display: block;
 		width: 100%;
 		overflow: hidden;
@@ -174,8 +174,8 @@ Shopware provides 3 product box types:<br/>
 
 		.price--unit {
 			.unitize-height(20);
-			.unitize(11, 16, font-size);
-			.unitize(16, 16, line-height);
+			.unitize(font-size, 11);
+			.unitize(line-height, 16);
 			display: block;
 			overflow: hidden;
 		}
@@ -185,8 +185,8 @@ Shopware provides 3 product box types:<br/>
 		.unitize-height(20);
 
 		.price--default {
-			.unitize(18, 16, font-size);
-			.unitize(20, 16, line-height);
+			.unitize(font-size, 18);
+			.unitize(line-height, 20);
 			display: inline-block;
 			color: @text-color-dark;
 			font-weight: bold;
@@ -197,8 +197,8 @@ Shopware provides 3 product box types:<br/>
 		}
 
 		.price--discount {
-			.unitize(12, 16, font-size);
-			.unitize(20, 16, line-height);
+			.unitize(font-size, 12);
+			.unitize(line-height, 20);
 			display: inline-block;
 			text-decoration: line-through;
 			vertical-align: baseline;
@@ -207,14 +207,14 @@ Shopware provides 3 product box types:<br/>
 
 	.product--actions {
 		.unitize-margin(15, 0, 0, 0);
-		.unitize(14, 16, font-size);
-		.unitize(24, 16, line-height);
+		.unitize(font-size, 14);
+		.unitize(line-height, 24);
 	}
 
 	.product--action {
 		.unitize-margin(0, 20, 0, 0);
-		.unitize(14, 16, font-size);
-		.unitize(24, 16, line-height);
+		.unitize(font-size, 14);
+		.unitize(line-height, 24);
 		display: inline-block;
 		color: @text-color;
 		word-break: keep-all;
@@ -222,7 +222,7 @@ Shopware provides 3 product box types:<br/>
 
 		[class^="icon--"] {
 			.unitize-margin(0, 5, 0, 0);
-			.unitize(12, 16, font-size);
+			.unitize(font-size, 12);
 		}
 
 		&:hover {
@@ -261,16 +261,16 @@ Creates a corner product badge on a product-box.
 ```
 */
 	.product--badges {
-		.unitize(20, 16, top);
-		.unitize(-1, 16, left);
+		.unitize(top, 20);
+		.unitize(left, -1);
 		position: absolute;
 		z-index: 750;
 
 		.product--badge {
 			.unitize-padding(3, 10);
 			.unitize-margin(0, 0, 5, 0);
-			.unitize(14, 16, font-size);
-			.unitize(16, 16, line-height);
+			.unitize(font-size, 14);
+			.unitize(line-height, 16);
 			.border-radius-multi(0, 3px, 3px, 0);
 			display: block;
             float: left;
@@ -318,8 +318,8 @@ Creates a corner product badge on a product-box.
 
 		.price--unit {
 			.unitize-height(30);
-			.unitize(10, 16, font-size);
-			.unitize(14, 16, line-height);
+			.unitize(font-size, 10);
+			.unitize(line-height, 14);
 			display: block;
 		}
 	}
@@ -330,22 +330,22 @@ Creates a corner product badge on a product-box.
 	}
 
 	.product--price {
-		.unitize(20, 16, line-height);
+		.unitize(line-height, 20);
 		position: absolute;
 		bottom: 0; left: 0;
 		height: auto;
 
 		.price--default {
-			.unitize(16, 16, font-size);
-			.unitize(20, 16, line-height);
+			.unitize(font-size, 16);
+			.unitize(line-height, 20);
 			.unitize-margin(0, 5, 0, 0);
 			vertical-align: bottom;
 			float: left;
 		}
 
 		.price--discount {
-			.unitize(10, 16, font-size);
-			.unitize(14, 16, line-height);
+			.unitize(font-size, 10);
+			.unitize(line-height, 14);
 			vertical-align: bottom;
 		}
 	}
@@ -376,11 +376,11 @@ Creates a corner product badge on a product-box.
 
 		.price--unit {
 			.unitize-height(14);
-			.unitize(10, 16, font-size);
+			.unitize(font-size, 10);
 		}
 
 		.price--default {
-			.unitize(14, 16, font-size);
+			.unitize(font-size, 14);
 		}
 
 		.is--discount {
@@ -393,7 +393,7 @@ Creates a corner product badge on a product-box.
 		.user-select(none);
 		.touch-callout(none);
 		.tap-highlight-color(rgba(0, 0, 0, 0));
-		.unitize(10, 16, margin-bottom);
+		.unitize(margin-bottom, 10);
 		display: block;
 		text-align: center;
 		position: relative;
@@ -421,8 +421,8 @@ Creates a corner product badge on a product-box.
 	}
 
 	.product--title {
-		.unitize(14, 16, font-size);
-		.unitize(40, 16, height);
+		.unitize(font-size, 14);
+		.unitize(height, 40);
 		.user-select(none);
 		.touch-callout(none);
 		.tap-highlight-color(rgba(0, 0, 0, 0));

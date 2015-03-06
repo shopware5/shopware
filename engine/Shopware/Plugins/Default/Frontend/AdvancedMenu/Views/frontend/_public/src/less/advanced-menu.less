@@ -45,12 +45,12 @@
 
         + .teaser--headline,
         + .teaser--text {
-            .unitize(40, 16, margin-top);
+            .unitize(margin-top, 40);
         }
     }
 
     .teaser--headline {
-        .unitize(21, 16, font-size);
+        .unitize(font-size, 21);
         .unitize-margin(0, 0, 20, 0);
         font-weight: bold;
     }
@@ -63,7 +63,7 @@
 
     .menu--list-item-link {
         .unitize-padding(5, 0);
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         .transition(color 0.2s ease-out);
         color: @text-color-dark;
         display: block;
@@ -72,7 +72,7 @@
     }
 
     .button-container {
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         .unitize-padding(20, 30, 20, 0);
         background: @text-color-dark;
         color: @btn-secondary-text-color;
@@ -85,11 +85,11 @@
         }
 
         .icon--arrow-right {
-            .unitize(12, 16, font-size);
+            .unitize(font-size, 12);
             .unitize(-6, 16, margin-top);
             position: absolute;
             top: 50%;
-            .unitize(30, 16, right);
+            .unitize(right, 30);
         }
 
         .button--close {
@@ -139,7 +139,7 @@
     }
 
     .item--level-0 {
-        .unitize(40, 16, padding-bottom);
+        .unitize(padding-bottom, 40);
         display: inline-block;
         position: relative;
 
@@ -160,7 +160,7 @@
     }
 
     .item--level-2 .menu--list-item-link {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
 
         + .menu--level-3 {
             .unitize-margin(0, 0, 5, 20);
@@ -168,7 +168,7 @@
     }
 
     .item--level-3 .menu--list-item-link {
-        .unitize(12, 16, font-size);
+        .unitize(font-size, 12);
     }
 }
 

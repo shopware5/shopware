@@ -8,7 +8,7 @@ It is displayed on the product detail page.
 
 .image--gallery {
     .image-slider--container {
-        .unitize(90, 16, bottom);
+        .unitize(bottom, 90);
         position: absolute;
         top: 0;
         left: 0;
@@ -48,7 +48,7 @@ It is displayed on the product detail page.
 
     .image-slider--thumbnails {
         .unitize-padding(10, 0);
-        .unitize(90, 16, height);
+        .unitize(height, 90);
         background: #fff;
         top: auto;
         bottom: 0;
@@ -58,7 +58,7 @@ It is displayed on the product detail page.
         display: block;
 
         .thumbnails--arrow {
-            .unitize(10, 16, top);
+            .unitize(top, 10);
 
             &.is--left {
                 border-left: 0 none;
@@ -84,9 +84,9 @@ It is displayed on the product detail page.
     .button--zoom-in,
     .button--zoom-out,
     .button--zoom-reset {
-        .unitize(10, 16, top);
-        .unitize(10, 16, left);
-        .unitize(20, 16, font-size);
+        .unitize(top, 10);
+        .unitize(left, 10);
+        .unitize(font-size, 20);
         .unitize-padding(2, 6);
         position: absolute;
 
@@ -100,22 +100,22 @@ It is displayed on the product detail page.
     }
 
     .button--zoom-reset {
-        .unitize(43, 16, left);
+        .unitize(left, 43);
         border-radius: 0;
     }
 
     .button--zoom-in {
         .border-radius-multi(0, 3px, 3px, 0);
-        .unitize(76, 16, left);
+        .unitize(left, 76);
     }
 }
 
 .image-gallery--modal {
     .modal--close {
-        .unitize(10, 16, top);
-        .unitize(34, 16, width);
-        .unitize(34, 16, height);
-        .unitize(32, 16, line-height);
+        .unitize(top, 10);
+        .unitize(width, 34);
+        .unitize(height, 34);
+        .unitize(line-height, 32);
     }
 }
 

@@ -7,7 +7,7 @@ The option can be enabled in the shopware backend and is disabled by default.
 */
 
 .tellafriend--content {
-    .unitize(10, 16, padding-top);
+    .unitize(padding-top, 10);
     width: 100%;
 
     .tellafriend--field {
@@ -20,21 +20,21 @@ The option can be enabled in the shopware backend and is disabled by default.
     }
 
     .captcha--placeholder {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
     }
 
     .captcha--notice {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         display: block;
     }
 
     .alert {
-        .unitize(30, 16, margin-top);
+        .unitize(margin-top, 30);
     }
 
     .review--notice {
-        .unitize(10, 16, margin-bottom);
-        .unitize(14, 16, font-size);
+        .unitize(margin-bottom, 10);
+        .unitize(font-size, 14);
     }
 }
 
@@ -42,11 +42,11 @@ The option can be enabled in the shopware backend and is disabled by default.
 @media screen and(min-width: @tabletViewportWidth) {
 
     .tellafriend--content {
-        .unitize(20, 16, padding-top);
+        .unitize(padding-top, 20);
         width: 100%;
 
         .tellafriend--field {
-            .unitize(15, 16, margin-bottom);
+            .unitize(margin-bottom, 15);
         }
 
         .alert {
@@ -58,6 +58,6 @@ The option can be enabled in the shopware backend and is disabled by default.
     // Desktop view
 @media screen and(min-width: @desktopViewportWidth) {
     .tellafriend--content {
-        .unitize(45, 16, padding-top);
+        .unitize(padding-top, 45);
     }
 }

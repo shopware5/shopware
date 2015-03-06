@@ -24,7 +24,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 */
 .filter-panel {
     .unitize-height(38);
-    .unitize(10, 16, margin-bottom);
+    .unitize(margin-bottom, 10);
     .border-radius();
     .white-gradient();
 	.user-select(none);
@@ -78,7 +78,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter-panel--title {
     .unitize-height(36);
-    .unitize(36, 16, line-height);
+    .unitize(line-height, 36);
     .unitize-padding(0, 30, 0, 10);
     .unitize-margin(0, 0, 5, 0);
     .user-select(none);
@@ -94,10 +94,10 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter-panel--icon {
     .unitize-width(16);
     .unitize-height(16);
-    .unitize(8, 16, top);
-    .unitize(10, 16, right);
-    .unitize(6, 16, font-size);
-    .unitize(16, 16, line-height);
+    .unitize(top, 8);
+    .unitize(right, 10);
+    .unitize(font-size, 6);
+    .unitize(line-height, 16);
     .user-select(none);
     .touch-callout(none);
     .tap-highlight-color(rgba(0, 0, 0, 0));
@@ -119,7 +119,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 }
 
 .filter-panel--option-list {
-    .unitize(5, 16, padding-bottom);
+    .unitize(padding-bottom, 5);
     list-style: none;
 }
 
@@ -139,7 +139,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter-panel--label {
     .unitize-padding(4, 0, 4, 30);
-    .unitize(18, 16, line-height);
+    .unitize(line-height, 18);
 	.user-select(none);
 	.touch-callout(none);
 	.tap-highlight-color(rgba(0, 0, 0, 0));
@@ -182,8 +182,8 @@ The styling includes the collapsed and expanded styling and the panel component 
             &:before {
                 .unitize-width(12);
                 .unitize-height(12);
-                .unitize(12, 16, line-height);
-                .unitize(7, 16, font-size);
+                .unitize(line-height, 12);
+                .unitize(font-size, 7);
                 display: block;
                 font-family: 'shopware';
                 font-weight: normal;
@@ -279,7 +279,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter-panel--media-option {
     .unitize-height(45);
-    .unitize(45, 16, max-width);
+    .unitize(max-width, 45);
     width: 18%;
     margin: 0 0 2% 2%;
     display: block;
@@ -308,8 +308,8 @@ The styling includes the collapsed and expanded styling and the panel component 
             &:after {
                 .unitize-width(16);
                 .unitize-height(16);
-                .unitize(16, 16, line-height);
-                .unitize(7, 16, font-size);
+                .unitize(line-height, 16);
+                .unitize(font-size, 7);
                 .unitize(-4, 16, top);
                 .unitize(-4, 16, right);
                 .primary-gradient();
@@ -332,7 +332,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter-panel--media-label {
     .unitize-padding(2, 2);
-    .unitize(36, 16, line-height);
+    .unitize(line-height, 36);
     .border-radius();
     width: 100%;
     height: 100%;
@@ -361,7 +361,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     .clearfix();
     .unitize-width(150);
     .unitize-height(30);
-    .unitize(10, 16, margin-bottom);
+    .unitize(margin-bottom, 10);
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -378,11 +378,11 @@ The styling includes the collapsed and expanded styling and the panel component 
         cursor: pointer;
         z-index: 65;
 
-        &#star--1 { .unitize(0, 16, left); }
-        &#star--2 { .unitize(30, 16, left); }
-        &#star--3 { .unitize(60, 16, left); }
-        &#star--4 { .unitize(90, 16, left); }
-        &#star--5 { .unitize(120, 16, left); }
+        &#star--1 { .unitize(left, 0); }
+        &#star--2 { .unitize(left, 30); }
+        &#star--3 { .unitize(left, 60); }
+        &#star--4 { .unitize(left, 90); }
+        &#star--5 { .unitize(left, 120); }
 
         &:checked ~ .rating-star--label,
         &#star--reset:checked:disabled ~ .rating-star--label {
@@ -397,8 +397,8 @@ The styling includes the collapsed and expanded styling and the panel component 
     .rating-star--label {
         .unitize-width(30);
         .unitize-height(30);
-        .unitize(30, 16, line-height);
-        .unitize(30, 16, font-size);
+        .unitize(line-height, 30);
+        .unitize(font-size, 30);
         position: absolute;
         top: 0; left: 0;
         font-family: 'shopware';
@@ -409,18 +409,18 @@ The styling includes the collapsed and expanded styling and the panel component 
             content: "\e600";
         }
 
-        &.star--1 { .unitize(0, 16, left); }
-        &.star--2 { .unitize(30, 16, left); }
-        &.star--3 { .unitize(60, 16, left); }
-        &.star--4 { .unitize(90, 16, left); }
-        &.star--5 { .unitize(120, 16, left); }
+        &.star--1 { .unitize(left, 0); }
+        &.star--2 { .unitize(left, 30); }
+        &.star--3 { .unitize(left, 60); }
+        &.star--4 { .unitize(left, 90); }
+        &.star--5 { .unitize(left, 120); }
     }
 }
 
 .filter--set-title {
     .unitize-margin(30, 0, 10, 0);
-    .unitize(14, 16, font-size);
-    .unitize(24, 16, line-height);
+    .unitize(font-size, 14);
+    .unitize(line-height, 24);
     margin-left: 1%;
     margin-right: 1%;
     border-bottom: 1px solid @border-color;
@@ -437,28 +437,28 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 
     .filter-panel--title {
-        .unitize(35, 15, padding-left);
+        .unitize(padding-left, 35);
     }
 
     .filter-panel--checkbox {
-        .unitize(8, 16, top);
-        .unitize(10, 16, left);
+        .unitize(top, 8);
+        .unitize(left, 10);
         position: absolute;
     }
 }
 
 .filter--property {
     .filter-panel--checkbox {
-        .unitize(5, 16, top);
-        .unitize(0, 16, left);
+        .unitize(top, 5);
+        .unitize(left, 0);
         position: absolute;
     }
 }
 
 .filter--radio {
 	.filter-panel--radio {
-		.unitize(5, 16, top);
-		.unitize(0, 16, left);
+		.unitize(top, 5);
+		.unitize(left, 0);
 		position: absolute;
 	}
 }
@@ -476,8 +476,8 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--active {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
-    .unitize(22, 16, line-height);
-    .unitize(13, 16, font-size);
+    .unitize(line-height, 22);
+    .unitize(font-size, 13);
     .border-radius();
     display: inline-block;
     border: 1px solid @border-color;
@@ -488,7 +488,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
     .filter--active-icon {
         .unitize-margin(0, 10, 0, 0);
-        .unitize(8, 16, font-size);
+        .unitize(font-size, 8);
         .unitize(-1, 16, top);
         position: relative;
         font-family: 'shopware';
@@ -520,7 +520,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
 .filter--actions {
     .unitize-padding(10, 0);
-    .unitize(10, 16, margin-bottom);
+    .unitize(margin-bottom, 10);
     border-bottom: 1px solid @border-color;
     clear: both;
 }
@@ -531,7 +531,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     width: 100%;
 
     [class^="icon--"] {
-        .unitize(14, 16, font-size);
+        .unitize(font-size, 14);
     }
 
     .filter--count {
@@ -614,24 +614,24 @@ The styling includes the collapsed and expanded styling and the panel component 
             .unitize-width(20);
             .unitize-height(20);
 
-            &#star--1 { .unitize(0, 16, left); }
-            &#star--2 { .unitize(20, 16, left); }
-            &#star--3 { .unitize(40, 16, left); }
-            &#star--4 { .unitize(60, 16, left); }
-            &#star--5 { .unitize(80, 16, left); }
+            &#star--1 { .unitize(left, 0); }
+            &#star--2 { .unitize(left, 20); }
+            &#star--3 { .unitize(left, 40); }
+            &#star--4 { .unitize(left, 60); }
+            &#star--5 { .unitize(left, 80); }
         }
 
         .rating-star--label {
             .unitize-width(20);
             .unitize-height(20);
-            .unitize(20, 16, line-height);
-            .unitize(20, 16, font-size);
+            .unitize(line-height, 20);
+            .unitize(font-size, 20);
 
-            &.star--1 { .unitize(0, 16, left); }
-            &.star--2 { .unitize(20, 16, left); }
-            &.star--3 { .unitize(40, 16, left); }
-            &.star--4 { .unitize(60, 16, left); }
-            &.star--5 { .unitize(80, 16, left); }
+            &.star--1 { .unitize(left, 0); }
+            &.star--2 { .unitize(left, 20); }
+            &.star--3 { .unitize(left, 40); }
+            &.star--4 { .unitize(left, 60); }
+            &.star--5 { .unitize(left, 80); }
         }
     }
 }

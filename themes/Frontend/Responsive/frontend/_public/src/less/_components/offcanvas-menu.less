@@ -52,7 +52,7 @@ body {
 
     .close--off-canvas {
         .unitize-padding(2, 10);
-        .unitize(38, 16, line-height);
+        .unitize(line-height, 38);
         .secondary-gradient();
         .clearfix();
         display: block;
@@ -62,24 +62,24 @@ body {
 
         .icon--arrow-left {
             .unitize-margin(0, 10, 0, 0);
-            .unitize(11, 16, font-size);
+            .unitize(font-size, 11);
         }
     }
 
     .link--go-main {
-        .unitize(16, 16, font-size);
+        .unitize(font-size, 16);
         font-weight: 700;
 
         .icon--menu {
-            .unitize(20, 16, font-size);
-            .unitize(10, 16, margin-right);
+            .unitize(font-size, 20);
+            .unitize(margin-right, 10);
             float: left;
         }
     }
 
     .sidebar--navigation .navigation--link {
         .unitize-padding(2, 10);
-        .unitize(38, 16, line-height);
+        .unitize(line-height, 38);
 
         .is--icon-right {
             margin-top: 0;
@@ -112,12 +112,12 @@ body {
 
 	.entry--close-off-canvas {
         .unitize-padding(2, 10);
-        .unitize(38, 16, line-height);
+        .unitize(line-height, 38);
 		.secondary-gradient();
 
 		.navigation--link {
 			.clearfix();
-            .unitize(14, 16, font-size);
+            .unitize(font-size, 14);
 			color: @gray-light;
 			font-weight: bold;
 
@@ -127,7 +127,7 @@ body {
 		}
 		.icon--arrow-right {
 			.unitize-margin(12, 0, 0, 0);
-            .unitize(11, 16, font-size);
+            .unitize(font-size, 11);
             float: right;
 		}
 	}
@@ -139,7 +139,7 @@ body {
 }
 .navigation--headline {
 	.unitize-margin(16, 10, 6, 10);
-    .unitize(26, 16, line-height);
+    .unitize(line-height, 26);
     color: @text-color-dark;
     font-weight: 700;
 	font-size: 1em;

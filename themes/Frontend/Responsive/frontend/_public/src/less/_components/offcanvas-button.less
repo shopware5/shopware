@@ -10,7 +10,7 @@ The functionality is provided by the `jquery.off-canvas-button.js` file.
 
 .js--off-canvas-button {
     .unitize-padding(10, 10);
-    .unitize(10, 16, margin-bottom);
+    .unitize(margin-bottom, 10);
     .border-radius();
     position: relative;
     border: 1px solid @panel-border;
@@ -18,13 +18,13 @@ The functionality is provided by the `jquery.off-canvas-button.js` file.
     display: block;
 
     .tab--header {
-        .unitize(10, 16, margin-bottom);
+        .unitize(margin-bottom, 10);
         position: relative;
     }
 
     .tab--title:after {
-        .unitize(12, 16, font-size);
-        .unitize(5, 16, right);
+        .unitize(font-size, 12);
+        .unitize(right, 5);
         .unitize(-6, 16, margin-top);
         content: "\e60f";
     }
