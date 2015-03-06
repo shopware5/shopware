@@ -127,7 +127,7 @@
                 throw new Error('Parameter "requestUrl" needs to be set.');
             }
 
-            me.$parent = $el.parent(opts.formSelector);
+            me.$parent = $el.parents(opts.formSelector);
             me.$results = me.$parent.next(opts.resultsSelector).hide();
             me.$loader = me.$parent.find(opts.loadingIndicatorSelector);
             me.lastSearchTerm = '';
