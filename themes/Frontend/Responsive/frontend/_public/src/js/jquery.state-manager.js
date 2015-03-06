@@ -1264,7 +1264,7 @@
          * Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas, David Knight.
          * Dual MIT/BSD license
          *
-         * @private
+         * @public
          * @method matchMedia
          * @param {String} media
          */
@@ -1314,7 +1314,7 @@
         /**
          * requestAnimationFrame() polyfill
          *
-         * @private
+         * @public
          * @method requestAnimationFrame
          * @param {Function} callback
          * @returns {Number}
@@ -1345,7 +1345,7 @@
         /**
          * cancelAnimationFrame() polyfill
          *
-         * @private
+         * @public
          * @method cancelAnimationFrame
          * @param {Number} id
          */
@@ -1363,7 +1363,31 @@
             return caf || window.clearTimeout;
         }()).bind(window),
 
-        getVendorProperty: function (property) {
+        /**
+         * Tests the given CSS style property on an empty div with all vendor
+         * properties. If it fails and the softError flag was not set, it
+         * returns null, otherwise the given property.
+         *
+         * @example
+         *
+         * // New chrome version
+         * StateManager.getVendorProperty('transform'); => 'transform'
+         *
+         * // IE9
+         * StateManager.getVendorProperty('transform'); => 'msTransform'
+         *
+         * // Property not supported, without soft error flag
+         * StateManager.getVendorProperty('animation'); => null
+         *
+         * // Property not supported, with soft error flag
+         * StateManager.getVendorProperty('animation', true); => 'animate'
+         *
+         * @public
+         * @method getVendorProperty
+         * @param {String} property
+         * @param {Boolean} softError
+         */
+        getVendorProperty: function (property, softError) {
             var cache = this._vendorPropertyCache,
                 style = vendorPropertyDiv.style;
 
@@ -1389,7 +1413,7 @@
                 }
             }
 
-            return (cache[property] = property);
+            return (cache[property] = (softError ? property : null));
         }
     });
 
