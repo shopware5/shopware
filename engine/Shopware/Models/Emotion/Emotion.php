@@ -741,6 +741,13 @@ class Emotion extends ModelEntity
             $elements[] = $newElement;
         }
 
+        if ($attribute = $this->getAttribute()) {
+            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
+            $newAttribute = clone $attribute;
+            $newAttribute->setEmotion($this);
+            $this->attribute = $newAttribute;
+        }
+
         $this->elements = $elements;
         $this->categories = $categories;
     }
