@@ -144,9 +144,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             }
         }
 
-        if(form.get('name') == 'Template') {
-            controller = 'Template';
-        } else if(form.get('name') == 'Document') {
+        if(form.get('name') == 'Document') {
 			controller = 'Document';
 			me.getController('Form');
 		} else {
