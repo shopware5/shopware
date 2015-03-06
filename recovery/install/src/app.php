@@ -185,14 +185,14 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $systemCheckResults  = $shopwareSystemCheck->toArray();
 
     $app->view()->setData("warning", (bool) $shopwareSystemCheck->getContainsWarnings());
-
     $app->view()->setData("error", (bool) $shopwareSystemCheck->getFatalError());
 
     // Check file & directory permissions
     /** @var $shopwareSystemCheckPath RequirementsPath */
     $shopwareSystemCheckPath = $container->offsetGet("install.requirementsPath");
-    $systemCheckPathResults = $shopwareSystemCheckPath->toArray();
-    if ($shopwareSystemCheckPath->getFatalError() == true) {
+    $shopwareSystemCheckPathResult = $shopwareSystemCheckPath->check();
+
+    if ($shopwareSystemCheckPathResult->hasError()) {
         $app->view()->setData('error', true);
     }
 
@@ -203,7 +203,7 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
 
     $app->render("/requirements.php", [
         "systemCheckResults"                 => $systemCheckResults,
-        "systemCheckResultsWritePermissions" => $systemCheckPathResults
+        "systemCheckResultsWritePermissions" => $shopwareSystemCheckPathResult->toArray()
     ]);
 })->name("requirements")->via('GET', 'POST');
 
