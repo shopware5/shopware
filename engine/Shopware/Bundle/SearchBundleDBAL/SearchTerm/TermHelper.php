@@ -115,7 +115,7 @@ class TermHelper
         if (!isset($badWords)) {
             $badWords = preg_split(
             "#[\s,;]+#msi",
-            $this->config->get('badwords')
+            $this->config->get('badwords'),
             -1,
             PREG_SPLIT_NO_EMPTY
         );
