@@ -423,7 +423,7 @@ class Context implements \JsonSerializable
     public static function getGlobalParamsFromRequest(EnlightRequest $request)
     {
         $globalParams = [];
-        if ($request->getModuleName() !== null) {
+        if ($request->getModuleName()) {
             $globalParams['module'] = $request->getModuleName();
             if ($request->getControllerName() !== null) {
                 $globalParams['controller'] = $request->getControllerName();
