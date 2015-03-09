@@ -45,8 +45,9 @@ class FrontendPostFilter implements PostFilterInterface
      */
     public function postFilter($url, Context $context)
     {
-        if ($this->isFullPath($context)) {
-            $secure = $this->isSecure($context);
+        $params = $context->getParams();
+        if ($this->isFullPath($params)) {
+            $secure = $this->isSecure($context, $params);
             $url = ($secure ? 'https://' : 'http://')
                 . ($secure ? $context->getSecureHost() : $context->getHost())
                 . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
@@ -54,7 +55,7 @@ class FrontendPostFilter implements PostFilterInterface
         }
 
         //@todo make session postfilter
-        if (!empty($userParams['appendSession'])) {
+        if (!empty($params['appendSession'])) {
             $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= session_name() . '=' . session_id();
             $url .= '&__shop=' . $context->getShopId();
@@ -63,10 +64,8 @@ class FrontendPostFilter implements PostFilterInterface
         return $url;
     }
 
-    private function isSecure(Context $context)
+    private function isSecure(Context $context, $params)
     {
-        $params = $context->getParams();
-
         if ($context->isAlwaysSecure()) {
             $secure = true;
         } elseif (!$context->isSecure()) {
@@ -83,9 +82,8 @@ class FrontendPostFilter implements PostFilterInterface
         return $secure;
     }
 
-    private function isFullPath(Context $context)
+    private function isFullPath($params)
     {
-        $params = $context->getParams();
         if (!empty($params['fullPath']) || !empty($params['sUseSSL']) || !empty($params['forceSecure'])) {
             $fullPath = true;
         } elseif (isset($params['module']) && $params['module'] != 'frontend') {
