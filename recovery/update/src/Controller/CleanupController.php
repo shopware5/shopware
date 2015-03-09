@@ -88,8 +88,10 @@ class CleanupController
     {
         $_SESSION['DB_DONE'] = true;
 
-        $cleanupList = $this->pluginFinder->getDummyPlugins();
-        $cleanupList += $this->filesFinder->getCleanupFiles();
+        $cleanupList = array_merge(
+            $this->pluginFinder->getDummyPlugins(),
+            $this->filesFinder->getCleanupFiles()
+        );
 
         if (count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
