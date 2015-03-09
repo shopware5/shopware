@@ -838,17 +838,19 @@ Ext.define('Shopware.model.Container', {
 
         me.fireEvent(me.eventAlias + '-column-containers-created', me, fields, items, model);
 
+        if (customConfig.hasOwnProperty('title')) {
+            title = customConfig.title;
+        }
+
         fieldSet = Ext.create('Ext.form.FieldSet', {
             flex: 1,
             padding: '10 20',
             layout: 'column',
-            items: items
+            items: items,
+            title: title
         });
 
         fieldSet = Ext.apply(fieldSet, customConfig);
-        if (!customConfig.hasOwnProperty('title')) {
-            fieldSet.title = title;
-        }
 
         me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
 
