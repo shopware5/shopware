@@ -7,10 +7,11 @@
      * @type {Object}
      **/
     var keyMap = {
-        'UP': 38,
-        'DOWN': 40,
-        'ENTER': 13
-    };
+            'UP': 38,
+            'DOWN': 40,
+            'ENTER': 13
+        },
+        msPointerEnabled = window.navigator.msPointerEnabled;
 
     /**
      * Shopware Live Search Plugin.
@@ -134,7 +135,14 @@
 
             me._on($el, 'keyup', $.proxy(me.onKeyUp, me));
             me._on($el, 'keydown', $.proxy(me.onKeyDown, me));
-            me._on($el, 'blur', $.proxy(me.onBlur, me));
+            me._on($el, 'focusout', $.proxy(me.onBlur, me));
+            me._on(me.$results, 'focusout', $.proxy(me.onBlur, me));
+
+            if (msPointerEnabled) {
+                me.$results.on('click', opts.resultLinkSelector, function (event) {
+                    window.location.href = $(event.currentTarget).attr('href');
+                });
+            }
         },
 
         /**
@@ -145,7 +153,7 @@
         onBlur: function (event) {
             var me = this;
 
-            if ($.contains(me.$results[0], (event.target || event.currentTarget))) {
+            if ($.contains(me.$results[0], event.relatedTarget)) {
                 return;
             }
 

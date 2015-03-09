@@ -2,7 +2,12 @@
     'use strict';
 
     var transitionProperty = StateManager.getVendorProperty('transition'),
-        transformProperty = StateManager.getVendorProperty('transform');
+        transformProperty = StateManager.getVendorProperty('transform'),
+        msPointerEnabled = window.navigator.msPointerEnabled,
+        killEvent = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        };
 
     /**
      * Image Slider Plugin.
@@ -605,9 +610,10 @@
                 $slide = me._$slide;
 
             if (opts.touchControls) {
-                me._on($slide, 'touchstart mousedown MSPointerDown', $.proxy(me.onTouchStart, me));
-                me._on($slide, 'touchmove mousemove MSPointerMove', $.proxy(me.onTouchMove, me));
-                me._on($slide, 'touchend mouseup mouseleave MSPointerUp', $.proxy(me.onTouchEnd, me));
+                me._on($slide, 'touchstart mousedown', $.proxy(me.onTouchStart, me));
+                me._on($slide, 'touchmove mousemove', $.proxy(me.onTouchMove, me));
+                me._on($slide, 'touchend mouseleave' + (!msPointerEnabled ? ' mouseup' : ''), $.proxy(me.onTouchEnd, me));
+                me._on($slide, 'MSHoldVisual', killEvent);
                 me._on($slide, 'click', $.proxy(me.onClick, me));
 
                 if (!opts.preventScrolling && ('ontouchstart' in window)) {
@@ -689,7 +695,7 @@
                     me.stopAutoSlide();
                 }
 
-                if (event.originalEvent instanceof MouseEvent) {
+                if (event.originalEvent instanceof MouseEvent && !msPointerEnabled) {
                     event.preventDefault();
 
                     me._grabImage = true;
@@ -751,7 +757,7 @@
 
             if (touches.length === 1) {
 
-                if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
+                if (event.originalEvent instanceof MouseEvent && !me._grabImage && !msPointerEnabled) {
                     return;
                 }
 
@@ -840,7 +846,7 @@
                 swipeValid,
                 pullValid;
 
-            if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
+            if (event.originalEvent instanceof MouseEvent && !me._grabImage && !msPointerEnabled) {
                 return;
             }
 
