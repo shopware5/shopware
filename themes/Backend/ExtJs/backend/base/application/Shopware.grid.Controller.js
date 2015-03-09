@@ -691,12 +691,15 @@ Ext.define('Shopware.grid.Controller', {
      * Creates a new instance of the grid store model an displays it in a new detail window.
      *
      * @param listing { Shopware.grid.Panel }
+     * @param record { Ext.data.Model }
      * @returns { Shopware.window.Detail|boolean }
      */
-    onAddItem: function (listing) {
-        var me = this, record, store = listing.getStore(), window;
+    onAddItem: function (listing, record) {
+        var me = this, store = listing.getStore(), window;
 
-        record = Ext.create(store.model);
+        if (!(record instanceof Ext.data.Model)) {
+            record = Ext.create(store.model);
+        }
 
         if (!Shopware.app.Application.fireEvent(me.getEventName('before-add-item'), me, listing, record)) {
             return false;
