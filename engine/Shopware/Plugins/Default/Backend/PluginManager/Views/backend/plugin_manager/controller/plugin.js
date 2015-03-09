@@ -428,6 +428,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             },
             function(response) {
                 response.shopwareId = shopwareId;
+                if (response.success == true) {
+                    Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
+                }
                 me.fireRefreshAccountData(response);
                 callback(response);
             }

@@ -30,6 +30,7 @@ use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
+use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
@@ -77,6 +78,41 @@ class Shopware_Controllers_Backend_PluginManager
             'success' => true,
             'data' => $categories
         ]);
+    }
+
+    /**
+     * check if secret is set and set if it isn't
+     * return true if secret finally exists
+     */
+    public function checkSecretAction()
+    {
+        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $secret = $subscriptionService->getShopSecret();
+
+        if (empty($secret)) {
+            try {
+                $subscriptionService->setShopSecret();
+            } catch (Exception $e) {
+                $this->View()->assign(['success' => false, 'error' => $e->getMessage()]);
+            }
+        } else {
+            $this->View()->assign('success', true);
+        }
+    }
+
+    /**
+     * Returns not upgraded plugins, "hacked" plugins, plugins which loose subscription to json-view
+     */
+    public function getPluginsSubscriptionStateAction()
+    {
+        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $pluginStates = $subscriptionService->getPluginsSubscription($this->Response(), $this->Request());
+
+        if ($pluginStates === false) {
+            $this->View()->assign('success', false);
+        } else {
+            $this->View()->assign(['success' => true, 'data' => $pluginStates]);
+        }
     }
 
     public function storeListingAction()
