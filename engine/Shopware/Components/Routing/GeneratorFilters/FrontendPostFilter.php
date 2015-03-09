@@ -46,7 +46,26 @@ class FrontendPostFilter implements PostFilterInterface
     public function postFilter($url, Context $context)
     {
         $params = $context->getParams();
+        if ($this->isFullPath($params)) {
+            $secure = $this->isSecure($context, $params);
+            $url = ($secure ? 'https://' : 'http://')
+                . ($secure ? $context->getSecureHost() : $context->getHost())
+                . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
+                . '/' . $url;
+        }
 
+        //@todo make session postfilter
+        if (!empty($params['appendSession'])) {
+            $url .= strpos($url, '?') === false ? '?' : '&';
+            $url .= session_name() . '=' . session_id();
+            $url .= '&__shop=' . $context->getShopId();
+        }
+
+        return $url;
+    }
+
+    private function isSecure(Context $context, $params)
+    {
         if ($context->isAlwaysSecure()) {
             $secure = true;
         } elseif (!$context->isSecure()) {
@@ -60,8 +79,12 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $secure = false;
         }
+        return $secure;
+    }
 
-        if (!empty($params['fullPath']) || $secure) {
+    private function isFullPath($params)
+    {
+        if (!empty($params['fullPath']) || !empty($params['sUseSSL']) || !empty($params['forceSecure'])) {
             $fullPath = true;
         } elseif (isset($params['module']) && $params['module'] != 'frontend') {
             $fullPath = false;
@@ -70,21 +93,6 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $fullPath = true;
         }
-
-        if ($fullPath) {
-            $url = ($secure ? 'https://' : 'http://')
-                . ($secure ? $context->getSecureHost() : $context->getHost())
-                . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
-                . '/' . $url;
-        }
-
-        //@todo make session postfilter
-        if (!empty($userParams['appendSession'])) {
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= session_name() . '=' . session_id();
-            $url .= '&__shop=' . $context->getShopId();
-        }
-
-        return $url;
+        return $fullPath;
     }
 }
