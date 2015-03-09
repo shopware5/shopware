@@ -39,14 +39,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
 
         $this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
         $this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
         $this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
-        $this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
 
         $this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
         $this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
@@ -948,158 +944,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     protected function getTable($name)
     {
         return isset($this->tables[$name]) ? $this->tables[$name] : null;
-    }
-
-    /**
-     * Returns a full list of all templates
-     */
-    public function getTemplateListAction()
-    {
-        $shopId = $this->Request()->getParam('shopId');
-        $shop = $shopId !== null ? $this->getRepository('shop')->find($shopId) : null;
-        $enabled = $shop !== null ? $shop->getTemplate() : null;
-        $enabled = $enabled !== null ? $enabled->getTemplate() : null;
-
-        //$preview = Shopware()->Shop()->getTemplate();
-        $preview = null;
-
-        $templateDir = Shopware()->DocPath('templates');
-        $this->refreshTemplateList($templateDir);
-
-        $repository = $this->getRepository('template');
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
-        $builder = $repository->createQueryBuilder('template');
-
-        $builder->addFilter((array) $this->Request()->getParam('filter', array()))
-            ->addOrderBy((array) $this->Request()->getParam('sort', array()));
-        $builder->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
-
-        $query = $builder->getQuery();
-        $total = Shopware()->Models()->getQueryCount($query);
-        $data = $query->getArrayResult();
-
-        foreach ($data as &$item) {
-            $item['preview'] = $item['template'] === $preview;
-            $item['enabled'] = $item['template'] === $enabled;
-
-            // Check for preview images
-            $templateDir = Shopware()->Template()->resolveTemplateDir($item['template']);
-            $item['previewFull'] = '/preview.png';
-            $item['previewThumb'] = '/preview_thb.png';
-            if (!file_exists($templateDir . $item['preview'])) {
-                $item['previewFull'] = null;
-            } else {
-                $item['previewFull'] = $item['template'] . $item['previewFull'];
-            }
-            if (!file_exists($templateDir . $item['previewThumb'])) {
-                $item['previewThumb'] = null;
-            } else {
-                $item['previewThumb'] = file_get_contents($templateDir . $item['previewThumb']);
-                $item['previewThumb'] = 'data:image/png;base64,' . base64_encode($item['previewThumb']);
-            }
-        }
-
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
-    }
-
-    /**
-     * Updates the template list
-     *
-     * @param $templateDir
-     */
-    protected function refreshTemplateList($templateDir)
-    {
-        $repository = $this->getRepository('template');
-        $templates = $repository->findAll();
-
-        $templateList = array();
-        foreach ($templates as $template) {
-            $templateList[$template->getTemplate()] = $template;
-        }
-
-        $dirs = new DirectoryIterator($templateDir);
-        foreach ($dirs as $dirInfo) {
-            if ($dirInfo->isDot() || !$dirInfo->isDir()) {
-                continue;
-            }
-            $dirName = $dirInfo->getFilename();
-            if (in_array($dirName, array('.svn'))
-                || is_numeric($dirName)
-                || strpos($dirName, '_') === 0
-            ) {
-                continue;
-            }
-
-            $templateData = array();
-            $templateFile = $dirInfo->getPathname() . '/info.json';
-            if (file_exists($templateFile)) {
-                $templateData = (array) Zend_Json::decode(file_get_contents($templateFile));
-            }
-            if (!isset($templateData['version'])) {
-                $templateData['version'] = strpos($dirName, 'emotion_') !== 0 ? 1 : 2;
-            }
-            if (isset($templateList[$dirName])) {
-                $template = $templateList[$dirName];
-            } else {
-                $template = new Shopware\Models\Shop\Template();
-                $templateData['template'] = $dirName;
-                if (empty($templateData['name'])) {
-                    $templateData['name'] = ucwords(str_replace('_', ' ', $dirName));
-                }
-            }
-            $template->fromArray($templateData);
-
-            Shopware()->Models()->persist($template);
-        }
-        Shopware()->Models()->flush();
-    }
-
-    /**
-     * Save template selection
-     */
-    public function saveTemplateAction()
-    {
-        $data = $this->Request()->getPost();
-        $data = isset($data[0]) ? $data : array($data);
-
-        $shopId = $this->Request()->getParam('shopId');
-        $shop = $this->getRepository('shop')->find($shopId);
-
-        foreach ($data as $template) {
-            if (empty($template['enabled']) || empty($template['id'])) {
-                continue;
-            }
-            $template = $this->getRepository('template')->find($template['id']);
-            $shop->setTemplate($template);
-        }
-
-        Shopware()->Models()->flush();
-    }
-
-    /**
-     * Starts a template preview
-     */
-    public function previewTemplateAction()
-    {
-        $template = $this->Request()->getParam('template');
-
-        $shopId = $this->Request()->getParam('shopId');
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->getRepository('shop')->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
-
-        Shopware()->Session()->template = $template;
-        Shopware()->Session()->Admin = true;
-
-        if (!$this->Request()->isXmlHttpRequest()) {
-            $url = $this->Front()->Router()->assemble(array(
-                'module' => 'frontend',
-                'controller' => 'index',
-                'appendSession' => true,
-            ));
-            $this->redirect($url);
-        }
     }
 
     private function createDocumentElements($model)
