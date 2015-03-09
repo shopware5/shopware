@@ -42,6 +42,16 @@
             animationSpeed: 350,
 
             /**
+             * Easing function for the slide animations.
+             * Will only be set when transitions and
+             * transforms are supported by the browser.
+             *
+             * @property animationEasing
+             * @type {String}
+             */
+            animationEasing: 'cubic-bezier(.2,.89,.75,.99)',
+
+            /**
              * Turn thumbnail support on and off.
              *
              * @property thumbnails
@@ -766,7 +776,7 @@
 
                     if (transitionProperty && transformProperty) {
                         slideStyle[transitionProperty] = 'none';
-                        slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%)';
+                        slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%) translateZ(0)';
                     } else {
                         slideStyle['left'] = (offset + percentage) + '%';
                     }
@@ -1434,7 +1444,7 @@
 
             if (transformProperty && transitionProperty) {
                 slideStyle[transitionProperty] = 'none';
-                slideStyle[transformProperty] = 'translateX(' + percentage + '%)';
+                slideStyle[transformProperty] = 'translateX(' + percentage + '%) translateZ(0)';
             } else {
                 slideStyle['left'] = percentage + '%';
             }
@@ -1673,8 +1683,8 @@
 
             me.resetTransformation(true, function () {
                 if (transitionProperty && transformProperty) {
-                    slideStyle[transitionProperty] = 'all ' + opts.animationSpeed + 'ms cubic-bezier(.2,.89,.75,.99)';
-                    slideStyle[transformProperty] = 'translateX(' + (index * -100) + '%)';
+                    slideStyle[transitionProperty] = 'all ' + opts.animationSpeed + 'ms ' + opts.animationEasing;
+                    slideStyle[transformProperty] = 'translateX(' + (index * -100) + '%) translateZ(0)';
 
                     if (typeof callback === 'function') {
                         setTimeout($.proxy(callback, me), opts.animationSpeed);

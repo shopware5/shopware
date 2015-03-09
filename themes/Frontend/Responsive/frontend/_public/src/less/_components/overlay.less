@@ -21,6 +21,7 @@ default color:`#000000` default opacity (alpha):`0.7`
 .js--overlay {
     .transition(~"opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s linear");
     .tap-highlight-color();
+    .transform(translateZ(0));
     .opacity(0.1);
     background: rgba(red(@overlay-bg), green(@overlay-bg), blue(@overlay-bg), @overlay-opacity);
     position: fixed;
