@@ -142,21 +142,13 @@ class Shopware_Controllers_Backend_PluginManager
     {
         $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
 
-        $sort = [];
-        foreach ($this->Request()->getParam('sort', []) as $sortData) {
-            if ($sortData['property'] == 'groupingState') {
-                continue;
-            }
-            $sort[] = $sortData;
-        }
-
         $context = new ListingRequest(
             $this->getLocale(),
             $this->getVersion(),
             $this->Request()->getParam('offset', null),
             $this->Request()->getParam('limit', null),
             $this->Request()->getParam('filter', []),
-            $sort
+            $this->getListingSorting()
         );
 
         if ($this->isApiAvailable()) {
@@ -171,6 +163,46 @@ class Shopware_Controllers_Backend_PluginManager
             'success' => true,
             'data' => array_values($plugins)
         ]);
+    }
+
+    /**
+     * Returns the sorting criteria for the plugin listing
+     * Shows installed plugins, then inactive, then uninstalled.
+     * Afterwards applies the custom sorting from the request,
+     * and then 'installation_date DESC' as fallback.
+     *
+     * @return array
+     */
+    private function getListingSorting()
+    {
+        $prioritySorting = [
+            [
+                'property' => 'active',
+                'direction' => 'DESC'
+            ],
+            [
+                'property' => 'installation_date IS NULL',
+                'direction' => 'ASC'
+            ]
+        ];
+
+        $fallbackSorting = [
+            [
+                'property' => 'installation_date',
+                'direction' => 'DESC'
+            ]
+        ];
+
+        $customSorting = [];
+        foreach ($this->Request()->getParam('sort', []) as $sortData) {
+            if ($sortData['property'] == 'groupingState') {
+                continue;
+            }
+            $sortData['property'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $sortData['property']));
+            $customSorting[] = $sortData;
+        }
+
+        return array_merge($prioritySorting, $customSorting, $fallbackSorting);
     }
 
     public function detailAction()
