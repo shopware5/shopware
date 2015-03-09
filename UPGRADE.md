@@ -1,5 +1,10 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
+* Removed classes:
+    * `ConfigIframe.php` backend controller
+    * `Viewport.php` frontend controller
+* Removed template files:
+    * `backend\index\iframe.tpl`
 
 ## 5.0.0 Beta 3
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
