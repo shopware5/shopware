@@ -842,11 +842,13 @@ Ext.define('Shopware.model.Container', {
             flex: 1,
             padding: '10 20',
             layout: 'column',
-            items: items,
-            title: title
+            items: items
         });
 
         fieldSet = Ext.apply(fieldSet, customConfig);
+        if (!customConfig.hasOwnProperty('title')) {
+            fieldSet.title = title;
+        }
 
         me.fireEvent(me.eventAlias + '-after-model-field-set-created', me, fieldSet, model);
 
