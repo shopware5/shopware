@@ -10,6 +10,18 @@ In this document you will find a changelog of the important changes related to t
 * Replaced `closeOverlay` with `openOverlay` option in the loading indicator to improve the simplicity.
 * Removed overlay options in the modal box and loading indicator jQuery plugin.
 * Overlay jQuery plugin now only provides the closeOnClick, onClick and onClose options. To style the overlay, use the corresponding less file.
+* Removed unused methods:
+    * `Shopware_Controllers_Backend_Config::getTemplateListAction`
+    * `Shopware_Controllers_Backend_Config::refreshTemplateList`
+    * `Shopware_Controllers_Backend_Config::saveTemplateAction`
+* Removed unused files:
+    * `themes/Backend/ExtJs/backend/config/view/form/template.js`
+    * `themes/Backend/ExtJs/backend/config/view/template/detail.js`
+    * `themes/Backend/ExtJs/backend/config/view/template/preview.js`
+    * `themes/Backend/ExtJs/backend/config/view/template/view.js`
+    * `themes/Backend/ExtJs/backend/config/store/form/template.js`
+    * `themes/Backend/ExtJs/backend/config/store/model/template.js`
+    * `themes/Backend/ExtJs/backend/config/store/controller/template.js`
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
