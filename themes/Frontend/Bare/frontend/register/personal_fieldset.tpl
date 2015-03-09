@@ -39,14 +39,14 @@
 		{* Firstname *}
 		{block name='frontend_register_personal_fieldset_input_firstname'}
 			<div class="register--firstname">
-				<input name="register[personal][firstname]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderFirstname'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="firstname" value="{$form_data.firstname|escape}" class="register--field is--required{if $error_flags.firstname} has--error{/if}" />
+				<input autocomplete="section-personal given-name" name="register[personal][firstname]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderFirstname'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="firstname" value="{$form_data.firstname|escape}" class="register--field is--required{if $error_flags.firstname} has--error{/if}" />
 			</div>
 		{/block}
 
 		{* Lastname *}
 		{block name='frontend_register_personal_fieldset_input_lastname'}
 			<div class="register--lastname">
-				<input name="register[personal][lastname]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderLastname'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="lastname" value="{$form_data.lastname|escape}" class="register--field is--required{if $error_flags.lastname} has--error{/if}" />
+				<input autocomplete="section-personal family-name" name="register[personal][lastname]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderLastname'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="lastname" value="{$form_data.lastname|escape}" class="register--field is--required{if $error_flags.lastname} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -64,12 +64,12 @@
 			{* E-Mail *}
 			{block name='frontend_register_personal_fieldset_input_mail'}
 				<div class="register--email">
-					<input name="register[personal][email]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field email is--required{if $error_flags.email} has--error{/if}" />
+					<input autocomplete="section-personal email" name="register[personal][email]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field email is--required{if $error_flags.email} has--error{/if}" />
 				</div>
 
 				{if {config name=doubleEmailValidation}}
 					<div class="register--emailconfirm">
-						<input name="register[personal][emailConfirmation]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderMailConfirmation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field emailConfirmation is--required{if $error_flags.emailConfirmation} has--error{/if}" />
+						<input autocomplete="section-personal email" name="register[personal][emailConfirmation]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterPlaceholderMailConfirmation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field emailConfirmation is--required{if $error_flags.emailConfirmation} has--error{/if}" />
 					</div>
 				{/if}
 			{/block}
@@ -106,7 +106,7 @@
 		{block name='frontend_register_personal_fieldset_input_phone'}
 			{if {config name=showPhoneNumberField}}
 				<div class="register--phone">
-					<input name="register[personal][phone]" type="tel"{if {config name=requirePhoneField}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterPlaceholderPhone'}{/s}{if {config name=requirePhoneField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="phone" value="{$form_data.phone|escape}" class="register--field{if {config name=requirePhoneField}} is--required{/if}{if $error_flags.phone && {config name=requirePhoneField}} has--error{/if}" />
+					<input autocomplete="section-personal tel" name="register[personal][phone]" type="tel"{if {config name=requirePhoneField}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterPlaceholderPhone'}{/s}{if {config name=requirePhoneField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="phone" value="{$form_data.phone|escape}" class="register--field{if {config name=requirePhoneField}} is--required{/if}{if $error_flags.phone && {config name=requirePhoneField}} has--error{/if}" />
 				</div>
 			{/if}
 		{/block}

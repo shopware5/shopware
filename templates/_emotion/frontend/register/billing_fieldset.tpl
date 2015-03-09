@@ -5,7 +5,7 @@
 	{block name='frontend_register_billing_fieldset_input_company'}
 		<div>
 			<label for="register_billing_company">{se name='RegisterLabelCompany'}{/se}:</label>
-			<input name="register[billing][company]" type="text"  id="register_billing_company" value="{$form_data.company|escape}" class="text company required {if $error_flags.company}instyle_error{/if}" />
+			<input autocomplete="section-billing billing organization" name="register[billing][company]" type="text"  id="register_billing_company" value="{$form_data.company|escape}" class="text company required {if $error_flags.company}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -13,7 +13,7 @@
 	{block name='frontend_register_billing_fieldset_input_department'}
 		<div>
 			<label for="register_billing_department" class="normal">{se name='RegisterLabelDepartment'}{/se}:</label>
-			<input name="register[billing][department]" type="text" id="register_billing_department" value="{$form_data.department|escape}" class="text" />
+			<input autocomplete="section-billing billing organization-title" name="register[billing][department]" type="text" id="register_billing_department" value="{$form_data.department|escape}" class="text" />
 		</div>
 	{/block}
 
@@ -33,7 +33,7 @@
 	{block name='frontend_register_billing_fieldset_input_street'}
 		<div>
 			<label for="street">{s name='RegisterBillingLabelStreet'}{/s}</label>
-			<input name="register[billing][street]" type="text" id="street" value="{$form_data.street|escape}" class="required text{if $error_flags.street} instyle_error{/if}" />
+			<input autocomplete="section-billing billing street-address" name="register[billing][street]" type="text" id="street" value="{$form_data.street|escape}" class="required text{if $error_flags.street} instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -42,7 +42,7 @@
 		{if {config name=showAdditionAddressLine1}}
 			<div>
 				<label for="additionalAddressLine1" {if !{config name=requireAdditionAddressLine1}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine1'}{/se}{if {config name=requireAdditionAddressLine1}}*{/if}:</label>
-				<input name="register[billing][additional_address_line1]" type="text" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
+				<input autocomplete="section-billing billing address-line2" name="register[billing][additional_address_line1]" type="text" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}
@@ -52,7 +52,7 @@
 		{if {config name=showAdditionAddressLine2}}
 			<div>
 				<label for="additionalAddressLine2" {if !{config name=requireAdditionAddressLine2}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine2'}{/se}{if {config name=requireAdditionAddressLine2}}*{/if}:</label>
-				<input name="register[billing][additional_address_line2]" type="text" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
+				<input autocomplete="section-billing billing address-line3" name="register[billing][additional_address_line2]" type="text" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}
@@ -61,8 +61,8 @@
 	{block name='frontend_register_billing_fieldset_input_zip_and_city'}
 		<div>
 			<label for="zipcode">{se name='RegisterBillingLabelCity'}{/se}</label>
-			<input name="register[billing][zipcode]" type="text" id="zipcode" value="{$form_data.zipcode|escape}" class="zipcode required text{if $error_flags.zipcode} instyle_error{/if}" />
-			<input name="register[billing][city]" type="text" id="city" value="{$form_data.city|escape}" size="25" class="city required text{if $error_flags.city} instyle_error{/if}" />
+			<input autocomplete="section-billing billing postal-code" name="register[billing][zipcode]" type="text" id="zipcode" value="{$form_data.zipcode|escape}" class="zipcode required text{if $error_flags.zipcode} instyle_error{/if}" />
+			<input autocomplete="section-billing billing address-level2" name="register[billing][city]" type="text" id="city" value="{$form_data.city|escape}" size="25" class="city required text{if $error_flags.city} instyle_error{/if}" />
 		</div>
 	{/block}
 
