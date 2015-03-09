@@ -356,7 +356,7 @@
             var me = this,
                 $target = $(event.target),
                 url = $target.attr('href'),
-                parentId = $target.attr('data-parentId');
+                parentId = ~~$target.attr('data-parentId');
 
             if (me.inProgress) {
                 return;
