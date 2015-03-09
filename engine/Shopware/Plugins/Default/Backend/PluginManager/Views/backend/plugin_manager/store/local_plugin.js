@@ -4,19 +4,11 @@ Ext.define('Shopware.apps.PluginManager.store.LocalPlugin', {
 
     pageSize: 20000,
 
-    remoteSort: false,
+    remoteSort: true,
     remoteFilter: false,
 
     groupers: [{
         property: 'groupingState',
-        direction: 'DESC'
-    }],
-
-    sorters: [{
-        property: 'plugin.active',
-        direction: 'DESC'
-    }, {
-        property: 'plugin.installation_date',
         direction: 'DESC'
     }],
 
