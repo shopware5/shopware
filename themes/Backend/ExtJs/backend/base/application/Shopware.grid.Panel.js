@@ -1659,13 +1659,17 @@ Ext.define('Shopware.grid.Panel', {
             text: me.addButtonText,
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
-                me.fireEvent(me.eventAlias + '-add-item', me, this);
+                me.fireEvent(me.eventAlias + '-add-item', me, me.createNewRecord());
             }
         });
 
         me.fireEvent(me.eventAlias + '-add-button-created', me, me.addButton);
 
         return me.addButton;
+    },
+
+    createNewRecord: function() {
+        return Ext.create(this.store.model);
     },
 
     /**
