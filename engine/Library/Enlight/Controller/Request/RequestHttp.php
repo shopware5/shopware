@@ -179,4 +179,12 @@ class Enlight_Controller_Request_RequestHttp
 
         return strtolower(trim(parent::getModuleName()));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClientIp($checkProxy = false)
+    {
+        parent::getClientIp($checkProxy);
+    }
 }

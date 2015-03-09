@@ -547,7 +547,7 @@ interface Enlight_Controller_Request_Request
      * @param  boolean $checkProxy
      * @return string
      */
-    public function getClientIp($checkProxy = true);
+    public function getClientIp($checkProxy = false);
 
     /**
      * Set GET values method
