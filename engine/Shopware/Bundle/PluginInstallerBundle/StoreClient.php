@@ -31,6 +31,7 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\DomainVerificationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\LicenceException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\OrderException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\SbpServerException;
+use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\HttpClient\HttpClientInterface;
@@ -94,14 +95,16 @@ class StoreClient
     /**
      * @param string $resource
      * @param array $params
+     * @param array $headers
      * @return array
      * @throws \Exception
      */
-    public function doGetRequest($resource, $params = [])
+    public function doGetRequest($resource, $params = [], $headers = [])
     {
         $response = $this->getRequest(
             $resource,
-            $params
+            $params,
+            $headers
         );
 
         return json_decode($response->getBody(), true);
@@ -111,17 +114,20 @@ class StoreClient
      * @param AccessTokenStruct $accessToken
      * @param string $resource
      * @param array $params
+     * @param array $headers
      * @return array
      * @throws \Exception
      */
     public function doAuthGetRequest(
         AccessTokenStruct $accessToken,
         $resource,
-        $params
+        $params,
+        $headers = []
     ) {
         $response = $this->getRequest(
             $resource,
             $params,
+            $headers,
             $accessToken
         );
 
@@ -131,14 +137,16 @@ class StoreClient
     /**
      * @param $resource
      * @param array $params
+     * @param array $headers
      * @return mixed
      * @throws \Exception
      */
-    public function doGetRequestRaw($resource, $params = [])
+    public function doGetRequestRaw($resource, $params = [], $headers = [])
     {
         $response = $this->getRequest(
             $resource,
-            $params
+            $params,
+            $headers
         );
 
         return $response->getBody();
@@ -148,17 +156,20 @@ class StoreClient
      * @param AccessTokenStruct $accessToken
      * @param string $resource
      * @param array $params
+     * @param array $headers
      * @return array
      * @throws \Exception
      */
     public function doAuthGetRequestRaw(
         AccessTokenStruct $accessToken,
         $resource,
-        $params
+        $params,
+        $headers = []
     ) {
         $response = $this->getRequest(
             $resource,
             $params,
+            $headers,
             $accessToken
         );
         return $response->getBody();
@@ -223,13 +234,14 @@ class StoreClient
 
     /**
      * @param $resource
-     * @param $params
-     * @param AccessTokenStruct $token
+     * @param array $params
+     * @param array $headers
+     * @param accessTokenStruct|null $token
      * @return \Shopware\Components\HttpClient\Response
-     * @throws StoreException
      * @throws \Exception
+     * @internal param null|string $secret
      */
-    private function getRequest($resource, $params, AccessTokenStruct $token = null)
+    private function getRequest($resource, $params, $headers = [], AccessTokenStruct $token = null)
     {
         $url = $this->apiEndPoint . $resource;
         if (!empty($params)) {
@@ -239,6 +251,10 @@ class StoreClient
         $header = [];
         if ($token) {
             $header['X-Shopware-Token'] = $token->getToken();
+        }
+
+        if (count($headers) > 0) {
+            $header = array_merge($header, $headers);
         }
 
         try {
@@ -397,6 +413,8 @@ class StoreClient
                 throw new DomainVerificationException($sbpCode, 'unknown_id', $httpCode, $requestException);
             case 'DomainVerificationException-4':   //Domain already in use.
                 throw new DomainVerificationException($sbpCode, 'domain_in_use', $httpCode, $requestException);
+            case 'ShopSecretsException-2':
+                throw new ShopSecretException($sbpCode, 'shop_secret_invalid', $httpCode, $requestException);
         }
 
         throw new StoreException(

@@ -155,6 +155,8 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.ShopwareId', {
                         me.snippets.growlMessage
                     );
 
+                    Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
+
                     if (params.registerDomain !== false) {
                         me.submitShopwareDomainRequest(params);
                     } else {
