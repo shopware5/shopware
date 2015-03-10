@@ -268,7 +268,7 @@ class SubscriptionService
     }
 
     /**
-     * Get all licensed plugins with name and version
+     * Get all plugins with name and version
      * @return array
      */
     private function getPluginsNameAndVersion()
