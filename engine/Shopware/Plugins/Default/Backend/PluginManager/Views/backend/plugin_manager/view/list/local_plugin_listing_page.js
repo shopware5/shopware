@@ -23,27 +23,32 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 label: {
                     flex: 2,
                     header: '{s name="plugin_name"}{/s}',
+                    groupable: false,
                     renderer: this.nameRenderer,
                     editor: null
                 },
                 version: {
                     width: 30,
                     header: '{s name="version"}{/s}',
+                    groupable: false,
                     editor: null
                 },
                 installationDate: {
                     header: '{s name="installed_on"}{/s}',
+                    groupable: false,
                     renderer: this.dateRenderer,
                     editor: null
                 },
                 updateDate: {
                     header: '{s name="updated_on"}{/s}',
+                    groupable: false,
                     renderer: this.dateRenderer,
                     editor: null
                 },
                 licenceCheck: {
                     flex: 2,
                     sortable: false,
+                    groupable: false,
                     cls: 'licence-column',
                     header: '{s name="licence"}{/s}',
                     renderer: this.licenceRenderer,
@@ -52,6 +57,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 active: this.createActiveColumn,
                 author: {
                     header: '{s name="from_producer"}{/s}',
+                    groupable: false,
                     renderer: this.authorRenderer,
                     editor: null
                 }
@@ -131,6 +137,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             width: 60,
             align: 'center',
             header: '{s name="active"}{/s}',
+            groupable: false,
             items: items
         };
     },
