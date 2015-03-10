@@ -612,7 +612,7 @@
             if (opts.touchControls) {
                 me._on($slide, 'touchstart mousedown', $.proxy(me.onTouchStart, me));
                 me._on($slide, 'touchmove mousemove', $.proxy(me.onTouchMove, me));
-                me._on($slide, 'touchend mouseleave' + (!msPointerEnabled ? ' mouseup' : ''), $.proxy(me.onTouchEnd, me));
+                me._on($slide, 'touchend mouseup mouseleave', $.proxy(me.onTouchEnd, me));
                 me._on($slide, 'MSHoldVisual', killEvent);
                 me._on($slide, 'click', $.proxy(me.onClick, me));
 
@@ -695,7 +695,7 @@
                     me.stopAutoSlide();
                 }
 
-                if (event.originalEvent instanceof MouseEvent && !msPointerEnabled) {
+                if (event.originalEvent instanceof MouseEvent) {
                     event.preventDefault();
 
                     me._grabImage = true;
@@ -757,7 +757,7 @@
 
             if (touches.length === 1) {
 
-                if (event.originalEvent instanceof MouseEvent && !me._grabImage && !msPointerEnabled) {
+                if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
                     return;
                 }
 
@@ -846,7 +846,7 @@
                 swipeValid,
                 pullValid;
 
-            if (event.originalEvent instanceof MouseEvent && !me._grabImage && !msPointerEnabled) {
+            if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
                 return;
             }
 
