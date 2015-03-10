@@ -371,7 +371,7 @@
                     type = $comp.attr('data-filter-type'),
                     fieldName = $comp.attr('data-field-name');
 
-                if ((type == 'value-list' || type == 'media') &&
+                if ((type == 'value-list' || type == 'value-tree' || type == 'media') &&
                     me.propertyFieldNames.indexOf(fieldName) == -1) {
                     me.propertyFieldNames.push(fieldName);
                 }

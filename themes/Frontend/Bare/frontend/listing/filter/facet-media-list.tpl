@@ -29,28 +29,32 @@
                                     {block name="frontend_listing_filter_facet_media_list_option"}
                                         <li class="filter-panel--media-option">
 
-                                            {block name="frontend_listing_filter_facet_media_list_input"}
-                                                <input type="checkbox"
-                                                       id="__{$facet->getFieldName()}__{$option->getId()}"
-                                                       name="__{$facet->getFieldName()}__{$option->getId()}"
-                                                       value="{$option->getId()}"
-                                                       title="{$option->getLabel()}"
-                                                       {if $option->isActive()}checked="checked" {/if}/>
-                                            {/block}
+                                            {block name="frontend_listing_filter_facet_media_list_option_container"}
+                                                <div class="option--container">
 
-                                            {block name="frontend_listing_filter_facet_media_list_label"}
-                                                {$mediaFile = {link file='frontend/_public/src/img/no-picture.jpg'}}
-                                                {if $option->getMedia()}
-                                                    {$mediaFile = $option->getMedia()->getFile()}
-                                                {/if}
+                                                    {block name="frontend_listing_filter_facet_media_list_input"}
+                                                        <input type="checkbox"
+                                                               id="__{$facet->getFieldName()}__{$option->getId()}"
+                                                               name="__{$facet->getFieldName()}__{$option->getId()}"
+                                                               value="{$option->getId()}"
+                                                               title="{$option->getLabel()}"
+                                                               {if $option->isActive()}checked="checked" {/if}/>
+                                                    {/block}
 
-                                                <label class="filter-panel--media-label"
-                                                       for="__{$facet->getFieldName()}__{$option->getId()}">
-                                                    <img class="filter-panel--media-image"
-                                                         src="{$mediaFile}"
-                                                         alt="{$option->getLabel()}" />
-                                                </label>
+                                                    {block name="frontend_listing_filter_facet_media_list_label"}
+                                                        {$mediaFile = {link file='frontend/_public/src/img/no-picture.jpg'}}
+                                                        {if $option->getMedia()}
+                                                            {$mediaFile = $option->getMedia()->getFile()}
+                                                        {/if}
 
+                                                        <label class="filter-panel--media-label"
+                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
+                                                            <img class="filter-panel--media-image"
+                                                                 src="{$mediaFile}"
+                                                                 alt="{$option->getLabel()}" />
+                                                        </label>
+                                                    {/block}
+                                                </div>
                                             {/block}
                                         </li>
                                     {/block}
