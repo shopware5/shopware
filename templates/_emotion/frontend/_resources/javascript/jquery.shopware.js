@@ -117,11 +117,19 @@ jQuery(document).ready(function ($) {
 
     $('.modal_open a').click(function (event) {
         event.preventDefault();
-        $.post(this.href, function (data) {
-            $.modal(data, '', {
-                'position': 'fixed'
-            }).find('.close').remove();
-        });
+
+        $.ajax({
+            type: 'post',
+            url: this.href,
+            data: {
+                isXHR: 1
+            },
+            success: function (data) {
+                $.modal(data, '', {
+                    'position': 'fixed'
+                }).find('.close').remove();
+            }
+        })
     });
 
     //Topseller
@@ -3248,15 +3256,22 @@ jQuery.fn.liveSearch = function (conf) {
                 width = width || config.width;
                 height = height || config.height;
 
-                $.post(me.attr('href'), function (data) {
-                    var modal = $.modal(data, '', {
-                        'position':'fixed',
-                        'width': parseInt(width, 10),
-                        'height': parseInt(height, 10)
-                    });
+                $.ajax({
+                    type: 'post',
+                    url: me.attr('href'),
+                    data: {
+                        isXHR: 1
+                    },
+                    success: function (data) {
+                        var modal = $.modal(data, '', {
+                            'position':'fixed',
+                            'width': parseInt(width, 10),
+                            'height': parseInt(height, 10)
+                        });
 
-                    // Remove close icon
-                    modal.find('.close').remove();
+                        // Remove close icon
+                        modal.find('.close').remove();
+                    }
                 });
             });
         });
@@ -3643,6 +3658,9 @@ jQuery.fn.liveSearch = function (conf) {
             $.ajax({
                 'dataType': 'jsonp',
                 'url': $(this).attr('href'),
+                'data': {
+                    isXHR: 1
+                },
                 'success': function (result) {
                     $.loadingIndicator.close();
                     $.modal(result, '', modalConfig);
@@ -3660,7 +3678,7 @@ jQuery.fn.liveSearch = function (conf) {
 
             $.loadingIndicator.open();
             $.ajax({
-                'data': $(this).serialize(),
+                'data': $(this).serialize() + '&isXHR=1',
                 'dataType': 'jsonp',
                 'url': $(this).attr('action'),
                 'success': function (result) {

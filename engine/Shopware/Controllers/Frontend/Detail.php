@@ -99,7 +99,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/detail/' . $article['template']);
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
-        } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
+        } elseif ($tpl === 'ajax') {
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
