@@ -237,10 +237,6 @@ class Kernel implements HttpKernelInterface
         $this->initializeContainer();
         $this->initializeShopware();
 
-        if ($this->isHttpCacheEnabled()) {
-            SymfonyRequest::setTrustedProxies(array('127.0.0.1'));
-        }
-
         if ($trustedProxies = $this->container->getParameter('shopware.trustedProxies')) {
             SymfonyRequest::setTrustedProxies($trustedProxies);
         }
