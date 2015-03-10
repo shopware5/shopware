@@ -203,7 +203,7 @@ Ext.define('Ext.ux.ButtonColumn', {
     //private
     initBtnTpl: function () {
         var me = this,
-            mainDivStr = '<div class="x-btn x-btn-default-small {literal}{iconClsBtn} {disabledCls}{/literal}">{literal}{0}{/literal}</div>',
+            mainDivStr = '<div class="x-btn x-btn-default-small {literal}{iconClsBtn} {disabledCls}{/literal}"{literal} {tooltip}{/literal}>{literal}{0}{/literal}</div>',
             btnFrameTpl = '<TABLE  class="x-table-plain" cellPadding=0><TBODY><TR>' +
                 '<TD'+ (me.extMinor != 2 ? ' style="PADDING-LEFT: 3px; BACKGROUND-POSITION: 0px -6px"' : '') + ' class="x-frame-tl x-btn-tl x-btn-default-small-tl" role=presentation></TD>' +
                 '<TD'+ (me.extMinor != 2 ? ' style="BACKGROUND-POSITION: 0px 0px; HEIGHT: 3px"' : '')  + ' class="x-frame-tc x-btn-tc x-btn-default-small-tc" role=presentation></TD>' +
