@@ -240,6 +240,8 @@ class SubscriptionService
             $name = $plugin['name'];
             if (isset($labels[$name])) {
                 $plugin['label'] = $labels[$name];
+            } else {
+                $plugin['label'] = $plugin['name'];
             }
         }
 
@@ -266,18 +268,19 @@ class SubscriptionService
     }
 
     /**
-     * Get all licensed plugins with name and version
+     * Get all plugins with name and version
      * @return array
      */
     private function getPluginsNameAndVersion()
     {
-        $licenses = $this->getLicences();
-        $plugins = [];
+        $queryBuilder = $this->connection->createQueryBuilder();
 
-        foreach ($licenses as $license) {
-            $info = \Shopware_Components_License::readLicenseInfo($license['license']);
-            $plugins[] = ['name' => $info['module'], 'version' => $info['version']];
-        }
+        $queryBuilder->select(['plugin.name', 'plugin.version'])
+            ->from('s_core_plugins', 'plugin')
+            ->where('plugin.active = 1');
+
+        $builderExecute = $queryBuilder->execute();
+        $plugins = $builderExecute->fetchAll();
 
         return $plugins;
     }
