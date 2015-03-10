@@ -426,6 +426,8 @@
                 $el.replaceWith(img);
             });
 
+            me._$imageContainerClone.find('.arrow').remove();
+
             return $('<div>', {
                 'class': me.opts.imageGalleryClass,
                 'html': [
