@@ -9,7 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * New event `Shopware_Modules_Order_SaveOrder_FilterParams`
 * Implemented the `Enlight_Controller_Request_Request` interface. Please typehint to this class instead to `Enlight_Controller_Request_RequestHttp`
 * New config option `trustedProxies`
-* New event `Shopware_Controllers_Frontend_Froms_commitForm_Mail`
+* New event `Shopware_Controllers_Frontend_Forms_commitForm_Mail`
 * Changed default value of `$checkProxy` to false in \Enlight_Controller_Request_Request::getClientIp($checkProxy = false).
     * The correct client ip is automatically obtained if the `trustedProxies` option is configured properly.
 * Deprecated event `Shopware_Plugins_HttpCache_ShouldNotCache`
