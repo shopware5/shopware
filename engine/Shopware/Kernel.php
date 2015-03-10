@@ -107,6 +107,10 @@ class Kernel implements HttpKernelInterface
         if (!empty($this->config['phpsettings'])) {
             $this->setPhpSettings($this->config['phpsettings']);
         }
+
+        if ($trustedProxies = $this->config['trustedproxies']) {
+            SymfonyRequest::setTrustedProxies($trustedProxies);
+        }
     }
 
     /**
@@ -236,10 +240,6 @@ class Kernel implements HttpKernelInterface
 
         $this->initializeContainer();
         $this->initializeShopware();
-
-        if ($trustedProxies = $this->container->getParameter('shopware.trustedProxies')) {
-            SymfonyRequest::setTrustedProxies($trustedProxies);
-        }
 
         $this->booted = true;
     }
