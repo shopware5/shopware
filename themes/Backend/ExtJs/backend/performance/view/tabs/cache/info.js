@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Info', {
         });
 
         me.callParent(arguments);
-        me.store.load();
     },
 
     /**
