@@ -236,11 +236,11 @@ class Shopware_Components_TemplateMail
             }
 
             if (false === ($fileHandle = fopen($attachment->getPath(), 'r'))) {
-                throw new \Enlight_Exception('Could not load file: ' . $attachment->getPath());
+                Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
+            } else {
+                $fileAttachment = $mail->createAttachment($fileHandle);
+                $fileAttachment->filename = $attachment->getFileName();
             }
-
-            $fileAttachment = $mail->createAttachment($fileHandle);
-            $fileAttachment->filename = $attachment->getFileName();
         }
 
         return $mail;
