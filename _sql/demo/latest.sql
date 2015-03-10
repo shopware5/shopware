@@ -5495,7 +5495,6 @@ INSERT IGNORE INTO `s_core_config_values` (`id`, `element_id`, `shop_id`, `value
 
 TRUNCATE TABLE `s_core_rewrite_urls`;
 INSERT INTO `s_core_rewrite_urls` (`id`, `org_path`, `path`, `main`, `subshopID`) VALUES
-(1, 'sViewport=cat&sCategory=3', 'listing/', 1, 1),
 (2, 'sViewport=blog&sCategory=17', 'Trends-News/', 1, 1),
 (3, 'sViewport=cat&sCategory=5', 'Genusswelten/', 1, 1),
 (4, 'sViewport=cat&sCategory=11', 'Genusswelten/Tees-und-Zubeh/', 0, 1),
@@ -5756,7 +5755,6 @@ INSERT INTO `s_core_rewrite_urls` (`id`, `org_path`, `path`, `main`, `subshopID`
 (885, 'sViewport=detail&sArticle=236', 'Wohnwelten/Dekoration/236/Servietten', 1, 1),
 (889, 'sViewport=detail&sArticle=237', 'Wohnwelten/Dekoration/237/Stoffherz-kariert', 1, 1),
 (891, 'sViewport=detail&sArticle=238', 'Sommerwelten/Beachwear/238/Strandbag-Sailor', 1, 1),
-(957, 'sViewport=cat&sCategory=39', 'listing/', 1, 2),
 (958, 'sViewport=blog&sAction=detail&sCategory=17&blogArticle=3', 'Trends-News/Der-Sommer-wird-bunt', 1, 2),
 (959, 'sViewport=blog&sAction=detail&sCategory=17&blogArticle=4', 'Trends-News/Sonnenschutz-so-gehoeren-Sie-zur-Creme-de-la-Creme', 1, 2),
 (960, 'sViewport=blog&sAction=detail&sCategory=17&blogArticle=5', 'Trends-News/Ich-packe-meinen-Koffer', 1, 2),
