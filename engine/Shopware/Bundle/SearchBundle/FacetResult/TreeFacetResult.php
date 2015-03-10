@@ -83,7 +83,7 @@ class TreeFacetResult
         $label,
         $values,
         $attributes = [],
-        $template = null
+        $template = 'frontend/listing/filter/facet-value-tree.tpl'
     ) {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;
