@@ -106,7 +106,8 @@
     'use strict';
 
     var $html = $('html'),
-        vendorPropertyDiv = document.createElement('div');
+        vendorPropertyDiv = document.createElement('div'),
+        vendorPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
     /**
      * @class EventEmitter
@@ -349,7 +350,7 @@
         _viewportWidth: 0,
 
         /**
-         *
+         * Cache for all previous gathered vendor properties.
          *
          * @private
          * @property _vendorPropertyCache
@@ -372,7 +373,7 @@
 
             me._viewportWidth = me.getViewportWidth();
 
-            me._baseFontSize = parseInt($('html').css('font-size'));
+            me._baseFontSize = parseInt($html.css('font-size'));
 
             me.registerBreakpoint(breakpoints);
 
@@ -1321,12 +1322,11 @@
          */
         requestAnimationFrame: (function () {
             var raf = window.requestAnimationFrame,
-                vendors = ['webkit', 'moz', 'ms', 'o'],
-                i = vendors.length,
+                i = vendorPrefixes.length,
                 lastTime = 0;
 
             while (!raf && i) {
-                raf = window[vendors[i--] + 'RequestAnimationFrame'];
+                raf = window[vendorPrefixes[i--] + 'RequestAnimationFrame'];
             }
 
             return raf || function (callback) {
@@ -1351,12 +1351,11 @@
          */
         cancelAnimationFrame: (function () {
             var caf = window.cancelAnimationFrame,
-                vendors = ['webkit', 'moz', 'ms', 'o'],
-                i = vendors.length,
+                i = vendorPrefixes.length,
                 fnName;
 
             while (!caf && i) {
-                fnName = vendors[i--];
+                fnName = vendorPrefixes[i--];
                 caf = window[fnName + 'CancelAnimationFrame'] || window[fnName + 'CancelRequestAnimationFrame'];
             }
 
@@ -1399,14 +1398,13 @@
                 return (cache[property] = property);
             }
 
-            var prefixes = ['webkit', 'moz', 'ms', 'o'],
-                prop = property.charAt(0).toUpperCase() + property.substr(1),
-                len = prefixes.length,
+            var prop = property.charAt(0).toUpperCase() + property.substr(1),
+                len = vendorPrefixes.length,
                 i = 0,
                 vendorProp;
 
             for (; i < len; i++) {
-                vendorProp = prefixes[i] + prop;
+                vendorProp = vendorPrefixes[i] + prop;
 
                 if (vendorProp in style) {
                     return (cache[property] = vendorProp);
