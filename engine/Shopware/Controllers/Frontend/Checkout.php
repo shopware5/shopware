@@ -400,10 +400,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             }
         }
 
-        if ($this->request->isXmlHttpRequest() || !empty($this->Request()->callback)) {
+        if ($this->Request()->getParam('isXHR') || !empty($this->Request()->callback)) {
             $this->Request()->setParam('sTargetAction', 'ajax_add_article');
         }
-
 
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
@@ -585,7 +584,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
         $this->View()->sTargetAction = 'shippingPayment';
 
-        if ($this->Request()->isXmlHttpRequest()) {
+        if ($this->Request()->getParam('isXHR')) {
             return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
         }
     }
@@ -604,7 +603,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $payment = $this->Request()->getPost('payment');
 
         // If request is ajax, we skip the validation, because the user is still editing
-        if ($this->Request()->isXmlHttpRequest()) {
+        if ($this->Request()->getParam('isXHR')) {
             // Save payment and shipping method data.
             $this->admin->sUpdatePayment($payment);
             $this->setDispatch($dispatch, $payment);

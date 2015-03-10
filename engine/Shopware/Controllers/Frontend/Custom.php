@@ -32,7 +32,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if ($this->Request()->isXmlHttpRequest()) {
+        if ($this->Request()->getParam('isXHR')) {
             $this->View()->loadTemplate('frontend/custom/ajax.tpl');
         }
 

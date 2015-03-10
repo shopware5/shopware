@@ -117,6 +117,8 @@
                 $el = me.$el,
                 ajaxData = $el.serialize();
 
+            ajaxData += '&isXHR=1';
+
             if (opts.showModal) {
                 $.overlay.open({
                     'closeOnClick': false
