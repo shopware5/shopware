@@ -204,6 +204,6 @@ class Enlight_Controller_Request_RequestTestCase
      */
     public function getClientIp($checkProxy = false)
     {
-        parent::getClientIp($checkProxy);
+        return parent::getClientIp($checkProxy);
     }
 }

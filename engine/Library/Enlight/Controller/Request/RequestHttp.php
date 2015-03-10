@@ -185,6 +185,6 @@ class Enlight_Controller_Request_RequestHttp
      */
     public function getClientIp($checkProxy = false)
     {
-        parent::getClientIp($checkProxy);
+        return parent::getClientIp($checkProxy);
     }
 }
