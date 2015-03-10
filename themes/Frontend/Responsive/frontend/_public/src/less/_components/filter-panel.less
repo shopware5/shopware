@@ -121,20 +121,34 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter-panel--option-list {
     .unitize(padding-bottom, 5);
     list-style: none;
+
+    &.sub-level {
+    	.unitize-margin(0, 0, 0, 8);
+    	.unitize-padding(0, 0, 0, 18);
+    	border-left: 1px solid @border-color;
+    }
 }
 
 .filter-panel--option {
     display: block;
     position: relative;
 
-    &:hover {
-        .filter-panel--label {
-            color: @brand-primary;
-        }
-        .filter-panel--checkbox {
-            border-color: @brand-primary;
-        }
+    .option--container:hover {
+		.filter-panel--label {
+			color: @brand-primary;
+		}
+		.filter-panel--checkbox {
+			border-color: @brand-primary;
+		}
     }
+}
+
+.value-tree--option {
+	.unitize-margin(0, 0, 10, 0);
+
+	.sub-level & {
+		margin: 0;
+	}
 }
 
 .filter-panel--label {

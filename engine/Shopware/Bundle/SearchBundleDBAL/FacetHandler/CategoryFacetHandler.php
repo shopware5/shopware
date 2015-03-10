@@ -205,7 +205,9 @@ class CategoryFacetHandler implements FacetHandlerInterface
             $this->fieldName,
             empty($active),
             $this->snippetNamespace->get($facet->getName(), 'Categories'),
-            $values
+            $values,
+            [],
+            null
         );
     }
 

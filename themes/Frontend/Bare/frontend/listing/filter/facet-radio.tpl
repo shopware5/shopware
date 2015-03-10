@@ -29,23 +29,28 @@
                                     {block name="frontend_listing_filter_facet_radio_list_option"}
                                         <li class="filter-panel--option">
 
-                                            {block name="frontend_listing_filter_facet_radio_list_input"}
-                                                <span class="filter-panel--radio">
-                                                    <input type="radio"
-                                                           id="__{$facet->getFieldName()}__{$option->getId()}"
-                                                           name="{$facet->getFieldName()}"
-                                                           value="{$option->getId()}"
-                                                           {if $option->isActive()}checked="checked" {/if}/>
+                                            {block name="frontend_listing_filter_facet_radio_list_option_container"}
+                                                <div class="option--container">
 
-                                                    <span class="radio--state">&nbsp;</span>
-                                                </span>
-                                            {/block}
+                                                    {block name="frontend_listing_filter_facet_radio_list_input"}
+                                                        <span class="filter-panel--radio">
+                                                            <input type="radio"
+                                                                   id="__{$facet->getFieldName()}__{$option->getId()}"
+                                                                   name="{$facet->getFieldName()}"
+                                                                   value="{$option->getId()}"
+                                                                   {if $option->isActive()}checked="checked" {/if}/>
 
-                                            {block name="frontend_listing_filter_facet_radio_list_label"}
-                                                <label class="filter-panel--label"
-                                                       for="__{$facet->getFieldName()}__{$option->getId()}">
-                                                    {$option->getLabel()} &nbsp;
-                                                </label>
+                                                            <span class="radio--state">&nbsp;</span>
+                                                        </span>
+                                                    {/block}
+
+                                                    {block name="frontend_listing_filter_facet_radio_list_label"}
+                                                        <label class="filter-panel--label"
+                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
+                                                            {$option->getLabel()} &nbsp;
+                                                        </label>
+                                                    {/block}
+                                                </div>
                                             {/block}
                                         </li>
                                     {/block}

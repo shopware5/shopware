@@ -29,24 +29,29 @@
 									{block name="frontend_listing_filter_facet_value_list_option"}
 										<li class="filter-panel--option">
 
-											{block name="frontend_listing_filter_facet_value_list_input"}
-												<span class="filter-panel--checkbox">
-													<input type="checkbox"
-														   id="__{$facet->getFieldName()}__{$option->getId()}"
-														   name="__{$facet->getFieldName()}__{$option->getId()}"
-														   value="{$option->getId()}"
-														   {if $option->isActive()}checked="checked" {/if}/>
+                                            {block name="frontend_listing_filter_facet_value_list_option_container"}
+                                                <div class="option--container">
 
-													<span class="checkbox--state">&nbsp;</span>
-												</span>
-											{/block}
+                                                    {block name="frontend_listing_filter_facet_value_list_input"}
+                                                        <span class="filter-panel--checkbox">
+                                                            <input type="checkbox"
+                                                                   id="__{$facet->getFieldName()}__{$option->getId()}"
+                                                                   name="__{$facet->getFieldName()}__{$option->getId()}"
+                                                                   value="{$option->getId()}"
+                                                                   {if $option->isActive()}checked="checked" {/if}/>
 
-											{block name="frontend_listing_filter_facet_value_list_label"}
-												<label class="filter-panel--label"
-													   for="__{$facet->getFieldName()}__{$option->getId()}">
-													{$option->getLabel()}
-												</label>
-											{/block}
+                                                            <span class="checkbox--state">&nbsp;</span>
+                                                        </span>
+                                                    {/block}
+
+                                                    {block name="frontend_listing_filter_facet_value_list_label"}
+                                                        <label class="filter-panel--label"
+                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
+                                                            {$option->getLabel()}
+                                                        </label>
+                                                    {/block}
+                                                </div>
+                                            {/block}
 										</li>
 									{/block}
 								{/foreach}
