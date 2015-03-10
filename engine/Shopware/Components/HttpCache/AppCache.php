@@ -77,6 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
+            'cache_cookies'     => array('shop' , 'currency'),
         ), $options);
 
         parent::__construct(
@@ -203,7 +204,7 @@ class AppCache extends HttpCache
             return;
         }
 
-        return parent::store($request, $response);
+        parent::store($request, $response);
     }
 
     /**
@@ -249,7 +250,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $bootstrap \Shopware\Components\DependencyInjection\Container */
+        /** @var $container \Shopware\Components\DependencyInjection\Container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 
@@ -269,7 +270,7 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies']);
     }
 
     /**
