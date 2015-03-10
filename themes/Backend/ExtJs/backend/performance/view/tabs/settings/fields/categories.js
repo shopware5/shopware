@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                     {
                         xtype: 'performance-multi-request-button',
                         event: 'category',
-                        title: '{s name=fieldset/categories/repair}Rebuild cagtegory tree{/s}'
+                        title: '{s name=fieldset/categories/repair}Rebuild category tree{/s}'
                     },
                     {
                         fieldLabel: '{s name=fieldset/categories/text/moveBatchModeEnabled}Move categories in batch-mode{/s}',
@@ -113,7 +113,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                     name: 'categories[articlesperpage]',
                     fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
                     helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',
-
                     xtype: 'numberfield',
                     minValue: 1
                 }]
