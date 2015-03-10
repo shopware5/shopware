@@ -183,57 +183,57 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             borderLeftWidth: 0,
             iconCls: 'sprite-document-copy',
             buttonText: '',
-            tooltip: 'Einkaufswelt kopieren',
+            tooltip: '{s name="list/action_column/tooltip"}Einkaufswelt kopieren{/s}',
             handler: function (view, rowIndex, colIndex) {
-            var listStore = view.getStore();
-            var record = listStore.getAt(rowIndex);
-            var device = record.get('device');
+                var listStore = view.getStore();
+                var record = listStore.getAt(rowIndex);
+                var device = record.get('device');
 
-            me.fireEvent('duplicateemotion', me, record, device);
-        },
+                me.fireEvent('duplicateemotion', me, record, device);
+            },
             stopSelection: true,        //don't select record on button click
                 items: [
-            {
-                iconCls: 'sprite-imac',
-                text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
-                handler: function (item, scope) {
-                    var record = scope.record;
-                    me.fireEvent('duplicateemotion', me, record, 0);
+                {
+                    iconCls: 'sprite-imac',
+                    text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 0);
+                    }
+                },
+                {
+                    iconCls: 'sprite-ipad--landscape',
+                    text: '{s name="list/action_column/copy_tablet_landscape"}Als Tablet Landscape Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 1);
+                    }
+                },
+                {
+                    iconCls: 'sprite-ipad--portrait',
+                    text: '{s name="list/action_column/copy_tablet_portrait"}Als Tablet Portrait Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 2);
+                    }
+                },
+                {
+                    iconCls: 'sprite-iphone--landscape',
+                    text: '{s name="list/action_column/copy_mobile_landscape"}Als mobile Landscape Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 3);
+                    }
+                },
+                {
+                    iconCls: 'sprite-iphone--portrait',
+                    text: '{s name="list/action_column/copy_mobile_portrait"}Als mobile Portrait Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 4);
+                    }
                 }
-            },
-            {
-                iconCls: 'sprite-ipad--landscape',
-                text: '{s name="list/action_column/copy_tablet_landscape"}Als Tablet Landscape Einkaufswelt{/s}',
-                handler: function (item, scope) {
-                    var record = scope.record;
-                    me.fireEvent('duplicateemotion', me, record, 1);
-                }
-            },
-            {
-                iconCls: 'sprite-ipad--portrait',
-                text: '{s name="list/action_column/copy_tablet_portrait"}Als Tablet Portrait Einkaufswelt{/s}',
-                handler: function (item, scope) {
-                    var record = scope.record;
-                    me.fireEvent('duplicateemotion', me, record, 2);
-                }
-            },
-            {
-                iconCls: 'sprite-iphone--landscape',
-                text: '{s name="list/action_column/copy_mobile_landscape"}Als mobile Landscape Einkaufswelt{/s}',
-                handler: function (item, scope) {
-                    var record = scope.record;
-                    me.fireEvent('duplicateemotion', me, record, 3);
-                }
-            },
-            {
-                iconCls: 'sprite-iphone--portrait',
-                text: '{s name="list/action_column/copy_mobile_portrait"}Als mobile Portrait Einkaufswelt{/s}',
-                handler: function (item, scope) {
-                    var record = scope.record;
-                    me.fireEvent('duplicateemotion', me, record, 4);
-                }
-            }
-        ]
+            ]
         }
     },
 
