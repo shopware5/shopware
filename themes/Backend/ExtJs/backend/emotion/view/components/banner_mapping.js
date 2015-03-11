@@ -29,6 +29,7 @@
 
 //{namespace name=backend/emotion/view/detail}
 
+//{block name="backend_emotion_view_components_banner_mapping"}
 Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     extend: 'Enlight.app.Window',
     footerButton: false,
@@ -530,3 +531,4 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }, 1000);
     }
 });
+//{/block}
