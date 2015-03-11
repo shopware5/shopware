@@ -182,6 +182,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             );
 
             /**
+             * Early exit the dispatch if we have a redirect
+             */
+            if ($this->response->isRedirect()) {
+                return $this->response;
+            }
+
+            /**
              * Notify plugins of dispatch loop startup
              */
             $this->eventManager->notify(
