@@ -1,8 +1,7 @@
-;(function($, window, document, undefined) {
+;(function($, window, document) {
     'use strict';
 
-    var $window = $(window),
-        $document = $(document);
+    var $document = $(document);
 
     /**
      * Rounds the given value to the chosen base.
@@ -187,8 +186,7 @@
             me._on(me.$maxHandle, 'mousedown touchstart', $.proxy(me.onStartDrag, me, 'max', me.$maxHandle));
 
             me._on($document, 'mouseup touchend', $.proxy(me.onEndDrag, me));
-            me._on($document, 'mousemove', $.proxy(me.slide, me));
-            me._on($document, 'touchmove', $.proxy(me.slide, me));
+            me._on($document, 'mousemove touchmove', $.proxy(me.slide, me));
         },
 
         createSliderTemplate: function() {
@@ -451,4 +449,4 @@
             me._destroy();
         }
     });
-})(jQuery, window, document, undefined);
+})(jQuery, window, document);
