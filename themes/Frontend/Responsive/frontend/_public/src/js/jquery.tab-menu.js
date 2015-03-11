@@ -35,18 +35,28 @@
             /**
              * Selector for the tab content list
              *
-             * @property contentContainerSelector
+             * @property containerListSelector
              * @type {String}
              */
-            'contentContainerSelector': '.tab--container-list',
+            'containerListSelector': '.tab--container-list',
 
             /**
-             * Selector for the tab content item
+             * Selector for the tab container in a tab container list.
+             *
+             * @property containerSelector
+             * @type {String}
+             */
+            'containerSelector': '.tab--container',
+
+            /**
+             * Selector for the content element inside a tab container.
              *
              * @property contentSelector
              * @type {String}
              */
-            'contentSelector': '.tab--container',
+            'contentSelector': '.tab--content',
+
+            'hasContentClass': 'has--content',
 
             /**
              * Class that should be set on an active tab navigation item
@@ -82,7 +92,9 @@
         init: function () {
             var me = this,
                 opts = me.opts,
-                $el = me.$el;
+                $el = me.$el,
+                $container,
+                $tab;
 
             me.applyDataAttributes();
 
@@ -90,11 +102,21 @@
 
             me.$tabContainer = $el.find(opts.tabContainerSelector);
 
-            me.$contentContainer = $el.find(opts.contentContainerSelector);
+            me.$containerList = $el.find(opts.containerListSelector);
 
             me.$tabs = me.$tabContainer.find(opts.tabSelector);
 
-            me.$contents = me.$contentContainer.find(opts.contentSelector);
+            me.$container = me.$containerList.find(opts.containerSelector);
+
+            me.$container.each(function (i, el) {
+                $container = $(el);
+                $tab = $(me.$tabs.get(i));
+
+                if ($container.find(opts.contentSelector).html().length) {
+                    $container.addClass(opts.hasContentClass);
+                    $tab.addClass(opts.hasContentClass);
+                }
+            });
 
             me._index = null;
 
@@ -114,7 +136,7 @@
             var me = this;
 
             me.$tabs.each(function (i, el) {
-                me._on($(el), 'click touchstart', $.proxy(me.changeTab, me, i));
+                me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
         },
 
@@ -133,7 +155,7 @@
                 activeTabClass = opts.activeTabClass,
                 activeContainerClass = opts.activeContainerClass,
                 $tab,
-                $content;
+                $container;
 
             if (event) {
                 event.preventDefault();
@@ -146,7 +168,7 @@
             me._index = index;
 
             $tab = $(me.$tabs.get(index));
-            $content = $(me.$contents.get(index));
+            $container = $(me.$container.get(index));
 
             me.$tabContainer
                 .find('.' + activeTabClass)
@@ -154,18 +176,18 @@
 
             $tab.addClass(activeTabClass);
 
-            me.$contentContainer
+            me.$containerList
                 .find('.' + activeContainerClass)
                 .removeClass(activeContainerClass);
 
-            $content.addClass(activeContainerClass);
+            $container.addClass(activeContainerClass);
 
-            $.each($content.find('.product-slider'), function(index, item) {
+            $.each($container.find('.product-slider'), function(index, item) {
                 $(item).data('plugin_productSlider').update();
             });
 
             if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
-                $content.load($tab.attr('data-url'));
+                $container.load($tab.attr('data-url'));
             }
         },
 

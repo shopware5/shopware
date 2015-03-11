@@ -36,13 +36,22 @@ The functionality is provided by the `jquery.tab-menu.js` file.
         .white-gradient();
         .border-radius-multi(3px, 3px, 0, 0);
         .unitize(top, 1);
-        display: inline-block;
+        display: none;
         position: relative;
         font-weight: bold;
         text-align: center;
         color: @text-color;
         border: 1px solid @border-color;
         white-space: nowrap;
+
+        &:hover {
+            color: @link-color;
+            background: #fff;
+        }
+
+        &:focus {
+            outline: none;
+        }
 
         &.is--active {
             color: @text-color-dark;
@@ -54,19 +63,16 @@ The functionality is provided by the `jquery.tab-menu.js` file.
             }
         }
 
-        &:hover {
-            color: @link-color;
-            background: #fff;
+        &.has--content {
+            display: inline-block;
         }
-
-		&:focus { outline: none; }
     }
 
     .tab--container-list .tab--container {
         border: 1px solid @panel-border;
         display: none;
 
-        &.is--active {
+        &.has--content.is--active {
             display: block;
         }
     }
