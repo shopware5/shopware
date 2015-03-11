@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,18 +36,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class StoreListUpdatesCommand extends StoreCommand
+class StoreListIntegratedCommand extends StoreCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        parent::addConfigureShopwareVersion();
-
         $this
-            ->setName('sw:store:list:updates')
-            ->setDescription('Lists updates for installed plugins.')
+            ->setName('sw:store:list:integrated')
+            ->setDescription('List all integrated plugins.')
         ;
     }
 
@@ -56,31 +54,24 @@ class StoreListUpdatesCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $version = $input->getOption('shopware-version');
-        if (empty($version)) {
-            $version = \Shopware::VERSION;
-        }
+        $context = new ListingRequest(null, \Shopware::VERSION, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
+        $listing = $this->container->get('shopware_plugininstaller.plugin_service_view')->getStoreListing($context);
 
-        $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
-        $domain  = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
-        $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $request = new UpdateListingRequest(null, $version, $domain, $plugins);
-        $updates = $service->getUpdates($request);
-
-        $result = array();
-        foreach ($updates as $plugin) {
+        $result = [];
+        foreach ($listing->getPlugins() as $plugin) {
             $result[] = [
-                $plugin->getId(),
-                $plugin->getTechnicalName(),
-                $plugin->getLabel(),
-                $plugin->getVersion(),
-                $plugin->getAvailableVersion()
+                'id'               => $plugin->getId(),
+                'technicalName'    => $plugin->getTechnicalName(),
+                'label'            => $plugin->getLabel(),
+                'installed'        => ($plugin->getInstallationDate() !== null),
+                'version'          => $plugin->getVersion(),
+                'updateAvailable'  => $plugin->isUpdateAvailable()
             ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'))
-              ->setRows($result);
+        $table->setHeaders(array('Id', 'Technical name', 'Label', 'Installed', 'Version', 'Update available'))
+            ->setRows($result);
 
         $table->render($output);
     }
