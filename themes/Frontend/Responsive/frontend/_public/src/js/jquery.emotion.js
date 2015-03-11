@@ -189,10 +189,18 @@
             me.$el.html(me.opts.loadingIndicator);
             me.showEmotion();
 
+            if (me.isLoading) {
+                return;
+            }
+
+            me.isLoading = true;
+
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function (response) {
+
+                    me.isLoading = false;
 
                     if (!response.length) {
                         me.hideEmotion();
