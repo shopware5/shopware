@@ -173,15 +173,16 @@ class PluginLocalService
         return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-
     private function getIconOfPlugin($source, $namespace, $name)
     {
         $root = Shopware()->Container()->getParameter('kernel.root_dir');
 
         $path = '/engine/Shopware/Plugins/' . $source . '/' . $namespace . '/' . $name . '/plugin.png';
 
-        if (file_exists($root . $path)) {
-            return Shopware()->Container()->get('front')->Request()->getBasePath() . $path;
+        $front = Shopware()->Container()->get('front');
+
+        if (file_exists($root . $path) && $front && $front->Request()) {
+            return $front->Request()->getBasePath() . $path;
         } else {
             return false;
         }

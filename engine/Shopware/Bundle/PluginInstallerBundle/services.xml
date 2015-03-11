@@ -52,6 +52,13 @@
             <argument type="service" id="shopware_plugininstaller.store_client" />
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="snippets" />
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_plugininstaller.plugin_licence_service" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_plugininstaller.plugin_download_service" />
+            <argument type="service" id="shopware_plugininstaller.plugin_manager" />
         </service>
 
         <service id="shopware_plugininstaller.plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
