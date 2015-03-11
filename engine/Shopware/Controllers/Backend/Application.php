@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Base controller for a single backend sub application.
@@ -332,7 +333,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('query', null),
                 $this->Request()->getParam('association', null),
                 $this->Request()->getParam('start', 0),
-                $this->Request()->getParam('limit', 20)
+                $this->Request()->getParam('limit', 20),
+                $this->Request()->getParam('id', null)
             )
         );
     }
@@ -602,16 +604,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param int $limit
      * @return array
      */
-    public function searchAssociation($search, $association, $offset, $limit)
+    public function searchAssociation($search, $association, $offset, $limit, $id = null)
     {
+        $associationModel = $this->getAssociatedModelByProperty($this->model, $association);
+
         $builder = $this->getSearchAssociationQuery(
             $association,
-            $this->getAssociatedModelByProperty($this->model, $association),
+            $associationModel,
             $search
         );
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
+
+        if ($id !== null) {
+            $this->addIdentifierCondition($association, $id, $builder);
+        }
 
         $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->getArrayCopy();
@@ -628,7 +636,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * If the class property model isn't configured, the init function throws an exception.
      * The listing alias for the from table can be configured over the class property alias.
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getListQuery()
     {
@@ -661,7 +669,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *
      * @param $id
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     protected function getDetailQuery($id)
     {
@@ -683,7 +691,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param $association
      * @param $model
      * @param $search
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getSearchAssociationQuery($association, $model, $search)
     {
@@ -709,7 +717,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param $alias - Query alias for the selected model
      * @param $fieldName - Property name of the foreign key column in the associated model.
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getReloadAssociationQuery($model, $alias, $fieldName)
     {
@@ -1129,5 +1137,47 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
 
         return $fields;
+    }
+
+    /**
+     * Returns the reference column for the provided association property
+     * @param string $association
+     * @return string|null
+     */
+    private function getReferencedColumnName($association)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($this->model);
+        $mappings = $metaData->getAssociationMappings();
+
+        if (!isset($mappings[$association])) {
+            return null;
+        }
+
+        $mapping = $mappings[$association];
+        $column = array_shift($mapping['joinColumns']);
+        $column = $column['referencedColumnName'];
+
+        return $column;
+    }
+
+    /**
+     * Filters the search association query by the identifier field.
+     * Used for form loading if the raw value is set to the value.
+     * @param string $association
+     * @param int $id
+     * @param QueryBuilder $builder
+     */
+    private function addIdentifierCondition($association, $id, QueryBuilder $builder)
+    {
+        $column = $this->getReferencedColumnName($association);
+
+        if (!isset($column)) {
+            return;
+        }
+
+        $builder->where($association . '.' . $column . ' = :id')
+            ->setParameters(['id' => $id])
+            ->setFirstResult(0)
+            ->setMaxResults(1);
     }
 }

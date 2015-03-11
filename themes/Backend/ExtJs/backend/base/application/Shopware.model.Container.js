@@ -940,7 +940,16 @@ Ext.define('Shopware.model.Container', {
                     fieldAssociation.associatedName,
                     fieldAssociation.associationKey,
                     me.getConfig('searchUrl')
-                ).load();
+                );
+
+                var value = me.record.get(formField.name);
+                if (value) {
+                    formField.store.load({
+                        params: { id: value }
+                    });
+                } else {
+                    formField.store.load();
+                }
             }
             me.fireEvent(me.eventAlias + '-association-field-created', model, formField, field, fieldAssociation);
         }
