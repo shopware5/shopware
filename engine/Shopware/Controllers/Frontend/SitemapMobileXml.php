@@ -36,10 +36,22 @@ class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_
      */
     public function indexAction()
     {
-        return $this->forward(
-            'mobile',
-            'sitemapXml'
-        );
+        $this->assertMobileSitemapEnabled();
 
+        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
+        set_time_limit(0);
+
+        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
+        $sitemap = $this->get('sitemapxml.repository');
+        $this->View()->sitemap = $sitemap->getSitemapContent();
+    }
+
+    private function assertMobileSitemapEnabled()
+    {
+        if (!$this->container->get('config')->get('mobileSitemap')) {
+            throw new Enlight_Controller_Exception(
+                'Page not found', 404
+            );
+        }
     }
 }
