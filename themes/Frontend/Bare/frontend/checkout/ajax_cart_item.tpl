@@ -5,6 +5,12 @@
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
 
+{if $sBasketItem.additional_details.sConfigurator}
+    {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+{else}
+    {$detailLink=$sBasketItem.linkDetails}
+{/if}
+
 <div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
     {* Article image *}
 	{block name='frontend_checkout_ajax_cart_articleimage'}
@@ -81,7 +87,7 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-        <a class="item--link" href="{if $basketItem.modus != 4}{$basketItem.linkDetails}{else}#{/if}" title="{$basketItem.articlename|escape:"html"}">
+        <a class="item--link" href="{if $basketItem.modus != 4}{$detailLink}{else}#{/if}" title="{$basketItem.articlename|escape:"html"}">
             {block name="frontend_checkout_ajax_cart_articlename_quantity"}
 				<span class="item--quantity">{$basketItem.quantity}x</span>
 			{/block}
