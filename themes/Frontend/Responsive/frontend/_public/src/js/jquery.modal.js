@@ -293,6 +293,9 @@
             switch (opts.mode) {
                 case 'ajax':
                     $.ajax(content, {
+                        data: {
+                            isXHR: 1
+                        },
                         success: function (result) {
                             me.setContent(result);
                         }
