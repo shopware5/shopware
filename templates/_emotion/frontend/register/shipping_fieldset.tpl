@@ -17,7 +17,7 @@
 	{block name="frontend_register_shipping_fieldset_input_company"}
 		<div>
 		    <label for="company2" class="normal">{se name='RegisterShippingLabelCompany'}{/se}</label>
-		    <input name="register[shipping][company]" type="text"  id="company2" value="{$form_data.company|escape}" class="text {if $error_flags.company}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping organization" name="register[shipping][company]" type="text"  id="company2" value="{$form_data.company|escape}" class="text {if $error_flags.company}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -25,7 +25,7 @@
 	{block name='frontend_register_shipping_fieldset_input_department'}
 		<div>
 		    <label for="department2" class="normal">{se name='RegisterShippingLabelDepartment'}{/se}</label>
-		    <input name="register[shipping][department]" type="text" id="department2" value="{$form_data.department|escape}" class="text" />
+		    <input autocomplete="section-shipping shipping organization-title" name="register[shipping][department]" type="text" id="department2" value="{$form_data.department|escape}" class="text" />
 		</div>
 	{/block}
 
@@ -33,7 +33,7 @@
 	{block name='frontend_register_shipping_fieldset_input_firstname'}
 		<div>
 		    <label for="firstname2">{se name='RegisterShippingLabelFirstname'}{/se}</label>
-		    <input name="register[shipping][firstname]" type="text"  id="firstname2" value="{$form_data.firstname|escape}" class="text required {if $error_flags.firstname}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping given-name" name="register[shipping][firstname]" type="text"  id="firstname2" value="{$form_data.firstname|escape}" class="text required {if $error_flags.firstname}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -41,7 +41,7 @@
 	{block name='frontend_register_shipping_fieldset_input_lastname'}
 		<div>
 		    <label for="lastname2">{se name='RegisterShippingLabelLastname'}{/se}</label>
-		    <input name="register[shipping][lastname]" type="text"  id="lastname2" value="{$form_data.lastname|escape}" class="text required {if $error_flags.lastname}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping family-name" name="register[shipping][lastname]" type="text"  id="lastname2" value="{$form_data.lastname|escape}" class="text required {if $error_flags.lastname}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -49,7 +49,7 @@
 	{block name='frontend_register_shipping_fieldset_input_street'}
 		<div>
 		    <label for="street2">{se name='RegisterShippingLabelStreet'}{/se}</label>
-		    <input name="register[shipping][street]" type="text"  id="street2" value="{$form_data.street|escape}" class="text required {if $error_flags.street}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping street-address" name="register[shipping][street]" type="text"  id="street2" value="{$form_data.street|escape}" class="text required {if $error_flags.street}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -58,7 +58,7 @@
 		{if {config name=showAdditionAddressLine1}}
 			<div>
 				<label for="additionalAddressLine21" {if !{config name=requireAdditionAddressLine1}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine1'}{/se}{if {config name=requireAdditionAddressLine1}}*{/if}:</label>
-				<input name="register[shipping][additional_address_line1]" type="text" id="additionalAddressLine21" value="{$form_data.additional_address_line1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
+				<input autocomplete="section-shipping shipping address-line2" name="register[shipping][additional_address_line1]" type="text" id="additionalAddressLine21" value="{$form_data.additional_address_line1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}
@@ -68,7 +68,7 @@
 		{if {config name=showAdditionAddressLine2}}
 			<div>
 				<label for="additionalAddressLine22" {if !{config name=requireAdditionAddressLine2}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine2'}{/se}{if {config name=requireAdditionAddressLine2}}*{/if}:</label>
-				<input name="register[shipping][additional_address_line2]" type="text" id="additionalAddressLine22" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
+				<input autocomplete="section-shipping shipping address-line3" name="register[shipping][additional_address_line2]" type="text" id="additionalAddressLine22" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}
@@ -77,8 +77,8 @@
 	{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
 		<div>
 		    <label for="zipcode2">{se name='RegisterShippingLabelCity'}{/se}</label>
-		    <input name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}"  class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
-		    <input name="register[shipping][city]" type="text"  id="city2" value="{$form_data.city|escape}" size="25" class="city text required {if $error_flags.city}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping postal-code" name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}"  class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
+		    <input autocomplete="section-shipping shipping address-level2" name="register[shipping][city]" type="text"  id="city2" value="{$form_data.city|escape}" size="25" class="city text required {if $error_flags.city}instyle_error{/if}" />
 		</div>
 	{/block}
 
