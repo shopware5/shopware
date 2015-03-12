@@ -33,7 +33,7 @@
             $.ajax({
                 type: "POST",
                 url: url,
-                data: $("#shippingPaymentForm").serialize(),
+                data: $("#shippingPaymentForm").serialize() + '&isXHR=1',
                 success: function(res) {
                     me.$el.empty().html(res);
                     $.loadingIndicator.close();
