@@ -287,6 +287,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $params['articles'] = $this->prepareAssociationDataForSaving('articles','Shopware\Models\Article\Article',$params);
 
         $params['attribute'] = $params['attribute'][0];
+        $productFeed = $this->setDirty($productFeed, $params);
         $productFeed->fromArray($params);
 
         //just for future use
@@ -320,6 +321,34 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
+    }
+
+    /**
+     * Determines if a feed needs to be marked as dirty
+     * New feeds, feeds whose header, body or footer have been
+     * changed are marked as dirty
+     *
+     * @param ProductFeed $productFeed
+     * @param array $params
+     * @return ProductFeed
+     */
+    private function setDirty($productFeed, $params)
+    {
+        if ($productFeed->isDirty()) {
+            return $productFeed;
+        }
+
+        if (!$productFeed->getId()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['header']) && $params['header'] != $productFeed->getHeader()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['body']) && $params['body'] != $productFeed->getBody()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['footer']) && $params['footer'] != $productFeed->getFooter()) {
+            $productFeed->setDirty(true);
+        }
+
+        return $productFeed;
     }
 
     /**
