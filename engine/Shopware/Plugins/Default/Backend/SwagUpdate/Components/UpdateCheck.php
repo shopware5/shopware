@@ -114,8 +114,14 @@ class UpdateCheck
         $client->setParameterGet('channel', $this->channel);
         $client->setParameterGet($params);
 
-        $response = $client->request();
-        $body     = $response->getBody();
+        try {
+            $response = $client->request();
+        } catch (\Zend_Http_Client_Exception $e) {
+            // Do not show exception to user if request times out
+            return null;
+        }
+
+        $body = $response->getBody();
 
         $verified = false;
         if (!empty($this->publicKey) && $this->verifySignature) {

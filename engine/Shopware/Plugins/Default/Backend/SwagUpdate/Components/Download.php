@@ -104,6 +104,8 @@ class Download
     private function verifyHash($partFile, $hash)
     {
         if (sha1_file($partFile->getPathname()) !== $hash) {
+            // try to delete invalid file so a valid one can be downloaded
+            @unlink($partFile->getPathname());
             throw new \Exception("Hash mismatch");
         }
 
