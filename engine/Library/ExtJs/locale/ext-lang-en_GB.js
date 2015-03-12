@@ -528,7 +528,7 @@ Ext.onReady(function() {
         helpText: 'Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.'
     });
 
-    Ext.define('Shopware.apps.Base.store.de.ProductBoxLayout', {
+    Ext.define('Shopware.apps.Base.store.en_GB.ProductBoxLayout', {
         override: 'Shopware.apps.Base.store.ProductBoxLayout',
 
         snippets: {
@@ -548,6 +548,32 @@ Ext.onReady(function() {
                 label: 'Big image',
                 description: 'The layout of the product box is based on a big image of the product.'
             }
+        }
+    });
+
+    Ext.define('Shopware.notification.en_GB.SubscriptionWarning', {
+        override: 'Shopware.notification.SubscriptionWarning',
+
+        snippets: {
+            plugin_not_upgraded : 'The license upgrade for plugin [0] is pending.',
+            plugins_not_upgraded : 'The license upgrades for the following plugins are pending:',
+            plugin_wrong_version : 'The license for plugin [0] is invalid.',
+            plugins_wrong_version : 'The licenses for the following plugins are invalid:',
+            plugin_subscription_warning : 'The subscription for plugin [0] has expired.',
+            plugin_subscription_warning_days : 'The subscription for plugin [1] expires in [0] days.',
+            shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.'
+        }
+    });
+
+    Ext.define('Shopware.notification.en_GB.ExpiredLicence', {
+        override: 'Shopware.notification.ExpiredLicence',
+
+        snippets: {
+            licenses_expired : 'Licenses will expire soon',
+            license_expired : 'License will expire soon',
+            licenses_expired_long : 'The following licenses will expire soon:',
+            license_expired_long : 'The following license will expire soon:',
+            license_expired_line_text : '[0] will expire on [1]'
         }
     });
 });
