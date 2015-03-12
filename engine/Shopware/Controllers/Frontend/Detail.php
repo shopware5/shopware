@@ -40,14 +40,24 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     }
 
     /**
-     * Error action method
-     *
-     * Read similar products
+     * Error action method for not found/inactive articles
+     * Can throw an exception that is handled by the default error controller
+     * or show a custom page with related articles
      */
     public function errorAction()
     {
-        $this->Response()->setHttpResponseCode(404);
-        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles($this->Request()->sArticle, 4);
+        $config = $this->container->get('config');
+        if (!$config->get('RelatedArticlesOnArticleNotFound')) {
+            throw new Enlight_Controller_Exception('Article not found', 404);
+        }
+
+        $this->Response()->setHttpResponseCode(
+            $config->get('PageNotFoundCode', 404)
+        );
+        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles(
+            $this->Request()->sArticle,
+            4
+        );
     }
 
     /**
@@ -80,12 +90,16 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $number = $this->Request()->getParam('number', null);
         $selection = $this->Request()->getParam('group', array());
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleById(
-            $id,
-            null,
-            $number,
-            $selection
-        );
+        try {
+            $article = Shopware()->Modules()->Articles()->sGetArticleById(
+                $id,
+                null,
+                $number,
+                $selection
+            );
+        } catch (RuntimeException $e) {
+            $article = null;
+        }
 
         if (!$this->Request()->get('sCategory')) {
             $this->Request()->setParam('sCategory', $article['categoryID']);
