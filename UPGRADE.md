@@ -30,6 +30,8 @@ In this document you will find a changelog of the important changes related to t
 * Removed commands `sw:store:download:update` and `sw:store:licenseplugin`.
 * Added `sw:store:download` command to download install and updates of plugins.
 * Added `sw:store:list:integrated` command to list all shopware 5 integrated plugins.
+* Added way to early exit the dispatch.
+    * After `Enlight_Controller_Front_RouteShutdown` a response containing a redirect will not enter the dispatch loop.
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
