@@ -320,7 +320,7 @@ Ext.define('Shopware.form.field.CodeMirror',
      * @return [string] The setted value
      */
     setValue: function(value) {
-        if (this.editor && (typeof value !== "undefined")) {
+        if (this.editor && (typeof value !== "undefined") && value !== null) {
             this.editor.setValue(value);
         }
 
