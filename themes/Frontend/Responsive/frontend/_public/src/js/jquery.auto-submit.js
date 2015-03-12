@@ -26,6 +26,18 @@
      *
      */
     $.plugin('autoSubmit', {
+
+        defaults: {
+
+            /**
+             * Decide if loading indicator is shown until the form is submitted.
+             *
+             * @property loadingindicator
+             * @type {Boolean}
+             */
+            'loadingindicator': true
+        },
+
         /**
          * Default plugin initialisation function.
          * Registers an event listener on the change event.
@@ -37,10 +49,24 @@
         init: function () {
             var me = this;
 
+            me.applyDataAttributes();
+
+            me.$form = $(me.$el.parents('form')[0]);
+
             // Will be automatically removed when destroy() is called.
-            me._on(me.$el, 'change', function () {
-                $(this).parents('form').submit();
-            });
+            me._on(me.$el, 'change', $.proxy(me.onChangeSelection, me));
+        },
+
+        onChangeSelection: function () {
+            var me = this;
+
+            if(me.opts.loadingindicator) {
+                $.loadingIndicator.open({
+                    closeOnClick: false
+                });
+            }
+
+            me.$form.submit();
         }
     });
 })(jQuery);
