@@ -366,7 +366,7 @@
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_voucher_field'}
-                                            <input type="text" class="block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}"|escape}" />
+                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}"|escape}" />
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_voucher_button'}
