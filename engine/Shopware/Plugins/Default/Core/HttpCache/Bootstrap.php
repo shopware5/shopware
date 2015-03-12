@@ -628,6 +628,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         $request = $this->action->Request();
 
+        // Alias from "name" to "action" to be compatible with non-http-cache implementation
+        // @see engine/Library/Enlight/Template/Plugins/function.action.php
+        if (isset($params['name'])) {
+            $params['action'] = $params['name'];
+            unset($params['name']);
+        }
+
         if (isset($params['params'])) {
             $params = array_merge((array) $params['params'], $params);
             unset($params['params']);
