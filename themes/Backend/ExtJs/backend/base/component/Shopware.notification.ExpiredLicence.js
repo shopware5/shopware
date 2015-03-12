@@ -25,6 +25,15 @@
 
 Ext.define('Shopware.notification.ExpiredLicence', {
 
+    snippets: {
+        licenses_expired : '{s name="licenses_expired"}Licenses will expire soon{/s}',
+        license_expired : '{s name="license_expired"}License will expire soon{/s}',
+        licenses_expired_long : '{s name="licenses_expired_long"}The following licenses will expire soon:{/s}',
+        license_expired_long : '{s name="license_expired_long"}The following license will expire soon:{/s}',
+        license_expired_line_text : '{s name="license_expired_line_text"}[0] will expire on [1]{/s}'
+
+    },
+
     /**
      * Check if any plugins are expired
      */
@@ -37,16 +46,17 @@ Ext.define('Shopware.notification.ExpiredLicence', {
     },
 
     displayNotice: function(licences) {
-        var text = (Ext.Object.getSize(licences) > 1) ? '{s name="licenses_expired_long"}{/s}:<br/>' : '{s name="license_expired_long"}{/s}:<br/>';
+        var me = this;
+        var text = (Ext.Object.getSize(licences) > 1) ? me.snippets.licenses_expired_long + '<br/>' : me.snippets.license_expired_long + '<br/>';
 
         Ext.each(licences, function(licence){
             var dateStr = Ext.util.Format.date(licence.expireDate);
-            var snippet = '{s name="license_expired_line_text"}{/s}<br/>';
+            var snippet = me.snippets.license_expired_line_text +'<br/>';
             text += Ext.String.format(snippet, licence.plugin, dateStr);
         });
 
         Shopware.Notification.createStickyGrowlMessage({
-            title : (Ext.Object.getSize(licences) > 1) ? '{s name="licenses_expired"}{/s}' : '{s name="license_expired"}{/s}',
+            title : (Ext.Object.getSize(licences) > 1) ? me.snippets.licenses_expired : me.snippets.license_expired,
             text  : text,
             width : 440,
             height: 300
@@ -54,6 +64,8 @@ Ext.define('Shopware.notification.ExpiredLicence', {
     },
 
     getExpiredLicences: function(callback) {
+        var me = this;
+
         Ext.Ajax.request({
             url: '{url controller="base" action="getExpiredLicences"}',
             async: false,

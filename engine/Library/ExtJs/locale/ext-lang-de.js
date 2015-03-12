@@ -576,4 +576,30 @@ Ext.onReady(function() {
             }
         }
     });
+
+    Ext.define('Shopware.notification.de.SubscriptionWarning', {
+        override: 'Shopware.notification.SubscriptionWarning',
+
+        snippets: {
+            plugin_not_upgraded : 'Das Lizenzupgrade für das Plugin [0] steht noch aus.',
+            plugins_not_upgraded : 'Die Lizenzupgrades für folgende Plugins stehen noch aus:',
+            plugin_wrong_version : 'Die Lizenz für das Plugin [0] ist ungültig.',
+            plugins_wrong_version : 'Die Lizenzen für folgende Plugins sind ungültig:',
+            plugin_subscription_warning : 'Die Subscription für das Plugin [0] ist abgelaufen.',
+            plugin_subscription_warning_days : 'In [0] Tagen läuft die Subscription für das Plugin [1] ab.',
+            shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt.'
+        }
+    });
+
+    Ext.define('Shopware.notification.de.ExpiredLicence', {
+        override: 'Shopware.notification.ExpiredLicence',
+
+        snippets: {
+            licenses_expired : 'Pluginlizenzen laufen ab',
+            license_expired : 'Pluginlizenz läuft ab',
+            licenses_expired_long : 'Folgende Pluginlizenzen laufen ab',
+            license_expired_long : 'Folgende Pluginlizenz läuft ab',
+            license_expired_line_text : '[0] läuft am [1] ab'
+        }
+    });
 });
