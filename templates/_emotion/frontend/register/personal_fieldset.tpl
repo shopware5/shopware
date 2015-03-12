@@ -34,7 +34,7 @@
 	{block name='frontend_register_personal_fieldset_input_firstname'}		
 		<div>
 			<label for="firstname">{se name='RegisterLabelFirstname'}{/se}</label>
-			<input name="register[personal][firstname]" type="text" id="firstname" value="{$form_data.firstname|escape}" class="text required {if $error_flags.firstname}instyle_error{/if}" />
+			<input autocomplete="section-personal given-name" name="register[personal][firstname]" type="text" id="firstname" value="{$form_data.firstname|escape}" class="text required {if $error_flags.firstname}instyle_error{/if}" />
 		</div>
 	{/block}
 	
@@ -42,7 +42,7 @@
 	{block name='frontend_register_personal_fieldset_input_lastname'}
 		<div>
 			<label for="lastname">{se name='RegisterLabelLastname'}{/se}</label>
-			<input name="register[personal][lastname]" type="text"  id="lastname" value="{$form_data.lastname|escape}" class="text required {if $error_flags.lastname}instyle_error{/if}" />
+			<input autocomplete="section-personal family-name" name="register[personal][lastname]" type="text"  id="lastname" value="{$form_data.lastname|escape}" class="text required {if $error_flags.lastname}instyle_error{/if}" />
 		</div>
 	{/block}
 	
@@ -64,7 +64,7 @@
 			    <label for="register_personal_email">
 			    	{se name='RegisterLabelMail'}{/se}
 			    </label>
-			    <input name="register[personal][email]" type="text" id="register_personal_email" value="{$form_data.email|escape}" class="text required email {if $error_flags.email}instyle_error{/if}" />
+			    <input autocomplete="section-personal email" name="register[personal][email]" type="text" id="register_personal_email" value="{$form_data.email|escape}" class="text required email {if $error_flags.email}instyle_error{/if}" />
 			</div>
 		
 			{if {config name=DOUBLEEMAILVALIDATION}}
@@ -72,7 +72,7 @@
 			        <label for="register_personal_emailConfirmation">
 			        	{se name='RegisterLabelMailConfirmation'}{/se}
 			        </label>
-			        <input name="register[personal][emailConfirmation]" type="text" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="text emailConfirmation required {if $error_flags.emailConfirmation}instyle_error{/if}" />
+			        <input autocomplete="section-personal email" name="register[personal][emailConfirmation]" type="text" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="text emailConfirmation required {if $error_flags.emailConfirmation}instyle_error{/if}" />
 			    </div>
 			{/if}
 		{/block}
@@ -110,7 +110,7 @@
         {if {config name=showPhoneNumberField}}
             <div>
                 <label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}{if {config name=requirePhoneField}}*{/if}:</label>
-                <input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
+                <input autocomplete="section-personal tel" name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
             </div>
         {/if}
 	{/block}
