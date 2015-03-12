@@ -532,7 +532,6 @@ class sArticles
                 $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
             }
 
-
             if ($id !== Shopware()->Shop()->getCategory()->getId()) {
                 $query = array(
                     'sViewport' => 'cat',
@@ -542,13 +541,14 @@ class sArticles
                 );
             } else {
                 $query = array(
-                    'sViewport' => 'supplier',
+                    'controller' => 'listing',
+                    'action' => 'manufacturer',
                     'sSupplier' => $supplierValue["id"]
                 );
             }
 
             $getSupplier[$supplierKey]["link"] = Shopware()->Config()->get('baseFile')
-                . '?' . http_build_query($query, '', '&');
+                .'?'.http_build_query($query, '', '&');
         }
 
         return $getSupplier;
