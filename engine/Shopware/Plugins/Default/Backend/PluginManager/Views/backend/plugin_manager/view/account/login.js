@@ -112,12 +112,13 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             return;
         }
 
+        me.destroy();
+
         Shopware.app.Application.fireEvent(
             'store-login',
             me.shopwareIdField.getValue(),
             me.passwordField.getValue(),
             function(response) {
-                me.destroy();
                 me.callback();
             }
         );
