@@ -97,8 +97,11 @@ class CacheManager
      */
     public function clearHttpCache()
     {
-        $cacheDir = $this->container->getParameter('shopware.httpCache.cache_dir');
-        $this->clearDirectory($cacheDir);
+        if ($this->container->getParameter('shopware.httpCache.enable')) {
+            $this->clearDirectory(
+                $this->container->getParameter('shopware.httpCache.cache_dir')
+            );
+        }
 
         // Fire event to let Plugin-Implementation clear cache
         $this->events->notify('Shopware_Plugins_HttpCache_ClearCache');
@@ -226,9 +229,14 @@ class CacheManager
      */
     public function getHttpCacheInfo($request = null)
     {
-        $cacheDir = $this->container->getParameter('shopware.httpCache.cache_dir');
+        if ($this->container->getParameter('shopware.httpCache.enable')) {
+            $this->getDirectoryInfo(
+                $this->container->getParameter('shopware.httpCache.cache_dir')
+            );
+        } else {
+            $info = array();
+        }
 
-        $info = $this->getDirectoryInfo($cacheDir);
         $info['name'] = 'Http-Reverse-Proxy';
 
         if ($request && $request->getHeader('Surrogate-Capability')) {
