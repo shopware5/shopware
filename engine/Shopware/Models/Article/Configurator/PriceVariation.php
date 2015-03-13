@@ -45,7 +45,7 @@ class PriceVariation extends ModelEntity
 
     /**
      * @var string
-     * @ORM\Column(name="options", type="string", length=255, nullable=true)
+     * @ORM\Column(name="options", type="text", nullable=true)
      */
     private $options;
 
