@@ -171,10 +171,18 @@
             /**
              * Speed of the slide animations in milliseconds.
              *
-             * @property animationSpeed
+             * @property animationSpeedIn
              * @type {Number}
              */
-            'animationSpeed': 400,
+            'animationSpeedIn': 450,
+
+            /**
+             * Speed of the slide animations in milliseconds.
+             *
+             * @property animationSpeedOut
+             * @type {Number}
+             */
+            'animationSpeedOut': 300,
 
             /**
              * Easing function for sliding a slide into the viewport.
@@ -182,7 +190,7 @@
              * @property easingIn
              * @type {String}
              */
-            'easingIn': 'cubic-bezier(.16,.04,.14,1)',
+            'easingIn': 'cubic-bezier(.3,0,.15,1)',
 
             /**
              * Easing function for sliding a slide out of the viewport.
@@ -190,7 +198,7 @@
              * @property easingOut
              * @type {String}
              */
-            'easingOut': 'cubic-bezier(.2,.76,.5,1)',
+            'easingOut': 'cubic-bezier(.02, .01, .47, 1)',
 
             /**
              * The animation easing used when transitions are not supported.
@@ -474,7 +482,7 @@
 
             $slide = $overlays.not('.' + opts.backSlideClass);
 
-            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, me.easingEffectOut, function () {
+            $slide[me.slideFunction]({ 'left': 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
                 $slide.remove();
 
                 me.inProgress = false;
@@ -509,7 +517,7 @@
                 'display': 'block'
             });
 
-            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeed, me.easingEffectIn, function () {
+            $slide[me.slideFunction]({ 'left': 0 }, opts.animationSpeedIn, me.easingEffectIn, function () {
                 // remove background layer
                 $overlays.each(function (i, el) {
                     $el = $(el);
@@ -550,7 +558,7 @@
             // fade in arrow icons
             me.$sidebarWrapper.find(me.opts.iconRightSelector).fadeIn('slow');
 
-            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeed, me.easingEffectOut, function () {
+            $overlay[me.slideFunction]({ 'left': 280 }, opts.animationSpeedOut, me.easingEffectOut, function () {
                 $overlay.remove();
 
                 // enable scrolling on main menu

@@ -109,7 +109,7 @@
              *
              * @type {String|Number}
              */
-            animationSpeed: 'fast'
+            animationSpeed: 200
         },
 
         /**
@@ -240,7 +240,8 @@
                 opts = me.opts;
 
             me.$loader.fadeOut(opts.animationSpeed);
-            me.$results.empty().html(response).slideDown().addClass(opts.activeCls);
+            me.$results.empty().html(response).addClass(opts.activeCls).show();
+
             picturefill();
 
             $.publish('plugin/liveSearch/showResult', me);
@@ -254,7 +255,8 @@
                 opts = me.opts,
                 $results = me.$results;
 
-            $results.removeClass(opts.activeCls).fadeOut(opts.animationSpeed, $results.empty.bind($results));
+            $results.removeClass(opts.activeCls).hide().empty();
+
             $.publish('plugin/liveSearch/closeResult', me);
         },
 

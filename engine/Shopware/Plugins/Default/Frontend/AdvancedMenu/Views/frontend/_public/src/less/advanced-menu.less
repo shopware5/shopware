@@ -64,11 +64,14 @@
     .menu--list-item-link {
         .unitize-padding(5, 0);
         .unitize(font-size, 16);
-        .transition(color 0.2s ease-out);
+        .transition(all 0.1s ease);
         color: @text-color-dark;
         display: block;
 
-        &:hover { color: @link-color }
+        &:hover {
+            .unitize-padding(5, 0, 5, 3);
+            color: @link-color;
+        }
     }
 
     .button-container {
@@ -80,8 +83,13 @@
 
         .button--category {
             .unitize-padding(20, 50);
+            .transition(padding .1s ease);
             color: @btn-secondary-text-color;
             position: relative;
+
+            &:hover {
+                .unitize-padding(20, 50, 20, 55);
+            }
         }
 
         .icon--arrow-right {
