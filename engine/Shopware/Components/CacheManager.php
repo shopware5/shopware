@@ -97,7 +97,7 @@ class CacheManager
      */
     public function clearHttpCache()
     {
-        if ($this->container->getParameter('shopware.httpCache.enable')) {
+        if ($this->container->getParameter('shopware.httpCache.enabled')) {
             $this->clearDirectory(
                 $this->container->getParameter('shopware.httpCache.cache_dir')
             );
@@ -229,7 +229,7 @@ class CacheManager
      */
     public function getHttpCacheInfo($request = null)
     {
-        if ($this->container->getParameter('shopware.httpCache.enable')) {
+        if ($this->container->getParameter('shopware.httpCache.enabled')) {
             $this->getDirectoryInfo(
                 $this->container->getParameter('shopware.httpCache.cache_dir')
             );
