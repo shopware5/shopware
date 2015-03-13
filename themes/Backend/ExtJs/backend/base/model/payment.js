@@ -42,8 +42,7 @@ Ext.define('Shopware.apps.Base.model.Payment', {
         debit: '{s name=debit}Debit{/s}',
         cash: '{s name=on_delivery}On delivery{/s}',
         invoice: '{s name=invoice}Invoice{/s}',
-        prepayment: '{s name=prepayment}Prepayment{/s}',
-        paypalexpress: '{s name=pay_pal_express}PayPal{/s}'
+        prepayment: '{s name=prepayment}Prepayment{/s}'
     },
 
     /**
