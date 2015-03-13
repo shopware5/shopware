@@ -3,7 +3,6 @@
 
     var transitionProperty = StateManager.getVendorProperty('transition'),
         transformProperty = StateManager.getVendorProperty('transform'),
-        msPointerEnabled = window.navigator.msPointerEnabled,
         killEvent = function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -784,7 +783,7 @@
                         slideStyle[transitionProperty] = 'none';
                         slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%) translateZ(0)';
                     } else {
-                        slideStyle['left'] = (offset + percentage) + '%';
+                        slideStyle.left = (offset + percentage) + '%';
                     }
 
                     if (opts.preventScrolling) {
@@ -1452,7 +1451,7 @@
                 slideStyle[transitionProperty] = 'none';
                 slideStyle[transformProperty] = 'translateX(' + percentage + '%) translateZ(0)';
             } else {
-                slideStyle['left'] = percentage + '%';
+                slideStyle.left = percentage + '%';
             }
 
             me._$currentImage = $(me._$images[index]);
