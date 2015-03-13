@@ -31,8 +31,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
     cls: 'performance-view-start',
     bodyCls: 'performance-view-start-body',
 
-    submitChange: false,
-
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -129,35 +127,30 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
                 { xtype: 'component', html: '{s name=tabs/start/development_mode_description}{/s}' }
             ],
             listeners: {
-                change: function(comp, value) {
-                    if (me.submitChange) {
-                        me.fireEvent('toggle-productive', me);
+                change: function (elem, newValue, oldValue) {
+                    if (
+                        !Ext.isEmpty(oldValue.productiveMode)
+                        && !Ext.isEmpty(newValue.productiveMode)
+                        && oldValue.productiveMode !== newValue.productiveMode
+                    ) {
+                        me.fireEvent('toggle-productive', me)
                     }
                 }
             }
         });
     },
-    
+
     setState: function(state) {
-        var me = this;
+        var me = this,
+            productiveMode = (state === true);
 
-        if (state === true) {
-            me.radioGroup.setValue({ productiveMode: true });
-        } else {
-            me.radioGroup.setValue({ productiveMode: false });
-        }
-
-        if (me.submitChange == false) {
-            me.submitChange = true;
-        }
+        me.radioGroup.setValue({productiveMode: productiveMode});
     },
 
     resetState: function(state) {
         var me =  this;
 
-        me.submitChange = false;
         me.radioGroup.setValue({ productiveMode: !me.radioGroup.getValue().productiveMode });
-        me.submitChange = true;
     }
 });
 //{/block}

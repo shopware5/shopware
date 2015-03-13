@@ -34,6 +34,8 @@
  */
 //{block name="backend/performance/view/main/window"}
 Ext.define('Shopware.apps.Performance.view.main.Window', {
+    id: 'performanceWindow',
+
     /**
      * Define that the customer main window is an extension of the enlight application window
      * @string
