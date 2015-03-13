@@ -95,25 +95,26 @@
          * Plugin constructor
          */
         init: function() {
-            var me = this;
+            var me = this,
+                opts = me.opts;
 
             me.applyDataAttributes();
 
-            if (me.opts.controllerUrl === null ||
-                me.opts.availableDevices === null) {
+            if (opts.controllerUrl === null ||
+                opts.availableDevices === null) {
                 me.$el.remove();
                 return;
             }
 
             me.$emotion = false;
 
-            me.hasSiblings = !!me.$el.siblings(me.opts.wrapperSelector).length;
-            me.availableDevices = me.opts.availableDevices.split(',');
+            me.hasSiblings = !!me.$el.siblings(opts.wrapperSelector).length;
+            me.availableDevices = (opts.availableDevices + '').split(',');
 
-            me.$fallbackContent = $(me.opts.fallbackContentSelector);
-            me.$showListingLink = $(me.opts.showListingSelector);
+            me.$fallbackContent = $(opts.fallbackContentSelector);
+            me.$showListingLink = $(opts.showListingSelector);
 
-            if (!me.opts.showListing) {
+            if (!opts.showListing) {
                 me.hideFallbackContent();
             }
 
@@ -188,10 +189,18 @@
             me.$el.html(me.opts.loadingIndicator);
             me.showEmotion();
 
+            if (me.isLoading) {
+                return;
+            }
+
+            me.isLoading = true;
+
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function (response) {
+
+                    me.isLoading = false;
 
                     if (!response.length) {
                         me.hideEmotion();
