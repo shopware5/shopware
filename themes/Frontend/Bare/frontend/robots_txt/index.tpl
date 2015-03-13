@@ -1,5 +1,8 @@
+{block name="frontend_robots_txt_user_agent"}
 User-agent: *
+{/block}
 
+{block name="frontend_robots_txt_disallows"}
 Disallow: {url controller=compare fullPath=false}
 
 Disallow: {url controller=checkout fullPath=false}
@@ -14,5 +17,9 @@ Disallow: {url controller=widgets fullPath=false}
 
 Disallow: {url controller=listing fullPath=false}
 
+Disallow: {url controller=ticket fullPath=false}
+{/block}
 
+{block name="frontend_robots_txt_sitemap"}
 Sitemap: {url controller=index}sitemap.xml
+{/block}
