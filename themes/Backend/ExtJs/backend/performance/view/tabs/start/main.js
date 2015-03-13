@@ -144,7 +144,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         var me = this,
             productiveMode = (state === true);
 
-        me.radioGroup.setValue({productiveMode: productiveMode});
+        me.radioGroup.setValue({
+            productiveMode: productiveMode
+        });
     },
 
     resetState: function(state) {
