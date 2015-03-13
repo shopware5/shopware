@@ -31,7 +31,7 @@ use Doctrine\DBAL\Connection;
  * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SearchIndexer
+class SearchIndexer implements SearchIndexerInterface
 {
     /**
      * @var Connection
@@ -44,19 +44,19 @@ class SearchIndexer
     private $config;
 
     /**
-     * @var TermHelper
+     * @var TermHelperInterface
      */
     private $termHelper;
 
     /**
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
-     * @param TermHelper $termHelper
+     * @param TermHelperInterface $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
-        TermHelper $termHelper
+        TermHelperInterface $termHelper
     ) {
         $this->config = $config;
         $this->connection = $connection;
@@ -83,7 +83,7 @@ class SearchIndexer
         }
 
         $sql = "
-            SELECT NOW() as current, cf.value as last, (SELECT 1 FROM s_search_index LIMIT 1) as not_force
+            SELECT NOW() AS current, cf.value AS last, (SELECT 1 FROM s_search_index LIMIT 1) AS not_force
             FROM s_core_config_elements ce, s_core_config_values cf
             WHERE ce.name = 'fuzzysearchlastupdate'
             AND cf.element_id = ce.id
@@ -93,6 +93,7 @@ class SearchIndexer
 
         if (empty($result) || !isset($result[0])) {
             $this->build();
+
             return;
         }
 
@@ -283,18 +284,19 @@ class SearchIndexer
 
     /**
      * Get all tables and columns that might be involved in this search request as an array
+     *
      * @return array
      */
     private function getSearchTables()
     {
         return $this->connection->fetchAll("
             SELECT STRAIGHT_JOIN
-                st.id as tableID,
+                st.id AS tableID,
                 st.table,
                 st.where,
                 st.referenz_table, st.foreign_key,
-                GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
-                GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
+                GROUP_CONCAT(sf.id SEPARATOR ', ') AS fieldIDs,
+                GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`
             FROM s_search_fields sf FORCE INDEX (tableID)
                 INNER JOIN s_search_tables st
                     ON st.id = sf.tableID

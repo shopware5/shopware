@@ -45,12 +45,13 @@ class KeywordFinder implements KeywordFinderInterface
     private $connection;
 
     /**
-     * @var TermHelper
+     * @var TermHelperInterface
      */
     private $termHelper;
 
     /**
      * Max keywords that should be considered in search
+     *
      * @var int
      */
     protected $maxKeywords = 5;
@@ -58,12 +59,12 @@ class KeywordFinder implements KeywordFinderInterface
     /**
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
-     * @param TermHelper $termHelper
+     * @param TermHelperInterface $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
-        TermHelper $termHelper
+        TermHelperInterface $termHelper
     ) {
         $this->config = $config;
         $this->connection = $connection;
@@ -93,6 +94,7 @@ class KeywordFinder implements KeywordFinderInterface
 
     /**
      * For a certain term get matching keywords from keyword index
+     *
      * @param string $term
      * @return Keyword[]
      */

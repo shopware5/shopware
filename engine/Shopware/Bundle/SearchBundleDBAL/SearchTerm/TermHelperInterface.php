@@ -22,36 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
+namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
+ * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
+interface TermHelperInterface
 {
     /**
-     * Helper function to get the new seo index component with auto completion
+     * Parse a string / search term into a keyword array
      *
-     * @return Shopware_Components_SeoIndex
+     * @param string $string
+     * @return array
      */
-    public function SearchIndex()
-    {
-        return Shopware()->SearchIndex();
-    }
-
-    /**
-     * This controller action is used to build the search index.
-     */
-    public function buildAction()
-    {
-        @set_time_limit(1200);
-
-        /* @var $indexer SearchIndexerInterface */
-        $indexer = $this->get('shopware_searchdbal.search_indexer');
-        $indexer->build();
-
-        $this->View()->assign(array('success' => true));
-    }
+    public function splitTerm($string);
 }
