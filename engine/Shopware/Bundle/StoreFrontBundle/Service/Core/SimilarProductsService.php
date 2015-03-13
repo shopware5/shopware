@@ -126,7 +126,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             );
         }
 
-        return array_merge($result, $fallbackResult);
+        return ($result + $fallbackResult);
     }
 
     /**
