@@ -294,7 +294,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             }
         });
 
-        var fullscreen = Ext.create('Ext.form.field.Checkbox', {
+        me.fullscreenField = Ext.create('Ext.form.field.Checkbox', {
             inputValue: 1,
             uncheckedValue: 0,
             fieldLabel: '{s name=settings/label/fullscreen}{/s}',
@@ -330,7 +330,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ me.deviceComboGroup, fullscreen, me.containerWidthField, me.positionNumberField ]
+                    items: [ me.deviceComboGroup, me.fullscreenField, me.containerWidthField, me.positionNumberField ]
                 }
             ]
         });
