@@ -479,10 +479,18 @@ Ext.define('Shopware.window.Detail', {
     createDefaultController: function() {
         var me = this;
 
-        me.controller = me.subApp.getController('Shopware.detail.Controller');
-        me.controller._opts.detailWindow = me.$className;
-        me.controller._opts.eventAlias = me.eventAlias;
-        me.controller.reloadControls();
+        me.controller = Ext.create('Shopware.detail.Controller', {
+            application: me.subApp,
+            subApplication: me.subApp,
+            subApp: me.subApp,
+            configure: function () {
+                return {
+                    detailWindow: me.$className,
+                    eventAlias: me.eventAlias
+                }
+            }
+        });
+        me.controller.init();
 
         return me.controller;
     },
