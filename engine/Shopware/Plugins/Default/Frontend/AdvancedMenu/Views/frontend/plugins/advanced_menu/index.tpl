@@ -67,7 +67,7 @@
                                     {/if}
                                     <div class="menu--teaser"{if $hasCategories} style="width: {$columnAmount * 25}%;"{else} style="width: 100%;"{/if}>
                                         {if !empty($mainCategory.media)}
-                                            <div class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></div>
+                                            <a href="{$mainCategory.link}" title="{s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$categories.name}" class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></a>
                                         {/if}
 
                                         {if !empty($mainCategory.cmsHeadline)}
