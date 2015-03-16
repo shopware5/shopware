@@ -117,7 +117,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         ));
     }
 
-
+    /**
+     * Returns all master landing pages.
+     */
     public function getMasterLandingPagesAction()
     {
         $id = $this->Request()->getParam('id', null);

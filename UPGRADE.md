@@ -34,6 +34,7 @@ In this document you will find a changelog of the important changes related to t
 * Added way to early exit the dispatch.
     * After `Enlight_Controller_Front_RouteShutdown` a response containing a redirect will not enter the dispatch loop.
 * `HttpCache` plugin is no longer handled by the Plugin manager. Use the `Performance` window to enable/configure the Http cache instead
+* \Shopware\Models\Emotion\Repository::getListQuery function replaced by getListingQuery.
 
 ## 5.0.0 Beta 2
 * Rename shopware_searchdbal.product_number_search to shopware_search.product_number_search. Use shopware_search.product_number_search service for number searchs.
