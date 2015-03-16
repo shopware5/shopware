@@ -61,22 +61,74 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param  array $filter
-     * @param  array $filterBy
      * @param  array $orderBy
-     * @param  int $categoryId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($filter = null, $filterBy = null, $orderBy = null, $categoryId = null)
+    public function getListQueryBuilder($filter = null, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('emotions', 'categories'))
             ->from('Shopware\Models\Emotion\Emotion', 'emotions')
             ->leftJoin('emotions.categories', 'categories');
 
+        //filter the displayed columns with the passed filter string
+        if (!empty($filter)) {
+            $builder->where('categories.name LIKE ?2')
+                ->orWhere('emotions.name LIKE ?2')
+                ->orWhere('emotions.modified LIKE ?2')
+                ->setParameter(2, '%' . $filter . '%');
+        }
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        return $builder;
+    }
+
+
+    /**
+     * @param null|array $filter
+     * @param null|array $filterBy
+     * @param null|array $orderBy
+     * @param null|int $categoryId
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function getListingQuery($filter = null, $filterBy = null, $orderBy = null, $categoryId = null)
+    {
+        $builder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $builder->select([
+                'SQL_CALC_FOUND_ROWS emotions.id',
+                'emotions.name',
+                'emotions.active',
+                'emotions.device',
+                'emotions.is_landingpage as isLandingPage',
+                'emotions.parent_id as parentId',
+                'emotions.modified',
+                'GROUP_CONCAT(categories.description) AS categoriesNames',
+                "(
+              CASE
+                WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
+                WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
+                ELSE GROUP_CONCAT(categories.description)
+              END
+            ) as groupingState"
+        ]);
+
+        $builder->from('s_emotion', 'emotions')
+            ->leftJoin('emotions', 's_emotion_categories', 'emotionCategories', 'emotions.id = emotionCategories.emotion_id')
+            ->leftJoin('emotions', 's_categories', 'categories', 'categories.id = emotionCategories.category_id')
+            ->leftJoin('emotions', 's_emotion', 'parent', 'parent.id = emotions.parent_id');
+
+        $builder->groupBy('emotions.id')
+            ->addOrderBy('emotions.is_landingpage', 'ASC')
+            ->addOrderBy('groupingState', 'ASC')
+            ->addOrderBy('emotions.parent_id', 'ASC')
+        ;
+
         // filter by search
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
-            $builder->andWhere('emotions.name LIKE ?1')
-                ->setParameter(1, '%'.$filter[0]["value"].'%');
+            $builder->andWhere('emotions.name LIKE :search')
+                ->setParameter(':search', '%'.$filter[0]["value"].'%');
         }
 
         // filter by desktop devices
@@ -111,12 +163,18 @@ class Repository extends ModelRepository
 
         // filter by landingpages
         if (isset($filterBy) && $filterBy == 'onlyLandingpage') {
-            $builder->andWhere('emotions.isLandingPage = 1');
+            $builder->andWhere('emotions.is_landingpage = 1');
+        }
+
+        // filter by landing page masters
+        if (isset($filterBy) && $filterBy == 'onlyLandingPageMasters') {
+            $builder->andWhere('emotions.is_landingpage = 1')
+                ->andWhere('emotions.parent_id IS NULL');
         }
 
         // filter by shopping worlds
         if (isset($filterBy) && $filterBy == 'onlyWorld') {
-            $builder->andWhere('emotions.isLandingPage = 0');
+            $builder->andWhere('emotions.is_landingpage = 0');
         }
 
         // filter by categoryId
@@ -124,15 +182,8 @@ class Repository extends ModelRepository
             $path = '%|' . $categoryId . '|%';
 
             $builder->andWhere('categories.path LIKE :category OR categories.id = :categoryId')
-                ->setParameter('category', $path)
-                ->setParameter('categoryId', $categoryId);
-        }
-
-        if (!empty($orderBy)) {
-            $builder->addOrderBy($orderBy);
-        } else {
-            $builder->addOrderBy('categories.id', 'ASC');
-            $builder->addOrderBy('emotions.position', 'ASC');
+                ->setParameter(':category', $path)
+                ->setParameter(':categoryId', $categoryId);
         }
 
         return $builder;
@@ -375,9 +426,11 @@ class Repository extends ModelRepository
         $builder->select(array('emotions'))
             ->innerJoin('emotions.categories','categories')
             ->where('categories.id = ?1')
+            ->andWhere('emotions.parentId IS NULL')
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
             ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
             ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.parentId IS NULL')
             ->andWhere('emotions.active = 1 ')
             ->setParameter(1, $categoryId)
             ->setParameter('now', new \DateTime());
@@ -413,6 +466,7 @@ class Repository extends ModelRepository
     public function getCampaignsByCategoryId($categoryId)
     {
         $builder = $this->getCampaigns();
+        $builder->andWhere('emotions.parentId IS NULL');
         $builder->andWhere(
             $builder->expr()->orX(
                 $builder->expr()->eq('categories.id', ':categoryId'), // = 3

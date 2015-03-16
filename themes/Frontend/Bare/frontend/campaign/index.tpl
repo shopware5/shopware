@@ -23,20 +23,22 @@
 
 {* Promotion *}
 {block name='frontend_home_index_promotions'}
+    {foreach $landingPage.emotions as $emotion}
 
-    <div class="content--emotions">
-        {if $hasEscapedFragment}
-            <div class="emotion--fragment">
-                {action module=widgets controller=campaign action=index emotionId=$emotionId}
-            </div>
-        {else}
-            <div class="emotion--wrapper"
-                 data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                 data-availableDevices="{$emotion.devices}"
-                 data-showListing="false">
-            </div>
-        {/if}
-    </div>
+        <div class="content--emotions">
+            {if $hasEscapedFragment}
+                <div class="emotion--fragment">
+                    {action module=widgets controller=campaign action=index emotionId=$emotion.id}
+                </div>
+            {else}
+                <div class="emotion--wrapper"
+                     data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+                     data-availableDevices="{$emotion.device}"
+                     data-showListing="false">
+                </div>
+            {/if}
+        </div>
+    {/foreach}
 {/block}
 
 {* Sidebar left *}

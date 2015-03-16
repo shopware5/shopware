@@ -53,7 +53,25 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         me.bbar = me.createPagingToolbar();
         me.selModel = me.createSelectionModel();
 
+        me.features = [me.createGroupingFeature()];
         me.callParent(arguments);
+    },
+
+    createGroupingFeature: function() {
+        var me = this;
+
+        me.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
+            groupHeaderTpl: new Ext.XTemplate(
+                '{literal}{name:this.formatName}{/literal}',
+                {
+                    formatName: function(value) {
+                        return value;
+                    }
+                }
+            )
+        });
+
+        return me.groupingFeature;
     },
 
     registerEvents: function() {
@@ -260,7 +278,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     nameColumn: function(value, metaData, record) {
-        return record.get('name');
+        if (record.get('isLandingPage') && !record.get('parentId')) {
+            return '<strong>'+record.get('name')+'</strong>';
+        } else {
+            return record.get('name');
+        }
     },
 
 
@@ -280,6 +302,10 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         // Type detection
         if(record.get('isLandingPage')) {
             type = '{s name=grid/renderer/landingpage}Landingpage{/s}'
+        }
+
+        if (record.get('parentId') == null && record.get('isLandingPage')) {
+            type = '<strong>{s name=grid/renderer/landingpage_master}Master landing page{/s}</strong>'
         }
 
         return type;
@@ -328,7 +354,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     modifiedColumn: function(value, metaData, record) {
-       return Ext.util.Format.date(record.get('modified')) + ' ' + Ext.util.Format.date(record.get('modified'), 'H:i:s');
+        console.log("value", record.get('modified'));
+        return Ext.util.Format.date(record.get('modified')) + ' ' + Ext.util.Format.date(record.get('modified'), 'H:i:s');
     },
 
     /**

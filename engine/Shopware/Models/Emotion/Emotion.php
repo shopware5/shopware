@@ -71,6 +71,13 @@ class Emotion extends ModelEntity
     private $id;
 
     /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    private $parentId = null;
+
+    /**
      * Is this emotion active
      *
      * @var integer $active
@@ -782,5 +789,21 @@ class Emotion extends ModelEntity
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
     }
 }
