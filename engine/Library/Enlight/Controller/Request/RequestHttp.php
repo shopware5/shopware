@@ -87,7 +87,7 @@ class Enlight_Controller_Request_RequestHttp
      * Sets the request URI scheme
      *
      * @param $value
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true)
     {
@@ -99,7 +99,7 @@ class Enlight_Controller_Request_RequestHttp
      * Set SERVER remote address
      *
      * @param string $address
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address)
     {
@@ -112,7 +112,7 @@ class Enlight_Controller_Request_RequestHttp
      * Sets HTTP host method
      *
      * @param string $host
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setHttpHost($host)
     {
@@ -168,7 +168,7 @@ class Enlight_Controller_Request_RequestHttp
      *
      * @param   string $header
      * @param   $value
-     * @return  Enlight_Controller_Request_RequestHttp
+     * @return  Enlight_Controller_Request_Request
      */
     public function setHeader($header, $value)
     {
@@ -178,9 +178,27 @@ class Enlight_Controller_Request_RequestHttp
     }
 
     /**
-     * Returns the current device type, or false if detection could not be done
-     *
-     * @return string
+     * {@inheritdoc}
+     */
+    public function getModuleName()
+    {
+        if (parent::getModuleName() === null) {
+            return null;
+        }
+
+        return strtolower(trim(parent::getModuleName()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClientIp($checkProxy = false)
+    {
+        return parent::getClientIp($checkProxy);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getDeviceType()
     {

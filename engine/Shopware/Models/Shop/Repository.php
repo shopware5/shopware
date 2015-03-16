@@ -336,7 +336,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param \Enlight_Controller_Request_RequestHttp $request
+     * @param \Enlight_Controller_Request_Request $request
      * @return \Shopware\Models\Shop\Shop
      */
     public function getActiveByRequest($request)

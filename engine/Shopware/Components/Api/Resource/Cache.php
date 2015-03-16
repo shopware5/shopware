@@ -42,7 +42,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 class Cache extends Resource implements ContainerAwareInterface
 {
     /**
-     * @var \Enlight_Controller_Request_RequestHttp
+     * @var \Enlight_Controller_Request_Request
      */
     private $request;
 
@@ -52,7 +52,7 @@ class Cache extends Resource implements ContainerAwareInterface
     private $cacheManager;
 
     /**
-     * @return \Enlight_Controller_Request_RequestHttp
+     * @return \Enlight_Controller_Request_Request
      */
     protected function getRequest()
     {

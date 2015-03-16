@@ -21,6 +21,11 @@ RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
+<IfModule mod_alias.c>
+    # Block access to VCS directories
+    RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
+</IfModule>
+
 # Staging environment
 #SetEnvIf Host "staging.test.shopware.in" SHOPWARE_ENV=staging
 

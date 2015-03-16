@@ -77,7 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
-            'cache_cookies'     => ['shop' , 'currency'],
+            'cache_cookies'     => array('shop' , 'currency'),
         ), $options);
 
         parent::__construct(
@@ -204,7 +204,7 @@ class AppCache extends HttpCache
             return;
         }
 
-        return parent::store($request, $response);
+        parent::store($request, $response);
     }
 
     /**
@@ -250,7 +250,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $bootstrap \Shopware\Components\DependencyInjection\Container */
+        /** @var $container \Shopware\Components\DependencyInjection\Container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 
@@ -290,7 +290,7 @@ class AppCache extends HttpCache
     protected function isPurgeRequestAllowed(Request $request)
     {
         if ($request->server->has('SERVER_ADDR')) {
-            if ($request->server->has('SERVER_ADDR') == $request->getClientIp()) {
+            if ($request->server->get('SERVER_ADDR') == $request->getClientIp()) {
                 return true;
             }
         }

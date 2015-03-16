@@ -104,6 +104,8 @@ class Download
     private function verifyHash($partFile, $hash)
     {
         if (sha1_file($partFile->getPathname()) !== $hash) {
+            // try to delete invalid file so a valid one can be downloaded
+            @unlink($partFile->getPathname());
             throw new \Exception("Hash mismatch");
         }
 
@@ -159,11 +161,11 @@ class Download
 
         curl_setopt($ch, CURLOPT_RANGE, $range);
         curl_setopt($ch, CURLOPT_URL, $sourceUri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true );
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_NOPROGRESS, FALSE);
+        curl_setopt($ch, CURLOPT_NOPROGRESS, false);
 
         $me = $this;
         curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($ch, $dltotal, $dlnow) use ($me, $size) {

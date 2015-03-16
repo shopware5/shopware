@@ -27,14 +27,14 @@ namespace Shopware\Components\LegacyRequestWrapper;
 class GetWrapper implements \ArrayAccess
 {
     /**
-     * @var \Enlight_Controller_Request_RequestHttp
+     * @var \Enlight_Controller_Request_Request
      */
     private $request;
 
     /**
-     * @param \Enlight_Controller_Request_RequestHttp $request The request object
+     * @param \Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(\Enlight_Controller_Request_RequestHttp $request)
+    public function __construct(\Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
     }

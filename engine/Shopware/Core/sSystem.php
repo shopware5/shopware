@@ -184,9 +184,9 @@ class sSystem
     public $sSYSTEM;
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request The request object
+     * @param Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
+    public function __construct(Enlight_Controller_Request_Request $request = null)
     {
         $request = $request ? : new Enlight_Controller_Request_RequestHttp();
         $this->postWrapper = new PostWrapper($request);

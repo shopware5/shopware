@@ -33,7 +33,7 @@ use Shopware\Components\DependencyInjection\Container;
  * @package   ShopwarePlugins\SwagUpdate\Components;
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-Class PluginCheck
+class PluginCheck
 {
     /**
      * @var \Shopware\Components\DependencyInjection\Container

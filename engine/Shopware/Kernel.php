@@ -110,6 +110,10 @@ class Kernel implements HttpKernelInterface
         if (!empty($this->config['phpsettings'])) {
             $this->setPhpSettings($this->config['phpsettings']);
         }
+
+        if ($trustedProxies = $this->config['trustedproxies']) {
+            SymfonyRequest::setTrustedProxies($trustedProxies);
+        }
     }
 
     /**
@@ -179,6 +183,7 @@ class Kernel implements HttpKernelInterface
 
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
+        $enlightRequest->setSecure($request->isSecure());
 
         return $enlightRequest;
     }
@@ -233,10 +238,6 @@ class Kernel implements HttpKernelInterface
 
         $this->initializeContainer();
         $this->initializeShopware();
-
-        if ($this->isHttpCacheEnabled()) {
-            SymfonyRequest::setTrustedProxies(array('127.0.0.1'));
-        }
 
         $this->booted = true;
     }
