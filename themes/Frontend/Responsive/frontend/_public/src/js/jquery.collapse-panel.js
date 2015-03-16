@@ -62,7 +62,7 @@
              *
              * @type {Number}
              */
-            animationSpeed: 300
+            animationSpeed: 400
         },
 
         /**

@@ -290,7 +290,6 @@ It contains the product actions, the product information such as pictures and de
     .action--compare { display: none }
 
     .link--notepad {
-        .transition();
 
         &:focus {
             outline: none;
@@ -844,11 +843,13 @@ It contains the product actions, the product information such as pictures and de
         }
 
         .image--container {
+            .transition(all 0.45s cubic-bezier(.16,.04,.14,1));
             width: 100%;
             height: 100%;
             background-position: center center;
             background-repeat: no-repeat;
             background-size: contain;
+            position: relative;
         }
 
         .link--prev-button {
@@ -873,27 +874,45 @@ It contains the product actions, the product information such as pictures and de
 
         .link--prev,
         .link--next {
-            .transition(all 0.3s ease);
+            .transition(all 0.38s cubic-bezier(.16,.04,.14,1));
 
-            &:hover .link--prev-button,
-            &:hover .link--next-button {
-                background: rgba(red(@brand-secondary), green(@brand-secondary), blue(@brand-secondary), 0.2);
+            &:hover {
+                .link--prev-button,
+                .link--next-button {
+                    background: rgba(red(@brand-secondary), green(@brand-secondary), blue(@brand-secondary), 0.2);
+                }
             }
         }
 
         .link--prev {
             .unitize(-40, 16, left);
 
+            .image--container {
+                .unitize(left, 50);
+            }
+
             &.can--slide:hover {
                 .unitize(-140, 16, left);
+
+                .image--container {
+                    left: 0;
+                }
             }
         }
 
         .link--next {
             .unitize(-40, 16, right);
 
+            .image--container {
+                .unitize(right, 50);
+            }
+
             &.can--slide:hover {
                 .unitize(-140, 16, right);
+
+                .image--container {
+                    right: 0;
+                }
             }
         }
     }
