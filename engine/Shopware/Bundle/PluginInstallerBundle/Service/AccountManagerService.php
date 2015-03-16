@@ -185,15 +185,17 @@ class AccountManagerService
      * Requests the validation of the current installation's domain
      *
      * @param string $domain
+     * @param string $shopwareVersion Current Shopware version
      * @param AccessTokenStruct $token
      * @return array Result of the validation operation (empty if successful)
      * @throws \RuntimeException
      */
-    public function verifyDomain($domain, AccessTokenStruct $token)
+    public function verifyDomain($domain, $shopwareVersion, AccessTokenStruct $token)
     {
         $postData = [
             'shopwareId' => $token->getShopwareId(),
-            'domain' => $domain
+            'domain' => $domain,
+            'shopwareVersion' => $shopwareVersion
         ];
 
         try {

@@ -395,7 +395,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         try {
-            $accountManagerService->verifyDomain($domain, $token);
+            $accountManagerService->verifyDomain($domain, $this->getVersion(), $token);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -419,6 +419,14 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'success' => true,
             'message' => 'domainRegistered'
         ));
+    }
+
+    /**
+     * @return string
+     */
+    private function getVersion()
+    {
+        return Shopware::VERSION;
     }
 
     /**
