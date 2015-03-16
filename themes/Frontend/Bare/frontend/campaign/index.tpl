@@ -17,10 +17,6 @@
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description}{/if}{/block}
 
-
-{* Topseller *}
-{block name='frontend_home_right_topseller'}{/block}
-
 {* Promotion *}
 {block name='frontend_home_index_promotions'}
     {foreach $landingPage.emotions as $emotion}
@@ -40,9 +36,3 @@
         </div>
     {/foreach}
 {/block}
-
-{* Sidebar left *}
-{block name='frontend_index_content_left'}{/block}
-
-{* Sidebar right *}
-{block name='frontend_index_content_right'}{/block}
