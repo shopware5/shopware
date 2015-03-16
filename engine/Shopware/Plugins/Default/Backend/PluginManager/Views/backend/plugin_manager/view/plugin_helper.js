@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
                 Shopware.app.Application.fireEvent('plugin-reloaded', merged);
 
                 if (Ext.isFunction(callback)) {
-                    callback();
+                    callback(merged);
                 }
             }
         });
@@ -237,6 +237,24 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
                 callback(response);
             }
+        });
+    },
+
+    createDownloadMask: function(plugin, download, callback) {
+        var icon;
+
+        if (!plugin.get('iconPath')) {
+            icon = '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/default_icon.png"}';
+        } else {
+            icon = plugin.get('iconPath');
+        }
+
+        return Ext.create('Shopware.apps.PluginManager.view.components.DownloadWindow', {
+            headline: plugin.get('label'),
+            description: '{s name="execute_plugin_download"}{/s}',
+            download: download,
+            icon: icon,
+            callback: callback
         });
     },
 

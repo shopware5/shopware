@@ -277,27 +277,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             activePage.hideContent();
         }
 
-        activePage.getEl().slideOut('l', {
-            duration: me.animationSpeed
-        });
+        activePage.hide();
 
-        nextPage.getEl().slideIn('r', {
-            duration: me.animationSpeed,
-            callback: function () {
+        if (Ext.isFunction(callback)) {
+            callback();
+        }
+        if (Ext.isFunction(nextPage.displayContent)) {
+            nextPage.displayContent();
+        }
 
-                if (Ext.isFunction(nextPage.displayContent)) {
-                    nextPage.displayContent();
-                }
-
-                Ext.Function.defer(function () {
-                    layout.setActiveItem(nextPage);
-                }, 500);
-
-                if (Ext.isFunction(callback)) {
-                    callback();
-                }
-            }
-        });
+        layout.setActiveItem(nextPage);
     },
 
     removeTreeSelection: function() {
