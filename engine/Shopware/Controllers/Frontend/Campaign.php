@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Emotion\DeviceConfiguration;
 
 /**
  */
@@ -30,23 +31,22 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
     {
         $emotionId = $this->Request()->getParam('emotionId');
 
-        $emotion = $this->get('emotion_device_configuration')->getLandingPageById($emotionId);
+        /**@var $service DeviceConfiguration*/
+        $service = $this->get('emotion_device_configuration');
+        $landingPage = $service->getLandingPage($emotionId);
 
-        if (!$emotion) {
+        if (!$landingPage) {
             $this->Response()->setHttpResponseCode(404);
             return $this->redirect('index');
         }
 
-        $viewData = [
-            'sBreadcrumb' => [['name' => $emotion['name']]],
-            'seo_keywords' => $emotion['seo_keywords'],
-            'seo_description' => $emotion['seo_description'],
-            'emotion' => $emotion,
-            'emotionId' => $emotionId,
+        $this->View()->assign([
+            'sBreadcrumb'          => [['name' => $landingPage['name']]],
+            'seo_keywords'         => $landingPage['seo_keywords'],
+            'seo_description'      => $landingPage['seo_description'],
+            'landingPage'          => $landingPage,
             'isEmotionLandingPage' => true,
-            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
-        ];
-
-        $this->View()->assign($viewData);
+            'hasEscapedFragment'   => $this->Request()->has('_escaped_fragment_'),
+        ]);
     }
 }
