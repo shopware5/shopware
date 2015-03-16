@@ -192,14 +192,14 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     /**
      * Event listener method
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param Enlight_Controller_ActionEventArgs $args
      */
-    public function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $config = $this->Config();
         $view = $args->getSubject()->View();
         $parent = Shopware()->Shop()->get('parentID');
-        $sCategory = $args->get('sCategory');
+        $sCategory = $args->getRequest()->get('sCategory');
 
         if (empty($config->show) && $config->show !== null) {
             return;
