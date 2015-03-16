@@ -90,10 +90,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $number = $this->Request()->getParam('number', null);
         $selection = $this->Request()->getParam('group', array());
 
+        $categoryId = $this->Request()->get('sCategory');
+        if (!$this->isValidCategory($categoryId)) {
+            $categoryId = 0;
+        }
+
         try {
             $article = Shopware()->Modules()->Articles()->sGetArticleById(
                 $id,
-                null,
+                $categoryId,
                 $number,
                 $selection
             );
@@ -101,9 +106,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $article = null;
         }
 
-        if (!$this->Request()->get('sCategory')) {
-            $this->Request()->setParam('sCategory', $article['categoryID']);
-        }
+        $this->Request()->setQuery('sCategory', $article['categoryID']);
 
         if (empty($article) || empty($article["articleName"])) {
             return $this->forward('error');
@@ -156,6 +159,27 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sCategoryInfo = $categoryInfo;
         $this->View()->sArticle = $article;
         $this->View()->rand = md5(uniqid(rand()));
+    }
+
+    /**
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function isValidCategory($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $repository->getPathById($categoryId);
+
+        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
