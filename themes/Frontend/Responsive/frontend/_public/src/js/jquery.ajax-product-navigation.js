@@ -132,10 +132,9 @@
             me.$backButton = $el.find(opts.breadcrumbButtonSelector);
             me.$productDetails = $el.find(opts.productDetailsSelector);
 
-            me.categoryId = ~~(params && params.c || me.$productDetails.attr('data-category-id'));
+            me.categoryId = ~~(me.$productDetails.attr('data-category-id') || params && params.c);
             me.orderNumber = me.$productDetails.attr('data-main-ordernumber');
             me.productState = me.getProductState();
-
             if (!me.categoryId) {
                 return;
             }
