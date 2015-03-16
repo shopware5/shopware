@@ -171,13 +171,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      */
     private function getVersion()
     {
-        $version = Shopware::VERSION;
-
-        if ($version == '___VERSION___') {
-            return '4.2.0';
-        } else {
-            return $version;
-        }
+        return Shopware::VERSION;
     }
 
     /**
