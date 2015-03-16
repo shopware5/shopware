@@ -56,6 +56,13 @@
              */
             'contentSelector': '.tab--content',
 
+            /**
+             * Class that will be applied to a content container and
+             * its corresponding tab when the container has any content.
+             *
+             * @property hasContentClass
+             * @type {String}
+             */
             'hasContentClass': 'has--content',
 
             /**
