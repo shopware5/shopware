@@ -143,6 +143,18 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        return array(
+            'install' => false,
+            'enable' => false,
+            'update' => true
+        );
+    }
+
+    /**
      * Install config-form
      */
     public function installForm()
