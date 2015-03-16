@@ -118,7 +118,7 @@ class Router extends EnlightRouter implements RouterInterface
             }
         }
 
-        return false; //@todo throw a exception?
+        return false;
     }
 
     /**
@@ -285,6 +285,7 @@ class Router extends EnlightRouter implements RouterInterface
                 $request->setParams($params);
             }
         }
+
         if ($request instanceof EnlightRequest || $request instanceof RequestTestCase) {
             /** For enlight routing  */
             $this->context->updateFromEnlightRequest($request);
