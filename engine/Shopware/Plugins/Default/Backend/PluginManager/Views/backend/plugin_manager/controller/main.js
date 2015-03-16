@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         this.callParent(arguments);
     },
 
-    loadUpdateListing: function() {
+    loadUpdateListing: function(callback) {
         var me = this,
             navigation = me.getNavigation(),
             updatePage = me.getUpdatePage();
@@ -57,6 +57,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                     navigation.setUpdateCount(records.length);
 
                     Ext.create('Shopware.notification.ExpiredLicence').check();
+                }
+
+                if (Ext.isFunction(callback)) {
+                    callback(records);
                 }
             }
         });

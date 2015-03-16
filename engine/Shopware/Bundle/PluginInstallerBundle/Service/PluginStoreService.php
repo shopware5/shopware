@@ -28,10 +28,8 @@ use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\UpdateRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
-use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
@@ -147,26 +145,6 @@ class PluginStoreService
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
 
         return $plugins;
-    }
-
-    /**
-     * @param AccessTokenStruct $token
-     * @param UpdateRequest $context
-     * @return string
-     * @throws \Exception
-     */
-    public function downloadUpdate(
-        AccessTokenStruct $token,
-        UpdateRequest $context
-    ) {
-        return $this->storeClient->doAuthGetRequestRaw(
-            $token,
-            '/pluginFiles/'. $context->getPluginName() .'/file',
-            [
-                'shopwareVersion' => $context->getShopwareVersion(),
-                'domain' => $context->getDomain()
-            ]
-        );
     }
 
     /**

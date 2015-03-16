@@ -24,9 +24,9 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\UpdateRequest;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
@@ -115,7 +115,7 @@ class StoreDownloadCommand extends StoreCommand
                 break;
 
             case ($isDummy):
-                $this->handleDummyInstall($plugin, $version);
+                $this->handleDummyInstall($plugin, $domain, $version);
                 break;
 
             case ($plugin->getId()):
@@ -151,7 +151,7 @@ class StoreDownloadCommand extends StoreCommand
 
         $this->output->writeln(sprintf("Download plugin update package %s", $plugin->getLabel()));
 
-        $context = new UpdateRequest($plugin->getTechnicalName(), $domain, $version, null);
+        $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, null);
 
         $model = $this->getPluginModel($plugin->getTechnicalName());
         if ($plugin->isActive()) {
@@ -159,22 +159,22 @@ class StoreDownloadCommand extends StoreCommand
         }
 
         $this->container->get('shopware_plugininstaller.plugin_download_service')
-            ->downloadUpdate($context);
+            ->download($request);
     }
 
     /**
      * @param PluginStruct $plugin
      * @param string $version
+     * @param $domain
      * @throws \Exception
      */
-    private function handleDummyInstall(PluginStruct $plugin, $version)
+    private function handleDummyInstall(PluginStruct $plugin, $domain, $version)
     {
         $this->output->writeln(sprintf("Download plugin install package %s", $plugin->getLabel()));
 
-        $this->container->get('shopware_plugininstaller.plugin_download_service')->downloadDummy(
-            $plugin->getTechnicalName(),
-            $version
-        );
+        $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, null);
+
+        $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 
     /**
@@ -199,9 +199,9 @@ class StoreDownloadCommand extends StoreCommand
                 ->deactivatePlugin($model);
         }
 
-        $context = new UpdateRequest($plugin->getTechnicalName(), $domain, $version, $token);
+        $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
         $this->container->get('shopware_plugininstaller.plugin_download_service')
-            ->downloadUpdate($context);
+            ->download($request);
     }
 
     /**
@@ -214,15 +214,12 @@ class StoreDownloadCommand extends StoreCommand
     {
         $token = $this->checkAuthentication();
 
-        $this->output->writeln(sprintf("Checking licence for plugin %s", $plugin->getLabel()));
-
-        $licence = $this->getLicence($token, $domain, $version, $plugin);
-
         $this->output->writeln(sprintf("Download plugin install package", $plugin->getLabel()));
 
+        $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
+
         /**@var $service PluginLicenceService */
-        $this->container->get('shopware_plugininstaller.plugin_licence_service')
-            ->downloadPluginLicence($token, $licence);
+        $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 
     /**

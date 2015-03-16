@@ -61,21 +61,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param AccessTokenStruct $token
-     * @param LicenceStruct $licence
-     */
-    public function downloadPluginLicence(AccessTokenStruct $token, LicenceStruct $licence)
-    {
-        $success = $this->downloadService->downloadPlugin($token, $licence);
-
-        if ($success && strlen($licence->getLicenseKey()) > 0) {
-            $this->importLicence($licence->getLicenseKey());
-        }
-
-        $this->installer->refreshPluginList();
-    }
-
-    /**
      * @param string $licenceKey
      * @return int
      */
@@ -93,6 +78,4 @@ class PluginLicenceService
 
         return $persister->saveLicense($info, true);
     }
-
-
 }

@@ -224,6 +224,9 @@ class StructHydrator
         if ($storePlugin->getDescription()) {
             $localPlugin->setDescription($storePlugin->getDescription());
         }
+        if ($localPlugin->isUpdateAvailable()) {
+            $localPlugin->setAvailableVersion($storePlugin->getVersion());
+        }
 
         $localPlugin->setContactForm($storePlugin->getContactForm());
         $localPlugin->setRating($storePlugin->getRating());

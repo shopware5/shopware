@@ -49,6 +49,14 @@ class Shopware_Controllers_Backend_PluginInstaller
             $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
         }
 
+        if (!$plugin instanceof \Shopware\Models\Plugin\Plugin) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => sprintf('Plugin not found %s', $this->Request()->getParam('technicalName'))
+            ]);
+            return;
+        }
+
         try {
             $result = $this->get('shopware_plugininstaller.plugin_manager')->installPlugin($plugin);
 
@@ -154,7 +162,7 @@ class Shopware_Controllers_Backend_PluginInstaller
                 try {
                     $this->removeDirectory($directory);
                 } catch (Exception $e) {
-                    return $this->handleException($this->View(), $e);
+                    return $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
                 }
         }
 

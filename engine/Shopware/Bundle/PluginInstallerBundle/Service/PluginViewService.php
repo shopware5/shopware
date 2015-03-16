@@ -142,9 +142,7 @@ class PluginViewService
     {
         $store = $this->storePluginService->getListing($context);
 
-        $merged = $this->getAdditionallyLocalData(
-            $store->getPlugins()
-        );
+        $merged = $this->getAdditionallyLocalData($store->getPlugins());
 
         return new ListingResultStruct(
             $merged,
@@ -207,9 +205,7 @@ class PluginViewService
             $names
         );
 
-        $store = $this->storePluginService->getPlugins(
-            $storeContext
-        );
+        $store = $this->storePluginService->getPlugins($storeContext);
 
         $merged = [];
         foreach ($plugins as $plugin) {

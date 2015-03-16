@@ -22,82 +22,93 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\PluginInstallerBundle\Context;
+namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
-
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
-class UpdateRequest
+class MetaStruct implements \JsonSerializable
 {
     /**
      * @var string
      */
-    private $domain;
+    private $uri;
 
     /**
      * @var string
      */
-    private $shopwareVersion;
-
-    /**
-     * @var AccessTokenStruct
-     */
-    private $token;
+    private $size;
 
     /**
      * @var string
      */
-    private $pluginName;
+    private $sha1;
 
     /**
-     * @param AccessTokenStruct $token
-     * @param $pluginName
-     * @param $domain
-     * @param $shopwareVersion
+     * @var string
      */
-    public function __construct(
-        $pluginName,
-        $domain,
-        $shopwareVersion,
-        $token = null
-    ) {
-        $this->domain = $domain;
-        $this->shopwareVersion = $shopwareVersion;
-        $this->token = $token;
-        $this->pluginName = $pluginName;
+    private $binaryVersion;
+
+    /**
+     * @var string
+     */
+    private $fileName;
+
+    /**
+     * @param string $uri
+     * @param string $size
+     * @param string $sha1
+     * @param string $binaryVersion
+     * @param string $fileName
+     */
+    function __construct($uri, $size, $sha1, $binaryVersion, $fileName)
+    {
+        $this->uri = $uri;
+        $this->size = $size;
+        $this->sha1 = $sha1;
+        $this->binaryVersion = $binaryVersion;
+        $this->fileName = $fileName;
     }
 
     /**
      * @return string
      */
-    public function getDomain()
+    public function getUri()
     {
-        return $this->domain;
+        return $this->uri;
     }
 
     /**
      * @return string
      */
-    public function getShopwareVersion()
+    public function getSize()
     {
-        return $this->shopwareVersion;
-    }
-
-    /**
-     * @return AccessTokenStruct
-     */
-    public function getToken()
-    {
-        return $this->token;
+        return $this->size;
     }
 
     /**
      * @return string
      */
-    public function getPluginName()
+    public function getSha1()
     {
-        return $this->pluginName;
+        return $this->sha1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBinaryVersion()
+    {
+        return $this->binaryVersion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
