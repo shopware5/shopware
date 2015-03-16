@@ -483,6 +483,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                         } else {
                             $mapping['link'] = $this->articleByNumber($number);
                             $mapping['link'] = $mapping['link']['linkDetails'];
+                            $mapping['ordernumber'] = $number;
                         }
                     }
                 }
