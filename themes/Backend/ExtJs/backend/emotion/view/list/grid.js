@@ -118,22 +118,26 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             header: '{s name=grid/column/name}Name{/s}',
             dataIndex: 'emotions.name',
             flex: 2,
+            sortable: false,
             renderer: me.nameColumn
         }, {
             header: '{s name=grid/column/type}Type{/s}',
             flex: 2,
             tdCls: 'emotion-type-column',
+            sortable: false,
             renderer: me.typeColumn
         }, {
             header: '{s name=grid/column/devices}Devices{/s}',
             flex: 2,
             tdCls: 'emotion-device-column',
+            sortable: false,
             renderer: me.deviceColumn
         }, {
             xtype: 'datecolumn',
             header: '{s name=grid/column/date}Last edited{/s}',
             dataIndex: 'emotions.modified',
             flex: 2,
+            sortable: false,
             renderer: me.modifiedColumn
         }, {
             header: '{s name=grid/column/active}Active{/s}',

@@ -1056,11 +1056,11 @@ class sRewriteTable
     {
         /**@var $repo \Shopware\Models\Emotion\Repository */
         $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
-        $queryBuilder = $repo->getListingQuery();
+        $queryBuilder = $repo->getListQueryBuilder();
 
         $queryBuilder
-            ->andWhere('emotions.is_landingpage = 1 ')
-            ->andWhere('emotions.parent_id IS NULL')
+            ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.parentId IS NULL')
             ->andWhere('emotions.active = 1');
 
         if ($limit !== null && $offset !== null) {
@@ -1068,8 +1068,7 @@ class sRewriteTable
                 ->setMaxResults($limit);
         }
 
-        $statement = $queryBuilder->execute();
-        $campaigns = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $campaigns = $queryBuilder->getQuery()->getArrayResult();
 
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
         foreach ($campaigns as $campaign) {

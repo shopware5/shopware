@@ -86,12 +86,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $limit = $this->Request()->getParam('limit', null);
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
         $filter = $this->Request()->getParam('filter', null);
         $filterBy = $this->Request()->getParam('filterBy', null);
         $categoryId = $this->Request()->getParam('categoryId', null);
 
-        $query = $this->getRepository()->getListingQuery($filter, $filterBy, $sort, $categoryId);
+        $query = $this->getRepository()->getListingQuery($filter, $filterBy, $categoryId);
 
         $query->setFirstResult($offset)
             ->setMaxResults($limit);
