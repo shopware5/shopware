@@ -651,10 +651,18 @@ Ext.define('Shopware.grid.Panel', {
     createDefaultController: function () {
         var me = this;
 
-        me.controller = me.subApp.getController('Shopware.grid.Controller');
-        me.controller._opts.gridClass = me.$className;
-        me.controller._opts.eventAlias = me.eventAlias;
-        me.controller.reloadControls();
+        me.controller = Ext.create('Shopware.grid.Controller', {
+            application: me.subApp,
+            subApplication: me.subApp,
+            subApp: me.subApp,
+            configure: function () {
+                return {
+                    gridClass: me.$className,
+                    eventAlias: me.eventAlias
+                }
+            }
+        });
+        me.controller.init();
 
         return me.controller;
     },
