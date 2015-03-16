@@ -175,7 +175,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      */
     protected function initServiceMode($request)
     {
@@ -188,7 +188,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      */
     protected function upgradeShop($request, $response)

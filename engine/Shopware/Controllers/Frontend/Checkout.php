@@ -178,7 +178,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sCountry = $this->getSelectedCountry();
         $this->View()->sState = $this->getSelectedState();
         $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+
+        $userData = $this->View()->sUserData;
+        $userData["additional"]["payment"] = $this->View()->sPayment;
+        $this->View()->sUserData = $userData;
 
         $this->View()->sDispatch = $this->getSelectedDispatch();
         $this->View()->sPayments = $this->getPayments();
@@ -1167,16 +1170,40 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * checks if the current user selected an available payment method
+     *
+     * @param array $currentPayment
+     * @return bool
+     */
+    private function checkPaymentAvailability($currentPayment)
+    {
+        $payments = $this->getPayments();
+        foreach ($payments as $availablePayment) {
+            if ($availablePayment['id'] === $currentPayment['id']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get selected payment or do payment mean selection automatically
      *
      * @return array
      */
     public function getSelectedPayment()
     {
+        $paymentMethods = $this->getPayments();
+
         if (!empty($this->View()->sUserData['additional']['payment'])) {
             $payment = $this->View()->sUserData['additional']['payment'];
         } elseif (!empty($this->session['sPaymentID'])) {
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
+        }
+
+        if ($payment && !$this->checkPaymentAvailability($payment)) {
+            $payment = null;
         }
 
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
@@ -1190,22 +1217,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($payment)) {
             return $payment;
         }
-        $payments = $this->getPayments();
-        if (empty($payments)) {
+
+        if (empty($paymentMethods)) {
             unset($this->session['sPaymentID']);
+
             return false;
         }
 
-        // check if the standard payment is available than take it as the default
-        foreach ($payments as $payment) {
-            if ($payment["id"] == Shopware()->Config()->get('sDEFAULTPAYMENT')) {
-                $this->session['sPaymentID'] = (int)$payment['id'];
-                return $payment;
-            }
-        }
+        $payment = reset($paymentMethods);
+        $this->session['sPaymentID'] = (int)$payment['id'];
+        $this->front->Request()->setPost('sPayment', (int)$payment['id']);
+        $this->admin->sUpdatePayment();
 
-        $payment = reset($payments);
-        $this->session['sPaymentID'] = (int) $payment['id'];
         return $payment;
     }
 
@@ -1276,53 +1299,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Ajax add article cart action
-     *
-     * This action is a lightweight way to add an article by the passed
-     * article order number and quantity.
-     *
-     * The order number is expected to get passed by the 'sAdd' parameter
-     * This quantity is expected to get passed by the 'sQuantity' parameter.
-     *
-     * After the article was added to the basket, the whole cart content will be returned.
-     */
-    public function ajaxAddArticleCartAction()
-    {
-        $orderNumber = $this->Request()->getParam('sAdd');
-        $quantity = $this->Request()->getParam('sQuantity');
-
-        $this->View()->assign(
-            'basketInfoMessage',
-            $this->getInstockInfo($orderNumber, $quantity)
-        );
-
-        $this->basket->sAddArticle($orderNumber, $quantity);
-
-        $this->forward('ajaxCart');
-    }
-
-    /**
-     * Ajax delete article action
-     *
-     * This action is a lightweight way to delete an article by the passed
-     * basket item id.
-     *
-     * This id is expected to get passed by the 'sDelete' parameter.
-     *
-     * After the article was removed from the basket, the whole cart content will be returned.
-     */
-    public function ajaxDeleteArticleCartAction()
-    {
-        $itemId = $this->Request()->getParam('sDelete');
-
-        if ($itemId) {
-            $this->basket->sDeleteArticle($itemId);
-        }
-
-        $this->forward('ajaxCart');
-    }
-
-    /**
      * Ajax cart action
      *
      * This action loads the cart content and returns it.
@@ -1353,6 +1329,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
 
+        $this->View()->sBasketQuantity = $this->basket->sCountBasket();
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
 

@@ -375,11 +375,21 @@ In this document you will find a changelog of the important changes related to t
 * `sSelfCanonical` is deprecated. Use the `canonicalParams` array instead
 * Change array structure of thumbnail images in emotions, product detail pages, product listings, blog pages.
 * Enable and disable function of a plugin bootstrap can now return same parameter as install, uninstall.
+* Added automatic APC detection for the general cache.
 
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
 * New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
 * The `Google Analytics` plugin is deprecated and will be removed in the next release. Please use the new `Google Services` plugin instead, available on the community store.
+* Removed event `Shopware_Modules_Order_SaveOrder_FilterSQL`
+* New event `Shopware_Modules_Order_SaveOrder_FilterParams`
+* Implemented the `Enlight_Controller_Request_Request` interface. Please typehint to this class instead to `Enlight_Controller_Request_RequestHttp`
+* New config option `trustedProxies`
+* New event `Shopware_Controllers_Frontend_Forms_commitForm_Mail`
+* Changed default value of `$checkProxy` to false in \Enlight_Controller_Request_Request::getClientIp($checkProxy = false).
+    * The correct client ip is automatically obtained if the `trustedProxies` option is configured properly.
+* Deprecated event `Shopware_Plugins_HttpCache_ShouldNotCache`
+* New config option `httpCache.cache_cookies`
 
 ## 4.3.1
 
@@ -403,7 +413,6 @@ In this document you will find a changelog of the important changes related to t
     * Exceptions are logged in a logfile since 4.2.0 (/logs)
     * The old behaviour can be restored by setting `'front' => array('showException' => true)` in the projects `config.php`
 * Hiding the country field for shipping addresses will also hide the state field. The option label in the backend was adjusted to better describe this behaviour.
-* Added automatic APC detection for the general cache.
 
 ## 4.3.0
 

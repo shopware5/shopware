@@ -2371,6 +2371,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskORDERPOSITIONSMORE
      * @covers sAdmin::sRiskATTRIS
      * @covers sAdmin::sRiskATTRISNOT
+     * @covers sAdmin::sRiskDUNNINGLEVELONE
+     * @covers sAdmin::sRiskDUNNINGLEVELTWO
+     * @covers sAdmin::sRiskDUNNINGLEVELTHREE
      * @covers sAdmin::sRiskINKASSO
      * @covers sAdmin::sRiskLASTORDERLESS
      * @covers sAdmin::sRiskARTICLESFROM
@@ -2581,6 +2584,39 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'paymentID' => 2,
                 'rule1' => 'ATTRISNOT',
                 'value1' => '17|null'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELONE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELONE'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELTWO
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELTWO'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELTHREE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELTHREE'
             )
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));

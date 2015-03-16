@@ -49,7 +49,7 @@
 			<a href="{url controller='account' action='payment'}">
 				{s name="AccountLinkPayment"}{/s}
 			</a>
-		</li>		
+		</li>
 	{/block}
 	{block name="frontend_account_content_right_support"}
 		{* Supportmanagement *}
@@ -59,8 +59,8 @@
 					{s name="sTicketSysSupportManagement"}{/s}
 				</a>
 			</li>
-			
-			<li class="sub"><a href="{url controller='ticket' action='request'}">{s name='TicketLinkSupport'}{/s}</a></li>		
+
+			<li class="sub"><a href="{url controller='ticket' action='request'}">{s name='TicketLinkSupport'}{/s}</a></li>
 		{/if}
 	{/block}
 	{block name="frontend_account_content_right_notes"}
@@ -72,7 +72,7 @@
 		</li>
 	{/block}
     {block name="frontend_account_content_right_partner_statistic"}
-        {action name="partnerStatisticMenuItem" controller="account"}
+        {action action="partnerStatisticMenuItem" controller="account"}
     {/block}
 	{block name="frontend_account_content_right_logout"}
 		{* Logout *}
@@ -82,7 +82,7 @@
 			</a>
 		</li>
 	{/block}
-	</ul>	
+	</ul>
 	{block name="frontend_account_content_right_end"}
 	{/block}
 </div>

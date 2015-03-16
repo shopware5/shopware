@@ -300,9 +300,23 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if (empty($this->_config["date"])) {
             $this->_config["date"] = date("d.m.Y");
         }
-        $Document = array_merge($Document,array("comment"=>$this->_config["docComment"],"id"=>$id,"bid"=>$this->_documentBid,"date"=>$this->_config["date"],"deliveryDate"=>$this->_config["delivery_date"],"netto"=>$this->_order->order->taxfree ? true : $this->_config["netto"],"nettoPositions"=>$this->_order->order->net));
+        $Document = array_merge(
+            $Document,
+            array(
+                "comment" => $this->_config["docComment"],
+                "id" => $id,
+                "bid" => $this->_documentBid,
+                "date" => $this->_config["date"],
+                "deliveryDate" => $this->_config["delivery_date"],
+                // The "netto" config flag, if set to true, allows creating
+                // netto documents for brutto orders. Setting it to false,
+                // does not however create brutto documents for netto orders.
+                "netto" => $this->_order->order->taxfree ? true : $this->_config["netto"],
+                "nettoPositions" => $this->_order->order->net
+            )
+        );
         $Document["voucher"] = $this->getVoucher($this->_config["voucher"]);
-        $this->_view->assign('Document',$Document);
+        $this->_view->assign('Document', $Document);
 
         // Translate payment and dispatch depending on the order's language
         // and replace the default payment/dispatch text
@@ -329,8 +343,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             }
         }
 
-        $this->_view->assign('Order',$this->_order->__toArray());
-        $this->_view->assign('Containers',$this->_document->containers->getArrayCopy());
+        $this->_view->assign('Order', $this->_order->__toArray());
+        $this->_view->assign('Containers', $this->_document->containers->getArrayCopy());
 
         $order = clone $this->_order;
 
@@ -342,18 +356,21 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         }
 
         if ($this->_config["_previewForcePagebreak"]) {
-            $positions = array_merge($positions,$positions);
+            $positions = array_merge($positions, $positions);
         }
 
         $positions = array_chunk($positions,$this->_document["pagebreak"],true);
-        $this->_view->assign('Pages',$positions);
+        $this->_view->assign('Pages', $positions);
 
         $user = array(
-            "shipping"=>$order->shipping,
-            "billing"=>$order->billing,
-            "additional"=>array("countryShipping"=>$order->shipping->country,"country"=>$order->billing->country)
+            "shipping" => $order->shipping,
+            "billing" => $order->billing,
+            "additional" => array(
+                "countryShipping" => $order->shipping->country,
+                "country" => $order->billing->country
+            )
         );
-        $this->_view->assign('User',$user);
+        $this->_view->assign('User', $user);
     }
 
     /**

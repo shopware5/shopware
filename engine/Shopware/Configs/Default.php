@@ -15,14 +15,15 @@ if (!is_array($customConfig)) {
 
 // Allow partial override
 $customConfig = array_merge(array(
+    'trustedproxies' => array(),
     'db' => array(),
     'snippet' => array(),
     'front' => array(),
     'template' => array(),
     'mail' => array(),
-    'httpCache' => array(),
+    'httpcache' => array(),
     'session' => array(),
-    'phpSettings' => array(),
+    'phpsettings' => array(),
     'cache' => array(
         'backendOptions' => array(),
         'frontendOptions' => array()
@@ -32,12 +33,13 @@ $customConfig = array_merge(array(
     'config' => array(),
     'store' => array(),
     'custom' => array(),
-    'backendSession' => array(),
+    'backendsession' => array(),
     'plugins' => array()
 ), $customConfig);
 
 return array_merge($customConfig, array(
     'custom' => $customConfig['custom'],
+    'trustedproxies' => $customConfig['trustedproxies'],
     'snippet' => array_merge(array(
         'readFromDb' => true,
         'writeToDb' => true,
@@ -78,7 +80,7 @@ return array_merge($customConfig, array(
     'mail' => array_merge(array(
         'charset' => 'utf-8'
     ), $customConfig['mail']),
-    'httpCache' => array_merge(array(
+    'httpcache' => array_merge(array(
         'enabled' => true,
         'debug' => false,
         'default_ttl' => 0,
@@ -88,8 +90,8 @@ return array_merge($customConfig, array(
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir().'/html',
-        'cache_cookies' => ['shop', 'currency'],
-    ), $customConfig['httpCache']),
+        'cache_cookies' => array('shop', 'currency'),
+    ), $customConfig['httpcache']),
     'session' => array_merge(array(
         'name' => 'SHOPWARESID',
         'cookie_lifetime' => 0,
@@ -99,11 +101,11 @@ return array_merge($customConfig, array(
         'gc_divisor' => 100,
         'save_handler' => 'db'
     ), $customConfig['session']),
-    'phpSettings' => array_merge(array(
+    'phpsettings' => array_merge(array(
         'error_reporting' => E_ALL,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
-    ), $customConfig['phpSettings']),
+    ), $customConfig['phpsettings']),
     'cache' => array(
         'frontendOptions' => array_merge(array(
             'automatic_serialization' => true,
@@ -132,7 +134,7 @@ return array_merge($customConfig, array(
         'cacheProvider' => 'auto', // supports null, auto, Apc, Array, Wincache and Xcache
         'cacheNamespace' => null // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
     ), $customConfig['model']),
-    'backendSession' => array_merge(array(
+    'backendsession' => array_merge(array(
         'name' => 'SHOPWAREBACKEND',
 //        'gc_maxlifetime' => 60 * 90,
         'cookie_lifetime' => 0,
@@ -140,7 +142,7 @@ return array_merge($customConfig, array(
         'use_trans_sid' => false,
         'referer_check' => true, // true, false or a fix value
         'client_check' => false // true or false (is not compatible with firebug)
-    ), $customConfig['backendSession']),
+    ), $customConfig['backendsession']),
     /*
     'cache' => array(
         'backend' => 'Two Levels',

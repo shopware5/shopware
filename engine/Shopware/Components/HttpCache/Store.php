@@ -35,7 +35,7 @@ use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
  *
  * @category  Shopware
  * @package   Shopware\Components\HttpCache
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware 11AG (http://www.shopware.de)
  */
 class Store extends BaseStore
 {
