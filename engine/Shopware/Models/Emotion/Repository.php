@@ -89,11 +89,10 @@ class Repository extends ModelRepository
     /**
      * @param null|array $filter
      * @param null|array $filterBy
-     * @param null|array $orderBy
      * @param null|int $categoryId
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    public function getListingQuery($filter = null, $filterBy = null, $orderBy = null, $categoryId = null)
+    public function getListingQuery($filter = null, $filterBy = null, $categoryId = null)
     {
         $builder = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $builder->select([
