@@ -70,7 +70,7 @@
 	 	<name>session.auto_start</name><group>config</group><required>0</required>
 	</requirement>
 	<requirement>
-	 	<name>memory_limit</name><group>config</group><required>128M</required><error>1</error>
+	 	<name>memory_limit</name><group>config</group><required>256M</required>
 	</requirement>
 	<requirement>
 	 	<name>max_execution_time</name><group>config</group><required>30</required>
