@@ -98,10 +98,16 @@ class RewriteMatcher implements MatcherInterface
         // Rewrites queries
         $params = $context->getParams();
         $params = $this->queryAliasMapper->replaceShortParams($params);
+
         /* templates/_emotion/frontend/_resources/javascript/jquery.shopware.js */
-        if(isset($params['sAction'])) {
+        if (isset($params['sAction'])) {
             $params['action'] = $params['sAction'];
         }
+
+        if (isset($params['sViewport'])) {
+            $params['controller'] = $params['sViewport'];
+        }
+
         $context->setParams($params);
 
         // /widgets and /index supports short request queries
