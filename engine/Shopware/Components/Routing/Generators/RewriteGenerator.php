@@ -166,10 +166,8 @@ class RewriteGenerator implements GeneratorListInterface
                 ':orgPath' => Connection::PARAM_STR_ARRAY
             ]
         );
-        $rows = [];
-        while (($row = $statement->fetch(\PDO::FETCH_NUM)) !== false) {
-            $rows[$row[0]] = $row[1];
-        }
+
+        $rows = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         foreach ($list as $key => $orgPath) {
             if (isset($rows[$orgPath])) {

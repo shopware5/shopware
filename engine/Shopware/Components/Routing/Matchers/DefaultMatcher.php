@@ -61,13 +61,13 @@ class DefaultMatcher implements MatcherInterface
     public function match($pathInfo, Context $context)
     {
         $path = trim($pathInfo, $this->separator);
-
         if (empty($path)) {
             return false;
         }
 
         $query = [];
         $params = [];
+
         foreach (explode($this->separator, $path) as $routePart) {
             $routePart = urldecode($routePart);
             if (empty($query[$context->getModuleKey()]) && $this->dispatcher->isValidModule($routePart)) {
@@ -81,18 +81,6 @@ class DefaultMatcher implements MatcherInterface
             }
         }
 
-        $query[$context->getModuleKey()] = isset($query[$context->getModuleKey()])
-            ? $query[$context->getModuleKey()]
-            : $this->dispatcher->getDefaultModule();
-
-        $query[$context->getControllerKey()] = isset($query[$context->getControllerKey()])
-            ? $query[$context->getControllerKey()]
-            : $this->dispatcher->getDefaultControllerName();
-
-        $query[$context->getActionKey()] = isset($query[$context->getActionKey()])
-            ? $query[$context->getActionKey()]
-            : $this->dispatcher->getDefaultAction();
-
         if ($params) {
             $chunks = array_chunk($params, 2, false);
             foreach ($chunks as $chunk) {
@@ -103,6 +91,28 @@ class DefaultMatcher implements MatcherInterface
                 }
             }
         }
+
+        $query = $this->fillDefaults($context, $query);
+
+        return $query;
+    }
+
+    /**
+     * Fills up default values for module, controller and action
+     *
+     * @param Context $context
+     * @param array $query
+     * @return array
+     */
+    private function fillDefaults(Context $context, $query)
+    {
+        $defaults = [
+            $context->getModuleKey()     => $this->dispatcher->getDefaultModule(),
+            $context->getControllerKey() => $this->dispatcher->getDefaultControllerName(),
+            $context->getActionKey()     => $this->dispatcher->getDefaultAction(),
+        ];
+
+        $query = array_merge($defaults, $query);
 
         return $query;
     }
