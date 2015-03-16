@@ -1299,6 +1299,53 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * Ajax add article cart action
+     *
+     * This action is a lightweight way to add an article by the passed
+     * article order number and quantity.
+     *
+     * The order number is expected to get passed by the 'sAdd' parameter
+     * This quantity is expected to get passed by the 'sQuantity' parameter.
+     *
+     * After the article was added to the basket, the whole cart content will be returned.
+     */
+    public function ajaxAddArticleCartAction()
+    {
+        $orderNumber = $this->Request()->getParam('sAdd');
+        $quantity = $this->Request()->getParam('sQuantity');
+
+        $this->View()->assign(
+            'basketInfoMessage',
+            $this->getInstockInfo($orderNumber, $quantity)
+        );
+
+        $this->basket->sAddArticle($orderNumber, $quantity);
+
+        $this->forward('ajaxCart');
+    }
+
+    /**
+     * Ajax delete article action
+     *
+     * This action is a lightweight way to delete an article by the passed
+     * basket item id.
+     *
+     * This id is expected to get passed by the 'sDelete' parameter.
+     *
+     * After the article was removed from the basket, the whole cart content will be returned.
+     */
+    public function ajaxDeleteArticleCartAction()
+    {
+        $itemId = $this->Request()->getParam('sDelete');
+
+        if ($itemId) {
+            $this->basket->sDeleteArticle($itemId);
+        }
+
+        $this->forward('ajaxCart');
+    }
+
+    /**
      * Ajax cart action
      *
      * This action loads the cart content and returns it.
