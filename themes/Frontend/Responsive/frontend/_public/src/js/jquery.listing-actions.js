@@ -143,7 +143,7 @@
             /**
              * The time in ms for animations.
              */
-            animationSpeed: 300
+            animationSpeed: 400
         },
 
         /**

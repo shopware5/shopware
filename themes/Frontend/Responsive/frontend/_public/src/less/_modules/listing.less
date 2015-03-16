@@ -69,6 +69,7 @@ It contains the viewport specific styles inside media queries.
         .unitize(24, 16, line-height);
         display: block;
         position: relative;
+        overflow: hidden;
 
 		.icon--filter {
 			.unitize(margin-right, 8);
@@ -297,7 +298,16 @@ It contains the viewport specific styles inside media queries.
                 color: inherit;
 
                 &:before {
+                    .transition(margin-top .4s cubic-bezier(.02, .01, .47, 1));
+                    .unitize(margin-top, -46);
+                    content: "\e610";
+                    display: block;
+                }
+
+                &:after {
+                    .unitize(margin-top, 30);
                     content: "\e612";
+                    display: block;
                 }
             }
 
@@ -305,7 +315,7 @@ It contains the viewport specific styles inside media queries.
                 .is--primary();
 
                 .action--collapse-icon:before {
-                    content: "\e610";
+                    margin-top: 0;
                 }
             }
         }
