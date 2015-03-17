@@ -38,9 +38,6 @@ function smarty_function_compileJavascript($params, $template)
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
-    if ($shop->getMain()) {
-        $shop = $shop->getMain();
-    }
 
     /**@var $settings \Shopware\Models\Theme\Settings*/
     $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
@@ -50,7 +47,7 @@ function smarty_function_compileJavascript($params, $template)
     /** @var $front Enlight_Controller_Front */
     $front = Enlight_Application::Instance()->Front();
     $secure = $front->Request()->isSecure();
-    
+
     $files = $pathResolver->getJsFilePaths($shop, $time);
 
     $urls = array();

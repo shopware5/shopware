@@ -249,6 +249,7 @@ class PathResolver
         } else {
             $targetPath = $shop->getBasePath();
         }
+
         return str_replace($this->rootDir, $targetPath, $path);
     }
 
@@ -318,6 +319,10 @@ class PathResolver
      */
     private function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
     {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
         return $timestamp . '_' . 'theme' . $shop->getId() . '.' . $suffix;
     }
 
