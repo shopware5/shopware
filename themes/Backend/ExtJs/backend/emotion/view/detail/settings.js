@@ -505,6 +505,48 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'landingPageBlock'
         });
 
+        me.ladingPageConfiguration = Ext.create('Ext.container.Container', {
+            margin: '15 0 0',
+            layout: 'anchor',
+            defaults: me.defaults,
+            items: [
+                displayField,
+                mediaSelection,
+                seoKeywords,
+                seoDescription,
+                me.categorySearchField,
+                me.positionSelection
+            ]
+        });
+
+
+        var parentStore = Ext.create('Shopware.apps.Emotion.store.LandingPage');
+        parentStore.getProxy().extraParams.ownId = me.emotion.get('id');
+
+        if (me.emotion.get('parentId')) {
+            parentStore.load({ params: { id: me.emotion.get('parentId') } });
+        }
+
+        me.parentLangingPage = Ext.create('Ext.form.field.ComboBox', {
+            queryMode: 'remote',
+            fieldLabel: '{s name=settings/master_landingpage}Master landingpage{/s}',
+            displayField: 'name',
+            valueField: 'id',
+            name: 'parentId',
+            store: parentStore,
+            allowBlank: true,
+            listeners: {
+                change: function(field, newValue) {
+                    if (newValue) {
+                        me.ladingPageConfiguration.hide();
+                    } else {
+                        this.setValue('');
+                        me.ladingPageConfiguration.show();
+                    }
+                }
+            }
+        });
+
         fieldset = Ext.create('Ext.form.FieldSet', {
             margin: '15 0 0',
             title: '{s name=settings/landingpage_settings}Landingpage settings{/s}',
@@ -512,7 +554,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             collapsible: true,
             hidden: true,
             defaults: me.defaults,
-            items: [ displayField, mediaSelection, seoKeywords, seoDescription, me.categorySearchField, me.positionSelection ]
+            items: [
+                me.parentLangingPage,
+                me.ladingPageConfiguration
+            ]
         });
 
         return fieldset;

@@ -541,8 +541,8 @@
             StateManager.on('resize', $.proxy(me.onResize, me));
 
             if (me.opts.fullscreen) {
-                $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.initFullscreen, me));
-                $.subscribe('plugin/emotionLoader/hideEmotion', $.proxy(me.removeFullscreen, me));
+                $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.onShow, me));
+                $.subscribe('plugin/emotionLoader/hideEmotion', $.proxy(me.onHide, me));
             }
 
             $.publish('plugin/emotion/registerEvents', me);
@@ -560,6 +560,22 @@
 
             me.$bannerElements.trigger('emotionResize');
             me.$videoElements.trigger('emotionResize');
+        },
+
+        onShow: function(event, emotion) {
+            var me = this;
+
+            if (emotion.$el.is(me.$el)) {
+                me.initFullscreen();
+            }
+        },
+
+        onHide: function(event, emotion) {
+            var me = this;
+
+            if (emotion.$el.is(me.$el)) {
+                me.removeFullscreen();
+            }
         },
 
         /**

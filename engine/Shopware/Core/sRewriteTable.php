@@ -1054,10 +1054,13 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        $queryBuilder = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion')
-            ->getListQueryBuilder();
+        /**@var $repo \Shopware\Models\Emotion\Repository */
+        $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
+        $queryBuilder = $repo->getListQueryBuilder();
+
         $queryBuilder
             ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.parentId IS NULL')
             ->andWhere('emotions.active = 1');
 
         if ($limit !== null && $offset !== null) {

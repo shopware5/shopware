@@ -25,6 +25,7 @@
 namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class DeviceConfiguration
 {
@@ -105,28 +106,85 @@ class DeviceConfiguration
     }
 
     /**
-     * @param $emotionId
+     * @param $id
      * @throws \Exception
      * @return array
      */
-    public function getLandingPageById($emotionId)
+    public function getLandingPage($id)
     {
-        $query = $this->connection->createQueryBuilder();
+        $master = $this->getMasterLandingPage($id);
 
-        $query->select(array(
-            'emotion.id',
-            'emotion.device as devices',
-        ));
+        if (!$master) {
+            return null;
+        }
 
-        $query->from('s_emotion', 'emotion')
-            ->where('emotion.id = :emotionId')
-            ->andWhere('valid_from IS NULL || valid_from <= now()')
-            ->andWhere('valid_to IS NULL || valid_to >= now()')
-            ->setParameter('emotionId', $emotionId);
+        $children = $this->getChildrenLandingPages($id);
+
+        $children = array_merge([
+            ['id' => $master['id'], 'device' => $master['device']]
+        ], $children);
+
+        $master['emotions'] = $children;
+        return $master;
+    }
+
+    /**
+     * @param $id
+     * @return array|null
+     */
+    private function getMasterLandingPage($id)
+    {
+        $query = $this->getLandingPageQuery()
+            ->andWhere('emotion.id = :id')
+            ->setParameter('id', $id);
 
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @param int $parentId
+     * @return array
+     */
+    private function getChildrenLandingPages($parentId)
+    {
+        $query = $this->getLandingPageQuery()
+            ->andWhere('emotion.parent_id = :id')
+            ->setParameter(':id', $parentId);
+
+        /**@var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    private function getLandingPageQuery()
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select([
+            'emotion.id',
+            'emotion.device',
+            'emotion.name',
+            'emotion.seo_keywords',
+            'emotion.seo_description',
+            'emotion.valid_from',
+            'emotion.valid_to',
+            'now()'
+        ]);
+
+        $query->from('s_emotion', 'emotion')
+            ->andWhere('emotion.active = 1')
+            ->andWhere('(valid_from IS NULL OR valid_from <= now())')
+            ->andWhere('(valid_to IS NULL OR valid_to >= now())')
+        ;
+
+        return $query;
+    }
+
 }
