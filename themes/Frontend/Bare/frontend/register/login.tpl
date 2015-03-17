@@ -53,7 +53,7 @@
 
 						{block name='frontend_register_login_input_form_submit'}
 							<div class="register--login-action">
-								<button type="submit" class="btn is--primary is--icon-right" name="Submit">{s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right"></i></button>
+								<button type="submit" class="register--login-btn btn is--primary is--large is--icon-right" name="Submit">{s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right"></i></button>
 							</div>
 						{/block}
 					</form>

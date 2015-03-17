@@ -37,15 +37,16 @@ The footer element sizes are defined with the unitize mixin.
         cursor: pointer;
 
         &.is--active::after {
-            content: '-';
+            content: '\e68e';
         }
 
         &::after {
-            .unitize-margin(-3.5, 0, 0, 0, 16);
-            .unitize(24, 16);
+            .unitize(4, margin-top);
+            .unitize(18, font-size);
+            font-family: 'shopware';
             color: @text-color;
-            content: '+';
-            font-weight: bold;
+            font-weight: 700;
+            content: '\e68f';
             float: right;
         }
     }

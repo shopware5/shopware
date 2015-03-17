@@ -619,7 +619,7 @@ More precise designations are commented inside the document.
             }
 
             .service--list {
-                .unitize-width(166);
+                .unitize-min-width(150);
                 .unitize-padding(5, 0);
                 .unitize(top, 32);
                 .unitize(right, 12);
@@ -645,18 +645,20 @@ More precise designations are commented inside the document.
                     border-width: 0 0 1px 1px;
                     border-style: solid;
                 }
-            }
-
-            .js--is--dropdown-active .service--list {
-                display: block;
 
                 .service--link {
                     .unitize-padding(5, 10);
                     display: block;
                     color: @text-color;
-
-                    &:hover { color: @brand-primary; }
                 }
+
+                .service--link:hover {
+                    color: @brand-primary;
+                }
+            }
+
+            .js--is--dropdown-active .service--list {
+                display: block;
             }
         }
 
@@ -908,7 +910,6 @@ More precise designations are commented inside the document.
     // Topbar navigation
     .header-main .top-bar--navigation {
         .service--list {
-            .unitize-width(152);
             right:  0;
         }
 

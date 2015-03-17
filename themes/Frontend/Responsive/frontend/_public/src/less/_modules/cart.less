@@ -27,7 +27,10 @@ Shopware offers two different shopping cart element options that can be selected
     .account--shipping-address,
     .account--change-billing,
     .account--change-shipping {
-        width: 100% !important;
+        &.register--content {
+            float: none;
+            width: 100%;
+        }
     }
 }
 
@@ -344,6 +347,10 @@ Shopware offers two different shopping cart element options that can be selected
         width: 90%;
     }
 
+    .add-voucher--field {
+        background: #fff;
+    }
+
     .add-product--button,
     .add-voucher--button {
         .unitize(height, 38);
@@ -393,7 +400,7 @@ Shopware offers two different shopping cart element options that can be selected
 
     .benefit--headline {
         .unitize(font-size, 14);
-        color: @text-color;
+        color: @text-color-dark;
         font-weight: bold;
     }
 }
@@ -411,13 +418,17 @@ Shopware offers two different shopping cart element options that can be selected
     }
     .entry--value {
         width: 30%;
-        font-weight: bold;
         text-align: right;
     }
 
     .entry--total {
         font-weight: bold;
         color: @text-color-dark;
+    }
+
+    .entry--totalnet,
+    .entry--taxes {
+        .unitize(font-size, 12);
     }
 }
 
@@ -511,6 +522,7 @@ Shopware offers two different shopping cart element options that can be selected
         .premium-product--free {
             color: @highlight-success;
             font-weight: bold;
+            text-align: left;
         }
 
         .btn {
@@ -718,8 +730,9 @@ Shopware offers two different shopping cart element options that can be selected
     }
 
     .confirm--actions {
-        input[type="submit"] {
-            .unitize(padding-left, 16);
+        .main--actions {
+            text-align: center;
+            width: 100%;
         }
     }
 
@@ -920,6 +933,15 @@ Shopware offers two different shopping cart element options that can be selected
 
     .is--ctl-checkout .basket--info-messages {
         .unitize-margin(20, 0, 4, 0);
+    }
+
+    .is--ctl-checkout {
+        .account--change-billing,
+        .account--change-shipping {
+            &.register--content {
+                width: 75%;
+            }
+        }
     }
 
     .is--act-shippingPayment {
@@ -1248,6 +1270,10 @@ Shopware offers two different shopping cart element options that can be selected
                 border: 1px solid @panel-border;
                 margin: 0;
             }
+        }
+
+        .confirm--actions {
+            .main--actions { width: 25%; }
         }
     }
 }
