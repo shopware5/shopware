@@ -819,9 +819,12 @@ class sArticles
                 $navigation["previousProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $previousProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["previousProduct"]["name"] = $previousProduct->getName();
 
-                $navigation["previousProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
-                    $previousProduct->getCover()
-                );
+                $previousCover = $previousProduct->getCover();
+                if ($previousCover) {
+                    $navigation["previousProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
+                        $previousCover
+                    );
+                }
             }
 
             if ($nextProduct) {
@@ -831,9 +834,12 @@ class sArticles
                 $navigation["nextProduct"]["link"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sDetails=" . $nextProduct->getId() . "&sCategory=" . $categoryId;
                 $navigation["nextProduct"]["name"] = $nextProduct->getName();
 
-                $navigation["nextProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
-                    $nextProduct->getCover()
-                );
+                $nextCover = $nextProduct->getCover();
+                if ($nextCover) {
+                    $navigation["nextProduct"]["image"] = $this->legacyStructConverter->convertMediaStruct(
+                        $nextCover
+                    );
+                }
             }
 
             $navigation["currentListing"]["position"] = $index + 1;
