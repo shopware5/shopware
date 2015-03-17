@@ -703,6 +703,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                         startCol: startCol,
                         endCol: startCol + cols
                     });
+
+                    me.ownerCt.fireEvent('emotion-refresh-emotion-world', record, data.sourceStore, me.store);
                 }
 
                 me.refresh();
