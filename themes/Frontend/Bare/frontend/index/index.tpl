@@ -59,6 +59,14 @@
 			{/block}
 		{/block}
 
+        {block name='frontend_index_emotion_loading_overlay'}
+            {if $hasEmotion}
+                <div class="emotion--overlay">
+                    <i class="emotion--loading-indicator"></i>
+                </div>
+            {/if}
+        {/block}
+
 		<section class="content-main container block-group">
 
             {* Breadcrumb *}
