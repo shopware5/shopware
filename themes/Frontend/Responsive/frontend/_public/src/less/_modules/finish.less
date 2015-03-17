@@ -64,6 +64,15 @@ It is displayed after the shopware checkout process is finished and contains the
 
     .aggregation--list {
         margin: 0;
+        border-bottom: 0 none;
+    }
+
+    .basket--footer {
+        border-top: 1px solid @panel-border;
+    }
+
+    .is--last-row {
+        border-bottom: 0 none;
     }
 }
 
@@ -122,7 +131,7 @@ It is displayed after the shopware checkout process is finished and contains the
         }
 
         .panel--body {
-            .unitize-padding(14, 20, 20, 20);
+            .unitize-padding(20, 20);
         }
 
         .column--total-price {
@@ -157,10 +166,6 @@ It is displayed after the shopware checkout process is finished and contains the
 
         .aggregation--list {
             .unitize-padding(20, 20);
-        }
-
-        .basket--footer {
-            border-top: 0 none;
         }
     }
 }
