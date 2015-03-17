@@ -341,7 +341,7 @@
     </div>
 
     {* Additional feature which can be enabled / disabled in the base configuration *}
-    {if {config name=commentvoucherarticle}||{config name=premiumarticles}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
+    {if {config name=commentvoucherarticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
         {block name="frontend_checkout_confirm_additional_features"}
             <div class="panel has--border additional--features">
                 {block name="frontend_checkout_confirm_additional_features_headline"}
@@ -407,14 +407,15 @@
                     </div>
                 {/block}
             </div>
-            {* Premiums articles *}
-            {block name='frontend_checkout_confirm_premiums'}
-                {if $sPremiums && {config name=premiumarticles}}
-                    {include file='frontend/checkout/premiums.tpl'}
-                {/if}
-            {/block}
         {/block}
     {/if}
+
+	{* Premiums articles *}
+	{block name='frontend_checkout_confirm_premiums'}
+		{if $sPremiums && {config name=premiumarticles}}
+			{include file='frontend/checkout/premiums.tpl'}
+		{/if}
+	{/block}
 
     {block name='frontend_checkout_confirm_product_table'}
         <div class="product--table">
