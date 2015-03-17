@@ -86,27 +86,65 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $limit = $this->Request()->getParam('limit', null);
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
         $filter = $this->Request()->getParam('filter', null);
         $filterBy = $this->Request()->getParam('filterBy', null);
         $categoryId = $this->Request()->getParam('categoryId', null);
 
+        $query = $this->getRepository()->getListingQuery($filter, $filterBy, $categoryId);
 
-        $query = $this->getRepository()->getListQuery($filter, $filterBy, $sort, $offset, $limit, $categoryId);
-        $count = Shopware()->Models()->getQueryCount($query);
-        $emotions = $query->getArrayResult();
-        foreach ($emotions as &$emotion) {
-            $categories = array();
-            foreach ($emotion["categories"] as $category) {
-                $categories[] = $category["name"];
-            }
-            $emotion["categoriesNames"] = implode(",", $categories);
-        }
+        $query->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $query->select('COUNT(emotions.id) as count')
+            ->resetQueryPart('groupBy')
+            ->resetQueryPart('orderBy')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+        ;
+
+        $statement = $query->execute();
+        $count = $statement->fetch(PDO::FETCH_COLUMN);
+
         $this->View()->assign(array(
             'success' => true,
             'data' => $emotions,
             'total' => $count
         ));
+    }
+
+    /**
+     * Returns all master landing pages.
+     */
+    public function getMasterLandingPagesAction()
+    {
+        $id = $this->Request()->getParam('id', null);
+        $ownId = $this->Request()->getParam('ownId', null);
+
+        $builder = $this->getRepository()->getListingQuery([], 'onlyLandingPageMasters');
+
+        if ($id) {
+            $builder->where('emotions.id = :id')
+                ->setParameters(['id' => $id])
+                ->setFirstResult(0)
+                ->setMaxResults(1);
+        }
+
+        if ($ownId) {
+            $builder->andWhere('emotions.id != :ownId')
+                ->setParameter('ownId', $ownId);
+        }
+
+        $builder->andWhere('emotions.is_landingpage = 1')
+            ->andWhere('emotions.parent_id IS NULL');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -450,6 +488,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         $new = clone $emotion;
+
+        switch (true) {
+            case ($device && $emotion->getIsLandingPage() && $emotion->getParentId()):
+                $new->setParentId($emotion->getParentId());
+                break;
+            case ($device && $emotion->getIsLandingPage()):
+                $new->setParentId($emotion->getId());
+                break;
+        }
 
         $new->setDevice($device);
         $new->setCreateDate(new \DateTime());

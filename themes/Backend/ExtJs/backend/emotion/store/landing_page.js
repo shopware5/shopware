@@ -27,73 +27,13 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Emotion Module
- *
- */
-//{block name="backend/emotion/store/list"}
-Ext.define('Shopware.apps.Emotion.store.List', {
-    /**
-     * Extend for the standard ExtJS 4
-     * @string
-     */
+Ext.define('Shopware.apps.Emotion.store.LandingPage', {
     extend:'Ext.data.Store',
-    /**
-     * Define the used model for this store
-     * @string
-     */
     model:'Shopware.apps.Emotion.model.Emotion',
-    /**
-     * Enable remote sort.
-     * @boolean
-     */
-    remoteSort:true,
-    /**
-     * Enable remote filtering
-     * @boolean
-     */
-    remoteFilter:true,
-    /**
-     * Amount of data loaded at once
-     * @integer
-     */
-    pageSize:50,
-    /**
-     * to upload all selected items in one request
-     * @boolean
-     */
-    batch:true,
-
-    groupers: [{
-        property: 'groupingState',
-        direction: 'ASC'
-    }],
-
-    /**
-     * Configure the data communication
-     * @object
-     */
     proxy:{
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
         type:'ajax',
 
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        api: {
-            read: '{url action="list"}',
-            destroy: '{url action="delete" targetField=emotions}'
-        },
-
-        /**
-         * Configure the data reader
-         * @object
-         */
+        url: '{url controller="Emotion" action="getMasterLandingPages"}',
         reader:{
             type:'json',
             root:'data',
@@ -101,5 +41,3 @@ Ext.define('Shopware.apps.Emotion.store.List', {
         }
     }
 });
-//{/block}
-
