@@ -111,8 +111,8 @@ class DownloadService
     {
         $params = [
             'domain' => $request->getDomain(),
-            'version' => $request->getVersion(),
-            'technicalName' => $request->getTechnicalName()
+            'technicalName' => $request->getTechnicalName(),
+            'shopwareVersion' => $request->getVersion()
         ];
 
         if ($request->getToken()) {
@@ -135,7 +135,7 @@ class DownloadService
             $result['size'],
             $result['sha1'],
             $result['binaryVersion'],
-            md5($request->getTechnicalName()) . 'zip'
+            md5($request->getTechnicalName()) . '.zip'
         );
     }
 
