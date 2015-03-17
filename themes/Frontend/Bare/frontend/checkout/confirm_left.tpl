@@ -33,7 +33,7 @@
 				{if $sUserData.billingaddress.salutation eq "mr"}{s name="ConfirmSalutationMr"}{/s}{else}{s name="ConfirmSalutationMs"}{/s}{/if}
 				{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
 				{$sUserData.billingaddress.street}<br />
-				{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
+                {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
                 {if $sUserData.additional.state.shortcode}{$sUserData.additional.state.shortcode} - {/if} {$sUserData.additional.country.countryname}
 			</p>
 			<a href="{url controller=account action=billing sTarget=checkout}" class="button-middle small">
@@ -65,7 +65,7 @@
 	        {/if}
 	    	{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
 			{$sUserData.shippingaddress.street}<br />
-			{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
+            {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
             {if $sUserData.additional.stateShipping.shortcode}{$sUserData.additional.stateShipping.shortcode} - {/if}{$sUserData.additional.countryShipping.countryname}
 			</p>
 			
