@@ -93,16 +93,16 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $categoryId = $this->Request()->getParam('sCategory');
+        $requestCategoryId = $this->Request()->getParam('sCategory');
 
-        if (!$categoryId || !$this->isValidCategoryPath($categoryId)) {
+        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
             throw new Enlight_Controller_Exception(
                 'Listing category missing, non-existent or invalid for the current shop',
                 404
             );
         }
 
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
 
         $categoryId = $categoryContent['id'];
         Shopware()->System()->_GET['sCategory'] = $categoryId;
@@ -128,6 +128,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
 
             $categoryContent = array_merge($categoryContent, $manufacturerContent);
+        } elseif (!$requestCategoryId) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
         }
 
         $viewAssignments = array(
