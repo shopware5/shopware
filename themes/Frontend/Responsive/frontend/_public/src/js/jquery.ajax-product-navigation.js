@@ -286,6 +286,7 @@
 
         /**
          * Checks if it's possible for the arrows to slide to full extend.
+         * Also checks if there's an image to display
          * If so, add the arrow slide class to the arrows.
          *
          * @private
@@ -299,7 +300,9 @@
                 $prevBtn = me.$prevButton,
                 $nextBtn = me.$nextButton,
                 remainingSpacePrev,
-                remainingSpaceNext;
+                remainingSpaceNext,
+                prevBtnImage,
+                nextBtnImage;
 
             if (!$nextBtn.length || !$prevBtn.length) {
                 return false;
@@ -308,8 +311,16 @@
             remainingSpacePrev = $prevBtn.offset().left + offset;
             remainingSpaceNext = $(window).width() - $nextBtn.offset().left - $nextBtn.outerWidth() + offset;
 
-            $prevBtn[(remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
-            $nextBtn[(remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
+            prevBtnImage = $prevBtn
+                .find(opts.imageContainerSelector)
+                .css('background-image');
+
+            nextBtnImage = $nextBtn
+                .find(opts.imageContainerSelector)
+                .css('background-image');
+
+            $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
+            $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
         },
 
         /**
@@ -371,7 +382,11 @@
             if (typeof prevProduct === 'object') {
                 $prevBtn.attr('data-ordernumber', prevProduct.orderNumber);
 
-                $prevBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + prevProduct.image.thumbnails[0].source + ')');
+                if (prevProduct.image) {
+                    $prevBtn
+                        .find(opts.imageContainerSelector)
+                        .css('background-image', 'url(' + prevProduct.image.thumbnails[0].source + ')');
+                }
 
                 $prevBtn
                     .attr('href', prevProduct.href)
@@ -388,7 +403,11 @@
             if (typeof nextProduct === 'object') {
                 $nextBtn.attr('data-ordernumber', nextProduct.orderNumber);
 
-                $nextBtn.find(opts.imageContainerSelector).css('background-image', 'url(' + nextProduct.image.thumbnails[0].source + ')');
+                if (nextProduct.image) {
+                    $nextBtn
+                        .find(opts.imageContainerSelector)
+                        .css('background-image', 'url(' + nextProduct.image.thumbnails[0].source + ')');
+                }
 
                 $nextBtn
                     .attr('href', nextProduct.href)
