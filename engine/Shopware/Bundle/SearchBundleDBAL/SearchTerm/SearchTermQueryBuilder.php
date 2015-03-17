@@ -52,7 +52,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $keywordFinder;
 
     /**
-     * @var SearchIndexer
+     * @var SearchIndexerInterface
      */
     private $searchIndexer;
 
@@ -60,13 +60,13 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
      * @param KeywordFinderInterface $keywordFinder
-     * @param SearchIndexer $searchIndexer
+     * @param SearchIndexerInterface $searchIndexer
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
         KeywordFinderInterface $keywordFinder,
-        SearchIndexer $searchIndexer
+        SearchIndexerInterface $searchIndexer
     ) {
         $this->config = $config;
         $this->connection = $connection;
@@ -113,8 +113,8 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $query->select(
             [
-          "a.id as product_id",
-          "(" . $this->getRelevanceSelection() . ") as ranking"
+                "a.id as product_id",
+                "(" . $this->getRelevanceSelection() . ") as ranking"
             ]
         );
 
@@ -163,11 +163,11 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             $tablesSql[] = $query->getSQL();
         }
 
-        $tablesSql = "\n" .  implode("\n     UNION ALL\n", $tablesSql);
+        $tablesSql = "\n" . implode("\n     UNION ALL\n", $tablesSql);
 
         $subQuery = $this->connection->createQueryBuilder();
         $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance']);
-        $subQuery->from("(" . $tablesSql  . ')', 'srd')
+        $subQuery->from("(" . $tablesSql . ')', 'srd')
             ->groupBy('srd.articleID')
             ->setMaxResults(5000);
 
@@ -186,7 +186,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      */
     private function addToleranceCondition(QueryBuilder $query)
     {
-        $query->select("MAX(". $this->getRelevanceSelection() .")");
+        $query->select("MAX(" . $this->getRelevanceSelection() . ")");
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -205,18 +205,19 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
     /**
      * Get all tables and columns that might be involved in this search request as an array
+     *
      * @return array
      */
     private function getSearchTables()
     {
         return $this->connection->fetchAll("
             SELECT STRAIGHT_JOIN
-                st.id as tableID,
+                st.id AS tableID,
                 st.table,
                 st.where,
                 st.referenz_table, st.foreign_key,
-                GROUP_CONCAT(sf.id SEPARATOR ', ') as fieldIDs,
-                GROUP_CONCAT(sf.field SEPARATOR ', ') as `fields`
+                GROUP_CONCAT(sf.id SEPARATOR ', ') AS fieldIDs,
+                GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`
             FROM s_search_fields sf FORCE INDEX (tableID)
                 INNER JOIN s_search_tables st
                     ON st.id = sf.tableID

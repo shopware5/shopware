@@ -29,7 +29,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
  * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class TermHelper
+class TermHelper implements TermHelperInterface
 {
     /**
      * @var \Shopware_Components_Config
@@ -46,6 +46,7 @@ class TermHelper
 
     /**
      * Parse a string / search term into a keyword array
+     *
      * @param string $string
      * @return array
      */
@@ -54,8 +55,18 @@ class TermHelper
         $string = strtolower(html_entity_decode($string));
 
         $substitution = [
-            "ä" => "a", "Ä" => "a", "ö" => "o", "Ö" => "o", "ü" => "u", "Ü" => "u", "ß" => "ss", "\" " => " zoll ",
-            "`" => "", "´" => "", "'" => "", "-" => ""
+            "ä" => "a",
+            "Ä" => "a",
+            "ö" => "o",
+            "Ö" => "o",
+            "ü" => "u",
+            "Ü" => "u",
+            "ß" => "ss",
+            "\" " => " zoll ",
+            "`" => "",
+            "´" => "",
+            "'" => "",
+            "-" => ""
         ];
 
         // Remove not required chars from string
@@ -77,12 +88,13 @@ class TermHelper
         $words = $this->filterBadWordsFromString($words);
 
         sort($words);
+
         return $words;
     }
 
-
     /**
      * Filter out bad keywords before starting search
+     *
      * @param array $words
      * @return array|bool
      */
@@ -105,6 +117,7 @@ class TermHelper
 
     /**
      * Check if a keyword is on blacklist or not
+     *
      * @param string $word
      * @return bool
      */
@@ -114,11 +127,11 @@ class TermHelper
 
         if (!isset($badWords)) {
             $badWords = preg_split(
-            "#[\s,;]+#msi",
-            $this->config->get('badwords'),
-            -1,
-            PREG_SPLIT_NO_EMPTY
-        );
+                "#[\s,;]+#msi",
+                $this->config->get('badwords'),
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            );
         }
 
         if (in_array((string) $word, $badWords)) {

@@ -21,7 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
+
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
  * Shopware Plugin Frontend CronRefresh
@@ -32,12 +33,14 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
 {
     /**
      * Defining Cronjob-Events
+     *
      * @return bool
      */
     public function install()
     {
         $this->subscribeEvent('Shopware_CronJob_Clearing', 'onCronJobClearing');
         $this->subscribeEvent('Shopware_CronJob_Search', 'onCronJobSearch');
+
         return true;
     }
 
@@ -45,6 +48,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      * Clear s_emarketing_lastarticles / s_statistics_search / s_core_log in 30 days interval
      * Delete all entries older then 30 days.
      * To change this time - modify sql-queries
+     *
      * @static
      * @param Shopware_Components_Cron_CronJob $job
      * @return Array
@@ -53,27 +57,28 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     {
         // Delete all entries from lastarticles older than 30 days
         $sql = '
-            DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, interval -30 day)
+            DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, INTERVAL -30 DAY)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['lastarticles']['rows'] = $result->rowCount();
 
         // Delete all entries from search statistic older than 30 days
         $sql = '
-            DELETE FROM s_statistics_search WHERE datum < date_add(current_date, interval -30 day)
+            DELETE FROM s_statistics_search WHERE datum < date_add(current_date, INTERVAL -30 DAY)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['search']['rows'] = $result->rowCount();
 
         // Delete all entries from s_core_log older than 30 days
         $sql = '
-            DELETE FROM s_core_log WHERE `date` < date_add(current_date, interval -30 day)
+            DELETE FROM s_core_log WHERE `date` < date_add(current_date, INTERVAL -30 DAY)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['log']['rows'] = $result->rowCount();
 
         $data['referrer']['rows'] = $this->deleteOldReferrerData(Shopware()->Config()->maximumReferrerAge);
         $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData(Shopware()->Config()->maximumImpressionAge);
+
         return $data;
     }
 
@@ -97,7 +102,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      */
     public function onCronJobSearch(Shopware_Components_Cron_CronJob $job)
     {
-        /**@var $indexer SearchIndexer*/
+        /* @var $indexer SearchIndexerInterface */
         $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
     }
@@ -118,12 +123,12 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         //negate the value and quote it for the sql statement
         $maximumReferrerAge = Shopware()->Db()->quote($maximumReferrerAge * -1);
         $sql = '
-            DELETE FROM s_statistics_referer WHERE `datum` < date_add(current_date, interval '.$maximumReferrerAge.' day)
+            DELETE FROM s_statistics_referer WHERE `datum` < date_add(current_date, INTERVAL ' . $maximumReferrerAge . ' DAY)
         ';
         $result = Shopware()->Db()->query($sql);
+
         return $result->rowCount();
     }
-
 
     /**
      * Delete old entries from s_statistics_article_impression
@@ -141,9 +146,10 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         //negate the value and quote it for the sql statement
         $maximumAge = Shopware()->Db()->quote($maximumAge * -1);
         $sql = '
-            DELETE FROM  s_statistics_article_impression WHERE `date` < date_add(current_date, interval '.$maximumAge.' day)
+            DELETE FROM  s_statistics_article_impression WHERE `date` < date_add(current_date, INTERVAL ' . $maximumAge . ' DAY)
         ';
         $result = Shopware()->Db()->query($sql);
+
         return $result->rowCount();
     }
 }
