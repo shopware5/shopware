@@ -83,12 +83,12 @@
             showListingSelector: '.emotion--show-listing',
 
             /**
-             * The markup for the loading indicator.
+             * The DOM selector for the loading overlay.
              *
-             * @property loadingIndicator
+             * @property loadingOverlaySelector
              * @type {string}
              */
-            loadingIndicator: '<i class="icon--loading-indicator"></i>'
+            loadingOverlaySelector: '.emotion--overlay'
         },
 
         /**
@@ -108,11 +108,15 @@
 
             me.$emotion = false;
 
-            me.hasSiblings = !!me.$el.siblings(opts.wrapperSelector).length;
+            me.$siblings = me.$el.siblings(opts.wrapperSelector);
+
+            me.hasSiblings = (me.$siblings.length > 0);
             me.availableDevices = (opts.availableDevices + '').split(',');
 
             me.$fallbackContent = $(opts.fallbackContentSelector);
             me.$showListingLink = $(opts.showListingSelector);
+
+            me.$overlay = $(me.opts.loadingOverlaySelector);
 
             if (!opts.showListing) {
                 me.hideFallbackContent();
@@ -158,8 +162,19 @@
              * hide the wrapper element and show the default content.
              */
             if (devices.indexOf(types[state]) === -1) {
+                var hasSameDeviceSibling = false;
+
                 me.hideEmotion();
-                if (!me.hasSiblings) me.showFallbackContent();
+
+                me.$siblings.each(function(index, el) {
+                    var devices = $(el).attr('data-availabledevices');
+
+                    if (devices.indexOf(types[state]) !== -1) {
+                        hasSameDeviceSibling = true;
+                    }
+                });
+
+                if (!hasSameDeviceSibling) me.showFallbackContent();
                 return;
             }
 
@@ -179,6 +194,7 @@
 
                 if (!me.opts.showListing) me.hideFallbackContent();
 
+                me.$overlay.remove();
                 me.showEmotion();
                 return;
             }
@@ -194,6 +210,7 @@
             }
 
             me.isLoading = true;
+            me.$overlay.insertBefore('.content-main');
 
             $.ajax({
                 url: url,
@@ -201,6 +218,7 @@
                 success: function (response) {
 
                     me.isLoading = false;
+                    me.$overlay.remove();
 
                     if (!response.length) {
                         me.hideEmotion();
@@ -267,6 +285,8 @@
 
             me.$fallbackContent.removeClass('is--hidden');
             me.$showListingLink.addClass('is--hidden');
+
+            me.$overlay.remove();
 
             StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
 

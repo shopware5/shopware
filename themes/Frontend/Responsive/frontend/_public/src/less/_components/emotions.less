@@ -79,6 +79,54 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	}
 }
 
+	// Emotion loading overlay
+.emotion--overlay {
+	.unitize-width(50);
+	.unitize-height(50);
+	.unitize(top, 50);
+	.border-radius(3px);
+	margin: 0 auto;
+	position: relative;
+	left: 0;
+	z-index: 1000;
+
+	& .emotion--loading-indicator {
+		padding: 0;
+		position: absolute;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		margin: auto;
+	}
+
+	& ~ .content-main {
+		visibility: hidden;
+	}
+}
+
+	// Emotion loading indicator
+.emotion--loading-indicator {
+	.unitize-width(21);
+	.unitize-height(21);
+	.unitize-padding(50, 0);
+	margin: 0 auto;
+	display: block;
+	position: relative;
+	box-sizing: content-box;
+
+	&:before {
+		.border-radius(100%);
+		.animation(keyframe--spin 1s linear infinite);
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		display: block;
+		content: "";
+		border-width: 2px;
+		border-style: solid;
+		border-color: #333 #CCC #CCC #CCC;
+	}
+}
+
     // Emotion content
 .content--emotions {
 	display: block;
@@ -95,29 +143,6 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	display: block;
 	margin: 0 auto;
 	overflow: hidden;
-
-	.icon--loading-indicator {
-		.unitize-width(21);
-		.unitize-height(21);
-		.unitize-padding(50, 0);
-		margin: 0 auto;
-		display: block;
-		position: relative;
-		box-sizing: content-box;
-
-		&:before {
-			.border-radius(100%);
-			.animation(keyframe--spin 1s linear infinite);
-			width: 100%;
-			height: 100%;
-			box-sizing: border-box;
-			display: block;
-			content: "";
-			border-width: 2px;
-			border-style: solid;
-			border-color: #333 #CCC #CCC #CCC;
-		}
-	}
 }
 
     // Emotion container
