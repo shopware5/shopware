@@ -38,9 +38,6 @@ function smarty_function_compileLess($params, $template)
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
-    if ($shop->getMain()) {
-        $shop = $shop->getMain();
-    }
 
     /**@var $settings \Shopware\Models\Theme\Settings*/
     $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
@@ -60,7 +57,7 @@ function smarty_function_compileLess($params, $template)
     foreach($files as $key => $file) {
         $urls[$key] = $pathResolver->formatPathToUrl(
             $file,
-            $shop, 
+            $shop,
             $secure
         );
 
