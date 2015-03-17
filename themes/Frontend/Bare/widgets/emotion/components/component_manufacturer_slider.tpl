@@ -15,7 +15,13 @@
             <div class="manufacturer--content">
 
                 {block name="frontend_widgets_manufacturer_slider_container"}
-                    <div class="manufacturer--slider product-slider" data-product-slider="true" data-itemMinWidth="280">
+                    <div class="manufacturer--slider product-slider"
+                         data-product-slider="true"
+                         data-itemMinWidth="280"
+                         data-arrowControls="{if $Data.manufacturer_slider_arrows == 1}true{else}false{/if}"
+                         data-autoSlide="{if $Data.manufacturer_slider_rotation == 1}true{else}false{/if}"
+                         {if $Data.manufacturer_slider_scrollspeed}data-animationSpeed="{$Data.manufacturer_slider_scrollspeed}"{/if}
+                         {if $Data.manufacturer_slider_rotatespeed}data-autoSlideSpeed="{$Data.manufacturer_slider_rotatespeed / 1000}"{/if}>
 
                         <div class="product-slider--container">
                             {foreach $Data.values as $supplier}
