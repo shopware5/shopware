@@ -21,7 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
+
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
  * @category  Shopware
@@ -83,9 +84,9 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     public function getInfo()
     {
         return array(
-            'version'     => $this->getVersion(),
-            'label'       => $this->getLabel(),
-            'link'        => 'http://www.shopware.de/'
+            'version' => $this->getVersion(),
+            'label' => $this->getLabel(),
+            'link' => 'http://www.shopware.de/'
         );
     }
 
@@ -113,6 +114,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * The install function creates the plugin configuration
      * and subscribes all required events for this plugin
+     *
      * @return bool
      */
     public function install()
@@ -128,7 +130,10 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     protected function subscribeSearchIndexEvents()
     {
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex','getSearchIndexBackendController');
+        $this->subscribeEvent(
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex',
+            'getSearchIndexBackendController'
+        );
 
         $this->createCronJob('Refresh search index', 'RefreshSearchIndex', 86400, true);
         $this->subscribeEvent('Shopware_CronJob_RefreshSearchIndex', 'refreshSearchIndex');
@@ -140,7 +145,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     protected function subscribeSeoIndexEvents()
     {
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo','getSeoBackendController');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo', 'getSeoBackendController');
 
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_SeoIndex', 'initSeoIndexResource');
         $this->subscribeEvent('Enlight_Controller_Front_DispatchLoopShutdown', 'onAfterSendResponse');
@@ -151,6 +156,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
     /**
      * Event listener function of the search index rebuild cron job.
+     *
      * @param Enlight_Event_EventArgs $arguments
      * @return bool
      */
@@ -200,6 +206,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
     /**
      * Event listener function of the search index rebuild cron job.
+     *
      * @param Enlight_Event_EventArgs $arguments
      * @return bool
      */
@@ -211,13 +218,12 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return true;
         }
 
-        /**@var $indexer SearchIndexer*/
+        /* @var $indexer SearchIndexerInterface */
         $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 
         return true;
     }
-
 
     /**
      * This replaces the old event from the routerRewrite plugin
@@ -262,7 +268,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         return $this->Path() . 'Controllers/Seo.php';
     }
 
-
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex
      * event. This event is fired when shopware trying to access the plugin SearchIndex controller.
@@ -274,7 +279,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     {
         return $this->Path() . 'Controllers/SearchIndex.php';
     }
-
 
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
@@ -291,6 +295,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Plugin event listener function which is fired
      * when the also bought resource has to be initialed.
+     *
      * @return Shopware_Components_SeoIndex
      */
     public function initSeoIndexResource()
@@ -301,7 +306,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         );
 
         $seoIndex = Enlight_Class::Instance('Shopware_Components_SeoIndex');
+
         return $seoIndex;
     }
-
 }

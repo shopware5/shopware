@@ -22,36 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
+namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
+ * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
+interface SearchIndexerInterface
 {
     /**
-     * Helper function to get the new seo index component with auto completion
-     *
-     * @return Shopware_Components_SeoIndex
+     * Check if search index is valid anymore and rebuild if necessary
      */
-    public function SearchIndex()
-    {
-        return Shopware()->SearchIndex();
-    }
+    public function validate();
 
     /**
-     * This controller action is used to build the search index.
+     * Rebuilds the search index for the shopware default search query builder.
      */
-    public function buildAction()
-    {
-        @set_time_limit(1200);
-
-        /* @var $indexer SearchIndexerInterface */
-        $indexer = $this->get('shopware_searchdbal.search_indexer');
-        $indexer->build();
-
-        $this->View()->assign(array('success' => true));
-    }
+    public function build();
 }
