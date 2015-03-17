@@ -57,16 +57,20 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
         /**@var $shop \Shopware\Models\Shop\Shop*/
         foreach($shops as $shop) {
 
+            $id = $shop->getId();
+            if ($shop->getMain()) {
+                $id = $shop->getMain()->getId();
+            }
             $files = $this->pathResolver->getCssFilePaths($shop, $timestamp);
 
-            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $shop->getId() . '.css';
+            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $id . '.css';
             $this->assertEquals($expected, $files['default']);
 
 
             //js file name test
             $files = $this->pathResolver->getJsFilePaths($shop, $timestamp);
 
-            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $shop->getId() . '.js';
+            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $id . '.js';
             $this->assertEquals($expected, $files['default']);
         }
     }
