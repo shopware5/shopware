@@ -165,7 +165,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->setCookie("session-" . $shop->getId(),'',-1);
+                $response->setCookie("session-" . $shop->getId(), '', -1);
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -194,6 +194,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     protected function upgradeShop($request, $response)
     {
         $bootstrap = $this->Application()->Bootstrap();
+        /** @var $shop Shopware\Models\Shop\Shop */
         $shop = $this->Application()->Shop();
 
         $cookieKey = null;
@@ -231,22 +232,32 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             /** @var $repository Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $newShop = $repository->getActiveById($cookieValue);
+
             if ($newShop !== null) {
+                // Remove baseUrl from request url
                 $url = $request->getRequestUri();
                 $baseUrl = $request->getBaseUrl();
-                if(strpos($url, $baseUrl) === 0) {
+                if (strpos($url, $baseUrl) === 0) {
                     $url = substr($url, strlen($baseUrl));
                 }
-                $baseUrl = $newShop->getBaseUrl() ?: $baseUrl;
+
+                $baseUrl = $newShop->getBaseUrl() ?: $request->getBasePath();
                 $response->setRedirect($baseUrl . $url);
-                // On host change
-                if (($newShop->getHost() !== null && $newShop->getHost() !== $shop->getHost())
-                    || ($newShop->getBaseUrl() !== null && $newShop->getBaseUrl() !== $shop->getBaseUrl())
-                ) {
-                    $path = rtrim($newShop->getBasePath(), '/') . '/';
-                    $response->setCookie($cookieKey, $cookieValue, 0, $path);
-                    return;
+
+                if ($newShop->getBasePath()) {
+                    $cookiePath = $newShop->getBasePath();
+                } else {
+                    $cookiePath = $request->getBasePath();
                 }
+
+                $cookiePath = rtrim($cookiePath, '/') . '/';
+
+                // If shop is main, remove the cookie
+                $cookieTime = $newShop->getMain() === null ? time() - 3600 : 0;
+
+                $response->setCookie($cookieKey, $cookieValue, $cookieTime, $cookiePath);
+
+                return;
             }
         }
 
