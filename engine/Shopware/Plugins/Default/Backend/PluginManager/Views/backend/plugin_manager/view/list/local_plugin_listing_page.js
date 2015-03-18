@@ -358,6 +358,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 if (!record.allowUpdate()) {
                     return Ext.baseCSSPrefix + 'hidden';
                 }
+                this.items[4].tooltip = '{s name="install_update"}{/s} (v ' + record.get('availableVersion') + ')';
             }
         });
 

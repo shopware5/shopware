@@ -22,22 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\UpdateRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
-use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
+use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
+use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 
 class Shopware_Controllers_Backend_PluginManager
     extends Shopware_Controllers_Backend_ExtJs
@@ -55,6 +57,75 @@ class Shopware_Controllers_Backend_PluginManager
         }
 
         parent::preDispatch();
+    }
+
+    public function metaDownloadAction()
+    {
+        try {
+            $request = new MetaRequest(
+                $this->Request()->getParam('technicalName'),
+                $this->getVersion(),
+                $this->getDomain(),
+                $this->getAccessToken()
+            );
+
+            /**@var $service DownloadService */
+            $service = $this->get('shopware_plugininstaller.plugin_download_service');
+            $result = $service->getMetaInformation($request);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
+
+        $this->View()->assign(['success' => true, 'data' => $result]);
+    }
+
+    public function rangeDownloadAction()
+    {
+        $url    = $this->Request()->getParam('uri');
+        $offset = $this->Request()->getParam('offset');
+        $size   = $this->Request()->getParam('size');
+        $sha1   = $this->Request()->getParam('sha1');
+        $name   = $this->Request()->getParam('fileName', 'download.zip');
+
+        $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
+        if ($offset == 0) {
+            unlink($destination);
+        }
+
+        $request = new RangeDownloadRequest($url, $offset, $size, $sha1, $destination);
+
+        try {
+            /**@var $service DownloadService */
+            $service = $this->get('shopware_plugininstaller.plugin_download_service');
+            $result = $service->downloadRange($request);
+        } catch (Exception $e) {
+            $this->handleException($e);
+            return;
+        }
+
+        if ($result instanceof FinishResult) {
+            $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
+        } else {
+            /**@var $result \Shopware\Recovery\Update\Steps\ValidResult*/
+            $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
+        }
+    }
+
+    public function extractAction()
+    {
+        $technicalName = $this->Request()->getParam('technicalName');
+        $fileName      = $this->Request()->getParam('fileName');
+        $service       = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
+
+        try {
+            $service->extractPluginZip($fileName, $technicalName);
+            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        } catch (Exception $e) {
+            $this->View()->assign(['succees' => false, 'message' => $e->getMessage()]);
+        }
+
+        $this->View()->assign('success', true);
     }
 
     public function pingStoreAction()
@@ -119,10 +190,7 @@ class Shopware_Controllers_Backend_PluginManager
     public function storeListingAction()
     {
         if (!$this->isApiAvailable()) {
-            $this->View()->assign([
-                'success' => false,
-                'data' => []
-            ]);
+            $this->View()->assign(['success' => false, 'data' => []]);
             return;
         }
 
@@ -213,21 +281,12 @@ class Shopware_Controllers_Backend_PluginManager
     private function getListingSorting()
     {
         $prioritySorting = [
-            [
-                'property' => 'active',
-                'direction' => 'DESC'
-            ],
-            [
-                'property' => 'installation_date IS NULL',
-                'direction' => 'ASC'
-            ]
+            ['property' => 'active', 'direction' => 'DESC'],
+            ['property' => 'installation_date IS NULL', 'direction' => 'ASC']
         ];
 
         $fallbackSorting = [
-            [
-                'property' => 'installation_date',
-                'direction' => 'DESC'
-            ]
+            ['property' => 'installation_date', 'direction' => 'DESC']
         ];
 
         $customSorting = [];
@@ -419,41 +478,14 @@ class Shopware_Controllers_Backend_PluginManager
         ]);
     }
 
-    private function handleException(Exception $e)
+    public function importLicenceKeyAction()
     {
-        if ($e instanceof StoreException) {
-            $message = $this->getExceptionMessage($e);
-            if (empty($message)) {
-                $message = $e->getMessage();
-            }
-
-            $this->View()->assign([
-                'success' => false,
-                'message' => $message,
-                'authentication' => ($e instanceof AuthenticationException)
-            ]);
-        } else {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function downloadLicenceDirectAction()
-    {
-        $link = $this->Request()->getParam('binaryLink');
-
-        $licence = $this->Request()->getParam('licenceKey');
-        $domain  = $this->Request()->getParam('domain');
-
-        $struct = new LicenceStruct();
-        $struct->setBinaryLink($link);
-        $struct->setLicenseKey($licence);
-        $struct->setShop($domain);
+        $key = $this->Request()->getParam('licenceKey');
 
         try {
-            $this->downloadPluginLicence($struct);
+            /**@var $service PluginLicenceService*/
+            $service = $this->get('shopware_plugininstaller.plugin_licence_service');
+            $service->importLicence($key);
         } catch (Exception $e) {
             $this->handleException($e);
             return;
@@ -465,7 +497,7 @@ class Shopware_Controllers_Backend_PluginManager
     /**
      * @throws Exception
      */
-    public function downloadPluginLicenceAction()
+    public function importPluginLicenceAction()
     {
         $technicalName = $this->Request()->getParam('technicalName');
 
@@ -476,65 +508,32 @@ class Shopware_Controllers_Backend_PluginManager
             $technicalName
         );
 
+        /**@var $licence LicenceStruct*/
         $licence = $this->get('shopware_plugininstaller.plugin_service_store_production')
             ->getPluginLicence($context);
 
+        if (!$licence) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => sprintf('Licence for plugin %s not found', $technicalName)
+            ]);
+        }
+
+        if (!$licence->getLicenseKey()) {
+            return $this->View()->assign('success', true);
+        }
+
         try {
-            $this->downloadPluginLicence($licence);
+            /**@var $service PluginLicenceService*/
+            $service = $this->get('shopware_plugininstaller.plugin_licence_service');
+            $service->importLicence($licence->getLicenseKey());
+
         } catch (Exception $e) {
             $this->handleException($e);
             return;
         }
 
-        $this->View()->assign('success', true);
-    }
-
-    public function importPluginLicenceAction()
-    {
-        $key = $this->Request()->getParam('licenceKey');
-
-        try {
-            $this->importLicence($key);
-        } catch (Exception $e) {
-            $this->handleException($e);
-            return;
-        }
-
-        $this->View()->assign('success', true);
-    }
-
-    public function updateDummyPluginAction()
-    {
-        $technicalName = $this->Request()->getParam('technicalName', null);
-
-        try {
-            $this->get('shopware_plugininstaller.plugin_download_service')->downloadDummy(
-                $technicalName,
-                $this->getVersion()
-            );
-        } catch (Exception $e) {
-            $this->handleException($e);
-            return;
-        }
-
-        $this->View()->assign('success', true);
-    }
-
-    public function downloadUpdateAction()
-    {
-        $technicalName = $this->Request()->getParam('technicalName');
-
-        $context = new UpdateRequest(
-            $technicalName,
-            $this->getDomain(),
-            $this->getVersion(),
-            $this->getAccessToken()
-        );
-
-        $this->get('shopware_plugininstaller.plugin_download_service')
-            ->downloadUpdate($context);
-
-        $this->View()->assign('success', true);
+        return $this->View()->assign('success', true);
     }
 
     public function getAccessTokenAction()
@@ -544,10 +543,7 @@ class Shopware_Controllers_Backend_PluginManager
         if ($token == null) {
             $this->View()->assign('success', false);
         } else {
-            $this->View()->assign([
-                'success' => true,
-                'shopwareId' => $token->getShopwareId()
-            ]);
+            $this->View()->assign(['success' => true, 'shopwareId' => $token->getShopwareId()]);
         }
     }
 
@@ -694,27 +690,9 @@ class Shopware_Controllers_Backend_PluginManager
     }
 
     /**
-     * @param $licenceKey
-     * @return int
+     * @param BasketStruct $basket
+     * @param $positions
      */
-    private function importLicence($licenceKey)
-    {
-        /**@var $service PluginLicenceService*/
-        $service = $this->get('shopware_plugininstaller.plugin_licence_service');
-        return $service->importLicence($licenceKey);
-    }
-
-    /**
-     * @param LicenceStruct $licence
-     * @throws Exception
-     */
-    private function downloadPluginLicence(LicenceStruct $licence)
-    {
-        /**@var $service PluginLicenceService*/
-        $service = $this->get('shopware_plugininstaller.plugin_licence_service');
-        $service->downloadPluginLicence($this->getAccessToken(), $licence);
-    }
-
     private function loadBasketPlugins(BasketStruct $basket, $positions)
     {
         $context = new PluginsByTechnicalNameRequest(
@@ -749,5 +727,24 @@ class Shopware_Controllers_Backend_PluginManager
         }
 
         return null;
+    }
+
+    private function handleException(Exception $e)
+    {
+        if (!($e instanceof StoreException)) {
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+
+        $message = $this->getExceptionMessage($e);
+        if (empty($message)) {
+            $message = $e->getMessage();
+        }
+
+        $this->View()->assign([
+            'success' => false,
+            'message' => $message,
+            'authentication' => ($e instanceof AuthenticationException)
+        ]);
     }
 }
