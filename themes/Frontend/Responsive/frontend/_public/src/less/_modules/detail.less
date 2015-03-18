@@ -523,14 +523,14 @@ It contains the product actions, the product information such as pictures and de
         .unitize-margin(0, 0, 10, 0);
         .border-radius(3px);
         border: 1px solid @panel-border;
-        display: block;
+        display: none;
+
+        &.has--content {
+            display: block;
+        }
 
         &:last-child {
             .unitize-margin(0, 0);
-        }
-
-        &.no--content {
-            display: none;
         }
     }
 
@@ -552,10 +552,6 @@ It contains the product actions, the product information such as pictures and de
         &:after {
             content: "\e68f";
         }
-    }
-
-    .tab--link {
-        display: none;
     }
 }
 

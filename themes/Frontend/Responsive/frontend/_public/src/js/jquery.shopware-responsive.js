@@ -146,7 +146,8 @@ $(function () {
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if ($('.is--ctl-detail').length) {
         var tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu'),
-            tabMenuCrossSelling = $('.tab-menu--cross-selling').data('plugin_tabMenu');
+            $tabMenuCrossSelling = $('.tab-menu--cross-selling'),
+            $container;
 
         $('.product--rating-link, .link--publish-comment').on('click touchstart', function (event) {
             event.preventDefault();
@@ -163,24 +164,12 @@ $(function () {
             tabMenuProduct.changeTab(1);
         }
 
-        // Show the cross selling tabs if they have content when HTTP-Cache is active.
-        if (tabMenuCrossSelling) {
-            var activeContainerClass = tabMenuCrossSelling.opts.activeContainerClass;
+        if (StateManager.isCurrentState(['xs', 's']) && $tabMenuCrossSelling.length) {
+            $tabMenuCrossSelling.find('.tab--container').each(function (i, el) {
+                $container = $(el);
 
-            tabMenuCrossSelling.$contents.each(function (i, el) {
-                var $el = $(el),
-                    $con = $el.find('.tab--content');
-
-                if ($con.html().length) {
-                    $con.show();
-                    $(tabMenuCrossSelling.$tabs.get(i)).css('display', 'inline-block');
-                } else {
-                    $el.addClass('no--content');
-
-                    if ($el.hasClass(activeContainerClass)) {
-                        $el.removeClass(activeContainerClass)
-                        $(tabMenuCrossSelling.$contents.get(i + 1)).addClass(activeContainerClass);
-                    }
+                if ($container.find('.tab--content').html().length) {
+                    $container.addClass('has--content');
                 }
             });
         }
