@@ -40,7 +40,8 @@ body > .sidebar-main {
 }
 
 .mobile--switches {
-    .unitize-padding(10, 10);
+    .unitize-padding(8, 10);
+    .unitize-height(46);
     .clearfix();
     display: block;
 
@@ -122,10 +123,10 @@ body > .sidebar-main {
     }
 
     .navigation--link {
+        .unitize-padding(10, 20, 10, 20);
         width: 100%;
         height: 100%;
         display: block;
-        .unitize-padding(10, 20, 10, 20);
 
         .is--icon-right {
             .unitize(margin-top, 5);
@@ -147,7 +148,7 @@ body > .sidebar-main {
 
 .offcanvas--overlay {
     .unitize(width, 280);
-    .unitize(top, 44);
+    .unitize(top, 42);
     background: @gray;
     position: absolute;
     overflow-x: hidden;
@@ -169,7 +170,8 @@ body > .sidebar-main {
     }
 
     .overlay--category {
-        .unitize-margin(16, 10, 10, 10);
+        .unitize-margin(16, 10, 6, 10);
+        .unitize(line-height, 26);
 
         .category--headline {
             .unitize(font-size, 14);
