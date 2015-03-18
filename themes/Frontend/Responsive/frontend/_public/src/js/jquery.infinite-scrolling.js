@@ -270,7 +270,7 @@
             }
 
             if(me.currentPushState != tmpPushState) {
-                
+
                 me.currentPushState = tmpPushState;
                 if(!history || !history.pushState) {
                     return;
@@ -325,35 +325,31 @@
             // generate ajax fefch url by all params
             var url = me.ajax.url + '?' + $.param(me.params);
 
-            $.ajax({
-                'url': url,
-                'dataType': 'jsonp',
-                'success': function (data) {
-                    var template = data.trim();
+            $.get(url, function(data) {
+                var template = data.trim();
 
-                    // Cancel is no data provided
-                    if(!template) {
-                        me.isFinished = true;
-
-                        me.closeLoadingIndicator();
-                        return;
-                    }
-
-                    // append fetched data into listing
-                    me.$el.append(template);
-
-                    // trigger picturefill for regenerating thumbnail sizes
-                    picturefill();
+                // Cancel is no data provided
+                if(!template) {
+                    me.isFinished = true;
 
                     me.closeLoadingIndicator();
+                    return;
+                }
 
-                    // enable loading for further pages
-                    me.isLoading = false;
+                // append fetched data into listing
+                me.$el.append(template);
 
-                    // check if last page reached
-                    if(me.params.p >= me.maxPages) {
-                        me.isFinished = true;
-                    }
+                // trigger picturefill for regenerating thumbnail sizes
+                picturefill();
+
+                me.closeLoadingIndicator();
+
+                // enable loading for further pages
+                me.isLoading = false;
+
+                // check if last page reached
+                if(me.params.p >= me.maxPages) {
+                    me.isFinished = true;
                 }
             });
         },
@@ -437,26 +433,22 @@
             // generate ajax fefch url by all params
             var url = me.ajax.url + '?' + $.param(tmpParams);
 
-            $.ajax({
-                'url': url,
-                'dataType': 'jsonp',
-                'success': function(data) {
-                    var template = data.trim();
+            $.get(url, function(data) {
+                var template = data.trim();
 
-                    // append fetched data into listing
-                    me.$el.prepend(template);
+                // append fetched data into listing
+                me.$el.prepend(template);
 
-                    picturefill();
+                picturefill();
 
-                    me.closeLoadingIndicator();
+                me.closeLoadingIndicator();
 
-                    // enable loading for further pages
-                    me.isLoading = false;
+                // enable loading for further pages
+                me.isLoading = false;
 
-                    // Set load previous button if we aren't already on page one
-                    if(tmpParams.p > 1) {
-                        me.showLoadPrevious();
-                    }
+                // Set load previous button if we aren't already on page one
+                if(tmpParams.p > 1) {
+                    me.showLoadPrevious();
                 }
             });
         },
