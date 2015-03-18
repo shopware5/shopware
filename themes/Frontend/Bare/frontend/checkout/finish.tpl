@@ -121,7 +121,7 @@
 								{$sUserData.billingaddress.street}<br />
 								{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
 								{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
-								{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
+                                {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
 								{if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
 								{$sUserData.additional.country.countryname}
 							</div>
@@ -153,7 +153,7 @@
 								{$sUserData.shippingaddress.street}<br />
 								{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
 								{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
-								{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
+                                {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
 								{if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
 								{$sUserData.additional.countryShipping.countryname}
 							</div>

@@ -97,10 +97,14 @@ td.head  {
 					{/if}
 				{/block}
 				{block name="document_index_address_cityZip"}
-				{$User.$address.zipcode} {$User.$address.city}<br />
+                    {if {config name=showZipBeforeCity}}
+                        {$User.$address.zipcode} {$User.$address.city}<br />
+                    {else}
+                        {$User.$address.city} {$User.$address.zipcode}<br />
+                    {/if}
 				{/block}
 				{block name="document_index_address_countryData"}
-				{if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
+				    {if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
 				{/block}
 			</div>
 		{/if}
