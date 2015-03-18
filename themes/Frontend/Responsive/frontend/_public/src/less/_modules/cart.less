@@ -448,6 +448,16 @@ Shopware offers two different shopping cart element options that can be selected
         }
     }
 
+    .product-slider--arrow {
+        &.arrow--next {
+            .unitize(right, -1);
+        }
+
+        &.arrow--prev {
+            .unitize(left, -1);
+        }
+    }
+
     .product--inner {
         .unitize-padding(5, 30);
         .unitize-margin(0, 0, 10);
@@ -456,6 +466,7 @@ Shopware offers two different shopping cart element options that can be selected
             .border-radius();
             .unitize-height(175);
             .unitize-margin(0, 0, 15, 0);
+            .unitize-padding(10, 10);
             display: block;
             border: 1px solid @border-color;
             position: relative;
@@ -484,7 +495,6 @@ Shopware offers two different shopping cart element options that can be selected
         }
 
         .premium-product--badge {
-            .box-shadow();
             .border-radius(38px);
             .unitize-height(38);
             .unitize-width(38);
