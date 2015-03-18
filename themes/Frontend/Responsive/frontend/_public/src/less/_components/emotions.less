@@ -311,7 +311,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	position: relative;
 
 	.product-slider--title {
-		.unitize-height(55px);
+		.unitize-height(55);
 		position: relative;
 		top: 0; left: 0;
 		z-index: 500;
@@ -458,10 +458,26 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .emotion--manufacturer {
 	width: 100%;
 	height: 100%;
+	position: relative;
+
+	.manufacturer--title {
+		.unitize-height(55);
+		position: relative;
+		top: 0; left: 0;
+		z-index: 500;
+	}
 
 	.manufacturer--content {
-		.unitize-padding(10, 20, 0, 20);
+		.unitize-padding(10, 20);
 		height: 100%;
+		width: 100%;
+		position: absolute;
+		top: 0; left: 0;
+		z-index: 400;
+	}
+
+	.manufacturer--title ~ .manufacturer--content {
+		.unitize(padding-top, 65);
 	}
 
 	.manufacturer--slider {
