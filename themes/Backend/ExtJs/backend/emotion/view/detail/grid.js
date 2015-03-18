@@ -690,6 +690,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                     model.getComponent().add(record);
                     elements.push(model);
 
+                    me.ownerCt.fireEvent('emotion-new-element-dropped', record);
+
                     /**
                      * The record is an element on the stage and just need to get new row and col properties
                      */
