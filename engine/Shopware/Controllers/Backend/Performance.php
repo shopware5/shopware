@@ -71,6 +71,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function toggleProductiveModeAction()
     {
+        /** @var Plugin $httpCache */
         $httpCache = $this->getPluginByName('HttpCache');
 
         if (!$httpCache) {
@@ -78,7 +79,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return;
         }
 
-        switch($httpCache->getActive()) {
+        switch ($httpCache->getActive()) {
             case true:
                 $this->deactivateHttpCache($httpCache);
                 break;
@@ -111,7 +112,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * deactivate httpCache-Plugin
      * @param Plugin $httpCache
      */
-    public function deactivateHttpCache($httpCache)
+    private function deactivateHttpCache($httpCache)
     {
         if (!$httpCache->getActive()) {
             return;

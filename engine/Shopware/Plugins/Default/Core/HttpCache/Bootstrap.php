@@ -155,6 +155,30 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
+     * Enable plugin method
+     * Although plugin is flagged as capability: enable => false,
+     * it can still be enabled/disabled programmatically
+     *
+     * @return bool
+     */
+    public function enable()
+    {
+        return true;
+    }
+
+    /**
+     * Disable plugin method
+     * Although plugin is flagged as capability: enable => false,
+     * it can still be enabled/disabled programmatically
+     *
+     * @return bool
+     */
+    public function disable()
+    {
+        return true;
+    }
+
+    /**
      * Install config-form
      */
     public function installForm()
