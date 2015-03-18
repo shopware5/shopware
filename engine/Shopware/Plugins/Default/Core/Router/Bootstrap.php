@@ -148,12 +148,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             /** @var Shopware\Models\Shop\Shop $shop */
             $shop = $this->Application()->Shop();
 
-            if ($shop->getAlwaysSecure() && !$request->isSecure()) {
-                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $request->getRequestUri();
-            } elseif ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
-                $newPath = $request::SCHEME_HTTPS . '://' . $shop->getSecureHost() . $request->getRequestUri();
+            if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
+                $newPath = 'https://' . $shop->getSecureHost() . $request->getRequestUri();
             } elseif (!$request->isSecure() && $request->getHttpHost() !== $shop->getHost()) {
-                $newPath = $request::SCHEME_HTTP . '://' . $shop->getHost() . $shop->getBaseUrl();
+                $newPath = 'http://' . $shop->getHost() . $shop->getBaseUrl();
             }
 
             // Strip /shopware.php/ from string and perform a redirect
