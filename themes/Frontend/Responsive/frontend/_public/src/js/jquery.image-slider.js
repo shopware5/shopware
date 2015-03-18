@@ -781,7 +781,7 @@
 
                     if (transitionProperty && transformProperty) {
                         slideStyle[transitionProperty] = 'none';
-                        slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%) translateZ(0)';
+                        slideStyle[transformProperty] = 'translateX(' + (offset + percentage) + '%)';
                     } else {
                         slideStyle.left = (offset + percentage) + '%';
                     }
@@ -1449,7 +1449,7 @@
 
             if (transformProperty && transitionProperty) {
                 slideStyle[transitionProperty] = 'none';
-                slideStyle[transformProperty] = 'translateX(' + percentage + '%) translateZ(0)';
+                slideStyle[transformProperty] = 'translateX(' + percentage + '%)';
             } else {
                 slideStyle.left = percentage + '%';
             }
@@ -1689,7 +1689,7 @@
             me.resetTransformation(true, function () {
                 if (transitionProperty && transformProperty) {
                     slideStyle[transitionProperty] = 'all ' + opts.animationSpeed + 'ms ' + opts.animationEasing;
-                    slideStyle[transformProperty] = 'translateX(' + (index * -100) + '%) translateZ(0)';
+                    slideStyle[transformProperty] = 'translateX(' + (index * -100) + '%)';
 
                     if (typeof callback === 'function') {
                         setTimeout($.proxy(callback, me), opts.animationSpeed);
