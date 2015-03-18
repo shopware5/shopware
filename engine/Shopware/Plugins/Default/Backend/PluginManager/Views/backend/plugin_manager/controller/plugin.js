@@ -30,21 +30,23 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'reinstall-plugin':            me.reinstallPlugin,
             'activate-plugin':             me.activatePlugin,
             'deactivate-plugin':           me.deactivatePlugin,
-            'update-plugin':               me.updatePlugin,
             'execute-plugin-update':       me.executePluginUpdate,
-            'update-dummy-plugin':         me.updateDummyPlugin,
-            'upload-plugin':               me.uploadPlugin,
-            'delete-plugin':               me.deletePlugin,
-            'reload-plugin':               me.reloadPlugin,
-            'store-login':                 me.login,
+
             'download-plugin-licence':     me.downloadPluginLicenceDirect,
-            'reload-local-listing':        me.reloadLocalListing,
-            'import-plugin-licence':       me.importPluginLicence,
-            'save-plugin-configuration':   me.saveConfiguration,
+            'update-plugin':               me.updatePlugin,
+            'update-dummy-plugin':         me.updateDummyPlugin,
             'buy-plugin':                  me.purchasePlugin,
             'rent-plugin':                 me.purchasePlugin,
             'download-free-plugin':        me.purchasePlugin,
             'request-plugin-test-version': me.purchasePlugin,
+            'import-plugin-licence':       me.importLicenceKey,
+
+            'upload-plugin':               me.uploadPlugin,
+            'delete-plugin':               me.deletePlugin,
+            'reload-plugin':               me.reloadPlugin,
+            'reload-local-listing':        me.reloadLocalListing,
+            'save-plugin-configuration':   me.saveConfiguration,
+            'store-login':                 me.login,
             'check-store-login':           me.checkLogin,
             'open-login':                  me.openLogin,
             'check-licence-plugin':        me.checkLicencePlugin,
@@ -86,27 +88,55 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         });
     },
 
+    updatePlugin: function(plugin, callback) {
+        var me = this;
+
+        me.authenticateForUpdate(plugin, function() {
+            me.startPluginDownload(plugin, function() {
+                me.displayLoadingMask(plugin, '{s name=execute_update}{/s}');
+                me.executePluginUpdate(plugin, function() {
+
+                    Shopware.app.Application.fireEvent('load-update-listing', function() {
+                        me.hideLoadingMask();
+                        callback();
+                    })
+                });
+            });
+        });
+    },
+
     updateDummyPlugin: function(plugin, callback) {
         var me = this;
 
         if (plugin.get('technicalName') == 'SwagLicense') {
             me.checkIonCube(plugin, function() {
-                me.updateDummyPluginDirect(plugin, callback);
+                me.startPluginDownload(plugin, callback);
             });
         } else {
-            me.updateDummyPluginDirect(plugin, callback);
+            me.startPluginDownload(plugin, callback);
         }
     },
 
-    updateDummyPluginDirect: function(plugin, callback) {
+    startPluginDownload: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_installed"}{/s}');
+        me.hideLoadingMask();
 
         me.sendAjaxRequest(
-            '{url controller=PluginManager action=updateDummyPlugin}',
+            '{url controller=PluginManager action=metaDownload}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                var mask = me.createDownloadMask(plugin, response.data, function(fileName) {
+                    me.sendAjaxRequest(
+                        '{url controller=PluginManager action=extract}',
+                        { technicalName: plugin.get('technicalName'), fileName: fileName },
+                        callback
+                    );
+                });
+
+                mask.show();
+                mask.startDownload(0);
+            }
         );
     },
 
@@ -126,24 +156,38 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     priceType: price.get('type')
                 },
                 function(response) {
-
                     me.checkoutWindow.hide();
 
-                    me.downloadPluginLicence(plugin, function(downloadResponse) {
-
-                        me.pluginBoughtEvent(plugin);
-
-                        callback(downloadResponse);
+                    me.startPluginDownload(plugin, function() {
+                        me.importPluginLicence(plugin, function() {
+                            me.pluginBoughtEvent(plugin);
+                            callback();
+                        });
                     });
                 }
             );
         });
     },
 
-    importPluginLicence: function(licence, callback) {
+    importPluginLicence: function(plugin, callback) {
         var me = this;
 
+        me.displayLoadingMask(plugin, '{s name="licence_is_being_imported"}{/s}');
+
+        me.sendAjaxRequest(
+            '{url controller="PluginManager" action="importPluginLicence"}',
+            { technicalName: plugin.get('technicalName') },
+            callback
+        );
+    },
+
+    importLicenceKey: function(licence, callback) {
+        var me = this;
+
+        me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}{/s}');
+
         if (!licence.get('licenseKey')) {
+            me.hideLoadingMask();
             callback();
             return;
         }
@@ -155,7 +199,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}{/s}');
 
                 me.sendAjaxRequest(
-                    '{url controller="PluginManager" action="importPluginLicence"}',
+                    '{url controller="PluginManager" action="importLicenceKey"}',
                     {
                         licenceKey: licence.get('licenseKey')
                     },
@@ -170,36 +214,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.checkIonCube(licence, function() {
-
             me.checkLicencePlugin(licence, function () {
-
-                me.displayLoadingMask(licence, '{s name="plugin_is_being_downloaded"}{/s}');
-
-                me.sendAjaxRequest(
-                    '{url controller="PluginManager" action="downloadLicenceDirect"}',
-                    {
-                        domain    : licence.get('shop'),
-                        binaryLink: licence.get('binaryLink'),
-                        licenceKey: licence.get('licenseKey')
-                    },
-                    callback
-                );
-
+                me.startPluginDownload(licence, function() {
+                    me.importLicenceKey(licence, callback);
+                });
             });
         });
     },
 
-    downloadPluginLicence: function(plugin, callback) {
-        var me = this;
-
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_downloaded"}{/s}');
-
-        me.sendAjaxRequest(
-            '{url controller="PluginManager" action="downloadPluginLicence"}',
-            { technicalName: plugin.get('technicalName') },
-            callback
-        );
-    },
 
     checkout: function(plugin, price, callback) {
         var me = this;
@@ -233,6 +255,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     store.load({
                         callback: function(records) {
                             var basket = records[0];
+
+                            me.hideLoadingMask();
 
                             me.checkoutWindow = me.getView('account.Checkout').create({
                                 basket: basket,
@@ -342,21 +366,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
     },
 
-    updatePlugin: function(plugin, callback) {
-        var me = this;
 
-        me.authenticateForUpdate(plugin, function() {
-            me.displayLoadingMask(plugin, '{s name="download_update_and_install"}{/s}');
-
-            me.sendAjaxRequest(
-                '{url controller=PluginManager action=downloadUpdate}',
-                { technicalName: plugin.get('technicalName') },
-                function(response) {
-                    me.executePluginUpdate(plugin, callback);
-                }
-            );
-        });
-    },
 
     authenticateForUpdate: function(plugin, callback) {
         var me = this;
