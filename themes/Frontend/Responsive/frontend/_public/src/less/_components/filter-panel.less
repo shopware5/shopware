@@ -544,8 +544,16 @@ The styling includes the collapsed and expanded styling and the panel component 
     font-weight: 600;
     width: 100%;
 
-    [class^="icon--"] {
+    &.is--icon-right [class^="icon--"] {
         .unitize(font-size, 14);
+        .unitize(line-height, 16);
+        .unitize-margin(-8, 0, 0, 0);
+    }
+
+    &.is--loading {
+        [class^="icon--"] {
+            .animation(keyframe--spin-reverse 1s linear infinite);
+        }
     }
 
     .filter--count {

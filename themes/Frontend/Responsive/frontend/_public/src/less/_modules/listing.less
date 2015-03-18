@@ -281,41 +281,41 @@ It contains the viewport specific styles inside media queries.
 
         .filter--trigger {
             .action--collapse-icon {
+                display: none;
+            }
+
+            &:before,
+            &:after {
+                .transition(margin-top .4s cubic-bezier(.02, .01, .47, 1));
                 .unitize-width(16);
                 .unitize-height(16);
                 .unitize(right, 10);
                 .unitize(margin-top, -8);
                 .unitize(font-size, 6);
                 .unitize(line-height, 16);
-                .reset-border-radius();
-                display: inline-block;
-                padding: 0;
-                position: absolute;
-                top: 50%;
                 font-family: "shopware";
+                content: "\e612";
+                position: absolute;
                 text-align: center;
                 background: none;
                 color: inherit;
+                top: 50%;
+            }
 
-                &:before {
-                    .transition(margin-top .4s cubic-bezier(.02, .01, .47, 1));
-                    .unitize(margin-top, -46);
-                    content: "\e610";
-                    display: block;
-                }
-
-                &:after {
-                    .unitize(margin-top, 30);
-                    content: "\e612";
-                    display: block;
-                }
+            &:after {
+                .unitize(margin-top, -48);
+                content: "\e610";
             }
 
             &.is--active {
                 .is--primary();
 
-                .action--collapse-icon:before {
-                    margin-top: 0;
+                &:before {
+                    .unitize(margin-top, 40);
+                }
+
+                &:after {
+                    .unitize(margin-top, -8);
                 }
             }
         }

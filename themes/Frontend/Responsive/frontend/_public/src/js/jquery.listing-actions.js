@@ -1,4 +1,4 @@
-;(function($, StateManager, undefined) {
+;(function($, window, StateManager, undefined) {
     'use strict';
 
     var $body = $('body');
@@ -72,6 +72,11 @@
             filterTriggerSelector: '*[data-filter-trigger="true"]',
 
             /**
+             * The selector for the icon inside the filter trigger button.
+             */
+            filterTriggerIconSelector: '.action--collapse-icon',
+
+            /**
              * The selector for the filter panel element.
              */
             filterContainerSelector: '.action--filter-options',
@@ -127,6 +132,17 @@
             disabledCls: 'is--disabled',
 
             /**
+             * Selector for the element that contains the found product count.
+             */
+            filterCountSelector: '.filter--count',
+
+            /**
+             * Class that will be added to the apply filter button
+             * when loading the results.
+             */
+            loadingClass: 'is--loading',
+
+            /**
              * The characters used as a prefix to identify property field names.
              * The properties will be merged in one GET parameter.
              * For example properties with field names beginning with __f__"ID"
@@ -157,7 +173,7 @@
             me.$filterForm = $(me.opts.filterFormSelector);
             me.$filterComponents = me.$el.find(me.opts.filterComponentSelector);
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
-            me.$filterTriggerIcon = me.$filterTrigger.find('.action--collapse-icon');
+            me.$filterTriggerIcon = me.$filterTrigger.find(me.opts.filterTriggerIconSelector);
             me.$filterCont = me.$el.find(me.opts.filterContainerSelector);
             me.$actionForms = $(me.opts.actionFormSelector);
             me.$actionLinks = $(me.opts.actionLinkSelector);
@@ -165,14 +181,13 @@
             me.$applyFilterBtn = me.$el.find(me.opts.applyFilterBtnSelector);
 
             me.resultCountURL = me.$filterForm.attr('data-count-ctrl');
-            me.controllerURL = top.location.href.split('?')[0];
-            me.categoryId = me.$el.attr('data-category-id');
+            me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
             me.propertyFieldNames = [];
             me.activeFilterElements = {};
             me.categoryParams = {};
             me.urlParams = '';
-            me.bufferTimeout = false;
+            me.bufferTimeout = 0;
 
             me.getPropertyFieldNames();
             me.setCategoryParamsFromTopLocation();
@@ -187,25 +202,56 @@
          * Initializes the state manager for specific device options.
          */
         initStateHandling: function() {
+            var me = this,
+                enterFn = $.proxy(me.onEnterMobile, me),
+                exitFn = $.proxy(me.onExitMobile, me);
+
+            StateManager.registerListener([
+                {
+                    state: 'xs',
+                    enter: enterFn,
+                    exit: exitFn
+                },
+                {
+                    state: 's',
+                    enter: enterFn,
+                    exit: exitFn
+                }
+            ]);
+        },
+
+        /**
+         * Called when entering the xs or s viewport.
+         * Removes/Clears style attributes that were set in higher viewports.
+         */
+        onEnterMobile: function () {
+            var me = this,
+                opts = me.opts;
+
+            me.$filterForm.removeAttr('style');
+
+            me.$activeFilterCont.removeAttr('style').removeClass(opts.disabledCls);
+
+            me.$filterCont.removeClass(opts.collapsedCls);
+
+            me.$filterTrigger.removeClass(opts.activeCls);
+        },
+
+        /**
+         * Called when exiting the xs or s viewport.
+         * Add the disabled class to the active filter container
+         * when it has active filter elements.
+         */
+        onExitMobile: function () {
             var me = this;
 
-            StateManager.registerListener([{
-                state: 'xs',
-                enter: function() {
-                    me.$filterForm.removeAttr('style');
+            if (StateManager.isCurrentState(['xs', 's'])) {
+                return;
+            }
 
-                    me.$activeFilterCont.removeAttr('style')
-                        .removeClass(me.opts.disabledCls);
-
-                    me.$filterCont.removeClass(me.opts.collapsedCls)
-                        .removeClass(me.opts.hasActiveFilterCls);
-
-                    me.$filterTrigger.removeClass(me.opts.activeCls);
-                },
-                exit: function() {
-                    me.$filterTriggerIcon.html('').removeAttr('style');
-                }
-            }]);
+            if (Object.keys(me.activeFilterElements).length) {
+                me.$activeFilterCont.addClass(me.opts.disabledCls);
+            }
         },
 
         /**
@@ -332,6 +378,8 @@
 
             me.createActiveFiltersFromCategoryParams(categoryParams);
 
+            me.$applyFilterBtn.addClass(me.opts.loadingClass);
+
             me.buffer($.proxy(me.getFilterResult, me, urlParams), me.opts.bufferTime)
         },
 
@@ -345,7 +393,8 @@
         onActiveFilterClick: function(event) {
             var me = this,
                 $activeFilter = $(event.currentTarget),
-                param = $activeFilter.attr('data-filter-param');
+                param = $activeFilter.attr('data-filter-param'),
+                isMobile = StateManager.isCurrentState(['xs', 's']);
 
             if (param == 'reset') {
                 $.each(me.activeFilterElements, function(key) {
@@ -353,11 +402,11 @@
                     me.resetFilterProperty(key);
                 });
 
-                if (!StateManager.isCurrentState(['xs', 's']) && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
+                if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
 
-            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
@@ -410,7 +459,7 @@
          */
         setCategoryParamsFromTopLocation: function() {
             var me = this,
-                urlParams = decodeURI(top.location.search).substr(1);
+                urlParams = decodeURI(window.location.search).substr(1);
 
             return me.setCategoryParamsFromUrlParams(urlParams);
         },
@@ -509,7 +558,7 @@
             var me = this,
                 params = urlParams || me.urlParams;
 
-            top.location.href = me.getListingUrl(params, true);
+            window.location.href = me.getListingUrl(params, true);
         },
 
         /**
@@ -551,7 +600,7 @@
          * Resets the current buffer timeout.
          */
         resetBuffer: function() {
-            this.bufferTimeout = false;
+            this.bufferTimeout = 0;
         },
 
         /**
@@ -571,6 +620,8 @@
                 type: 'get',
                 url: me.resultCountURL + params,
                 success: function(response) {
+                    me.$applyFilterBtn.removeClass(me.opts.loadingClass);
+
                     me.updateFilterButton(response.totalCount);
                 }
             });
@@ -585,7 +636,7 @@
         updateFilterButton: function(count) {
             var me = this;
 
-            me.$applyFilterBtn.find('.filter--count').html(count);
+            me.$applyFilterBtn.find(me.opts.filterCountSelector).html(count);
 
             if (count <= 0) {
                 me.$applyFilterBtn.attr('disabled', 'disabled');
@@ -601,26 +652,15 @@
          * @param activeFilterCount
          */
         updateFilterTriggerButton: function(activeFilterCount) {
-            var me = this;
-
-            if (!StateManager.isCurrentState(['xs', 's'])) {
-                return;
-            }
-
-            if (activeFilterCount > 0) {
-                me.$filterTriggerIcon.html(activeFilterCount).show();
-            } else {
-                me.$filterTriggerIcon.html('').hide();
-            }
+            this.$filterTriggerIcon.html(activeFilterCount || '');
         },
 
         /**
          * Creates the labels for active filters from the category params.
          *
          * @param categoryParams
-         * @param checkContainerState
          */
-        createActiveFiltersFromCategoryParams: function(categoryParams, checkContainerState) {
+        createActiveFiltersFromCategoryParams: function(categoryParams) {
             var me = this,
                 count = 0,
                 params = categoryParams || me.categoryParams;
@@ -643,12 +683,10 @@
                 me.createActiveFilterElement('reset', me.resetLabel);
             }
 
-            if (StateManager.isCurrentState(['xs', 's'])) {
-                me.updateFilterTriggerButton(count);
-            } else {
-                me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
-                me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
-            }
+            me.updateFilterTriggerButton(count);
+
+            me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
+            me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
         },
 
         /**
@@ -842,4 +880,4 @@
             me._destroy();
         }
     });
-})(jQuery, StateManager, undefined);
+})(jQuery, window, StateManager, undefined);
