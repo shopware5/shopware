@@ -68,8 +68,13 @@
 		{* Zip + City *}
 		{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
 			<div class="register--zip-city">
-				<input autocomplete="section-shipping shipping postal-code" name="register[shipping][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode2" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
-				<input autocomplete="section-shipping shipping address-level2" name="register[shipping][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city2" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
+                {if {config name=showZipBeforeCity}}
+                    <input autocomplete="section-shipping shipping postal-code" name="register[shipping][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode2" value="{$form_data.zipcode|escape}" class="register--field register--spacer register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+                    <input autocomplete="section-shipping shipping address-level2" name="register[shipping][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city2" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
+                {else}
+                    <input autocomplete="section-shipping shipping address-level2" name="register[shipping][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city2" value="{$form_data.city|escape}" size="25" class="register--field register--spacer register--field-city is--required{if $error_flags.city} has--error{/if}" />
+                    <input autocomplete="section-shipping shipping postal-code" name="register[shipping][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode2" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+                {/if}
 			</div>
 		{/block}
 
