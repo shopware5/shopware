@@ -114,9 +114,18 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             category: '{s name=progress/category}[0] of [1] category urls{/s}',
             emotion: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
             blog: '{s name=progress/blog}[0] of [1] blog urls{/s}',
-            statistic: '{s name=progress/statistic}[0] of [1] statistic urls{/s}',
+            static: '{s name=progress/static}[0] of [1] static urls{/s}',
             content: '{s name=progress/content}[0] of [1] content urls{/s}',
             supplier: '{s name=progress/supplier}[0] of [1] supplier urls{/s}'
+        },
+        seoListing: {
+            article: '{s name=listing/articles}Article URLs{/s}',
+            category: '{s name=listing/category}Category URLs{/s}',
+            emotion: '{s name=listing/emotion}Emotion URLs{/s}',
+            blog: '{s name=listing/blog}Blog URLs{/s}',
+            static: '{s name=listing/static}Static URLs{/s}',
+            content: '{s name=listing/content}Content URLs{/s}',
+            supplier: '{s name=listing/supplier}Supplier URLs{/s}'
         },
         httpCacheWarmer: {
             initialArticle: '{s name=progress/initialArticles}Article URLs...{/s}',
@@ -178,13 +187,13 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     createSeoItems: function() {
         var me = this;
 
-        me.articleProgress = me.createProgressBar('article', 'Articles ...');
-        me.categoryProgress = me.createProgressBar('category', 'Categories ...');
-        me.emotionProgress = me.createProgressBar('emotion', 'Emotions ...');
-        me.statisticProgress = me.createProgressBar('statistic', 'Statistics ...');
-        me.blogProgress = me.createProgressBar('blog', 'Blogs ...');
-        me.contentProgress = me.createProgressBar('content', 'Contents ...');
-        me.supplierProgress = me.createProgressBar('supplier', 'Suppliers ...');
+        me.articleProgress = me.createProgressBar('article', me.snippets.seoListing.article);
+        me.categoryProgress = me.createProgressBar('category', me.snippets.seoListing.category);
+        me.emotionProgress = me.createProgressBar('emotion', me.snippets.seoListing.emotion);
+        me.staticProgress = me.createProgressBar('static', me.snippets.seoListing.static);
+        me.blogProgress = me.createProgressBar('blog', me.snippets.seoListing.blog);
+        me.contentProgress = me.createProgressBar('content', me.snippets.seoListing.content);
+        me.supplierProgress = me.createProgressBar('supplier', me.snippets.seoListing.supplier);
 
         return [
             me.createShopCombo(),
@@ -196,7 +205,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     me.categoryProgress,
                     me.emotionProgress,
                     me.blogProgress,
-                    me.statisticProgress,
+                    me.staticProgress,
                     me.contentProgress,
                     me.supplierProgress
                 ]
@@ -263,15 +272,12 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         return me.shopCombo;
     },
 
-
-
     /**
      * Helper function to create the window items for the search index
      */
     createSearchIndexItems: function() {
 
     },
-
 
     /**
      * Registers additional component events.
