@@ -117,6 +117,12 @@ class Element extends ModelEntity
     protected $allowBlank = true;
 
     /**
+     * @var bool
+     * @ORM\Column(name="less_compatible", type="boolean", nullable=false)
+     */
+    protected $lessCompatible = true;
+
+    /**
      * @var string
      * @ORM\Column(name="attributes", type="array", nullable=false)
      */
@@ -366,5 +372,21 @@ class Element extends ModelEntity
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isLessCompatible()
+    {
+        return $this->lessCompatible;
+    }
+
+    /**
+     * @param boolean $lessCompatible
+     */
+    public function setLessCompatible($lessCompatible)
+    {
+        $this->lessCompatible = $lessCompatible;
     }
 }

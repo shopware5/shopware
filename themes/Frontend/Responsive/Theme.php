@@ -1254,7 +1254,7 @@ class Theme extends \Shopware\Components\Theme
                 'additionalCssData',
                 '__additional_css_data__',
                 '',
-                array('attributes' => array('xtype' => 'textarea'), 'help' => '__additional_css_data_description__')
+                array('attributes' => array('xtype' => 'textarea', 'lessCompatible' => false), 'help' => '__additional_css_data_description__')
             )
         );
 
@@ -1263,7 +1263,7 @@ class Theme extends \Shopware\Components\Theme
                 'additionalJsLibraries',
                 '__additional_js_libraries__',
                 '',
-                array('attributes' => array('xtype' => 'textarea'), 'help' => '__additional_js_libraries_description__')
+                array('attributes' => array('xtype' => 'textarea', 'lessCompatible' => false), 'help' => '__additional_js_libraries_description__')
             )
         );
 
