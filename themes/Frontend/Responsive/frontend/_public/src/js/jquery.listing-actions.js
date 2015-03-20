@@ -166,7 +166,8 @@
          * Initializes the plugin.
          */
         init: function() {
-            var me = this;
+            var me = this,
+                filterCount;
 
             me.applyDataAttributes();
 
@@ -193,6 +194,12 @@
             me.setCategoryParamsFromTopLocation();
             me.createActiveFiltersFromCategoryParams();
             me.createUrlParams();
+
+            filterCount = Object.keys(me.activeFilterElements).length;
+
+            me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
+
+
 
             me.initStateHandling();
             me.registerEvents();
@@ -682,8 +689,6 @@
             if (count > 1) {
                 me.createActiveFilterElement('reset', me.resetLabel);
             }
-
-            me.updateFilterTriggerButton(count);
 
             me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
             me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
