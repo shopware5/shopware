@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundleDBAL
@@ -32,17 +34,19 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 interface SearchTermQueryBuilderInterface
 {
     /**
-     * Creates the search query string.
+     * Creates the search query builder.
      * The query contains only the search expressions.
      *
      * Additionally conditions like category or prices are not included.
      *
-     * Returned query string should be possible to join as table.
+     * Returned query builder should be possible to join as table.
      * Required table fields:
      *  - product_id : id of the product, used as join
      *
+     * Returns null if no keywords or search tables are found
+     *
      * @param $term
-     * @return string
+     * @return QueryBuilder|null
      */
     public function buildQuery($term);
 }
