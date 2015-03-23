@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $blog = $this->SeoIndex()->countBlogs($shopId);
         $emotion = $this->SeoIndex()->countEmotions($shopId);
         $content = $this->SeoIndex()->countContent($shopId);
-        $statistic = $this->SeoIndex()->countStatic($shopId);
+        $static = $this->SeoIndex()->countStatic($shopId);
         $supplier = $this->SeoIndex()->countSuppliers($shopId);
 
         $this->View()->assign(array(
@@ -90,7 +90,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
                 'article' => $article,
                 'blog' => $blog,
                 'emotion' => $emotion,
-                'statistic' => $statistic,
+                'static' => $static,
                 'content' => $content,
                 'supplier' => $supplier
             ))
