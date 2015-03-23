@@ -185,7 +185,7 @@ More precise designations are commented inside the document.
     left: 0;
     top: 0;
     position: absolute;
-    z-index: 3000;
+    z-index: @zindex-header-search-form;
 
     .main-search--field {
         .unitize-padding(9, 38, 9, 9);
@@ -203,7 +203,7 @@ More precise designations are commented inside the document.
         .unitize(font-size, 20);
         padding: 0;
         position: absolute;
-        z-index: 2;
+        z-index: @zindex-header-search-button;
         border: 0 none;
         background: transparent;
         color: @text-color;
@@ -285,7 +285,7 @@ More precise designations are commented inside the document.
     width: 100%;
     left: 0;
     text-align: left;
-    z-index: 3000;
+    z-index: @zindex-header-search-results;
     display: none;
 }
 
@@ -594,7 +594,7 @@ More precise designations are commented inside the document.
                 .language--flag {
                     .unitize(-6, 16, margin-top);
                     position: absolute;
-                    z-index: 900;
+                    z-index: @zindex-header-language-flag;
                     top: 50%;
                     left: 0;
                 }
@@ -628,7 +628,7 @@ More precise designations are commented inside the document.
                 display: none;
                 list-style: none;
                 background: #fff;
-                z-index: 1000;
+                z-index: @zindex-header-service-list;
                 border: 1px solid @border-color;
 
                 &::after {

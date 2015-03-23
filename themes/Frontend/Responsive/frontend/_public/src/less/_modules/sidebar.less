@@ -100,7 +100,7 @@ body > .sidebar-main {
         .language--flag {
             .unitize(-6, 16, margin-top);
             position: absolute;
-            z-index: 900;
+            z-index: @zindex-sidebar-language-flag;
             top: 50%;
             left: 0;
         }
@@ -155,11 +155,11 @@ body > .sidebar-main {
     overflow-y: auto;
     left: 0;
     padding: 0;
-    z-index: 1200;
+    z-index: @zindex-sidebar-offcanvas-overlay;
     bottom: 0;
 
     &.background {
-        z-index: 1100;
+        z-index: @zindex-sidebar-offcanvas-overlay-background;
     }
 
     .overlay--headline {
@@ -471,7 +471,7 @@ body > .sidebar-main {
             position: relative;
             top: 0;
             left: 0;
-            z-index: 1000;
+            z-index: @zindex-sidebar-offcanvas-higher-viewport;
         }
     }
 }
