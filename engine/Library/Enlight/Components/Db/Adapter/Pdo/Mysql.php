@@ -101,6 +101,10 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
             throw new Zend_Db_Adapter_Exception($message, $e->getCode());
         }
 
+        if (!empty($this->_config["timezone"])) {
+            $this->exec("SET time_zone = ".$this->quote($this->_config["timezone"]));
+        }
+
         // finally, we delete the authorization data
         unset($this->_config['username'], $this->_config['password']);
     }

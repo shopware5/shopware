@@ -53,7 +53,8 @@ return array_merge($customConfig, array(
         'dbname' => 'shopware',
         'host' => 'localhost',
         'charset' => 'utf8',
-        'adapter' => 'pdo_mysql'
+        'adapter' => 'pdo_mysql',
+        'timezone' => 'Europe/Berlin'
     ), $customConfig['db']),
     'front' => array_merge(array(
         'noErrorHandler' => false,
