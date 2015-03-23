@@ -333,7 +333,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'desktopImpressions',
-                    title: '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s}'
+                    title: '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s}',
+                    markerConfig: {
+                        type: 'cross',
+                        fill: '#00CC66',
+                        stroke: '#00CC66'
+                    },
+                    style: {
+                        stroke: '#00CC66',
+                        fill: '#00CC66'
+                    }
                 },
                 desktopImpressionTip
             ),
@@ -341,7 +350,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'tabletImpressions',
-                    title: '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s}'
+                    title: '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s}',
+                    markerConfig: {
+                        type: 'cross',
+                        fill: '#9955FF',
+                        stroke: '#9955FF'
+                    },
+                    style: {
+                        stroke: '#9955FF',
+                        fill: '#9955FF'
+                    }
                 },
                 tabletImpressionTip
             ),
@@ -349,7 +367,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'mobileImpressions',
-                    title: '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s}'
+                    title: '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s}',
+                    markerConfig: {
+                        type: 'cross',
+                        fill: '#FF6600',
+                        stroke: '#FF6600'
+                    },
+                    style: {
+                        stroke: '#FF6600',
+                        fill: '#FF6600'
+                    }
                 },
                 mobileImpressionTip
             ),
@@ -357,7 +384,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'totalImpressions',
-                    title: '{s name=chart/visitors/legend_impression}Total impressions{/s}'
+                    title: '{s name=chart/visitors/legend_impression}Total impressions{/s}',
+                    markerConfig: {
+                        type: 'cross',
+                        fill: '#0099FF',
+                        stroke: '#0099FF'
+                    },
+                    style: {
+                        stroke: '#0099FF',
+                        fill: '#0099FF'
+                    }
                 },
                 totalImpressionTip
             ),
@@ -365,7 +401,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'desktopVisits',
-                    title: '{s name=chart/visitors/legend_desktop_visit}Desktop visits{/s}'
+                    title: '{s name=chart/visitors/legend_desktop_visits}Desktop visits{/s}',
+                    markerConfig: {
+                        type: 'circle',
+                        fill: '#00CC66',
+                        stroke: '#00CC66'
+                    },
+                    style: {
+                        stroke: '#00CC66',
+                        fill: '#00CC66'
+                    }
                 },
                 desktopVisitTip
             ),
@@ -373,7 +418,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'tabletVisits',
-                    title: '{s name=chart/visitors/legend_tablet_visit}Tablet visits{/s}'
+                    title: '{s name=chart/visitors/legend_tablet_visits}Tablet visits{/s}',
+                    markerConfig: {
+                        type: 'circle',
+                        fill: '#9955FF',
+                        stroke: '#9955FF'
+                    },
+                    style: {
+                        stroke: '#9955FF',
+                        fill: '#9955FF'
+                    }
                 },
                 tabletVisitTip
             ),
@@ -381,7 +435,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'mobileVisits',
-                    title: '{s name=chart/visitors/legend_mobile_visit}Mobile visits{/s}'
+                    title: '{s name=chart/visitors/legend_mobile_visits}Mobile visits{/s}',
+                    markerConfig: {
+                        type: 'circle',
+                        fill: '#FF6600',
+                        stroke: '#FF6600'
+                    },
+                    style: {
+                        stroke: '#FF6600',
+                        fill: '#FF6600'
+                    }
                 },
                 mobileVisitTip
             ),
@@ -389,7 +452,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 {
                     xField: 'datum',
                     yField: 'totalVisits',
-                    title: '{s name=chart/visitors/legend_visits}Total visits{/s}'
+                    title: '{s name=chart/visitors/legend_visits}Total visits{/s}',
+                    markerConfig: {
+                        type: 'circle',
+                        fill: '#0099FF',
+                        stroke: '#0099FF'
+                    },
+                    style: {
+                        stroke: '#0099FF',
+                        fill: '#0099FF'
+                    }
                 },
                 totalVisitTip
             )
