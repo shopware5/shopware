@@ -54,7 +54,7 @@ return array_merge($customConfig, array(
         'host' => 'localhost',
         'charset' => 'utf8',
         'adapter' => 'pdo_mysql',
-        'timezone' => 'Europe/Berlin'
+        'timezone' => ''
     ), $customConfig['db']),
     'front' => array_merge(array(
         'noErrorHandler' => false,
