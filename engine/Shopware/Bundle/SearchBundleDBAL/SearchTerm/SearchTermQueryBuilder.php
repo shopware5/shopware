@@ -91,20 +91,20 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      *  - product_id : id of the product, used as join
      *
      * @param $term
-     * @return string
+     * @return QueryBuilder|null
      */
     public function buildQuery($term)
     {
         $keywords = $this->keywordFinder->getKeywordsOfTerm($term);
 
         if (empty($keywords)) {
-            return '';
+            return null;
         }
 
         $tables = $this->getSearchTables();
 
         if (empty($tables)) {
-            return '';
+            return null;
         }
 
         $query = $this->buildQueryFromKeywords($keywords, $tables);
@@ -118,7 +118,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             ]
         );
 
-        return $query->getSQL();
+        return $query;
     }
 
     /**
