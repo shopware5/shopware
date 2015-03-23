@@ -1229,7 +1229,8 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'appleWebAppTitle',
                 '__apple_web_app_title__',
-                ''
+                '',
+                ['attributes' => ['lessCompatible' => false]]
             )
         );
 
