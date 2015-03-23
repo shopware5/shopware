@@ -176,7 +176,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         // Count total number of associated blog articles
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder($blogCategoryIds);
+        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder(
+            $blogCategoryIds, null
+        );
         $numResults = $builder->select('COUNT(blog)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -278,6 +280,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     /**
      * Count Static routes
+     * @param $shopId
+     * @return int
      */
     public function countStatic($shopId)
     {
@@ -285,14 +289,16 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $urls = Shopware()->Config()->seoStaticUrls;
 
         if (empty($urls)) {
-            return;
+            return 0;
         }
         $static = array();
 
         if (!empty($urls)) {
             foreach (explode("\n", $urls) as $url) {
                 list($key, $value) = explode(',', trim($url));
-                if (empty($key) || empty($value)) continue;
+                if (empty($key) || empty($value)) {
+                    continue;
+                }
                 $static[$key] = $value;
             }
         }

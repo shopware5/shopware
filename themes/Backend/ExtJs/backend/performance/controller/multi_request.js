@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 category: '{url controller="Seo" action="seoCategory"}',
                 emotion: '{url controller="Seo" action="seoEmotion"}',
                 blog: '{url controller="Seo" action="seoBlog"}',
-                statistic: '{url controller="Seo" action="seoStatic"}',
+                static: '{url controller="Seo" action="seoStatic"}',
                 content: '{url controller="Seo" action="seoContent"}',
                 supplier: '{url controller="Seo" action="seoSupplier"}'
             },
@@ -157,45 +157,39 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 var json = Ext.decode(response.responseText);
                 taskConfig.totalCounts = json.data.counts;
 
-                if(taskConfig.totalCounts.article) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.article)) {
                     window.articleProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
                     );
                 }
-                if(taskConfig.totalCounts.category) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.category)) {
                     window.categoryProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
                     );
                 }
-                if(taskConfig.totalCounts.emotion) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.emotion)) {
                     window.emotionProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
                     );
                 }
-
-                if(taskConfig.totalCounts.statistic) {
-                    window.statisticProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].statistic, 0, taskConfig.totalCounts.statistic)
-                    );
-                }
-                if(taskConfig.totalCounts.static) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.static)) {
                     window.staticProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
                     );
                 }
-                if(taskConfig.totalCounts.blog) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.blog)) {
                     window.blogProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
                     );
                 }
-                if(taskConfig.totalCounts.content) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.content)) {
                     window.contentProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
                     );
                 }
-                if(taskConfig.totalCounts.supplier) {
+                if (!Ext.isEmpty(taskConfig.totalCounts.supplier)) {
                     window.supplierProgress.updateProgress(
-                            0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
+                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
                     );
                 }
 
@@ -246,7 +240,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getRequestConfig(window, 'categoryProgress', 'seo', 'category'));
         configs.push(me.getRequestConfig(window, 'emotionProgress', 'seo', 'emotion'));
         configs.push(me.getRequestConfig(window, 'blogProgress', 'seo', 'blog'));
-        configs.push(me.getRequestConfig(window, 'statisticProgress', 'seo', 'statistic'));
+        configs.push(me.getRequestConfig(window, 'staticProgress', 'seo', 'static'));
         configs.push(me.getRequestConfig(window, 'contentProgress', 'seo', 'content'));
         configs.push(me.getRequestConfig(window, 'supplierProgress', 'seo', 'supplier'));
 
