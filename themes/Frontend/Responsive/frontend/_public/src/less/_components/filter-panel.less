@@ -53,7 +53,7 @@ The styling includes the collapsed and expanded styling and the panel component 
             border: 1px solid @brand-primary;
             background: #FFF;
             overflow: visible;
-            z-index: 800;
+            z-index: @zindex-filter-panel-flyout-collapsed;
         }
 
         .filter-panel--title {
@@ -73,7 +73,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     display: block;
     width: 100%;
     overflow: hidden;
-    z-index: 500;
+    z-index: @zindex-filter-panel-flyout;
 }
 
 .filter-panel--title {
@@ -188,7 +188,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         border: 0 none;
         background: none;
         cursor: pointer;
-        z-index: 65;
+        z-index: @zindex-filter-panel-checkbox;
 
         &:checked ~ .checkbox--state {
             .primary-gradient();
@@ -227,7 +227,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         width: 100%;
         height: 100%;
         position: relative;
-        z-index: 60;
+        z-index: @zindex-filter-panel-checkbox-state;
     }
 }
 
@@ -255,7 +255,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 		border: 0 none;
 		background: none;
 		cursor: pointer;
-		z-index: 65;
+		z-index: @zindex-filter-panel-radio;
 
 		&:checked ~ .radio--state {
 			.primary-gradient();
@@ -281,7 +281,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 		width: 100%;
 		height: 100%;
 		position: relative;
-		z-index: 60;
+		z-index: @zindex-filter-panel-radio-state;
 	}
 }
 
@@ -310,7 +310,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         border: 0 none;
         background: none;
         cursor: pointer;
-        z-index: 65;
+        z-index: @zindex-filter-panel-media-checkbox;
 
         &:hover ~ .filter-panel--media-label {
             border-color: @brand-primary;
@@ -390,7 +390,7 @@ The styling includes the collapsed and expanded styling and the panel component 
         border: 0 none;
         background: none;
         cursor: pointer;
-        z-index: 65;
+        z-index: @zindex-filter-panel-rating-star;
 
         &#star--1 { .unitize(left, 0); }
         &#star--2 { .unitize(left, 30); }

@@ -15,7 +15,7 @@ It contains the viewport specific styles inside media queries.
 	.transform-style(preserve-3d);
 	.backface-visibility(hidden);
     display: block;
-    z-index: 1000;
+    z-index: @zindex-image-slider;
     position: relative;
 }
 
@@ -43,7 +43,7 @@ It contains the viewport specific styles inside media queries.
         border: 1px solid rgba(255, 255, 255, 0.5);
         position: absolute;
         top: 50%;
-        z-index: 1000;
+        z-index: @zindex-image-slider-arrow;
         font-family: 'shopware';
         text-align: center;
         color: @text-color;
@@ -171,7 +171,7 @@ It contains the viewport specific styles inside media queries.
         .linear-gradient(#ffffff, @gray-light);
         display: none;
         position: absolute;
-        z-index: 1000;
+        z-index: @zindex-image-slider-arrow;
         font-family: 'shopware';
         text-align: center;
         color: @text-color;

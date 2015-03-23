@@ -47,7 +47,7 @@ Displays a folding box that responds if the content does not fit the element.
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
     display: block;
     position: relative;
-    z-index: 1100;
+    z-index: @zindex-collapse-header;
     border: 1px solid @border-color;
     cursor: pointer;
 
@@ -78,7 +78,7 @@ Displays a folding box that responds if the content does not fit the element.
         border-width: 0 0 1px 0;
         border-style: solid;
         border-color: darken(@border-color, 15%);
-        z-index: 1300;
+        z-index: @zindex-collapse-header-active;
 
         .collapse--toggler {
             &:before {
@@ -95,7 +95,7 @@ Displays a folding box that responds if the content does not fit the element.
     .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
     display: none;
     position: relative;
-    z-index: 1000;
+    z-index: @zindex-collapse-content;
     background: #fff;
     border-width: 0 1px 1px 1px;
     border-style: solid;
@@ -103,7 +103,7 @@ Displays a folding box that responds if the content does not fit the element.
 
     &.is--collapsed {
         display: block;
-        z-index: 1200;
+        z-index: @zindex-collapse-content-collapsed;
     }
 }
 
