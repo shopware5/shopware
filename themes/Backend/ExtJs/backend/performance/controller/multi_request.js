@@ -157,45 +157,51 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 var json = Ext.decode(response.responseText);
                 taskConfig.totalCounts = json.data.counts;
 
-                if (!Ext.isEmpty(taskConfig.totalCounts.article)) {
-                    window.articleProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.category)) {
-                    window.categoryProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.emotion)) {
-                    window.emotionProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.static)) {
-                    window.staticProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.blog)) {
-                    window.blogProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.content)) {
-                    window.contentProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
-                    );
-                }
-                if (!Ext.isEmpty(taskConfig.totalCounts.supplier)) {
-                    window.supplierProgress.updateProgress(
-                        0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
-                    );
-                }
+                me.updateProgressBars(window);
 
                 window.startButton.enable();
             }
         });
+    },
+
+    updateProgressBars: function(window) {
+        var taskConfig = window.taskConfig;
+
+        if (!Ext.isEmpty(taskConfig.totalCounts.article)) {
+            window.articleProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].article, 0, taskConfig.totalCounts.article)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.category)) {
+            window.categoryProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].category, 0, taskConfig.totalCounts.category)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.emotion)) {
+            window.emotionProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].emotion, 0, taskConfig.totalCounts.emotion)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.static)) {
+            window.staticProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].static, 0, taskConfig.totalCounts.static)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.blog)) {
+            window.blogProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].blog, 0, taskConfig.totalCounts.blog)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.content)) {
+            window.contentProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].content, 0, taskConfig.totalCounts.content)
+            );
+        }
+        if (!Ext.isEmpty(taskConfig.totalCounts.supplier)) {
+            window.supplierProgress.updateProgress(
+                0, Ext.String.format(window.snippets[taskConfig.snippetResource].supplier, 0, taskConfig.totalCounts.supplier)
+            );
+        }
     },
 
     getRequestConfig: function(window, progress, taskName, resource) {
@@ -233,6 +239,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
      */
     onStartSeoIndex: function(window) {
         var me = this, configs = [];
+
+        me.updateProgressBars(window);
 
         configs.push(me.getSeoInitRequestConfig(window, me.requestConfig.seo));
 
