@@ -84,7 +84,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             || $request->has('callback')                // is a jsonp call
             || $request->getModuleName() != 'frontend'  // is not frontend
             || !$request->getParam('rewriteAlias')      // is not a rewrite url alias
-            || !Shopware()->Session()->Bot && !$request->getCookie() // is not a bot and doesn't support cookies
         ) {
             return;
         }
@@ -94,7 +93,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
         $location = $router->assemble($query);
 
         // Fix shop redirect / if it's not a seo url
-        if(preg_match('#\/[0-9]+$#', $location, $match) > 0) {
+        if (preg_match('#\/[0-9]+$#', $location, $match) > 0) {
             $location = $request->getBaseUrl() . '/';
         }
 
