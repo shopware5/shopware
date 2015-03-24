@@ -53,6 +53,8 @@
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="snippets" />
             <argument type="service" id="models" />
+            <argument type="service" id="guzzle_http_client" />
+            <argument>%shopware.store.apiEndpoint%</argument>
         </service>
 
         <service id="shopware_plugininstaller.plugin_licence_service" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService">

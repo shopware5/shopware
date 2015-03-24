@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
@@ -50,27 +51,44 @@ class AccountManagerService
      * @var \Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
+
     /**
      * @var ModelManager
      */
     private $entityManager;
 
     /**
+     * @var ClientInterface
+     */
+    private $guzzleHttpClient;
+
+    /**
+     * @var String
+     */
+    private $apiEndPoint;
+
+    /**
      * @param StoreClient $storeClient
      * @param StructHydrator $structHydrator
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param ModelManager $entityManager
+     * @param ClientInterface $guzzleHttpClient
+     * @param String $apiEndPoint
      */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $structHydrator,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        ModelManager $entityManager
+        ModelManager $entityManager,
+        ClientInterface $guzzleHttpClient,
+        $apiEndPoint
     ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $structHydrator;
         $this->snippetManager = $snippetManager;
         $this->entityManager = $entityManager;
+        $this->guzzleHttpClient = $guzzleHttpClient;
+        $this->apiEndPoint = $apiEndPoint;
     }
 
     /**
@@ -94,9 +112,15 @@ class AccountManagerService
     public function pingServer()
     {
         try {
-            return $this->storeClient->doGetRequest('/ping') ? : false;
-        } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            $response = $this->guzzleHttpClient->get($this->apiEndPoint.'/ping', ['timeout' => 7]);
+
+            return $response->json() ?: false;
+        } catch (\Exception $e) {
+            $snippet = $this->snippetManager
+                ->getNamespace('backend/plugin_manager/exceptions')
+                ->get('timeout', 'The connection with SBP timed out');
+
+            throw new \Exception($snippet, $e->getCode(), $e);
         }
     }
 
