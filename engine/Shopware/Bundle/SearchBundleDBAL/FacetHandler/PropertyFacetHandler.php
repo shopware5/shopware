@@ -117,7 +117,6 @@ class PropertyFacetHandler implements FacetHandlerInterface
             $context
         );
 
-        $results = [];
         $actives = $this->getFilteredValues($criteria);
 
         return $this->createCollectionResult(

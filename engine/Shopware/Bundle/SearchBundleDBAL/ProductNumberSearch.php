@@ -231,7 +231,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $facetHandlers
         );
 
-        $this->assertCollectionIsInstaceOf($facetHandlers, __NAMESPACE__ . '\FacetHandlerInterface');
+        $this->assertCollectionIsInstanceOf($facetHandlers, __NAMESPACE__ . '\FacetHandlerInterface');
 
         return array_merge($facetHandlers->toArray(), $this->facetHandlers);
     }
@@ -256,7 +256,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * @param ArrayCollection $objects
      * @param string $class
      */
-    private function assertCollectionIsInstaceOf(ArrayCollection $objects, $class)
+    private function assertCollectionIsInstanceOf(ArrayCollection $objects, $class)
     {
         foreach ($objects as $object) {
             if (!$object instanceof $class) {
