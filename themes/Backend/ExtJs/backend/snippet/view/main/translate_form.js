@@ -27,7 +27,7 @@
 Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
     extend: 'Ext.form.Panel',
     alias: 'widget.snippet-main-translateForm',
-    layout: 'fit',
+    autoScroll: true,
     width: 860,
     height: 600,
     bodyPadding: 10,
