@@ -152,7 +152,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')
+            ->getProductContext();
+
+        $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
+            ->createAjaxListingCriteria($this->Request(), $context);
+
+        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
         $articles = $articles['sArticles'];
 
         $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
