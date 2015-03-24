@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
@@ -39,6 +40,67 @@ use Shopware\Components\Model\Query\SqlWalker;
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
+    /**
+     * The getEmotions function selects all emotions for the passed category id
+     * and sets the result into the view variable "sEmotions".
+     */
+    public function indexAction()
+    {
+        /**@var $repository \Shopware\Models\Emotion\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $emotions = $this->getEmotion($repository);
+        //iterate all emotions to select the element data.
+
+        foreach ($emotions as &$emotion) {
+            // Support for emotions which are available on multiple devices.
+            $emotion['device'] = explode(',', $emotion['device']);
+
+            //for each emotion we have to iterate the elements to get the element data.
+            foreach ($emotion['elements'] as &$element) {
+                $component = $element['component'];
+                $elementQuery = $repository->getElementDataQuery($element['id'], $element['componentId']);
+                $componentData = $elementQuery->getArrayResult();
+                $data = array();
+                $data["objectId"] = md5($element["id"]);
+
+                //we have to iterate the component data to decode the values.
+                foreach ($componentData as $entry) {
+                    $value = '';
+                    switch (strtolower($entry['valueType'])) {
+                        case "json":
+                            $value = Zend_Json::decode($entry['value']);
+                            break;
+                        case "string":
+                        default:
+                            $value = $entry['value'];
+                            break;
+                    }
+                    $data[$entry['name']] = $value;
+                }
+
+                $data = Enlight()->Events()->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, array('subject' => $this, 'element' => $element));
+
+                if (!empty($component['convertFunction'])) {
+                    $categoryId = $this->Request()->getParam('categoryId') ?: $emotion['categories'][0]['id'];
+
+                    $data = $this->$component['convertFunction']($data, $categoryId, $element);
+                }
+
+                $element['data'] = $data;
+            }
+        }
+
+        if (empty($emotions[0]['template'])) {
+            $this->View()->loadTemplate('widgets/emotion/index.tpl');
+        } else {
+            $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
+        }
+
+        $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
+        $this->View()->assign('sEmotions', $emotions, true);
+        $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));
+    }
+
     /**
      * Get emotion by category
      * @param $repository \Shopware\Models\Emotion\Repository
@@ -123,66 +185,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('sElementHeight', $elementHeight);
     }
 
-    /**
-     * The getEmotions function selects all emotions for the passed category id
-     * and sets the result into the view variable "sEmotions".
-     */
-    public function indexAction()
-    {
-        /**@var $repository \Shopware\Models\Emotion\Repository*/
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-        $emotions = $this->getEmotion($repository);
-        //iterate all emotions to select the element data.
 
-        foreach ($emotions as &$emotion) {
-            // Support for emotions which are available on multiple devices.
-            $emotion['device'] = explode(',', $emotion['device']);
-
-            //for each emotion we have to iterate the elements to get the element data.
-            foreach ($emotion['elements'] as &$element) {
-                $component = $element['component'];
-                $elementQuery = $repository->getElementDataQuery($element['id'], $element['componentId']);
-                $componentData = $elementQuery->getArrayResult();
-                $data = array();
-                $data["objectId"] = md5($element["id"]);
-
-                //we have to iterate the component data to decode the values.
-                foreach ($componentData as $entry) {
-                    $value = '';
-                    switch (strtolower($entry['valueType'])) {
-                        case "json":
-                            $value = Zend_Json::decode($entry['value']);
-                            break;
-                        case "string":
-                        default:
-                            $value = $entry['value'];
-                            break;
-                    }
-                    $data[$entry['name']] = $value;
-                }
-
-                $data = Enlight()->Events()->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, array('subject' => $this, 'element' => $element));
-
-                if (!empty($component['convertFunction'])) {
-                    $categoryId = $this->Request()->getParam('categoryId') ?: $emotion['categories'][0]['id'];
-
-                    $data = $this->$component['convertFunction']($data, $categoryId, $element);
-                }
-
-                $element['data'] = $data;
-            }
-        }
-
-        if (empty($emotions[0]['template'])) {
-            $this->View()->loadTemplate('widgets/emotion/index.tpl');
-        } else {
-            $this->View()->loadTemplate('widgets/emotion/' . $emotions[0]['template']['file']);
-        }
-
-        $this->View()->assign('categoryId', (int) $this->Request()->getParam('categoryId'));
-        $this->View()->assign('sEmotions', $emotions, true);
-        $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
-    }
 
     private function getArticle($data, $categoryId, $element)
     {
@@ -475,6 +478,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $mappings = $data['bannerMapping'];
         if (!empty($mappings)) {
+            $numbers = array_column($mappings, 'link');
+
+            $numbers = $this->getProductIdsByNumbers($numbers);
+
             foreach ($mappings as $key => $mapping) {
                 $number = $mapping['link'];
 
@@ -485,8 +492,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                         if (substr($number, 0, 1) === '/') {
                             $mapping['link'] = $this->Request()->getBaseUrl() . $number;
                         } else {
-                            $mapping['link'] = $this->articleByNumber($number);
-                            $mapping['link'] = $mapping['link']['linkDetails'];
+                            $mapping['link'] = $this->get('config')->get('baseFile') . "?sViewport=detail&sArticle=" . $numbers[$number];
                             $mapping['ordernumber'] = $number;
                         }
                     }
@@ -682,20 +688,19 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             ->limit($limit);
 
         switch ($sort) {
-             case 'price_asc':
-                 $criteria->addSorting(new PriceSorting(SortingInterface::SORT_ASC));
-                 break;
-             case 'price_desc':
-                 $criteria->addSorting(new PriceSorting(SortingInterface::SORT_DESC));
-                 break;
-             case 'topseller':
-                 $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
-                 break;
-             case 'newcomer':
+            case 'price_asc':
+                $criteria->addSorting(new PriceSorting(SortingInterface::SORT_ASC));
+                break;
+            case 'price_desc':
+                $criteria->addSorting(new PriceSorting(SortingInterface::SORT_DESC));
+                break;
+            case 'topseller':
+                $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
+                break;
+            case 'newcomer':
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
                 break;
-            }
-
+        }
 
         /** @var $result \Shopware\Bundle\SearchBundle\ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')
@@ -761,5 +766,24 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         //fake to prevent rendering the templates with the widgets module.
         //otherwise the template engine don't accept to load templates of the `frontend` module
         $this->Request()->setModuleName('frontend');
+    }
+
+    /**
+     * @param $numbers
+     * @return array
+     */
+    private function getProductIdsByNumbers($numbers)
+    {
+        /** @var Connection $connection */
+        $connection = $this->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->select(['variant.ordernumber', 'variant.articleID'])
+            ->from('s_articles_details', 'variant')
+            ->where('variant.ordernumber IN (:numbers)')
+            ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }
