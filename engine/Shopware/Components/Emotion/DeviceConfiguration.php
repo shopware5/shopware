@@ -77,32 +77,14 @@ class DeviceConfiguration
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
+        $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-    /**
-     * @param $emotionId
-     * @throws \Exception
-     * @return array
-     */
-    public function getById($emotionId)
-    {
-        $query = $this->connection->createQueryBuilder();
+        $emotions = array_map(function($emotion) {
+            $emotion['devicesArray'] = explode(',', $emotion['devices']);
+            return $emotion;
+        }, $emotions);
 
-        $query->select(array(
-            'emotion.id',
-            'emotion.device as devices',
-            'emotion.show_listing as showListing'
-        ));
-
-        $query->from('s_emotion', 'emotion')
-            ->where('emotion.id = :emotionId')
-            ->setParameter(':emotionId', $emotionId);
-
-        /**@var $statement \PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $emotions;
     }
 
     /**
@@ -119,12 +101,15 @@ class DeviceConfiguration
         }
 
         $children = $this->getChildrenLandingPages($id);
+        $children = array_merge([$master], $children);
 
-        $children = array_merge([
-            ['id' => $master['id'], 'device' => $master['device']]
-        ], $children);
+        $children = array_map(function($emotion) {
+            $emotion['devicesArray'] = explode(',', $emotion['devices']);
+            return $emotion;
+        }, $children);
 
         $master['emotions'] = $children;
+
         return $master;
     }
 
@@ -169,7 +154,7 @@ class DeviceConfiguration
 
         $query->select([
             'emotion.id',
-            'emotion.device',
+            'emotion.device as devices',
             'emotion.name',
             'emotion.seo_keywords',
             'emotion.seo_description',

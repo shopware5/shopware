@@ -1,7 +1,11 @@
 {extends file='parent:frontend/home/index.tpl'}
 
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{url emotionId=$emotionId}" />
+    {if $landingPage.categoryId}
+        <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id sCategory=$landingPage.categoryId}" />
+    {else}
+        <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id}" />
+    {/if}
 {/block}
 
 {* Google optimized crawling *}
@@ -23,13 +27,15 @@
 
         <div class="content--emotions">
             {if $hasEscapedFragment}
-                <div class="emotion--fragment">
-                    {action module=widgets controller=campaign action=index emotionId=$emotion.id}
-                </div>
+                {if 0|in_array:$emotion.devicesArray}
+                    <div class="emotion--fragment">
+                        {action module=widgets controller=campaign action=index emotionId=$emotion.id controllerName=$Controller}
+                    </div>
+                {/if}
             {else}
                 <div class="emotion--wrapper"
                      data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                     data-availableDevices="{$emotion.device}"
+                     data-availableDevices="{$emotion.devices}"
                      data-showListing="false">
                 </div>
             {/if}
