@@ -97,15 +97,17 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addLimit($request, $criteria);
         $this->addOffset($request, $criteria);
 
-        $this->addCustomerGroupCondition($criteria, $context);
-        $this->addHasPriceCondition($criteria);
         $this->addCategoryCondition($request, $criteria);
+        $this->addHasPriceCondition($criteria);
+        $this->addCustomerGroupCondition($criteria, $context);
+
+        $this->addSearchCondition($request, $criteria);
+
         $this->addManufacturerCondition($request, $criteria);
         $this->addShippingFreeCondition($request, $criteria);
         $this->addImmediateDeliveryCondition($request, $criteria);
         $this->addRatingCondition($request, $criteria);
         $this->addPriceCondition($request, $criteria);
-        $this->addSearchCondition($request, $criteria);
 
         $this->addSorting($request, $criteria);
 
