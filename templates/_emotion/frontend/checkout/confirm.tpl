@@ -231,7 +231,10 @@
         {if {config name=commentvoucherarticle}||{config name=premiumarticles}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
             <div class="additional-options grid_16 first">
 
-                <h2 class="headingbox">{s name="ConfirmHeadlineAdditionalOptions"}Weitere Optionen{/s}</h2>
+                {if {config name=commentvoucherarticle}}
+                    <h2 class="headingbox">{s name="ConfirmHeadlineAdditionalOptions"}Weitere Optionen{/s}</h2>
+                {/if}
+
                 <div class="inner_container">
 
                     {* Voucher and add article *}
