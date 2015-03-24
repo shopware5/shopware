@@ -79,7 +79,7 @@
                             {/foreach}
                         </div>
                     {elseif $Data.link}
-                        <a href="{$Data.link}" class="banner--link"></a>
+                        <a href="{$Data.link}" class="banner--link"{if $Data.title} title="{$Data.title|escape}"{/if}></a>
                     {/if}
                 {/block}
             </div>
