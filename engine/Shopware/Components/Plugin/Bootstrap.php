@@ -809,6 +809,33 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return true;
     }
 
+
+    /**
+     * Check if a given version of a plugin is greater or equal to
+     * the currently installed one
+     *
+     * @param $plugin
+     * @param $version
+     *
+     * @return bool
+     */
+    protected function assertRequiredPluginMinimumVersion($plugin, $version)
+    {
+        $sql = 'SELECT version FROM s_core_plugins WHERE name = ? AND active = 1';
+        $installedVersion = Shopware()->Db()->fetchOne($sql, array($plugin));
+
+        if (empty($installedVersion)) {
+            return false;
+        }
+
+        if (version_compare($installedVersion, $version, '<')) {
+            return false;
+        }
+
+        return true;
+    }
+    
+
     /**
      * Check if a given version is greater or equal to
      * the currently installed shopware version.
