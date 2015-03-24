@@ -40,6 +40,8 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
             return $this->redirect('index');
         }
 
+        $landingPage['categoryId'] = $this->Request()->getParam('sCategory');
+
         $this->View()->assign([
             'sBreadcrumb'          => [['name' => $landingPage['name']]],
             'seo_keywords'         => $landingPage['seo_keywords'],
