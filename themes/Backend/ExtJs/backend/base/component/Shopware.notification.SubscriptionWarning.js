@@ -26,13 +26,10 @@
 Ext.define('Shopware.notification.SubscriptionWarning', {
 
     snippets: {
-        plugin_not_upgraded : '{s name="shop_license_upgrade"}The license upgrade for plugin [0] is pending.{/s}',
-        plugins_not_upgraded : '{s name="shop_license_upgrade"}The license upgrades for the following plugins are pending:{/s}',
-        plugin_wrong_version : '{s name="shop_license_upgrade"}The license for plugin [0] is invalid.{/s}',
-        plugins_wrong_version : '{s name="shop_license_upgrade"}The licenses for the following plugins are invalid:{/s}',
-        plugin_subscription_warning : '{s name="shop_license_upgrade"}The subscription for plugin [0] has expired.{/s}',
-        plugin_subscription_warning_days : '{s name="shop_license_upgrade"}The subscription for plugin [1] expires in [0] days.{/s}',
-        shop_license_upgrade : '{s name="shop_license_upgrade"}The license upgrade for the shop hasn\'t been executed yet.{/s}'
+        licence_upgrade_warning: '[0]x plugin(s) require a licence upgrade',
+        subscription_warning: 'Subscription(s) for [0]x plugin(s) are expired or expire in a few days',
+        invalid_licence: 'Licence(s) of [0]x plugin(s) are invalid',
+        shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.'
     },
 
     /**
@@ -73,94 +70,6 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayNotUpgradedNotice: function (plugins) {
-        var me = this,
-            text = '',
-            len = plugins.length,
-            x = 0;
-
-        if (len === 1) {
-            text += Ext.String.format('<b>' + me.snippets.plugin_not_upgraded + '</b></br>', '</b><i>' + plugins[0].label + '</i><b>');
-        } else {
-            text += '<b>' + me.snippets.plugins_not_upgraded + '</b><br/>';
-
-            for (; x < len; x++) {
-                text += '<i>' + plugins[x].label + '</i>';
-
-                if (x < len - 1) {
-                    text += '<br/>';
-                }
-            }
-        }
-
-        Shopware.Notification.createStickyGrowlMessage({
-            text: text,
-            width: 440
-        });
-    },
-
-    getPluginList: function (plugins) {
-        return '<i>' + plugins.join('</i><br/><i>') + '</i>';
-    },
-
-    displayWrongVersionNotice: function (plugins) {
-        var me = this,
-            text = '',
-            len = plugins.length,
-            x = 0;
-
-        if (len === 1) {
-            text += Ext.String.format('<b>' + me.snippets.plugin_wrong_version + '</b></br>', '</b><i>' + plugins[0].label + '</i><b>');
-        } else {
-            text += '<b>' + me.snippets.plugins_wrong_version + '</b><br/>';
-
-            for (; x < len; x++) {
-                text += '<i>' + plugins[x].label + '</i>';
-                if (x < len - 1) {
-                    text += '<br/>';
-                }
-            }
-        }
-
-        Shopware.Notification.createStickyGrowlMessage({
-            text: text,
-            width: 440
-        });
-    },
-
-    displaySubscriptionNotice: function (plugins) {
-        var me = this,
-            text = '',
-            len = plugins.length,
-            x = 0;
-
-        for (; x < len; x++) {
-            if (plugins[x].expired == true) {
-                text += Ext.String.format('<b>' + me.snippets.plugin_subscription_warning + '</b></br>', '</b><i>' + plugins[0].label + '</i><b>');
-            } else {
-                text += Ext.String.format('<b>' + me.snippets.plugin_subscription_warning_days + '</b></br>', '</b><i>' + plugins[0].daysLeft + '</i><b>', '</b><i>' + plugins[0].label + '</i><b>');
-            }
-
-            if (x < len - 1) {
-                text += '<br/>';
-            }
-        }
-
-        Shopware.Notification.createStickyGrowlMessage({
-            text: text,
-            width: 440
-        });
-    },
-
-    displayShopNotUpgradedShopMessage: function (data) {
-        var me = this;
-
-        Shopware.Notification.createStickyGrowlMessage({
-            text: '<b>' + me.snippets.shop_license_upgrade + '</b>',
-            width: 440
-        });
-    },
-
     displayNotices: function (data) {
         var me = this;
 
@@ -179,5 +88,38 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         if (data.expiredPluginSubscriptions && data.expiredPluginSubscriptions.length > 0) {
             me.displaySubscriptionNotice(data.expiredPluginSubscriptions);
         }
+    },
+
+    displayWrongVersionNotice: function (plugins) {
+        var me = this;
+        Shopware.Notification.createStickyGrowlMessage({
+            text: Ext.String.format(me.snippets.invalid_licence, plugins.length),
+            width: 440
+        });
+    },
+
+    displayNotUpgradedNotice: function (plugins) {
+        var me = this;
+        Shopware.Notification.createStickyGrowlMessage({
+            text: Ext.String.format(me.snippets.licence_upgrade_warning, plugins.length),
+            width: 440
+        });
+
+    },
+
+    displaySubscriptionNotice: function (plugins) {
+        var me = this;
+        Shopware.Notification.createStickyGrowlMessage({
+            text: Ext.String.format(me.snippets.subscription_warning, plugins.length),
+            width: 440
+        });
+    },
+
+    displayShopNotUpgradedShopMessage: function (data) {
+        var me = this;
+        Shopware.Notification.createStickyGrowlMessage({
+            text: '<b>' + me.snippets.shop_license_upgrade + '</b>',
+            width: 440
+        });
     }
 });

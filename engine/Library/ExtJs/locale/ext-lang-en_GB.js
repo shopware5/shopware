@@ -555,12 +555,9 @@ Ext.onReady(function() {
         override: 'Shopware.notification.SubscriptionWarning',
 
         snippets: {
-            plugin_not_upgraded : 'The license upgrade for plugin [0] is pending.',
-            plugins_not_upgraded : 'The license upgrades for the following plugins are pending:',
-            plugin_wrong_version : 'The license for plugin [0] is invalid.',
-            plugins_wrong_version : 'The licenses for the following plugins are invalid:',
-            plugin_subscription_warning : 'The subscription for plugin [0] has expired.',
-            plugin_subscription_warning_days : 'The subscription for plugin [1] expires in [0] days.',
+            licence_upgrade_warning: '[0] plugin(s) require a licence upgrade',
+            subscription_warning: 'Subscription(s) for [0] plugin(s) have expired or will expire soon',
+            invalid_licence: 'Licence(s) of [0] plugin(s) are invalid',
             shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.'
         }
     });
