@@ -8,15 +8,21 @@
 
                 {foreach $emotions as $emotion}
 
-                    {if $emotion.showListing == 1}
-                        {$showListing = true}
-                    {/if}
-
                     {if $hasEscapedFragment}
-                        <div class="emotion--fragment">
-                            {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
-                        </div>
+                        {if 0|in_array:$emotion.devicesArray}
+                            {if $emotion.showListing == 1}
+                                {$showListing = true}
+                            {/if}
+
+                            <div class="emotion--fragment">
+                                {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
+                            </div>
+                        {/if}
                     {else}
+                        {if $emotion.showListing == 1}
+                            {$showListing = true}
+                        {/if}
+
                         <div class="emotion--wrapper"
                              data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
                              data-availableDevices="{$emotion.devices}"
