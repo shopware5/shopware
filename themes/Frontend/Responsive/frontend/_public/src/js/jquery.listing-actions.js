@@ -199,8 +199,6 @@
 
             me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
 
-
-
             me.initStateHandling();
             me.registerEvents();
         },
