@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/partner_revenue"}
 Ext.define('Shopware.apps.Analytics.store.navigation.PartnerRevenue', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-partner_revenue',
@@ -48,3 +49,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.PartnerRevenue', {
         }
     }
 });
+//{/block}

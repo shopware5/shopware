@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/month"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-month',
@@ -63,3 +64,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
         me.callParent(arguments);
     }
 });
+//{/block}
