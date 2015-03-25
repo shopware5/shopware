@@ -358,7 +358,6 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
      * @param [string] record   - The whole data model
      */
     modifiedColumn: function(value, metaData, record) {
-        console.log("value", record.get('modified'));
         return Ext.util.Format.date(record.get('modified')) + ' ' + Ext.util.Format.date(record.get('modified'), 'H:i:s');
     },
 
