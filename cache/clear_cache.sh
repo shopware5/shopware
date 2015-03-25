@@ -8,7 +8,9 @@ if [[ "$DIR" != */cache ]]; then
 fi
 
 echo "Clearing caches"
-find $DIR -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -Rf
+mkdir $DIR/delete
+find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete -print0 | xargs -0 mv -t $DIR/delete/
+rm -Rf $DIR/delete/
 rm -f $DIR/../web/cache/*.js > /dev/null
 rm -f $DIR/../web/cache/*.css
 rm -f $DIR/../web/cache/*.txt
