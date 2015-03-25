@@ -266,6 +266,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     onStartHttpCacheWarmUp: function(window) {
         var me = this, configs = [];
 
+        me.updateProgressBars(window);
+
         configs.push(me.getRequestConfig(window, 'articleProgress', 'httpCacheWarmer', 'article'));
         configs.push(me.getRequestConfig(window, 'categoryProgress', 'httpCacheWarmer', 'category'));
         configs.push(me.getRequestConfig(window, 'blogProgress', 'httpCacheWarmer', 'blog'));
