@@ -71,7 +71,7 @@ class SearchTermLogger implements SearchTermLoggerInterface
 
         $now = new \DateTime();
         $this->connection->insert('s_statistics_search', [
-            'datum' => $now->format('Y-m-d h:i:s'),
+            'datum' => $now->format('Y-m-d H:i:s'),
             'searchterm' => $condition->getTerm(),
             'results' => $result->getTotalCount(),
             'shop_id' => $shop->getId()
