@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/search_urls"}
 Ext.define('Shopware.apps.Analytics.store.navigation.SearchUrls', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-search-urls',
@@ -47,3 +48,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.SearchUrls', {
         }
     }
 });
+//{/block}

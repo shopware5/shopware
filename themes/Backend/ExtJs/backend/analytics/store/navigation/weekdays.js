@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/weekdays"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Weekdays', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-weekdays',
@@ -61,3 +62,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Weekdays', {
         me.callParent(arguments);
     }
 });
+//{/block}

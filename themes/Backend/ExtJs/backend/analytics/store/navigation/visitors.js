@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/visitors"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-visitors',
@@ -75,3 +76,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
         me.callParent(arguments);
     }
 });
+//{/block}

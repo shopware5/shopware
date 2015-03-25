@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/countries"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Countries', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-countries',
@@ -60,3 +61,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Countries', {
         me.callParent(arguments);
     }
 });
+//{/block}

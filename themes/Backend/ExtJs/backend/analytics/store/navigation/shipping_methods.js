@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/shipping_methods"}
 Ext.define('Shopware.apps.Analytics.store.navigation.ShippingMethods', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-shipping_methods',
@@ -60,3 +61,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ShippingMethods', {
         me.callParent(arguments);
     }
 });
+//{/block}
