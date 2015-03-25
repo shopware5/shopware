@@ -490,6 +490,12 @@ More precise designations are commented inside the document.
         .unitize(-110, 16, margin-left);
     }
 
+    .results--list {
+        .border-radius();
+        border: 1px solid @border-color;
+        background: #fff;
+    }
+
     // Remove the active searchfield padding
     .header-main {
         &.is--active-searchfield {
@@ -768,12 +774,6 @@ More precise designations are commented inside the document.
         .unitize(-225, 16, margin-left);
         .unitize(top, 55);
         left: 50%;
-    }
-
-    .results--list {
-        .border-radius();
-        border: 1px solid @border-color;
-        background: #fff;
     }
 }
 
