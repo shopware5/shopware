@@ -222,9 +222,13 @@ class Repository extends ModelRepository
         $builder->select(array('emotions.id', 'emotions.name'))
             ->from('Shopware\Models\Emotion\Emotion', 'emotions');
 
-        if (!empty($filter)) {
+        if ($filter === true) {
             $builder->where('emotions.isLandingPage = :isLandingPage')
-                ->setParameter('isLandingPage', $filter ? 1 : 0);
+                ->andWhere('emotions.parentId IS NULL')
+                ->setParameter('isLandingPage', 1);
+        } else {
+            $builder->where('emotions.isLandingPage = :isLandingPage')
+                ->setParameter('isLandingPage', 0);
         }
 
         if (!empty($orderBy)) {
