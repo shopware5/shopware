@@ -57,7 +57,7 @@ Either in a `span` element with an `input` tag inside / or inside a link. (Examp
 		width: 100%;
 		height: 100%;
 		position: relative;
-		z-index: 60;
+		z-index: @zindex-checkbox-state;
 	}
 
 	input[type="checkbox"] {
@@ -70,7 +70,7 @@ Either in a `span` element with an `input` tag inside / or inside a link. (Examp
 		border: 0 none;
 		background: none;
 		cursor: pointer;
-		z-index: 65;
+		z-index: @zindex-checkbox-element;
 
 		&:checked ~ .checkbox--state {
 			.primary-gradient();
