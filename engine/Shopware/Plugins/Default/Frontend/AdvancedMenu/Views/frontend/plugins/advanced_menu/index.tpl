@@ -40,7 +40,7 @@
                     {block name="frontend_plugins_advanced_menu_main_container"}
                         <div class="button-container">
                             {block name="frontend_plugins_advanced_menu_button_category"}
-                                <a href="{$mainCategory.link}" class="button--category" title="{s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$categories.name}">
+                                <a href="{$mainCategory.link}" class="button--category" title="{s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$mainCategory.name|escape:'html'}">
                                     <i class="icon--arrow-right"></i>
                                     {s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$mainCategory.name}
                                 </a>
@@ -67,7 +67,7 @@
                                     {/if}
                                     <div class="menu--teaser"{if $hasCategories} style="width: {$columnAmount * 25}%;"{else} style="width: 100%;"{/if}>
                                         {if !empty($mainCategory.media)}
-                                            <a href="{$mainCategory.link}" title="{s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$categories.name}" class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></a>
+                                            <a href="{$mainCategory.link}" title="{s name="toCategoryBtn" namespace="frontend/plugins/advanced_menu/advanced_menu"}{/s}{$mainCategory.name|escape:'html'}" class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></a>
                                         {/if}
 
                                         {if !empty($mainCategory.cmsHeadline)}
