@@ -490,10 +490,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $new = clone $emotion;
 
         switch (true) {
-            case ($device && $emotion->getIsLandingPage() && $emotion->getParentId()):
+            case ($emotion->getIsLandingPage() && $emotion->getParentId()):
                 $new->setParentId($emotion->getParentId());
                 break;
-            case ($device && $emotion->getIsLandingPage()):
+            case ($emotion->getIsLandingPage()):
                 $new->setParentId($emotion->getId());
                 break;
         }
