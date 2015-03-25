@@ -15,7 +15,7 @@ The collapse cart element contains the current items in the users shopping cart 
     position: absolute;
     text-align: left;
     right: 0;
-    z-index: 3000;
+    z-index: @zindex-collapse-cart;
     display: none;
 
     &.off-canvas {
@@ -29,7 +29,7 @@ The collapse cart element contains the current items in the users shopping cart 
         top: 0;
         padding: 0;
         background: #fff;
-        z-index: 8000;
+        z-index: @zindex-collapse-cart-offcanvas;
 
         .icon--loading-indicator {
             .unitize-width(38);

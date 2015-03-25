@@ -133,7 +133,7 @@ Shopware provides 3 product box types:<br/>
 				margin: auto;
 				display: inline-block;
 				vertical-align: middle;
-				z-index: 500;
+				z-index: @zindex-product-box-image-element;
 			}
 		}
 	}
@@ -262,7 +262,7 @@ Creates a corner product badge on a product-box.
 		.unitize(top, 20);
 		.unitize(left, -1);
 		position: absolute;
-		z-index: 750;
+		z-index: @zindex-product-box-product-badge;
 
 		.product--badge {
 			.unitize-padding(3, 10);
@@ -414,7 +414,7 @@ Creates a corner product badge on a product-box.
 			margin: auto;
 			display: inline-block;
 			vertical-align: middle;
-			z-index: 500;
+			z-index: @zindex-product-box-image-element;
 		}
 	}
 

@@ -88,7 +88,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	margin: 0 auto;
 	position: relative;
 	left: 0;
-	z-index: 1000;
+	z-index: @zindex-emotion-overlay;
 
 	& .emotion--loading-indicator {
 		padding: 0;
@@ -250,7 +250,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	.banner--mapping-link {
 		position: absolute;
 		display: block;
-		z-index: 110;
+		z-index: @zindex-emotion-mapping-link;
 		background: rgba(0,0,0,0);
 	}
 }
@@ -266,7 +266,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		width: 100%;
 		position: absolute;
 		top: 0; left: 0;
-		z-index: 100;
+		z-index: @zindex-emotion-image-slider-title;
 		color: #fff;
 		font-weight: 600;
 		background: rgba(0, 0, 0, 0.5);
@@ -314,7 +314,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		.unitize-height(55);
 		position: relative;
 		top: 0; left: 0;
-		z-index: 500;
+		z-index: @zindex-emotion-product-slider-title;
 	}
 
 	.product-slider--content {
@@ -323,7 +323,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		width: 100%;
 		position: absolute;
 		top: 0; left: 0;
-		z-index: 400;
+		z-index: @zindex-emotion-product-slider-content;
 	}
 
 	.product-slider--title ~ .product-slider--content {
@@ -464,7 +464,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		.unitize-height(55);
 		position: relative;
 		top: 0; left: 0;
-		z-index: 500;
+		z-index: @zindex-emotion-product-slider-title;
 	}
 
 	.manufacturer--content {
@@ -473,7 +473,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		width: 100%;
 		position: absolute;
 		top: 0; left: 0;
-		z-index: 400;
+		z-index: @zindex-emotion-product-slider-content;
 	}
 
 	.manufacturer--title ~ .manufacturer--content {
@@ -545,7 +545,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		background: #000;
 		position: absolute;
 		top: 0; left: 0;
-		z-index: 1000;
+		z-index: @zindex-emotion-video-element;
 	}
 
 	.video--cover {
@@ -553,7 +553,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		width: 100%;
 		height: 100%;
 		position: absolute;
-		z-index: 1300;
+		z-index: @zindex-emotion-video-cover;
 		background-position: center center;
 		background-size: cover;
 		background-repeat: no-repeat;
@@ -588,7 +588,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		color: #fff;
 		border: 2px solid #fff;
 		text-align: center;
-		z-index: 1200;
+		z-index: @zindex-emotion-video-play-btn;
 	}
 
 	.video--text {
@@ -598,7 +598,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		position: absolute;
 		left: 0; right: 0;
 		top: 0; bottom: 0;
-		z-index: 1100;
+		z-index: @zindex-emotion-video-text;
 		color: #fff;
 		text-align: center;
 

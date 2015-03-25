@@ -22,7 +22,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
     display: none;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    z-index: 8000;
+    z-index: @zindex-offcanvas;
 
     &.is--left {
         .transform(translateX(-100%));
@@ -185,7 +185,7 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
         height: auto;
         top: 0;
         left: 0;
-        z-index: 1000;
+        z-index: @zindex-offcanvas-higher-viewport;
 
         .sidebar--navigation .navigation--link {
             .unitize-padding(10, 10);
