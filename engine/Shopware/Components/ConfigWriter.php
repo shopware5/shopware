@@ -50,9 +50,9 @@ class ConfigWriter
 
     /**
      * @param string $name
-     * @param null $namespace
+     * @param string|null $namespace
      * @param int $shopId
-     * @return array|null
+     * @return mixed
      */
     public function get($name, $namespace = null, $shopId = 1)
     {
@@ -69,8 +69,8 @@ class ConfigWriter
 
     /**
      * @param string $name
-     * @param string $value
-     * @param null $namespace
+     * @param mixed $value
+     * @param string|null $namespace
      * @param null|int $shopId
      */
     public function save($name, $value, $namespace = null, $shopId = 1)
@@ -95,7 +95,7 @@ class ConfigWriter
      * @param int|null $shopId
      * @return QueryBuilder
      */
-    private function getConfigValueByNameQuery($name, $namespace, $shopId)
+    private function getConfigValueByNameQuery($name, $namespace = null, $shopId = 1)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([
