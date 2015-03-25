@@ -56,6 +56,12 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     protected $fileExtension = '.php';
 
     /**
+     * Chmod for proxy files
+     * @var int
+     */
+    protected $fileChmod = 0644;
+
+    /**
      * @var string Default proxy class template.
      */
     protected $proxyClassTemplate =
@@ -101,10 +107,11 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * @param string $proxyNamespace
      * @param string $proxyDir
      */
-    public function __construct($hookManager, $proxyNamespace, $proxyDir)
+    public function __construct($hookManager, $proxyNamespace, $proxyDir, $proxyChmod = 0644)
     {
         $this->hookManager = $hookManager;
         $this->proxyNamespace = $proxyNamespace;
+        $this->fileChmod = $proxyChmod;
 
         if (!is_dir($proxyDir)) {
             throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $proxyDir));
@@ -228,7 +235,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
             return false;
         }
-        chmod($fileName, 0644);
+        chmod($fileName, $this->fileChmod);
         umask($oldMask);
     }
 
