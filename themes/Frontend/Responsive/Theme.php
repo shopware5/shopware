@@ -42,7 +42,7 @@ class Theme extends \Shopware\Components\Theme
      *
      * @var array
      */
-    protected $javascript = array(
+    protected $javascript = [
 
         // Third party plugins / libraries
         'vendors/js/jquery/jquery.min.js',
@@ -98,16 +98,16 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.image-gallery.js',
         'src/js/jquery.offcanvas-html-panel.js',
         'src/js/jquery.shopware-responsive.js'
-    );
+    ];
 
-    private $fieldSetDefaults = array(
+    private $fieldSetDefaults = [
         'layout' => 'column',
         'height' => 170,
         'flex' => 0,
-        'defaults' => array('columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0')
-    );
+        'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0']
+    ];
 
-    private $themeColorDefaults = array(
+    private $themeColorDefaults = [
         "_brand-primary" => "#D9400B",
         "_brand-primary-light" => "saturate(lighten(@brand-primary,12%), 5%)",
         "_brand-secondary" => "#5F7285",
@@ -178,14 +178,13 @@ class Theme extends \Shopware\Components\Theme
         "_badge-recommendation-color" => "#FFFFFF",
         "_badge-download-bg" => "@highlight-info",
         "_badge-download-color" => "#FFFFFF"
-    );
+    ];
 
     /**
      * @param Form\Container\TabContainer $container
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
-
         $container->addTab($this->createMainConfigTab());
 
         $tab = $this->createTab(
@@ -199,11 +198,11 @@ class Theme extends \Shopware\Components\Theme
 
     private function createBasicFieldSet()
     {
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 130]);
         $fieldSet = $this->createFieldSet(
             'basic_field_set',
             '__responsive_tab_general_fieldset_base__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSet->addElement(
@@ -246,11 +245,11 @@ class Theme extends \Shopware\Components\Theme
     {
         $tabPanel = $this->createTabPanel(
             'bottom_tab_panel',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'plain' => true
-                )
-            )
+                ]
+            ]
         );
 
         $tabPanel->addTab($this->createGeneralTab());
@@ -271,18 +270,18 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'general_tab',
             '__responsive_tab_general__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'autoScroll' => true
-                )
-            )
+                ]
+            ]
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 130]);
         $fieldSetGrey = $this->createFieldSet(
             'grey_tones',
             '__responsive_tab_general_fieldset_grey__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetGrey->addElement(
@@ -318,11 +317,11 @@ class Theme extends \Shopware\Components\Theme
         $tab->addElement($basicFieldSet);
         $tab->addElement($fieldSetGrey);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 130));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 130]);
         $fieldSetHighlights = $this->createFieldSet(
             'highlight_colors',
             '__responsive_tab_general_fieldset_highlight__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetHighlights->addElement(
@@ -356,11 +355,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetHighlights);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 200]);
         $fieldSetScaffolding = $this->createFieldSet(
             'scaffolding',
             '__responsive_tab_general_fieldset_scaffolding__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetScaffolding->addElement(
@@ -434,14 +433,14 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'typo_tab',
             '__responsive_tab_typo__',
-            array('attributes' => array('autoScroll' => true))
+            ['attributes' => ['autoScroll' => true]]
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 170]);
         $fieldSetBasic = $this->createFieldSet(
             'typo_base',
             '__responsive_tab_typo_fieldset_base__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetBasic->addElement(
@@ -489,11 +488,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetBasic);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 170]);
         $fieldSetHeadlines = $this->createFieldSet(
             'typo_headlines',
             '__responsive_tab_typo_fieldset_headlines__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetHeadlines->addElement(
@@ -553,18 +552,18 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'buttons_tab',
             '__responsive_tab_buttons__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'autoScroll' => true
-                )
-            )
+                ]
+            ]
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 90));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 90]);
         $fieldSetButtons = $this->createFieldSet(
             'buttons_fieldset',
             '__responsive_tab_buttons_fieldset_global__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetButtons->addElement(
@@ -584,11 +583,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetButtons);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 200]);
         $fieldSetDefaultButtons = $this->createFieldSet(
             'buttons_default_fieldset',
             '__responsive_tab_buttons_fieldset_default__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetDefaultButtons->addElement(
@@ -643,11 +642,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetDefaultButtons);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 170]);
         $fieldSetPrimaryButtons = $this->createFieldSet(
             'buttons_primary_fieldset',
             '__responsive_tab_buttons_fieldset_primary__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetPrimaryButtons->addElement(
@@ -688,11 +687,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetPrimaryButtons);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 170]);
         $fieldSetSecondaryButtons = $this->createFieldSet(
             'buttons_secondary_fieldset',
             '__responsive_tab_buttons_fieldset_secondary__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetSecondaryButtons->addElement(
@@ -733,11 +732,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetSecondaryButtons);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 170));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 170]);
         $fieldSetPanels = $this->createFieldSet(
             'panels_fieldset',
             '__responsive_tab_buttons_fieldset_panels__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetPanels->addElement(
@@ -790,18 +789,18 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'forms_tab',
             '__responsive_tab_forms__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'autoScroll' => true
-                )
-            )
+                ]
+            ]
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 90));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 90]);
         $fieldSetLabels = $this->createFieldSet(
             'labels_fieldset',
             '__responsive_tab_forms_fieldset_labels__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetLabels->addElement(
@@ -821,11 +820,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetLabels);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 160));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 160]);
         $fieldSetFormBase = $this->createFieldSet(
             'form_base_fieldset',
             '__responsive_tab_forms_fieldset_global__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetFormBase->addElement(
@@ -866,11 +865,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetFormBase);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 240));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 240]);
         $fieldSetFormStates = $this->createFieldSet(
             'form_states_fieldset',
             '__responsive_tab_forms_fieldset_states__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetFormStates->addElement(
@@ -951,18 +950,18 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'tables_tab',
             '__responsive_tab_tables__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'autoScroll' => true
-                )
-            )
+                ]
+            ]
         );
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 200]);
         $fieldSetTables = $this->createFieldSet(
             'tables_fieldset',
             '__responsive_tab_tables_fieldset_tables__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetTables->addElement(
@@ -1017,11 +1016,11 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetTables);
 
-        $attributes = array_merge($this->fieldSetDefaults, array('height' => 200));
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 200]);
         $fieldSetBadges = $this->createFieldSet(
             'badges_fieldset',
             '__responsive_tab_tables_fieldset_badges__',
-            array('attributes' => $attributes)
+            ['attributes' => $attributes]
         );
 
         $fieldSetBadges->addElement(
@@ -1095,27 +1094,27 @@ class Theme extends \Shopware\Components\Theme
         $tab = $this->createTab(
             'responsiveMain',
             '__responsive_tab_header__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'layout' => 'anchor',
                     'autoScroll' => true,
                     'padding' => '0',
-                    'defaults' => array('anchor' => '100%')
-                )
-            )
+                    'defaults' => ['anchor' => '100%']
+                ]
+            ]
         );
 
         $fieldSet = $this->createFieldSet(
             'bareGlobal',
             '__global_configuration__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'padding' => '10',
                     'margin'=> '5',
                     'layout' => 'anchor',
-                    'defaults' => array('labelWidth' => 155, 'anchor' => '100%')
-                )
-            )
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
+                ]
+            ]
         );
 
         $fieldSet->addElement(
@@ -1212,13 +1211,13 @@ class Theme extends \Shopware\Components\Theme
                 'lightboxZoomFactor',
                 '__lightbox_zoom_factor__',
                 0,
-                array(
-                    array('value' => 0, 'text' => '__lightbox_zoom_factor_auto__'),
-                    array('value' => 1, 'text' => '__lightbox_zoom_factor_none__'),
-                    array('value' => 2, 'text' => '__lightbox_zoom_factor_2x__'),
-                    array('value' => 3, 'text' => '__lightbox_zoom_factor_3x__'),
-                    array('value' => 5, 'text' => '__lightbox_zoom_factor_5x__')
-                ),
+                [
+                    ['value' => 0, 'text' => '__lightbox_zoom_factor_auto__'],
+                    ['value' => 1, 'text' => '__lightbox_zoom_factor_none__'],
+                    ['value' => 2, 'text' => '__lightbox_zoom_factor_2x__'],
+                    ['value' => 3, 'text' => '__lightbox_zoom_factor_3x__'],
+                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__']
+                ],
                 $this->getLabelAttribute(
                     'lightbox_zoom_factor_description',
                     'supportText'
@@ -1230,7 +1229,8 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'appleWebAppTitle',
                 '__apple_web_app_title__',
-                ''
+                '',
+                ['attributes' => ['lessCompatible' => false]]
             )
         );
 
@@ -1239,14 +1239,14 @@ class Theme extends \Shopware\Components\Theme
         $fieldSet = $this->createFieldSet(
             'responsiveGlobal',
             '__advanced_settings__',
-            array(
-                'attributes' => array(
+            [
+                'attributes' => [
                     'padding' => '10',
                     'margin' => '5',
                     'layout' => 'anchor',
-                    'defaults' => array('anchor' => '100%', 'labelWidth' => 155)
-                )
-            )
+                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155]
+                ]
+            ]
         );
 
         $fieldSet->addElement(
@@ -1254,7 +1254,7 @@ class Theme extends \Shopware\Components\Theme
                 'additionalCssData',
                 '__additional_css_data__',
                 '',
-                array('attributes' => array('xtype' => 'textarea'), 'help' => '__additional_css_data_description__')
+                ['attributes' => ['xtype' => 'textarea', 'lessCompatible' => false], 'help' => '__additional_css_data_description__']
             )
         );
 
@@ -1263,7 +1263,7 @@ class Theme extends \Shopware\Components\Theme
                 'additionalJsLibraries',
                 '__additional_js_libraries__',
                 '',
-                array('attributes' => array('xtype' => 'textarea'), 'help' => '__additional_js_libraries_description__')
+                ['attributes' => ['xtype' => 'textarea', 'lessCompatible' => false], 'help' => '__additional_js_libraries_description__']
             )
         );
 
@@ -1280,7 +1280,7 @@ class Theme extends \Shopware\Components\Theme
     private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
     {
         $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
-        return array('attributes' => array($labelType => $description));
+        return ['attributes' => [$labelType => $description]];
     }
 
     /**
@@ -1294,10 +1294,10 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_turquoise_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#1db3b8',
                     '_brand-primary-light' => 'lighten(@brand-primary, 5%)'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1307,10 +1307,10 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_green_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#72a425',
                     '_brand-primary-light' => 'saturate(lighten(@brand-primary, 5%), 5%)'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1320,10 +1320,10 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_red_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#be0a30',
                     '_brand-primary-light' => 'saturate(lighten(@brand-primary, 10%), 5%)'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1333,9 +1333,9 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_pink_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#d31e81'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1345,7 +1345,7 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_gray_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#555555',
                     '_brand-primary-light' => 'lighten(@brand-primary, 10%)',
                     '_brand-secondary' => '#999999',
@@ -1353,7 +1353,7 @@ class Theme extends \Shopware\Components\Theme
                     '_text-color' => '@brand-primary-light',
                     '_text-color-dark' => '@brand-primary',
                     '_link-color' => '@brand-secondary'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1363,10 +1363,10 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_brown_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#613400',
                     '_brand-primary-light' => 'saturate(lighten(@brand-primary,5%), 5%)'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1376,9 +1376,9 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_blue_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#009ee0'
-                )
+                ]
             )
         );
         $collection->add($set);
@@ -1388,12 +1388,12 @@ class Theme extends \Shopware\Components\Theme
             '__color_scheme_black_description__'
         )->setValues(
             array_merge($this->themeColorDefaults,
-                array(
+                [
                     '_brand-primary' => '#000000',
                     '_brand-primary-light' => 'lighten(@brand-primary, 20%)',
                     '_brand-secondary' => '#555555',
                     '_brand-secondary-dark' => 'darken(@brand-secondary, 10%)'
-                )
+                ]
             )
         );
         $collection->add($set);

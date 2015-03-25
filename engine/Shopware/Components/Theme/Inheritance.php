@@ -428,9 +428,11 @@ class Inheritance
      * current shop.
      *
      * @param \Shopware\Models\Shop\Template $template
+     * @param boolean $lessCompatible
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @throws \Enlight_Event_Exception
      */
-    private function getShopConfigQuery(Shop\Template $template)
+    private function getShopConfigQuery(Shop\Template $template, $lessCompatible)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(
@@ -443,6 +445,10 @@ class Inheritance
         $builder->from('Shopware\Models\Shop\TemplateConfig\Element', 'element')
             ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
             ->where('element.templateId = :templateId');
+
+        if ($lessCompatible) {
+            $builder->andWhere('element.lessCompatible = 1');
+        }
 
         $this->eventManager->notify('Theme_Inheritance_Shop_Query_Built', array(
             'builder' => $builder,
