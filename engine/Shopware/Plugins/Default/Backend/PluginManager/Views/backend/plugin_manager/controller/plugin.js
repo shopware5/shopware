@@ -429,7 +429,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         }).show();
     },
 
-    login: function(shopwareId, password, callback) {
+    login: function(shopwareId, password, callback, errorCallback) {
         var me = this;
 
         me.sendAjaxRequest(
@@ -445,7 +445,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 }
                 me.fireRefreshAccountData(response);
                 callback(response);
-            }
+            },
+            errorCallback
         );
     },
 

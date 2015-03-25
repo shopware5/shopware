@@ -127,6 +127,11 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
             $r = isset($o['product']) ? $o['product'] : null;
             $this->View()->assign('product', $r, true);
         }
+
+        /** @var Shopware_Components_Config $config */
+        $config = $this->get('config');
+
+        $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
     }
 
     /**

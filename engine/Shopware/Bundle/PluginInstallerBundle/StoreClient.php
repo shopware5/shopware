@@ -355,6 +355,7 @@ class StoreClient
             case 'UserTokensException-0':     //Authorization failed!
             case 'UserTokensException-1':     //Token invalid.
             case 'UserTokensException-2':     //Given token is invalid.
+            case 'LicenseUpgradesException-0': //Given token is invalid.
             case 'LdapTokensException-0':     //Authorization failed.
                 throw new AuthenticationException($sbpCode, 'authentication', $httpCode, $requestException);
 
@@ -418,7 +419,7 @@ class StoreClient
         }
 
         throw new StoreException(
-            $data[$sbpCode],
+            $sbpCode,
             $data['reason'],
             $httpCode,
             $requestException
