@@ -33,7 +33,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
 
     snippets: {
         file: '{s name=file}Image{/s}',
-        link: '{s name=link}Link{/s}'
+        link: '{s name=link}Link{/s}',
+        title: '{s name=title}Title{/s}'
     },
 
     basePath: '{link file=""}',
