@@ -33,6 +33,17 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
             'onPostDispatch'
         );
 
+        $this->addForm();
+        $this->translateForm();
+
+        return true;
+    }
+
+    /**
+     * Translates the plugin form
+     */
+    private function addForm()
+    {
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
@@ -66,10 +77,41 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
             'value' => 30,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
-
-        return true;
     }
 
+    /**
+     * Translates the plugin form
+     */
+    private function translateForm()
+    {
+        $formTranslation = array(
+            'en_GB' => array(
+                'plugin_form' => array(
+                    'label' => 'Tag cloud'
+                ),
+                'show' => array(
+                    'label' => 'Display tag cloud',
+                ),
+                'controller' => array(
+                    'label' => 'Controller selection'
+                ),
+                'tagCloudClass' => array(
+                    'label' => 'Name of the tag class'
+                ),
+                'tagCloudMax' => array(
+                    'label' => 'Maximum number of terms'
+                ),
+                'tagCloudSplit' => array(
+                    'label' => 'Number of ranks'
+                ),
+                'tagTime' => array(
+                    'label' => 'Time period (in days) considered'
+                )
+            )
+        );
+
+        $this->addFormTranslations($formTranslation);
+    }
     /**
      * @return array
      */
