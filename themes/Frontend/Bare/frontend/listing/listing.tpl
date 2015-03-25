@@ -2,6 +2,7 @@
 {block name="frontend_listing_list_promotion"}
     {if $hasEmotion}
         {$showListing = false}
+        {$fullscreen = false}
 
         {block name="frontend_listing_emotions"}
             <div class="content--emotions">
@@ -14,6 +15,10 @@
                                 {$showListing = true}
                             {/if}
 
+                            {if $emotion.fullscreen == 1}
+                                {$fullscreen = true}
+                            {/if}
+
                             <div class="emotion--fragment">
                                 {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
                             </div>
@@ -21,6 +26,10 @@
                     {else}
                         {if $emotion.showListing == 1}
                             {$showListing = true}
+                        {/if}
+
+                        {if $emotion.fullscreen == 1}
+                            {$fullscreen = true}
                         {/if}
 
                         <div class="emotion--wrapper"
@@ -33,8 +42,8 @@
 
                 {block name="frontend_listing_list_promotion_link_show_listing"}
                     {if !$showListing}
-                        <div class="emotion--show-listing">
-                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" class="link--show-listing" rel="nofollow">
+                        <div class="emotion--show-listing{if $fullscreen} is--align-center{/if}">
+                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" class="link--show-listing{if $fullscreen} btn is--primary{/if}" rel="nofollow">
                                 {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
                             </a>
                         </div>
