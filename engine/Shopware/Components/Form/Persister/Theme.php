@@ -170,13 +170,20 @@ class Theme implements Form\Interfaces\Persister
     private function saveField(Form\Interfaces\Field $field, Template $template, TemplateConfig\Layout $parent)
     {
         /**@var $field Form\Field */
+        $lessCompatible = true;
+        if (array_key_exists('lessCompatible', $field->getAttributes())) {
+            $attributes = $field->getAttributes();
+            $lessCompatible = (bool) $attributes['lessCompatible'];
+        }
+
         $data = array(
             'attributes' => $field->getAttributes(),
             'fieldLabel' => $field->getLabel(),
             'name' => $field->getName(),
             'defaultValue' => $field->getDefaultValue(),
             'supportText' => $field->getHelp(),
-            'allowBlank' => !$field->isRequired()
+            'allowBlank' => !$field->isRequired(),
+            'lessCompatible' => $lessCompatible
         );
 
         $class = get_class($field);
