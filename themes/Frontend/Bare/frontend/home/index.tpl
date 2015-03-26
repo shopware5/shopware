@@ -31,9 +31,11 @@
             <div class="content--emotions">
                 {foreach $emotions as $emotion}
                     {if $hasEscapedFragment}
-                        <div class="emotion--fragment">
-                            {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
-                        </div>
+                        {if 0|in_array:$emotion.devicesArray}
+                            <div class="emotion--fragment">
+                                {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
+                            </div>
+                        {/if}
                     {else}
                         <div class="emotion--wrapper"
                              data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
