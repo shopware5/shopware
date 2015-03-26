@@ -409,6 +409,10 @@ class LegacyStructConverter
      */
     public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
+        if (!$media instanceof StoreFrontBundle\Struct\Media) {
+            return [];
+        }
+
         //now we get the configured image and thumbnail dir.
         $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
