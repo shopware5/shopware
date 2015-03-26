@@ -422,7 +422,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['image']]);
             $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
             $media = Shopware()->Container()->get('shopware_storefront.media_service')->get($mediaId, $context);
-            $data['media'] = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
+            if ($media instanceof \Shopware\Bundle\StoreFrontBundle\Struct\Media) {
+                $data['media'] = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
+            } else {
+                $data['media'] = [];
+            }
         }
 
         return $data;
@@ -496,7 +500,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($mediaId) {
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
             $media = $this->get('shopware_storefront.media_service')->get($mediaId, $context);
-            $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+            if ($media instanceof \Shopware\Bundle\StoreFrontBundle\Struct\Media) {
+                $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+            } else {
+                $mediaData = [];
+            }
             $data = array_merge($mediaData, $data);
         }
 
@@ -574,6 +582,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $value['link'] = $this->Request()->getBaseUrl() . $value['link'];
                 }
             }
+            if (!isset($media[$value['mediaId']])) {
+                continue;
+            }
+
             $single = $media[$value['mediaId']];
 
             $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
