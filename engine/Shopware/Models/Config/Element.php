@@ -52,7 +52,7 @@ class Element extends ModelEntity
     private $name;
 
     /**
-     * @var string $description
+     * @var string $value
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
