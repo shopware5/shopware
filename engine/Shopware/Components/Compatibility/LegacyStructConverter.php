@@ -816,6 +816,11 @@ class LegacyStructConverter
      */
     private function getListProductData(StoreFrontBundle\Struct\ListProduct $product)
     {
+        $createDate = null;
+        if ($product->getCreatedAt()) {
+            $createDate = $product->getCreatedAt()->format('Y-m-d');
+        }
+
         $data = array(
             'articleID' => $product->getId(),
             'articleDetailsID' => $product->getVariantId(),
@@ -838,7 +843,7 @@ class LegacyStructConverter
             'width' => $product->getWidth(),
             'laststock' => $product->isCloseouts(),
             'additionaltext' => $product->getAdditional(),
-            'datum' => $product->getCreatedAt()->format('Y-m-d'),
+            'datum' => $createDate,
             'sales' => $product->getSales(),
             'filtergroupID' => null,
             'priceStartingFrom' => null,
