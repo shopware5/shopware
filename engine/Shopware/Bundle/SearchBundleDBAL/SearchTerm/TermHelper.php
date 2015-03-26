@@ -52,26 +52,14 @@ class TermHelper implements TermHelperInterface
      */
     public function splitTerm($string)
     {
-        $string = strtolower(html_entity_decode($string));
-
-        $substitution = [
-            "ä" => "a",
-            "Ä" => "a",
-            "ö" => "o",
-            "Ö" => "o",
-            "ü" => "u",
-            "Ü" => "u",
-            "ß" => "ss",
-            "\" " => " zoll ",
-            "`" => "",
-            "´" => "",
-            "'" => "",
-            "-" => ""
-        ];
+        if (function_exists('mb_strtolower')) {
+            $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
+        } else {
+            $string = strtolower(html_entity_decode($string));
+        }
 
         // Remove not required chars from string
-        $string = str_replace(array_keys($substitution), array_values($substitution), $string);
-        $string = trim(preg_replace("/[^a-z0-9]/", " ", $string));
+        $string = trim(preg_replace("/[^\pL]/u", " ", $string));
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
@@ -86,8 +74,6 @@ class TermHelper implements TermHelperInterface
 
         // Check if any keyword is on blacklist
         $words = $this->filterBadWordsFromString($words);
-
-        sort($words);
 
         return $words;
     }
