@@ -301,7 +301,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             boxLabel: '{s name=settings/boxlabel/fullscreen}{/s}',
             name: 'fullscreen',
             labelWidth: me.defaults.labelWidth - 20,
-            anchor: '100%'
+            anchor: '100%',
+            listeners: {
+                scope: me,
+                change: function(field, value) {
+                    me.listingCheckbox.setVisible(!value);
+                    if(value) {
+                        me.listingCheckbox.setValue(false);
+                    }
+                }
+            }
         });
 
         return Ext.create('Ext.form.FieldSet', {
