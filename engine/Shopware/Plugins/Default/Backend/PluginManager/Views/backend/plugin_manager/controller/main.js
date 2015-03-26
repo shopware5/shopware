@@ -25,6 +25,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                     return;
                 }
 
+                if (!Shopware.app.Application.sbpAvailable) {
+                    Shopware.Notification.createGrowlMessage('', '{s name="sbp_not_available"}{/s}');
+                }
                 me.mainWindow = me.getView('list.Window').create();
                 me.mainWindow.show();
             }
