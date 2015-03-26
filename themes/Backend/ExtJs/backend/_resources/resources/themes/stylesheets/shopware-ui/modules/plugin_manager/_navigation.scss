@@ -32,6 +32,10 @@
         }
     }
 
+    .account-avatar.disabled {
+        cursor: default;
+    }
+
     .navigation-headline {
         color: #93a3af;
         border-bottom: 1px solid #D5DFE4;
