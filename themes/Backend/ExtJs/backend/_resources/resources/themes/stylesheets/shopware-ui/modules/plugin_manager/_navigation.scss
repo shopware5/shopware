@@ -119,6 +119,10 @@
             background: none;
             color: #c4c4c4 !important;
         }
+        a {
+            background: none;
+            color: #c4c4c4 !important;
+        }
     }
 
     .navigation-item.x-item-disabled {
@@ -126,6 +130,10 @@
 
         .x-mask {
             background: none;
+        }
+
+        a {
+            color: #c4c4c4 !important;
         }
     }
 
