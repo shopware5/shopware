@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.LicensePluginHandler', {
                 }
 
                 if (response.data) {
-                    me.checkLicencePlugin();
+                    me.checkLicencePlugin(plugin, callback);
                 }
             }
         });

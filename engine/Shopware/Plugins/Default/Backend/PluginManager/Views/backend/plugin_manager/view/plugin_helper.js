@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         });
     },
 
-    displayLoadingMask: function(plugin, description) {
+    displayLoadingMask: function(plugin, description, autoTimeout) {
         var me = this;
 
         me.hideLoadingMask();
@@ -267,6 +267,11 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             plugin: plugin,
             description: description
         });
+
+        if (autoTimeout === false) {
+            Shopware.app.Application.loadingMask.show();
+            return;
+        }
 
         Ext.Function.defer(function(deferPlugin) {
             if (!Shopware.app.Application.loadingMask) {
@@ -277,9 +282,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             if (loadingPlugin.get('technicalName') !== deferPlugin.get('technicalName')) {
                 return;
             }
-
             me.hideLoadingMask();
-
         }, 15000, this, [plugin]);
 
         Shopware.app.Application.loadingMask.show();
