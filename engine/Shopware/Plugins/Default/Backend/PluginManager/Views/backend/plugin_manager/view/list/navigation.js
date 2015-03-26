@@ -89,8 +89,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
             },  me.shopwareIdField]
         });
 
+        var cls = 'account-avatar';
+        if (!Shopware.app.Application.sbpAvailable) {
+            cls += ' disabled';
+        }
+
         me.accountAvatar = Ext.create('PluginManager.container.Container', {
-            cls: 'account-avatar',
+            cls: cls,
             items: [ rightSide ],
             margin: '0 0 10',
             handler: function() {
