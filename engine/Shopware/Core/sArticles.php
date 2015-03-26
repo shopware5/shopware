@@ -28,8 +28,10 @@ use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
+use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
@@ -163,6 +165,11 @@ class sArticles
      * @var SearchBundle\StoreFrontCriteriaFactory
      */
     private $storeFrontCriteriaFactory;
+
+    /**
+     * @var array
+     */
+    private $cachePromotions = [];
 
     /**
      * @var sArticlesComparisons
@@ -802,7 +809,7 @@ class sArticles
             return array();
         }
 
-        /** @var $currentProduct StoreFrontBundle\Struct\BaseProduct */
+        /** @var $currentProduct BaseProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;
@@ -1396,7 +1403,7 @@ class sArticles
             case 'top':
             case 'new':
             case 'random':
-                $value = $this->getRandomArticle($mode, $category, $value, $withImage);
+                $value = $this->getRandomArticle($mode, $category);
                 break;
             case "fix":
                 break;
@@ -1415,80 +1422,54 @@ class sArticles
         return $value;
     }
 
-    private function getRandomArticle($mode, $category = 0, $value = 0, $withImage = false)
+    /**
+     * @param string $mode
+     * @param int $category
+     * @return int
+     */
+    protected function getRandomArticle($mode, $category = 0)
     {
         $category = (int) $category;
-        $categoryJoin = "";
+        $context = $this->contextService->getShopContext();
+        $criteria = new Criteria();
 
-        if (!empty($category)) {
-            $categoryJoin = "
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID  = a.id
-                    AND ac.categoryID = $category
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-            ";
-        }
+        $criteria->addBaseCondition(new CategoryCondition([$category]))
+            ->addBaseCondition(new HasPriceCondition())
+            ->addBaseCondition(new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()]));
 
-        $withImageJoin = "";
-        if ($withImage) {
-            $withImageJoin = "
-                JOIN s_articles_img ai
-                ON ai.articleID=a.id
-                AND ai.main=1
-                AND ai.article_detail_id IS NULL
-            ";
-        }
-
+        $criteria->offset(0)
+            ->limit(50);
+        
         if ($mode == 'top') {
-            $promotionTime = !empty($this->config['sPROMOTIONTIME']) ? (int) $this->config['sPROMOTIONTIME'] : 30;
-            $now = $this->db->quote(date('Y-m-d H:00:00'));
-            $sql = "
-                SELECT od.articleID
-                FROM s_order as o, s_order_details od, s_articles a $withImageJoin
-
-                $categoryJoin
-
-                LEFT JOIN s_articles_avoid_customergroups ag
-                ON ag.articleID=a.id
-                AND ag.customergroupID={$this->customerGroupId}
-                WHERE o.ordertime > DATE_SUB($now, INTERVAL $promotionTime DAY)
-                AND o.id=od.orderID
-                AND od.modus=0 AND od.articleID=a.id
-                AND a.active=1
-                AND ag.articleID IS NULL
-                GROUP BY od.articleID
-                ORDER BY COUNT(od.articleID) DESC
-                LIMIT 100
-            ";
+            $criteria->addSorting(new PopularitySorting());
         } else {
-            $sql = "
-                SELECT a.id as articleID
-                FROM  s_articles a $withImageJoin
-                $categoryJoin
-                LEFT JOIN s_articles_avoid_customergroups ag
-                ON ag.articleID=a.id
-                AND ag.customergroupID={$this->customerGroupId}
-                WHERE a.active=1 AND a.mode=0
-                AND ag.articleID IS NULL
-                ORDER BY a.datum DESC
-                LIMIT 100
-            ";
+            $criteria->addSorting(new ReleaseDateSorting());
         }
-        $sql = Enlight()->Events()->filter(
-            'Shopware_Modules_Articles_GetPromotionById_FilterSqlRandom',
-            $sql,
-            array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value)
-        );
-        $articleIDs = $this->db->fetchCol($sql);
+        $result = $this->productNumberSearch->search($criteria, $context);
+
+        $ids = array_map(function(BaseProduct $product) {
+            return $product->getId();
+        }, $result->getProducts());
+
+        $diff = array_diff($ids, $this->cachePromotions);
+        if (empty($diff)) {
+            $diff = $ids;
+        }
+
+        shuffle($diff);
 
         if ($mode == 'random') {
-            $value = array_rand($articleIDs);
-            $value = $articleIDs[$value];
+            $value = array_rand($diff);
+            $value = $diff[$value];
         } else {
-            $value = current($articleIDs);
+            $value = current($diff);
         }
+
+        if (!$value) {
+            $value = current($ids);
+        }
+
+        $this->cachePromotions[] = $value;
 
         return $value;
     }
