@@ -94,7 +94,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
             items: [ rightSide ],
             margin: '0 0 10',
             handler: function() {
-                Shopware.app.Application.fireEvent('open-login', function() { });
+                if (Shopware.app.Application.sbpAvailable) {
+                    Shopware.app.Application.fireEvent('open-login', function() { });
+                }
             }
         });
 
