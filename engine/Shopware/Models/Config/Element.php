@@ -256,7 +256,7 @@ class Element extends ModelEntity
      */
     public function setOptions(array $options)
     {
-        $fields = array('label', 'value', 'description', 'required', 'scope');
+        $fields = array('label', 'value', 'description', 'required', 'scope', 'position');
         foreach ($fields as $field) {
             if (array_key_exists($field, $options)) {
                 $method = 'set' . ucfirst($field);
