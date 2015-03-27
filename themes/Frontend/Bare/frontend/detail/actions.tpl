@@ -1,7 +1,9 @@
 {block name='frontend_detail_actions_compare'}
-    <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" data-product-compare-add="true" title="{"{s name='DetailActionLinkCompare'}{/s}"|escape}" class="action--link action--compare">
-        <i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
-    </a>
+    {if {config name="compareShow"}}
+        <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" data-product-compare-add="true" title="{"{s name='DetailActionLinkCompare'}{/s}"|escape}" class="action--link action--compare">
+            <i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
+        </a>
+    {/if}
 {/block}
 
 {block name='frontend_detail_actions_notepad'}
