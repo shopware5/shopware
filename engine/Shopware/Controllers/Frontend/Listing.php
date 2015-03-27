@@ -381,9 +381,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
-        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+        if (!in_array($defaultShopCategoryId, array_keys($categoryPath))) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
-
             $this->Response()->setHttpResponseCode(404);
             return false;
         }
