@@ -244,6 +244,11 @@
             me.stepSize = me.range / int(me.opts.stepCount);
             me.stepWidth = 100 / int(me.opts.stepCount);
 
+
+            if (me.maxValue == me.minValue) {
+                me.maxValue = me.rangeMax;
+            }
+
             me.minValue = (me.opts.startMin == me.opts.rangeMin || me.opts.startMin <= me.minRange) ? me.minRange : int(me.opts.startMin);
             me.maxValue = (me.opts.startMax == me.opts.rangeMax || me.opts.startMax >= me.maxRange) ? me.maxRange : int(me.opts.startMax);
 
