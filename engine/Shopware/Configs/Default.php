@@ -110,7 +110,8 @@ return array_merge($customConfig, array(
         'frontendOptions' => array_merge(array(
             'automatic_serialization' => true,
             'automatic_cleaning_factor' => 0,
-            'lifetime' => 3600
+            'lifetime' => 3600,
+            'cache_id_prefix' => md5($this->getCacheDir())
         ), $customConfig['cache']['frontendOptions']),
         'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'auto', // e.G auto, apc, xcache
         'backendOptions' => array_merge(array(
