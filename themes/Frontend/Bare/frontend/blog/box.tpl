@@ -94,7 +94,7 @@
 
 				{* Article Description *}
 				{block name='frontend_blog_col_description'}
-					<div class="blog--box-description">
+					<div class="blog--box-description{if !$sArticle.media} is--fluid{/if}">
 
 						{block name='frontend_blog_col_description_short'}
 							<div class="blog--box-description-short">
