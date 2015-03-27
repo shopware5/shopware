@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/calendar_weeks"}
 Ext.define('Shopware.apps.Analytics.store.navigation.CalendarWeeks', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-calendar_weeks',
@@ -61,3 +62,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CalendarWeeks', {
         me.callParent(arguments);
     }
 });
+//{/block}

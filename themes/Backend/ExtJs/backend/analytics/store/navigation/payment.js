@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/payment"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Payment', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-payment',
@@ -60,3 +61,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Payment', {
         me.callParent(arguments);
     }
 });
+//{/block}
