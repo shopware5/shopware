@@ -2818,6 +2818,8 @@ class sArticles
      */
     public function sGetArticleById($id = 0, $sCategoryID = null)
     {
+        /** @var Enlight_Components_Db_Adapter_Pdo_Mysql $conn */
+        $conn = Shopware()->Db();
 
         if (empty($sCategoryID)) {
             $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
@@ -2833,7 +2835,7 @@ class sArticles
             $subShopJoin = "
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
-                    AND ac.categoryID = {$this->categoryId}
+                    AND ac.categoryID = {$conn->quote($this->categoryId)}
                 INNER JOIN s_categories c
                     ON  c.id = ac.categoryID
                     AND c.active = 1
@@ -2906,7 +2908,7 @@ class sArticles
 
             LEFT JOIN s_articles_prices AS p
                 ON p.articledetailsID=aDetails.id
-                AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
+                AND p.pricegroup={$conn->quote($this->sSYSTEM->sUSERGROUP)}
                 AND p.from='1'
 
             LEFT JOIN s_articles_prices AS p2
@@ -2919,9 +2921,9 @@ class sArticles
 
             LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+            AND ag.customergroupID={$conn->quote($this->customerGroupId)}
 
-            WHERE a.id=" . $id . "
+            WHERE a.id={$conn->quote($id)}
             AND ag.articleID IS NULL
         ";
 
@@ -2929,11 +2931,15 @@ class sArticles
             $sql .= "AND a.active=1";
         }
 
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterSQL', $sql, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+        $sql = Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetArticleById_FilterSQL',
+            $sql,
+            array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP)
+        );
 
 //        $this->sSYSTEM->_SESSION["sLastArticle"] = $this->sSYSTEM->_GET['sArticle']; // r302 save last visited article
 
-        $getArticle = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $id);
+        $getArticle = $conn->fetchRow($sql);
 
         // If the article is empty at this point, it means something went wrong, and we should skip the following steps
         if (empty($getArticle)) {
@@ -2955,26 +2961,42 @@ class sArticles
           */
         if ($getArticle["pricegroupActive"]) {
             $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
-            $getArticle["price"] = $this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], $getArticle["price"], 1, false);
+            $getArticle["price"] = $this->sGetPricegroupDiscount(
+                $this->sSYSTEM->sUSERGROUP,
+                $getArticle["pricegroupID"],
+                $getArticle["price"],
+                1,
+                false
+            );
         }
 
         // If the article could found
         if (count($getArticle) && $getArticle["articleID"]) {
-            $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterArticle', $getArticle, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+            $getArticle = Enlight()->Events()->filter(
+                'Shopware_Modules_Articles_GetArticleById_FilterArticle',
+                $getArticle,
+                array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP)
+            );
 
-            // Grap related links
-            $getRelatedLinks = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-                SELECT id, description, link, target FROM s_articles_information
-                WHERE articleID={$getArticle["articleID"]}
-                ", false, "article_" . $getArticle["articleID"]);
+            // Grab related links
+            $getRelatedLinks = $conn->fetchAll(
+                "SELECT id, description, link, target FROM s_articles_information
+                WHERE articleID = :articleId",
+                array('articleId' => $getArticle["articleID"])
+            );
             // Add 'http://' to link (if not set)
             if (isset($getRelatedLinks[0])) {
                 foreach ($getRelatedLinks as $linkKey => $linkValue) {
                     // Get possible link - translation
-                    $getRelatedLinks[$linkKey] = $this->sGetTranslation($linkValue, $linkValue["id"], "link", $this->sSYSTEM->sLanguage);
+                    $getRelatedLinks[$linkKey] = $this->sGetTranslation(
+                        $linkValue,
+                        $linkValue["id"],
+                        "link",
+                        $this->sSYSTEM->sLanguage
+                    );
 
                     if (!preg_match("/http/", $getRelatedLinks[$linkKey]["link"])) {
-                        $getRelatedLinks[$linkKey]["link"] = "http://" . $getRelatedLinks[$linkKey]["link"];
+                        $getRelatedLinks[$linkKey]["link"] = "http://".$getRelatedLinks[$linkKey]["link"];
                     }
                     //$getRelatedLinks[$linkKey]["target"] = "_blank";	// Open external links in new brower window
                     $getRelatedLinks[$linkKey]["supplierSearch"] = false;
@@ -2987,12 +3009,15 @@ class sArticles
             // This is most likely dead code. I'll update it for now, as part of SW-6977, but its
             // not tested nor should it be in use anywhere
             $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                . "sViewport=supplier&sSupplier=" . $getArticle['supplierID']
-                . "&sSearchText=" . urlencode($getArticle['supplierName']);
+                ."sViewport=supplier&sSupplier=".$getArticle['supplierID']
+                ."&sSearchText=".urlencode($getArticle['supplierName']);
 
-            $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
+            $getRelatedLinks[count($getRelatedLinks)] = array(
+                "supplierSearch" => true,
                 "description" => $getArticle["supplierName"],
-                "link" => $link, "target" => "_parent");
+                "link" => $link,
+                "target" => "_parent"
+            );
 
             $getArticle["sLinks"] = $getRelatedLinks;
 
@@ -3011,12 +3036,13 @@ class sArticles
 
             // Get article accessories
             // =================================================.
-            $getRelatedArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-                SELECT relatedarticle FROM s_articles_relationships WHERE articleID={$getArticle["articleID"]}
-                ", false, "article_" . $getArticle["articleID"]);
+            $getRelatedArticles = $conn->fetchAll(
+                "SELECT relatedarticle FROM s_articles_relationships WHERE articleID = :articleId",
+                array('articleId' => $getArticle["articleID"])
+            );
             if (count($getRelatedArticles)) {
                 foreach ($getRelatedArticles as $relatedArticleValue) {
-                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
+                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int)$relatedArticleValue['relatedarticle']);
 
                     if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
                         $getArticle["sRelatedArticles"][] = $tmpContainer;
@@ -3029,35 +3055,43 @@ class sArticles
 
             // Get similar articles
             // =================================================.
-            $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'],
-                "SELECT relatedarticle FROM s_articles_similar WHERE articleID={$getArticle["articleID"]}",
-                array(), "article_" . $getArticle["articleID"]
+            $getSimilarArticles = $conn->fetchAll(
+                "SELECT relatedarticle FROM s_articles_similar WHERE articleID = :articleId",
+                array('articleId' => $getArticle["articleID"])
             );
             if (count($getSimilarArticles)) {
                 foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
-                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
+                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int)$relatedArticleValue['relatedarticle']);
                     if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
                         $getArticle["sSimilarArticles"][] = $tmpContainer;
                     }
                 }
             } else {
 
-                if (!empty( $sCategoryID )) {
+                if (!empty($sCategoryID)) {
                     $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
                     $sqlGetCategory = "
-                    SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
-                    WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
-                    AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
+                    SELECT DISTINCT s_articles.id AS relatedarticle
+                    FROM s_articles_categories_ro, s_articles, s_articles_details
+                    WHERE s_articles_categories_ro.categoryID=:categoryId
+                    AND s_articles.id=s_articles_categories_ro.articleID
+                    AND s_articles.id=s_articles_details.articleID
                     AND s_articles_details.kind=1
-                    AND s_articles.id!={$getArticle["articleID"]}
+                    AND s_articles.id!=:articleId
                     AND s_articles.active=1
-                    ORDER BY s_articles_details.sales DESC LIMIT $similarLimit
+                    ORDER BY s_articles_details.sales DESC LIMIT {$conn->quote(intval($similarLimit))}
                     ";
 
-                    $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetCategory, false, "article_" . $getArticle["articleID"]);
+                    $getSimilarArticles = $conn->fetchAll(
+                        $sqlGetCategory,
+                        array(
+                            'categoryId' => $sCategoryID,
+                            'articleId' => $getArticle["articleID"]
+                        )
+                    );
 
                     foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
-                        $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
+                        $tmpContainer = $this->sGetPromotionById("fix", 0, (int)$relatedArticleValue['relatedarticle']);
                         if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
                             $getArticle["sSimilarArticles"][] = $tmpContainer;
                         }
@@ -3077,7 +3111,14 @@ class sArticles
                 /*
                     If prices were calculated via an active pricegroup - build discount matrix dynamicly
                     */
-                $getArticle["sBlockPrices"] = $this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], $getArticle["priceBeforePriceGroup"], 1, true, $getArticle);
+                $getArticle["sBlockPrices"] = $this->sGetPricegroupDiscount(
+                    $this->sSYSTEM->sUSERGROUP,
+                    $getArticle["pricegroupID"],
+                    $getArticle["priceBeforePriceGroup"],
+                    1,
+                    true,
+                    $getArticle
+                );
 
             } else {
                 /*
@@ -3087,26 +3128,48 @@ class sArticles
                     */
                 if ($getArticle["pricegroup"] != $this->sSYSTEM->sUSERGROUP) {
                     $sql = "
-                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
+                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice
+                        FROM s_articles_prices WHERE articledetailsID=:articleDetailsId
                         AND (pricegroup='EK')
                         ORDER BY id ASC
                         ";
+                    $params = array(
+                        'articleDetailsId' => $getArticle["articleDetailsID"]
+                    );
                 } else {
                     $sql = "
-                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
-                        AND (pricegroup='" . $this->sSYSTEM->sUSERGROUP . "')
+                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice
+                        FROM s_articles_prices WHERE articledetailsID=:articleDetailsId
+                        AND (pricegroup=:priceGroup)
                         ORDER BY id ASC
                         ";
+                    $params = array(
+                        'articleDetailsId' => $getArticle["articleDetailsID"],
+                        'priceGroup' => $this->sSYSTEM->sUSERGROUP
+                    );
                 }
 
-                $getBlockPricings = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
+                $getBlockPricings = $conn->fetchAll(
+                    $sql,
+                    $params
+                );
                 // If more then one row, there are block-prices
                 if (count($getBlockPricings) > 1) {
                     foreach ($getBlockPricings as $blockPriceKey => $blockPriceValue) {
                         $getBlockPricings[$blockPriceKey]["from"] = $blockPriceValue["valFrom"];
                         $getBlockPricings[$blockPriceKey]["to"] = $blockPriceValue["valTo"];
-                        $getBlockPricings[$blockPriceKey]["price"] = $this->sCalculatingPrice($blockPriceValue["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
-                        $getBlockPricings[$blockPriceKey]["pseudoprice"] = $this->sCalculatingPrice($blockPriceValue["pseudoprice"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
+                        $getBlockPricings[$blockPriceKey]["price"] = $this->sCalculatingPrice(
+                            $blockPriceValue["price"],
+                            $getArticle["tax"],
+                            $getArticle["taxID"],
+                            $getArticle
+                        );
+                        $getBlockPricings[$blockPriceKey]["pseudoprice"] = $this->sCalculatingPrice(
+                            $blockPriceValue["pseudoprice"],
+                            $getArticle["tax"],
+                            $getArticle["taxID"],
+                            $getArticle
+                        );
 
                     }
                     $getArticle["sBlockPrices"] = $getBlockPricings;
@@ -3119,7 +3182,9 @@ class sArticles
             $getArticle["sVariants"] = array();
 
             // Default-values
-            if (!$getArticle["minpurchase"]) $getArticle["minpurchase"] = 1;
+            if (!$getArticle["minpurchase"]) {
+                $getArticle["minpurchase"] = 1;
+            }
 
             if (!$getArticle["maxpurchase"]) {
 
@@ -3127,7 +3192,9 @@ class sArticles
             } else {
 
             }
-            if (!$getArticle["purchasesteps"]) $getArticle["purchasesteps"] = 1;
+            if (!$getArticle["purchasesteps"]) {
+                $getArticle["purchasesteps"] = 1;
+            }
 
 
             // Read unit if set
@@ -3136,9 +3203,21 @@ class sArticles
             }
 
             // Get cheapest price
-            $getArticle["priceStartingFrom"] = $this->sGetCheapestPrice($getArticle["articleID"], $getArticle["pricegroup"], $getArticle["pricegroupID"], $getArticle["pricegroupActive"]);
+            $getArticle["priceStartingFrom"] = $this->sGetCheapestPrice(
+                $getArticle["articleID"],
+                $getArticle["pricegroup"],
+                $getArticle["pricegroupID"],
+                $getArticle["pricegroupActive"]
+            );
 
-            if ($getArticle["price"]) $getArticle["price"] = $this->sCalculatingPrice($getArticle["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
+            if ($getArticle["price"]) {
+                $getArticle["price"] = $this->sCalculatingPrice(
+                    $getArticle["price"],
+                    $getArticle["tax"],
+                    $getArticle["taxID"],
+                    $getArticle
+                );
+            }
 
             // Load article-configurations
             $getArticle = $this->sGetArticleConfig($getArticle["articleID"], $getArticle);
@@ -3148,7 +3227,15 @@ class sArticles
                     // The default variant's price group price is calculated above and is not overwritten by sGetArticleConfig
                     if ($getArticle['sConfiguratorSelection']['kind'] !== 1) {
                         $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
-                        $getArticle["price"] = $this->sFormatPrice($this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], str_replace(",", ".", $getArticle["price"]), 1, false));
+                        $getArticle["price"] = $this->sFormatPrice(
+                            $this->sGetPricegroupDiscount(
+                                $this->sSYSTEM->sUSERGROUP,
+                                $getArticle["pricegroupID"],
+                                str_replace(",", ".", $getArticle["price"]),
+                                1,
+                                false
+                            )
+                        );
                     }
                 }
             }
@@ -3156,7 +3243,12 @@ class sArticles
             // Reformat prices
             // =================================================.
             if ($getArticle["pseudoprice"]) {
-                $getArticle["pseudoprice"] = $this->sCalculatingPrice(str_replace(",", ".", $getArticle["pseudoprice"]), $getArticle["tax"], $getArticle["taxID"], $getArticle);
+                $getArticle["pseudoprice"] = $this->sCalculatingPrice(
+                    str_replace(",", ".", $getArticle["pseudoprice"]),
+                    $getArticle["tax"],
+                    $getArticle["taxID"],
+                    $getArticle
+                );
 
                 $discPseudo = str_replace(",", ".", $getArticle["pseudoprice"]);
                 $discPrice = str_replace(",", ".", $getArticle["price"]);
@@ -3165,12 +3257,19 @@ class sArticles
                     $getArticle["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
                 }
             }
-            if ($getArticle["priceStartingFrom"]) $getArticle["priceStartingFrom"] = $this->sCalculatingPrice($getArticle["priceStartingFrom"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
+            if ($getArticle["priceStartingFrom"]) {
+                $getArticle["priceStartingFrom"] = $this->sCalculatingPrice(
+                    $getArticle["priceStartingFrom"],
+                    $getArticle["tax"],
+                    $getArticle["taxID"],
+                    $getArticle
+                );
+            }
 
             // Calculating price for reference-unit
             if ($getArticle["purchaseunit"] > 0 && $getArticle["referenceunit"]) {
-                $getArticle["purchaseunit"] = (float) $getArticle["purchaseunit"];
-                $getArticle["referenceunit"] = (float) $getArticle["referenceunit"];
+                $getArticle["purchaseunit"] = (float)$getArticle["purchaseunit"];
+                $getArticle["referenceunit"] = (float)$getArticle["referenceunit"];
 
                 $getArticle["referenceprice"] = $this->calculateReferencePrice(
                     $getArticle["price"],
@@ -3183,21 +3282,34 @@ class sArticles
 
             // Get Article images
             // =================================================.
-            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']);
-            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']);
+            $getArticle["image"] = $this->sGetArticlePictures(
+                $getArticle["articleID"],
+                true,
+                4,
+                $getArticle['ordernumber']
+            );
+            $getArticle["images"] = $this->sGetArticlePictures(
+                $getArticle["articleID"],
+                false,
+                0,
+                $getArticle['ordernumber']
+            );
 
             // Links
             // =================================================.
-            $getArticle["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getArticle["ordernumber"];
-            $getArticle["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getArticle["articleID"];
+            $getArticle["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=basket&sAdd=".$getArticle["ordernumber"];
+            $getArticle["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=detail&sArticle=".$getArticle["articleID"];
             if (!empty($sCategoryID)) {
-                $getArticle["linkDetails"] .= '&sCategory=' . $sCategoryID;
+                $getArticle["linkDetails"] .= '&sCategory='.$sCategoryID;
             }
-            $getArticle["linkDetailsRewrited"] = $this->sSYSTEM->sMODULES['sCore']->sRewriteLink($getArticle["linkDetails"], $getArticle["articleName"]);
+            $getArticle["linkDetailsRewrited"] = $this->sSYSTEM->sMODULES['sCore']->sRewriteLink(
+                $getArticle["linkDetails"],
+                $getArticle["articleName"]
+            );
 
-            $getArticle["linkNote"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=note&sAdd=" . $getArticle["ordernumber"];
-            $getArticle["linkTellAFriend"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=tellafriend&sDetails=" . $getArticle["articleID"];
-            $getArticle["linkCheaper"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=cheaper&sDetails=" . $getArticle["articleID"];
+            $getArticle["linkNote"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=note&sAdd=".$getArticle["ordernumber"];
+            $getArticle["linkTellAFriend"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=tellafriend&sDetails=".$getArticle["articleID"];
+            $getArticle["linkCheaper"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=cheaper&sDetails=".$getArticle["articleID"];
             // PDF - Link
 
 
@@ -3205,16 +3317,23 @@ class sArticles
 
             // Downloads
             // =================================================.
-            $sql = "
-                SELECT id, description, filename, size FROM s_articles_downloads WHERE articleID = {$getArticle["articleID"]}
-                ";
+            $getArticleDownloads = $conn->fetchAll(
+                "SELECT id, description, filename, size
+                FROM s_articles_downloads
+                WHERE articleID = :articleId",
+                array('articleId' => $getArticle["articleID"])
+            );
 
-            $getArticleDownloads = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
             foreach ($getArticleDownloads as $articleDownloadKey => $articleDownloadValue) {
                 // Get possible download - translation
-                $getArticleDownloads[$articleDownloadKey] = $this->sGetTranslation($articleDownloadValue, $articleDownloadValue["id"], "download", $this->sSYSTEM->sLanguage);
+                $getArticleDownloads[$articleDownloadKey] = $this->sGetTranslation(
+                    $articleDownloadValue,
+                    $articleDownloadValue["id"],
+                    "download",
+                    $this->sSYSTEM->sLanguage
+                );
                 // Construct filename
-                $getArticleDownloads[$articleDownloadKey]["filename"] = $this->sSYSTEM->sPathArticleFiles . "/" . $getArticleDownloads[$articleDownloadKey]["filename"];
+                $getArticleDownloads[$articleDownloadKey]["filename"] = $this->sSYSTEM->sPathArticleFiles."/".$getArticleDownloads[$articleDownloadKey]["filename"];
             }
 
             $getArticle["sDownloads"] = $getArticleDownloads;
@@ -3246,7 +3365,10 @@ class sArticles
             }
 
             if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
-                $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
+                $getArticle["sProperties"] = $this->sGetArticleProperties(
+                    $getArticle["articleID"],
+                    $getArticle["filtergroupID"]
+                );
             }
 
             if ($this->showArticleNavigation()) {
@@ -3255,23 +3377,34 @@ class sArticles
 
             //sDescriptionKeywords
             $string = (strip_tags(html_entity_decode($getArticle["description_long"], null, 'UTF-8')));
-            $string = str_replace(',','',$string);
+            $string = str_replace(',', '', $string);
             $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
             $badwords = explode(",", $this->sSYSTEM->sCONFIG['sBADWORDS']);
             $words = array_diff($words, $badwords);
             $words = array_count_values($words);
-            foreach (array_keys($words) as $word)
-                if (strlen($word) < 2)
+            foreach (array_keys($words) as $word) {
+                if (strlen($word) < 2) {
                     unset($words[$word]);
+                }
+            }
             arsort($words);
-            $getArticle["sDescriptionKeywords"] = htmlspecialchars(implode(", ", array_slice(array_keys($words), 0, 20)), ENT_QUOTES, 'UTF-8', false);
+            $getArticle["sDescriptionKeywords"] = htmlspecialchars(
+                implode(", ", array_slice(array_keys($words), 0, 20)),
+                ENT_QUOTES,
+                'UTF-8',
+                false
+            );
         }
 
 
         // Deactivate bundle displaying
         $getArticle['crossbundlelook'] = false;
 
-        $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
+        $getArticle = Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetArticleById_FilterResult',
+            $getArticle,
+            array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP)
+        );
 
         return $getArticle;
     }
