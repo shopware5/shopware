@@ -649,12 +649,15 @@ Ext.define('Shopware.grid.Panel', {
      * @returns { Shopware.grid.Controller }
      */
     createDefaultController: function () {
-        var me = this;
+        var me = this,
+            id = Ext.id();
 
         me.controller = Ext.create('Shopware.grid.Controller', {
             application: me.subApp,
             subApplication: me.subApp,
             subApp: me.subApp,
+            $controllerId: id,
+            id: id,
             configure: function () {
                 return {
                     gridClass: me.$className,
@@ -663,9 +666,27 @@ Ext.define('Shopware.grid.Panel', {
             }
         });
         me.controller.init();
+        me.subApp.controllers.add(me.controller.$controllerId, me.controller);
 
         return me.controller;
     },
+
+    /**
+     * Event bus workaround.
+     * The grid controller isn't assigned to any sub application.
+     * To prevent a duplicate event handling, the controller event listeners
+     * has to be destroyed if the detail window will be destroyed.
+     *
+     * @returns { Object }
+     */
+    destroy: function () {
+        var me = this;
+        if (!me.getConfig('hasOwnController') && me.controller) {
+            me.subApp.removeController(me.controller);
+        }
+        return me.callParent(arguments);
+    },
+
 
     /**
      * Registers the additional shopware events for this component

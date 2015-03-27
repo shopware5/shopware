@@ -476,13 +476,16 @@ Ext.define('Shopware.window.Detail', {
      *
      * @returns { Shopware.detail.Controller }
      */
-    createDefaultController: function() {
-        var me = this;
+    createDefaultController: function () {
+        var me = this,
+            id = Ext.id();
 
         me.controller = Ext.create('Shopware.detail.Controller', {
             application: me.subApp,
             subApplication: me.subApp,
             subApp: me.subApp,
+            $controllerId: id,
+            id: id,
             configure: function () {
                 return {
                     detailWindow: me.$className,
@@ -491,6 +494,7 @@ Ext.define('Shopware.window.Detail', {
             }
         });
         me.controller.init();
+        me.subApp.controllers.add(me.controller.$controllerId, me.controller);
 
         return me.controller;
     },
@@ -503,10 +507,10 @@ Ext.define('Shopware.window.Detail', {
      *
      * @returns { Object }
      */
-    destroy: function() {
+    destroy: function () {
         var me = this;
         if (!me.getConfig('hasOwnController') && me.controller) {
-            me.subApp.eventbus.uncontrol([me.controller.$className]);
+            me.subApp.removeController(me.controller);
         }
         return me.callParent(arguments);
     },
