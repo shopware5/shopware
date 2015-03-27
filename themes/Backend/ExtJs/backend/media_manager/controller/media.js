@@ -27,6 +27,8 @@
  * @author shopware AG
  */
 
+//{namespace name=backend/media_manager/view/main}
+
 /**
  * Shopware UI - Media Manager Media Controller
  *
@@ -42,6 +44,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * @string
      */
 	extend: 'Ext.app.Controller',
+
+    snippets: {
+        confirmMsgBox: {
+            deleteTitle: '{s name=confirmMsgBox/deleteTitle}Delete media files{/s}',
+            deleteText: '{s name=confirmMsgBox/deleteText}Are you sure you want to delete all selected media files?{/s}'
+        }
+    },
 
     /**
      * Define references for the different parts of our application. The
@@ -159,6 +168,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         var me = this,
             mediaView = me.getMediaView();
 
+        field.reset();
+
         mediaView.mediaDropZone.iterateFiles(fileField.files);
     },
 
@@ -272,12 +283,32 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Event listener method which fires when the user
      * clicks the "delete media(s)" button in the top toolbar
      *
-     * Deletes the currently selected medias.
+     * Shows a confirmation message box
      *
      * @event click
      * @return void
      */
     onDeleteMedia: function() {
+        var me = this;
+
+        Ext.MessageBox.confirm(
+            me.snippets.confirmMsgBox.deleteTitle,
+            me.snippets.confirmMsgBox.deleteText,
+            function(button){
+                if(button == 'yes'){
+                    me.deleteMedia();
+                }
+            },
+        this);
+    },
+
+    /**
+     * Deletes the currently selected medias.
+     * Will be executed if the user confirms to delete the selected medias
+     *
+     * @return void
+     */
+    deleteMedia: function() {
         var me = this,
             tree =  me.getAlbumTree(),
             treeStore = tree.getStore(),
@@ -307,6 +338,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                     callback: function() {
                         rootNode.removeAll(false);
                         treeStore.load();
+                        mediaView.deleteBtn.setDisabled(true);
                     }
                 });
             }
