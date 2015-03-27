@@ -105,7 +105,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $sortMode = $this->getSortMode(array_keys($valueIds));
+        $sortMode = $this->getSortMode($valueIds);
 
         $query->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
