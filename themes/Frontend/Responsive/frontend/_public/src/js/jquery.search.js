@@ -278,6 +278,8 @@
                 keyCode = event.which,
                 navKeyPressed = opts.keyBoardNavigation && (keyCode === keyMap.UP || keyCode === keyMap.DOWN || keyCode === keyMap.ENTER);
 
+            $.publish('plugin/search/onKeyDown', [ me, event ]);
+
             if (navKeyPressed && me.$results.hasClass(opts.activeCls)) {
                 me.onKeyboardNavigation(keyCode);
                 event.preventDefault();
@@ -292,12 +294,15 @@
          *
          * @public
          * @method onKeyUp
+         * @param {jQuery.Event} event
          */
-        onKeyUp: function () {
+        onKeyUp: function (event) {
             var me = this,
                 opts = me.opts,
                 term = me.$searchField.val() + '',
                 timeout = me.keyupTimeout;
+
+            $.publish('plugin/search/onKeyUp', [ me, event ]);
 
             if (timeout) {
                 window.clearTimeout(timeout);
@@ -330,6 +335,8 @@
 
             me.lastSearchTerm = $.trim(searchTerm);
 
+            $.publish('plugin/search/onSearchRequest', [ me, searchTerm ]);
+
             $.ajax({
                 'url': me.requestURL,
                 'data': {
@@ -337,7 +344,7 @@
                 },
                 'success': function (response) {
                     me.showResult(response);
-                    $.publish('plugin/searchField/onResponseSearchRequest', [ me, searchTerm ]);
+                    $.publish('plugin/search/onSearchResponse', [ me, searchTerm, response ]);
                 }
             });
         },
@@ -362,7 +369,7 @@
 
             picturefill();
 
-            $.publish('plugin/searchField/showResult', me);
+            $.publish('plugin/search/onShowResult', me);
         },
 
         /**
@@ -376,7 +383,7 @@
 
             me.$results.removeClass(me.opts.activeCls).hide().empty();
 
-            $.publish('plugin/searchField/closeResult', me);
+            $.publish('plugin/search/onCloseResult', me);
         },
 
         /**
@@ -419,6 +426,8 @@
                 $resultItems,
                 $nextSibling,
                 firstLast;
+
+            $.publish('plugin/search/onKeyboardNavigation', [ me, keyCode ]);
 
             if (keyCode === keyMap.UP || keyCode === keyMap.DOWN) {
                 $resultItems = $results.find(opts.resultItemSelector);
@@ -464,6 +473,8 @@
                 $el = me.$el,
                 opts = me.opts;
 
+            $.publish('plugin/search/onClickSearchEntry', [ me, event ]);
+
             if (!StateManager.isCurrentState('xs')) {
                 return;
             }
@@ -493,6 +504,8 @@
             me.$mainHeader.addClass(opts.activeHeaderClass);
 
             me.$searchField.focus();
+
+            $.publish('plugin/search/onOpenMobileSearch', [ me ]);
         },
 
         /**
@@ -512,6 +525,8 @@
             me.$mainHeader.removeClass(opts.activeHeaderClass);
 
             me.$searchField.blur();
+
+            $.publish('plugin/search/onCloseMobileSearch', [ me ]);
 
             me.closeResult();
         },
