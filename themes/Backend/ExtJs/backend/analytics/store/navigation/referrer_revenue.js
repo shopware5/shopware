@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/referrer_revenue"}
 Ext.define('Shopware.apps.Analytics.store.navigation.ReferrerRevenue', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-referrer_revenue',
@@ -55,3 +56,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ReferrerRevenue', {
         }
     }
 });
+//{/block}

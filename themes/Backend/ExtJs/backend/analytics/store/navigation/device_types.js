@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/device_types"}
 Ext.define('Shopware.apps.Analytics.store.navigation.DeviceTypes', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-device-types',
@@ -73,3 +74,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.DeviceTypes', {
         me.callParent(arguments);
     }
 });
+//{/block}

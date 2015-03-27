@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/article_impressions"}
 Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-article_impressions',
@@ -68,3 +69,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
         me.callParent(arguments);
     }
 });
+//{/block}

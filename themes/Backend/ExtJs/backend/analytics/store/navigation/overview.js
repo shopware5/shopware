@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/overview"}
 Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-overview',
@@ -55,3 +56,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
         }
     }
 });
+//{/block}

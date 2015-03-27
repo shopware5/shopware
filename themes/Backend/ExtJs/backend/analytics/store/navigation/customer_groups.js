@@ -29,6 +29,7 @@
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
+//{block name="backend/analytics/store/navigation/customer_groups"}
 Ext.define('Shopware.apps.Analytics.store.navigation.CustomerGroups', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-navigation-customer-groups',
@@ -62,3 +63,4 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CustomerGroups', {
         me.callParent(arguments);
     }
 });
+//{/block}
