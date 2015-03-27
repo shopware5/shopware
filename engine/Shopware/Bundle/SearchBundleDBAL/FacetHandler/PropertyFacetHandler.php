@@ -101,21 +101,14 @@ class PropertyFacetHandler implements FacetHandlerInterface
         $queryCriteria = clone $criteria;
         $queryCriteria->resetConditions();
         $queryCriteria->resetSorting();
+        $queryCriteria->resetFacets();
+        $queryCriteria->offset(0)->limit(1);
 
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
+        $properties = $this->getProperties($context, $queryCriteria);
 
-        $this->rebuildQuery($query);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        /**@var $facet Facet\PropertyFacet */
-        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        $properties = $this->propertyGateway->getList(
-            $valueIds,
-            $context
-        );
+        if ($properties == null) {
+            return null;
+        }
 
         $actives = $this->getFilteredValues($criteria);
 
@@ -223,5 +216,34 @@ class PropertyFacetHandler implements FacetHandlerInterface
             null,
             $facet->getName()
         );
+    }
+
+    /**
+     * @param Struct\ShopContextInterface $context
+     * @param $queryCriteria
+     * @return Struct\Property\Set[]
+     */
+    protected function getProperties(Struct\ShopContextInterface $context, $queryCriteria)
+    {
+        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
+
+        $this->rebuildQuery($query);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        /**@var $facet Facet\PropertyFacet */
+        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($valueIds)) {
+            return null;
+        }
+
+        $properties = $this->propertyGateway->getList(
+            $valueIds,
+            $context
+        );
+
+        return $properties;
     }
 }
