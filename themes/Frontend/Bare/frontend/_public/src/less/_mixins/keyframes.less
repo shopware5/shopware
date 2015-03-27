@@ -33,4 +33,15 @@ Please refer to <http://caniuse.com/#search=keyframe> to see the browser support
     }
 };
 
+@keyframe--spin-reverse: {
+    from {
+        .rotate(360deg);
+    }
+    to {
+        .rotate(0);
+    }
+};
+
 .keyframes(keyframe--spin, @keyframe--spin);
+
+.keyframes(keyframe--spin-reverse, @keyframe--spin-reverse);
