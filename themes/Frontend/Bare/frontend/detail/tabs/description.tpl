@@ -107,24 +107,6 @@
 		{/block}
 	{/block}
 
-    {* Product vendor *}
-    {block name='frontend_detail_description_supplier'}
-		{if $sArticle.supplierDescription}
-
-			{* Vendor title *}
-			{block name='frontend_detail_description_supplier_title'}
-				<div class="content--title title--description-supplier">
-					{s name="DetailDescriptionSupplier"}{/s} "{$sArticle.supplierName}"
-				</div>
-			{/block}
-
-			{* Vendor content *}
-			{block name='frontend_detail_description_supplier_content'}
-				{$sArticle.supplierDescription}
-			{/block}
-		{/if}
-    {/block}
-
 	{* Downloads *}
 	{block name='frontend_detail_description_downloads'}
 		{if $sArticle.sDownloads}
