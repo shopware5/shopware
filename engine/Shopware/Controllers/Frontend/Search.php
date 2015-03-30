@@ -210,11 +210,15 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             ));
         }
         if (!empty($articles) && count($articles) == 1) {
-            return $this->get('router')->assemble(array(
+            $assembleParams = [
                 'sViewport' => 'detail',
                 'sArticle' => $articles[0],
-                'number' => $number
-            ));
+            ];
+            if ($number) {
+                $assembleParams['number'] = $number;
+            }
+
+            return $this->get('router')->assemble($assembleParams);
         }
     }
 }
