@@ -3,21 +3,34 @@ namespace Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class Blog extends Page
+class Blog extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/blog/index/sCategory/{categoryId}';
 
-    public $cssLocator = array(
-        'commentForm' => 'form.comments'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'commentForm' => 'form.comments'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'commentFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'commentFormSubmit' => array('de' => 'Speichern', 'en' => 'Save')
+        );
+    }
 
     /**
      * @param array $data

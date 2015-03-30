@@ -1,8 +1,8 @@
 <?php
 namespace Page\Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page,
-    Behat\Behat\Context\Step;
+use Element\Emotion\NotePosition;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Note extends Page
 {

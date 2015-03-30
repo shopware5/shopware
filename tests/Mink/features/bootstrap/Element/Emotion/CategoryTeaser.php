@@ -6,18 +6,25 @@ use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class CategoryTeaser extends MultipleElement
+class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.category-teaser-element');
 
-    public $cssLocator = array(
-        'name' => 'div.teaser_headline > h3',
-        'image' => 'div.teaser_img',
-        'link' => 'div.teaser_box > a'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'name' => 'div.teaser_headline > h3',
+            'image' => 'div.teaser_img',
+            'link' => 'div.teaser_box > a'
+        );
+    }
 
     /**
      * @return array

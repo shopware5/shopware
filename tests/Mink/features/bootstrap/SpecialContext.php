@@ -10,24 +10,6 @@ require_once 'SubContext.php';
 class SpecialContext extends SubContext
 {
     /**
-     * @Given /^the "(?P<name>[^"]*)" plugin is enabled$/
-     */
-    public function thePluginIsEnabled($name)
-    {
-        /** @var \Shopware\Components\Plugin\Manager $pluginManager */
-        $pluginManager = $this->getContainer()->get('shopware_plugininstaller.plugin_manager');
-
-        // hack to prevent behat error handler kicking in.
-        $oldErrorReporting = error_reporting(0);
-        $pluginManager->refreshPluginList();
-        error_reporting($oldErrorReporting);
-
-        $plugin = $pluginManager->getPluginByName($name);
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
-    }
-
-    /**
      * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
      */
     public function theArticlesFromHaveTaxId($supplier, $taxId)
@@ -114,25 +96,12 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Given /^I submit the form "(?P<formName>[^"]*)" on page "(?P<pageClass>[^"]*)" with:$/
-     */
-    public function iSubmitTheFormOnPageWith($formLocatorName, $pageClass, TableNode $values)
-    {
-        $page = $this->getPage($pageClass);
-        $this->getPage('Homepage')->submitForm($formLocatorName, $page, $values->getHash());
-    }
-
-    /**
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the page "(?P<pageClass>[^"]*)"$/
      */
     public function iFollowTheLinkOfThePage($linkName, $pageClass)
     {
         $page = $this->getPage($pageClass);
-        $locators = array('contentBlock');
-        $elements = Helper::findElements($page, $locators, $this->getPage('Homepage')->cssLocator);
-
-        $language = Helper::getCurrentLanguage($page);
-        $elements['contentBlock']->clickLink($page->namedSelectors[$linkName][$language]);
+        Helper::clickNamedLink($page, $linkName);
     }
 
     /**
@@ -150,6 +119,7 @@ class SpecialContext extends SubContext
      */
     public function iFollowTheLinkOfTheElementOnPosition($linkName, $elementClass, $position = 1)
     {
+        /** @var HelperSelectorInterface $element */
         $element = $this->getElement($elementClass);
 
         if ($element instanceof MultipleElement) {
@@ -168,6 +138,16 @@ class SpecialContext extends SubContext
         }
 
         $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
-        $element->clickLink($element->namedSelectors[$linkName][$language]);
+        $selectors = $element->getNamedSelectors();
+        $element->clickLink($selectors[$linkName][$language]);
+    }
+
+    /**
+     * @Given /^the "(?P<field>[^"]*)" field should contain:$/
+     */
+    public function theFieldShouldContain($field, \Behat\Gherkin\Node\PyStringNode $string)
+    {
+        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert->fieldValueEquals($field, $string->getRaw());
     }
 }

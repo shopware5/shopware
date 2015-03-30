@@ -2,24 +2,38 @@
 
 namespace Element\Emotion;
 
+require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
+
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
-class AccountPayment extends Element
+class AccountPayment extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div#selected_payment > div.inner_container');
 
-    /** @var array $cssLocator */
-    public $cssLocator = array(
-        'currentMethod' => 'p'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'currentMethod' => 'p'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'changeButton'  => array('de' => 'Zahlungsart ändern',       'en' => 'Change payment method')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'changeButton' => array('de' => 'Zahlungsart ändern', 'en' => 'Change payment method')
+        );
+    }
 
     public function getCurrentMethodsToCheck()
     {

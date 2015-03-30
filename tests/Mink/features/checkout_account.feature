@@ -14,7 +14,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         When  I put the article "3" times into the basket
         Then  the cart should contain 1 articles with a value of "<sum>"
         And   the aggregations should look like this:
-            | aggregation   | value           |
+            | label         | value           |
             | sum           | <sum>           |
             | shipping      | <shipping>      |
             | total         | <total>         |
@@ -40,7 +40,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         When  I put the article "3" times into the basket
         Then  the cart should contain 1 articles with a value of "<sum>"
         And   the aggregations should look like this:
-            | aggregation   | value           |
+            | label         | value           |
             | sum           | <sum>           |
             | shipping      | <shipping>      |
             | total         | <total>         |
@@ -81,7 +81,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         When  I put the article "3" times into the basket
         Then  the cart should contain 1 articles with a value of "38,47 €"
         And   the aggregations should look like this:
-            | aggregation   | value   |
+            | label         | value   |
             | sum           | 38,47 € |
             | shipping      | 3,90 €  |
             | total         | 42,37 € |
@@ -120,7 +120,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         When  I put the article "3" times into the basket
         Then  the cart should contain 1 articles with a value of "38,47 €"
         And   the aggregations should look like this:
-            | aggregation   | value   |
+            | label         | value   |
             | sum           | 38,47 € |
             | shipping      | 3,90 €  |
             | total         | 42,37 € |

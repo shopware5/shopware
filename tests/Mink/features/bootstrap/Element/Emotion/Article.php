@@ -4,20 +4,27 @@ namespace Element\Emotion;
 
 require_once 'tests/Mink/features/bootstrap/Element/Emotion/CategoryTeaser.php';
 
-class Article extends CategoryTeaser
+class Article extends CategoryTeaser implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.article-element');
 
-    public $cssLocator = array(
-        'name' => 'a.title',
-        'link' => 'a.artbox_thumb',
-        'text' => 'p.desc',
-        'price' => 'span.price',
-        'more' => 'a.more'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'name' => 'a.title',
+            'link' => 'a.artbox_thumb',
+            'text' => 'p.desc',
+            'price' => 'span.price',
+            'more' => 'a.more'
+        );
+    }
 
     /**
      * @return array

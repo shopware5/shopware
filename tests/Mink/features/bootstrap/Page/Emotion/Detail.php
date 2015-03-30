@@ -7,29 +7,42 @@ use Behat\Mink\Element\NodeElement;
 use Element\Emotion\ArticleEvaluation;
 use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
 
-class Detail extends Page
+class Detail extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/detail/index/sArticle/{articleId}';
 
-    public $cssLocator = array(
-        'productRating' => 'div#detailbox_middle > div.detail_comments > .star',
-        'productRatingCount' => 'div#detailbox_middle > div.detail_comments > .comment_numbers',
-        'productEvaluationAverage' => 'div#comments > div.overview_rating > .star',
-        'productEvaluationCount' => 'div#comments > div.overview_rating > span',
-        'configuratorForm' => 'div#buybox > form',
-        'notificationForm' => 'form#sendArticleNotification',
-        'voteForm' => 'div#comments > form'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'productRating' => 'div#detailbox_middle > div.detail_comments > .star',
+            'productRatingCount' => 'div#detailbox_middle > div.detail_comments > .comment_numbers',
+            'productEvaluationAverage' => 'div#comments > div.overview_rating > .star',
+            'productEvaluationCount' => 'div#comments > div.overview_rating > span',
+            'configuratorForm' => 'div#buybox > form',
+            'notificationForm' => 'form#sendArticleNotification',
+            'voteForm' => 'div#comments > form'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'voteFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'notificationFormSubmit' => array('de' => 'Eintragen', 'en' => 'Enter'),
+            'voteFormSubmit'         => array('de' => 'Speichern', 'en' => 'Save')
+        );
+    }
 
     protected $configuratorTypes = array(
         'table' => 'basketform',
@@ -260,5 +273,22 @@ class Detail extends Page
         if(!empty($errors)) {
             \Helper::throwException($errors);
         }
+    }
+
+    /**
+     * Fills the notification form and submits it
+     * @param string $email
+     */
+    public function submitNotification($email)
+    {
+        $data = array(
+            array(
+                'field' => 'sNotificationEmail',
+                'value' => $email
+            )
+        );
+
+        \Helper::fillForm($this, 'notificationForm', $data);
+        \Helper::pressNamedButton($this, 'notificationFormSubmit');
     }
 }

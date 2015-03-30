@@ -3,19 +3,24 @@ namespace Page\Responsive;
 
 use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
-use Symfony\Component\Console\Helper\Helper;
 
 class Listing extends \Page\Emotion\Listing
 {
-    public $cssLocator = array(
-        'view' => array(
-            'table' => 'a.action--link.link--table-view',
-            'list' => 'a.action--link.link--list-view'),
-        'active' => '.is--active',
-        'filterFilterProperties' => 'div.filter--container > form li.filter-panel--option input[type=checkbox]',
-        'filterShowResults' => 'div.filter--container > form > div.filter--actions > button[type=submit]',
-        'listingBox' => 'div.listing--container'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'viewTable' => 'a.action--link.link--table-view',
+            'viewList' => 'a.action--link.link--list-view',
+            'active' => '.is--active',
+            'filterFilterProperties' => 'div.filter--container > form li.filter-panel--option input[type=checkbox]',
+            'filterShowResults' => 'div.filter--container > form > div.filter--actions > button[type=submit]',
+            'listingBox' => 'div.listing--container'
+        );
+    }
 
     /**
      * @throws \Behat\Mink\Exception\ElementException

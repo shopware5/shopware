@@ -2,17 +2,24 @@
 
 namespace Element\Emotion;
 
-class ManufacturerSlider extends BannerSlider
+class ManufacturerSlider extends BannerSlider implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.manufacturer-slider-element');
 
-    public $cssLocator = array(
-        'slideImage' => 'div.supplier img',
-        'slideLink' => 'div.supplier > a'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'slideImage' => 'div.supplier img',
+            'slideLink' => 'div.supplier > a'
+        );
+    }
 
     /**
      * @return array
@@ -20,7 +27,7 @@ class ManufacturerSlider extends BannerSlider
     public function getNamesToCheck()
     {
         $locators = array('slideImage', 'slideLink');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $names = array();
 

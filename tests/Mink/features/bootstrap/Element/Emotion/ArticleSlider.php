@@ -4,19 +4,26 @@ namespace Element\Emotion;
 
 require_once 'tests/Mink/features/bootstrap/Element/Emotion/BannerSlider.php';
 
-class ArticleSlider extends BannerSlider
+class ArticleSlider extends BannerSlider implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.article-slider-element');
 
-    public $cssLocator = array(
-        'slideImage' => 'a.article-thumb-wrapper > img',
-        'slideLink' => 'a.article-thumb-wrapper',
-        'slideName' => 'a.title',
-        'slidePrice' => 'p.price'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'slideImage' => 'a.article-thumb-wrapper > img',
+            'slideLink' => 'a.article-thumb-wrapper',
+            'slideName' => 'a.title',
+            'slidePrice' => 'p.price'
+        );
+    }
 
     /**
      * @return array
@@ -24,7 +31,7 @@ class ArticleSlider extends BannerSlider
     public function getLinksToCheck()
     {
         $locators = array('slideLink', 'slideName');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $links = array();
 
@@ -44,7 +51,7 @@ class ArticleSlider extends BannerSlider
     public function getNamesToCheck()
     {
         $locators = array('slideImage', 'slideLink', 'slideName');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $names = array();
 
@@ -66,7 +73,7 @@ class ArticleSlider extends BannerSlider
     public function getPricesToCheck()
     {
         $locators = array('slidePrice');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $prices = array();
 

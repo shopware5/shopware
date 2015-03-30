@@ -7,20 +7,33 @@ class NotePosition extends \Element\Emotion\NotePosition
     /** @var array $selector */
     protected $selector = array('css' => 'div.note--item');
 
-    /** @var array $namedSelectors */
-    protected $namedSelectors = array(
-        'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
-        'compare' => array('de' => 'Vergleichen',   'en' => 'Compare')
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'a-thumb' => 'a.note--image-link',
+            'img' => 'img',
+            'a-title' => 'a.note--title',
+            'p-number' => 'div.note--ordernumber',
+            'strong-price' => 'div.note--price',
+            'a-detail' => 'a.note--title'
+        );
+    }
 
-    public $cssLocator = array(
-        'a-thumb' => 'a.note--image-link',
-        'img' => 'img',
-        'a-title' => 'a.note--title',
-        'p-number' => 'div.note--ordernumber',
-        'strong-price' => 'div.note--price',
-        'a-detail' => 'a.note--title'
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
+            'compare' => array('de' => 'Vergleichen',   'en' => 'Compare')
+        );
+    }
 
     /**
      * Searches an article from the array, that matches to the NotePosition.
@@ -30,7 +43,8 @@ class NotePosition extends \Element\Emotion\NotePosition
      */
     public function search($articles)
     {
-        $elements = \Helper::findElements($this, $this->cssLocator, $this->cssLocator);
+        $locators = array_keys($this->getCssSelectors());
+        $elements = \Helper::findElements($this, $locators);
 
         foreach ($articles as $key => $article) {
             $check = array();
