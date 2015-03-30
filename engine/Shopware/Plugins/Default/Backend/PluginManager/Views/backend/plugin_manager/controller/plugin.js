@@ -120,12 +120,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     startPluginDownload: function(plugin, callback) {
         var me = this;
 
-        me.hideLoadingMask();
+        me.displayLoadingMask(plugin, '{s name="initial_download"}{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginManager action=metaDownload}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
+                me.hideLoadingMask();
+
                 var mask = me.createDownloadMask(plugin, response.data, function(fileName) {
                     me.sendAjaxRequest(
                         '{url controller=PluginManager action=extract}',
@@ -286,7 +288,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             success: function(operation, opts) {
                 var response = Ext.decode(operation.responseText);
 
-                if (response.success === true) {
+                if (response.success === true && Ext.isFunction(callback)) {
                     callback(response);
                     return;
                 }
