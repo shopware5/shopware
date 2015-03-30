@@ -192,7 +192,7 @@ class Container extends BaseContainer
             throw new \Exception('Resource "' . $name . '" not found failure');
         }
 
-        // a privious attempt to load the resource resulted in an exception,
+        // a previous attempt to load the resource resulted in an exception,
         // try to reload the resource to provide the original exception
         // instead of generic "resource not found" message.
         if ($this->resourceStatus[$name] === self::STATUS_EXCEPTION) {
