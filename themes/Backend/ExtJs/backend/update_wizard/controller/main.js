@@ -15,10 +15,10 @@ Ext.define('Shopware.apps.UpdateWizard.controller.Main', {
 
         me.control({
             'update-wizard-start': {
-                'update-wizard-display-login': me.displayLogin,
-                'close-update-wizard': me.closeUpdateWizard
+                'update-wizard-display-login': me.displayLogin
             },
             'update-wizard-login': {
+                'close-update-wizard': me.closeUpdateWizard,
                 'update-wizard-display-plugin-page': me.displayPluginPage
             },
             'update-wizard-plugins': {
