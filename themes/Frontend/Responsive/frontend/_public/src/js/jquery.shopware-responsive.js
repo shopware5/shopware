@@ -159,7 +159,7 @@ $(function () {
             }
         });
 
-        var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
+        var param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]);
         if (param === 'rating' && tabMenuProduct) {
             tabMenuProduct.changeTab(1);
         }
