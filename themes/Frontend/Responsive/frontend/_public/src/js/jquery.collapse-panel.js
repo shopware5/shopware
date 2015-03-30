@@ -162,9 +162,9 @@
                 opts = me.opts;
 
             me.$el.removeClass(opts.activeTriggerCls);
-            me.$targetEl.slideUp(opts.animationSpeed).removeClass(opts.collapsedStateCls);
-
-            $.publish('plugin/collapsePanel/onClose', me);
+            me.$targetEl.slideUp(opts.animationSpeed, function() {
+                $.publish('plugin/collapsePanel/onClose', me);
+            }).removeClass(opts.collapsedStateCls);
         },
 
         /**
