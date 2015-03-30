@@ -731,6 +731,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 $categoryId = (int) $request->getParam('sCategory');
                 $cacheIds[] = 'c' . $categoryId;
 
+                $blogPost = $view->getAssign('sArticle');
+                foreach ($blogPost['assignedArticles'] as $article) {
+                    $articleIds[] = $article['id'];
+                }
+
                 break;
             case 'widgets/listing':
                 $categoryId = (int) $request->getParam('sCategory');
@@ -739,6 +744,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 }
                 $cacheIds[] = 'c' . $categoryId;
 
+                foreach ($view->getAssign('sArticles') as $article) {
+                    $articleIds[] = $article['articleID'];
+                }
+
+                foreach ($view->getAssign('sCharts') as $article) {
+                    $articleIds[] = $article['articleID'];
+                }
                 break;
             case 'frontend/index':
                 $categoryId = (int) Shopware()->Shop()->get('parentID');
@@ -772,6 +784,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                             foreach ($element['data']['values'] as $value) {
                                 $articleIds[] = $value['articleID'];
                                 $articleIds[] = $value['articleDetailsID'];
+                            }
+                        } elseif ($element['component']['name'] == 'Sideview-Element') {
+                            foreach ($element['data']['product_data'] as $value) {
+                                $articleIds[] = $value['articleID'];
                             }
                         }
                     }
