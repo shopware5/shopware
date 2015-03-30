@@ -57,7 +57,7 @@
 
 	{* Supported payment services *}
 	{block name="frontend_checkout_footer_payment"}
-		<div class="footer--benefit block">
+		<div class="footer--benefit is--last block">
 			{block name="frontend_checkout_footer_headline_payment"}
 				<h4 class="benefit--headline">{s namespace="frontend/checkout/cart" name="CheckoutFooterBenefitHeadlinePayment"}{/s}</h4>
 			{/block}
