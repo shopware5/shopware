@@ -266,7 +266,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         if ($manufacturer->getMetaTitle()) {
-            $content['title'] = $manufacturer->getMetaTitle() . ' | ' . $this->get('shop')->getName();
+            $content['title'] = $manufacturer->getMetaTitle() . ' | ' . $this->get('config')->get('shopname');
         } elseif ($manufacturer->getName()) {
             $content['title'] = $manufacturer->getName();
         }
