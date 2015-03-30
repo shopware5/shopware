@@ -337,11 +337,10 @@ class StoreClient
             case 'BinariesException-7':       //Binary is getting checked although not waiting for code review
             case 'BinariesException-8':       //Failed storing encrypted binary
             case 'BinariesException-9':       //Ioncube encryption failed
-            case 'BinariesException-11':      //No fitting binary found
             case 'PluginLicensesException-6': //Deserialization failed.
             case 'OrdersException-2':         //Deserialization failed
             case 'UsersException-5':          //Deserialization failed
-            case 'UserShopsException-8':            //Could not find software version.
+            case 'UserShopsException-8':      //Could not find software version.
                 throw new SbpServerException($sbpCode, 'server_error', $httpCode, $requestException);
 
             case 'BinariesException-10': //Shopware version not given
@@ -373,6 +372,9 @@ class StoreClient
 
             case 'UserTokensException-3': //Account is banned.
                 throw new AccountException($sbpCode, 'account_banned', $httpCode, $requestException);
+
+            case 'BinariesException-11':      //no fitting binary found
+                throw new LicenceException($sbpCode, 'no_fitting_binary', $httpCode, $requestException);
 
             case 'BinariesException-13':      //Plugin not found
             case 'OrdersException-1':         //Ordered plugin not found
