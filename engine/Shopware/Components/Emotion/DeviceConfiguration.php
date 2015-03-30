@@ -88,6 +88,31 @@ class DeviceConfiguration
     }
 
     /**
+     * @param $emotionId
+     * @throws \Exception
+     * @return array
+     */
+    public function getById($emotionId)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(array(
+            'emotion.id',
+            'emotion.device as devices',
+            'emotion.show_listing as showListing'
+        ));
+
+        $query->from('s_emotion', 'emotion')
+            ->where('emotion.id = :emotionId')
+            ->setParameter(':emotionId', $emotionId);
+
+        /**@var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param $id
      * @throws \Exception
      * @return array
