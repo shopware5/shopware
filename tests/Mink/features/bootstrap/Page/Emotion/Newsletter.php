@@ -1,23 +1,36 @@
 <?php
 namespace Page\Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page,
-    Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class Newsletter extends Page
+class Newsletter extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/newsletter';
 
-    public $cssLocator = array(
-        'newsletterForm' => 'form#letterForm'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'newsletterForm' => 'form#letterForm'
+        );
+    }
 
-    public $namedSelectors = array(
-        'newsletterFormSubmit' => array('de' => 'Speichern',                'en' => 'Save')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'newsletterFormSubmit' => array('de' => 'Speichern', 'en' => 'Save')
+        );
+    }
 
     /**
      * @param array $data

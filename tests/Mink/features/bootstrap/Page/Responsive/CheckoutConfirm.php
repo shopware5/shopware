@@ -3,37 +3,51 @@ namespace Page\Responsive;
 
 class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
 {
-    public $cssLocator = array(
-        'pageIdentifier'  => 'div#confirm--content',
-        'shippingPaymentForm' => 'form.payment',
-        'proceedCheckoutForm' => 'form#confirm--form',
-        'orderNumber' => 'div.finish--details > div.panel--body'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'pageIdentifier'  => 'div#confirm--content',
+            'shippingPaymentForm' => 'form.payment',
+            'proceedCheckoutForm' => 'form#confirm--form',
+            'orderNumber' => 'div.finish--details > div.panel--body'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'confirmButton'         => array('de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order'),
-        'changePaymentButton'   => array('de' => 'Weiter',                      'en' => 'Next'),
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'confirmButton'         => array('de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order'),
+            'changePaymentButton'   => array('de' => 'Weiter',                      'en' => 'Next'),
+        );
+    }
 
     /**
      * Changes the payment method
      * @param array   $data
      */
-    public function changePayment($data = array())
+    public function changePaymentMethod($data = array())
     {
         $data[0]['field'] = 'payment';
-        $this->changeShipping($data);
+        $this->changeShippingMethod($data);
     }
 
     /**
+     * Changes the shipping method
      * @param array $data
      */
-    public function changeShipping($data = array())
+    public function changeShippingMethod($data = array())
     {
         $element = $this->getElement('CheckoutPayment');
         $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', null, $language);
+        \Helper::clickNamedLink($element, 'changeButton', $language);
 
         \Helper::fillForm($this, 'shippingPaymentForm', $data);
         \Helper::pressNamedButton($this, 'changePaymentButton');

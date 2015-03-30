@@ -3,34 +3,36 @@
 namespace Page\Emotion;
 
 use Element\MultipleElement;
-use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class Homepage extends Page
+class Homepage extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/';
 
-    public $cssLocator = array(
-        'contentBlock' => 'div#content > div.inner',
-        'searchForm' => 'div#searchcontainer form',
-        'newsletterForm' => 'div.footer_column.col4 > form',
-        'newsletterFormSubmit' => 'div.footer_column.col4 > form input[type="submit"]',
-        'controller' => array(
-            'account' => 'body.ctl_account',
-            'checkout' => 'body.ctl_checkout',
-            'newsletter' => 'body.ctl_newsletter'
-        )
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'newsletterForm' => 'div.footer_column.col4 > form',
+            'newsletterFormSubmit' => 'div.footer_column.col4 > form input[type="submit"]'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'searchButton'            => array('de' => 'Suchen',  'en' => 'Search')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
 
     /**
      * Searches the given term in the shop
@@ -44,8 +46,11 @@ class Homepage extends Page
                 'value' => $searchTerm
             )
         );
-        \Helper::fillForm($this, 'searchForm', $data);
-        \Helper::pressNamedButton($this, 'searchButton');
+
+        $searchForm = $this->getElement('SearchForm');
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::fillForm($searchForm, 'searchForm', $data);
+        \Helper::pressNamedButton($searchForm, 'searchButton', $language);
         $this->verifyResponse();
     }
 
@@ -61,7 +66,9 @@ class Homepage extends Page
                 'value' => $searchTerm
             )
         );
-        \Helper::fillForm($this, 'searchForm', $data);
+
+        $searchForm = $this->getElement('SearchForm');
+        \Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
 
@@ -121,6 +128,7 @@ class Homepage extends Page
      * Global method to check the content of an Element or Page
      * @param TraversableElement $element
      * @param array              $content
+     * @throws \Exception
      */
     public function assertElementContent(TraversableElement $element, $content)
     {
@@ -195,100 +203,5 @@ class Homepage extends Page
             $message = sprintf('Item %d is different! ("%s" not found in "%s")', $result['key'] + 1, $result['value2'], $result['value']);
             \Helper::throwException($message);
         }
-    }
-
-    /**
-     * @param string             $formLocatorName
-     * @param TraversableElement $element
-     * @param array              $values
-     */
-    public function submitForm($formLocatorName, TraversableElement $element, $values)
-    {
-        $locators = array(
-            'form' => $element->cssLocator[$formLocatorName],
-            'formSubmitButton' => $element->cssLocator[$formLocatorName] . ' *[type="submit"]'
-        );
-        $elements = \Helper::findElements($element, $locators, $locators, false, false);
-
-        if(empty($elements['form'])) {
-            $message = sprintf('The form "%s" was not found!', $formLocatorName);
-            \Helper::throwException($message);
-        }
-
-        $form = $elements['form'];
-        $formSubmit = $elements['formSubmitButton'];
-
-        if(empty($formSubmit)) {
-            $locators = array(
-                'submitButton' => '*[type="submit"]'
-            );
-            $elements = \Helper::findElements($element, $locators, $locators, true, false);
-
-            $formId = $form->getAttribute('id');
-
-            foreach($elements['submitButton'] as $submit) {
-                if($submit->getAttribute('form') === $formId) {
-                    $formSubmit = $submit;
-                    break;
-                }
-            }
-        }
-
-        if(empty($formSubmit)) {
-            $message = sprintf('The form "%s" has no submit button!', $formLocatorName);
-            \Helper::throwException($message);
-        }
-
-        foreach ($values as $value) {
-            $tempFieldName = $fieldName = $value['field'];
-            unset($value['field']);
-
-            foreach ($value as $key => $fieldValue) {
-                if ($key !== 'value') {
-                    $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
-                }
-
-                $field = $form->findField($fieldName);
-
-                if (empty($field)) {
-                    if (empty($fieldValue)) {
-                        continue;
-                    }
-
-                    $message = sprintf('The form "%s" has no field "%s"!', $formLocatorName, $fieldName);
-                    \Helper::throwException($message);
-                }
-
-                $fieldType = $field->getAttribute('type');
-
-                //Select
-                if (empty($fieldType)) {
-                    $field->selectOption($fieldValue);
-                    continue;
-                }
-
-                //Checkbox
-                if ($fieldType === 'checkbox') {
-                    $field->check();
-                    continue;
-                }
-
-                //Text
-                $field->setValue($fieldValue);
-            }
-        }
-
-        $formSubmit->press();
-    }
-
-    /**
-     * Returns the called Shopware controller
-     * @return string
-     */
-    public function getController()
-    {
-        $elements = \Helper::findElements($this, $this->cssLocator['controller'], $this->cssLocator['controller'], false, false);
-        $elements = array_filter($elements);
-        return key($elements);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Element\Responsive;
 
-use  Behat\Mink\Exception\ResponseTextException;
-
 class AccountShipping extends \Element\Emotion\AccountShipping
 {
     /**

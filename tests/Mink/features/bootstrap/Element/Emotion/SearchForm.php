@@ -2,12 +2,14 @@
 
 namespace Element\Emotion;
 
-class CheckoutShipping extends AccountShipping
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+
+class SearchForm extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.shipping-address');
+    protected $selector = array('css' => '#searchcontainer');
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -16,7 +18,7 @@ class CheckoutShipping extends AccountShipping
     public function getCssSelectors()
     {
         return array(
-            'currentMethod' => 'p'
+            'searchForm' => '#searchform',
         );
     }
 
@@ -27,7 +29,9 @@ class CheckoutShipping extends AccountShipping
     public function getNamedSelectors()
     {
         return array(
-            'changeButton'  => array('de' => 'Ändern', 'en' => 'Change')
+            'searchButton' => array('de' => 'Suchen', 'en' => 'Search')
         );
     }
+
+
 }

@@ -10,20 +10,6 @@ require_once 'SubContext.php';
 class CheckoutContext extends SubContext
 {
     /**
-     * @Given /^the total sum should be "([^"]*)"$/
-     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)"$/
-     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)" and VAT is:$/
-     */
-    public function theSumsShouldBe($sum, $shippingCosts = null, TableNode $vat = null)
-    {
-        if (isset($vat)) {
-            $vat = $vat->getHash();
-        }
-
-        $this->getPage('CheckoutCart')->checkSums($sum, $shippingCosts, $vat);
-    }
-
-    /**
      * @When /^I add the voucher "(?P<code>[^"]*)" to my basket$/
      */
     public function iAddTheVoucherToMyBasket($voucher)
@@ -62,7 +48,7 @@ class CheckoutContext extends SubContext
 
         /** @var ArticleBox $cartPosition */
         $cartPosition = $cartPositions->setInstance($position);
-        $cartPosition->clickActionLink('remove', $language);
+        Helper::clickNamedLink($cartPosition, 'remove', $language);
     }
 
     /**
@@ -73,7 +59,18 @@ class CheckoutContext extends SubContext
         $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
         $values = $positions->getHash();
 
-        $this->getPage('Account')->checkOrder($orderNumber, $values);
+        /** @var \Page\Emotion\Account $page */
+        $page = $this->getPage('Account');
+        $language = Helper::getCurrentLanguage($page);
+
+        $page->open();
+        Helper::clickNamedLink($page, 'myOrdersLink', $language);
+
+        /** @var \Element\Emotion\AccountOrder $order */
+        $order = $this->getElement('AccountOrder');
+        $order->setParent($page);
+
+        $this->getPage('Account')->checkOrder($order, $orderNumber, $values);
     }
 
     /**
@@ -105,6 +102,6 @@ class CheckoutContext extends SubContext
             )
         );
 
-        $this->getPage('CheckoutConfirm')->changeShipping($data);
+        $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
     }
 }

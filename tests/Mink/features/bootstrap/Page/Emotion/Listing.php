@@ -1,13 +1,11 @@
 <?php
 namespace Page\Emotion;
 
-use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class Listing extends Page
+class Listing extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $basePath
@@ -19,14 +17,29 @@ class Listing extends Page
      */
     protected $path = '';
 
-    public $cssLocator = array(
-        'view' => array(
-            'table' => 'a.table-view',
-            'list' => 'a.list-view'),
-        'active' => '.active',
-        'filterCloseLinks' => 'div.filter_properties > div > div.slideContainer > ul > li.close > a',
-        'listingBox' => 'div.listing'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'viewTable' => 'a.table-view.active',
+            'viewList' => 'a.list-view.active',
+            'active' => '.active',
+            'filterCloseLinks' => 'div.filter_properties > div > div.slideContainer > ul > li.close > a',
+            'listingBox' => 'div.listing'
+        );
+    }
+
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
 
     protected $viewSwitchCount = 2;
 
@@ -70,13 +83,15 @@ class Listing extends Page
     protected function resetFilters()
     {
         $locators = array('filterCloseLinks');
-        $elements = \Helper::findElements($this, $locators, null, true, false);
+        $elements = \Helper::findAllOfElements($this, $locators, false);
 
-        if (isset($elements['filterCloseLinks'])) {
-            $closeLinks = array_reverse($elements['filterCloseLinks']);
-            foreach ($closeLinks as $closeLink) {
-                $closeLink->click();
-            }
+        if (empty($elements['filterCloseLinks'])) {
+            return;
+        }
+
+        $closeLinks = array_reverse($elements['filterCloseLinks']);
+        foreach ($closeLinks as $closeLink) {
+            $closeLink->click();
         }
     }
 
@@ -120,20 +135,13 @@ class Listing extends Page
      */
     public function checkView($view)
     {
-        foreach ($this->cssLocator['view'] as $key => $viewCssLocator) {
-            $message = sprintf('The %s view is active! (should be %s view)', $key, $view);
-            $count = 0;
+        $views = array('viewTable', 'viewList');
+        $elements = \Helper::findElements($this, $views, false);
+        $elements = array_filter($elements);
 
-            if ($key === $view) {
-                $message = sprintf('The %s view is not active!', $view);
-                $count = $this->viewSwitchCount;
-            }
-
-            $result = \Helper::countElements($this, $viewCssLocator . $this->cssLocator['active'], $count);
-
-            if ($result !== true) {
-                \Helper::throwException(array($message));
-            }
+        if(key($elements) !== $view) {
+            $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
+            \Helper::throwException($message);
         }
     }
 

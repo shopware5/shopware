@@ -6,22 +6,29 @@ use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class CompareColumn extends MultipleElement
+class CompareColumn extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.compare_article');
 
-    public $cssLocator = array(
-        'thumbnailImage'    => 'div.picture > a > img',
-        'thumbnailLink'     => 'div.picture > a',
-        'name'              => 'div.name > h3 > a',
-        'detailsButton'     => 'div.name > a.button-right',
-        'stars'             => 'div.votes > div.star',
-        'description'       => 'div.desc',
-        'price'             => 'div.price > p > strong'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'thumbnailImage'    => 'div.picture > a > img',
+            'thumbnailLink'     => 'div.picture > a',
+            'name'              => 'div.name > h3 > a',
+            'detailsButton'     => 'div.name > a.button-right',
+            'stars'             => 'div.votes > div.star',
+            'description'       => 'div.desc',
+            'price'             => 'div.price > p > strong'
+        );
+    }
 
     /** @var array $namedSelectors */
     protected $namedSelectors = array(

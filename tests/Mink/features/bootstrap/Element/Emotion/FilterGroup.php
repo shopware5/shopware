@@ -12,9 +12,16 @@ class FilterGroup extends MultipleElement
     /** @var array $selector */
     protected $selector = array('css' => 'div.filter_properties > div > div:not(.slideContainer)');
 
-    public $cssLocator = array(
-        'properties' => 'div + div.slideContainer'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'properties' => 'div + div.slideContainer'
+        );
+    }
 
     /**
      * @param string $propertyName
@@ -22,7 +29,8 @@ class FilterGroup extends MultipleElement
      */
     public function setProperty($propertyName)
     {
-        $elements = \Helper::findElements($this);
+        $locator = array('properties');
+        $elements = \Helper::findElements($this, $locator);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];

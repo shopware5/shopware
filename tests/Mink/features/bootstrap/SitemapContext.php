@@ -13,47 +13,52 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Then /^I should see all active categories$/
+     * @Then /^I should see the group "([^"]*)"$/
+     * @Then /^I should see the group "([^"]*)":$/
      */
-    public function iShouldSeeAllActiveCategories()
+    public function iShouldSeeTheGroup($name, \Behat\Gherkin\Node\TableNode $entries = null)
     {
-        if (strpos($this->getSession()->getCurrentUrl(), 'sitemap.xml') !== false) {
-            $this->getPage('Sitemap')->checkXmlCategories();
-        } else {
-            $this->getPage('Sitemap')->checkCategories();
+        $this->iShouldSeeTheGroupWithLink($name, null, $entries);
+    }
+
+    /**
+     * @Then /^I should see the group "([^"]*)" with link "([^"]*)"$/
+     * @Then /^I should see the group "([^"]*)" with link "([^"]*)":$/
+     */
+    public function iShouldSeeTheGroupWithLink($name, $link, \Behat\Gherkin\Node\TableNode $entries = null)
+    {
+        $links = array();
+
+        if($entries) {
+            $links = $entries->getHash();
         }
+
+        /** @var \Page\Emotion\Sitemap $page */
+        $page = $this->getPage('Sitemap');
+
+        /** @var \Element\Emotion\SitemapGroup $groups */
+        $groups = $this->getElement('SitemapGroup');
+        $groups->setParent($page);
+
+        $sitemapGroup = $name;
+
+        /** @var \Element\Emotion\SitemapGroup $group */
+        foreach($groups as $group) {
+            if ($group->getTitle() === $name) {
+                $sitemapGroup = $group;
+                break;
+            }
+        }
+
+        $page->checkGroup($sitemapGroup, $link, $links);
     }
 
     /**
-     * @Then /^I should see the homepage in the xml sitemap$/
+     * @Then /^there should be these links in the XML:$/
      */
-    public function iShouldSeeTheHomepageInTheXmlSitemap()
+    public function thereShouldBeTheseLinksInTheXml(\Behat\Gherkin\Node\TableNode $links)
     {
-        $this->getPage('Sitemap')->checkXmlHomepage();
+        $links = $links->getHash();
+        $this->getPage('Sitemap')->checkXml($links);
     }
-
-    /**
-     * @Given /^I should see all custom pages$/
-     */
-    public function iShouldSeeAllCustomPages()
-    {
-        $this->getPage('Sitemap')->checkCustomPages();
-    }
-
-    /**
-     * @Given /^I should see all supplier pages$/
-     */
-    public function iShouldSeeAllSupplierPages()
-    {
-        $this->getPage('Sitemap')->checkSupplierPages();
-    }
-
-    /**
-     * @Given /^I should see all landingpages$/
-     */
-    public function iShouldSeeAllLandingpages()
-    {
-        $this->getPage('Sitemap')->checkLandingPages();
-    }
-
 }

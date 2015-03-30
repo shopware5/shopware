@@ -6,18 +6,25 @@ use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class Banner extends MultipleElement
+class Banner extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.banner-element');
 
-    public $cssLocator = array(
-        'image' => 'img',
-        'link' => 'div.mapping > a',
-        'mapping' => 'div.banner-mapping > a.emotion-banner-mapping'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'image' => 'img',
+            'link' => 'div.mapping > a',
+            'mapping' => 'div.banner-mapping > a.emotion-banner-mapping'
+        );
+    }
 
     /**
      * @return array
@@ -51,7 +58,7 @@ class Banner extends MultipleElement
     public function getMappingsToCheck()
     {
         $locators = array('mapping');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $mapping = array();
 

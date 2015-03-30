@@ -1,40 +1,60 @@
 <?php
 namespace Page\Emotion;
 
+use Behat\Mink\Element\NodeElement;
+use Element\Emotion\AccountOrder;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ExpectationException;
 
-class Account extends Page
+class Account extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/account';
 
-    public $cssLocator = array(
-        'identifiers' => array(
-            'dashboard' => 'div#content > div > div.account',
-            'login' => 'div#login',
-            'register' => 'div#content > div > div.register'
-        ),
-        'payment' => 'div#selected_payment strong',
-        'logout' => 'div.adminbox a.logout',
-        'registrationForm' => 'div.register > form',
-        'billingForm' => 'div.change_billing > form',
-        'shippingForm' => 'div.change_shipping > form',
-        'paymentForm' => 'div.change_payment > form',
-        'passwordForm' => 'div.password > form',
-        'emailForm' => 'div.email > form'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'identifierDashboard' => 'div#content > div > div.account',
+            'identifierLogin' => 'div#login',
+            'identifierRegister' => 'div#content > div > div.register',
+            'payment' => 'div#selected_payment strong',
+            'logout' => 'div.adminbox a.logout',
+            'registrationForm' => 'div.register > form',
+            'billingForm' => 'div.change_billing > form',
+            'shippingForm' => 'div.change_shipping > form',
+            'paymentForm' => 'div.change_payment > form',
+            'passwordForm' => 'div.password > form',
+            'emailForm' => 'div.email > form',
+            'esdDownloads' => 'div.downloads div.table_row',
+            'esdDownloadName' => '.grid_7 > strong'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'registerButton'        => array('de' => 'Neuer Kunde',                'en' => 'New customer'),
-        'sendButton'            => array('de' => 'Registrierung abschließen',  'en' => 'Complete registration'),
-        'changePaymentButton'   => array('de' => 'Ändern',                     'en' => 'Change'),
-        'changePasswordButton'  => array('de' => 'Passwort ändern',            'en' => ''),
-        'changeEmailButton'     => array('de' => 'E-Mail ändern',              'en' => ''),
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'registerButton'        => array('de' => 'Neuer Kunde',               'en' => 'New customer'),
+            'sendButton'            => array('de' => 'Registrierung abschließen', 'en' => 'Complete registration'),
+            'changePaymentButton'   => array('de' => 'Ändern',                    'en' => 'Change'),
+            'changeShippingButton'  => array('de' => 'Ändern',                    'en' => 'Change'),
+            'changePasswordButton'  => array('de' => 'Passwort ändern',           'en' => 'Change password'),
+            'changeEmailButton'     => array('de' => 'E-Mail ändern',             'en' => 'Change email'),
+            'myOrdersLink'          => array('de' => 'Meine Bestellungen',        'en' => 'My orders'),
+            'myEsdDownloads'        => array('de' => 'Meine Sofortdownloads',     'en' => 'My instant downloads'),
+            'logoutLink'            => array('de' => 'Abmelden Logout',           'en' => 'Logout')
+        );
+    }
+
+    protected $identifiers = array('identifierDashboard', 'identifierLogin', 'identifierRegister');
 
     /**
      * Logins a user
@@ -68,9 +88,8 @@ class Account extends Page
      */
     public function verifyPage($action = null)
     {
-        $locators = $this->cssLocator['identifiers'];
-        $elements = \Helper::findElements($this, $locators, $locators, false, false);
-
+        $locators = $this->identifiers;
+        $elements = \Helper::findElements($this, $locators, false);
         $elements = array_filter($elements);
 
         if (empty($elements)) {
@@ -95,12 +114,8 @@ class Account extends Page
      */
     public function logout()
     {
-        $locators = array('logout');
-        $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
-
-        if ($elements['logout']) {
-            $elements['logout']->click();
-
+        if($this->verifyPage('identifierDashboard') === true) {
+            \Helper::clickNamedLink($this, 'logoutLink');
             return true;
         }
 
@@ -175,7 +190,7 @@ class Account extends Page
      * Changes the shipping address of the user
      * @param array $values
      */
-    public function changeShipping($values)
+    public function changeShippingAddress($values)
     {
         \Helper::fillForm($this, 'shippingForm', $values);
         \Helper::pressNamedButton($this, 'changePaymentButton');
@@ -196,116 +211,152 @@ class Account extends Page
      * Changes the payment method
      * @param array   $data
      */
-    public function changePayment($data = array())
+    public function changePaymentMethod($data = array())
     {
         $element = $this->getElement('AccountPayment');
         $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', null, $language);
+        \Helper::clickNamedLink($element, 'changeButton', $language);
 
         \Helper::fillForm($this, 'paymentForm', $data);
-        \Helper::pressNamedButton($this, 'changePaymentButton');
+        \Helper::pressNamedButton($this, 'changePaymentButton', $language);
     }
 
-    public function checkOrder($orderNumber, $articles, $position = 1)
+    /**
+     * @param AccountOrder $order
+     * @param $orderNumber
+     * @param $articles
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
+     */
+    public function checkOrder($order, $orderNumber, $articles)
     {
-        $this->open();
+        $date = $this->checkOrderDate($order);
+        $this->checkOrderNumber($order, $orderNumber);
+        $this->checkOrderPositions($order, $articles);
+        $this->checkEsdArticles($date, $articles);
+    }
 
-        $this->clickLink('Meine Bestellungen');
-
-        $locator_prefix = sprintf(
-            'div.orderoverview_active > div.table > div:nth-of-type(%d) > div.table',
-            $position * 2 + 1
-        );
-
-        $locators = array();
-        $check = array();
-        $esd = array();
-
-        //Check positions
-        foreach ($articles as $key => $article) {
-            $locators['name' . $key] = sprintf(
-                '%s > div.table_row:nth-of-type(%d) .articleName',
-                $locator_prefix,
-                $key + 2
-            );
-            $locators['quantity' . $key] = sprintf(
-                '%s > div.table_row:nth-of-type(%d) > div:nth-of-type(2)',
-                $locator_prefix,
-                $key + 2
-            );
-            $locators['price' . $key] = sprintf(
-                '%s > div.table_row:nth-of-type(%d) > div:nth-of-type(3)',
-                $locator_prefix,
-                $key + 2
-            );
-            $locators['sum' . $key] = sprintf(
-                '%s > div.table_row:nth-of-type(%d) > div:nth-of-type(4)',
-                $locator_prefix,
-                $key + 2
-            );
-
-            $check['name' . $key] = array('', $article['product']);
-            $check['quantity' . $key] = array('', $article['quantity']);
-            $check['price' . $key] = array('', $article['price']);
-            $check['sum' . $key] = array('', $article['sum']);
-
-            if (!empty($article['esd'])) {
-                $esd[] = $article['product'];
-            }
-        }
-
-        $locators['orderDate'] = $locator_prefix . ' > div.table_foot > div:nth-of-type(2) > p:nth-of-type(1)';
-        $locators['orderNumber'] = $locator_prefix . ' > div.table_foot > div:nth-of-type(2) > p:nth-of-type(2)';
-
-        $check['orderNumber'] = array('', $orderNumber);
-
-        $elements = \Helper::findElements($this, null, $locators);
-
-        foreach ($check as $key => &$checkStep) {
-            $checkStep[0] = $elements[$key]->getText();
-
-            if (strpos($key, 'name') === false) {
-                $checkStep = \Helper::toFloat($checkStep);
-            }
-        }
-
-        if (!empty($esd)) {
-            $date = $elements['orderDate']->getText();
-
-            $downloads = $this->getEsdArray($date);
-
-            foreach ($downloads as $key => $download) {
-                $check['esd' . $key] = array($download, $date .' '. $esd[$key]);
-            }
-        }
-
-        $result = \Helper::checkArray($check);
-
-        if ($result !== true) {
-            $message = sprintf('There was a different value of the order! (%s: %s instead of %s)', $result, $check[$result][0], $check[$result][1]);
+    /**
+     * Checks the dates of an order in the account. On success the date will be returned.
+     * @param AccountOrder $order
+     * @return string
+     * @throws \Exception
+     */
+    private function checkOrderDate(AccountOrder $order) {
+        $dates = \Helper::getValuesToCheck($order, 'date');
+        $dates = array_unique($dates);
+        if (count($dates) > 1) {
+            $message = sprintf("There are different dates in the order!\r\n%s", implode("\r\n", $dates));
             \Helper::throwException($message);
         }
+
+        return $dates['orderDate'];
     }
 
-    public function getEsdArray($date = null)
+    /**
+     * @param AccountOrder $order
+     * @param $number
+     */
+    private function checkOrderNumber(AccountOrder $order, $number)
     {
-        $this->open();
+        /** @var Homepage $homepage */
+        $homepage = $this->getPage('Homepage');
 
-        $this->clickLink('Meine Sofortdownloads');
+        $data = array(
+            array(
+                'position' => 'number',
+                'content' => $number
+            )
+        );
 
-        $rows = $this->findAll('css', 'div.downloads div.table_row');
+        $homepage->assertElementContent($order, $data);
+    }
 
+    /**
+     * @param AccountOrder $order
+     * @param array $articles
+     * @throws \Exception
+     */
+    private function checkOrderPositions(AccountOrder $order, $articles)
+    {
+        $positions = $order->getPositions(array('product', 'quantity', 'price', 'sum'));
+
+        $data = array();
+
+        foreach($articles as $key => $article) {
+            $data[$key] = \Helper::toFloat(array(
+                'quantity' => $article['quantity'],
+                'price' => $article['price'],
+                'sum' => $article['sum']
+            ));
+
+            $data[$key]['product'] = $article['product'];
+        }
+
+        $result = \Helper::compareArrays($positions, $data);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf('The %s of a position is different! (is "%s", should be "%s")', $result['key'], $result['value'], $result['value2']);
+        \Helper::throwException($message);
+    }
+
+    /**
+     * @param string $date
+     * @param array $articles
+     * @throws \Exception
+     */
+    private function checkEsdArticles($date, $articles)
+    {
+        $esd = array();
+
+        foreach($articles as $key => $article) {
+            if (empty($article['esd'])) {
+                continue;
+            }
+
+            $esd[] = $article['product'];
+        }
+
+        if(empty($esd)) {
+            return;
+        }
+
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::clickNamedLink($this, 'myEsdDownloads', $language);
+
+        $locators = array('esdDownloads');
+        $elements = \Helper::findAllOfElements($this, $locators);
+        $locator = \Helper::getRequiredSelector($this, 'esdDownloadName');
         $downloads = array();
 
-        foreach ($rows as $row) {
-            if (strpos($row->getText(), $date) !== false) {
-                $downloads[] = $row->getText();
+        /** @var NodeElement $esdDownload */
+        foreach($elements['esdDownloads'] as $esdDownload) {
+            if (strpos($esdDownload->getText(), $date) !== false) {
+                $downloads[] = $this->find('css', $locator)->getText();
             }
         }
 
-        return $downloads;
+        foreach($esd as $givenEsd) {
+            foreach($downloads as $download) {
+                if ($givenEsd === $download) {
+                    break;
+                }
+
+                if($download === end($downloads)) {
+                    $message = sprintf('ESD-Article "%s" not found in account!', $givenEsd);
+                    \Helper::throwException($message);
+                }
+            }
+        }
     }
 
+    /**
+     * @param string $type
+     * @param string $address
+     */
     public function checkAddress($type, $address)
     {
         $this->open();
@@ -317,11 +368,11 @@ class Account extends Page
     }
 
     /**
-     * @param $data
+     * @param array $data
      */
     public function register($data)
     {
-        if ($this->verifyPage('login') === true) {
+        if ($this->verifyPage('identifierLogin') === true) {
             \Helper::pressNamedButton($this, 'registerButton');
         }
 

@@ -3,7 +3,6 @@
 namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Paging extends Element
 {

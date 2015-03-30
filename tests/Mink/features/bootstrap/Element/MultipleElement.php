@@ -2,6 +2,8 @@
 
 namespace Element;
 
+require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
+
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
 use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
@@ -9,7 +11,7 @@ use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
 /**
  * Class MultipleElement
  */
-abstract class MultipleElement extends Element implements \Countable, \Iterator
+abstract class MultipleElement extends Element implements \Countable, \Iterator, \HelperSelectorInterface
 {
     /** @var  integer */
     protected $position;
@@ -25,6 +27,24 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator
         parent::__construct($session, $pageFactory);
 
         $this->siblings = array();
+    }
+
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array();
+    }
+
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
     }
 
     /**

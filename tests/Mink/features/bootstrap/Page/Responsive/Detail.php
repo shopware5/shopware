@@ -7,13 +7,21 @@ use Element\MultipleElement;
 
 class Detail extends \Page\Emotion\Detail
 {
-    public $cssLocator = array(
-        'productRating' => 'div.product--rating-container .product--rating > meta',
-        'productRatingCount' => 'div.product--rating-container .product--rating > span',
-        'configuratorForm' => 'div.product--buybox > div.buybox--inner > form',
-        'notificationForm' => 'form.notification--form',
-        'voteForm' => 'form.review--form'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'productRating' => 'div.product--rating-container .product--rating > meta',
+            'productRatingCount' => 'div.product--rating-container .product--rating > span',
+            'configuratorForm' => 'div.product--buybox > div.buybox--inner > form',
+            'notificationForm' => 'form.notification--form',
+            'notificationSubmit' => '.notification--button',
+            'voteForm' => 'form.review--form'
+        );
+    }
 
     protected $configuratorTypes = array(
         'table' => 'buybox--form',
@@ -78,5 +86,25 @@ class Detail extends \Page\Emotion\Detail
             $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
             \Helper::throwException($message);
         }
+    }
+
+    /**
+     * Fills the notification form and submits it
+     * @param string $email
+     */
+    public function submitNotification($email)
+    {
+        $data = array(
+            array(
+                'field' => 'sNotificationEmail',
+                'value' => $email
+            )
+        );
+
+        \Helper::fillForm($this, 'notificationForm', $data);
+
+        $locators = array('notificationSubmit');
+        $elements = \Helper::findElements($this, $locators);
+        $elements['notificationSubmit']->press();
     }
 }

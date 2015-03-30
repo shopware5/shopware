@@ -25,15 +25,14 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
 
-        And   I submit the form "shippingPaymentForm" on page "CheckoutConfirm" with:
+        And  I change the payment method to <paymentMethod>:
             | field     | value            |
-            | payment   | <paymentMethod>  |
             | sDispatch | <shippingMethod> |
 
-        Then  the page "CheckoutCart" should have the content:
-            | position | content         |
+        Then  the aggregations should look like this:
+            | label    | value           |
             | shipping | <shippingCosts> |
-            | totalSum | <totalSum>      |
+            | total    | <totalSum>      |
 
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
@@ -60,31 +59,29 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
 
-        And   I submit the form "shippingPaymentForm" on page "CheckoutConfirm" with:
+        And  I change the payment method to 2:
             | field            | value          |
-            | payment          | 2              |
             | sDebitAccount    | 123456789      |
             | sDebitBankcode   | 1234567        |
             | sDebitBankName   | Shopware Bank  |
             | sDebitBankHolder | Max Mustermann |
 
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
+        Then  the aggregations should look like this:
+            | label    | value    |
             | shipping | 3,90 €   |
-            | totalSum | 128,09 € |
+            | total    | 128,09 € |
 
         When  I follow the link "changeButton" of the element "CheckoutPayment"
-        And   I submit the form "shippingPaymentForm" on page "CheckoutConfirm" with:
+        And   I change the payment method to 6:
             | field         | value                  |
-            | payment       | 6                      |
             | sSepaIban     | DE68210501700012345678 |
             | sSepaBic      | SHOPWAREXXX            |
             | sSepaBankName | Shopware Bank          |
 
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
+        Then  the aggregations should look like this:
+            | label    | value    |
             | shipping | 75,00 €  |
-            | totalSum | 214,99 € |
+            | total    | 214,99 € |
 
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
