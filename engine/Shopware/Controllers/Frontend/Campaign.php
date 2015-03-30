@@ -36,8 +36,10 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         $landingPage = $service->getLandingPage($emotionId);
 
         if (!$landingPage) {
-            $this->Response()->setHttpResponseCode(404);
-            return $this->redirect('index');
+            throw new Enlight_Controller_Exception(
+                'Landing page missing, non-existent or invalid for the current shop',
+                404
+            );
         }
 
         $landingPage['categoryId'] = $this->Request()->getParam('sCategory');
