@@ -192,6 +192,8 @@ class DeviceConfiguration
             ->andWhere('emotion.active = 1')
             ->andWhere('(valid_from IS NULL OR valid_from <= now())')
             ->andWhere('(valid_to IS NULL OR valid_to >= now())')
+            ->orderBy('emotion.position', 'ASC')
+            ->addOrderBy('emotion.id', 'ASC')
         ;
 
         return $query;
