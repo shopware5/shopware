@@ -221,7 +221,7 @@
 						{* Article items *}
 						{foreach $sBasket.content as $key => $sBasketItem}
 							{block name='frontend_checkout_finish_item'}
-								{include file='frontend/checkout/finish_item.tpl'}
+								{include file='frontend/checkout/finish_item.tpl' isLast=$sBasketItem@last}
 							{/block}
 						{/foreach}
 

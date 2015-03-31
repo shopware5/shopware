@@ -91,6 +91,12 @@ More precise designations are commented inside the document.
     overflow: hidden !important;
 }
 
+    // Removing unwanted padding on button-elements in firefox
+.btn::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     // Webkit based has problems with small "rem"-values which results in an much bigger font as declared.

@@ -27,7 +27,7 @@ The user can see the registration steps, advantages and required information.
     .register--action {
         .unitize-margin(20, 20);
 
-        .is--primary {
+        .register--submit {
             width: 100%;
             text-align: center;
         }
@@ -121,10 +121,30 @@ The user can see the registration steps, advantages and required information.
     .register--new-customer {
         .unitize-margin(20, 0);
 
-        .btn {
+        .new-customer-btn {
             display: block;
             width: 100%;
             text-align: center;
+            position: relative;
+
+            &:after {
+                .unitize-width(16);
+                .unitize-height(16);
+                .unitize(line-height, 16);
+                .unitize(margin-top, -8);
+                .unitize(font-size, 6);
+                .unitize(right, 10);
+                position: absolute;
+                font-family: "shopware";
+                font-weight: normal;
+                content: "\e612";
+                color: inherit;
+                top: 50%;
+            }
+
+            &.is--active:after {
+                content: "\e610";
+            }
         }
     }
 
@@ -141,6 +161,10 @@ The user can see the registration steps, advantages and required information.
         .unitize(padding-bottom, 20);
     }
 
+    .register--login-btn {
+        width: 100%;
+        text-align: center;
+    }
 }
 
     // Register Advantages
@@ -288,8 +312,8 @@ The user can see the registration steps, advantages and required information.
         .register--action {
             text-align: right;
 
-            .is--primary {
-                width: auto;
+            .register--submit {
+                width: 35%;
             }
         }
     }
@@ -327,6 +351,11 @@ The user can see the registration steps, advantages and required information.
 
         .register--login-field {
             .unitize(margin-bottom, 15);
+        }
+
+        .register--login-btn {
+            width: auto;
+            text-align: left;
         }
     }
 

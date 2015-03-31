@@ -23,8 +23,18 @@ It allows the user to directly see and change the important information of their
 
     // Logout success message
 .account--logout {
-    .account--welcome { margin: 0; }
-    .logout--text { margin: 0; }
+    .logout--headline {
+        .unitize(font-size, 24);
+        .unitize-margin(10, 0, 20, 0);
+    }
+
+    .logout--actions {
+        .unitize(margin-bottom, 10);
+    }
+
+    .logout-back-to-shop {
+        display: block;
+    }
 }
 
 .account--menu {
@@ -59,6 +69,10 @@ It allows the user to directly see and change the important information of their
     .panel--title {
         .unitize-padding(20, 0);
         margin: 0;
+    }
+
+    .panel--actions {
+        padding: 0;
     }
 }
 
@@ -412,6 +426,10 @@ It allows the user to directly see and change the important information of their
                 .unitize-margin(0, 10, 0, 0);
             }
         }
+    }
+
+    .account--logout .logout-back-to-shop {
+        display: inline-block;
     }
 }
 

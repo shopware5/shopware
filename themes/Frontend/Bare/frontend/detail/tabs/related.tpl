@@ -3,7 +3,7 @@
 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
 	{* Related products - Content *}
 	{block name="frontend_detail_index_similar_slider_content"}
-        <div class="related--content panel--body">
+        <div class="related--content">
             <div class="product-slider" data-product-slider="true">
                 <div class="product-slider--container">
                     {foreach $sArticle.sRelatedArticles as $sArticleSub}
