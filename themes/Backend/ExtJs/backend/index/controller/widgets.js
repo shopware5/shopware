@@ -99,6 +99,28 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.callParent(arguments);
     },
 
+    initUpdateWizard: function() {
+        var me = this;
+
+        if (me.subApplication.updateWizardStarted) {
+            return;
+        }
+
+        Shopware.app.Application.addSubApplication({
+                name: 'Shopware.apps.PluginManager',
+                params: {
+                    hidden: true
+                }
+            },
+            undefined,
+            function() {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.UpdateWizard'
+                });
+            }
+        );
+    },
+
     loadWidgetPanel: function () {
         /*{if {acl_is_allowed resource=widgets privilege=read}}*/
         var me = this;
@@ -106,6 +128,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.viewport = Shopware.app.Application.viewport;
 
         if (!me.viewport) {
+            me.initUpdateWizard();
             Ext.Error.raise(me.snippets.error.viewportNotLoaded);
         }
 
@@ -186,6 +209,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         }
 
         if (!settings) {
+            me.initUpdateWizard();
             Ext.Error.raise(me.snippets.error.settingsInitialisation);
         }
 
@@ -203,6 +227,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         if (!minimized) {
             me.taskBarBtn.getEl().addCls('btn-over');
         }
+        me.initUpdateWizard();
     },
 
     /**

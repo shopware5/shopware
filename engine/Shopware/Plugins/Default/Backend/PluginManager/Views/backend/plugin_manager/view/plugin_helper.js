@@ -219,7 +219,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         );
     },
 
-    sendAjaxRequest: function(url, params, callback) {
+    sendAjaxRequest: function(url, params, callback, errorCallback) {
         var me = this;
 
         Ext.Ajax.request({
@@ -230,8 +230,12 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
                 var response = Ext.decode(operation.responseText);
 
                 if (response.success === false) {
-                    me.displayErrorMessage(response);
-                    me.hideLoadingMask();
+                    if (Ext.isFunction(errorCallback)) {
+                        errorCallback(response);
+                    } else {
+                        me.displayErrorMessage(response);
+                        me.hideLoadingMask();
+                    }
                     return;
                 }
 
