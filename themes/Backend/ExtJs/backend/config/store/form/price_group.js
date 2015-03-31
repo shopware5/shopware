@@ -32,9 +32,9 @@ Ext.define('Shopware.apps.Config.store.form.PriceGroup', {
     remoteFilter: true,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=priceGroup}',
+        url: '{url action=getList}?_repositoryClass=priceGroup',
         api: {
-            destroy: '{url action=deleteValues name=priceGroup}'
+            destroy: '{url action=deleteValues}?_repositoryClass=priceGroup'
         },
         reader: {
             type: 'json',

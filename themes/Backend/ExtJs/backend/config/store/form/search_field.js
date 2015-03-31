@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.SearchField', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getTableList name=searchField}',
+        url: '{url action=getTableList}?_repositoryClass=searchField',
         api: {
-            create: '{url action=saveTableValues name=searchField}',
-            update: '{url action=saveTableValues name=searchField}',
-            destroy: '{url action=deleteTableValues name=searchField}'
+            create: '{url action=saveTableValues}?_repositoryClass=searchField',
+            update: '{url action=saveTableValues}?_repositoryClass=searchField',
+            destroy: '{url action=deleteTableValues}?_repositoryClass=searchField'
         },
         reader: {
             type: 'json',

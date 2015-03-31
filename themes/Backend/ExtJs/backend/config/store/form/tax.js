@@ -36,9 +36,9 @@ Ext.define('Shopware.apps.Config.store.form.Tax', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=tax}',
+        url: '{url action=getList}?_repositoryClass=tax',
         api: {
-            destroy: '{url action=deleteValues name=tax}'
+            destroy: '{url action=deleteValues}?_repositoryClass=tax'
         },
         reader: {
             type: 'json',
