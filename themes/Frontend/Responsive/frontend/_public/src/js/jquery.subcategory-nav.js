@@ -393,7 +393,7 @@
             event.preventDefault();
 
             var me = this,
-                $target = $(event.target),
+                $target = $(event.currentTarget),
                 url = $target.attr('data-fetchUrl');
 
             if (me.inProgress) {
