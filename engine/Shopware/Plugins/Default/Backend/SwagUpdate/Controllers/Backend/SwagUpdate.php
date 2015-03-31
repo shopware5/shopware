@@ -25,6 +25,7 @@
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Random;
 use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\MySQLVersionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
@@ -123,6 +124,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             new PHPExtensionCheck($namespace),
             new WritableCheck($fileSystem, $namespace),
             new IonCubeLoaderCheck($namespace),
+            new LicenseCheck($conn, $this->container->getParameter('shopware.store.apiEndpoint'), $this->getShopwareVersion(), $namespace)
         );
         $validation = new Validation($namespace, $checks);
 
@@ -152,7 +154,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * $this->View()->assign(array(
      *     'success' => false,
-     *     'error' => 'Their are some problems. SORRY!!'
+     *     'error' => 'There are some problems. SORRY!!'
      * ));
      *
      * $this->View()->assign(array(
