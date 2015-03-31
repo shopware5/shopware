@@ -302,6 +302,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
             if ($category->getMedia()) {
                 $data['media'] = $converter->convertMediaStruct($category->getMedia());
+                $data['media']['path'] = $category->getMedia()->getFile();
             }
 
             return $data;
