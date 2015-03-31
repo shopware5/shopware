@@ -142,6 +142,13 @@ class sOrder
     public $o_attr_1, $o_attr_2,$o_attr_3,$o_attr_4,$o_attr_5,$o_attr_6;
 
     /**
+     * Device type from which the order was placed
+     *
+     * @var string
+     */
+    public $deviceType;
+
+    /**
      * Database connection which used for each database operation in this class.
      * Injected over the class constructor
      *
@@ -529,7 +536,8 @@ class sOrder
             'currency'             => $this->sSYSTEM->sCurrency["currency"],
             'currencyFactor'       => $this->sSYSTEM->sCurrency["factor"],
             'subshopID'            => $mainShop->getId(),
-            'remote_addr'          => (string) $_SERVER['REMOTE_ADDR']
+            'remote_addr'          => (string) $_SERVER['REMOTE_ADDR'],
+            'deviceType'           => $this->deviceType
         );
 
         $orderParams = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterParams', $orderParams, array('subject' => $this));
