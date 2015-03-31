@@ -2,25 +2,39 @@
 
 namespace Element\Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use  Behat\Mink\Exception\ResponseTextException;
+require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
 
-class AccountBilling extends Element
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+
+class AccountBilling extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.billing > div.inner_container');
 
-    public $cssLocator = array(
-        'addressData' => 'p'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'addressData' => 'p'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'otherButton'  => array('de' => 'Andere wählen',            'en' => 'Select other'),
-        'changeButton' => array('de' => 'Rechnungsadresse ändern',  'en' => 'Change billing address')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'otherButton'  => array('de' => 'Andere wählen',            'en' => 'Select other'),
+            'changeButton' => array('de' => 'Rechnungsadresse ändern',  'en' => 'Change billing address')
+        );
+    }
 
     public function checkAddress($testAddress)
     {
@@ -29,7 +43,7 @@ class AccountBilling extends Element
         $testAddress = array_values($testAddress);
 
         $locators = array('addressData');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $address = array();
 
@@ -55,6 +69,6 @@ class AccountBilling extends Element
         }
 
         $message = sprintf('The addresses are different! ("%s" not was found in "%s")', $result['value2'], $result['value']);
-        throw new ResponseTextException($message, $this->getSession());
+        \Helper::throwException($message);
     }
 }

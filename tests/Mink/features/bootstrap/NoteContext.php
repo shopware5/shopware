@@ -71,6 +71,6 @@ class NoteContext extends SubContext
 
         /** @var NotePosition $notePosition */
         $notePosition = $notePositions->setInstance($position);
-        $notePosition->clickActionLink($name, $language);
+        Helper::clickNamedLink($notePosition, $name, $language);
     }
 }

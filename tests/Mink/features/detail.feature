@@ -34,9 +34,7 @@ Feature: detail page
         Given I am on the detail page for article 243
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
-        When  I submit the form "notificationForm" on page "Detail" with:
-            | field              | value           |
-            | sNotificationEmail | test@example.de |
+        When  I submit the notification form with "test@example.de"
         Then  I should see "Bestätigen Sie den Link der eMail die Sie gerade erhalten haben. Sie erhalten dann eine eMail sobald der Artikel wieder verfügbar ist"
 
         When  I click the link in my latest email

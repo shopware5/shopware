@@ -2,23 +2,21 @@
 
 namespace Page\Responsive;
 
-use Behat\Behat\Context\Step;
 use Behat\Mink\Driver\SahiDriver;
-use Symfony\Component\Console\Helper\Helper;
 
 class Homepage extends \Page\Emotion\Homepage
 {
-    public $cssLocator = array(
-        'contentBlock' => 'section.content-main > div.content-main--inner',
-        'searchForm' => 'form.main-search--form',
-        'newsletterForm' => 'form.newsletter--form',
-        'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]',
-        'controller' => array(
-            'account' => 'body.is--ctl-account',
-            'checkout' => 'body.is--ctl-checkout',
-            'newsletter' => 'body.is--ctl-newsletter'
-        )
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'newsletterForm' => 'form.newsletter--form',
+            'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]'
+        );
+    }
 
     /**
      * @param string $keyword

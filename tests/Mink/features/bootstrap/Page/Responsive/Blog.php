@@ -3,7 +3,14 @@ namespace Page\Responsive;
 
 class Blog extends \Page\Emotion\Blog
 {
-    public $cssLocator = array(
-        'commentForm' => 'div.blog--comments-form > form'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'commentForm' => 'div.blog--comments-form > form'
+        );
+    }
 }

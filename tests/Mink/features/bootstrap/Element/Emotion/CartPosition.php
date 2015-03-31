@@ -14,20 +14,33 @@ class CartPosition extends MultipleElement
      */
     protected $selector = array('css' => 'div.table_row');
 
-    public $cssLocator = array(
-        'name' => 'div.basket_details > a.title',
-        'number' => 'div.basket_details > p.ordernumber',
-        'thumbnailLink' => 'a.thumb_image',
-        'thumbnailImage' => 'a.thumb_image > img',
-        'quantity' => 'div > form > div:nth-of-type(3) > select > option',
-        'itemPrice' => 'div > form > div:nth-of-type(4)',
-        'sum' => 'div > form > div:nth-of-type(5)'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'name' => 'div.basket_details > a.title',
+            'number' => 'div.basket_details > p.ordernumber',
+            'thumbnailLink' => 'a.thumb_image',
+            'thumbnailImage' => 'a.thumb_image > img',
+            'quantity' => 'div > form > div:nth-of-type(3) > select > option',
+            'itemPrice' => 'div > form > div:nth-of-type(4)',
+            'sum' => 'div > form > div:nth-of-type(5)'
+        );
+    }
 
-    /** @var array $namedSelectors */
-    protected $namedSelectors = array(
-        'remove'  => array('de' => 'Löschen',   'en' => 'Delete')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'remove'  => array('de' => 'Löschen',   'en' => 'Delete')
+        );
+    }
 
     /**
      * @return array
@@ -61,7 +74,7 @@ class CartPosition extends MultipleElement
     public function getQuantitysTocheck()
     {
         $locators = array('quantity');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $quantity = 0;
 
@@ -97,14 +110,5 @@ class CartPosition extends MultipleElement
         return array(
             'totalPrice' => $elements['sum']->getText()
         );
-    }
-
-    /**
-     * @param string $name
-     * @param string $language
-     */
-    public function clickActionLink($name, $language)
-    {
-        $this->clickLink($this->namedSelectors[$name][$language]);
     }
 }

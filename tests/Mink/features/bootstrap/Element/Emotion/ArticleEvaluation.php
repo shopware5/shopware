@@ -11,14 +11,21 @@ class ArticleEvaluation extends BlogComment
     /** @var array $selector */
     protected $selector = array('css' => 'div.comment_block:not(.answer)');
 
-    public $cssLocator = array(
-        'author' => 'div.left_container > .author > .name',
-        'date' => 'div.left_container > .date',
-        'stars' => 'div.left_container > .star',
-        'headline' => 'div.right_container > h3',
-        'comment' => 'div.right_container > p',
-        'answer' => 'div + div.answer > div.right_container'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'author' => 'div.left_container > .author > .name',
+            'date' => 'div.left_container > .date',
+            'stars' => 'div.left_container > .star',
+            'headline' => 'div.right_container > h3',
+            'comment' => 'div.right_container > p',
+            'answer' => 'div + div.answer > div.right_container'
+        );
+    }
 
     /**
      * @param NodeElement $element

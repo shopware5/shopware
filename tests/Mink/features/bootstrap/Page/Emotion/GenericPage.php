@@ -2,9 +2,8 @@
 namespace Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Behat\Context\Step;
 
-class GenericPage extends Page
+class GenericPage extends Page implements \HelperSelectorInterface
 {
     public $cssLocator = array(
         'canonical' => 'link[rel=canonical]',
@@ -12,6 +11,29 @@ class GenericPage extends Page
         'prev' => 'link[rel=prev]',
         'robots' => 'meta[name=robots]'
     );
+
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'canonical' => 'link[rel=canonical]',
+            'next' => 'link[rel=next]',
+            'prev' => 'link[rel=prev]',
+            'robots' => 'meta[name=robots]'
+        );
+    }
+
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
 
     /**
      * Checks if the canonical link matches the given path and query
@@ -70,7 +92,7 @@ class GenericPage extends Page
      */
     private function checkLink($locator, $path = null, $query = array())
     {
-        $elements = \Helper::findElements($this, array($locator), array(), false, false);
+        $elements = \Helper::findElements($this, array($locator), false);
         $linkElement = $elements[$locator];
 
         if ($path !== null && empty($linkElement)) {

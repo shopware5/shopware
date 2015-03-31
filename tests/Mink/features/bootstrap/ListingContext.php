@@ -70,7 +70,7 @@ class ListingContext extends SubContext
      */
     public function theArticlesShouldBeShownInATableView()
     {
-        $this->getPage('Listing')->checkView('table');
+        $this->getPage('Listing')->checkView('viewTable');
     }
 
     /**
@@ -78,7 +78,7 @@ class ListingContext extends SubContext
      */
     public function theArticlesShouldBeShownInAListView()
     {
-        $this->getPage('Listing')->checkView('list');
+        $this->getPage('Listing')->checkView('viewList');
     }
 
     /**

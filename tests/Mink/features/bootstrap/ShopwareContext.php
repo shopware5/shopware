@@ -94,10 +94,8 @@ class ShopwareContext extends SubContext
      */
     public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
-        $controller = $page->getController();
-
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageName = ucfirst($pageInfo['controller']);
         $data = array(
             array(
                 'field' => 'newsletter',
@@ -105,14 +103,15 @@ class ShopwareContext extends SubContext
             )
         );
 
-        if ($controller === 'newsletter') {
-            $page = $this->getPage('Newsletter');
-
-            if ($additionalData) {
-                $data = array_merge($data, $additionalData->getHash());
-            }
+        if ($pageName === 'Index') {
+            $pageName = 'Homepage';
+        }
+        elseif (($pageName === 'Newsletter') && ($additionalData)) {
+            $data = array_merge($data, $additionalData->getHash());
         }
 
+        /** @var Homepage|\Page\Emotion\Newsletter $page */
+        $page = $this->getPage($pageName);
         $page->subscribeNewsletter($data);
     }
 

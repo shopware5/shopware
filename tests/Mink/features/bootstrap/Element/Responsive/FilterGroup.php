@@ -3,16 +3,22 @@
 namespace Element\Responsive;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
 
 class FilterGroup extends \Element\Emotion\FilterGroup
 {
     /** @var array $selector */
     protected $selector = array('css' => 'div.filter--container label.filter-panel--title');
 
-    public $cssLocator = array(
-        'properties' => 'label ~ div.filter-panel--content'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'properties' => 'label ~ div.filter-panel--content'
+        );
+    }
 
     /**
      * @param string $propertyName
@@ -20,7 +26,8 @@ class FilterGroup extends \Element\Emotion\FilterGroup
      */
     public function setProperty($propertyName)
     {
-        $elements = \Helper::findElements($this);
+        $locator = array('properties');
+        $elements = \Helper::findElements($this, $locator);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];

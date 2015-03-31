@@ -6,17 +6,24 @@ use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class BannerSlider extends MultipleElement
+class BannerSlider extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.banner-slider-element');
 
-    public $cssLocator = array(
-        'slideImage' => 'div.slide img',
-        'slideLink' => 'div.slide > a'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'slideImage' => 'div.slide img',
+            'slideLink' => 'div.slide > a'
+        );
+    }
 
     /**
      * @return array
@@ -24,7 +31,7 @@ class BannerSlider extends MultipleElement
     public function getImagesToCheck()
     {
         $locators = array('slideImage');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $images = array();
 
@@ -41,7 +48,7 @@ class BannerSlider extends MultipleElement
     public function getLinksToCheck()
     {
         $locators = array('slideLink');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $links = array();
 

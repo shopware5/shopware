@@ -2,24 +2,40 @@
 namespace Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
 
-class Form extends Page
+class Form extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '?sViewport=ticket&sFid={formId}';
 
-    public $cssLocator = array(
-        'captchaPlaceholder' => 'div.captcha-placeholder',
-        'captchaImage' => 'div.captcha-placeholder img',
-        'captchaHidden' => 'div.captcha-placeholder input'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'captchaPlaceholder' => 'div.captcha-placeholder',
+            'captchaImage' => 'div.captcha-placeholder img',
+            'captchaHidden' => 'div.captcha-placeholder input'
+        );
+    }
+
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
 
     public function checkCaptcha()
     {
-        $element = \Helper::findElements($this);
+        $locators = array('captchaPlaceholder', 'captchaImage', 'captchaHidden');
+        $element = \Helper::findElements($this, $locators);
 
         $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');

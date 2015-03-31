@@ -9,14 +9,21 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
     /** @var array $selector */
     protected $selector = array('css' => 'div.review--entry:not(.is--answer)');
 
-    public $cssLocator = array(
-        'author' => 'span.content--field:nth-of-type(2)',
-        'date' => 'span.content--field:nth-of-type(3)',
-        'stars' => 'span.product--rating > meta:nth-of-type(2)',
-        'headline' => 'h4.content--title',
-        'comment' => 'p.review--content',
-        'answer' => 'div + div.is--answer'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'author' => 'span.content--field:nth-of-type(2)',
+            'date' => 'span.content--field:nth-of-type(3)',
+            'stars' => 'span.product--rating > meta:nth-of-type(2)',
+            'headline' => 'h4.content--title',
+            'comment' => 'p.review--content',
+            'answer' => 'div + div.is--answer'
+        );
+    }
 
     /**
      * @param NodeElement $element
