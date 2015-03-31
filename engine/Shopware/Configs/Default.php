@@ -33,6 +33,7 @@ $customConfig = array_merge(array(
     'hook' => array(),
     'model' => array(),
     'config' => array(),
+    'store' => array(),
     'custom' => array(),
     'backendsession' => array(),
     'plugins' => array()
@@ -64,6 +65,9 @@ return array_merge($customConfig, array(
         'charset' => 'utf-8'
     ), $customConfig['front']),
     'config' => array_merge(array(), $customConfig['config']),
+    'store' => array_merge(array(
+        'apiEndpoint' => 'https://api.shopware.com',
+    ), $customConfig['store']),
     'plugins' => array_merge(array(), $customConfig['plugins']),
     'template' => array_merge(array(
         'compileCheck' => true,
