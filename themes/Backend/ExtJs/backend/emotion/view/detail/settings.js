@@ -87,6 +87,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/emotion_name_field}Emotion name{/s}',
             emptyText: '{s name=settings/emotion_name_empty}My new emotion{/s}',
             name: 'name',
+            allowBlank: false,
             labelWidth: me.defaults.labelWidth
         });
 
