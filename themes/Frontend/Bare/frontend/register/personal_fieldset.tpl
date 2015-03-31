@@ -96,7 +96,7 @@
 				{* Password description *}
 				{block name='frontend_register_personal_fieldset_password_description'}
 					<div class="register--password-description">
-						{s name='RegisterInfoPassword'}{/s} {config name=MinPassword} {s name='RegisterInfoPasswordCharacters'}{/s} {s name='RegisterInfoPassword2'}{/s}
+						{s name='RegisterInfoPassword'}{/s} {config name=MinPassword} {s name='RegisterInfoPasswordCharacters'}{/s}<br />{s name='RegisterInfoPassword2'}{/s}
 					</div>
 				{/block}
 			</div>
