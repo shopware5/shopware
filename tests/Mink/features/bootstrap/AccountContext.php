@@ -62,9 +62,19 @@ class AccountContext extends SubContext
      */
     public function iChangeMyShippingAddress(TableNode $table)
     {
-        $this->getPage('Account')->changeShipping($table->getHash());
-    }
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageName = ucfirst($pageInfo['controller']);
 
+        if($pageName === 'Checkout') {
+            $pageName = 'CheckoutConfirm';
+        }
+
+        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        $page = $this->getPage($pageName);
+        $data = $table->getHash();
+
+        $page->changeShippingAddress($data);
+    }
 
     /**
      * @Given /^the "([^"]*)" address should be "([^"]*)"$/
@@ -88,14 +98,15 @@ class AccountContext extends SubContext
      */
     public function iChangeThePaymentMethodTo($payment, TableNode $table = null)
     {
-        $controller = $this->getPage('Homepage')->getController();
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller', 'action'));
+        $pageName = ucfirst($pageInfo['controller']);
 
-        $pageName = 'Account';
-
-        if($controller !== 'account') {
-            $pageName = 'CheckoutConfirm';
+        if($pageName === 'Checkout') {
+            $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
+        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        $page = $this->getPage($pageName);
         $data = array(
             array(
                 'field' => 'register[payment]',
@@ -107,6 +118,6 @@ class AccountContext extends SubContext
             $data = array_merge($data, $table->getHash());
         }
 
-        $this->getPage($pageName)->changePayment($data);
+        $page->changePaymentMethod($data);
     }
 }

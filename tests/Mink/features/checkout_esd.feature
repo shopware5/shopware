@@ -6,27 +6,23 @@ Feature: Checkout esd article
         Given I am on the page "Account"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
 
-        When  I follow the link "changeButton" of the element "AccountPayment"
-        And   I submit the form "paymentForm" on page "Account" with:
-            | field   | register |
-            | payment | 4        |
-
+        When  I change the payment method to 4
         Then  the element "AccountPayment" should have the content:
             | position      | content  |
             | currentMethod | Rechnung |
 
-        When  I submit the form "searchForm" on page "Homepage" with:
-            | field   | value |
-            | sSearch | ESD   |
+        When  I search for "ESD"
         Then  I should see "Zu \"ESD\" wurden 1 Artikel gefunden!"
 
         When  I follow the link "order" of the element "ArticleBox" on position 1
         Then  the cart should contain 1 articles with a value of "37,99 €"
         And   I should see "ESD Download Artikel"
         And   I should see "Zuschlag für Zahlungsart"
-        And   the total sum should be "37,99 €" when shipping costs are "0,00 €" and VAT is:
-            | percent | value  |
-            | 19 %    | 6,07 € |
+        And   the aggregations should look like this:
+            | label    | value   |
+            | shipping | 0,00 €  |
+            | total    | 37,99 € |
+            | 19 %     | 6,07 €  |
 
         When  I check "sAGB"
         And   I check "esdAgreementChecked"
@@ -43,18 +39,12 @@ Feature: Checkout esd article
         Given I am on the page "Account"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
 
-        When  I follow the link "changeButton" of the element "AccountPayment"
-        And   I submit the form "paymentForm" on page "Account" with:
-            | field   | register |
-            | payment | 4        |
-
+        When  I change the payment method to 4
         Then  the element "AccountPayment" should have the content:
             | position      | content  |
             | currentMethod | Rechnung |
 
-        When  I submit the form "searchForm" on page "Homepage" with:
-            | field   | value |
-            | sSearch | ESD   |
+        When  I search for "ESD"
         Then  I should see "Zu \"ESD\" wurden 1 Artikel gefunden!"
 
         When  I follow "ESD Download Artikel"
@@ -62,9 +52,11 @@ Feature: Checkout esd article
         Then  the cart should contain 1 articles with a value of "37,99 €"
         And   I should see "ESD Download Artikel"
         And   I should see "Zuschlag für Zahlungsart"
-        And   the total sum should be "37,99 €" when shipping costs are "0,00 €" and VAT is:
-            | percent | value  |
-            | 19 %    | 6,07 € |
+        And   the aggregations should look like this:
+            | label    | value   |
+            | shipping | 0,00 €  |
+            | total    | 37,99 € |
+            | 19 %     | 6,07 €  |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
 

@@ -1,348 +1,157 @@
 <?php
 namespace Page\Emotion;
 
-use Behat\Mink\Element\NodeElement;
+use Element\Emotion\SitemapGroup;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
-use Behat\Behat\Context\Step;
 
-class Sitemap extends Page
+class Sitemap extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/sitemap{xml}';
 
-    public $cssLocator = array(
-        'sitemapGroups' => 'div#center.sitemap > div:not(.clear)',
-        'sitemapNodes' => 'div > ul > ul > li',
-        'sitemapSubNodes' => 'li > ul > li',
-        'nodeLink' => 'li > a',
-        'navigationNodes' => 'div#left > ul.categories.level0 > li'
-    );
-
-    protected $specialGroupsOrder = array('customPages', 'supplierPages', 'landingPages');
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array();
+    }
 
     /**
-     * Compares the category tree (left navigation) with the sitemap
-     * @throws \Behat\Mink\Exception\ResponseTextException
+     * Returns an array of all named selectors of the element/page
+     * @return array
      */
-    public function checkCategories()
+    public function getNamedSelectors()
     {
-        $categories = $this->getSitemapLinks();
-        $navigation = $this->getNavigationLinks();
+        return array();
+    }
 
-        $result = \Helper::compareArrays($navigation, $categories);
-
-        if ($result !== true) {
-            switch ($result['error']) {
-                case 'keyNotExists':
-                    $message = sprintf('The category "%s" was not found in the sitemap', $result['value']['name']);
-                    break;
-
-                case 'comparisonFailed':
-                    $message = sprintf(
-                        'The category "%s" is different in navigation and sitemap ("%s")',
-                        $result['value'],
-                        $result['value2']
-                    );
-                    break;
-
-                default:
-                    $message = 'An error occurred';
-                    break;
-            }
-
+    /**
+     * @param SitemapGroup|string $group
+     * @param string $link
+     * @param array $links
+     */
+    public function checkGroup($group, $link, array $sites)
+    {
+        if(!($group instanceof SitemapGroup)) {
+            $message = sprintf('Sitemap group "%s" was not found!', $group);
             \Helper::throwException($message);
         }
-    }
 
-    /**
-     * Helper function to read all categories from sitemap
-     * @return array
-     */
-    private function getSitemapLinks()
-    {
-        $this->open();
+        $data = \Helper::getElementData($group, false);
 
-        $categoryGroups = $this->getSitemapGroups();
+        $this->checkGroupTitleLink($group->getText(), $link, $data['titleLink']);
 
-        $links = array();
+        foreach($sites as $site) {
+            $level = 1;
 
-        foreach ($categoryGroups as $categoryGroup) {
-            //Read a-Tag for name and link
-            $locators = array('nodeLink');
-            $elements = \Helper::findElements($categoryGroup, $locators, $this->cssLocator);
+            if(isset($site['level'])) {
+                $level = $site['level'];
+            }
 
-            $links[] = array(
-                'name' => $elements['nodeLink']->getText(),
-                'link' => $elements['nodeLink']->getAttribute('href'),
-                'children' => $this->readSitemapGroup($categoryGroup)
-            );
+            $this->checkGroupSite($site['value'], $site['link'], $data['level' . $level]);
         }
-
-        return $links;
     }
 
     /**
-     * Helper function to read all categories from left navigation
-     * @return array
+     * @param string $title
+     * @param string $link
+     * @param array $data
+     * @throws \Exception
      */
-    private function getNavigationLinks()
+    private function checkGroupTitleLink($title, $link, array $data)
     {
-        $this->open();
-
-        $locators = array('navigationNodes');
-        $elements = \Helper::findElements($this, $locators, null, true);
-
-        $navigation = array();
-
-        foreach ($elements['navigationNodes'] as $navigationNode) {
-            $navigation[] = $this->readNavigationNode($navigationNode);
-        }
-
-        return $navigation;
-    }
-
-    /**
-     * Recursive helper function to read all category children from left navigation (by clicking through the category tree)
-     * @param  NodeElement $node
-     * @return array
-     */
-    private function readNavigationNode($node)
-    {
-        $locators = array('nodeLink');
-        $elements = \Helper::findElements($node, $locators, $this->cssLocator);
-
-        $navigationNode = array(
-            'name' => $elements['nodeLink']->getText(),
-            'link' => $elements['nodeLink']->getAttribute('href'),
-            'children' => array()
+        $check = array(
+            'title' => array($data['title'], $title),
+            'link'  => array($data['link'],  $link),
         );
 
-        $nodeLink = $elements['nodeLink'];
-        $nodeLink->click();
+        $result = \Helper::checkArray($check);
 
-        $locators = array('sitemapSubNodes');
-        $elements = \Helper::findElements($node, $locators, $this->cssLocator, true, false);
-
-        if (!isset($elements['sitemapSubNodes'])) {
-            return $navigationNode;
+        if($result === true) {
+            return;
         }
 
-        foreach ($elements['sitemapSubNodes'] as $navigationSubNode) {
-            $navigationNode['children'][] = $this->readNavigationNode($navigationSubNode);
-
-            if ($navigationSubNode !== end($elements['sitemapSubNodes'])) {
-                $nodeLink->click();
-            }
+        if ($result === 'title') {
+            $message = sprintf('Title of "%s" has a different value! (is "%s")', $check['title'][1], $check['title'][0]);
+        } elseif (empty($link)) {
+            $message = array(
+                sprintf('There is a link for the group "%s"!', $title),
+                $check['link'][0]
+            );
+        } else {
+            $message = sprintf('The link of "%s" is different! ("%s" not found in "%s")', $title, $check['link'][1], $check['link'][0]);
         }
 
-        return $navigationNode;
-    }
-
-    /**
-     * Looks in the sitemap.xml for the homepage link
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkXmlHomepage()
-    {
-        $homepageUrl = rtrim($this->getParameter('base_url'), '/').'/';
-        $xmlArray = array();
-
-        $this->open(array('xml' => '.xml'));
-
-        $parser = xml_parser_create();
-        xml_parse_into_struct($parser, $this->getContent(), $xmlArray);
-
-        foreach ($xmlArray as $xml) {
-            if ($xml['tag'] !== 'LOC') {
-                continue;
-            }
-
-            if ($xml['value'] == $homepageUrl) {
-                return true;
-            }
-        }
-
-        $message = 'The homepage url was not found in the sitemap';
         \Helper::throwException($message);
     }
 
     /**
-     * Compares the category tree (left navigation) with the sitemap.xml
-     * @throws \Behat\Mink\Exception\ResponseTextException
+     * @param string $title
+     * @param string $link
+     * @param array $data
+     * @throws \Exception
      */
-    public function checkXmlCategories()
+    private function checkGroupSite($title, $link, array $data)
     {
-        $categories = array();
-        $xmlArray = array();
+        foreach($data as $site) {
+            $check = array(
+                array($site['value'], $title),
+                array($site['title'], $title),
+                array($site['link'],  $link)
+            );
 
-        $navigation = $this->getNavigationLinks();
+            $result = \Helper::checkArray($check);
 
-        foreach ($navigation as $category) {
-            $categories = array_merge($categories, $this->getCategoryLinks($category));
+            if($result === true) {
+                return;
+            }
         }
 
-        $this->open(array('xml' => '.xml'));
+        $message = sprintf('The site "%s" with link "%s" was not found!', $title, $link);
+        \Helper::throwException($message);
+    }
 
-        $parser = xml_parser_create();
-        xml_parse_into_struct($parser, $this->getContent(), $xmlArray);
+    /**
+     * @param array $links
+     */
+    public function checkXml(array $links)
+    {
+        $homepageUrl = rtrim($this->getParameter('base_url'), '/');
+        $xml = new \SimpleXMLElement($this->getContent());
 
+        $check = array();
         $i = 0;
-        foreach ($xmlArray as $xml) {
-            if ($xml['tag'] !== 'LOC') {
-                continue;
+
+        foreach($xml as $link) {
+            if(empty($links[$i])) {
+                $messages = array(
+                    'There are more links in the sitemap.xml as expected!',
+                    sprintf('(%d sites in sitemap.xml, %d in test data', count($xml), count($links))
+                );
+
+                \Helper::throwException($messages);
             }
 
-            if (($key = array_search($xml['value'], $categories)) !== false) {
-                unset($categories[$key]);
-            }
-
-            if (empty($categories)) {
-                break;
-            }
-
+            $check[] = array((string) $link->loc, $homepageUrl . $links[$i]['link']);
             $i++;
         }
 
-        if (!empty($categories)) {
-            $message = sprintf(
-                'The following category/ies were not found in the sitemap: %s',
-                implode(', ', $categories)
-            );
-            \Helper::throwException($message);
-        }
-    }
+        $result = \Helper::checkArray($check, true);
 
-    /**
-     * Recursive helper function to add all category children to first level of an array
-     * @param  array $category
-     * @return array
-     */
-    private function getCategoryLinks($category)
-    {
-        $categories = array($category['link']);
-
-        foreach ($category['children'] as $child) {
-            $categories = array_merge($categories, $this->getCategoryLinks($child));
+        if($result === true) {
+            return;
         }
 
-        return $categories;
-    }
-
-    /**
-     * Compares the custom pages tree (left navigation) with the sitemap
-     */
-    public function checkCustomPages()
-    {
-        $customPagesGroup = $this->getSitemapGroups('customPages');
-
-        $links = $this->readSitemapGroup($customPagesGroup);
-    }
-
-    /**
-     * Compares the supplier pages list with the sitemap
-     */
-    public function checkSupplierPages()
-    {
-        $supplierPagesGroup = $this->getSitemapGroups('supplierPages');
-
-        $links = $this->readSitemapGroup($supplierPagesGroup);
-    }
-
-    /**
-     * Compares all landing pages found in categories with the sitemap
-     */
-    public function checkLandingPages()
-    {
-        $landingPagesGroup = $this->getSitemapGroups('landingPages');
-
-        $links = $this->readSitemapGroup($landingPagesGroup);
-    }
-
-    /**
-     * Reads the complete sitemap tree of the group
-     * @param  NodeElement $group
-     * @return array
-     */
-    private function readSitemapGroup($group)
-    {
-        $locators = array('sitemapNodes');
-        $elements = \Helper::findElements($group, $locators, $this->cssLocator, true, false);
-
-        $links = array();
-
-        if (empty($elements['sitemapNodes'])) {
-            return $links;
-        }
-
-        foreach ($elements['sitemapNodes'] as $node) {
-            $links[] = $this->getNodeData($node);
-        }
-
-        return $links;
-    }
-
-    /**
-     * Recursive helper function to read all Node data
-     * @param  NodeElement $node
-     * @return array
-     */
-    private function getNodeData($node)
-    {
-        //Read a-Tag for name and link
-        $locators = array('nodeLink');
-        $elements = \Helper::findElements($node, $locators, $this->cssLocator);
-
-        $data = array(
-            'name' => $elements['nodeLink']->getText(),
-            'link' => $elements['nodeLink']->getAttribute('href'),
-            'children' => array()
+        $messages = array(
+            'A link is different!',
+            'Read: ' . $check[$result][0],
+            'Expected: ' . $check[$result][1]
         );
 
-        //Look for deeper ul-Tags and read them recursively
-        $locators = array('sitemapSubNodes');
-        $elements = \Helper::findElements($node, $locators, $this->cssLocator, true, false);
-
-        if (empty($elements['sitemapSubNodes'])) {
-            return $data;
-        }
-
-        foreach ($elements['sitemapSubNodes'] as $subNode) {
-            $data['children'][] = $this->getNodeData($subNode);
-        }
-
-        return $data;
+        \Helper::throwException($messages);
     }
-
-    /**
-     * Helper function to get all sitemap groups of a type (categories, custom pages, supplier pages, landing pages)
-     * @param  string            $groupName
-     * @return array|NodeElement
-     */
-    private function getSitemapGroups($groupName = 'categories')
-    {
-        $this->open();
-
-        $locators = array('sitemapGroups');
-        $elements = \Helper::findElements($this, $locators, null, true);
-
-        if (in_array($groupName, $this->specialGroupsOrder)) {
-            $groups = array_reverse($elements['sitemapGroups']);
-            $specialGroupsOrder = array_reverse($this->specialGroupsOrder);
-            $specialGroupsOrder = array_flip($specialGroupsOrder);
-            $groupId = $specialGroupsOrder[$groupName];
-
-            return $groups[$groupId];
-        }
-
-        $groups = $elements['sitemapGroups'];
-        foreach ($this->specialGroupsOrder as $specialGroup) {
-            array_pop($groups);
-        }
-
-        return $groups;
-    }
-
 }

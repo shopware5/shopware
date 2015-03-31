@@ -3,26 +3,40 @@
 namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
 
-class HeaderCart extends Element
+class HeaderCart extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div#shopnavi');
 
-    public $cssLocator = array(
-        'quantity' => 'a.quantity',
-        'amount' => 'span.amount',
-        'link' => 'a.quantity'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'quantity' => 'a.quantity',
+            'amount' => 'span.amount',
+            'link' => 'a.quantity'
+        );
+    }
 
     /**
-     * @param string $keywords
-     *
-     * @return Page
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
+
+    /**
+     * @param string $quantity
+     * @param float $amount
+     * @throws \Exception
      */
     public function checkCart($quantity, $amount)
     {
@@ -41,10 +55,13 @@ class HeaderCart extends Element
                 'The %s of the header cart is wrong! (%s instead of %s)',
                 $result, $check[$result][0], $check[$result][1]
             );
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException($message);
         }
     }
 
+    /**
+     *
+     */
     public function clickCart()
     {
         $locators = array('link');

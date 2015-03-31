@@ -27,7 +27,7 @@ Feature: Note
 
         Then  the cart should contain 2 articles with a value of "165,89 €"
         And   the aggregations should look like this:
-            | aggregation   | value    |
+            | label         | value    |
             | sum           | 165,89 € |
             | shipping      | 3,90 €   |
             | total         | 169,79 € |

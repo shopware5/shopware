@@ -6,18 +6,25 @@ use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
 
-class BlogArticle extends MultipleElement
+class BlogArticle extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.emotion-element > div.blog-element');
 
-    public $cssLocator = array(
-        'title' => 'h2 > a',
-        'link' => 'div.blog_img > a',
-        'text' => 'p'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'title' => 'h2 > a',
+            'link' => 'div.blog_img > a',
+            'text' => 'p'
+        );
+    }
 
     /**
      * @return array
@@ -25,7 +32,7 @@ class BlogArticle extends MultipleElement
     public function getTitlesToCheck()
     {
         $locators = array('title', 'link');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $titles = array();
 
@@ -46,7 +53,7 @@ class BlogArticle extends MultipleElement
     public function getImagesToCheck()
     {
         $locators = array('link');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $images = array();
 
@@ -63,7 +70,7 @@ class BlogArticle extends MultipleElement
     public function getLinksToCheck()
     {
         $locators = array('title', 'link');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $links = array();
 
@@ -83,7 +90,7 @@ class BlogArticle extends MultipleElement
     public function getTextsToCheck()
     {
         $locators = array('text');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, $locators);
 
         $texts = array();
 

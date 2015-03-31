@@ -7,34 +7,34 @@ Feature: Checkout articles with voucher
         Then  I should see "Fahrerbrille Chronos"
 
         When  I put the article into the basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 61,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 61,89 € |
 
         When  I add the article "SW10142" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 106,88 € |
+        Then  the aggregations should look like this:
+            | label | value    |
+            | total | 106,88 € |
 
         When  I add the voucher "absolut" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 101,88 € |
+        Then  the aggregations should look like this:
+            | label | value    |
+            | total | 101,88 € |
 
         When  I remove the voucher
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 106,88 € |
+        Then  the aggregations should look like this:
+            | label | value    |
+            | total | 106,88 € |
 
         When  I remove the article on position 2
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 61,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 61,89 € |
 
         When  I add the voucher "prozentual" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 55,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 55,89 € |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
         And   I register me:
@@ -52,9 +52,9 @@ Feature: Checkout articles with voucher
             | country       |                    | Deutschland       |
 
         Then  I should not see "Ein Fehler ist aufgetreten!"
-        And   the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 55,89 € |
+        And   the aggregations should look like this:
+            | label | value   |
+            | total | 55,89 € |
         And   I should see "Gesamtsumme"
         And   I should see "AGB und Widerrufsbelehrung"
 
@@ -67,34 +67,34 @@ Feature: Checkout articles with voucher
         Then  I should see "Fahrerbrille Chronos"
 
         When  I put the article into the basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 61,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 61,89 € |
 
         When  I add the article "SW10142" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 106,88 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 106,88 € |
 
         When  I add the voucher "absolut" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 101,88 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 101,88 € |
 
         When  I remove the voucher
-        Then  the page "CheckoutCart" should have the content:
-            | position | content  |
-            | totalSum | 106,88 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 106,88 € |
 
         When  I remove the article on position 2
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 61,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 61,89 € |
 
         When  I add the voucher "prozentual" to my basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 55,89 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 55,89 € |
 
         When  I follow the link "checkout" of the page "CheckoutCart"
         And   I register me:
@@ -112,9 +112,9 @@ Feature: Checkout articles with voucher
             | country       |                    | Deutschland       |
 
         Then  I should not see "Ein Fehler ist aufgetreten!"
-        And   the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | 55,89 € |
+        And   the aggregations should look like this:
+            | label | value   |
+            | total | 55,89 € |
 
         When  I press "Weiter"
         Then  I should see "Gesamtsumme"
@@ -129,20 +129,23 @@ Feature: Checkout articles with voucher
         Then  I should see "Mehrzwecknudeln"
 
         When  I put the article into the basket
-        Then  the total sum should be "15,38 €" when shipping costs are "3,90 €" and VAT is:
-            | percent | value  |
-            | 7 %     | 1,01 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 15,38 € |
+            | 7 %   | 1,01 €  |
 
         When  I add the article "SW10039" to my basket
         And   I add the article "SW10172" to my basket
 
-        Then  the total sum should be "34,35 €" when shipping costs are "3,90 €" and VAT is:
-            | percent | value  |
-            | 7 %     | 1,46 € |
-            | 19 %    | 1,90 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 34,35 € |
+            | 7 %   | 1,46 €  |
+            | 19 %  | 1,90 €  |
 
         When  I add the voucher "kostenfrei" to my basket
-        Then  the total sum should be "32,45 €" when shipping costs are "0,00 €" and VAT is:
-            | percent | value  |
-            | 7 %     | 1,46 € |
-            | 19 %    | 1,60 € |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | 32,45 € |
+            | 7 %   | 1,46 €  |
+            | 19 %  | 1,60 €  |

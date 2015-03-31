@@ -33,7 +33,7 @@ class BlogContext extends SubContext
 
         /** @var BlogBox $blogBox */
         $blogBox = $blogBoxes->setInstance($position);
-        $blogBox->clickActionLink('readMore', $language);
+        Helper::clickNamedLink($blogBox, 'readMore', $language);
     }
 
     /**

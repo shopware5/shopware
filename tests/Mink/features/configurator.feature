@@ -10,9 +10,9 @@ Feature: Configurator articles
             | 6       | <color> |
             | 7       | <size>  |
         And   I put the article "<quantity>" times into the basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | <total> |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | <total> |
         And   the element "CartPosition" should have the content:
             | position | content         |
             | name     | <configuration> |
@@ -33,9 +33,9 @@ Feature: Configurator articles
             | 12      | <spares>   |
             | 13      | <warranty> |
         And   I put the article "<quantity>" times into the basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | <total> |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | <total> |
         And   the element "CartPosition" should have the content:
             | position | content         |
             | name     | <configuration> |
@@ -57,9 +57,9 @@ Feature: Configurator articles
             | 6       | <color> |
             | 7       | <size>  |
         And   I put the article "<quantity>" times into the basket
-        Then  the page "CheckoutCart" should have the content:
-            | position | content |
-            | totalSum | <total> |
+        Then  the aggregations should look like this:
+            | label | value   |
+            | total | <total> |
         And   the element "CartPosition" should have the content:
             | position | content         |
             | name     | <configuration> |

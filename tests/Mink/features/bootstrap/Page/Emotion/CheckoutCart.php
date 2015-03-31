@@ -1,156 +1,148 @@
 <?php
 namespace Page\Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class CheckoutCart extends Page
+class CheckoutCart extends Page implements \HelperSelectorInterface
 {
     /**
      * @var string $path
      */
     protected $path = '/checkout/cart';
 
-    public $cssLocator = array(
-        'aggregationAmounts' => 'div#aggregation',
-        'sum' => 'div#aggregation > p.textright',
-        'shipping' => 'div > div:nth-of-type(1)',
-        'total' => 'div#aggregation > div.totalamount',
-        'sumWithoutVat' => 'div#aggregation > div.tax',
-        'taxValue' => 'div#aggregation > div:nth-of-type(%d)',
-        'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)',
-        'addVoucher' => array(
-            'input' => 'div.vouchers input.text',
-            'submit' => 'div.vouchers input.box_send'
-        ),
-        'addArticle' => array(
-            'input' => 'div.add_article input.ordernum',
-            'submit' => 'div.add_article input.box_send'
-        ),
-        'removeVoucher' => 'div.table_row.voucher a.del'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return array
+     */
+    public function getCssSelectors()
+    {
+        return array(
+            'aggregationAmounts' => 'div#aggregation',
+            'sum' => 'div#aggregation > p.textright',
+            'shipping' => 'div#aggregation > div:nth-of-type(1)',
+            'total' => 'div#aggregation > div.totalamount',
+            'sumWithoutVat' => 'div#aggregation > div.tax',
+            'taxValue' => 'div#aggregation > div:nth-of-type(%d)',
+            'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)',
+            'addVoucherInput' => 'div.vouchers input.text',
+            'addVoucherSubmit' => 'div.vouchers input.box_send',
+            'addArticleInput' => 'div.add_article input.ordernum',
+            'addArticleSubmit' => 'div.add_article input.box_send',
+            'removeVoucher' => 'div.table_row.voucher a.del',
+            'aggregationLabels' => '#aggregation_left > *',
+            'aggregationValues' => '#aggregation > *'
+        );
+    }
 
-    public $namedSelectors = array(
-        'checkout' => array('de' => 'Zur Kasse gehen!', 'en' => 'Proceed to checkout')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'checkout' => array('de' => 'Zur Kasse gehen!', 'en' => 'Proceed to checkout'),
+            'sum' => array('de' => 'Summe', 'en' => 'Proceed to checkout'),
+            'shipping' => array('de' => 'Versandkosten', 'en' => 'Proceed to checkout'),
+            'total' => array('de' => 'Gesamtsumme', 'en' => 'Proceed to checkout'),
+            'sumWithoutVat' => array('de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'),
+            'tax' => array('de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'),
+        );
+    }
 
     protected $taxesPositionFirst = 4;
     public $cartPositionFirst = 3;
 
     /**
-     * @return array
+     * @param $aggregation
+     * @throws \Exception
      */
-    public function getSumsToCheck()
+    public function checkAggregation($aggregation)
     {
-        $locators = array('sum');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'aggregationSum' => \Helper::toFloat($elements['sum']->getText())
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getShippingsToCheck()
-    {
-        $locators = array('shipping');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'aggregationShipping' => \Helper::toFloat($elements['shipping']->getText())
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getTotalSumsToCheck()
-    {
-        $locators = array('total');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'aggregationTotalSum' => \Helper::toFloat($elements['total']->getText())
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getSumWithoutVatsToCheck()
-    {
-        $locators = array('sumWithoutVat');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'aggregationSumWithoutVat' => \Helper::toFloat($elements['sumWithoutVat']->getText())
-        );
-    }
-
-    /**
-     * Checks the sum, shipping costs, total sum, sum without vat and vat of the cart.
-     * @param string      $totalSum
-     * @param string|null $shippingCosts
-     * @param array       $vat
-     */
-    public function checkSums($totalAmount, $shippingCosts = null, $vats = array())
-    {
-        $locators = array('aggregationAmounts');
-        $elements = \Helper::findElements($this, $locators);
-
-        $aggregation = $elements['aggregationAmounts'];
-        $prices = array('total' => $totalAmount);
-        $locators = array('total');
-
-        if ($shippingCosts !== null) {
-            $prices['shipping'] = $shippingCosts;
-            $locators = array_merge($locators, array('sum', 'shipping'));
-        }
-
-        $prices = \Helper::toFloat($prices);
-        $elements = \Helper::findElements($aggregation, $locators, $this->cssLocator);
-
+        $locators = array('aggregationLabels', 'aggregationValues');
+        $elements = \Helper::findAllOfElements($this, $locators);
+        $lang = \Helper::getCurrentLanguage($this);
         $check = array();
-        $check[] = \Helper::toFloat(array($elements['total']->getText(), $prices['total']));
 
-        if ($shippingCosts !== null) {
-            $prices['sum'] = $prices['total'] - $prices['shipping'];
-            $check[] = \Helper::toFloat(array($elements['sum']->getText(), $prices['sum']));
-            $check[] = \Helper::toFloat(array($elements['shipping']->getText(), $prices['shipping']));
-        }
+        foreach($aggregation as $property) {
+            $key = $this->getAggregationPosition($elements['aggregationLabels'], $property['label'], $lang);
 
-        if (!empty($vats)) {
-            $prices['sumWithoutVat'] = $prices['total'];
+            $check[$property['label']] = \Helper::toFloat(
+                array(
+                    $property['value'],
+                    $elements['aggregationValues'][$key]->getText()
+                )
+            );
 
-            foreach ($vats as $key => $vat) {
-                $vat = \Helper::toFloat($vat);
-                $prices['sumWithoutVat'] -= $vat['value'];
-
-                $locators = array(
-                    'taxValue' => $key + $this->taxesPositionFirst,
-                    'taxRate' => $key + $this->taxesPositionFirst,
-                );
-
-                $elements = \Helper::findElements($this, $locators);
-
-                $check[] = \Helper::toFloat(array($elements['taxValue']->getText(), $vat['value']));
-                $check[] = \Helper::toFloat(array($elements['taxRate']->getText(), $vat['percent']));
-            }
-
-            $locators = array('sumWithoutVat');
-            $elements = \Helper::findElements($aggregation, $locators, $this->cssLocator);
-
-            $check[] = \Helper::toFloat(array($elements['sumWithoutVat']->getText(), $prices['sumWithoutVat']));
+            unset($elements['aggregationLabels'][$key]);
+            unset($elements['aggregationValues'][$key]);
         }
 
         $result = \Helper::checkArray($check);
 
-        if ($result !== true) {
-            $message = sprintf('The value on cart (%s) is deviant from %s!', $check[$result][0], $check[$result][1]);
+        if($result !== true) {
+            $message = sprintf(
+                'The value of "%s" is "%s"! (should be "%s")',
+                $result,
+                $check[$result][0],
+                $check[$result][1]
+            );
+
             \Helper::throwException($message);
         }
+    }
+
+    /**
+     * @param string $key
+     * @param string $language
+     * @return string
+     * @throws \Behat\Behat\Exception\PendingException
+     */
+    private function getLabel($key, $language)
+    {
+        $labels = $this->getNamedSelectors();
+
+        if(strpos($key, '%') !== false) {
+            $taxRate = intval($key);
+            return sprintf($labels['tax'][$language], $taxRate);
+        }
+
+        if(isset($labels[$key][$language])) {
+            return $labels[$key][$language];
+        }
+
+        $message = sprintf('Label "%s" is not defined for language key "%s"', $key, $language);
+        \Helper::throwException($message, \Helper::EXCEPTION_PENDING);
+    }
+
+    /**
+     * @param array $labels
+     * @param string $labelKey
+     * @param string $language
+     * @return int
+     * @throws \Exception
+     */
+    private function getAggregationPosition(array $labels, $labelKey, $language)
+    {
+        $givenLabel = $this->getLabel($labelKey, $language);
+
+        $key = 0;
+        $lastKey = max(array_keys($labels));
+
+        do {
+            if (array_key_exists($key, $labels)) {
+                $readLabel = $labels[$key]->getText();
+
+                if ($givenLabel === $readLabel) {
+                    return $key;
+                }
+            }
+
+            $key++;
+        } while($key <= $lastKey);
+
+        $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
+        \Helper::throwException($message);
     }
 
     /**
@@ -159,12 +151,11 @@ class CheckoutCart extends Page
      */
     public function addVoucher($voucher)
     {
-        $this->open();
+        $locators = array('addVoucherInput', 'addVoucherSubmit');
+        $elements = \Helper::findElements($this, $locators);
 
-        $elements = \Helper::findElements($this, $this->cssLocator['addVoucher'], $this->cssLocator['addVoucher']);
-
-        $elements['input']->setValue($voucher);
-        $elements['submit']->press();
+        $elements['addVoucherInput']->setValue($voucher);
+        $elements['addVoucherSubmit']->press();
     }
 
     /**
@@ -173,12 +164,11 @@ class CheckoutCart extends Page
      */
     public function addArticle($article)
     {
-        $this->open();
+        $locators = array('addArticleInput', 'addArticleSubmit');
+        $elements = \Helper::findElements($this, $locators);
 
-        $elements = \Helper::findElements($this, $this->cssLocator['addArticle'], $this->cssLocator['addArticle']);
-
-        $elements['input']->setValue($article);
-        $elements['submit']->press();
+        $elements['addArticleInput']->setValue($article);
+        $elements['addArticleSubmit']->press();
     }
 
     /**
@@ -187,82 +177,9 @@ class CheckoutCart extends Page
      */
     public function removeVoucher()
     {
-        $link = $this->find('css', $this->cssLocator['removeVoucher']);
+        $locator = array('removeVoucher');
+        $elements = \Helper::findElements($this, $locator);
 
-        if (empty($link)) {
-            \Helper::throwException('Cart page has no voucher.');
-        }
-
-        $link->click();
-    }
-
-    /**
-     * @param array $aggregations
-     */
-    public function checkAggregation($aggregations)
-    {
-        $locators = array('aggregationAmounts');
-        $elements = \Helper::findElements($this, $locators);
-
-        $aggregation = $elements['aggregationAmounts'];
-
-        $locators = array_column($aggregations, 'aggregation');
-        $values = array_column($aggregations, 'value');
-
-        $taxLocators = array();
-        $taxValues = array();
-
-        foreach ($locators as $key => $locator) {
-            $tax = floatval($locator);
-
-            if (empty($tax)) {
-                continue;
-            }
-
-            $taxKey = count($taxLocators) + $this->taxesPositionFirst;
-
-            $taxLocators[] = array(
-                'taxRate' => $taxKey,
-                'taxValue' => $taxKey
-            );
-
-            $taxValues[] = array(
-                'taxRate' => $tax,
-                'taxValue' => $values[$key]
-            );
-
-            unset($locators[$key]);
-            unset($values[$key]);
-        }
-
-        $elements = \Helper::findElements($aggregation, $locators, $this->cssLocator);
-        $values = array_combine($locators, $values);
-
-        $check = array();
-        foreach ($elements as $key => $element) {
-            $check[$key] = \Helper::toFloat(array($element->getText(), $values[$key]));
-        }
-
-        foreach ($taxLocators as $key => $locator) {
-            $elements = \Helper::findElements($this, $locator);
-            $check['taxRate_' . $taxValues[$key]['taxRate']] = \Helper::toFloat(
-                array($elements['taxRate']->getText(), $taxValues[$key]['taxRate'])
-            );
-            $check['taxValue_' . $taxValues[$key]['taxRate']] = \Helper::toFloat(
-                array($elements['taxValue']->getText(), $taxValues[$key]['taxValue'])
-            );
-        }
-
-        $result = \Helper::checkArray($check);
-
-        if ($result !== true) {
-            $message = sprintf(
-                'The value "%s" on cart (%s) is deviant from %s!',
-                $result,
-                $check[$result][0],
-                $check[$result][1]
-            );
-            \Helper::throwException(array($message));
-        }
+        $elements['removeVoucher']->click();
     }
 }

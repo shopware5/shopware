@@ -100,4 +100,13 @@ class DetailContext extends SubContext
         $this->getPage('Detail')->checkSelect($select, $min, $max, $graduation);
     }
 
+    /**
+     * @When /^I submit the notification form with "([^"]*)"$/
+     */
+    public function iSubmitTheNotificationFormWith($email)
+    {
+        $this->getPage('Detail')->submitNotification($email);
+    }
+
+
 }

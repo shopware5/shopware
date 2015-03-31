@@ -2,8 +2,6 @@
 
 namespace Element\Emotion;
 
-use  Behat\Mink\Exception\ResponseTextException;
-
 class AccountShipping extends AccountBilling
 {
     /**
@@ -11,9 +9,15 @@ class AccountShipping extends AccountBilling
      */
     protected $selector = array('css' => 'div.shipping > div.inner_container');
 
-    /** @var array $namedSelectors */
-    public $namedSelectors = array(
-        'otherButton'  => array('de' => 'Andere wählen',            'en' => 'Select other'),
-        'changeButton' => array('de' => 'Lieferadresse ändern',     'en' => 'Change shipping address')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array(
+            'otherButton'  => array('de' => 'Andere wählen',            'en' => 'Select other'),
+            'changeButton' => array('de' => 'Lieferadresse ändern',     'en' => 'Change shipping address')
+        );
+    }
 }

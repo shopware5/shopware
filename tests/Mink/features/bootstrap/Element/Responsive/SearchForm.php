@@ -2,12 +2,12 @@
 
 namespace Element\Responsive;
 
-class HeaderCart extends \Element\Emotion\HeaderCart
+class SearchForm extends \Element\Emotion\SearchForm
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'li.navigation--entry.entry--cart');
+    protected $selector = array('css' => 'form.main-search--form');
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -16,9 +16,7 @@ class HeaderCart extends \Element\Emotion\HeaderCart
     public function getCssSelectors()
     {
         return array(
-            'quantity' => 'span.cart--quantity',
-            'amount' => 'span.cart--amount',
-            'link' => 'a.cart--link'
+            'searchForm' => '.main-search--form',
         );
     }
 }
