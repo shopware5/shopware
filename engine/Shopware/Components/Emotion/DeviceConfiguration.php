@@ -54,7 +54,8 @@ class DeviceConfiguration
         $query->select(array(
             'emotion.id',
             'emotion.device as devices',
-            'emotion.show_listing as showListing'
+            'emotion.show_listing as showListing',
+            'emotion.fullscreen'
         ));
 
         $query->from('s_emotion', 'emotion')
