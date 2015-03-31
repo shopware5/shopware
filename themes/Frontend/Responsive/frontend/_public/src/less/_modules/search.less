@@ -29,8 +29,17 @@ It contains the viewport specific styles inside media queries.
 	}
 
 	.cat-filter--reset {
-		.unitize-margin(0, 0, 10, 0);
-		display: inline-block;
+        &:extend(.filter--active);
+        .unitize-margin(0, 0, 15, 0);
+        .unitize(line-height, 24);
+        border-color: @brand-primary;
+
+        [class^="icon--"] {
+            .unitize(top, -1);
+            .unitize(margin-right, 10);
+            .unitize(font-size, 8);
+            position: relative;
+        }
 	}
 
 	.cat-filter--active-path {
@@ -52,7 +61,6 @@ It contains the viewport specific styles inside media queries.
 	}
 
 	.cat-filter--link,
-	.cat-filter--reset,
 	.cat-filter--sub-cat {
 		color: @text-color;
 

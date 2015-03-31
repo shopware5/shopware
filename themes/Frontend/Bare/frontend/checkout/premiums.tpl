@@ -5,7 +5,7 @@
 
             {* Headline *}
             {block name='frontend_checkout_cart_premium_headline'}
-                <div class="premium-product--title panel--title">
+                <div class="premium-product--title panel--title is--underline">
                     {s name="CartPremiumsHeadline" namespace="frontend/checkout/cart"}{/s}
                 </div>
             {/block}

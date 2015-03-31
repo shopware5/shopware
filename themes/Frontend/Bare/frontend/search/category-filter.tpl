@@ -32,9 +32,7 @@
                         {block name="frontend_search_category_filter_reset_link"}
                             <a href="#?c=reset" title="{"{s name='SearchFilterLinkDefault'}{/s}"|escape}" class="cat-filter--reset" data-action-link="true">
                                 {block name="frontend_search_category_filter_reset_link_icon"}
-                                    <span class="checkbox">
-                                        <span class="checkbox--state"></span>
-                                    </span>
+									<i class="icon--cross"></i>
                                 {/block}
                                 {s name="SearchFilterLinkDefault"}{/s}
                             </a>
