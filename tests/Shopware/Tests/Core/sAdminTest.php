@@ -78,106 +78,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sValidateVat
-     */
-    public function testsValidateVat()
-    {
-        // Test that null sVATCHECKENDABLED causes empty array return
-        $this->config->offsetSet('sVATCHECKENDABLED', null);
-        $this->assertEmpty($this->module->sValidateVat());
-        $this->config->offsetSet('sVATCHECKENDABLED', true);
-
-        // Test that null sVATCHECKREQUIRED causes empty array return
-        $this->config->offsetSet('sVATCHECKREQUIRED', false);
-        $this->assertEmpty($this->module->sValidateVat());
-        $this->config->offsetSet('sVATCHECKREQUIRED', true);
-
-        // Test that no tax id returns matching error
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('VatFailureEmpty', 'Please enter a vat id')
-            , $result
-        );
-
-        // Test that wrong tax id returns matching error
-        $this->front->Request()->setPost('ustid', -1);
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('VatFailureInvalid', 'The vat id entered is invalid')
-            , $result
-        );
-
-        // Test that no country id returns matching error
-        $this->front->Request()->setPost('ustid', 'DE123456789');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get(
-                        'VatFailureErrorField',
-                        'The field %s does not match to the vat id entered'
-                    ),
-                'Land'
-            ),
-            $result
-        );
-
-        // Test basic validation is ok
-        $this->front->Request()->setPost('country', '2');
-        $this->assertCount(0, $this->module->sValidateVat());
-
-        // Test that non-matching VAT prefix and country id returns error
-        $this->front->Request()->setPost('country', '18');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get(
-                        'VatFailureErrorField',
-                        'The field %s does not match to the vat id entered'
-                    ),
-                'Land'
-            ),
-            $result
-        );
-    }
-
-    /**
-     * @group knownFailing
-     * @covers sAdmin::sValidateVat
-     * @ticket SW-8169
-     */
-    public function testsValidateVatWithGermanVatId()
-    {
-        // Posted number is fake
-        // Validation should fail
-        $this->front->Request()->setPost('country', '2');
-        $this->front->Request()->setPost('ustid', 'DE123456789');
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'DE813028812');
-        $this->assertCount(1, $this->module->sValidateVat());
-    }
-
-    /**
-     * @group knownFailing
-     * @covers sAdmin::sValidateVat
-     * @ticket SW-8168
-     */
-    public function testsValidateVatWithForeignShopVatId()
-    {
-        // Both vat numbers are valid
-        // http://services.amazon.de/service/nutzungsbedingungen.html
-        // Validation should return true
-        $this->front->Request()->setPost('country', '18');
-        $this->front->Request()->setPost('ustid', 'LU19647148');
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'LU20260743');
-        $this->assertCount(0, $this->module->sValidateVat());
-    }
-
-    /**
      * @covers sAdmin::sGetPaymentMeanById
      */
     public function testsGetPaymentMeanById()
@@ -655,19 +555,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(0, $result['sErrorFlag']);
         $this->assertCount(0, $result['sErrorMessages']);
-
-        // Test that using vat id will trigger aux function to validate it
-        $this->config->offsetSet('sVATCHECKENDABLED', true);
-        $testRuleSet['ustid'] = array('required' => 1);
-        $this->front->Request()->setPost('ustid', '12345');
-        $result = $this->module->sValidateStep2($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('VatFailureInvalid', $result['sErrorFlag']);
-        $this->assertContains('VatFailureErrorInfo', $result['sErrorFlag']);
     }
 
     /**
