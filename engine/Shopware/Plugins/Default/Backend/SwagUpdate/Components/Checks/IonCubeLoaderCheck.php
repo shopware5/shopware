@@ -64,7 +64,7 @@ class IonCubeLoaderCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $requiredVerson = $requirement['value'];
+        $requiredVersion = $requirement['value'];
 
         if (!extension_loaded('ionCube Loader')) {
             return null;
@@ -76,21 +76,21 @@ class IonCubeLoaderCheck implements CheckInterface
                 'errorLevel' => $requirement['level'],
                 'message'    => sprintf(
                     $this->namespace->get('controller/check_ioncubeloaderversion_unknown'),
-                    $requiredVerson
+                    $requiredVersion
                 )
             );
         }
 
         $installedVersion = ioncube_loader_version();
 
-        $isValid = version_compare(strtolower($installedVersion), $requiredVerson, '>');
+        $isValid = version_compare(strtolower($installedVersion), $requiredVersion, '>');
         if ($isValid) {
             return array(
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
                 'message'    => sprintf(
                     $this->namespace->get('controller/check_ioncubeloaderversion_success'),
-                    $requiredVerson,
+                    $requiredVersion,
                     $installedVersion
                 )
             );
@@ -100,7 +100,7 @@ class IonCubeLoaderCheck implements CheckInterface
                 'errorLevel' => $requirement['level'],
                 'message'    => sprintf(
                     $this->namespace->get('check_ioncubeloaderversion_failure'),
-                    $requiredVerson,
+                    $requiredVersion,
                     $installedVersion
                 )
             );

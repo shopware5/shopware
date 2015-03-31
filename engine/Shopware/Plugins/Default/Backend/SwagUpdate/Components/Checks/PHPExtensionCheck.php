@@ -63,18 +63,18 @@ class PHPExtensionCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $requiredExtesion = $requirement['value'];
+        $requiredExtension = $requirement['value'];
 
         $successMessage = $this->namespace->get('controller/check_phpextension_success');
         $failMessage = $this->namespace->get('controller/check_phpextension_failure');
 
-        if (extension_loaded($requiredExtesion)) {
+        if (extension_loaded($requiredExtension)) {
             return array(
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
                 'message'    => sprintf(
                     $successMessage,
-                    $requiredExtesion
+                    $requiredExtension
                 )
             );
         } else {
@@ -83,7 +83,7 @@ class PHPExtensionCheck implements CheckInterface
                 'errorLevel' => $requirement['level'],
                 'message'    => sprintf(
                     $failMessage,
-                    $requiredExtesion
+                    $requiredExtension
                 )
             );
         }
