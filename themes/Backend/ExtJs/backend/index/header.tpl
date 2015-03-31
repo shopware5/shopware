@@ -58,7 +58,8 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 				params: {$params},
                 localizedName: 'Shopware',
                 firstRunWizardEnabled: {$firstRunWizardEnabled|intval},
-                sbpLogin: {$sbpLogin}
+                sbpLogin: {$sbpLogin},
+                updateWizardStarted: {$updateWizardStarted|intval}
 			});
 {else}
             this.addSubApplication({

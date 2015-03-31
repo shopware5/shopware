@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
+use Shopware\Bundle\PluginInstallerBundle\Context\UpdateLicencesRequest;
+use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 
 class PluginLicenceService
 {
@@ -36,28 +36,28 @@ class PluginLicenceService
     private $connection;
 
     /**
-     * @var DownloadService
-     */
-    private $downloadService;
-
-    /**
      * @var InstallerService
      */
     private $installer;
 
     /**
+     * @var StoreClient
+     */
+    private $storeClient;
+
+    /**
      * @param Connection $connection
-     * @param DownloadService $downloadService
      * @param InstallerService $installer
+     * @param StoreClient $storeClient
      */
     public function __construct(
         Connection $connection,
-        DownloadService $downloadService,
-        InstallerService $installer
+        InstallerService $installer,
+        StoreClient $storeClient
     ) {
         $this->connection = $connection;
-        $this->downloadService = $downloadService;
         $this->installer = $installer;
+        $this->storeClient = $storeClient;
     }
 
     /**
@@ -77,5 +77,24 @@ class PluginLicenceService
         }
 
         return $persister->saveLicense($info, true);
+    }
+
+    /**
+     * @param UpdateLicencesRequest $request
+     * @return array
+     */
+    public function updateLicences(UpdateLicencesRequest $request)
+    {
+        $response = $this->storeClient->doAuthPostRequestRaw(
+            $request->getToken(),
+            '/licenseupgrades/simple',
+            [
+                'domain' => $request->getDomain(),
+                'shopwareVersion' => $request->getShopwareVersion(),
+                'locale' => $request->getLocale()
+            ]
+        );
+
+        return $response;
     }
 }
