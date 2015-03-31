@@ -102,6 +102,10 @@ class CategoryHydrator extends Hydrator
             $category->setName($data['__category_description']);
         }
 
+        $category->setParentId((int) $data['__category_parent_id']);
+
+        $category->setPosition((int) $data['__category_position']);
+
         if (isset($data['__category_metakeywords'])) {
             $category->setMetaKeywords($data['__category_metakeywords']);
         }

@@ -39,6 +39,16 @@ class Category extends Extendable implements \JsonSerializable
     protected $id;
 
     /**
+     * @var int|null
+     */
+    protected $parentId;
+
+    /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @var array
      */
     protected $path;
@@ -123,6 +133,8 @@ class Category extends Extendable implements \JsonSerializable
 
         $struct->setId($category->getId());
         $struct->setName($category->getName());
+        $struct->setPosition($category->getPosition());
+        $struct->setParentId($category->getParentId());
 
         $path = $category->getPath();
         if ($path) {
@@ -399,5 +411,37 @@ class Category extends Extendable implements \JsonSerializable
     public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds)
     {
         $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int|null $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 }
