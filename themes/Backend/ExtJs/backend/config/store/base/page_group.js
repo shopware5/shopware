@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Config.store.base.PageGroup', {
     pageSize: 1000,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=pageGroup}',
+        url: '{url action=getList}?_repositoryClass=pageGroup',
         reader: {
             type: 'json',
             root: 'data'

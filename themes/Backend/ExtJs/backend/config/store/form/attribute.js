@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.Attribute', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=attribute}',
+        url: '{url action=getList}?_repositoryClass=attribute',
         api: {
-            create: '{url action=saveValues name=attribute}',
-            update: '{url action=saveValues name=attribute}',
-            destroy: '{url action=deleteValues name=attribute}'
+            create: '{url action=saveValues}?_repositoryClass=attribute',
+            update: '{url action=saveValues}?_repositoryClass=attribute',
+            destroy: '{url action=deleteValues}?_repositoryClass=attribute'
         },
         reader: {
             type: 'json',

@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.Locale', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=locale}',
+        url: '{url action=getList}?_repositoryClass=locale',
         api: {
-            create: '{url action=saveValues name=locale}',
-            update: '{url action=saveValues name=locale}',
-            destroy: '{url action=deleteValues name=locale}'
+            create: '{url action=saveValues}?_repositoryClass=locale',
+            update: '{url action=saveValues}?_repositoryClass=locale',
+            destroy: '{url action=deleteValues}?_repositoryClass=locale'
         },
         reader: {
             type: 'json',

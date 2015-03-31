@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * `Mark VAT ID number as required` moved to `Login / Registration` in `Basic Settings`. All other VAT ID validation options were removed. If you need VAT ID validation functionalities, please use the VAT ID Validation plugin available on the store.
     * `sAdmin::sValidateVat()` removed
 * Removed supplier description on article detail page to prevent duplicated content for google remote crawling
+* Fix duplicate name parameter for backend extjs stores inside the config module. Repository class name sent before as `name` parameter. Now the stores uses `_repositoryClass` as parameter.
 
 ## 5.0.0 RC1
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
