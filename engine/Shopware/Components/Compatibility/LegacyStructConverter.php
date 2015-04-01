@@ -415,7 +415,7 @@ class LegacyStructConverter
 
         //now we get the configured image and thumbnail dir.
         $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
+        $imageDir = str_replace('/media/image/', '/', $imageDir);
 
         $thumbnails = [];
         foreach ($media->getThumbnails() as $thumbnail) {
