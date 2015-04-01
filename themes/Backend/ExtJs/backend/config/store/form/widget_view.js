@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.WidgetView', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=widgetView}',
+        url: '{url action=getList}?_repositoryClass=widgetView',
         api: {
-            create: '{url action=saveValues name=widgetView}',
-            update: '{url action=saveValues name=widgetView}',
-            destroy: '{url action=deleteValues name=widgetView}'
+            create: '{url action=saveValues}?_repositoryClass=widgetView',
+            update: '{url action=saveValues}?_repositoryClass=widgetView',
+            destroy: '{url action=deleteValues}?_repositoryClass=widgetView'
         },
         reader: {
             type: 'json',

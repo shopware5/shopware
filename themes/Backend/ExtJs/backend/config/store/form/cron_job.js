@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.CronJob', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getTableList name=cronJob}',
+        url: '{url action=getTableList}?_repositoryClass=cronJob',
         api: {
-            create: '{url action=saveTableValues name=cronJob}',
-            update: '{url action=saveTableValues name=cronJob}',
-            destroy: '{url action=deleteTableValues name=cronJob}'
+            create: '{url action=saveTableValues}?_repositoryClass=cronJob',
+            update: '{url action=saveTableValues}?_repositoryClass=cronJob',
+            destroy: '{url action=deleteTableValues}?_repositoryClass=cronJob'
         },
         reader: {
             type: 'json',

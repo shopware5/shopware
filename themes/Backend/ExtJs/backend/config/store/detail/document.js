@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.detail.Document', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getValues}?name=document',
+        url: '{url action=getValues}?_repositoryClass=document',
         api: {
-            create: '{url action=saveValues}?name=document',
-            update: '{url action=saveValues}?name=document',
-            destroy: '{url action=deleteValues}?name=document'
+            create: '{url action=saveValues}?_repositoryClass=document',
+            update: '{url action=saveValues}?_repositoryClass=document',
+            destroy: '{url action=deleteValues}?_repositoryClass=document'
         },
         reader: {
             type: 'json',

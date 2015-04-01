@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.detail.CustomerGroup', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getValues}?name=customerGroup',
+        url: '{url action=getValues}?_repositoryClass=customerGroup',
         api: {
-            create: '{url action=saveValues}?name=customerGroup',
-            update: '{url action=saveValues}?name=customerGroup',
-            destroy: '{url action=deleteValues}?name=customerGroup'
+            create: '{url action=saveValues}?_repositoryClass=customerGroup',
+            update: '{url action=saveValues}?_repositoryClass=customerGroup',
+            destroy: '{url action=deleteValues}?_repositoryClass=customerGroup'
         },
         reader: {
             type: 'json',

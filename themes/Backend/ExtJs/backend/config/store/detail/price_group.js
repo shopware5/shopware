@@ -32,11 +32,11 @@ Ext.define('Shopware.apps.Config.store.detail.PriceGroup', {
     remoteFilter: true,
     proxy: {
         type: 'ajax',
-        url: '{url action=getValues}?name=priceGroup',
+        url: '{url action=getValues}?_repositoryClass=priceGroup',
         api: {
-            create: '{url action=saveValues}?name=priceGroup',
-            update: '{url action=saveValues}?name=priceGroup',
-            destroy: '{url action=deleteValues}?name=priceGroup'
+            create: '{url action=saveValues}?_repositoryClass=priceGroup',
+            update: '{url action=saveValues}?_repositoryClass=priceGroup',
+            destroy: '{url action=deleteValues}?_repositoryClass=priceGroup'
         },
         reader: {
             type: 'json',

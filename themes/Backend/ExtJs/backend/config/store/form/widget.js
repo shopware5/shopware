@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.Config.store.form.Widget', {
     model: 'Shopware.apps.Config.model.form.Widget',
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=widget}',
+        url: '{url action=getList}?_repositoryClass=widget',
         reader: {
             type: 'json',
             root: 'data'

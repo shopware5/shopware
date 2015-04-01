@@ -34,9 +34,9 @@ Ext.define('Shopware.apps.Config.store.form.CustomerGroup', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=customerGroup}',
+        url: '{url action=getList}?_repositoryClass=customerGroup',
         api: {
-            destroy: '{url action=deleteValues name=customerGroup}'
+            destroy: '{url action=deleteValues}?_repositoryClass=customerGroup'
         },
         reader: {
             type: 'json',
