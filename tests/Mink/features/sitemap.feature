@@ -40,10 +40,15 @@ Feature: View all categories on sitemap
             | Preisgestaltung            | /beispiele/preisgestaltung/              |
         And   I should see the group "Trends + News" with link "/trends-news/"
 
-    @staticPages @forms
+    @staticPages @noResponsive
     Scenario: I can see all active custom pages
         Given I am on the page "Sitemap"
         Then  I should see the group "Statische Seiten"
+
+    @staticPages @noEmotion
+    Scenario: I can see all active custom pages
+        Given I am on the page "Sitemap"
+        Then  I should not see "Statische Seiten"
 
     @suppliers
     Scenario: I can see all suppliers
