@@ -176,7 +176,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $adapter = new Zend_Auth_Adapter_Http(array(
             'accept_schemes'  => 'digest',
-            'realm'           => 'Shopware4 REST-API',
+            'realm'           => 'Shopware REST-API',
             'digest_domains'  => '/',
             'nonce_timeout'  => 3600,
         ));
