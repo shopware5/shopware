@@ -34,9 +34,9 @@ Ext.define('Shopware.apps.Config.store.form.Country', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=country}',
+        url: '{url action=getList}?_repositoryClass=country',
         api: {
-            destroy: '{url action=deleteValues name=country}'
+            destroy: '{url action=deleteValues}?_repositoryClass=country'
         },
         reader: {
             type: 'json',

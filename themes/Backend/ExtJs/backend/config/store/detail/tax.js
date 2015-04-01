@@ -36,11 +36,11 @@ Ext.define('Shopware.apps.Config.store.detail.Tax', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getValues name=tax}',
+        url: '{url action=getValues}?_repositoryClass=tax',
         api: {
-            create: '{url action=saveValues name=tax}',
-            update: '{url action=saveValues name=tax}',
-            destroy: '{url action=deleteValues name=tax}'
+            create: '{url action=saveValues}?_repositoryClass=tax',
+            update: '{url action=saveValues}?_repositoryClass=tax',
+            destroy: '{url action=deleteValues}?_repositoryClass=tax'
         },
         reader: {
             type: 'json',

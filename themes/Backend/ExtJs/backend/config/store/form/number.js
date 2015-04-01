@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.Number', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList}?name=number',
+        url: '{url action=getList}?_repositoryClass=number',
         api: {
-            create: '{url action=saveValues}?name=number',
-            update: '{url action=saveValues}?name=number',
-            destroy: '{url action=deleteValues}?name=number'
+            create: '{url action=saveValues}?_repositoryClass=number',
+            update: '{url action=saveValues}?_repositoryClass=number',
+            destroy: '{url action=deleteValues}?_repositoryClass=number'
         },
         reader: {
             type: 'json',

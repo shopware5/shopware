@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.CountryArea', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=countryArea}',
+        url: '{url action=getList}?_repositoryClass=countryArea',
         api: {
-            create: '{url action=saveValues name=countryArea}',
-            update: '{url action=saveValues name=countryArea}',
-            destroy: '{url action=deleteValues name=countryArea}'
+            create: '{url action=saveValues}?_repositoryClass=countryArea',
+            update: '{url action=saveValues}?_repositoryClass=countryArea',
+            destroy: '{url action=deleteValues}?_repositoryClass=countryArea'
         },
         reader: {
             type: 'json',

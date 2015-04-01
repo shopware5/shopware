@@ -278,7 +278,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getListAction()
     {
         /** @var $name string */
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         /** @var $repository Shopware\Components\Model\ModelRepository */
         $repository = $this->getRepository($name);
 
@@ -352,7 +352,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getTableListAction()
     {
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         $limit = intval($this->Request()->get('limit'));
         $start = intval($this->Request()->get('start'));
         $table = $this->getTable($name);
@@ -456,7 +456,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getValuesAction()
     {
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         if ($repository === null) {
             return;
@@ -534,7 +534,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function saveValuesAction()
     {
         $manager = Shopware()->Models();
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
 
@@ -705,8 +705,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function saveTableValuesAction()
     {
-        $name = $this->Request()->getQuery('name');
-
+        $name = $this->Request()->get('_repositoryClass');
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;
         $id = !empty($data['id']) ? $data['id'] : null;
@@ -805,7 +804,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function deleteValuesAction()
     {
         $manager = Shopware()->Models();
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
 
@@ -831,7 +830,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function deleteTableValuesAction()
     {
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
 
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;

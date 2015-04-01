@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Config.store.base.SearchTable', {
     pageSize: 1000,
     proxy: {
         type: 'ajax',
-        url: '{url action=getTableList name=searchTable}',
+        url: '{url action=getTableList}?_repositoryClass=searchTable',
         reader: {
             type: 'json',
             root: 'data'

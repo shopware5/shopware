@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.Currency', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList}?name=currency',
+        url: '{url action=getList}?_repositoryClass=currency',
         api: {
-            create: '{url action=saveValues}?name=currency',
-            update: '{url action=saveValues}?name=currency',
-            destroy: '{url action=deleteValues}?name=currency'
+            create: '{url action=saveValues}?_repositoryClass=currency',
+            update: '{url action=saveValues}?_repositoryClass=currency',
+            destroy: '{url action=deleteValues}?_repositoryClass=currency'
         },
         reader: {
             type: 'json',

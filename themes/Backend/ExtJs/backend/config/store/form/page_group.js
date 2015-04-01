@@ -34,11 +34,11 @@ Ext.define('Shopware.apps.Config.store.form.PageGroup', {
     pageSize: 20,
     proxy: {
         type: 'ajax',
-        url: '{url action=getList name=pageGroup}',
+        url: '{url action=getList}?_repositoryClass=pageGroup',
         api: {
-            create: '{url action=saveValues name=pageGroup}',
-            update: '{url action=saveValues name=pageGroup}',
-            destroy: '{url action=deleteValues name=pageGroup}'
+            create: '{url action=saveValues}?_repositoryClass=pageGroup',
+            update: '{url action=saveValues}?_repositoryClass=pageGroup',
+            destroy: '{url action=deleteValues}?_repositoryClass=pageGroup'
         },
         reader: {
             type: 'json',
