@@ -35,12 +35,12 @@ standards.
 
 To start contributing, just fork the repository and clone your fork to your local machine:
 
-    git clone git@github.com:[YOUR USERNAME]/shopware-4.git
+    git clone git@github.com:[YOUR USERNAME]/shopware.git
 
 After having done this, configure the upstream remote:
 
-    cd shopware-4
-    git remote add upstream git://github.com/ShopwareAG/shopware-4.git
+    cd shopware
+    git remote add upstream git://github.com/shopware/shopware.git
     git config branch.master.remote upstream
 
 To keep your master up-to-date:
