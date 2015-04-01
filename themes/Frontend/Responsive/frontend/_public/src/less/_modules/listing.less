@@ -225,10 +225,10 @@ It contains the viewport specific styles inside media queries.
         .vendor--image {
             .unitize-margin(0, 20, 20, 0);
             float: left;
-        }
 
-        .vendor--text {
-            .unitize-margin(0, 0, 0, 250);
+            & + .vendor--text {
+                .unitize-margin(0, 0, 0, 250);
+            }
         }
     }
 
