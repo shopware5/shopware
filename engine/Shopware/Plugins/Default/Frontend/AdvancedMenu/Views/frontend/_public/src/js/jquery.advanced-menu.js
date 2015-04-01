@@ -1,6 +1,8 @@
 ;(function ($) {
     'use strict';
 
+    var $body = $('body');
+
     /**
      * Shopware Advanced Menu Plugin
      */
@@ -24,6 +26,13 @@
              * @type {String}
              */
             'navigationItemSelector': '.navigation--entry:not(.is--home)',
+
+            /**
+             * Selector for the category link
+             *
+             * @type {String}
+             */
+            'navigationLinkSelector': '.navigation--link',
 
             /**
              * Selector to get the close arrow.
@@ -113,6 +122,15 @@
              */
             me._touchStartTimestamp = 0;
 
+            /**
+             * PreviousTarget will be used for pointer events to prevent
+             * the default behaviour on the first click of the category.
+             *
+             * @type {null}
+             * @private
+             */
+            me._previousTarget = null;
+
             // Register all needed events
             me.registerEvents();
         },
@@ -135,15 +153,17 @@
 
                 me._on($el, 'touchstart', $.proxy(me.onTouchStart, me));
 
-                me._on($el, 'mouseenter touchend MSPointerDown', $.proxy(me.onListItemClick, me, i, $el));
+                me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
 
-                me._on($el, 'mouseleave', $.proxy(me.onMouseLeave, me));
+                if (window.navigator.pointerEnabled || window.navigator.msPointerEnabled) {
+
+                    me._on($el, 'click', $.proxy(me.onClickNavigationLink, me, i, $el))
+                }
             });
 
-            me._on(me.$el, 'mouseenter', $.proxy(me.onMouseEnter, me));
-            me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
+            $body.on('mousemove touchstart', $.proxy(me.onMouseMove, me));
 
-            me._on(me._$closeButton, 'click touchstart MSPointerDown', $.proxy(me.onCloseButtonClick, me));
+            me._on(me._$closeButton, 'click', $.proxy(me.onCloseButtonClick, me));
         },
 
         /**
@@ -165,7 +185,7 @@
          * @param {jQuery} $el
          * @param {Number} index
          */
-        onListItemClick: function (index, $el, event) {
+        onListItemEnter: function (index, $el, event) {
             var me = this,
                 opts = me.opts;
 
@@ -185,6 +205,19 @@
             me.onMouseEnter(event);
         },
 
+        onClickNavigationLink: function (index, $el, event) {
+            var me = this;
+
+            me._inProgress = true;
+
+            if(me._previousTarget !== $el[0]) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            me._previousTarget = $el[0];
+        },
+
         /**
          * Fired when the navigation list items were clicked / tapped or when the mouse enters them.
          *
@@ -195,8 +228,6 @@
             event.preventDefault();
 
             this.openMenu();
-
-            $.publish('plugin/advancedMenu/onOpenMenu');
         },
 
         /**
@@ -205,18 +236,16 @@
          * @event onMouseLeave
          * @param {jQuery.Event} event
          */
-        onMouseLeave: function (event) {
-            event.preventDefault();
+        onMouseMove: function (event) {
             var me = this,
-                target = event.toElement || event.relatedTarget;
+                target = event.target,
+                pluginEl = me.$el[0];
 
-            if($.contains(me.$el[0], target) || me._$listItems.has(target).length) {
+            if (pluginEl === target || $.contains(me.$el[0], target) || me._$listItems.has(target).length) {
                 return;
             }
 
             me.closeMenu();
-
-            $.publish('plugin/advancedMenu/onCloseMenu');
         },
 
         /**
@@ -226,11 +255,13 @@
          * @param {jQuery.Event} event
          */
         onCloseButtonClick: function (event) {
+            var me = this;
+
             event.preventDefault();
 
-            this.closeMenu();
+            me.closeMenu();
 
-            $.publish('plugin/advancedMenu/onCloseWithButton');
+            $.publish('plugin/advancedMenu/onCloseWithButton', me);
         },
 
         /**
@@ -248,6 +279,8 @@
             menus.each(function (i, el) {
                 $(el).toggleClass(me.opts.menuActiveClass, i === index);
             });
+
+            $.publish('plugin/advancedMenu/onSetMenuIndex', [ me, index ]);
         },
 
         /**
@@ -257,7 +290,11 @@
          * @method openMenu
          */
         openMenu: function () {
-            this.$el.show();
+            var me = this;
+
+            me.$el.show();
+
+            $.publish('plugin/advancedMenu/onOpenMenu', me);
         },
 
         /**
@@ -273,6 +310,10 @@
             me._$list.find('.' + opts.itemHoverClass).removeClass(opts.itemHoverClass);
 
             me.$el.hide();
+
+            me._previousTarget = null;
+
+            $.publish('plugin/advancedMenu/onCloseMenu', me);
         }
     });
 })(jQuery);
