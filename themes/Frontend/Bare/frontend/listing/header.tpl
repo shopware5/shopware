@@ -35,8 +35,6 @@
 
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}
-<link rel="alternate" type="application/rss+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.rssFeed}" />
-<link rel="alternate" type="application/atom+xml" title="{$sCategoryContent.description|escape}" href="{$sCategoryContent.atomFeed}" />
 {/block}
 
 {* Google optimized crawling *}
