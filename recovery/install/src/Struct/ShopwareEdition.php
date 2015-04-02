@@ -31,20 +31,12 @@ namespace Shopware\Recovery\Install\Struct;
  */
 class ShopwareEdition
 {
-    const CE = 'CE';
-    const PE = 'PE';
-    const EB = 'EB';
-    const EC = 'EC';
-
-    /**
-     * @var string[]
-     */
-    private $validEditions = [
-        self::CE,
-        self::PE,
-        self::EB,
-        self::EC,
-    ];
+    const CE = 'CE'; // Community Edition
+    const PE = 'PE'; // Professional - SwagCore
+    const PP = 'PP'; // Professional - SwagCorePlus
+    const EE = 'EE'; // Enterprise - SwagEnterprisePlatform
+    const EB = 'EB'; // (legacy) Enterprise Basic - SwagEnterprise
+    const EC = 'EC'; // (legacy) Enterprise Premium - SwagEnterprisePremium/SwagEnterpriseCluster
 
     /**
      * @var string
@@ -64,16 +56,6 @@ class ShopwareEdition
     private function __construct($edition, $licence = null)
     {
         $edition = strtoupper($edition);
-        if (!in_array($edition, $this->validEditions)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Edition must be one of %s, given: %s.',
-                    implode(", ", $this->validEditions),
-                    (string) $edition
-                )
-            );
-        }
-
         $this->edition = $edition;
         $this->licence = $licence;
     }
@@ -84,6 +66,21 @@ class ShopwareEdition
     public function isCommercial()
     {
         return $this->edition != self::CE;
+    }
+
+    /**
+     * Returns a list of valid commercial product keys
+     * @return array
+     */
+    public static function getValidEditions()
+    {
+        return [
+            self::PE,
+            self::PP,
+            self::EE,
+            self::EB,
+            self::EC
+        ];
     }
 
     /**
