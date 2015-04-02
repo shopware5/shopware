@@ -106,9 +106,9 @@ class Requirements implements \IteratorAggregate, \Countable
         } elseif (function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
-            if (strtolower($value) == 'off' || $value == 0) {
+            if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
-            } elseif (strtolower($value) == 'on' || $value == 1) {
+            } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
             } else {
                 return $value;
