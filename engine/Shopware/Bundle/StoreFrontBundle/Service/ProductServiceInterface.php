@@ -40,30 +40,11 @@ interface ProductServiceInterface
      * @param Struct\ProductContextInterface $context
      * @return Struct\Product[] Indexed by the product order number
      */
-    public function getList($numbers, Struct\ProductContextInterface $context);
+    public function getList(array $numbers, Struct\ProductContextInterface $context);
 
     /**
-     * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object which all required data.
-     *
-     * A full \Shopware\Bundle\StoreFrontBundle\Struct\Product is build over the following classes:
-     * - \Shopware\Bundle\StoreFrontBundle\Gateway\ProductGatewayInterfaceServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface
-     * - \Shopware\Bundle\StoreFrontBundle\Service\MarketingServiceInterface
-     *
-     * The different services selects the specify product associated data
-     * for the provided product.
-     *
-     * The function injects the different sources into the \Shopware\Bundle\StoreFrontBundle\Struct\Product class
-     * and calculates the prices for the store front through a \Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface class.
+     * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object.
+     * A product struct contains all data about one single product.
      *
      * @param $number
      * @param Struct\ProductContextInterface $context
