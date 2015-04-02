@@ -3,13 +3,13 @@
         {block name='frontend_detail_product_quick_view_inner'}
 
             {block name='frontend_detail_product_quick_view_image_link'}
-                <a class="quick-view--image-link" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
+                <a class="quick-view--image-link" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articlename|escape}{/if}">
                     {block name='frontend_detail_product_quick_view_image'}
 
-                        {$alt = $sArticle.articlename|escape:"html"}
+                        {$alt = $sArticle.articlename|escape}
 
                         {if $sArticle.image.description}
-                            {$alt = $sArticle.image.description|escape:"html"}
+                            {$alt = $sArticle.image.description|escape}
                         {/if}
 
                         <span class="quick-view--image">
@@ -31,9 +31,9 @@
                 <div class="quick-view--header">
                     {block name='frontend_detail_product_quick_view_header_inner'}
                         {block name='frontend_detail_product_quick_view_title'}
-                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="quick-view--title" title="{$sArticle.articleName|escape:"html"}">
+                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="quick-view--title" title="{$sArticle.articleName|escape}">
                                 {block name='frontend_detail_product_quick_view_title_inner'}
-                                    {$sArticle.articleName|escape:"html"}
+                                    {$sArticle.articleName|escape}
                                 {/block}
                             </a>
                         {/block}
@@ -41,7 +41,7 @@
                         {block name='frontend_detail_product_quick_view_supplier'}
                             <div class="quick-view--supplier">
                                 {block name='frontend_detail_product_quick_view_supplier_inner'}
-                                    {$sArticle.supplierName|escape:"html"}
+                                    {$sArticle.supplierName|escape}
                                 {/block}
                             </div>
                         {/block}

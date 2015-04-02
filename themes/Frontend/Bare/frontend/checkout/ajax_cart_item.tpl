@@ -20,10 +20,10 @@
             {block name='frontend_checkout_ajax_cart_articleimage_product'}
                 {if $basketItem.modus == $IS_PRODUCT || $basketItem.modus == $IS_PREMIUM_PRODUCT}
                     {if $basketItem.additional_details.image.thumbnails}
-                        <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
+                        <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape}" class="thumbnail--image" />
 
                     {elseif $basketItem.image.src.0}
-                        <img src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape:"html"}" class="thumbnail--image" />
+                        <img src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape}" class="thumbnail--image" />
                     {/if}
                 {/if}
             {/block}
@@ -87,7 +87,7 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-        <a class="item--link" href="{if $basketItem.modus != 4}{$detailLink}{else}#{/if}" title="{$basketItem.articlename|escape:"html"}">
+        <a class="item--link" href="{if $basketItem.modus != 4}{$detailLink}{else}#{/if}" title="{$basketItem.articlename|escape}">
             {block name="frontend_checkout_ajax_cart_articlename_quantity"}
 				<span class="item--quantity">{$basketItem.quantity}x</span>
 			{/block}
