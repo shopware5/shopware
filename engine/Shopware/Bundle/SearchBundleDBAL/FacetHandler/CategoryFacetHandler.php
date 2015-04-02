@@ -64,22 +64,29 @@ class CategoryFacetHandler implements FacetHandlerInterface
      * @var string
      */
     private $fieldName;
+    /**
+     * @var Connection
+     */
+    private $connection;
 
     /**
      * @param CategoryServiceInterface $categoryService
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper $queryAliasMapper
+     * @param Connection $connection
      */
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactory $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper
+        QueryAliasMapper $queryAliasMapper,
+        Connection $connection
     ) {
         $this->categoryService = $categoryService;
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
+        $this->connection = $connection;
 
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('sCategory')) {
             $this->fieldName = 'sCategory';
@@ -103,75 +110,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $queryCriteria = clone $criteria;
-        $queryCriteria->resetConditions();
-        $queryCriteria->resetSorting();
-
-        $queryCriteria->removeBaseCondition('category');
-        $queryCriteria->removeCondition('category');
-
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
-
-        $query->select(
-            [
-            'category.id',
-            'category.path'
-            ]
-        );
-
-        $query->innerJoin(
-            'product',
-            's_articles_categories_ro',
-            'productCategory',
-            'productCategory.articleID = product.id'
-        );
-
-        $query->innerJoin(
-            'productCategory',
-            's_categories',
-            'category',
-            'category.id = productCategory.categoryID
-             AND (category.parent IN (:category) OR category.id IN (:category))
-             AND category.active = 1'
-        );
-
-        $query->groupBy('productCategory.categoryID');
-
-        if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition*/
-            $condition = $criteria->getCondition('category');
-            $query->setParameter(
-                ':category',
-                $condition->getCategoryIds(),
-                Connection::PARAM_INT_ARRAY
-            );
-        }
-
-        if (!$query->getParameter(':category')) {
-            $query->setParameter(
-                ':category',
-                [1],
-                Connection::PARAM_INT_ARRAY
-            );
-        }
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        /**@var $facet Facet\CategoryFacet */
-        $paths = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        $ids = array_keys($paths);
-        $plain = array_values($paths);
-
-        if (count($plain) > 0 && strpos($plain[0], '|') !== false) {
-            $rootPath = explode('|', $plain[0]);
-            $rootPath = array_filter(array_unique($rootPath));
-            $ids = array_merge($ids, $rootPath);
-        }
+        $ids = $this->getCategoryIds($criteria, $context);
 
         $categories = $this->categoryService->getList($ids, $context);
 
@@ -272,5 +211,74 @@ class CategoryFacetHandler implements FacetHandlerInterface
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof Facet\CategoryFacet);
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param ShopContextInterface $context
+     * @return array
+     */
+    private function getCategoryIds(Criteria $criteria, ShopContextInterface $context)
+    {
+        $queryCriteria = clone $criteria;
+        $queryCriteria->resetConditions();
+        $queryCriteria->resetSorting();
+
+        $queryCriteria->removeBaseCondition('category');
+        $queryCriteria->removeCondition('category');
+
+        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
+
+        $query->resetQueryPart('orderBy');
+        $query->resetQueryPart('groupBy');
+
+        $query->select(['productCategory.categoryID']);
+
+        $query->innerJoin(
+            'product',
+            's_articles_categories_ro',
+            'productCategory',
+            'productCategory.articleID = product.id'
+        );
+
+        $query->groupBy('productCategory.categoryID');
+
+        if ($criteria->hasCondition('category')) {
+            /**@var $condition CategoryCondition */
+            $condition = $criteria->getCondition('category');
+            $parentIds = $condition->getCategoryIds();
+        } else {
+            $parentIds = [1];
+        }
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        /**@var $facet Facet\CategoryFacet */
+        $ids = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['category.id', 'category.path'])
+            ->from('s_categories', 'category')
+            ->where('category.parent IN (:parent) OR category.id IN (:parent)')
+            ->andWhere('category.id IN (:ids)')
+            ->andWhere('category.active = 1')
+            ->setParameter(':parent', $parentIds, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+        ;
+
+        $paths = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        $ids = array_keys($paths);
+        $plain = array_values($paths);
+
+        if (count($plain) > 0 && strpos($plain[0], '|') !== false) {
+            $rootPath = explode('|', $plain[0]);
+            $rootPath = array_filter(array_unique($rootPath));
+            $ids = array_merge($ids, $rootPath);
+            return $ids;
+        }
+
+        return $ids;
     }
 }
