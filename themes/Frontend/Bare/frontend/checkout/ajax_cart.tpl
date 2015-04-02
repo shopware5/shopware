@@ -71,13 +71,13 @@
             <div class="button--container">
                 {block name='frontend_checkout_ajax_cart_button_container_inner'}
                     {block name='frontend_checkout_ajax_cart_open_checkout'}
-                        <a href="{url controller='checkout' action='confirm'}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape:"html"}">
+                        <a href="{url controller='checkout' action='confirm'}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
                             <i class="icon--arrow-right"></i>
                             {s name='AjaxCartLinkConfirm'}{/s}
                         </a>
                     {/block}
                     {block name='frontend_checkout_ajax_cart_open_basket'}
-                        <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape:"html"}">
+                        <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape}">
                             <i class="icon--arrow-right"></i>
                             {s name='AjaxCartLinkBasket'}{/s}
                         </a>

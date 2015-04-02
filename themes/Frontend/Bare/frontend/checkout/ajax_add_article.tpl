@@ -25,13 +25,13 @@
             {* Article image *}
             {block name='checkout_ajax_add_information_image'}
                 <div class="article--image block">
-                    <a href="{$detailLink}" class="link--article-image" title="{$sArticle.articlename|escape:"html"}">
+                    <a href="{$detailLink}" class="link--article-image" title="{$sArticle.articlename|escape}">
 
                         {$image = $sArticle.additional_details.image}
-                        {$alt = $sArticle.articlename|escape:"html"}
+                        {$alt = $sArticle.articlename|escape}
 
                         {if $image.description}
-                            {$alt = $image.description|escape:"html"}
+                            {$alt = $image.description|escape}
                         {/if}
 
                         <span class="image--media">
