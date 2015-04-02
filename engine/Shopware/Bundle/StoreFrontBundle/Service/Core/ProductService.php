@@ -34,25 +34,11 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
  */
 class ProductService implements Service\ProductServiceInterface
 {
-    /**
-     * @var Gateway\ProductGatewayInterface
-     */
-    private $productGateway;
 
     /**
      * @var Service\MediaServiceInterface
      */
     private $mediaService;
-
-    /**
-     * @var Service\GraduatedPricesServiceInterface
-     */
-    private $graduatedPricesService;
-
-    /**
-     * @var Service\PriceCalculationServiceInterface
-     */
-    private $priceCalculationService;
 
     /**
      * @var Service\VoteServiceInterface
@@ -95,64 +81,38 @@ class ProductService implements Service\ProductServiceInterface
     private $configuratorService;
 
     /**
-     * @var Service\CheapestPriceServiceInterface
-     */
-    private $cheapestPriceService;
-
-    /**
-     * @var Service\MarketingServiceInterface
-     */
-    private $marketingService;
-
-    /**
-     * @param Gateway\ListProductGatewayInterface $productGateway
+     * @param Service\ListProductServiceInterface $listProductService
      * @param Service\VoteServiceInterface $voteService
+     * @param Service\MediaServiceInterface $mediaService
      * @param Service\RelatedProductsServiceInterface $relatedProductsService
      * @param Service\SimilarProductsServiceInterface $similarProductsService
-     * @param Service\ListProductServiceInterface $listProductService
-     * @param Service\GraduatedPricesServiceInterface $graduatedPricesService
-     * @param Service\CheapestPriceServiceInterface $cheapestPriceService
-     * @param Service\PriceCalculationServiceInterface $priceCalculationService
-     * @param Service\MediaServiceInterface $mediaService
      * @param Service\ProductDownloadServiceInterface $downloadService
      * @param Service\ProductLinkServiceInterface $linkService
      * @param Service\PropertyServiceInterface $propertyService
      * @param Service\ConfiguratorServiceInterface $configuratorService
-     * @param Service\MarketingServiceInterface $marketingService
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
-        Gateway\ListProductGatewayInterface $productGateway,
+        Service\ListProductServiceInterface $listProductService,
         Service\VoteServiceInterface $voteService,
+        Service\MediaServiceInterface $mediaService,
         Service\RelatedProductsServiceInterface $relatedProductsService,
         Service\SimilarProductsServiceInterface $similarProductsService,
-        Service\ListProductServiceInterface $listProductService,
-        Service\GraduatedPricesServiceInterface $graduatedPricesService,
-        Service\CheapestPriceServiceInterface $cheapestPriceService,
-        Service\PriceCalculationServiceInterface $priceCalculationService,
-        Service\MediaServiceInterface $mediaService,
         Service\ProductDownloadServiceInterface $downloadService,
         Service\ProductLinkServiceInterface $linkService,
         Service\PropertyServiceInterface $propertyService,
         Service\ConfiguratorServiceInterface $configuratorService,
-        Service\MarketingServiceInterface $marketingService,
         \Enlight_Event_EventManager $eventManager
     ) {
-        $this->productGateway = $productGateway;
         $this->voteService = $voteService;
         $this->relatedProductsService = $relatedProductsService;
         $this->similarProductsService = $similarProductsService;
         $this->downloadService = $downloadService;
         $this->linkService = $linkService;
-
         $this->listProductService = $listProductService;
-        $this->graduatedPricesService = $graduatedPricesService;
-        $this->cheapestPriceService = $cheapestPriceService;
-        $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
         $this->propertyService = $propertyService;
         $this->configuratorService = $configuratorService;
-        $this->marketingService = $marketingService;
         $this->eventManager = $eventManager;
     }
 
@@ -169,43 +129,41 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($numbers, Struct\ProductContextInterface $context)
+    public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
-        $products = $this->productGateway->getList($numbers, $context);
+        $listProducts = $this->listProductService->getList($numbers, $context);
 
-        $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
+        return $this->createFromListProducts($listProducts, $context);
+    }
 
-        $cheapestPrice = $this->cheapestPriceService->getList($products, $context);
+    /**
+     * @param Struct\ListProduct[] $listProducts
+     * @param Struct\ProductContextInterface $context
+     * @return Struct\Product[] indexed by order number
+     */
+    private function createFromListProducts(array $listProducts, Struct\ProductContextInterface $context)
+    {
+        $votes = $this->voteService->getList($listProducts, $context);
 
-        $votes = $this->voteService->getList($products, $context);
+        $relatedProducts = $this->relatedProductsService->getList($listProducts, $context);
 
-        $averages = $this->voteService->getAverages($products, $context);
+        $similarProducts = $this->similarProductsService->getList($listProducts, $context);
 
-        $relatedProducts = $this->relatedProductsService->getList($products, $context);
+        $downloads = $this->downloadService->getList($listProducts, $context);
 
-        $similarProducts = $this->similarProductsService->getList($products, $context);
+        $links = $this->linkService->getList($listProducts, $context);
 
-        $downloads = $this->downloadService->getList($products, $context);
+        $media = $this->mediaService->getProductsMedia($listProducts, $context);
 
-        $links = $this->linkService->getList($products, $context);
+        $properties = $this->propertyService->getList($listProducts, $context);
 
-        $media = $this->mediaService->getProductsMedia($products, $context);
+        $configuration = $this->configuratorService->getProductsConfigurations($listProducts, $context);
 
-        $covers = $this->mediaService->getCovers($products, $context);
+        $products = [];
+        foreach ($listProducts as $listProduct) {
+            $number = $listProduct->getNumber();
 
-        $properties = $this->propertyService->getList($products, $context);
-
-        $configuration = $this->configuratorService->getProductsConfigurations($products, $context);
-
-        $result = [];
-        foreach ($numbers as $number) {
-            if (!array_key_exists($number, $products)) {
-                continue;
-            }
-
-            $product = $products[$number];
-
-            $product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED);
+            $product = $this->createProductStruct($listProduct);
 
             if (isset($relatedProducts[$number])) {
                 $product->setRelatedProducts($relatedProducts[$number]);
@@ -213,10 +171,6 @@ class ProductService implements Service\ProductServiceInterface
 
             if (isset($similarProducts[$number])) {
                 $product->setSimilarProducts($similarProducts[$number]);
-            }
-
-            if (isset($graduatedPrices[$number])) {
-                $product->setPriceRules($graduatedPrices[$number]);
             }
 
             if (isset($votes[$number])) {
@@ -243,52 +197,71 @@ class ProductService implements Service\ProductServiceInterface
                 $product->setConfiguration($configuration[$number]);
             }
 
-            if (isset($cheapestPrice[$number])) {
-                $product->setCheapestPriceRule($cheapestPrice[$number]);
-            }
-
-            if (isset($covers[$number])) {
-                $product->setCover($covers[$number]);
-            }
-
-            if (isset($averages[$number])) {
-                $product->setVoteAverage($averages[$number]);
-            }
-
-            $product->addAttribute(
-                'marketing',
-                $this->marketingService->getProductAttribute($product)
-            );
-
-            $this->priceCalculationService->calculateProduct($product, $context);
-
-            if ($this->isProductValid($product, $context)) {
-                $result[$number] = $product;
-            }
+            $products[$number] = $product;
         }
 
-        return $result;
+        return $products;
     }
 
     /**
-     * Checks if the provided product is allowed to display in the store front for
-     * the provided context.
-     *
-     * @param Struct\Product $product
-     * @param Struct\ProductContextInterface $context
-     * @return bool
+     * @param  Struct\ListProduct $listProduct
+     * @return Struct\Product
      */
-    private function isProductValid(Struct\Product $product, Struct\ProductContextInterface $context)
+    private function createProductStruct(Struct\ListProduct $listProduct)
     {
-        if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
-            return false;
+        $product = new Struct\Product(
+            $listProduct->getId(),
+            $listProduct->getVariantId(),
+            $listProduct->getNumber()
+        );
+
+        $product->setShippingFree($listProduct->isShippingFree());
+        $product->setAllowsNotification($listProduct->allowsNotification());
+        $product->setHighlight($listProduct->highlight());
+        $product->setUnit($listProduct->getUnit());
+        $product->setTax($listProduct->getTax());
+        $product->setPrices($listProduct->getPrices());
+        $product->setManufacturer($listProduct->getManufacturer());
+        $product->setCover($listProduct->getCover());
+        $product->setCheapestPrice($listProduct->getCheapestPrice());
+        $product->setName($listProduct->getName());
+        $product->setAdditional($listProduct->getAdditional());
+        $product->setCloseouts($listProduct->isCloseouts());
+        $product->setEan($listProduct->getEan());
+        $product->setHeight($listProduct->getHeight());
+        $product->setKeywords($listProduct->getKeywords());
+        $product->setLength($listProduct->getLength());
+        $product->setLongDescription($listProduct->getLongDescription());
+        $product->setMinStock($listProduct->getMinStock());
+        $product->setReleaseDate($listProduct->getReleaseDate());
+        $product->setShippingTime($listProduct->getShippingTime());
+        $product->setShortDescription($listProduct->getShortDescription());
+        $product->setStock($listProduct->getStock());
+        $product->setWeight($listProduct->getWeight());
+        $product->setWidth($listProduct->getWidth());
+        $product->setPriceGroup($listProduct->getPriceGroup());
+        $product->setCreatedAt($listProduct->getCreatedAt());
+        $product->setPriceRules($listProduct->getPriceRules());
+        $product->setCheapestPriceRule($listProduct->getCheapestPriceRule());
+        $product->setManufacturerNumber($listProduct->getManufacturerNumber());
+        $product->setMetaTitle($listProduct->getMetaTitle());
+        $product->setTemplate($listProduct->getTemplate());
+        $product->setHasConfigurator($listProduct->hasConfigurator());
+        $product->setSales($listProduct->getSales());
+        $product->setHasEsd($listProduct->hasEsd());
+        $product->setEsd($listProduct->getEsd());
+        $product->setIsPriceGroupActive($listProduct->isPriceGroupActive());
+        $product->setBlockedCustomerGroupIds($listProduct->getBlockedCustomerGroupIds());
+        $product->setVoteAverage($listProduct->getVoteAverage());
+
+        foreach ($listProduct->getAttributes() as $name => $attribute) {
+            $product->addAttribute($name, $attribute);
         }
 
-        $prices = $product->getPrices();
-        if (empty($prices)) {
-            return false;
+        foreach ($listProduct->getStates() as $state) {
+            $product->addState($state);
         }
 
-        return true;
+        return $product;
     }
 }

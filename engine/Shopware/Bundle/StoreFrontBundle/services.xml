@@ -34,20 +34,15 @@
         </service>
 
         <service id="shopware_storefront.product_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductService">
-            <argument type="service" id="shopware_storefront.product_gateway"/>
+            <argument type="service" id="shopware_storefront.list_product_service"/>
             <argument type="service" id="shopware_storefront.vote_service"/>
+            <argument type="service" id="shopware_storefront.media_service"/>
             <argument type="service" id="shopware_storefront.related_products_service"/>
             <argument type="service" id="shopware_storefront.similar_products_service"/>
-            <argument type="service" id="shopware_storefront.list_product_service"/>
-            <argument type="service" id="shopware_storefront.graduated_prices_service"/>
-            <argument type="service" id="shopware_storefront.cheapest_price_service"/>
-            <argument type="service" id="shopware_storefront.price_calculation_service"/>
-            <argument type="service" id="shopware_storefront.media_service"/>
             <argument type="service" id="shopware_storefront.product_download_service"/>
             <argument type="service" id="shopware_storefront.product_link_service"/>
             <argument type="service" id="shopware_storefront.property_service"/>
             <argument type="service" id="shopware_storefront.configurator_service"/>
-            <argument type="service" id="shopware_storefront.marketing_service"/>
             <argument type="service" id="events"/>
         </service>
 
@@ -125,13 +120,6 @@
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.product_hydrator_dbal"/>
         </service>
-
-        <service id="shopware_storefront.product_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.product_hydrator_dbal"/>
-        </service>
-
 
         <service id="shopware_storefront.media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\MediaGateway">
             <argument type="service" id="dbal_connection"/>
