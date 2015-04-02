@@ -39,6 +39,8 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         $sql = "INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`)
                 VALUES (NULL, '0', 'updateWizardStarted', 'b:1;', '', '', 'checkbox', '0', '0', '1', NULL, NULL);";
         $connection->executeUpdate($sql);
+
+        Shopware()->Container()->get('shopware.cache_manager')->clearConfigCache();
     }
 
     public function updateAction()
