@@ -40,7 +40,7 @@
 
 														{block name='frontend_detail_configurator_variant_group_option_label_image'}
 															<span class="image--element">
-																<span class="image--media">
+																<span class="image--media{if !$option.selectable} is--disabled{/if}">
                                                                     {if isset($media.thumbnails)}
                                                                         <img srcset="{$media.thumbnails[0].sourceSet}" alt="{$option.optionname}" />
                                                                     {else}
