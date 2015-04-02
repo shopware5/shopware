@@ -47,16 +47,7 @@ interface ListProductServiceInterface
 
     /**
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct object.
-     *
-     * A full \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct is build over the following classes:
-     * - \Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface      > Selects the base product data
-     * - \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface            > Selects the cover
-     * - \Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface  > Selects the graduated prices
-     * - \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface    > Selects the cheapest price
-     * - \Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface             > Selects the product vote average
-     *
-     * This data will be injected into the generated \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct object
-     * and will be calculated through the \Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface class.
+     * A list product contains all required data to display products in small views like listings, sliders or emotions.
      *
      * @param string $number
      * @param Struct\ProductContextInterface $context
