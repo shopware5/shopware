@@ -1,6 +1,12 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.3.6
+* Backport ESI security patch from Symfony Upstream (http://symfony.com/blog/cve-2015-2308-esi-code-injection).
+
+## 4.3.5
+* Additional checks for the auto update module in preparation for Shopware 5.
+
 ## 4.3.3
 * The config option `showException` now only applies to frontend errors. Backend errors will always display the exception details.
 * New event `Shopware_Modules_Basket_AddArticle_CheckBasketForArticle` in class sBasket
