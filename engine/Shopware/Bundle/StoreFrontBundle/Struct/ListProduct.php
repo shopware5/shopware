@@ -45,11 +45,6 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     const STATE_PRICE_CALCULATED = 'price_calculated';
 
     /**
-     * State for a translated product.
-     */
-    const STATE_TRANSLATED = 'translated';
-
-    /**
      * Contains the product name.
      *
      * @var string
@@ -319,6 +314,14 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function addState($state)
     {
         $this->states[] = $state;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStates()
+    {
+        return $this->states;
     }
 
     /**

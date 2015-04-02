@@ -93,21 +93,6 @@ class ProductHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     * @return Struct\ListProduct
-     */
-    public function hydrateProduct(array $data)
-    {
-        $product = new Struct\Product(
-            (int) $data['__product_id'],
-            (int) $data['__variant_id'],
-            $data['__variant_ordernumber']
-        );
-
-        return $this->assignData($product, $data);
-    }
-
-    /**
      * Hydrates the passed data and converts the ORM
      * array values into a Struct\ListProduct class.
      *
