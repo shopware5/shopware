@@ -68,10 +68,8 @@ EOT
     'migration_update_success'          => 'Process complete',
 
     'edition_header'        => 'Choose your license',
-    'edition_ce'            => 'Shopware Community Edition (License: AGPL)',
-    'edition_pe'            => 'Shopware Professional Edition (License: Commercial / License key required)',
-    'edition_ee'            => 'Shopware Enterprise Basic Edition (License: Commercial / License key required)',
-    'edition_ec'            => 'Shopware Enterprise Premium Edition (License: Commercial / License key required)',
+    'edition_ce'            => 'Shopware CE (License: AGPL)',
+    'edition_cm'            => 'Shopware Commercial Edition (License: Commercial / License key required)',
     'edition_license'       => 'License key:',
     'edition_info'          => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.',
     'edition_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',

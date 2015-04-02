@@ -242,8 +242,7 @@ EOT;
 
         $licenseUnpackRequest = new LicenseUnpackRequest(
             $shopwareEdition->licence,
-            $shop->host,
-            $shopwareEdition->edition
+            $shop->host
         );
 
         try {
@@ -261,10 +260,8 @@ EOT;
     private function askEdition()
     {
         $choices = [
-            'ce' => 'Shopware Community Edition (License: AGPL)',
-            'pe' => 'Shopware Professional Edition',
-            'eb' => 'Shopware Enterprise Basic Edition',
-            'ec' => 'Shopware Enterprise Premium Edition',
+            'ce' => 'Shopware CE (License: AGPL)',
+            'cm' => 'Shopware Commercial Edition (License: Commercial / License key required)'
         ];
 
         $hint =  "For PE/EB/EC a Commercial License key is required)";

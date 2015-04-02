@@ -42,19 +42,12 @@ class LicenseUnpackRequest
     public $host;
 
     /**
-     * @var string
-     */
-    public $edition;
-
-    /**
      * @param string $licenseKey
      * @param string $host
-     * @param string $edition
      */
-    public function __construct($licenseKey, $host, $edition)
+    public function __construct($licenseKey, $host)
     {
         $this->licenseKey = $licenseKey;
         $this->host = $host;
-        $this->edition = $edition;
     }
 }
