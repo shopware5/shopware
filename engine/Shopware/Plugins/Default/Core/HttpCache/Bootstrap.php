@@ -661,8 +661,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         $url = sprintf(
-            'http://%s%s/?%s',
-            $request->getHttpHost(),
+            '%s/?%s',
             $request->getBaseUrl(),
             http_build_query($params, null, '&')
         );
