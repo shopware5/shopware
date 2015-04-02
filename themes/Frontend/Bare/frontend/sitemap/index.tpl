@@ -25,9 +25,14 @@
 
 
 	{block name="frontend_sitemap_content"}
-		{foreach $sCategoryTree as $categoryTree}
+        {$i = 0}
 
-			{if $categoryTree@index % 4 == 0}
+		{foreach $sCategoryTree as $categoryTree}
+            {if ($categoryTree.name == 'SitemapStaticPages' || $categoryTree.name == 'SitemapSupplierPages' || $categoryTree.name == 'SitemapLandingPages') && !$categoryTree.sub}
+                {continue}
+            {/if}
+
+			{if $i == 0}
 				<div class="block-group">
 			{/if}
 
@@ -78,8 +83,11 @@
 				</div>
 			{/block}
 
-			{if $categoryTree@index % 4 == 3 || $categoryTree@last}
+			{if $i == 3 || $categoryTree@last}
 				</div>
+                {$i = 0}
+            {else}
+                {$i = $i + 1}
 			{/if}
 		{/foreach}
 	{/block}
