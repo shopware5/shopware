@@ -102,9 +102,9 @@ class Inheritance
      * @param \Shopware\Models\Shop\Template $template
      * @return \Shopware\Models\Shop\Template[]
      */
-    public function buildInheritance(Shop\Template $template)
+    public function buildInheritance(Shop\Template $template, $includeBareAndResponsive = true, $includeOwnThemes = true)
     {
-        $hierarchy = $this->buildInheritanceRecursive($template);
+        $hierarchy = $this->buildInheritanceRecursive($template, $includeBareAndResponsive, $includeOwnThemes);
 
         $hierarchy = $this->eventManager->filter('Theme_Inheritance_Built', $hierarchy, array(
             'template' => $template
@@ -285,14 +285,23 @@ class Inheritance
      * @param Shop\Template $template
      * @return array
      */
-    private function buildInheritanceRecursive(Shop\Template $template)
+    private function buildInheritanceRecursive(Shop\Template $template, $includeBareAndResponsive = true, $includeOwnThemes = true)
     {
         $hierarchy = array($template);
 
-        if ($template->getParent() instanceof Shop\Template) {
+        if ((!$includeBareAndResponsive) && (in_array($template->getName(), array('Bare', 'Responsive', '__theme_name__')))) {
+            $hierarchy = array();
+        }
+
+        if ((!$includeOwnThemes) && (!in_array($template->getName(), array('Bare', 'Responsive', '__theme_name__')))) {
+            $hierarchy = array();
+        }
+
+        $parent = $template->getParent();
+        if ($parent instanceof Shop\Template) {
             $hierarchy = array_merge(
                 $hierarchy,
-                $this->buildInheritanceRecursive($template->getParent())
+                $this->buildInheritanceRecursive($parent, $includeBareAndResponsive, $includeOwnThemes)
             );
         }
         return $hierarchy;
