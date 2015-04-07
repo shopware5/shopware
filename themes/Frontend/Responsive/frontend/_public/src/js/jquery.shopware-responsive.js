@@ -33,7 +33,7 @@ $(function () {
         .addPlugin('*[data-offcanvas="true"]', 'offcanvasMenu', ['xs', 's'])
 
         // Search field
-        .addPlugin('*[data-search-dropdown="true"]', 'searchFieldDropDown', ['xs', 's', 'm', 'l'])
+        .addPlugin('*[data-search="true"]', 'search')
 
         // Scroll plugin
         .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's', 'm'])
@@ -179,8 +179,6 @@ $(function () {
 
     // Initialize the registration plugin
     $('div[data-register="true"]').register();
-
-    $('*[data-live-search="true"]').liveSearch();
 
     $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
 

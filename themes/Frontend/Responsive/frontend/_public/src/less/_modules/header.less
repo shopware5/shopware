@@ -192,10 +192,12 @@ More precise designations are commented inside the document.
 
     .main-search--button {
         .appearance(none);
-        .unitize(right, 20);
-        .unitize(top, 12);
+        .unitize(top, 10);
+        .unitize(bottom, 10);
+        .unitize(right, 10);
         .unitize(font-size, 20);
-        padding: 0;
+        .unitize-padding(0, 10);
+        line-height: 1;
         position: absolute;
         z-index: @zindex-header-search-button;
         border: 0 none;
@@ -311,7 +313,7 @@ More precise designations are commented inside the document.
 		display: block;
     }
 
-    .entry--all-results.js--is-active {
+    .entry--all-results.is--active {
         font-weight: 600;
 
         .entry--all-results-number {
@@ -333,7 +335,7 @@ More precise designations are commented inside the document.
         font-weight: normal;
     }
 
-    .js--is-active,
+    .is--active,
 	.list--entry:hover {
         color: @link-color;
 
@@ -466,8 +468,10 @@ More precise designations are commented inside the document.
 
             // Icon position from here to @desktopViewportWidth
             .main-search--button {
-                .unitize(top, 2);
-                .unitize(right, 12);
+                .unitize(top, 0);
+                .unitize(bottom, 0);
+                .unitize(right, 0);
+                .unitize-padding(0, 10);
             }
         }
     }
@@ -478,6 +482,12 @@ More precise designations are commented inside the document.
         .unitize(top, 50);
         .unitize-width(450);
         .unitize(-110, 16, margin-left);
+    }
+
+    .results--list {
+        .border-radius();
+        border: 1px solid @border-color;
+        background: #fff;
     }
 
     // Remove the active searchfield padding
@@ -760,12 +770,6 @@ More precise designations are commented inside the document.
         .unitize(-225, 16, margin-left);
         .unitize(top, 55);
         left: 50%;
-    }
-
-    .results--list {
-        .border-radius();
-        border: 1px solid @border-color;
-        background: #fff;
     }
 }
 
