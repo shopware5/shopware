@@ -116,10 +116,10 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             )
         );
 
-        $this->translateForm($form);
+        $this->translateForm();
     }
 
-    private function translateForm(Shopware\Models\Config\Form $form)
+    private function translateForm()
     {
         $translations = array(
             'en_GB' => array(
@@ -131,11 +131,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             )
         );
 
-        if ($this->assertMinimumVersion('4.2.2')) {
-            $this->addFormTranslations($translations);
-        } else {
-            $form->translateForm($translations);
-        }
+        $this->addFormTranslations($translations);
     }
 
     /**
