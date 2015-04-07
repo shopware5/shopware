@@ -64,7 +64,7 @@ The configurator element allows the user to choose from different article variat
         }
 
         &:disabled {
-            cursor: default;
+            cursor: not-allowed;
         }
     }
 
@@ -81,6 +81,10 @@ The configurator element allows the user to choose from different article variat
         font-weight: bold;
         text-align: center;
         overflow: hidden;
+
+        &.is--disabled img {
+            opacity: 0.3;
+        }
 
         .image--media {
             .unitize(line-height, 50);
