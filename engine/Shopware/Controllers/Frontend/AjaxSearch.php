@@ -57,7 +57,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $term = $this->Request()->getParam('sSearch');
         $term = trim(stripslashes(html_entity_decode($term)));
 
-        if (!$term || strlen($term) < Shopware()->Config()->MinSearchLenght) {
+        if (!$term || strlen($term) < Shopware()->Config()->MinSearchLength) {
             return false;
         }
 
