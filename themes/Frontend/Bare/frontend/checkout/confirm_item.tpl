@@ -18,7 +18,11 @@
 {/block}
 
 {* Additional product relevant information *}
-{block name='frontend_checkout_cart_item_details_inline'}{/block}
+{block name='frontend_checkout_cart_item_details_inline'}
+    <div class="product--essential-features">
+        {include file="string:{config name=mainfeatures}"}
+    </div>
+{/block}
 
 {* Voucher tax price *}
 {block name='frontend_checkout_cart_item_voucher_tax_price'}
