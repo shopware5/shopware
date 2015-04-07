@@ -166,13 +166,16 @@ class Compiler
 
         $this->buildConfig($template, $shop);
 
-        $this->compileThemeLess($template, $shop);
+        $inheritances = $this->inheritance->buildInheritances($template);
+
+        $this->compileLessInheritance($inheritances['bare'], $shop);
+        $this->compileCssInheritance($inheritances['bare'], $shop);
 
         $this->compilePluginLess($template, $shop);
+        $this->compilePluginCss($template, $shop);
 
-        $this->compressThemeCss($template, $shop);
-
-        $this->compressPluginCss($template, $shop);
+        $this->compileLessInheritance($inheritances['custom'], $shop);
+        $this->compileCssInheritance($inheritances['custom'], $shop);
 
         $this->outputCompiledCss($timestamp, $shop);
     }
@@ -186,9 +189,12 @@ class Compiler
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $this->compressThemeJavascript($timestamp, $template, $shop);
+        $inheritances = $this->inheritance->buildInheritances($template);
 
+        $this->createThemeJavascriptFile($timestamp, $shop);
+        $this->compileJavascriptInheritance($timestamp, $inheritances['bare'], $shop);
         $this->compressPluginJavascript($timestamp, $template, $shop);
+        $this->compileJavascriptInheritance($timestamp, $inheritances['custom'], $shop);
     }
 
     /**
@@ -342,7 +348,7 @@ class Compiler
     }
 
     /**
-     * Compiles all less files of the theme inheritance of the passed shop template.
+     * Compiles all less files of the provided theme inheritance.
      * The timestamp is required for file caching.
      *
      * Shopware implements the convention that each theme, which wants to implement less compiling,
@@ -351,27 +357,55 @@ class Compiler
      *
      * Notice: The theme _public directory will be configured into the less compiler as import directory and root uri.
      *
-     * @param Shop\Template $template
+     * @param $inheritance
      * @param Shop\Shop $shop
      */
-    protected function compileThemeLess(Shop\Template $template, Shop\Shop $shop)
+    private function compileLessInheritance($inheritance, Shop\Shop $shop)
     {
-        $hierarchy = $this->inheritance->buildInheritance($template);
-
         //use array_reverse to compile the bare themes first.
-        foreach (array_reverse($hierarchy) as $shopTemplate) {
+        foreach (array_reverse($inheritance) as $shopTemplate) {
             $definition = new LessDefinition();
 
             $definition->setImportDirectory(
                 $this->pathResolver->getPublicDirectory($shopTemplate)
             );
 
-            $definition->setFiles(array(
+            $definition->setFiles([
                 $this->pathResolver->getThemeLessFile($shopTemplate)
-            ));
+            ]);
 
             $this->compileLessDefinition($shop, $definition);
         }
+    }
+
+    /**
+     * This function allows to define simple css files within a theme which compressed
+     * into one theme.css file for the frontend.
+     *
+     * To define which css files of the theme should be compressed, the Theme.php $css property is used.
+     * Shopware expects that all css file of this property is stored within the /frontend/_public/src/css
+     * directory.
+     *
+     * @param Shop\Template[] $inheritance
+     * @param Shop\Shop $shop
+     * @throws \Exception
+     */
+    private function compileCssInheritance($inheritance, Shop\Shop $shop)
+    {
+        $files = [];
+        foreach (array_reverse($inheritance) as $template) {
+            $files = array_merge(
+                $files,
+                $this->inheritance->getTemplateCssFiles($template)
+            );
+        }
+        if (empty($files)) {
+            return;
+        }
+
+        $definition = new LessDefinition();
+        $definition->setFiles($files);
+        $this->compileLessDefinition($shop, $definition);
     }
 
     /**
@@ -432,30 +466,6 @@ class Compiler
     }
 
     /**
-     * This function allows to define simple css files within a theme which compressed
-     * into one theme.css file for the frontend.
-     *
-     * To define which css files of the theme should be compressed, the Theme.php $css property is used.
-     * Shopware expects that all css file of this property is stored within the /frontend/_public/src/css
-     * directory.
-     *
-     *
-     * @param Shop\Template $template
-     * @param Shop\Shop $shop
-     * @throws \Exception
-     */
-    protected function compressThemeCss(Shop\Template $template, Shop\Shop $shop)
-    {
-        $definition = new LessDefinition();
-
-        $definition->setFiles(
-            $this->inheritance->getCssFiles($template)
-        );
-
-        $this->compileLessDefinition($shop, $definition);
-    }
-
-    /**
      * Compress the plugin css files which can be added
      * over the `Theme_Compiler_Collect_Plugin_Css` event.
      * Each file will be minified by the Theme\Compressor\Css class.
@@ -466,7 +476,7 @@ class Compiler
      * @param Shop\Shop $shop
      * @throws \Exception
      */
-    protected function compressPluginCss(Shop\Template $template, Shop\Shop $shop)
+    protected function compilePluginCss(Shop\Template $template, Shop\Shop $shop)
     {
         $collection = new ArrayCollection();
         $this->eventManager->collect('Theme_Compiler_Collect_Plugin_Css', $collection, array(
@@ -486,44 +496,39 @@ class Compiler
     }
 
     /**
-     * Compress the theme javascript files.
-     * Each file will be minified by the Theme\Compressor\Js class.
-     * The compressed js content will be added to the theme.js file
-     * which stored in the theme cache directory.
-     *
-     * @param $timestamp
-     * @param Shop\Template $template
+     * @param string $timestamp
+     * @param Shop\Template[] $inheritance
      * @param Shop\Shop $shop
      * @throws \Exception
      */
-    protected function compressThemeJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
+    private function compileJavascriptInheritance($timestamp, $inheritance, Shop\Shop $shop)
     {
-        $files = $this->inheritance->getJavascriptFiles($template);
-
         $fileName = $this->pathResolver->getJsFilePaths($shop, $timestamp);
         $fileName = $fileName['default'];
 
-        $output = new \SplFileObject($fileName, "w+");
+        $output = new \SplFileObject($fileName, "a+");
+        $output->fwrite('');
 
         $settings = $this->service->getSystemConfiguration(
             AbstractQuery::HYDRATE_OBJECT
         );
 
-        foreach ($files as $file) {
-            if (!file_exists($file)) {
-                throw new \Exception(sprintf(
-                    "Theme javascript file %s doesn't exists",
-                    $file
-                ));
-            }
+        foreach (array_reverse($inheritance) as $template) {
+            $files = $this->inheritance->getTemplateJavascriptFiles($template);
 
-            $content = file_get_contents($file);
+            foreach ($files as $file) {
+                if (!file_exists($file)) {
+                    throw new \Exception(sprintf("Theme javascript file %s doesn't exists", $file));
+                }
 
-            if ($settings->getCompressJs()) {
-                $content = $this->jsCompressor->compress($content);
+                $content = file_get_contents($file);
+
+                if ($settings->getCompressJs()) {
+                    $content = $this->jsCompressor->compress($content);
+                }
+                $content = $content . "\n";
+                $output->fwrite($content);
             }
-            $content = $content . "\n";
-            $output->fwrite($content);
         }
     }
 
@@ -628,7 +633,7 @@ class Compiler
 
     /**
      * @param string $original
-     * @param string $names
+     * @param string[] $names
      * @return bool
      */
     private function fileNameMatch($original, $names)
@@ -660,5 +665,17 @@ class Compiler
         }
 
         return (int) $timestamp;
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     */
+    protected function createThemeJavascriptFile($timestamp, Shop\Shop $shop)
+    {
+        $fileName = $this->pathResolver->getJsFilePaths($shop, $timestamp);
+        $fileName = $fileName['default'];
+        $output = new \SplFileObject($fileName, "w+");
+        $output->fwrite('');
     }
 }

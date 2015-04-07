@@ -25,7 +25,9 @@
 namespace Shopware\Components\Theme;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme;
 use Shopware\Models\Shop as Shop;
+use Shopware\Themes\Responsive\Theme as ResponsiveTheme;
 
 /**
  * The Theme\Inheritance class is used to
@@ -95,22 +97,29 @@ class Inheritance
     }
 
     /**
-     * Returns the inheritance hierarchy for the passed theme.
-     * This function is used to iterate a shop template inheritance
-     * in the frontend to register or collect different resources.
-     *
-     * @param \Shopware\Models\Shop\Template $template
-     * @return \Shopware\Models\Shop\Template[]
+     * @param Shop\Template $template
+     * @return array
      */
-    public function buildInheritance(Shop\Template $template)
+    public function buildInheritances(Shop\Template $template)
     {
         $hierarchy = $this->buildInheritanceRecursive($template);
 
-        $hierarchy = $this->eventManager->filter('Theme_Inheritance_Built', $hierarchy, array(
-            'template' => $template
-        ));
-
-        return $hierarchy;
+        $util = $this->util;
+        $bare = array_filter($hierarchy, function(Shop\Template $template) use ($util) {
+            $theme = $util->getThemeByTemplate($template);
+            return ($template->getParent() == null || $theme instanceof ResponsiveTheme);
+        });
+    
+        $custom = array_filter($hierarchy, function(Shop\Template $template) use ($util) {
+            $theme = $util->getThemeByTemplate($template);
+            return ($template->getParent() !== null && !($theme instanceof ResponsiveTheme));
+        });
+        
+        return [
+            'full'   => $hierarchy,
+            'bare'   => array_values($bare),
+            'custom' => array_values($custom)
+        ];
     }
 
     /**
@@ -187,35 +196,44 @@ class Inheritance
     }
 
     /**
-     * Returns all css files for the passed shop template inheritance.
-     * This function contains no event, because the theme compiler
-     * which compress css files and compiles less, contains
-     * an event to add own css files.
-     * See \Shopware\Components\Theme\Compiler::compressPluginCss() function
-     * for more information.
-     *
      * @param Shop\Template $template
-     * @return array
+     * @return string[]
+     * @throws \Exception
      */
-    public function getCssFiles(Shop\Template $template)
+    public function getTemplateCssFiles(Shop\Template $template)
     {
-        return $this->getCssFilesRecursive($template);
+        $theme = $this->util->getThemeByTemplate($template);
+
+        $css = $theme->getCss();
+
+        $directory = $this->pathResolver->getPublicDirectory($template);
+        foreach ($css as &$file) {
+            $file = $directory . DIRECTORY_SEPARATOR . $file;
+        }
+
+        return $css;
     }
 
     /**
-     * Returns all javascript files for the passed shop template inheritance.
-     * This function contains no event, because the theme compiler
-     * which compress js files, contains an event to add own js files.
-     * See \Shopware\Components\Theme\Compiler::compressPluginJavascript() function
-     * for more information.
-     *
      * @param Shop\Template $template
-     * @return array
+     * @return string[]
+     * @throws \Exception
      */
-    public function getJavascriptFiles(Shop\Template $template)
+    public function getTemplateJavascriptFiles(Shop\Template $template)
     {
-        return $this->getJavascriptFilesRecursive($template);
+        $theme = $this->util->getThemeByTemplate($template);
+
+        $files = $theme->getJavascript();
+
+        $directory = $this->pathResolver->getPublicDirectory($template);
+
+        foreach ($files as &$file) {
+            $file = $directory . DIRECTORY_SEPARATOR . $file;
+        }
+
+        return $files;
     }
+
 
     /**
      * Helper function which collects the defined theme css
