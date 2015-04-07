@@ -152,9 +152,10 @@
             <argument>%shopware.db%</argument>
         </service>
 
-        <service id="guzzle_http_client" class="GuzzleHttp\Client" public="false" />
+        <service id="guzzle_http_client_factory" class="Shopware\Components\HttpClient\GuzzleFactory" />
+
         <service id="http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
-            <argument type="service" id="guzzle_http_client"/>
+            <argument type="service" id="guzzle_http_client_factory"/>
         </service>
 
         <service id="cache_factory" class="Shopware\Components\DependencyInjection\Bridge\Cache"/>
@@ -366,6 +367,7 @@
         <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="corelogger" />
+            <argument type="service" id="guzzle_http_client_factory" />
         </service>
 
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
