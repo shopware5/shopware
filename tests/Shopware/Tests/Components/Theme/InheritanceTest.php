@@ -27,12 +27,24 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
     {
         $custom = $this->getDummyTemplates();
 
-        $hierarchy = Shopware()->Container()->get('theme_inheritance')
-            ->buildInheritance($custom);
+        $inheritance = new \Shopware\Components\Theme\Inheritance(
+            Shopware()->Container()->get('models'),
+            $this->getUtilClass(),
+            Shopware()->Container()->get('theme_path_resolver'),
+            Shopware()->Container()->get('events')
+        );
 
-        $this->assertCount(2, $hierarchy);
-        $this->assertEquals('slave', $hierarchy[0]->getName());
-        $this->assertEquals('master', $hierarchy[1]->getName());
+        $hierarchy = $inheritance->buildInheritances($custom);
+
+        $this->assertCount(2, $hierarchy['full']);
+        $this->assertEquals('TestResponsive', $hierarchy['full'][0]->getName());
+        $this->assertEquals('TestBare', $hierarchy['full'][1]->getName());
+
+        $this->assertCount(1, $hierarchy['bare']);
+        $this->assertCount(1, $hierarchy['custom']);
+
+        $this->assertEquals('TestBare', $hierarchy['bare'][0]->getName());
+        $this->assertEquals('TestResponsive', $hierarchy['custom'][0]->getName());
     }
 
     public function testSmartyDirectories()
@@ -69,7 +81,6 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
         );
     }
 
-
     public function testThemeFiles()
     {
         $util = $this->getUtilClass();
@@ -96,8 +107,7 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             $this->getEventManager()
         );
 
-        $files = $inheritance->getJavascriptFiles($template);
-
+        $files = $inheritance->getTemplateJavascriptFiles($template);
         $this->assertCount(2, $files);
 
         foreach ($files as $file) {
@@ -105,7 +115,7 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             $this->assertStringStartsWith('public_directory', $file);
         }
 
-        $files = $inheritance->getCssFiles($template);
+        $files = $inheritance->getTemplateCssFiles($template);
 
         $this->assertCount(2, $files);
 
@@ -119,13 +129,13 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
     private function getDummyTemplates()
     {
         $master = new \Shopware\Models\Shop\Template();
-        $master->setName('master');
-        $master->setTemplate('master');
+        $master->setName('TestBare');
+        $master->setTemplate('TestBare');
         $master->setVersion(3);
 
         $slave = new \Shopware\Models\Shop\Template();
-        $slave->setName('slave');
-        $slave->setTemplate('slave');
+        $slave->setName('TestResponsive');
+        $slave->setTemplate('TestResponsive');
         $slave->setParent($master);
         $slave->setVersion(3);
 

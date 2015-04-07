@@ -28,7 +28,7 @@ use Shopware\Components\Theme\ConfigSet;
 
 class Theme extends \Shopware\Components\Theme
 {
-    protected $extend = 'Bare';
+    protected $extend = 'TestBare';
 
     protected $inheritanceConfig = true;
 
