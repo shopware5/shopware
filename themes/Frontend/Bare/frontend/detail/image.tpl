@@ -14,10 +14,10 @@
 
                     {block name='frontend_detail_image_default_image_element'}
 
-                        {$alt = $sArticle.articleName|escape:"html"}
+                        {$alt = $sArticle.articleName|escape}
 
                         {if $sArticle.image.description}
-                            {$alt = $sArticle.image.description|escape:"html"}
+                            {$alt = $sArticle.image.description|escape}
                         {/if}
 
                         <span class="image--element"
@@ -50,10 +50,10 @@
 
                         {block name='frontend_detail_images_image_element'}
 
-                            {$alt = $sArticle.articleName|escape:"html"}
+                            {$alt = $sArticle.articleName|escape}
 
                             {if $image.description}
-                                {$alt = $image.description|escape:"html"}
+                                {$alt = $image.description|escape}
                             {/if}
 
                             <span class="image--element"

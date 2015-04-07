@@ -11,10 +11,10 @@
 				{* Thumbnail - Main image *}
 				{if $sArticle.image.thumbnails}
 
-				    {$alt = $sArticle.articleName|escape:"html"}
+				    {$alt = $sArticle.articleName|escape}
 
                     {if $sArticle.image.description}
-                        {$alt = $sArticle.image.description|escape:"html"}
+                        {$alt = $sArticle.image.description|escape}
                     {/if}
 
 					<a href="{$sArticle.image.src.1}"
@@ -34,10 +34,10 @@
                     {if $image.thumbnails}
                         {block name='frontend_detail_image_thumbnail_images'}
 
-                            {$alt = $sArticle.articleName|escape:"html"}
+                            {$alt = $sArticle.articleName|escape}
 
                             {if $image.description}
-                                {$alt = $image.description|escape:"html"}
+                                {$alt = $image.description|escape}
                             {/if}
 
                             <a href="{$image.src.1}"

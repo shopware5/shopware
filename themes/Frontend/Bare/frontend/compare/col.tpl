@@ -8,15 +8,15 @@
                 {block name="frontend_compare_article_picture"}
                     <li class="list--entry entry--picture">
                         {* Product image - uses the picturefill polyfill for the HTML5 "picture" element *}
-                        <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape:'html'}" class="box--image">
+                        <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="box--image">
                             <span class="image--element">
                                 <span class="image--media">
                                     {if isset($sArticle.image.thumbnails)}
                                         <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
-                                             alt="{$sArticle.articleName|escape:'html'}" />
+                                             alt="{$sArticle.articleName|escape}" />
                                     {else}
                                         <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-                                             alt="{$sArticle.articleName|escape:'html'}">
+                                             alt="{$sArticle.articleName|escape}">
                                     {/if}
                                 </span>
                             </span>
