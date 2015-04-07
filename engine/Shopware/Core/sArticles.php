@@ -1340,8 +1340,8 @@ class sArticles
             return false;
         }
 
-        $listProduct = $this->listProductService->get($ordernumber, $this->contextService->getProductContext());
-        $getPromotionResult = $this->legacyStructConverter->convertListProductStruct($listProduct);
+        $product = $this->productService->get($ordernumber, $this->contextService->getProductContext());
+        $getPromotionResult = $this->legacyStructConverter->convertProductStruct($product);
 
         $getPromotionResult = Enlight()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
