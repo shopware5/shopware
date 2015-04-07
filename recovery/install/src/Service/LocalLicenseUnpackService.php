@@ -26,6 +26,7 @@ namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Recovery\Install\Struct\LicenseInformation;
 use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
+use Shopware\Recovery\Install\Struct\ShopwareEdition;
 
 /**
  * @category  Shopware
@@ -42,7 +43,6 @@ class LocalLicenseUnpackService implements LicenseUnpackService
     {
         $license = $request->licenseKey;
         $host    = $request->host;
-        $product = $request->edition;
 
         $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
         $license = str_replace('--------- LICENSE END ----------', '', $license);
@@ -81,8 +81,8 @@ class LocalLicenseUnpackService implements LicenseUnpackService
 
         $info['license'] = $license;
 
-        if (!empty($product) && $product != $info['product']) {
-            $this->throwException("License key is formally correct but does not match to the selected shopware edition");
+        if (!$this->isValidProductKey($info['product'])) {
+            $this->throwException("License key does not match a commercial Shopware edition");
         }
 
         if ($info['host'] != $host) {
@@ -99,6 +99,23 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         ]);
 
         return $licenseInformation;
+    }
+
+    /**
+     * Validates the product key provided in the license
+     *
+     * @param string $productKey
+     * @return bool
+     */
+    private function isValidProductKey($productKey)
+    {
+        if (empty($productKey)) {
+            return false;
+        }
+
+        $validKeys = ShopwareEdition::getValidEditions();
+
+        return in_array($productKey, $validKeys, true);
     }
 
     /**

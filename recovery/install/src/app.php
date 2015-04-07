@@ -326,9 +326,8 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
         } else {
             $unpackRequest = new LicenseUnpackRequest(
                 $app->request()->post("c_license"),
-                $_SERVER["HTTP_HOST"],
-                strtoupper($app->request()->post("c_edition")))
-            ;
+                $_SERVER["HTTP_HOST"]
+            );
 
             try {
                 $licenseInformation = $licenseUnpackService->evaluateLicense($unpackRequest);

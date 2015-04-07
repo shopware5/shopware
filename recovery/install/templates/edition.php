@@ -20,19 +20,9 @@
     </label>
 
     <label>
-        <input type="radio" name="c_edition" id="optionsRadios2" value="pe"  <?= ($parameters["c_edition"] == "pe") ? "checked=\"checked\"" : "" ?> onclick="$('#c_license').attr ( 'disabled' , false );">
-        <?= $t->t("edition_pe") ?>
+        <input type="radio" name="c_edition" id="optionsRadios2" value="cm"  <?= ($parameters["c_edition"] == "cm") ? "checked=\"checked\"" : "" ?> onclick="$('#c_license').attr ( 'disabled' , false );">
+        <?= $t->t("edition_cm") ?>
     </label>
-
-    <label>
-        <input type="radio" name="c_edition" id="optionsRadios3" value="eb"  <?= ($parameters["c_edition"] == "eb") ? "checked=\"checked\"" : "" ?> onclick="$('#c_license').attr ( 'disabled' , false );">
-         <?= $t->t("edition_ee") ?>
-     </label>
-
-    <label>
-        <input type="radio" name="c_edition" id="optionsRadios4" value="ec"  <?= ($parameters["c_edition"] == "ec") ? "checked=\"checked\"" : "" ?> onclick="$('#c_license').attr ( 'disabled' , false );">
-         <?= $t->t("edition_ec") ?>
-     </label>
 
     <label for="c_license" class="label--license"><?= $t->t("edition_license") ?></label>
     <textarea class="license--agreement" id="c_license" name="c_license" rows="3" <?= ($parameters["c_edition"]=="ce" || !isset($parameters["c_edition"])) ? "disabled" : ""?>><?= $parameters["c_license"] ?></textarea>

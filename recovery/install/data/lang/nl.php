@@ -67,10 +67,8 @@ EOT
     'migration_update_success'          => 'Database-Update is succesvol uitgevoerd',
 
     'edition_header'        => 'Kiest u de licentie welke u gebruiken wilt',
-    'edition_ce'            => 'Shopware Community Versie (Licentie: Open-Source AGPL)',
-    'edition_pe'            => 'Shopware Professional (Licentie: Commercieel, Licentie-code is vereist)',
-    'edition_ee'            => 'Shopware Enterprise Basic (Lizenz: Commercieel, Licentie-code is vereist)',
-    'edition_ec'            => 'Shopware Enterprise Premium (Licentie: Commercieel, Licentie-code is vereist)',
+    'edition_ce'            => 'Shopware Community Edition (Licentie: Open-Source AGPL)',
+    'edition_cm'            => 'Shopware Commerciële Versie (Licentie: Commercieel, Licentie-code is vereist) Bijv. Professional, Professional Plus, Enterprise',
     'edition_license'       => 'Licentie-code:',
     'edition_info'          => 'Wanneer u een commerciële Shopware licentie Wenn Sie eine kommerzielle Shopware Lizenz verworven heeft, kies dan alstublieft de betreffende editie uit de lijst en voer uw licentiecode in!',
     'edition_license_error' => 'Voor de installatie van een commerciële Shopware versie is een geldige licentie vereist.',
