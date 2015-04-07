@@ -68,6 +68,9 @@
     {if isset($microData)}
         {$hasMicroData=$microData}
     {/if}
+    {if $hasMicroData && $isType === 'aggregated' && $count === 0} {* Don't display microdata for empty aggregated ratings *}
+        {$hasMicroData=false}
+    {/if}
 {/block}
 
 {* Microdata depending on type *}
@@ -110,12 +113,11 @@
         {* Microdata *}
         {block name='frontend_rating_content_microdata'}
             {if $hasMicroData}
-                {if $isType === 'single'}
-                    <meta itemprop="worstRating" content="1">
-                    <meta itemprop="ratingValue" content="{$points}">
-                    <meta itemprop="bestRating" content="{$isBase}">
-                {else}
-                    <meta itemprop="ratingValue" content="{$average}">
+                <meta itemprop="ratingValue" content="{$points}">
+                <meta itemprop="worstRating" content="1">
+                <meta itemprop="bestRating" content="{$isBase}">
+                {if $isType === 'aggregated'}
+                    <meta itemprop="ratingCount" content="{$count}">
                 {/if}
             {/if}
         {/block}
@@ -145,7 +147,7 @@
         {block name='frontend_rating_content_label'}
             {if $hasLabel && $count}
                 <span class="rating--count-wrapper">
-                    (<span {if $hasMicroData}itemprop="ratingCount"{/if} class="rating--count">{$count}</span>)
+                    (<span class="rating--count">{$count}</span>)
                 </span>
             {/if}
         {/block}
