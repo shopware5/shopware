@@ -309,7 +309,6 @@ class Compiler
     protected function buildConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
-        $config = $this->addThemePrefix($config);
 
         $this->compiler->setVariables($config);
 
@@ -327,24 +326,6 @@ class Compiler
 
             $this->compiler->setVariables($config);
         }
-    }
-
-    /**
-     * Helper function to add the prefix 'theme' to each config variable for less
-     * @param array $config
-     * @return array
-     */
-    private function addThemePrefix($config)
-    {
-        $keys = array_keys($config);
-
-        foreach($keys as &$key) {
-            $key = 'theme' . ucfirst($key);
-        }
-
-        $config = array_combine($keys, $config);
-
-        return $config;
     }
 
     /**
