@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\SubscriptionStateStruct;
@@ -260,7 +259,7 @@ class SubscriptionService
             ->from('s_core_plugins', 'plugins')
             ->where('plugins.name IN (:names)')
             ->setParameter('names', $names, Connection::PARAM_STR_ARRAY);
-        
+
         /**@var $statement \PDOStatement*/
         $statement = $query->execute();
 

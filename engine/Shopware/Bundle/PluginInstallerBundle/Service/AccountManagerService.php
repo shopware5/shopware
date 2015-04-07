@@ -30,6 +30,7 @@ use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 
 /**
@@ -72,22 +73,23 @@ class AccountManagerService
      * @param StructHydrator $structHydrator
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param ModelManager $entityManager
-     * @param ClientInterface $guzzleHttpClient
+     * @param GuzzleFactory $guzzleFactory
      * @param String $apiEndPoint
+     * @internal param ClientInterface $guzzleHttpClient
      */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $structHydrator,
         \Shopware_Components_Snippet_Manager $snippetManager,
         ModelManager $entityManager,
-        ClientInterface $guzzleHttpClient,
+        GuzzleFactory $guzzleFactory,
         $apiEndPoint
     ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $structHydrator;
         $this->snippetManager = $snippetManager;
         $this->entityManager = $entityManager;
-        $this->guzzleHttpClient = $guzzleHttpClient;
+        $this->guzzleHttpClient = $guzzleFactory->createClient();
         $this->apiEndPoint = $apiEndPoint;
     }
 

@@ -14,6 +14,8 @@ In this document you will find a changelog of the important changes related to t
 * \Shopware\Bundle\StoreFrontBundle\Service\Core\ProductService uses now the ListProductService to load the product data and converts the product structs by loaded list products.
 * Removed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductHydrator::hydrateProduct` function.
 * Removed \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct::STATE_TRANSLATED constant.
+* Removed Service `guzzle_http_client`, use `guzzle_http_client_factory` instead.
+* Added support for Bundle of CA Root Certificates. See: http://curl.haxx.se/docs/caextract.html.
 
 ## 5.0.0 RC1
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
