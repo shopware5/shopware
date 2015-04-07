@@ -21,7 +21,7 @@
                         {* Product image *}
                         {block name='frontend_listing_box_article_picture'}
                             <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
-                               title="{$sArticle.articleName|escape:'html'}"
+                               title="{$sArticle.articleName|escape}"
                                class="product--image{if $imageOnly} is--large{/if}">
 
                                 {block name='frontend_listing_box_article_image_element'}
@@ -35,11 +35,11 @@
                                                             <source srcset="{$sArticle.image.thumbnails[2].sourceSet}" media="(min-width: 78em)">
                                                             <source srcset="{$sArticle.image.thumbnails[1].sourceSet}" media="(min-width: 48em)">
 
-                                                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}" alt="{$sArticle.articleName|escape:'html'}" />
+                                                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}" alt="{$sArticle.articleName|escape}" />
                                                         </picture>
                                                     {/block}
                                                 {else}
-                                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape:'html'}" />
+                                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape}" />
                                                 {/if}
                                             </span>
                                         {/block}

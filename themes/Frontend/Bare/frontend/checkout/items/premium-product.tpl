@@ -21,7 +21,7 @@
                                                 data-mode="ajax"
                                                 data-width="750"
                                                 data-sizing="content"
-                                                data-title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
+                                                data-title="{$sBasketItem.articlename|strip_tags|escape}"
                                                 data-updateImages="true"
                                             {/if}>
                                             <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
@@ -56,7 +56,7 @@
                                 data-mode="ajax"
                                 data-width="750"
                                 data-sizing="content"
-                                data-title="{$sBasketItem.articlename|strip_tags|escape:"html"}"
+                                data-title="{$sBasketItem.articlename|strip_tags|escape}"
                                 data-updateImages="true"
                             {/if}>
                             {$sBasketItem.articlename|strip_tags|truncate:60}
