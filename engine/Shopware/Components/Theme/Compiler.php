@@ -166,13 +166,15 @@ class Compiler
 
         $this->buildConfig($template, $shop);
 
-        $this->compileThemeLess($template, $shop);
+        $this->compileThemeLess($template, $shop, true, false);
 
         $this->compilePluginLess($template, $shop);
 
-        $this->compressThemeCss($template, $shop);
-
         $this->compressPluginCss($template, $shop);
+
+        $this->compileThemeLess($template, $shop, false, true);
+
+        $this->compressThemeCss($template, $shop);
 
         $this->outputCompiledCss($timestamp, $shop);
     }
@@ -354,9 +356,9 @@ class Compiler
      * @param Shop\Template $template
      * @param Shop\Shop $shop
      */
-    protected function compileThemeLess(Shop\Template $template, Shop\Shop $shop)
+    protected function compileThemeLess(Shop\Template $template, Shop\Shop $shop, $includeBareAndResponsive = true, $includeOwnThemes = true)
     {
-        $hierarchy = $this->inheritance->buildInheritance($template);
+        $hierarchy = $this->inheritance->buildInheritance($template, $includeBareAndResponsive, $includeOwnThemes);
 
         //use array_reverse to compile the bare themes first.
         foreach (array_reverse($hierarchy) as $shopTemplate) {
