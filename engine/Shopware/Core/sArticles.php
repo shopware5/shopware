@@ -1431,6 +1431,10 @@ class sArticles
     {
         $category = (int) $category;
         $context = $this->contextService->getShopContext();
+        if (empty($category)) {
+            $category = $context->getShop()->getCategory()->getId();
+        }
+
         $criteria = new Criteria();
 
         $criteria->addBaseCondition(new CategoryCondition([$category]))
