@@ -265,6 +265,8 @@
 
                     me.$el.html(result);
 
+                    picturefill();
+
                     $.publish('plugin/collapseCart/afterRemoveArticle', me);
                 }
             });
