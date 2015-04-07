@@ -68,8 +68,8 @@ EOT
 
     'edition_header'        => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten',
     'edition_info'          => 'Wenn Sie eine kommerzielle Shopware Lizenz erworben haben, so wählen Sie bitte die zutreffene Edition aus der Liste und geben Sie Ihren Lizenzschlüssel ein.',
-    'edition_ce'            => 'Shopware Community Version (Lizenz: Open-Source AGPL)',
-    'edition_cm'            => 'Shopware Kommerziell Version (Lizenz: Kommerziell, Lizenzschlüssel erforderlich)',
+    'edition_ce'            => 'Shopware Community Edition (Lizenz: Open-Source AGPL)',
+    'edition_cm'            => 'Shopware kommerzielle Version (Lizenz: Kommerziell, Lizenzschlüssel erforderlich) Bspw. Professional, Professional Plus, Enterprise',
     'edition_license'       => 'Lizenz-Schlüssel:',
     'edition_license_error' => 'Für die Installation einer kommerziellen Shopware Version ist eine gültige Lizenz erfordelich.',
 

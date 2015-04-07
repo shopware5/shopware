@@ -260,8 +260,8 @@ EOT;
     private function askEdition()
     {
         $choices = [
-            'ce' => 'Shopware CE (License: AGPL)',
-            'cm' => 'Shopware Commercial Edition (License: Commercial / License key required)'
+            'ce' => 'Shopware Community Edition (License: AGPL)',
+            'cm' => 'Shopware Commercial Version (License: Commercial / License key required) e.g. Professional, Professional Plus, Enterprise'
         ];
 
         $hint =  "For PE/EB/EC a Commercial License key is required)";

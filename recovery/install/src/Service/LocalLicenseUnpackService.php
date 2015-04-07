@@ -104,7 +104,7 @@ class LocalLicenseUnpackService implements LicenseUnpackService
     /**
      * Validates the product key provided in the license
      *
-     * @param $productKey
+     * @param string $productKey
      * @return bool
      */
     private function isValidProductKey($productKey)
