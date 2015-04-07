@@ -25,7 +25,8 @@
 namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Logger;
 
 /**
@@ -57,15 +58,21 @@ class CacheWarmer
     protected $logger;
 
     /**
+     * @var ClientInterface
+     */
+    private $guzzleClient;
+
+    /**
      * standard constructor
      *
      * @param Connection $connection
      * @param Logger $logger
      */
-    public function __construct(Connection $connection, Logger $logger)
+    public function __construct(Connection $connection, Logger $logger, GuzzleFactory $guzzleFactory)
     {
         $this->connection = $connection;
         $this->logger = $logger;
+        $this->guzzleClient = $guzzleFactory->createClient();
     }
 
     /**
@@ -190,21 +197,18 @@ class CacheWarmer
      */
     public function callUrls($urls, $shopId)
     {
-        $httpClient = new Client();
         $shop = $this->getShopDataById($shopId);
 
-        //don't verify the ssl certificate
-        $guzzleConfig['verify'] = false;
-
+        $guzzleConfig = [];
         if (!empty($shop["main_id"])) {
             //is not the main shop call url without shop cookie encoded in it
             $guzzleConfig['cookies'] = ['shop' => $shopId];
         }
 
         foreach ($urls as $url) {
-            $request = $httpClient->createRequest('GET', $url, $guzzleConfig);
+            $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
             try {
-                $httpClient->send($request);
+                $this->guzzleClient->send($request);
             } catch (\Exception $e) {
                 $this->logger->error(
                     "Warm up http-cache error with shopId " . $shopId . " " . $e->getMessage()
