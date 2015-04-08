@@ -16,7 +16,7 @@ Thumbs.db
 
 # Composer
 /composer.phar
-/vendor/
+/vendor/*
 
 # Internal Repositories
 /internal
@@ -51,3 +51,6 @@ Thumbs.db
 
 # Snippet exports
 /snippetsExport/
+
+# never skip an .htaccess
+!**/.htaccess
