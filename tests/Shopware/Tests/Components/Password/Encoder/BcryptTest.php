@@ -135,11 +135,11 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components
      */
     public function testIfSaltIsGivenHashIsKnown()
     {
-        $expectedHash = '$2y$04$T3l1YWl1Ri5CY3c3bU5DYOiIKqbbPpdcIiqpnkLoRwJkELw/uCaUO';
+        $expectedHash = '$2y$04$usesomesillystringfore0pFChtAErThomfG2Hq4BYOHbY1fhRUq';
 
         $this->hasher = new \Shopware\Components\Password\Encoder\Bcrypt(array(
-            'cost' => 4,
-            'salt' => 'OyuaiuF.Bcw7mNCak/3Au7c=',
+            'cost' => 04,
+            'salt' => 'usesomesillystringforsalt',
         ));
 
         $hash = $this->hasher->encodePassword('foobar');
