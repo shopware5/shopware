@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         { name : 'name', type: 'string' },
         { name : 'position', type: 'integer', useNull:true, defaultValue: null},
         { name : 'metaKeywords', type: 'string', useNull:true, defaultValue: null },
+        { name : 'metaTitle', type: 'string', useNull:true, defaultValue: null },
         { name : 'metaDescription', type: 'string', useNull:true, defaultValue: null },
         { name : 'cmsHeadline', type: 'string', useNull:true, defaultValue: null },
         { name : 'cmsText', type: 'string', useNull:true, defaultValue: null },
