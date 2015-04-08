@@ -92,6 +92,15 @@ class Category extends ModelEntity
     private $position;
 
     /**
+     * SEO friendly title which is displayed in the HTML page.
+     *
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="text", nullable=true)
+     */
+    private $metaTitle;
+
+    /**
      * Keeps the meta keywords which are displayed in the HTML page.
      *
      * @var string $metaKeywords
@@ -988,5 +997,21 @@ class Category extends ModelEntity
         $this->productBoxLayout = $productBoxLayout;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
     }
 }
