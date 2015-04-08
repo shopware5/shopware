@@ -9,16 +9,24 @@
 
         /**
          * Initializes the plugin and sets up all necessary event listeners.
-         * @returns {boolean}
          */
         init: function() {
-            var me = this,
-                isIE = me.isIE();
-            
+            var me = this;
+
             // If the browser supports the feature, we don't need to take action
-            if(!isIE) {
+            if(!me.isIE()) {
                 return false;
             }
+
+            me.applyDataAttributes();
+            me.registerEvents();
+        },
+
+        /**
+         * Registers all necessary event listener.
+         */
+        registerEvents: function() {
+            var me = this;
 
             me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
         },
@@ -52,8 +60,14 @@
             $form.submit();
         },
 
+        /**
+         * Destroy method of the plugin.
+         * Removes attached event listener.
+         */
         destroy: function() {
+            var me = this;
 
+            me._destroy();
         }
     });
 })(jQuery, window, document);
