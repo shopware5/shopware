@@ -101,27 +101,11 @@ class ProductAttributeFacet implements FacetInterface
     }
 
     /**
-     * @param string $field
-     */
-    public function setField($field)
-    {
-        $this->field = $field;
-    }
-
-    /**
      * @return string
      */
     public function getMode()
     {
         return $this->mode;
-    }
-
-    /**
-     * @param string $mode
-     */
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
     }
 
     /**
