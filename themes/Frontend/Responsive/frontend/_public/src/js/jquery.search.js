@@ -163,6 +163,25 @@
             }
 
             /**
+            * Converts the url to a protocol relative url, so we don't need to manually
+            * check the used http protocol. See the example from paul irish to get an idea
+            * how it should work:
+            *    `http://www.paulirish.com/2010/the-protocol-relative-url/`
+            *    `http://blog.httpwatch.com/2010/02/10/using-protocol-relative-urls-to-switch-between-http-and-https/`
+            *
+            * @param {String} url - the url which needs to be converted
+            * @returns {String} converted string
+            */
+            var convertUrlToRelativeUrl = function(url) {
+                url = url.replace('https:', '');
+                url = url.replace('http:', '');
+
+                return url;
+            };
+
+            me.requestURL = convertUrlToRelativeUrl(me.requestURL);
+
+            /**
              * The search field itself.
              *
              * @public
