@@ -333,7 +333,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $shopwareId = $this->Request()->get('shopwareID');
         $password = $this->Request()->get('password');
-        $domain = 'http://'. $shop->getHost();
+        $domain = $shop->getHost();
 
         try {
             $token = $this->getToken($shopwareId, $password);
