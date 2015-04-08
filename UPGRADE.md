@@ -17,6 +17,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed Service `guzzle_http_client`, use `guzzle_http_client_factory` instead.
 * Added support for Bundle of CA Root Certificates. See: http://curl.haxx.se/docs/caextract.html.
 * Removed `setField` and `setMode` function in \Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet.
+* Removed unnecessary theme variable prefix for less compiler. Each theme config variable prefixed with "theme" . ucfirst($key) which generates @themeBrandPrimary. This variables were remapped inside responsive theme.
 
 ## 5.0.0 RC1
 * New orders will no longer set `s_order.transactionID` automatically from POST data. 3rd party plugins can still use this value as before.
