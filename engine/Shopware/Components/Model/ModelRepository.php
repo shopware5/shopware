@@ -46,15 +46,11 @@ use Doctrine\ORM\Query\Expr;
 class ModelRepository extends EntityRepository
 {
     /**
-     * Create a new QueryBuilder instance that is pre populated for this entity name
-     *
-     * @param   string $alias
-     * @return \Doctrine\ORM\QueryBuilder
-     * @return  \Doctrine\ORM\QueryBuilder
+     * {@inheritdoc}
      */
-    public function createQueryBuilder($alias)
+    public function createQueryBuilder($alias, $indexBy = null)
     {
-        $builder = parent::createQueryBuilder($alias);
+        $builder = parent::createQueryBuilder($alias, $indexBy = null);
         $builder->setAlias($alias);
 
         return $builder;
