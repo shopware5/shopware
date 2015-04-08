@@ -41,7 +41,8 @@
         "behat/mink-extension": "@stable",
         "behat/mink-sahi-driver": "@stable",
         "behat/mink-goutte-driver": "@stable",
-        "sensiolabs/behat-page-object-extension": "*"
+        "sensiolabs/behat-page-object-extension": "*",
+        "squizlabs/php_codesniffer": "~2.3"
     },
     "autoload": {
         "psr-0": {
