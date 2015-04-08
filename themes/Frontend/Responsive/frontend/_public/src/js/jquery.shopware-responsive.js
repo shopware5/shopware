@@ -101,7 +101,7 @@ $(function () {
     // Emotion Ajax Loader
     $('.emotion--wrapper').emotionLoader();
 
-    $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
+    $('input[type="submit"][form], button[form]').formPolyfill();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
