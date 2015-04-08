@@ -40,15 +40,15 @@ Ext.define('Shopware.apps.Emotion.view.components.HtmlVideo', {
         },
         'webm_video': {
             fieldLabel: '{s name=webm_video/label}.webm video{/s}',
-            supportText: '{s name=webm_video/support}Video for browsers with WebM support. Also external path allowed.{/s}'
+            supportText: '{s name=webm_video/support}Video for browsers with WebM support. External path also allowed.{/s}'
         },
         'ogg_video': {
             fieldLabel: '{s name=ogg_video/label}.ogv video{/s}',
-            supportText: '{s name=ogg_video/support}Video for browsers with Ogg support. Also external path allowed.{/s}'
+            supportText: '{s name=ogg_video/support}Video for browsers with Ogg support. External path also allowed.{/s}'
         },
         'h264_video': {
             fieldLabel: '{s name=h264_video/label}.mp4 video{/s}',
-            supportText: '{s name=h264_video/support}Video for browsers with MP4 support. Also external path allowed.{/s}'
+            supportText: '{s name=h264_video/support}Video for browsers with MP4 support. External path also allowed.{/s}'
         },
         'fallback_picture': {
             fieldLabel: '{s name=fallback_picture/label}Preview image{/s}',
