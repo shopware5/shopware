@@ -19,9 +19,9 @@
 							{if !$date.removeProperty}
 								{if $smarty.get.sFilterDate==$date.dateFormatDate}
 									{$filterDateActive=true}
-									<li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
+									<li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:"{s name="BlogHeaderFilterDateFormat"}{/s}"} ({$date.dateCount})</a></li>
 								{else}
-									<li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
+									<li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:"{s name="BlogHeaderFilterDateFormat"}{/s}"} ({$date.dateCount})</a></li>
 								{/if}
 							{elseif $filterDateActive}
 								<li class="filter--entry close"><a href="{$date.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
