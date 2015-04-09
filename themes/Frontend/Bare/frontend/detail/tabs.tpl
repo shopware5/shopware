@@ -49,7 +49,7 @@
                                     {block name="frontend_detail_tabs_description_preview"}
                                         <div class="tab--preview">
                                             {block name="frontend_detail_tabs_content_description_preview_inner"}
-                                                {$sArticle.description_long|truncate:100:'...'}<a href="#" class="tab--link" title="{s name="PreviewTextMore"}{/s}">{s name="PreviewTextMore"}{/s}</a>
+                                                {$sArticle.description_long|strip_tags|truncate:100:'...'}<a href="#" class="tab--link" title="{s name="PreviewTextMore"}{/s}">{s name="PreviewTextMore"}{/s}</a>
                                             {/block}
                                         </div>
                                     {/block}
