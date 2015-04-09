@@ -2,71 +2,69 @@
     'use strict';
 
     $.plugin('shippingPayment', {
+
+        defaults: {
+
+            formSelector: '#shippingPaymentForm',
+
+            radioSelector: 'input.auto_submit[type=radio]',
+
+            submitSelector: 'input[type=submit]'
+        },
+
+        /**
+         * Plugin constructor.
+         */
         init: function () {
             var me = this;
 
+            me.applyDataAttributes();
             me.registerEvents();
         },
 
+        /**
+         * Registers all necessary event listener.
+         */
         registerEvents: function () {
-            var me = this,
-                isIE = me.isIE();
+            var me = this;
 
-
-            me.$el.delegate('input.auto_submit[type=radio]', 'change', $.proxy(me.onInputChanged, me));
-
-            // If the browser supports the feature, we don't need to take action
-            if(!isIE) {
-                return false;
-            }
-
-            me.$el.delegate('input[type=submit]', 'click', $.proxy(me.onSubmitForm, me));
+            me.$el.on('change', me.opts.radioSelector, $.proxy(me.onInputChanged, me));
         },
 
+        /**
+         * Called on change event of the radio fields.
+         */
         onInputChanged: function () {
             var me = this,
-                form = $('#shippingPaymentForm'),
-                url = form.attr('action');
+                form = me.$el.find(me.opts.formSelector),
+                url = form.attr('action'),
+                data = form.serialize() + '&isXHR=1';
 
             $.loadingIndicator.open();
 
             $.ajax({
                 type: "POST",
                 url: url,
-                data: $("#shippingPaymentForm").serialize() + '&isXHR=1',
+                data: data,
                 success: function(res) {
                     me.$el.empty().html(res);
+                    me.$el.find('input[type="submit"][form], button[form]').formPolyfill();
                     $.loadingIndicator.close();
+                    window.picturefill();
                 }
             })
         },
 
         /**
-         * Checks if we're dealing with the internet explorer.
-         *
-         * @private
-         * @returns {Boolean} Truthy, if the browser supports it, otherwise false.
+         * Destroy method of the plugin.
+         * Removes attached event listener.
          */
-        isIE: function() {
-            var myNav = navigator.userAgent.toLowerCase();
-            return myNav.indexOf('msie') != -1 || !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
-        },
+        destroy: function() {
+            var me = this;
 
-        /**
-         * Event listener method which is necessary when the browser
-         * doesn't support the ```form``` attribute on ```input``` elements.
-         * @returns {boolean}
-         */
-        onSubmitForm: function() {
-            var me = this,
-                $form = me.$el.find('#shippingPaymentForm');
+            me.$el.off('change', me.opts.radioSelector);
 
-            // We can't find the form
-            if(!$form.length) {
-                return false;
-            }
-
-            $form.submit();
+            me._destroy();
         }
     });
 })(jQuery);
