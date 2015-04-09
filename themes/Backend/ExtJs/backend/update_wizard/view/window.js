@@ -13,7 +13,7 @@ Ext.define('Shopware.apps.UpdateWizard.view.Window', {
         flex: 1
     },
 
-    width: 820,
+    minWidth: 820,
     height: 467,
     title: '{s name="start_headline"}{/s}',
 
