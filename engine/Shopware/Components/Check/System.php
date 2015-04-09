@@ -75,22 +75,21 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      */
     protected function check($name)
     {
-        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
+        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
         } elseif (function_exists($name)) {
             return true;
-        } elseif (($value = ini_get($name))!==null) {
-            if (strtolower($value)=='off' || $value==0) {
+        } elseif (($value = ini_get($name)) !== null) {
+            if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
-            } elseif (strtolower($value)=='on' || $value==1) {
+            } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
             } else {
                 return $value;
             }
-            return (!empty($value)&&strtolower($value)!='off');
         } else {
             return null;
         }
