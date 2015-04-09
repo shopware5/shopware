@@ -28,11 +28,20 @@ Ext.define('Shopware.apps.UpdateWizard.view.Plugins', {
         text = Ext.String.format('{s name="plugins_installed"}{/s}', me.plugins.length);
         me.headline.update(text);
 
-        text = Ext.String.format('{s name="plugins_update_required"}{/s}', me.updatable.length, me.plugins.length);
-        me.updateNotice.update(text);
+        if (me.updatable.length > 0) {
+            text = Ext.String.format('{s name="plugins_update_required"}{/s}', me.updatable.length, me.plugins.length);
+            me.updateNotice.update(text);
+        } else {
+            me.updateNotice.hide();
+            me.pluginManagerButton.hide();
+        }
 
-        text = Ext.String.format('{s name="plugins_not_updatable"}{/s}', me.notUpdatable.length, me.plugins.length);
-        me.notUpdatableNotice.update(text);
+        if (me.notUpdatable.length > 0) {
+            text = Ext.String.format('{s name="plugins_not_updatable"}{/s}', me.notUpdatable.length, me.plugins.length);
+            me.notUpdatableNotice.update(text);
+        } else {
+            me.notUpdatableNotice.hide();
+        }
 
         var plugins = [];
         Ext.each(me.notUpdatable, function(plugin) {

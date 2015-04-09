@@ -61,8 +61,8 @@
 
         .feature {
             display: inline-block;
-            margin-left: 30px;
             text-align: center;
+            width: 33.3%;
 
             .feature-title {
                 padding-top: 20px;
@@ -74,6 +74,7 @@
 
             .image {
                 width: 200px;
+                margin: 0 auto;
                 img { display: block; width: 100% }
             }
         }
