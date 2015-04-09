@@ -110,6 +110,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             $order->dispatchId = Shopware()->Session()->sDispatch;
             $order->sNet = empty($user['additional']['charge_vat']);
             $order->uniqueID = $paymentUniqueId;
+            $order->deviceType = $this->Request()->getDeviceType();
             $orderNumber = $order->sSaveOrder();
         }
 
