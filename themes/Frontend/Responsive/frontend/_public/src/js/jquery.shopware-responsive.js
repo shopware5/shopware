@@ -36,7 +36,7 @@ $(function () {
         .addPlugin('*[data-search="true"]', 'search')
 
         // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'scroll', ['xs', 's', 'm'])
+        .addPlugin('.btn--password, .btn--email', 'scrollAnimate', ['xs', 's', 'm'])
 
         // Collapse panel
         .addPlugin('.btn--password, .btn--email', 'collapsePanel', ['l', 'xl'])
@@ -68,7 +68,7 @@ $(function () {
         .addPlugin('.premium-product--content', 'productSlider')
 
         // Detail page tab menus
-        .addPlugin('.product--rating-link, .link--publish-comment', 'scroll', {
+        .addPlugin('.product--rating-link, .link--publish-comment', 'scrollAnimate', {
             scrollTarget: '.tab-menu--product'
         })
         .addPlugin('.tab-menu--product', 'tabMenu', ['s', 'm', 'l', 'xl'])
@@ -94,7 +94,7 @@ $(function () {
 
     $('*[data-filter-type]').filterComponent();
     $('*[data-listing-actions="true"]').listingActions();
-    $('*[data-scroll="true"]').scroll();
+    $('*[data-scroll="true"]').scrollAnimate();
     $('*[data-ajax-wishlist="true"]').ajaxWishlist();
     $('*[data-image-gallery="true"]').imageGallery();
 

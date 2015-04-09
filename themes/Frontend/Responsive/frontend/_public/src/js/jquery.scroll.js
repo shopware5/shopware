@@ -2,12 +2,12 @@
     'use strict';
 
     /**
-     * Shopware Search Field Plugin.
+     * Shopware Scroll Plugin.
      *
      * This plugin scrolls the page or given element to a certain point when the
      * plugin element was clicked.
      */
-    $.plugin('scroll', {
+    $.plugin('scrollAnimate', {
 
         defaults: {
 
