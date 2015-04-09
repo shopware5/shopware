@@ -47,6 +47,7 @@ class Application extends BaseApplication
 
         $config = require __DIR__ . '/../../config/config.php';
         $this->container = new Container(new \Pimple(), $config);
+        $this->container->setParameter('environment', $env);
     }
 
     /**
