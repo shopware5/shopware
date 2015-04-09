@@ -9,4 +9,8 @@ $autoloader->addPsr4(
     SW_PATH . '/engine/Shopware/Components/Migrations/'
 );
 
+$autoloader->addClassMap(array(
+    'Shopware\\Components\\ConfigLoader' => SW_PATH . '/engine/Shopware/Components/ConfigLoader.php'
+));
+
 return $autoloader;

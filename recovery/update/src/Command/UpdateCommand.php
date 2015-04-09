@@ -39,6 +39,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateCommand extends Command
@@ -64,6 +65,7 @@ class UpdateCommand extends Command
     protected function configure()
     {
         $this->setName('update');
+        $this->addOption('env', 'e', InputOption::VALUE_OPTIONAL, 'Sets the environment');
     }
 
     /**
