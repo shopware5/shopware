@@ -52,7 +52,7 @@
                                 {* Comments *}
                                 {block name='frontend_blog_detail_comments'}
                                     <span class="blog--metadata-comments blog--metadata">
-                                        <a data-scroll="true" data-scrollTarget=".blog--comments" href="#commentcontainer" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
+                                        <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
                                     </span>
                                 {/block}
 
@@ -60,7 +60,7 @@
                                 {block name='frontend_blog_detail_rating'}
                                     {if $sArticle.sVoteAverage|round}
                                         <span class="blog--metadata-rating blog--metadata">
-                                            <a data-scroll="true" data-scrollTarget=".blog--comments" href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='BlogHeaderRating'}{/s}"|escape}">
+                                            <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" class="blog--rating-link" rel="nofollow" title="{"{s name='BlogHeaderRating'}{/s}"|escape}">
                                                 {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count}
                                             </a>
                                         </span>
