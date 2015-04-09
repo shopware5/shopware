@@ -80,6 +80,11 @@ It contains the product actions, the product information such as pictures and de
 	.product--image-container {
         .unitize-margin(0, 0, 20, 0);
         width: 100%;
+
+        // Fixing the one pixel rounding error occurring when using a percentage based width.
+        .image-slider--slide {
+            margin-right: -0.5px;
+        }
 	}
 
     .alert {
