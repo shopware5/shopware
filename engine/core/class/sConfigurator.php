@@ -267,7 +267,15 @@ class sConfigurator
             foreach ($sConfigurator as &$group) {
                 $preSelectedOption = $preSelectedOptions[$group['groupID']];
                 $id = $preSelectedOption['id'];
+
                 if (array_key_exists($id, $group['values'])) {
+                    // reset selection
+                    foreach ($group['values'] as &$value) {
+                        $value['user_selected'] = 0;
+                        $value['selected'] = 0;
+                    }
+
+                    // set the correct one instead
                     $group['values'][$preSelectedOption['id']]['user_selected'] = 1;
                     $group['values'][$preSelectedOption['id']]['selected'] = 1;
                 }
