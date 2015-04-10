@@ -36,27 +36,27 @@ Ext.define('Shopware.apps.Emotion.view.components.HtmlVideo', {
     snippets: {
         'videoMode': {
             fieldLabel: '{s name=videoMode/label}Video Mode{/s}',
-            supportText: '{s name=videoMode/support}Determine the behavior of the video. Determine whether the video should be shown scaling, filling or stretched.{/s}'
+            supportText: '{s name=videoMode/support}Determine the behavior of the video. Determine whether the video should scale, fill or stretch the element.{/s}'
         },
         'webm_video': {
-            fieldLabel: '{s name=webm_video/label}WebM Video{/s}',
-            supportText: '{s name=webm_video/support}Video for Google Chrome{/s}'
+            fieldLabel: '{s name=webm_video/label}.webm video{/s}',
+            supportText: '{s name=webm_video/support}Video for browsers with WebM support. External path also allowed.{/s}'
         },
         'ogg_video': {
-            fieldLabel: '{s name=ogg_video/label}Ogg Theora Video{/s}',
-            supportText: '{s name=ogg_video/support}Video for Firefox{/s}'
+            fieldLabel: '{s name=ogg_video/label}.ogv video{/s}',
+            supportText: '{s name=ogg_video/support}Video for browsers with Ogg support. External path also allowed.{/s}'
         },
         'h264_video': {
-            fieldLabel: '{s name=h264_video/label}H264 Video{/s}',
-            supportText: '{s name=h264_video/support}H.264 Video for Safari{/s}'
+            fieldLabel: '{s name=h264_video/label}.mp4 video{/s}',
+            supportText: '{s name=h264_video/support}Video for browsers with MP4 support. External path also allowed.{/s}'
         },
         'fallback_picture': {
-            fieldLabel: '{s name=fallback_picture/label}Fallback image{/s}',
-            supportText: '{s name=fallback_picture/support}Fallback image for when the video is loading{/s}'
+            fieldLabel: '{s name=fallback_picture/label}Preview image{/s}',
+            supportText: '{s name=fallback_picture/support}The image which is shown before the video starts.{/s}'
         },
         'html_text': {
-            fieldLabel: '{s name=html_text/label}Text{/s}',
-            supportText: '{s name=html_text/support}Text to be displayed with the video.{/s}'
+            fieldLabel: '{s name=html_text/label}Overlay text{/s}',
+            supportText: '{s name=html_text/support}Text to be displayed in an overlay on the top of the video.{/s}'
         },
         'autoplay': {
             fieldLabel: '{s name=autoplay/label}Automatically play video{/s}'
@@ -66,31 +66,31 @@ Ext.define('Shopware.apps.Emotion.view.components.HtmlVideo', {
         },
         'controls': {
             fieldLabel: '{s name=controls/label}Display video control{/s}',
-            supportText: '{s name=controls/support}Not recommended for filling or stretching mode.{/s}'
+            supportText: '{s name=controls/support}Will only be shown on normal scale mode. On the other modes small buttons are shown at the top.{/s}'
         },
         'loop': {
             fieldLabel: '{s name=loop/label}Loop video{/s}',
-            supportText: '{s name=loop/support}The video will be displayed in a continuous loop{/s}'
+            supportText: '{s name=loop/support}The video will be displayed in a continuous loop.{/s}'
         },
         'muted': {
-            fieldLabel: '{s name=muted/label}Video stumm schalten{/s}',
-            supportText: '{s name=muted/support}Die Ton-Spur des Videos wird stumm geschaltet{/s}'
+            fieldLabel: '{s name=muted/label}Mute video{/s}',
+            supportText: '{s name=muted/support}The audio track of the video is muted.{/s}'
         },
         'scale': {
-            fieldLabel: '{s name=scale/label}Zoom-Faktor{/s}',
-            supportText: '{s name=scale/support}Wenn Sie den Modus Füllen gewählt haben können Sie den Zoom-Faktor mit dieser Option ändern.{/s}'
+            fieldLabel: '{s name=scale/label}Zoom factor{/s}',
+            supportText: '{s name=scale/support}Zoom factor to apply when using the \'fill\' mode.{/s}'
         },
         'overlay': {
             fieldLabel: '{s name=overlay/label}Overlay color{/s}',
             supportText: '{s name=overlay/support}Set a background color for the overlay. A RGBA value is recommended.{/s}'
         },
         'originTop': {
-            fieldLabel: '{s name=originTop/label}Top starting point{/s}',
-            supportText: '{s name=originTop/support}Sets the top starting point for the scaling of the video. The value is given in percentage.{/s}'
+            fieldLabel: '{s name=originTop/label}Top scale origin{/s}',
+            supportText: '{s name=originTop/support}Sets the top origin for the scaling of the video. The value is given in percentage.{/s}'
         },
         'originLeft': {
-            fieldLabel: '{s name=originLeft/label}Left starting point{/s}',
-            supportText: '{s name=originLeft/support}Sets the left starting point for the scaling of the video. The value is given in percentage.{/s}'
+            fieldLabel: '{s name=originLeft/label}Left scale origin{/s}',
+            supportText: '{s name=originLeft/support}Sets the left origin for the scaling of the video. The value is given in percentage.{/s}'
         }
 }
 });
