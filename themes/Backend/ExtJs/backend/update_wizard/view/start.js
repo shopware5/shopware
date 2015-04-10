@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.UpdateWizard.view.Start', {
         var icon = '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/update_wizard/tour-icon.png"}';
         me.productTourLink = Ext.create('Ext.container.Container', {
             cls: 'update-wizard-tour-link text',
-            html: '<a target="_blank" href="http://www.shopware.de/"><div class="image"><img src="'+icon+'" /><span>{s name="start_tour"}{/s}</span></div></a>'
+            html: '<a target="_blank" href="{s name="start_tour_link"}http://www.shopware.com/{/s}"><div class="image"><img src="'+icon+'" /><span>{s name="start_tour_label"}{/s}</span></div></a>'
         });
 
         return [me.features, me.productTourLink];
