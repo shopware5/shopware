@@ -224,7 +224,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $childrenOfChildren = $categoryRepository->getCategoryByIdQuery($child['id'])->getArrayResult();
             $childrenOfChildren = $childrenOfChildren[0]['children'];
 
-            $child['childrenCount'] = count($childrenOfChildren);
+            $child['childrenCount'] = 0;
+
+            foreach($childrenOfChildren as $childrenChild) {
+                if($childrenChild['active']) {
+                    $child['childrenCount']++;
+                }
+            }
         }
 
         return $category;

@@ -61,27 +61,29 @@
                 {* sub categories *}
                 {foreach $category.children as $children}
                     {block name="widgets_listing_get_category_categories_item"}
-                        <li class="navigation--entry" role="menuitem">
-                            {block name="widgets_listing_get_category_categories_item_link"}
-                                <a href="{$children.link}" title="{$children.name|escape}"
-                                   class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
-                                   data-category-id="{$children.id}"
-                                   data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}">
+                        {if $children.active}
+                            <li class="navigation--entry" role="menuitem">
+                                {block name="widgets_listing_get_category_categories_item_link"}
+                                    <a href="{$children.link}" title="{$children.name|escape}"
+                                       class="navigation--link{if $children.childrenCount} link--go-forward{/if}"
+                                       data-category-id="{$children.id}"
+                                       data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$children.id}}">
 
-                                    {block name="widgets_listing_get_category_categories_item_link_name"}
-                                        {$children.name}
-                                    {/block}
+                                        {block name="widgets_listing_get_category_categories_item_link_name"}
+                                            {$children.name}
+                                        {/block}
 
-                                    {block name="widgets_listing_get_category_categories_item_link_children"}
-                                        {if $children.childrenCount}
-                                            <span class="is--icon-right">
-                                                <i class="icon--arrow-right"></i>
-                                            </span>
-                                        {/if}
-                                    {/block}
-                                </a>
-                            {/block}
-                        </li>
+                                        {block name="widgets_listing_get_category_categories_item_link_children"}
+                                            {if $children.childrenCount}
+                                                <span class="is--icon-right">
+                                                    <i class="icon--arrow-right"></i>
+                                                </span>
+                                            {/if}
+                                        {/block}
+                                    </a>
+                                {/block}
+                            </li>
+                        {/if}
                     {/block}
                 {/foreach}
             </ul>
