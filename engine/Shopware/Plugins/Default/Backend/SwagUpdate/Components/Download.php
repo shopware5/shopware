@@ -113,12 +113,12 @@ class Download
     }
 
     /**
-     * @param \SplFileObject $partFile
-     * @param string         $destinationUri
+     * @param string partFilePath
+     * @param string $destinationUri
      */
-    private function moveFile(\SplFileObject $partFile, $destinationUri)
+    private function moveFile($partFilePath, $destinationUri)
     {
-        rename($partFile->getPathname(), $destinationUri);
+        rename($partFilePath, $destinationUri);
     }
 
     /**
@@ -145,11 +145,11 @@ class Download
         $size = $partFile->getSize();
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            $this->moveFile($partFile, $destinationUri);
-
-            # close local file
+            # close local file connections before move for windows
+            $partFilePath = $partFile->getPathname();
             fclose($destination);
             unset($partFile);
+            $this->moveFile($partFilePath, $destinationUri);
 
             return 0;
         }
@@ -210,9 +210,14 @@ class Download
 
         clearstatcache(false, $partFile->getPathname());
         $size = $partFile->getSize();
+
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            $this->moveFile($partFile, $destinationUri);
+            # close local file connections before move for windows
+            $partFilePath = $partFile->getPathname();
+            fclose($destination);
+            unset($partFile);
+            $this->moveFile($partFilePath, $destinationUri);
         }
 
         // close local file
