@@ -122,6 +122,7 @@ class Repository extends ModelRepository
      * @param bool $summary
      * @param      $fromDate
      * @param      $toDate
+     * @param      $userCurrencyFactor
      * @return \Doctrine\ORM\Query
      */
     public function getStatisticListQuery($order = null, $offset = null, $limit = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
@@ -142,6 +143,7 @@ class Repository extends ModelRepository
      * @param bool $summary
      * @param      $fromDate
      * @param      $toDate
+     * @param      $userCurrencyFactor
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
@@ -195,6 +197,7 @@ class Repository extends ModelRepository
      * @param $partnerId
      * @param $fromDate
      * @param $toDate
+     * @param $userCurrencyFactor
      * @return \Doctrine\ORM\Query
      */
     public function getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
@@ -209,6 +212,7 @@ class Repository extends ModelRepository
      * @param $partnerId
      * @param $fromDate
      * @param $toDate
+     * @param $userCurrencyFactor
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
