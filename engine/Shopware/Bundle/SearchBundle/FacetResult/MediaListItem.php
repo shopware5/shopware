@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 class MediaListItem extends Extendable
 {
     /**
-     * @var int
+     * @var int|string
      */
     private $id;
 
@@ -56,7 +56,7 @@ class MediaListItem extends Extendable
     private $media;
 
     /**
-     * @param int $id
+     * @param int|string $id
      * @param string $label
      * @param boolean $active
      * @param Media $media
@@ -72,7 +72,7 @@ class MediaListItem extends Extendable
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getId()
     {

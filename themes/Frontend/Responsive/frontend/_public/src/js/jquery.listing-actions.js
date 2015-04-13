@@ -790,7 +790,8 @@
         createActiveFilterLabel: function(param, value) {
             var me = this,
                 $label,
-                labelText = '';
+                labelText = '',
+                valueString = value + '';
 
             if (param == 'rating' && value > 0) {
                 labelText = me.createStarLabel(value);
@@ -802,7 +803,7 @@
                     labelText = $label.prev('span').html() + $label.html();
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
-                } else if (value > 0) {
+                } else if (value > 0 || valueString.length > 0) {
                     labelText = $label.html();
                 }
             }
