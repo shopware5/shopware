@@ -186,7 +186,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getFilterQueryBuilder($categoryIds, $filter);
         $builder->select(array(
-            'DATE_FORMAT(blog.displayDate,\'%Y-%m-%d\') as dateFormatDate',
+            'DATE_FORMAT(blog.displayDate,\'%Y-%m\') as dateFormatDate',
             'COUNT(DISTINCT blog.id) as dateCount'
         ));
         $builder->groupBy("dateFormatDate");
