@@ -12,6 +12,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         events: 'Shopware.apps.PluginManager.view.PluginHelper'
     },
 
+    snippets: {
+        'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}{/s}',
+        'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}{/s}',
+        'licencePluginActivate':         '{s name="licence_plugin_activate"}{/s}'
+    },
+
     init: function() {
         var me = this;
 
@@ -299,7 +305,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     case 'download':
                         me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
-                            '{s name="licence_plugin_download_and_install"}{/s}',
+                            me.snippets.licencePluginDownloadInstall,
                             function() {
                                 me.updateDummyPlugin(licence, function () {
                                     me.installPlugin(licence, function () {
@@ -313,7 +319,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     case 'install':
                         me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
-                            '{s name="licence_plugin_install_and_activate"}{/s}',
+                            me.snippets.licencePluginDownloadActivate,
                             function() {
                                 me.installPlugin(licence, function() {
                                     me.activatePlugin(licence, callback);
@@ -326,7 +332,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     case 'activate':
                         me.confirmMessage(
                             '{s name="licence_plugin_required_title"}{/s}',
-                            '{s name="licence_plugin_activate"}{/s}',
+                            me.snippets.licencePluginActivate,
                             function() {
                                 me.activatePlugin(licence, callback);
                             }
