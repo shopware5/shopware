@@ -425,28 +425,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function addAccessoriesAction()
     {
-        $accessories = $this->Request()->getParam('sAddAccessories');
-        $accessoriesQuantity = $this->Request()->getParam('sAddAccessoriesQuantity');
-        if (is_string($accessories)) {
-            $accessories = explode(';', $accessories);
+        $this->addAccessories(
+            $this->Request()->getParam('sAddAccessories'),
+            $this->Request()->getParam('sAddAccessoriesQuantity')
+        );
+
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+        } else {
+            $this->forward($this->Request()->getParam('sTargetAction', 'index'));
         }
-
-        if (!empty($accessories)&&is_array($accessories)) {
-            foreach ($accessories as $key => $accessory) {
-                try {
-                    if (!empty($accessoriesQuantity[$key])) {
-                        $quantity = intval($accessoriesQuantity[$key]);
-                    } else {
-                        $quantity = 1;
-                    }
-                    $this->basket->sAddArticle($accessory, $quantity);
-                } catch (Exception $e) {
-
-                }
-            }
-        }
-
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**
@@ -1320,9 +1308,42 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->getInstockInfo($orderNumber, $quantity)
         );
 
+        if ($this->Request()->get('sAddAccessories')) {
+            $this->addAccessories(
+                $this->Request()->getParam('sAddAccessories'),
+                $this->Request()->getParam('sAddAccessoriesQuantity')
+            );
+        }
+
         $this->basket->sAddArticle($orderNumber, $quantity);
 
         $this->forward('ajaxCart');
+    }
+
+    /**
+     * @param string|array $accessories
+     * @param array $quantities
+     */
+    private function addAccessories($accessories, $quantities)
+    {
+        if (is_string($accessories)) {
+            $accessories = explode(';', $accessories);
+        }
+
+        if (empty($accessories) || !is_array($accessories)) {
+            return;
+        }
+
+        foreach ($accessories as $key => $accessory) {
+            try {
+                $quantity = 1;
+                if (!empty($quantities[$key])) {
+                    $quantity = intval($quantities[$key]);
+                }
+
+                $this->basket->sAddArticle($accessory, $quantity);
+            } catch (Exception $e) { }
+        }
     }
 
     /**
