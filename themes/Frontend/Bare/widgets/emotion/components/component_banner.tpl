@@ -74,7 +74,7 @@
                                           height:{({$mapping.height} / ({$Data.fileInfo.height} / 100))|round:3}%;
                                           left:{({$mapping.x} / ({$Data.fileInfo.width} / 100))|round:3}%;
                                           top:{({$mapping.y} / ({$Data.fileInfo.height} / 100))|round:3}%"
-                                   {if $mapping.title} title="{$mapping.title|escape}"{/if}
+                                   {if $mapping.as_tooltip && $mapping.title} title="{$mapping.title|escape}"{/if}
                                    {if $mapping.linkLocation eq "external"} target="_blank"{/if}>&nbsp;</a>
                             {/foreach}
                         </div>
