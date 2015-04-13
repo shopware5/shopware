@@ -145,7 +145,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         }
 
         $items = array_map(function($row) use ($actives) {
-            return new ValueListItem($row, $row, ($row == $actives));
+            return new ValueListItem($row, $row, in_array($row, $actives));
         }, $result);
 
         if ($facet->getMode() == ProductAttributeFacet::MODE_RADIO_LIST_RESULT) {
