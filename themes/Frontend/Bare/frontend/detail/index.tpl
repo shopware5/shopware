@@ -65,7 +65,7 @@
                             {/block}
 
                             {* Product - Supplier information *}
-                            {block name='frontend_detai_supplier_info'}
+                            {block name='frontend_detail_supplier_info'}
                                 {if $sArticle.supplierImg}
                                     <div class="product--supplier">
                                         <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
