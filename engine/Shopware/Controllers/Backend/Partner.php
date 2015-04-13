@@ -130,8 +130,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $repository = Shopware()->Models()->Partner();
             $dataQuery = $repository->getStatisticListQuery($order,$offset,$limit,$partnerId,false,$fromDate,$toDate);
 
-            $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
-
+            $totalCount = $this->getStatisticListTotalCount($dataQuery);
 
             $data = $dataQuery->getArrayResult();
 
@@ -150,6 +149,34 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
+    }
+
+    /**
+     * Helper function returns total count of the passed query builder
+     *
+     * @param \Doctrine\ORM\Query $dataQuery
+     * @return int|null
+     */
+    private function getStatisticListTotalCount(\Doctrine\ORM\Query $dataQuery)
+    {
+        //userCurrencyFactor has not to be part of the count parameters
+        $originalParameters = $dataQuery->getParameters();
+        $countParameters = new \Doctrine\Common\Collections\ArrayCollection();
+
+        /** @var \Doctrine\ORM\Query\Parameter $parameter */
+        foreach($originalParameters as $parameter) {
+            if($parameter->getName() === 'userCurrencyFactor') {
+                continue;
+            }
+
+            $countParameters->add($parameter);
+        }
+
+        $dataQuery->setParameters($countParameters);
+        $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+        $dataQuery->setParameters($originalParameters);
+
+        return $totalCount;
     }
 
     /**
