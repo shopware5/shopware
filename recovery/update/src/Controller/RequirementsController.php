@@ -25,6 +25,7 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use Shopware\Recovery\Common\DependencyInjection\Container;
+use Shopware\Recovery\Common\Utils as CommonUtils;
 use Shopware\Recovery\Update\Utils;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -100,10 +101,7 @@ class RequirementsController
             'engine/Library/Mpdf/ttfontdata'   => false,
         ];
 
-        if (function_exists('apc_clear_cache')) {
-            apc_clear_cache();
-            apc_clear_cache('user');
-        }
+        CommonUtils::clearOpcodeCache();
 
         $results = [];
         foreach ($directoriesToDelete as $directory => $deleteDirecory) {
