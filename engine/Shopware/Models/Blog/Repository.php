@@ -76,12 +76,14 @@ class Repository extends ModelRepository
             'media',
             'mappingMedia',
             'tags',
+            'attribute',
             'comments'
         ))
         ->leftJoin('blog.tags', 'tags')
         ->leftJoin('blog.author', 'author')
         ->leftJoin('blog.media', 'mappingMedia' , \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
         ->leftJoin('mappingMedia.media', 'media')
+        ->leftJoin('blog.attribute', 'attribute')
         ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
