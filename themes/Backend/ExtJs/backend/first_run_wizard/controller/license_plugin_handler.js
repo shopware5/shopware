@@ -36,6 +36,12 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.LicensePluginHandler', {
 
     extend:'Shopware.apps.PluginManager.controller.Plugin',
 
+    snippets: {
+        'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}{/s}',
+        'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}{/s}',
+        'licencePluginActivate':         '{s name="licence_plugin_activate"}{/s}'
+    },
+
     init: function () {
         var me = this;
 
