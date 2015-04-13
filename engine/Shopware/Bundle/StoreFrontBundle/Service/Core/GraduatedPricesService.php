@@ -175,7 +175,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
             $price = $reference->getPrice() * $percent;
 
-            $pseudo = $reference->getPseudoPrice() * $percent;
+            $pseudo = $reference->getPseudoPrice();
 
             $rule->setPrice($price);
 
