@@ -742,7 +742,7 @@ Ext.define('Shopware.grid.Controller', {
             return false;
         }
 
-        if (!me.hasModelAction(store, 'read')) {
+        if (!me.hasModelAction(store, 'read') || store.remoteFilter == false) {
             me.localGridSearch(store, value);
             return true;
         }
