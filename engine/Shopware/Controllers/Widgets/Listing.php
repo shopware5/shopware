@@ -238,6 +238,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $query->select('category.id')
             ->from('s_categories', 'category')
             ->where('category.parent = :parentId')
+            ->andWhere('category.active = 1')
             ->setParameter(':parentId', $categoryId);
 
         $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
