@@ -18,7 +18,7 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
         return array(
             'author' => 'span.content--field:nth-of-type(2)',
             'date' => 'span.content--field:nth-of-type(3)',
-            'stars' => 'span.product--rating > meta:nth-of-type(2)',
+            'stars' => 'span.product--rating > meta:nth-of-type(1)',
             'headline' => 'h4.content--title',
             'comment' => 'p.review--content',
             'answer' => 'div + div.is--answer'

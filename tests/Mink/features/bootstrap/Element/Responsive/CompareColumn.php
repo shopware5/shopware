@@ -20,7 +20,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
             'thumbnailLink'     => 'li.entry--picture > a',
             'name'              => 'li.entry--name > a.link--name',
             'detailsButton'     => 'li.entry--name > a.btn--product',
-            'stars'             => 'li.entry--voting meta:nth-of-type(2)',
+            'stars'             => 'li.entry--voting meta:nth-of-type(1)',
             'description'       => 'li.entry--description',
             'price'             => 'li.entry--price > .price--normal'
         );
