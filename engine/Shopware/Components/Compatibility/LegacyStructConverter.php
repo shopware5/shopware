@@ -84,6 +84,62 @@ class LegacyStructConverter
     }
 
     /**
+     * @param StoreFrontBundle\Struct\Category $category
+     * @return array
+     * @throws \Exception
+     */
+    public function convertCategoryStruct(StoreFrontBundle\Struct\Category $category)
+    {
+        $media = null;
+        if ($category->getMedia()) {
+            $media = $this->convertMediaStruct($media);
+        }
+
+        return [
+            'id' => $category->getId(),
+            'parentId' => $category->getParentId(),
+            'name' => $category->getName(),
+            'position' => $category->getPosition(),
+            'metaKeywords' => $category->getMetaKeywords(),
+            'metaDescription' => $category->getMetaDescription(),
+            'cmsHeadline' => $category->getCmsHeadline(),
+            'cmsText' => $category->getCmsText(),
+            'active' => true,
+            'template' => $category->getTemplate(),
+            'productBoxLayout' => $category->getProductBoxLayout(),
+            'blog' => $category->isBlog(),
+            'path' => $category->getPath(),
+            'showFilterGroups' => $category->displayPropertySets(),
+            'external' => $category->getExternalLink(),
+            'hideFilter' => !$category->displayFacets(),
+            'hideTop' => !$category->displayInNavigation(),
+            'noViewSelect' => $category->allowViewSelect(),
+            'changed' => null,
+            'added' => null,
+            'attribute' => $category->getAttribute('core')->toArray(),
+            'attributes' => $category->getAttributes(),
+            'media' => $media,
+            'link' => $this->getCategoryLink($category)
+        ];
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Category $category
+     * @return string
+     */
+    private function getCategoryLink(StoreFrontBundle\Struct\Category $category)
+    {
+        $viewport = $category->isBlog() ? 'blog' : 'cat';
+        $params = http_build_query(
+            ['sViewport' => $viewport, 'sCategory' => $category->getId()],
+            '',
+            '&'
+        );
+
+        return $this->config->get('baseFile') . '?' . $params;
+    }
+
+    /**
      * @param StoreFrontBundle\Struct\ListProduct[] $products
      * @return array
      */

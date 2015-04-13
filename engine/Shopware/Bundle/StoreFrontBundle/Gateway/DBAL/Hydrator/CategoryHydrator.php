@@ -106,6 +106,8 @@ class CategoryHydrator extends Hydrator
 
         $category->setPosition((int) $data['__category_position']);
 
+        $category->setProductBoxLayout($data['__category_product_box_layout']);
+
         if (isset($data['__category_metakeywords'])) {
             $category->setMetaKeywords($data['__category_metakeywords']);
         }

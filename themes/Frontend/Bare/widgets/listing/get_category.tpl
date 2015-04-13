@@ -49,7 +49,7 @@
                 {block name="widgets_listing_get_category_categories_show"}
                     <li class="navigation--entry" role="menuitem">
                         {block name="widgets_listing_get_category_categories_show_link"}
-                            <a href="{$category.link}" title="{$category.name|escape} {s name="ButtonShow"}{/s}" class="navigation--link is--display-button">
+                            <a href="{$category.link}" title="{s name="ButtonShowPrepend"}{/s} {$category.name|escape} {s name="ButtonShowAppend"}{/s}" class="navigation--link is--display-button">
                                 {block name="widgets_listing_get_category_categories_show_link_name"}
                                     {s name="ButtonShowPrepend"}{/s} {$category.name} {s name="ButtonShowAppend"}{/s}
                                 {/block}
