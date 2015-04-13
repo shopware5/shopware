@@ -240,7 +240,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select("DISTINCT category.id")
             ->from('s_categories', 'category')
-            ->innerJoin('category', 's_articles_categories_ro', 'roTable', 'roTable.categoryID = category.id')
             ->where('category.path LIKE :path')
             ->andWhere('category.active = 1')
             ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
