@@ -66,6 +66,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         form.submit({
             onSuccess: function(response) {
                 var result = Ext.decode(response.responseText);
+                if (!result) {
+                    result = Ext.decode(response.responseXML.body.childNodes[0].innerHTML);
+                }
 
                 if (result.success) {
                     Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}{/s}');
