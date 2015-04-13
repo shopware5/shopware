@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 class TreeItem extends Extendable
 {
     /**
-     * @var int
+     * @var int|string
      */
     private $id;
 
@@ -55,7 +55,7 @@ class TreeItem extends Extendable
     private $values;
 
     /**
-     * @param int $id
+     * @param int|string $id
      * @param string $label
      * @param boolean $active
      * @param TreeItem[] $values
@@ -71,7 +71,7 @@ class TreeItem extends Extendable
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getId()
     {

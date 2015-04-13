@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 class ValueListItem extends Extendable
 {
     /**
-     * @var int
+     * @var int|string
      */
     private $id;
 
@@ -50,7 +50,7 @@ class ValueListItem extends Extendable
     private $active;
 
     /**
-     * @param int $id
+     * @param int|string $id
      * @param string $label
      * @param boolean $active
      * @param Attribute[] $attributes
@@ -64,7 +64,7 @@ class ValueListItem extends Extendable
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getId()
     {
