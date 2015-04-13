@@ -27,6 +27,22 @@ namespace Shopware\Recovery\Common;
 class Utils
 {
     /**
+     * Clear opcode caches to make sure that the
+     * updated files are used in the following requests.
+     */
+    public static function clearOpcodeCache()
+    {
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+            apc_clear_cache('user');
+        }
+    }
+
+    /**
      * @param $app \Slim\Slim
      * @return $this
      */
