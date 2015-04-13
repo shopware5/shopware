@@ -666,6 +666,7 @@ class Repository extends ModelRepository
      * Returns the \Doctrine\ORM\Query to select the informations of an category and its children by category id
      * @param integer $categoryId
      * @return Query
+     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
      */
     public function getCategoryByIdQuery($categoryId)
     {
@@ -680,8 +681,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCategoryByIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
      */
-
     public function getCategoryQueryBuilder()
     {
         $builder = Shopware()->Models()->createQueryBuilder();

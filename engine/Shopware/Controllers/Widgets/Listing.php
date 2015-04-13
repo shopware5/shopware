@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 
 /**
@@ -201,53 +200,47 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     /**
      * Helper function to return the category information by category id
      * @param integer $categoryId
-     * @return mixed
+     * @return array
      */
     private function getCategoryById($categoryId)
     {
-        /** @var \Shopware\Models\Category\Repository $categoryRepository */
-        $categoryRepository = $this->get('models')->getRepository('Shopware\Models\Category\Category');
-        $category = $categoryRepository->getCategoryByIdQuery($categoryId)->getArrayResult();
+        $childrenIds = $this->getCategoryChildrenIds($categoryId);
+        $childrenIds[] = $categoryId;
 
-        if (empty($category)) {
-            return array();
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $categories = $this->container->get('shopware_storefront.category_service')
+            ->getList($childrenIds, $context);
+
+        $converted = [];
+        foreach ($categories as $category) {
+            $temp = $this->container->get('legacy_struct_converter')->convertCategoryStruct($category);
+            $childrenIds = $this->getCategoryChildrenIds($category->getId());
+            $temp['childrenCount'] = count($childrenIds);
+            $converted[$category->getId()] = $temp;
         }
 
-        $category = $category[0];
+        $result = $converted[$categoryId];
+        unset($converted[$categoryId]);
+        $result['children'] = $converted;
+        $result['childrenCount'] = count($converted);
 
-        $category['link'] = $this->getCategoryLink($categoryId, $category['blog']);
-
-        foreach ($category['children'] as &$child) {
-            $child['link'] = $this->getCategoryLink($child['id'], $child['blog']);
-
-            // search for childrens
-            $childrenOfChildren = $categoryRepository->getCategoryByIdQuery($child['id'])->getArrayResult();
-            $childrenOfChildren = $childrenOfChildren[0]['children'];
-
-            $child['childrenCount'] = 0;
-
-            foreach($childrenOfChildren as $childrenChild) {
-                if($childrenChild['active']) {
-                    $child['childrenCount']++;
-                }
-            }
-        }
-
-        return $category;
+        return $result;
     }
 
     /**
-     * Helper function to create a category link
-     * @param integer $categoryId
-     * @param string $categoryName
-     * @param bool $blog
-     * @return mixed|string
+     * @param $categoryId
+     * @return array
+     * @throws Exception
      */
-    private function getCategoryLink($categoryId, $blog = false)
+    private function getCategoryChildrenIds($categoryId)
     {
-        return $this->get('config')->get('baseFile') . '?' . http_build_query([
-            'sViewport' => $blog ? 'blog' : 'cat',
-            'sCategory' => $categoryId
-        ], '', '&');
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select('category.id')
+            ->from('s_categories', 'category')
+            ->where('category.parent = :parentId')
+            ->setParameter(':parentId', $categoryId);
+
+        $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
+        return $childrenIds;
     }
 }
