@@ -126,7 +126,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
         cmsTextLabel : '{s name=view/settings_cms_text_label}Text{/s}',
 
-        metaTitle : '{s name=view/settings_meta_description_title}Meta information{/s}',
+        metaGroupTitle : '{s name=view/settings_meta_description_title}Meta information{/s}',
+        metaTitle : '{s name=view/settings_meta_title_label}Meta title{/s}',
         metaDescription : '{s name=view/settings_meta_description_label}Meta description{/s}',
         metaKeywords : '{s name=view/settings_meta_keywords_label}Meta keywords{/s}',
 
@@ -498,11 +499,15 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     {
         var me = this;
         return Ext.create('Ext.form.FieldSet',{
-            title: me.snippets.metaTitle,
+            title: me.snippets.metaGroupTitle,
             anchor: '100%',
             defaults : me.defaults,
             disabled : true,
             items : [{
+                    xtype : 'textfield',
+                    fieldLabel  : me.snippets.metaTitle,
+                    name : 'metaTitle'
+                },{
                     xtype : 'textareafield',
                     fieldLabel  : me.snippets.metaDescription,
                     name : 'metaDescription'
