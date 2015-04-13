@@ -71,7 +71,7 @@ class Detail extends \Page\Emotion\Detail
                 case 'productRating':
                     $rating = $element->getAttribute('content');
                     $rating = floatval($rating);
-                    $check[$locator] = array($rating * 2, $average);
+                    $check[$locator] = array($rating, $average);
                     break;
 
                 case 'productRatingCount':
