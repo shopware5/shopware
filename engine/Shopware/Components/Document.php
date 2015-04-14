@@ -211,6 +211,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $document->_subshop = Shopware()->Db()->fetchRow("
             SELECT
                 s.id,
+                s.document_template_id as doc_template_id,
+                s.template_id,
                 (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = s.document_template_id) as doc_template,
                 (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = s.template_id) as template,
                 s.id as isocode,
@@ -250,6 +252,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $this->_template->setTemplateDir($inheritance);
             }
         }
+
         $data = $this->_template->fetch("documents/".$this->_document["template"],$this->_view);
 
         if ($this->_renderer == "html" || !$this->_renderer) {
