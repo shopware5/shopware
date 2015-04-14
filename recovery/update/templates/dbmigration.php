@@ -8,7 +8,7 @@
 
 <div class="progress-container">
     <div class="progress">
-        <div class="progress-bar" ></div>
+        <div class="progress-bar"></div>
     </div>
 
     <div class="counter-text is--hidden">
@@ -18,7 +18,7 @@
         </p>
     </div>
 
-    <div class="progress-text">
+    <div class="progress-text is--hidden">
         <?= $language["migration_progress_text"];?>
     </div>
 
