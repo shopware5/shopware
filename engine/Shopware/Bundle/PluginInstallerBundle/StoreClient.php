@@ -347,7 +347,27 @@ class StoreClient
             case 'BinariesException-12': //Shopware version is invalid
                 throw new SbpServerException($sbpCode, 'shopware_version', $httpCode, $requestException);
 
-            case 'BinariesException-14':      //Unauthorized
+            case 'BinariesException-11':      //no fitting binary found
+                throw new LicenceException($sbpCode, 'no_fitting_binary', $httpCode, $requestException);
+            case 'BinariesException-13':
+                throw new SbpServerException($sbpCode, 'plugin_name_not_found', $httpCode, $requestException);
+            case 'BinariesException-14':
+                throw new AuthenticationException($sbpCode, 'token_invalid', $httpCode, $requestException);
+            case 'BinariesException-15':
+                throw new SbpServerException($sbpCode, 'plugin_licence_not_found', $httpCode, $requestException);
+            case 'BinariesException-16':
+                throw new SbpServerException($sbpCode, 'wrong_major_version_licence', $httpCode, $requestException);
+            case 'BinariesException-17':
+                throw new SbpServerException($sbpCode, 'licence_outdated', $httpCode, $requestException);
+            case 'BinariesException-18':
+                throw new SbpServerException($sbpCode, 'defect_subscription', $httpCode, $requestException);
+            case 'BinariesException-19':
+                throw new SbpServerException($sbpCode, 'no_version_for_subscription', $httpCode, $requestException);
+            case 'BinariesException-20':
+                throw new SbpServerException($sbpCode, 'no_version_for_provided_shopware_version', $httpCode, $requestException);
+            case 'BinariesException-21':
+                throw new SbpServerException($sbpCode, 'no_version_for_provided_shopware_version', $httpCode, $requestException);
+
             case 'UsersException-4':          //Unauthorized
             case 'OrdersException-0':         //Order authentication failed
             case 'PluginLicensesException-8': //Unauthorized
@@ -373,10 +393,6 @@ class StoreClient
             case 'UserTokensException-3': //Account is banned.
                 throw new AccountException($sbpCode, 'account_banned', $httpCode, $requestException);
 
-            case 'BinariesException-11':      //no fitting binary found
-                throw new LicenceException($sbpCode, 'no_fitting_binary', $httpCode, $requestException);
-
-            case 'BinariesException-13':      //Plugin not found
             case 'OrdersException-1':         //Ordered plugin not found
             case 'PluginLicensesException-1': //Referenced plugin not found.
                 throw new OrderException($sbpCode, 'plugin_not_found', $httpCode, $requestException);
