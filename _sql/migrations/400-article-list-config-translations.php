@@ -7,9 +7,27 @@ class Migrations_Migration400 Extends Shopware\Components\Migrations\AbstractMig
         $sql = "SET @formId = (SELECT `id` FROM `s_core_config_forms` WHERE name = 'SwagMultiEdit');";
         $this->addSql($sql);
 
-        // Fix broken config name
-        $sql = "UPDATE s_core_config_elements SET name = 'clearCache', value = 'b:0;' WHERE `form_id`=@formId AND name = 'b:0;'";
-        $this->addSql($sql);
+        $fixed = $this->connection->query("
+            SELECT id
+            FROM s_core_config_elements
+            WHERE `form_id`= (SELECT `id` FROM `s_core_config_forms` WHERE name = 'SwagMultiEdit' LIMIT 1)
+            AND name = 'clearCache'
+        ")->fetchColumn(0);
+
+        $wrong = $this->connection->query("
+            SELECT id
+            FROM s_core_config_elements
+            WHERE `form_id`= (SELECT `id` FROM `s_core_config_forms` WHERE name = 'SwagMultiEdit' LIMIT 1)
+            AND name = 'b:0;'
+        ")->fetchColumn(0);
+
+        if ($fixed && $wrong) {
+            $this->addSql("DELETE FROM s_core_config_elements WHERE id = " . $wrong);
+        } else if (!$fixed && $wrong) {
+            // Fix broken config name
+            $sql = "UPDATE s_core_config_elements SET name = 'clearCache', value = 'b:0;' WHERE id = " . $wrong;
+            $this->addSql($sql);
+        }
 
         // Translate queue config
         $sql = "SET @elementId = (SELECT `id`
