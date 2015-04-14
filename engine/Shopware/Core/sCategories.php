@@ -417,20 +417,18 @@ class sCategories
         }
 
         $sql = '
-            SELECT STRAIGHT_JOIN
-                   ac.categoryID as id
-            FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
+           SELECT ac.categoryID as id
+            FROM s_articles_categories ac
                 INNER JOIN s_categories c
                     ON  ac.categoryID = c.id
                     AND c.active = 1
                     AND c.path LIKE ?
-
                 LEFT JOIN s_categories c2
                     ON c2.parent = c.id
-
             WHERE ac.articleID = ?
             AND c2.id IS NULL
             ORDER BY ac.id
+            LIMIT 1
         ';
 
         $id = (int) $this->db->fetchOne($sql, array(
@@ -676,32 +674,10 @@ class sCategories
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
 
-        $data['articleCount'] = $this->getCategoryArticleCount($id);
         $data['childrenCount'] = $this->getCategoryChildrenCount($id);
 
         return $data;
     }
-
-    /**
-     * Returns the count of active products in the provided category
-     * @param $id
-     * @return PDOStatement
-     * @throws Exception
-     */
-    private function getCategoryArticleCount($id)
-    {
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
-        $query->select('COUNT(ro.id)')
-            ->from('s_articles_categories_ro', 'ro')
-            ->innerJoin('ro', 's_articles', 'a', 'a.id = ro.articleID AND a.active = 1')
-            ->where('ro.categoryID = :id')
-            ->setParameter(':id', $id);
-
-        /**@var $statement PDOStatement */
-        $statement = $query->execute();
-        return $statement->fetch(PDO::FETCH_COLUMN);
-    }
-
 
     /**
      * Returns the count of children categories of the provided category

@@ -73,6 +73,18 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->priceHelper->joinDefaultPrices($query, $context);
+        $query->innerJoin(
+            'product',
+            's_articles_prices',
+            'hasPrice',
+            'hasPrice.articledetailsID = product.main_detail_id
+             AND hasPrice.pricegroup = :fallbackCustomerGroup
+             AND hasPrice.from = 1'
+        );
+
+        $query->setParameter(
+            ':fallbackCustomerGroup',
+            $context->getFallbackCustomerGroup()->getKey()
+        );
     }
 }
