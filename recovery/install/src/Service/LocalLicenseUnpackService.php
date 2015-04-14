@@ -51,7 +51,8 @@ class LocalLicenseUnpackService implements LicenseUnpackService
 
         $info = base64_decode($license);
         if ($info === false) {
-            return false;
+            // License can not be unpacked.
+            $this->throwException("License key seems to be incorrect");
         }
 
         $info = @gzinflate($info);
