@@ -133,9 +133,8 @@ class PropertyFacetHandler implements FacetHandlerInterface
             'productProperty',
             'productProperty.articleID = product.id'
         );
-
+       
         $query->groupBy('productProperty.valueID');
-
         $query->select('productProperty.valueID as id');
     }
 
@@ -220,13 +219,12 @@ class PropertyFacetHandler implements FacetHandlerInterface
 
     /**
      * @param Struct\ShopContextInterface $context
-     * @param $queryCriteria
+     * @param Criteria $queryCriteria
      * @return Struct\Property\Set[]
      */
-    protected function getProperties(Struct\ShopContextInterface $context, $queryCriteria)
+    protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
         $this->rebuildQuery($query);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

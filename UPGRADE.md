@@ -1,6 +1,10 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.0.0 RC3
+* \Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPriceConditionHandler joins now the prices as 1:1 association for performance improvement.
+* sCategories::sGetCategoryContent function returns no more the category articleCount. Variable is unused.
+
 ## 5.0.0 RC2
 * SEO URL generation variable "statistic" has been translated and corrected to "static"
 * Theme config elements can now define, over the attributes array, if they are less compatible. Example: `attributes => ['lessCompatible' => false]`, default is set to true.
