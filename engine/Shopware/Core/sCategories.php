@@ -172,7 +172,8 @@ class sCategories
 
         $query->select(array('parent as id', 'COUNT(id) as childrenCount'));
         $query->from('s_categories', 'category')
-            ->where('parent IN( :ids )')
+            ->where('parent IN ( :ids )')
+            ->andWhere('category.active = 1')
             ->groupBy('parent')
             ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
