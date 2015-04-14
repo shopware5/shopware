@@ -1,4 +1,4 @@
-.ctl_checkout .confirm_accept.modal_open {
+.ctl_checkout .confirm_accept {
     top: 35px !important;
 }
 .agb_accept {
@@ -13,7 +13,6 @@
 .ctl_checkout .more_info {
     top: 110px !important;
 }
-.ctl_checkout .confirm_accept,
 .ctl_checkout .agb_info {
     top: 135px !important;
 }
