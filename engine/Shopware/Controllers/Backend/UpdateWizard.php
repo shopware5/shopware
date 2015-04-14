@@ -70,7 +70,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         $plugins = $pluginCheck->checkInstalledPluginsAvailableForNewVersion($this->getVersion());
 
         $updatable = array_filter($plugins, function($plugin) {
-            return $plugin['success'];
+            return $plugin['updatable'];
         });
 
         $notUpdatable = array_filter($plugins, function($plugin) {
