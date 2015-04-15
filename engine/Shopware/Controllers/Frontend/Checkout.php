@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Enlight_Controller_Request_Request as Request;
+
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
@@ -71,31 +73,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
         $this->View()->sUserData = $this->getUserData();
-
-        if ($this->Request()->getActionName() !== 'finish' && $this->Request()->getActionName() !== 'payment') {
-            return;
-        }
-
-        $basket = $this->getBasket();
-        $errors = array();
-
-        $serviceChecked = $this->Request()->getParam('serviceAgreementChecked');
-        if ($this->basketHasServiceArticles($basket) && empty($serviceChecked)) {
-            $errors['serviceError'] = true;
-        }
-
-        if (Shopware()->Config()->showEsdWarning) {
-            $esdChecked = $this->Request()->getParam('esdAgreementChecked');
-            if ($this->basketHasEsdArticles($basket) && empty($esdChecked)) {
-                $errors['esdError'] = true;
-            }
-        }
-
-        if (!empty($errors)) {
-            $this->forward('confirm', null, null, array(
-                'agreementErrors' => $errors
-            ));
-        }
     }
 
     /**
@@ -279,25 +256,74 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
 
-        if ($this->basket->sCountBasket()>0
-                && empty($this->View()->sUserData['additional']['payment']['embediframe'])) {
-            if ($this->Request()->getParam('sNewsletter')!==null) {
-                $this->session['sNewsletter'] = $this->Request()->getParam('sNewsletter') ? true : false;
-            }
-            if ($this->Request()->getParam('sComment')!==null) {
-                $this->session['sComment'] = trim(strip_tags($this->Request()->getParam('sComment')));
-            }
-            if (!Shopware()->Config()->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
-                $this->View()->sAGBError = true;
-                return $this->forward('confirm');
-            }
-            if (!empty($this->session['sNewsletter'])) {
-                $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
-            }
-            $this->saveOrder();
+        if ($this->basket->sCountBasket() <= 0) {
+            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+            return;
         }
 
+        if (!empty($this->View()->sUserData['additional']['payment']['embediframe'])) {
+            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+            return;
+        }
+
+        if ($this->Request()->getParam('sNewsletter')!==null) {
+            $this->session['sNewsletter'] = $this->Request()->getParam('sNewsletter') ? true : false;
+        }
+        if ($this->Request()->getParam('sComment')!==null) {
+            $this->session['sComment'] = trim(strip_tags($this->Request()->getParam('sComment')));
+        }
+
+        $basket = $this->View()->sBasket;
+        $agreements = $this->getInvalidAgreements($basket, $this->Request());
+
+        if (!empty($agreements)) {
+            $this->View()->sAGBError = array_key_exists('agbError', $agreements);
+
+            return $this->forward(
+                'confirm',
+                null,
+                null,
+                ['agreementErrors' => $agreements]
+            );
+        }
+
+        if (!empty($this->session['sNewsletter'])) {
+            $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
+        }
+
+        $this->saveOrder();
+
         $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+    }
+
+    /**
+     * @param $basket
+     * @param Request $request
+     * @return array
+     * @throws Exception
+     */
+    private function getInvalidAgreements($basket, Request $request)
+    {
+        $errors = [];
+
+        if (!$this->container->get('config')->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
+            $errors['agbError'] = true;
+        }
+
+        $esdAgreement = $request->getParam('esdAgreementChecked');
+        if ($this->container->get('config')->get('showEsdWarning')
+            && $this->basketHasEsdArticles($basket)
+            && empty($esdAgreement)
+        ) {
+            $errors['esdError'] = true;
+        }
+
+        $serviceChecked = $request->getParam('serviceAgreementChecked');
+        if ($this->basketHasServiceArticles($basket) && empty($serviceChecked)) {
+            $errors['serviceError'] = true;
+        }
+
+        return $errors;
     }
 
     /**
@@ -1162,11 +1188,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * checks if the current user selected an available payment method
      *
      * @param array $currentPayment
+     * @param array $payments
      * @return bool
      */
-    private function checkPaymentAvailability($currentPayment)
+    private function checkPaymentAvailability($currentPayment, $payments)
     {
-        $payments = $this->getPayments();
         foreach ($payments as $availablePayment) {
             if ($availablePayment['id'] === $currentPayment['id']) {
                 return true;
@@ -1191,7 +1217,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
         }
 
-        if ($payment && !$this->checkPaymentAvailability($payment)) {
+        if ($payment && !$this->checkPaymentAvailability($payment, $paymentMethods)) {
             $payment = null;
         }
 
