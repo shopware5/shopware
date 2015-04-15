@@ -52,20 +52,36 @@ DirectoryIndex shopware.php
 
 # Enable gzip compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/json application/x-font-woff application/font-woff
+    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json
 </IfModule>
 
-<IfModule mod_expires.c>
-<Files ~ "\.(jpe?g|png|gif|css|js)$">
-    ExpiresActive on
-    ExpiresDefault "access plus 1 month"
-    FileETag None
+<Files ~ "\.(jpe?g|png|gif|css|js|woff|eot)$">
+    <IfModule mod_expires.c>
+        ExpiresActive on
+        ExpiresDefault "access plus 1 month"
+    </IfModule>
+
     <IfModule mod_headers.c>
         Header append Cache-Control "public"
         Header unset ETag
     </IfModule>
+
+    FileETag None
 </Files>
-</IfModule>
+
+# Match generated files like:
+# 1429684458_t22_s1.css
+# 1429684458_t22_s1.js
+<FilesMatch "([0-9]{10})_(.+)\.(js|css)$">
+    <ifModule mod_headers.c>
+        Header set Cache-Control "max-age=31536000, public"
+    </ifModule>
+
+    <IfModule mod_expires.c>
+        ExpiresActive on
+        ExpiresDefault "access plus 1 year"
+    </IfModule>
+</FilesMatch>
 
 # Disables auto directory index
 <IfModule mod_autoindex.c>
