@@ -47,18 +47,17 @@
 {* Service article tos not accepted *}
 {block name='frontend_checkout_error_messages_service_error'}
 {if $agreementErrors && $agreementErrors.serviceError}
-    <div class="error center bold">
-        {s name="ServiceErrorMessage"}Bitte bestätigen Sie die Widerrufsbelehrung bezüglich der Dienstleistungen.{/s}
-        <br />
-    </div>
+	<div class="error agb_confirm center">
+		{s name="ServiceErrorMessage"}Bitte bestätigen Sie die Widerrufsbelehrung bezüglich der Dienstleistungen.{/s}
+	</div>
 {/if}
 {/block}
 
 {* ESD article tos not accepted *}
 {block name='frontend_checkout_error_messages_esd_error'}
 {if $agreementErrors && $agreementErrors.esdError && {config name="showEsdWarning"}}
-    <div class="error center bold">
-        {s name="EsdErrorMessage"}Bitte bestätigen Sie die Widerrufsbelehrung bezüglich der digitalen Inhalte.{/s}
-    </div>
+	<div class="error agb_confirm center">
+		{s name="EsdErrorMessage"}Bitte bestätigen Sie die Widerrufsbelehrung bezüglich der digitalen Inhalte.{/s}
+	</div>
 {/if}
 {/block}
