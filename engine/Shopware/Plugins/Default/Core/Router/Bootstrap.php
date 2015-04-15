@@ -226,7 +226,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Redirect on shop change
-        if ($cookieKey === 'shop' && $request->isPost()) {
+        if ($cookieKey === 'shop' && $request->isPost() && $request->getQuery('__shop') === null) {
             /** @var $repository Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $newShop = $repository->getActiveById($cookieValue);
