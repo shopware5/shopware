@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Request_Request as Request;
 
 /**
  * @category  Shopware
@@ -298,7 +298,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     /**
      * @param $basket
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Request $request
      * @return array
      * @throws Exception
      */
