@@ -210,7 +210,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
 
     public function testCategoryData()
     {
-        $first1  = $this->helper->createCategory(array('name' => 'first1', 'parent' => 3, 'media' => $media));
+        $first1  = $this->helper->createCategory(array('name' => 'first1', 'parent' => 3));
         $second1 = $this->helper->createCategory(array('name' => 'second1',  'parent' => $first1->getId()));
 
         Shopware()->Db()->executeUpdate("UPDATE s_categories SET mediaID = 564 WHERE id = ?", array($first1->getId()));
@@ -275,7 +275,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
             ),
             5 => array(
                 'name' => 'Beispiele',
-                'childrenCount' => 11
+                'childrenCount' => 10
             ),
             6 => array('name' => 'Trends + News'),
         );

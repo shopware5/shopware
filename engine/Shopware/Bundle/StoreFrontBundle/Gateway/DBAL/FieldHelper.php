@@ -269,6 +269,7 @@ class FieldHelper
             'category.metakeywords as __category_metakeywords',
             'category.metadescription as __category_metadescription',
             'category.cmsheadline as __category_cmsheadline',
+            'category.product_box_layout as __category_product_box_layout',
             'category.cmstext as __category_cmstext',
             'category.template as __category_template',
             'category.noviewselect as __category_noviewselect',
