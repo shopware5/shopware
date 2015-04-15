@@ -91,63 +91,75 @@
                         {* Terms of service *}
                         {block name='frontend_checkout_confirm_agb'}
                             <li class="block-group row--tos">
-                                {* Terms of service  checkbox *}
+                                {* Terms of service checkbox *}
                                 {block name='frontend_checkout_confirm_agb_checkbox'}
-                                    <div class="block column--checkbox">
+                                    <span class="block column--checkbox">
                                         {if !{config name='IgnoreAGB'}}
                                             <input type="checkbox" required="required" aria-required="true" id="sAGB" name="sAGB"{if $sAGBChecked} checked="checked"{/if} />
                                         {/if}
-                                    </div>
+                                    </span>
                                 {/block}
 
                                 {* AGB label *}
                                 {block name='frontend_checkout_confirm_agb_label'}
-                                    <div class="block column--label">
+                                    <span class="block column--label">
                                         <label for="sAGB"{if $sAGBError} class="has--error"{/if} data-modalbox="true" data-targetSelector="a" data-mode="ajax" data-height="500" data-width="750">{s name="ConfirmTerms"}{/s}</label>
-                                    </div>
+                                    </span>
                                 {/block}
                             </li>
                         {/block}
 
                         {* Service articles and ESD articles *}
                         {block name='frontend_checkout_confirm_service_esd'}
-                            <li class="block-group row--tos">
-                                {block name='frontend_checkout_confirm_service'}
-                                    {if $hasServiceArticles}
-                                        {block name='frontend_checkout_confirm_service_checkbox'}
-                                            <div class="block column--checkbox">
-                                                <input type="checkbox" required="required" aria-required="true" name="serviceAgreementChecked" id="serviceAgreementChecked"{if $serviceAgreementChecked} checked="checked"{/if} />
-                                            </div>
-                                        {/block}
 
-                                        {block name='frontend_checkout_confirm_service_label'}
-                                            <div class="block column--label">
-                                                <label for="swagCRDServiceBox"{if $agreementErrors && $agreementErrors.serviceError} class="has--error"{/if}>
-                                                    {s name="AcceptServiceMessage"}{/s}
-                                                </label>
-                                            </div>
-                                        {/block}
-                                    {/if}
-                                {/block}
+							{* Service articles *}
+							{block name='frontend_checkout_confirm_service'}
+								{if $hasServiceArticles}
+									<li class="block-group row--tos">
 
-                                {block name='frontend_checkout_confirm_esd'}
-                                    {if $hasEsdArticles}
-                                        {block name='frontend_checkout_confirm_esd_checkbox'}
-                                            <div class="block column--checkbox">
-                                                <input type="checkbox" required="required" aria-required="true" name="esdAgreementChecked" id="esdAgreementChecked"{if $esdAgreementChecked} checked="checked"{/if} />
-                                            </div>
-                                        {/block}
+										{* Service articles checkbox *}
+										{block name='frontend_checkout_confirm_service_checkbox'}
+											<span class="block column--checkbox">
+												<input type="checkbox" required="required" aria-required="true" name="serviceAgreementChecked" id="serviceAgreementChecked"{if $serviceAgreementChecked} checked="checked"{/if} />
+											</span>
+										{/block}
 
-                                        {block name='frontend_checkout_confirm_esd_label'}
-                                            <div class="block column--label">
-                                                <label for="esdAgreementChecked"{if $agreementErrors && $agreementErrors.esdError} class="has--error"{/if}>
-                                                    {s name="AcceptEsdMessage"}{/s}
-                                                </label>
-                                            </div>
-                                        {/block}
-                                    {/if}
-                                {/block}
-                            </li>
+										{* Service articles label *}
+										{block name='frontend_checkout_confirm_service_label'}
+											<span class="block column--label">
+												<label for="swagCRDServiceBox"{if $agreementErrors && $agreementErrors.serviceError} class="has--error"{/if}>
+													{s name="AcceptServiceMessage"}{/s}
+												</label>
+											</span>
+										{/block}
+									</li>
+								{/if}
+							{/block}
+
+							{* ESD articles *}
+							{block name='frontend_checkout_confirm_esd'}
+								{if $hasEsdArticles}
+									<li class="block-group row--tos">
+
+										{* ESD articles checkbox *}
+										{block name='frontend_checkout_confirm_esd_checkbox'}
+											<span class="block column--checkbox">
+												<input type="checkbox" required="required" aria-required="true" name="esdAgreementChecked" id="esdAgreementChecked"{if $esdAgreementChecked} checked="checked"{/if} />
+											</span>
+										{/block}
+
+										{* ESD articles label *}
+										{block name='frontend_checkout_confirm_esd_label'}
+											<span class="block column--label">
+												<label for="esdAgreementChecked"{if $agreementErrors && $agreementErrors.esdError} class="has--error"{/if}>
+													{s name="AcceptEsdMessage"}{/s}
+												</label>
+											</span>
+										{/block}
+									</li>
+								{/if}
+							{/block}
+
                         {/block}
 
                         {* Newsletter sign up checkbox *}
@@ -157,18 +169,18 @@
 
                                     {* Newsletter checkbox *}
                                     {block name='frontend_checkout_confirm_newsletter_checkbox'}
-                                        <div class="block column--checkbox">
+                                        <span class="block column--checkbox">
                                             <input type="checkbox" name="sNewsletter" id="sNewsletter" value="1"{if $sNewsletter} checked="checked"{/if} />
-                                        </div>
+                                        </span>
                                     {/block}
 
                                     {* Newsletter label *}
                                     {block name='frontend_checkout_confirm_newsletter_label'}
-                                        <div class="block column--label">
+                                        <span class="block column--label">
                                             <label for="sNewsletter">
                                                 {s name="ConfirmLabelNewsletter"}{/s}
                                             </label>
-                                        </div>
+                                        </span>
                                     {/block}
                                 </li>
                             {/if}
