@@ -124,6 +124,11 @@ class Category extends Extendable implements \JsonSerializable
     protected $blockedCustomerGroupIds = [];
 
     /**
+     * @var null|string
+     */
+    protected $productBoxLayout = null;
+
+    /**
      * @param CategoryEntity $category
      * @return Category
      */
@@ -443,5 +448,21 @@ class Category extends Extendable implements \JsonSerializable
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getProductBoxLayout()
+    {
+        return $this->productBoxLayout;
+    }
+
+    /**
+     * @param null|string $productBoxLayout
+     */
+    public function setProductBoxLayout($productBoxLayout)
+    {
+        $this->productBoxLayout = $productBoxLayout;
     }
 }
