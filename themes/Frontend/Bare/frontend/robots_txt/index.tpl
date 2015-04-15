@@ -25,8 +25,8 @@ Sitemap: {url controller=index}sitemap.xml
 {/block}
 
 {block name="frontend_robots_txt_sitemap_mobile"}
-    {if {config name=mobileSitemap}}
-        Sitemap: {url controller=index}sitemapMobile.xml
-    {/if}
+{if {config name=mobileSitemap}}
+Sitemap: {url controller=index}sitemapMobile.xml
+{/if}
 {/block}
 
