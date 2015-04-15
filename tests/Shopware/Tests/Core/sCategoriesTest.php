@@ -73,8 +73,8 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testsGetCategoryIdByArticleId()
     {
-        // Known value
-        $this->assertEquals(21, $this->module->sGetCategoryIdByArticleId(2));
+        //first category which assigned to the product 2
+        $this->assertEquals(14, $this->module->sGetCategoryIdByArticleId(2));
 
         // Check that searching in default category or with null is the same
         $this->assertEquals(
@@ -88,9 +88,9 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
             $this->module->sGetCategoryIdByArticleId(2, 39)
         );
 
-        // Check that searching in subtrees gives different the same results
+        // provide own parent id to filter returned category id
         $this->assertEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+            21,
             $this->module->sGetCategoryIdByArticleId(2, 10)
         );
 
