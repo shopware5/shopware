@@ -126,14 +126,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
     {
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
-
-        $query->innerJoin(
-            'product',
-            's_filter_articles',
-            'productProperty',
-            'productProperty.articleID = product.id'
-        );
-       
+        $query->innerJoin('product', 's_filter_articles', 'productProperty', 'productProperty.articleID = product.id');
         $query->groupBy('productProperty.valueID');
         $query->select('productProperty.valueID as id');
     }
