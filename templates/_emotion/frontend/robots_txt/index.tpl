@@ -13,3 +13,6 @@ Disallow: {url controller=note fullPath=false}
 
 
 Sitemap: {url controller=index}sitemap.xml
+{if {config name=mobileSitemap}}
+Sitemap: {url controller=index}sitemapMobile.xml
+{/if}
