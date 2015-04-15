@@ -560,11 +560,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param Collection $options
+     * @param Collection|array $options
      * @param Image $image
      * @return Image\Mapping
      */
-    public function createImageMappingForOptions(Collection $options, Image $image)
+    public function createImageMappingForOptions($options, Image $image)
     {
         $mapping = new Image\Mapping();
         $mapping->setImage($image);
@@ -580,11 +580,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param Collection $availableImages
+     * @param Collection|array $availableImages
      * @param $mediaId
      * @return bool|Image
      */
-    private function getAvailableMediaImage(Collection $availableImages, $mediaId)
+    private function getAvailableMediaImage($availableImages, $mediaId)
     {
         /**@var $image Image*/
         foreach ($availableImages as $image) {
@@ -679,7 +679,7 @@ class Variant extends Resource implements BatchInterface
      * @param array $data
      * @param ArticleModel $article
      * @param Detail $variant
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
@@ -735,11 +735,11 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
      *
-     * @param Collection $availableGroups
+     * @param Collection|array $availableGroups
      * @param array $groupData
      * @return bool|Group
      */
-    private function getAvailableGroup(Collection $availableGroups, array $groupData)
+    private function getAvailableGroup($availableGroups, array $groupData)
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
@@ -757,11 +757,11 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed option data is already existing in the passed array collection.
      * The option data are checked for "id" and "name".
      *
-     * @param \Doctrine\Common\Collections\Collection $availableOptions
+     * @param Collection|array $availableOptions
      * @param array $optionData
      * @return bool
      */
-    private function getAvailableOption(Collection $availableOptions, array $optionData)
+    private function getAvailableOption($availableOptions, array $optionData)
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
