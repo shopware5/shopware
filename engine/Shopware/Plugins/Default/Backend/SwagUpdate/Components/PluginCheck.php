@@ -69,8 +69,8 @@ class PluginCheck
     public function checkInstalledPluginsAvailableForNewVersion($version)
     {
         $service = $this->container->get('shopware_plugininstaller.plugin_service_store_production');
-        $plugins = $this->getUserInstalledPlugins();
-        $technicalNames = array_keys($plugins);
+        $installedPlugins = $this->getUserInstalledPlugins();
+        $technicalNames = array_column($installedPlugins, 'name');
         $locale = $this->getLocale();
 
         $request = new PluginsByTechnicalNameRequest($locale, \Shopware::VERSION, $technicalNames);
@@ -81,18 +81,19 @@ class PluginCheck
 
         try {
             $results = [];
-            foreach ($plugins as $technicalName => $label) {
-                $key         = strtolower($technicalName);
-                $name        = $label;
+            foreach ($installedPlugins as $plugin) {
+                $key         = strtolower($plugin['name']);
+                $name        = $plugin['label'];
                 $inStore     = array_key_exists($key, $storePlugins);
                 $available   = array_key_exists($key, $updatesAvailable);
+                $updatable   = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
                 $description = $this->getPluginStateDescription($inStore, $available);
 
                 $results[] = [
                     'inStore'    => $inStore,
                     'name'       => $name,
                     'message'    => $description,
-                    'success'    => $available,
+                    'updatable'  => $updatable,
                     'id'         => sprintf('plugin_incompatible-%s', $name),
                     'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING
                 ];
@@ -128,7 +129,7 @@ class PluginCheck
     private function getUserInstalledPlugins()
     {
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select(['plugin.name', 'plugin.label'])
+        $query->select(['plugin.name', 'plugin.label', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name NOT IN (:names)')
             ->andWhere('plugin.source != :source')
@@ -138,7 +139,7 @@ class PluginCheck
         /**@var $statement \PDOStatement*/
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 
