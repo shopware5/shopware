@@ -310,6 +310,8 @@ class Compiler
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
 
+        $config['shopware-revision'] = \Shopware::REVISION;
+
         $this->compiler->setVariables($config);
 
         $collection = new ArrayCollection();
@@ -581,7 +583,7 @@ class Compiler
     /**
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
-     * 
+     *
      * @param array $names
      */
     public function clearDirectory($names = array())
