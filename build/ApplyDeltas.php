@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-// ./ApplyDeltas.php --username="root" --password="example" --host="localhost" --dbname="example-db"
+// ./ApplyDeltas.php --username="root" --password="example" --host="localhost" --dbname="example-db" [ --mode=(install|update) ]
 
 date_default_timezone_set('UTC');
 
@@ -66,7 +66,14 @@ try {
 require $shopPath . '/engine/Shopware/Components/Migrations/AbstractMigration.php';
 require $shopPath . '/engine/Shopware/Components/Migrations/Manager.php';
 
+$modeArg = getopt('', array('mode:'));
+if (!isset($modeArg['mode']) || $modeArg['mode'] == 'install') {
+    $mode = \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL;
+} else {
+    $mode = \Shopware\Components\Migrations\AbstractMigration::MODUS_UPDATE;
+}
+
 $migrationManger = new Shopware\Components\Migrations\Manager($conn, $shopPath . '/_sql/migrations');
-$migrationManger->run(\Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL);
+$migrationManger->run($mode);
 
 exit(0);
