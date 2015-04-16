@@ -1076,4 +1076,45 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             }
         }
     }
+    
+    /**
+     * Updates the database schema, but ONLY in context of this plugin.
+     * If you use SchemaTool::updateSchema() instead, it will kill your database.
+     *
+     * @param $classes
+     */
+    public function updatePluginSchema($classes)
+    {
+        $em = $this->Application()->Models();
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $platform = $em->getConnection()->getDatabasePlatform();
+
+        /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $sm */
+        $sm = $em->getConnection()->getSchemaManager();
+        $fullSchema = $sm->createSchema();
+        $toSchema = $tool->getSchemaFromMetadata($classes);
+
+        $sequences = $fullSchema->getSequences();
+        $schemaConfig = $sm->createSchemaConfig();
+        $tables = [];
+        foreach ($fullSchema->getTables() as $table) {
+            if ($toSchema->hasTable($table->getShortestName($fullSchema->getName()))) {
+                $tables[] = $table;
+            }
+        }
+
+        $fromSchema = new \Doctrine\DBAL\Schema\Schema($tables, $sequences, $schemaConfig);
+
+
+        $comparator = new Doctrine\DBAL\Schema\Comparator();
+        $schemaDiff = $comparator->compare($fromSchema, $toSchema);
+
+        $updateSchemaSql = $schemaDiff->toSql($platform);
+
+        $conn = $em->getConnection();
+
+        foreach ($updateSchemaSql as $sql) {
+            $conn->executeQuery($sql);
+        }
+    }
 }
