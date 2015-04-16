@@ -65,7 +65,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $linkRewriter = function($link) {
+        $linkRewriter = function ($link) {
             /** @var $core sCore */
             $core = Shopware()->Modules()->Core();
 

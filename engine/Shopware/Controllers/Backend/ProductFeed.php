@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\ProductFeed\ProductFeed as ProductFeed,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\ProductFeed\ProductFeed as ProductFeed;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller for the Voucher Module
  *
@@ -113,17 +114,17 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         /**
          * permission to list all feeds
          */
-        $this->addAclPermission('getFeedsAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getFeedsAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to show detail information of a feed
          */
-        $this->addAclPermission('getDetailFeedAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getDetailFeedAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to delete the feed
          */
-        $this->addAclPermission('deleteFeedAction', 'delete','Insufficient Permissions');
+        $this->addAclPermission('deleteFeedAction', 'delete', 'Insufficient Permissions');
     }
 
 
@@ -278,13 +279,13 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         }
 
         //save data of the category tree
-        $params['categories'] = $this->prepareAssociationDataForSaving('categories','Shopware\Models\Category\Category',$params);
+        $params['categories'] = $this->prepareAssociationDataForSaving('categories', 'Shopware\Models\Category\Category', $params);
 
         //save data of the supplier filter
-        $params['suppliers'] = $this->prepareAssociationDataForSaving('suppliers','Shopware\Models\Article\Supplier',$params);
+        $params['suppliers'] = $this->prepareAssociationDataForSaving('suppliers', 'Shopware\Models\Article\Supplier', $params);
 
         //save data of the article filter
-        $params['articles'] = $this->prepareAssociationDataForSaving('articles','Shopware\Models\Article\Article',$params);
+        $params['articles'] = $this->prepareAssociationDataForSaving('articles', 'Shopware\Models\Article\Article', $params);
 
         $params['attribute'] = $params['attribute'][0];
         $productFeed = $this->setDirty($productFeed, $params);
@@ -389,5 +390,4 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         }
         return $collection;
     }
-
 }

@@ -113,7 +113,7 @@ class Layout extends ModelEntity
      */
     protected $elements;
 
-    function __construct()
+    public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->elements = new ArrayCollection();
@@ -272,6 +272,4 @@ class Layout extends ModelEntity
     {
         $this->attributes = $attributes;
     }
-
-
 }

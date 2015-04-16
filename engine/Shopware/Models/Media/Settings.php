@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Media;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The album settings model contains all settings around one album.
@@ -186,21 +187,21 @@ class Settings extends ModelEntity
         return explode(';', $this->thumbnailSize);
     }
 
-	/**
-	 * If the album settings updated and the thumbnail configuration changed,
-	 * the new configuration have to be executed on each assigned media.
-	 * To notify the configuration change the model gets the entity change set
-	 * over the doctrine unit of work instance.
-	 * When update is checked whether the old thumbnails should be deleted,
-	 * and whether new thumbnail files must be generated.
-	 *
-	 * @ORM\PreUpdate
-	 * @deprecated
-	 */
-	public function onUpdate()
-	{
-		return;
-	}
+    /**
+     * If the album settings updated and the thumbnail configuration changed,
+     * the new configuration have to be executed on each assigned media.
+     * To notify the configuration change the model gets the entity change set
+     * over the doctrine unit of work instance.
+     * When update is checked whether the old thumbnails should be deleted,
+     * and whether new thumbnail files must be generated.
+     *
+     * @ORM\PreUpdate
+     * @deprecated
+     */
+    public function onUpdate()
+    {
+        return;
+    }
 
     /**
      * @return \Shopware\Models\Media\Album

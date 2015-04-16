@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
  *
@@ -105,7 +107,7 @@ class Repository extends ModelRepository
                     ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter      );
+                    ->setParameter(3, '%' . $filter);
         }
         //filter the customers with the passed customer group parameter
         if (!empty($customerGroup)) {
@@ -151,7 +153,7 @@ class Repository extends ModelRepository
                     ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter      );
+                    ->setParameter(3, '%' . $filter);
         }
         //filter the customers with the passed customer group parameter
         if (!empty($customerGroup)) {
@@ -206,8 +208,8 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.debit', 'debit')
-                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
-                ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4' )
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
+                ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
                 ->leftJoin('customer.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -309,8 +311,8 @@ class Repository extends ModelRepository
                 )
             )
             ->setParameter(1,       $filter . '%')
-            ->setParameter(2, '%' . $filter      )
-            ->setParameter(3, str_replace(".", "_",str_replace(",", "_", $filter)) . '%');
+            ->setParameter(2, '%' . $filter)
+            ->setParameter(3, str_replace(".", "_", str_replace(",", "_", $filter)) . '%');
         } else {
             $builder->where($expr->eq('orders.customerId', $customerId));
         }
@@ -411,9 +413,9 @@ class Repository extends ModelRepository
      * @param null $customerId
      * @return \Doctrine\ORM\Query
      */
-    public function getValidateEmailQuery($email = null, $customerId = null,$shopId=null)
+    public function getValidateEmailQuery($email = null, $customerId = null, $shopId=null)
     {
-        $builder = $this->getValidateEmailQueryBuilder($email, $customerId,$shopId);
+        $builder = $this->getValidateEmailQueryBuilder($email, $customerId, $shopId);
         return $builder->getQuery();
     }
 
@@ -424,7 +426,7 @@ class Repository extends ModelRepository
      * @param null $customerId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getValidateEmailQueryBuilder($email = null, $customerId = null,$shopId = null)
+    public function getValidateEmailQueryBuilder($email = null, $customerId = null, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('customer'))
@@ -485,5 +487,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

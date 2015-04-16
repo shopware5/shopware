@@ -53,7 +53,7 @@ class LegacyEventManager
      * @param \Shopware_Components_Config $config
      * @param ContextServiceInterface $contextService
      */
-    function __construct(
+    public function __construct(
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config,
         ContextServiceInterface $contextService
@@ -532,7 +532,6 @@ class LegacyEventManager
                         'article' => $getArticle
                     )
                 );
-
             }
         }
 

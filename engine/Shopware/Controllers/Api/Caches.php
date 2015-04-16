@@ -86,7 +86,6 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         throw new \RuntimeException('Updating caches is not possible, yet. After updating a product or category the cache will be invalidated automatically, if configured in the HTTP-Cache settings..');
-
     }
 
     /**

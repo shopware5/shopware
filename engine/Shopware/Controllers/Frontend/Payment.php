@@ -38,7 +38,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getPaymentShortName()
     {
-        if(($user = $this->getUser()) !== null
+        if (($user = $this->getUser()) !== null
                 && !empty($user['additional']['payment']['name'])) {
             return $user['additional']['payment']['name'];
         } else {

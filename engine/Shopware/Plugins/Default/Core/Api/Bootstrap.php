@@ -68,8 +68,6 @@ class Shopware_Plugins_Core_Api_Bootstrap extends Shopware_Components_Plugin_Boo
             'description' => 'The old Shopware Import/Export API'
         );
     }
-
-
 }
 
 /**
@@ -134,7 +132,7 @@ class sAPI
     public function load($url)
     {
         $url_array = parse_url($url);
-        $url_array['path'] = explode("/",$url_array['path']);
+        $url_array['path'] = explode("/", $url_array['path']);
         switch ($url_array['scheme']) {
             case "ftp":
             case "http":
@@ -144,8 +142,9 @@ class sAPI
                 $dir = Shopware()->DocPath('media_' . 'temp');
                 while (empty($hash)) {
                     $hash = md5(uniqid(rand(), true));
-                    if(file_exists("$dir/$hash.api_tmp"))
+                    if (file_exists("$dir/$hash.api_tmp")) {
                         $hash = "";
+                    }
                 }
                 if (!$put_handle = fopen("$dir/$hash.api_tmp", "w+")) {
                     return false;
@@ -172,12 +171,13 @@ class sAPI
       */
     public function __destruct()
     {
-        if(!empty($this->sFiles))
-        foreach ($this->sFiles as $hash) {
-            if(file_exists(Shopware()->DocPath('media_' . 'temp')."/$hash.api_tmp"))
-                @unlink(Shopware()->DocPath('media_' . 'temp')."$hash.api_tmp");
+        if (!empty($this->sFiles)) {
+            foreach ($this->sFiles as $hash) {
+                if (file_exists(Shopware()->DocPath('media_' . 'temp')."/$hash.api_tmp")) {
+                    @unlink(Shopware()->DocPath('media_' . 'temp')."$hash.api_tmp");
+                }
+            }
         }
-
     }
 
     /**
@@ -188,7 +188,7 @@ class sAPI
     public function save($url)
     {
         $url_array = parse_url($url);
-        $url_array['path'] = explode("/",$url_array['path']);
+        $url_array['path'] = explode("/", $url_array['path']);
         switch ($url_array['scheme']) {
             case "ftp":
             case "http":
@@ -261,7 +261,6 @@ class sAPI
         }
         return $this->sResource[$res];
     }
-
 }
 
 // Still needed for compability reasons
@@ -287,18 +286,20 @@ class sClassHandler
                 $filename = $this->sType;
             }
             // construct include file name
-            if(!file_exists(dirname(__FILE__)."/Components/{$filename}.php"))
+            if (!file_exists(dirname(__FILE__)."/Components/{$filename}.php")) {
                 return false;
+            }
             include(dirname(__FILE__)."/Components/{$filename}.php");
 
             // construct class name
             $name = "s".ucfirst($class).ucfirst($this->sType);
-            if(class_exists($name))
+            if (class_exists($name)) {
                 $this->sClass[$class] = new $name;
-            elseif(class_exists($class))
+            } elseif (class_exists($class)) {
                 $this->sClass[$class] = new $class;
-            else
+            } else {
                 return false;
+            }
 
             $this->sClass[$class]->sSystem =& $this->sAPI->sSystem;
             $this->sClass[$class]->sDB =& $this->sAPI->sDB;
@@ -307,5 +308,4 @@ class sClassHandler
         }
         return $this->sClass[$class];
     }
-
 }

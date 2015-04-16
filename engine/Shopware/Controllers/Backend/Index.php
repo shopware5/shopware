@@ -83,7 +83,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         try {
             $this->Request()->setHeader('referer', '');
             $auth = $this->auth->checkAuth();
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
 
         // No session
         if ($auth === null) {
@@ -136,7 +137,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
 
     /**
      * Returns if the first run wizard should be loaded in the current backend instance
-     * 
+     *
      * @param $identity
      * @return bool
      * @throws Exception
@@ -156,7 +157,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
      */
     public function authAction()
     {
-
     }
 
     /**

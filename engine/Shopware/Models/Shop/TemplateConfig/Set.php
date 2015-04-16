@@ -154,6 +154,4 @@ class Set extends ModelEntity
     {
         $this->template = $template;
     }
-
-
 }

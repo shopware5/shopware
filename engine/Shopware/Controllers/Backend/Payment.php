@@ -129,10 +129,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             //Matches the surcharges with the countries
             if (!empty($result['surchargeString'])) {
                 $surchargeString = $result['surchargeString'];
-                $surcharges = explode(";",$surchargeString);
+                $surcharges = explode(";", $surchargeString);
                 $specificSurcharges = array();
                 foreach ($surcharges as $surcharge) {
-                    $specificSurcharges[] = explode(":",$surcharge);
+                    $specificSurcharges[] = explode(":", $surcharge);
                 }
                 $surchargeCollection[$result['name']] = $specificSurcharges;
             }
@@ -141,13 +141,11 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
             foreach ($result['countries'] as &$country) {
                 foreach ($surchargeCollection[$result['name']] as $singleSurcharge) {
-
                     if ($country['iso']==$singleSurcharge[0]) {
                         $country['surcharge'] = $singleSurcharge[1];
                     }
                 }
             }
-
         }
         return $results;
     }
@@ -169,7 +167,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     public function createPaymentsAction()
     {
         try {
-
             $params = $this->Request()->getParams();
             unset($params["action"]);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
@@ -215,8 +212,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
             $action = $payment->getAction();
             $data = $this->Request()->getParams();
-            $data['surcharge'] = str_replace(',','.',$data['surcharge']);
-            $data['debitPercent'] = str_replace(',','.',$data['debitPercent']);
+            $data['surcharge'] = str_replace(',', '.', $data['surcharge']);
+            $data['debitPercent'] = str_replace(',', '.', $data['debitPercent']);
 
             $countries = new \Doctrine\Common\Collections\ArrayCollection();
             if (!empty($data['countries'])) {
@@ -270,7 +267,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
 
             $this->View()->assign(array('success'=>true, 'data'=>$data));
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
         }

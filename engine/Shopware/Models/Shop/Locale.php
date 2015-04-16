@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Shop;
+
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Locale Model Entity

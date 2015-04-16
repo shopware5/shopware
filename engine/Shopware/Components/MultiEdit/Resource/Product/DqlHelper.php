@@ -681,7 +681,6 @@ class DqlHelper
         $skipNext = false;
 
         foreach ($tokens as $key => $token) {
-
             if ($skipNext) {
                 $skipNext = false;
                 continue;
@@ -856,7 +855,6 @@ class DqlHelper
      */
     public function getIdForForeignEntityInternal($foreignPrefix, $detailIds)
     {
-
         $quoted = '(' . $this->getDb()->quote($detailIds, \PDO::PARAM_INT) . ');';
 
         switch ($foreignPrefix) {

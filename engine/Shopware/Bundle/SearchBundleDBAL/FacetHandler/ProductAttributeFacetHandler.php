@@ -144,7 +144,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
             $actives = $condition->getValue();
         }
 
-        $items = array_map(function($row) use ($actives) {
+        $items = array_map(function ($row) use ($actives) {
             return new ValueListItem($row, $row, in_array($row, $actives));
         }, $result);
 
@@ -165,7 +165,6 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
                 $facet->getFormFieldName()
             );
         }
-
     }
 
 
@@ -210,7 +209,6 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
             'min' . $facet->getFormFieldName(),
             'max' . $facet->getFormFieldName()
         );
-
     }
 
 

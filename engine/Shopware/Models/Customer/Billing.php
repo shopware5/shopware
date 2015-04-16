@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware customer billing model represents a single billing address of a customer.

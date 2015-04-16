@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\MultiEdit;
+
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -39,9 +40,10 @@ class Repository extends ModelRepository
      * @param $filter
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($filter = null) {
-    	$builder = $this->getListQueryBuilder($filter);
-    	return $builder->getQuery();
+    public function getListQuery($filter = null)
+    {
+        $builder = $this->getListQueryBuilder($filter);
+        return $builder->getQuery();
     }
 
     /**
@@ -51,11 +53,12 @@ class Repository extends ModelRepository
      * @param $filter
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($filter) {
-    	$builder = $this->getEntityManager()->createQueryBuilder()
+    public function getListQueryBuilder($filter)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder()
             ->select('filter')
             ->from('Shopware\Models\MultiEdit\Filter', 'filter');
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -64,15 +67,16 @@ class Repository extends ModelRepository
      * @param $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getBackupListQuery($offset = null, $limit) {
-    	$builder = $this->getBackupListQueryBuilder();
+    public function getBackupListQuery($offset = null, $limit)
+    {
+        $builder = $this->getBackupListQueryBuilder();
 
         if ($offset !== null) {
             $builder->setFirstResult($offset);
             $builder->setMaxResults($limit);
         }
 
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -80,14 +84,14 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getBackupListQueryBuilder() {
-    	$builder = $this->getEntityManager()->createQueryBuilder()
+    public function getBackupListQueryBuilder()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder()
             ->select('backup')
             ->from('Shopware\Models\MultiEdit\Backup', 'backup')
             ->orderBy('backup.date', 'DESC');
 
 
-    	return $builder;
+        return $builder;
     }
-
 }

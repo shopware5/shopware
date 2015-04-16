@@ -281,7 +281,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     private function convertCategories($categories)
     {
         $converter = Shopware()->Container()->get('legacy_struct_converter');
-        return array_map(function(Category $category) use ($converter) {
+        return array_map(function (Category $category) use ($converter) {
             $data = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),

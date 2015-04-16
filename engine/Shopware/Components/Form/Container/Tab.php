@@ -36,7 +36,7 @@ class Tab extends BaseContainer
      */
     protected $title;
 
-    function __construct($name, $title)
+    public function __construct($name, $title)
     {
         $this->title = $title;
         $this->name = $name;

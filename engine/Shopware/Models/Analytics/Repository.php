@@ -53,7 +53,7 @@ class Repository
      * @param Connection $connection
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
+    public function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
     {
         $this->connection = $connection;
         $this->eventManager = $eventManager;
@@ -108,7 +108,7 @@ class Repository
     {
         $builder = $this->createDailyVisitorsBuilder($from, $to);
 
-        foreach($shopIds as $shopId) {
+        foreach ($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM(IF(visitor.shopID = " . $shopId . ", visitor.uniquevisits, 0)) as visits" . $shopId
             );
@@ -191,7 +191,7 @@ class Repository
 		    )) as cancelledOrders"
         ));
 
-        foreach($shopIds as $shopId) {
+        foreach ($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM( IF(
 	   		        orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
@@ -1601,6 +1601,4 @@ class Repository
 
         return $this;
     }
-
-
 }

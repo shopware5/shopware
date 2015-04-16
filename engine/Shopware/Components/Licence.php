@@ -27,7 +27,7 @@
  */
 class Shopware_Components_Licence extends Enlight_Class
 {
-    public function __call($method,$arguments)
+    public function __call($method, $arguments)
     {
         throw new Enlight_Exception("Licence plugin not installed");
     }

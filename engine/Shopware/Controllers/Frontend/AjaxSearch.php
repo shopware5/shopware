@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     private function convertProducts(ProductSearchResult $result)
     {
         $articles = array();
-        foreach($result->getProducts() as $product) {
+        foreach ($result->getProducts() as $product) {
             $article = $this->get('legacy_struct_converter')->convertListProductStruct(
                 $product
             );

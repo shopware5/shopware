@@ -282,7 +282,6 @@ class %className% extends ModelEntity
             if ($result === false) {
                 $errors[] = $table->getName();
             }
-
         }
 
         return array('success' => empty($errors), 'errors' => $errors);
@@ -449,7 +448,7 @@ class %className% extends ModelEntity
         $columns = array();
         /**@var $column \Doctrine\DBAL\Schema\Column*/
         foreach ($table->getColumns() as $column) {
-            $columns[] = $this->getColumnProperty($table,$column);
+            $columns[] = $this->getColumnProperty($table, $column);
         }
         return $columns;
     }
@@ -671,7 +670,6 @@ class %className% extends ModelEntity
             $functions[] = $this->getColumnFunctions($table, $column);
         }
         return $functions;
-
     }
 
     /**

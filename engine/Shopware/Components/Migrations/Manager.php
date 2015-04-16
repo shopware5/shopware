@@ -178,7 +178,6 @@ class Manager
         $migrations = array();
 
         foreach ($regex as $result) {
-
             $migrationVersion = $result['1'];
             if ($migrationVersion <= $currentVersion) {
                 continue;

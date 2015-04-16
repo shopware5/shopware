@@ -187,7 +187,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $mail->addTo($email);
                     $mail->send();
                     Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$notifyOrderNumber] = true;
-
                 } else {
                     $action->View()->NotifyAlreadyRegistered = true;
                 }
@@ -247,7 +246,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 $action->View()->NotifyValid = true;
                 Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
             } else {
-
                 $action->View()->NotifyInvalid = true;
             }
         }
@@ -274,7 +272,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $sArticle = Shopware()->Db()->fetchRow("SELECT a.id as articleID, d.ordernumber, d.instock, a.active FROM s_articles_details d, s_articles a WHERE d.articleID=a.id AND d.ordernumber=?", array($ordernumber));
 
             $sArticleID = $sArticle["articleID"];
-            if (empty($sArticleID)) continue;
+            if (empty($sArticleID)) {
+                continue;
+            }
 
             $instock = $sArticle["instock"];
 

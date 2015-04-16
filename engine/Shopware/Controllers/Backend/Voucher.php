@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Voucher\Voucher as Voucher,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\Voucher\Voucher as Voucher;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller for the Voucher Module
  */
@@ -76,27 +77,27 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         /**
          * permission to delete voucher(s)
          */
-        $this->addAclPermission('deleteVoucherAction', 'delete','Insufficient Permissions');
+        $this->addAclPermission('deleteVoucherAction', 'delete', 'Insufficient Permissions');
 
         /**
          * permission to list all vouchers
          */
-        $this->addAclPermission('getVoucherAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getVoucherAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to list all individual vouchers
          */
-        $this->addAclPermission('getVoucherCodesAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getVoucherCodesAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to create individual voucher codes
          */
-        $this->addAclPermission('createVoucherCodesAction', 'generate','Insufficient Permissions');
+        $this->addAclPermission('createVoucherCodesAction', 'generate', 'Insufficient Permissions');
 
         /**
          * permission to export individual voucher codes
          */
-        $this->addAclPermission('exportVoucherCodeAction', 'export','Insufficient Permissions');
+        $this->addAclPermission('exportVoucherCodeAction', 'export', 'Insufficient Permissions');
     }
 
     /**
@@ -149,7 +150,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function getVoucherAction()
     {
         try {
-
             $offset = intval($this->Request()->start);
             $limit = intval($this->Request()->limit);
             $filter = $this->Request()->filter;
@@ -242,14 +242,14 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $numberOfUnits = intval($this->Request()->numberOfUnits);
         $codePattern = $this->Request()->codePattern;
 
-        $codePattern = str_replace('%D','%d',$codePattern);
-        $codePattern = str_replace('%S','%s',$codePattern);
+        $codePattern = str_replace('%D', '%d', $codePattern);
+        $codePattern = str_replace('%S', '%s', $codePattern);
         $deletePreviousVoucherCodes = $this->Request()->deletePreviousVoucherCodes;
         $createdVoucherCodes = 0;
 
         //verify the pattern of the code only the first time of batch processing batch
         if (!empty($codePattern) && $deletePreviousVoucherCodes === "true") {
-            if (!$this->validateCodePattern($codePattern,$numberOfUnits)) {
+            if (!$this->validateCodePattern($codePattern, $numberOfUnits)) {
                 $this->View()->assign(array('success' => false, 'errorMsg' => "CodePattern not complex enough"));
                 return;
             }
@@ -258,20 +258,19 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         if ($deletePreviousVoucherCodes === "true") {
             $this->deleteAllVoucherCodesById($voucherId);
 
-            $this->View()->assign(array('success' => true,'generatedVoucherCodes' => $createdVoucherCodes));
+            $this->View()->assign(array('success' => true, 'generatedVoucherCodes' => $createdVoucherCodes));
             return;
         }
         do {
             //generate voucher codes till the numberOfUnits is reached
-            $this->generateVoucherCodes($voucherId,($numberOfUnits - $createdVoucherCodes), $codePattern);
+            $this->generateVoucherCodes($voucherId, ($numberOfUnits - $createdVoucherCodes), $codePattern);
 
             $query = $this->getVoucherRepository()->getVoucherCodeCountQuery($voucherId);
             $result = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
             $createdVoucherCodes = $result["countCode"];
-
         } while ($createdVoucherCodes < $numberOfUnits);
 
-        $this->View()->assign(array('success' => true,'generatedVoucherCodes' => $createdVoucherCodes));
+        $this->View()->assign(array('success' => true, 'generatedVoucherCodes' => $createdVoucherCodes));
     }
 
     /**
@@ -287,8 +286,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $dataQuery = $this->getVoucherRepository()->getVoucherCodeListQuery($voucherId);
         $resultArray = $dataQuery->getArrayResult();
 
-        $this->Response()->setHeader('Content-Type','text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition','attachment;filename=voucherCodes.csv');
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=voucherCodes.csv');
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
@@ -332,7 +331,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function getVoucherDetailAction()
     {
         try {
-
             $voucherID = intval($this->Request()->voucherID);
 
             $query = $this->getVoucherRepository()->getVoucherDetailQuery($voucherID);
@@ -364,7 +362,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function getTaxConfigurationAction()
     {
         $builder = $this->getManager()->Tax()->createQueryBuilder('t');
-        $builder->orderBy("t.id","ASC");
+        $builder->orderBy("t.id", "ASC");
         $tax = $builder->getQuery()->getArrayResult();
 
         $this->View()->assign(array("success"=>true, "data"=>$tax));
@@ -436,10 +434,10 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function generateCode($codePattern)
     {
         if (empty($codePattern)) {
-            return strtoupper(substr(uniqid("",true),6,8));
+            return strtoupper(substr(uniqid("", true), 6, 8));
         } else {
-            $codePattern = $this->replaceAllMatchingPatterns($codePattern,range('A','Z'),'%s');
-            $codePattern = $this->replaceAllMatchingPatterns($codePattern,range('0','9'),'%d');
+            $codePattern = $this->replaceAllMatchingPatterns($codePattern, range('A', 'Z'), '%s');
+            $codePattern = $this->replaceAllMatchingPatterns($codePattern, range('0', '9'), '%d');
             return $codePattern;
         }
     }
@@ -478,7 +476,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace("/\\".$pattern."/", $range[mt_rand(1,count($range)-1)], $generatedCode, 1);
+            $generatedCode = preg_replace("/\\".$pattern."/", $range[mt_rand(1, count($range)-1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
         return $generatedCode;

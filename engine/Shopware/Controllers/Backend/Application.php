@@ -826,7 +826,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     //remove the foreign key data.
                     unset($data[$field]);
                 }
-
             } elseif ($mapping['type'] === 8) {
                 /**
                  * @ORM\ManyToMany associations.
@@ -854,7 +853,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 }
                 $data[$mapping['fieldName']] = $associationModels;
             }
-
         }
         return $data;
     }
@@ -1029,7 +1027,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                         'value' => $value
                     );
                 }
-
             } elseif (array_key_exists($condition['property'], $fields)) {
                 //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
                 if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
@@ -1081,7 +1078,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function formatSearchValue($value, array $field)
     {
-
         switch ($field['type']) {
             case 'boolean':
                 break;

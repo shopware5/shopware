@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware customer debit model represents a single debit of a customer.
@@ -226,5 +227,4 @@ class Debit extends ModelEntity
         $this->customer = $customer;
         return $this;
     }
-
 }

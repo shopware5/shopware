@@ -23,10 +23,11 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM,
-            Symfony\Component\Validator\Constraints as Assert,
-            Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware newsletter model represents a newsletter.
@@ -435,7 +436,7 @@ class Newsletter extends ModelEntity
      */
     public function setContainers($containers)
     {
-//        $this->containers = $containers;
+        //        $this->containers = $containers;
         return $this->setOneToMany($containers, '\Shopware\Models\Newsletter\Container', 'containers', 'newsletter');
     }
 

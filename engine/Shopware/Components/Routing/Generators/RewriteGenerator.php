@@ -4,7 +4,6 @@ namespace Shopware\Components\Routing\Generators;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\GeneratorListInterface;
 use Shopware\Components\Routing\Context;
-
 use Doctrine\DBAL\Connection;
 
 /**
@@ -69,7 +68,7 @@ class RewriteGenerator implements GeneratorListInterface
         // Remove globals
         unset($query['module'], $query['controller']);
         // Remove action, if action is a part of the seo url
-        if(isset($orgQuery['sAction']) || isset($query['action']) && $query['action'] == 'index') {
+        if (isset($orgQuery['sAction']) || isset($query['action']) && $query['action'] == 'index') {
             unset($query['action']);
         }
         if (!empty($query)) {
@@ -112,7 +111,7 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 $query = array_diff_key($list[$key], $orgQueryList[$key]);
                 unset($query['module'], $query['controller']);
-                if(isset($orgQueryList[$key]['sAction']) || isset($query['action']) && $query['action'] == 'index') {
+                if (isset($orgQueryList[$key]['sAction']) || isset($query['action']) && $query['action'] == 'index') {
                     unset($query['action']);
                 }
                 if (!empty($query)) {

@@ -122,7 +122,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
             $params['shippingFree'] = null;
         } else {
-            $params['shippingFree'] = floatval(str_replace(',' , '.', $params['shippingFree']));
+            $params['shippingFree'] = floatval(str_replace(',', '.', $params['shippingFree']));
         }
 
         $params['payments']        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -248,7 +248,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
         $shippingCostsResult = array();
         foreach ($shippingCosts as $shippingCost) {
-
             if (!is_null($shippingCost['bindTimeFrom'])) {
                 $date = new Zend_Date();
                 $date->setMinute(0);

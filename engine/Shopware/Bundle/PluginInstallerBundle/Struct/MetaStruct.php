@@ -58,7 +58,7 @@ class MetaStruct implements \JsonSerializable
      * @param string $binaryVersion
      * @param string $fileName
      */
-    function __construct($uri, $size, $sha1, $binaryVersion, $fileName)
+    public function __construct($uri, $size, $sha1, $binaryVersion, $fileName)
     {
         $this->uri = $uri;
         $this->size = $size;
@@ -107,7 +107,7 @@ class MetaStruct implements \JsonSerializable
         return $this->fileName;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return get_object_vars($this);
     }

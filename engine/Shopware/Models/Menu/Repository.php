@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Menu;
+
 use Shopware\Components\Model\ModelRepository;
+
 /**
  */
 class Repository extends ModelRepository
@@ -33,7 +35,6 @@ class Repository extends ModelRepository
      */
     public function save()
     {
-
     }
 
     /**
@@ -42,7 +43,6 @@ class Repository extends ModelRepository
      */
     public function addItem($item)
     {
-
     }
 
     /**

@@ -23,10 +23,13 @@
  */
 
 namespace Shopware\Models\Tax;
-use Shopware\Components\Model\ModelEntity,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\ORM\Mapping AS ORM,
-    Doctrine\Common\Collections\ArrayCollection;;
+
+use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+;
 
 /**
  * The Shopware Model represents the Taxes.

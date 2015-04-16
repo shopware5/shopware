@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Payment;
-use         Shopware\Components\Model\ModelRepository,
-            Doctrine\ORM\Query\Expr;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query\Expr;
+
 /**
  * Shopware Payment Model
  *
@@ -213,5 +215,4 @@ class Repository extends ModelRepository
                       ->setParameter(1, $paymentId);
         return $builder;
     }
-
 }

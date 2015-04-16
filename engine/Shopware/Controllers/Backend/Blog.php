@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Blog\Blog as Blog,
-    Shopware\Models\Blog\Tag as Tag,
-    Shopware\Models\Blog\Media as Media,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\Blog\Blog as Blog;
+use Shopware\Models\Blog\Tag as Tag;
+use Shopware\Models\Blog\Media as Media;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller for the Blog Module
  *
@@ -167,7 +168,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getListAction()
     {
-
         try {
             $limit = intval($this->Request()->limit);
             $offset = intval($this->Request()->start);

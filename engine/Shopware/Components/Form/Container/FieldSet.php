@@ -41,7 +41,7 @@ class FieldSet extends BaseContainer
      * @param string $name
      * @param string $title
      */
-    function __construct($name, $title)
+    public function __construct($name, $title)
     {
         $this->title = $title;
         $this->name = $name;
@@ -63,5 +63,4 @@ class FieldSet extends BaseContainer
     {
         return $this->title;
     }
-
 }

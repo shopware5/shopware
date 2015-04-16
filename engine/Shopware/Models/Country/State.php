@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Country;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -224,5 +225,4 @@ class State extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CountryState', 'attribute', 'countryState');
     }
-
 }

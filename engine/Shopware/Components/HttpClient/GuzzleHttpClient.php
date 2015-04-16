@@ -57,7 +57,7 @@ class GuzzleHttpClient implements HttpClientInterface
         } catch (\Exception $e) {
             /** @var $e GuzzleClientException */
             $body = '';
-            if ($e->hasResponse())  {
+            if ($e->hasResponse()) {
                 $body = (string) $e->getResponse()->getBody();
             }
 
@@ -125,7 +125,6 @@ class GuzzleHttpClient implements HttpClientInterface
             );
 
             $response = $this->guzzleClient->put($url, $options);
-
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -174,11 +173,10 @@ class GuzzleHttpClient implements HttpClientInterface
             );
 
             $response = $this->guzzleClient->post($url, $options);
-
         } catch (\Exception $e) {
             /** @var $e GuzzleClientException */
             $body = '';
-            if ($e->hasResponse())  {
+            if ($e->hasResponse()) {
                 $body = (string) $e->getResponse()->getBody();
             }
 

@@ -67,12 +67,12 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
      private function subscribeEvents()
      {
-        $this->subscribeEvent(
+         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_PasswordEncoder',
             'onInitResourcePasswordEncoder'
         );
 
-        $this->subscribeEvent(
+         $this->subscribeEvent(
             'Shopware_Components_Password_Manager_AddEncoder',
             'onAddEncoder'
         );
@@ -89,7 +89,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
             'label' => 'Passwörter verschlüsseln mit...',
             'editable' => false,
             'value' => 'Auto',
-            'valueField' => 'id','displayField'=>'id',
+            'valueField' => 'id', 'displayField'=>'id',
             'triggerAction' => 'all',
             'store' => 'base.EncoderName'
         ));
@@ -122,7 +122,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         $form->setParent(
             $this->Forms()->findOneBy(array('name' => 'Core'))
         );
-     }
+    }
 
     /**
      * @return array

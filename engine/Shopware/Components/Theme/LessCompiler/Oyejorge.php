@@ -36,7 +36,7 @@ class Oyejorge implements LessCompiler
     /**
      * @param \Less_Parser $compiler
      */
-    function __construct(\Less_Parser $compiler)
+    public function __construct(\Less_Parser $compiler)
     {
         $this->compiler = $compiler;
     }
@@ -103,6 +103,4 @@ class Oyejorge implements LessCompiler
     {
         $this->compiler->Reset();
     }
-
-
 }

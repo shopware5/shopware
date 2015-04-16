@@ -193,17 +193,19 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->personal->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (!empty($this->session['sRegister']['auth']))
-        foreach ($this->session['sRegister']['auth'] as $key => $value) {
-            if (!isset($this->View()->register->personal->form_data->$key)) {
-                $this->View()->register->personal->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['auth'])) {
+            foreach ($this->session['sRegister']['auth'] as $key => $value) {
+                if (!isset($this->View()->register->personal->form_data->$key)) {
+                    $this->View()->register->personal->form_data->$key = $value;
+                }
             }
         }
 
-        if (!empty($this->session['sRegister']['billing']))
-        foreach ($this->session['sRegister']['billing'] as $key => $value) {
-            if (!isset($this->View()->register->personal->form_data->$key)) {
-                $this->View()->register->personal->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['billing'])) {
+            foreach ($this->session['sRegister']['billing'] as $key => $value) {
+                if (!isset($this->View()->register->personal->form_data->$key)) {
+                    $this->View()->register->personal->form_data->$key = $value;
+                }
             }
         }
 
@@ -211,9 +213,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             // For new b2bessentials plugin (replacement for customergroup module), do validation of this parameter
             $sValidation = $this->request->getParam('sValidation');
             // Simply check if this customergroup is valid
-            if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ",array($sValidation))) {
+            if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ", array($sValidation))) {
                 // New event to do further validations in b2b customergroup plugin
-                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this,'sValidation'=>$sValidation))) {
+                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this, 'sValidation'=>$sValidation))) {
                     $this->View()->register->personal->form_data->sValidation = $sValidation;
                 }
             } else {
@@ -266,10 +268,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->View()->register->billing->country_list = $getCountryList;
 
-        if(!empty($this->session['sRegister']['billing']))
-        foreach ($this->session['sRegister']['billing'] as $key => $value) {
-            if (!isset($this->View()->register->billing->form_data->$key)) {
-                $this->View()->register->billing->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['billing'])) {
+            foreach ($this->session['sRegister']['billing'] as $key => $value) {
+                if (!isset($this->View()->register->billing->form_data->$key)) {
+                    $this->View()->register->billing->form_data->$key = $value;
+                }
             }
         }
 
@@ -295,10 +298,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->billing = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
         if (!empty($this->post['billing'])) {
-
             $this->View()->register->billing->form_data = new ArrayObject($this->post['billing'], ArrayObject::ARRAY_AS_PROPS);
             if (!empty($this->View()->register->billing->form_data['ustid'])) {
-                $this->View()->register->billing->form_data['ustid'] = preg_replace('#[^0-9A-Z\+\*\.]#','',strtoupper($this->View()->register->billing->form_data['ustid']));
+                $this->View()->register->billing->form_data['ustid'] = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->View()->register->billing->form_data['ustid']));
             }
         }
 
@@ -326,9 +328,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         $this->View()->register->shipping->country_list = $this->admin->sGetCountryList();
-        if(!empty($this->session['sRegister']['shipping']))
-        foreach ($this->session['sRegister']['shipping'] as $key => $value) {
-            $this->View()->register->shipping->form_data[$key] = $value;
+        if (!empty($this->session['sRegister']['shipping'])) {
+            foreach ($this->session['sRegister']['shipping'] as $key => $value) {
+                $this->View()->register->shipping->form_data[$key] = $value;
+            }
         }
     }
 
@@ -366,18 +369,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->payment = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if(!isset($this->View()->register->payment->form_data))
-        if (!empty($this->session['sPayment'])) {
-            $this->View()->register->payment->form_data = array('payment'=>$this->session['sPayment']);
-        } else {
-            $this->View()->register->payment->form_data = array('payment'=>Shopware()->Config()->get('DefaultPayment'));
+        if (!isset($this->View()->register->payment->form_data)) {
+            if (!empty($this->session['sPayment'])) {
+                $this->View()->register->payment->form_data = array('payment'=>$this->session['sPayment']);
+            } else {
+                $this->View()->register->payment->form_data = array('payment'=>Shopware()->Config()->get('DefaultPayment'));
+            }
         }
 
         $this->View()->register->payment->payment_means = $this->admin->sGetPaymentMeans();
 
-        if(!empty($this->session['sRegister']['shipping']))
-        foreach ($this->session['sRegister']['shipping'] as $key => $value) {
-            $this->View()->form_data->register['shipping'][$key] = $value;
+        if (!empty($this->session['sRegister']['shipping'])) {
+            foreach ($this->session['sRegister']['shipping'] as $key => $value) {
+                $this->View()->form_data->register['shipping'][$key] = $value;
+            }
         }
     }
 
@@ -492,7 +497,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         // Check if state selection is required
         if (!empty($this->post["billing"]["country"])) {
-
             $stateSelectionRequired = Shopware()->Db()->fetchRow(
                 "SELECT display_state_in_registration, force_state_in_registration
                 FROM s_core_countries WHERE id = ?",
@@ -657,7 +661,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $validator = $this->container->get('validator.email');
 
         if (empty($this->post['personal']['email'])) {
-
         } elseif (!$validator->isValid($this->post['personal']['email'])) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
             $error_flags['email'] = true;
@@ -697,7 +700,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $error_flags = array();
 
         if (empty($this->post['personal']['password'])) {
-
         } elseif (strlen(utf8_decode($this->post['personal']['password'])) < Shopware()->Config()->get('MinPassword')) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get(
                 'RegisterPasswordLength',

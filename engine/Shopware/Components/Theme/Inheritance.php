@@ -83,13 +83,12 @@ class Inheritance
      * @param PathResolver $pathResolver
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         Util $util,
         PathResolver $pathResolver,
         \Enlight_Event_EventManager $eventManager
-    )
-    {
+    ) {
         $this->pathResolver = $pathResolver;
         $this->entityManager = $entityManager;
         $this->util = $util;
@@ -105,12 +104,12 @@ class Inheritance
         $hierarchy = $this->buildInheritanceRecursive($template);
 
         $util = $this->util;
-        $bare = array_filter($hierarchy, function(Shop\Template $template) use ($util) {
+        $bare = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
             return ($template->getParent() == null || $theme instanceof ResponsiveTheme);
         });
     
-        $custom = array_filter($hierarchy, function(Shop\Template $template) use ($util) {
+        $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
             return ($template->getParent() !== null && !($theme instanceof ResponsiveTheme));
         });

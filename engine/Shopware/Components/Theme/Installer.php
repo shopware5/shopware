@@ -85,7 +85,7 @@ class Installer
      */
     protected $snippetConfig;
 
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         Configurator $configurator,
         PathResolver $pathResolver,

@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Article\Detail as Detail,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\Article\Detail as Detail;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller for the Notification Module
  *
@@ -42,8 +43,8 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
         /**
          * permission to list all notifications
          */
-        $this->addAclPermission('getArticleList', 'read','Insufficient Permissions');
-        $this->addAclPermission('getCustomerList', 'read','Insufficient Permissions');
+        $this->addAclPermission('getArticleList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getCustomerList', 'read', 'Insufficient Permissions');
     }
 
 
@@ -123,5 +124,4 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
-
 }

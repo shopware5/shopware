@@ -24,7 +24,7 @@
 
 namespace Shopware\Models\MultiEdit;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
 
@@ -234,7 +234,4 @@ class Queue extends ModelEntity
     {
         return $this->active;
     }
-
-
-
 }

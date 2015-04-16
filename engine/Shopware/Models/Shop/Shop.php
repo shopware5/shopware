@@ -24,10 +24,10 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Shopware\Components\Theme\Inheritance,
-    Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Theme\Inheritance;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -718,8 +718,7 @@ class Shop extends ModelEntity
 
             if ($template->getVersion() == 3) {
                 $this->registerTheme($template);
-
-            } else if ($template->getVersion() == 2) {
+            } elseif ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',

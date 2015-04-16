@@ -62,7 +62,7 @@ class EnlightMailHandler extends MailHandler
             $mailer->setBodyText($content);
             $mailer->send();
         } catch (\Exception $e) {
-             // empty catch intended to prevent recursion
+            // empty catch intended to prevent recursion
         }
     }
 }

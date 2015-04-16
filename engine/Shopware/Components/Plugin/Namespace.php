@@ -377,7 +377,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         /**@var $plugin Shopware\Models\Plugin\Plugin*/
         /**@var $widget Shopware\Models\Widget\Widget*/
-        foreach($plugin->getWidgets() as $widget) {
+        foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
             $db->insert('s_core_acl_privileges', array(
                 'name' => $name,
@@ -551,13 +551,12 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return;
         }
 
-        foreach($widgets as $widget) {
+        foreach ($widgets as $widget) {
             $db->query("DELETE FROM s_core_acl_privileges WHERE resourceID = ? AND name = ?", array(
                 $resourceId,
                 $widget['name']
             ));
         }
-
     }
 
     /**

@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Order;
 
-use Doctrine\ORM\Mapping as ORM,
-    Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_order_basket")

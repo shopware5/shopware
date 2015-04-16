@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Shop;
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelRepository;
 

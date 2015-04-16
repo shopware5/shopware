@@ -93,7 +93,6 @@ abstract class Resource
             $this->container = Shopware()->Container();
         }
         return $this->container;
-
     }
 
     /**
@@ -494,7 +493,6 @@ abstract class Resource
         }
 
         return $results;
-
     }
 
     /**

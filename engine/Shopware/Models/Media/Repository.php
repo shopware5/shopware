@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Media;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * The media repository used for the media manager backend module.
@@ -84,7 +85,7 @@ class Repository extends ModelRepository
      * @param null $validTypes
      * @return \Doctrine\ORM\Query
      */
-    public function getAlbumMediaQuery($albumId, $filter = null, $orderBy = null, $offset = null, $limit= null,$validTypes = null)
+    public function getAlbumMediaQuery($albumId, $filter = null, $orderBy = null, $offset = null, $limit= null, $validTypes = null)
     {
         $builder = $this->getAlbumMediaQueryBuilder($albumId, $filter, $orderBy, $validTypes);
         if ($limit !== null) {
@@ -103,7 +104,7 @@ class Repository extends ModelRepository
      * @param null $validTypes
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getAlbumMediaQueryBuilder($albumId, $filter = null, $orderBy = null,$validTypes = null)
+    public function getAlbumMediaQueryBuilder($albumId, $filter = null, $orderBy = null, $validTypes = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
@@ -191,9 +192,7 @@ class Repository extends ModelRepository
         $builder->select(array('media'));
         $builder->from('Shopware\Models\Media\Media', 'media')
                 ->where('media.path = ?1')
-                ->setParameter(1,$path);
+                ->setParameter(1, $path);
         return $builder;
     }
-
-
 }

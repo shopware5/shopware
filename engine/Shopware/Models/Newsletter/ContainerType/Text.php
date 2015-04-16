@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter\ContainerType;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware text model represents a text container type.

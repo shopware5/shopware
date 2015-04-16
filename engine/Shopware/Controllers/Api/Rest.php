@@ -103,5 +103,4 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 
         $this->View()->assign(array('success' => true, 'data' => $result));
     }
-
 }

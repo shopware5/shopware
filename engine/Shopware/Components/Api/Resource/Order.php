@@ -285,7 +285,7 @@ class Order extends Resource
         $details = $params['details'];
 
         if (empty($details)) {
-            unset ($params['details']);
+            unset($params['details']);
             return $params;
         }
 

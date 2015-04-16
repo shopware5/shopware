@@ -102,7 +102,6 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoStaticAction()
     {
-
         $shopId = (int) $this->Request()->getParam('shopId', 1);
         @set_time_limit(1200);
 
@@ -122,7 +121,6 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoCategoryAction()
     {
-
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset');
         $limit = $this->Request()->getParam('limit', 50);

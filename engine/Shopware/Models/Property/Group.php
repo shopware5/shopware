@@ -23,11 +23,12 @@
  */
 
 namespace Shopware\Models\Property;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Shopware\Models\Property\Value,
-    Shopware\Models\Property\Option,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Property\Value;
+use Shopware\Models\Property\Option;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware Article Property Model
@@ -285,5 +286,4 @@ class Group extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyGroup', 'attribute', 'propertyGroup');
     }
-
 }

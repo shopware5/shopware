@@ -57,7 +57,7 @@ class DownloadRequest
      * @param string $domain
      * @param AccessTokenStruct|null $token
      */
-    function __construct($technicalName, $shopwareVersion, $domain, AccessTokenStruct $token = null)
+    public function __construct($technicalName, $shopwareVersion, $domain, AccessTokenStruct $token = null)
     {
         $this->technicalName = $technicalName;
         $this->shopwareVersion = $shopwareVersion;

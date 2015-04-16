@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,9 +43,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function initAcl()
     {
-        $this->addAclPermission('saveSingleEntityAction', 'editSingleArticle','Insufficient Permissions');
-        $this->addAclPermission('deleteAction', 'doBackup','Insufficient Permissions');
-        $this->addAclPermission('restoreAction', 'doBackup','Insufficient Permissions');
+        $this->addAclPermission('saveSingleEntityAction', 'editSingleArticle', 'Insufficient Permissions');
+        $this->addAclPermission('deleteAction', 'doBackup', 'Insufficient Permissions');
+        $this->addAclPermission('restoreAction', 'doBackup', 'Insufficient Permissions');
         $this->addAclPermission('getOperationsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('getOperatorsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('getEditableColumnsAction', 'doMultiEdit', 'Insufficient Permissions');
@@ -55,7 +55,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $this->addAclPermission('saveFilterAction', 'editFilters', 'Insufficient Permissions');
         $this->addAclPermission('deleteFilterAction', 'deleteFilters', 'Insufficient Permissions');
         $this->addAclPermission('createQueueAction', 'doMultiEdit', 'Insufficient Permissions');
-
     }
 
     /**
@@ -106,7 +105,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $data = $resource->save($params);
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->save($params);
 
         $this->View()->assign(array(
             'success' => true,
@@ -128,7 +128,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $id = $this->Request()->getParam('id');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $success = $resource->deleteBackup($id);
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $success = $resource->deleteBackup($id);
 
         $this->View()->assign(array(
             'success' => $success
@@ -145,7 +146,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $data = $resource->restoreBackup($id, $offset);
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->restoreBackup($id, $offset);
 
         $this->View()->assign(array(
             'success' => true,
@@ -164,7 +166,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $result = $resource->listBackups($offset, $limit);
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $result = $resource->listBackups($offset, $limit);
         $result['success'] = true;
 
         $this->View()->assign($result);
@@ -229,7 +232,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $columns = $resource->getBatchColumns();
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $columns = $resource->getBatchColumns();
 
         ksort($columns);
 
@@ -269,7 +273,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $queueId = $this->Request()->getParam('queueId', null);
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);        $data = $resource->batchProcess($queueId);
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->batchProcess($queueId);
 
         $this->View()->assign(
             array(

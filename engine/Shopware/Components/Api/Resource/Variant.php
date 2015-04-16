@@ -114,7 +114,6 @@ class Variant extends Resource implements BatchInterface
         }
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
-
             if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
                 $tax = Shopware()->Db()->fetchOne(
                     "SELECT tax
@@ -429,7 +428,9 @@ class Variant extends Resource implements BatchInterface
                 foreach ($variant->getImages() as $image) {
                     $mapping = $this->getVariantMappingOfImage($image, $variant);
 
-                    if ($mapping) $this->getManager()->remove($mapping);
+                    if ($mapping) {
+                        $this->getManager()->remove($mapping);
+                    }
                 }
             }
             return $data;
@@ -472,7 +473,6 @@ class Variant extends Resource implements BatchInterface
                         $article, $media
                     );
                 }
-
             } elseif (isset($imageData['link'])) {
 
                 //check if an url passed and upload the passed image url and create a new article image.
@@ -482,7 +482,6 @@ class Variant extends Resource implements BatchInterface
                 $image = $this->getArticleResource()->createNewArticleImage(
                     $article, $media
                 );
-
             } else {
                 throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
             }
@@ -743,9 +742,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ( ($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
                 || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
-
                 return $availableGroup;
             }
         }
@@ -765,9 +763,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ( ($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
-
                 return $availableOption;
             }
         }
@@ -808,7 +805,6 @@ class Variant extends Resource implements BatchInterface
     {
         //if unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
-
             $data['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['unitId']);
 
             if (empty($data['unit'])) {

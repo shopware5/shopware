@@ -46,9 +46,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        if(!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout'))
-            && !$this->admin->sCheckUser())
-        {
+        if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout'))
+            && !$this->admin->sCheckUser()) {
             // If using the new template, the 'GET' action will be handled
             // in the Register controller (unified login/register page)
             if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
@@ -209,7 +208,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $destinationPage = (int)$this->Request()->sPage;
 
-        if(empty($destinationPage)) {
+        if (empty($destinationPage)) {
             $destinationPage = 1;
         }
 
@@ -398,7 +397,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
             // State selection
             if (!empty($values["billing"]["country"])) {
-               $stateSelectionRequired = Shopware()->Db()->fetchRow(
+                $stateSelectionRequired = Shopware()->Db()->fetchRow(
                    "SELECT display_state_in_registration, force_state_in_registration
                    FROM s_core_countries WHERE id = ?",
                    array($values["billing"]["country"]))
@@ -648,7 +647,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $status = $this->Request()->getPost('newsletter') ? true : false;
             $this->admin->sUpdateNewsletter($status, $this->admin->sGetUserMailById(), true);
             $successMessage =  $status ? 'newsletter' : 'deletenewsletter';
-            if(Shopware()->Config()->optinnewsletter && $status) {
+            if (Shopware()->Config()->optinnewsletter && $status) {
                 $successMessage = 'optinnewsletter';
             }
             $this->View()->sSuccessAction = $successMessage;

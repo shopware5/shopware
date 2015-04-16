@@ -244,6 +244,4 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         return $sumSelect;
     }
-
-
 }

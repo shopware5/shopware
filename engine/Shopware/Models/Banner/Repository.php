@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Banner;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the banner model (Shopware\Models\Banner\Banner).
@@ -63,7 +64,7 @@ class Repository extends ModelRepository
         $today = new \DateTime();
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom','?3'),
+                $builder->expr()->lte('banner.validFrom', '?3'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validFrom', '?4'),
                     $builder->expr()->isNull('banner.validFrom')
@@ -72,7 +73,7 @@ class Repository extends ModelRepository
         )->setParameter(3, $today)->setParameter(4, null);
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo','?5'),
+                $builder->expr()->gte('banner.validTo', '?5'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validTo', '?6'),
                     $builder->expr()->isNull('banner.validTo')
@@ -126,7 +127,7 @@ class Repository extends ModelRepository
         $today = new \DateTime();
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom','?3'),
+                $builder->expr()->lte('banner.validFrom', '?3'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validFrom', '?4'),
                     $builder->expr()->isNull('banner.validFrom')
@@ -135,7 +136,7 @@ class Repository extends ModelRepository
         )->setParameter(3, $today)->setParameter(4, null);
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo','?5'),
+                $builder->expr()->gte('banner.validTo', '?5'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validTo', '?6'),
                     $builder->expr()->isNull('banner.validTo')
@@ -155,7 +156,7 @@ class Repository extends ModelRepository
         shuffle($retval);
 
         if ($limit > 0) {
-            $retval =   array_slice($retval,0,$limit);
+            $retval =   array_slice($retval, 0, $limit);
         }
 
         return $retval;

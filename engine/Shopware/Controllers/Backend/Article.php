@@ -106,10 +106,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function initAcl()
     {
-        $this->addAclPermission("loadStores","read","Insufficient Permissions");
-        $this->addAclPermission("duplicateArticle","save","Insufficient Permissions");
-        $this->addAclPermission("save","save","Insufficient Permissions");
-        $this->addAclPermission("delete","delete","Insufficient Permissions");
+        $this->addAclPermission("loadStores", "read", "Insufficient Permissions");
+        $this->addAclPermission("duplicateArticle", "save", "Insufficient Permissions");
+        $this->addAclPermission("save", "save", "Insufficient Permissions");
+        $this->addAclPermission("delete", "delete", "Insufficient Permissions");
     }
     /**
      * Disable template engine for all actions
@@ -398,7 +398,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $data = $this->Request()->getParams();
             $articleId = (int) $data['articleId'];
             if (empty($articleId)) {
-                $this->View()->assign(array('success' => false,'noId' => true));
+                $this->View()->assign(array('success' => false, 'noId' => true));
 
                 return;
             }
@@ -838,7 +838,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (!empty($data['mediaId'])) {
                 $data['media'] = Shopware()->Models()->find('\Shopware\Models\Media\Media', $data['mediaId']);
                 if (!$data['media']) {
-                     unset($data['media']);
+                    unset($data['media']);
                 }
             }
 
@@ -946,7 +946,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->flush();
 
         $this->increaseAutoNumber($newArticleData['autoNumber'], $number);
-
     }
 
     /**
@@ -1250,7 +1249,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($mainDetail->getId() !== $detail->getId()) {
                 $this->swapDetailTranslations($detail, $mainDetail);
             }
-
         }
 
         return $detail;
@@ -1306,7 +1304,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $newData,
                 false
             );
-
         }
 
         // Save the new mainDetail translations as article translations
@@ -1566,9 +1563,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'filterValues.value AS value',
                 'filterOptions.id AS optionId'))
             ->from('s_filter_values', 'filterValues')
-            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id' )
-            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID' )
-            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)' )
+            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id')
+            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID')
+            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)')
             ->setParameter('propertyGroupId', $propertyGroupId);
 
         if (!empty($searchValue)) {
@@ -1597,7 +1594,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function setPropertyListAction()
     {
-        if(!$this->Request()->isPost()) {
+        if (!$this->Request()->isPost()) {
             //don't save the property list on a get request. This will only occur when there is an ext js problem
             return;
         }
@@ -1927,7 +1924,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $this->getRepository()
                     ->getConfiguratorDependenciesQuery($configuratorSetId)
                     ->getArrayResult();
-
     }
 
     /**
@@ -2259,15 +2255,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $selectSql = array();
 
         //we have remove the first group id, but we need the first id in the select, from and where path.
-        $selectSql[] = sprintf($selectTemplate, $firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId);
-        $groupSql[] = sprintf($fromTemplate, $firstId,$firstId,$firstId,$firstId);
-        $whereSql = sprintf($whereTemplate, $firstId,$firstId,$firstId, implode(',', $first['options']));
+        $selectSql[] = sprintf($selectTemplate, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId);
+        $groupSql[] = sprintf($fromTemplate, $firstId, $firstId, $firstId, $firstId);
+        $whereSql = sprintf($whereTemplate, $firstId, $firstId, $firstId, implode(',', $first['options']));
 
         //now we iterate all other groups, and create a select sql path and a cross join sql path.
         foreach ($activeGroups as $group) {
             $groupId = $group['id'];
-            $selectSql[] = sprintf($selectTemplate, $groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId);
-            $groupSql[] = sprintf($joinTemplate, $groupId,$groupId,$groupId,$groupId,implode(',', $group['options']),$groupId,$groupId,$groupId);
+            $selectSql[] = sprintf($selectTemplate, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId);
+            $groupSql[] = sprintf($joinTemplate, $groupId, $groupId, $groupId, $groupId, implode(',', $group['options']), $groupId, $groupId, $groupId);
         }
 
         //concat the sql statement
@@ -2453,7 +2449,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getQuery()
                     ->execute();
         }
-
     }
 
 
@@ -2620,7 +2615,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $detailData = $this->getRepository()
                     ->getConfiguratorTemplateByArticleIdQuery($article->getId())
                     ->getArrayResult();
-
         }
 
         return $detailData[0];
@@ -4169,7 +4163,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         } else {
             return $result;
         }
-
     }
 
     /**

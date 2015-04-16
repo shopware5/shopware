@@ -19,5 +19,4 @@ interface CompressorInterface
      * @return string
      */
     public function compress($content);
-
 }

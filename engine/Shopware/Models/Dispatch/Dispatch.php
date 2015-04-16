@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Dispatch;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Dispatch Model
@@ -1100,5 +1101,4 @@ class Dispatch extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Dispatch', 'attribute', 'dispatch');
     }
-
 }

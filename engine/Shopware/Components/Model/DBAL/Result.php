@@ -68,7 +68,7 @@ class Result
      * @param bool $useCountQuery Allows to disable or enable the total count query.
      * @internal param array $data
      */
-    function __construct(QueryBuilder $builder, $fetchMode = \PDO::FETCH_ASSOC, $useCountQuery = true)
+    public function __construct(QueryBuilder $builder, $fetchMode = \PDO::FETCH_ASSOC, $useCountQuery = true)
     {
         $builder = clone $builder;
 
@@ -125,5 +125,4 @@ class Result
     {
         return $this->totalCount;
     }
-
 }

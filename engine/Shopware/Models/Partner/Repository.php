@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Partner;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
  *
@@ -167,18 +169,18 @@ class Repository extends ModelRepository
                 'orderState.id as orderStatusId'
             ))
             ->from('Shopware\Models\Order\Order', 'o')
-            ->leftJoin("o.partner","partner")
+            ->leftJoin("o.partner", "partner")
             ->leftJoin("o.orderStatus", "orderState")
             ->leftJoin("o.customer", "customer")
             ->leftJoin("customer.billing", "billing")
-            ->where($expr->eq("partner.id" ,"?1"))
+            ->where($expr->eq("partner.id", "?1"))
             ->andWhere("o.status != 4")
             ->andWhere("o.status != -1")
-            ->andWhere($expr->gt('o.orderTime','?2' ))
-            ->andWhere($expr->lt('o.orderTime','?3' ))
-            ->setParameter(1,$partnerId)
-            ->setParameter(2,$fromDate)
-            ->setParameter(3,$toDate)
+            ->andWhere($expr->gt('o.orderTime', '?2'))
+            ->andWhere($expr->lt('o.orderTime', '?3'))
+            ->setParameter(1, $partnerId)
+            ->setParameter(2, $fromDate)
+            ->setParameter(3, $toDate)
             ->setParameter('userCurrencyFactor', $userCurrencyFactor);
 
         if (!$summary) {
@@ -226,7 +228,7 @@ class Repository extends ModelRepository
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision'
             ))
             ->from('Shopware\Models\Order\Order', 'o')
-            ->leftJoin('o.partner','partner')
+            ->leftJoin('o.partner', 'partner')
             ->where('partner.id = ?0')
             ->andWhere('o.status != 4')
             ->andWhere('o.status != -1')
@@ -274,9 +276,9 @@ class Repository extends ModelRepository
                 ->andWhere("customer.email = ?0")
                 ->orWhere("billing.number = ?1")
                 ->orWhere("customer.id = ?2");
-        $builder->setParameter(0,$mappingValue);
-        $builder->setParameter(1,$mappingValue);
-        $builder->setParameter(2,$mappingValue);
+        $builder->setParameter(0, $mappingValue);
+        $builder->setParameter(1, $mappingValue);
+        $builder->setParameter(2, $mappingValue);
         return $builder;
     }
 
@@ -323,7 +325,6 @@ class Repository extends ModelRepository
      */
     private function getDatePartListDQL($alias, $monthlyAmount = false)
     {
-
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->from('Shopware\Models\Order\Order', $alias)
                 ->select(array('SUM('.$alias.'.invoiceAmountNet - '.$alias.'.invoiceShippingNet)'))

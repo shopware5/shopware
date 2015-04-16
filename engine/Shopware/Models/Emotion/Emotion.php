@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Emotion;
-use         Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -727,20 +728,19 @@ class Emotion extends ModelEntity
         $this->id = null;
 
         $categories = array();
-        foreach($this->getCategories() as $category) {
+        foreach ($this->getCategories() as $category) {
             $categories[] = $category;
         }
 
         $elements = array();
         /**@var $element Element*/
-        foreach($this->getElements() as $element) {
-
+        foreach ($this->getElements() as $element) {
             $newElement = clone $element;
             $newElement->setEmotion($this);
 
             if ($newElement->getData()) {
                 /**@var $data Data*/
-                foreach($newElement->getData() as $data) {
+                foreach ($newElement->getData() as $data) {
                     $data->setEmotion($this);
                 }
             }

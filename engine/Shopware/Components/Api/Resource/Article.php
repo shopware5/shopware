@@ -35,7 +35,6 @@ use Shopware\Models\Article\Configurator;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Models\Shop\Shop;
 
-
 /**
  * Article API Resource
  *
@@ -815,7 +814,6 @@ class Article extends Resource implements BatchInterface
         }
 
         foreach ($data['variants'] as $variantData) {
-
             if (isset($variantData['id'])) {
                 $variant = $this->getVariantResource()->internalUpdate(
                     $variantData['id'],
@@ -876,7 +874,6 @@ class Article extends Resource implements BatchInterface
                             }
                         }
                     }
-
                 }
 
                 $data['mainDetail'] = $newMain;
@@ -1013,7 +1010,6 @@ class Article extends Resource implements BatchInterface
             if (empty($data['tax'])) {
                 throw new ApiException\CustomValidationException(sprintf("Tax by id %s not found", $data['taxId']));
             }
-
         } elseif (isset($data['tax']) && ($data['tax'] >= 0)) {
             $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
             if (!$tax) {
@@ -1144,7 +1140,6 @@ class Article extends Resource implements BatchInterface
         $categories = $article->getCategories();
 
         foreach ($data['categories'] as $categoryData) {
-
             $category = $this->getManyToManySubElement(
                 $categories,
                 $categoryData,
@@ -1163,7 +1158,6 @@ class Article extends Resource implements BatchInterface
 
                 $categories->add($category);
             }
-
         }
 
         $data['categories'] = $categories;
@@ -1235,8 +1229,7 @@ class Article extends Resource implements BatchInterface
                 }
 
                 $seoCategory->setCategory($category);
-
-            } else if (isset($categoryData['categoryPath'])) {
+            } elseif (isset($categoryData['categoryPath'])) {
                 $category = $this->getResource('Category')->findCategoryByPath(
                     $categoryData['categoryPath'],
                     true
@@ -1563,7 +1556,6 @@ class Article extends Resource implements BatchInterface
         $downloads = $this->checkDataReplacement($article->getDownloads(), $data, 'downloads', true);
 
         foreach ($data['downloads'] as &$downloadData) {
-
             $download = $this->getOneToManySubElement(
                 $downloads,
                 $downloadData,
@@ -1646,7 +1638,6 @@ class Article extends Resource implements BatchInterface
 
                 $image->setPosition($position);
                 $position++;
-
             } elseif (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
                     'Shopware\Models\Media\Media',
@@ -1727,7 +1718,6 @@ class Article extends Resource implements BatchInterface
 
         /**@var $mapping Image\Mapping */
         foreach ($mappings as $mapping) {
-
             $builder = $this->getArticleVariantQuery($id);
 
             /**@var $rule Image\Rule */
@@ -1747,7 +1737,9 @@ class Article extends Resource implements BatchInterface
                     'parent',
                     $mapping->getImage()
                 );
-                if ($exist) continue;
+                if ($exist) {
+                    continue;
+                }
 
                 $image = $this->getVariantResource()->createVariantImage(
                     $mapping->getImage(),
@@ -1758,7 +1750,6 @@ class Article extends Resource implements BatchInterface
             }
         }
         $this->getManager()->flush();
-
     }
 
     /**
@@ -1849,11 +1840,9 @@ class Article extends Resource implements BatchInterface
         $configuratorOptions = $article->getConfiguratorSet()->getOptions();
 
         foreach ($mappings as $mappingData) {
-
             $options = new ArrayCollection();
 
             foreach ($mappingData as $option) {
-
                 $available = $this->getCollectionElementByProperties($configuratorOptions, array(
                     'id' => $option['id'],
                     'name' => $option['name'],
@@ -2212,7 +2201,6 @@ class Article extends Resource implements BatchInterface
                     $image = $this->mergeTranslation($image, $translation['data']);
                 }
             }
-
         }
 
         return $details;
@@ -2311,6 +2299,4 @@ class Article extends Resource implements BatchInterface
 
         return false;
     }
-
-
 }

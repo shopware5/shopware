@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Mail\Mail,
-    Shopware\Models\Mail\Attachment;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Mail\Attachment;
+
 /**
  * Backend Controller for the mail backend module
  */
@@ -656,7 +657,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $childNodes = array();
         foreach ($attachments as $attachment) {
-
             if ($attachment->getShopId() !== null) {
                 continue;
             }

@@ -325,7 +325,6 @@ class StoreDownloadCommand extends StoreCommand
         $this->handleError([
             'message' => sprintf('Plugin %s is encrypted and requires the ioncube loader extension', $plugin->getLabel())
         ]);
-
     }
 
     /**

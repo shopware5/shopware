@@ -106,7 +106,7 @@ class Customer extends Resource
                 ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
-                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')

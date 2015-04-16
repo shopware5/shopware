@@ -138,7 +138,6 @@ class Grammar
         }
 
         return $attributes;
-
     }
 
     /**
@@ -148,7 +147,6 @@ class Grammar
      */
     public function getGrammar()
     {
-
         $grammar = array(
             'nullaryOperators' => array(
                 'HASIMAGE' => '',
@@ -188,7 +186,5 @@ class Grammar
         );
 
         return $grammar;
-
     }
-
 }

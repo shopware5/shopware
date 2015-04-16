@@ -23,7 +23,6 @@
  */
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
-
 use Shopware\Bundle\StoreFrontBundle;
 
 /**
@@ -121,8 +120,7 @@ class sBasket
 
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
-    )
-    {
+    ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
         $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
@@ -159,7 +157,7 @@ class sBasket
             array($this->session->get('sessionId'))
         );
 
-       return ($result === false ? array() : $result);
+        return ($result === false ? array() : $result);
     }
 
     /**
@@ -355,7 +353,7 @@ class sBasket
 
         $discount = $basketAmount / 100 * $basketDiscount;
         $discount = $discount * -1;
-        $discount = round($discount,2);
+        $discount = round($discount, 2);
 
         $taxMode = $this->config->get('sTAXAUTOMODE');
         if (!empty($taxMode)) {
@@ -375,7 +373,7 @@ class sBasket
         if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
             $discountNet = $discount;
         } else {
-            $discountNet = round($discount / (100+$tax) * 100,3);
+            $discountNet = round($discount / (100+$tax) * 100, 3);
         }
 
         $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] = $basketDiscount;
@@ -695,7 +693,7 @@ class sBasket
         }
 
         // Check if the voucher is limited to certain articles, and validate that
-        list ($sErrorMessages, $restrictedArticles) = $this->filterArticleVoucher($voucherDetails);
+        list($sErrorMessages, $restrictedArticles) = $this->filterArticleVoucher($voucherDetails);
         if (!empty($sErrorMessages)) {
             return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
@@ -755,7 +753,7 @@ class sBasket
         )
         VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
         ";
-        $params = array (
+        $params = array(
             $this->session->get('sessionId'),
             $voucherName,
             $voucherDetails["id"],
@@ -816,7 +814,7 @@ class sBasket
         $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA["minimumorder"];
         $factor = $this->sSYSTEM->sCurrency["factor"];
 
-        if ($minimumOrder && !$this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"] ) {
+        if ($minimumOrder && !$this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]) {
             $amount = $this->sGetAmount();
             if ($amount["totalAmount"] < ($minimumOrder * $factor)) {
                 return ($minimumOrder * $factor);
@@ -852,11 +850,9 @@ class sBasket
         $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA['minimumorder'];
         $minimumOrderSurcharge = $this->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
         if ($minimumOrder && $minimumOrderSurcharge) {
-
             $amount = $this->sGetAmount();
 
             if ($amount["totalAmount"] < $minimumOrder) {
-
                 $taxAutoMode = $this->config->get('sTAXAUTOMODE');
                 if (!empty($taxAutoMode)) {
                     $tax = $this->getMaxTax();
@@ -871,7 +867,7 @@ class sBasket
                 if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
                     $discountNet = $minimumOrderSurcharge;
                 } else {
-                    $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100,3);
+                    $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100, 3);
                 }
 
                 if ($this->sSYSTEM->sCurrency["factor"]) {
@@ -932,7 +928,6 @@ class sBasket
                 'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
                 array($userData["paymentID"])
             ) ? : array();
-
         }
 
         $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
@@ -973,7 +968,7 @@ class sBasket
             if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $discountNet = $surcharge;
             } else {
-                $discountNet = round($surcharge / (100+$tax) * 100,3);
+                $discountNet = round($surcharge / (100+$tax) * 100, 3);
             }
 
             $this->db->insert(
@@ -1178,7 +1173,7 @@ class sBasket
                 's_order_notes',
                 array(
                     'sUniqueID'   => empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
-                    'userID'      => $this->session->get('sUserId') ? : '0' ,
+                    'userID'      => $this->session->get('sUserId') ? : '0',
                     'articlename' => $articleName,
                     'articleID'   => $articleID,
                     'ordernumber' => $articleOrderNumber,
@@ -1223,7 +1218,7 @@ class sBasket
 
         $promotions = array();
         /**@var $product ListProduct */
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $average = null;
             $note = $notes[$product->getNumber()];
             if (array_key_exists($product->getNumber(), $votes)) {
@@ -1233,7 +1228,6 @@ class sBasket
             $promotions[] = $this->convertListProductToNote($product, $note, $average);
         }
         return $promotions;
-
     }
 
     /**
@@ -1728,7 +1722,6 @@ class sBasket
     {
         $sErrorMessages = array();
         if ($userId && $voucherDetails["id"]) {
-
             $queryVoucher = $this->db->fetchAll(
                 'SELECT s_order_details.id AS id
                     FROM s_order, s_order_details
@@ -1860,7 +1853,6 @@ class sBasket
 
         $allowedSupplierId = $voucherDetails["bindtosupplier"];
         if ($allowedSupplierId) {
-
             $allowedBasketEntriesBySupplier = $this->db->fetchRow(
                 'SELECT s_order_basket.id
                 FROM s_order_basket, s_articles, s_articles_supplier
@@ -1906,7 +1898,6 @@ class sBasket
                 $taxRate = $this->config->get('sVOUCHERTAX');
             } elseif ($voucherDetails["taxconfig"] == "auto") {
                 $taxRate = $this->getMaxTax();
-
             } elseif (intval($voucherDetails["taxconfig"])) {
                 $temporaryTax = $voucherDetails["taxconfig"];
                 $getTaxRate = $this->db->fetchOne(
@@ -2085,7 +2076,6 @@ class sBasket
                 //if voucher was deleted, do not restore
                 if ($this->front->Request()->getQuery('sDelete') != 'voucher') {
                     $this->sAddVoucher($ticketResult["vouchercode"]);
-
                 }
             }
 
@@ -2098,7 +2088,6 @@ class sBasket
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
                 if (empty($value["modus"])) {
-
                     $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
 
                     $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
@@ -2106,7 +2095,6 @@ class sBasket
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
                     }
-
                 } elseif ($value["modus"] == 3) {
                     $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
                     // Basket discount
@@ -2149,7 +2137,6 @@ class sBasket
                 } else {
                     $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
                 }
-
             } else {
                 if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
                     $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);

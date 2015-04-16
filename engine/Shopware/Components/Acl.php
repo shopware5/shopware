@@ -65,7 +65,7 @@ class Shopware_Components_Acl extends Zend_Acl
 
         /**@var $resource Shopware\Models\User\Resource */
         foreach ($resources as $resource) {
-             $this->addResource($resource);
+            $this->addResource($resource);
         }
 
         return $this;
@@ -119,9 +119,9 @@ class Shopware_Components_Acl extends Zend_Acl
             $resource = $rule->getResource();
             $privilege = $rule->getPrivilege();
 
-            if ($resource === NULL && $privilege === NULL) {
+            if ($resource === null && $privilege === null) {
                 $this->allow($role);
-            } elseif ($privilege === NULL) {
+            } elseif ($privilege === null) {
                 $this->allow($role, $resource);
             } else {
                 $this->allow($role, $resource, $privilege->getName());
@@ -175,10 +175,9 @@ class Shopware_Components_Acl extends Zend_Acl
         if (!empty($menuItemName)) {
             $this->em->getConnection()->executeUpdate(
                 "UPDATE s_core_menu SET resourceID = ? WHERE name = ?",
-                [$resource->getId(),$menuItemName]
+                [$resource->getId(), $menuItemName]
             );
         }
-
     }
 
     /**

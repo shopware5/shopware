@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\User;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
@@ -448,5 +449,4 @@ class Repository extends ModelRepository
                 ->andWhere($expr->isNull('rule.privilegeId'));
         return $builder;
     }
-
 }

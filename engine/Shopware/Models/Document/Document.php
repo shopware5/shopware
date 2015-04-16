@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Document;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware document model represents a document.

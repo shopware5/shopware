@@ -133,7 +133,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
             }
         }
-
     }
 
     /**
@@ -337,7 +336,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             //catch all errors
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
-
     }
 
     /**
@@ -395,7 +393,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //also, check if we have the necessary rights
         try {
             if (!empty($siteId)) {
-
                 if (!$this->_isAllowed('updateSite', 'site')) {
                     $this->View()->assign(array('success' => false, 'message' => 'Permission denied.'));
                     return;
@@ -403,7 +400,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
                 $site = $this->getSiteRepository()->find($siteId);
             } else {
-
                 if (!$this->_isAllowed('createSite', 'site')) {
                     $this->View()->assign(array('success' => false, 'message' => 'Permission denied.'));
                     return;

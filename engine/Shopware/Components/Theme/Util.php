@@ -57,7 +57,7 @@ class Util
      * @param ModelManager $entityManager
      * @param PathResolver $pathResolver
      */
-    function __construct(ModelManager $entityManager, PathResolver $pathResolver)
+    public function __construct(ModelManager $entityManager, PathResolver $pathResolver)
     {
         $this->entityManager = $entityManager;
         $this->pathResolver = $pathResolver;
@@ -218,5 +218,4 @@ class Util
             AbstractQuery::HYDRATE_OBJECT
         );
     }
-
 }

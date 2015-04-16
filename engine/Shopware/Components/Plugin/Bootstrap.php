@@ -632,7 +632,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         return $path;
-
     }
 
     /**
@@ -719,7 +718,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function deleteForm()
     {
-
     }
 
     /**
@@ -727,7 +725,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function deleteConfig()
     {
-
     }
 
     /**
@@ -797,8 +794,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $next = null,
         $start = null,
         $end = null
-    )
-    {
+    ) {
         $this->createCronJob($name, $action, $interval, $active);
     }
 
@@ -1165,7 +1161,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         $value = $this->explodeHttpCacheRoutes($value);
-        $new = array_filter($value, function($row) use ($route) {
+        $new = array_filter($value, function ($row) use ($route) {
             return ($row['route'] != $route);
         });
 
@@ -1175,7 +1171,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         //remove no cache tags
         $value = $writer->get('noCacheControllers', 'HttpCache');
         $value = $this->explodeHttpCacheRoutes($value);
-        $new = array_filter($value, function($row) use ($route) {
+        $new = array_filter($value, function ($row) use ($route) {
             return ($row['route'] != $route);
         });
 
@@ -1268,7 +1264,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     private function implodeHttpCacheRoutes($value)
     {
-        $value = array_map(function($row) {
+        $value = array_map(function ($row) {
             return implode(' ', $row);
         }, $value);
 

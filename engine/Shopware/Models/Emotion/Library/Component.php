@@ -25,8 +25,8 @@
 namespace Shopware\Models\Emotion\Library;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use         Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Plugin\Plugin;
 
 /**
@@ -601,7 +601,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
 
@@ -624,7 +623,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
 
@@ -647,7 +645,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
     /**
@@ -696,7 +693,7 @@ class Component extends ModelEntity
             $this->maxFieldPositionValue = 0;
 
             $positions = array_map(
-                function($field) {return $field->getPosition();},
+                function ($field) {return $field->getPosition();},
                 $this->getFields()->toArray()
             );
             $this->maxFieldPositionValue = max($positions) ? : 0;

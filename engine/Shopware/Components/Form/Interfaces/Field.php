@@ -41,5 +41,4 @@ interface Field
      * @return string
      */
     public function getName();
-
 }

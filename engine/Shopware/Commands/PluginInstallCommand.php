@@ -73,7 +73,6 @@ EOF
         set_error_handler(function ($errno, $errstr) {
             if ($errno === E_RECOVERABLE_ERROR
                 && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
-
                 return true;
             }
 

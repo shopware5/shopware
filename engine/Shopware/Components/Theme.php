@@ -211,7 +211,9 @@ class Theme
      *  }
      * </code>
      */
-    public function createConfig(Form\Container\TabContainer $container) { }
+    public function createConfig(Form\Container\TabContainer $container)
+    {
+    }
 
     /**
      * Each theme can implement multiple configuration sets or also named color sets.
@@ -232,7 +234,9 @@ class Theme
      *      $collection->add($set);
      *   }
      */
-    public function createConfigSets(ArrayCollection $collection) { }
+    public function createConfigSets(ArrayCollection $collection)
+    {
+    }
 
     /**
      * Creates a ext js tab panel.

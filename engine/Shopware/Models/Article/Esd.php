@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM,
-Symfony\Component\Validator\Constraints as Assert,
-Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -176,7 +177,6 @@ class Esd extends ModelEntity
     public function setArticle($article)
     {
         throw new \Exception('Article should be set implicit with setArticleDetail');
-
     }
 
     /**

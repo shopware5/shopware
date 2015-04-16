@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Tracking;
+
 use Shopware\Components\Model\ModelRepository;
+
 /**
  * Shopware Tracking Model
  */
@@ -47,8 +49,7 @@ class Repository extends ModelRepository
 
         // If no Entry for this day exists - create a new one
         if (! $bannerStatistics) {
-
-            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId,$date);
+            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId, $date);
 
             $bannerStatistics->setClicks(0);
             $bannerStatistics->setViews(0);
@@ -105,5 +106,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

@@ -25,10 +25,10 @@
 /**
  * Backend Controller for the backend user management
  */
-use Shopware\Models\User\User as User,
-Shopware\Models\User\Role as Role,
-Shopware\Models\User\Privilege as Privilege,
-Shopware\Models\User\Resource as Resource;
+use Shopware\Models\User\User as User;
+use Shopware\Models\User\Role as Role;
+use Shopware\Models\User\Privilege as Privilege;
+use Shopware\Models\User\Resource as Resource;
 
 class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Backend_ExtJs
 {
@@ -516,7 +516,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             }
             $resourceNode['data'] = $children;
             $resourceNode['leaf'] = false;
-
         } else {
             $resourceNode['leaf'] = true;
             $resourceNode['data'] = array();
@@ -681,7 +680,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             ));
 
             return;
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -723,7 +721,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             ));
             return;
         }
-
     }
 
     /**

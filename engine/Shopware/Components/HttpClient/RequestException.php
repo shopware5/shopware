@@ -42,7 +42,7 @@ class RequestException extends \Exception
      * @param \Exception $previous
      * @param string $body
      */
-    function __construct($message = "", $code = 0, \Exception $previous = null, $body = null)
+    public function __construct($message = "", $code = 0, \Exception $previous = null, $body = null)
     {
         $this->body = $body;
         parent::__construct($message, $code, $previous);

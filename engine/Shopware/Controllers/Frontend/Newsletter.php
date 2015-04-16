@@ -143,17 +143,14 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
-
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
             if ($this->View()->sStatus['code'] == 3) {
                 // Send mail to subscriber
                 $this->sendMail(Shopware()->System()->_POST["newsletter"], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
-
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
             if ($this->View()->sStatus["code"] == 3) {
-
                 Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
                 $hash = md5(uniqid(rand()));
                 $data = serialize(Shopware()->System()->_POST->toArray());

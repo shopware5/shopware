@@ -42,13 +42,13 @@ class SepaPaymentMethod extends GenericPaymentMethod
         $sErrorFlag = array();
         $sErrorMessages = array();
 
-        if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0 ) {
+        if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0) {
             $sErrorFlag["sSepaIban"] = true;
         }
-        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$request->getParam("sSepaBic") || strlen(trim($request->getParam("sSepaBic"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$request->getParam("sSepaBic") || strlen(trim($request->getParam("sSepaBic"))) === 0)) {
             $sErrorFlag["sSepaBic"] = true;
         }
-        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0)) {
             $sErrorFlag["sSepaBankName"] = true;
         }
 

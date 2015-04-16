@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Premium;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Model Premium

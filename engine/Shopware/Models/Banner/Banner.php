@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Banner;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Banner Model
@@ -389,5 +390,4 @@ class Banner extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Banner', 'attribute', 'banner');
     }
-
 }

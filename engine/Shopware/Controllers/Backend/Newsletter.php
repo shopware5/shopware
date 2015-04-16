@@ -360,10 +360,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->Response()->setHeader('Content-Type', 'image/gif');
-        $bild = imagecreate (1, 1);
+        $bild = imagecreate(1, 1);
         $white = imagecolorallocate($bild, 255, 255, 255);
         imagefill($bild, 1, 1, $white);
-        imagegif ($bild);
+        imagegif($bild);
         imagedestroy($bild);
     }
 
@@ -519,7 +519,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $sql = 'SELECT groups, languageID FROM s_campaigns_mailings WHERE id=?';
         $mailing = Shopware()->Db()->fetchRow($sql, array($id));
 
-        if(empty($mailing)) return false;
+        if (empty($mailing)) {
+            return false;
+        }
 
         $mailing['groups'] = unserialize($mailing['groups']);
 
@@ -607,7 +609,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function getMailingUserByEmail($email)
     {
-
         $select = '
             cm.email, cm.email as newsletter, cg.name as `group`,
             IFNULL(ub.salutation, nd.salutation) as salutation,
@@ -686,7 +687,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function outputFilter($source)
     {
-        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi','$1="../../campaigns/$2"', $source);
+        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi', '$1="../../campaigns/$2"', $source);
         $callback = array(Shopware()->Plugins()->Core()->PostFilter(),'rewriteSrc');
         $source = preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
         return $source;
@@ -701,8 +702,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     public function altFilter($source)
     {
         $source = preg_replace('#<a.+href="(.*)".*>#Umsi', '$1', $source);
-        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n","\n", ' '), $source);
-        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$source)));
+        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n", "\n", ' '), $source);
+        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $source)));
         $source = html_entity_decode($source);
         return $source;
     }

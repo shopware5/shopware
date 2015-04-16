@@ -86,7 +86,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         Shopware()->Session()->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
-
             $this->get('events')->notify('Shopware_Theme_Preview_Starts', array(
                 'session' => Shopware()->Session(),
                 'shop'    => $shop,
@@ -319,7 +318,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         if ($template->getConfigSets()->count() > 0) {
             return true;
-        } else if ($theme->useInheritanceConfig() && $template->getParent() instanceof Template) {
+        } elseif ($theme->useInheritanceConfig() && $template->getParent() instanceof Template) {
             return $this->hasTemplateConfigSet($template->getParent());
         } else {
             return false;

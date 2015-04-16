@@ -114,7 +114,6 @@ set `date` = $calculation
 WHERE id = ?
 SQL;
             $this->db->executeUpdate($sql, array($id));
-
         }
     }
 
@@ -160,9 +159,8 @@ SQL;
         $L = $I - $J;
         $m = 3 + (int) (($L + 40) / 44);
         $d = $L + 28 - 31 * ((int) ($m / 4));
-        $E = mktime(0,0,0, $m, $d, $year)-mktime(0,0,0,3,21,$year);
+        $E = mktime(0, 0, 0, $m, $d, $year)-mktime(0, 0, 0, 3, 21, $year);
 
-        return intval(round($E/(60*60*24),0));
+        return intval(round($E/(60*60*24), 0));
     }
-
 }

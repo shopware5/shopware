@@ -57,7 +57,7 @@ class DefaultPreFilter implements PreFilterInterface
         unset($params['title'], $params['sViewport'], $params['sAction']);
 
         if (isset($params['controller']) || isset($params['module'])) {
-            if(isset($params['module'])) {
+            if (isset($params['module'])) {
                 unset($globalParams['controller']);
             }
             unset($globalParams['controller'], $globalParams['action']);

@@ -699,5 +699,4 @@ class sCategories
 
         return $statement->fetch(PDO::FETCH_COLUMN);
     }
-
 }

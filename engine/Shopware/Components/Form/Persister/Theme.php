@@ -46,7 +46,7 @@ class Theme implements Form\Interfaces\Persister
     /**
      * @param ModelManager $entityManager
      */
-    function __construct(ModelManager $entityManager)
+    public function __construct(ModelManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -93,8 +93,7 @@ class Theme implements Form\Interfaces\Persister
         foreach ($container->getElements() as $element) {
             if ($element instanceof Form\Interfaces\Container) {
                 $this->saveContainer($element, $template, $entity);
-
-            } else if ($element instanceof Form\Interfaces\Field) {
+            } elseif ($element instanceof Form\Interfaces\Field) {
                 $this->saveField($element, $template, $entity);
             }
         }
@@ -281,5 +280,4 @@ class Theme implements Form\Interfaces\Persister
         }
         return new TemplateConfig\Layout();
     }
-
 }

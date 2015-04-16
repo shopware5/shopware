@@ -179,7 +179,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         //returns the blog article data
         $blogArticles = $paginator->getIterator()->getArrayCopy();
 
-        $mediaIds = array_map(function($blogArticle) {
+        $mediaIds = array_map(function ($blogArticle) {
             if (isset($blogArticle['media']) && $blogArticle['media'][0]['mediaId']) {
                 return $blogArticle['media'][0]['mediaId'];
             }
@@ -230,7 +230,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
-	    /**@var $repository \Shopware\Models\Emotion\Repository*/
+        /**@var $repository \Shopware\Models\Emotion\Repository*/
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $query = $repository->getCampaignByCategoryQuery($categoryId);
         $campaignsResult = $query->getArrayResult();
@@ -253,7 +253,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
             'sCategoryInfo' => $categoryContent,
             'sBlogArticles' => $blogArticles,
-	        'campaigns' => $campaigns
+            'campaigns' => $campaigns
         );
 
         $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)));
@@ -306,7 +306,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
                 && $this->Request()->getParam('__cache') === null) {
-
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
                 'eMail' => $userData['additional']['user']['email'],

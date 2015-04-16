@@ -97,7 +97,7 @@ class LessDefinition
      * @param array $files Contains the full file name paths.
      * @param null $importDirectory Full path to the import directory for less @import commands
      */
-    function __construct(array $config = array(), array $files = array(), $importDirectory = null)
+    public function __construct(array $config = array(), array $files = array(), $importDirectory = null)
     {
         $this->config = $config;
         $this->files = $files;

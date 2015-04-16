@@ -37,7 +37,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
 
-
 /**
  * @package Shopware\Bundle\PluginInstallerBundle
  */

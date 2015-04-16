@@ -74,5 +74,4 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
     {
         throw new \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
     }
-
 }

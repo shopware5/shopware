@@ -116,7 +116,6 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $this->View()->sSuccess = true;
                 $url = $this->Front()->Router()->assemble(array('controller' => 'tellafriend', 'action' => 'success'));
                 $this->redirect($url);
-
             } else {
                 $this->View()->sError = true;
                 $this->View()->sName = $this->Request()->getPost("sName");

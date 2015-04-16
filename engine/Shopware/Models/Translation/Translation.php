@@ -27,10 +27,8 @@ namespace Shopware\Models\Translation;
 
 use Shopware\Models\Shop\Shop;
 use Shopware\Components\Model\ModelEntity;
-
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping AS ORM;
-
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Translation

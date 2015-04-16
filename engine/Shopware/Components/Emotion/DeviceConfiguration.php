@@ -80,7 +80,7 @@ class DeviceConfiguration
 
         $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $emotions = array_map(function($emotion) {
+        $emotions = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
             return $emotion;
         }, $emotions);
@@ -129,7 +129,7 @@ class DeviceConfiguration
         $children = $this->getChildrenLandingPages($id);
         $children = array_merge([$master], $children);
 
-        $children = array_map(function($emotion) {
+        $children = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
             return $emotion;
         }, $children);
@@ -199,5 +199,4 @@ class DeviceConfiguration
 
         return $query;
     }
-
 }

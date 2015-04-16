@@ -134,10 +134,10 @@ class sExport
     {
         static $currencyCache = array();
 
-        if(empty($currency)) {
+        if (empty($currency)) {
             $currency = $this->shopData["currency_id"];
         }
-        if(isset($currencyCache[$currency])) {
+        if (isset($currencyCache[$currency])) {
             return $currencyCache[$currency];
         }
         if (is_numeric($currency)) {
@@ -164,7 +164,7 @@ class sExport
     public function sGetCustomergroup($customerGroup)
     {
         static $cache = array();
-        if(empty($customerGroup)) {
+        if (empty($customerGroup)) {
             $customerGroup = $this->sMultishop["defaultcustomergroup"];
         }
         if (isset($cache[$customerGroup])) {
@@ -201,9 +201,9 @@ class sExport
 
         if (empty($id)) {
             $sql = "s.`default`=1";
-        } elseif(is_numeric($id)) {
+        } elseif (is_numeric($id)) {
             $sql = "s.id=".$id;
-        } elseif(is_string($id)) {
+        } elseif (is_string($id)) {
             $sql = "s.name=".$this->db->quote(trim($id));
         }
 
@@ -253,14 +253,14 @@ class sExport
     {
         static $cache = array();
 
-        if(isset($cache[$language])) {
+        if (isset($cache[$language])) {
             return $cache[$language];
         }
         if (empty($language)) {
             $sql = "s.`default`=1";
-        } elseif(is_numeric($language)) {
+        } elseif (is_numeric($language)) {
             $sql = "s.id=".$language;
-        } elseif(is_string($language)) {
+        } elseif (is_string($language)) {
             $sql = "s.name=".$this->db->quote(trim($language));
         }
 
@@ -334,8 +334,9 @@ class sExport
         ";
         $this->sSettings = $this->db->fetchRow($sql);
 
-        if(empty($this->sSettings))
+        if (empty($this->sSettings)) {
             die();
+        }
 
         $this->sSettings["dec_separator"] = ",";
         switch ($this->sSettings["formatID"]) {
@@ -427,25 +428,25 @@ class sExport
         $this->sSYSTEM->sSMARTY->debugging = 0;
         $this->sSYSTEM->sSMARTY->caching = 0;
 
-        $this->sSmarty->registerPlugin('modifier', 'htmlentities', array(&$this,'sHtmlEntities'));
-        $this->sSmarty->registerPlugin('modifier', 'format', array(&$this,'sFormatString'));
-        $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this,'sEscapeString'));
-        $this->sSmarty->registerPlugin('modifier', 'category', array(&$this,'sGetArticleCategoryPath'));
-        $this->sSmarty->registerPlugin('modifier', 'link', array(&$this,'sGetArticleLink'));
-        $this->sSmarty->registerPlugin('modifier', 'image', array(&$this,'sGetImageLink'));
-        $this->sSmarty->registerPlugin('modifier', 'articleImages', array(&$this,'sGetArticleImageLinks'));
-        $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this,'sGetArticleShippingcost'));
-        $this->sSmarty->registerPlugin('modifier', 'property', array(&$this,'sGetArticleProperties'));
+        $this->sSmarty->registerPlugin('modifier', 'htmlentities', array(&$this, 'sHtmlEntities'));
+        $this->sSmarty->registerPlugin('modifier', 'format', array(&$this, 'sFormatString'));
+        $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this, 'sEscapeString'));
+        $this->sSmarty->registerPlugin('modifier', 'category', array(&$this, 'sGetArticleCategoryPath'));
+        $this->sSmarty->registerPlugin('modifier', 'link', array(&$this, 'sGetArticleLink'));
+        $this->sSmarty->registerPlugin('modifier', 'image', array(&$this, 'sGetImageLink'));
+        $this->sSmarty->registerPlugin('modifier', 'articleImages', array(&$this, 'sGetArticleImageLinks'));
+        $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this, 'sGetArticleShippingcost'));
+        $this->sSmarty->registerPlugin('modifier', 'property', array(&$this, 'sGetArticleProperties'));
 
-        $this->sSmarty->assign("sConfig",$this->sSYSTEM->sCONFIG);
-        $this->sSmarty->assign("shopData",$this->shopData);
-        $this->sSmarty->assign("sCurrency",$this->sCurrency);
-        $this->sSmarty->assign("sCustomergroup",$this->sCustomergroup);
-        $this->sSmarty->assign("sSettings",$this->sSettings);
+        $this->sSmarty->assign("sConfig", $this->sSYSTEM->sCONFIG);
+        $this->sSmarty->assign("shopData", $this->shopData);
+        $this->sSmarty->assign("sCurrency", $this->sCurrency);
+        $this->sSmarty->assign("sCustomergroup", $this->sCustomergroup);
+        $this->sSmarty->assign("sSettings", $this->sSettings);
 
         // deprecated: use shopData instead
-        $this->sSmarty->assign("sLanguage",$this->sLanguage);
-        $this->sSmarty->assign("sMultishop",$this->sMultishop);
+        $this->sSmarty->assign("sLanguage", $this->sLanguage);
+        $this->sSmarty->assign("sMultishop", $this->sMultishop);
 
         $this->sSmarty->config_vars["F"] = $this->sSettings["fieldmark"];
         $this->sSmarty->config_vars["EF"] = $this->sSettings["escaped_separator"];
@@ -467,7 +468,7 @@ class sExport
             $char_set = $this->sSettings['encoding'];
         }
         
-        return htmlentities($string, ENT_COMPAT | ENT_HTML401 , $char_set);
+        return htmlentities($string, ENT_COMPAT | ENT_HTML401, $char_set);
     }
     
     public function sFormatString($string, $esc_type = '', $char_set = null)
@@ -491,17 +492,17 @@ class sExport
 
         switch ($esc_type) {
             case 'number':
-                return number_format($string,2,$this->sSettings["dec_separator"],'');
+                return number_format($string, 2, $this->sSettings["dec_separator"], '');
             case 'csv':
                 if (empty($this->sSettings["escaped_line_separator"])) {
                     $string = preg_replace('#[\r\n]+#m', ' ', $string);
                 } elseif ($this->sSettings["escaped_line_separator"]!=$this->sSettings["line_separator"]) {
-                    $string = str_replace($this->sSettings["line_separator"],$this->sSettings['escaped_line_separator'],$string);
+                    $string = str_replace($this->sSettings["line_separator"], $this->sSettings['escaped_line_separator'], $string);
                 }
                 if (!empty($this->sSettings["fieldmark"])) {
-                    $string = str_replace($this->sSettings["fieldmark"],$this->sSettings['escaped_fieldmark'],$string);
+                    $string = str_replace($this->sSettings["fieldmark"], $this->sSettings['escaped_fieldmark'], $string);
                 } else {
-                    $string = str_replace($this->sSettings['separator'],$this->sSettings['escaped_separator'],$string);
+                    $string = str_replace($this->sSettings['separator'], $this->sSettings['escaped_separator'], $string);
                 }
 
                 if ($char_set != 'UTF-8') {
@@ -522,7 +523,7 @@ class sExport
             case 'url':
                 return rawurlencode($string);
             case 'urlpathinfo':
-                return str_replace('%2F','/',rawurlencode($string));
+                return str_replace('%2F', '/', rawurlencode($string));
 
             case 'quotes':
                 // escape unescaped single quotes
@@ -552,11 +553,11 @@ class sExport
 
             case 'javascript':
                 // escape quotes and backslashes, newlines, etc.
-                return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+                return strtr($string, array('\\'=>'\\\\', "'"=>"\\'", '"'=>'\\"', "\r"=>'\\r', "\n"=>'\\n', '</'=>'<\/'));
 
             case 'mail':
                 // safe way to display e-mail address on a web page
-                return str_replace(array('@', '.'),array(' [AT] ', ' [DOT] '), $string);
+                return str_replace(array('@', '.'), array(' [AT] ', ' [DOT] '), $string);
 
             case 'nonstd':
                // escape non-standard chars, such as ms document quotes
@@ -576,7 +577,7 @@ class sExport
 
     public function sGetArticleLink($articleID, $title="")
     {
-        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",$title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
+        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID", $title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
     }
 
     public function sGetImageLink($hash, $imageSize = null)
@@ -626,7 +627,7 @@ class sExport
      * @param string $separator
      * @return string
      */
-    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = "|" )
+    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = "|")
     {
         $imageSize = ($imageSize == null) ? "original" : $imageSize;
         $returnData = array();
@@ -651,7 +652,7 @@ class sExport
      * @param $filterGroupId
      * @return string
      */
-    public function sGetArticleProperties($articleId, $filterGroupId  )
+    public function sGetArticleProperties($articleId, $filterGroupId)
     {
         if (empty($articleId) || empty($filterGroupId)) {
             return "";
@@ -712,19 +713,21 @@ class sExport
         for ($i = 0; $i < count($elements); $i++) {
             $nquotes = substr_count($elements[$i], $fieldmark);
             if ($nquotes %2 == 1) {
-                if(isset($elements[$i+1])) {
+                if (isset($elements[$i+1])) {
                     $elements[$i+1] = $elements[$i].$separator.$elements[$i+1];
                 }
             } else {
                 if ($nquotes > 0) {
-                    if(substr($elements[$i],0,1)==$fieldmark)
-                        $elements[$i] = substr($elements[$i],1);
-                    if(substr($elements[$i],-1,1)==$fieldmark)
-                        $elements[$i] = substr($elements[$i],0,-1);
+                    if (substr($elements[$i], 0, 1)==$fieldmark) {
+                        $elements[$i] = substr($elements[$i], 1);
+                    }
+                    if (substr($elements[$i], -1, 1)==$fieldmark) {
+                        $elements[$i] = substr($elements[$i], 0, -1);
+                    }
                     $elements[$i] = str_replace($fieldmark.$fieldmark, $fieldmark, $elements[$i]);
                 }
-                $index = substr($elements[$i] , 0, strpos($elements[$i], ':'));
-                $elements[$i] = substr($elements[$i] , strpos($elements[$i], ':')+1);
+                $index = substr($elements[$i], 0, strpos($elements[$i], ':'));
+                $elements[$i] = substr($elements[$i], strpos($elements[$i], ':')+1);
                 $tmp_elements[$index] = $elements[$i];
             }
         }
@@ -813,7 +816,7 @@ class sExport
         if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
             $sql_add_select[] = "IF(COUNT(d.ordernumber) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.ordernumber,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_ordernumber";
             $sql_add_select[] = "IF(COUNT(d.additionaltext) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.additionaltext,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_additionaltext";
-	    $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
             $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";
             $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
@@ -858,14 +861,14 @@ class sExport
             $sql_add_where[] = "(v.instock > 0 OR d.instock > 0)";
         }
 
-        $sql_add_join = implode(" ",$sql_add_join);
+        $sql_add_join = implode(" ", $sql_add_join);
         if (!empty($sql_add_select)) {
-            $sql_add_select = ", ".implode(", ",$sql_add_select);
+            $sql_add_select = ", ".implode(", ", $sql_add_select);
         } else {
             $sql_add_select = "";
         }
         if (!empty($sql_add_where)) {
-            $sql_add_where = " AND ".implode(" AND ",$sql_add_where);
+            $sql_add_where = " AND ".implode(" AND ", $sql_add_where);
         } else {
             $sql_add_where = "";
         }
@@ -1055,7 +1058,6 @@ class sExport
         // fetches all required data to smarty
         $rows = array();
         for ($rowIndex = 1; $row = $result->fetch(); $rowIndex++) {
-
             if (!empty($row['group_ordernumber_2'])) {
                 $row['group_ordernumber'] = $this->_decode_line($row['group_ordernumber_2']);
                 $row['group_pricenet'] = explode(';', $row['group_pricenet_2']);
@@ -1163,7 +1165,6 @@ class sExport
             $rows[] = $row;
 
             if ($rowIndex == $count || count($rows) >= 50) {
-
                 @set_time_limit(30);
 
                 $this->sSmarty->assign('sArticles', $rows);
@@ -1180,31 +1181,35 @@ class sExport
 
     public function sGetArticleCategoryPath($articleID, $separator = " > ", $categoryID=null)
     {
-        if(empty($categoryID))
+        if (empty($categoryID)) {
             $categoryID = $this->sSettings["categoryID"];
+        }
 
-        $articleCategoryId = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($articleID,$categoryID);
+        $articleCategoryId = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($articleID, $categoryID);
         $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
 
         foreach ($breadcrumb as $breadcrumbObj) {
             $breadcrumbs[] = $breadcrumbObj["name"];
         }
-        return htmlspecialchars_decode(implode($separator,$breadcrumbs));
+        return htmlspecialchars_decode(implode($separator, $breadcrumbs));
     }
 
     public function sGetCountry($country)
     {
         static $cache = array();
-        if(empty($country))
+        if (empty($country)) {
             return false;
-        if(isset($cache[$country]))
+        }
+        if (isset($cache[$country])) {
             return $cache[$country];
-        if(is_numeric($country))
+        }
+        if (is_numeric($country)) {
             $sql = "c.id=".$country;
-        elseif(is_string($country))
+        } elseif (is_string($country)) {
             $sql = "c.countryiso=".$this->db->quote($country);
-        else
+        } else {
             return false;
+        }
         $sql = "
             SELECT
               c.id, c.id as countryID, countryname, countryiso,
@@ -1219,16 +1224,19 @@ class sExport
     public function sGetPaymentmean($payment)
     {
         static $cache = array();
-        if(empty($payment))
+        if (empty($payment)) {
             return false;
-        if(isset($cache[$payment]))
+        }
+        if (isset($cache[$payment])) {
             return $cache[$payment];
-        if(is_numeric($payment))
+        }
+        if (is_numeric($payment)) {
             $sql = "id=".$payment;
-        elseif(is_string($payment))
+        } elseif (is_string($payment)) {
             $sql = "name=".$this->db->quote($payment);
-        else
+        } else {
             return false;
+        }
         $sql = "
             SELECT * FROM s_core_paymentmeans
             WHERE $sql
@@ -1237,9 +1245,9 @@ class sExport
 
         $cache[$payment]["country_surcharge"] = array();
         if (!empty($cache[$payment]["surchargestring"])) {
-            foreach (explode(";",$cache[$payment]["surchargestring"]) as $countrySurcharge) {
-                list($key,$value) = explode(":",$countrySurcharge);
-                $value = floatval(str_replace(",",".",$value));
+            foreach (explode(";", $cache[$payment]["surchargestring"]) as $countrySurcharge) {
+                list($key, $value) = explode(":", $countrySurcharge);
+                $value = floatval(str_replace(",", ".", $value));
                 if (!empty($value)) {
                     $cache[$payment]["country_surcharge"][$key] = $value;
                 }
@@ -1251,27 +1259,30 @@ class sExport
 
     public function sGetDispatch($dispatch = null, $country = null)
     {
-        if(empty($dispatch))
+        if (empty($dispatch)) {
             $sql_order = "";
-        elseif(is_numeric($dispatch))
+        } elseif (is_numeric($dispatch)) {
             $sql_order = "IF(sd.id=".(int) $dispatch.",0,1),";
-        elseif(is_string($dispatch))
+        } elseif (is_string($dispatch)) {
             $sql_order = "IF(name=".$this->db->quote($dispatch).",0,1),";
-        else
+        } else {
             $sql_order = "";
+        }
 
-        if(empty($country))
+        if (empty($country)) {
             $sql_where = "";
-        elseif(is_numeric($country))
+        } elseif (is_numeric($country)) {
             $sql_where = "c.id=".$country;
-        elseif(is_string($country))
+        } elseif (is_string($country)) {
             $sql_where = "c.countryiso=".$this->db->quote($country);
-        else
+        } else {
             $sql_where = "";
+        }
 
         static $cache = array();
-        if(isset($cache[$sql_order."|".$sql_where]))
+        if (isset($cache[$sql_order."|".$sql_where])) {
             return $cache[$sql_order."|".$sql_where];
+        }
 
         if (!empty($sql_where)) {
             $sql_from = " s_premium_dispatch_countries sc,	s_core_countries c";
@@ -1300,10 +1311,13 @@ class sExport
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
         $calculations = $this->db->fetchPairs($sql);
-        if(!empty($calculations))
-        foreach ($calculations as $dispatchID => $calculation) {
-            if(empty($calculation)) $calculation = $this->db->quote($calculation);
-            $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
+        if (!empty($calculations)) {
+            foreach ($calculations as $dispatchID => $calculation) {
+                if (empty($calculation)) {
+                    $calculation = $this->db->quote($calculation);
+                }
+                $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
+            }
         }
 
         $sql = "
@@ -1367,7 +1381,7 @@ class sExport
         ";
 
         try {
-        $basket = $this->db->fetchRow($sql,array(
+            $basket = $this->db->fetchRow($sql, array(
             $article["articleID"],
             $article["ordernumber"],
             $article["shippingfree"],
@@ -1394,28 +1408,36 @@ class sExport
 
     public function sGetArticleShippingcost($article, $payment, $country, $dispatch = null)
     {
-        if(empty($article)||!is_array($article)) return false;
+        if (empty($article)||!is_array($article)) {
+            return false;
+        }
         $country = $this->sGetCountry($country);
-        if(empty($country)) return false;
+        if (empty($country)) {
+            return false;
+        }
         $payment = $this->sGetPaymentmean($payment);
-        if(empty($payment)) return false;
-        if (!empty($payment["country_surcharge"][$country["countryiso"]]))
+        if (empty($payment)) {
+            return false;
+        }
+        if (!empty($payment["country_surcharge"][$country["countryiso"]])) {
             $payment["surcharge"] += $payment["country_surcharge"][$country["countryiso"]];
-        $payment['surcharge'] = round($payment['surcharge']*$this->sCurrency["factor"],2);
+        }
+        $payment['surcharge'] = round($payment['surcharge']*$this->sCurrency["factor"], 2);
 
-        return $this->sGetArticlePremiumShippingcosts($article,$payment,$country,$dispatch);
+        return $this->sGetArticlePremiumShippingcosts($article, $payment, $country, $dispatch);
     }
 
     public function sGetPremiumDispatch($basket, $dispatch = null)
     {
-        if(empty($dispatch))
+        if (empty($dispatch)) {
             $sql_order = "";
-        elseif(is_numeric($dispatch))
+        } elseif (is_numeric($dispatch)) {
             $sql_order = "IF(d.id=".(int) $dispatch.",0,1),";
-        elseif(is_string($dispatch))
+        } elseif (is_string($dispatch)) {
             $sql_order = "IF(d.name=".$this->db->quote($dispatch).",0,1),";
-        else
+        } else {
             $sql_order = "";
+        }
 
         $sql_add_join = "";
         if (!empty($basket['paymentID'])) {
@@ -1447,7 +1469,7 @@ class sExport
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
-        $sql_basket = implode(', ',$sql_basket);
+        $sql_basket = implode(', ', $sql_basket);
 
         $sql = "
             SELECT d.id, d.name, d.description, d.calculation, d.status_link, d.surcharge_calculation, d.bind_shippingfree, tax_calculation, t.tax as tax_calculation_value, d.shippingfree
@@ -1521,7 +1543,9 @@ class sExport
 
     public function sGetPremiumDispatchSurcharge($basket)
     {
-        if(empty($basket)) return false;
+        if (empty($basket)) {
+            return false;
+        }
 
         $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=2 AND bind_sql IS NOT NULL';
         $statements = $this->db->fetchPairs($sql);
@@ -1536,9 +1560,9 @@ class sExport
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
-        $sql_basket = implode(', ',$sql_basket);
+        $sql_basket = implode(', ', $sql_basket);
 
-                $sql_add_join = "";
+        $sql_add_join = "";
         if (!empty($basket['paymentID'])) {
             $sql_add_join .= "
                 JOIN s_premium_dispatch_paymentmeans dp
@@ -1601,19 +1625,20 @@ class sExport
         ";
         $dispatches = $this->db->fetchAll($sql);
         $surcharge = 0;
-        if(!empty($dispatches))
-        foreach ($dispatches as $dispatch) {
-            if(empty($dispatch['calculation']))
-                $from = round($basket['weight'],3);
-            elseif($dispatch['calculation']==1)
-                $from = round($basket['amount'],2);
-            elseif($dispatch['calculation']==2)
-                $from = round($basket['count_article']);
-            elseif($dispatch['calculation']==3)
-                $from = round($basket['calculation_value_'.$dispatch['id']]);
-            else
-                continue;
-            $sql = "
+        if (!empty($dispatches)) {
+            foreach ($dispatches as $dispatch) {
+                if (empty($dispatch['calculation'])) {
+                    $from = round($basket['weight'], 3);
+                } elseif ($dispatch['calculation']==1) {
+                    $from = round($basket['amount'], 2);
+                } elseif ($dispatch['calculation']==2) {
+                    $from = round($basket['count_article']);
+                } elseif ($dispatch['calculation']==3) {
+                    $from = round($basket['calculation_value_'.$dispatch['id']]);
+                } else {
+                    continue;
+                }
+                $sql = "
                 SELECT `value` , `factor`
                 FROM `s_premium_shippingcosts`
                 WHERE `from` <= $from
@@ -1621,43 +1646,52 @@ class sExport
                 ORDER BY `from` DESC
                 LIMIT 1
             ";
-            $result = $this->db->fetchRow($sql);
-            if(!$result) continue;
-            $surcharge += $result['value'];
-            if(!empty($result['factor']))
-                $surcharge +=  $result['factor']/100*$from;
+                $result = $this->db->fetchRow($sql);
+                if (!$result) {
+                    continue;
+                }
+                $surcharge += $result['value'];
+                if (!empty($result['factor'])) {
+                    $surcharge +=  $result['factor']/100*$from;
+                }
+            }
         }
         return $surcharge;
     }
 
     public function sGetArticlePremiumShippingcosts($article, $payment, $country, $dispatch = null)
     {
-        $basket = $this->sGetDispatchBasket($article,$country['id'],$payment['id']);
-        if(empty($basket)) return false;
+        $basket = $this->sGetDispatchBasket($article, $country['id'], $payment['id']);
+        if (empty($basket)) {
+            return false;
+        }
         $dispatch = $this->sGetPremiumDispatch($basket, $dispatch);
-        if(empty($dispatch)) return false;
+        if (empty($dispatch)) {
+            return false;
+        }
 
         if ((!empty($dispatch['shippingfree'])&&$dispatch['shippingfree']<=$basket['amount'])
             ||empty($basket['count_article'])
             ||(!empty($basket['shippingfree'])&&empty($dispatch['bind_shippingfree']))
-        )
-        {
-            if(empty($dispatch['surcharge_calculation']))
+        ) {
+            if (empty($dispatch['surcharge_calculation'])) {
                 return $payment['surcharge'];
-            else
+            } else {
                 return 0;
+            }
         }
 
-        if(empty($dispatch['calculation']))
-            $from = round($basket['weight'],3);
-        elseif($dispatch['calculation']==1)
-            $from = round($basket['amount'],2);
-        elseif($dispatch['calculation']==2)
+        if (empty($dispatch['calculation'])) {
+            $from = round($basket['weight'], 3);
+        } elseif ($dispatch['calculation']==1) {
+            $from = round($basket['amount'], 2);
+        } elseif ($dispatch['calculation']==2) {
             $from = round($basket['count_article']);
-        elseif($dispatch['calculation']==3)
+        } elseif ($dispatch['calculation']==3) {
             $from = round($basket['calculation_value_'.$dispatch['id']]);
-        else
+        } else {
             return false;
+        }
 
         $sql = "
             SELECT `value` , `factor`
@@ -1669,16 +1703,20 @@ class sExport
         ";
         $result = $this->db->fetchRow($sql);
 
-        if(empty($result)) return false;
+        if (empty($result)) {
+            return false;
+        }
 
         $result['shippingcosts'] = $result['value'];
-        if(!empty($result['factor']))
+        if (!empty($result['factor'])) {
             $result['shippingcosts'] +=  $result['factor']/100*$from;
+        }
         $result['surcharge'] = $this->sGetPremiumDispatchSurcharge($basket);
-        if(!empty($result['surcharge']))
+        if (!empty($result['surcharge'])) {
             $result['shippingcosts'] += $result['surcharge'];
+        }
         $result['shippingcosts'] *= $this->sCurrency["factor"];
-        $result['shippingcosts'] = round($result['shippingcosts'],2);
+        $result['shippingcosts'] = round($result['shippingcosts'], 2);
         if (!empty($payment['surcharge'])&&$dispatch['surcharge_calculation']!=2&&(empty($article['shippingfree'])||empty($dispatch['surcharge_calculation']))) {
             $result['shippingcosts'] += $payment['surcharge'];
         }
@@ -1687,4 +1725,3 @@ class sExport
         return $result['shippingcosts'];
     }
 }
-?>

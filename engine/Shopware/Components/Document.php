@@ -205,9 +205,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if (empty($document->_subshop["id"])) {
                 throw new Enlight_Exception("Could not load template path for order $orderID");
             }
-
         } else {
-
             $document->_subshop = Shopware()->Db()->fetchRow("
             SELECT
                 s.id,
@@ -223,7 +221,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             $document->setTemplate($document->_defaultPath);
             $document->_subshop["doc_template"] = $document->_defaultPath;
-
         }
 
         $document->setTranslationComponent();
@@ -238,7 +235,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     public function render($_renderer = "")
     {
-        if (!empty($_renderer)) $this->_renderer = $_renderer;
+        if (!empty($_renderer)) {
+            $this->_renderer = $_renderer;
+        }
         if ($this->_valuesAssigend == false) {
             $this->assignValues();
         }
@@ -253,24 +252,23 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             }
         }
 
-        $data = $this->_template->fetch("documents/".$this->_document["template"],$this->_view);
+        $data = $this->_template->fetch("documents/".$this->_document["template"], $this->_view);
 
         if ($this->_renderer == "html" || !$this->_renderer) {
             echo $data;
         } elseif ($this->_renderer == "pdf") {
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new mPDF("utf-8","A4","","",$this->_document["left"],$this->_document["right"],$this->_document["top"],$this->_document["bottom"]);
+                $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output();
                 exit;
             } else {
                 $path = Shopware()->OldPath()."files/documents"."/".$this->_documentHash.".pdf";
-                $mpdf = new mPDF("utf-8","A4","","",$this->_document["left"],$this->_document["right"],$this->_document["top"],$this->_document["bottom"]);
+                $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
-                $mpdf->Output($path,"F");
+                $mpdf->Output($path, "F");
             }
         }
-
     }
 
     /**
@@ -285,7 +283,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         }
 
         return $this->assignValues4x();
-
     }
 
     /**
@@ -362,7 +359,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $positions = array_merge($positions, $positions);
         }
 
-        $positions = array_chunk($positions,$this->_document["pagebreak"],true);
+        $positions = array_chunk($positions, $this->_document["pagebreak"], true);
         $this->_view->assign('Pages', $positions);
 
         $user = array(
@@ -402,19 +399,20 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $this->_document = new ArrayObject(Shopware()->Db()->fetchRow("
         SELECT * FROM s_core_documents WHERE id = ?
-        ",array($id),ArrayObject::ARRAY_AS_PROPS));
+        ", array($id), ArrayObject::ARRAY_AS_PROPS));
 
 
         // Load Containers
         $this->_document->containers = new ArrayObject(Shopware()->Db()->fetchAll("
         SELECT * FROM s_core_documents_box WHERE documentID = ?
-        ",array($id),ArrayObject::ARRAY_AS_PROPS));
+        ", array($id), ArrayObject::ARRAY_AS_PROPS));
 
         $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
 
         foreach ($this->_document->containers as $key => $container) {
-
-            if (!is_numeric($key)) continue;
+            if (!is_numeric($key)) {
+                continue;
+            }
             if (!empty($translation[$id][$container["name"]."_Value"])) {
                 $this->_document->containers[$key]["value"] = $translation[$id][$container["name"]."_Value"];
             }
@@ -424,7 +422,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->_document->containers[$container["name"]] = $this->_document->containers[$key];
             unset($this->_document->containers[$key]);
         }
-
     }
 
     /**
@@ -458,7 +455,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     public function getVoucher($id)
     {
-        if (empty($id)) return false;
+        if (empty($id)) {
+            return false;
+        }
 
         // Check if voucher is available
         $sqlVoucher = "SELECT s_emarketing_voucher_codes.id AS id, code, description, value, percental FROM s_emarketing_vouchers, s_emarketing_voucher_codes
@@ -470,7 +469,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
          GROUP BY s_emarketing_voucher_codes.voucherID
          ";
 
-        $getVoucher = Shopware()->Db()->fetchRow($sqlVoucher,array($id));
+        $getVoucher = Shopware()->Db()->fetchRow($sqlVoucher, array($id));
         if ($getVoucher["id"]) {
             // Update Voucher and pass-information to template
             $updateVoucher = Shopware()->Db()->query("
@@ -479,7 +478,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 userID = ?
             WHERE
                 id = ?
-            ",array($this->_order->userID,$getVoucher["id"]));
+            ", array($this->_order->userID, $getVoucher["id"]));
             if ($this->_order->currency->factor!=1) {
                 $getVoucher["value"]*=$this->_order->currency->factor;
             }
@@ -545,7 +544,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     {
         $this->_config = $config;
         foreach ($config as $key => $v) {
-            if (property_exists($this,$key)) {
+            if (property_exists($this, $key)) {
                 $this->$key = $v;
             }
         }
@@ -556,20 +555,24 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function saveDocument()
     {
-        if ($this->_preview==true) return;
+        if ($this->_preview==true) {
+            return;
+        }
 
         $bid = $this->_config["bid"];
         if (!empty($bid)) {
             $this->_documentBid = $bid;
         }
-        if (empty($bid)) $bid = 0;
+        if (empty($bid)) {
+            $bid = 0;
+        }
 
         // Check if this kind of document already exists
         $typID = $this->_typID;
 
         $checkForExistingDocument = Shopware()->Db()->fetchRow("
         SELECT ID,docID,hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND type = ?
-        ",array($this->_order->userID,$this->_order->id,$typID));
+        ", array($this->_order->userID, $this->_order->id, $typID));
 
         if (!empty($checkForExistingDocument["ID"])) {
             // Document already exist. Update date and amount!
@@ -577,11 +580,11 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ";
-            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto,2) : round($this->_order->amount,2);
+            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
-            $update = Shopware()->Db()->query($update,array(
+            $update = Shopware()->Db()->query($update, array(
                     $amount,
                     $typID,
                     $this->_order->userID,
@@ -617,7 +620,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             $hash = md5(uniqid(rand()));
 
-            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto,2) : round($this->_order->amount,2);
+            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
@@ -625,7 +628,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             INSERT INTO s_order_documents (`date`, `type`, `userID`, `orderID`, `amount`, `docID`,`hash`)
             VALUES ( NOW() , ? , ? , ?, ?, ?,?)
             ";
-            $insert = Shopware()->Db()->query($sql,array(
+            $insert = Shopware()->Db()->query($sql, array(
                     $typID,
                     $this->_order->userID,
                     $this->_order->id,
@@ -662,19 +665,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 }
 
                 $getNumber = Shopware()->Db()->fetchRow("
-                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?"
-                    ,array($numberrange));
+                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?", array($numberrange));
 
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
-                ",array($getNumber['next'],$rowID));
+                ", array($getNumber['next'], $rowID));
 
                 Shopware()->Db()->query("
                     UPDATE `s_order_number` SET `number` = ? WHERE `name` = ? LIMIT 1 ;
-                ",array($getNumber['next'],$numberrange));
+                ", array($getNumber['next'], $numberrange));
 
                 $bid = $getNumber["next"];
-
             }
         }
         $this->_documentID = $bid;

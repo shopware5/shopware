@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *

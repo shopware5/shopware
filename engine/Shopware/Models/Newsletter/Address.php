@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Address model represents a mail address.

@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\ProductFeed;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
  *

@@ -25,7 +25,7 @@
 namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

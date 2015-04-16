@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Dispatch;
-use         Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The Shopware Model represents the Holidays stored in the DB.

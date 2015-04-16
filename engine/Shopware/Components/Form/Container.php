@@ -67,7 +67,7 @@ class Container extends Base implements ContainerInterface
     /**
      * Initials the elements collection.
      */
-    function __construct()
+    public function __construct()
     {
         $this->elements = new ArrayCollection();
     }

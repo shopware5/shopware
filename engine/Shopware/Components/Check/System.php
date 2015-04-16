@@ -122,7 +122,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      */
     protected function compare($name, $version, $required)
     {
-        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
+        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m($version, $required);
         } elseif (preg_match('#^[0-9]+[A-Z]$#', $required)) {
@@ -160,7 +160,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         phpinfo(1);
         $s = ob_get_contents();
         ob_end_clean();
-        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/',$s,$match)) {
+        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/', $s, $match)) {
             return $match[1];
         }
         return false;
@@ -254,7 +254,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         if (function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
-                if (substr_count($match[0],'.')==1) {
+                if (substr_count($match[0], '.')==1) {
                     $match[0] .='.0';
                 }
                 return $match[0];
@@ -386,7 +386,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public static function decodeSize($val)
     {
         $val = trim($val);
-        list($val, $last) = explode(' ',$val);
+        list($val, $last) = explode(' ', $val);
         $val = (float) $val;
         switch (strtoupper($last)) {
             case 'TB':
@@ -412,8 +412,8 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public static function encodeSize($bytes)
     {
         $types = array( 'B', 'KB', 'MB', 'GB', 'TB' );
-        for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
-        return( round( $bytes, 2 ) . ' ' . $types[$i] );
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) -1); $bytes /= 1024, $i++);
+        return(round($bytes, 2) . ' ' . $types[$i]);
     }
 
     /**
