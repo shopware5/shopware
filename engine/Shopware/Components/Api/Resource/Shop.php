@@ -52,7 +52,6 @@ class Shop extends Resource
      */
     public function getOne($id)
     {
-
         $this->checkPrivilege('read');
 
         if (empty($id)) {

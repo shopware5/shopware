@@ -292,5 +292,3 @@ class Shopware_Components_Convert_Xml
         }
     }
 }
-
-?>

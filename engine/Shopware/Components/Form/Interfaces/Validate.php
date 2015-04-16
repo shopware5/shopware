@@ -38,5 +38,4 @@ interface Validate
      * @throws \Exception
      */
     public function validate();
-
 }

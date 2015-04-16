@@ -40,8 +40,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function getCampaignsRepository()
     {
         if ($this->campaignsRepository === null) {
-                 $this->campaignsRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Newsletter');
-             }
+            $this->campaignsRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Newsletter');
+        }
 
         return $this->campaignsRepository;
     }
@@ -121,7 +121,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => Shopware()->Models()->toArray($model)));
-
     }
 
     /**
@@ -183,7 +182,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'total' => count($data)
         ));
         return;
-
     }
 
     /**
@@ -387,7 +385,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-
     }
 
     /**
@@ -444,8 +441,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => $model->toArray));
-
-
     }
 
 
@@ -477,7 +472,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true));
-
     }
 
     /**
@@ -504,7 +498,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true));
-
     }
 
     /**
@@ -559,8 +552,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'data' => $result,
             'total' => $totalResult,
         ));
-
-
     }
 
     /**
@@ -658,7 +649,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             if ($revenue !== null) {
                 $result[$key]['revenue'] = $revenue;
             }
-
         }
 
         $this->View()->assign(array(
@@ -666,7 +656,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'data' => $result,
             'total' => $totalResult,
         ));
-
     }
 
     /**
@@ -716,5 +705,4 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         return $flattenedGroup;
     }
-
 }

@@ -23,10 +23,11 @@
  */
 
 namespace   Shopware\Models\Order;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware order model represents a single order in your shop.
@@ -1063,7 +1064,6 @@ class Order extends ModelEntity
             $this->invoiceAmount = $invoiceAmount + $this->invoiceShipping;
             $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
         }
-
     }
 
     /**

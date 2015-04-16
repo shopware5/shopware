@@ -31,6 +31,7 @@ use Shopware\Components\MultiEdit\Resource\Product\BatchProcess;
 use Shopware\Components\MultiEdit\Resource\Product\Queue;
 use Shopware\Components\MultiEdit\Resource\Product\Backup;
 use Shopware\Components\MultiEdit\Resource\Product\Value;
+
 /**
  * The main product resource will delegate the controller requests to the corresponding classes
  * and inject dependencies
@@ -70,7 +71,6 @@ class Product implements ResourceInterface
 
     public function __construct(DqlHelper $dqlHelper, Grammar $grammar, Value $value, Filter $filter, BatchProcess $batchProcess, Queue $queue, Backup $backup)
     {
-
         $this->dqlHelper = $dqlHelper;
         $this->grammar = $grammar;
         $this->value = $value;
@@ -145,7 +145,6 @@ class Product implements ResourceInterface
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId)
     {
         return $this->queue->create($filterArray, $operations, $offset, $limit, $queueId);
-
     }
 
     /**
@@ -268,5 +267,4 @@ class Product implements ResourceInterface
     {
         return $this->backup->delete($id);
     }
-
 }

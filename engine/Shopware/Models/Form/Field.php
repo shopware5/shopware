@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Form;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware field model represents a single form-field

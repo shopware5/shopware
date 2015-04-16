@@ -172,7 +172,6 @@ class FirePHPHandler extends BaseFirePHPHandler
             self::$sendHeaders = $this->headersAccepted();
 
             foreach ($this->getInitHeaders() as $header => $content) {
-
                 $this->sendHeader($header, $content);
             }
 

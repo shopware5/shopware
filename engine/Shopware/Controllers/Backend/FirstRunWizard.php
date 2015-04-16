@@ -229,7 +229,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
 
-        if(($key = array_search($targetLocale->getId(), $locales)) !== false) {
+        if (($key = array_search($targetLocale->getId(), $locales)) !== false) {
             unset($locales[$key]);
         }
 

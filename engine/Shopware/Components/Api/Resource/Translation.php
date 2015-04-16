@@ -528,7 +528,6 @@ class Translation extends Resource implements BatchInterface
                     sprintf("Unknown translation type %s", $type)
                 );
         }
-
     }
 
     /**

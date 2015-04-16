@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Site;
-use         Shopware\Components\Model\ModelRepository,
-            Doctrine\ORM\Query\Expr;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query\Expr;
+
 /**
  * Repository for the site model (Shopware\Models\Site\Site).
  * <br>
@@ -116,7 +118,7 @@ class Repository extends ModelRepository
                 ->leftJoin('sites.attribute', 'attribute')
                 ->leftJoin('sites.children', 'children')
                 ->leftJoin('children.attribute', 'childrenAttribute')
-                ->where($builder->expr()->eq('sites.parentId',0))
+                ->where($builder->expr()->eq('sites.parentId', 0))
                 ->andWhere(
                     $builder->expr()->orX(
                         $builder->expr()->eq('sites.grouping', '?1'),        // = gBottom

@@ -69,7 +69,7 @@ class Manager
      * @param String $rootDir - the full path to the shopware directory e.g. /var/www/shopware/
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager)
+    public function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager)
     {
         $this->generator = $generator;
         $this->rootDir = $rootDir;
@@ -136,7 +136,7 @@ class Manager
             $suffix = $size['width'] . 'x' . $size['height'];
 
             $destinations = $this->getDestination($media, $suffix);
-            foreach ($destinations as $destination){
+            foreach ($destinations as $destination) {
                 $this->generator->createThumbnail(
                     $parameters['path'],
                     $destination,
@@ -156,7 +156,7 @@ class Manager
             $suffix = $size['width'] . 'x' . $size['height'] . '@2x';
 
             $destinations = $this->getDestination($media, $suffix);
-            foreach ($destinations as $destination){
+            foreach ($destinations as $destination) {
                 $this->generator->createThumbnail(
                     $parameters['path'],
                     $destination,

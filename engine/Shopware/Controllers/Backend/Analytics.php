@@ -229,7 +229,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         krsort($data);
 
-        foreach($data as $date => &$row) {
+        foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
             $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
         }
@@ -268,7 +268,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $orders = array_map('reset', $orders->getData());
         $data = array_merge_recursive($orders, $visitors);
 
-        foreach($data as $date => &$row) {
+        foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
             $orders = $row['orderCount'];
             $visitors = $row['visits'];
@@ -352,7 +352,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         // Sort the multidimensional array
-        usort($referrer, function($a,$b) {
+        usort($referrer, function ($a, $b) {
             return $a['turnover'] < $b['turnover'];
         });
 
@@ -450,7 +450,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $customers = array();
         $users = array();
 
-        foreach($result->getData() as $row) {
+        foreach ($result->getData() as $row) {
             $week = $row['orderTime'];
             $customers[$week]['orderCount']++;
             $customers[$week]['week'] = $week;
@@ -459,7 +459,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $customers[$week]['registration'] = (int) $customers[$week]['registration'];
             $users[$week] = (array) $users[$week];
 
-            switch(strtolower($row['salutation'])) {
+            switch (strtolower($row['salutation'])) {
                 case "mr":
                     $customers[$week]['male']++;
                     break;
@@ -826,8 +826,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function formatCsvData($data)
     {
         if ($fields = $this->getDateFields($data[0])) {
-            foreach($data as &$row) {
-                foreach($fields as $field) {
+            foreach ($data as &$row) {
+                foreach ($fields as $field) {
                     if (array_key_exists($field, $row)) {
                         $row[$field] = date('Y-m-d H:i:s', $row[$field]);
                     }
@@ -838,7 +838,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if ($fields = $this->getShopFields($data[0])) {
             $shopNames = $this->getShopNames();
 
-            foreach($fields as $field => $shopId) {
+            foreach ($fields as $field => $shopId) {
                 $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
@@ -876,9 +876,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $ids = $this->getSelectedShopIds();
         $fields = array();
-        foreach(array_keys($data) as $key) {
+        foreach (array_keys($data) as $key) {
             if (in_array($key, $this->shopFields)) {
-                foreach($ids as $id) {
+                foreach ($ids as $id) {
                     if (array_key_exists($key . $id, $data)) {
                         $fields[$key . $id] = $id;
                     }
@@ -891,7 +891,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function getDateFields($data)
     {
         $fields = array();
-        foreach(array_keys($data) as $key) {
+        foreach (array_keys($data) as $key) {
             if (in_array($key, $this->dateFields)) {
                 $fields[] = $key;
             }
@@ -901,7 +901,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     private function isTimestamp($input)
     {
-        if (strlen($input) != 11)  {
+        if (strlen($input) != 11) {
             return false;
         }
 
@@ -909,7 +909,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             return true;
         }
 
-        if  (is_string($input)) {
+        if (is_string($input)) {
             return ctype_digit($input);
         }
 

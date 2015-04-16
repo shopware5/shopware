@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Emotion;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
@@ -261,7 +262,7 @@ class Repository extends ModelRepository
     public function getEmotionDetailQueryBuilder($emotionId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute','categories', 'grid', 'template'))
+        $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute', 'categories', 'grid', 'template'))
             ->from('Shopware\Models\Emotion\Emotion', 'emotions')
             ->leftJoin('emotions.grid', 'grid')
             ->leftJoin('emotions.template', 'template')
@@ -388,7 +389,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions'))
-            ->innerJoin('emotions.categories','categories')
+            ->innerJoin('emotions.categories', 'categories')
             ->where('categories.id = ?1')
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
             ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
@@ -413,8 +414,8 @@ class Repository extends ModelRepository
         $builder->from('Shopware\Models\Emotion\Element', 'elements');
         $builder->leftJoin('elements.component', 'component');
         $builder->where('elements.emotionId = :emotionId');
-        $builder->addOrderBy(array(array('property' => 'elements.startRow','direction' => 'ASC')));
-        $builder->addOrderBy(array(array('property' => 'elements.startCol','direction' => 'ASC')));
+        $builder->addOrderBy(array(array('property' => 'elements.startRow', 'direction' => 'ASC')));
+        $builder->addOrderBy(array(array('property' => 'elements.startCol', 'direction' => 'ASC')));
         $builder->setParameters(array('emotionId' => $emotionId));
         return $builder;
     }
@@ -427,7 +428,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions'))
-            ->innerJoin('emotions.categories','categories')
+            ->innerJoin('emotions.categories', 'categories')
             ->where('categories.id = ?1')
             ->andWhere('emotions.parentId IS NULL')
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
@@ -449,9 +450,9 @@ class Repository extends ModelRepository
     public function getCampaigns($offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions','categories.id AS categoryId', 'attribute'))
-            ->innerJoin('emotions.categories','categories')
-            ->leftJoin('emotions.attribute','attribute')
+        $builder->select(array('emotions', 'categories.id AS categoryId', 'attribute'))
+            ->innerJoin('emotions.categories', 'categories')
+            ->leftJoin('emotions.attribute', 'attribute')
             ->where('emotions.isLandingPage = 1 ')
             ->andWhere('emotions.active = 1');
 
@@ -488,7 +489,6 @@ class Repository extends ModelRepository
      */
     public function getEmotionById($id)
     {
-
         $builder = $this->createQueryBuilder('emotions');
         $builder->select(array('emotions', 'elements', 'component', 'grid', 'template'))
             ->leftJoin('emotions.elements', 'elements')

@@ -56,7 +56,6 @@ class OrderHistorySubscriber implements EventSubscriber
         //order or payment status changed?
         if ($eventArgs->hasChangedField('paymentStatus')
             || $eventArgs->hasChangedField('orderStatus')) {
-
             $historyData = array(
                 'userID'      => null,
                 'change_date' => date('Y-m-d H:i:s'),

@@ -73,9 +73,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $shop = $repository->getActiveById($shop);
             } elseif (($shop = $request->getCookie('shop')) !== null) {
                 $shop = $repository->getActiveById($shop);
-            } if ($shop === null) {
+            }
+            if ($shop === null) {
                 $shop = $repository->getActiveByRequest($request);
-            } if ($shop === null) {
+            }
+            if ($shop === null) {
                 $shop = $repository->getActiveDefault();
             }
         } catch (Exception $e) {

@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter\ContainerType;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware text model represents a text container type.

@@ -83,8 +83,8 @@ class sCore
             }
         }
 
-        if(!empty($url)) {
-            $queryString = '?'.http_build_query($url,"","&");
+        if (!empty($url)) {
+            $queryString = '?'.http_build_query($url, "", "&");
         } else {
             $queryString = '';
         }

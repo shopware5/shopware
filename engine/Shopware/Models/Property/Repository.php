@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Property;
+
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\Query\SqlWalker;
 
@@ -124,7 +125,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -385,5 +385,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

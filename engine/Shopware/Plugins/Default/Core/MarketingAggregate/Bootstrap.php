@@ -181,7 +181,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     protected function subscribeAlsoBoughtEvents()
     {
         $this->subscribeEvent('Shopware_Modules_Order_SaveOrder_ProcessDetails', 'addNewAlsoBought');
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_AlsoBought','getAlsoBoughtBackendController');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_AlsoBought', 'getAlsoBoughtBackendController');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_AlsoBought', 'initAlsoBoughtResource');
     }
 
@@ -193,7 +193,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         $this->subscribeEvent('Shopware_Modules_Order_SaveOrder_ProcessDetails', 'incrementTopSeller');
         $this->subscribeEvent('Shopware_Modules_Articles_GetArticleCharts', 'afterTopSellerSelected');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_TopSeller', 'initTopSellerResource');
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller','getTopSellerBackendController');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller', 'getTopSellerBackendController');
 
         $this->createCronJob('Topseller Refresh', 'RefreshTopSeller', 86400, true);
         $this->subscribeEvent('Shopware_CronJob_RefreshTopSeller', 'refreshTopSeller');
@@ -556,5 +556,4 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     {
         $this->TopSeller()->updateElapsedTopSeller(50);
     }
-
 }

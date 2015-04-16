@@ -73,5 +73,3 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
         $output->writeln("<info>First Run Wizard enabled</info>");
     }
 }
-
-

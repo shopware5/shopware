@@ -169,7 +169,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         //return the data and total count
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
-
     }
 
     /**
@@ -649,8 +648,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         /**@var $template \Shopware\Models\Shop\Template**/
         $result = [];
-        foreach($templates as $template) {
-
+        foreach ($templates as $template) {
             $data = array(
                 'id' => $template->getId(),
                 'name' => $template->getName(),
@@ -787,7 +785,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $blacklist = array('prehashed', 'legacybackendmd5');
 
         foreach ($hashes as $hash) {
-
             if (in_array(strtolower($hash->getName()), $blacklist)) {
                 continue;
             }

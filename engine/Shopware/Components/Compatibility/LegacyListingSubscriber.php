@@ -21,7 +21,7 @@ class LegacyListingSubscriber implements SubscriberInterface
     /**
      * @param Container $container
      */
-    function __construct(Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -67,7 +67,7 @@ class LegacyListingSubscriber implements SubscriberInterface
 
         $data = $controller->View()->getAssign();
         foreach ($data['sArticle']['media'] as &$media) {
-            foreach($media['src'] as &$thumb) {
+            foreach ($media['src'] as &$thumb) {
                 $thumb = str_replace($imageDir, '', $thumb);
             }
             $media['thumbNails'] = $media['src'];
@@ -394,7 +394,6 @@ class LegacyListingSubscriber implements SubscriberInterface
 
         $filteredManufacturer = null;
         foreach ($items as $item) {
-
             $params = array_merge($params, array('sSupplier' => $item->getId()));
 
             $data[$item->getId()] = array(
@@ -522,7 +521,6 @@ class LegacyListingSubscriber implements SubscriberInterface
         foreach ($data as &$set) {
             $groups = array();
             foreach ($set['groups'] as &$group) {
-
                 $activeGroupOptions = array();
                 $options = array();
 

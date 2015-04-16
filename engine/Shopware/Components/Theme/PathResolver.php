@@ -53,7 +53,7 @@ class PathResolver
      * @param string $rootDir
      * @param \Enlight_Template_Manager $templateManager
      */
-    function __construct($rootDir, \Enlight_Template_Manager $templateManager)
+    public function __construct($rootDir, \Enlight_Template_Manager $templateManager)
     {
         $this->rootDir = $rootDir;
         $this->templateManager = $templateManager;
@@ -336,7 +336,6 @@ class PathResolver
     private function getThemeDirectory(Shop\Template $theme)
     {
         if ($theme->getPlugin()) {
-
             return $this->getPluginPath($theme->getPlugin()) .
             DIRECTORY_SEPARATOR .
             'Themes' .
@@ -344,7 +343,6 @@ class PathResolver
             'Frontend' .
             DIRECTORY_SEPARATOR .
             $theme->getTemplate();
-
         } else {
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }

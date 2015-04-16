@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Site;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Model Site
@@ -587,7 +588,7 @@ class Site extends ModelEntity
         $explodedShopIds = explode('|', trim($this->shopIds, '|'));
 
         // cast to ints
-        $explodedShopIds = array_map( function($elem) {return (int) $elem;}, $explodedShopIds);
+        $explodedShopIds = array_map(function ($elem) {return (int) $elem;}, $explodedShopIds);
 
         return $explodedShopIds;
     }

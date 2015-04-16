@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Snippet;
+
 use Shopware\Components\Model\ModelRepository;
 
 /**

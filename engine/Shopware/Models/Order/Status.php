@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware order status model represents the status of an order (payment or order state).

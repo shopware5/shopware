@@ -112,7 +112,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
 
         // No security policy specified, accept all requests
-        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount)   {
+        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount) {
             return true;
         }
 
@@ -120,7 +120,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         if (!empty($cronSecureAllowedKey)) {
             $urlKey = $request->getParam('key');
 
-            if (strcmp($cronSecureAllowedKey, $urlKey) == 0 ) {
+            if (strcmp($cronSecureAllowedKey, $urlKey) == 0) {
                 return true;
             }
         }
@@ -136,7 +136,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         // Validate user auth
         if ($cronSecureByAccount) {
-            if (Shopware()->Auth()->hasIdentity() === true ) {
+            if (Shopware()->Auth()->hasIdentity() === true) {
                 return true;
             }
         }

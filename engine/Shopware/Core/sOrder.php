@@ -132,7 +132,7 @@ class sOrder
      *
      * @var bool
      */
-    public $sNet; 	// Complete taxfree
+    public $sNet;    // Complete taxfree
 
     /**
      * Custom attributes
@@ -317,21 +317,23 @@ class sOrder
     {
         $sessionId = $this->getSession()->offsetGet('sessionId');
 
-        if (empty($sessionId)) return;
+        if (empty($sessionId)) {
+            return;
+        }
 
         $deleteWholeOrder = $this->db->fetchAll("
         SELECT * FROM s_order WHERE temporaryID = ? LIMIT 2
-        ",array($this->getSession()->offsetGet('sessionId')));
+        ", array($this->getSession()->offsetGet('sessionId')));
 
         foreach ($deleteWholeOrder as $orderDelete) {
             $this->db->executeUpdate("
             DELETE FROM s_order WHERE id = ?
-            ",array($orderDelete["id"]));
+            ", array($orderDelete["id"]));
 
             $this->db->executeUpdate("
             DELETE FROM s_order_details
             WHERE orderID=?
-            ",array($orderDelete["id"]));
+            ", array($orderDelete["id"]));
         }
     }
 
@@ -342,8 +344,12 @@ class sOrder
     public function sCreateTemporaryOrder()
     {
         $this->sShippingData["AmountNumeric"] = $this->sShippingData["AmountNumeric"] ? $this->sShippingData["AmountNumeric"] : "0";
-        if (!$this->sShippingcostsNumeric) $this->sShippingcostsNumeric = "0";
-        if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
+        if (!$this->sShippingcostsNumeric) {
+            $this->sShippingcostsNumeric = "0";
+        }
+        if (!$this->sBasketData["AmountWithTaxNumeric"]) {
+            $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
+        }
 
         if ($this->isTaxFree(
             $this->sSYSTEM->sUSERGROUPDATA["tax"],
@@ -354,17 +360,21 @@ class sOrder
             $net = "0";
         }
 
-        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"],2);
+        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"], 2);
         if ($this->dispatchId) {
             $dispatchId = $this->dispatchId;
         } else {
             $dispatchId = "0";
         }
 
-        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"],2);
+        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"], 2);
 
-        if (empty($this->sSYSTEM->sCurrency["currency"])) $this->sSYSTEM->sCurrency["currency"] = "EUR";
-        if (empty($this->sSYSTEM->sCurrency["factor"])) $this->sSYSTEM->sCurrency["factor"] = "1";
+        if (empty($this->sSYSTEM->sCurrency["currency"])) {
+            $this->sSYSTEM->sCurrency["currency"] = "EUR";
+        }
+        if (empty($this->sSYSTEM->sCurrency["factor"])) {
+            $this->sSYSTEM->sCurrency["factor"] = "1";
+        }
 
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
@@ -377,8 +387,12 @@ class sOrder
             $this->sShippingcostsNumeric = $this->sShippingcostsNumericNet;
             $taxfree = "1";
         }
-        if (empty($this->sBasketData["AmountWithTaxNumeric"])) $this->sBasketData["AmountWithTaxNumeric"] = '0';
-        if (empty($this->sBasketData["AmountNetNumeric"])) $this->sBasketData["AmountNetNumeric"] = '0';
+        if (empty($this->sBasketData["AmountWithTaxNumeric"])) {
+            $this->sBasketData["AmountWithTaxNumeric"] = '0';
+        }
+        if (empty($this->sBasketData["AmountNetNumeric"])) {
+            $this->sBasketData["AmountNetNumeric"] = '0';
+        }
 
         $data = array(
             'ordernumber' => '0',
@@ -417,16 +431,24 @@ class sOrder
         foreach ($this->sBasketData["content"] as $basketRow) {
             $position++;
 
-            if (!$basketRow["price"]) $basketRow["price"] = "0,00";
+            if (!$basketRow["price"]) {
+                $basketRow["price"] = "0,00";
+            }
 
             $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
             $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
 
             $basketRow["articlename"] = $this->sSYSTEM->sMODULES['sArticles']->sOptimizeText($basketRow["articlename"]);
 
-            if (!$basketRow["esdarticle"]) $basketRow["esdarticle"] = "0";
-            if (!$basketRow["modus"]) $basketRow["modus"] = "0";
-            if (!$basketRow["taxID"]) $basketRow["taxID"] = "0";
+            if (!$basketRow["esdarticle"]) {
+                $basketRow["esdarticle"] = "0";
+            }
+            if (!$basketRow["modus"]) {
+                $basketRow["modus"] = "0";
+            }
+            if (!$basketRow["taxID"]) {
+                $basketRow["taxID"] = "0";
+            }
 
             $data = array(
                 'orderID' => $orderID,
@@ -449,7 +471,6 @@ class sOrder
             } catch (Exception $e) {
                 throw new Enlight_Exception("##sOrder-sTemporaryOrder-Position-#02:" . $e->getMessage(), 0, $e);
             }
-
         } // For every article in basket
         return;
     }
@@ -473,9 +494,13 @@ class sOrder
         $orderNumber = $this->sGetOrderNumber();
         $this->sOrderNumber = $orderNumber;
 
-        if (!$this->sShippingcostsNumeric) $this->sShippingcostsNumeric = "0";
+        if (!$this->sShippingcostsNumeric) {
+            $this->sShippingcostsNumeric = "0";
+        }
 
-        if (!$this->sBasketData["AmountWithTaxNumeric"]) $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
+        if (!$this->sBasketData["AmountWithTaxNumeric"]) {
+            $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
+        }
 
         if ($this->isTaxFree(
                 $this->sSYSTEM->sUSERGROUPDATA["tax"],
@@ -492,10 +517,14 @@ class sOrder
             $dispatchId = "0";
         }
 
-        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"],2);
+        $this->sBasketData["AmountNetNumeric"] = round($this->sBasketData["AmountNetNumeric"], 2);
 
-        if (empty($this->sSYSTEM->sCurrency["currency"])) $this->sSYSTEM->sCurrency["currency"] = "EUR";
-        if (empty($this->sSYSTEM->sCurrency["factor"])) $this->sSYSTEM->sCurrency["factor"] = "1";
+        if (empty($this->sSYSTEM->sCurrency["currency"])) {
+            $this->sSYSTEM->sCurrency["currency"] = "EUR";
+        }
+        if (empty($this->sSYSTEM->sCurrency["factor"])) {
+            $this->sSYSTEM->sCurrency["factor"] = "1";
+        }
 
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
@@ -631,7 +660,7 @@ class sOrder
             );
 
 
-            $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
+            $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
 
             // Check for individual voucher - code
             if ($basketRow["modus"] == 2) {
@@ -643,7 +672,9 @@ class sOrder
                 );
             }
 
-            if ($basketRow["esdarticle"]) $esdOrder = true;
+            if ($basketRow["esdarticle"]) {
+                $esdOrder = true;
+            }
 
 
             try {
@@ -666,7 +697,7 @@ class sOrder
                              $this->db->quote((string) $basketRow["ob_attr5"]).",".
                              $this->db->quote((string) $basketRow["ob_attr6"]).
             ")";
-            $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this,'row'=>$basketRow,'user'=>$this->sUserData,'order'=>array("id"=>$orderID,"number"=>$orderNumber)));
+            $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
             $this->db->executeUpdate($attributeSql);
 
             $attributes = $this->getOrderDetailAttributes($orderdetailsID);
@@ -692,7 +723,6 @@ class sOrder
                     $this->sBasketData["content"][$key]['serials'] = $basketRow['assignedSerials'];
                 }
             }
-
         } // For every article in basket
 
         $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', array(
@@ -730,13 +760,13 @@ class sOrder
         }
 
         // Save Billing and Shipping-Address to retrace in future
-        $this->sSaveBillingAddress($this->sUserData["billingaddress"],$orderID);
-        $this->sSaveShippingAddress($this->sUserData["shippingaddress"],$orderID);
+        $this->sSaveBillingAddress($this->sUserData["billingaddress"], $orderID);
+        $this->sSaveShippingAddress($this->sUserData["shippingaddress"], $orderID);
 
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
 
-        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?",array($this->getSession()->offsetGet('sessionId')));
+        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?", array($this->getSession()->offsetGet('sessionId')));
 
         $confirmMailDeliveryFailed = false;
         try {
@@ -962,12 +992,12 @@ class sOrder
         $details = array();
         foreach ($basketRows as $content) {
             $content["articlename"] = trim(html_entity_decode($content["articlename"]));
-            $content["articlename"] = str_replace(array("<br />","<br>"),"\n",$content["articlename"]);
-            $content["articlename"] = str_replace("&euro;","€",$content["articlename"]);
+            $content["articlename"] = str_replace(array("<br />", "<br>"), "\n", $content["articlename"]);
+            $content["articlename"] = str_replace("&euro;", "€", $content["articlename"]);
             $content["articlename"] = trim($content["articlename"]);
 
-            while (strpos($content["articlename"],"\n\n")!==false) {
-                $content["articlename"] = str_replace("\n\n","\n",$content["articlename"]);
+            while (strpos($content["articlename"], "\n\n")!==false) {
+                $content["articlename"] = str_replace("\n\n", "\n", $content["articlename"]);
             }
 
             $content["ordernumber"] = trim(html_entity_decode($content["ordernumber"]));
@@ -1055,7 +1085,7 @@ class sOrder
      */
     private function formatBasketRow($basketRow)
     {
-        $basketRow["articlename"] = str_replace("<br />","\n",$basketRow["articlename"]);
+        $basketRow["articlename"] = str_replace("<br />", "\n", $basketRow["articlename"]);
         $basketRow["articlename"] = html_entity_decode($basketRow["articlename"]);
         $basketRow["articlename"] = strip_tags($basketRow["articlename"]);
         $basketRow["articlename"] = Shopware()->Modules()->Articles()->sOptimizeText(
@@ -1207,7 +1237,7 @@ class sOrder
      * Save order billing address
      * @access public
      */
-    public function sSaveBillingAddress($address,$id)
+    public function sSaveBillingAddress($address, $id)
     {
         $sql = "
         INSERT INTO s_order_billingaddress
@@ -1252,7 +1282,7 @@ class sOrder
             ?
             )
         ";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterSQL', $sql, array('subject'=>$this,'address'=>$address,'id'=>$id));
+        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
             $address["userID"],
             $id,
@@ -1273,14 +1303,14 @@ class sOrder
             $address["additional_address_line1"],
             $address["additional_address_line2"]
         );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $result = $this->db->executeUpdate($sql,$array);
+        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
+        $result = $this->db->executeUpdate($sql, $array);
 
 
         //new attribute tables
         $billingID = $this->db->lastInsertId();
         $sql = "INSERT INTO s_order_billingaddress_attributes (billingID, text1, text2, text3, text4, text5, text6) VALUES (?,?,?,?,?,?,?)";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterSQL', $sql, array('subject'=>$this,'address'=>$address,'id'=>$id));
+        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
             $billingID,
             $address["text1"],
@@ -1290,8 +1320,8 @@ class sOrder
             $address["text5"],
             $address["text6"]
         );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $this->db->executeUpdate($sql,$array);
+        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
+        $this->db->executeUpdate($sql, $array);
 
         return $result;
     }
@@ -1300,7 +1330,7 @@ class sOrder
      * save order shipping address
      * @access public
      */
-    public function sSaveShippingAddress($address,$id)
+    public function sSaveShippingAddress($address, $id)
     {
         $sql = "
         INSERT INTO s_order_shippingaddress
@@ -1337,7 +1367,7 @@ class sOrder
             ?
             )
         ";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterSQL', $sql, array('subject'=>$this,'address'=>$address,'id'=>$id));
+        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
             $address["userID"],
             $id,
@@ -1354,13 +1384,13 @@ class sOrder
             $address["additional_address_line1"],
             $address["additional_address_line2"]
         );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $result = $this->db->executeUpdate($sql,$array);
+        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
+        $result = $this->db->executeUpdate($sql, $array);
 
         //new attribute table
         $shippingId = $this->db->lastInsertId();
         $sql = "INSERT INTO s_order_shippingaddress_attributes (shippingID, text1, text2, text3, text4, text5, text6) VALUES (?,?,?,?,?,?,?)";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterSQL', $sql, array('subject'=>$this,'address'=>$address,'id'=>$id));
+        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
             $shippingId,
             $address["text1"],
@@ -1370,8 +1400,8 @@ class sOrder
             $address["text5"],
             $address["text6"]
         );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterArray', $array, array('subject'=>$this,'address'=>$address,'id'=>$id));
-        $this->db->executeUpdate($sql,$array);
+        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
+        $this->db->executeUpdate($sql, $array);
 
         return $result;
     }
@@ -1391,12 +1421,12 @@ class sOrder
         if ($checkIfUserFound) {
             $this->db->executeUpdate("
             UPDATE s_emarketing_tellafriend SET confirmed=1 WHERE recipient=?
-            ",array($checkMail));
+            ", array($checkMail));
 
             $advertiser = $this->db->fetchRow("
             SELECT email, firstname, lastname FROM s_user, s_user_billingaddress
             WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
-            ",array($checkIfUserFound["sender"]));
+            ", array($checkIfUserFound["sender"]));
 
             if (!$advertiser) {
                 return;

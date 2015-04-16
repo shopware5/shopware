@@ -110,7 +110,5 @@ class Value
             'data' => $results,
             'total' => $totalCount
         );
-
     }
-
 }

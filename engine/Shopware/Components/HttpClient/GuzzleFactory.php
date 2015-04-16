@@ -27,7 +27,7 @@ namespace Shopware\Components\HttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
-Class GuzzleFactory
+class GuzzleFactory
 {
     /**
      * @return ClientInterface

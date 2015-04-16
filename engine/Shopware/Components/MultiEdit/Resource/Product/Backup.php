@@ -136,7 +136,6 @@ class Backup
             'totalCount' => $totalCount,
             'data' => $backups
         );
-
     }
 
     /**
@@ -394,7 +393,6 @@ class Backup
             foreach ($files as $file) {
                 unlink($file);
             }
-
         }
 
         return array(
@@ -429,7 +427,7 @@ class Backup
         // Delete .sql and .dump files from our backup folder. Any other files will not be deleted
         $files = $this->getDirectoryList($dir);
         foreach ($files as $file) {
-            unlink ($file);
+            unlink($file);
         }
 
         $entityManager->remove($backup);
@@ -452,7 +450,7 @@ class Backup
         foreach ($folders as $key => $folder) {
             $folderPath = $path . $folder . '/';
             // Remove non-folders and non-backup folders
-            if (is_dir($folderPath) && strpos($folder, $this->backupBaseName) !== false ) {
+            if (is_dir($folderPath) && strpos($folder, $this->backupBaseName) !== false) {
                 $resultFolders[] = $folderPath;
             }
         }
@@ -478,12 +476,10 @@ class Backup
                         unlink($file);
                     }
                     // Try to delete the (empty) folder.
-                    rmdir ($folder);
+                    rmdir($folder);
                 }
-
             }
         }
-
     }
 
     /**
@@ -545,7 +541,6 @@ class Backup
 
         // Actually write the file
         fwrite($fileHandle, implode(',', $output));
-
     }
 
     /**
@@ -570,7 +565,6 @@ class Backup
         } else {
             return \Zend_Db::INT_TYPE;
         }
-
     }
 
     /**

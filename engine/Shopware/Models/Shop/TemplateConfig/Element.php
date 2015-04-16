@@ -142,7 +142,7 @@ class Element extends ModelEntity
     protected $containerId;
 
 
-    function __construct()
+    public function __construct()
     {
         $this->values = new ArrayCollection();
     }

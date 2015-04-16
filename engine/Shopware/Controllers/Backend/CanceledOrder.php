@@ -24,6 +24,7 @@
 
 use Shopware\Models\Order\Order;
 use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller
  * Backend for various ajax queries
@@ -156,7 +157,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND lastviewport LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -247,7 +248,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'data' => $data,
             'total' => count($data),
         ));
-
     }
 
     /**
@@ -371,7 +371,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         $this->View()->assign(array('success' => true));
-
     }
 
     /*
@@ -391,7 +390,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_core_paymentmeans.description LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -412,7 +411,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'data' => $data,
             'total' => count($data),
         ));
-
     }
 
     /**
@@ -433,7 +431,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND (s_articles.name LIKE :filter OR s_order_basket.ordernumber LIKE :filter)';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -504,7 +502,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_order_basket.datum LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -567,7 +565,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getOrderAction()
     {
-
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
         $filter = $this->Request()->getParam('filter', null);
@@ -646,6 +643,4 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'success' => true
         ));
     }
-
-
 }

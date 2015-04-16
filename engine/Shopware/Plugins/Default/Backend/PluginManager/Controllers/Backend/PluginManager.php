@@ -527,7 +527,6 @@ class Shopware_Controllers_Backend_PluginManager
             /**@var $service PluginLicenceService*/
             $service = $this->get('shopware_plugininstaller.plugin_licence_service');
             $service->importLicence($licence->getLicenseKey());
-
         } catch (Exception $e) {
             $this->handleException($e);
             return;

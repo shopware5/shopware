@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\User;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware backend user model represents a single backend user.
@@ -574,7 +575,4 @@ class User extends ModelEntity
     {
         return $this->encoder;
     }
-
-
-
 }

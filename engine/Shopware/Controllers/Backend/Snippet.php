@@ -23,6 +23,7 @@
  */
 
 use Shopware\Models\Snippet\Snippet;
+
 /**
  * Shopware Backend Controller for the snippet module
  *
@@ -451,7 +452,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             if ($pos === false) {
                 continue;
             }
-            $row = explode('-',$header);
+            $row = explode('-', $header);
             $translations[] = array(
                 'both'     => $row[1] . '-'.$row[2],
                 'localeID' => $this->getLocaleId($row[1]),
@@ -589,7 +590,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         if ($format == 'sql') {
-            $this->Response()->setHeader('Content-type: text/plain','');
+            $this->Response()->setHeader('Content-type: text/plain', '');
             $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.sql"');
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
@@ -609,7 +610,6 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                       $row['created'],
                       $row['dirty']
                 );
-
             }
             echo implode(",\r\n", $rows) . ';';
 

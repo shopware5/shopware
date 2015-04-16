@@ -113,9 +113,9 @@ class SnippetsFindMissingCommand extends ShopwareCommand
             $statement
                 ->addSelect('fallback_values.value AS value')
                 ->leftJoin(
-                    's', 
-                    's_core_snippets', 
-                    'fallback_values', 
+                    's',
+                    's_core_snippets',
+                    'fallback_values',
                     '(s.name = fallback_values.name AND s.namespace = fallback_values.namespace AND fallback_values.localeID = :targetLocale)'
                 )
                 ->setParameter('targetLocale', $targetLocale->getId())

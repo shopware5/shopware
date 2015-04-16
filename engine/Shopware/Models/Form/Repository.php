@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Form;
+
 use Shopware\Components\Model\ModelRepository;
 
 /**

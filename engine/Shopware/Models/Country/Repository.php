@@ -23,7 +23,8 @@
  */
 
 namespace Shopware\Models\Country;
-use       Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  */
@@ -244,5 +245,4 @@ class Repository extends ModelRepository
                          ->where('attribute.countryStateId = ?1')
                          ->setParameter(1, $stateId);
     }
-
 }

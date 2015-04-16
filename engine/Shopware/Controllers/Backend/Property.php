@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Property\Value,
-    Shopware\Models\Property\Option,
-    Shopware\Models\Property\Group;
+use Shopware\Models\Property\Value;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Group;
 
 /**
  * Shopware Backend Controller for the property module
@@ -71,7 +71,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      */
     public function getSetsAction()
     {
-
         $limit = intval($this->Request()->limit);
         $offset = intval($this->Request()->start);
         $filter = $this->Request()->getParam('filter', array());
@@ -528,7 +527,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $positions = json_decode($data);
 
         foreach ($positions as $position => $valueId) {
-           $test[] = (array(array("position"=>$position,"optionId"=>$valueId,"groupId"=>$setId)));
+            $test[] = (array(array("position"=>$position, "optionId"=>$valueId, "groupId"=>$setId)));
 
             Shopware()->Db()->update(
                 's_filter_relations',

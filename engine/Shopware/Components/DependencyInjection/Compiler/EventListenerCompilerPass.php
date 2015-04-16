@@ -50,7 +50,6 @@ class EventListenerCompilerPass implements CompilerPassInterface
 
         foreach ($taggedServices as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
-
                 $callback = array(new Reference($id), $attributes["method"]);
 
                 $definition->addMethodCall(

@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components;;
+namespace Shopware\Components;
+
+;
 
 /**
  * Class Config

@@ -191,7 +191,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->request = $this->action->Request();
         $this->aclResource = strtolower($this->request->getControllerName());
 
-        if($this->request->getModuleName() != 'backend'
+        if ($this->request->getModuleName() != 'backend'
           || in_array($this->aclResource, array('error'))) {
             return;
         }
@@ -224,7 +224,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $this->initLocale($auth);
 
         if ($auth->hasIdentity()) {
-
             $identity = $auth->getIdentity();
 
             $this->acl = Shopware()->Acl();
@@ -286,7 +285,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
                   . Shopware::REVISION;
-        $baseHash = substr(sha1($baseHash), 0 , 5);
+        $baseHash = substr(sha1($baseHash), 0, 5);
         $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
 
         if ($this->action !== null && $this->action->View()->hasTemplate()) {
@@ -404,7 +403,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
             $options['gc_maxlifetime'] = $backendTimeout;
         }
-        $refererCheck = false; $clientCheck = false;
+        $refererCheck = false;
+        $clientCheck = false;
         if (is_bool($options['referer_check'])) {
             $refererCheck = $options['referer_check'];
             unset($options['referer_check']);
@@ -430,7 +430,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
         Enlight_Components_Session::start($options);
 
-        if($refererCheck && ($referer = $this->request->getHeader('referer')) !== null
+        if ($refererCheck && ($referer = $this->request->getHeader('referer')) !== null
           && strpos($referer, 'http') === 0) {
             $referer = substr($referer, 0, strpos($referer, '/backend/'));
             $referer .= '/backend/';

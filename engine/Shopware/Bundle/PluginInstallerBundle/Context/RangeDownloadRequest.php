@@ -61,7 +61,7 @@ class RangeDownloadRequest
      * @param string $sha1
      * @param string $destination
      */
-    function __construct($uri, $offset, $size, $sha1, $destination)
+    public function __construct($uri, $offset, $size, $sha1, $destination)
     {
         $this->uri = $uri;
         $this->offset = $offset;

@@ -128,5 +128,4 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
 
         return $data;
     }
-
 }

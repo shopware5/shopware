@@ -168,7 +168,8 @@ class SubscriptionService
         $technicalNames = array_merge($technicalNames, array_column($data['wrongVersion'], 'name'));
         $technicalNames = array_values(array_unique($technicalNames));
 
-        $labels = $this->getPluginLabelsByNames($technicalNames);;
+        $labels = $this->getPluginLabelsByNames($technicalNames);
+        ;
 
         $data['subscription'] = $this->assignLabels($data['subscription'], $labels);
         $data['notUpgraded'] = $this->assignLabels($data['notUpgraded'], $labels);

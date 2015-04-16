@@ -25,7 +25,7 @@
 namespace Shopware\Models\Article;
 
 use Shopware\Components\Model\LazyFetchModelEntity;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @category  Shopware

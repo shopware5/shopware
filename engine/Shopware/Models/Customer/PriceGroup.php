@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Customer;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware customer price group model represents a single customer price group.

@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Data model represents a non-customer shop visior contact data.
@@ -308,6 +309,4 @@ class ContactData extends ModelEntity
     {
         return $this->zipCode;
     }
-
-
 }

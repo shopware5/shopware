@@ -41,5 +41,4 @@ interface Element
      * @return string
      */
     public function getName();
-
 }

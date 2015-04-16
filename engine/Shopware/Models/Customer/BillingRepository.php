@@ -24,7 +24,8 @@
 
 namespace   Shopware\Models\Customer;
 
-use         Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the billing model (Shopware\Models\Customer\Billing).
  *
@@ -40,7 +41,8 @@ class BillingRepository extends ModelRepository
      * @param null $userId
      * @return \Doctrine\ORM\Query
      */
-    public function getUserBillingQuery($userId) {
+    public function getUserBillingQuery($userId)
+    {
         $builder = $this->getUserBillingQueryBuilder($userId);
         return $builder->getQuery();
     }
@@ -52,8 +54,8 @@ class BillingRepository extends ModelRepository
      * @param null $userId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getUserBillingQueryBuilder($userId) {
-
+    public function getUserBillingQueryBuilder($userId)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'billing.firstName',

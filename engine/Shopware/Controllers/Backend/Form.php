@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Form\Form,
-    Shopware\Models\Form\Field;
+use Shopware\Models\Form\Form;
+use Shopware\Models\Form\Field;
 
 /**
  * Shopware Backend Controller for the form module

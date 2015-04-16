@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Order;
-use       Shopware\Components\Model\ModelEntity,
-          Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware order detail model represents a single detail data of an order .
@@ -554,7 +555,6 @@ class Detail extends ModelEntity
      */
     public function beforeInsert()
     {
-
     }
 
     /**
@@ -634,7 +634,6 @@ class Detail extends ModelEntity
                 $oldArticle->setInStock($oldArticle->getInStock() + $oldQuantity);
                 Shopware()->Models()->persist($oldArticle);
             }
-
         } elseif ($article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() + $quantityDiff);
             Shopware()->Models()->persist($article);

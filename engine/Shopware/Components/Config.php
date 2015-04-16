@@ -64,11 +64,11 @@ class Shopware_Components_Config implements ArrayAccess
      */
     public function __construct($config)
     {
-        if(isset($config['cache'])
+        if (isset($config['cache'])
             && $config['cache'] instanceof Zend_Cache_Core) {
             $this->_cache = $config['cache'];
         }
-        if(isset($config['db'])
+        if (isset($config['db'])
             && $config['db'] instanceof Zend_Db_Adapter_Abstract) {
             $this->_db = $config['db'];
         }

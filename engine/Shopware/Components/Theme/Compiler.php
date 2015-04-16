@@ -85,7 +85,7 @@ class Compiler
      * @param Js $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         $rootDir,
         LessCompiler $compiler,
         PathResolver $pathResolver,
@@ -93,8 +93,7 @@ class Compiler
         Service $service,
         Js $jsCompressor,
         \Enlight_Event_EventManager $eventManager
-    )
-    {
+    ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
         $this->service = $service;
@@ -581,7 +580,7 @@ class Compiler
     /**
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
-     * 
+     *
      * @param array $names
      */
     public function clearDirectory($names = array())
@@ -619,7 +618,7 @@ class Compiler
      */
     private function fileNameMatch($original, $names)
     {
-        foreach($names as $name) {
+        foreach ($names as $name) {
             if (strpos($original, $name) !== false) {
                 return true;
             }

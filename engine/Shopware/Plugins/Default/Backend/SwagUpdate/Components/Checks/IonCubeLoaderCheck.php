@@ -105,6 +105,5 @@ class IonCubeLoaderCheck implements CheckInterface
                 )
             );
         }
-
     }
 }

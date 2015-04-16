@@ -36,7 +36,7 @@ class Em extends Field
      * Requires to set a name for the field
      * @param $name
      */
-    function __construct($name)
+    public function __construct($name)
     {
         $this->name = $name;
     }

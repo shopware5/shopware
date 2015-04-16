@@ -140,7 +140,6 @@ class Application extends BaseApplication
         }
 
         $this->registerFilesystemCommands();
-
     }
 
     protected function registerFilesystemCommands()

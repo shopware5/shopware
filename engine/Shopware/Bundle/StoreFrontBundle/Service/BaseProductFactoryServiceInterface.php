@@ -9,7 +9,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
-
 /**
  * Class BaseProductFactory
  * @package Shopware\Bundle\StoreFrontBundle\Struct

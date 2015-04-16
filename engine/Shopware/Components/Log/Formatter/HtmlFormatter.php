@@ -105,7 +105,7 @@ class HtmlFormatter extends NormalizerFormatter
         }
         if ($record['extra']) {
             if (is_array($record['extra'])) {
-                foreach ($record['extra'] as $key => $row){
+                foreach ($record['extra'] as $key => $row) {
                     $output .= $this->addRow($key, $this->convertToString($row));
                 }
             } else {

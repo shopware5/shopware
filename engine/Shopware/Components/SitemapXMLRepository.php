@@ -204,7 +204,7 @@ class SitemapXMLRepository
         $sites = $this->getSitesByShopId($shopId);
 
         foreach ($sites as $site) {
-            if(!empty($site['children'])) {
+            if (!empty($site['children'])) {
                 $sites = array_merge($sites, $site['children']);
             }
         }

@@ -160,7 +160,6 @@ class Shopware_Components_StringCompiler
             $template = $templateEngine->createTemplate('string:' . $value);
             $template->assign($context);
             $template = $template->fetch();
-
         } catch (SmartyCompilerException $e) {
             $errorMessage = $e->getMessage();
 
@@ -192,5 +191,4 @@ class Shopware_Components_StringCompiler
 
         return $value;
     }
-
 }

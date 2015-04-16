@@ -54,7 +54,7 @@ class MetaRequest
      * @param string $domain
      * @param null|AccessTokenStruct $token
      */
-    function __construct($technicalName, $version, $domain, $token = null)
+    public function __construct($technicalName, $version, $domain, $token = null)
     {
         $this->technicalName = $technicalName;
         $this->version = $version;

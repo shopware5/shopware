@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Mail;
+
 use Shopware\Components\Model\ModelRepository;
+
 /**
  */
 class Repository extends ModelRepository
@@ -121,5 +123,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

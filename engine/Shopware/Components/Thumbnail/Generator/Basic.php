@@ -80,7 +80,7 @@ class Basic implements GeneratorInterface
             'height' => $height
         );
 
-        if ($keepProportions === true){
+        if ($keepProportions === true) {
             $newSize = $this->calculateProportionalThumbnailSize($originalSize, $width, $height);
         }
 
@@ -160,7 +160,7 @@ class Basic implements GeneratorInterface
         // Calculate the scale factor
         if ($width === 0) {
             $factor = $height / $srcHeight;
-        } else if($height === 0) {
+        } elseif ($height === 0) {
             $factor = $width / $srcWidth;
         } else {
             $factor = min($width / $srcWidth, $height / $srcHeight);

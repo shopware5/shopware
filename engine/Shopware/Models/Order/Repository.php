@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the order model (Shopware\Models\Order\Order).
  *
@@ -128,7 +130,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -339,7 +340,7 @@ class Repository extends ModelRepository
                 ->leftJoin('subShop.locale', 'locale');
 
         $builder->where('orders.number = :orderNumber');
-        $builder->setParameter('orderNumber',$orderNumber);
+        $builder->setParameter('orderNumber', $orderNumber);
         return $builder->getQuery();
     }
 
@@ -474,7 +475,7 @@ class Repository extends ModelRepository
                             )
                         );
                         $builder->setParameter(1,       $filter['value'] . '%');
-                        $builder->setParameter(2, '%' . $filter['value']      );
+                        $builder->setParameter(2, '%' . $filter['value']);
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
                     case "from":
@@ -536,7 +537,5 @@ class Repository extends ModelRepository
                        ->andWhere($builder->expr()->eq('codes.cashed', 0))
                        ->andWhere($builder->expr()->eq('voucher.modus', 1))
                        ->getQuery();
-
     }
-
 }

@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Order\Document;
-use       Shopware\Components\Model\ModelEntity,
-          Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -328,5 +329,4 @@ class Document extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'document');
     }
-
 }

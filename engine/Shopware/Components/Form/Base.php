@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 namespace Shopware\Components\Form;
+
 use Shopware\Components\Form\Interfaces\Element;
 
 /**
@@ -112,5 +113,4 @@ class Base implements Element
         }
         return $this;
     }
-
 }

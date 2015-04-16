@@ -168,7 +168,7 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(array('.'), array('_') , $exprKey) . uniqid();
+            $parameterKey = str_replace(array('.'), array('_'), $exprKey) . uniqid();
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }

@@ -311,7 +311,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         );
 
         foreach ($configurationItems as $arrayKeyName => $classPropertyName) {
-            if(isset($oldConfiguration[$arrayKeyName])) {
+            if (isset($oldConfiguration[$arrayKeyName])) {
                 $this->$classPropertyName = $oldConfiguration[$arrayKeyName];
             }
         }
@@ -324,7 +324,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function getPriceRanges()
     {
-        if(empty($this->configSearchPriceFilter)) {
+        if (empty($this->configSearchPriceFilter)) {
             return $this->configPriceFilter;
         }
         return $this->configSearchPriceFilter;
@@ -410,7 +410,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function searchMatchingKeywords($term)
     {
-
         $id = 'Shopware_Modules_Search_' . $term;
         $cache = $this->cache;
 
@@ -435,26 +434,29 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             if (strlen($term) < strlen($keyword)) {
                 $term1 = $keyword;
                 $term2 = $term;
-            }
-            else {
+            } else {
                 $term2 = $keyword;
                 $term1 = $term;
             }
 
             $relevance = 0;
 
-            if ($term1 === $term2) // Terms are similar
-            {
+            if ($term1 === $term2) {
+                // Terms are similar
+
                 $relevance = $this->configSearchExactMatchFactor;
-            }
-            elseif (strpos($term1, $term2) !== false) // Check for sub term matching
-            {
-                if (strlen($term1) < 4)
+            } elseif (strpos($term1, $term2) !== false) {
+                // Check for sub term matching
+
+                if (strlen($term1) < 4) {
                     $relevance = $this->configSearchMatchFactor;
-                elseif (strlen($term1) - strlen($term2) <= 1) //ipod === ipods
+                } elseif (strlen($term1) - strlen($term2) <= 1) {
+                    //ipod === ipods
                     $relevance = $this->configSearchExactMatchFactor;
-                elseif ((round(strlen($term2) / strlen($term1), 2) * 100) >= $this->configSearchPartNameDistance) //digital == digi
+                } elseif ((round(strlen($term2) / strlen($term1), 2) * 100) >= $this->configSearchPartNameDistance) {
+                    //digital == digi
                     $relevance = $this->configSearchPatternMatchFactor;
+                }
             }
 
             if (!empty($relevance)) {
@@ -611,7 +613,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         static $tables;
 
         if (empty($tables)) {
-
             $tables = $this->database->fetchAll("
                 SELECT STRAIGHT_JOIN
                     st.id as tableID,
@@ -647,13 +648,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 $sqlTable = 'JOIN ' . $table['referenz_table'] . ' st' . $table['tableID'] . "\n"
                     . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.articleID';
-            }
-            elseif (!empty($table['foreign_key'])) {
+            } elseif (!empty($table['foreign_key'])) {
                 $sqlTable = 'JOIN s_articles st' . $table['tableID'] . "\n"
                     . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.id';
-            }
-            else {
+            } else {
                 $sqlArticleId = 'si.elementID';
             }
             $tablesSql[] = '
@@ -751,8 +750,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Strip out search results that does not have much relevance
         if (!empty($this->configSearchMinDistanceOnTop)) {
             $minimumRelevance = $max_relevance / 100 * $this->configSearchMinDistanceOnTop;
-            if (!empty($minimumRelevance))
+            if (!empty($minimumRelevance)) {
                 $sqlWhere .= ' AND relevance>=' . (int)$minimumRelevance;
+            }
         }
 
         // Filter search results for supplier
@@ -773,12 +773,10 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (!empty($this->requestFilter["price"])) {
             if (is_array($this->requestFilter["price"])) {
                 $filterPrice = $this->requestFilter["price"];
-            }
-            else {
-                if(empty($this->configSearchPriceFilter)) {
+            } else {
+                if (empty($this->configSearchPriceFilter)) {
                     $filterPrice = $this->configPriceFilter[$this->requestFilter["price"]];
-                }
-                else {
+                } else {
                     $filterPrice = $this->configSearchPriceFilter[$this->requestFilter["price"]];
                 }
             }
@@ -972,7 +970,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         );
 
         $traceSearch = Shopware()->Config()->get('traceSearch', true);
-        if(empty($this->requestSuggestSearch) && $traceSearch) {
+        if (empty($this->requestSuggestSearch) && $traceSearch) {
             $sql = '
               INSERT INTO s_statistics_search (datum, searchterm, results, shop_id)
                 VALUES (NOW(), ?, ?, ?)
@@ -1003,7 +1001,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         if (!empty($this->requestSortSearchResultsBy)) {
             $sortedResult = $this->sortResults($searchResultsFinal, $this->requestSortSearchResultsBy);
-            if($sortedResult !== false) {
+            if ($sortedResult !== false) {
                 $searchResultsFinal = $sortedResult;
             }
         }
@@ -1027,8 +1025,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      * Empty method that allows to integrate own filters into search adapter
      * @param $searchResult
      */
-    public function executeCustomFilters($searchResult){
-
+    public function executeCustomFilters($searchResult)
+    {
     }
 
 
@@ -1061,7 +1059,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
 
         // Loop through affected categories as long as ...
-        if(!empty($result) && count($result) === 1) {
+        if (!empty($result) && count($result) === 1) {
             $this->getResult()->setCurrentCategoryFilter($result[0]['id']);
             return $this->getCountCategoryFilters($searchResults);
         }
@@ -1084,10 +1082,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         foreach ($filterPrice as $key => $filter) {
             foreach ($searchResult as $article) {
                 if ($article['price'] >= $filter['start'] && $article['price'] < $filter['end']) {
-                    if (isset($searchResultPriceFilters[$key]))
+                    if (isset($searchResultPriceFilters[$key])) {
                         $searchResultPriceFilters[$key]++;
-                    else
+                    } else {
                         $searchResultPriceFilters[$key] = 1;
+                    }
                 }
             }
         }
@@ -1226,7 +1225,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 // Build sql query to fetch values from this table
                 $sql = 'SELECT ' . $table['elementID'] . ' as id, ' . $table['fields'] . ' FROM ' . $table['table'];
                 // If any where condition is set, add to query
-                if (!empty($table['where'])) $sql .= 'WHERE ' . $table['where'];
+                if (!empty($table['where'])) {
+                    $sql .= 'WHERE ' . $table['where'];
+                }
 
                 // Get all fields & values from current table
 
@@ -1323,9 +1324,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (count($wordsTmp)) $words = array_unique($wordsTmp);
-        elseif (!empty($string)) $words = array($string);
-        else return array();
+        if (count($wordsTmp)) {
+            $words = array_unique($wordsTmp);
+        } elseif (!empty($string)) {
+            $words = array($string);
+        } else {
+            return array();
+        }
 
         // Check if any keyword is on blacklist
         $words = $this->filterBadWordsFromString($words);
@@ -1344,9 +1349,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     {
         static $badWords;
 
-        if (!isset($badWords)) $badWords = preg_split("#[\s,;]+#msi", $this->configSearchBadWords, -1, PREG_SPLIT_NO_EMPTY);
+        if (!isset($badWords)) {
+            $badWords = preg_split("#[\s,;]+#msi", $this->configSearchBadWords, -1, PREG_SPLIT_NO_EMPTY);
+        }
 
-        if (in_array((string)$word, $badWords)) return false;
+        if (in_array((string)$word, $badWords)) {
+            return false;
+        }
         return true;
     }
 
@@ -1358,12 +1367,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function filterBadWordsFromString(array $words)
     {
-        if (!count($words) || !is_array($words)) return false;
+        if (!count($words) || !is_array($words)) {
+            return false;
+        }
 
         $result = array();
 
         foreach ($words as $word) {
-            if ($this->filterBadWordFromString($word)) $result[] = $word;
+            if ($this->filterBadWordFromString($word)) {
+                $result[] = $word;
+            }
         }
 
         return $result;
@@ -1378,8 +1391,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         $sql_join = '';
         foreach ($tables as $table) {
-            if (empty($table["foreign_key"])) continue;
-            if (empty($table['referenz_table'])) $table['referenz_table'] = 's_articles';
+            if (empty($table["foreign_key"])) {
+                continue;
+            }
+            if (empty($table['referenz_table'])) {
+                $table['referenz_table'] = 's_articles';
+            }
             $sql_join .= "
                 LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
                 ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}

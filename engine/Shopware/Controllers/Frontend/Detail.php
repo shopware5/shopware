@@ -282,7 +282,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                 $mail->addTo($this->Request()->getParam('sVoteMail'));
                 $mail->Send();
-
             } else {
                 unset(Shopware()->Config()->sOPTINVOTE);
                 Shopware()->Modules()->Articles()->sSaveComment($id);

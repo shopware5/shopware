@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Plugin;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="s_core_licenses")

@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Snippet;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware snippet model represents a single snippet
@@ -316,6 +317,4 @@ class Snippet extends ModelEntity
     {
         return $this->dirty;
     }
-
-
 }

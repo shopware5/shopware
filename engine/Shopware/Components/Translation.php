@@ -297,7 +297,6 @@ class Shopware_Components_Translation
                         $translationData[$key] = $data;
                     }
                 }
-
             }
         }
 
@@ -347,7 +346,7 @@ class Shopware_Components_Translation
         $requiredKeys = array('objectdata', 'objectlanguage', 'objecttype', 'objectkey');
 
         foreach ($data as $translation) {
-            if(count(array_intersect_key(array_flip($requiredKeys), $translation)) !== count($requiredKeys)) {
+            if (count(array_intersect_key(array_flip($requiredKeys), $translation)) !== count($requiredKeys)) {
                 continue;
             }
 
@@ -465,7 +464,7 @@ class Shopware_Components_Translation
         ));
 
         // Insert s_articles_translations entry for fallbacks
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $existStmt->execute(array(':language' => $id));
             $exist = $existStmt->fetch(PDO::FETCH_COLUMN);
 

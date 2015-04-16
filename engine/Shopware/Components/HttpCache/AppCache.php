@@ -77,7 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
-            'cache_cookies'     => array('shop' , 'currency'),
+            'cache_cookies'     => array('shop', 'currency'),
         ), $options);
 
         parent::__construct(
@@ -153,7 +153,6 @@ class AppCache extends HttpCache
             } else {
                 $response->setStatusCode(404, 'Not Banned');
             }
-
         } elseif ($request->getMethod() === 'PURGE') {
             if ($this->getStore()->purge($request->getUri())) {
                 $response->setStatusCode(200, 'Purged');
@@ -220,7 +219,6 @@ class AppCache extends HttpCache
         // Not cache sites with nocache header
         if (!$response->headers->has('x-shopware-allow-nocache')
             || !$request->cookies->has('nocache')) {
-
             return false;
         }
 

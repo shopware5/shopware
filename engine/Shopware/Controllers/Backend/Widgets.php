@@ -180,7 +180,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
             Shopware()->Container()->get('models')->persist($model);
             Shopware()->Container()->get('models')->flush();
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
@@ -209,7 +208,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
             Shopware()->Container()->get('models')->remove($model);
             Shopware()->Container()->get('models')->flush();
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
             return;

@@ -201,14 +201,12 @@ class Filter
             if ($article = $this->getDqlHelper()->getProductForListing($detailId)) {
                 $articles[] = $article;
             }
-
         }
 
         return array(
             'data'  => $articles,
             'total' => $totalCount
         );
-
     }
 
     /**

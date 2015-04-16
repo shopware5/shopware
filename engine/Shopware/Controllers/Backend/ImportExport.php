@@ -302,7 +302,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->join('customer.billing', 'billing')
                 ->leftJoin('customer.shipping', 'shipping')
-                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4' )
+                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('customer.attribute', 'attribute')
@@ -438,7 +438,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $article['propertyValues'] = $this->prepareXmlArray($article['propertyValues'], 'propertyValue');
 
             $article['mainDetail']['prices'] = $this->prepareXmlArray($article['mainDetail']['prices'], 'price');
-
         }
 
         array_walk_recursive($result, function (&$value) {
@@ -802,7 +801,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $categorypaths[] = $categorypath;
                 }
             }
-            $row['categorypaths'] = implode("\r\n",$categorypaths);
+            $row['categorypaths'] = implode("\r\n", $categorypaths);
         }
 
         if (!empty($languages)) {
@@ -1726,7 +1725,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $recreateImagesLater[] = $article->getId();
-
             }
 
             // Prevent multiple images from being a preview
@@ -2108,9 +2106,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $articleData['pricegroup'] = 'EK';
             }
 
-            $articleData['price']       = floatval(str_replace(',' , '.', $articleData['price']));
-            $articleData['pseudoprice'] = floatval(str_replace(',' , '.', $articleData['pseudoprice']));
-            $articleData['baseprice']   = floatval(str_replace(',' , '.', $articleData['baseprice']));
+            $articleData['price']       = floatval(str_replace(',', '.', $articleData['price']));
+            $articleData['pseudoprice'] = floatval(str_replace(',', '.', $articleData['pseudoprice']));
+            $articleData['baseprice']   = floatval(str_replace(',', '.', $articleData['baseprice']));
 
             if (!empty($customergroups[$articleData['pricegroup']]['taxinput'])) {
                 $articleData['price'] = $articleData['price']/(100+$tax)*100;
@@ -2283,7 +2281,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         $updateData['configuratorSet']['groups'][$groupKey] = $group;
                         foreach ($group['options'] as $optionKey => $option) {
                             $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
-
                         }
                     }
                 }
@@ -2534,7 +2531,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             // delete old and save new prices
             foreach ($customerPriceGroups as $customerGroup => $price) {
-                $price = floatval(str_replace(',' , '.', $price));
+                $price = floatval(str_replace(',', '.', $price));
 
                 // if customer group is a preTax group (taxinput=true), recalculate the price
                 $isPreTax = $localCustomerGroups[$customerGroup]['taxinput'];
@@ -2561,9 +2558,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     'percent'          => 0
                 ));
             }
-
         }
-
     }
 
     /**
@@ -2597,7 +2592,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $isNewConfigurator = false;
         if (isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
             if (!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
-                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped",$articleData['ordernumber'] );
+                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped", $articleData['ordernumber']);
             }
             list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
             $isNewConfigurator = true;
@@ -2856,17 +2851,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $configuratorGroups[] = $currentGroup;
 
             $configuratorOptions[]= array("option" => $option, "group" => $group);
-
         }
 
         return array(
             array('groups' => $configuratorGroups),      // ConfiguratorSet
             $configuratorOptions                         // ConfiguratorOptions
         );
-
-
-
-
     }
 
     /**
@@ -2995,7 +2985,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $data['translations'] = $translationByLanguage;
         return $data;
-
     }
 
     /**
@@ -3083,7 +3072,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (!empty($customerData['email']) && !empty($customerData['subshopID'])) {
             /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email'], 'shopId' => $customerData['subshopID']));
-
         } elseif (!empty($customerData['email'])) {
             /** \Shopware\Models\Customer\Customer $customerModel */
             $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email']));
@@ -3491,17 +3479,23 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (get_class($xml) == 'SimpleXMLElement') {
             $attributes = $xml->attributes();
             foreach ($attributes as $k=>$v) {
-                if ($v) $a[$k] = (string) $v;
+                if ($v) {
+                    $a[$k] = (string) $v;
+                }
             }
             $x = $xml;
             $xml = get_object_vars($xml);
         }
         if (is_array($xml)) {
-            if (count($xml) == 0) return (string) $x; // for CDATA
+            if (count($xml) == 0) {
+                return (string) $x;
+            } // for CDATA
             foreach ($xml as $key=>$value) {
                 $r[$key] = $this->simplexml2array($value);
             }
-            if (isset($a)) $r['@attributes'] = $a;    // Attributes
+            if (isset($a)) {
+                $r['@attributes'] = $a;
+            }    // Attributes
             return $r;
         }
         return (string) $xml;
@@ -3570,7 +3564,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (!in_array($categoryId, $categoryIds)) {
                     $categoryIds[] = $categoryId;
                 }
-
             }
         }
 
@@ -3604,7 +3597,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/",$urlArray['path']);
+        $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":

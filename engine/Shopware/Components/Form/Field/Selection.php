@@ -44,7 +44,7 @@ class Selection extends Field
      * @param $name
      * @param  array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      */
-    function __construct($name, $store)
+    public function __construct($name, $store)
     {
         $this->name = $name;
         $this->store = $store;
@@ -80,6 +80,4 @@ class Selection extends Field
             ));
         }
     }
-
-
 }

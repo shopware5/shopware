@@ -274,7 +274,7 @@ class sArticles
     public function sGetComparisons()
     {
         return $this->articleComparisons->sGetComparisons();
-     }
+    }
 
     /**
      * Get all articles and a table of their properties as an array
@@ -580,7 +580,11 @@ class sArticles
 
         // Support tax rate defined by certain conditions
         $getTaxByConditions = $this->getTaxRateByConditions($taxId);
-        if ($getTaxByConditions === false) $tax = (float) $tax; else $tax = (float) $getTaxByConditions;
+        if ($getTaxByConditions === false) {
+            $tax = (float) $tax;
+        } else {
+            $tax = (float) $getTaxByConditions;
+        }
 
         // Calculate global discount
         if ($this->sSYSTEM->sUSERGROUPDATA["mode"] && $this->sSYSTEM->sUSERGROUPDATA["discount"]) {
@@ -631,7 +635,7 @@ class sArticles
     public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = array())
     {
         if (empty($taxId)) {
-            throw new Enlight_Exception ("Empty tax id in sCalculatingPriceNum");
+            throw new Enlight_Exception("Empty tax id in sCalculatingPriceNum");
         }
         // Calculating global discount
         if ($this->sSYSTEM->sUSERGROUPDATA["mode"] && $this->sSYSTEM->sUSERGROUPDATA["discount"]) {
@@ -640,20 +644,25 @@ class sArticles
 
         // Support tax rate defined by certain conditions
         $getTaxByConditions = $this->getTaxRateByConditions($taxId);
-        if ($getTaxByConditions===false) $tax = (float) $tax; else $tax = (float) $getTaxByConditions;
+        if ($getTaxByConditions===false) {
+            $tax = (float) $tax;
+        } else {
+            $tax = (float) $getTaxByConditions;
+        }
 
         if (!empty($this->sSYSTEM->sCurrency["factor"]) && $ignoreCurrency == false) {
             $price = floatval($price) * floatval($this->sSYSTEM->sCurrency["factor"]);
         }
 
-        if ($ignoreTax == true)  return round($price,2);
+        if ($ignoreTax == true) {
+            return round($price, 2);
+        }
 
         // Show brutto or netto ?
         // Condition Output-Netto AND NOT overwrite by customer-group
         // OR Output-Netto NOT SET AND tax-settings provided by customer-group
         if ($doNotRound == true) {
             if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-
             } else {
                 $price = $price * (100 + $tax) / 100;
             }
@@ -666,7 +675,6 @@ class sArticles
         }
 
         return $price;
-
     }
 
     /**
@@ -934,9 +942,10 @@ class sArticles
 
         if (!empty($this->sSYSTEM->sUSERGROUPDATA["groupkey"])) {
             $customergroup = $this->sSYSTEM->sUSERGROUPDATA["groupkey"];
-
         }
-        if (!$customergroup || !$groupID) return false;
+        if (!$customergroup || !$groupID) {
+            return false;
+        }
 
         $sql = "
         SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
@@ -956,12 +965,13 @@ class sArticles
         if (count($getGroups)) {
             foreach ($getGroups as $group) {
                 $priceMatrix[$group["discountstart"]] = array("percent" => $group["discount"]);
-                if (!empty($group["discount"])) $discountsFounds = true;
+                if (!empty($group["discount"])) {
+                    $discountsFounds = true;
+                }
             }
 
             if (empty($discountsFounds)) {
                 if (empty($doMatrix)) {
-
                     return $listprice;
                 } else {
                     return;
@@ -989,24 +999,25 @@ class sArticles
                 // Building price-ranges
                 foreach ($priceMatrix as $start => $percent) {
                     $to = $start - 1;
-                    if ($laststart && $to) $priceMatrix[$laststart]["to"] = $to;
+                    if ($laststart && $to) {
+                        $priceMatrix[$laststart]["to"] = $to;
+                    }
                     $laststart = $start;
                 }
 
                 foreach ($priceMatrix as $start => $percent) {
-
                     $getBlockPricings[$i]["from"] = $start;
                     $getBlockPricings[$i]["to"] = $percent["to"];
                     if ($i == 0 && $ignore) {
-
                         $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100)), $articleData["tax"], $articleData["taxID"], $articleData);
                         $divPercent = $percent["percent"];
                     } else {
-                        if ($ignore) $percent["percent"] -= $divPercent;
+                        if ($ignore) {
+                            $percent["percent"] -= $divPercent;
+                        }
                         $getBlockPricings[$i]["price"] = $this->sCalculatingPrice(($listprice / 100 * (100 - $percent["percent"])), $articleData["tax"], $articleData["taxID"], $articleData);
                     }
                     $i++;
-
                 }
 
 
@@ -1014,10 +1025,8 @@ class sArticles
             }
         }
         if (!empty($doMatrix)) {
-
             return;
         } else {
-
             return $listprice;
         }
     }
@@ -1124,9 +1133,7 @@ class sArticles
 
         // Updated / Fixed 28.10.2008 - STH
         if (!empty($usepricegroups)) {
-
             if (!empty($cheapestPrice)) {
-
                 $basePrice = $cheapestPrice;
             } else {
                 $foundPrice = true;
@@ -1141,14 +1148,10 @@ class sArticles
             );
 
             if (!empty($returnPrice) && $foundPrice) {
-
-
                 $cheapestPrice = $returnPrice;
             } elseif (!empty($foundPrice) && $returnPrice == 0.00) {
-
                 $cheapestPrice = "0.00";
             } else {
-
                 $cheapestPrice = "0";
             }
         }
@@ -1293,7 +1296,6 @@ class sArticles
         $price = str_replace(".", ",", $price); // Replaces points with commas
         $commaPos = strpos($price, ",");
         if ($commaPos) {
-
             $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
             switch (strlen($part)) {
                 case 1:
@@ -1322,7 +1324,9 @@ class sArticles
     public function sRound($moneyfloat = null)
     {
         $money_str = explode(".", $moneyfloat);
-        if (empty($money_str[1])) $money_str[1] = 0;
+        if (empty($money_str[1])) {
+            $money_str[1] = 0;
+        }
         $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
 
         $money_str = $money_str[0] . "." . $money_str[1];
@@ -1450,7 +1454,7 @@ class sArticles
         }
         $result = $this->productNumberSearch->search($criteria, $context);
 
-        $ids = array_map(function(BaseProduct $product) {
+        $ids = array_map(function (BaseProduct $product) {
             return $product->getId();
         }, $result->getProducts());
 
@@ -1811,7 +1815,6 @@ class sArticles
 
         // If article has variants, we need to append the additional text to the name
         if ($article['configurator_set_id'] > 0) {
-
             $product = new StoreFrontBundle\Struct\ListProduct(
                 (int) $article['id'],
                 (int) $article["did"],
@@ -2060,7 +2063,6 @@ class sArticles
     public function sGetConfiguratorImage($sArticle, $sCombination = "")
     {
         if (!empty($sArticle["sConfigurator"]) || !empty($sCombination)) {
-
             $foundImage = false;
             $configuratorImages = false;
             $mainKey = 0;
@@ -2070,7 +2072,6 @@ class sArticles
                 $sArticle["image"]["relations"] = $sArticle["image"]["res"]["relations"];
                 foreach ($sArticle["sConfigurator"] as $key => $group) {
                     foreach ($group["values"] as $key2 => $option) {
-
                         $groupVal = $group["groupnameOrig"] ? $group["groupnameOrig"] : $group["groupname"];
                         $groupVal = str_replace("/", "", $groupVal);
                         $groupVal = str_replace(" ", "", $groupVal);
@@ -2100,23 +2101,18 @@ class sArticles
                 foreach ($sArticle["images"] as $k => $value) {
                     if (preg_match("/(.*){(.*)}/", $value["relations"])) {
                         $configuratorImages = true;
-
-
                     }
                     if ($value["main"] == 1) {
                         $mainKey = $k;
                     }
                 }
                 if (empty($configuratorImages)) {
-
                     return $sArticle["images"][$mainKey];
                 }
-
             }
 
 
             if (!empty($configuratorImages)) {
-
                 $sArticle["images"] = array_merge($sArticle["images"], array(count($sArticle["images"]) => $sArticle["image"]));
 
                 unset($sArticle["image"]);
@@ -2136,7 +2132,9 @@ class sArticles
                     $relation = $stringParsed[1];
                     $available = explode("/", $stringParsed[2]);
 
-                    if (!@count($available)) $available = array(0 => $stringParsed[2]);
+                    if (!@count($available)) {
+                        $available = array(0 => $stringParsed[2]);
+                    }
 
                     $imageFailedCheck = array();
 
@@ -2146,20 +2144,22 @@ class sArticles
                         $option = $getCombination[1];
 
                         if (isset($referenceImages[strtolower($checkCombination)])) {
-
                             $imageFailedCheck[] = true;
-
                         }
                     }
                     if (count($imageFailedCheck) && count($imageFailedCheck) >= 1 && count($available) >= 1 && $relation == "||") { // ODER Verknï¿½pfunbg
-                        if (!empty($debug)) echo $string . " matching combination\n";
+                        if (!empty($debug)) {
+                            echo $string . " matching combination\n";
+                        }
                         $sArticle["images"][$imageKey]["relations"] = "";
                         $positions[$image["position"]] = $imageKey;
                     } elseif (count($imageFailedCheck) == count($available) && $relation == "&") { // UND VERKNï¿½PFUNG
                         $sArticle["images"][$imageKey]["relations"] = "";
                         $positions[$image["position"]] = $imageKey;
                     } else {
-                        if (!empty($debug)) echo $string . " doesnt match combination\n";
+                        if (!empty($debug)) {
+                            echo $string . " doesnt match combination\n";
+                        }
                         unset($sArticle["images"][$imageKey]);
                     }
                 }
@@ -2172,9 +2172,7 @@ class sArticles
                 if (!empty($sCombination)) {
                     return $sArticle["image"];
                 }
-
             } else {
-
             }
         }
 
@@ -2309,7 +2307,7 @@ class sArticles
         $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
 
         $relatedArticles = array();
-        foreach($data['sRelatedArticles'] as $related) {
+        foreach ($data['sRelatedArticles'] as $related) {
             $related = $this->legacyEventManager->firePromotionByIdEvents($related, null, $this);
             if ($related) {
                 $relatedArticles[] = $related;
@@ -2318,7 +2316,7 @@ class sArticles
         $data['sRelatedArticles'] = $relatedArticles;
 
         $similarArticles = array();
-        foreach($data['sSimilarArticles'] as $similar) {
+        foreach ($data['sSimilarArticles'] as $similar) {
             $similar = $this->legacyEventManager->firePromotionByIdEvents($similar, null, $this);
             if ($similar) {
                 $similarArticles[] = $similar;

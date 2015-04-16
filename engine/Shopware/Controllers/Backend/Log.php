@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             'log.ipAddress as ip_address',
             'log.userAgent as user_agent',
             'log.value4 as value4'
-        )->from('Shopware\Models\Log\Log','log');
+        )->from('Shopware\Models\Log\Log', 'log');
 
         if ($filterValue) {
             $builder->where('log.user = ?1')->setParameter(1, $filterValue);

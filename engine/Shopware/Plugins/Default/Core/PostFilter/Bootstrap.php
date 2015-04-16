@@ -94,16 +94,16 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $router = $this->get('router');
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';
-        if(preg_match_all($regex, $source, $matches) > 0) {
+        if (preg_match_all($regex, $source, $matches) > 0) {
             $urls = array_map('htmlspecialchars_decode', $matches[3]);
             $this->urls = array_combine($matches[3], $router->generateList($urls));
         }
         // Rewrite urls in rss and atom feeds
         $regex = '#<(guid|link|id)>(' . $baseFile . '[^<]*)</(guid|link|id)>#Umsi';
-        if(preg_match_all($regex, $source, $matches) > 0) {
+        if (preg_match_all($regex, $source, $matches) > 0) {
             $urls = array_map('htmlspecialchars_decode', $matches[2]);
             $urls = array_combine($matches[2], $router->generateList($urls));
-            $source = preg_replace_callback($regex, function($found) use (&$urls) {
+            $source = preg_replace_callback($regex, function ($found) use (&$urls) {
                 return '<' . $found[1] . '>' . $urls[$found[2]] . '</' . $found[3] . '>';
             }, $source);
         }

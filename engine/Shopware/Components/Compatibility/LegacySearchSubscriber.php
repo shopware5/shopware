@@ -25,7 +25,7 @@ class LegacySearchSubscriber implements SubscriberInterface
     /**
      * @param Container $container
      */
-    function __construct(Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -125,11 +125,9 @@ class LegacySearchSubscriber implements SubscriberInterface
 
             if ($facet->getFacetName() == 'price') {
                 $priceFacetValues = $this->getPriceRangeValues($priceRanges, $facet);
-
-            } else if ($facet->getFacetName() == 'category') {
+            } elseif ($facet->getFacetName() == 'category') {
                 $categoryFacet = $this->convertCategoryFacet($facet, $activeCategoryId);
-
-            } else if ($facet->getFacetName() == 'manufacturer') {
+            } elseif ($facet->getFacetName() == 'manufacturer') {
                 $manufacturerFacet = $this->convertManufacturerFacet($facet);
             }
         }
@@ -237,15 +235,15 @@ class LegacySearchSubscriber implements SubscriberInterface
             'sLink'         => $baseLink,
             'sSearch'       => $this->container->get('router')->assemble(array('sViewport' => 'search')),
 
-            'sPage'         => $baseLink . '&' . http_build_query($activeFilters,"","&"),
-            'sSort'         => $baseLink . '&' . http_build_query($withoutSort,"","&"),
-            'sPerPage'      => $baseLink . '&' . http_build_query($withoutPerPage,"","&"),
+            'sPage'         => $baseLink . '&' . http_build_query($activeFilters, "", "&"),
+            'sSort'         => $baseLink . '&' . http_build_query($withoutSort, "", "&"),
+            'sPerPage'      => $baseLink . '&' . http_build_query($withoutPerPage, "", "&"),
 
             'sFilter'       => array(
-                'category'  => $baseLink . '&' . http_build_query($withoutCategory,"","&"),
-                'supplier'  => $baseLink . '&' . http_build_query($withoutSupplier,"","&"),
-                'price'     => $baseLink . '&' . http_build_query($withoutPrice,"","&"),
-                'property'  => $baseLink . '&' . http_build_query($withoutProperty,"","&"),
+                'category'  => $baseLink . '&' . http_build_query($withoutCategory, "", "&"),
+                'supplier'  => $baseLink . '&' . http_build_query($withoutSupplier, "", "&"),
+                'price'     => $baseLink . '&' . http_build_query($withoutPrice, "", "&"),
+                'property'  => $baseLink . '&' . http_build_query($withoutProperty, "", "&"),
             )
         );
         return $links;
@@ -278,7 +276,6 @@ class LegacySearchSubscriber implements SubscriberInterface
                 ($end >= $facet->getMin() && $end <= $facet->getMax())) {
                 $result[$index] = 1;
             }
-
         }
         
         return $result;

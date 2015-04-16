@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Dispatch;
-use         Shopware\Components\Model\ModelRepository,
-            Shopware\Models\Customer;
+
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Customer;
+
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
  * <br>
@@ -118,11 +120,11 @@ class Repository extends ModelRepository
 
         // Build the query
         $builder->select(array('dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'))
-                ->leftJoin('dispatch.countries','countries')
-                ->leftJoin('dispatch.categories','categories')
-                ->leftJoin('dispatch.holidays','holidays')
-                ->leftJoin('dispatch.attribute','attribute')
-                ->leftJoin('dispatch.payments','payments');
+                ->leftJoin('dispatch.countries', 'countries')
+                ->leftJoin('dispatch.categories', 'categories')
+                ->leftJoin('dispatch.holidays', 'holidays')
+                ->leftJoin('dispatch.attribute', 'attribute')
+                ->leftJoin('dispatch.payments', 'payments');
         if (null !== $dispatchId) {
             $builder->where($expr->eq('dispatch.id', '?2'))
                     ->setParameter(2, $dispatchId);
@@ -176,7 +178,7 @@ class Repository extends ModelRepository
         $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(array('shippingcosts'));
 
         // assure that we will get an empty result set when no dispatch ID is provided
-        if (is_null($dispatchId) || empty($dispatchId) ) {
+        if (is_null($dispatchId) || empty($dispatchId)) {
             $dispatchId = '-1';
         }
         $builder->where($expr->eq('shippingcosts.dispatchId', $dispatchId));
@@ -196,7 +198,7 @@ class Repository extends ModelRepository
     {
         return $this->getEntityManager()
             ->createQuery('delete from Shopware\Models\Dispatch\ShippingCost cm where cm.dispatchId = ?1')
-            ->setParameter(1,$dispatchId);
+            ->setParameter(1, $dispatchId);
     }
 
     /**

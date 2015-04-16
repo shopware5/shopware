@@ -394,7 +394,6 @@ class sAdmin
         );
 
         return $getPaymentMeans;
-
     }
 
     /**
@@ -483,7 +482,7 @@ class sAdmin
         // Convert multiple birthday fields into a single value
         if (!empty($postData['birthmonth']) && !empty($postData['birthday']) && !empty($postData['birthyear'])) {
             $postData['birthday'] = mktime(
-                0,0,0,
+                0, 0, 0,
                 (int) $postData['birthmonth'],
                 (int) $postData['birthday'],
                 (int) $postData['birthyear']
@@ -950,7 +949,6 @@ class sAdmin
             );
         }
         return true;
-
     }
 
     /**
@@ -1019,7 +1017,7 @@ class sAdmin
         }
         list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
             'Shopware_Modules_Admin_ValidateStep2_FilterResult',
-            array($sErrorMessages,$sErrorFlag),
+            array($sErrorMessages, $sErrorFlag),
             array(
                 'edit' => $edit,
                 'rules' => $rules,
@@ -1161,9 +1159,9 @@ class sAdmin
                     unset($register['auth']["encoderName"]);
                 }
             } else {
-                unset ($register['auth']["email"]);
-                unset ($register['auth']["password"]);
-                unset ($register['auth']["encoderName"]);
+                unset($register['auth']["email"]);
+                unset($register['auth']["password"]);
+                unset($register['auth']["encoderName"]);
             }
 
             $this->session->offsetSet('sRegister', $register);
@@ -1706,7 +1704,7 @@ class sAdmin
         $saveUserData = $this->db->query($sql, $data);
         $this->eventManager->notify(
             'Shopware_Modules_Admin_SaveRegisterMainData_Return',
-            array('subject' => $this,'insertObject' => $saveUserData)
+            array('subject' => $this, 'insertObject' => $saveUserData)
         );
 
         $userId = $this->db->lastInsertId();
@@ -1819,7 +1817,7 @@ class sAdmin
         // Trying to insert
         list($sqlBilling, $data) = $this->eventManager->filter(
             'Shopware_Modules_Admin_SaveRegisterBilling_FilterSql',
-            array($sqlBilling,$data),
+            array($sqlBilling, $data),
             array('subject' => $this)
         );
 
@@ -1945,7 +1943,7 @@ class sAdmin
     {
         if ($this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-            array('subject' => $this,'email' => $email))
+            array('subject' => $this, 'email' => $email))
         ) {
             return false;
         }
@@ -1977,7 +1975,7 @@ class sAdmin
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_SaveRegisterSendConfirmation_BeforeSend',
-            array('subject' => $this,'mail' => $mail)
+            array('subject' => $this, 'mail' => $mail)
         );
 
         $mail->send();
@@ -2046,7 +2044,7 @@ class sAdmin
             if ($this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')) {
                 if (!$this->eventManager->notifyUntil(
                     'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber',
-                    array('subject' => $this,'id' => $userID))
+                    array('subject' => $this, 'id' => $userID))
                 ) {
                     $sql = "
                         UPDATE
@@ -2065,7 +2063,7 @@ class sAdmin
             if (count($register["shipping"])) {
                 $userShippingID = $this->sSaveRegisterShipping($userID, $register);
                 if ($this->db->getErrorMessage() || !$userShippingID) {
-                    throw new Enlight_Exception("sSaveRegister #02: Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($register,true));
+                    throw new Enlight_Exception("sSaveRegister #02: Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($register, true));
                 }
             }
 
@@ -2143,7 +2141,6 @@ class sAdmin
         );
 
         foreach ($getOrders as $orderKey => $orderValue) {
-
             if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
@@ -2169,7 +2166,7 @@ class sAdmin
                 $foundESD = false;
                 foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->moduleManager->Articles()
-                        ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
+                        ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"], 2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                         ->sFormatPrice($orderDetailsValue["price"]);
 
@@ -2223,7 +2220,6 @@ class sAdmin
         $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
 
         return $orderData;
-
     }
 
     /**
@@ -2262,7 +2258,6 @@ class sAdmin
         $foundOrdersCount = (int)Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
         foreach ($getOrders as $orderKey => $orderValue) {
-
             $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_amount"]);
             $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
@@ -2448,7 +2443,7 @@ class sAdmin
         $userData = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetUserData_FilterResult',
             $userData,
-            array('subject' => $this,'id' => $this->session->offsetGet('sUserId'))
+            array('subject' => $this, 'id' => $this->session->offsetGet('sUserId'))
         );
 
         return $userData;
@@ -2791,7 +2786,6 @@ class sAdmin
     public function sRiskATTRISNOT($user, $order, $value)
     {
         if (!empty($order["content"])) {
-
             $value = explode("|", $value);
             if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
@@ -3023,7 +3017,7 @@ class sAdmin
         $value = strtolower($value);
         return (
             preg_match("/$value/", strtolower($user["shippingaddress"]["lastname"]))
-            || preg_match("/$value/",strtolower($user["billingaddress"]["lastname"]))
+            || preg_match("/$value/", strtolower($user["billingaddress"]["lastname"]))
         );
     }
 
@@ -3104,7 +3098,7 @@ class sAdmin
                 return array(
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('ErrorFillIn','Please fill in all red fields'),
+                            ->get('ErrorFillIn', 'Please fill in all red fields'),
                     'sErrorFlag' => $errorFlag
                 );
             }
@@ -3120,7 +3114,7 @@ class sAdmin
         }
 
         $email = trim(strtolower(stripslashes($email)));
-        if(empty($email)) {
+        if (empty($email)) {
             return array(
                 "code" => 6,
                 "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -3146,8 +3140,7 @@ class sAdmin
                     "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                             ->get('NewsletterFailureNotFound', 'This mail address could not be found')
                 );
-            }
-            else {
+            } else {
                 $result = array(
                     "code" => 5,
                     "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -3473,7 +3466,7 @@ class sAdmin
             AND bind_sql IS NOT NULL AND bind_sql != ''
         ");
 
-        if(empty($basket)) {
+        if (empty($basket)) {
             return array();
         }
 
@@ -3486,7 +3479,7 @@ class sAdmin
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
-        $sql_basket = implode(', ',$sql_basket);
+        $sql_basket = implode(', ', $sql_basket);
 
         $sql = "
             SELECT
@@ -3643,7 +3636,7 @@ class sAdmin
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
-        $sql_basket = implode(', ',$sql_basket);
+        $sql_basket = implode(', ', $sql_basket);
 
         $sql = "
             SELECT d.id, d.calculation
@@ -3759,15 +3752,15 @@ class sAdmin
         ));
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if(empty($basket)) {
+        if (empty($basket)) {
             return false;
         }
         $country = $this->sGetCountry($basket['countryID']);
-        if(empty($country)) {
+        if (empty($country)) {
             return false;
         }
         $payment = $this->sGetPaymentmean($basket['paymentID']);
-        if(empty($payment)) {
+        if (empty($payment)) {
             return false;
         }
 
@@ -3807,19 +3800,19 @@ class sAdmin
         }
 
         if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
-            $dispatch['shippingfree'] = round($dispatch['shippingfree']/(100+$discount_tax)*100,2);
+            $dispatch['shippingfree'] = round($dispatch['shippingfree']/(100+$discount_tax)*100, 2);
         }
 
         if ((!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
             || empty($basket['count_article'])
             || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
-            if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge']))
+            if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge'])) {
                 return array(
                     'brutto' => $payment['surcharge'],
                     'netto' => round($payment['surcharge']*100/(100+$this->config->get('sTAXSHIPPING')), 2)
                 );
-            else {
+            } else {
                 return array('brutto' => 0, 'netto' => 0);
             }
         }
@@ -3865,7 +3858,7 @@ class sAdmin
             $result['brutto'] +=  $result['surcharge'];
         }
         $result['brutto'] *= $currencyFactor;
-        $result['brutto'] = round($result['brutto'],2);
+        $result['brutto'] = round($result['brutto'], 2);
         if (!empty($payment['surcharge'])
             && $dispatch['surcharge_calculation'] != 2
             && (empty($basket['shippingfree']) || empty($dispatch['surcharge_calculation']))
@@ -3876,13 +3869,13 @@ class sAdmin
         if ($result['brutto'] < 0) {
             return array('brutto' => 0, 'netto' => 0);
         }
-        if(empty($dispatch['tax_calculation'])) {
+        if (empty($dispatch['tax_calculation'])) {
             $result['tax'] = $basket['max_tax'];
         } else {
             $result['tax'] = $dispatch['tax_calculation_value'];
         }
         $result['tax'] = (float) $result['tax'];
-        $result['netto'] = round($result['brutto']*100/(100+$result['tax']),2);
+        $result['netto'] = round($result['brutto']*100/(100+$result['tax']), 2);
 
         return $result;
     }
@@ -3903,7 +3896,7 @@ class sAdmin
         if (isset($postData["emailConfirmation"]) || isset($postData["email"])) {
             $postData["email"] = strtolower(trim($postData["email"]));
 
-			if (empty($postData["email"]) || !$this->emailValidator->isValid($postData["email"])) {
+            if (empty($postData["email"]) || !$this->emailValidator->isValid($postData["email"])) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                     ->get('MailFailure', 'Please enter a valid mail address');
@@ -4161,7 +4154,6 @@ class sAdmin
         foreach ($neededFields as $sectionKey => $sectionFields) {
             foreach ($neededFields[$sectionKey] as $fieldKey => $fieldValue) {
                 if (is_array($fieldValue)) {
-
                     $objKey = $fieldValue[0];
 
                     if (empty($register[$sectionKey][$fieldKey][$objKey])) {
@@ -4736,7 +4728,7 @@ class sAdmin
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $percent_net = $percent;
             } else {
-                $percent_net = round($percent/(100+$discount_tax)*100,2);
+                $percent_net = round($percent/(100+$discount_tax)*100, 2);
             }
 
             $tax_rate = $discount_tax;

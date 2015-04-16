@@ -158,7 +158,6 @@ class BatchProcess
         error_log(print_r($attributes, true)."\n", 3, Shopware()->DocPath().'/../error.log');
 
         return $attributes;
-
     }
 
     /**
@@ -184,7 +183,6 @@ class BatchProcess
         $builder->where($builder->expr()->in($prefix.'.id', $ids));
 
         foreach ($operations as $operation) {
-
             list($prefix, $column) = explode('.', $operation['column']);
 
             $type = $columnInfo[ucfirst($prefix).ucfirst($column)]['type'];
@@ -262,7 +260,7 @@ class BatchProcess
 
         // As of Shopware 4.1.3 clearing the cache via event is possible. As this is quite slow, however,
         // this function is optional and disabled by default.
-        $clearCache = $this->getConfig()->getByNamespace('SwagMultiEdit', 'clearCache' , false);
+        $clearCache = $this->getConfig()->getByNamespace('SwagMultiEdit', 'clearCache', false);
         if (!$clearCache) {
             return;
         }
@@ -274,7 +272,6 @@ class BatchProcess
                 array('subject' => $this, 'cacheId' => 'a'.$articleId)
             );
         }
-
     }
 
     /**
@@ -303,7 +300,7 @@ class BatchProcess
         $connection->beginTransaction();
 
         try {
-            $details = $this->getQueue()->pop($queueId, $this->getConfig()->getByNamespace('SwagMultiEdit', 'batchItemsPerRequest' , 512));
+            $details = $this->getQueue()->pop($queueId, $this->getConfig()->getByNamespace('SwagMultiEdit', 'batchItemsPerRequest', 512));
 
             if (!empty($details)) {
                 $this->updateDetails($details, $operations);

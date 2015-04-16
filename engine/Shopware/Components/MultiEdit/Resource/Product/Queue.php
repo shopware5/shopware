@@ -124,7 +124,6 @@ class Queue
         $query->execute();
 
         return $result;
-
     }
 
     /**
@@ -207,7 +206,5 @@ class Queue
             'queueId' => $queueId,
             'done' => $done
         );
-
     }
-
 }

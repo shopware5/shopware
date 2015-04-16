@@ -124,5 +124,4 @@ interface ResourceInterface
      * @return mixed
      */
     public function deleteBackup($id);
-
 }

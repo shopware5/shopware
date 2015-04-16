@@ -456,7 +456,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
-
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -744,14 +743,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
 
         if ($templateVersion >= 3) {
-            
             $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
 
             $viewAssignments['emotion'] = $emotion;
             $viewAssignments['hasEmotion'] = (!empty($emotion));
 
             $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
-
         } else {
             //check category emotions
             $emotion = $this->get('emotion_device_configuration')->getById($emotionId);

@@ -66,7 +66,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {
-
             if (is_array($value)) {
                 $pluginName = $key;
                 $config = $value;

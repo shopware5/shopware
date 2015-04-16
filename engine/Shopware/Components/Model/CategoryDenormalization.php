@@ -219,7 +219,6 @@ class CategoryDenormalization
         $this->beginTransaction();
 
         while ($category = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-
             $parents = $this->getParentCategoryIds($category['id']);
             array_shift($parents);
 

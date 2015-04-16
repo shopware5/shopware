@@ -23,8 +23,8 @@
  */
 namespace Shopware\Models\Tracking;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Article Impression Statistics

@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Emotion\Library;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the \Shopware\Models\Emotion\Library\Component model.
@@ -39,5 +40,4 @@ use         Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
 }

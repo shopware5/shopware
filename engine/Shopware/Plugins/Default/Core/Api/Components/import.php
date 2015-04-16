@@ -160,7 +160,6 @@ class sShopwareImport
             if (count(explode("|", $article['additionaltext'])) == count(explode("|", $article['variant_group_names']))) {
                 $groupNames = explode("|", $article['variant_group_names']);
             }
-
         }
 
         foreach (explode("|", $article['additionaltext']) as $idx => $option) {
@@ -223,7 +222,6 @@ class sShopwareImport
         }
 
         return $configuratorID;
-
     }
 
     /**
@@ -273,10 +271,11 @@ class sShopwareImport
      * @access public
      * @return array Alle offenen Bestellungen
      */
-    public function sArticle ($article, $config = array())
+    public function sArticle($article, $config = array())
     {
-        if(!isset($config['update']))
+        if (!isset($config['update'])) {
             $config['update'] = true;
+        }
 
         if (empty($article['ordernumber'])&&empty($article['articledetailsID'])&&empty($article['articleID'])) {
             $this->sAPI->sSetError("Ordernumber or articleID are required", 10200);
@@ -284,131 +283,182 @@ class sShopwareImport
         }
 
         ### ELEMENTS OF s_articles ###
-        if(isset($article["name"]))
+        if (isset($article["name"])) {
             $article['name'] = $this->sDB->qstr($this->sValDescription($article['name']));
-        if(isset($article["shippingtime"]))
+        }
+        if (isset($article["shippingtime"])) {
             $article['shippingtime'] = $this->sDB->qstr((string) $article['shippingtime']);
-        if(isset($article["description"]))
+        }
+        if (isset($article["description"])) {
             $article['description'] = $this->sDB->qstr((string) $article['description']);
-        if(isset($article["description_long"]))
+        }
+        if (isset($article["description_long"])) {
             $article['description_long'] = $this->sDB->qstr((string) $article['description_long']);
-        if(isset($article["keywords"]))
+        }
+        if (isset($article["keywords"])) {
             $article['keywords'] = $this->sDB->qstr((string) $article['keywords']);
-        if(isset($article['supplierID']))
+        }
+        if (isset($article['supplierID'])) {
             $article['supplierID'] = intval($article['supplierID']);
-        if(isset($article['taxID']))
+        }
+        if (isset($article['taxID'])) {
             $article['taxID'] = intval($article['taxID']);
-        if(isset($article['filtergroupID']))
+        }
+        if (isset($article['filtergroupID'])) {
             $article['filtergroupID'] = intval($article['filtergroupID']);
-        if(isset($article['pricegroupID']))
+        }
+        if (isset($article['pricegroupID'])) {
             $article['pricegroupID'] = intval($article['pricegroupID']);
-        if(isset($article['pseudosales']))
+        }
+        if (isset($article['pseudosales'])) {
             $article['pseudosales'] = intval($article['pseudosales']);
-        if(isset($article['topseller']))
+        }
+        if (isset($article['topseller'])) {
             $article['topseller'] = empty($article['topseller']) ? 0 : 1;
-        if(isset($article['notification']))
+        }
+        if (isset($article['notification'])) {
             $article['notification'] = empty($article['notification']) ? 0 : 1;
-        if(isset($article['laststock']))
+        }
+        if (isset($article['laststock'])) {
             $article['laststock'] = empty($article['laststock']) ? 0 : 1;
-        if(isset($article['active']))
+        }
+        if (isset($article['active'])) {
             $article['active'] = empty($article['active']) ? 0 : 1;
-        if(isset($article['pricegroupActive']))
+        }
+        if (isset($article['pricegroupActive'])) {
             $article['pricegroupActive'] = empty($article['pricegroupActive']) ? 0 : 1;
+        }
 
-        if(!empty($article['added']))
+        if (!empty($article['added'])) {
             $article['added'] = $this->sDB->DBDate($article['added']);
-        else
+        } else {
             unset($article['added']);
+        }
 
-        if(!empty($article['changed']))
+        if (!empty($article['changed'])) {
             $article['changed'] = $this->sDB->DBTimeStamp($article['changed']);
-        else
+        } else {
             unset($article['changed']);
-        if(isset($article['crossbundlelook']))
+        }
+        if (isset($article['crossbundlelook'])) {
             $article['crossbundlelook'] = empty($article['crossbundlelook']) ? 0 : 1;
+        }
 
-        if(isset($article['main_detail_id']))
+        if (isset($article['main_detail_id'])) {
             $article['main_detail_id'] = intval($article['main_detail_id']);
-        if(!empty($article['available_from']))
+        }
+        if (!empty($article['available_from'])) {
             $article['available_from'] = $this->sDB->DBTimeStamp($article['available_from']);
-        else
+        } else {
             unset($article['available_from']);
-        if(!empty($article['available_to']))
+        }
+        if (!empty($article['available_to'])) {
             $article['available_to'] = $this->sDB->DBTimeStamp($article['available_to']);
-        else
+        } else {
             unset($article['available_to']);
-        if(isset($article['configurator_set_id']))
+        }
+        if (isset($article['configurator_set_id'])) {
             $article['configurator_set_id'] = intval($article['configurator_set_id']);
-        if(isset($article['crossbundlelook']))
+        }
+        if (isset($article['crossbundlelook'])) {
             $article['crossbundlelook'] = intval($article['crossbundlelook']);
-        if(isset($article['notification']))
+        }
+        if (isset($article['notification'])) {
             $article['notification'] = intval($article['notification']);
-        if(isset($article['template']))
+        }
+        if (isset($article['template'])) {
             $article['template'] = intval($article['template']);
-        if(isset($article['mode']))
+        }
+        if (isset($article['mode'])) {
             $article['mode'] = intval($article['mode']);
+        }
 
         ### ELEMENTS OF s_articles_details ###
         // Checked for availability in sw4
-        if(isset($article["ordernumber"]))
+        if (isset($article["ordernumber"])) {
             $article['ordernumber'] = $this->sDB->qstr($this->sValDescription($article['ordernumber']));
-        if(isset($article["suppliernumber"]))
+        }
+        if (isset($article["suppliernumber"])) {
             $article['suppliernumber'] = $this->sDB->qstr($this->sValDescription($article['suppliernumber']));
-        if(isset($article["additionaltext"]))
+        }
+        if (isset($article["additionaltext"])) {
             $article['additionaltext'] = $this->sDB->qstr((string) $article['additionaltext']);
-        if(isset($article['sales']))
+        }
+        if (isset($article['sales'])) {
             $article['sales'] = intval($article['sales']);
-        if(isset($article['active']))
+        }
+        if (isset($article['active'])) {
             $article['active'] = empty($article['active']) ? 0 : 1;
-        if(isset($article['instock']))
+        }
+        if (isset($article['instock'])) {
             $article['instock'] = intval($article['instock']);
-        if(isset($article['stockmin']))
+        }
+        if (isset($article['stockmin'])) {
             $article['stockmin'] = intval($article['stockmin']);
-        if(isset($article['weight']))
-                  $article['weight'] = $this->sValFloat($article['weight']);
-        if(isset($article['position']))
+        }
+        if (isset($article['weight'])) {
+            $article['weight'] = $this->sValFloat($article['weight']);
+        }
+        if (isset($article['position'])) {
             $article['position'] = intval($article['position']);
-        if(isset($article['width']))
+        }
+        if (isset($article['width'])) {
             $article['width'] = $this->sValFloat($article['width']);
-        if(isset($article['height']))
+        }
+        if (isset($article['height'])) {
             $article['height'] = $this->sValFloat($article['height']);
-        if(isset($article['length']))
+        }
+        if (isset($article['length'])) {
             $article['length'] = $this->sValFloat($article['length']);
-        if(isset($article["ean"]))
+        }
+        if (isset($article["ean"])) {
             $article['ean'] = $this->sDB->qstr((string) $article['ean']);
-        if(isset($article['unitID']))
+        }
+        if (isset($article['unitID'])) {
             $article['unitID'] = intval($article['unitID']);
-        if(isset($article['purchasesteps']))
+        }
+        if (isset($article['purchasesteps'])) {
             $article['purchasesteps'] = intval($article['purchasesteps']);
-        if(isset($article['maxpurchase']))
+        }
+        if (isset($article['maxpurchase'])) {
             $article['maxpurchase'] = intval($article['maxpurchase']);
-        if(isset($article['minpurchase']))
+        }
+        if (isset($article['minpurchase'])) {
             $article['minpurchase'] = intval($article['minpurchase']);
-        if(isset($article['purchaseunit']))
+        }
+        if (isset($article['purchaseunit'])) {
             $article['purchaseunit'] = $this->sValFloat($article['purchaseunit']);
-        if(isset($article['referenceunit']))
+        }
+        if (isset($article['referenceunit'])) {
             $article['referenceunit'] = $this->sValFloat($article['referenceunit']);
-        if(isset($article["packunit"]))
+        }
+        if (isset($article["packunit"])) {
             $article['packunit'] = $this->sDB->qstr((string) $article['packunit']);
-        if(!empty($article["releasedate"]))
+        }
+        if (!empty($article["releasedate"])) {
             $article['releasedate'] = $this->sDB->DBDate($article['releasedate']);
-        elseif(isset($article['releasedate']))
+        } elseif (isset($article['releasedate'])) {
             $article['releasedate'] = null;
-        if(isset($article['shippingfree']))
+        }
+        if (isset($article['shippingfree'])) {
             $article['shippingfree'] = empty($article['shippingfree']) ? 0 : 1;
+        }
 
         ### ELEMENTS OF s_articles_attributes ##
-        if(isset($article['articledetailsID']))
+        if (isset($article['articledetailsID'])) {
             $article['articledetailsID'] = intval($article['articledetailsID']);
-        if(isset($article['articleID']))
+        }
+        if (isset($article['articleID'])) {
             $article['articleID'] = intval($article['articleID']);
+        }
         if (isset($article["attr"])&&is_array($article["attr"])) {
             foreach ($article["attr"] as $key=>$attr) {
                 $key = (int) str_replace('attr', '', $key);
-                if(!is_int($key)||$key>20)
-                    unset ($article["attr"][$key]);
-                else
+                if (!is_int($key)||$key>20) {
+                    unset($article["attr"][$key]);
+                } else {
                     $article["attr"][$key] = $this->sDB->qstr((string) $attr);
+                }
             }
         } else {
             $article["attr"] = array();
@@ -420,23 +470,27 @@ class sShopwareImport
             }
         }
 
-        if(!empty($article['mainID']))
+        if (!empty($article['mainID'])) {
             $article['mainID'] = intval($article['mainID']);
-        if(!empty($article['maindetailsID']))
+        }
+        if (!empty($article['maindetailsID'])) {
             $article['maindetailsID'] = intval($article['maindetailsID']);
-        if(!empty($article['mainnumber']))
+        }
+        if (!empty($article['mainnumber'])) {
             $article['mainnumber'] = $this->sDB->qstr((string) $article['mainnumber']);
+        }
 
         $configuratorSetId = null;
 
         // Varianten-Artikel �berpr�fen
         if (!empty($article['mainnumber'])||!empty($article['mainID'])||!empty($article['maindetailsID'])) {
-            if(!empty($article['maindetailsID']))
+            if (!empty($article['maindetailsID'])) {
                 $where = "id={$article['maindetailsID']}";
-            elseif(!empty($article['mainID']))
+            } elseif (!empty($article['mainID'])) {
                 $where = "articleID={$article['mainID']}";
-            else
+            } else {
                 $where = "ordernumber={$article['mainnumber']}";
+            }
             $sql = "
                 SELECT id, articleID FROM s_articles_details
                 WHERE $where AND kind = 1
@@ -448,16 +502,16 @@ class sShopwareImport
             }
             $article['maindetailsID'] = $row['id'];
             $article['articleID'] = $row['articleID'];
-
         }
 
         // Wir �berpr�fen ob Artikel vorhanden ist, wenn ja holen wir die ArtikelDetailsID
-        if(!empty($article['articledetailsID']))
+        if (!empty($article['articledetailsID'])) {
             $where = "d.id={$article['articledetailsID']}";
-        elseif(!empty($article['ordernumber']))
+        } elseif (!empty($article['ordernumber'])) {
             $where = "d.ordernumber={$article['ordernumber']}";
-        elseif(!empty($article['articleID']))
+        } elseif (!empty($article['articleID'])) {
             $where = "d.articleID={$article['articleID']} AND d.kind = 1";
+        }
         $sql = "
             SELECT d.id, d.articleID, d.kind, a.taxID
             FROM s_articles a, s_articles_details d
@@ -471,7 +525,7 @@ class sShopwareImport
             return false;
         }
         // Varianten-Artikel �berpr�fen 2
-        if(empty($article['maindetailsID'])
+        if (empty($article['maindetailsID'])
           || (!empty($row['id']) && $article['maindetailsID'] == $row['id'])) {
             $article['kind'] = 1;
         } else {
@@ -513,22 +567,24 @@ class sShopwareImport
 //		}
 
         //HerstellerID holen
-        if (isset($article['supplierID']))
+        if (isset($article['supplierID'])) {
             $article['supplierID'] = $this->sSupplier(array('supplierID'=>$article['supplierID']));
-        elseif (isset($article['supplier']))
+        } elseif (isset($article['supplier'])) {
             $article['supplierID'] = $this->sSupplier(array('supplier'=>$article['supplier']));
+        }
         if (empty($article['supplierID'])&&empty($article['articleID'])) { // Hersteller wird ben�tigt
             $this->sAPI->sSetError("Supplier are required", 10206);
             return false;
         }
 
         //TaxID holen
-        if (!empty($article['taxID']))
+        if (!empty($article['taxID'])) {
             $where = ' WHERE id='.intval($article['taxID']);
-        elseif (isset($article['tax']))
+        } elseif (isset($article['tax'])) {
             $where = ' WHERE tax='.$this->sValFloat($article['tax']);
-        else
+        } else {
             $where =  'ORDER BY id';
+        }
 
         $sql = 'SELECT id as taxID, tax FROM s_core_tax '.$where.' LIMIT 1';
         $row = $this->sDB->GetRow($sql);
@@ -567,16 +623,20 @@ class sShopwareImport
         );
 
         if (empty($article['articleID'])) {
-            if (!isset($article['active'])||$article['active']==1)
+            if (!isset($article['active'])||$article['active']==1) {
                 $article['active'] = 1;
-            else
+            } else {
                 $article['active'] = 0;
-            if (empty($article['taxID']))
+            }
+            if (empty($article['taxID'])) {
                 $article['taxID'] = 1;
-            if (empty($article['added']))
+            }
+            if (empty($article['added'])) {
                 $article['added'] = $this->sDB->sysDate;
-            if (empty($article['changed']))
+            }
+            if (empty($article['changed'])) {
                 $article['changed'] = $this->sDB->sysTimeStamp;
+            }
 
             $article['datum'] = $article['added'];
             $article['changetime'] = $article['changed'];
@@ -590,17 +650,19 @@ class sShopwareImport
                 }
             }
             $sql = "
-                INSERT INTO s_articles (".implode(", ",$insert_fields).")
-                VALUES (".implode(", ",$insert_values).")
+                INSERT INTO s_articles (".implode(", ", $insert_fields).")
+                VALUES (".implode(", ", $insert_values).")
             ";
             $this->sDB->Execute($sql);
             $article['articleID'] = $this->sDB->Insert_ID();
         }//Wenn Artikel vorhanden ist, aktualisieren wir ihn
         else {
-            if(!empty($article['added']))
+            if (!empty($article['added'])) {
                 $article['datum'] = $article['added'];
-            if(empty($article['changed']))
+            }
+            if (empty($article['changed'])) {
                 $article['changed'] = $this->sDB->sysTimeStamp;
+            }
             $article['changetime'] = $article['changed'];
 
             if ($article['kind']==1) {
@@ -610,7 +672,7 @@ class sShopwareImport
                         $upset[] = $field."=".$article[$field];
                     }
                 }
-                $upset = implode(", ",$upset);
+                $upset = implode(", ", $upset);
             } else {
                 $upset = 'changetime='.$article['changetime'];
             }
@@ -652,20 +714,26 @@ class sShopwareImport
         );
 
         if (empty($article['articledetailsID'])) {
-            if(empty($article['stockmin']))
+            if (empty($article['stockmin'])) {
                 $article['stockmin'] = 0;
-            if(empty($article['instock']))
+            }
+            if (empty($article['instock'])) {
                 $article['instock'] = 0;
-            if(empty($article['weight']))
+            }
+            if (empty($article['weight'])) {
                 $article['weight'] = 0;
-            if (empty($article['additionaltext']))
+            }
+            if (empty($article['additionaltext'])) {
                 $article['additionaltext'] = "''";
-            if (empty($article['suppliernumber']))
+            }
+            if (empty($article['suppliernumber'])) {
                 $article['suppliernumber'] = "''";
-            if (!isset($article['active'])||$article['active']==1)
+            }
+            if (!isset($article['active'])||$article['active']==1) {
                 $article['active'] = 1;
-            else
+            } else {
                 $article['active'] = 0;
+            }
 
             $article['datum'] = $article['added'];
             $article['changetime'] = $article['changed'];
@@ -679,8 +747,8 @@ class sShopwareImport
                 }
             }
             $sql = "
-                INSERT INTO s_articles_details (".implode(", ",$insert_fields).")
-                VALUES (".implode(", ",$insert_values).")
+                INSERT INTO s_articles_details (".implode(", ", $insert_fields).")
+                VALUES (".implode(", ", $insert_values).")
             ";
             $this->sDB->Execute($sql);
             $article['articledetailsID'] = $this->sDB->Insert_ID();
@@ -692,7 +760,7 @@ class sShopwareImport
                     $upset[] = $field."=".$article[$field];
                 }
             }
-            $upset = implode(", ",$upset);
+            $upset = implode(", ", $upset);
             $sql = "
                 UPDATE s_articles_details
                 SET
@@ -708,7 +776,7 @@ class sShopwareImport
             $this->sDB->Execute($sql);
         }
         $sql = "UPDATE `s_articles_prices` SET `articleID`=? WHERE `articledetailsID` = ?;";
-        $this->sDB->Execute($sql,array($article['articleID'],$article['articledetailsID']));
+        $this->sDB->Execute($sql, array($article['articleID'], $article['articledetailsID']));
 
         //Nachschauen ob die Artikelattribute schon angelegt sind
         $sql = "
@@ -736,8 +804,8 @@ class sShopwareImport
             $this->sDB->Execute($sql);
         } else {
             if (!empty($article['attr'])) {
-                $upset = ", attr".implode(", attr",array_keys($article['attr']));
-                $upset2 = ", ".implode(", ",$article['attr']);
+                $upset = ", attr".implode(", attr", array_keys($article['attr']));
+                $upset2 = ", ".implode(", ", $article['attr']);
             } else {
                 $upset = "";
                 $upset2 = "";
@@ -794,52 +862,71 @@ class sShopwareImport
      */
     public function sCustomer($customer)
     {
-        if(isset($customer["password"]))
-            $customer["password"] = trim($customer['password'],"\r\n");
-        if(empty($customer["md5_password"])&&!empty($customer['password']))
+        if (isset($customer["password"])) {
+            $customer["password"] = trim($customer['password'], "\r\n");
+        }
+        if (empty($customer["md5_password"])&&!empty($customer['password'])) {
             $customer["md5_password"] = md5($customer['password']);
-        if(isset($customer["md5_password"]))
+        }
+        if (isset($customer["md5_password"])) {
             $customer["md5_password"] = $this->sDB->qstr($customer['md5_password']);
-        if(isset($customer["encoder"]))
+        }
+        if (isset($customer["encoder"])) {
             $customer["encoder"] = $this->sDB->qstr($customer['encoder']);
-        if(isset($customer["email"]))
+        }
+        if (isset($customer["email"])) {
             $customer["email"] = $this->sDB->qstr(trim($customer["email"]));
-        if(isset($customer["customergroup"]))
+        }
+        if (isset($customer["customergroup"])) {
             $customer["customergroup"] = $this->sDB->qstr((string) $customer["customergroup"]);
-        if(isset($customer["validation"]))
+        }
+        if (isset($customer["validation"])) {
             $customer["validation"] = $this->sDB->qstr((string) $customer["validation"]);
-        if(isset($customer["language"]))
+        }
+        if (isset($customer["language"])) {
             $customer["language"] = $this->sDB->qstr((string) $customer["language"]);
-        if(isset($customer["referer"]))
+        }
+        if (isset($customer["referer"])) {
             $customer["referer"] = $this->sDB->qstr((string) $customer["referer"]);
+        }
 
-        if(isset($customer['active']))
+        if (isset($customer['active'])) {
             $customer['active'] = empty($customer['active']) ? 0 : 1;
-        if(isset($customer['accountmode']))
+        }
+        if (isset($customer['accountmode'])) {
             $customer['accountmode'] = empty($customer['accountmode']) ? 0 : 1;
-        if(isset($customer['newsletter']))
+        }
+        if (isset($customer['newsletter'])) {
             $customer['newsletter'] = empty($customer['newsletter']) ? 0 : 1;
+        }
 
-        if(isset($customer['paymentID']))
+        if (isset($customer['paymentID'])) {
             $customer['paymentID'] = intval($customer['paymentID']);
-        if(isset($customer['paymentpreset']))
+        }
+        if (isset($customer['paymentpreset'])) {
             $customer['paymentpreset'] = intval($customer['paymentpreset']);
-        if(isset($customer['subshopID']))
+        }
+        if (isset($customer['subshopID'])) {
             $customer['subshopID '] = intval($customer['subshopID']);
-        if(isset($customer['userID']))
+        }
+        if (isset($customer['userID'])) {
             $customer['userID'] = intval($customer['userID']);
+        }
 
-        if(isset($customer['firstlogin']))
+        if (isset($customer['firstlogin'])) {
             $customer['firstlogin'] = $this->sDB->DBDate($customer['firstlogin']);
-        if(isset($customer['lastlogin']))
+        }
+        if (isset($customer['lastlogin'])) {
             $customer['lastlogin'] = $this->sDB->DBTimeStamp($customer['lastlogin']);
+        }
 
         #$reg = "/^\s*[a-z][a-z0-9]*(\.[a-z0-9][a-z0-9-]*)*(\+[a-z0-9]*)?@[a-z0-9][a-z0-9-]*(\.[a-z0-9][a-z0-9-]*)*\.[a-z]{2,6}\s*$/i";
         #if(!preg_match($reg, $customer["email"]))
         #	return false;
 
-        if(empty($customer['userID'])&&empty($customer['email']))
+        if (empty($customer['userID'])&&empty($customer['email'])) {
             return false;
+        }
 
         if (empty($customer['userID'])&&!empty($customer['email'])) {
             $sql = "SELECT id FROM s_user WHERE email={$customer["email"]}";
@@ -865,24 +952,30 @@ class sShopwareImport
             if (empty($customer['password'])&&empty($customer["md5_password"])) {
                 $customer["password"] = "";
                 for ($i = 0; $i < 10; $i++) {
-                    $randnum = mt_rand(0,35);
-                    if ($randnum < 10)
+                    $randnum = mt_rand(0, 35);
+                    if ($randnum < 10) {
                         $customer["password"] .= $randnum;
-                    else
+                    } else {
                         $customer["password"] .= chr($randnum+87);
+                    }
                 }
                 $customer["md5_password"] = $this->sDB->qstr(md5($customer['password']));
             }
-            if(!isset($customer['active']))
+            if (!isset($customer['active'])) {
                 $customer['active'] = 1;
-            if(empty($customer['customergroup']))
+            }
+            if (empty($customer['customergroup'])) {
                 $customer['customergroup'] = $this->sDB->qstr("EK");
-            if(empty($customer['firstlogin']))
+            }
+            if (empty($customer['firstlogin'])) {
                 $customer['firstlogin'] = $this->sDB->sysDate;
-            if(empty($article['lastlogin']))
+            }
+            if (empty($article['lastlogin'])) {
                 $customer['lastlogin'] = $this->sDB->sysTimeStamp;
-            if(!isset($customer['validation']))
+            }
+            if (!isset($customer['validation'])) {
                 $customer['validation'] = $this->sDB->qstr("");
+            }
 
             $insert_fields = array();
             $insert_values = array();
@@ -895,25 +988,26 @@ class sShopwareImport
             $insert_fields[] = "password";
             $insert_values[] = $customer["md5_password"];
             $sql = "
-                INSERT INTO s_user (".implode(", ",$insert_fields).")
-                VALUES (".implode(", ",$insert_values).")
+                INSERT INTO s_user (".implode(", ", $insert_fields).")
+                VALUES (".implode(", ", $insert_values).")
             ";
             $result = $this->sDB->Execute($sql);
-            if($result===false)
+            if ($result===false) {
                 return false;
+            }
             $customer['userID'] = $this->sDB->Insert_ID();
         } else {
-
             $upset = array();
             foreach ($fields as $field) {
                 if (isset($customer[$field])) {
                     $upset[] = $field."=".$customer[$field];
                 }
             }
-            if(isset($customer["md5_password"]))
+            if (isset($customer["md5_password"])) {
                 $upset[] = "password=".$customer["md5_password"];
+            }
             if (!empty($upset)) {
-                $upset = implode(", ",$upset);
+                $upset = implode(", ", $upset);
                 $sql = "
                     UPDATE s_user
                     SET $upset
@@ -922,40 +1016,57 @@ class sShopwareImport
                 $this->sDB->Execute($sql);
             }
         }
-        if(isset($customer["billing_company"]))
+        if (isset($customer["billing_company"])) {
             $customer["billing_company"] = $this->sDB->qstr((string) $customer["billing_company"]);
-        if(isset($customer["billing_department"]))
+        }
+        if (isset($customer["billing_department"])) {
             $customer["billing_department"] = $this->sDB->qstr((string) $customer["billing_department"]);
-        if(isset($customer["billing_salutation"]))
+        }
+        if (isset($customer["billing_salutation"])) {
             $customer["billing_salutation"] = $this->sDB->qstr((string) $customer["billing_salutation"]);
-        if(isset($customer["billing_firstname"]))
+        }
+        if (isset($customer["billing_firstname"])) {
             $customer["billing_firstname"] = $this->sDB->qstr((string) $customer["billing_firstname"]);
-        if(isset($customer["billing_lastname"]))
+        }
+        if (isset($customer["billing_lastname"])) {
             $customer["billing_lastname"] = $this->sDB->qstr((string) $customer["billing_lastname"]);
-        if(isset($customer["billing_street"]))
+        }
+        if (isset($customer["billing_street"])) {
             $customer["billing_street"] = $this->sDB->qstr((string) $customer["billing_street"]);
-        if(isset($customer["billing_zipcode"]))
+        }
+        if (isset($customer["billing_zipcode"])) {
             $customer["billing_zipcode"] = $this->sDB->qstr((string) $customer["billing_zipcode"]);
-        if(isset($customer["billing_city"]))
+        }
+        if (isset($customer["billing_city"])) {
             $customer["billing_city"] = $this->sDB->qstr((string) $customer["billing_city"]);
-        if(isset($customer["phone"]))
+        }
+        if (isset($customer["phone"])) {
             $customer["phone"] = $this->sDB->qstr((string) $customer["phone"]);
-        if(isset($customer["fax"]))
+        }
+        if (isset($customer["fax"])) {
             $customer["fax"] = $this->sDB->qstr((string) $customer["fax"]);
-        if(isset($customer["ustid"]))
+        }
+        if (isset($customer["ustid"])) {
             $customer["ustid"] = $this->sDB->qstr((string) $customer["ustid"]);
-        if(isset($customer["billing_countryID"]))
+        }
+        if (isset($customer["billing_countryID"])) {
             $customer["billing_countryID"] = intval($customer["billing_countryID"]);
-        if(empty($customer["billing_countryID"])&&!empty($customer["billing_countryiso"]))
+        }
+        if (empty($customer["billing_countryID"])&&!empty($customer["billing_countryiso"])) {
             $customer["billing_countryID"] = (int) $this->sGetCountryID(array("iso"=>$customer["billing_countryiso"]));
-        for($i=1;$i<7;$i++)
-            if(isset($customer["billing_text$i"]))
+        }
+        for ($i=1;$i<7;$i++) {
+            if (isset($customer["billing_text$i"])) {
                 $customer["billing_text$i"] = $this->sDB->qstr((string) $customer["billing_text$i"]);
+            }
+        }
 
-        if(isset($customer["customernumber"]))
+        if (isset($customer["customernumber"])) {
             $customer["customernumber"] = $this->sDB->qstr((string) $customer["customernumber"]);
-        if(isset($customer["birthday"]))
+        }
+        if (isset($customer["birthday"])) {
             $customer["birthday"] = $this->sDB->DBDate($customer['birthday']);
+        }
         $fields = array(
             "userID"=>"userID",
             "company"=>"billing_company",
@@ -986,12 +1097,13 @@ class sShopwareImport
                 }
             }
             $sql = "
-                INSERT INTO s_user_billingaddress (".implode(", ",$insert_fields).")
-                VALUES (".implode(", ",$insert_values).")
+                INSERT INTO s_user_billingaddress (".implode(", ", $insert_fields).")
+                VALUES (".implode(", ", $insert_values).")
             ";
             $result = $this->sDB->Execute($sql);
-            if($result===false)
+            if ($result===false) {
                 return false;
+            }
 
             $customer["billingaddressID"] = $this->sDB->Insert_ID();
         } else {
@@ -1002,7 +1114,7 @@ class sShopwareImport
                 }
             }
             if (!empty($upset)&&count($upset)>1) {
-                $upset = implode(", ",$upset);
+                $upset = implode(", ", $upset);
                 $sql = "
                     UPDATE s_user_billingaddress
                     SET $upset
@@ -1033,12 +1145,13 @@ class sShopwareImport
                 }
             }
             $sql = "
-                INSERT INTO s_user_billingaddress_attributes (".implode(", ",$insert_fields).")
-                VALUES (".implode(", ",$insert_values).")
+                INSERT INTO s_user_billingaddress_attributes (".implode(", ", $insert_fields).")
+                VALUES (".implode(", ", $insert_values).")
             ";
             $result = $this->sDB->Execute($sql);
-            if($result===false)
+            if ($result===false) {
                 return false;
+            }
         } else {
             $upset = array();
             foreach ($fields as $field=>$field2) {
@@ -1047,7 +1160,7 @@ class sShopwareImport
                 }
             }
             if (!empty($upset)&&count($upset)>1) {
-                $upset = implode(", ",$upset);
+                $upset = implode(", ", $upset);
                 $sql = "
                     UPDATE s_user_billingaddress_attributes
                     SET $upset
@@ -1059,29 +1172,41 @@ class sShopwareImport
 
 
         if (!empty($customer["shipping_company"])||!empty($customer["shipping_firstname"])||!empty($customer["shipping_lastname"])) {
-            if(isset($customer["shipping_company"]))
+            if (isset($customer["shipping_company"])) {
                 $customer["shipping_company"] = $this->sDB->qstr((string) $customer["shipping_company"]);
-            if(isset($customer["shipping_department"]))
+            }
+            if (isset($customer["shipping_department"])) {
                 $customer["shipping_department"] = $this->sDB->qstr((string) $customer["shipping_department"]);
-            if(isset($customer["shipping_salutation"]))
+            }
+            if (isset($customer["shipping_salutation"])) {
                 $customer["shipping_salutation"] = $this->sDB->qstr((string) $customer["shipping_salutation"]);
-            if(isset($customer["shipping_firstname"]))
+            }
+            if (isset($customer["shipping_firstname"])) {
                 $customer["shipping_firstname"] = $this->sDB->qstr((string) $customer["shipping_firstname"]);
-            if(isset($customer["shipping_lastname"]))
+            }
+            if (isset($customer["shipping_lastname"])) {
                 $customer["shipping_lastname"] = $this->sDB->qstr((string) $customer["shipping_lastname"]);
-            if(isset($customer["shipping_street"]))
+            }
+            if (isset($customer["shipping_street"])) {
                 $customer["shipping_street"] = $this->sDB->qstr((string) $customer["shipping_street"]);
-            if(isset($customer["shipping_zipcode"]))
+            }
+            if (isset($customer["shipping_zipcode"])) {
                 $customer["shipping_zipcode"] = $this->sDB->qstr((string) $customer["shipping_zipcode"]);
-            if(isset($customer["shipping_city"]))
+            }
+            if (isset($customer["shipping_city"])) {
                 $customer["shipping_city"] = $this->sDB->qstr((string) $customer["shipping_city"]);
-            if(isset($customer["shipping_countryID"]))
+            }
+            if (isset($customer["shipping_countryID"])) {
                 $customer["shipping_countryID"] = intval($customer["shipping_countryID"]);
-            if(empty($customer["shipping_countryID"])&&!empty($customer["shipping_countryiso"]))
+            }
+            if (empty($customer["shipping_countryID"])&&!empty($customer["shipping_countryiso"])) {
                 $customer["shipping_countryID"] = (int) $this->sGetCountryID(array("iso"=>$customer["shipping_countryiso"]));
-            for($i=1;$i<7;$i++)
-            if(isset($customer["shipping_text$i"]))
-                $customer["shipping_text$i"] = $this->sDB->qstr((string) $customer["shipping_text$i"]);
+            }
+            for ($i=1;$i<7;$i++) {
+                if (isset($customer["shipping_text$i"])) {
+                    $customer["shipping_text$i"] = $this->sDB->qstr((string) $customer["shipping_text$i"]);
+                }
+            }
 
             $fields = array(
                 "userID"=>"userID",
@@ -1107,12 +1232,13 @@ class sShopwareImport
                     }
                 }
                 $sql = "
-                    INSERT INTO s_user_shippingaddress (".implode(", ",$insert_fields).")
-                    VALUES (".implode(", ",$insert_values).")
+                    INSERT INTO s_user_shippingaddress (".implode(", ", $insert_fields).")
+                    VALUES (".implode(", ", $insert_values).")
                 ";
                 $result = $this->sDB->Execute($sql);
-                if($result===false)
+                if ($result===false) {
                     return false;
+                }
 
                 $customer["shippingaddressID"] = $this->sDB->Insert_ID();
             } else {
@@ -1123,7 +1249,7 @@ class sShopwareImport
                     }
                 }
                 if (!empty($upset)&&count($upset)>1) {
-                    $upset = implode(", ",$upset);
+                    $upset = implode(", ", $upset);
                     $sql = "
                         UPDATE s_user_shippingaddress
                         SET $upset
@@ -1154,12 +1280,13 @@ class sShopwareImport
                     }
                 }
                 $sql = "
-                    INSERT INTO s_user_shippingaddress_attributes (".implode(", ",$insert_fields).")
-                    VALUES (".implode(", ",$insert_values).")
+                    INSERT INTO s_user_shippingaddress_attributes (".implode(", ", $insert_fields).")
+                    VALUES (".implode(", ", $insert_values).")
                 ";
                 $result = $this->sDB->Execute($sql);
-                if($result===false)
+                if ($result===false) {
                     return false;
+                }
             } else {
                 $upset = array();
                 foreach ($fields as $field=>$field2) {
@@ -1168,7 +1295,7 @@ class sShopwareImport
                     }
                 }
                 if (!empty($upset)&&count($upset)>1) {
-                    $upset = implode(", ",$upset);
+                    $upset = implode(", ", $upset);
                     $sql = "
                         UPDATE s_user_shippingaddress_attributes
                         SET $upset
@@ -1194,14 +1321,14 @@ class sShopwareImport
                 $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email=".$customer["email"];
                 $this->sDB->Execute($sql);
             } else {
-                if(empty($customer["newslettergroupID"]))
+                if (empty($customer["newslettergroupID"])) {
                     $customer["newslettergroupID"] = empty($this->sSystem->sCONFIG["sNEWSLETTERDEFAULTGROUP"]) ? 1 : (int) $this->sSystem->sCONFIG["sNEWSLETTERDEFAULTGROUP"];
-                else
+                } else {
                     $customer["newslettergroupID"] = intval($customer["newslettergroupID"]);
+                }
                 $sql = "SELECT id FROM s_campaigns_mailaddresses WHERE email=".$customer["email"];
                 $result = $this->sDB->GetOne($sql);
                 if (empty($result)) {
-
                     $sql = "INSERT INTO s_campaigns_mailaddresses (customer, groupID, email) VALUES (1,{$customer["newslettergroupID"]},{$customer["email"]});";
                     $this->sDB->Execute($sql);
                 }
@@ -1226,22 +1353,24 @@ class sShopwareImport
      */
     public function sGetCountryID($country)
     {
-        if(!empty($country["name"]))
+        if (!empty($country["name"])) {
             $where = "countryname LIKE ".$this->sDB->qstr(trim((string) $country['name']));
-        elseif(!empty($country["iso"]))
+        } elseif (!empty($country["iso"])) {
             $where = "countryiso=".$this->sDB->qstr(trim((string) $country['iso']));
-        elseif(!empty($country["en"]))
+        } elseif (!empty($country["en"])) {
             $where = "countryen LIKE ".$this->sDB->qstr(trim((string) $country['en']));
-        else
+        } else {
             return false;
+        }
         $sql = "
             SELECT  id
             FROM s_core_countries
             WHERE $where
         ";
         $result = $this->sDB->GetOne($sql);
-        if($result===false)
+        if ($result===false) {
             return false;
+        }
         return $result;
     }
 
@@ -1254,19 +1383,23 @@ class sShopwareImport
      */
     public function sArticleImages($article, $images)
     {
-        if(!($articleID = $this->sGetArticleID($article)))
+        if (!($articleID = $this->sGetArticleID($article))) {
             return false;
+        }
         $inserts = array();
         if (!empty($images)&&is_array($images)) {
             foreach ($images as $image) {
-                if(is_string($image)) $image = array('image'=>$image);
+                if (is_string($image)) {
+                    $image = array('image'=>$image);
+                }
                 $image["articleID"] = $articleID;
                 $insert = $this->sArticleImage($image);
-                if(!empty($insert))
+                if (!empty($insert)) {
                     $inserts[] = $insert;
+                }
             }
         }
-        $this->sDeleteOtherArticleImages ($articleID, $inserts);
+        $this->sDeleteOtherArticleImages($articleID, $inserts);
         return $inserts;
     }
 
@@ -1279,8 +1412,9 @@ class sShopwareImport
      */
     public function sArticlePrices($article, $prices)
     {
-        if(!($articledetailsID = $this->sGetArticledetailsID($article)))
+        if (!($articledetailsID = $this->sGetArticledetailsID($article))) {
             return false;
+        }
         if (!empty($prices)&&is_array($prices)) {
             foreach ($prices as $price) {
                 $price["articledetailsID"] = $articledetailsID;
@@ -1332,7 +1466,7 @@ class sShopwareImport
         // Create a new category if no model was set, yet
         if (!$model) {
             // try to find a existing category by name and parent
-            if (isset($category['parent']) && isset($category['name']) ) {
+            if (isset($category['parent']) && isset($category['name'])) {
                 $model = $categoryRepository->findOneBy(array('parent' => $category['parent'], 'name' => $category['name']));
             }
             if (!$model) {
@@ -1352,7 +1486,6 @@ class sShopwareImport
 
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-
         }
 
         // set category attributes
@@ -1404,34 +1537,43 @@ class sShopwareImport
      */
     public function sArticlePrice($price)
     {
-        if(isset($price['price']))
+        if (isset($price['price'])) {
             $price['price'] = $this->sValFloat($price['price']);
-        if(isset($price['tax']))
+        }
+        if (isset($price['tax'])) {
             $price['tax'] = $this->sValFloat($price['tax']);
-        if(isset($price['pseudoprice']))
+        }
+        if (isset($price['pseudoprice'])) {
             $price['pseudoprice'] = $this->sValFloat($price['pseudoprice']);
-        else
+        } else {
             $price['pseudoprice'] = 0;
-        if(isset($price['baseprice']))
+        }
+        if (isset($price['baseprice'])) {
             $price['baseprice'] = $this->sValFloat($price['baseprice']);
-        else
+        } else {
             $price['baseprice'] = 0;
-        if(isset($price['percent']))
+        }
+        if (isset($price['percent'])) {
             $price['percent'] = $this->sValFloat($price['percent']);
-        else
+        } else {
             $price['percent'] = 0;
-        if(empty($price['from']))
+        }
+        if (empty($price['from'])) {
             $price['from'] = 1;
-        else
+        } else {
             $price['from'] = intval($price['from']);
-        if(empty($price['pricegroup']))
+        }
+        if (empty($price['pricegroup'])) {
             $price['pricegroup'] = "EK";
+        }
         $price['pricegroup'] = $this->sDB->qstr($price['pricegroup']);
 
-        if(!empty($price['tax']))
+        if (!empty($price['tax'])) {
             $price['price'] = $price['price']/(100+$price['tax'])*100;
-        if(isset($price['pseudoprice'])&&!empty($price['tax']))
+        }
+        if (isset($price['pseudoprice'])&&!empty($price['tax'])) {
             $price['pseudoprice'] = $price['pseudoprice']/(100+$price['tax'])*100;
+        }
 
         $article = $this->sGetArticleNumbers($price);
         if (empty($article)) {
@@ -1507,7 +1649,6 @@ class sShopwareImport
         } else {
             return $this->sDB->Insert_ID();
         }
-
     }
 
     /**
@@ -1548,14 +1689,14 @@ class sShopwareImport
             $breite_neu = $new_width;
         }
 
-        $hoehe_neu = round($breite_neu / $verhaeltnis,0);
+        $hoehe_neu = round($breite_neu / $verhaeltnis, 0);
 
-        $newImage = imagecreatetruecolor($breite_neu,$hoehe_neu); //Thumbnail im Speicher erstellen
+        $newImage = imagecreatetruecolor($breite_neu, $hoehe_neu); //Thumbnail im Speicher erstellen
 
         imagealphablending($newImage, false);
         imagesavealpha($newImage, true);
 
-        imagecopyresampled($newImage,$image,0,0,0,0,$breite_neu,$hoehe_neu,$breite,$hoehe);
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $breite_neu, $hoehe_neu, $breite, $hoehe);
 
         return $newImage;
     }
@@ -1583,19 +1724,19 @@ class sShopwareImport
         if ($breite > $hoehe) {
             $verhaeltnis = $breite/$hoehe;
             $breite_neu = $new_width;
-            $hoehe_neu = round($breite_neu / $verhaeltnis,0);
+            $hoehe_neu = round($breite_neu / $verhaeltnis, 0);
         } else {
             $verhaeltnis = $hoehe/$breite;
             $hoehe_neu = $new_height;
-            $breite_neu = round($hoehe_neu / $verhaeltnis,0);
+            $breite_neu = round($hoehe_neu / $verhaeltnis, 0);
         }
 
-        $newImage = imagecreatetruecolor($breite_neu,$hoehe_neu); //Thumbnail im Speicher erstellen
+        $newImage = imagecreatetruecolor($breite_neu, $hoehe_neu); //Thumbnail im Speicher erstellen
 
         imagealphablending($newImage, false);
         imagesavealpha($newImage, true);
 
-        imagecopyresampled($newImage,$image,0,0,0,0,$breite_neu,$hoehe_neu,$breite,$hoehe);
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $breite_neu, $hoehe_neu, $breite, $hoehe);
 
         return $newImage;
     }
@@ -1642,38 +1783,48 @@ class sShopwareImport
     public function sArticleImage($article_image = array())
     {
         // Some initial checks
-        if (empty($article_image)||!is_array($article_image))
+        if (empty($article_image)||!is_array($article_image)) {
             return false;
-        if(isset($article_image["link"]))
+        }
+        if (isset($article_image["link"])) {
             $article_image["image"] = $article_image["link"];
-        if(isset($article_image["albumID"]))
+        }
+        if (isset($article_image["albumID"])) {
             $article_image["albumID"] = (int) $article_image["albumID"];
-        if(isset($article_image['articleID']))
+        }
+        if (isset($article_image['articleID'])) {
             $article_image['articleID'] = intval($article_image['articleID']);
-        if(empty($article_image['articleID'])||(empty($article_image['image'])&&empty($article_image['name'])))
+        }
+        if (empty($article_image['articleID'])||(empty($article_image['image'])&&empty($article_image['name']))) {
             return false;
-        if(!empty($article_image['position']))
+        }
+        if (!empty($article_image['position'])) {
             $article_image['position'] = intval($article_image['position']);
-        else
+        } else {
             $article_image['position'] = 0;
-        if(empty($article_image['description']))
+        }
+        if (empty($article_image['description'])) {
             $article_image['description'] = '';
-        if(empty($article_image['relations']))
+        }
+        if (empty($article_image['relations'])) {
             $article_image['relations'] = '';
+        }
 
         // Checks for main flag
-        if(!empty($article_image['main'])&&$article_image['main']==1)
+        if (!empty($article_image['main'])&&$article_image['main']==1) {
             $article_image['main'] = 1;
-        elseif(!empty($article_image['main']))
+        } elseif (!empty($article_image['main'])) {
             $article_image['main'] = 2;
+        }
         // If main is not set and no other article image is main, set this to be main
         if (empty($article_image['main'])) {
             $sql = "SELECT id FROM s_articles_img WHERE articleID={$article_image['articleID']} AND main=1";
             $row = $this->sDB->GetRow($sql);
-            if(empty($row['id']))
+            if (empty($row['id'])) {
                 $article_image['main'] = 1;
-            else
+            } else {
                 $article_image['main'] = 2;
+            }
         // if this article image is set to be main, set all other images to be not-main
         } elseif ($article_image['main']==1) {
             $sql = "UPDATE s_articles_img SET main=2 WHERE articleID={$article_image['articleID']}";
@@ -1686,13 +1837,12 @@ class sShopwareImport
         if (empty($article_image['name'])) {
             $article_image['name'] =  md5(uniqid(mt_rand(), true));
         } else {
-            $article_image['name']  = pathinfo($article_image['name'],  PATHINFO_FILENAME);;
-
+            $article_image['name']  = pathinfo($article_image['name'],  PATHINFO_FILENAME);
+            ;
         }
 
         // Copy image to local temp dir
         if (!empty($article_image['image'])) {
-
             $uploadFile = $uploadDir.$article_image['name'];
             if (!copy($article_image['image'], $uploadFile)) {
                 $this->sAPI->sSetError("Copying image from '{$article_image['image']}' to '$uploadFile' did not work", 10400);
@@ -1794,7 +1944,7 @@ class sShopwareImport
      * @param $articleId
      * @param $number
      */
-    private function createImageRelationsFromArticleNumber($imageId,$articleId, $number)
+    private function createImageRelationsFromArticleNumber($imageId, $articleId, $number)
     {
         if (!$number) {
             return;
@@ -1802,7 +1952,7 @@ class sShopwareImport
 
         $detailId = Shopware()->DB()->fetchOne("SELECT id FROM s_articles_details WHERE ordernumber=?", array($number));
         if ($detailId === false) {
-                return;
+            return;
         }
 
         $sql = "SELECT cor.option_id as optionId
@@ -1827,9 +1977,7 @@ class sShopwareImport
             }
 
             $this->recreateVariantImages($articleId);
-
         }
-
     }
 
     /**
@@ -1891,7 +2039,7 @@ class sShopwareImport
      * @access public
      * @return
      */
-    public function sDeleteArticleImages  ($article_image = array())
+    public function sDeleteArticleImages($article_image = array())
     {
         $articleID = $this->sGetArticleID($article_image);
         if (empty($articleID)) {
@@ -1913,14 +2061,12 @@ class sShopwareImport
                     } catch (\Doctrine\ORM\ORMException $e) {
                         return false;
                     }
-
                 }
             }
         }
 
         Shopware()->Models()->flush();
         return true;
-
     }
 
     /**
@@ -2012,17 +2158,19 @@ class sShopwareImport
      */
     public function sArticleCategories($article, $categoryIDs)
     {
-        if(!($articleID = $this->sGetArticleID($article)))
+        if (!($articleID = $this->sGetArticleID($article))) {
             return false;
+        }
         $inserts = array();
         if (!empty($categoryIDs)&&is_array($categoryIDs)) {
             foreach ($categoryIDs as $categoryID) {
-                $insert = $this->sArticleCategory  ($articleID, $categoryID);
-                if(!empty($insert))
+                $insert = $this->sArticleCategory($articleID, $categoryID);
+                if (!empty($insert)) {
                     $inserts = array_merge($inserts, $insert);
+                }
             }
         }
-        $this->sDeleteOtherArticlesCategories ($articleID, $inserts);
+        $this->sDeleteOtherArticlesCategories($articleID, $inserts);
         return $inserts;
     }
 
@@ -2036,14 +2184,16 @@ class sShopwareImport
     public function sArticleCrossSelling($article, $relatedarticleIDs)
     {
         $articleID = $this->sGetArticleID($article);
-        if(empty($articleID))
+        if (empty($articleID)) {
             return false;
+        }
         $this->sDeleteArticleCrossSelling(array("articleID"=>$articleID));
-        if(empty($relatedarticleIDs)||!is_array($relatedarticleIDs))
+        if (empty($relatedarticleIDs)||!is_array($relatedarticleIDs)) {
             return true;
+        }
 
         // In sw similar articles are no longer stored as ordernumbers but as articleIDs
-        $sql = "SELECT ordernumber, articleID from s_articles_details WHERE ordernumber IN ('".implode('\',\'',array_map(Shopware()->Db()->quote, $relatedarticleIDs))."')";
+        $sql = "SELECT ordernumber, articleID from s_articles_details WHERE ordernumber IN ('".implode('\',\'', array_map(Shopware()->Db()->quote, $relatedarticleIDs))."')";
         $articleIDs = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articleIDs)) {
@@ -2052,7 +2202,9 @@ class sShopwareImport
 
 
         foreach ($relatedarticleIDs as $relatedarticleID) {
-            if(empty($relatedarticleID)) continue;
+            if (empty($relatedarticleID)) {
+                continue;
+            }
 
             $sql = "
                 INSERT IGNORE INTO s_articles_relationships (articleID, relatedarticle)
@@ -2073,14 +2225,15 @@ class sShopwareImport
      */
     public function sDeleteArticleCrossSelling($article)
     {
-        if(!$article = $this->sGetArticleID($article))
+        if (!$article = $this->sGetArticleID($article)) {
             return false;
+        }
         $sql = '
             DELETE FROM
                 s_articles_relationships
             WHERE articleID=?
         ';
-        $this->sDB->Execute($sql,array($article));
+        $this->sDB->Execute($sql, array($article));
         return true;
     }
     /**
@@ -2096,16 +2249,20 @@ class sShopwareImport
     public function sArticlePermissions($article, $nopermissiongroupIDs)
     {
         $articleID = $this->sGetArticleID($article);
-        if(empty($articleID))
+        if (empty($articleID)) {
             return false;
+        }
 
         $this->sDeleteArticlePermissions(array("articleID"=>$articleID));
 
-        if(empty($nopermissiongroupIDs)||!is_array($nopermissiongroupIDs))
+        if (empty($nopermissiongroupIDs)||!is_array($nopermissiongroupIDs)) {
             return true;
+        }
 
         foreach ($nopermissiongroupIDs as $nopermissiongroupID) {
-            if(empty($nopermissiongroupID)) continue;
+            if (empty($nopermissiongroupID)) {
+                continue;
+            }
             $nopermissiongroupID = $this->sDB->qstr($nopermissiongroupID);
             $sql = "
             INSERT INTO s_articles_avoid_customergroups (articleID, customergroupID)
@@ -2127,15 +2284,16 @@ class sShopwareImport
     */
     public function sDeleteArticlePermissions($article)
     {
-        if(!$article = $this->sGetArticleID($article))
-        return false;
+        if (!$article = $this->sGetArticleID($article)) {
+            return false;
+        }
 
         $sql = '
         DELETE FROM
         s_articles_avoid_customergroups
         WHERE articleID=?
         ';
-        $this->sDB->Execute($sql,array($article));
+        $this->sDB->Execute($sql, array($article));
 
         return true;
     }
@@ -2150,15 +2308,17 @@ class sShopwareImport
     public function sArticleSimilar($article, $relatedarticleIDs)
     {
         $articleID = $this->sGetArticleID($article);
-        if(empty($articleID))
+        if (empty($articleID)) {
             return false;
+        }
         $this->sDeleteArticleSimilar(array("articleID"=>$articleID));
-        if(empty($relatedarticleIDs)||!is_array($relatedarticleIDs))
+        if (empty($relatedarticleIDs)||!is_array($relatedarticleIDs)) {
             return true;
+        }
 
 
         // In sw similar articles are no longer stored as ordernumbers but as articleIDs
-        $sql = "SELECT ordernumber, articleID from s_articles_details WHERE ordernumber IN ('".implode('\',\'',array_map(Shopware()->Db()->quote, $relatedarticleIDs))."')";
+        $sql = "SELECT ordernumber, articleID from s_articles_details WHERE ordernumber IN ('".implode('\',\'', array_map(Shopware()->Db()->quote, $relatedarticleIDs))."')";
         $articleIDs = Shopware()->Db()->fetchAssoc($sql);
 
         if (empty($articleIDs)) {
@@ -2166,7 +2326,9 @@ class sShopwareImport
         }
 
         foreach ($relatedarticleIDs as $relatedarticleID) {
-            if(empty($relatedarticleID)) continue;
+            if (empty($relatedarticleID)) {
+                continue;
+            }
 
             $sql = "
                 INSERT IGNORE INTO s_articles_similar (articleID, relatedarticle)
@@ -2189,14 +2351,15 @@ class sShopwareImport
      */
     public function sDeleteArticleSimilar($article)
     {
-        if(!$article = $this->sGetArticleID($article))
+        if (!$article = $this->sGetArticleID($article)) {
             return false;
+        }
         $sql = '
             DELETE FROM
                 s_articles_similar
             WHERE articleID=?
         ';
-        $this->sDB->Execute($sql,array($article));
+        $this->sDB->Execute($sql, array($article));
         return true;
     }
 
@@ -2210,17 +2373,20 @@ class sShopwareImport
      */
     public function sArticleLink($article_link)
     {
-        if(!($article_link["articleID"] = $this->sGetArticleID($article_link)))
+        if (!($article_link["articleID"] = $this->sGetArticleID($article_link))) {
             return false;
-        if(empty($article_link)||!is_array($article_link)||empty($article_link['link'])||empty($article_link['description']))
+        }
+        if (empty($article_link)||!is_array($article_link)||empty($article_link['link'])||empty($article_link['description'])) {
             return false;
-        if(empty($article_link['target']))
+        }
+        if (empty($article_link['target'])) {
             $article_link['target'] = "_blank";
+        }
         $sql = "
             INSERT INTO s_articles_information (articleID, description, link, target)
             VALUES (?, ?, ?, ?)
         ";
-        $this->sDB->Execute($sql,array($article_link["articleID"],$article_link['description'],$article_link['link'],$article_link['target']));
+        $this->sDB->Execute($sql, array($article_link["articleID"], $article_link['description'], $article_link['link'], $article_link['target']));
         return $this->sDB->Insert_ID();
     }
 
@@ -2236,8 +2402,9 @@ class sShopwareImport
         $articleID = $this->sGetArticleID($article);
         $sql = 'SELECT id FROM s_articles_information WHERE articleID='.$articleID;
         $links = $this->sDB->GetCol($sql);
-        if(!empty($links))
-            $this->sDeleteTranslation('link',$links);
+        if (!empty($links)) {
+            $this->sDeleteTranslation('link', $links);
+        }
         $sql = 'DELETE FROM s_articles_information WHERE articleID='.$articleID;
         $this->sDB->Execute($sql);
         return true;
@@ -2295,13 +2462,14 @@ class sShopwareImport
      */
     public function sDeleteOtherCategories($categoryIDs)
     {
-        if (empty($categoryIDs)||!is_array($categoryIDs))
+        if (empty($categoryIDs)||!is_array($categoryIDs)) {
             return false;
+        }
 
         $sql = "
             DELETE c FROM s_categories c
             LEFT JOIN s_core_shops cs ON c.id=cs.category_id
-            WHERE c.id NOT IN (".implode(",",$categoryIDs).")
+            WHERE c.id NOT IN (".implode(",", $categoryIDs).")
             AND cs.id IS NULL
             AND c.parent IS NOT NULL
         ";
@@ -2336,14 +2504,17 @@ class sShopwareImport
      */
     public function sSupplier($supplier)
     {
-        if(empty($supplier)||!is_array($supplier))
+        if (empty($supplier)||!is_array($supplier)) {
             return false;
-        if(empty($supplier['supplier'])&&empty($supplier['supplierID']))
+        }
+        if (empty($supplier['supplier'])&&empty($supplier['supplierID'])) {
             return false;
+        }
 
         // quote
-        if(isset($supplier['supplier']))
+        if (isset($supplier['supplier'])) {
             $supplier['supplier'] = $this->sDB->qstr($this->sValDescription($supplier['supplier']));
+        }
 
         // Get pre-existing supplier by id or by name if no id was given
         if (empty($supplier['supplierID'])) {
@@ -2380,8 +2551,9 @@ class sShopwareImport
             unset($supplier['old_supplier']);
         }
 
-        if(empty($supplier['supplier'])&&empty($supplier['supplierID']))
+        if (empty($supplier['supplier'])&&empty($supplier['supplierID'])) {
             return false;
+        }
 
         if (!isset($supplier['link'])) {
             $supplier['link'] = $supplier['old_link'];
@@ -2400,7 +2572,7 @@ class sShopwareImport
             if (!empty($size[2])&&$size[2]==2) {
                 $supplier['image'] = md5(uniqid(rand()));
                 if (copy($supplier['image'], $supplierimages.$supplier['image'].".jpg")) {
-                    chmod($supplierimages.$supplier['image'].".jpg",$this->sSettings["chmod"]);
+                    chmod($supplierimages.$supplier['image'].".jpg", $this->sSettings["chmod"]);
                 } else {
                     $supplier['image'] = "";
                 }
@@ -2464,32 +2636,39 @@ class sShopwareImport
      * @access public
      * @return
      */
-    public function sArticleStock ($article_stock = array())
+    public function sArticleStock($article_stock = array())
     {
-        if(!empty($article_stock['articledetailsID']))
+        if (!empty($article_stock['articledetailsID'])) {
             $where = 'd.id='.intval($article_stock['articledetailsID']);
-        elseif(!empty($article_stock['ordernumber']))
+        } elseif (!empty($article_stock['ordernumber'])) {
             $where = 'd.ordernumber='.$this->sDB->qstr($article_stock['ordernumber']);
-        elseif (!empty($article_stock['articleID']))
+        } elseif (!empty($article_stock['articleID'])) {
             $where = 'd.kind=1 AND a.id='.intval($article_stock['articleID']);
-        else
+        } else {
             return false;
+        }
 
         $sql = array();
-        if(isset($article_stock['instock']))
+        if (isset($article_stock['instock'])) {
             $sql[] = "d.instock=".intval($article_stock['instock']);
-        if(isset($article_stock['stockmin']))
+        }
+        if (isset($article_stock['stockmin'])) {
             $sql[] = "d.stockmin=".intval($article_stock['stockmin']);
-        if(isset($article_stock['active']))
+        }
+        if (isset($article_stock['active'])) {
             $sql[] = "a.active=IF(d.kind!=1,a.active,".intval($article_stock['active']).")";
-        if(isset($article_stock['active']))
+        }
+        if (isset($article_stock['active'])) {
             $sql[] = "d.active=".intval($article_stock['active']);
-        if(isset($article_stock['shippingtime']))
+        }
+        if (isset($article_stock['shippingtime'])) {
             $sql[] = "a.shippingtime=IF(d.kind!=1,a.shippingtime,".$this->sDB->qstr($article_stock['shippingtime']).")";
-        if(isset($article_stock['laststock']))
-            $sql[] = "a.laststock=IF(d.kind!=1,a.laststock,". (empty($article_stock['laststock']) ? 0 : 1) .")";;
+        }
+        if (isset($article_stock['laststock'])) {
+            $sql[] = "a.laststock=IF(d.kind!=1,a.laststock,". (empty($article_stock['laststock']) ? 0 : 1) .")";
+        };
         $sql[] = "a.changetime=".$this->sDB->sysTimeStamp;
-        $sql = implode(", ",$sql);
+        $sql = implode(", ", $sql);
         $sql = "
             UPDATE s_articles a, s_articles_details d
             SET	$sql
@@ -2497,8 +2676,9 @@ class sShopwareImport
             AND d.articleID=a.id
         ";
         $result = $this->sDB->Execute($sql);
-        if ($result === false)
+        if ($result === false) {
             return false;
+        }
         return true;
     }
 
@@ -2512,7 +2692,7 @@ class sShopwareImport
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
                 ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId)
+                ->setParameter('id', $articleId)
                 ->getQuery()
                 ->execute();
     }
@@ -2553,28 +2733,33 @@ class sShopwareImport
      */
     public function sDeleteArticle($article)
     {
-        if(is_int($article))
+        if (is_int($article)) {
             $article = array("articleID"=>$article);
-        elseif(is_string($article))
+        } elseif (is_string($article)) {
             $article = array("ordernumber"=>$article);
+        }
 
         if (!empty($article["articleID"])) {
             $article["articleID"] = intval($article["articleID"]);
             $article["kind"] = 1;
             $article["articledetailsID"] = $this->sDB->GetOne("SELECT id FROM s_articles_details WHERE articleID={$article['articleID']}");
-            if(empty($article["articledetailsID"]))
+            if (empty($article["articledetailsID"])) {
                 return false;
+            }
         } else {
-            if(!empty($article["articledetailsID"])&&$article["articledetailsID"]=intval($article["articledetailsID"]))
+            if (!empty($article["articledetailsID"])&&$article["articledetailsID"]=intval($article["articledetailsID"])) {
                 $article = $this->sDB->GetRow("SELECT id as articledetailsID, ordernumber, articleID, kind FROM s_articles_details WHERE id={$article['articledetailsID']}");
-            elseif(!empty($article["ordernumber"])&&$article["ordernumber"]=$this->sDB->qstr($article["ordernumber"]))
+            } elseif (!empty($article["ordernumber"])&&$article["ordernumber"]=$this->sDB->qstr($article["ordernumber"])) {
                 $article = $this->sDB->GetRow("SELECT id as articledetailsID, ordernumber, articleID, kind FROM s_articles_details WHERE ordernumber={$article['ordernumber']}");
-            else
+            } else {
                 return false;
-            if(empty($article))
+            }
+            if (empty($article)) {
                 return false;
-            if($this->sDB->GetOne("SELECT COUNT(id) FROM s_articles_details WHERE articleID={$article['articleID']}")<=1)
+            }
+            if ($this->sDB->GetOne("SELECT COUNT(id) FROM s_articles_details WHERE articleID={$article['articleID']}")<=1) {
                 $article["kind"] == 1;
+            }
         }
         if ($article["kind"] == 1) {
             $this->sDeleteArticleImages($article);
@@ -2589,7 +2774,7 @@ class sShopwareImport
             $sql = "SELECT id FROM s_articles_esd WHERE articleID = {$article['articleID']}";
             $esdIDs = $this->sDB->GetCol($sql);
             if (!empty($esdIDs)) {
-                $sql = "DELETE FROM s_articles_esd_serials WHERE esdID=".implode(" OR esdID=",$esdIDs);
+                $sql = "DELETE FROM s_articles_esd_serials WHERE esdID=".implode(" OR esdID=", $esdIDs);
                 $this->sDB->Execute($sql);
             }
             $delete_tables = array(
@@ -2611,7 +2796,7 @@ class sShopwareImport
                 $sql = "DELETE FROM $delete_table WHERE articleID={$article['articleID']}";
                 $this->sDB->Execute($sql);
             }
-            $this->sDeleteTranslation(array('article','configuratoroption','configuratorgroup','accessoryoption','accessorygroup','propertyvalue'),$article['articleID']);
+            $this->sDeleteTranslation(array('article', 'configuratoroption', 'configuratorgroup', 'accessoryoption', 'accessorygroup', 'propertyvalue'), $article['articleID']);
 
             $sql = 'DELETE FROM s_core_rewrite_urls WHERE org_path=?';
             $this->sDB->Execute($sql, array('sViewport=detail&sArticle=' . $article['articleID']));
@@ -2644,9 +2829,9 @@ class sShopwareImport
         );
         foreach ($delete_tables as $delete_table => $delete_row) {
             $sql = "DELETE FROM $delete_table WHERE $delete_row=?";
-            $this->sDB->Execute($sql,array($article['ordernumber']));
+            $this->sDB->Execute($sql, array($article['ordernumber']));
         }
-        $this->sDeleteTranslation('objectkey',$article['articledetailsID']);
+        $this->sDeleteTranslation('objectkey', $article['articledetailsID']);
         return true;
     }
 
@@ -2662,7 +2847,6 @@ class sShopwareImport
         $article = $this->sGetArticleID($article);
         $sql = 'UPDATE s_articles SET active=0 WHERE id='.$article;
         return $this->sDB->Execute($sql);
-
     }
 
     /**
@@ -2672,19 +2856,19 @@ class sShopwareImport
      * @access public
      * @return
      */
-    public function sDeleteOtherArticles ($articles = array())
+    public function sDeleteOtherArticles($articles = array())
     {
-
         if (empty($articles['articledetailsIDs'])&&empty($articles['articleIDs'])) {
-            if(!empty($articles)&&is_array($articles))
+            if (!empty($articles)&&is_array($articles)) {
                 $articles['articledetailsIDs'] = $articles;
-            else
+            } else {
                 return false;
+            }
         }
         if (!empty($articles['articleIDs'])&&is_array($articles['articleIDs'])) {
-            $where =  "a.id NOT IN (".implode(",",$articles['articleIDs']).")";
+            $where =  "a.id NOT IN (".implode(",", $articles['articleIDs']).")";
         } else {
-            $where =  "d.id NOT IN (".implode(",",$articles['articledetailsIDs']).")";
+            $where =  "d.id NOT IN (".implode(",", $articles['articledetailsIDs']).")";
         }
         $sql = "
             SELECT
@@ -2696,11 +2880,13 @@ class sShopwareImport
             AND ($where)
         ";
         $result = $this->sDB->GetCol($sql);
-        if ($result === false)
+        if ($result === false) {
             return false;
+        }
 
-        foreach ($result as $articleID)
+        foreach ($result as $articleID) {
             $this->sDeleteArticle(array("articledetailsID"=>$articleID));
+        }
         return true;
     }
 
@@ -2781,29 +2967,34 @@ class sShopwareImport
         if (empty($cols)) {
             $sql = "TRUNCATE s_categories";
         } else {
-            $cols = "id!=".implode(" AND id!=",$cols);
+            $cols = "id!=".implode(" AND id!=", $cols);
             $sql = "DELETE FROM s_categories WHERE parent IS NOT NULL AND $cols";
         }
         $result = $this->sDB->Execute($sql);
-        if ($result === false)
+        if ($result === false) {
             return false;
+        }
 
-        if ($this->sDB->Execute("TRUNCATE s_articles_categories") === false)
+        if ($this->sDB->Execute("TRUNCATE s_articles_categories") === false) {
             return false;
-        if ($this->sDB->Execute("TRUNCATE s_emarketing_banners") === false)
+        }
+        if ($this->sDB->Execute("TRUNCATE s_emarketing_banners") === false) {
             return false;
+        }
 
         $sql = "SELECT MAX(category_id) FROM  s_core_shops";
         $result = $this->sDB->GetOne($sql);
-        if(empty($result))
+        if (empty($result)) {
             $auto_increment = 2;
-        else
+        } else {
             $auto_increment = $result+1;
-        $auto_increment = max($auto_increment,10);
+        }
+        $auto_increment = max($auto_increment, 10);
         $sql = "ALTER TABLE s_categories AUTO_INCREMENT = $auto_increment;";
         $result = $this->sDB->Execute($sql);
-        if ($result === false)
+        if ($result === false) {
             return false;
+        }
         return true;
     }
 
@@ -2816,27 +3007,33 @@ class sShopwareImport
      */
     public function sDeleteAllFiles($dir, $rek=false)
     {
-        if(empty($dir)||!file_exists($dir)||!is_readable($dir))
+        if (empty($dir)||!file_exists($dir)||!is_readable($dir)) {
             return false;
+        }
 
         $dir = realpath($dir)."/";
 
         $dh = opendir($dir);
-        if(!$dh)
+        if (!$dh) {
             return false;
+        }
         while (($file = readdir($dh)) !== false) {
-            if($file=="."||$file=="..")
+            if ($file=="."||$file=="..") {
                 continue;
+            }
             if (is_dir($dir . $file)) {
                 if ($rek) {
-                    if(!$this->sDeleteAllFiles($dir . $file, $rek))
+                    if (!$this->sDeleteAllFiles($dir . $file, $rek)) {
                         continue;
-                    if(!rmdir($dir . $file))
+                    }
+                    if (!rmdir($dir . $file)) {
                         continue;
+                    }
                 }
             } elseif (is_file($dir . $file)) {
-                if(!unlink($dir . $file))
+                if (!unlink($dir . $file)) {
                     continue;
+                }
             }
         }
         closedir($dh);
@@ -2852,7 +3049,7 @@ class sShopwareImport
      */
     public function sFormatPrice($price = 0)
     {
-        return number_format($price,2,$this->sSettings['dec_point'],'');
+        return number_format($price, 2, $this->sSettings['dec_point'], '');
     }
 
     /**
@@ -2864,7 +3061,7 @@ class sShopwareImport
      */
     public function sValFloat($value)
     {
-        return floatval(str_replace(",",".",$value));
+        return floatval(str_replace(",", ".", $value));
     }
 
     /**
@@ -2896,8 +3093,9 @@ class sShopwareImport
      */
     public function sGetArticledetailsID($article)
     {
-        if(empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber']))
+        if (empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber'])) {
             return false;
+        }
         if (!empty($article['articledetailsID'])) {
             $article['articledetailsID'] = intval($article['articledetailsID']);
             $sql = "id = {$article['articledetailsID']}";
@@ -2910,8 +3108,9 @@ class sShopwareImport
         }
         $sql = "SELECT id FROM s_articles_details WHERE $sql";
         $row = $this->sDB->GetRow($sql);
-        if(empty($row['id']))
+        if (empty($row['id'])) {
             return false;
+        }
         return $row['id'];
     }
 
@@ -2923,16 +3122,21 @@ class sShopwareImport
      */
     public function sGetArticleID($article)
     {
-        if(empty($article))
+        if (empty($article)) {
             return false;
-        if(is_string($article))
+        }
+        if (is_string($article)) {
             $article = array("ordernumber"=>$article);
-        if(is_int($article))
+        }
+        if (is_int($article)) {
             $article = array("articleID"=>$article);
-        if(!is_array($article))
+        }
+        if (!is_array($article)) {
             return false;
-        if(empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber']))
+        }
+        if (empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber'])) {
             return false;
+        }
         $sql = "SELECT articleID FROM s_articles_details WHERE ";
         if (!empty($article['articleID'])) {
             $article['articleID'] = intval($article['articleID']);
@@ -2945,8 +3149,9 @@ class sShopwareImport
             $sql .= "ordernumber = {$article['ordernumber']}";
         }
         $row = $this->sDB->GetRow($sql);
-        if(empty($row['articleID']))
+        if (empty($row['articleID'])) {
             return false;
+        }
         return $row['articleID'];
     }
 
@@ -2958,8 +3163,9 @@ class sShopwareImport
      */
     public function sGetArticleNumbers($article)
     {
-        if(empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber']))
+        if (empty($article['articleID'])&&empty($article['articledetailsID'])&&empty($article['ordernumber'])) {
             return false;
+        }
         if (!empty($article['articledetailsID'])) {
             $article['articledetailsID'] = intval($article['articledetailsID']);
             $sql = "id = {$article['articledetailsID']}";
@@ -2972,8 +3178,9 @@ class sShopwareImport
         }
         $sql = "SELECT id as articledetailsID, ordernumber, articleID FROM s_articles_details WHERE $sql";
         $row = $this->sDB->GetRow($sql);
-        if(empty($row['articledetailsID']))
+        if (empty($row['articledetailsID'])) {
             return false;
+        }
         return $row;
     }
 
@@ -2986,8 +3193,9 @@ class sShopwareImport
      */
     public function sGetMainArticleID($article)
     {
-        if(!$articleID= $this->sGetArticleID ($article))
-                return false;
+        if (!$articleID= $this->sGetArticleID($article)) {
+            return false;
+        }
         $sql = "
             SELECT id
             FROM s_articles_details
@@ -2996,8 +3204,9 @@ class sShopwareImport
             articleID = $articleID
         ";
         $row = $this->sDB->GetRow($sql);
-        if(empty($row['id']))
+        if (empty($row['id'])) {
             return false;
+        }
         return $row['id'];
     }
 
@@ -3007,9 +3216,9 @@ class sShopwareImport
     public function sDeleteCache()
     {
         foreach (glob($this->sPath."/cache/templates*", GLOB_ONLYDIR) as $cachedir) {
-            $this->sDeleteAllFiles ($cachedir, true);
+            $this->sDeleteAllFiles($cachedir, true);
         }
-        $this->sDeleteAllFiles ($this->sPath."/engine/vendor/html2ps/cache/", true);
+        $this->sDeleteAllFiles($this->sPath."/engine/vendor/html2ps/cache/", true);
         $this->sDeleteArticleCache();
     }
 
@@ -3018,8 +3227,8 @@ class sShopwareImport
      */
     public function sDeleteArticleCache()
     {
-        $this->sDeleteAllFiles ($this->sPath."/cache/database/", true);
-        $this->sDeleteAllFiles ($this->sPath."/cache/vars/", true);
+        $this->sDeleteAllFiles($this->sPath."/cache/database/", true);
+        $this->sDeleteAllFiles($this->sPath."/cache/vars/", true);
         //$this->sDeleteAllFiles ($this->sPath."/files/article_pdf/", true);
     }
 
@@ -3063,8 +3272,9 @@ class sShopwareImport
      */
     public function sDeleteCategories($categories)
     {
-        if(empty($categories)||!is_array($categories))
+        if (empty($categories)||!is_array($categories)) {
             return false;
+        }
 
         // Delete categories
         $categoryRepository = $this->getCategoryRepository();
@@ -3077,10 +3287,11 @@ class sShopwareImport
         Shopware()->Models()->flush();
 
         // Delete connected article_categories
-        $where = 'categoryID IN ('.implode(',',$categories).')';
+        $where = 'categoryID IN ('.implode(',', $categories).')';
         $sql = "DELETE FROM s_articles_categories WHERE $where;";
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
 
         return true;
     }
@@ -3093,8 +3304,9 @@ class sShopwareImport
         $sql = "SELECT articleID, categoryID FROM s_articles_categories";
         $article_categories = $this->sDB->GetAll($sql);
         $this->sDB->Execute("TRUNCATE TABLE s_articles_categories");
-        foreach ($article_categories as $article_category)
-            $this->sArticleCategory ($article_category["articleID"], $article_category["categoryID"]);
+        foreach ($article_categories as $article_category) {
+            $this->sArticleCategory($article_category["articleID"], $article_category["categoryID"]);
+        }
     }
 
     /**
@@ -3113,7 +3325,7 @@ class sShopwareImport
             foreach ($type as &$value) {
                 $value = $this->sDB->qstr($value);
             }
-            $type = implode(',',$type);
+            $type = implode(',', $type);
         } else {
             $type = $this->sDB->qstr($type);
         }
@@ -3123,7 +3335,7 @@ class sShopwareImport
                 foreach ($objectkey as &$value) {
                     $value = $this->sDB->qstr($value);
                 }
-                $objectkey = implode(',',$objectkey);
+                $objectkey = implode(',', $objectkey);
             } else {
                 $objectkey = $this->sDB->qstr($objectkey);
             }
@@ -3132,7 +3344,7 @@ class sShopwareImport
         if (!empty($language)) {
             $sql .=  ' AND objectlanguage='.$this->sDB->qstr($language);
         }
-        $result = $this->sDB->Execute($sql,array($type));
+        $result = $this->sDB->Execute($sql, array($type));
         return (bool) $result;
     }
 
@@ -3147,10 +3359,12 @@ class sShopwareImport
      */
     public function sTranslation($type, $objectkey, $language, $data)
     {
-        if(empty($type)||empty($objectkey)||empty($language))
+        if (empty($type)||empty($objectkey)||empty($language)) {
             return false;
-        if(empty($data))
+        }
+        if (empty($data)) {
             return $this->sDeleteTranslation($type, $objectkey, $language);
+        }
 
         switch ($type) {
             case "article":
@@ -3170,48 +3384,66 @@ class sShopwareImport
                 }
                 $tmp = array();
                 foreach ($map as $key => $name) {
-                    if(isset($data[$key]))
+                    if (isset($data[$key])) {
                         $tmp[$key] = $data[$key];
-                    elseif(isset($data[$name."_".$language]))
+                    } elseif (isset($data[$name."_".$language])) {
                         $tmp[$key] = $data[$name."_".$language];
-                    elseif(isset($data[$name]))
+                    } elseif (isset($data[$name])) {
                         $tmp[$key] = $data[$name];
-                    if(empty($tmp[$key])) unset($tmp[$key]);
+                    }
+                    if (empty($tmp[$key])) {
+                        unset($tmp[$key]);
+                    }
                 }
                 for ($i=1;$i<=20;$i++) {
-                    if(!empty($data["attr{$i}_$language"]))
+                    if (!empty($data["attr{$i}_$language"])) {
                         $tmp["attr$i"] = $data["attr{$i}_$language"];
-                    elseif(!empty($data["attr$i"]))
+                    } elseif (!empty($data["attr$i"])) {
                         $tmp["attr$i"] = $data["attr$i"];
+                    }
                 }
-                if(isset($tmp["txtArtikel"])) $tmp["txtArtikel"] = $this->sValDescription($tmp["txtArtikel"]);
-                if(isset($tmp["txtzusatztxt"])) $tmp["txtzusatztxt"] = $this->sValDescription($tmp["txtzusatztxt"]);
+                if (isset($tmp["txtArtikel"])) {
+                    $tmp["txtArtikel"] = $this->sValDescription($tmp["txtArtikel"]);
+                }
+                if (isset($tmp["txtzusatztxt"])) {
+                    $tmp["txtzusatztxt"] = $this->sValDescription($tmp["txtzusatztxt"]);
+                }
                 $data = $tmp;
                 break;
             case "configuratoroption":
-                if(!empty($data)&&is_array($data))
-                foreach ($data as $key => &$value) {
-                    if(is_array($value)&&isset($value['gruppenName']))
-                        $value = $value['gruppenName'];
-                    if (!is_string($value)||!is_int($key)) {
-                        unset($data[$key]);
-                        continue;
+                if (!empty($data)&&is_array($data)) {
+                    foreach ($data as $key => &$value) {
+                        if (is_array($value)&&isset($value['gruppenName'])) {
+                            $value = $value['gruppenName'];
+                        }
+                        if (!is_string($value)||!is_int($key)) {
+                            unset($data[$key]);
+                            continue;
+                        }
+                        $value = array('optionName'=>$this->sValDescription($value));
                     }
-                    $value = array('optionName'=>$this->sValDescription($value));
-                } else $data = false;
+                } else {
+                    $data = false;
+                }
                 break;
             case "configuratorgroup":
-                if(!empty($data)&&is_array($data))
-                foreach ($data as $key => &$value) {
-                    if(is_string($value))
-                        $value = array('gruppenName'=>$value);
-                    if (!is_array($value)||!is_int($key)||$key<1||$key>10) {
-                        unset($data[$key]);	continue;
+                if (!empty($data)&&is_array($data)) {
+                    foreach ($data as $key => &$value) {
+                        if (is_string($value)) {
+                            $value = array('gruppenName'=>$value);
+                        }
+                        if (!is_array($value)||!is_int($key)||$key<1||$key>10) {
+                            unset($data[$key]);
+                            continue;
+                        }
+                        if (isset($value['gruppenName'])) {
+                            $value['gruppenName'] = $this->sValDescription($value['gruppenName']);
+                        }
+                        $this->sValDescription($value);
                     }
-                    if(isset($value['gruppenName']))
-                        $value['gruppenName'] = $this->sValDescription($value['gruppenName']);
-                    $this->sValDescription($value);
-                } else $data = false;
+                } else {
+                    $data = false;
+                }
                 break;
             case "accessorygroup":
                 //1 => accessoryName
@@ -3228,26 +3460,29 @@ class sShopwareImport
                 }
                 break;
             case "link":
-                if(is_scalar($data))
+                if (is_scalar($data)) {
                     $data = array("linkname"=>$this->sValDescription($data));
-                elseif(isset($data["description"]))
+                } elseif (isset($data["description"])) {
                     $data = array("linkname"=>$this->sValDescription($data["description"]));
-                else
+                } else {
                     $data = false;
+                }
                 break;
             case "download":
-                if(is_scalar($data))
+                if (is_scalar($data)) {
                     $data = array("downloadname"=>$this->sValDescription($data));
-                elseif(isset($data["description"]))
+                } elseif (isset($data["description"])) {
                     $data = array("downloadname"=>$this->sValDescription($data["description"]));
-                else
+                } else {
                     $data = false;
+                }
                 break;
             default:
                 break;
         }
-        if(empty($data))
+        if (empty($data)) {
             return $this->sDeleteTranslation($type, $objectkey, $language);
+        }
 
         $type = $this->sDB->qstr((string) $type);
         $objectkey = $this->sDB->qstr((string) $objectkey);
@@ -3263,10 +3498,11 @@ class sShopwareImport
                     ($type, $data, $objectkey, $language)
             ";
             $result = $this->sDB->Execute($sql);
-            if(empty($result))
+            if (empty($result)) {
                 return false;
-            else
+            } else {
                 return $this->sDB->Insert_ID();
+            }
         } else {
             $sql = "
                 UPDATE s_core_translations
@@ -3274,10 +3510,11 @@ class sShopwareImport
                 WHERE id=$id
             ";
             $result = $this->sDB->Execute($sql);
-            if(empty($result))
+            if (empty($result)) {
                 return false;
-            else
+            } else {
                 return $id;
+            }
         }
     }
 
@@ -3318,13 +3555,13 @@ class sShopwareImport
         }
 
         $sql = 'SELECT id FROM s_articles_downloads WHERE articleID='.$articleID;
-              $downloads = $this->sDB->GetCol($sql);
-              if(!empty($downloads))
-                  $this->sDeleteTranslation('download',$downloads);
+        $downloads = $this->sDB->GetCol($sql);
+        if (!empty($downloads)) {
+            $this->sDeleteTranslation('download', $downloads);
+        }
 
         Shopware()->Models()->flush();
         return true;
-
     }
 
     /**
@@ -3335,13 +3572,16 @@ class sShopwareImport
      */
     public function sArticleDownload($article_download)
     {
-        if (empty($article_download)||!is_array($article_download))
+        if (empty($article_download)||!is_array($article_download)) {
             return false;
+        }
         $article_download['articleID'] = $this->sGetArticleID($article_download);
-        if(empty($article_download['articleID']))
+        if (empty($article_download['articleID'])) {
             return false;
-        if(empty($article_download["name"])&&empty($article_download["link"]))
+        }
+        if (empty($article_download["name"])&&empty($article_download["link"])) {
             return false;
+        }
 
         if (empty($article_download["name"])) {
             $article_download["name"] = basename($article_download["link"]);
@@ -3363,15 +3603,19 @@ class sShopwareImport
         }
 
         if (!empty($article_download["link"])) {
-            if(file_exists($article_download["new_link"]))
+            if (file_exists($article_download["new_link"])) {
                 unlink($article_download["new_link"]);
-            if(!copy($article_download["link"],$article_download["new_link"]))
+            }
+            if (!copy($article_download["link"], $article_download["new_link"])) {
                 return false;
-            if(!empty($article_download["unlink"])&&file_exists($article_download["link"]))
+            }
+            if (!empty($article_download["unlink"])&&file_exists($article_download["link"])) {
                 unlink($article_download["link"]);
+            }
         } else {
-            if(!file_exists($article_download["new_link"]))
+            if (!file_exists($article_download["new_link"])) {
                 return false;
+            }
         }
 
         $article_download["size"] = filesize($article_download["new_link"]);
@@ -3436,7 +3680,6 @@ class sShopwareImport
         Shopware()->Models()->flush();
 
         return (int) $articleDownload->getId();
-
     }
 
     /**
@@ -3480,9 +3723,13 @@ class sShopwareImport
      */
     public function sArticleAttributeGroup($article)
     {
-        if(empty($article)||!is_array($article)) return false;
+        if (empty($article)||!is_array($article)) {
+            return false;
+        }
         $article["articleID"] = $this->sGetArticleID($article);
-        if(empty($article["articleID"])) return false;
+        if (empty($article["articleID"])) {
+            return false;
+        }
 
         // If attributegroupID is not set, set filtergroupID to null
         if (empty($article["attributegroupID"])) {
@@ -3511,11 +3758,13 @@ class sShopwareImport
         // Check if value-lengths match
         foreach ($languages as $languageArray) {
             $language = $languageArray['isocode'];
-            if(!isset($article['values_'.$language])) continue;
+            if (!isset($article['values_'.$language])) {
+                continue;
+            }
 
             if (count($article['values_'.$language]) !== count($article['values'])) {
-              $this->sAPI->sSetError("Value-Arrays may not differ in length", 10508);
-              return false;
+                $this->sAPI->sSetError("Value-Arrays may not differ in length", 10508);
+                return false;
             }
         }
 
@@ -3585,7 +3834,9 @@ class sShopwareImport
             $language = $languageArray['isocode'];
             $localeID = $languageArray['id'];
 
-            if(!isset($article['values_'.$language])) continue;
+            if (!isset($article['values_'.$language])) {
+                continue;
+            }
 
             foreach ($article['values_'.$language] as $key=>$value) {
                 $valueModel = $valueRepository->findOneBy(array(
@@ -3606,11 +3857,14 @@ class sShopwareImport
      */
     public function sOrder($order)
     {
-        if(!empty($order['orderID']))
+        if (!empty($order['orderID'])) {
             $order['orderIDs'] = array($order['orderID']);
+        }
         if (!empty($order['orderIDs'])&&is_array($order['orderIDs'])) {
-            foreach ($order['orderIDs'] as &$orderID) $orderID = (int) $orderID;
-            $order['where'] = "`id` IN (".implode(",",$order['orderIDs']).")\n";
+            foreach ($order['orderIDs'] as &$orderID) {
+                $orderID = (int) $orderID;
+            }
+            $order['where'] = "`id` IN (".implode(",", $order['orderIDs']).")\n";
         } elseif (!empty($order['ordernumber'])) {
             $order['where'] = "`ordernumber` = ".$this->sDB->qstr($order['ordernumber'])."\n";
         } elseif (empty($order['where'])) {
@@ -3618,32 +3872,38 @@ class sShopwareImport
         }
 
         $upset = array();
-        if(isset($order['statusID']))
+        if (isset($order['statusID'])) {
             $upset[] = "status=".intval($order['statusID']);
-        if(isset($order['clearedID']))
-            $upset[] = "cleared=".intval($order['clearedID']);
-        if(isset($order['trackingID']))
-            $upset[] = "trackingcode=".$this->sDB->qstr((string) $order['trackingID']);
-        if(isset($order['transactionID']))
-            $upset[] = "transactionID=".$this->sDB->qstr((string) $order['transactionID']);
-        if(isset($order['comment']))
-            $upset[] = "comment=".$this->sDB->qstr((string) $order['comment']);
-        if(!empty($article['cleareddate']))
-            $upset[] = "cleareddate=".$order['cleareddate'];
-        elseif (isset($article['cleareddate'])) {
-            $upset[] = "cleareddate='0000-00-00'";
-
         }
-        if(empty($upset))
+        if (isset($order['clearedID'])) {
+            $upset[] = "cleared=".intval($order['clearedID']);
+        }
+        if (isset($order['trackingID'])) {
+            $upset[] = "trackingcode=".$this->sDB->qstr((string) $order['trackingID']);
+        }
+        if (isset($order['transactionID'])) {
+            $upset[] = "transactionID=".$this->sDB->qstr((string) $order['transactionID']);
+        }
+        if (isset($order['comment'])) {
+            $upset[] = "comment=".$this->sDB->qstr((string) $order['comment']);
+        }
+        if (!empty($article['cleareddate'])) {
+            $upset[] = "cleareddate=".$order['cleareddate'];
+        } elseif (isset($article['cleareddate'])) {
+            $upset[] = "cleareddate='0000-00-00'";
+        }
+        if (empty($upset)) {
             return true;
+        }
 
         $sql = "
             UPDATE s_order
-            SET ".implode(", ",$upset)."
+            SET ".implode(", ", $upset)."
             WHERE {$order['where']} AND status!=-1
         ";
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
         return true;
     }
 
@@ -3660,21 +3920,26 @@ class sShopwareImport
                   AND LEFT(l.locale,2) <> 'de'";
         $languages = $this->sDB->getAll($sql);
 
-        if(empty($languages)) return true;
+        if (empty($languages)) {
+            return true;
+        }
 
-        if(!empty($article['articledetailsID']))
+        if (!empty($article['articledetailsID'])) {
             $where = 'id='.$this->sDB->qstr($article['articledetailsID']);
-        elseif(!empty($article['ordernumber']))
+        } elseif (!empty($article['ordernumber'])) {
             $where = 'ordernumber='.$this->sDB->qstr($article['ordernumber']);
-        elseif(!empty($article['articleID']))
+        } elseif (!empty($article['articleID'])) {
             $where = 'kind=1 AND articleID='.$this->sDB->qstr($article['articleID']);
+        }
         $sql = "
             SELECT id as articledetailsID, articleID, kind
             FROM s_articles_details
             WHERE $where
         ";
         $article_data = $this->sDB->GetRow($sql);
-        if(empty($article_data)) return false;
+        if (empty($article_data)) {
+            return false;
+        }
 
         if ($article_data['kind']==1) {
             $translate_type = 'article';
@@ -3720,16 +3985,19 @@ class sShopwareImport
     public function sGetArticleByAttribute($attr)
     {
         $tmp = array();
-        if(!empty($attr)&&is_array($attr))
-        foreach ($attr as $key=>$value) {
-            if(is_numeric($key)&&$key>0)
-                $key = "attr".$key;
-            $value = $this->sDB->qstr((string) $value);
-            $tmp[] = "$key = $value";
+        if (!empty($attr)&&is_array($attr)) {
+            foreach ($attr as $key=>$value) {
+                if (is_numeric($key)&&$key>0) {
+                    $key = "attr".$key;
+                }
+                $value = $this->sDB->qstr((string) $value);
+                $tmp[] = "$key = $value";
+            }
         }
-        $upset = implode(" AND ",$tmp);
-        if(empty($tmp))
+        $upset = implode(" AND ", $tmp);
+        if (empty($tmp)) {
             return false;
+        }
         $sql = "SELECT articleID, articledetailsID FROM s_articles_attributes WHERE $upset";
         return $this->sDB->GetRow($sql);
     }
@@ -3744,16 +4012,19 @@ class sShopwareImport
     {
         //@@TODO: nach sGetArticledetailsIDs verschieben
         $tmp = array();
-        if(!empty($attr)&&is_array($attr))
-        foreach ($attr as $key=>$value) {
-            if(is_numeric($key)&&$key>0)
-                $key = "attr".$key;
-            $value = $this->sDB->qstr((string) $value);
-            $tmp[] = "$key = $value";
+        if (!empty($attr)&&is_array($attr)) {
+            foreach ($attr as $key=>$value) {
+                if (is_numeric($key)&&$key>0) {
+                    $key = "attr".$key;
+                }
+                $value = $this->sDB->qstr((string) $value);
+                $tmp[] = "$key = $value";
+            }
         }
-        $upset = implode(" AND ",$tmp);
-        if(empty($tmp))
+        $upset = implode(" AND ", $tmp);
+        if (empty($tmp)) {
             return false;
+        }
         $sql = "SELECT articledetailsID FROM s_articles_attributes WHERE $upset";
         return $this->sDB->GetCol($sql);
     }
@@ -3788,7 +4059,7 @@ class sShopwareImport
      */
     public function sRoundPrice($price)
     {
-        return number_format($price,2,'.','');
+        return number_format($price, 2, '.', '');
     }
 
     /**
@@ -3815,8 +4086,9 @@ class sShopwareImport
         if (is_dir($dir)) {
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
-                    if($file=="."||$file=="..")
+                    if ($file=="."||$file=="..") {
                         continue;
+                    }
                     $files[] = $file;
                 }
                 closedir($dh);

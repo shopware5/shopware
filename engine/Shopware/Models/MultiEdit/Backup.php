@@ -24,7 +24,7 @@
 
 namespace Shopware\Models\MultiEdit;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
@@ -219,7 +219,4 @@ class Backup extends ModelEntity
     {
         return $this->size;
     }
-
-
-
 }

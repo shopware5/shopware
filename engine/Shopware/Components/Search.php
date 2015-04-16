@@ -63,6 +63,6 @@ class Shopware_Components_Search extends Enlight_Class implements Enlight_Hook
     */
     public function search($term, array $config)
     {
-        return $this->getAdapter()->search($term,$config);
+        return $this->getAdapter()->search($term, $config);
     }
 }

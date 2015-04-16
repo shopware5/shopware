@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
+
 /**
  * Shopware MediaManager Controller
  *
@@ -240,14 +241,14 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         /** @var $media Media */
-        foreach($mediaList as &$media){
-            if($media['type'] !== Media::TYPE_IMAGE){
+        foreach ($mediaList as &$media) {
+            if ($media['type'] !== Media::TYPE_IMAGE) {
                 continue;
             }
 
             $thumbnails = $this->getMediaThumbnailPaths($media);
 
-            if(!empty($thumbnails) && file_exists(Shopware()->OldPath() . $thumbnails['140x140'])){
+            if (!empty($thumbnails) && file_exists(Shopware()->OldPath() . $thumbnails['140x140'])) {
                 $size = getimagesize($media['path']);
                 $media['thumbnail'] = $thumbnails['140x140'];
                 $media['width'] = $size[0];
@@ -553,7 +554,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
 
-        if(!$album){
+        if (!$album) {
             $this->View()->assign(array('success' => false, 'message' => 'Invalid album id passed'));
             return;
         }
@@ -577,7 +578,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
-            if($media->getType() === Media::TYPE_IMAGE){
+            if ($media->getType() === Media::TYPE_IMAGE) {
                 $manager = Shopware()->Container()->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, array(), true);
             }
@@ -634,7 +635,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->getManager()->flush($album->getSettings());
 
             $this->View()->assign(array('success' => true));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -657,7 +658,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $settings->setAlbum($album);
         }
         // validate album name
-        if(empty($data['text'])){
+        if (empty($data['text'])) {
             throw new Exception('No valid album name passed!');
         }
         $data['name'] = $data['text'];
@@ -689,7 +690,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
         }
 
-        if(isset($data['iconCls']) && !empty($data['iconCls'])) {
+        if (isset($data['iconCls']) && !empty($data['iconCls'])) {
             $icon = $data['iconCls'];
         }
 
@@ -698,7 +699,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ? : 70;
 
         $albumId = $album->getId();
-        if(empty($albumId) && $data['parent'] !== null) {
+        if (empty($albumId) && $data['parent'] !== null) {
             /** @var Settings $parentSettings */
             $parentSettings = $data['parent']->getSettings();
 
@@ -788,7 +789,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $media->setAttribute($params['attribute'][0]);
         //check if the album id passed and is valid
-        if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])){
+        if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
             $media->setAlbumId($params['newAlbumID']);
         }
 
@@ -919,11 +920,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return $properties;
     }
 
-	/**
-	 * This method creates thumbnails based on the request.
-	 */
-	public function createThumbnailsAction()
-	{
+    /**
+     * This method creates thumbnails based on the request.
+     */
+    public function createThumbnailsAction()
+    {
         $offset  = $this->Request()->getParam('offset');
         $limit   = $this->Request()->getParam('limit');
         $albumId = $this->Request()->getParam('albumId');
@@ -942,16 +943,16 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $manager = $this->get('thumbnail_manager');
 
         $fails = array();
-        foreach ($medias as $media){
+        foreach ($medias as $media) {
             try {
                 $manager->createMediaThumbnail($media, $thumbnailSizes, true);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $fails[] = $e->getMessage();
             }
         }
 
-		$this->View()->assign(array('success' => true, 'total' => count($medias) * count($thumbnailSizes), 'fails' => $fails));
-	}
+        $this->View()->assign(array('success' => true, 'total' => count($medias) * count($thumbnailSizes), 'fails' => $fails));
+    }
 
     /**
      * @param integer $albumId

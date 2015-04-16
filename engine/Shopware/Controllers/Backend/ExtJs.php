@@ -93,7 +93,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function initAcl()
     {
-
     }
 
     /**
@@ -113,7 +112,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function setAclResourceName($resource = null)
     {
-
     }
 
     /**

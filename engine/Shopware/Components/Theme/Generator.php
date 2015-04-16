@@ -183,7 +183,7 @@ EOD;
      * @param Filesystem $fileSystem
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
+    public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
     {
         $this->pathResolver = $pathResolver;
         $this->fileSystem = $fileSystem;
@@ -346,11 +346,9 @@ EOD;
     {
         foreach ($directory as $key => $value) {
             if (is_array($value)) {
-
                 $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);
-
             } else {
                 //switch between create file or create directory
                 if (strpos($value, '.') !== false) {

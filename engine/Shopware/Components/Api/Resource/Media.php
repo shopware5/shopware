@@ -57,7 +57,6 @@ class Media extends Resource
      */
     public function getOne($id)
     {
-
         $this->checkPrivilege('read');
 
         if (empty($id)) {
@@ -226,7 +225,6 @@ class Media extends Resource
 
         if (!$media && (!isset($params['file']) || empty($params['file']))) {
             throw new ApiException\ParameterMissingException();
-
         }
 
         if (!$media && (!isset($params['description']) || empty($params['description']))) {
@@ -260,7 +258,7 @@ class Media extends Resource
                 try {
                     $path = $this->load($params['file'], $params['name']);
                 } catch (\Exception $e) {
-                    throw new \Exception(sprintf("Could not load image %s", $params['file'] ));
+                    throw new \Exception(sprintf("Could not load image %s", $params['file']));
                 }
             } else {
                 $path = $params['file'];

@@ -64,12 +64,11 @@ class Service
      * @param \Shopware_Components_Snippet_Manager $snippets
      * @param Util $util
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
         Util $util
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->snippets = $snippets;
         $this->util = $util;
@@ -220,7 +219,7 @@ class Service
 
             if (isset($element['selection'])) {
                 foreach ($element['selection'] as &$selection) {
-                    foreach($selection as &$value) {
+                    foreach ($selection as &$value) {
                         $value = $this->convertSnippet($value, $namespace);
                     }
                 }
@@ -480,7 +479,7 @@ class Service
             foreach ($data as &$value) {
                 $value = $this->translateRecursive($value, $namespace);
             }
-        } else if (is_string($data)) {
+        } elseif (is_string($data)) {
             $data = $this->convertSnippet($data, $namespace);
         }
         return $data;
@@ -584,5 +583,4 @@ class Service
             $this->util->getSnippetNamespace($template) . 'backend/config'
         );
     }
-
 }

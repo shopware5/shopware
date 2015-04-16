@@ -62,8 +62,8 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
         foreach ($config as $key => $value) {
             if ($key=='order') {
                 $this->_order = $value;
-            } elseif (substr($key,-6)=='Column') {
-                $this->_colums[substr($key,0,-6)] = $value;
+            } elseif (substr($key, -6)=='Column') {
+                $this->_colums[substr($key, 0, -6)] = $value;
             }
         }
 

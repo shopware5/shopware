@@ -23,9 +23,10 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Symfony\Component\Validator\Constraints as Assert,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *

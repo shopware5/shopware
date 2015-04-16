@@ -51,7 +51,6 @@ class CustomerGroup extends Resource
      */
     public function getOne($id)
     {
-
         $this->checkPrivilege('read');
 
         if (empty($id)) {
@@ -193,7 +192,6 @@ class CustomerGroup extends Resource
      */
     private function saveDiscounts($discounts, $group)
     {
-
         $oldDiscounts = $group->getDiscounts();
         foreach ($oldDiscounts as $oldDiscount) {
             if (!in_array($oldDiscount, $discounts)) {

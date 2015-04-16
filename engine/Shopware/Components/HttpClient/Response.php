@@ -29,7 +29,7 @@ namespace Shopware\Components\HttpClient;
  * @package   Shopware\Components\HttpClient
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-Class Response
+class Response
 {
     /**
      * @var string

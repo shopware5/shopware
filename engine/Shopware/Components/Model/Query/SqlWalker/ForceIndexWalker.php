@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Components\Model\Query\SqlWalker;
+
 use Doctrine\ORM\Query\SqlWalker;
 
 /**
@@ -69,5 +70,4 @@ class ForceIndexWalker extends SqlWalker
 
         return $result;
     }
-
 }

@@ -502,7 +502,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'description' => $descriptionPHPVersion
             )
         );
-
     }
 
     /**

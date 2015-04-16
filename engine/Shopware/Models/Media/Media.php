@@ -23,11 +23,12 @@
  */
 
 namespace   Shopware\Models\Media;
+
 use Doctrine\Common\Collections\ArrayCollection;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM,
-            Symfony\Component\HttpFoundation\File\UploadedFile,
-            Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * In Shopware all media resources are represented in the media model.
@@ -588,14 +589,14 @@ class Media extends ModelEntity
         }
     }
 
-	/**
-	 * Model event function, which called when the model is loaded.
-	 * @ORM\PostLoad
-	 */
-	public function onLoad()
-	{
-		$this->thumbnails = $this->loadThumbnails();
-	}
+    /**
+     * Model event function, which called when the model is loaded.
+     * @ORM\PostLoad
+     */
+    public function onLoad()
+    {
+        $this->thumbnails = $this->loadThumbnails();
+    }
 
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
@@ -643,7 +644,6 @@ class Media extends ModelEntity
         if ($settings !== null) {
             $this->removeAlbumThumbnails($settings->getThumbnailSize(), $this->getFileName());
         }
-
     }
 
     /****************************************************************
@@ -796,10 +796,10 @@ class Media extends ModelEntity
             return;
         }
 
-	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
-	    $generator = Shopware()->Container()->get('thumbnail_manager');
+        /** @var \Shopware\Components\Thumbnail\Manager $generator */
+        $generator = Shopware()->Container()->get('thumbnail_manager');
 
-	    $generator->createMediaThumbnail($this, $this->defaultThumbnails);
+        $generator->createMediaThumbnail($this, $this->defaultThumbnails);
     }
 
     /**
@@ -836,7 +836,6 @@ class Media extends ModelEntity
             if (file_exists($names['originalHD'])) {
                 unlink($names['originalHD']);
             }
-
         }
     }
 
@@ -848,9 +847,9 @@ class Media extends ModelEntity
      */
     public function loadThumbnails($highDpi = false)
     {
-	    $thumbnails = $this->getThumbnailFilePaths($highDpi);
+        $thumbnails = $this->getThumbnailFilePaths($highDpi);
 
-        if (!file_exists(Shopware()->OldPath() . $this->getPath())){
+        if (!file_exists(Shopware()->OldPath() . $this->getPath())) {
             return $thumbnails;
         }
 
@@ -869,7 +868,7 @@ class Media extends ModelEntity
             }
         }
 
-	    return $thumbnails;
+        return $thumbnails;
     }
 
     /**
@@ -878,35 +877,35 @@ class Media extends ModelEntity
      * @param bool $highDpi - If true, returns the file path for the high dpi thumbnails instead
      * @return array
      */
-	public function getThumbnailFilePaths($highDpi = false)
-	{
-		if ($this->type !== self::TYPE_IMAGE) {
-			return array();
-		}
-		$sizes = array();
+    public function getThumbnailFilePaths($highDpi = false)
+    {
+        if ($this->type !== self::TYPE_IMAGE) {
+            return array();
+        }
+        $sizes = array();
 
-		//concat default sizes
-		foreach ($this->defaultThumbnails as $size) {
-			if (count($size) === 1) {
-				$sizes[] = $size . 'x' . $size;
-			} else {
-				$sizes[] = $size[0] . 'x' . $size[1];
-			}
-		}
+        //concat default sizes
+        foreach ($this->defaultThumbnails as $size) {
+            if (count($size) === 1) {
+                $sizes[] = $size . 'x' . $size;
+            } else {
+                $sizes[] = $size[0] . 'x' . $size[1];
+            }
+        }
 
-		//Check if the album has loaded correctly.
-		if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
-			$sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
-			$sizes = array_unique($sizes);
-		}
-		$thumbnails = array();
+        //Check if the album has loaded correctly.
+        if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
+            $sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
+            $sizes = array_unique($sizes);
+        }
+        $thumbnails = array();
         $suffix = $highDpi ? '@2x' : '';
 
-		//iterate thumbnail sizes
-		foreach ($sizes as $size) {
-			if (strpos($size, 'x') === false) {
-				$size = $size . 'x' . $size;
-			}
+        //iterate thumbnail sizes
+        foreach ($sizes as $size) {
+            if (strpos($size, 'x') === false) {
+                $size = $size . 'x' . $size;
+            }
 
             $fileName = str_replace(
                 '.' . $this->extension,
@@ -914,13 +913,13 @@ class Media extends ModelEntity
                 $this->getFileName()
             );
 
-			$path = $this->getThumbnailDir() . $fileName;
+            $path = $this->getThumbnailDir() . $fileName;
             $path = str_replace(Shopware()->OldPath(), '', $path);
-			if (DIRECTORY_SEPARATOR !== '/') {
-				$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-			}
-			$thumbnails[$size] = $path;
-		}
+            if (DIRECTORY_SEPARATOR !== '/') {
+                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+            }
+            $thumbnails[$size] = $path;
+        }
 
         return $thumbnails;
     }
@@ -952,18 +951,18 @@ class Media extends ModelEntity
      */
     private function createThumbnail($width, $height)
     {
-	    //create only thumbnails for image media
-	    if ($this->type !== self::TYPE_IMAGE) {
-		    return;
-	    }
+        //create only thumbnails for image media
+        if ($this->type !== self::TYPE_IMAGE) {
+            return;
+        }
 
-	    /** @var \Shopware\Components\Thumbnail\Manager $manager */
-	    $manager = Shopware()->Container()->get('thumbnail_manager');
+        /** @var \Shopware\Components\Thumbnail\Manager $manager */
+        $manager = Shopware()->Container()->get('thumbnail_manager');
 
-	    $newSize = array(
-		    'width' => $width,
-		    'height' => $height
-	    );
+        $newSize = array(
+            'width' => $width,
+            'height' => $height
+        );
 
         $manager->createMediaThumbnail($this, array($newSize), true);
     }
@@ -1075,7 +1074,6 @@ class Media extends ModelEntity
             $fileInfo  = pathinfo($this->file->getClientOriginalName());
             $extension = $fileInfo['extension'];
             $name      = $fileInfo['filename'];
-
         } else {
             $extension = $this->file->guessExtension();
             $name      = $this->file->getBasename();

@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the mailing model
  *
@@ -75,7 +77,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -127,14 +128,12 @@ class Repository extends ModelRepository
                 'lastNewsletter.subject LIKE :search'
             ));
             $builder->setParameter('search', '%' . $filter[0]['value'] . '%');
-
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
         return $builder;
-
     }
 
 
@@ -186,7 +185,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -250,6 +248,5 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 }

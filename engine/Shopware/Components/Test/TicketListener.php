@@ -37,7 +37,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
      *
      * @param string|array $options
      */
-    public function __construct($serverAddress, $printTicketStateChanges=false , $notifyTicketStateChanges=false)
+    public function __construct($serverAddress, $printTicketStateChanges=false, $notifyTicketStateChanges=false)
     {
         $this->serverAddress = $serverAddress;
         $this->printTicketStateChanges = $printTicketStateChanges;
@@ -138,13 +138,13 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
         $newStatus  = 'reopened';
         $message    = 'Automatically reopened by PHPUnit (test failed).';
         $resolution = '';
-        $cumulative = FALSE;
-        $adjustTicket = TRUE;
+        $cumulative = false;
+        $adjustTicket = true;
 
         $message .= "\n".$e->getMessage();
 
         if ($e instanceof PHPUnit_Framework_ExpectationFailedException) {
-        //	$message .= "\n".$e->getCustomMessage();
+            //	$message .= "\n".$e->getCustomMessage();
         }
 
         $message = str_replace("\n", "\n[[BR]]", $message);
@@ -153,7 +153,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
         $tickets = PHPUnit_Util_Test::getTickets(get_class($test), $name);
 
         foreach ($tickets as $ticket) {
-           $ticketInfo = $this->getTicketInfo($ticket);
+            $ticketInfo = $this->getTicketInfo($ticket);
 
             if ($adjustTicket && in_array($ticketInfo['status'], $ifStatus)) {
                 $this->updateTicket($ticket, $newStatus, $message, $resolution);
@@ -192,7 +192,7 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
         $newStatus  = 'closed';
         $message    = 'Automatically closed by PHPUnit (test passed).';
         $resolution = 'fixed';
-        $cumulative = TRUE;
+        $cumulative = true;
 
         $name = $test->getName(false);
         $tickets = PHPUnit_Util_Test::getTickets(get_class($test), $name);
@@ -207,10 +207,10 @@ class Shopware_Components_Test_TicketListener extends PHPUnit_Extensions_TicketL
             // but reopen tickets if a single test fails.
             if (count($this->ticketCounts[$ticket]) > 0) {
                 // There exist remaining test cases with this reference.
-                $adjustTicket = FALSE;
+                $adjustTicket = false;
             } else {
                 // No remaining tickets, go ahead and adjust.
-                $adjustTicket = TRUE;
+                $adjustTicket = true;
             }
 
             $ticketInfo = $this->getTicketInfo($ticket);

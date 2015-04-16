@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Article;
+
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -790,7 +791,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.prices', 'prices','WITH', 'prices.customerGroupKey = :key')
+                ->leftJoin('details.prices', 'prices', 'WITH', 'prices.customerGroupKey = :key')
                 ->leftJoin('prices.customerGroup', 'customerGroup')
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
@@ -1153,7 +1154,7 @@ class Repository extends ModelRepository
     public function getDetailsByIdsQueryBuilder($ids, $sort = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('details','attribute','prices','customerGroup','configuratorOptions'))
+        $builder->select(array('details', 'attribute', 'prices', 'customerGroup', 'configuratorOptions'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.configuratorOptions', 'configuratorOptions')
                 ->leftJoin('details.prices', 'prices')
@@ -1543,8 +1544,8 @@ class Repository extends ModelRepository
                 ->leftJoin('articles.supplier', 'supplier');
 
         if (!empty($ids)) {
-            $ids = implode(",",$ids);
-            $builder->where($builder->expr()->notIn("articles.id",$ids));
+            $ids = implode(",", $ids);
+            $builder->where($builder->expr()->notIn("articles.id", $ids));
         }
 
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
@@ -1650,8 +1651,8 @@ class Repository extends ModelRepository
         ));
         $builder->from('Shopware\Models\Article\Supplier', 'suppliers');
         if (!empty($ids)) {
-            $ids = implode(",",$ids);
-            $builder->where($builder->expr()->notIn("suppliers.id",$ids));
+            $ids = implode(",", $ids);
+            $builder->where($builder->expr()->notIn("suppliers.id", $ids));
         }
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
             $builder->andWhere('suppliers.name LIKE ?1')
@@ -1751,7 +1752,7 @@ class Repository extends ModelRepository
             'article.name as articleName'
         ));
         $builder->from('Shopware\Models\Article\Vote', 'vote');
-        $builder->join('vote.article','article');
+        $builder->join('vote.article', 'article');
         if (!empty($filter)) {
             $builder->where('article.name LIKE ?1')
                     ->setParameter(1, '%'.$filter.'%');
@@ -1875,7 +1876,7 @@ class Repository extends ModelRepository
                 ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageId = notification.language')
                 ->leftJoin('customer.billing', 'billing')
                 ->where('notification.articleNumber = :orderNumber')
-                ->setParameter("orderNumber",$articleOrderNumber);
+                ->setParameter("orderNumber", $articleOrderNumber);
 
         //search part
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
@@ -2253,7 +2254,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('images'))
                 ->from('Shopware\Models\Article\Image', 'images')
-                ->leftJoin('images.children','children')
+                ->leftJoin('images.children', 'children')
                 ->where('images.articleId = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->andWhere('images.articleDetailId IS NULL')
@@ -2288,7 +2289,7 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
                 ->where('prices.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
 
         return $builder;
     }
@@ -2316,7 +2317,7 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
                 ->where('attribute.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
 
         return $builder;
     }
@@ -2343,7 +2344,7 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
                 ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
 
         return $builder;
     }

@@ -44,7 +44,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function indexAction()
     {
-
     }
 
     /**
@@ -54,7 +53,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function listingAction()
     {
-
     }
 
     /**
@@ -64,7 +62,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function requestAction()
     {
-
     }
 
     /**
@@ -74,7 +71,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function detailAction()
     {
-
     }
 
     /**
@@ -84,7 +80,6 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function directAction()
     {
-
     }
 
     /**
@@ -94,6 +89,5 @@ class Shopware_Controllers_Frontend_Ticket extends Shopware_Controllers_Frontend
      */
     public function commitForm()
     {
-
     }
 }

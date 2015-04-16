@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
             ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
-            ->leftJoin('form.translations', 'translation' , \Doctrine\ORM\Query\Expr\Join::WITH, 'translation.localeId = :localeId')
+            ->leftJoin('form.translations', 'translation', \Doctrine\ORM\Query\Expr\Join::WITH, 'translation.localeId = :localeId')
             ->leftJoin('form.children', 'children')
             ->select(array(
                 'form.id',
@@ -74,7 +74,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 'COUNT(children.id) as childrenCount'
             ))
             ->groupBy('form.id')
-            ->setParameter("localeId",$locale->getId());
+            ->setParameter("localeId", $locale->getId());
 
         // Search forms
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
@@ -118,11 +118,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
-            ->leftJoin('form.translations', 'formTranslation' , \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId = :localeId')
+            ->leftJoin('form.translations', 'formTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId = :localeId')
             ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
             ->leftJoin('element.values', 'value')
             ->select(array('form', 'element', 'value', 'elementTranslation', 'formTranslation'))
-            ->setParameter("localeId",$locale->getId());
+            ->setParameter("localeId", $locale->getId());
 
         $builder->addOrderBy((array) $this->Request()->getParam('sort', array()))
             ->addFilter((array) $this->Request()->getParam('filter', array()));
@@ -681,7 +681,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['elements'] = $elements;
                 } else {
                     $data['elements'] = $this->createDocumentElements($model);
-
                 }
 
                 break;

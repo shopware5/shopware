@@ -25,8 +25,8 @@
 namespace Shopware\Models\Shop;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
@@ -185,7 +185,7 @@ class Template extends ModelEntity
     protected $configSets;
 
 
-    function __construct()
+    public function __construct()
     {
         $this->shops = new ArrayCollection();
         $this->elements = new ArrayCollection();
@@ -486,6 +486,4 @@ class Template extends ModelEntity
     {
         $this->configSets = $configSets;
     }
-
-
 }

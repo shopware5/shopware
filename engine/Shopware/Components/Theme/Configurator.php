@@ -77,7 +77,7 @@ class Configurator
      * @param Form\Persister\Theme $persister
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         Model\ModelManager $entityManager,
         Util $util,
         Form\Persister\Theme $persister,
@@ -171,7 +171,7 @@ class Configurator
                 $this->validateConfig($element);
 
                 //check Form\Field validation
-            } else if ($element instanceof Form\Interfaces\Validate) {
+            } elseif ($element instanceof Form\Interfaces\Validate) {
                 $element->validate();
             }
         }
@@ -386,9 +386,7 @@ class Configurator
         $layout['containers'][] = $container->getName();
 
         foreach ($container->getElements() as $element) {
-
             if ($element instanceof Form\Container) {
-
                 $child = $this->getContainerNames($element);
 
                 $layout['containers'] = array_merge(
@@ -400,9 +398,7 @@ class Configurator
                     $layout['fields'],
                     $child['fields']
                 );
-
-            } else if ($element instanceof Form\Field) {
-
+            } elseif ($element instanceof Form\Field) {
                 $layout['fields'][] = $element->getName();
             }
         }

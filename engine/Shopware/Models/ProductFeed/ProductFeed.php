@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\ProductFeed;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware product feed model represents a single feed.

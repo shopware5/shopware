@@ -23,8 +23,10 @@
  */
 
 namespace Shopware\Models\Voucher;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Standard Voucher Model Entity
  *
@@ -628,5 +630,4 @@ class Voucher extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Voucher', 'attribute', 'voucher');
     }
-
 }

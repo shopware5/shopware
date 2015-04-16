@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity

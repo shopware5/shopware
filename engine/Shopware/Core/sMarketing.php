@@ -79,8 +79,7 @@ class sMarketing
     public function __construct(
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
-    )
-    {
+    ) {
         $this->category = Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
@@ -340,10 +339,11 @@ class sMarketing
         }
 
         $sBasketAmount = $this->sSYSTEM->sMODULES['sBasket']->sGetAmount();
-        if (empty($sBasketAmount["totalAmount"]))
+        if (empty($sBasketAmount["totalAmount"])) {
             $sBasketAmount = 0;
-        else
+        } else {
             $sBasketAmount = $sBasketAmount["totalAmount"];
+        }
         $sql = "
             SELECT
                 p.ordernumber AS premium_ordernumber,
@@ -362,7 +362,6 @@ class sMarketing
         $premiums = $this->db->fetchAll($sql, array($context->getShop()->getId()));
 
         foreach ($premiums as &$premium) {
-
             $activeShopId = Shopware()->Shop()->getId();
             $activeFactor = $this->sSYSTEM->sCurrency["factor"];
 
@@ -456,7 +455,7 @@ class sMarketing
         $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         return array_map(
-            function(StoreFrontBundle\Struct\Product $elem) {
+            function (StoreFrontBundle\Struct\Product $elem) {
                 return array(
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional()
@@ -473,14 +472,16 @@ class sMarketing
             $categoryId = $this->categoryId;
         }
 
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDMAX']))
+        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDMAX'])) {
             $tagSize = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDMAX'];
-        else
+        } else {
             $tagSize = 50;
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGTIME']))
+        }
+        if (!empty($this->sSYSTEM->sCONFIG['sTAGTIME'])) {
             $tagTime = (int) $this->sSYSTEM->sCONFIG['sTAGTIME'];
-        else
+        } else {
             $tagTime = 3;
+        }
 
         $sql = "
             SELECT
@@ -513,7 +514,7 @@ class sMarketing
         ";
 
         $articles = $this->db->fetchAssoc($sql);
-        array_walk($articles, function(&$article) {
+        array_walk($articles, function (&$article) {
             unset($article['articleID']);
         });
 
@@ -524,14 +525,16 @@ class sMarketing
 
         $pos = 1;
         $anz = count($articles);
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT']))
+        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'])) {
             $steps = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'];
-        else
+        } else {
             $steps = 3;
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDCLASS']))
+        }
+        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDCLASS'])) {
             $class = (string) $this->sSYSTEM->sCONFIG['sTAGCLOUDCLASS'];
-        else
+        } else {
             $class = "tag";
+        }
         $link = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=";
 
         foreach ($articles as $articleId => $article) {
@@ -602,13 +605,14 @@ class sMarketing
         $similarArticleIds = $this->db->fetchCol($sql);
 
         $similarArticles = array();
-        if (!empty($similarArticleIds))
+        if (!empty($similarArticleIds)) {
             foreach ($similarArticleIds as $similarArticleId) {
                 $article = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", 0, (int) $similarArticleId);
                 if (!empty($article)) {
                     $similarArticles[] = $article;
                 }
             }
+        }
         return $similarArticles;
     }
 
@@ -686,7 +690,6 @@ class sMarketing
                                     $articleData[] = $tmpContainer;
                                 }
                             }
-
                         }
 
                         $getCampaignContainers[$campaignKey]["data"] = $articleData;

@@ -231,7 +231,7 @@ class sSystem
      * @param $WARNING_MESSAGE
      * @throws Enlight_Exception
      */
-    public function E_CORE_WARNING($WARNING_ID,$WARNING_MESSAGE)
+    public function E_CORE_WARNING($WARNING_ID, $WARNING_MESSAGE)
     {
         throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
     }
