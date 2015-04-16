@@ -944,26 +944,6 @@ class sOrder
     }
 
     /**
-     * Helper function which checks if no more variant of the passed article id
-     * has stock.
-     *
-     * @param int $articleId Id of the article
-     * @return bool
-     */
-    private function isArticleOutOfStock($articleId)
-    {
-        $stock = $this->db->fetchOne(
-            'SELECT MAX(instock) as max_instock
-            FROM s_articles_details
-            WHERE articleID = ?',
-            array($articleId)
-        );
-        $stock = (int)$stock;
-
-        return ($stock <= 0);
-    }
-
-    /**
      * Helper function which returns the attributes
      * of the passed order id.
      *
