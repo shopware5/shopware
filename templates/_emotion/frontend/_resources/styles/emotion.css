@@ -3369,22 +3369,10 @@ div.blogFilter ul li.close a {padding-left: 30px; font-weight: bold;}
 	/** CSS3 **/
 	border-radius: 0;
 }
-.ctl_checkout .more_info,
-.ctl_checkout .confirm_accept,
-.ctl_checkout .agb_info,
-.ctl_checkout .agb_accept {
-    position: absolute;
-    z-index: 1;
-    left: 40px;
-    top: 70px;
-}
-.ctl_checkout .agb_info {top: 130px;}
-.ctl_checkout .confirm_accept {top: 52px; font-weight: bold; color: #000;}
-
+.ctl_checkout .confirm_accept { font-weight: bold; line-height: 22px; }
 .ctl_checkout .confirm_accept a {text-decoration: underline !important;}
 .ctl_checkout .confirm_accept a:hover {color: #e1540f;}
 
-.ctl_checkout .more_info {top: 90px;}
 .ctl_checkout .more_info label,
 .ctl_checkout .more_info input {float: left;}
 .ctl_checkout .more_info label {margin-top: 6px; margin-left: 5px;}
@@ -3396,10 +3384,6 @@ div.blogFilter ul li.close a {padding-left: 30px; font-weight: bold;}
     color: #E1540F;
     height: 30px;
     line-height: 20px;
-}
-
-#confirm .agb_cancelation  {
-	height: 160px;
 }
 
 /*	iPad related styles (landscape and portrait)

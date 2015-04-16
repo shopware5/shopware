@@ -373,7 +373,6 @@ a.searchthumb {
 }
 
 /** AGB and Cancelation */
-.agb_cancelation .inner_container {min-height: 80px;}
 .agb_cancelation .inner_container .revocation {
 	padding: 0 10px;
 	line-height: 16px;
@@ -576,21 +575,46 @@ a.searchthumb {
 .ctl_checkout #content .newsletter-holder {
     height: 22px;
 }
-.ctl_checkout .agb_accept {
-    position: absolute;
-    z-index: 1;
-    left: 16px;
-    top: 67px;
+.ctl_checkout .agb_info {
+    height: auto;
+    margin-top: 15px;
 }
-.ctl_checkout .more_info {
-    border: 0 none;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    z-index: 1;
-    left: 16px;
-    top: 95px;
+.agb_cancelation .inner_container {
+    position: relative;
 }
+.positioned_wrapper {
+    position: absolute;
+    left: 36px;
+    top: 43px;
+}
+.positioned_with_revocation {
+    top: 63px;
+}
+.positioned_revocation {
+    position: absolute;
+    left: 40px;
+    top: 8px;
+}
+.positioned_revocation p {
+    margin-bottom: 0;
+}
+.positioned_spacer {
+    height: 22px;
+}
+.positioned_agb .chklabel,
+.positioned_service_article .chklabel,
+.positioned_esd_article .chklabel,
+.positioned_info .chklabel {
+    line-height: 22px;
+}
+.positioned_agb input[type=checkbox],
+.positioned_service_article input[type=checkbox],
+.positioned_esd_article input[type=checkbox],
+.positioned_info input[type=checkbox] {
+    margin-right: 6px;
+    top: 1px;
+}
+
 /** Table styling */
 #confirm .table_row a.thumb_image,
 #confirm .table .table_row .basket_details {

@@ -68,23 +68,32 @@
 
             <div class="inner_container">
 
-                {* Display the right of cancelation *}
-                {if {config name=revocationnotice}}
-                    <div class="confirm_accept modal_open">
-                        {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
-                    </div>
-                {/if}
+				{if {config name=revocationnotice}}
+					<div class="positioned_spacer"></div>
+					<div class="confirm_accept positioned_revocation modal_open">
+						{s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
+					</div>
+				{/if}
 
-                {* AGB checkbox *}
-                {block name='frontend_checkout_confirm_agb'}
-                {/block}
+				{block name='frontend_checkout_confirm_agb'}
+					{if !{config name='IgnoreAGB'}}
+						<div class="positioned_spacer"></div>
+					{/if}
+				{/block}
 
-                {* Newsletter registration *}
-                {block name='frontend_checkout_confirm_newsletter'}
-                    {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
-                        <div class="clear"></div>
-                    {/if}
-                {/block}
+				{block name='frontend_checkout_confirm_newsletter'}
+					{if !$sUserData.additional.user.newsletter && {config name=newsletter}}
+						<div class="positioned_spacer"></div>
+					{/if}
+				{/block}
+
+				{if $hasEsdArticles}
+					<div class="positioned_spacer"></div>
+				{/if}
+
+				{if $hasServiceArticles}
+					<div class="positioned_spacer"></div>
+				{/if}
 
                 {if {config name=additionalfreetext}}
                     <div class="agb_info">
@@ -102,7 +111,7 @@
             </h2>
 
             <div class="inner_container">
-                {if {config name=additionalfreetext}}
+                {if {config name=bankConnection}}
                     <p>
                         {s name="ConfirmInfoChange"}{/s}<br/>
                         {s name="ConfirmInfoPaymentData"}{/s}
@@ -364,30 +373,27 @@
                         {/if}
                         <div class="clear">&nbsp;</div>
                     {/block}
-                {block name='frontend_checkout_confirm_agb_checkbox'}
-                <div class="agb_accept">
-                    {if !{config name='IgnoreAGB'}}
-                    	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
-                    {/if}
 
-					{* Additional hidden input for IE11 fix empty post body *}
-					<input type="hidden" name="ieCheckValue" value="42" />
-                    <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
-                </div>
-                {/block}
+					<div class="positioned_wrapper{if {config name=revocationnotice}} positioned_with_revocation{/if}">
 
-                {block name="frontend_index_header_css_screen" append}
-                    {if $hasMixedArticles}
-                        <link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/mixed.css'}" />
-                    {else}
-                        <link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/confirm.css'}" />
-                    {/if}
-                {/block}
+					{block name='frontend_checkout_confirm_agb_checkbox'}
+						<div class="positioned_agb">
+							{if !{config name='IgnoreAGB'}}
+								<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
+							{/if}
+
+							{* Additional hidden input for IE11 fix empty post body *}
+							<input type="hidden" name="ieCheckValue" value="42" />
+							<label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
+
+							<div class="clear"></div>
+						</div>
+					{/block}
 
                 {block name='frontend_checkout_confirm_service_esd'}
                 {if $hasServiceArticles}
                     {block name='frontend_checkout_confirm_service'}
-                    <div class="agb_accept service_article">
+                    <div class="positioned_service_article">
 
                         {* Service checkbox *}
                         {block name='frontend_checkout_confirm_service_checkbox'}
@@ -400,13 +406,15 @@
                             {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_service_message"}Ja, bitte beginnen Sie sofort mit der Dienstleistung. Mein Widerrufsrecht erlischt mit vollständiger Ausführung.{/s}
                         </label>
                         {/block}
+
+						<div class="clear"></div>
                     </div>
                     {/block}
                 {/if}
 
                 {if $hasEsdArticles}
                     {block name='frontend_checkout_confirm_esd'}
-                    <div class="agb_accept esd_article"{if $hasServiceArticles} style="top: 90px !important;"{/if}>
+                    <div class="positioned_esd_article">
 
                         {* ESD checkbox *}
                         {block name='frontend_checkout_confirm_esd_checkbox'}
@@ -419,21 +427,23 @@
                             {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_esd_message"}Ja, ich möchte sofort Zugang zu dem digitalen Inhalt und weiß, dass mein Widerrufsrecht mit dem Zugang erlischt.{/s}
                         </label>
                         {/block}
+
+						<div class="clear"></div>
                     </div>
                     {/block}
                 {/if}
                 {/block}
 
                 {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
-                    <div class="more_info">
-                        <p>
-                            <input type="checkbox" name="sNewsletter" value="1" class="chkbox"{if $sNewsletter} checked="checked"{/if} />
-                            <label for="sNewsletter" class="chklabel">
-                                {s name="ConfirmLabelNewsletter"}{/s}
-                            </label>
-                        </p>
+                    <div class="positioned_info">
+						<input type="checkbox" class="left" name="sNewsletter" id="sNewsletter" value="1" class="chkbox"{if $sNewsletter} checked="checked"{/if} />
+						<label for="sNewsletter" class="chklabel">
+							{s name="ConfirmLabelNewsletter"}{/s}
+						</label>
+						<div class="clear"></div>
                     </div>
                 {/if}
+			</div>
             </form>
         </div>
 	</div>
