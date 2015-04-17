@@ -323,7 +323,7 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        return $timestamp . '_' . 'theme' . $shop->getId() . '.' . $suffix;
+        return $timestamp . '_' . 't' . $shop->getTemplate()->getId() . '_s' . $shop->getId() . '.' . $suffix;
     }
 
     /**
