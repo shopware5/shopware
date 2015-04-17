@@ -615,8 +615,8 @@
                 me._on($slide, 'MSHoldVisual', killEvent);
                 me._on($slide, 'click', $.proxy(me.onClick, me));
 
-                if (!opts.preventScrolling && ('ontouchstart' in window)) {
-                    me._on($slide, 'movestart', function(e) {
+                if (!opts.preventScrolling && ('ontouchstart' in window || navigator.msMaxTouchPoints)) {
+                    me._on($slide, 'movestart', function (e) {
                         // Allows the normal up and down scrolling from the browser
                         if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
                             me._lockSlide = true;
