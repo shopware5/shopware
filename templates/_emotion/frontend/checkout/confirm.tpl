@@ -397,7 +397,7 @@
                         {* Service label *}
                         {block name='frontend_checkout_confirm_service_label'}
                         <label for="serviceAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.serviceError} instyle_error{/if}">
-                            {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_service_message"}Ja, bitte beginnen Sie sofort mit der Dienstleistung. Mein Widerrufsrecht erlischt mit vollständiger Ausführung.{/s}
+                            {s namespace="frontend/checkout/confirm" name="AcceptServiceMessage"}I agree to the starting of the service and I acknowledge that I lose my right to cancel once the service has been fully performed.{/s}
                         </label>
                         {/block}
                     </div>
@@ -416,7 +416,7 @@
                         {* ESD label *}
                         {block name='frontend_checkout_confirm_esd_label'}
                         <label for="esdAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.esdError} instyle_error{/if}">
-                            {s namespace="frontend/swag_consumer_rights_directive/checkout/confirm" name="accept_esd_message"}Ja, ich möchte sofort Zugang zu dem digitalen Inhalt und weiß, dass mein Widerrufsrecht mit dem Zugang erlischt.{/s}
+                            {s namespace="frontend/checkout/confirm" name="AcceptEsdMessage"}I want immediate access to the digital content and I acknowledge that thereby I lose my right to cancel once the service has begun.{/s}
                         </label>
                         {/block}
                     </div>
