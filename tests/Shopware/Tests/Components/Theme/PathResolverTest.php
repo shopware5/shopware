@@ -22,18 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Class Shopware_Tests_Components_PathResolverTest
- */
+use Shopware\Components\Theme\PathResolver;
+
 class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Components_Theme_Base
 {
     /**
-     * @var \Shopware\Models\Shop\Repository
-     */
-    private $shopRepo;
-
-    /**
-     * @var \Shopware\Components\Theme\PathResolver
+     * @var PathResolver
      */
     private $pathResolver;
 
@@ -41,37 +35,76 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
     {
         parent::setUp();
 
-        $this->shopRepo = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-
-        $this->pathResolver = Shopware()->Container()->get('theme_path_resolver');
+        $this->pathResolver = new PathResolver(
+            '/my/root/dir',
+            $this->createTemplateManagerMock()
+        );
     }
-
 
     public function testFiles()
     {
-        $shops = $this->shopRepo->findAll();
-
         $timestamp = '200000';
-        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+        $templateId = 5;
+        $shopId = 4;
 
-        /**@var $shop \Shopware\Models\Shop\Shop*/
-        foreach($shops as $shop) {
+        $templateMock = $this->createTemplateMock($templateId);
+        $shopMock = $this->createShopMock($shopId, $templateMock);
 
-            $id = $shop->getId();
-            if ($shop->getMain()) {
-                $id = $shop->getMain()->getId();
-            }
-            $files = $this->pathResolver->getCssFilePaths($shop, $timestamp);
+        $expected = ['default' => '/my/root/dir/web/cache/' . $timestamp . '_t' . $templateId . '_s' . $shopId . '.css'];
+        $this->assertEquals($expected, $this->pathResolver->getCssFilePaths($shopMock, $timestamp));
 
-            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $id . '.css';
-            $this->assertEquals($expected, $files['default']);
+        $expected = ['default' => '/my/root/dir/web/cache/' . $timestamp . '_t' . $templateId . '_s' . $shopId . '.js'];
+        $this->assertEquals($expected, $this->pathResolver->getJsFilePaths($shopMock, $timestamp));
+    }
 
+    /**
+     * @return \Enlight_Template_Manager
+     */
+    private function createTemplateManagerMock()
+    {
+        $templateManager = $this->getMockBuilder('Enlight_Template_Manager')
+                                ->disableOriginalConstructor()
+                                ->getMock();
 
-            //js file name test
-            $files = $this->pathResolver->getJsFilePaths($shop, $timestamp);
+        return $templateManager;
+    }
 
-            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $id . '.js';
-            $this->assertEquals($expected, $files['default']);
-        }
+    /**
+     * @param int $templateId
+     * @return \Shopware\Models\Shop\Template
+     */
+    private function createTemplateMock($templateId)
+    {
+        $templateStub = $this->getMockBuilder('Shopware\Models\Shop\Template')
+                             ->disableOriginalConstructor()
+                             ->getMock();
+
+        $templateStub->method('getId')
+                     ->willReturn($templateId);
+
+        return $templateStub;
+    }
+
+    /**
+     * @param int $shopId
+     * @param \Shopware\Models\Shop\Template $templateStub
+     * @return \Shopware\Models\Shop\Shop
+     */
+    private function createShopMock($shopId, $templateStub)
+    {
+        $stub = $this->getMockBuilder('Shopware\Models\Shop\Shop')
+                     ->disableOriginalConstructor()
+                     ->getMock();
+
+        $stub->method('getMain')
+            ->willReturn(null);
+
+        $stub->method('getId')
+             ->willReturn($shopId);
+
+        $stub->method('getTemplate')
+             ->willReturn($templateStub);
+
+        return $stub;
     }
 }
