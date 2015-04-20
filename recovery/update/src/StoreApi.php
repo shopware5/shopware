@@ -107,7 +107,7 @@ class StoreApi
             'arg2'   => json_encode($requestPayload)
         ];
 
-        $queryParams = http_build_query($queryParams);
+        $queryParams = http_build_query($queryParams, null, '&');
 
         $url = $this->baseUrl . "?" . $queryParams;
 

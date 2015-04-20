@@ -244,7 +244,7 @@ class StoreClient
     {
         $url = $this->apiEndPoint . $resource;
         if (!empty($params)) {
-            $url .= '?' . http_build_query($params);
+            $url .= '?' . http_build_query($params, null, '&');
         }
 
         $header = [];
