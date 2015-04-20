@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     alias: 'widget.first-run-wizard',
     layout: 'border',
 
-    minHeight: 750,
+    height: '90%',
 
     width: 900,
 
