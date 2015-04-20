@@ -201,16 +201,12 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     private function removePartOfUrl($requestUri, $url)
     {
-        $decode = urldecode($url);
-        $encode = urlencode($decode);
-
+        $temp = rtrim($url, '/') . '/';
         switch (true) {
-            case (strpos($requestUri, $url) === 0):
+            case (strpos($requestUri, $temp) === 0):
                 return substr($requestUri, strlen($url));
-            case (strpos($requestUri, $decode) === 0):
-                return substr($requestUri, strlen($decode));
-            case (strpos($requestUri, $encode) === 0):
-                return substr($requestUri, strlen($encode));
+            case ($requestUri == $url):
+                return substr($requestUri, strlen($url));
             default:
                 return $requestUri;
         }
