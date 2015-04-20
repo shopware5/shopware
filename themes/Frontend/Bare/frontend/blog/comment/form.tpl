@@ -32,7 +32,7 @@
             </div>
         {/block}
 
-		<form method="post" class="comment--collapse-target{if $sErrorFlag} collapse--soft-show{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}">
+		<form method="post" class="comment--collapse-target{if $sErrorFlag} collapse--soft-show{/if}" action="{url controller=blog action=rating blogArticle=$sArticle.id}#blog--comments-start">
 
             <div class="form--comment-add">
 

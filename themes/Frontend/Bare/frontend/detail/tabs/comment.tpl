@@ -12,7 +12,7 @@
     </div>
 {/block}
 
-<div class="content--product-reviews">
+<div class="content--product-reviews" id="detail--product-reviews">
 
 	{* Response save comment *}
 	{if $sAction == "ratingAction"}
