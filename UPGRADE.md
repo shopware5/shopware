@@ -5,6 +5,7 @@ In this document you will find a changelog of the important changes related to t
 * \Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPriceConditionHandler now joins the prices as a 1:1 association for a performance improvement.
 * sCategories::sGetCategoryContent function returns no more the category articleCount. Variable is unused.
 * sCategories::sGetCategoryIdByArticleId function use now the s_articles_categories table.
+* Add __redirect parameter in frontend language switcher. Each language switcher requires now an additionally post parameter to redirect to the new shop `<input type="hidden" name="__redirect" value="1">`
 
 ## 5.0.0 RC2
 * SEO URL generation variable "statistic" has been translated and corrected to "static"
