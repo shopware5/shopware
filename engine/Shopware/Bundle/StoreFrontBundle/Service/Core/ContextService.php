@@ -37,6 +37,8 @@ use Shopware\Models;
  */
 class ContextService implements Service\ContextServiceInterface
 {
+    const FALLBACK_CUSTOMER_GROUP = "EK";
+
     /**
      * @var Container
      */
@@ -171,13 +173,13 @@ class ContextService implements Service\ContextServiceInterface
         /**@var $shop Models\Shop\Shop */
         $shop = $this->container->get('shop');
 
-        $fallback = $shop->getCustomerGroup()->getKey();
-
         if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
             $key = $session->offsetGet('sUserGroup');
         } else {
-            $key = $fallback;
+            $key = $shop->getCustomerGroup()->getKey();
         }
+
+        $fallback = self::FALLBACK_CUSTOMER_GROUP;
 
         $groups = $this->customerGroupGateway->getList([$key, $fallback]);
 
