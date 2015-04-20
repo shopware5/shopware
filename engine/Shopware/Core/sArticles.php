@@ -889,7 +889,7 @@ class sArticles
             ]
         );
 
-        $queryPrams = http_build_query($params);
+        $queryPrams = http_build_query($params, null, '&');
         $listingLink = $this->config->get('sBASEFILE') . "?" . $queryPrams;
 
         return $listingLink;
