@@ -29,7 +29,7 @@
             <link itemprop="availability" href="http://schema.org/InStock" />
 			<p class="delivery--information">
 				<span class="delivery--text delivery--text-available">
-                    <i class="delivery--status-icon delivery--status-available">;</i>
+                    <i class="delivery--status-icon delivery--status-available"></i>
 					{s name="DetailDataInfoInstantDownload"}{/s}
 				</span>
 			</p>
