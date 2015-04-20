@@ -15,6 +15,8 @@
                                 </option>
                             {/foreach}
                         </select>
+                        <input type="hidden" name="__redirect" value="1">
+                        {block name="frontend_index_actions_active_shop_inline"}{/block}
                         <span class="arrow"></span>
                     </div>
                 </form>
