@@ -30,6 +30,7 @@
                     </option>
                 {/foreach}
             </select>
+            <input type="hidden" name="__redirect" value="1">
         </form>
     {/if}
 </div>
