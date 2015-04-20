@@ -444,7 +444,7 @@ class Context implements \JsonSerializable
         $this->setBaseUrl($request->getBaseUrl());
         $this->setSecure($request->isSecure());
         $this->setGlobalParams(self::getGlobalParamsFromRequest($request));
-        $this->setParams($request->getParams());
+        $this->setParams($request->getQuery());
     }
 
     /**
