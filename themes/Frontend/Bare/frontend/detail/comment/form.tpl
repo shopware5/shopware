@@ -16,7 +16,7 @@
 
 {* Publish review form *}
 {block name='frontend_detail_comment_post_form'}
-	<form method="post" action="{url action='rating' sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="content--form review--form">
+	<form method="post" action="{url action='rating' sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}#detail--product-reviews" class="content--form review--form">
 
 		{* Review author name *}
 		{block name='frontend_detail_comment_input_name'}

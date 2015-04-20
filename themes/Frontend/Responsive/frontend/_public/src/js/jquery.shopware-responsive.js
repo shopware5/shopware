@@ -143,37 +143,8 @@ $(function () {
         $next[method]('is--hidden');
     });
 
-    // Change the active tab to the customer reviews, if the url param sAction === rating is set.
-    if ($('.is--ctl-detail').length) {
-        var tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu'),
-            $tabMenuCrossSelling = $('.tab-menu--cross-selling'),
-            $container;
-
-        $('.product--rating-link, .link--publish-comment').on('click touchstart', function (event) {
-            event.preventDefault();
-
-            tabMenuProduct = $('.tab-menu--product').data('plugin_tabMenu');
-
-            if (tabMenuProduct) {
-                tabMenuProduct.changeTab(1);
-            }
-        });
-
-        var param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]);
-        if (param === 'rating' && tabMenuProduct) {
-            tabMenuProduct.changeTab(1);
-        }
-
-        if (StateManager.isCurrentState(['xs', 's']) && $tabMenuCrossSelling.length) {
-            $tabMenuCrossSelling.find('.tab--container').each(function (i, el) {
-                $container = $(el);
-
-                if ($container.find('.tab--content').html().length) {
-                    $container.addClass('has--content');
-                }
-            });
-        }
-    }
+    // Change the active tab to the customer reviews
+    $('.is--ctl-detail, .is--ctl-blog').tabSwitcher();
 
     $('*[data-ajax-shipping-payment="true"]').shippingPayment();
 

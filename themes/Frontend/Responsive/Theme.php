@@ -96,7 +96,8 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.preloader-button.js',
         'src/js/jquery.image-gallery.js',
         'src/js/jquery.offcanvas-html-panel.js',
-        'src/js/jquery.shopware-responsive.js'
+        'src/js/jquery.shopware-responsive.js',
+        'src/js/jquery.tab-switcher.js'
     ];
 
     private $fieldSetDefaults = [
