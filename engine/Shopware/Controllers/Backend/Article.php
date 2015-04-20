@@ -4318,8 +4318,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             array(
                 'module' => 'frontend',
                 'controller' => 'detail',
-                'sArticle' => $articleId,
-                'appendSession' => true
+                'sArticle' => $articleId
             )
         );
 

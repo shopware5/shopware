@@ -296,12 +296,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     'shop.basePath as basePath',
                     'shop.baseUrl as baseUrl',
                     'shop.default as default',
-                    'IFNULL(main.default, shop.default) as orderValue1',
-                    'IFNULL(main.name, shop.name) as orderValue2'
+                    'IFNULL(shop.mainId, shop.id) as orderValue0',
+                    'IFNULL(main.default, shop.default) as orderValue1'
                 ));
-                $builder->orderBy('orderValue1', 'DESC');
-                $builder->orderBy('orderValue2');
-                $builder->orderBy('name');
+                $builder->addOrderBy('orderValue1', 'DESC');
+                $builder->addOrderBy('orderValue0', 'ASC');
+                $builder->addOrderBy('shop.host', 'DESC');
+                $builder->addOrderBy('name');
                 break;
             case 'pageGroup':
                 $builder->leftJoin('pageGroup.mapping', 'mapping');
