@@ -32,9 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class LocationContext
-    extends Extendable
-    implements LocationContextInterface, \JsonSerializable
+class LocationContext extends Extendable implements LocationContextInterface, \JsonSerializable
 {
     /**
      * @var Area

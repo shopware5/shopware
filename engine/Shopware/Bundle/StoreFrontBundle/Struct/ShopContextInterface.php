@@ -32,24 +32,44 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 interface ShopContextInterface
 {
     /**
-     * Returns the current active shop of the context.
-     * The shop id is used as translation identifier.
+     * Contains the current shop object of the store front.
+     * The shop is used to build links or to select the
+     * resource translations.
      *
      * @return Shop
      */
     public function getShop();
 
     /**
+     * Contains the currency of the store front.
+     * This struct is required for the price calculation.
+     *
+     * For example, the shop prices are defined in Euro,
+     * the current store front displays Dollars.
+     * The currency is required to calculate the Dollar
+     * value of 100,- Euro.
+     *
      * @return Currency
      */
     public function getCurrency();
 
     /**
+     * Contains the current customer group for the store front.
+     * If the customer isn't logged in, the current customer group
+     * is equal to the fallback customer group of the shop.
+     *
+     *
      * @return Customer\Group
      */
     public function getCurrentCustomerGroup();
 
     /**
+     * Contains the fallback customer group for the current shop.
+     * This customer group is required for price selections.
+     * If the customer group of the logged in customer has no
+     * own defined product prices, the prices of the fallback customer
+     * group are displayed.
+     *
      * @return Customer\Group
      */
     public function getFallbackCustomerGroup();
