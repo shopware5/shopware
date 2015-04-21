@@ -169,6 +169,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         //if the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
             $view->extendsTemplate(
                 'backend/order/payment_methods/controller/detail.js'
             );
@@ -190,6 +191,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         //if the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
+
             $view->extendsTemplate(
                 'backend/customer/payment_methods/controller/detail.js'
             );
