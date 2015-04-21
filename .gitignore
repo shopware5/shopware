@@ -31,8 +31,11 @@ Thumbs.db
 /engine/Shopware/Configs/Custom.php
 
 # Caches/Proxies
-/tests/Shopware/TempFiles/
-/cache/
+/tests/Shopware/TempFiles/*
+!/tests/Shopware/TempFiles/.gitkeep
+/cache/*
+!/cache/.htaccess
+!/cache/clear_cache.sh
 
 # Log files
 /logs/
@@ -51,3 +54,6 @@ Thumbs.db
 
 # Snippet exports
 /snippetsExport/
+
+# ignore no .gitkeeps
+!**/.gitkeep
