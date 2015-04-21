@@ -301,6 +301,10 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 		white-space: nowrap;
 		overflow: hidden;
 	}
+
+    .image-slider--dots {
+        display: none;
+    }
 }
 
     // Product-Slider element
@@ -670,4 +674,37 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 	height: 100%;
 	position: relative;
 	overflow: hidden;
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .emotion--banner-slider {
+        .image-slider--dots {
+            .unitize(bottom, 10);
+            top: auto;
+            left: 0;
+            display: block;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            padding: 0;
+
+            .dot--link {
+                .border-radius(100%);
+                .unitize-margin(0, 2);
+                .unitize-width(20);
+                .unitize-height(20);
+                .transition(all .3s ease);
+                background: darken(@brand-secondary, 15%);
+                display: inline-block;
+                border: 5px solid rgba(255, 255, 255, .5);
+                cursor: pointer;
+                text-indent: -99999em;
+
+                &.is--active {
+                    background: @brand-primary;
+                }
+            }
+        }
+    }
 }
