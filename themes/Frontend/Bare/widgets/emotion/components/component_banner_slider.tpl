@@ -87,6 +87,16 @@
                         {/foreach}
                     </div>
                 {/block}
+
+                {block name="frontend_widgets_banner_slider_navigation"}
+                    {if $Data.banner_slider_numbers}
+                        <div class="image-slider--dots">
+                            {foreach $Data.values as $link}
+                                <div class="dot--link">{$link@iteration}</div>
+                            {/foreach}
+                        </div>
+                    {/if}
+                {/block}
             </div>
         {/block}
     </div>
