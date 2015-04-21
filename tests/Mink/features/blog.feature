@@ -40,7 +40,7 @@ Feature: Blog
         | Sonnenschutz - so gehören Sie zur Crème de la Crème |
         | Ich packe meinen Koffer                             |
 
-    @captchaInactive
+    @captchaInactive @comments
     Scenario: I can write a comment
         Given I follow "Der Sommer wird bunt"
         Then  I should see "Kommentar schreiben"
@@ -52,13 +52,10 @@ Feature: Blog
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
             | sCaptcha | 123456          |
-        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser eMail um die Bewertung freizugeben."
-        But   I should not see "Hallo Welt"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         But   I should not see "Hallo Welt"
 
-        When  the shop owner activate my latest comment
+        When  the shop owner activates my latest comment
         Then  I should see "Hallo Welt"

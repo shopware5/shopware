@@ -1,7 +1,7 @@
 @detail
 Feature: detail page
 
-    @captchaInactive
+    @captchaInactive @evaluations
     Scenario: I can see evaluations
         Given I am on the detail page for article 198
 
@@ -51,7 +51,7 @@ Feature: detail page
         When  I select "Deutsch" from "__shop"
         Then  I should see "Magnete London"
 
-    @captchaInactive
+    @captchaInactive @evaluations
     Scenario: I can write an evaluation
         Given I am on the detail page for article 100
         Then  I should see "Bewertungen"

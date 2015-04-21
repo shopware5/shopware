@@ -147,6 +147,11 @@ class ShopwareContext extends SubContext
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
         $query = parse_url($link, PHP_URL_QUERY);
+        $anchor = strpos($link, "#");
+
+        if($anchor) {
+            $link = substr($link, 0, $anchor);
+        }
 
         //Blogartikel-Bewertung
         if(empty($query)) {
