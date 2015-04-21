@@ -47,12 +47,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
     name:'shopware-id',
 
     /**
-     * Layout type for the component.
-     * @string
-     */
-    layout: 'vbox',
-
-    /**
      * Contains all snippets for the view component
      * @object
      */
@@ -208,7 +202,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
 
         me.newRegistrationPasswordField = Ext.create('Ext.form.field.Text', {
             name:'password',
-            anchor: '92%',
             inputType:'password',
             allowBlank: false,
             required: true,
@@ -229,7 +222,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         me.newRegistrationPasswordConfirmationField = Ext.create('Ext.form.field.Text', {
             name:'passwordConfirmation',
             inputType:'password',
-            anchor: '95%',
             allowBlank: false,
             required: true,
             fieldLabel:me.snippets.newRegistrationForm.confirmPassword,
@@ -291,14 +283,16 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             me.newRegistrationPasswordConfirmationField,
             me.newRegistrationEmail,
             me.newRegistrationRegisterDomain,
-            me.newRegistrationSendButton
+            { xtype: 'container', items: me.newRegistrationSendButton }
         ];
 
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.newRegistrationForm.title,
             cls: Ext.baseCSSPrefix + 'base-field-set',
+            width: 405,
+            layout: 'anchor',
             defaults:{
-                minWidth: 350,
+                anchor: '100%',
                 xtype:'textfield'
             },
             items: me.newRegistrationFormItems
@@ -325,7 +319,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
 
         me.existingAccountPasswordField = Ext.create('Ext.form.field.Text', {
             name:'password',
-            anchor: '92%',
             inputType:'password',
             allowBlank: false,
             required: true,
@@ -348,7 +341,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
         me.existingAccountSendButton = Ext.create('Ext.Button', {
             text: me.snippets.existingAccountForm.registerButton,
             cls: 'primary',
-            minWidth: 150,
+            width: 150,
             style: {
                 float: 'right'
             },
@@ -367,16 +360,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
             me.existingAccountShopwareId,
             me.existingAccountPasswordField,
             me.existingAccountRegisterDomain,
-            me.existingAccountSendButton,
+            { xtype: 'container', items: me.existingAccountSendButton },
             me.existingAccountForgotPassword
         ];
 
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.existingAccountForm.title,
             cls: Ext.baseCSSPrefix + 'base-field-set',
+            width: 405,
+            layout: 'anchor',
             defaults:{
-                anchor:'95%',
-                minWidth:350,
+                anchor: '100%',
                 xtype:'textfield'
             },
             items: me.existingAccountFormItems
