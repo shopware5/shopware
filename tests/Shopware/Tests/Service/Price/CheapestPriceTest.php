@@ -118,7 +118,7 @@ class CheapestPriceTest extends TestCase
          */
         $this->assertEquals(15, $cheapestPrice->getCalculatedPrice());
         $this->assertEquals(18, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(30, $cheapestPrice->getCalculatedReferencePrice());
+        $this->assertEquals(10, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithMinPurchaseAndCloseout()
