@@ -189,14 +189,16 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $config = $this->Config();
-        $view = $args->getSubject()->View();
-        $parent = Shopware()->Shop()->get('parentID');
 
-        if (empty($config->show) && $config->show !== null) {
+        if (!$config->show) {
             return;
         }
 
-        $menu = $this->getAdvancedMenu($parent, (int) $config->levels);
+        $view = $args->getSubject()->View();
+        $parent = Shopware()->Shop()->get('parentID');
+        $categoryId = $args->getRequest()->getParam('sCategory', $parent);
+
+        $menu = $this->getAdvancedMenu($parent, $categoryId, (int) $config->levels);
 
         $view->assign('sAdvancedMenu', $menu);
 
@@ -210,10 +212,11 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      * Returns the complete menu with category path.
      *
      * @param int $category
+     * @param int $categoryId
      * @param int $depth
      * @return array
      */
-    public function getAdvancedMenu($category, $depth = null)
+    public function getAdvancedMenu($category, $categoryId, $depth = null)
     {
         $context  = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . Shopware()->System()->sUSERGROUPDATA['id'];
@@ -226,6 +229,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $ids = $this->getCategoryIdsOfDepth($category, $depth);
         $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
         $categoriesArray = $this->convertCategories($categories);
+        $categoryPath = Shopware()->Modules()->Categories()->sGetCategoryPath($categoryId, $category);
+        $categoriesArray = $this->setActiveCategoriesFlag($categoriesArray, $categoryPath);
         $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
 
         if ($this->Config()->get('caching')) {
@@ -292,8 +297,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'cmsText' => $category->getCmsText(),
                 'position' => $category->getPosition(),
                 'link' => 'shopware.php?sViewport=cat&sCategory=' . $category->getId(),
-                'media' => null
+                'media' => null,
+                'flag' => false
             ];
+
+            if ($category->isBlog()) {
+                $data['link'] = 'shopware.php?sViewport=blog&sCategory=' . $category->getId();
+            }
 
             if ($category->getMedia()) {
                 $data['media'] = $converter->convertMediaStruct($category->getMedia());
@@ -302,5 +312,19 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
             return $data;
         }, $categories);
+    }
+
+    /**
+     * @param array $categories
+     * @param array $path
+     * @return array
+     */
+    private function setActiveCategoriesFlag($categories, $path)
+    {
+        foreach ($path as $categoryId) {
+            $categories[$categoryId]['flag'] = true;
+        }
+
+        return $categories;
     }
 }
