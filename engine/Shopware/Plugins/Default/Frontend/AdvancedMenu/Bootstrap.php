@@ -212,34 +212,79 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      * Returns the complete menu with category path.
      *
      * @param int $category
-     * @param int $categoryId
+     * @param int $activeCategoryId
      * @param int $depth
      * @return array
      */
-    public function getAdvancedMenu($category, $categoryId, $depth = null)
+    public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context  = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . Shopware()->System()->sUSERGROUPDATA['id'];
         $cache    = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
-            return $cache->load($cacheKey);
+            $menu = $cache->load($cacheKey);
+        } else {
+            $ids = $this->getCategoryIdsOfDepth($category, $depth);
+            $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
+            $categoriesArray = $this->convertCategories($categories);
+            $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
+            if ($this->Config()->get('caching')) {
+                $cache->save($categoryTree, $cacheKey, ['Shopware_Plugin'], (int) $this->Config()->get('cachetime', 86400));
+            }
+            $menu = $categoryTree;
         }
 
-        $ids = $this->getCategoryIdsOfDepth($category, $depth);
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
-        $categoriesArray = $this->convertCategories($categories);
-        $categoryPath = Shopware()->Modules()->Categories()->sGetCategoryPath($categoryId, $category);
-        $categoriesArray = $this->setActiveCategoriesFlag($categoriesArray, $categoryPath);
-        $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
-
-        if ($this->Config()->get('caching')) {
-            $cache->save($categoryTree, $cacheKey, ['Shopware_Plugin'], (int) $this->Config()->get('cachetime', 86400));
-        }
-
-        return $categoryTree;
+        $categoryPath = $this->getCategoryPath($activeCategoryId);
+        $menu = $this->setActiveFlags($menu, $categoryPath);
+        return $menu;
     }
 
+    /**
+     * @param array[] $categories
+     * @param int[] $actives
+     * @return array[]
+     */
+    private function setActiveFlags($categories, $actives)
+    {
+        foreach ($categories as &$category) {
+            $category['flag'] = in_array($category['id'], $actives);
+
+            if (!empty($category['sub'])) {
+                $category['sub'] = $this->setActiveFlags($category['sub'], $actives);
+            }
+        }
+        return $categories;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return int[]
+     * @throws Exception
+     */
+    private function getCategoryPath($categoryId)
+    {
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $query->select('category.path')
+            ->from('s_categories', 'category')
+            ->where('category.id = :id')
+            ->setParameter(':id', $categoryId);
+
+        $path = $query->execute()->fetch(PDO::FETCH_COLUMN);
+        $path = explode('|', $path);
+        $path = array_filter($path);
+        $path[] = $categoryId;
+
+        return $path;
+    }
+
+    /**
+     * @param int $parentId
+     * @param int $depth
+     * @return int[]
+     * @throws Exception
+     */
     private function getCategoryIdsOfDepth($parentId, $depth)
     {
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
