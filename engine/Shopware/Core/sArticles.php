@@ -1188,27 +1188,30 @@ class sArticles
             $number = $this->productNumberService->getMainProductNumberById($id);
         }
 
+        $context = $this->contextService->getProductContext();
+
         /**
          * Checks which product number should be loaded. If a configuration passed.
          */
         $productNumber = $this->productNumberService->getAvailableNumber(
             $number,
+            $context,
             $selection
         );
 
-        $context = $this->contextService->getProductContext();
-        $product = $this->productService->get(
-            $productNumber,
-            $context
-        );
+        if (!$productNumber) {
+            return [];
+        }
+
+        $product = $this->productService->get($productNumber, $context);
 
         $hideNoInstock = $this->config->get('hideNoInstock');
         if ($hideNoInstock && !$product->isAvailable()) {
-            return array();
+            return [];
         }
 
         if (!$product) {
-            return array();
+            return [];
         }
 
         if ($product->hasConfigurator()) {
