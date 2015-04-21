@@ -92,7 +92,12 @@ class LegacyStructConverter
     {
         $media = null;
         if ($category->getMedia()) {
-            $media = $this->convertMediaStruct($media);
+            $media = $this->convertMediaStruct($category->getMedia());
+        }
+
+        $attribute = [];
+        if ($category->hasAttribute('core')) {
+            $attribute = $category->getAttribute('core')->toArray();
         }
 
         return [
@@ -116,7 +121,7 @@ class LegacyStructConverter
             'noViewSelect' => $category->allowViewSelect(),
             'changed' => null,
             'added' => null,
-            'attribute' => $category->getAttribute('core')->toArray(),
+            'attribute' => $attribute,
             'attributes' => $category->getAttributes(),
             'media' => $media,
             'link' => $this->getCategoryLink($category)
