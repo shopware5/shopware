@@ -102,6 +102,10 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
             $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPrice()
         );
 
+        $cheapestPrice->getUnit()->setPurchaseUnit(
+            $cheapestPrice->getUnit()->getPurchaseUnit() * $cheapestPrice->getUnit()->getMinPurchase()
+        );
+
         $cheapestPrice->setPseudoPrice(
             $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPseudoPrice()
         );
