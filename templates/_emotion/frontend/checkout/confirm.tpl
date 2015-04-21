@@ -102,6 +102,17 @@
                 {/if}
             </div>
         </div>
+
+		{* Bank connection *}
+		{block name='frontend_checkout_bank_connection'}
+			{if {config name=bankConnection}}
+				<div class="bank-connection">
+					{s name="ConfirmInfoChange"}{/s}<br/>
+					{s name="ConfirmInfoPaymentData"}{/s}
+				</div>
+			{/if}
+		{/block}
+
         <div class="space"></div>
 
         {* Personal information *}
@@ -111,12 +122,6 @@
             </h2>
 
             <div class="inner_container">
-                {if {config name=bankConnection}}
-                    <p>
-                        {s name="ConfirmInfoChange"}{/s}<br/>
-                        {s name="ConfirmInfoPaymentData"}{/s}
-                    </p>
-                {/if}
 
                 {* Billing address *}
                 {block name='frontend_checkout_confirm_left_billing_address'}

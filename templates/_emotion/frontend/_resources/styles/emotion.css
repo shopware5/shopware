@@ -3027,8 +3027,13 @@ div.agb_accept input {margin: 3px 0;}
 	padding: 5px 0 0;
 	line-height: 1.6em;
 }
-#confirm .personal-information p {color: #999; margin: 0 0 5px;}
-
+#confirm .bank-connection {
+    color: #999;
+    padding: 0 40px;
+    margin: 0 0 5px;
+    clear: both;
+    float: none;
+}
 
 /** AGB and Cancelation */
 .agb_cancelation .inner_container .revocation {
