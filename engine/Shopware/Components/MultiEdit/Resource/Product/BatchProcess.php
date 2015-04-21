@@ -108,9 +108,14 @@ class BatchProcess
     public function getEditableColumns()
     {
         $columns = $this->getDqlHelper()->getColumnsForProductListing();
-
+        
         foreach ($columns as $key => $config) {
             $attribute = $config['entity'] . '.' . $config['field'];
+
+            if (!$config['editable']) {
+                continue;
+            }
+
             // Do not allow overriding
             if (!isset($columns[$attribute])) {
                 $columns[$attribute] = $config;
@@ -155,7 +160,6 @@ class BatchProcess
                 $attributes[$attribute][] = 'dql';
             }
         }
-        error_log(print_r($attributes, true)."\n", 3, Shopware()->DocPath().'/../error.log');
 
         return $attributes;
     }
