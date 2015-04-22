@@ -9,7 +9,7 @@
      * scrolls to the correct page position where the alert messages
      * are shown.
      */
-    $.plugin('tabSwitcher', {
+    $.plugin('jumpToTab', {
         defaults: {
             contentCls: 'has--content',
             tabDetail: '.tab-menu--product',
