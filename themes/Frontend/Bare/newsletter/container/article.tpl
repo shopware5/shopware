@@ -5,7 +5,6 @@
 <table width="560" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
     <tr>
         <td width="100%">
-
             <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
                 {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
                     {if $sArticle@index%3==0}<tr>{/if}
@@ -16,7 +15,7 @@
                             <tr>
                                 <td height="180" valign="center" style="text-align:center;background-color:#fff;">
                                     <div align="center" style="overflow:hidden;">
-                                        <a target="_blank" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}">
+                                        <a target="_blank" href="{url controller=detail sArticle=$sArticle.articleID}" title="{$sArticle.articleName}">
                                             {if $sArticle.image.source}
                                                 <img src="{$sArticle.image.thumbnails[0].source}" border="0" alt="{$sArticle.articleName|escape|truncate:155}">
                                             {else}
@@ -28,7 +27,7 @@
                             </tr>
                             <tr>
                                 <td valign="top" style="color:#000; font-size:13px; background-color:#fff; height:5px; padding: 8px 10px 5px 10px; font-weight:bold;">
-                                    <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" target="_blank" title="{$sArticle.articleName}" style="color:#000000;text-decoration:underline;font-size:13px;">{$sArticle.articleName|truncate:20:"[..]"}</a>
+                                    <a href="{url controller=detail sArticle=$sArticle.articleID}" target="_blank" title="{$sArticle.articleName}" style="color:#000000;text-decoration:underline;font-size:13px;">{$sArticle.articleName|truncate:20:"[..]"}</a>
                                 </td>
                             </tr>
                             <tr>
