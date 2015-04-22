@@ -18,8 +18,9 @@
 		{block name='frontend_detail_group_selection'}
 			<select name="group[{$sConfigurator.groupID}]" data-auto-submit="true">
 				{foreach $sConfigurator.values as $configValue}
-					<option{if $configValue.selected} selected="selected"{/if} value="{$configValue.optionID}">
-						{$configValue.optionname}{if $configValue.upprice} {if $configValue.upprice > 0}{/if}{/if}
+					<option {if !$configValue.selectable}disabled{/if} {if $configValue.selected && $sConfigurator.user_selected} selected="selected"{/if} value="{$configValue.optionID}">
+						{$configValue.optionname}{if $configValue.upprice && !$configValue.reset} {if $configValue.upprice > 0}{/if}{/if}
+						{if !$configValue.selectable}{s name="DetailConfigValueNotAvailable" namespace="frontend/detail/config_step"}{/s}{/if}
 					</option>
 				{/foreach}
 			</select>
