@@ -75,6 +75,11 @@ class ListProductService implements Service\ListProductServiceInterface
     private $eventManager;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Gateway\ListProductGatewayInterface $productGateway
      * @param Service\GraduatedPricesServiceInterface $graduatedPricesService
      * @param Service\CheapestPriceServiceInterface $cheapestPriceService
@@ -83,6 +88,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\MarketingServiceInterface $marketingService
      * @param Service\VoteServiceInterface $voteService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
@@ -92,7 +98,8 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\MediaServiceInterface $mediaService,
         Service\MarketingServiceInterface $marketingService,
         Service\VoteServiceInterface $voteService,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        \Shopware_Components_Config $config
     ) {
         $this->productGateway = $productGateway;
         $this->graduatedPricesService = $graduatedPricesService;
@@ -102,6 +109,7 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->eventManager = $eventManager;
         $this->marketingService = $marketingService;
         $this->voteService = $voteService;
+        $this->config = $config;
     }
 
     /**
@@ -184,6 +192,10 @@ class ListProductService implements Service\ListProductServiceInterface
 
         $prices = $product->getPrices();
         if (empty($prices)) {
+            return false;
+        }
+
+        if (!$product->hasAvailableVariant()) {
             return false;
         }
 

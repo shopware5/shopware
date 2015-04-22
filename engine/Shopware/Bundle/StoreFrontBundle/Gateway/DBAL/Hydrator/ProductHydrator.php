@@ -173,131 +173,53 @@ class ProductHydrator extends Hydrator
      */
     private function assignProductData(Struct\ListProduct $product, $data)
     {
-        if (isset($data['__product_name'])) {
-            $product->setName($data['__product_name']);
+        $product->setName($data['__product_name']);
+        $product->setShortDescription($data['__product_description']);
+        $product->setLongDescription($data['__product_description_long']);
+        $product->setCloseouts((bool) ($data['__product_laststock']));
+        $product->setMetaTitle($data['__product_metaTitle']);
+        $product->setHasProperties($data['__product_filtergroupID'] > 0);
+        $product->setHighlight((bool) ($data['__product_topseller']));
+        $product->setAllowsNotification((bool) ($data['__product_notification']));
+        $product->setKeywords($data['__product_keywords']);
+        $product->setTemplate($data['__product_template']);
+        $product->setHasConfigurator(($data['__product_configurator_set_id'] > 0));
+        $product->setHasEsd((bool) $data['__product_has_esd']);
+        $product->setIsPriceGroupActive((bool) $data['__product_pricegroupActive']);
+        $product->setSales((int) $data['__topSeller_sales']);
+        $product->setShippingFree((bool) ($data['__variant_shippingfree']));
+        $product->setStock((int) $data['__variant_instock']);
+        $product->setManufacturerNumber($data['__variant_suppliernumber']);
+
+        if ($data['__variant_shippingtime']) {
+            $product->setShippingTime($data['__variant_shippingtime']);
+        } elseif ($data['__product_shippingtime']) {
+            $product->setShippingTime($data['__product_shippingtime']);
         }
 
-        if (isset($data['__product_description'])) {
-            $product->setShortDescription($data['__product_description']);
+        if ($data['__variant_releasedate']) {
+            $product->setReleaseDate(
+                new \DateTime($data['__variant_releasedate'])
+            );
         }
-
-        if (isset($data['__product_description_long'])) {
-            $product->setLongDescription($data['__product_description_long']);
-        }
-
-        if (isset($data['__product_laststock'])) {
-            $product->setCloseouts((bool) ($data['__product_laststock']));
-        }
-
-        if (isset($data['__product_metaTitle'])) {
-            $product->setMetaTitle($data['__product_metaTitle']);
-        }
-
-        if (isset($data['__product_filtergroupID'])) {
-            $product->setHasProperties($data['__product_filtergroupID'] > 0);
-        }
-
-        if (isset($data['__product_topseller'])) {
-            $product->setHighlight((bool) ($data['__product_topseller']));
-        }
-
-        if (isset($data['__product_notification'])) {
-            $product->setAllowsNotification((bool) ($data['__product_notification']));
-        }
-
-        if (isset($data['__product_keywords'])) {
-            $product->setKeywords($data['__product_keywords']);
-        }
-
-        if (isset($data['__product_template'])) {
-            $product->setTemplate($data['__product_template']);
-        }
-
         if ($data['__product_datum']) {
             $product->setCreatedAt(
                 new \DateTime($data['__product_datum'])
             );
         }
 
-        if (isset($data['__product_configurator_set_id'])) {
-            $product->setHasConfigurator(
-                ($data['__product_configurator_set_id'] > 0)
-            );
-        }
+        $product->setAdditional($data['__variant_additionaltext']);
+        $product->setEan($data['__variant_ean']);
+        $product->setHeight((float) $data['__variant_height']);
+        $product->setLength((float) $data['__variant_length']);
+        $product->setMinStock((int) $data['__variant_stockmin']);
+        $product->setWeight((float) $data['__variant_weight']);
+        $product->setWidth((float) $data['__variant_width']);
 
-        if (isset($data['__product_has_esd'])) {
-            $product->setHasEsd(
-                (bool) $data['__product_has_esd']
-            );
-        }
-
-        if (isset($data['__product_pricegroupActive'])) {
-            $product->setIsPriceGroupActive(
-                (bool) $data['__product_pricegroupActive']
-            );
-        }
-
-        if (isset($data['__product_blocked_customer_groups'])) {
-            $product->setBlockedCustomerGroupIds(
-                explode('|', $data['__product_blocked_customer_groups'])
-            );
-        }
-
-        if (isset($data['__topSeller_sales'])) {
-            $product->setSales((int) $data['__topSeller_sales']);
-        }
-
-        if (isset($data['__variant_shippingtime'])) {
-            $product->setShippingTime($data['__variant_shippingtime']);
-        } elseif (isset($data['__product_shippingtime'])) {
-            $product->setShippingTime($data['__product_shippingtime']);
-        }
-
-        if (isset($data['__variant_shippingfree'])) {
-            $product->setShippingFree((bool) ($data['__variant_shippingfree']));
-        }
-
-        if (isset($data['__variant_instock'])) {
-            $product->setStock((int) $data['__variant_instock']);
-        }
-
-        if (isset($data['__variant_suppliernumber'])) {
-            $product->setManufacturerNumber($data['__variant_suppliernumber']);
-        }
-
-        if (isset($data['__variant_releasedate'])) {
-            $product->setReleaseDate(
-                new \DateTime($data['__variant_releasedate'])
-            );
-        }
-
-        if (isset($data['__variant_additionaltext'])) {
-            $product->setAdditional($data['__variant_additionaltext']);
-        }
-
-        if (isset($data['__variant_ean'])) {
-            $product->setEan($data['__variant_ean']);
-        }
-
-        if (isset($data['__variant_height'])) {
-            $product->setHeight((float) $data['__variant_height']);
-        }
-
-        if (isset($data['__variant_length'])) {
-            $product->setLength((float) $data['__variant_length']);
-        }
-
-        if (isset($data['__variant_stockmin'])) {
-            $product->setMinStock((int) $data['__variant_stockmin']);
-        }
-
-        if (isset($data['__variant_weight'])) {
-            $product->setWeight((float) $data['__variant_weight']);
-        }
-
-        if (isset($data['__variant_width'])) {
-            $product->setWidth((float) $data['__variant_width']);
-        }
+        $customerGroups = explode('|', $data['__product_blocked_customer_groups']);
+        $customerGroups = array_filter($customerGroups);
+        $product->setBlockedCustomerGroupIds($customerGroups);
+        $product->setHasAvailableVariant($data['__product_has_available_variants'] > 0);
     }
 
     /**
