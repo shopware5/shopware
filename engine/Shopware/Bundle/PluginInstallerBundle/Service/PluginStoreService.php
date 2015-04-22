@@ -138,10 +138,10 @@ class PluginStoreService
                 'shopwareVersion' => $context->getShopwareVersion(),
                 'domain' => $context->getDomain(),
                 'locale' => $context->getLocale(),
-                'pluginNames' => array_keys($context->getPlugins())
+                'plugins' => $context->getPlugins()
             ]
         );
-
+        
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
 
         return $plugins;
