@@ -139,6 +139,12 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         if (Shopware()->System()->_POST["subscribeToNewsletter"] != 1) {
             // Unsubscribe user
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
+
+            $session = $this->container->get('session');
+            if($session->offsetExists('sNewsletter')) {
+                $session->offsetSet('sNewsletter', false);
+            }
+
             return;
         }
 
