@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  * @package   Shopware\Bundle\SearchBundleDBAL
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class QueryBuilderFactory
+class QueryBuilderFactory implements QueryBuilderFactoryInterface
 {
     /**
      * @var Connection
@@ -80,14 +80,7 @@ class QueryBuilderFactory
     }
 
     /**
-     * Creates the product number search query for the provided
-     * criteria and context.
-     *
-     * Adds the sortings and conditions of the provided criteria.
-     *
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
-     * @return QueryBuilder
+     * @inheritdoc
      */
     public function createQueryWithSorting(Criteria $criteria, ShopContextInterface $context)
     {
@@ -99,14 +92,38 @@ class QueryBuilderFactory
     }
 
     /**
-     * Creates the product number search query for the provided
-     * criteria and context.
-     *
-     * Adds only the conditions of the provided criteria.
-     *
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
-     * @return QueryBuilder
+     * @inheritdoc
+     */
+    public function createProductQuery(Criteria $criteria, ShopContextInterface $context)
+    {
+        $query = $this->createQueryWithSorting($criteria, $context);
+
+        $select = $query->getQueryPart('select');
+
+        $query->select([
+            'SQL_CALC_FOUND_ROWS product.id as __product_id',
+            'variant.id                     as __variant_id',
+            'variant.ordernumber            as __variant_ordernumber'
+        ]);
+
+        foreach ($select as $selection) {
+            $query->addSelect($selection);
+        }
+
+        $query->addGroupBy('product.id');
+
+        if ($criteria->getOffset()) {
+            $query->setFirstResult($criteria->getOffset());
+        }
+        if ($criteria->getLimit()) {
+            $query->setMaxResults($criteria->getLimit());
+        }
+
+        return $query;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function createQuery(Criteria $criteria, ShopContextInterface $context)
     {
@@ -140,7 +157,7 @@ class QueryBuilderFactory
     }
 
     /**
-     * @return QueryBuilder
+     * @inheritdoc
      */
     public function createQueryBuilder()
     {
@@ -148,7 +165,6 @@ class QueryBuilderFactory
     }
 
     /**
-     *
      * @param Criteria $criteria
      * @param QueryBuilder $query
      * @param ShopContextInterface $context

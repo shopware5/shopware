@@ -90,7 +90,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
-        $query = $this->getProductQuery($criteria, $context);
+        $query = $this->queryBuilderFactory->createProductQuery($criteria, $context);
 
         $products = $this->getProducts($query);
 
@@ -127,20 +127,12 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 $row['__variant_ordernumber']
             );
 
-            unset($row['ordernumber']);
-
-            if (!empty($row)) {
-                $product->addAttribute(
-                    'search',
-                    $this->attributeHydrator->hydrate($row)
-                );
-            }
+            $product->addAttribute('search', $this->attributeHydrator->hydrate($row));
             $products[$product->getNumber()] = $product;
         }
 
         return $products;
     }
-
 
     /**
      * Calculated the total count of the whole search result.
@@ -151,44 +143,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private function getTotalCount($query)
     {
         return $query->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
-    }
-
-    /**
-     * Executes the base query to select the products.
-     *
-     * @param SearchBundle\Criteria $criteria
-     * @param ShopContextInterface $context
-     * @return QueryBuilder
-     */
-    private function getProductQuery(SearchBundle\Criteria $criteria, ShopContextInterface $context)
-    {
-        $query = $this->queryBuilderFactory->createQueryWithSorting(
-            $criteria,
-            $context
-        );
-
-        $select = $query->getQueryPart('select');
-
-        $query->select([
-            'SQL_CALC_FOUND_ROWS product.id as __product_id',
-            'variant.id                     as __variant_id',
-            'variant.ordernumber            as __variant_ordernumber'
-        ]);
-
-        foreach ($select as $selection) {
-            $query->addSelect($selection);
-        }
-
-        $query->addGroupBy('product.id');
-
-        if ($criteria->getOffset()) {
-            $query->setFirstResult($criteria->getOffset());
-        }
-        if ($criteria->getLimit()) {
-            $query->setMaxResults($criteria->getLimit());
-        }
-
-        return $query;
     }
 
     /**
