@@ -651,6 +651,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $successMessage = 'optinnewsletter';
             }
             $this->View()->sSuccessAction = $successMessage;
+            $this->container->get('session')->offsetSet('sNewsletter', $status);
         }
         $this->forward('index');
     }
