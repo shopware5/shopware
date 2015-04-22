@@ -25,6 +25,7 @@
             me.$tabMenuCrossSelling = me.$el.find(me.opts.tabCrossSelling);
 
             me.resizeCrossSelling();
+            me.registerEvents();
 
             if (param === 'rating') {
                 me.jumpToTab(1, '#detail--product-reviews');
