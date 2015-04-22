@@ -101,4 +101,20 @@ class ProductNumberSearchResult implements \JsonSerializable
     {
         return get_object_vars($this);
     }
+
+    /**
+     * @return Attribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param Attribute $attribute
+     */
+    public function setAttribute($attribute)
+    {
+        $this->attribute = $attribute;
+    }
 }
