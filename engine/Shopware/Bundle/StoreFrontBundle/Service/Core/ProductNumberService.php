@@ -26,6 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -73,11 +75,15 @@ class ProductNumberService implements ProductNumberServiceInterface
     /**
      * @inheritdoc
      */
-    public function getAvailableNumber($number, $selection = [])
+    public function getAvailableNumber($number, ShopContextInterface $context, $selection = [])
     {
         $productId = $this->getProductIdByNumber($number);
         if (!$productId) {
             throw new \RuntimeException("No valid product id found");
+        }
+
+        if (!$this->isProductAvailableInShop($productId, $context->getShop())) {
+            throw new \RuntimeException("Product not available in current shop");
         }
 
         $selected = null;
@@ -150,7 +156,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     private function getNumberBySelection($productId, array $selection)
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array('variant.ordernumber'))
+        $query->select(['variant.ordernumber'])
             ->from('s_articles_details', 'variant')
             ->where('variant.articleID = :productId')
             ->andWhere('variant.active = 1')
@@ -259,7 +265,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     private function getProductNumberQuery()
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select(array('variant.ordernumber'));
+        $query->select(['variant.ordernumber']);
         $query->from('s_articles_details', 'variant');
         $query->innerJoin(
             'variant',
@@ -270,5 +276,24 @@ class ProductNumberService implements ProductNumberServiceInterface
         );
         $query->setMaxResults(1);
         return $query;
+    }
+
+    /**
+     * Validates if the product is available in the current shop
+     * @param int $productId
+     * @param Shop $shop
+     */
+    private function isProductAvailableInShop($productId, $shop)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select('categories.categoryID')
+            ->from('s_articles_categories_ro', 'categories')
+            ->where('categories.articleID = :productId')
+            ->andWhere('categories.categoryID = :categoryId')
+            ->setParameter(':productId', $productId)
+            ->setParameter(':categoryId', $shop->getCategory()->getId())
+            ->setMaxResults(1);
+
+        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 }
