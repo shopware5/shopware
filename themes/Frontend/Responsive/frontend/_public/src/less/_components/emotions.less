@@ -700,9 +700,11 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
                 border: 5px solid rgba(255, 255, 255, .5);
                 cursor: pointer;
                 text-indent: -99999em;
+                background-clip: padding-box;
 
                 &.is--active {
                     background: @brand-primary;
+                    background-clip: padding-box;
                 }
             }
         }
