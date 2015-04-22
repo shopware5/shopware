@@ -44,11 +44,20 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
     private $priceHelper;
 
     /**
-     * @param PriceHelper $priceHelper
+     * @var \Shopware_Components_Config
      */
-    public function __construct(PriceHelper $priceHelper)
-    {
+    private $config;
+
+    /**
+     * @param PriceHelper $priceHelper
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(
+        PriceHelper $priceHelper,
+        \Shopware_Components_Config $config
+    ) {
         $this->priceHelper = $priceHelper;
+        $this->config = $config;
     }
 
     /**
@@ -73,6 +82,11 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if ($this->config->get('hideNoInstock')) {
+            $this->priceHelper->joinDefaultPrices($query, $context);
+            return;
+        }
+
         $query->innerJoin(
             'product',
             's_articles_prices',
