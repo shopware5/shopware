@@ -144,7 +144,7 @@ $(function () {
     });
 
     // Change the active tab to the customer reviews
-    $('.is--ctl-detail, .is--ctl-blog').tabSwitcher();
+    $('.is--ctl-detail, .is--ctl-blog').jumpToTab();
 
     $('*[data-ajax-shipping-payment="true"]').shippingPayment();
 
