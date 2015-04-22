@@ -927,7 +927,16 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'xtype' => 'emotion-components-base'
         ), $options);
 
-        $component = new Component();
+        $component = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Library\Component')->findOneBy(
+            array(
+                'name' => $options['name'],
+                'pluginId' => $this->getId()
+            )
+        );
+        if (!$component) {
+            $component = new Component();
+        }
+
         $component->fromArray($config);
 
         $component->setPluginId($this->getId());
