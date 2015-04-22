@@ -59,6 +59,18 @@
                     </div>
                 {/block}
 
+				{* Summary *}
+				{block name='frontend_blog_comments_input_summary'}
+					<div class="blog--comments-summary">
+						<input name="headline"
+							   type="text"
+							   placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+							   required="required" aria-required="true"
+							   value="{$sFormData.headline|escape}"
+							   class="input--field{if $sErrorFlag.headline} has--error{/if}" />
+					</div>
+				{/block}
+
                 {* Voting *}
                 {block name='frontend_blog_comments_input_voting'}
                     <div class="blog--comments-voting">
@@ -75,18 +87,6 @@
                             <option value="2"{if $sFormData.points == 2} selected="selected"{/if}>{s name="rate2"}{/s}</option>
                             <option value="1"{if $sFormData.points == 1} selected="selected"{/if}>{s name="rate1"}{/s}</option>
                         </select>
-                    </div>
-                {/block}
-
-                {* Summary *}
-                {block name='frontend_blog_comments_input_summary'}
-                    <div class="blog--comments-summary">
-                        <input name="headline"
-                               type="text"
-                               placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
-                               required="required" aria-required="true"
-                               value="{$sFormData.headline|escape}"
-                               class="input--field{if $sErrorFlag.headline} has--error{/if}" />
                     </div>
                 {/block}
 
