@@ -104,4 +104,18 @@ class CheckoutContext extends SubContext
 
         $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
     }
+
+    /**
+     * @Given /^I enable the payment method (?P<paymentId>\d+)$/
+     *
+     * @param $paymentId
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function enablePaymentMethod($paymentId)
+    {
+        $database = $this->getContainer()->get('db');
+
+        $sql = "UPDATE s_core_paymentmeans SET active = 1 WHERE id = " . $paymentId . ";";
+        $database->exec($sql);
+    }
 }
