@@ -75,7 +75,8 @@ Feature: My account (without changing login data)
 
     @payment
     Scenario: I can change my payment method
-        When  I change the payment method to 2:
+        When  I enable the payment method 2
+        And   I change the payment method to 2:
             | field             | value          |
             | sDebitAccount     | 123456789      |
             | sDebitBankcode    | 1234567        |

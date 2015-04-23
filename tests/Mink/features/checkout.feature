@@ -155,6 +155,7 @@ Feature: Checkout articles
     @delivery @payment @noEmotion
     Scenario: I can change the delivery to Express and pay via debit
         Given I follow the link "checkout" of the page "CheckoutCart"
+        And   I enable the payment method 2
 
         When  I change the payment method to 2:
             | field             | value          |
