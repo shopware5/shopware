@@ -1204,7 +1204,10 @@ class sArticles
         }
 
         $product = $this->productService->get($productNumber, $context);
-
+        if (!$product) {
+            return [];
+        }
+        
         $hideNoInstock = $this->config->get('hideNoInstock');
         if ($hideNoInstock && !$product->isAvailable()) {
             return [];

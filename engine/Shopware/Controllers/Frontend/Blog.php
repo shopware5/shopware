@@ -329,7 +329,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         //add sRelatedArticles
         foreach ($blogArticleData["assignedArticles"] as &$assignedArticle) {
-            $blogArticleData["sRelatedArticles"][] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
+            $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
+            if ($product) {
+                $blogArticleData["sRelatedArticles"][] = $product;
+            }
         }
 
         //adding average vote data to the blog article

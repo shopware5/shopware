@@ -253,6 +253,10 @@ class LegacyStructConverter
      */
     public function convertProductStruct(StoreFrontBundle\Struct\Product $product)
     {
+        if (!$product instanceof StoreFrontBundle\Struct\Product) {
+            return [];
+        }
+
         $data = $this->getListProductData($product);
 
         if ($product->getUnit()) {
