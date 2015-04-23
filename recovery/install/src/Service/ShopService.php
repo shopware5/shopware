@@ -54,30 +54,13 @@ class ShopService
     public function updateShop(Shop $shop)
     {
         if (empty($shop->locale)
-            || empty($shop->currency)
             || empty($shop->host)
         ) {
             throw new \RuntimeException("Please fill in all required fields. (shop configuration)");
         }
 
         try {
-            $stmt = $this->connection->prepare(
-                "SELECT id FROM s_core_currencies WHERE currency = ?"
-            );
-            $stmt->execute([$shop->currency]);
-            $currencyId = $stmt->fetchColumn();
-            if (!$currencyId) {
-                throw new \RuntimeException("Currency " . $shop->currency. " not found");
-            }
-
             $fetchLanguageId = $this->getLocaleIdByLocale($shop->locale);
-
-            // Do update on s_core_shops
-            if ($shop->locale == "de_DE") {
-                $name = "Hauptshop Deutsch";
-            } else {
-                $name = "Default english";
-            }
 
             // Update s_core_shops
             $sql = <<<EOT
@@ -86,7 +69,6 @@ UPDATE
 SET
     `name` = ?,
     locale_id =  ?,
-    currency_id = ?,
     host = ?,
     base_path = ?,
     hosts = ?
@@ -96,9 +78,8 @@ EOT;
 
             $prepareStatement = $this->connection->prepare($sql);
             $prepareStatement->execute([
-                $name,
+                $shop->name,
                 $fetchLanguageId,
-                $currencyId,
                 $shop->host,
                 $shop->basePath,
                 $shop->host,
@@ -107,13 +88,12 @@ EOT;
             // Update s_core_multilanguage
             $sql = <<<EOT
 UPDATE s_core_multilanguage
-SET `name` = ?, defaultcurrency =  ?, locale = ?, domainaliase = ?
+SET `name` = ?, locale = ?, domainaliase = ?
 WHERE `default` = 1
 EOT;
             $prepareStatement = $this->connection->prepare($sql);
             $prepareStatement->execute([
-                $name,
-                $currencyId,
+                $shop->name,
                 $fetchLanguageId,
                 $shop->host
             ]);
