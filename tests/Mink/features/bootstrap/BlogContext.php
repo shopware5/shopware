@@ -45,7 +45,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @When /^the shop owner activate my latest comment$/
+     * @When /^the shop owner activates my latest comment$/
      */
     public function theShopOwnerActivateMyLatestComment()
     {
