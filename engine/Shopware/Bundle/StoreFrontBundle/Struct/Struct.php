@@ -30,4 +30,34 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  */
 abstract class Struct
 {
+    public function __clone()
+    {
+        foreach ($this as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $this->$key;
+            } else if (is_array($value)) {
+                $this->$key = $this->cloneArray($value);
+            }
+        }
+    }
+
+    /**
+     * @param array $array
+     * @return array
+     */
+    private function cloneArray($array)
+    {
+        $newValue = [];
+
+        foreach ($array as $index => $value) {
+            if (is_object($value)) {
+                $newValue[$index] = clone $value;
+            } elseif (is_array($value)) {
+                $newValue[$index] = $this->cloneArray($value);
+            } else {
+                $newValue[$index] = $value;
+            }
+        }
+        return $newValue;
+    }
 }
