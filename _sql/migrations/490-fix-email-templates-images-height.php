@@ -4,9 +4,7 @@ class Migrations_Migration490 Extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        if ($modus === self::MODUS_INSTALL) {
-            $this->updateTemplate();
-        }
+        $this->updateTemplate();
     }
 
     /**
