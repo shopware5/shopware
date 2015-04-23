@@ -49,7 +49,7 @@ class Shop extends Extendable implements \JsonSerializable
      *
      * @var int
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @var string

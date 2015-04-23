@@ -58,27 +58,61 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
 
         $prices = [];
         foreach ($product->getPriceRules() as $rule) {
-            $prices[] = $this->calculatePriceStruct(
-                $rule,
-                $tax,
-                $context
-            );
+            $prices[] = $this->calculatePriceStruct($rule, $tax, $context);
         }
 
         $product->setPrices($prices);
 
+        $rules = $product->getPriceRules();
+        if (!$product->getCheapestPriceRule() && !empty($rules)) {
+            $product->setCheapestPriceRule(clone $rules[0]);
+        }
+
         if ($product->getCheapestPriceRule()) {
-            $cheapestPrice = $this->calculateCheapestPrice(
-                $product,
-                $product->getCheapestPriceRule(),
-                $context
+            /**
+             * Calculation with considering min purchase
+             */
+            $rule = clone $product->getCheapestPriceRule();
+            $product->setCheapestPrice(
+                $this->calculateCheapestAvailablePrice($product, $rule, $context)
             );
 
-            $product->setCheapestPrice($cheapestPrice);
+            /**
+             * Calculation without considering min purchase
+             */
+            $rule = clone $product->getCheapestPriceRule();
+            $product->setCheapestUnitPrice(
+                $this->calculateCheapestPrice($product, $rule, $context)
+            );
         }
 
         //add state to the product which can be used to check if the prices are already calculated.
         $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
+    }
+
+    /**
+     * Calculates the cheapest price considering the variant min purchase
+     * @param Struct\ListProduct $product
+     * @param Struct\Product\PriceRule $priceRule
+     * @param Struct\ProductContextInterface $context
+     * @return Struct\Product\Price
+     */
+    private function calculateCheapestAvailablePrice(
+        Struct\ListProduct $product,
+        Struct\Product\PriceRule $priceRule,
+        Struct\ProductContextInterface $context
+    ) {
+        $priceRule->setPrice(
+            $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
+        );
+        $priceRule->getUnit()->setPurchaseUnit(
+            $priceRule->getUnit()->getMinPurchase() * $priceRule->getUnit()->getPurchaseUnit()
+        );
+        $priceRule->setPseudoPrice(
+            $priceRule->getUnit()->getMinPurchase() * $priceRule->getPseudoPrice()
+        );
+
+        return $this->calculateCheapestPrice($product, $priceRule, $context);
     }
 
     /**
@@ -87,56 +121,36 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * prices unit.
      *
      * @param Struct\ListProduct $product
-     * @param Struct\Product\PriceRule $cheapestPrice
+     * @param Struct\Product\PriceRule $priceRule
      * @param Struct\ProductContextInterface $context
      * @return Struct\Product\Price
      */
     private function calculateCheapestPrice(
         Struct\ListProduct $product,
-        Struct\Product\PriceRule $cheapestPrice,
+        Struct\Product\PriceRule $priceRule,
         Struct\ProductContextInterface $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
-        $cheapestPrice->setPrice(
-            $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPrice()
-        );
-
-        $cheapestPrice->getUnit()->setPurchaseUnit(
-            $cheapestPrice->getUnit()->getPurchaseUnit() * $cheapestPrice->getUnit()->getMinPurchase()
-        );
-
-        $cheapestPrice->setPseudoPrice(
-            $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPseudoPrice()
-        );
-
         //check for price group discounts.
         if (!$product->getPriceGroup() || !$product->isPriceGroupActive()) {
-            return $this->calculatePriceStruct(
-                $cheapestPrice,
-                $tax,
-                $context
-            );
+            return $this->calculatePriceStruct($priceRule, $tax, $context);
         }
 
         //selects the highest price group discount, for the passed quantity.
         $discount = $this->getHighestQuantityDiscount(
             $product,
             $context,
-            $cheapestPrice->getUnit()->getMinPurchase()
+            $priceRule->getUnit()->getMinPurchase()
         );
 
         if ($discount) {
-            $cheapestPrice->setPrice(
-                $cheapestPrice->getPrice() / 100 * (100 - $discount->getPercent())
+            $priceRule->setPrice(
+                $priceRule->getPrice() / 100 * (100 - $discount->getPercent())
             );
         }
 
-        return $this->calculatePriceStruct(
-            $cheapestPrice,
-            $tax,
-            $context
-        );
+        return $this->calculatePriceStruct($priceRule, $tax, $context);
     }
 
     /**

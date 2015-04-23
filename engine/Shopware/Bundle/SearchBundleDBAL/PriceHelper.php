@@ -75,6 +75,8 @@ class PriceHelper
 
         $discount = $current->useDiscount() ? $current->getPercentageDiscount() : 0;
 
+        $considerMinPurchase = $this->config->get('calculateCheapestPriceWithMinPurchase');
+
         //rounded to filter this value correctly
         // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
         return 'ROUND(' .
@@ -83,7 +85,7 @@ class PriceHelper
             $priceField .
 
             //multiplied with the variant min purchase
-            ' * priceVariant.minpurchase' .
+            ($considerMinPurchase ? ' * priceVariant.minpurchase' : '') .
 
             //multiplied with the percentage price group discount
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
