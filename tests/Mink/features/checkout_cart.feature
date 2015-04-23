@@ -59,6 +59,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
 
+        And  I enable the payment method 2
         And  I change the payment method to 2:
             | field            | value          |
             | sDebitAccount    | 123456789      |
