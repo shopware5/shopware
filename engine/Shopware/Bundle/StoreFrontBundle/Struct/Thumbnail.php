@@ -34,22 +34,22 @@ class Thumbnail extends Extendable implements \JsonSerializable
     /**
      * @var string
      */
-    private $source;
+    protected $source;
 
     /**
      * @var string|null
      */
-    private $retinaSource;
+    protected $retinaSource;
 
     /**
      * @var int
      */
-    private $maxWidth;
+    protected $maxWidth;
 
     /**
      * @var int
      */
-    private $maxHeight;
+    protected $maxHeight;
 
     /**
      * @param string $source
