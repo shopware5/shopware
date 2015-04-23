@@ -82,19 +82,17 @@ EOF
         $count = $component->rebuildAllAssignmentsCount();
         $output->writeln("\rCounted {$count} items");
 
-
         /** @var ProgressHelper $progressHelper */
         $progressHelper = $this->getHelper('progress');
         $progressHelper->setFormat(ProgressHelper::FORMAT_VERBOSE);
         $progressHelper->start($output, $count);
-
         $progressHelper->advance($progress);
 
         // create the assignments
         while ($progress < $count) {
-            $new = $component->rebuildAllAssignments($limit, $progress);
-            $progress += $new;
-            $progressHelper->advance($new);
+            $component->rebuildAllAssignments($limit, $progress);
+            $progress += $limit;
+            $progressHelper->advance($limit);
         }
         $progressHelper->finish();
 
