@@ -1,9 +1,10 @@
--- Paymentmeans --
+-- s_core_paymentmeans --
 UPDATE `s_core_paymentmeans` SET description = 'Debit', additionaldescription = '' WHERE name= 'debit';
 UPDATE `s_core_paymentmeans` SET description = 'Cash', additionaldescription = '' WHERE name= 'cash';
 UPDATE `s_core_paymentmeans` SET description = 'Invoice', additionaldescription = '' WHERE name= 'invoice';
 UPDATE `s_core_paymentmeans` SET description = 'Prepayment', additionaldescription = '' WHERE name= 'prepayment';
 
+-- s_core_detail_states --
 UPDATE s_core_detail_states SET description = 'Open' WHERE id = 0;
 UPDATE s_core_detail_states SET description = 'In progress' WHERE id = 1;
 UPDATE s_core_detail_states SET description = 'Cancelled' WHERE id = 2;
@@ -20,20 +21,15 @@ UPDATE s_core_documents SET name = 'Cancellation invoice' WHERE template = 'inde
 
 -- s_core_customergroups --
 UPDATE s_core_customergroups SET description = 'Default' WHERE `groupkey` = 'EK';
+UPDATE s_core_customergroups SET description = 'B2B / Reseller ' WHERE `groupkey` = 'H';
 
 -- s_core_countries --
 UPDATE s_core_countries SET countryname = CONCAT(UPPER(SUBSTRING(countryen, 1,1)),LOWER(SUBSTRING(countryen, 2)));
 UPDATE s_core_countries SET active = 1 WHERE countryiso = 'GB';
-
--- s_core_countries --
-UPDATE s_core_countries SET countryname = CONCAT(UPPER(SUBSTRING(countryen, 1,1)),LOWER(SUBSTRING(countryen, 2)));
-
--- s_core_shops --
-UPDATE s_core_shops SET `name` = 'German shop', locale_id = 1 WHERE `name` = 'Englisch';
+UPDATE s_core_countries SET active = 0 WHERE countryiso = 'DE';
 
 -- s_categories --
 UPDATE s_categories SET `description` = 'English' WHERE `description` = 'Deutsch';
-UPDATE s_categories SET `description` = 'German' WHERE `description` = 'Englisch';
 
 -- s_core_countries_states --
 UPDATE s_core_countries_states SET `name` = 'Lower Saxony' WHERE id = 2;
@@ -122,10 +118,7 @@ UPDATE s_cms_static_groups SET `name` = 'English bottom pane (Information)' WHER
 INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
   (1, 7),
   (1, 9),
-  (1, 10),
-  (2, 1),
-  (2, 2),
-  (2, 3);
+  (1, 10);
 
 -- s_core_locales --
 UPDATE s_core_locales SET language = 'German', territory = 'Germany' WHERE locale = 'de_DE';
@@ -381,4 +374,4 @@ UPDATE s_core_locales SET language = 'Chinese', territory = 'Hong Kong' WHERE lo
 UPDATE s_core_locales SET language = 'Chinese', territory = 'Macao' WHERE locale = 'zh_MO'; 
 UPDATE s_core_locales SET language = 'Chinese', territory = 'Singapur' WHERE locale = 'zh_SG'; 
 UPDATE s_core_locales SET language = 'Chinese', territory = 'Taiwan' WHERE locale = 'zh_TW'; 
-UPDATE s_core_locales SET language = 'Zulu', territory = 'South Africa' WHERE locale = 'zu_ZA'; 
+UPDATE s_core_locales SET language = 'Zulu', territory = 'South Africa' WHERE locale = 'zu_ZA';

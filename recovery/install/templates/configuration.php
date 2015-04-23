@@ -48,6 +48,21 @@
         </select>
     </p>
 
+    <p>
+        <label for="c_config_shop_currency"><?= $t->t("configuration_sconfig_currency"); ?></label>
+        <select name="c_config_shop_currency" id="c_config_shop_currency">
+            <option
+                value="EUR" <?= $parameters["c_config_shop_currency"] == "EUR" ? "selected" : "" ?>><?= $t->t("configuration_admin_currency_eur"); ?></option>
+            <option
+                value="USD" <?= $parameters["c_config_shop_currency"] == "USD" ? "selected" : "" ?>><?= $t->t("configuration_admin_currency_usd"); ?></option>
+            <option
+                value="GBP" <?= $parameters["c_config_shop_currency"] == "GBP" ? "selected" : "" ?>><?= $t->t("configuration_admin_currency_gbp"); ?></option>
+        </select>
+        <span class="help-block">
+           <?= $t->t("configuration_sconfig_currency_info"); ?>
+        </span>
+    </p>
+
     <h3><?= $t->t("configuration_admin_title"); ?></h3>
 
     <p>

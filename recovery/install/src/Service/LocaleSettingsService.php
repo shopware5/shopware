@@ -22,58 +22,49 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Recovery\Install\Struct;
+namespace Shopware\Recovery\Install\Service;
+
+use Pimple\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ * @package   Shopware\Recovery\Install\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shop extends Struct
+class LocaleSettingsService
 {
     /**
-     * Name of the shop e.g. "My example shop"
-     *
-     * @var string
+     * @var \PDO
      */
-    public $name;
+    private $connection;
 
     /**
-     * Shop owner email address
-     *
-     * @var string
+     * @var Container
      */
-    public $email;
+    private $container;
 
     /**
-     * Shop host including port
-     * e.g.
-     * "localhost:8080"
-     * "my-example.com"
-     *
-     * @var string
+     * @param \PDO $connection
+     * @param Container $container
      */
-    public $host;
+    public function __construct(\PDO $connection, Container $container)
+    {
+        $this->connection = $connection;
+        $this->container = $container;
+    }
 
     /**
-     * Base path to shop if installed in a sub directory
-     * Leave blank if installed in root dir
-     *
-     * @var string
+     * @param  String $locale
+     * @throws \RuntimeException
      */
-    public $basePath;
-
-    /**
-     * Default shop locale e.g. "en_GB"
-     *
-     * @var string
-     */
-    public $locale;
-
-    /**
-     * Default shopware currency e.g. "EUR"
-     *
-     * @var string
-     */
-    public $currency = 'EUR';
+    public function updateLocaleSettings($locale)
+    {
+        $serviceName = 'database.dump_iterator_'.strtolower($locale);
+        if ($this->container->offsetExists($serviceName)) {
+            $dump = $this->container->offsetGet($serviceName);
+            foreach ($dump as $row) {
+                $this->connection->query($row);
+            }
+        }
+    }
 }
