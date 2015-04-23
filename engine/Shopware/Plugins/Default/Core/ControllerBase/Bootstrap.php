@@ -62,6 +62,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             return;
         }
 
+        $view->baseUrl = $request->getBaseUrl() . $request->getPathInfo();
+
         $shop = Shopware()->Shop();
         $view->Controller = $args->getSubject()->Request()->getControllerName();
         $view->Shopware = Shopware();
