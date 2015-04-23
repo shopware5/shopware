@@ -56,18 +56,26 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     protected $fieldHelper;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ProductHydrator $hydrator
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ProductHydrator $hydrator
+        Hydrator\ProductHydrator $hydrator,
+        \Shopware_Components_Config $config
     ) {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     /**
@@ -110,6 +118,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();
+        $availableVariantQuery = $this->getHasAvailableVariantQuery();
 
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
@@ -121,7 +130,9 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->addSelect($this->fieldHelper->getManufacturerFields())
             ->addSelect($this->fieldHelper->getEsdFields())
             ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd')
-            ->addSelect('('. $customerGroupQuery->getSQL() .') as __product_blocked_customer_groups');
+            ->addSelect('(' . $customerGroupQuery->getSQL() .') as __product_blocked_customer_groups')
+            ->addSelect('(' . $availableVariantQuery->getSQL() .') as __product_has_available_variants')
+        ;
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
@@ -172,6 +183,27 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
             ->from('s_articles_avoid_customergroups', 'customerGroups')
             ->where('customerGroups.articleID = product.id');
+
+        return $query;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getHasAvailableVariantQuery()
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select("COUNT(variant.id)")
+            ->from('s_articles_details', 'variant')
+            ->where('variant.articleID = product.id')
+            ->andWhere('variant.active = 1');
+
+        if ($this->config->get('hideNoInstock')) {
+            $query->andWhere(
+                '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+            );
+        }
 
         return $query;
     }
