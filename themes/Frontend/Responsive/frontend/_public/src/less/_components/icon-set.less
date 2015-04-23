@@ -1265,11 +1265,11 @@ Example: `<i class="icon--cart"></i>`
 
 @font-face {
 	font-family: 'shopware';
-	src:url('@{font-directory}/shopware.eot?-7cvoc');
-	src:url('@{font-directory}/shopware.eot?#iefix-7cvoc') format('embedded-opentype'),
-		url('@{font-directory}/shopware.woff?-7cvoc') format('woff'),
-		url('@{font-directory}/shopware.ttf?-7cvoc') format('truetype'),
-		url('@{font-directory}/shopware.svg?-7cvoc#shopware') format('svg');
+	src:url('@{font-directory}/shopware.eot?@{shopware-revision}');
+	src:url('@{font-directory}/shopware.eot?#@{shopware-revision}') format('embedded-opentype'),
+		url('@{font-directory}/shopware.woff?@{shopware-revision}') format('woff'),
+		url('@{font-directory}/shopware.ttf?@{shopware-revision}') format('truetype'),
+		url('@{font-directory}/shopware.svg?@{shopware-revision}') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
