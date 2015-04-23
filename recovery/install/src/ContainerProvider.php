@@ -99,7 +99,7 @@ class ContainerProvider implements ServiceProviderInterface
         });
 
         // dump class contains state so we define it as factory here
-        $container['database.snippet_dump_iterator_en'] = $container->factory(function ($c) {
+        $container['database.dump_iterator_en_gb'] = $container->factory(function ($c) {
             $dumpFile = __DIR__ . '/../data/sql/en.sql';
 
             return new DumpIterator($dumpFile);

@@ -31,9 +31,11 @@ use Shopware\Recovery\Install\DatabaseFactory;
 use Shopware\Recovery\Install\DatabaseInteractor;
 use Shopware\Recovery\Install\Service\AdminService;
 use Shopware\Recovery\Install\Service\ConfigWriter;
+use Shopware\Recovery\Install\Service\CurrencyService;
 use Shopware\Recovery\Install\Service\DatabaseService;
 use Shopware\Recovery\Install\Service\LicenseInstaller;
 use Shopware\Recovery\Install\Service\LicenseUnpackService;
+use Shopware\Recovery\Install\Service\LocaleSettingsService;
 use Shopware\Recovery\Install\Service\ShopService;
 use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
@@ -124,6 +126,10 @@ class InstallCommand extends Command
         $locales = ['de_DE', 'en_GB'];
         $shop = $this->askForShopInformation($locales);
 
+        $currencies = ['EUR', 'USD', 'GBP'];
+        $currency = $this->askForCurrencyInformation($currencies);
+        $shop->currency = $currency;
+
         if (!$this->webserverCheck($ioService, $container, $shop)) {
             $ioService->writeln("Could not verify");
             if (!$this->IOHelper->askConfirmation("Continue?")) {
@@ -136,6 +142,12 @@ class InstallCommand extends Command
         $shopService = new ShopService($conn);
         $shopService->updateShop($shop);
         $shopService->updateConfig($shop);
+
+        $currencyService = new CurrencyService($conn);
+        $currencyService->updateCurrency($shop);
+
+        $currencyService = new LocaleSettingsService($conn, $container);
+        $currencyService->updateLocaleSettings($shop->locale);
 
         $adminService = new AdminService($conn);
         $adminService->createAdmin($adminUser);
@@ -513,6 +525,23 @@ EOT;
         $shop->locale   = $shopLocale;
 
         return $shop;
+    }
+
+    /**
+     * @param  string[] $currencies
+     * @return string currency
+     */
+    protected function askForCurrencyInformation($currencies)
+    {
+        $this->IOHelper->cls();
+        $this->IOHelper->writeln("<info>=== Currency Information ===</info>");
+
+        $question = new ChoiceQuestion("Please select your shop currency", $currencies);
+        $question->setErrorMessage('Currency %s is invalid.');
+
+        $currency = $this->IOHelper->ask($question);
+
+        return $currency;
     }
 
     private function activateResponsiveTheme()

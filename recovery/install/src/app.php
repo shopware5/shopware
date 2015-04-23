@@ -10,8 +10,10 @@ use Shopware\Recovery\Install\Service\AdminService;
 use Shopware\Recovery\Install\Service\ConfigWriter;
 use Shopware\Recovery\Install\Service\DatabaseService;
 use Shopware\Recovery\Install\Service\LicenseInstaller;
+use Shopware\Recovery\Install\Service\LocaleSettingsService;
 use Shopware\Recovery\Install\Service\LocalLicenseUnpackService;
 use Shopware\Recovery\Install\Service\ShopService;
+use Shopware\Recovery\Install\Service\CurrencyService;
 use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
@@ -381,19 +383,25 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         $shop = new \Shopware\Recovery\Install\Struct\Shop([
             'name'     => $_SESSION["parameters"]['c_config_shopName'],
             'locale'   => $_SESSION["parameters"]['c_config_shop_language'],
+            'currency' => $_SESSION["parameters"]['c_config_shop_currency'],
             'email'    => $_SESSION["parameters"]['c_config_mail'],
             'host'     => $_SERVER["HTTP_HOST"],
             'basePath' => str_replace("/recovery/install/index.php", "", $_SERVER["SCRIPT_NAME"]),
         ]);
+        $locale = $_SESSION["parameters"]['c_config_shop_language'] ? : 'de_DE';
 
         $shopService  = new ShopService($db);
+        $currencyService  = new CurrencyService($db);
         $adminService = new AdminService($db);
+        $localeSettingsService = new LocaleSettingsService($db, $container);
 
         $hasErrors = false;
         try {
             $adminService->createAdmin($adminUser);
             $shopService->updateShop($shop);
+            $currencyService->updateCurrency($shop);
             $shopService->updateConfig($shop);
+            $localeSettingsService->updateLocaleSettings($locale);
         } catch (\Exception $e) {
             $hasErrors = true;
             $app->view()->setData("error", $e->getMessage());
@@ -413,7 +421,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         $_SESSION["parameters"]["c_config_shop_language"] = $translationService->translate('locale');
     }
     if (empty($_SESSION["parameters"]["c_config_shop_currency"])) {
-        $_SESSION["parameters"]["c_config_shop_currency"] = $translationService->translate('locale');
+        $_SESSION["parameters"]["c_config_shop_currency"] = $translationService->translate('currency');
     }
     if (empty($_SESSION["parameters"]["c_config_admin_language"])) {
         $_SESSION["parameters"]["c_config_admin_language"] = $translationService->translate('locale');
@@ -512,14 +520,6 @@ EOD;
         }
 
         $dump->next();
-    }
-
-    if (!$dump->valid() && $container->offsetGet("install.language") != "de") {
-        /** @var $dump \Shopware\Recovery\Common\DumpIterator */
-        $dump = $container->offsetGet('database.snippet_dump_iterator_en');
-        foreach ($dump as $row) {
-            $db->query($row);
-        }
     }
 
     $data = [
