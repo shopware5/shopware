@@ -59,7 +59,7 @@ class TermHelper implements TermHelperInterface
         }
 
         // Remove not required chars from string
-        $string = trim(preg_replace("/[^\pL]/u", " ", $string));
+        $string = trim(preg_replace("/[^\pL_0-9]/u", " ", $string));
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
