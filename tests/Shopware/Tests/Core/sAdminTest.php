@@ -155,7 +155,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('surchargestring', $paymentMean);
             $this->assertArrayHasKey('active', $paymentMean);
             $this->assertArrayHasKey('esdactive', $paymentMean);
-            $this->assertContains($paymentMean['id'], array(2, 3, 5));
+            $this->assertContains($paymentMean['id'], array(3, 5, 6));
         }
     }
 
@@ -3016,29 +3016,29 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Valid country returns valid data
         $result = $this->module->sGetPaymentmean(
-            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "debit"')
+            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
         $this->assertEquals(
             array(
-                'id' => '2',
-                'name' => 'debit',
-                'description' => 'Lastschrift',
-                'template' => 'debit.tpl',
-                'class' => 'debit.php',
-                'table' => 's_user_debit',
+                'id' => '5',
+                'name' => 'prepayment',
+                'description' => 'Vorkasse',
+                'template' => 'prepayment.tpl',
+                'class' => 'prepayment.php',
+                'table' => '',
                 'hide' => '0',
-                'additionaldescription' => 'Zusatztext',
-                'debit_percent' => '-10',
+                'additionaldescription' => 'Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.',
+                'debit_percent' => '0',
                 'surcharge' => '0',
                 'surchargestring' => '',
-                'position' => '4',
+                'position' => '1',
                 'active' => '1',
                 'esdactive' => '0',
                 'mobile_inactive' => '0',
                 'embediframe' => '',
                 'hideprospect' => '0',
-                'action' => '',
+                'action' => NULL,
                 'pluginID' => NULL,
                 'source' => NULL,
                 'country_surcharge' =>
