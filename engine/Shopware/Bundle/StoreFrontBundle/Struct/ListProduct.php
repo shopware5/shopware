@@ -249,6 +249,13 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $cheapestPriceRule;
 
     /**
+     * Contains the cheapest unit price of each product variation.
+     *
+     * @var Price
+     */
+    protected $cheapestUnitPrice;
+
+    /**
      * @var PriceRule[]
      */
     protected $priceRules = [];
@@ -489,10 +496,6 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function getCheapestPrice()
     {
-        if ($this->cheapestPrice == null) {
-            $this->cheapestPrice = $this->getVariantPrice();
-        }
-
         return $this->cheapestPrice;
     }
 
@@ -1010,5 +1013,21 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setHasAvailableVariant($hasAvailableVariant)
     {
         $this->hasAvailableVariant = $hasAvailableVariant;
+    }
+
+    /**
+     * @return Price
+     */
+    public function getCheapestUnitPrice()
+    {
+        return $this->cheapestUnitPrice;
+    }
+
+    /**
+     * @param Price $cheapestUnitPrice
+     */
+    public function setCheapestUnitPrice($cheapestUnitPrice)
+    {
+        $this->cheapestUnitPrice = $cheapestUnitPrice;
     }
 }

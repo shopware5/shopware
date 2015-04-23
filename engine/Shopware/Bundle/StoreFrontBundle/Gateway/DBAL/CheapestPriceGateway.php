@@ -56,18 +56,26 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator
+        Hydrator\PriceHydrator $priceHydrator,
+        \Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->config = $config;
     }
 
     /**
@@ -190,10 +198,17 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 
         $subQuery->setMaxResults(1);
 
-        /**
-         * Sorting of the cheapest available product price.
-         */
-        $subQuery->orderBy('(prices.price * variant.minpurchase)');
+        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            /**
+             * Sorting by the cheapest available price
+             */
+            $subQuery->orderBy('(prices.price * variant.minpurchase)');
+        } else {
+            /**
+             * Sorting by the cheapest unit price
+             */
+            $subQuery->orderBy('prices.price');
+        }
 
         /**
          * Creates an outer query which allows to
