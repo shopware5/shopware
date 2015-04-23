@@ -28,6 +28,11 @@ UPDATE s_core_countries SET countryname = CONCAT(UPPER(SUBSTRING(countryen, 1,1)
 UPDATE s_core_countries SET active = 1 WHERE countryiso = 'GB';
 UPDATE s_core_countries SET active = 0 WHERE countryiso = 'DE';
 
+-- s_core_countries_areas --
+UPDATE s_core_countries_areas SET name = 'My country' WHERE id = 1;
+UPDATE s_core_countries_areas SET name = 'World' WHERE id = 2;
+UPDATE s_core_countries_areas SET name = 'Europe' WHERE id = 3;
+
 -- s_categories --
 UPDATE s_categories SET `description` = 'English' WHERE `description` = 'Deutsch';
 
