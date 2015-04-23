@@ -307,6 +307,12 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $voteAverage;
 
     /**
+     * Flag if the product has an available variant
+     * @var boolean
+     */
+    protected $hasAvailableVariant;
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -988,5 +994,21 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setVoteAverage($voteAverage)
     {
         $this->voteAverage = $voteAverage;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasAvailableVariant()
+    {
+        return $this->hasAvailableVariant;
+    }
+
+    /**
+     * @param boolean $hasAvailableVariant
+     */
+    public function setHasAvailableVariant($hasAvailableVariant)
+    {
+        $this->hasAvailableVariant = $hasAvailableVariant;
     }
 }
