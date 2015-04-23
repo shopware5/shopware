@@ -309,6 +309,8 @@ class Compiler
     {
         $config = $this->inheritance->buildConfig($template, $shop, true);
 
+        $config['shopware-revision'] = \Shopware::REVISION;
+
         $this->compiler->setVariables($config);
 
         $collection = new ArrayCollection();
