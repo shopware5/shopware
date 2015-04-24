@@ -39,7 +39,10 @@
 							{* Product price *}
 							{block name="search_ajax_list_entry_price"}
 								<span class="entry--price block">
-									{$search_result.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                    {$sArticle = $search_result}
+                                    {*reset pseudo price value to prevent discount boxes*}
+                                    {$sArticle.pseudoprice = 0}
+                                    {include file="frontend/listing/product-box/product-price.tpl" sArticle=$sArticle}
 								</span>
 							{/block}
 						</a>

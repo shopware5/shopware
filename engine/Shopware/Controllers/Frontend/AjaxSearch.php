@@ -98,10 +98,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
                 'sArticle' => $product->getId(),
                 'title' => $product->getName()
             ));
-
             $article['name'] = $product->getName();
-            $article['price'] = $product->getCheapestPrice()->getCalculatedPrice();
-
             $articles[] = $article;
         }
 
