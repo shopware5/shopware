@@ -1204,6 +1204,9 @@ class sArticles
         }
 
         $product = $this->productService->get($productNumber, $context);
+        if (!$product) {
+            return [];
+        }
 
         $hideNoInstock = $this->config->get('hideNoInstock');
         if ($hideNoInstock && !$product->isAvailable()) {
@@ -2419,29 +2422,6 @@ class sArticles
             ENT_QUOTES,
             'UTF-8',
             false
-        );
-    }
-
-    /**
-     * Helper function which checks which product id should be used.
-     * If only a product number passed to the product detail page,
-     * the function returns the associated product id for the product variation.
-     *
-     * The product id is required for following selections.
-     *
-     * @param $id
-     * @param null $number
-     * @return string
-     */
-    private function getCurrentProductId($id, $number = null)
-    {
-        if ($number == null) {
-            return $id;
-        }
-
-        return $this->db->fetchOne(
-            "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
-            array($number)
         );
     }
 

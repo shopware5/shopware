@@ -42,11 +42,20 @@ class ProductNumberService implements ProductNumberServiceInterface
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var \Shopware_Components_Config
      */
-    public function __construct(Connection $connection)
-    {
+    private $config;
+
+    /**
+     * @param Connection $connection
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(
+        Connection $connection,
+        \Shopware_Components_Config $config
+    ) {
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     /**
@@ -177,6 +186,11 @@ class ProductNumberService implements ProductNumberServiceInterface
             $query->setParameter(':' . $alias, (int) $optionId);
         }
 
+        if ($this->config->get('hideNoInStock')) {
+            $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
+            $query->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+        }
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
@@ -267,13 +281,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query = $this->connection->createQueryBuilder();
         $query->select(['variant.ordernumber']);
         $query->from('s_articles_details', 'variant');
-        $query->innerJoin(
-            'variant',
-            's_articles',
-            'product',
-            'product.id = variant.articleID
-             AND variant.active = 1'
-        );
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND variant.active = 1');
         $query->setMaxResults(1);
         return $query;
     }
