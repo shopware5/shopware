@@ -16,6 +16,7 @@
 
         <service id="shopware_storefront.product_number_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductNumberService">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_storefront.list_product_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService">

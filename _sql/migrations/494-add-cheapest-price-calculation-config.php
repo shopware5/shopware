@@ -8,7 +8,7 @@ class Migrations_Migration494 Extends Shopware\Components\Migrations\AbstractMig
 SET @formId = (SELECT id FROM `s_core_config_forms` WHERE `name` = 'Frontend30' LIMIT 1);
 
 INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`)
-VALUES (NULL, @formId, 'calculateCheapestPriceWithMinPurchase', 'b:1;', 'Mindestabnahme bei der Günstigsten-Preis-Berechnung berücksichtigen', NULL, 'checkbox', '0', '0', '1', NULL, NULL);
+VALUES (NULL, @formId, 'calculateCheapestPriceWithMinPurchase', 'b:0;', 'Mindestabnahme bei der Günstigsten-Preis-Berechnung berücksichtigen', NULL, 'checkbox', '0', '0', '1', NULL, NULL);
 SQL;
         $this->addSql($sql);
 
