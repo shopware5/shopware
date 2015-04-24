@@ -165,7 +165,11 @@ class LegacyStructConverter
             return array();
         }
 
-        $cheapestPrice = $product->getCheapestPrice();
+        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            $cheapestPrice = $product->getCheapestPrice();
+        } else {
+            $cheapestPrice = $product->getCheapestUnitPrice();
+        }
 
         $unit = $cheapestPrice->getUnit();
 
@@ -741,7 +745,11 @@ class LegacyStructConverter
 
         $variantPrice = $product->getVariantPrice();
 
-        $cheapestPrice = $product->getCheapestPrice();
+        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            $cheapestPrice = $product->getCheapestPrice();
+        } else {
+            $cheapestPrice = $product->getCheapestUnitPrice();
+        }
 
         if (count($product->getPrices()) > 1 || $product->hasConfigurator()) {
             $data['priceStartingFrom'] = $this->sFormatPrice(
