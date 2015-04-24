@@ -253,6 +253,8 @@ class ProductService implements Service\ProductServiceInterface
         $product->setIsPriceGroupActive($listProduct->isPriceGroupActive());
         $product->setBlockedCustomerGroupIds($listProduct->getBlockedCustomerGroupIds());
         $product->setVoteAverage($listProduct->getVoteAverage());
+        $product->setHasAvailableVariant($listProduct->hasAvailableVariant());
+        $product->setCheapestUnitPrice($listProduct->getCheapestUnitPrice());
 
         foreach ($listProduct->getAttributes() as $name => $attribute) {
             $product->addAttribute($name, $attribute);
