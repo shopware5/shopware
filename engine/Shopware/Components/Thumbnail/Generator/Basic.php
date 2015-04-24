@@ -60,7 +60,7 @@ class Basic implements GeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false, $quality = 90)
+    public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
         if (!file_exists($imagePath)) {
             throw new \Exception("File not found: " . $imagePath);
@@ -71,17 +71,17 @@ class Basic implements GeneratorInterface
         // Determines the width and height of the original image
         $originalSize = $this->getOriginalImageSize($image);
 
-        if (empty($height)) {
-            $height = $width;
+        if (empty($maxHeight)) {
+            $maxHeight = $maxWidth;
         }
 
         $newSize = array(
-            'width'  => $width,
-            'height' => $height
+            'width'  => $maxWidth,
+            'height' => $maxHeight
         );
 
-        if ($keepProportions === true) {
-            $newSize = $this->calculateProportionalThumbnailSize($originalSize, $width, $height);
+        if ($keepProportions) {
+            $newSize = $this->calculateProportionalThumbnailSize($originalSize, $maxWidth, $maxHeight);
         }
 
         $newImage = $this->createNewImage($image, $originalSize, $newSize);
@@ -166,9 +166,15 @@ class Basic implements GeneratorInterface
             $factor = min($width / $srcWidth, $height / $srcHeight);
         }
 
-        // Get the destination size
-        $dstWidth = round($srcWidth * $factor);
-        $dstHeight = round($srcHeight * $factor);
+        if ($factor >= 1) {
+            $dstWidth  = $srcWidth;
+            $dstHeight = $srcHeight;
+            $factor = 1;
+        } else {
+             //Get the destination size
+            $dstWidth  = round($srcWidth * $factor);
+            $dstHeight = round($srcHeight * $factor);
+        }
 
         return array(
             'width' => $dstWidth,
