@@ -3,6 +3,8 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.0.0
 * Add console command `sw:refresh:search:index` to manually regenerate the search index. The optional parameter `--clear-table` can be used to clear the index tables before regenerating the data again.
+* Remove `price` field override in AjaxSearch controller.
+* Include `frontend/listing/product-box/product-price.tpl` template in ajax search to display product prices.
 
 ## 5.0.0 RC3
 * \Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPriceConditionHandler now joins the prices as a 1:1 association for a performance improvement.
