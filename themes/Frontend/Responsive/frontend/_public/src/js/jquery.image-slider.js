@@ -584,7 +584,7 @@
 
             /**
              * Whether or not the slider should scroll while the finger is down.
-             * Used to determin if the user scrolls down to lock the horizontal
+             * Used to determine if the user scrolls down to lock the horizontal
              * scrolling.
              * Gets unlocked when the user end the touch.
              *

@@ -392,7 +392,7 @@ class Compiler
 
     /**
      * This function is responsible to allow plugins to compile less files into the plugin.css file.
-     * The event fires the Theme_Compiler_Collect_Plugin_Less collect event to collect all plugin less definintions.
+     * The event fires the Theme_Compiler_Collect_Plugin_Less collect event to collect all plugin less definitions.
      *
      * Example to add an own plugin less compiling step:
      * <code>
@@ -500,7 +500,7 @@ class Compiler
 
             foreach ($files as $file) {
                 if (!file_exists($file)) {
-                    throw new \Exception(sprintf("Theme javascript file %s doesn't exists", $file));
+                    throw new \Exception(sprintf("Theme javascript file %s doesn't exist", $file));
                 }
 
                 $content = file_get_contents($file);

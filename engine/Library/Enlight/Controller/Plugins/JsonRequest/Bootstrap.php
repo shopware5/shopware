@@ -140,10 +140,10 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
         return $this;
     }
 
-    /*
-    * @param bool $padding
-    * @return Enlight_Controller_Plugins_Json_Bootstrap
-    */
+    /**
+      * @param bool $padding
+      * @return Enlight_Controller_Plugins_Json_Bootstrap
+      */
     public function setPadding($padding = true)
     {
         $this->padding = $padding;

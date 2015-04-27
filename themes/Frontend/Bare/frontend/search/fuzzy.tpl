@@ -11,7 +11,7 @@
 
 		{block name='frontend_search_info_messages'}
 			{if !$sSearchResults.sArticles}
-				{if $sRequests.sSearchOrginal}
+				{if $sRequests.sSearchOriginal}
 
 					{* No results found *}
 					{block name='frontend_search_message_no_results'}
