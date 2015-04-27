@@ -152,7 +152,7 @@ class Currency extends Extendable implements \JsonSerializable
      */
     public function getFactor()
     {
-        return $this->factor;
+        return empty($this->factor) ? 1 : $this->factor;
     }
 
     /**
