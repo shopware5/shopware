@@ -192,7 +192,7 @@
              */
             if (me.$emotion.length) {
 
-                if (!me.opts.showListing) me.hideFallbackContent();
+                (me.opts.showListing) ? me.showFallbackContent() : me.hideFallbackContent();
 
                 me.$overlay.remove();
                 me.showEmotion();
@@ -202,7 +202,6 @@
             /**
              * Show the loading indicator and load the emotion world.
              */
-            me.$el.html(me.opts.loadingIndicator);
             me.showEmotion();
 
             if (me.isLoading) {
@@ -225,6 +224,8 @@
                         me.showFallbackContent();
                         return;
                     }
+
+                    (me.opts.showListing) ? me.showFallbackContent() : me.hideFallbackContent();
 
                     me.initEmotion(response);
                 }
