@@ -67,7 +67,7 @@
     <target name="install-composer-binary" depends="check-composer-binary"  unless="composer.binary.present">
         <exec executable="bash" failonerror="true">
             <arg value="-c" />
-            <arg value="curl -s http://getcomposer.org/installer | php" />
+            <arg value="curl -s https://getcomposer.org/installer | php" />
         </exec>
     </target>
 
