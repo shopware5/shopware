@@ -41,13 +41,11 @@
                 {/foreach}
 
                 {block name="frontend_listing_list_promotion_link_show_listing"}
-                    {if !$showListing}
-                        <div class="emotion--show-listing{if $fullscreen} is--align-center{/if}">
-                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}" rel="nofollow">
-                                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
-                            </a>
-                        </div>
-                    {/if}
+                    <div class="emotion--show-listing{if $fullscreen} is--align-center{/if}">
+                        <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}" rel="nofollow">
+                            {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
+                        </a>
+                    </div>
                 {/block}
             </div>
         {/block}
