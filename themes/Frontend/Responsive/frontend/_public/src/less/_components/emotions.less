@@ -7,300 +7,304 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 */
 .createColumnSizes(@n, @i: 1) when (@i =< @n) {
 
-	&.emotion--mode-resize {
-		&.emotion--column-@{n} .column--@{i} {
-			width: (100% / @n * @i);
-		}
-	}
+    &.emotion--mode-resize {
+        &.emotion--column-@{n} .column--@{i} {
+            width: (100% / @n * @i);
+        }
+    }
 
-	&.emotion--mode-masonry {
-		&.emotion--column-@{n} .column--@{i} {
-			width: 100%;
-		}
-	}
+    &.emotion--mode-masonry {
+        &.emotion--column-@{n} .column--@{i} {
+            width: 100%;
+        }
+    }
 
-	@media screen and(min-width: @phoneLandscapeViewportWidth) {
-		@columns: 2;
-		&.emotion--mode-masonry {
-			&.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-				width: (100% / @columns * @i);
-			}
-		}
-	}
+    @media screen and(min-width: @phoneLandscapeViewportWidth) {
+        @columns: 2;
+        &.emotion--mode-masonry {
+            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
+                width: (100% / @columns * @i);
+            }
+        }
+    }
 
-	@media screen and(min-width: @tabletViewportWidth) {
-		@columns: 3;
-		&.emotion--mode-masonry {
-			&.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-				width: (100% / @columns * @i);
-			}
-		}
-	}
+    @media screen and(min-width: @tabletViewportWidth) {
+        @columns: 3;
+        &.emotion--mode-masonry {
+            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
+                width: (100% / @columns * @i);
+            }
+        }
+    }
 
-	@media screen and(min-width: @tabletLandscapeViewportWidth) {
-		@columns: 3;
-		&.emotion--mode-masonry {
-			&.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-				width: (100% / @columns * @i);
-			}
-		}
-	}
+    @media screen and(min-width: @tabletLandscapeViewportWidth) {
+        @columns: 3;
+        &.emotion--mode-masonry {
+            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
+                width: (100% / @columns * @i);
+            }
+        }
+    }
 
-	@media screen and(min-width: @desktopViewportWidth) {
-		&.emotion--mode-masonry {
-			&.emotion--column-@{n} .column--@{i} {
-				width: (100% / @n * @i);
-			}
-		}
-	}
+    @media screen and(min-width: @desktopViewportWidth) {
+        &.emotion--mode-masonry {
+            &.emotion--column-@{n} .column--@{i} {
+                width: (100% / @n * @i);
+            }
+        }
+    }
 
-	.createColumnSizes(@n, (@i + 1));
+    .createColumnSizes(@n, (@i + 1));
 }
 
 
     // Content fullscreen mode
 .content-main.is--fullscreen {
-	.box-shadow(none);
-	max-width: none;
-	padding: 0;
-	margin: 0;
+    .box-shadow(none);
+    max-width: none;
+    padding: 0;
+    margin: 0;
 
-	.content,
-	.content-main--inner {
-		padding: 0;
-		margin: 0 auto;
-	}
+    .content,
+    .content-main--inner {
+        padding: 0;
+        margin: 0 auto;
+    }
 
-	.content--breadcrumb,
-	.listing--wrapper,
-	.tagcloud--content,
-	.last-seen-products {
-		display: none;
-	}
+    .content--breadcrumb,
+    .listing--wrapper,
+    .tagcloud--content,
+    .last-seen-products {
+        display: none;
+    }
 }
 
-	// Emotion loading overlay
+    // Emotion loading overlay
 .emotion--overlay {
-	.unitize-width(50);
-	.unitize-height(50);
-	.unitize(top, 50);
-	.border-radius(3px);
-	margin: 0 auto;
-	position: relative;
-	left: 0;
-	z-index: @zindex-emotion-overlay;
+    .unitize-width(50);
+    .unitize-height(50);
+    .unitize(top, 50);
+    .border-radius(3px);
+    margin: 0 auto;
+    position: relative;
+    left: 0;
+    z-index: @zindex-emotion-overlay;
 
-	& .emotion--loading-indicator {
-		padding: 0;
-		position: absolute;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
-		margin: auto;
-	}
+    & .emotion--loading-indicator {
+        padding: 0;
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 0; right: 0;
+        margin: auto;
+    }
 
-	& ~ .content-main {
-		.unitize-min-height(2000);
-		visibility: hidden;
-	}
+    & ~ .content-main {
+        .unitize-min-height(2000);
+        visibility: hidden;
+    }
 }
 
-	// Emotion loading indicator
+    // Emotion loading indicator
 .emotion--loading-indicator {
-	.unitize-width(21);
-	.unitize-height(21);
-	.unitize-padding(50, 0);
-	margin: 0 auto;
-	display: block;
-	position: relative;
-	box-sizing: content-box;
+    .unitize-width(21);
+    .unitize-height(21);
+    .unitize-padding(50, 0);
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    box-sizing: content-box;
 
-	&:before {
-		.border-radius(100%);
-		.animation(keyframe--spin 1s linear infinite);
-		width: 100%;
-		height: 100%;
-		box-sizing: border-box;
-		display: block;
-		content: "";
-		border-width: 2px;
-		border-style: solid;
-		border-color: #333 #CCC #CCC #CCC;
-	}
+    &:before {
+        .border-radius(100%);
+        .animation(keyframe--spin 1s linear infinite);
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        display: block;
+        content: "";
+        border-width: 2px;
+        border-style: solid;
+        border-color: #333 #CCC #CCC #CCC;
+    }
 }
 
     // Emotion content
 .content--emotions {
-	display: block;
+    display: block;
+
+    & + .listing--wrapper {
+        .unitize-margin(20, 0, 0, 0);
+    }
 }
 
     // Emotion show listing link
 .emotion--show-listing {
-	.unitize-margin(20, 0);
+    .unitize-margin(20, 0);
 }
 
     // Emotion wrapper
 .emotion--wrapper {
-	display: block;
-	margin: 0 auto;
-	overflow: hidden;
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
     // Emotion container
 .emotion--container {
-	.clearfix();
-	display: block;
-	margin: 0 auto;
-	position: relative;
-	top: 0; left: 0;
-	background: #fff;
+    .clearfix();
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    top: 0; left: 0;
+    background: #fff;
 
-	&.emotion--mode-resize {
-		.transition(transform 0.3s ease-out);
-	}
+    &.emotion--mode-resize {
+        .transition(transform 0.3s ease-out);
+    }
 
-	// Create the width based on the number of columns the item uses.
-	.createColumnSizes(1); // Container with one column
-	.createColumnSizes(2); // Container with two columns
-	.createColumnSizes(3); // Container with three columns
-	.createColumnSizes(4); // Container with four columns
-	.createColumnSizes(5); // Container with five columns
-	.createColumnSizes(6); // Container with six columns
-	.createColumnSizes(7); // Container with seven columns
-	.createColumnSizes(8); // Container with eight columns
-	.createColumnSizes(9); // Container with nine columns
-	.createColumnSizes(10); // Container with ten columns
-	.createColumnSizes(11); // Container with eleven columns
-	.createColumnSizes(12); // Container with twelve columns
+    // Create the width based on the number of columns the item uses.
+    .createColumnSizes(1); // Container with one column
+    .createColumnSizes(2); // Container with two columns
+    .createColumnSizes(3); // Container with three columns
+    .createColumnSizes(4); // Container with four columns
+    .createColumnSizes(5); // Container with five columns
+    .createColumnSizes(6); // Container with six columns
+    .createColumnSizes(7); // Container with seven columns
+    .createColumnSizes(8); // Container with eight columns
+    .createColumnSizes(9); // Container with nine columns
+    .createColumnSizes(10); // Container with ten columns
+    .createColumnSizes(11); // Container with eleven columns
+    .createColumnSizes(12); // Container with twelve columns
 }
 
     // Emotion element
 .emotion--element {
-	display: block;
-	position: absolute;
-	top: 0; left: 0;
+    display: block;
+    position: absolute;
+    top: 0; left: 0;
 }
 
     // Banner element
 .emotion--banner {
-	height: 100%;
-	width: 100%;
-	position: relative;
-	overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
 
-	.banner--content {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		margin: auto;
-		overflow: hidden;
-		background-position: center center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-color: transparent;
-	}
+    .banner--content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        overflow: hidden;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
 
-	.banner--link {
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
+    .banner--link {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
 
-	.banner--mapping {
-		.transform(translate(-50%, -50%));
-		display: block;
-		position: absolute;
-		top: 50%; left: 50%;
-		margin: auto;
+    .banner--mapping {
+        .transform(translate(-50%, -50%));
+        display: block;
+        position: absolute;
+        top: 50%; left: 50%;
+        margin: auto;
 
-		&.left.top {
-			.transform(translate(0, 0));
-			left: 0; top: 0;
-		}
-		&.left.center {
-			.transform(translate(0, -50%));
-			left: 0; top: 50%;
-		}
-		&.left.bottom {
-			.transform(translate(0, -100%));
-			left: 0; top: 100%;
-		}
-		&.center.top {
-			.transform(translate(-50%, 0));
-			left: 50%; top: 0;
-		}
-		&.center.bottom {
-			.transform(translate(-50%, -100%));
-			left: 50%; top: 100%;
-		}
-		&.right.top {
-			.transform(translate(-100%, 0));
-			left: 100%; top: 0;
-		}
-		&.right.center {
-			.transform(translate(-100%, -50%));
-			left: 100%; top: 50%;
-		}
-		&.right.bottom {
-			.transform(translate(-100%, 0));
-			left: 100%; bottom: 0;
-		}
-	}
+        &.left.top {
+            .transform(translate(0, 0));
+            left: 0; top: 0;
+        }
+        &.left.center {
+            .transform(translate(0, -50%));
+            left: 0; top: 50%;
+        }
+        &.left.bottom {
+            .transform(translate(0, -100%));
+            left: 0; top: 100%;
+        }
+        &.center.top {
+            .transform(translate(-50%, 0));
+            left: 50%; top: 0;
+        }
+        &.center.bottom {
+            .transform(translate(-50%, -100%));
+            left: 50%; top: 100%;
+        }
+        &.right.top {
+            .transform(translate(-100%, 0));
+            left: 100%; top: 0;
+        }
+        &.right.center {
+            .transform(translate(-100%, -50%));
+            left: 100%; top: 50%;
+        }
+        &.right.bottom {
+            .transform(translate(-100%, 0));
+            left: 100%; bottom: 0;
+        }
+    }
 
-	.banner--mapping-link {
-		position: absolute;
-		display: block;
-		z-index: @zindex-emotion-mapping-link;
-		background: rgba(0,0,0,0);
-	}
+    .banner--mapping-link {
+        position: absolute;
+        display: block;
+        z-index: @zindex-emotion-mapping-link;
+        background: rgba(0,0,0,0);
+    }
 }
 
     // Banner-Slider element
 .emotion--banner-slider {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 
-	.banner-slider--title {
-		.unitize-padding(10, 20);
-		display: block;
-		width: 100%;
-		position: absolute;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-image-slider-title;
-		color: #fff;
-		font-weight: 600;
-		background: rgba(0, 0, 0, 0.5);
-		white-space: nowrap;
-		overflow: hidden;
-		text-align: center;
-		text-overflow: ellipsis;
-	}
+    .banner-slider--title {
+        .unitize-padding(10, 20);
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-image-slider-title;
+        color: #fff;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+    }
 
-	.banner-slider--container,
-	.banner-slider--slide {
-		width: 100%;
-		height: 100%;
-	}
+    .banner-slider--container,
+    .banner-slider--slide {
+        width: 100%;
+        height: 100%;
+    }
 
-	.banner-slider--container .arrow {
-		display: block;
-	}
+    .banner-slider--container .arrow {
+        display: block;
+    }
 
-	.banner-slider--item {
-		height: 100%;
-		background-position: center center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-color: transparent;
-	}
+    .banner-slider--item {
+        height: 100%;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
 
-	.banner-slider--link {
-		display: block;
-		height: 100%;
-		width: 100%;
-		text-indent: 200%;
-		white-space: nowrap;
-		overflow: hidden;
-	}
+    .banner-slider--link {
+        display: block;
+        height: 100%;
+        width: 100%;
+        text-indent: 200%;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
     .image-slider--dots {
         display: none;
@@ -309,371 +313,371 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 
     // Product-Slider element
 .emotion--product-slider {
-	width: 100%;
-	height: 100%;
-	position: relative;
+    width: 100%;
+    height: 100%;
+    position: relative;
 
-	.product-slider--title {
-		.unitize-height(55);
-		position: relative;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-product-slider-title;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+    .product-slider--title {
+        .unitize-height(55);
+        position: relative;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-product-slider-title;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-	.product-slider--content {
-		.unitize-padding(10, 10);
-		height: 100%;
-		width: 100%;
-		position: absolute;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-product-slider-content;
-	}
+    .product-slider--content {
+        .unitize-padding(10, 10);
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-product-slider-content;
+    }
 
-	.product-slider--title ~ .product-slider--content {
-		.unitize(padding-top, 65);
-	}
+    .product-slider--title ~ .product-slider--content {
+        .unitize(padding-top, 65);
+    }
 
-	.product-slider--arrow {
-		&.arrow--next { border-right: 0 none; }
-		&.arrow--prev { border-left: 0 none; }
-	}
+    .product-slider--arrow {
+        &.arrow--next { border-right: 0 none; }
+        &.arrow--prev { border-left: 0 none; }
+    }
 
-	.box--emotion {
-		width: 100%;
-		height: 100%;
-		padding: 0;
-		text-align: center;
+    .box--emotion {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        text-align: center;
 
-		.box--content {
-			padding: 0;
-			border: 0 none;
-		}
+        .box--content {
+            padding: 0;
+            border: 0 none;
+        }
 
-		.product--info {
-			height: 100%;
-			position: relative;
-			overflow: hidden;
-		}
+        .product--info {
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
 
-		.product--image {
-			height: 60%;
-			margin: 0 auto;
-		}
+        .product--image {
+            height: 60%;
+            margin: 0 auto;
+        }
 
-		.product--details {
-			max-height: 35%;
-			width: 100%;
-			margin-top: 5%;
-		}
+        .product--details {
+            max-height: 35%;
+            width: 100%;
+            margin-top: 5%;
+        }
 
-		.product--title {
-			.unitize(14, 16, font-size);
-			font-weight: normal;
-			white-space: normal;
-		}
+        .product--title {
+            .unitize(14, 16, font-size);
+            font-weight: normal;
+            white-space: normal;
+        }
 
-		.product--price-info .price--unit {
-			.unitize-height(15);
-			.unitize(10, 16, font-size);
-		}
+        .product--price-info .price--unit {
+            .unitize-height(15);
+            .unitize(10, 16, font-size);
+        }
 
-		.product--price .price--default {
-			.unitize(14, 16, font-size);
-		}
-	}
+        .product--price .price--default {
+            .unitize(14, 16, font-size);
+        }
+    }
 }
 
     // Product-Box element
 .emotion--product {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 
-	.product--box {
-		width: 100%;
-		height: 100%;
-		padding: 0;
-		float: none;
+    .product--box {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        float: none;
 
-		.box--content {
-			.unitize-padding(10, 10);
-		}
+        .box--content {
+            .unitize-padding(10, 10);
+        }
 
-		.product--info {
-			height: 100%;
-			position: relative;
-			overflow: hidden;
-		}
+        .product--info {
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
 
-		.product--image {
-			height: 70%;
-			margin: 0 auto;
+        .product--image {
+            height: 70%;
+            margin: 0 auto;
 
-			&.is--large {
-				height: 100%;
-			}
-		}
+            &.is--large {
+                height: 100%;
+            }
+        }
 
-		.product--details {
-			max-height: 30%;
-			width: 100%;
-			position: absolute;
-			bottom: 0; left: 0;
-		}
+        .product--details {
+            max-height: 30%;
+            width: 100%;
+            position: absolute;
+            bottom: 0; left: 0;
+        }
 
-		.product--title {
-			text-overflow: ellipsis;
-		}
-	}
+        .product--title {
+            text-overflow: ellipsis;
+        }
+    }
 }
 
     // Category-Teaser element
 .emotion--category-teaser {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 
-	.category-teaser--link {
-		display: block;
-		width: 100%;
-		height: 100%;
-		position: relative;
-		background-position: center center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-color: transparent;
-	}
+    .category-teaser--link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: transparent;
+    }
 
-	.category-teaser--title {
-		.unitize-padding(10, 20);
-		display: block;
-		width: 100%;
-		position: absolute;
-		bottom: 0; left: 0;
-		color: #fff;
-		font-weight: 600;
-		background: rgba(0, 0, 0, 0.5);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+    .category-teaser--title {
+        .unitize-padding(10, 20);
+        display: block;
+        width: 100%;
+        position: absolute;
+        bottom: 0; left: 0;
+        color: #fff;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
     // Manufacturer element
 .emotion--manufacturer {
-	width: 100%;
-	height: 100%;
-	position: relative;
+    width: 100%;
+    height: 100%;
+    position: relative;
 
-	.manufacturer--title {
-		.unitize-height(55);
-		position: relative;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-product-slider-title;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+    .manufacturer--title {
+        .unitize-height(55);
+        position: relative;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-product-slider-title;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-	.manufacturer--content {
-		.unitize-padding(10, 20);
-		height: 100%;
-		width: 100%;
-		position: absolute;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-product-slider-content;
-	}
+    .manufacturer--content {
+        .unitize-padding(10, 20);
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-product-slider-content;
+    }
 
-	.manufacturer--title ~ .manufacturer--content {
-		.unitize(padding-top, 65);
-	}
+    .manufacturer--title ~ .manufacturer--content {
+        .unitize(padding-top, 65);
+    }
 
-	.manufacturer--slider {
-		height: 100%;
+    .manufacturer--slider {
+        height: 100%;
 
-		.arrow--next {
-			.unitize(-20, 16, right);
-			border-right: 0 none;
-		}
-		.arrow--prev {
-			.unitize(-20, 16, left);
-			border-left: 0 none;
-		}
-	}
+        .arrow--next {
+            .unitize(-20, 16, right);
+            border-right: 0 none;
+        }
+        .arrow--prev {
+            .unitize(-20, 16, left);
+            border-left: 0 none;
+        }
+    }
 
-	.manufacturer--item {
-		.unitize-padding(10, 15);
-		text-align: center;
-		vertical-align: middle;
-	}
+    .manufacturer--item {
+        .unitize-padding(10, 15);
+        text-align: center;
+        vertical-align: middle;
+    }
 
-	.manufacturer--link {
-		.unitize(font-size, 18);
-		display: block;
-		width: 100%;
-		height: 100%;
-		color: @text-color;
-		font-weight: 600;
-		position: relative;
+    .manufacturer--link {
+        .unitize(font-size, 18);
+        display: block;
+        width: 100%;
+        height: 100%;
+        color: @text-color;
+        font-weight: 600;
+        position: relative;
 
-		&:hover {
-			color: @link-color;
-		}
-	}
+        &:hover {
+            color: @link-color;
+        }
+    }
 
-	.manufacturer--image {
-		position: absolute;
-		top: 0; bottom: 0;
-		left: 0; right: 0;
-		margin: auto;
-	}
+    .manufacturer--image {
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 0; right: 0;
+        margin: auto;
+    }
 }
 
     // YouTube element
 .emotion--youtube {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
     // Video element
 .emotion--video {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
 
-	video::-moz-media-controls,
-	video::-webkit-media-controls {
-		bottom: 15%;
-	}
+    video::-moz-media-controls,
+    video::-webkit-media-controls {
+        bottom: 15%;
+    }
 
-	.video--element {
-		width: 100%;
-		height: 100%;
-		background: #000;
-		position: absolute;
-		top: 0; left: 0;
-		z-index: @zindex-emotion-video-element;
-	}
+    .video--element {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-video-element;
+    }
 
-	.video--cover {
-		display: block;
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		z-index: @zindex-emotion-video-cover;
-		background-position: center center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-color: #000;
-		text-align: center;
+    .video--cover {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: @zindex-emotion-video-cover;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: #000;
+        text-align: center;
 
-		.video--play-icon {
-			.unitize-width(100);
-			.unitize-height(100);
-			.unitize(font-size, 100);
-			display: block;
-			position: absolute;
-			top: 0; bottom: 0;
-			right: 0; left: 0;
-			margin: auto;
-			text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
-			color: #fff;
-		}
-	}
+        .video--play-icon {
+            .unitize-width(100);
+            .unitize-height(100);
+            .unitize(font-size, 100);
+            display: block;
+            position: absolute;
+            top: 0; bottom: 0;
+            right: 0; left: 0;
+            margin: auto;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+            color: #fff;
+        }
+    }
 
-	.video--play-btn {
-		.transition();
-		.unitize(top, 25);
-		.unitize(right, 25);
-		.unitize(line-height, 40);
-		.unitize(font-size, 21);
-		.unitize-width(42);
-		.unitize-height(42);
-		.border-radius(100%);
-		position: absolute;
-		cursor: pointer;
-		color: #fff;
-		border: 2px solid #fff;
-		text-align: center;
-		z-index: @zindex-emotion-video-play-btn;
-	}
+    .video--play-btn {
+        .transition();
+        .unitize(top, 25);
+        .unitize(right, 25);
+        .unitize(line-height, 40);
+        .unitize(font-size, 21);
+        .unitize-width(42);
+        .unitize-height(42);
+        .border-radius(100%);
+        position: absolute;
+        cursor: pointer;
+        color: #fff;
+        border: 2px solid #fff;
+        text-align: center;
+        z-index: @zindex-emotion-video-play-btn;
+    }
 
-	.video--text {
-		width: 100%;
-		height: 100%;
-		margin: auto;
-		position: absolute;
-		left: 0; right: 0;
-		top: 0; bottom: 0;
-		z-index: @zindex-emotion-video-text;
-		color: #fff;
-		text-align: center;
+    .video--text {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        z-index: @zindex-emotion-video-text;
+        color: #fff;
+        text-align: center;
 
-		&.no--events {
-			pointer-events: none;
-		}
-	}
+        &.no--events {
+            pointer-events: none;
+        }
+    }
 }
 
     // Iframe element
 .emotion--iframe {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
     // Blog element
 .emotion--blog {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-	.blog--container {
-		height: 100%;
-		margin: 0 0 0 -1%;
-	}
+    .blog--container {
+        height: 100%;
+        margin: 0 0 0 -1%;
+    }
 
-	.blog--entry {
-		height: 100%;
-		padding-left: 1%;
-		overflow: hidden;
-	}
+    .blog--entry {
+        height: 100%;
+        padding-left: 1%;
+        overflow: hidden;
+    }
 
-	.blog--image {
-		height: 40%;
-		width: 100%;
-		display: block;
-		background-position: center center;
-		background-size: cover;
-		margin-bottom: 2%;
-	}
+    .blog--image {
+        height: 40%;
+        width: 100%;
+        display: block;
+        background-position: center center;
+        background-size: cover;
+        margin-bottom: 2%;
+    }
 
-	.blog--title {
-		.unitize(font-size, 14);
-		display: block;
-		font-weight: bold;
-		color: @text-color-dark;
-		margin-bottom: 2%;
+    .blog--title {
+        .unitize(font-size, 14);
+        display: block;
+        font-weight: bold;
+        color: @text-color-dark;
+        margin-bottom: 2%;
 
-		&:hover {
-			color: @link-color;
-		}
-	}
+        &:hover {
+            color: @link-color;
+        }
+    }
 
-	.blog--description {
-		.unitize(font-size, 14);
-		.unitize(line-height, 20);
-		color: @text-color;
-	}
+    .blog--description {
+        .unitize(font-size, 14);
+        .unitize(line-height, 20);
+        color: @text-color;
+    }
 }
 
     // HTML element
 .emotion--html {
-	width: 100%;
-	height: 100%;
-	position: relative;
-	overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
