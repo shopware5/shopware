@@ -634,7 +634,7 @@ class Compiler
      * @param \Shopware\Models\Shop\Shop $shop
      * @return int
      */
-    private function getThemeTimestamp(Shop\Shop $shop)
+    public function getThemeTimestamp(Shop\Shop $shop)
     {
         /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
         $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
