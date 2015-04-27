@@ -60,14 +60,7 @@
              *
              * @type {String}
              */
-            'itemHoverClass': 'is--hovered',
-
-            /**
-             * Tolerance the touch should be counted as a tap.
-             *
-             * @type {Number}
-             */
-            'touchTimeTolerance': 100
+            'itemHoverClass': 'is--hovered'
         },
 
         /**
@@ -113,14 +106,6 @@
              */
             me._$closeButton = me.$el.find(me.opts.closeButtonSelector);
 
-            /**
-             * Timestamp of the last touch start on a list item.
-             *
-             * @private
-             * @property _touchStartTimestamp
-             * @type {Number}
-             */
-            me._touchStartTimestamp = 0;
 
             /**
              * PreviousTarget will be used for pointer events to prevent
@@ -151,13 +136,12 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
-                me._on($el, 'touchstart', $.proxy(me.onTouchStart, me));
-
                 me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
 
                 if (window.navigator.pointerEnabled || window.navigator.msPointerEnabled) {
-
                     me._on($el, 'click', $.proxy(me.onClickNavigationLink, me, i, $el))
+                } else {
+                    me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
                 }
             });
 
@@ -167,14 +151,26 @@
         },
 
         /**
-         * Called when a touch started on a list item.
-         * Updates the timestamp property to determine a tap on touch end.
+         * Called when a click event is triggered.
+         * If touch is available preventing default behaviour.
          *
-         * @public
-         * @method onTouchStart
+         * @param event
          */
-        onTouchStart: function () {
-            this._touchStartTimestamp = Date.now();
+        onClick: function () {
+            var me = this;
+
+            if(me.isTouchDevice()) {
+                event.preventDefault();
+            }
+        },
+
+        /**
+         * Detecting touch device.
+         *
+         * @returns {boolean}
+         */
+        isTouchDevice: function() {
+            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
         },
 
         /**
@@ -191,7 +187,7 @@
 
             event.stopPropagation();
 
-            if (!(event.originalEvent instanceof MouseEvent) && (Date.now() - me._touchStartTimestamp > opts.touchTimeTolerance)) {
+            if (!(event.originalEvent instanceof MouseEvent)) {
                 event.preventDefault();
                 return;
             }
