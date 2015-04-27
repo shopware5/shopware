@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
