@@ -685,10 +685,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             //Performs all of the collected actions.
             $this->getManager()->flush();
 
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $this->Request()->getParams())
-            );
+            $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
