@@ -995,7 +995,7 @@ class sArticles
 
         if (!empty($this->sSYSTEM->_GET['sSupplier'])) {
             $supplierInfo = $this->sGetSupplierById($this->sSYSTEM->_GET['sSupplier']);
-            $supplierSQL = "AND supplierID=" . intval($this->sSYSTEM->_GET['sSupplier']);
+            $supplierSQL = "AND a.supplierID=" . intval($this->sSYSTEM->_GET['sSupplier']);
         } else {
             $supplierSQL = "";
             $supplierInfo = array();
