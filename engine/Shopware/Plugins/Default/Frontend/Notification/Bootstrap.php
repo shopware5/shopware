@@ -79,6 +79,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $notificationVariants = array();
 
+        $view->NotifyAlreadyRegistered = false;
+        $view->showEmailForm = true;
+
         if (!empty(Shopware()->Session()->sNotificatedArticles)) {
             $sql = 'SELECT `ordernumber` FROM `s_articles_details` WHERE `articleID`=?';
             $ordernumbers = Shopware()->Db()->fetchCol($sql, $id);
@@ -98,11 +101,17 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
         $view->NotificationVariants = $notificationVariants;
-        $view->NotifyEmailError = $view->NotifyEmailError;
-        $view->NotifyValid = $view->NotifyValid;
-        $view->NotifyInvalid = $view->NotifyInvalid;
+        $view->NotifyEmailError = $args->getSubject()->Request()->NotifyEmailError;
+        $view->NotifyValid = $args->getSubject()->Request()->NotifyValid;
+        $view->NotifyInvalid = $args->getSubject()->Request()->NotifyInvalid;
         $view->ShowNotification = true;
-        $view->NotifyAlreadyRegistered = $view->NotifyAlreadyRegistered;
+
+        if( $view->NotifyValid == true
+            || $view->NotifyAlreadyRegistered == true
+            || $view->WaitingForOptInApprovement == true) {
+            $view->showEmailForm = false;
+        }
+
         $view->WaitingForOptInApprovement = Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$view->sArticle['ordernumber']];
     }
 
@@ -118,7 +127,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $args->setProcessed(true);
 
         $action = $args->getSubject();
-
         $id = (int) $action->Request()->sArticle;
         $email = $action->Request()->sNotificationEmail;
 
@@ -197,7 +205,12 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             }
         }
 
-        return $action->forward('index');
+        $link = $action->Front()->Router()->assemble(array(
+            'sViewport' => 'detail',
+            'sArticle' => $id
+        ));
+
+        return $action->redirect($link);
     }
 
     /**
@@ -213,8 +226,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $action = $args->getSubject();
 
-        $action->View()->NotifyValid = false;
-        $action->View()->NotifyInvalid = false;
+        $sArticleDetails = null;
+        $json_data = null;
+        $notifyValid = false;
+        $notifyInValid = false;
 
         if (!empty($action->Request()->sNotificationConfirmation) && !empty($action->Request()->sNotify)) {
             $getConfirmation = Shopware()->Db()->fetchRow('
@@ -247,14 +262,30 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $json_data['sLanguage'],
                     $json_data['sShopPath']
                 ));
-                $action->View()->NotifyValid = true;
+                $notifyValid = true;
                 Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
-            } else {
-
-                $action->View()->NotifyInvalid = true;
             }
+            else {
+                $notifyInValid = true;
+            }
+
+            $sArticleDetails = Shopware()->Db()->fetchRow('
+                    SELECT * FROM s_articles_details WHERE ordernumber = ?
+                    ', array($json_data['notifyOrdernumber']));
         }
-        return $action->forward('index');
+
+
+        if($sArticleDetails != null && !empty($sArticleDetails)){
+            $link = $action->Front()->Router()->assemble(array(
+                'sViewport' => 'detail',
+                'sArticle' => $sArticleDetails["articleID"],
+                'NotifyValid' => $notifyValid,
+                'NotifyInValid' => $notifyInValid
+            ));
+            return $action->redirect($link);
+        }
+
+        return $action->forward("index", "index");
     }
 
     /**
