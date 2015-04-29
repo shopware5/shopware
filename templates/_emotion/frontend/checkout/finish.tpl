@@ -22,7 +22,7 @@
 			{/if}
 
 			<p class="center">
-				{se name="FinishInfoConfirmationMail"}{/se}<br />{s name="FinishInfoPrintOrder"}{/s}
+				{s name="FinishInfoPrintOrder"}{/s}
 			</p>
 
 			<div class="center">
