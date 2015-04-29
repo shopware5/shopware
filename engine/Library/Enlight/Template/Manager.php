@@ -164,13 +164,13 @@ class Enlight_Template_Manager extends Smarty
         $inheritance = array_merge(
             $themeDirectories,
             $pluginDirs,
-            array($bareDir)
+            [$bareDir]
         );
 
         $inheritance = $this->enforceEndingSlash($inheritance);
-
+        $inheritance = array_map('realpath', $inheritance);
+        $inheritance = array_filter($inheritance);
         $inheritance = array_unique($inheritance);
-
         return parent::setTemplateDir($inheritance);
     }
 
