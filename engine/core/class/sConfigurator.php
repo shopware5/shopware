@@ -255,7 +255,7 @@ class sConfigurator
 
         if (empty($selected)) {
             // Limiting the results with setMaxResults(1) will result in only one price being selected SW-4465
-            $query = $repository->getConfiguratorTablePreSelectionItemQuery($id, $customerGroupKey, ($article['lastStock'] === 1));
+            $query = $repository->getConfiguratorTablePreSelectionItemQuery($id, $customerGroupKey, $article);
             $query->setFirstResult(0)->setMaxResults(1);
             $detail = $this->getOneOrNullResult($query);
 
@@ -267,7 +267,15 @@ class sConfigurator
             foreach ($sConfigurator as &$group) {
                 $preSelectedOption = $preSelectedOptions[$group['groupID']];
                 $id = $preSelectedOption['id'];
+
                 if (array_key_exists($id, $group['values'])) {
+                    // reset selection
+                    foreach ($group['values'] as &$value) {
+                        $value['user_selected'] = 0;
+                        $value['selected'] = 0;
+                    }
+
+                    // set the correct one instead
                     $group['values'][$preSelectedOption['id']]['user_selected'] = 1;
                     $group['values'][$preSelectedOption['id']]['selected'] = 1;
                 }
