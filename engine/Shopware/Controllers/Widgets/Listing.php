@@ -120,6 +120,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
     }
 
+    /**
+     * tells the number of found products
+     * used for ajax requests in search filters
+     */
     public function listingCountAction()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();

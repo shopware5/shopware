@@ -113,7 +113,7 @@ class Download
     }
 
     /**
-     * @param string partFilePath
+     * @param string $partFilePath
      * @param string $destinationUri
      */
     private function moveFile($partFilePath, $destinationUri)
