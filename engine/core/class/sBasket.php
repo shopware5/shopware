@@ -2055,9 +2055,10 @@ class sBasket
                 }
             }
 
-            $totalAmount += round($getArticles[$key]["amount"], 2);
-            // Needed if shop is in net-mode
-            $totalAmountWithTax += round($getArticles[$key]["amountWithTax"], 2);
+            $totalAmount = round($totalAmount + round($getArticles[$key]["amount"],2), 2);
+	    // Needed if shop is in net-mode
+	    $totalAmountWithTax = rount($totalAmountWithTax + round($getArticles[$key]["amountWithTax"],2), 2);
+
             // Ignore vouchers and premiums by counting articles
             if (!$getArticles[$key]["modus"]) {
                 $totalCount++;
