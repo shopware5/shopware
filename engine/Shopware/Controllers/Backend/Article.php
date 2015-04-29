@@ -104,6 +104,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected $propertyValueRepository = null;
 
+    /**
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $taxRepository = null;
+
     public function initAcl()
     {
         $this->addAclPermission("loadStores","read","Insufficient Permissions");
@@ -301,6 +306,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->propertyValueRepository;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    protected function getTaxRepository()
+    {
+        if($this->taxRepository === null) {
+            $this->taxRepository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+        }
+
+        return $this->taxRepository;
     }
 
     /**
@@ -2116,8 +2133,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Internal helper function to convert gross prices to net prices.
-     * @param $prices
-     * @param $tax
+     * @param array $prices
+     * @param array $tax
      * @return array
      */
     protected function formatPricesFromNetToGross($prices, $tax)
@@ -2125,8 +2142,35 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
             if ($customerGroup['taxInput']) {
-                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']) ;
-                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']) ;
+
+                /** @internal the tax array sometimes only contains the tax field. hydrate a matching tax object. this should always work since the tax rate will always be a default tax rate.
+                 */
+                if(!isset($tax['id'])) {
+                    /**
+                     * @var \Doctrine\ORM\QueryBuilder $builder
+                     */
+                    $builder = \Shopware()->Container()->get('models')->createQueryBuilder();
+                    $taxEntity = $builder->select('taxes')
+                        ->from('Shopware\Models\Tax\Tax', 'taxes')
+                        ->where('taxes.tax = :tax')
+                        ->setParameter('tax', $tax['tax'])
+                        ->getQuery()
+                        ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+                } else {
+                    $taxEntity = $this->getTaxRepository()->find($tax['id']);
+                }
+
+                if($taxEntity === null) {
+                    throw new \Exception('Unable to load a tax entity matching tax data: '.var_export($tax.true));
+                }
+
+                $taxRate = $this->getTaxRate(
+                    $this->getCustomerGroupRepository()->find($customerGroup['id']),
+                    $taxEntity
+                );
+
+                $price['price'] = $price['price'] / 100 * (100 + $taxRate) ;
+                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $taxRate) ;
             }
             $prices[$key] = $price;
         }
@@ -3137,8 +3181,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+                $taxRate = $this->getTaxRate($customerGroup, $tax);
+                $priceData['price'] = $priceData['price'] / (100 + $taxRate) * 100;
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $taxRate) * 100;
             }
 
             //resolve the oneToMany association of ExtJs to an oneToOne association for doctrine.
@@ -3150,6 +3195,27 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return $prices;
     }
+
+    /**
+     * @param \Shopware\Models\Customer\Group $group
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @return float
+     */
+    protected function getTaxRate(\Shopware\Models\Customer\Group $group, \Shopware\Models\Tax\Tax $tax)
+    {
+        $sql = "SELECT tax FROM s_core_tax_rules WHERE active = 1 AND groupID = ? AND customer_groupID = ? LIMIT 1";
+        $params = array($tax->getId(), $group->getId());
+        $res = Shopware()->Db()->fetchOne($sql, $params);
+        $taxRate = $res ? floatval($res) : null;
+
+        //use default tax rates if no rules are defined for the supplied customer group
+        if ($taxRate === null) {
+            $taxRate = floatval($tax->getTax());
+        }
+
+        return $taxRate;
+    }
+
 
     /**
      * Prepares the link data of the article.
