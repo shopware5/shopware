@@ -83,7 +83,8 @@ class Enlight_Hook_HookManager extends Enlight_Class
         $this->proxyFactory = new Enlight_Hook_ProxyFactory(
             $this,
             $options['proxyNamespace'],
-            $options['proxyDir']
+            $options['proxyDir'],
+            $options['proxyChmod']
         );
 
         $loader->registerNamespace(

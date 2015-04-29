@@ -127,7 +127,8 @@ return array_merge($customConfig, array(
     ),
     'hook' => array_merge(array(
         'proxyDir' => $this->DocPath('cache_proxies'),
-        'proxyNamespace' => $this->App() . '_Proxies'
+        'proxyNamespace' => $this->App() . '_Proxies',
+        'proxyChmod' => 0644
     ), $customConfig['hook']),
     'model' => array_merge(array(
         'autoGenerateProxyClasses' => false,
