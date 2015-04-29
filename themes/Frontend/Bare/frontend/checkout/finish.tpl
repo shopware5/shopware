@@ -64,7 +64,18 @@
 
 				{block name='frontend_checkout_finish_teaser_content'}
 					<div class="panel--body is--wide is--align-center">
-						<p class="teaser--text">{s name="FinishInfoConfirmationMail"}{/s}<br />{s name="FinishInfoPrintOrder"}{/s}</p>
+                        {if $confirmMailDeliveryFailed}
+                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="FinishInfoConfirmationMailFailed"}{/s}"}
+                        {/if}
+
+						<p class="teaser--text">
+                            {if !$confirmMailDeliveryFailed}
+                                {s name="FinishInfoConfirmationMail"}{/s}
+                                <br />
+                            {/if}
+
+                            {s name="FinishInfoPrintOrder"}{/s}
+                        </p>
 
 						{block name='frontend_checkout_finish_teaser_actions'}
 							<p class="teaser--actions">
