@@ -52,9 +52,9 @@ class Basket extends ModelEntity
     /**
      * @var integer $customerId
      *
-     * @ORM\Column(name="userID", type="integer", nullable=true)
+     * @ORM\Column(name="userID", type="integer", nullable=false)
      */
-    protected $customerId = null;
+    protected $customerId = 0;
 
     /**
      * @var integer $articleId
