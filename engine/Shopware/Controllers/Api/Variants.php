@@ -25,7 +25,7 @@
 class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Variant
+     * @var Shopware\Components\Api\Resource\Variants
      */
     protected $resource = null;
 
@@ -43,9 +43,14 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useEanAsId = (boolean) $this->Request()->getParam('useEanAsId', 0);
 
         if ($useNumberAsId) {
             $articleDetail = $this->resource->getOneByNumber($id, array(
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
+        } elseif ($useEanAsId) {
+            $articleDetail = $this->resource->getOneByEan($id, array(
                 'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
             ));
         } else {

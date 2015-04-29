@@ -63,9 +63,15 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useEanAsId = (boolean) $this->Request()->getParam('useEanAsId', 0);
 
         if ($useNumberAsId) {
             $article = $this->resource->getOneByNumber($id, array(
+                'language' => $this->Request()->getParam('language'),
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            ));
+        } elseif ($useEanAsId) {
+            $article = $this->resource->getOneByEan($id, array(
                 'language' => $this->Request()->getParam('language'),
                 'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
             ));
