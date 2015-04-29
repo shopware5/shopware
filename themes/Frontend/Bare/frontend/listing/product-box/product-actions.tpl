@@ -4,13 +4,15 @@
 
     {* Compare button *}
     {block name='frontend_listing_box_article_actions_compare'}
-        <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
-           title="{s name='ListingBoxLinkCompare'}{/s}"
-           class="product--action action--compare"
-           data-product-compare-add="true"
-           rel="nofollow">
-            <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
-        </a>
+        {if {config name="compareShow"}}
+            <a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
+               title="{s name='ListingBoxLinkCompare'}{/s}"
+               class="product--action action--compare"
+               data-product-compare-add="true"
+               rel="nofollow">
+                <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
+            </a>
+        {/if}
     {/block}
 
     {* Note button *}
