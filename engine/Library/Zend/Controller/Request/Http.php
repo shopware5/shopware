@@ -404,6 +404,13 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
                 && $_SERVER['UNENCODED_URL'] != ''
                 ) {
                 $requestUri = $_SERVER['UNENCODED_URL'];
+            } elseif (isset($_SERVER['REDIRECT_REQUEST_URI'])) {
+                $requestUri = $_SERVER['REDIRECT_REQUEST_URI'];
+                // Http proxy reqs setup request uri with scheme and host [and port] + the url path, only use url path
+                $schemeAndHttpHost = $this->getScheme() . '://' . $this->getHttpHost();
+                if (strpos($requestUri, $schemeAndHttpHost) === 0) {
+                    $requestUri = substr($requestUri, strlen($schemeAndHttpHost));
+                }
             } elseif (isset($_SERVER['REQUEST_URI'])) {
                 $requestUri = $_SERVER['REQUEST_URI'];
                 // Http proxy reqs setup request uri with scheme and host [and port] + the url path, only use url path
