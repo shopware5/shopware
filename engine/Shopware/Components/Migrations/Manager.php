@@ -28,7 +28,7 @@ namespace Shopware\Components\Migrations;
  * Shopware migration manager
  *
  * <code>
- * $migrationManager = new Manager($conn, '/path/to/migrations');
+ * $migrationManager = new Manager($conn, '/path/to/migrations', 's_schema_version');
  * $migrationManager->run();
  * </code>
  *
@@ -49,14 +49,24 @@ class Manager
     protected $migrationPath;
 
     /**
-     * @param \PDO $connection
-     * @param string $migrationPath
+     * @var string
      */
-    public function __construct(\PDO $connection, $migrationPath)
-    {
-        $this->migrationPath = $migrationPath;
+    protected $schemaTableName;
 
-        $this->connection = $connection;
+    /**
+     * @param \PDO   $connection
+     * @param string $migrationPath
+     * @param string $schemaTableName
+     */
+    public function __construct(\PDO $connection, $migrationPath = null, $schemaTableName = 's_schema_version')
+    {
+        $this->migrationPath   = $migrationPath;
+        $this->connection      = $connection;
+        $this->schemaTableName = $schemaTableName;
+
+        if (!$migrationPath) {
+            throw new \RuntimeException("MigrationPath is a required argument");
+        }
     }
 
     /**
@@ -115,7 +125,7 @@ class Manager
     public function createSchemaTable()
     {
         $sql = "
-            CREATE TABLE IF NOT EXISTS `s_schema_version` (
+            CREATE TABLE IF NOT EXISTS `{$this->schemaTableName}` (
             `version` int(11) NOT NULL,
             `start_date` datetime NOT NULL,
             `complete_date` datetime DEFAULT NULL,
@@ -134,7 +144,7 @@ class Manager
      */
     public function getCurrentVersion()
     {
-        $sql = 'SELECT version FROM s_schema_version WHERE complete_date IS NOT NULL ORDER BY version DESC';
+        $sql = "SELECT version FROM `{$this->schemaTableName}` WHERE complete_date IS NOT NULL ORDER BY version DESC";
         $currentVersion = (int) $this->connection->query($sql)->fetchColumn();
 
         return $currentVersion;
@@ -227,7 +237,7 @@ class Manager
      */
     public function apply(AbstractMigration $migration)
     {
-        $sql = 'REPLACE s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
+        $sql = "REPLACE `{$this->schemaTableName}` (version, start_date, name) VALUES (:version, :date, :name)";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute(array(
             ':version' => $migration->getVersion(),
@@ -243,7 +253,7 @@ class Manager
                 $this->connection->exec($sql);
             }
         } catch (\Exception $e) {
-            $updateVersionSql = 'UPDATE s_schema_version SET error_msg = :msg WHERE version = :version';
+            $updateVersionSql = "UPDATE `{$this->schemaTableName}` SET error_msg = :msg WHERE version = :version";
             $stmt = $this->connection->prepare($updateVersionSql);
             $stmt->execute(array(
                 ':version' => $migration->getVersion(),
@@ -252,7 +262,7 @@ class Manager
             throw new \Exception("Could not apply migration: " . $e->getMessage());
         }
 
-        $sql = 'UPDATE s_schema_version SET complete_date = :date WHERE version = :version';
+        $sql = "UPDATE `{$this->schemaTableName}` SET complete_date = :date WHERE version = :version";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute(array(
             ':version' => $migration->getVersion(),
