@@ -24,7 +24,7 @@
 
 /*	GENERAL
 	------------------------ */
-html, a, a:link, a:active, a:hover, a:visted {color: #333;}
+html, a, a:link, a:active, a:hover, a:visited {color: #333;}
 html {background-color:#E9EBED}
 .container_20 {background-color: #fff; border-color: #cdcdcd}
 h2, h3 {color:#999}
