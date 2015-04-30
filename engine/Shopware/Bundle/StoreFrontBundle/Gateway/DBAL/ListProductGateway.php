@@ -99,13 +99,12 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
         $products = [];
         foreach ($data as $product) {
             $key = $product['__variant_ordernumber'];
             $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
-
+        
         return $products;
     }
 
@@ -119,6 +118,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();
         $availableVariantQuery = $this->getHasAvailableVariantQuery();
+        $fallbackPriceQuery = $this->getPriceCountQuery(':fallback');
 
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
@@ -132,7 +132,15 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd')
             ->addSelect('(' . $customerGroupQuery->getSQL() .') as __product_blocked_customer_groups')
             ->addSelect('(' . $availableVariantQuery->getSQL() .') as __product_has_available_variants')
+            ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
         ;
+        $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
+
+        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+            $customerPriceQuery = $this->getPriceCountQuery(':current');
+            $query->addSelect('(' . $customerPriceQuery->getSQL() . ') as __product_custom_price_count');
+            $query->setParameter(':current', $context->getCurrentCustomerGroup()->getKey());
+        }
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
@@ -161,13 +169,35 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     /**
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
+    private function getPriceCountQuery($key)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            $query->addSelect('COUNT(DISTINCT ROUND(prices.price * priceVariant.minpurchase, 2)) as priceCount');
+        } else {
+            $query->addSelect('COUNT(DISTINCT prices.price) as priceCount');
+        }
+
+        $query->from('s_articles_prices', 'prices')
+            ->innerJoin('prices', 's_articles_details', 'priceVariant', 'priceVariant.id = prices.articledetailsID')
+            ->andWhere('prices.from = 1')
+            ->andWhere('prices.pricegroup = ' . $key)
+            ->andWhere('prices.articleID = product.id');
+
+        return $query;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     private function getEsdQuery()
     {
         $query = $this->connection->createQueryBuilder();
 
         $query->select('1')
-            ->from('s_articles_esd', 'esd')
-            ->where('esd.articleID = product.id')
+            ->from('s_articles_esd', 'variantEsd')
+            ->where('variantEsd.articleID = product.id')
             ->setMaxResults(1);
 
         return $query;
@@ -194,14 +224,14 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select("COUNT(variant.id)")
-            ->from('s_articles_details', 'variant')
-            ->where('variant.articleID = product.id')
-            ->andWhere('variant.active = 1');
+        $query->select("COUNT(availableVariant.id)")
+            ->from('s_articles_details', 'availableVariant')
+            ->where('availableVariant.articleID = product.id')
+            ->andWhere('availableVariant.active = 1');
 
         if ($this->config->get('hideNoInstock')) {
             $query->andWhere(
-                '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+                '(product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)'
             );
         }
 
