@@ -17,7 +17,9 @@
             <div class="panel--body is--wide">
 
                 {if $manufacturer->getCoverFile()}
-                    <img class="vendor--image" src="{$manufacturer->getCoverFile()}" alt="{$manufacturer->getName()|escape}">
+                    <div class="vendor--image-wrapper">
+						<img class="vendor--image" src="{$manufacturer->getCoverFile()}" alt="{$manufacturer->getName()|escape}">
+					</div>
                 {/if}
 
                 {if $manufacturer->getDescription()}
