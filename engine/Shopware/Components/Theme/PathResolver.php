@@ -285,11 +285,9 @@ class PathResolver
      * @param $timestamp
      * @return array
      */
-    public function getCssFilePaths(Shop\Shop $shop, $timestamp)
+    public function getCssFilePath(Shop\Shop $shop, $timestamp)
     {
-        return array(
-            'default' => $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'css')
-        );
+        return $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'css');
     }
 
     /**
@@ -303,11 +301,9 @@ class PathResolver
      * @param $timestamp
      * @return array
      */
-    public function getJsFilePaths(Shop\Shop $shop, $timestamp)
+    public function getJsFilePath(Shop\Shop $shop, $timestamp)
     {
-        return array(
-            'default' => $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'js')
-        );
+        return $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'js');
     }
 
     /**
@@ -317,7 +313,7 @@ class PathResolver
      * @param $suffix
      * @return string
      */
-    private function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
+    public function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
     {
         if ($shop->getMain()) {
             $shop = $shop->getMain();
