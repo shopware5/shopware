@@ -165,15 +165,12 @@ class Requirements implements \IteratorAggregate, \Countable
         if (!extension_loaded('ionCube Loader')) {
             return false;
         }
-        ob_start();
-        phpinfo(1);
-        $s = ob_get_contents();
-        ob_end_clean();
-        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/', $s, $match)) {
-            return $match[1];
+
+        if (!function_exists('ioncube_loader_version')) {
+            return false;
         }
 
-        return false;
+        return ioncube_loader_version();
     }
 
     /**
