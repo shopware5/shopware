@@ -220,6 +220,13 @@ class ProductHydrator extends Hydrator
         $customerGroups = array_filter($customerGroups);
         $product->setBlockedCustomerGroupIds($customerGroups);
         $product->setHasAvailableVariant($data['__product_has_available_variants'] > 0);
+
+        $product->setFallbackPriceCount($data['__product_fallback_price_count']);
+        if (array_key_exists('__product_custom_price_count', $data)) {
+            $product->setCustomerPriceCount($data['__product_custom_price_count']);
+        } else {
+            $product->setCustomerPriceCount($data['__product_fallback_price_count']);
+        }
     }
 
     /**

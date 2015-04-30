@@ -320,6 +320,16 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $hasAvailableVariant;
 
     /**
+     * @var int
+     */
+    protected $customerPriceCount;
+
+    /**
+     * @var int
+     */
+    protected $fallbackPriceCount;
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -1029,5 +1039,49 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setCheapestUnitPrice($cheapestUnitPrice)
     {
         $this->cheapestUnitPrice = $cheapestUnitPrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerPriceCount()
+    {
+        return $this->customerPriceCount;
+    }
+
+    /**
+     * @param int $customerPriceCount
+     */
+    public function setCustomerPriceCount($customerPriceCount)
+    {
+        $this->customerPriceCount = $customerPriceCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFallbackPriceCount()
+    {
+        return $this->fallbackPriceCount;
+    }
+
+    /**
+     * @param int $fallbackPriceCount
+     */
+    public function setFallbackPriceCount($fallbackPriceCount)
+    {
+        $this->fallbackPriceCount = $fallbackPriceCount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDifferentPrices()
+    {
+        return (
+            $this->getCustomerPriceCount() > 1
+            ||
+            $this->getFallbackPriceCount() > 1
+        );
     }
 }

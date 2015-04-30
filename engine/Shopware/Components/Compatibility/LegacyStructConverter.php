@@ -205,14 +205,8 @@ class LegacyStructConverter
             $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
         }
 
-        if (count($product->getPrices()) > 1 || $product->hasConfigurator()) {
+        if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
             $promotion['priceStartingFrom'] = $price;
-        }
-
-        $prices = $product->getPrices();
-        $realPrice = array_shift($prices)->getCalculatedPrice();
-        if ($realPrice > $cheapestPrice->getCalculatedPrice()) {
-            $promotion['priceStartingFrom'] = $cheapestPrice->getCalculatedPrice();
         }
 
         if ($cheapestPrice->getCalculatedPseudoPrice()) {
