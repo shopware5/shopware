@@ -2413,6 +2413,8 @@ class sArticles
             ORDER BY $orderBy
         ";
 
+        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetAllArticlesInCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
+
         $getAllArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
             $this->sSYSTEM->sCONFIG['sCACHECATEGORY'], $sql,
             false, "category_" . $categoryId
