@@ -1,6 +1,23 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.0.1
+* Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
+* Rename \Shopware\Components\Theme\Compiler::preCompile to \Shopware\Components\Theme\Compiler::compile
+* Change the following \Shopware\Components\Theme\Compiler functions visibility to private:
+    * compilePluginCss
+    * clearThemeCache
+    * buildConfig
+    * compilePluginLess
+    * compilePluginCss
+    * compressPluginJavascript
+    * clearDirectory
+    * createThemeJavascriptFile
+* Changed \Shopware\Components\Theme\PathResolver functions: getJsFilePaths and getCssFilePaths
+    * Renamed to singular naming, getJsFilePath and getCssFilePath
+    * Returning directly the `default` file path
+* Add themes/Gruntfile.js for local compiling.
+
 ## 5.0.0
 * Add console command `sw:refresh:search:index` to manually regenerate the search index. The optional parameter `--clear-table` can be used to clear the index tables before regenerating the data again.
 * Remove `price` field override in AjaxSearch controller.
