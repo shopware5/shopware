@@ -129,7 +129,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
         if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearHttpCache();
-            $this->cacheManager->clearThemeCache();
         }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearHttpCache();
@@ -168,7 +167,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         try {
             /** @var $compiler \Shopware\Components\Theme\Compiler */
             $compiler = $this->container->get('theme_compiler');
-            $compiler->preCompile($shop);
+            $compiler->compile($shop);
 
             $this->View()->assign(array(
                 'success' => true

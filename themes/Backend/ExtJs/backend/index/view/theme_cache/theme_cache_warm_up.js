@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      * Define window height
      * @integer
      */
-    height: 280,
+    height: 300,
 
     /**
      * Set vbox layout and stretch align to display the toolbar on top and the button container

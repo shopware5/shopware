@@ -48,34 +48,17 @@ function smarty_function_compileLess($params, $template)
     $front = Enlight_Application::Instance()->Front();
     $secure = $front->Request()->isSecure();
 
-    $files = $pathResolver->getCssFilePaths($shop, $time);
+    $file = $pathResolver->getCssFilePath($shop, $time);
+    $url = $pathResolver->formatPathToUrl($file, $shop, $secure);
 
-    $urls = array();
-
-    $compile = $settings->getForceCompile();
-
-    foreach($files as $key => $file) {
-        $urls[$key] = $pathResolver->formatPathToUrl(
-            $file,
-            $shop,
-            $secure
-        );
-
-        if (!file_exists($file)) {
-            $compile = true;
-        }
-    }
-
-    if (!$compile) {
+    if (!$settings->getForceCompile() && file_exists($file)) {
 	    // see: http://stackoverflow.com/a/9473886
-        $template->assign($output, $urls);
+        $template->assign($output, [$url]);
         return;
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
     $compiler = Shopware()->Container()->get('theme_compiler');
-
     $compiler->compileLess($time, $shop->getTemplate(), $shop);
-
-    $template->assign($output, $urls);
+    $template->assign($output, [$url]);
 }

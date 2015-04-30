@@ -24,9 +24,8 @@
 
 namespace Shopware\Commands;
 
-use Doctrine\ORM\AbstractQuery;
-use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
+use Shopware\Components\Theme\Configuration;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Command
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ThemeCacheGenerateCommand extends ShopwareCommand
+class ThemeDumpConfigurationCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -43,8 +42,8 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:theme:cache:generate')
-            ->setDescription('Generates theme caches.')
+            ->setName('sw:theme:dump:configuration')
+            ->setDescription('Dumps the theme configuration into json files')
         ;
     }
 
@@ -54,29 +53,31 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $shops      = $repository->getShopsWithThemes()->getResult();
+        $compiler   = $this->container->get('theme_compiler');
+        $rootDir    = $this->container->getParameter('kernel.root_dir');
 
-        $query = $repository->getShopsWithThemes();
-
-        $shops = $query->getResult(
-            AbstractQuery::HYDRATE_OBJECT
-        );
-
-        if (empty($shops)) {
-            $output->writeln('No theme shops found');
-            return;
-        }
-
-        /** @var $compiler \Shopware\Components\Theme\Compiler */
-        $compiler = $this->container->get('theme_compiler');
-
+        /**@var $shop Shop*/
         foreach ($shops as $shop) {
-            $output->writeln(sprintf('Generating theme cache for shop "%s" ...', $shop->getName()));
-            $compiler->compile($shop);
+            $configuration = $compiler->getThemeConfiguration($shop);
+            $file = $this->dumpConfiguration($shop, $configuration);
+            $file = str_replace($rootDir, '', $file);
+            $output->writeln("file : " . $file . " generated");
         }
+    }
 
-        $output->writeln('Clearing HTTP cache ...');
-        /** @var $cacheManager CacheManager */
-        $cacheManager = $this->container->get('shopware.cache_manager');
-        $cacheManager->clearHttpCache();
+    /**
+     * @param Shop $shop
+     * @param Configuration $configuration
+     * @return string
+     * @throws \Exception
+     */
+    private function dumpConfiguration(Shop $shop, Configuration $configuration)
+    {
+        $pathResolver = $this->container->get('theme_path_resolver');
+        $file         = $pathResolver->getCacheDirectory() . '/config_' . $shop->getId() . '.json';
+
+        file_put_contents($file, json_encode($configuration));
+        return $file;
     }
 }
