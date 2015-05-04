@@ -510,6 +510,84 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
+     * Returns a list of articles including variants. Supports store paging, sorting and filtering over the standard ExtJs store parameters.
+     * In contrast to getArticlesAction, this function returns individual variants. The ids returned by this function are article detail ids and
+     * not article ids. Each article has the following fields:
+     * <code>
+     *   [int]      id
+     *   [string]   name
+     *   [string]   additionalText
+     *   [string]   number
+     *   [int]      supplierId
+     *   [string]   supplierName
+     *   [string]   description
+     *   [int]      active
+     *   [array]    changeTime
+     *   [int]      articleId
+     *   [int]      inStock
+     * </code>
+     */
+    public function getArticleDetailsAction()
+    {
+        //load shop repository
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+
+        $builder = $repository->createQueryBuilder('articles');
+
+        $this->Request()->getParam('showVariants', true);
+
+        $fields = array(
+            'id' => 'detail.id',
+            'name' => 'articles.name',
+            'additionaltext' => 'detail.additionalText',
+            'description' => 'articles.description',
+            'active' => 'articles.active',
+            'changeTime' => 'articles.changed',
+            'number' => 'detail.number',
+            'articleId' => 'articles.id as articleId',
+            'inStock' => 'detail.inStock',
+            'supplierName' => 'supplier.name as supplierName',
+            'supplierId' => 'supplier.id as supplierId'
+        );
+        $builder->select($fields);
+
+        $builder->innerJoin('articles.supplier', 'supplier');
+
+        $builder->leftJoin('articles.details', 'detail');
+
+        $filters = $this->Request()->getParam('filter', array());
+        foreach ($filters as $filter) {
+            if ($filter['property'] === 'free') {
+                $builder->andWhere(
+                    $builder->expr()->orX(
+                        'detail.number LIKE :free',
+                        'articles.name LIKE :free'
+                    )
+                );
+                $builder->setParameter(':free', $filter['value']);
+            } else {
+                $repository->addFilter($builder, $filter);
+            }
+        }
+
+        $repository->addOrderBy($builder, $this->prepareParam($this->Request()->getParam('sort', array()), $fields));
+
+        $builder->setFirstResult($this->Request()->getParam('start'))
+            ->setMaxResults($this->Request()->getParam('limit'));
+
+        $query = $builder->getQuery();
+
+        //get total result of the query
+        $total = Shopware()->Models()->getQueryCount($query);
+
+        //select all shop as array
+        $data = $query->getArrayResult();
+
+        //return the data and total count
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+    }
+
+    /**
      * Returns a list of all backend-users. Supports store paging, sorting and filtering over the standard ExtJs store parameters.
      * Each user has the following fields:
      * <code>

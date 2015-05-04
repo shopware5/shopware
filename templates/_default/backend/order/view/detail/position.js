@@ -445,6 +445,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             returnValue: returnValue,
             hiddenReturnValue: hiddenReturnValue,
             articleStore: Ext.create('Shopware.store.Article'),
+            showVariants: true,
             allowBlank: false,
             getValue: function() {
                 return this.getSearchField().getValue();
