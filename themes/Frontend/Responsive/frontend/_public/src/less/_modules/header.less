@@ -32,7 +32,7 @@ More precise designations are commented inside the document.
 		// Smaller logo for mobile viewports
 		.logo--shop {
 			.unitize-height(35, 16);
-			width: 75%;
+			width: 50%;
 		}
 
 		.logo--supportinfo { display: none; }
@@ -49,7 +49,7 @@ More precise designations are commented inside the document.
     .header-main {
         .logo-main { width: 100%; }
         .logo--shop { width: 50% }
-        .logo--link { .unitize(margin-top, 15); }
+        .logo--link { .unitize(margin-top, 10); }
 
         .logo--supportinfo { display: none; }
         border-bottom: 1px solid @brand-primary;
@@ -62,10 +62,6 @@ More precise designations are commented inside the document.
             overflow: hidden;
             text-overflow: ellipsis;
         }
-    }
-
-    &.is--act-cart {
-        .logo--shop { width: 50%; }
     }
 }
 
@@ -691,20 +687,23 @@ More precise designations are commented inside the document.
         .header-main {
             .box-shadow(0 1px 2px 0 @border-color);
 
-            .logo-main { width: 100%; }
+            .logo-main {
+                .unitize(padding-right, 10);
+                width: 100%;
+            }
+
             .logo--shop { width: 35% }
-            .logo--link { .unitize(margin-top, 5); }
+
+            .logo--link {
+                margin-top: 0;
+                width: 80%;
+            }
 
             .logo--supportinfo {
                 .unitize-padding(5, 0);
                 display: block;
                 width: 35%;
             }
-        }
-
-        &.is--act-cart .header-main {
-            .logo-main { width: 35% }
-            .logo--shop { width: auto }
         }
     }
 
@@ -807,12 +806,6 @@ More precise designations are commented inside the document.
                 float: right;
             }
         }
-
-        &.is--act-cart .header-main {
-            .logo-main { width: 30%; }
-            .logo--shop { width: auto }
-            .shop--navigation { width: 70%; }
-        }
     }
 
     .navigation--list {
@@ -870,6 +863,7 @@ More precise designations are commented inside the document.
         .header-main {
             .box-shadow(0 1px 2px 0 @border-color);
 
+            .logo-main { padding-right: 0; }
             .logo--shop { width: 30% }
             .logo--supportinfo { width: 35%; }
 
@@ -877,12 +871,6 @@ More precise designations are commented inside the document.
                 display: inline-block;
                 float: right;
             }
-        }
-
-        // Header Support Info
-        &.is--act-cart {
-            .logo-main { width: 25%; }
-            .logo--shop { width: 75%; }
         }
     }
 
