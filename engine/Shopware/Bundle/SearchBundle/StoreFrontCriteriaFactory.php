@@ -27,6 +27,8 @@ namespace Shopware\Bundle\SearchBundle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
+use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -69,6 +71,27 @@ class StoreFrontCriteriaFactory
 
         $this->requestHandlers = $requestHandlers;
         $this->requestHandlers = $this->registerRequestHandlers();
+    }
+
+    /**
+     * @param int[] $categoryIds
+     * @param ShopContextInterface $context
+     * @return Criteria
+     */
+    public function createBaseCriteria($categoryIds, ShopContextInterface $context)
+    {
+        $criteria = new Criteria();
+
+        $criteria->addBaseCondition(new CategoryCondition($categoryIds));
+
+        if ($this->config->get('hideNoInstock')) {
+            $criteria->addBaseCondition(new IsAvailableCondition());
+        }
+
+        $criteria->addBaseCondition(
+            new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()])
+        );
+        return $criteria;
     }
 
     /**

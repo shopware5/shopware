@@ -120,6 +120,11 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.is_available_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\IsAvailableConditionHandler">
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.has_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPriceConditionHandler">
             <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
             <argument type="service" id="config" />

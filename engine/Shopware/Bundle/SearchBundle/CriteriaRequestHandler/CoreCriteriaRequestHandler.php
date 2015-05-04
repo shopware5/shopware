@@ -28,8 +28,8 @@ use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
+use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
@@ -98,9 +98,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addOffset($request, $criteria);
 
         $this->addCategoryCondition($request, $criteria);
-        $this->addHasPriceCondition($criteria);
+        $this->addIsAvailableCondition($criteria, $context);
         $this->addCustomerGroupCondition($criteria, $context);
-
         $this->addSearchCondition($request, $criteria);
 
         $this->addManufacturerCondition($request, $criteria);
@@ -301,14 +300,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Criteria $criteria
-     */
-    private function addHasPriceCondition(Criteria $criteria)
-    {
-        $criteria->addBaseCondition(new HasPriceCondition());
-    }
-
-    /**
-     * @param Criteria $criteria
      * @param ShopContextInterface $context
      */
     private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context)
@@ -342,5 +333,16 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             (int)$this->config->get('articlesPerPage')
         );
         $criteria->limit($limit);
+    }
+
+    /**
+     * @param Criteria $criteria
+     */
+    private function addIsAvailableCondition(Criteria $criteria)
+    {
+        if (!$this->config->get('hideNoInstock')) {
+            return;
+        }
+        $criteria->addBaseCondition(new IsAvailableCondition());
     }
 }

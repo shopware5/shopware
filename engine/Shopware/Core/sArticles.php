@@ -23,10 +23,6 @@
  */
 
 use Shopware\Bundle\SearchBundle;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -698,12 +694,8 @@ class sArticles
         }
 
         $context = $this->contextService->getProductContext();
-        $criteria = new Criteria();
 
-        $criteria->addBaseCondition(new CategoryCondition([$category]));
-        $criteria->addBaseCondition(new CustomerGroupCondition([$this->customerGroupId]));
-        $criteria->addBaseCondition(new HasPriceCondition());
-
+        $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
         $criteria->limit($sLimitChart);
 
         $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
@@ -1444,12 +1436,7 @@ class sArticles
             $category = $context->getShop()->getCategory()->getId();
         }
 
-        $criteria = new Criteria();
-
-        $criteria->addBaseCondition(new CategoryCondition([$category]))
-            ->addBaseCondition(new HasPriceCondition())
-            ->addBaseCondition(new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()]));
-
+        $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
         $criteria->offset(0)
             ->limit(50);
         
