@@ -27,19 +27,17 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @deprecated since 5.0.1 will be removed in 5.1
- *
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class HasPriceCondition implements ConditionInterface
+class IsAvailableCondition implements ConditionInterface
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
-        return 'has_price';
+        return 'is_available_condition';
     }
 }

@@ -38,6 +38,8 @@ class PriceHelper
 
     const STATE_INCLUDES_DEFAULT_PRICE = 'default_price';
 
+    const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
+
     /**
      * @var Connection
      */
@@ -85,7 +87,7 @@ class PriceHelper
             $priceField .
 
             //multiplied with the variant min purchase
-            ($considerMinPurchase ? ' * priceVariant.minpurchase' : '') .
+            ($considerMinPurchase ? ' * availableVariant.minpurchase' : '') .
 
             //multiplied with the percentage price group discount
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
@@ -116,14 +118,19 @@ class PriceHelper
 
         $this->joinDefaultPrices($query, $context);
 
+        $graduation = 'customerPrice.from = 1';
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $graduation = "customerPrice.to = 'beliebig'";
+        }
+
         $query->leftJoin(
             'product',
             's_articles_prices',
             'customerPrice',
             'customerPrice.articleID = product.id
              AND customerPrice.pricegroup = :currentCustomerGroup
-             AND customerPrice.from = 1
-             AND priceVariant.id = customerPrice.articledetailsID'
+             AND ' . $graduation . '
+             AND availableVariant.id = customerPrice.articledetailsID'
         );
 
         $query->leftJoin(
@@ -152,27 +159,20 @@ class PriceHelper
             return;
         }
 
+        $this->joinAvailableVariant($query);
+
+        $graduation = 'defaultPrice.from = 1';
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $graduation = "defaultPrice.to = 'beliebig'";
+        }
+
         $query->innerJoin(
             'product',
             's_articles_prices',
             'defaultPrice',
-            'defaultPrice.articleID = product.id
+            'defaultPrice.articledetailsID = availableVariant.id
              AND defaultPrice.pricegroup = :fallbackCustomerGroup
-             AND defaultPrice.from = 1'
-        );
-
-        if ($this->config->get('hideNoInstock')) {
-            $inStockCondition = 'AND (product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)';
-        } else {
-            $inStockCondition = '';
-        }
-
-        $query->innerJoin(
-            'defaultPrice',
-            's_articles_details',
-            'priceVariant',
-            'priceVariant.id = defaultPrice.articledetailsID
-             AND priceVariant.active = 1 '.$inStockCondition
+             AND ' . $graduation
         );
 
         $query->setParameter(
@@ -181,5 +181,30 @@ class PriceHelper
         );
 
         $query->addState(self::STATE_INCLUDES_DEFAULT_PRICE);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function joinAvailableVariant(QueryBuilder $query)
+    {
+        if ($query->hasState(self::STATE_INCLUDES_AVAILABLE_VARIANT)) {
+            return;
+        }
+
+        $stockCondition = '';
+        if ($this->config->get('hideNoInstock')) {
+            $stockCondition = 'AND (product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)';
+        }
+
+        $query->innerJoin(
+            'product',
+            's_articles_details',
+            'availableVariant',
+            'availableVariant.articleID = product.id
+             AND availableVariant.active = 1 ' . $stockCondition
+        );
+
+        $query->addState(self::STATE_INCLUDES_AVAILABLE_VARIANT);
     }
 }
