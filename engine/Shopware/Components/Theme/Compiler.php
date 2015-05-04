@@ -116,8 +116,10 @@ class Compiler
 
         $old = $this->getThemeTimestamp($shop);
         $timestamp = time();
+
         $this->compileLess($timestamp, $shop->getTemplate(), $shop);
         $this->compileJavascript($timestamp, $shop->getTemplate(), $shop);
+
         $this->createThemeTimestamp($shop, $timestamp);
         $this->clearThemeCache($shop, $old);
     }
@@ -176,6 +178,10 @@ class Compiler
      */
     public function compileLess($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
         $file = $this->pathResolver->getCssFilePath($shop, $timestamp);
         $file = new \SplFileObject($file, "a");
         if (!$file->flock(LOCK_EX)) {
@@ -214,6 +220,10 @@ class Compiler
      */
     public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
         $file = $this->pathResolver->getJsFilePath($shop, $timestamp);
         $file = new \SplFileObject($file, "a");
         if (!$file->flock(LOCK_EX)) {
@@ -320,7 +330,7 @@ class Compiler
      * @param \Shopware\Models\Shop\Shop $shop
      * @return int
      */
-    private function getThemeTimestamp(Shop\Shop $shop)
+    public function getThemeTimestamp(Shop\Shop $shop)
     {
         /**@var $pathResolver \Shopware\Components\Theme\PathResolver */
         $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
@@ -339,7 +349,7 @@ class Compiler
      * @param Shop\Shop $shop
      * @param $timestamp
      */
-    private function createThemeTimestamp(Shop\Shop $shop, $timestamp)
+    public function createThemeTimestamp(Shop\Shop $shop, $timestamp)
     {
         $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
         file_put_contents($file, $timestamp);
@@ -607,7 +617,7 @@ class Compiler
      * @param \Shopware\Models\Shop\Shop $shop
      * @param $timestamp
      */
-    private function clearThemeCache(Shop\Shop $shop, $timestamp)
+    public function clearThemeCache(Shop\Shop $shop, $timestamp)
     {
         if ($shop->getMain()) {
             $shop = $shop->getMain();
