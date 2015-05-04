@@ -51,6 +51,10 @@ It contains the viewport specific styles inside media queries.
         margin-right: auto;
     }
 
+    .vendor--image {
+        margin: 0 auto;
+    }
+
     .vendor--text {
         .unitize-margin(0, 0, 20, 0);
     }
@@ -228,6 +232,10 @@ It contains the viewport specific styles inside media queries.
 
             & + .vendor--text {
                 .unitize-margin(0, 0, 0, 250);
+            }
+
+            .vendor--image {
+                margin: 0;
             }
         }
     }
