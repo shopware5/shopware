@@ -254,8 +254,7 @@
                 $parent = $currentTarget.parent(),
                 url = $currentTarget.attr('href');
 
-            $.publish('plugin/collapseCart/onRemoveArticle', me);
-
+            $.publish('plugin/collapseCart/onRemoveArticle', [me, event]);
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
@@ -267,7 +266,7 @@
 
                     picturefill();
 
-                    $.publish('plugin/collapseCart/afterRemoveArticle', me);
+                    $.publish('plugin/collapseCart/afterRemoveArticle', [me, event]);
                 }
             });
         },
