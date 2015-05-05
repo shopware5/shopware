@@ -7,9 +7,9 @@
 
         {* Vendor headline *}
         {block name="frontend_listing_list_filter_supplier_headline"}
-            <h3 class="panel--title is--underline">
+            <h1 class="panel--title is--underline">
                 {s name='ListingInfoFilterSupplier'}{/s} {$manufacturer->getName()}
-            </h3>
+            </h1>
         {/block}
 
         {* Vendor content e.g. description and logo *}
