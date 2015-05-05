@@ -57,7 +57,15 @@
              * @property text
              * @type {String}
              */
-            text: 'Gemerkt'
+            text: 'Gemerkt',
+
+            /**
+             * Delay of the toggle back animation of the button
+             *
+             * @property delay
+             * @type {Number}
+             */
+            delay: 5000
         },
 
         /**
@@ -137,11 +145,18 @@
             var me = this,
                 $icon = $target.find('i'),
                 originalIcon = $icon[0].className,
-                $text = $target.find('.action--text');
+                $text = $target.find('.action--text'),
+                originalText = $text.html();
 
             $target.addClass(me.opts.savedCls);
             $text.html($target.attr('data-text') || me.opts.text);
             $icon.removeClass(originalIcon).addClass(me.opts.iconCls);
+
+            window.setTimeout(function() {
+                $target.removeClass(me.opts.savedCls);
+                $text.html(originalText);
+                $icon.removeClass(me.opts.iconCls).addClass(originalIcon);
+            }, me.opts.delay);
         },
 
         /**
