@@ -19,6 +19,10 @@ In this document you will find a changelog of the important changes related to t
 * Add themes/Gruntfile.js for local compiling.
 * \Shopware\Bundle\SearchBundle\Condition\HasPriceCondition marked as deprecated.
 * Add \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory::createBaseCriteria function to create a default criteria with all validation conditions.
+* Moved the mixins `primary-gradient`, `secondary-gradient` and `white-gradient` back to the Responsive theme
+    * We moved the variable declaration of `remScaleFactor` to the Bare theme.
+    * If you have created a custom theme based on the Bare theme and used the mentioned mixins, you need to modify the used variables in the mixin to get it working.
+    * The `icon-element` mixin can now be found in the Responsive theme as well.
 
 ## 5.0.0
 * Add console command `sw:refresh:search:index` to manually regenerate the search index. The optional parameter `--clear-table` can be used to clear the index tables before regenerating the data again.
