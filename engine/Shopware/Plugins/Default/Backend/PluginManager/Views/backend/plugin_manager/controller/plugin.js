@@ -630,6 +630,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     method: 'POST',
                     params: params,
                     callback: function() {
+                        if (caches.indexOf('theme') >= 0 || caches.indexOf('frontend') >= 0) {
+                            Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
+                        }
+
                         me.hideLoadingMask();
                     }
                 });
