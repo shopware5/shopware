@@ -89,7 +89,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $sTarget = $this->Request()->getParam('sTarget', 'account');
         $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
-        $this->View()->showNoAccount = $this->Request()->getParam('showNoAccount', false);
+        $this->View()->showNoAccount = $this->Request()->getParam('showNoAccount', true);
         $this->View()->sEsd = Shopware()->Modules()->Basket()->sCheckForESD();
         $this->View()->sTarget = $sTarget;
         $this->View()->sTargetAction = $sTargetAction;
