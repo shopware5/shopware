@@ -43,12 +43,16 @@ It contains the viewport specific styles inside media queries.
     .clearfix();
     .unitize-margin(0, 0, 20, 0);
 
-    .vendor--image {
+    .vendor--image-wrapper {
         .unitize-margin(0, 0, 10, 0);
         .unitize-max-width(200);
         .unitize-height(70);
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .vendor--image {
+        margin: 0 auto;
     }
 
     .vendor--text {
@@ -222,12 +226,16 @@ It contains the viewport specific styles inside media queries.
     }
 
     .vendor--info {
-        .vendor--image {
+        .vendor--image-wrapper {
             .unitize-margin(0, 20, 20, 0);
             float: left;
 
             & + .vendor--text {
                 .unitize-margin(0, 0, 0, 250);
+            }
+
+            .vendor--image {
+                margin: 0;
             }
         }
     }
