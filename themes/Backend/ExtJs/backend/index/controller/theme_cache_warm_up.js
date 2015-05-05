@@ -171,7 +171,9 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                             );
                         }
 
-                        me.clearHttpCache();
+                        me.moveThemeFiles(function() {
+                            me.clearHttpCache();
+                        });
                     } else {
                         me.runRequest(shops, offset+1);
                     }
@@ -187,6 +189,21 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
 
                     me.window.hide();
                 }
+            }
+        });
+    },
+
+    moveThemeFiles: function(callback) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=Cache action=moveThemeFiles}',
+            method: 'POST',
+            timeout: 4000000,
+            success: function(response) {
+                callback();
+            },
+            failure: function(response) {
             }
         });
     },

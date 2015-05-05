@@ -153,6 +153,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $query = $repository->getShopsWithThemes(array('shop.id' => $shopId));
 
+        /**@var $shop \Shopware\Models\Shop\Shop*/
         $shop = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         )[0];
@@ -165,9 +166,14 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         try {
+            if ($shop->getMain()) {
+                $shop = $shop->getMain();
+            }
+
             /** @var $compiler \Shopware\Components\Theme\Compiler */
             $compiler = $this->container->get('theme_compiler');
-            $compiler->compile($shop);
+            $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
+            $compiler->compileLess('new', $shop->getTemplate(), $shop);
 
             $this->View()->assign(array(
                 'success' => true
@@ -177,6 +183,42 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+        }
+    }
+
+    public function moveThemeFilesAction()
+    {
+        /**@var $repository \Shopware\Models\Shop\Repository*/
+        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $shops = $repository->getShopsWithThemes()->getResult();
+        $compiler = $this->container->get('theme_compiler');
+        $pathResolver = $this->container->get('theme_path_resolver');
+
+        $time = time();
+
+        foreach ($shops as $shop) {
+            $oldTimestamp = $compiler->getThemeTimestamp($shop);
+            if ($oldTimestamp == $time) {
+                $time++;
+            }
+
+            $new = $pathResolver->getCssFilePath($shop, 'new');
+            if (!file_exists($new)) {
+                continue;
+            }
+
+            rename(
+                $pathResolver->getCssFilePath($shop, 'new'),
+                $pathResolver->getCssFilePath($shop, $time)
+            );
+
+            rename(
+                $pathResolver->getJsFilePath($shop, 'new'),
+                $pathResolver->getJsFilePath($shop, $time)
+            );
+
+            $compiler->clearThemeCache($shop, $oldTimestamp);
+            $compiler->createThemeTimestamp($shop, $time);
         }
     }
 
