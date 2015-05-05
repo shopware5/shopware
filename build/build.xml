@@ -249,8 +249,8 @@
         </exec>
     </target>
 
-    <target name="start-server" failonerror="true">
-        <exec executable="${script.server.start}" >
+    <target name="start-server">
+        <exec executable="${script.server.start}" failonerror="true">
             <arg value="${app.host}"/>
         </exec>
     </target>
