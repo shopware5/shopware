@@ -200,6 +200,10 @@ class Category extends Resource
         if (!isset($params['name'])) {
             throw new ApiException\CustomValidationException("A name is required");
         }
+        
+        if(isset($params['mediaId'])){
+            $params['media'] = Shopware()->Models()->getRepository('Shopware\Models\Media\Media')->find($params['mediaId']);
+	}
 
         // in order to have a consistent interface within the REST Api, one might want
         // to set the parent category by using 'parentId' instead of 'parent'
