@@ -57,7 +57,9 @@ Ext.define('Shopware.apps.Index.view.Menu', {
                 me.fireEvent('menu-created', me.items);
 
                 Ext.create('Shopware.notification.ExpiredLicence').check();
+                /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
                 Ext.create('Shopware.notification.SubscriptionWarning').check();
+                /*{/if}*/
             }
         });
 

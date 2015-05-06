@@ -49,6 +49,32 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     protected $alias = 'template';
 
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('assign', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('list', 'read', 'Insufficient Permissions');
+
+        // preview
+        $this->addAclPermission('preview', 'preview', 'Insufficient Permissions');
+
+        // changeTheme
+        $this->addAclPermission('assign', 'changeTheme', 'Insufficient Permissions');
+
+        // createTheme
+        $this->addAclPermission('create', 'createTheme', 'Insufficient Permissions');
+
+        // uploadTheme
+        $this->addAclPermission('upload', 'uploadTheme', 'Insufficient Permissions');
+
+        // configureTheme
+        $this->addAclPermission('getConfigSets', 'configureTheme', 'Insufficient Permissions');
+
+        // configureSystem
+        $this->addAclPermission('loadSettings', 'configureSystem', 'Insufficient Permissions');
+        $this->addAclPermission('saveSettings', 'configureSystem', 'Insufficient Permissions');
+    }
+
     /**
      * Controller action which called to assign a shop template.
      */

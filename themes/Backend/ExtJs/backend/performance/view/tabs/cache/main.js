@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
         // Create the items of the container
         me.items = me.getItems();
 
+        /*{if {acl_is_allowed privilege=clear}}*/
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
@@ -59,6 +60,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
             cls: 'shopware-toolbar',
             items: me.getButtons()
         }];
+        /*{/if}*/
 
         me.callParent(arguments);
 
@@ -82,10 +84,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
             xtype: 'performance-tabs-cache-info',
             store: me.infoStore,
             flex: 1
-        }, {
+        }
+        /*{if {acl_is_allowed privilege=clear}}*/
+        ,{
             xtype: 'performance-tabs-cache-form',
             flex: 1
-        }];
+        }
+        /*{/if}*/
+        ];
     },
 
     /**

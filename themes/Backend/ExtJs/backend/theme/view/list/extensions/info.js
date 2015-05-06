@@ -56,7 +56,9 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
     initComponent: function() {
         var me = this;
 
+        /*{if {acl_is_allowed privilege=changeTheme} || {acl_is_allowed privilege=preview} || {acl_is_allowed privilege=configureTheme}}*/
         me.dockedItems = [ me.createToolbar() ];
+        /*{/if}*/
 
         me.callParent(arguments);
     },
@@ -82,9 +84,15 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
                 align: 'stretch'
             },
             items: [
+                /*{if {acl_is_allowed privilege=changeTheme}}*/
                 me.createAssignButton(),
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=preview}}*/
                 me.createPreviewButton(),
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=configureTheme}}*/
                 me.createConfigureButton()
+                /*{/if}*/
             ]
         });
     },

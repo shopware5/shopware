@@ -141,10 +141,12 @@ Ext.define('Shopware.apps.Performance.view.main.Window', {
             {
                 xtype: 'performance-tabs-cache-main',
                 infoStore: me.infoStore
-            },
-            {
+            }
+            /*{if {acl_is_allowed privilege=update}}*/
+            ,{
                 xtype: 'performance-tabs-settings-main'
             }
+            /*{/if}*/
         ];
     }
 
