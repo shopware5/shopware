@@ -153,13 +153,12 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .emotion--container {
     .clearfix();
     display: block;
-    margin: 0 auto;
     position: relative;
     top: 0; left: 0;
     background: #fff;
 
     &.emotion--mode-resize {
-        .transition(transform 0.3s ease-out);
+        .transform-origin(0, 0, 0);
     }
 
     // Create the width based on the number of columns the item uses.

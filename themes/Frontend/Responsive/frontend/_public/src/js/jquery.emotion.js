@@ -441,6 +441,8 @@
             me.$videoElements = me.$elements.find(me.opts.videoElSelector);
             me.$productSliderElements = me.$elements.find('*[data-product-slider="true"]');
 
+            me.remSpacing = ~~me.opts.cellSpacing / 16;
+
             if (me.opts.fullscreen) {
                 me.initFullscreen();
             }
@@ -509,18 +511,10 @@
          * Initializes the grid for the masonry type.
          */
         initMasonryGrid: function() {
-            var me = this,
-                remSpacing = me.opts.cellSpacing / 16;
+            var me = this;
 
             me.$el.css({
-                'margin-left': -remSpacing + 'rem'
-            });
-
-            me.$elements.css({
-                'padding-left': remSpacing + 'rem',
-                'padding-right': 0,
-                'padding-top': 0,
-                'padding-bottom': remSpacing + 'rem'
+                'margin-left': -me.remSpacing + 'rem'
             });
 
             me.$el.masonry({
@@ -542,7 +536,7 @@
             me.baseWidth = ~~me.opts.baseWidth;
             me.ratio = me.baseWidth / me.$el.outerHeight();
 
-            me.$el.css('width', me.baseWidth);
+            me.$el.css('width', me.baseWidth + me.opts.cellSpacing);
 
             if (!me.opts.fullscreen) {
                 me.$wrapper.css('max-width', me.baseWidth);
@@ -606,20 +600,14 @@
             var me = this,
                 width = (me.opts.fullscreen) ? $window.outerWidth() : me.$wrapper.outerWidth(),
                 factor = width / me.baseWidth,
-                origin = (factor > 1) ? '50% 0px' : '0px 0px',
                 wrapperHeight = width / me.ratio;
 
             me.$el.css({
-                '-ms-transform-origin': origin,
-                '-o-transform-origin': origin,
-                '-moz-transform-origin': origin,
-                '-webkit-transform-origin': origin,
-                'transform-origin': origin,
-                '-ms-transform': 'scale('+ factor +')',
-                '-o-transform': 'scale('+ factor +')',
-                '-moz-transform': 'scale('+ factor +')',
-                '-webkit-transform': 'scale('+ factor +')',
-                'transform': 'scale('+ factor +')'
+                '-ms-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                '-o-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                '-moz-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                '-webkit-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                'transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)'
             });
 
             me.$wrapper.css('height', wrapperHeight);
