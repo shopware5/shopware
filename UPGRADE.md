@@ -17,6 +17,8 @@ In this document you will find a changelog of the important changes related to t
     * Renamed to singular naming, getJsFilePath and getCssFilePath
     * Returning directly the `default` file path
 * Add themes/Gruntfile.js for local compiling.
+* \Shopware\Bundle\SearchBundle\Condition\HasPriceCondition marked as deprecated.
+* Add \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory::createBaseCriteria function to create a default criteria with all validation conditions.
 
 ## 5.0.0
 * Add console command `sw:refresh:search:index` to manually regenerate the search index. The optional parameter `--clear-table` can be used to clear the index tables before regenerating the data again.

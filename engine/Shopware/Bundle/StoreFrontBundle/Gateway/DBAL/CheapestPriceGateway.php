@@ -177,8 +177,13 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             'product.id = variant.articleID'
         );
 
+        $graduation = 'prices.from = 1';
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $graduation = "prices.to = 'beliebig'";
+        }
+
         $subQuery->where('prices.pricegroup = :customerGroup')
-            ->andWhere('prices.from = 1')
+            ->andWhere($graduation)
             ->andWhere('variant.active = 1')
             ->andWhere('prices.articleID = outerPrices.articleID');
 
