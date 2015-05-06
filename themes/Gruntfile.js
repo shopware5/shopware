@@ -15,12 +15,12 @@ module.exports = function (grunt) {
             'OpenSansPath': '"../../themes/Frontend/Responsive/frontend/_public/vendors/fonts/open-sans-fontface"'
         };
 
-    lessTargetFile['../' + config['lessTarget']] = '../web/cache/all.less';
+    lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
     config['js'].forEach(function (item) {
         jsFiles.push('../' + item);
     });
-    jsTargetFile['../' + config['jsTarget']] = jsFiles;
+    jsTargetFile['../' + config.jsTarget] = jsFiles;
 
     config['less'].forEach(function (item) {
         content += '@import "../' + item + '";';
@@ -28,8 +28,8 @@ module.exports = function (grunt) {
     });
     grunt.file.write('../web/cache/all.less', content);
 
-    for (var key in config['config']) {
-        variables[key] = config['config'][key];
+    for (var key in config.config) {
+        variables[key] = config.config[key];
     }
 
     grunt.initConfig({
@@ -85,13 +85,28 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['uglify']
             }
+        },
+        jshint: {
+            options: {
+                browser: true,
+                force: true,
+                globals: {
+                    jQuery: true,
+                    StateManager: true
+                }
+            },
+            src: [
+                'Gruntfile.js',
+                '../themes/Frontend/**/_public/src/js/*.js'
+            ]
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('production', [ 'less:production', 'uglify:production' ]);
-    grunt.registerTask('default', ['less:development', 'uglify:development', 'watch']);
+    grunt.registerTask('production', [ 'jshint', 'less:production', 'uglify:production' ]);
+    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
 };
