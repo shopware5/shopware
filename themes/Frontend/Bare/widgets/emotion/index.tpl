@@ -43,8 +43,8 @@
 
                                 {strip}
                                 <div class="emotion--element column--{$itemCols} row--{$itemRows}"
-                                     style="{if $element.endCol !== $emotion.grid.cols}padding-right: {$cellSpacing / 16}rem;{/if}
-                                            {if $element.startRow !== 1}padding-top: {$cellSpacing / 16}rem;{/if}
+                                     style="padding-left: {$cellSpacing / 16}rem;
+                                            padding-bottom: {$cellSpacing / 16}rem;
                                             height: {$itemHeight / 16}rem;
                                             top: {$itemTop / 16}rem;
                                             left: {$itemLeft}%;">
