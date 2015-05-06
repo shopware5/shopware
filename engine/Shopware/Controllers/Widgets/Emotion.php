@@ -23,10 +23,6 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
@@ -677,11 +673,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     private function getProductSliderData($category, $customerGroupId, $offset = 0, $limit, $sort = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
-        $criteria = new Criteria();
 
-        $criteria->addBaseCondition(new CategoryCondition([$category]));
-        $criteria->addBaseCondition(new CustomerGroupCondition([$customerGroupId]));
-        $criteria->addBaseCondition(new HasPriceCondition());
+        $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+        $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
             ->limit($limit);

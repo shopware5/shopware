@@ -24,20 +24,20 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\HasPriceCondition;
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\isAvailableCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 /**
- * @deprecated since 5.0.1 will be removed in 5.1
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class HasPriceConditionHandler implements ConditionHandlerInterface
+class IsAvailableConditionHandler implements ConditionHandlerInterface
 {
     /**
      * @var PriceHelper
@@ -45,20 +45,11 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
     private $priceHelper;
 
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @param PriceHelper $priceHelper
-     * @param \Shopware_Components_Config $config
      */
-    public function __construct(
-        PriceHelper $priceHelper,
-        \Shopware_Components_Config $config
-    ) {
+    function __construct(PriceHelper $priceHelper)
+    {
         $this->priceHelper = $priceHelper;
-        $this->config = $config;
     }
 
     /**
@@ -66,14 +57,11 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof HasPriceCondition);
+        return ($condition instanceof IsAvailableCondition);
     }
 
     /**
-     * Extends the query with two inner joins which validates
-     * that the selected products has a defined price for the fallback customer group.
-     *
-     * @param ConditionInterface|HasPriceCondition $condition
+     * @param ConditionInterface|CategoryCondition $condition
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
      * @return void
@@ -83,8 +71,6 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        Shopware()->Container()->get('corelogger')->notice(
-            __CLASS__ . ' is deprecated. Please remove usage'
-        );
+        $this->priceHelper->joinAvailableVariant($query);
     }
 }
