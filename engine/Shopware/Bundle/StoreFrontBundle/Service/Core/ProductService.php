@@ -255,6 +255,8 @@ class ProductService implements Service\ProductServiceInterface
         $product->setVoteAverage($listProduct->getVoteAverage());
         $product->setHasAvailableVariant($listProduct->hasAvailableVariant());
         $product->setCheapestUnitPrice($listProduct->getCheapestUnitPrice());
+        $product->setCustomerPriceCount($listProduct->getCustomerPriceCount());
+        $product->setFallbackPriceCount($listProduct->getFallbackPriceCount());
 
         foreach ($listProduct->getAttributes() as $name => $attribute) {
             $product->addAttribute($name, $attribute);
