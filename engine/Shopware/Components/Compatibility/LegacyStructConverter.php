@@ -749,13 +749,7 @@ class LegacyStructConverter
             $cheapestPrice = $product->getCheapestUnitPrice();
         }
 
-        if (count($product->getPrices()) > 1 || $product->hasConfigurator()) {
-            $data['priceStartingFrom'] = $this->sFormatPrice(
-                $cheapestPrice->getCalculatedPrice()
-            );
-        }
-
-        if ($variantPrice->getCalculatedPrice() > $cheapestPrice->getCalculatedPrice()) {
+        if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
             $data['priceStartingFrom'] = $this->sFormatPrice(
                 $cheapestPrice->getCalculatedPrice()
             );
