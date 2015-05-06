@@ -31,15 +31,3 @@ Shopware 5 also provides gradient mixins based on the basic color variables that
 	background-image: -ms-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 	background-image: linear-gradient(to @endTo, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 }
-
-.primary-gradient() {
-	.linear-gradient(@brand-primary-light, @brand-primary);
-}
-
-.secondary-gradient() {
-	.linear-gradient(@brand-secondary, @brand-secondary-dark);
-}
-
-.white-gradient() {
-	.linear-gradient(#fff, @gray-light);
-}
