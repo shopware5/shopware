@@ -97,7 +97,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
                 $context->getFallbackCustomerGroup()
             );
 
-            $prices = array_merge($prices, $fallbackPrices);
+            $prices = $prices + $fallbackPrices;
         }
 
         $priceGroups = $context->getPriceGroups();
