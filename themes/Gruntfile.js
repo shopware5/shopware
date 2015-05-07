@@ -81,7 +81,7 @@ module.exports = function (grunt) {
             js: {
                 files: [
                     '../engine/Shopware/Plugins/**/*.js',
-                    '../themes/Frontend/**/*.js'
+                    '../engine/Shopware/Plugins/**/src/js/**/*.js'
                 ],
                 tasks: ['uglify']
             }
@@ -97,7 +97,8 @@ module.exports = function (grunt) {
             },
             src: [
                 'Gruntfile.js',
-                '../themes/Frontend/**/_public/src/js/*.js'
+                '../themes/Frontend/**/_public/src/js/*.js',
+                '../engine/Shopware/Plugins/**/src/js/**/*.js'
             ]
         }
     });
