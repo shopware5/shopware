@@ -508,7 +508,6 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 ->select()
                 ->from(array('s1' => 's_core_snippets'), array('namespace', 'name', "value as $alias", "dirty as $alias-dirty"))
                 ->where('s1.localeId = ?', 1)
-                ->where('s1.shopId = ?', 1)
                 ->order('s1.namespace');
 
             $counter = 1;
