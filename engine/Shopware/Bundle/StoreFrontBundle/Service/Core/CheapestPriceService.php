@@ -93,7 +93,8 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
             $context->getFallbackCustomerGroup()
         );
 
-        return array_merge($prices, $fallbackPrices);
+        $prices = $prices + $fallbackPrices;
+        return $prices;
     }
 
     /**
