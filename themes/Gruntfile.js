@@ -3,10 +3,9 @@ module.exports = function (grunt) {
         shopId: 1
     });
 
-    var file =  '../web/cache/config_' + grunt.option('shopId') + '.json',
-        config = grunt.file.readJSON(file);
-
-    var lessTargetFile = {},
+    var file = '../web/cache/config_' + grunt.option('shopId') + '.json',
+        config = grunt.file.readJSON(file),
+        lessTargetFile = {},
         jsFiles = [],
         jsTargetFile = {},
         content = '',
