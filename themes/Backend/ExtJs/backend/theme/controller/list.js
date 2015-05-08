@@ -262,21 +262,35 @@ Ext.define('Shopware.apps.Theme.controller.List', {
 
         var record = me.getSelectedTheme();
 
+        /*{if {acl_is_allowed privilege=preview}}*/
         me.getInfoPanel().previewButton.disable();
+        /*{/if}*/
+        /*{if {acl_is_allowed privilege=changeTheme}}*/
         me.getInfoPanel().assignButton.disable();
+        /*{/if}*/
+        /*{if {acl_is_allowed privilege=configureTheme}}*/
         me.getInfoPanel().configureButton.disable();
+        /*{/if}*/
 
         if (record instanceof Ext.data.Model) {
+            /*{if {acl_is_allowed privilege=preview}}*/
             me.getInfoPanel().previewButton.enable();
+            /*{/if}*/
+            /*{if {acl_is_allowed privilege=changeTheme}}*/
             me.getInfoPanel().assignButton.enable();
+            /*{/if}*/
 
             if (record.get('hasConfig')) {
+                /*{if {acl_is_allowed privilege=configureTheme}}*/
                 me.getInfoPanel().configureButton.enable();
+                /*{/if}*/
             }
         }
 
         if (me.previewWindow) {
+            /*{if {acl_is_allowed privilege=preview}}*/
             me.getInfoPanel().previewButton.enable();
+            /*{/if}*/
         }
     },
 
