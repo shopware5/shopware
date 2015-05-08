@@ -113,6 +113,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                     array(4, '100%')
                 ),
                 'value' => 2,
+                'editable' => false
             )
         );
 
