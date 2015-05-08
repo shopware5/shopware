@@ -84,7 +84,7 @@ class Basic implements GeneratorInterface
             $newSize = $this->calculateProportionalThumbnailSize($originalSize, $maxWidth, $maxHeight);
         }
 
-        $newImage = $this->createNewImage($image, $originalSize, $newSize);
+        $newImage = $this->createNewImage($image, $originalSize, $newSize, $this->getImageExtension($destination));
 
         if ($this->fixGdImageBlur) {
             $this->fixGdImageBlur($newSize, $newImage);
@@ -187,15 +187,21 @@ class Basic implements GeneratorInterface
      * @param resource $image
      * @param array    $originalSize
      * @param array    $newSize
+     * @param boolean  $extension
      * @return resource
      */
-    private function createNewImage($image, $originalSize, $newSize)
+    private function createNewImage($image, $originalSize, $newSize, $extension)
     {
         // Creates a new image with given size
         $newImage = imagecreatetruecolor($newSize['width'], $newSize['height']);
 
-        // Disables blending
-        imagealphablending($newImage, false);
+        if (in_array($extension, ['jpg', 'jpeg'])) {
+            $background = imagecolorallocate($newImage, 255, 255, 255);
+            imagefill($newImage, 0, 0, $background);
+        } else {
+            // Disables blending
+            imagealphablending($newImage, false);
+        }
         // Saves the alpha informations
         imagesavealpha($newImage, true);
         // Copies the original image into the new created image with resampling
