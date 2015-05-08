@@ -25,11 +25,11 @@ UPDATE s_core_customergroups SET description = 'B2B / Reseller ' WHERE `groupkey
 
 -- s_core_countries --
 UPDATE s_core_countries SET countryname = CONCAT(UPPER(SUBSTRING(countryen, 1,1)),LOWER(SUBSTRING(countryen, 2)));
-UPDATE s_core_countries SET active = 1 WHERE countryiso = 'GB';
-UPDATE s_core_countries SET active = 0 WHERE countryiso = 'DE';
+UPDATE s_core_countries SET active = 1, areaID = 1 WHERE countryiso = 'GB';
+UPDATE s_core_countries SET active = 0, areaID = 3 WHERE countryiso = 'DE';
 
 -- s_core_countries_areas --
-UPDATE s_core_countries_areas SET name = 'My country' WHERE id = 1;
+UPDATE s_core_countries_areas SET name = 'Great Britain' WHERE id = 1;
 UPDATE s_core_countries_areas SET name = 'World' WHERE id = 2;
 UPDATE s_core_countries_areas SET name = 'Europe' WHERE id = 3;
 
