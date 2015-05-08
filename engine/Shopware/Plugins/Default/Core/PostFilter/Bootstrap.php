@@ -126,10 +126,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $this->backLinkWhiteList = preg_replace('#\s#', '', $shopConfig->seoBackLinkWhiteList);
         $this->backLinkWhiteList = explode(',', $this->backLinkWhiteList);
 
-        $shopHosts = Shopware()->Db()->fetchCol("SELECT host FROM s_core_shops WHERE host > ''");
+        $hosts = $this->getShopHosts();
+
         $this->backLinkWhiteList = array_merge(
             $this->backLinkWhiteList,
-            array_map('trim', $shopHosts)
+            array_map('trim', $hosts)
         );
     }
 
@@ -241,5 +242,29 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             'enable' => false,
             'update' => true
         );
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    private function getShopHosts()
+    {
+        $shop = $this->get('shop');
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        $shopHosts = $this->get('dbal_connection')->fetchAssoc(
+            "SELECT host, hosts FROM s_core_shops WHERE id = :id",
+            [':id' => $shop->getId()]
+        );
+
+        $hosts = [$shopHosts['host']];
+        if (!empty($shopHosts['hosts'])) {
+            $hosts = array_merge($hosts, explode("\n", $shopHosts['hosts']));
+        }
+        $hosts = array_filter($hosts);
+        return $hosts;
     }
 }
