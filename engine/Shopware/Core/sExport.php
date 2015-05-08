@@ -835,7 +835,7 @@ class sExport
             || $this->sSettings["variant_export"] == 1
         ) {
             $sql_add_join[] = "
-                JOIN (SELECT NULL as `articleID` , NULL as `valueID` , NULL as `attr1` , NULL as `attr2` , NULL as `attr3` , NULL as `attr4` , NULL as `attr5` , NULL as `attr6` , NULL as `attr7` , NULL as `attr8` , NULL as `attr9` , NULL as `attr10` , NULL as `standard` , NULL as `active` , NULL as `ordernumber` , NULL as `instock`) as v
+                JOIN (SELECT NULL as `articleID` , NULL as `valueID` , NULL as `attr1` , NULL as `attr2` , NULL as `attr3` , NULL as `attr4` , NULL as `attr5` , NULL as `attr6` , NULL as `attr7` , NULL as `attr8` , NULL as `attr9` , NULL as `attr10` , NULL as `standard` , NULL as `active` , NULL as `ordernumber` , NULL as `instock`, NULL as `minpurchase`) as v
             ";
             $sql_add_join[] = "
                 JOIN (SELECT NULL as articleID, NULL as valueID, NULL as groupkey, NULL as price, NULL as optionID) as gp
@@ -858,7 +858,11 @@ class sExport
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
         if ($this->config->offsetGet('hideNoInstock')) {
-            $sql_add_where[] = "(v.instock > 0 OR d.instock > 0)";
+            $sql_add_where[] = "(
+                (a.laststock * v.instock >= a.laststock * v.minpurchase)
+                OR
+                (a.laststock * d.instock >= a.laststock * d.minpurchase)
+            )";
         }
 
         $sql_add_join = implode(" ", $sql_add_join);
