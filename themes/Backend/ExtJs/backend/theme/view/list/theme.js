@@ -43,7 +43,9 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
         var me = this;
 
         me.items = [
+            /*{if {acl_is_allowed privilege=uploadTheme}}*/
             me.createDropZone(),
+            /*{/if}*/
             me.createInfoView()
         ];
 
