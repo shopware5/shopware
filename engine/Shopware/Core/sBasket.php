@@ -2590,20 +2590,17 @@ class sBasket
             return false;
         }
 
-        // Load translations for article or variant
-        if ($article['main_detail_id'] != $article['articledetailsID']) {
-            $article = $this->moduleManager->Articles()->sGetTranslation(
-                $article,
-                $article['articledetailsID'],
-                "variant"
-            );
-        } else {
-            $article = $this->moduleManager->Articles()->sGetTranslation(
-                $article,
-                $article['articleID'],
-                "article"
-            );
-        }
+        $article = $this->moduleManager->Articles()->sGetTranslation(
+            $article,
+            $article['articleID'],
+            "article"
+        );
+
+        $article = $this->moduleManager->Articles()->sGetTranslation(
+            $article,
+            $article['articledetailsID'],
+            "variant"
+        );
 
         if ($article['configurator_set_id'] > 0) {
             $product = new StoreFrontBundle\Struct\ListProduct(
