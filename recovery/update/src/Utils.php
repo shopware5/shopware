@@ -228,7 +228,32 @@ class Utils
             exit(1);
         }
 
+        self::setNonStrictSQLMode($conn);
+        self::checkSQLMode($conn);
+
         return $conn;
+    }
+
+    /**
+     * @param $conn
+     */
+    protected static function setNonStrictSQLMode(\PDO $conn)
+    {
+        $conn->exec("SET @@session.sql_mode = ''");
+    }
+
+    /**
+     * @param  \PDO              $conn
+     * @throws \RuntimeException
+     */
+    private static function checkSQLMode(\PDO $conn)
+    {
+        $sql = "SELECT @@SESSION.sql_mode;";
+        $result = $conn->query($sql)->fetchColumn(0);
+
+        if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
+        }
     }
 
     /**
