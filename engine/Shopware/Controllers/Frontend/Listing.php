@@ -25,7 +25,7 @@
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -218,7 +218,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $context ShopContextInterface*/
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-            /**@var $factory StoreFrontCriteriaFactory*/
+            /**@var $factory StoreFrontCriteriaFactoryInterface*/
             $factory = $this->get('shopware_search.store_front_criteria_factory');
             $criteria = $factory->createListingCriteria($this->Request(), $context);
 
