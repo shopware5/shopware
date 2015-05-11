@@ -686,11 +686,7 @@
             me.imageHeight = parseInt(me.$el.attr('data-height'), 10);
             me.imageRatio = me.imageWidth / me.imageHeight;
 
-            if (me.opts.bannerMapping) {
-                me.$mapping = me.$el.find(me.opts.bannerMappingSelector);
-                me.resizeMapping();
-            }
-
+            me.resizeBanner();
             me.registerEvents();
         },
 
@@ -700,25 +696,25 @@
         registerEvents: function() {
             var me = this;
 
-            if (me.opts.bannerMapping) me._on(me.$el, 'emotionResize', $.proxy(me.resizeMapping, me));
+            me._on(me.$el, 'emotionResize', $.proxy(me.resizeBanner, me));
         },
 
         /**
          * Does the measuring for the banner mapping container
          * and sets it's new dimensions.
          */
-        resizeMapping: function() {
+        resizeBanner: function() {
             var me = this,
-                containerWidth = me.$container.outerWidth(),
-                containerHeight = me.$container.outerHeight(),
+                containerWidth = me.$el.width(),
+                containerHeight = me.$el.height(),
                 containerRatio = containerWidth / containerHeight,
                 orientation = me.imageRatio > containerRatio,
-                mappingWidth = orientation ? containerHeight * me.imageRatio : '100%',
-                mappingHeight = orientation ? '100%' : containerWidth / me.imageRatio;
+                bannerWidth = orientation ? containerHeight * me.imageRatio : '100%',
+                bannerHeight = orientation ? '100%' : containerWidth / me.imageRatio;
 
-            me.$mapping.css({
-                'width': mappingWidth,
-                'height': mappingHeight
+            me.$container.css({
+                'width': bannerWidth,
+                'height': bannerHeight
             });
         },
 
