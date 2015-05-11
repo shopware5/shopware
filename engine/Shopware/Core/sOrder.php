@@ -700,10 +700,10 @@ class sOrder
             $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
             $this->db->executeUpdate($attributeSql);
 
-            $attributes = $this->getOrderDetailAttributes($orderdetailsID);
-            unset($attributes['id']);
-            unset($attributes['detailID']);
-            $this->sBasketData['content'][$key]['attributes'] = $attributes;
+            $detailAttributes = $this->getOrderDetailAttributes($orderdetailsID);
+            unset($detailAttributes['id']);
+            unset($detailAttributes['detailID']);
+            $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
             if ($basketRow["priceNumeric"] >= 0) {
