@@ -4,6 +4,8 @@
 		{* @deprecated *}
 		{block name='frontend_detail_data_block_prices_headline'}{/block}
 
+        {$hasReferencePrice = ($sArticle.referenceprice > 0)}
+
 		{block name="frontend_detail_data_block_prices_table"}
 			<table class="block-prices--table">
                 {block name="frontend_detail_data_block_prices_table_inner"}
@@ -22,6 +24,13 @@
                                                 {s namespace="frontend/detail/data" name="DetailDataColumnPrice"}{/s}
                                             </th>
                                         {/block}
+                                        {if $hasReferencePrice}
+                                            {block name="frontend_detail_data_block_prices_table_head_cell_reference_price"}
+                                                <th class="block-prices--cell">
+                                                    {s namespace="frontend/detail/data" name="DetailDataColumnReferencePrice"}{/s}
+                                                </th>
+                                            {/block}
+                                        {/if}
                                     {/block}
                                 </tr>
                             {/block}
@@ -51,6 +60,15 @@
                                                         {$blockPrice.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
                                                     </td>
                                                 {/block}
+                                                {if $hasReferencePrice}
+                                                    {block name="frontend_detail_data_block_prices_table_body_cell_reference_price"}
+                                                        <td class="block-prices--cell">
+                                                            {$blockPrice.referenceprice|currency}
+                                                            {s name="Star" namespace="frontend/listing/box_article"}{/s} /
+                                                            {$sArticle.referenceunit} {$sArticle.sUnit.description}
+                                                        </td>
+                                                    {/block}
+                                                {/if}
                                             {/block}
                                         </tr>
                                     {/block}
