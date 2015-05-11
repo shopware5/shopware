@@ -151,7 +151,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $sql = "
                 SELECT
                   ce.name,
-                  IFNULL(IFNULL(cv.value, cm.value), ce.value) as value
+                  IFNULL(IFNULL(cv.value, cm.value), IFNULL(cd.value, ce.value)) as value
                 FROM s_core_plugins p
                 JOIN s_core_config_forms cf
                 ON cf.plugin_id = p.id
@@ -163,11 +163,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 LEFT JOIN s_core_config_values cm
                 ON cm.element_id = ce.id
                 AND cm.shop_id = ?
+                LEFT JOIN s_core_config_values cd
+                ON cd.element_id = ce.id
+                AND cd.shop_id = ?
                 WHERE p.name=?
             ";
+
             $config = $this->Application()->Db()->fetchPairs($sql, array(
                 $shop !== null ? $shop->getId() : null,
                 $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
+                1,
                 $name
             ));
             foreach ($config as $key => $value) {
