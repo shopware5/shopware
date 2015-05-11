@@ -799,7 +799,7 @@ class Media extends ModelEntity
         /** @var \Shopware\Components\Thumbnail\Manager $generator */
         $generator = Shopware()->Container()->get('thumbnail_manager');
 
-        $generator->createMediaThumbnail($this, $this->defaultThumbnails);
+        $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
     }
 
     /**
