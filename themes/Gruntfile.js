@@ -36,7 +36,6 @@ module.exports = function (grunt) {
             production: {
                 options: {
                     compress: true,
-                    mangleProperties: true,
                     preserveComments: false
                 },
                 files: jsTargetFile
@@ -79,6 +78,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: [
+                    '../themes/Frontend/**/_public/src/js/*.js',
                     '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
                 ],
                 tasks: ['uglify']
