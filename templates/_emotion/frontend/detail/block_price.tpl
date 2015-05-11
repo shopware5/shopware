@@ -5,6 +5,8 @@
 			<h5 class="bold">{se namespace="frontend/detail/data" name="DetailDataHeaderBlockprices"}{/se}</h5>
 		{/block}
 
+		{$hasReferencePrice = ($sArticle.referenceprice > 0)}
+
 		{block name="frontend_detail_data_block_prices_table"}
 			<table width="220" border="0" cellspacing="0" cellpadding="0" class="text">
 				{block name="frontend_detail_data_block_prices_table_head"}
@@ -16,6 +18,11 @@
 						<td width='140'>
 							<strong>{se namespace="frontend/detail/data" name="DetailDataColumnPrice"}{/se}</strong>
 						</td>
+						{if $hasReferencePrice}
+							<td width='140'>
+								{s namespace="frontend/detail/data" name="DetailDataColumnReferencePrice"}{/s}
+							</td>
+						{/if}
 					</tr>
 					</thead>
 				{/block}
@@ -36,6 +43,13 @@
 									{$row.price|currency}*
 								</strong>
 							</td>
+							{if $hasReferencePrice}
+								<td class="block-prices--cell">
+									{$row.referenceprice|currency}
+									{s name="Star" namespace="frontend/listing/box_article"}{/s} /
+									{$sArticle.referenceunit} {$sArticle.sUnit.description}
+								</td>
+							{/if}
 						</tr>
 					{/block}
 				{/foreach}
