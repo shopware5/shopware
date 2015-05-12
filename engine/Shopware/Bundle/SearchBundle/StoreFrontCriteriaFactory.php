@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class StoreFrontCriteriaFactory
+class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 {
     const SORTING_RELEASE_DATE = 1;
     const SORTING_POPULARITY = 2;

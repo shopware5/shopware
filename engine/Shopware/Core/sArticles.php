@@ -158,7 +158,7 @@ class sArticles
     private $session;
 
     /**
-     * @var SearchBundle\StoreFrontCriteriaFactory
+     * @var SearchBundle\StoreFrontCriteriaFactoryInterface
      */
     private $storeFrontCriteriaFactory;
 
