@@ -591,6 +591,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
             $value = array_merge($value, $single);
+
+            $fullPath = getcwd() . DIRECTORY_SEPARATOR . $value['path'];
+            list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
+
+            $value['fileInfo'] = array(
+                'width' => $bannerWidth,
+                'height' => $bannerHeight
+            );
         }
 
         return $data;
