@@ -409,7 +409,7 @@
              * @property bannerElSelector
              * @type {string}
              */
-            bannerElSelector: '.emotion--banner',
+            bannerElSelector: '[data-coverImage="true"]',
 
             /**
              * The DOM selector for video elements.
@@ -648,12 +648,20 @@
         defaults: {
 
             /**
-             * Turn banner mapping on and off.
+             * The width of the image in px.
              *
-             * @property bannerMapping
-             * @type {boolean}
+             * @property width
+             * @type {number}
              */
-            bannerMapping: false,
+            width: null,
+
+            /**
+             * The height of the image in px.
+             *
+             * @proeprty height
+             * @type {number}
+             */
+            height: null,
 
             /**
              * The DOM selector for the banner container.
@@ -661,15 +669,7 @@
              * @property containerSelector
              * @type {string}
              */
-            containerSelector: '.banner--content',
-
-            /**
-             * The DOM selector for the banner mapping container.
-             *
-             * @property bannerMappingSelector
-             * @type {string}
-             */
-            bannerMappingSelector: '.banner--mapping'
+            containerSelector: '.banner--content'
         },
 
         /**
@@ -682,9 +682,7 @@
 
             me.$container = me.$el.find(me.opts.containerSelector);
 
-            me.imageWidth = parseInt(me.$el.attr('data-width'), 10);
-            me.imageHeight = parseInt(me.$el.attr('data-height'), 10);
-            me.imageRatio = me.imageWidth / me.imageHeight;
+            me.imageRatio = me.opts.width / me.opts.height;
 
             me.resizeBanner();
             me.registerEvents();

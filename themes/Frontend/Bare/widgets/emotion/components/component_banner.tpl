@@ -1,5 +1,6 @@
 {block name="widget_emotion_component_banner"}
     <div class="emotion--banner"
+         data-coverImage="true"
          data-width="{$Data.fileInfo.width}"
          data-height="{$Data.fileInfo.height}"
          {if $Data.bannerMapping}data-bannerMapping="true"{/if}>
