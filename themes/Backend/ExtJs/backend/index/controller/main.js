@@ -158,7 +158,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             },
             /*{/if}*/
 
-            /*{if {acl_is_allowed privilege=read resource=article} || {acl_is_allowed privilege=read resource=articlelist} || {acl_is_allowed privilege=read resource=order} || {acl_is_allowed privilege=read resource=customer} || {acl_is_allowed privilege=read resource=pluginmanager} || {acl_is_allowed privilege=clear resource=performance}}*/
             // Shopware Community - CTRL + ALT + H
             {
                 key: 'h',
@@ -168,7 +167,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     createKeyNavOverlay();
                 }
             },
-            /*{/if}*/
 
             /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
             // Plugin Manager - CTRL + ALT + P
@@ -315,60 +313,60 @@ openNewModule = function(subapp, options) {
 
 createKeyNavOverlay = function() {
     var store = Ext.create('Ext.data.Store', {
-        fields: [ 'name', 'key', 'alt', 'ctrl' ],
-        data: [
-            /*{if {acl_is_allowed privilege=read resource=article}}*/
-            { name: '{s name=title/article}Article{/s}', key: 'n', alt: true , ctrl: true },
-            /*{/if}*/
-            /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
-            { name: '{s name=title/article_overview}Article overview{/s}', key: 'o', alt: true , ctrl: true },
-            /*{/if}*/
-            /*{if {acl_is_allowed privilege=read resource=order}}*/
-            { name: '{s name=title/order}Order{/s}', key: 'b', alt: true , ctrl: true },
-            /*{/if}*/
-            /*{if {acl_is_allowed privilege=read resource=customer}}*/
-            { name: '{s name=title/customer}Customer{/s}', key: 'k', alt: true , ctrl: true },
-            /*{/if}*/
-            /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
-            { name: '{s name=title/plugin_manager}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
-            /*{/if}*/
-            /*{if {acl_is_allowed privilege=clear resource=performance}}*/
-            { name: '{s name=title/cache_template}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
-            { name: '{s name=title/cache_config}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
-            { name: '{s name=title/cache_frontend}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
-            /*{/if}*/
-        ]
-    });
+            fields: [ 'name', 'key', 'alt', 'ctrl' ],
+            data: [
+                /*{if {acl_is_allowed privilege=read resource=article}}*/
+                { name: '{s name=title/article}Article{/s}', key: 'n', alt: true , ctrl: true },
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=read resource=articlelist}}*/
+                { name: '{s name=title/article_overview}Article overview{/s}', key: 'o', alt: true , ctrl: true },
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=read resource=order}}*/
+                { name: '{s name=title/order}Order{/s}', key: 'b', alt: true , ctrl: true },
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=read resource=customer}}*/
+                { name: '{s name=title/customer}Customer{/s}', key: 'k', alt: true , ctrl: true },
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
+                { name: '{s name=title/plugin_manager}Plugin manager{/s}', key: 'p', alt: true , ctrl: true },
+                /*{/if}*/
+                /*{if {acl_is_allowed privilege=clear resource=performance}}*/
+                { name: '{s name=title/cache_template}Clear template cache{/s}', key: 't', alt: true , ctrl: true },
+                { name: '{s name=title/cache_config}Clear config cache{/s}', key: 'x', alt: true , ctrl: true },
+                { name: '{s name=title/cache_frontend}Clear shop cache{/s}', key: 'f', alt: true , ctrl: true }
+                /*{/if}*/
+            ]
+        }),
+        tpl = new Ext.XTemplate(
+            '{literal}<tpl for=".">',
+                '<div class="row">',
+                    '<span class="title">{name}:</span>',
+                    '<div class="keys">',
 
-    var tpl = new Ext.XTemplate(
-        '{literal}<tpl for=".">',
-            '<div class="row">',
-                '<span class="title">{name}:</span>',
-                '<div class="keys">',
+                        // Ctrl key
+                        '<tpl if="ctrl === true">',
+                            '<span class="sprite-key_ctrl_alternative">ctrl</span>',
+                        '</tpl>',
 
-                    // Ctrl key
-                    '<tpl if="ctrl === true">',
-                        '<span class="sprite-key_ctrl_alternative">ctrl</span>',
-                    '</tpl>',
+                        // Alt key
+                        '<tpl if="alt === true">',
+                            '<span class="key_sep">+</span>',
+                            '<span class="sprite-key_alt_alternative">alt</span>',
+                        '</tpl>',
 
-                    // Alt key
-                    '<tpl if="alt === true">',
+                        // Output the actual key
                         '<span class="key_sep">+</span>',
-                        '<span class="sprite-key_alt_alternative">alt</span>',
-                    '</tpl>',
-
-                    // Output the actual key
-                    '<span class="key_sep">+</span>',
-                    '<span class="sprite-key_{key}">{key}</span>',
+                        '<span class="sprite-key_{key}">{key}</span>',
+                    '</div>',
                 '</div>',
-            '</div>',
-        '</tpl>{/literal}'
-    );
-
-    var dataView = Ext.create('Ext.view.View', {
-        store: store,
-        tpl: tpl
-    });
+            '</tpl>{/literal}'
+        ),
+        emptyTpl = '<span class="no-shortcuts">{s name=shortcuts/no_shortcuts_acl}Due to your permissions, there are no shortcuts available{/s}</span>',
+        itemCount = store.totalCount,
+        dataView = Ext.create('Ext.view.View', {
+            store: store,
+            tpl: itemCount ? tpl : emptyTpl
+        });
 
     var win = Ext.create('Ext.window.Window', {
         modal: true,
