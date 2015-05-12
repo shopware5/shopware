@@ -54,7 +54,15 @@ Ext.define('Shopware.apps.Config.view.priceGroup.Discount', {
             editable: false,
             name: 'customerGroupId',
             store: 'base.CustomerGroup',
-            emptyText: '{s name=price_group/table/customer_group_empty_text}Please select...{/s}'
+            emptyText: '{s name=price_group/table/customer_group_empty_text}Please select...{/s}',
+            listeners: {
+                enable: function() {
+                    // Preselect first item
+                    if(this.store.getAt('0')) {
+                        this.setValue(this.store.getAt('0').get('id'));
+                    }
+                }
+            }
         });
         return topBar;
     }
