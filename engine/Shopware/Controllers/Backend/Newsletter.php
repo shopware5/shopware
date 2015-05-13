@@ -384,6 +384,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
 
         $this->Request()
             ->setHttpHost($shop->getHost())
+            ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
 
         Shopware()->Session()->sUserGroup = $mailing['customergroup'];
