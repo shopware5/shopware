@@ -518,7 +518,7 @@ class Component extends ModelEntity
     public function createHtmlEditorField(array $options)
     {
         $options += array(
-            'xtype' => 'htmleditor'
+            'xtype' => 'tinymce'
         );
 
         return $this->createField($options);
