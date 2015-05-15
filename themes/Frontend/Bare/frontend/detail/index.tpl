@@ -171,15 +171,17 @@
     
                             {* Configurator drop down menu's *}
                             {block name="frontend_detail_index_configurator"}
-                                {if $sArticle.sConfigurator}
-                                    {if $sArticle.sConfiguratorSettings.type == 1}
-                                        {include file="frontend/detail/config_step.tpl"}
-                                    {elseif $sArticle.sConfiguratorSettings.type == 2}
-                                        {include file="frontend/detail/config_variant.tpl"}
-                                    {else}
-                                        {include file="frontend/detail/config_upprice.tpl"}
+                                <div class="product--configurator">
+                                    {if $sArticle.sConfigurator}
+                                        {if $sArticle.sConfiguratorSettings.type == 1}
+                                            {include file="frontend/detail/config_step.tpl"}
+                                        {elseif $sArticle.sConfiguratorSettings.type == 2}
+                                            {include file="frontend/detail/config_variant.tpl"}
+                                        {else}
+                                            {include file="frontend/detail/config_upprice.tpl"}
+                                        {/if}
                                     {/if}
-                                {/if}
+                                </div>
                             {/block}
     
                             {* Include buy button and quantity box *}
