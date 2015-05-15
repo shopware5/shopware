@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             name: 'mainDetail[number]',
             dataIndex: 'mainDetail[number]',
             fieldLabel: me.snippets.number,
-            regex: /^[a-zA-Z0-9-_. ]+$/,
+            regex: /^[a-zA-Z0-9-_.]+$/,
             regexText: me.snippets.regexNumberValidation,
             allowBlank: false,
             enableKeyEvents:true,
