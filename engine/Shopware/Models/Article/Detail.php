@@ -62,7 +62,7 @@ class Detail extends ModelEntity
     /**
      * @var string $number
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-zA-Z0-9-_. ]+$/")
+     * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
      *
      * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
      */
