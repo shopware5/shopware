@@ -3567,6 +3567,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
+        foreach ($result as &$esdArticle) {
+            $builder = Shopware()->Models()->createQueryBuilder();
+
+            $builder->select('esd', 'attribute')
+                    ->from('Shopware\Models\Article\Esd', 'esd')
+                    ->leftJoin('esd.attribute', 'attribute')
+                    ->where('esd.id = :id')
+                    ->setParameter('id', $esdArticle['id']);
+
+            $esdArticleWithAttributes = $builder->getQuery()->getArrayResult();
+            $esdArticle['attribute'] = $esdArticleWithAttributes[0]['attribute'];
+        }
+
         $this->View()->assign(array(
             'data' => $result,
             'total' => $totalResult,
