@@ -3567,6 +3567,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
+        //selects and inserts all attributes which belongs to an esd article
         foreach ($result as &$esdArticle) {
             $builder = Shopware()->Models()->createQueryBuilder();
 
