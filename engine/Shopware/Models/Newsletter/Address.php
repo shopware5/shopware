@@ -122,6 +122,22 @@ class Address extends LazyFetchModelEntity
     private $lastReadId = 0;
 
     /**
+     * The Double-Opt-In date
+     *
+     * @var \DateTime $added
+     * @ORM\Column(name="added", type="datetime", nullable=false)
+     */
+    private $added;
+
+    /**
+     * Sets the default value for the added column
+     */
+    function __construct()
+    {
+        $this->added = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -233,5 +249,21 @@ class Address extends LazyFetchModelEntity
     public function getCustomer()
     {
         return $this->fetchLazy($this->customer, array('email' => $this->email));
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAdded()
+    {
+        return $this->added;
+    }
+
+    /**
+     * @param \DateTime $added
+     */
+    public function setAdded($added)
+    {
+        $this->added = $added;
     }
 }

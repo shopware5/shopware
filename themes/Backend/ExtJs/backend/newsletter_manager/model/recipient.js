@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.NewsletterManager.model.Recipient', {
         { name: 'isCustomer', type: 'boolean' },
         { name: 'email', type: 'string' },
         { name: 'groupId', type: 'int' },
-        { name: 'lastNewsletterId', type: 'int' }
+        { name: 'lastNewsletterId', type: 'int' },
+        { name: 'added', type: 'date' }
     ],
 
 
