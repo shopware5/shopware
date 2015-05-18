@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     {
         try {
             $params = $this->Request()->getParams();
-            $params['key'] = utf8_encode(html_entity_decode($params['key']));
+            $params['key'] = html_entity_decode($params['key']);
 
             $logModel = new Shopware\Models\Log\Log;
 
