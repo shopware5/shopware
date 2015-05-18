@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         var me = this;
 
         // Init main window
-        me.mainWindow = me.getView((me.subApplication.mode) ? 'main.Iframe' : 'main.Window').create({
+        me.mainWindow = me.getView('main.Window').create({
             mode: me.subApplication.mode,
             autoShow: true,
             hideNavigation: !!me.action
