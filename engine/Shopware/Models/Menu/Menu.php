@@ -318,9 +318,12 @@ class Menu extends ModelEntity
     /**
      * @param Menu $parent
      */
-    public function setParent(Menu $parent)
+    public function setParent(Menu $parent = null)
     {
-        $parent->getChildren()->add($this);
+        // Parent may be null when this menu item should be a main menu item
+        if ($parent) {
+            $parent->getChildren()->add($this);
+        }
         $this->parent = $parent;
     }
 

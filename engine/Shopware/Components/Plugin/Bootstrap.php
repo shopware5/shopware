@@ -360,23 +360,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (!isset($options['label'])) {
             return null;
         }
-        if (isset($options['parent'])
-            && $options['parent'] instanceof \Shopware\Models\Menu\Menu
-        ) {
-            $parentId = $options['parent']->getId();
-        } else {
-            $parentId = null;
-            unset($options['parent']);
-        }
-        $item = $this->Menu()->findOneBy(
-            array(
-                'label' => $options['label'],
-                'parentId' => $parentId
-            )
-        );
-        if ($item === null) {
-            $item = new Shopware\Models\Menu\Menu();
-        }
+
+        $item = new Shopware\Models\Menu\Menu();
         $item->fromArray($options);
         $plugin = $this->Plugin();
         $plugin->getMenuItems()->add($item);
