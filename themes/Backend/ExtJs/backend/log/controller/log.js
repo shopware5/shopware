@@ -53,8 +53,9 @@ Ext.define('Shopware.apps.Log.controller.Log', {
 		var me = this;
 
 		me.control({
-			'log-main-list actioncolumn':{
-				deleteColumn: me.onDeleteSingleLog
+			'log-main-list':{
+				deleteColumn: me.onDeleteSingleLog,
+                openLog: me.onViewLog
 			},
 			'log-main-list toolbar combobox': {
 				change: me.onSelectFilter
@@ -171,6 +172,14 @@ Ext.define('Shopware.apps.Log.controller.Log', {
 			//Loads the store with a special filter
 			store.filter('searchValue',selectedDisplayText);
 		}
-	}
+	},
+
+    onViewLog: function (log) {
+        var me = this;
+
+        me.getView('log.Detail').create({
+            log: log.data
+        });
+    }
 });
 //{/block}
