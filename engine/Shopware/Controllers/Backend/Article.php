@@ -239,8 +239,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $this->configuratorDependencyRepository;
     }
 
-
-
     /**
      * Helper function to get access to the configuratorGroup repository.
      * @return \Shopware\Components\Model\ModelRepository
@@ -3582,12 +3580,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Helper method which selects esd attributes and maps them into the esd listing array
      *
-     * @param array $result
+     * @param array $esdAttributesList
      * @return array
      */
-    private function getEsdListingAttributes($result)
+    private function getEsdListingAttributes($esdAttributesList)
     {
-        $ids = array_column($result, 'id');
+        $ids = array_column($esdAttributesList, 'id');
+
         $query = $this->getManager()->createQueryBuilder();
         $query->select('attribute')
                 ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
@@ -3596,14 +3595,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $esdAttributes = $query->getQuery()->getArrayResult();
 
-        foreach ($result as &$row) {
+        foreach ($esdAttributesList as &$row) {
             $row['attribute'] = [];
             if (isset($esdAttributes[$row['id']])) {
                 $row['attribute'] = $esdAttributes[$row['id']];
             }
         }
 
-        return $result;
+        return $esdAttributesList;
     }
 
     /**
