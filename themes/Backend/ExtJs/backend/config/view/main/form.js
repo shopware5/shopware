@@ -97,11 +97,11 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
         me.shopStore.each(function(shop) {
             fields = [];
             form.getElements().each(function(element) {
-                value = element.getValues().find('shopId', shop.getId());
+                value = element.getValues().find('shopId', shop.getId(), 0, false, true, true);
                 value = element.getValues().getAt(value);
                 var initialValue = value;
                 if(!value && shop.getId() != 1) {
-                    value = element.getValues().find('shopId', 1);
+                    value = element.getValues().find('shopId', 1, 0, false, true, true);
                     value = element.getValues().getAt(value);
                 }
 
