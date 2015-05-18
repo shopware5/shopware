@@ -388,7 +388,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 xtype:'combobox',
                 name:'shopId',
                 fieldLabel:'{s name=detail_general/field/restrict_on_sub_shop}Restrict to subshop{/s}',
-                store:Ext.create('Shopware.store.Shop').load(),
+                store:Ext.create('Shopware.store.ShopLanguage').load(),
                 valueField:'id',
                 editable:true,
                 displayField:'name'
