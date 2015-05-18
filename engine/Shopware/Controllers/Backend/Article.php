@@ -239,6 +239,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $this->configuratorDependencyRepository;
     }
 
+
+
     /**
      * Helper function to get access to the configuratorGroup repository.
      * @return \Shopware\Components\Model\ModelRepository
@@ -3567,8 +3569,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
-        //maps the esd attributes to the esd articles in the listing array
-        $result = $this->getEsdListingAttributes($result, $articleId);
+        //inserts esd attributes into the result
+        $result = $this->getEsdListingAttributes($result);
 
         $this->View()->assign(array(
             'data' => $result,
@@ -3578,48 +3580,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * helper function which selects esd attributes for the listing
+     * Helper method which selects esd attributes and maps them into the esd listing array
      *
-     * @param array $esdListing
-     * @param int $articleId
+     * @param array $result
      * @return array
      */
-    private function getEsdListingAttributes($esdListing, $articleId)
+    private function getEsdListingAttributes($result)
     {
-        //gets the esd ids for the listing
-        $query = $this->getRepository()->getEsdIdsByArticleIdQuery($articleId);
-        $esdListingIds = $query->getArrayResult();
+        $ids = array_column($result, 'id');
+        $query = $this->getManager()->createQueryBuilder();
+        $query->select('attribute')
+                ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
+                ->where('attribute.articleEsdId IN (:ids)')
+                ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        //gets the esd attributes for every esd article in the listing
-        $query = $this->getRepository()->getEsdAttributesQuery($esdListingIds);
-        $esdWithAttributes = $query->getArrayResult();
+        $esdAttributes = $query->getQuery()->getArrayResult();
 
-        $esdListing = $this->mapEsdAttributes($esdListing, $esdWithAttributes);
-
-        return $esdListing;
-    }
-
-    /**
-     * helper function which maps the esd attributes into the esd list
-     *
-     * @param array $esdListing
-     * @param array $esdWithAttributes
-     * @return array
-     */
-    private function mapEsdAttributes($esdListing, $esdWithAttributes)
-    {
-        foreach ($esdListing as $key => $esd) {
-            foreach ($esdWithAttributes as $esdWithAttribute) {
-
-                if ($esd['id'] == $esdWithAttribute['id']) {
-                    $esdListing[$key]['attribute'] = $esdWithAttribute['attribute'];
-                    break 1;
-                }
-
+        foreach ($result as &$row) {
+            $row['attribute'] = [];
+            if (isset($esdAttributes[$row['id']])) {
+                $row['attribute'] = $esdAttributes[$row['id']];
             }
         }
 
-        return $esdListing;
+        return $result;
     }
 
     /**
