@@ -3567,25 +3567,59 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
-        //selects and inserts all attributes which belongs to an esd article
-        foreach ($result as &$esdArticle) {
-            $builder = Shopware()->Models()->createQueryBuilder();
-
-            $builder->select('esd', 'attribute')
-                    ->from('Shopware\Models\Article\Esd', 'esd')
-                    ->leftJoin('esd.attribute', 'attribute')
-                    ->where('esd.id = :id')
-                    ->setParameter('id', $esdArticle['id']);
-
-            $esdArticleWithAttributes = $builder->getQuery()->getArrayResult();
-            $esdArticle['attribute'] = $esdArticleWithAttributes[0]['attribute'];
-        }
+        //maps the esd attributes to the esd articles in the listing array
+        $result = $this->getEsdListingAttributes($result, $articleId);
 
         $this->View()->assign(array(
             'data' => $result,
             'total' => $totalResult,
             'success' => true
         ));
+    }
+
+    /**
+     * helper function which selects esd attributes for the listing
+     *
+     * @param array $esdListing
+     * @param int $articleId
+     * @return array
+     */
+    private function getEsdListingAttributes($esdListing, $articleId)
+    {
+        //gets the esd ids for the listing
+        $query = $this->getRepository()->getEsdIdsByArticleIdQuery($articleId);
+        $esdListingIds = $query->getArrayResult();
+
+        //gets the esd attributes for every esd article in the listing
+        $query = $this->getRepository()->getEsdAttributesQuery($esdListingIds);
+        $esdWithAttributes = $query->getArrayResult();
+
+        $esdListing = $this->mapEsdAttributes($esdListing, $esdWithAttributes);
+
+        return $esdListing;
+    }
+
+    /**
+     * helper function which maps the esd attributes into the esd list
+     *
+     * @param array $esdListing
+     * @param array $esdWithAttributes
+     * @return array
+     */
+    private function mapEsdAttributes($esdListing, $esdWithAttributes)
+    {
+        foreach ($esdListing as $key => $esd) {
+            foreach ($esdWithAttributes as $esdWithAttribute) {
+
+                if ($esd['id'] == $esdWithAttribute['id']) {
+                    $esdListing[$key]['attribute'] = $esdWithAttribute['attribute'];
+                    break 1;
+                }
+
+            }
+        }
+
+        return $esdListing;
     }
 
     /**
