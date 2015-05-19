@@ -81,7 +81,6 @@ Ext.define('Shopware.apps.Order', {
         'list.Filter',
         'list.List',
         'list.Navigation',
-        'list.Statistic',
         'list.Position',
         'list.Document',
         'batch.Window',
@@ -95,7 +94,7 @@ Ext.define('Shopware.apps.Order', {
      * Array of stores to require from AppName.store namespace.
      * @array
      */
-    stores:[ 'OrderHistory', 'Order', 'Voucher', 'DocType', 'Statistic','Configuration', 'Batch', 'Tax',  'DetailBatch', 'ListBatch' ],
+    stores:[ 'OrderHistory', 'Order', 'Voucher', 'DocType','Configuration', 'Batch', 'Tax',  'DetailBatch', 'ListBatch' ],
 
     /**
      * Array of models to require from AppName.model namespace.
@@ -120,7 +119,6 @@ Ext.define('Shopware.apps.Order', {
         'Mail',
         'BillingAttribute',
         'ShippingAttribute',
-        'Statistic',
         'DetailBatch',
         'ListBatch'
     ],

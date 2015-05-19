@@ -87,8 +87,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                         paymentStatusStore: stores['paymentStatusStore'],
                         taxStore: me.getStore('Tax'),
                         statusStore: stores['statusStore'],
-                        listStore: me.subApplication.getStore('Order').load(),
-                        statisticStore: Ext.create('Shopware.apps.Order.store.Statistic').load()
+                        listStore: me.subApplication.getStore('Order').load()
                     });
                 }
             });
