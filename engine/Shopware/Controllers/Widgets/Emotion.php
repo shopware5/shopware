@@ -319,7 +319,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         //now we get the configured image and thumbnail dir.
         $imageDir = $context->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
+        $imageDir = str_replace('/media/image/', '/', $imageDir);
 
         foreach ($result as &$entry) {
             foreach ($entry['media'] as $media) {
@@ -462,7 +462,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         // Get image size of the banner
         if (isset($data['file']) && !empty($data['file'])) {
-            $fullPath = $this->get('kernel')->getRootDir() . DIRECTORY_SEPARATOR . $data['file'];
+            $fullPath = $this->get('kernel')->getRootDir() . '/' . $data['file'];
             list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
 
             $data['fileInfo'] = array(
@@ -592,7 +592,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
             $value = array_merge($value, $single);
 
-            $fullPath = $this->get('kernel')->getRootDir() . DIRECTORY_SEPARATOR . $value['path'];
+            $fullPath = $this->get('kernel')->getRootDir() . '/' . $value['path'];
             list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
 
             $value['fileInfo'] = array(
