@@ -31,24 +31,26 @@
                                     {block name="frontend_widgets_banner_slider_banner"}
                                         <div class="banner-slider--banner">
 
-                                            {if $banner.thumbnails}
-                                                {$colSize = 100 / $emotion.grid.cols}
-                                                {$itemSize = $itemCols * $colSize}
+                                            {block name="frontend_widgets_banner_slider_banner_picture"}
+                                                {if $banner.thumbnails}
+                                                    {$colSize = 100 / $emotion.grid.cols}
+                                                    {$itemSize = $itemCols * $colSize}
 
-                                                {foreach $banner.thumbnails as $image}
-                                                    {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
+                                                    {foreach $banner.thumbnails as $image}
+                                                        {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
 
-                                                    {if $image.retinaSource}
-                                                        {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
-                                                    {/if}
-                                                {/foreach}
-                                            {/if}
+                                                        {if $image.retinaSource}
+                                                            {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
+                                                        {/if}
+                                                    {/foreach}
+                                                {/if}
 
-                                            <picture>
-                                                {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
-                                                {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
-                                                <img src="{$banner.source}" sizes="{$itemSize}vw" class="banner-slider--image"{if $banner.altText} alt="{$banner.altText|escape}"{/if} />
-                                            </picture>
+                                                <picture>
+                                                    {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
+                                                    {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
+                                                    <img src="{$banner.source}" sizes="{$itemSize}vw" class="banner-slider--image"{if $banner.altText} alt="{$banner.altText|escape}"{/if} />
+                                                </picture>
+                                            {/block}
                                         </div>
                                     {/block}
 
