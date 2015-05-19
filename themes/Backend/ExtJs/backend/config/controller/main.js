@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         'base.Search',
         'base.Property',
 
-        'main.Window', 'main.Navigation', 'main.Iframe',
+        'main.Window', 'main.Navigation',
         'main.Panel',
         'main.Form', 'main.Fieldset',
 
