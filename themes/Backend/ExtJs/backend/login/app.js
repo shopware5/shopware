@@ -31,9 +31,8 @@
  * Shopware UI - Login Bootstrap
  *
  * This file bootstrapps the login module.
- *
- * todo@all: Documentation
  */
+//{block name="backend/login/app"}
 Ext.define('Shopware.apps.Login', {
 
     /**
@@ -114,3 +113,4 @@ Ext.define('Shopware.apps.Login', {
         return mainController.mainWindow;
     }
 });
+//{/block}

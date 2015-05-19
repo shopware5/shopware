@@ -1,4 +1,4 @@
-
+//{block name="backend/first_run_wizard/app"}
 Ext.define('Shopware.apps.FirstRunWizard', {
     name:'Shopware.apps.FirstRunWizard',
     extend:'Enlight.app.SubApplication',
@@ -43,5 +43,4 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         return this.getController('Main').mainWindow;
     }
 });
-
-
+//{/block}
