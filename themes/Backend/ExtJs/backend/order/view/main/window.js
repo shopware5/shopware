@@ -141,7 +141,6 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
                 })]
             }, Ext.create('Shopware.apps.Order.view.list.Navigation', {
                 region: 'west',
-                statisticStore: me.statisticStore,
                 orderStatusStore: me.orderStatusStore,
                 paymentStatusStore: me.paymentStatusStore
             })

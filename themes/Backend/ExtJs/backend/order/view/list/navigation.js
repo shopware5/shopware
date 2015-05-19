@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      * Set border layout for the panel content
      * @string
      */
-    layout:'accordion',
+    layout:'anchor',
     /**
      * Set css class for this component
      * @string
@@ -112,9 +112,6 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
                 documentStore: me.documentStore,
                 orderStatusStore: me.orderStatusStore,
                 paymentStatusStore: me.paymentStatusStore
-            }),
-            Ext.create('Shopware.apps.Order.view.list.Statistic', {
-                statisticStore: me.statisticStore
             })
         ];
     }
