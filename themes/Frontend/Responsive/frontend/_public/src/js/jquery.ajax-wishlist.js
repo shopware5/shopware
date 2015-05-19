@@ -65,7 +65,7 @@
              * @property delay
              * @type {Number}
              */
-            delay: 5000
+            delay: 1500
         },
 
         /**
