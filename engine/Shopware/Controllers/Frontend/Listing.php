@@ -408,7 +408,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl');
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module');
         $queryParamsNames = array_keys($this->Request()->getParams());
         $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
         

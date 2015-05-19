@@ -42,4 +42,19 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
         $this->assertNotContains('sCoreId', $match[1]);
         $this->assertLinkExists($match[1]);
     }
+
+    /**
+     * Test the home redirect if the base category called directly
+     * The request should return a 301 redirection to the base homepage.
+     *
+     * @ticket SW-11418
+     */
+    public function testHomeRedirect()
+    {
+        $mainCategory = Shopware()->Shop()->getCategory()->getId();
+        
+        $this->dispatch('/cat/index/sCategory/' . $mainCategory);
+
+        $this->assertEquals(301, $this->Response()->getHttpResponseCode());
+    }
 }
