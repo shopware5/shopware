@@ -11,6 +11,7 @@
                 {block name="widget_emotion_component_banner_image"}
 
                     {if $Data.thumbnails}
+                        {$baseSource = $Data.thumbnails[0].source}
                         {$colSize = 100 / $emotion.grid.cols}
                         {$itemSize = $itemCols * $colSize}
 
@@ -21,12 +22,14 @@
                                 {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
                             {/if}
                         {/foreach}
+                    {else}
+                        {$baseSource = $Data.source}
                     {/if}
 
                     <picture>
                         {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
                         {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
-                        <img src="{$Data.source}" sizes="{$itemSize}vw" class="banner--image"{if $Data.title} alt="{$Data.title|escape}"{/if} />
+                        <img src="{$baseSource}" sizes="{$itemSize}vw" class="banner--image"{if $Data.title} alt="{$Data.title|escape}"{/if} />
                     </picture>
                 {/block}
 

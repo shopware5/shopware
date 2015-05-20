@@ -33,6 +33,8 @@
                                                 {block name='frontend_listing_box_article_image_picture'}
                                                     {if $sArticle.image.thumbnails}
 
+                                                        {$baseSource = $sArticle.image.thumbnails[0].source}
+
                                                         {if $itemCols && $emotion.grid.cols}
                                                             {$colSize = 100 / $emotion.grid.cols}
                                                             {$itemSize = "{$itemCols * $colSize}vw"}
@@ -47,12 +49,16 @@
                                                                 {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
                                                             {/if}
                                                         {/foreach}
+                                                    {elseif $sArticle.image.source}
+                                                        {$baseSource = $sArticle.image.source}
+                                                    {else}
+                                                        {$baseSource = "{link file='frontend/_public/src/img/no-picture.jpg'}"}
                                                     {/if}
 
                                                     <picture>
                                                         {if $srcSetRetina}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
                                                         {if $srcSet}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSet}" />{/if}
-                                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape}" />
+                                                        <img src="{$baseSource}" alt="{$sArticle.articleName|escape}" />
                                                     </picture>
                                                 {/block}
                                             </span>
