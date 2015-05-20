@@ -95,7 +95,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         clearText += '{s name=tabs/start/info_text_clear_all}{/s}:<br/>';
         clearText += '<ul>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line1}{/s}</li>';
-        clearText += '<li>{s name=tabs/start/info_text_clear_all_line2}{/s}</li>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line3}{/s}</li>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line4}{/s}</li>';
         clearText += '</ul>';
