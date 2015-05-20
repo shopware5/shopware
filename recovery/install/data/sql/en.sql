@@ -4,6 +4,9 @@ UPDATE `s_core_paymentmeans` SET description = 'Cash', additionaldescription = '
 UPDATE `s_core_paymentmeans` SET description = 'Invoice', additionaldescription = '' WHERE name= 'invoice';
 UPDATE `s_core_paymentmeans` SET description = 'Prepayment', additionaldescription = '' WHERE name= 'prepayment';
 
+-- s_campaigns_sender --
+UPDATE `s_campaigns_sender` SET `name` = 'Newsletter sender' WHERE id = 1;
+
 -- s_core_detail_states --
 UPDATE s_core_detail_states SET description = 'Open' WHERE id = 0;
 UPDATE s_core_detail_states SET description = 'In progress' WHERE id = 1;
