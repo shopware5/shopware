@@ -68,7 +68,7 @@ class Price extends LazyFetchModelEntity
      *
      * @ORM\Column(name="`from`", type="integer", nullable=false)
      */
-    private $from;
+    private $from = 0;
 
     /**
      * @var integer $to
