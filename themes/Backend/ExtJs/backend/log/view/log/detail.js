@@ -92,8 +92,8 @@ Ext.define('Shopware.apps.Log.view.log.Detail', {
     /**
      * Returns the items of the log detail window.
      *
-     * @param {Object} log
-     * @returns {Array}
+     * @param { Object } log
+     * @returns { Array }
      */
     getPanelItems: function (log) {
         var me = this,
