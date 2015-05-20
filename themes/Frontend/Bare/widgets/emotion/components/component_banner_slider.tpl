@@ -33,6 +33,7 @@
 
                                             {block name="frontend_widgets_banner_slider_banner_picture"}
                                                 {if $banner.thumbnails}
+                                                    {$baseSource = $banner.thumbnails[0].source}
                                                     {$colSize = 100 / $emotion.grid.cols}
                                                     {$itemSize = $itemCols * $colSize}
 
@@ -43,12 +44,14 @@
                                                             {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
                                                         {/if}
                                                     {/foreach}
+                                                {else}
+                                                    {$baseSource = $banner.source}
                                                 {/if}
 
                                                 <picture>
                                                     {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
                                                     {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
-                                                    <img src="{$banner.source}" sizes="{$itemSize}vw" class="banner-slider--image"{if $banner.altText} alt="{$banner.altText|escape}"{/if} />
+                                                    <img src="{$baseSource}" sizes="{$itemSize}vw" class="banner-slider--image"{if $banner.altText} alt="{$banner.altText|escape}"{/if} />
                                                 </picture>
                                             {/block}
                                         </div>
