@@ -1,67 +1,37 @@
 {block name="widget_emotion_component_banner"}
     <div class="emotion--banner"
+         data-coverImage="true"
          data-width="{$Data.fileInfo.width}"
          data-height="{$Data.fileInfo.height}"
          {if $Data.bannerMapping}data-bannerMapping="true"{/if}>
 
-        {strip}
-        <style type="text/css">
-            {if empty($Data.thumbnails)}
-                #banner--{$Data.objectId} {
-                    background-image: url('{$Data.source}');
-                }
-            {else}
-                {$images = $Data.thumbnails}
-
-                #banner--{$Data.objectId} {
-                    background-image: url('{$images[0].source}');
-                }
-
-                {if isset($images[0].retinaSource)}
-                @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-                    #banner--{$Data.objectId} {
-                        background-image: url('{$images[0].retinaSource}');
-                    }
-                }
-                {/if}
-
-                @media screen and (min-width: 48em) {
-                    #banner--{$Data.objectId} {
-                        background-image: url('{$images[1].source}');
-                    }
-                }
-
-                {if isset($images[1].retinaSource)}
-                @media screen and (min-width: 48em) and (-webkit-min-device-pixel-ratio: 2),
-                       screen and (min-width: 48em) and (min-resolution: 192dpi) {
-                    #banner--{$Data.objectId} {
-                        background-image: url('{$images[1].retinaSource}');
-                    }
-                }
-                {/if}
-
-                @media screen and (min-width: 78.75em) {
-                    .is--fullscreen #banner--{$Data.objectId} {
-                        background-image: url('{$images[2].source}');
-                    }
-                }
-
-                {if isset($images[2].retinaSource)}
-                @media screen and (min-width: 78.75em) and (-webkit-min-device-pixel-ratio: 2),
-                       screen and (min-width: 78.75em) and (min-resolution: 192dpi) {
-                    .is--fullscreen #banner--{$Data.objectId} {
-                        background-image: url('{$images[2].retinaSource}');
-                    }
-                }
-                {/if}
-            {/if}
-        </style>
-        {/strip}
-
         {block name="widget_emotion_component_banner_inner"}
-            <div class="banner--content"
-                 id="banner--{$Data.objectId}"
-                 {if $Data.bannerPosition}style="background-position: {$Data.bannerPosition}"{/if}>
+            <div class="banner--content {$Data.bannerPosition}">
+
+                {block name="widget_emotion_component_banner_image"}
+
+                    {if $Data.thumbnails}
+                        {$baseSource = $Data.thumbnails[0].source}
+                        {$colSize = 100 / $emotion.grid.cols}
+                        {$itemSize = $itemCols * $colSize}
+
+                        {foreach $Data.thumbnails as $image}
+                            {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
+
+                            {if $image.retinaSource}
+                                {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
+                            {/if}
+                        {/foreach}
+                    {else}
+                        {$baseSource = $Data.source}
+                    {/if}
+
+                    <picture>
+                        {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
+                        {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
+                        <img src="{$baseSource}" sizes="{$itemSize}vw" class="banner--image"{if $Data.title} alt="{$Data.title|escape}"{/if} />
+                    </picture>
+                {/block}
 
                 {* Banner mapping, based on the same technic as an image map *}
                 {block name="widget_emotion_component_banner_mapping"}
