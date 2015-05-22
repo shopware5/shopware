@@ -94,32 +94,36 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 	 * @return [object] Ext.toolbar.Toolbar
 	 */
 	getToolbar: function(){
-		var items = [];
-		/*{if {acl_is_allowed privilege=delete}}*/
-		items.push(Ext.create('Ext.button.Button',{
-			iconCls: 'sprite-minus-circle',
-			text: '{s name=toolbar/deleteMarkedEntries}Delete marked entries{/s}',
-			disabled: true,
-			action: 'deleteMultipleLogs'
-		}));
-		/*{/if}*/
-		items.push('->');
-		items.push({
-			xtype: 'combo',
-			store: Ext.create('Shopware.apps.Log.store.Users'),
-			valueField:'id',
-			displayField:'name',
-			emptyText: '{s name=toolbar/filterField}Filter by{/s}'
-		});
-		items.push({
-			xtype: 'tbspacer',
-			width: 6
-		});
+        var me = this;
 
 		return Ext.create('Ext.toolbar.Toolbar', {
 			dock: 'top',
 			ui: 'shopware-ui',
-			items: items
+			items: [
+                /*{if {acl_is_allowed privilege=delete}}*/
+                {
+                    xtype: 'button',
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name=toolbar/deleteMarkedEntries}Delete marked entries{/s}',
+                    disabled: true,
+                    action: 'deleteMultipleLogs'
+                },
+                /*{/if}*/
+                '->',
+                {
+                    xtype: 'textfield',
+                    cls : 'searchfield',
+                    width : 170,
+                    emptyText : '{s name=toolbar/search}Search...{/s}',
+                    enableKeyEvents : true,
+                    checkChangeBuffer: 500,
+                    listeners: {
+                        change: function (field, value) {
+                            me.fireEvent('searchLog', value);
+                        }
+                    }
+                }
+            ]
 		});
 	},
 
