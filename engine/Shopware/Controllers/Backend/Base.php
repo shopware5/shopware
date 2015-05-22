@@ -69,12 +69,17 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     */
     private function prepareParam($properties, $fields)
     {
+        if (empty($properties)) {
+            return $properties;
+        }
+
         foreach ($properties as $key => $property) {
             if (array_key_exists($property['property'], $fields)) {
                 $property['property'] = $fields[$property['property']];
             }
             $properties[$key] = $property;
         }
+
         return $properties;
     }
 
@@ -480,6 +485,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         //don't search for variant articles?
+        //this is deprecated, because it's the same as "configurator". Further it does not search for variant articles,
+        //this was replaced by the option to set another store. To search for look at the example explained in the
+        //search scope documentation of the Shopware.form.field.ArticleSearch.js
         $displayVariants = (bool) $this->Request()->getParam('variants', true);
         if (!$displayVariants) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
@@ -513,15 +521,206 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
+        $paginator = Shopware()->Models()->createPaginator($query);
+
         //get total result of the query
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $paginator->count();
 
         //select all shop as array
-        $data = $query->getArrayResult();
+        $data = $paginator->getIterator()->getArrayCopy();
 
         //return the data and total count
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
+
+
+    /**
+     * Returns a list of articles with variants. Supports store paging, sorting and filtering over the standard ExtJs store parameters.
+     * This function is at the first look very similar to "getArticleAction()" but it differs in the query builder and the result very strong
+     *
+     * Each article has the following fields:
+     * <code>
+     *   [int]      id
+     *   [string]   name
+     *   [string]   number
+     *   [int]      supplierId
+     *   [string]   supplierName
+     *   [string]   description
+     *   [int]      active
+     *   [array]    changeTime
+     *   [int]      detailId
+     *   [int]      inStock
+     * </code>
+     */
+    public function getVariantsAction()
+    {
+        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $fields = array(
+                'details.id',
+                'articles.name',
+                'articles.description',
+                'articles.active',
+                'details.ordernumber',
+                'articles.id as articleId',
+                'details.inStock',
+                'supplier.name as supplierName',
+                'supplier.id as supplierId',
+                'details.additionalText'
+        );
+
+        $builder->select($fields);
+        $builder->from('s_articles_details', 'details');
+        $builder->innerJoin('details', 's_articles', 'articles', 'details.articleID = articles.id');
+        $builder->innerJoin('articles', 's_articles_supplier', 'supplier', 'supplier.id = articles.supplierID');
+
+        $filters = $this->Request()->getParam('filter', array());
+        foreach ($filters as $filter) {
+            if ($filter['property'] === 'free') {
+                $builder->andWhere(
+                    $builder->expr()->orX(
+                        'details.ordernumber LIKE :free',
+                        'articles.name LIKE :free',
+                        'supplier.name LIKE :free'
+                    )
+                );
+                $builder->setParameter(':free', $filter['value']);
+            } else {
+                $builder->addFilter($filter);
+            }
+        }
+
+        $properties = $this->prepareVariantParam($this->Request()->getParam('sort', array()), $fields);
+        foreach ($properties as $property) {
+            $builder->addOrderBy($property['property'], $property['direction']);
+        }
+
+        $builder->setFirstResult($this->Request()->getParam('start'))
+                ->setMaxResults($this->Request()->getParam('limit'));
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $total = (int) $builder->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
+
+        $result = $this->addAdditionalTextForVariant($result);
+
+        $this->View()->assign(array('success' => true, 'data' => $result, 'total' => $total));
+    }
+
+    /**
+     * prepares the sort params for the variant search
+     *
+     * @param array $properties
+     * @param array $fields
+     * @return array
+     */
+    private function prepareVariantParam($properties, $fields)
+    {
+        //maps the fields to the correct table
+        foreach ($properties as $key => $property) {
+            foreach ($fields as $field) {
+                $asStr = ' as ';
+                $dotPos = strpos($field, '.');
+                $asPos = strpos($field, $asStr, true);
+
+                if ($asPos) {
+                    $fieldName = substr($field, $asPos + strlen($asStr));
+                } else {
+                    $fieldName = substr($field, $dotPos + 1);
+                }
+
+                if ($fieldName == $property['property']) {
+                    $properties[$key]['property'] = $field;
+                }
+            }
+        }
+
+        return $properties;
+    }
+
+    /**
+     * adds the additional text for variants
+     *
+     * @param array $data
+     * @return mixed
+     */
+    private function addAdditionalTextForVariant($data)
+    {
+        $variantIds  = [];
+        $tmpVariant = [];
+
+        //checks if an additional text is available
+        foreach ($data as $variantData) {
+            if (!empty($variantData['additionalText'])) {
+                $variantData['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
+            } else {
+                $variantIds[$variantData['id']] = $variantData['id'];
+            }
+
+            $tmpVariant[$variantData['id']] = $variantData;
+        }
+
+        if (empty($variantIds)) {
+            return $data;
+        }
+
+        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $builder->select([
+            'details.id',
+            'groups.name AS groupName',
+            'options.name AS optionName'
+        ]);
+
+        $builder->from('s_articles_details', 'details');
+
+        $builder->innerJoin('details', 's_article_configurator_option_relations', 'mapping', 'mapping.article_id = details.id');
+        $builder->innerJoin('mapping', 's_article_configurator_options', 'options', 'options.id = mapping.option_id');
+        $builder->innerJoin('options', 's_article_configurator_groups', 'groups', 'options.group_id = groups.id');
+
+        $builder->where('details.id IN (:detailsId)');
+        $builder->setParameter('detailsId', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $statement = $builder->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $tmpVariant = $this->buildDynamicText($tmpVariant, $result);
+
+        //maps the associative data array back to an normal indexed array
+        $data = [];
+        foreach ($tmpVariant as $variant) {
+            $data[] = $variant;
+        }
+
+        return $data;
+    }
+
+    /**
+     * helper function to generate the additional text dynamically
+     *
+     * @param array $data
+     * @param array $variantsWithoutAdditionalText
+     * @return array
+     */
+    private function buildDynamicText($data, $variantsWithoutAdditionalText)
+    {
+        foreach ($variantsWithoutAdditionalText as $variantWithoutAdditionalText) {
+            $variantData = &$data[$variantWithoutAdditionalText['id']];
+
+            if (empty($variantData['additionalText'])) {
+                $variantData['additionalText'] .= $variantWithoutAdditionalText['optionName'];
+                $variantData['name'] .= ' ' . $variantWithoutAdditionalText['optionName'];
+            } else {
+                $variantData['additionalText'] .= ' / ' . $variantWithoutAdditionalText['optionName'];
+                $variantData['name'] .= ' / ' . $variantWithoutAdditionalText['optionName'];
+            }
+        }
+
+        return $data;
+    }
+
 
     /**
      * Returns a list of all backend-users. Supports store paging, sorting and filtering over the standard ExtJs store parameters.

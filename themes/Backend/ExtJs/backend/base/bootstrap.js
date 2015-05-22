@@ -99,6 +99,7 @@
 {include file='backend/base/model/supplier.js'}
 {include file='backend/base/model/country.js'}
 {include file='backend/base/model/article.js'}
+{include file='backend/base/model/variant.js'}
 {include file='backend/base/model/locale.js'}
 {include file='backend/base/model/currency.js'}
 {include file='backend/base/model/payment_status.js'}
@@ -133,6 +134,7 @@
 {include file='backend/base/store/supplier.js'}
 {include file='backend/base/store/country.js'}
 {include file='backend/base/store/article.js'}
+{include file='backend/base/store/variant.js'}
 {include file='backend/base/store/locale.js'}
 {include file='backend/base/store/currency.js'}
 {include file='backend/base/store/payment_status.js'}
