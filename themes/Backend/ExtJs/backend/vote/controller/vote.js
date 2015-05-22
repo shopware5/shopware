@@ -54,10 +54,7 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             },
             'vote-main-list':
             {
-                itemclick: me.onGridRowClick
-            },
-
-            'vote-main-list actioncolumn':{
+                itemclick: me.onGridRowClick,
                 deleteColumn: me.onGridButtonDelete,
                 commentColumn: me.onGridButtonComment,
                 addColumn: me.onGridButtonAccept
