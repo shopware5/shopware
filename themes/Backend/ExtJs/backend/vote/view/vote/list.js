@@ -161,15 +161,12 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
     getColumns: function(){
         var me = this;
 
-        me.items = [{
-
-        }];
-        var columns = [
+        return [
             {
                 header: '{s name=column/status}Status{/s}',
                 dataIndex: 'active',
                 width: 58,
-                renderer: this.statusColumn
+                renderer: me.statusColumn
             },{
                 header: '{s name=column/date}Datum{/s}',
                 dataIndex: 'datum',
@@ -191,15 +188,47 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
                 header: '{s name=column/points}Points{/s}',
                 dataIndex: 'points',
                 flex: 1,
-                renderer: this.pointsColumn
+                renderer: me.pointsColumn
             },
             {
                 xtype: 'actioncolumn',
                 width: 85,
-                renderer: me.renderEdit
+                items: [
+                    /*{if {acl_is_allowed privilege=accept}}*/
+                    {
+                        action: 'addColumn',
+                        tooltip: '{s name=column/actioncolumn/add}Accept vote{/s}',
+                        getClass: function (v, meta, rec) {
+                            return rec.get('active') ? 'x-hidden' : 'sprite-plus-circle'
+                        },
+                        handler: function (view, rowIndex) {
+                            me.fireEvent('addColumn', rowIndex);
+                        }
+                    },
+                    /*{/if}*/
+                    /*{if {acl_is_allowed privilege=delete}}*/
+                    {
+                        iconCls: 'sprite-minus-circle',
+                        action: 'deleteColumn',
+                        tooltip: '{s name=column/actioncolumn/delete}Delete vote{/s}',
+                        handler: function (view, rowIndex) {
+                            me.fireEvent('deleteColumn', rowIndex);
+                        }
+                    },
+                    /*{/if}*/
+                    /*{if {acl_is_allowed privilege=comment}}*/
+                    {
+                        iconCls: 'sprite-balloon--pencil',
+                        action: 'commentColumn',
+                        tooltip: '{s name=column/actioncolumn/comment}Comment on vote{/s}',
+                        handler: function (view, rowIndex) {
+                            me.fireEvent('commentColumn', rowIndex);
+                        }
+                    }
+                    /*{/if}*/
+                ]
             }
         ];
-        return columns;
     },
 
     /**
@@ -220,47 +249,6 @@ Ext.define('Shopware.apps.Vote.view.vote.List', {
      */
     pointsColumn: function(value){
         return value+'/5';
-    },
-
-    renderEdit: function(value, metaData, model, rowIndex, colIndex, store, view){
-        var data = '';
-
-        /*{if {acl_is_allowed privilege=accept}}*/
-        if (model.get("active") != 1) {
-            data = data + Ext.DomHelper.markup({
-                tag:'img',
-                'class': 'x-action-col-icon sprite-plus-circle',
-                tooltip: '{s name=column/actioncolumn/add}Accept vote{/s}',
-                'data-qtip': '{s name=column/actioncolumn/add}Accept vote{/s}',
-                cls:'sprite-plus-circle',
-                onclick: "Ext.getCmp('" + this.id + "').fireEvent('addColumn', " + rowIndex + ");"
-            });
-        }
-        /*{/if}*/
-
-        /*{if {acl_is_allowed privilege=delete}}*/
-        data = data + Ext.DomHelper.markup({
-            tag:'img',
-            'class': 'x-action-col-icon sprite-minus-circle',
-            tooltip: '{s name=column/actioncolumn/delete}Delete vote{/s}',
-            'data-qtip': '{s name=column/actioncolumn/delete}Delete vote{/s}',
-            cls:'sprite-minus-circle',
-            onclick: "Ext.getCmp('" + this.id + "').fireEvent('deleteColumn', " + rowIndex + ");"
-        });
-        /*{/if}*/
-
-        /*{if {acl_is_allowed privilege=comment}}*/
-        data = data + Ext.DomHelper.markup({
-            tag:'img',
-            'class': 'x-action-col-icon sprite-balloon--pencil',
-            tooltip: '{s name=column/actioncolumn/comment}Comment on vote{/s}',
-            'data-qtip': '{s name=column/actioncolumn/comment}Comment on vote{/s}',
-            cls:'sprite-balloon--pencil',
-            onclick: "Ext.getCmp('" + this.id + "').fireEvent('commentColumn', " + rowIndex + ");"
-        });
-        /*{/if}*/
-
-        return data;
     }
 });
 //{/block}
