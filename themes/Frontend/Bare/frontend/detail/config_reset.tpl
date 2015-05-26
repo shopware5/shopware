@@ -4,7 +4,7 @@
             {block name='frontend_detail_configurator_reset_button'}
                 <a class="btn is--icon-left reset--configuration" href="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}">
                     <i class="icon--cross"></i>
-                    {s name="DetailConfiguratorReset"}Reset selection{/s}
+                    {s name="DetailConfiguratorReset" namespace="frontend/detail/index"}Reset selection{/s}
                 </a>
             {/block}
             {break}
