@@ -4,10 +4,6 @@
 	{/if}
 {/block}
 
-{block name='frontend_detail_configurator_step_reset'}
-    {include file="frontend/detail/config_reset.tpl"}
-{/block}
-
 <form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="configurator--form selection--form">
 	{foreach from=$sArticle.sConfigurator item=sConfigurator name=group key=groupID}
 
@@ -52,3 +48,7 @@
 		</noscript>
 	{/block}
 </form>
+
+{block name='frontend_detail_configurator_step_reset'}
+    {include file="frontend/detail/config_reset.tpl"}
+{/block}
