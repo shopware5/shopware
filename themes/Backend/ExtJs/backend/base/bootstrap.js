@@ -48,6 +48,7 @@
 {include file='ExtJs/overrides/Ext.grid.RowEditor.js'}
 {include file='ExtJs/overrides/Ext.picker.Date.js'}
 {include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
+{include file='ExtJs/overrides/Ext.menu.Menu.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
