@@ -2842,6 +2842,8 @@ class sArticles
             ";
         }
 
+        $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
+
         $sql = "
             SELECT
                 a.id as articleID,
@@ -2891,7 +2893,8 @@ class sArticles
                 filtergroupID,
                 a.crossbundlelook,
                 IF(aDetails.releasedate > CURDATE(), 1, 0) as sUpcoming,
-                IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
+                IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate,
+                IF(DATEDIFF(NOW(), a.datum) <= $markNew,1,0) as newArticle
 
             FROM s_articles a
 
