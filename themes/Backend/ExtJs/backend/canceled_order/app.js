@@ -30,6 +30,7 @@
  * Shopware Application - CanceledOrder.
  * Lists orders and baskets with a status -1 ans shows some statistics
  */
+//{block name="backend/canceled_order/app"}
 Ext.define('Shopware.apps.CanceledOrder', {
 
     name: 'Shopware.apps.CanceledOrder',
@@ -62,3 +63,4 @@ Ext.define('Shopware.apps.CanceledOrder', {
         return mainController.mainWindow;
     }
 });
+//{/block}
