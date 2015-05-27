@@ -1,6 +1,10 @@
 {extends file="frontend/checkout/confirm.tpl"}
 
-{block name='frontend_index_content_left'}{/block}
+{block name='frontend_index_content_left'}
+    {if !$theme.checkoutHeader}
+        {$smarty.block.parent}
+    {/if}
+{/block}
 
 {* Javascript *}
 {block name="frontend_index_header_javascript" append}

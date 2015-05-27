@@ -1,7 +1,11 @@
 {extends file="frontend/index/index.tpl"}
 
 {* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{block name='frontend_index_content_left'}
+    {if !$theme.checkoutHeader}
+        {$smarty.block.parent}
+    {/if}
+{/block}
 
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}{/block}
