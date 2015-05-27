@@ -2071,7 +2071,11 @@ class sAdmin
             $uPass = $register["auth"]["password"];
 
             if ($register["auth"]["accountmode"] < 1) {
-                $this->sSaveRegisterSendConfirmation($uMail);
+                try {
+                    $this->sSaveRegisterSendConfirmation($uMail);
+                } catch (Exception $e) {
+                    $this->logRegistrationMailException($e, $uMail);
+                }
                 $this->session->offsetSet('sOneTimeAccount', false);
             } else {
                 $this->session->offsetSet('sOneTimeAccount', true);
@@ -4775,5 +4779,20 @@ class sAdmin
         );
 
         return ($checkOrder && $checkOrder["id"]);
+    }
+
+    /**
+     * @param \Exception $e
+     * @param string     $email
+     */
+    private function logRegistrationMailException(\Exception $e, $email)
+    {
+        $message = sprintf(
+            "Could not send user registration email to address %s",
+            $email
+        );
+
+        $context = array('exception' => $e);
+        Shopware()->Container()->get('corelogger')->error($message, $context);
     }
 }
