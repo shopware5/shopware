@@ -53,10 +53,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         return $this->voucherRepository;
     }
 
-
     /**
      * Internal helper function to get access to the entity manager.
-     * @return null
+     * @return Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {
@@ -93,6 +92,11 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
          * permission to create individual voucher codes
          */
         $this->addAclPermission('createVoucherCodesAction', 'generate', 'Insufficient Permissions');
+
+        /**
+         * permission to update individual voucher codes
+         */
+        $this->addAclPermission('updateVoucherCodesAction', 'generate', 'Insufficient Permissions');
 
         /**
          * permission to export individual voucher codes
@@ -271,6 +275,32 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         } while ($createdVoucherCodes < $numberOfUnits);
 
         $this->View()->assign(array('success' => true, 'generatedVoucherCodes' => $createdVoucherCodes));
+    }
+
+    /**
+     * Updates a single voucher code by the given parameters.
+     *
+     * @return void
+     */
+    public function updateVoucherCodesAction()
+    {
+        $codeId = intval($this->Request()->getParam('id'));
+        /** @var \Shopware\Models\Voucher\Code $code */
+        $code = $this->get('models')->getRepository('Shopware\Models\Voucher\Code')->find($codeId);
+
+        if (!$code) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        $code->setCashed($this->Request()->getParam('cashed'));
+        $code->setCode($this->Request()->getParam('code'));
+        $code->setCustomerId($this->Request()->getParam('customerId'));
+
+        $this->get('models')->persist($code);
+        $this->get('models')->flush($code);
+
+        $this->View()->assign(array('success' => true));
     }
 
     /**
