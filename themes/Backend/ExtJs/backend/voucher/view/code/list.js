@@ -91,7 +91,8 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
     },
     /**
      * Sets up the ui component
-     * @return void
+     *
+     * @return Array
      */
     getColumns:function () {
         var me = this;
@@ -112,7 +113,8 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
                 header:'{s name=detail_codes/column/cashed}Redeemed{/s}',
                 dataIndex:'cashed',
                 flex:1,
-                renderer:me.cashedRenderer
+                renderer:me.cashedRenderer,
+                editor: me.createRedeemedEditor()
             },
             {
                 header:'{s name=detail_codes/column/customer_number}Customer number{/s}',
@@ -154,6 +156,29 @@ Ext.define('Shopware.apps.Voucher.view.code.List', {
             }
         ];
     },
+
+    /**
+     * Creates and returns a new checkbox to edit the codes `cashed` property.
+     *
+     * @returns [Ext.form.field.Checkbox]
+     */
+    createRedeemedEditor: function() {
+        return Ext.create('Ext.form.field.Checkbox', {
+            store: new Ext.data.SimpleStore({
+                fields:[
+                    'id',
+                    'name'
+                ],
+                data: [
+                    [false, '{s name=list/render_value/cashed/no}No{/s}'],
+                    [true, '{s name=list/render_value/cashed/yes}Yes{/s}']
+                ]
+            }),
+            displayField: 'name',
+            valueField: 'id'
+        });
+    },
+
     /**
      * Creates the grid toolbar with the add and delete button
      *
