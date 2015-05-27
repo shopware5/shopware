@@ -805,7 +805,7 @@ class Article extends Resource implements BatchInterface
         // if another variant has set isMain to true, this variant will become
         // a usual variant again
         if ($setFirstVariantMain) {
-            $data['variants']['isMain'] = true;
+            $data['variants'][0]['isMain'] = true;
         }
 
         $variants = array();
@@ -849,6 +849,7 @@ class Article extends Resource implements BatchInterface
             if ($variantData['isMain'] || $variantData['standard']) {
                 $newMain = $variant;
                 $newMain->setKind(1);
+                $oldMainId = $article->getMainDetail()->getId();
 
                 // Check for old main articles:
                 // If old main article has configurator options, use it as a usual variant
@@ -880,6 +881,27 @@ class Article extends Resource implements BatchInterface
             }
 
             $variants[] = $variant;
+        }
+
+        // If the main variant was changed,
+        if ($oldMainId && $oldMainId != $newMain->getId()) {
+            $oldMainVariantProcessed = false;
+
+            foreach ($variants as &$processedVariant) {
+                if ($processedVariant->getId() == $oldMainId) {
+                    $processedVariant->setKind(2);
+                    $oldMainVariantProcessed = true;
+                    break;
+                }
+            }
+
+            if (!$oldMainVariantProcessed) {
+                $oldMain = $this->getDetailRepository()->find($oldMainId);
+                if ($oldMain) {
+                    $oldMain->setKind(2);
+                    $variants[] = $oldMain;
+                }
+            }
         }
 
         $data['details'] = $variants;
