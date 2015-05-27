@@ -218,6 +218,11 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $assembleParams['number'] = $number;
             }
 
+            $partner = $this->Request()->getParam('partner', $this->Request()->getParam('sPartner'));
+            if (!empty($partner)) {
+                $assembleParams['sPartner'] = $partner;
+            }
+
             return $this->get('router')->assemble($assembleParams);
         }
     }
