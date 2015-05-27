@@ -3567,11 +3567,42 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
+        //inserts esd attributes into the result
+        $result = $this->getEsdListingAttributes($result);
+
         $this->View()->assign(array(
             'data' => $result,
             'total' => $totalResult,
             'success' => true
         ));
+    }
+
+    /**
+     * Helper method which selects esd attributes and maps them into the esd listing array
+     *
+     * @param array $esdAttributesList
+     * @return array
+     */
+    private function getEsdListingAttributes($esdAttributesList)
+    {
+        $ids = array_column($esdAttributesList, 'id');
+
+        $query = $this->getManager()->createQueryBuilder();
+        $query->select('attribute')
+                ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
+                ->where('attribute.articleEsdId IN (:ids)')
+                ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        $esdAttributes = $query->getQuery()->getArrayResult();
+
+        foreach ($esdAttributesList as &$row) {
+            $row['attribute'] = [];
+            if (isset($esdAttributes[$row['id']])) {
+                $row['attribute'] = $esdAttributes[$row['id']];
+            }
+        }
+
+        return $esdAttributesList;
     }
 
     /**
