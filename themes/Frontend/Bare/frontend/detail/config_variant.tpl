@@ -67,3 +67,7 @@
 		{/block}
 	</div>
 {/block}
+
+{block name='frontend_detail_configurator_variant_reset'}
+    {include file="frontend/detail/config_reset.tpl"}
+{/block}

@@ -1,4 +1,4 @@
-$(function () {
+$(function ($) {
     StateManager.init([
         {
             state: 'xs',
@@ -199,4 +199,10 @@ $(function () {
     $.subscribe('plugin/collapseCart/afterRemoveArticle', cartRefresh);
 
     StateManager.addPlugin('*[data-subcategory-nav="true"]', 'subCategoryNav', ['xs', 's']);
+
+    $('.is--ctl-detail .reset--configuration').on('click', function () {
+        $.loadingIndicator.open({
+            closeOnClick: false
+        });
+    });
 });
