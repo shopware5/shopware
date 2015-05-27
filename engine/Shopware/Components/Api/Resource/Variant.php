@@ -628,46 +628,58 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
             }
 
-            // setup default values
-            $priceData += array(
-                'price'       => 0,
-                'basePrice'   => 0,
-                'pseudoPrice' => 0,
-                'percent'     => 0,
-                'from'        => '1',
-                'to'          => 'beliebig',
-            );
-
-            $priceData['from'] = intval($priceData['from']);
-            $priceData['to']   = intval($priceData['to']);
-
-            if ($priceData['from'] <= 0) {
-                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
-            }
-
-            // if the "to" value isn't numeric, set the place holder "beliebig"
-            if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
-            }
-
-            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
-            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
-            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
-
-            if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
             $priceData['customerGroup'] = $customerGroup;
             $priceData['article'] = $article;
             $priceData['detail'] = $variant;
+
+            $priceData = $this->mergePriceData($priceData, $tax);
 
             $price->fromArray($priceData);
         }
 
         return $prices;
+    }
+
+    /**
+     * Calculates and merges the numeric values of the Price entity
+     *
+     * @param $priceData
+     * @param $tax
+     * @return mixed
+     * @throws ApiException\CustomValidationException
+     */
+    private function mergePriceData($priceData, $tax)
+    {
+        if (array_key_exists('from', $priceData)) {
+            $priceData['from'] = intval($priceData['from']);
+            if ($priceData['from'] <= 0) {
+                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
+            }
+        }
+        if (array_key_exists('to', $priceData)) {
+            $priceData['to'] = intval($priceData['to']);
+            // if the "to" value isn't numeric, set the place holder "beliebig"
+            if ($priceData['to'] <= 0) {
+                $priceData['to'] = 'beliebig';
+            }
+        }
+
+        foreach (['price', 'basePrice', 'pseudoPrice', 'percent'] as $key) {
+            if (array_key_exists($key, $priceData)) {
+                $priceData[$key] = floatval(str_replace(",", ".", $priceData[$key]));
+            }
+        }
+
+        if ($priceData['customerGroup']->getTaxInput()) {
+            if (array_key_exists('price', $priceData)) {
+                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
+            }
+            if (array_key_exists('pseudoPrice', $priceData)) {
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+        }
+
+        return $priceData;
     }
 
 
