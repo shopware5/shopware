@@ -43,6 +43,12 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
     onStartProcess: function(win) {
         var me = this;
 
+        Shopware.Notification.createGrowlMessage(
+            '{s name="update_title"}Update{/s}',
+            '{s name="update_started"}Update started{/s}',
+            '{s name="window_title"}Software Update{/s}'
+        );
+
         var configs = [
             {
                 url: '{url controller="SwagUpdate" action="download"}',
