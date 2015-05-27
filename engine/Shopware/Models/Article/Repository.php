@@ -1971,7 +1971,6 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all serials by the given esdId
      *
