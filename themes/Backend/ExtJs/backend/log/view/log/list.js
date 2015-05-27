@@ -94,32 +94,36 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 	 * @return [object] Ext.toolbar.Toolbar
 	 */
 	getToolbar: function(){
-		var items = [];
-		/*{if {acl_is_allowed privilege=delete}}*/
-		items.push(Ext.create('Ext.button.Button',{
-			iconCls: 'sprite-minus-circle',
-			text: '{s name=toolbar/deleteMarkedEntries}Delete marked entries{/s}',
-			disabled: true,
-			action: 'deleteMultipleLogs'
-		}));
-		/*{/if}*/
-		items.push('->');
-		items.push({
-			xtype: 'combo',
-			store: Ext.create('Shopware.apps.Log.store.Users'),
-			valueField:'id',
-			displayField:'name',
-			emptyText: '{s name=toolbar/filterField}Filter by{/s}'
-		});
-		items.push({
-			xtype: 'tbspacer',
-			width: 6
-		});
+        var me = this;
 
 		return Ext.create('Ext.toolbar.Toolbar', {
 			dock: 'top',
 			ui: 'shopware-ui',
-			items: items
+			items: [
+                /*{if {acl_is_allowed privilege=delete}}*/
+                {
+                    xtype: 'button',
+                    iconCls: 'sprite-minus-circle',
+                    text: '{s name=toolbar/deleteMarkedEntries}Delete marked entries{/s}',
+                    disabled: true,
+                    action: 'deleteMultipleLogs'
+                },
+                /*{/if}*/
+                '->',
+                {
+                    xtype: 'textfield',
+                    cls : 'searchfield',
+                    width : 170,
+                    emptyText : '{s name=toolbar/search}Search...{/s}',
+                    enableKeyEvents : true,
+                    checkChangeBuffer: 500,
+                    listeners: {
+                        change: function (field, value) {
+                            me.fireEvent('searchLog', value);
+                        }
+                    }
+                }
+            ]
 		});
 	},
 
@@ -164,20 +168,34 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 			header: '{s name=grid/column_module}Module{/s}',
 			dataIndex: 'key',
 			flex: 1
-		},{
+		}, {
 			header: '{s name=grid/column_text}Text{/s}',
 			dataIndex: 'text',
 			flex: 1
-		}
-		/*{if {acl_is_allowed privilege=delete}}*/
-        ,
-		{
+		}, {
 			header: '{s name=grid/actioncolumn}Options{/s}',
 			xtype: 'actioncolumn',
-			renderer: me.renderActionColumn
-		}
-		/*{/if}*/
-		];
+            items: [
+                /*{if {acl_is_allowed privilege=delete}}*/
+                {
+                    iconCls:'sprite-minus-circle',
+                    action:'deleteColumn',
+                    tooltip: '{s name=grid/actioncolumn/buttonTooltip}Delete log{/s}',
+                    handler:function (view, rowIndex) {
+                        me.fireEvent('deleteColumn', rowIndex);
+                    }
+                },
+                /*{/if}*/
+                {
+                    iconCls:'sprite-magnifier',
+                    action:'openLog',
+                    tooltip: '{s name="grid/open_log"}Open log{/s}',
+                    handler:function (view, rowIndex, colIndex, item, event, record) {
+                        me.fireEvent('openLog', record);
+                    }
+                }
+            ]
+		}];
 
         return columns;
     },
@@ -186,33 +204,10 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 	 * Renders the date
 	 *
 	 * @param value
-	 * @return [date] value Contains the date
+	 * @return { String } value Contains the date
 	 */
 	renderDate: function(value){
 		return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
-	},
-
-	/**
-	 * Renders the action-column
-	 *
-	 * @param value Contains the clicked value
-	 * @param metaData Contains the metaData
-	 * @param model Contains the selected model
-	 * @param rowIndex Contains the rowIndex of the selection
-	 * @return [object] Ext.DomHelper
-	 */
-	renderActionColumn: function(value, metaData, model, rowIndex){
-		var data = [];
-
-		data.push(Ext.DomHelper.markup({
-			tag:'img',
-			'class': 'x-action-col-icon sprite-minus-circle',
-			tooltip: '{s name=grid/actioncolumn/buttonTooltip}Delete log{/s}',
-			cls:'sprite-minus-circle',
-			onclick: "Ext.getCmp('" + this.id + "').fireEvent('deleteColumn', " + rowIndex + ");"
-		}));
-
-		return data;
 	},
 
 	/**
@@ -228,9 +223,18 @@ Ext.define('Shopware.apps.Log.view.log.List', {
 			 * action column
 			 *
 			 * @event deleteColumn
-			 * @param [integer] rowIndex - Row index of the selection
+			 * @param { Number } rowIndex - Row index of the selection
 			 */
-			'deleteColumn'
+			'deleteColumn',
+
+            /**
+             * Event will be fired when the user clicks on the magnifier icon
+             * in the action column
+             *
+             * @event openLog
+             * @param { Number } rowIndex - Row index of the selection
+             */
+            'openLog'
 		)
 	}
 });
