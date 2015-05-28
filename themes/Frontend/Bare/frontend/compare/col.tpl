@@ -53,7 +53,7 @@
                     <li class="list--entry entry--price">
                         {* Article pseudoprice *}
                         {block name='frontend_compare_price_pseudoprice'}
-                            {if $sArticle.pseudoprice}
+                            {if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}
                                 <span class="price--pseudoprice">
                                     {s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency}
                                     {s name="Star" namespace="frontend/listing/box_article"}{/s}<br />
@@ -63,7 +63,7 @@
 
                         {* Article normal or discount price *}
                         {block name='frontend_compare_price_normal'}
-                            <span class="price--normal{if $sArticle.pseudoprice} price--reduced{/if}">
+                            <span class="price--normal{if $sArticle.pseudoprice|isHigherPrice:$sArticle.price} price--reduced{/if}">
                                 {if $sArticle.priceStartingFrom}
                                     {s name="ComparePriceFrom"}{/s}
                                 {/if}
