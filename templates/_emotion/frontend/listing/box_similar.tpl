@@ -34,10 +34,10 @@
 			{* Price *}
 			{block name='frontend_listing_box_similar_price'}
 				<p class="price">
-				    {if $sArticle.pseudoprice}
+				    {if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}
 				    	<span class="pseudo">{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
 				    {/if}
-				    <span class="price{if $sArticle.pseudoprice} pseudo_price{/if}">{$sArticle.price|currency} *</span>
+				    <span class="price{if $sArticle.pseudoprice|isHigherPrice:$sArticle.price} pseudo_price{/if}">{$sArticle.price|currency} *</span>
 				</p>
 	        {/block}
         </div>

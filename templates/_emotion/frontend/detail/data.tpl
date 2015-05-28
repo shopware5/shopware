@@ -255,9 +255,9 @@
 					{/block}
 				{/if}
 
-				<div {if $sArticle.pseudoprice} class='article_details_price2'>{else} class='article_details_price'>{/if}
+				<div {if $sArticle.pseudoprice|isHigherPrice:$sArticle.price} class='article_details_price2'>{else} class='article_details_price'>{/if}
 					{block name='frontend_detail_data_pseudo_price'}
-					{if $sArticle.pseudoprice}
+					{if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}
 					{* if $sArticle.sVariants || $sArticle.priceStartingFrom*}
 					<div class="PseudoPrice{if $sArticle.sVariants} displaynone{/if}">
 						<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
