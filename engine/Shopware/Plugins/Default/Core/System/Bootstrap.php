@@ -65,7 +65,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      */
     public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
     {
-        if (Shopware()->Session()->Bot) {
+        $container = Shopware()->Container();
+        if ($container->initialized('session') && $container->get('session')->Bot && PHP_SAPI !== 'cli') {
             Enlight_Components_Session::destroy();
         }
     }
