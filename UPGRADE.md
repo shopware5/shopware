@@ -2,6 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 5.0.2
+* Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
 * It's no longer possible to have spaces in article numbers. Existing articles with spaces in their numbers will still work, but the article cannot be changed without fixing the number.
 
 ## 5.0.1
