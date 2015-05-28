@@ -49,6 +49,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /**@var $context ShopContextInterface*/
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
+        if (!$this->Request()->getParam('sCategory')) {
+            $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
+        }
+
         /**@var $criteria Criteria*/
         $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createListingCriteria($this->Request(), $context);
