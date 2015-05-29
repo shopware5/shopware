@@ -48,33 +48,24 @@ Ext.define('Shopware.apps.Config.view.main.Window', {
 
     loadTitle: function(record) {
         var me = this,
-            title = me.titleTemplate;
-        title = new Ext.Template(title).applyTemplate(record.data);
+            title = new Ext.Template(me.titleTemplate).applyTemplate(record.data);
+
         me.setTitle(title);
     },
 
     /**
-     *
+     * Initializes the component and creates its items
      */
     initComponent: function() {
         var me = this;
 
-        Ext.applyIf(me, {
-            items: me.getItems()
-        });
+        me.items = me.getItems();
 
-        if(me.mode && me.mode === 'iframe-mode') {
-            me.title = '';
-            me.renderTo = Ext.getBody();
-            me.unstyled = true;
-            me.width = '100%';
-            me.height = '90%';
-        }
         me.callParent(arguments);
     },
 
     /**
-     * @return array
+     * @return { Array }
      */
     getItems: function() {
         var me = this;
