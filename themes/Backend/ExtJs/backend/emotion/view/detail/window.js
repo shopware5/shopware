@@ -49,6 +49,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     stateful: true,
     stateId: 'emotion-detail-window',
 
+    snippets: {
+        errorTitle: '{s name=save/error/title}Error{/s}',
+        errorMessage: '{s name=save/error/message_load}There is an error occured while opening the emotion. Please try again.{/s}'
+    },
+
     /**
      * Initializes the component and builds up the main interface
      *
@@ -91,7 +96,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 me.add(item);
             });
         } catch (e) {
-            console.log("e", e);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage);
+
             me.destory();
         }
     },
