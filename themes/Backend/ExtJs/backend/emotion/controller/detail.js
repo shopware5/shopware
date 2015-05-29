@@ -302,7 +302,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         return;
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
-                    win.destroy();
+
+                    me.loadEmotionRecord(record.get('id'), function(newRecord) {
+                        win.loadRecord(newRecord);
+                    });
+
                     gridStore.load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
@@ -312,15 +316,26 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
-        var me = this,
-            detailStore = me.getStore('Detail'),
-            listStore = scope.getStore();
+        var me = this, listStore = scope.getStore();
 
-        detailStore.getProxy().extraParams.id = listStore.getAt(rowIndex).get('id');
+        me.loadEmotionRecord(
+            listStore.getAt(rowIndex).get('id'),
+            function(record) {
+                me.openDetailWindow(record);
+            }
+        );
+    },
+
+    loadEmotionRecord: function(emotionId, callback) {
+        var me = this,
+            detailStore = me.getStore('Detail');
+
+        detailStore.getProxy().extraParams.id = emotionId;
+
         detailStore.load({
             callback: function(records, operation) {
                 if (operation.success) {
-                    me.openDetailWindow(records[0]);
+                    callback(records[0]);
                 }
             }
         });
