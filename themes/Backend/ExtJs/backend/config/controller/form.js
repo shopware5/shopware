@@ -384,6 +384,11 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         formPanel.disable();
         formPanel.loadRecord();
 
+		record.associations.each(function(association) {
+			var store = record[association.name]();
+			store.clearFilter(true);
+		});
+
         var message,
             title = me.messages.saveEntryTitle;
 
