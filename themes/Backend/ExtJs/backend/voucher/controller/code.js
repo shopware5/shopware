@@ -85,10 +85,12 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                 tabchange:me.onChangeTab
             },
             'voucher-code-list':{
-                openCustomerAccount:me.onOpenCustomerAccount
+                openCustomerAccount:me.onOpenCustomerAccount,
+                edit: me.onEditCode
             }
         });
     },
+
     /**
      * Listener method to generate all needed voucher codes
      *
@@ -114,6 +116,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             me.generateCodes(codePatternFieldValue);
         }
     },
+
     /**
      * Listener Method for the download codes button
      * to get access to the download window
@@ -126,6 +129,7 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             record = form.getRecord();
         window.open(' {url action="exportVoucherCode"}?voucherId='+record.data.id);
     },
+
     /**
      * helper method to send the request to the controller to generate new voucher codes
      *
@@ -145,6 +149,14 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             me.getProgressBar().updateText('{s name=progress/text/delete_old_voucher_codes}Deleting old voucher codes{/s}');
             me.batchProcessing(voucherId, codePattern, numberOfUnits, numberOfUnits, true, 0);
         }
+    },
+
+    /**
+     * Called when a voucher code was edited.
+     * Syncs the store inside the grid with the server.
+     */
+    onEditCode: function (editor, e, eOpts) {
+        this.getVoucherCodeGrid().getStore().sync();
     },
 
     /**
