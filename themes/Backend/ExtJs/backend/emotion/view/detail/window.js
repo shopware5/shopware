@@ -49,19 +49,67 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     stateful: true,
     stateId: 'emotion-detail-window',
 
+    snippets: {
+        errorTitle: '{s name=save/error/title}Error{/s}',
+        errorMessage: '{s name=save/error/message_load}There is an error occured while opening the emotion. Please try again.{/s}'
+    },
+
     /**
      * Initializes the component and builds up the main interface
      *
      * @return void
      */
     initComponent: function() {
-        var me = this, settings, elements;
+        var me = this;
+
+        me.plugins = [ me.createHubPlugin() ];
+
+        me.dockedItems = [{
+            dock: 'bottom',
+            xtype: 'toolbar',
+            ui: 'shopware-ui',
+            items: me.createActionButtons()
+        }];
+
+        me.registerEvents();
+        me.callParent(arguments);
+
+        if (me.emotion) {
+            me.loadRecord(me.emotion);
+        }
+    },
+
+    loadRecord: function(emotion) {
+        var me = this;
+
+        try {
+            me.emotion = emotion;
+            var settings = me.createSettings(me.emotion);
+            var elements = me.getEmotionElements(me.emotion);
+            me.changeTitle(elements);
+            me.createDataViewStore(elements, settings);
+
+            var items = me.createItems();
+            me.removeAll();
+
+            Ext.each(items, function (item) {
+                me.add(item);
+            });
+        } catch (e) {
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage);
+
+            me.destory();
+        }
+    },
+
+    createHudStore: function() {
+        var me = this;
 
         var shopwareComponents = me.getShopwareComponents();
         var pluginComponents = me.getPluginComponents();
 
         // Create the data store
-        var store = Ext.create('Ext.data.Store', {
+        return Ext.create('Ext.data.Store', {
             fields: [
                 'headline', 'children'
             ],
@@ -73,22 +121,51 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 children: pluginComponents
             }]
         });
+    },
 
-        settings = me.emotion.data;
-        if (me.emotion.getGrid() instanceof Ext.data.Store && me.emotion.getGrid().first() instanceof Ext.data.Model) {
-            var gridModel = me.emotion.getGrid().first();
+    createSettings: function(emotionRecord) {
+        var me = this;
+        var settings = emotionRecord.data;
+
+        if (emotionRecord.getGrid() instanceof Ext.data.Store
+            && emotionRecord.getGrid().first() instanceof Ext.data.Model
+        ) {
+            var gridModel = emotionRecord.getGrid().first();
             settings.cols = gridModel.get('cols');
             settings.cellHeight = gridModel.get('cellHeight');
             settings.articleHeight = gridModel.get('articleHeight');
         }
 
-        elements = me.emotion.getElements();
+        return settings;
+    },
+
+    getEmotionElements: function(emotion) {
+        var elements = emotion.getElements();
 
         if (elements instanceof Ext.data.Store && elements.data.length > 0) {
             elements = elements.data.items;
         } else {
             elements = [];
         }
+        return elements;
+    },
+
+    createHubPlugin: function() {
+        var me = this;
+
+        me.hubPlugin = Ext.create('Shopware.window.plugin.Hud', {
+            hudStore: me.createHudStore(),
+            originalStore: me.libraryStore,
+            hudOffset: 0,
+            hudHeight: 550,
+            itemSelector: '.x-library-element',
+            tpl: me.createElementLibraryTemplate()
+        });
+        return me.hubPlugin;
+    },
+
+    changeTitle: function(elements) {
+        var me = this;
 
         // Set the title
         if(elements.length) {
@@ -96,6 +173,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         } else {
             me.title = '{s name=window/title}New emotion{/s}';
         }
+    },
+
+    createDataViewStore: function(elements, settings) {
+        var me = this;
 
         me.dataviewStore = Ext.create('Ext.data.Store',{
             fields: ['settings', 'elements'],
@@ -105,28 +186,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             }]
         });
 
+        return me.dataviewStore;
+    },
+
+    createItems: function() {
+        var me = this;
         me.tabPanel = me.createTabPanel();
-        me.items = [ me.tabPanel ];
-
-        me.hubPlugin = Ext.create('Shopware.window.plugin.Hud', {
-            hudStore: store,
-            originalStore: me.libraryStore,
-            hudOffset: 0,
-            hudHeight: 550,
-            itemSelector: '.x-library-element',
-            tpl: me.createElementLibraryTemplate()
-        });
-        me.plugins = [ me.hubPlugin ];
-        // Build the action toolbar
-        me.dockedItems = [{
-            dock: 'bottom',
-            xtype: 'toolbar',
-            ui: 'shopware-ui',
-            items: me.createActionButtons()
-        }];
-
-        me.registerEvents();
-        me.callParent(arguments);
+        return [ me.tabPanel ];
     },
 
     /**
@@ -173,9 +239,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     createTabPanel: function() {
         var me = this;
 
+        var activeTab = 0;
+        if (me.emotion.get('name')) {
+            activeTab = 1;
+        }
+        if (me.tabPanel) {
+            activeTab = me.tabPanel.getActiveTab();
+            activeTab = activeTab.tabIndex;
+        }
+
         return Ext.create('Ext.tab.Panel', {
             plain: true,
-            activeTab: me.emotion.get('name') ? 0 : 1,
+            activeTab: activeTab,
             listeners: {
                 scope: me,
 
@@ -202,13 +277,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 initialTitle: 'designer',
                 emotion: me.emotion,
                 dataviewStore: me.dataviewStore,
-                disabled: me.emotion.get('name') ? false : true
+                disabled: me.emotion.get('name') ? false : true,
+                tabIndex: 0
             }, {
                 xtype: 'emotion-detail-settings',
                 initialTitle: 'settings',
                 categoryPathStore: me.categoryPathStore,
                 emotion: me.emotion,
-                dataviewStore: me.dataviewStore
+                dataviewStore: me.dataviewStore,
+                tabIndex: 1
             }]
         });
     },
