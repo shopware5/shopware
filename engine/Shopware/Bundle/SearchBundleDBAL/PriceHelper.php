@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  * @package   Shopware\Bundle\SearchBundleDBAL
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceHelper
+class PriceHelper implements PriceHelperInterface
 {
     const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';
 
@@ -61,8 +61,7 @@ class PriceHelper
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
-     * @return string
+     * @inheritdoc
      */
     public function getSelection(Struct\ShopContextInterface $context)
     {
@@ -105,8 +104,7 @@ class PriceHelper
     }
 
     /**
-     * @param QueryBuilder $query
-     * @param Struct\ShopContextInterface $context
+     * @inheritdoc
      */
     public function joinPrices(
         QueryBuilder $query,
@@ -150,8 +148,7 @@ class PriceHelper
     }
 
     /**
-     * @param QueryBuilder $query
-     * @param Struct\ShopContextInterface $context
+     * @inheritdoc
      */
     public function joinDefaultPrices(QueryBuilder $query, Struct\ShopContextInterface $context)
     {
@@ -184,7 +181,7 @@ class PriceHelper
     }
 
     /**
-     * @param QueryBuilder $query
+     * @inheritdoc
      */
     public function joinAvailableVariant(QueryBuilder $query)
     {
