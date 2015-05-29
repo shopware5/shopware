@@ -11,7 +11,7 @@
 		{* New *}
 		{block name='frontend_listing_box_article_new'}
 			{if $sArticle.newArticle}
-				<div class="ico_new" {if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}style="top:50px;"{/if}>{se name='ListingBoxNew'}{/se}</div>
+				<div class="ico_new" {if $sArticle.pseudoprice|number > $sArticle.price|number}style="top:50px;"{/if}>{se name='ListingBoxNew'}{/se}</div>
 			{/if}
 		{/block}
 		
@@ -63,7 +63,7 @@
 		{* Unit price *}
 		{block name='frontend_listing_box_article_unit'}
 			{if $sArticle.purchaseunit}
-			    <div class="{if !$sArticle.pseudoprice|isHigherPrice:$sArticle.price}article_price_unit{else}article_price_unit_pseudo{/if}">
+			    <div class="{if !$sArticle.pseudoprice|number > $sArticle.price|number}article_price_unit{else}article_price_unit_pseudo{/if}">
 			        {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
 			            <p>
 			            	<span class="purchaseunit">
@@ -84,8 +84,8 @@
 		
 		{* Article Price *}
 		{block name='frontend_listing_box_article_price'}
-			<p class="{if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}pseudoprice{else}price both{/if}">
-			    {if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}
+			<p class="{if $sArticle.pseudoprice|number > $sArticle.price|number}pseudoprice{else}price both{/if}">
+			    {if $sArticle.pseudoprice|number > $sArticle.price|number}
 			    	<span class="pseudo">{s name="reducedPrice"}Statt:{/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
 			    {/if}
 			    <span class="price">{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency} {s name="Star"}*{/s}</span>
@@ -116,7 +116,7 @@
 				{/block}
 			</div>
 
-			{if $sArticle.pseudoprice|isHigherPrice:$sArticle.price}
+			{if $sArticle.pseudoprice|number > $sArticle.price|number}
 				<div class="pseudo_percent">%</div>
 			{/if}
 		{/block}

@@ -106,7 +106,7 @@
 {* Unit price *}
 {block name='frontend_listing_box_article_unit'}
 {if $sArticle.purchaseunit}
-    <div class="{if !$sArticle.pseudoprice|isHigherPrice:$sArticle.price}article_price_unit{else}article_price_unit_pseudo{/if}">
+    <div class="{if !$sArticle.pseudoprice|number > $sArticle.price|number}article_price_unit{else}article_price_unit_pseudo{/if}">
         {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
             <p>
             	<span class="purchaseunit">
