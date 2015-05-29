@@ -33,14 +33,14 @@
             {/if}
 
             <p class="price">
-                {if $article.pseudoprice|isHigherPrice:$article.price}
+                {if $article.pseudoprice|number > $article.price|number}
                     <span class="pseudo">
                     <em>
                     	{s name="reducedPrice"}Statt:{/s} {$article.pseudoprice|currency} {s name="Star"}*{/s}
                     </em>
                     </span>
                 {/if}
-                <span class="price{if $article.pseudoprice|isHigherPrice:$article.price} pseudo{/if}">{if $article.priceStartingFrom && !$article.liveshoppingData}{s namespace="frontend/plugins/recommendation/slide_articles" name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} *</span>
+                <span class="price{if $article.pseudoprice|number > $article.price|number} pseudo{/if}">{if $article.priceStartingFrom && !$article.liveshoppingData}{s namespace="frontend/plugins/recommendation/slide_articles" name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} *</span>
             </p>
             </div>
         </div>

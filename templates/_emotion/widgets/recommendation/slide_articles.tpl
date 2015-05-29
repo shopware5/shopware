@@ -25,9 +25,9 @@
         {/if}
 		
 		<p class="price{if $article.purchaseunit}{else} up{/if}">
-		<span class="price{if $article.pseudoprice|isHigherPrice:$article.price} pseudo{/if}">
+		<span class="price{if $article.pseudoprice|number > $article.price|number} pseudo{/if}">
 		{if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt' namespace="frontend/plugins/recommendation/slide_articles"}{/s} {/if}{$article.price|currency} *</span>
-		{if $article.pseudoprice|isHigherPrice:$article.price}
+		{if $article.pseudoprice|number > $article.price|number}
         	<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
 		{/if}         
 		</p>
