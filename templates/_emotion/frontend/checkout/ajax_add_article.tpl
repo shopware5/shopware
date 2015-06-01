@@ -99,9 +99,9 @@
 			            {/if}
 
 			            <p class="price">
-			                <span class="price{if $article.pseudoprice} pseudo{/if}">
+			                <span class="price{if $article.pseudoprice|number > $article.price|number} pseudo{/if}">
 			                	{if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-								{if $article.pseudoprice}
+								{if $article.pseudoprice|number > $article.price|number}
 									<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
 								{/if}
 			                </span>
