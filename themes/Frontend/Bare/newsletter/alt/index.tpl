@@ -21,7 +21,7 @@
 
 {$sArticle.description_long|truncate:50:"..."|strip_tags|trim}
 
-{if $sArticle.pseudoprice}
+{if $sArticle.pseudoprice|number > $sArticle.price|number}
 
 {s name="NewsletterIndexPseudoInsteadOf"}{/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
@@ -42,7 +42,7 @@
 
 {$sArticle.description_long|truncate:50:"..."|strip_tags|trim}
 
-{if $sArticle.pseudoprice}
+{if $sArticle.pseudoprice|number > $sArticle.price|number}
 
 {s name="NewsletterIndexPseudoInsteadOf"}{/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
