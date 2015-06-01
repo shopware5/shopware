@@ -74,10 +74,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         me._initial = true;
 
-        me.categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath');
-        me.categoryPathStore.getProxy().extraParams.parents = true;
-        me.categoryPathStore.load();
-
         me.timingFieldSet =  me.createTimingFieldSet();
         me.generalFieldSet = me.createGeneralFieldSet();
         me.categoryFieldSet = me.createCategoryFieldSet();
@@ -446,6 +442,21 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         };
     },
 
+    getCategories: function () {
+        var me = this,
+            returnCategories = [],
+            categories = me.emotion.get('categories');
+
+        if (categories && !Ext.isObject(categories)) {
+            Ext.each(categories, function (category) {
+                returnCategories.push(category.id);
+            });
+            me.emotion.set('categories', returnCategories);
+        }
+
+        return returnCategories;
+    },
+
     createLandingpageFieldset: function() {
         var me = this, fieldset;
 
@@ -471,16 +482,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/seo_description}SEO-Description{/s}'
         });
 
-        var returnCats = [];
-        if(me.emotion.get('categories') && !Ext.isObject(me.emotion.get('categories'))) {
-            var categories =  me.emotion.get('categories');
-
-            Ext.each(categories, function(category) {
-                returnCats.push(category.id);
-            });
-            me.emotion.set('categories', returnCats);
-        }
-
         me.categorySearchField = Ext.create('Ext.ux.form.field.BoxSelect', {
             anchor: '100%',
             width: '100%',
@@ -489,7 +490,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             store: me.categoryPathStore,
             valueField: 'id',
             displayField: 'name',
-            value: returnCats
+            value: me.getCategories()
         });
 
         var store = Ext.create('Ext.data.Store', {
