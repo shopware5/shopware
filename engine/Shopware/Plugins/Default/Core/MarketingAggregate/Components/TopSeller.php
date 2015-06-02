@@ -41,7 +41,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * @param int $articleId
      * @param int $quantity
      */
-    public function incrementTopSeller(int $articleId, int $quantity)
+    public function incrementTopSeller($articleId, $quantity)
     {
         $sql = "
             INSERT INTO s_articles_top_seller_ro (article_id, sales, last_cleared)
