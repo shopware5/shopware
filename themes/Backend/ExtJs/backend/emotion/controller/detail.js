@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 	extend: 'Ext.app.Controller',
 
     refs: [
+        { ref: 'mainWindow', selector: 'emotion-main-window' },
         { ref: 'detailWindow', selector: 'emotion-detail-window' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
@@ -318,6 +319,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
         var me = this, listStore = scope.getStore();
 
+        me.getMainWindow().setLoading(true);
+
         me.loadEmotionRecord(
             listStore.getAt(rowIndex).get('id'),
             function(record) {
@@ -345,6 +348,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this,
             record;
 
+        me.getMainWindow().setLoading(true);
+
         record = Ext.create('Shopware.apps.Emotion.model.Emotion', {
             cols: 4,
             rows: 20,
@@ -359,15 +364,30 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     openDetailWindow: function(record) {
         var me = this,
-            libraryStore = me.getStore('Library');
+            libraryStore = me.getStore('Library'),
+            categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath'),
+            categoryStoreLoaded = false, libraryStoreLoaded = false;
 
-        libraryStore.load({
-            callback: function() {
-                me.getView('detail.Window').create({
-                    emotion: record,
-                    libraryStore: libraryStore,
-                    categoryPathStore: me.subApplication.categoryPathStore
-                });
+        var createWindow = function() {
+            me.getMainWindow().setLoading(false);
+            me.getView('detail.Window').create({
+                emotion: record,
+                libraryStore: libraryStore,
+                categoryPathStore: categoryPathStore
+            });
+        };
+
+        categoryPathStore.load(function() {
+            categoryStoreLoaded = true;
+            if (libraryStoreLoaded) {
+                createWindow();
+            }
+        });
+
+        libraryStore.load(function() {
+            libraryStoreLoaded = true;
+            if (categoryStoreLoaded) {
+                createWindow();
             }
         });
     },
