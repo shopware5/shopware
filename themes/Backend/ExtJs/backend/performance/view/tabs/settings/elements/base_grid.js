@@ -94,45 +94,47 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
     getToolbar:function () {
-        var me = this;
+        var me = this,
+            textField;
+
+        textField = Ext.create('Ext.form.field.Text', {
+            name: 'value',
+            flex: 1,
+            listeners: {
+                specialkey: function(field, event){
+                    if (event.getKey() == event.ENTER) {
+                        var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
+                            key = field.getValue(),
+                            split = key.split(' '),
+                            value = '';
+
+                        if (split[1]) {
+                            key = split[0];
+                            value = split[1];
+                        }
+
+                        record.set('key', key);
+                        record.set('value', value);
+                        me.store.add(record);
+                        field.setValue('');
+                        me.cellEditingPlugin.startEdit(record, 1);
+                    }
+                }
+            }
+        });
+
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
             items:[
-                {
-                    name: 'value',
-                    flex: 1,
-                    xtype: 'textfield',
-		             listeners: {
-		              specialkey: function(field, event){
-		                if (event.getKey() == event.ENTER) {
-							var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
-	                        	key = field.getValue(),
-	                        	split = key.split(' '),
-	                        	value = '';
-
-							if (split[1]) {
-								key = split[0];
-            	           		value = split[1];
-            	           	}
-
-                            record.set('key', key);
-                        	record.set('value', value);
-	                        me.store.add(record);
-	                        field.setValue('');
-	                        me.cellEditingPlugin.startEdit(record, 1);
-
-		                }
-		              }
-		            },
-                },
+                textField,
                 {
                     iconCls:'sprite-plus-circle-frame',
                     text:'{s name=grid/addEntry}Add entry{/s}',
                     cls: 'secondary small',
                     action:'add-entry',
-                    handler: function(button, event) {
+                    handler: function() {
                         var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
-                        	field = me.up().down('textfield'),
+                        	field = textField,
                         	key = field.getValue(),
                         	split = key.split(' '),
                         	value = '';
