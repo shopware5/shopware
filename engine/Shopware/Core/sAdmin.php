@@ -4537,7 +4537,7 @@ class sAdmin
             $this->db->query(
                 "UPDATE s_order_number, s_user_billingaddress
                 SET s_order_number.number = s_order_number.number+1,
-                s_user_billingaddress.customernumber = s_order_number.number+1
+                s_user_billingaddress.customernumber = s_order_number.number
                 WHERE s_order_number.name = 'user'
                 AND s_user_billingaddress.userID = ?",
                 array($userId));
