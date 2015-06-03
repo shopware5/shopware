@@ -377,6 +377,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             });
         };
 
+        categoryPathStore.getProxy().extraParams.parents = true;
         categoryPathStore.load(function() {
             categoryStoreLoaded = true;
             if (libraryStoreLoaded) {
