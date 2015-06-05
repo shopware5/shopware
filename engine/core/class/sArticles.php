@@ -1352,6 +1352,7 @@ class sArticles
             $articles[$articleKey]["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
             $articles[$articleKey]["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
             $articles[$articleKey]["referenceprice"] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
+            $articles[$articleKey]["packunit"] = empty($calculatedBasePriceData["packunit"]) ? null: $calculatedBasePriceData["packunit"];
 
             $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
         } // For every article in this list
@@ -3962,6 +3963,7 @@ class sArticles
             $getPromotionResult["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
             $getPromotionResult["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
             $getPromotionResult['referenceprice'] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
+            $getPromotionResult['packunit'] = empty($calculatedBasePriceData["packunit"]) ? null: $calculatedBasePriceData["packunit"];
         }
 
         // Strip tags from descriptions
