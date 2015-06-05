@@ -747,8 +747,14 @@ class Media extends ModelEntity
             }
             $this->file->move($this->getUploadDir(), $this->getFileName());
         }
+
+        // update new path
+        $this->path = $this->getRelativeUploadDir() . '/' . $this->getFileName();
+
+        // remove temporary upload-file
         unlink($this->file->getPathname());
         unlink($this->file);
+
         return true;
     }
 
@@ -890,6 +896,15 @@ class Media extends ModelEntity
     {
         // the absolute directory path where uploaded documents should be saved
         return Shopware()->DocPath('media_' . strtolower($this->type));
+    }
+
+    /**
+     * Returns the the relative path to the upload-directory
+     * @return string
+     */
+    private function getRelativeUploadDir()
+    {
+        return 'media/' . strtolower($this->type);
     }
 
     /**
