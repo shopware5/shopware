@@ -6,8 +6,8 @@
 		{block name='frontend_listing_box_similar_article_picture'}
 		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb {if !$sArticle.image.src}no_picture{/if}" {if $sArticle.image.src} 
 			style="background: #fff url({$sArticle.image.src.1}) no-repeat center center"{/if}>&nbsp;
-		{/block}
 		</a>
+		{/block}
 		
 		<div class="title_price">
 			{* Article name *}
