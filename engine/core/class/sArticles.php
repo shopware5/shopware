@@ -1053,6 +1053,7 @@ class sArticles
                 aDetails.referenceunit,
                 aDetails.unitID,
                 aDetails.weight,
+                aDetails.packunit,
                 aDetails.additionaltext,
                 aDetails.instock,
                 aDetails.sales,
