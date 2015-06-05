@@ -1,6 +1,6 @@
 # Shopware 5
 
-[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=master)](https://travis-ci.org/shopware/shopware)
+[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.0)](https://travis-ci.org/shopware/shopware)
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
@@ -31,7 +31,7 @@ Follow the instruction below if you want to install Shopware 5 using Git.
 
     git clone https://github.com/shopware/shopware.git
 
-In case you wish to contribute to Shopware, fork the master branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
+In case you wish to contribute to Shopware, fork the `5.0` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
 
 2.) Set the correct directory permissions:
 
@@ -90,7 +90,7 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/master>.
+The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.0>.
 
 ## Further reading
 
