@@ -417,6 +417,26 @@ class Customer extends LazyFetchModelEntity
         $this->hashPassword = null;
         $this->rawPassword  = $rawPassword;
     }
+    
+    /**
+     * Setter method for the encoder column
+     * 
+     * @param string $encoderName
+     */
+     public function setEncoderName($encoderName)
+     {
+        $this->encoderName = $encoderName;
+     }
+	 
+     /**
+      * Getter method for the encoder column
+      * 
+      * @return string
+      */
+     public function getEncoderName()
+     {
+        return $this->encoderName;
+     }
 
     /**
      * Setter function for the email column property of the customer.
