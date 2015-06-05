@@ -780,8 +780,8 @@ class Media extends ModelEntity
             }
             $this->file->move($this->getUploadDir(), $this->getFileName());
         }
-        unlink($this->file->getPathname());
-        unlink($this->file);
+        @unlink($this->file->getPathname());
+        @unlink($this->file);
         return true;
     }
 
