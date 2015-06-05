@@ -60,7 +60,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $this->View()->loadTemplate('frontend/search/fuzzy.tpl');
 
-        $minLengthSearchTerm = $this->get('config')->get('minSearchLenght');
+        $minLengthSearchTerm = $this->get('config')->get('minSearchLength');
         if (strlen($term) < (int) $minLengthSearchTerm) {
             return;
         }
@@ -161,7 +161,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     {
         $config = $this->get('config');
 
-        $minSearch = empty($config->sMINSEARCHLENGHT) ? 2 : (int) $config->sMINSEARCHLENGHT;
+        $minSearch = empty($config->sMINSEARCHLENGTH) ? 2 : (int) $config->sMINSEARCHLENGTH;
         $number = null;
         if (!empty($search) && strlen($search) >= $minSearch) {
             $sql = '

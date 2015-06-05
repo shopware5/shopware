@@ -2,7 +2,7 @@
 class Migrations_Migration308 Extends Shopware\Components\Migrations\AbstractMigration
 {
     /**
-     * Increase the lenght of all fields that contain the session id
+     * Increase the length of all fields that contain the session id
      * to allow usage of secure/long session hashes like session.hash_function="sha512"
      */
     public function up($modus)
