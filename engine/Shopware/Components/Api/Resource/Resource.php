@@ -263,6 +263,9 @@ abstract class Resource
                 $this->getManager()->clear();
             } catch (\Exception $e) {
                 $this->getManager()->getConnection()->rollBack();
+                if (!$this->getManager()->isOpen()) {
+                    $this->resetEntityManager();
+                }
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }
         }
