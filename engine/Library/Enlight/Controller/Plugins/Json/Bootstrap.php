@@ -220,10 +220,10 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         }
         if ($this->formatDateTime === true && is_array($data)) {
             array_walk_recursive($data, array($this, 'convertDateTime'));
-            $data = Zend_Json::encode($data);
+            $data = Zend_Json::encode($data, false, array('enableJsonExprFinder' => true));
             $data = preg_replace('/"Date\((-?\d+)\)"/', 'new Date($1)', $data);
         } else {
-            $data = Zend_Json::encode($data);
+            $data = Zend_Json::encode($data, false, array('enableJsonExprFinder' => true));
         }
         return $data;
     }
