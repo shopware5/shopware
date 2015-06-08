@@ -15,7 +15,7 @@ default:
 
 responsive:
     filters:
-        tags: "~@noResponsive&&~@javascript&&~@knownFailing"
+        tags: "~@noResponsive&&~jsResponsive&&~@javascript&&~@knownFailing"
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
@@ -27,7 +27,7 @@ responsive:
 
 emotion:
     filters:
-        tags: "~@noEmotion&&~@javascript&&~@knownFailing"
+        tags: "~@noEmotion&&~jsEmotion&&~@javascript&&~@knownFailing"
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
