@@ -27,7 +27,8 @@ class CheckoutShipping extends AccountShipping
     public function getNamedSelectors()
     {
         return array(
-            'changeButton'  => array('de' => 'Ändern', 'en' => 'Change')
+            'changeButton'  => array('de' => 'Ändern', 'en' => 'Change'),
+            'otherButton'  => array('de' => 'Andere', 'en' => 'Change')
         );
     }
 }

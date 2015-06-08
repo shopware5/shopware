@@ -2,7 +2,7 @@
 Feature: View all categories on sitemap
 
     @categories
-    Scenario: Scenario: I can see all categories
+    Scenario: I can see all categories
         Given I am on the page "Sitemap"
         Then  I should see the group "Genusswelten" with link "/genusswelten/":
             | value            | link                                          | level |

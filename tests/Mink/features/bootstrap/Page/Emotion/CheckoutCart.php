@@ -1,6 +1,7 @@
 <?php
 namespace Page\Emotion;
 
+use Element\Emotion\CartPosition;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class CheckoutCart extends Page implements \HelperSelectorInterface
@@ -50,8 +51,8 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
         );
     }
 
-    protected $taxesPositionFirst = 4;
-    public $cartPositionFirst = 3;
+//    protected $taxesPositionFirst = 4;
+//    public $cartPositionFirst = 3;
 
     /**
      * @param $aggregation
@@ -67,7 +68,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
         foreach($aggregation as $property) {
             $key = $this->getAggregationPosition($elements['aggregationLabels'], $property['label'], $lang);
 
-            $check[$property['label']] = \Helper::toFloat(
+            $check[$property['label']] = \Helper::floatArray(
                 array(
                     $property['value'],
                     $elements['aggregationValues'][$key]->getText()
@@ -84,8 +85,8 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
             $message = sprintf(
                 'The value of "%s" is "%s"! (should be "%s")',
                 $result,
-                $check[$result][0],
-                $check[$result][1]
+                $check[$result][1],
+                $check[$result][0]
             );
 
             \Helper::throwException($message);
@@ -172,6 +173,20 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     }
 
     /**
+     * Remove a product from the cart
+     * @param CartPosition $item
+     * @param string $language
+     */
+    public function removeProduct(CartPosition $item, $language = '')
+    {
+        if(empty($language)) {
+            $language = \Helper::getCurrentLanguage($this);
+        }
+
+        \Helper::clickNamedLink($item, 'remove', $language);
+    }
+
+    /**
      * Remove the voucher from the cart
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
@@ -181,5 +196,123 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
         $elements = \Helper::findElements($this, $locator);
 
         $elements['removeVoucher']->click();
+    }
+
+    /**
+     * @param CartPosition $items
+     */
+    public function emptyCart(CartPosition $items)
+    {
+        $language = \Helper::getCurrentLanguage($this);
+
+        /** @var CartPosition $item */
+        foreach($items as $item) {
+            $this->removeProduct($item, $language);
+        }
+    }
+
+    /**
+     * @param array $items
+     */
+    public function fillCartWithProducts(array $items)
+    {
+        $originalPath = $this->path;
+
+        foreach ($items as $item) {
+            $this->path = sprintf('/checkout/addArticle/sAdd/%s/sQuantity/%d', $item['number'], $item['quantity']);
+            $this->open();
+        }
+
+        $this->path = $originalPath;
+    }
+
+    /**
+     * Checks the cart positions
+     * Available properties are: number (required), name (required), quantity, itemPrice, sum
+     * @param CartPosition $cartPositions
+     * @param array $items
+     */
+    public function checkCartProducts(CartPosition $cartPositions, array $items)
+    {
+        if(count($cartPositions) !== count($items)) {
+            $message = sprintf(
+                'There are %d products in the cart! (should be %d)',
+                count($cartPositions),
+                count($items)
+            );
+            \Helper::throwException($message);
+        }
+
+        $result = \Helper::assertElements($items, $cartPositions);
+
+        if($result !== true) {
+            $messages = array('The following articles are wrong:');
+            foreach ($result as $product) {
+                $messages[] = sprintf(
+                    '%s - %s (%s is "%s", should be "%s")',
+                    $product['properties']['number'],
+                    $product['properties']['name'],
+                    $product['result']['key'],
+                    $product['result']['value'],
+                    $product['result']['value2']
+                );
+            }
+            \Helper::throwException($messages);
+        }
+    }
+
+    /**
+     * @param string $language
+     * @return bool
+     */
+    public function verifyPage($language = '')
+    {
+        return \Helper::hasNamedLink($this, 'checkout', $language);
+    }
+
+    /**
+     * Proceeds to the confirmation page
+     */
+    public function proceedToOrderConfirmation()
+    {
+        $language = \Helper::getCurrentLanguage($this);
+
+        if($this->verifyPage($language)) {
+            \Helper::clickNamedLink($this, 'checkout', $language);
+        }
+
+        $this->getPage('CheckoutConfirm')->verifyPage($language);
+    }
+
+    /**
+     * Proceeds to the confirmation page with login
+     * @param string $eMail
+     * @param string $password
+     */
+    public function proceedToOrderConfirmationWithLogin($eMail, $password)
+    {
+        $language = \Helper::getCurrentLanguage($this);
+
+        if($this->verifyPage($language)) {
+            \Helper::clickNamedLink($this, 'checkout', $language);
+        }
+
+        $this->getPage('Account')->login($eMail, $password);
+        $this->getPage('CheckoutConfirm')->verifyPage($language);
+    }
+
+    /**
+     * Proceeds to the confirmation page with registration
+     * @param array $data
+     */
+    public function proceedToOrderConfirmationWithRegistration(array $data)
+    {
+        $language = \Helper::getCurrentLanguage($this);
+
+        if($this->verifyPage($language)) {
+            \Helper::clickNamedLink($this, 'checkout', $language);
+        }
+
+        $this->getPage('Account')->register($data);
     }
 }

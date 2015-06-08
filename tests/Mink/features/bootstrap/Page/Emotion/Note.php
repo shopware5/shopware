@@ -12,27 +12,42 @@ class Note extends Page
     protected $path = '/note';
 
     /**
-     * Compares the complete note with the given list of articles
-     * @param array $notePositions
-     * @param array $articles
+     * @param array $items
      */
-    public function checkList($notePositions, $articles)
+    public function fillNoteWithProducts(array $items)
     {
-        $this->getPage('Homepage')->assertElementCount($notePositions, count($articles));
+        $originalPath = $this->path;
 
-        /** @var NotePosition $position */
-        foreach ($notePositions as $position) {
-            $result = $position->search($articles);
-
-            if ($result !== false) {
-                unset($articles[$result]);
-            }
+        foreach ($items as $item) {
+            $this->path = sprintf('/note/add/ordernumber/%s', $item['number']);
+            $this->open();
         }
 
-        if (!empty($articles)) {
+        $this->path = $originalPath;
+    }
+
+    /**
+     * @param NotePosition $notePositions
+     * @param array $items
+     */
+    public function checkNoteProducts(NotePosition $notePositions, array $items)
+    {
+        if(count($notePositions) !== count($items)) {
+            $message = sprintf(
+                'There are %d products on the note! (should be %d)',
+                count($notePositions),
+                count($items)
+            );
+            \Helper::throwException($message);
+        }
+
+        $result = \Helper::searchElements($items, $notePositions);
+
+        if($result !== true) {
             $messages = array('The following articles were not found:');
-            $names = array_column($articles, 'name');
-            $messages[] = implode(', ', $names);
+            foreach ($result as $product) {
+                $messages[] = $product['number'] . ' - ' . $product['name'];
+            }
             \Helper::throwException($messages);
         }
     }

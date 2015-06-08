@@ -27,30 +27,26 @@ class CompareColumn extends \Element\Emotion\CompareColumn
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
         $locators = array('thumbnailImage');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('srcset')
-        );
+        return $elements['thumbnailImage']->getAttribute('srcset');
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getRankingsToCheck()
+    public function getRankingProperty()
     {
         $locators = array('stars');
         $elements = \Helper::findElements($this, $locators);
 
         $ranking = $elements['stars']->getAttribute('content');
 
-        return array(
-            'articleRanking' => ($ranking) ? $ranking : 0
-        );
+        return ($ranking) ? $ranking : '0';
     }
 }

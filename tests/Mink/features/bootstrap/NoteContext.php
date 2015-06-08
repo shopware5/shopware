@@ -42,23 +42,6 @@ class NoteContext extends SubContext
         $this->clickActionLink($position, 'details');
     }
 
-    /**
-     * @Then /^My note should look like this:$/
-     */
-    public function myNoteShouldLookLikeThis(TableNode $articles)
-    {
-        $articles = $articles->getHash();
-
-        /** @var Note $page */
-        $page = $this->getPage('Note');
-
-        /** @var MultipleElement $notePositions */
-        $notePositions = $this->getElement('NotePosition');
-        $notePositions->setParent($page);
-
-        $page->checkList($notePositions, $articles);
-    }
-
     private function clickActionLink($position, $name)
     {
         /** @var Note $page */
@@ -72,5 +55,31 @@ class NoteContext extends SubContext
         /** @var NotePosition $notePosition */
         $notePosition = $notePositions->setInstance($position);
         Helper::clickNamedLink($notePosition, $name, $language);
+    }
+
+    /**
+     * @Given /^the note contains the following products:$/
+     */
+    public function theNoteContainsTheFollowingProducts(TableNode $items)
+    {
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+        $page->open();
+        $page->fillNoteWithProducts($items->getHash());
+        $this->theNoteShouldContainTheFollowingProducts($items);
+    }
+
+    /**
+     * @Then /^the note should contain the following products:$/
+     */
+    public function theNoteShouldContainTheFollowingProducts(TableNode $items)
+    {
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var NotePosition $cartPosition */
+        $notePositions = $this->getMultipleElement($page, 'NotePosition');
+
+        $page->checkNoteProducts($notePositions, $items->getHash());
     }
 }

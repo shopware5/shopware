@@ -29,33 +29,29 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
     /**
      * @return array
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
         $locators = array('image');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'image' => $elements['image']->getAttribute('src')
-        );
+        return $elements['image']->getAttribute('src');
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getLinksToCheck()
+    public function getLinkProperty()
     {
         $locators = array('link');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'link' => $elements['link']->getAttribute('href')
-        );
+        return $elements['link']->getAttribute('href');
     }
 
     /**
      * @return array
      */
-    public function getMappingsToCheck()
+    public function getMapping()
     {
         $locators = array('mapping');
         $elements = \Helper::findAllOfElements($this, $locators);
@@ -63,7 +59,7 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
         $mapping = array();
 
         foreach ($elements['mapping'] as $link) {
-            $mapping[] = array($link->getAttribute('href'));
+            $mapping[] = ['mapping' => $link->getAttribute('href')];
         }
 
         return $mapping;

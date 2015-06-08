@@ -1,6 +1,7 @@
 <?php
 namespace Page\Emotion;
 
+use Element\Emotion\ArticleBox;
 use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -45,21 +46,19 @@ class Listing extends Page implements \HelperSelectorInterface
 
     /**
      * Opens the listing page
-     * @param $params
+     * @param array $params
+     * @param bool $autoPage
      */
-    public function openListing($params)
+    public function openListing($params, $autoPage = true)
     {
-        $parameters = array();
+        $parameters = array_merge(
+            ['sCategory' => 3],
+            ($autoPage) ? ['sPage' => 1] : [],
+            \Helper::convertTableHashToArray($params, 'parameter')
+        );
 
-        foreach ($params as $param) {
-            $parameters[$param['parameter']] = $param['value'];
-        }
-
-        $categoryId = isset($parameters['sCategory']) ? $parameters['sCategory'] : "3";
-        unset($parameters['sCategory']);
-
+        $categoryId = array_shift($parameters);
         $this->path = $this->basePath . '?' . http_build_query($parameters);
-
         $parameters['sCategory'] = $categoryId;
 
         $this->open($parameters);
@@ -102,19 +101,19 @@ class Listing extends Page implements \HelperSelectorInterface
      */
     protected function setFilters(MultipleElement $filterGroups, $properties)
     {
-        foreach($properties as $property)
-        {
+        foreach ($properties as $property) {
             $found = false;
 
-            foreach($filterGroups as $filterGroup) {
+            foreach ($filterGroups as $filterGroup) {
                 $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
-                if($filterGroupName === $property['filter']) {
-                    $found  = true;
+                if ($filterGroupName === $property['filter']) {
+                    $found = true;
                     $success = $filterGroup->setProperty($property['value']);
 
-                    if(!$success) {
-                        $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
+                    if (!$success) {
+                        $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'],
+                            $property['filter']);
                         \Helper::throwException($message);
                     }
 
@@ -139,7 +138,7 @@ class Listing extends Page implements \HelperSelectorInterface
         $elements = \Helper::findElements($this, $views, false);
         $elements = array_filter($elements);
 
-        if(key($elements) !== $view) {
+        if (key($elements) !== $view) {
             $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
             \Helper::throwException($message);
         }
@@ -148,7 +147,7 @@ class Listing extends Page implements \HelperSelectorInterface
     /**
      * Checks, whether an article is in the listing or not, is $negation is true, it checks whether an article is NOT in the listing
      *
-     * @param $name
+     * @param string $name
      * @param bool $negation
      */
     public function checkListing($name, $negation = false)
@@ -170,6 +169,10 @@ class Listing extends Page implements \HelperSelectorInterface
         }
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     private function isArticleInListing($name)
     {
         $locator = array('listingBox');
@@ -179,5 +182,29 @@ class Listing extends Page implements \HelperSelectorInterface
         $listingBox = $elements['listingBox'];
 
         return $listingBox->hasLink($name);
+    }
+
+    /**
+     * @param ArticleBox $articleBox
+     * @param array $properties
+     * @throws \Exception
+     */
+    public function checkArticleBox(ArticleBox $articleBox, array $properties)
+    {
+        $properties = \Helper::floatArray($properties, ['price']);
+        $result = \Helper::assertElementProperties($articleBox, $properties);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The %s is "%s" (should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
     }
 }

@@ -2,12 +2,16 @@
 
 namespace Element\Emotion;
 
-class CheckoutBilling extends AccountBilling
+use Element\MultipleElement;
+
+require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
+
+class AddressBox extends MultipleElement
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.invoice-address');
+    protected $selector = array('css' => 'div.select_billing');
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -16,7 +20,7 @@ class CheckoutBilling extends AccountBilling
     public function getCssSelectors()
     {
         return array(
-            'currentMethod' => 'p'
+            'title' => '.bold'
         );
     }
 
@@ -27,8 +31,7 @@ class CheckoutBilling extends AccountBilling
     public function getNamedSelectors()
     {
         return array(
-            'changeButton'  => array('de' => 'Ändern', 'en' => 'Change'),
-            'otherButton'  => array('de' => 'Andere', 'en' => 'Change')
+            'chooseButton'  => array('de' => 'Auswählen',   'en' => 'Select')
         );
     }
 }

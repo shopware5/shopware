@@ -3,10 +3,9 @@ Feature: Checkout articles with voucher
 
     @registration @noResponsive
     Scenario: I can use vouchers in my basket and pay as new customer via prepayment
-        Given I am on the detail page for article 137
-        Then  I should see "Fahrerbrille Chronos"
-
-        When  I put the article into the basket
+        Given the cart contains the following products:
+            | number  | name                 | quantity |
+            | SW10137 | Fahrerbrille Chronos | 1        |
         Then  the aggregations should look like this:
             | label | value   |
             | total | 61,89 € |
@@ -63,10 +62,9 @@ Feature: Checkout articles with voucher
 
     @registration @noEmotion
     Scenario: I can use vouchers in my basket and pay as new customer via prepayment
-        Given I am on the detail page for article 137
-        Then  I should see "Fahrerbrille Chronos"
-
-        When  I put the article into the basket
+        Given the cart contains the following products:
+            | number  | name                 | quantity |
+            | SW10137 | Fahrerbrille Chronos | 1        |
         Then  the aggregations should look like this:
             | label | value   |
             | total | 61,89 € |
@@ -125,10 +123,9 @@ Feature: Checkout articles with voucher
 
     Scenario: I can use a free-shipping voucher and put articles with 7% tax in my basket
         Given the articles from "The Deli Garage" have tax id 4
-        When  I am on the detail page for article 39
-        Then  I should see "Mehrzwecknudeln"
-
-        When  I put the article into the basket
+        And   the cart contains the following products:
+            | number  | name            | quantity |
+            | SW10038 | Mehrzwecknudeln | 1        |
         Then  the aggregations should look like this:
             | label | value   |
             | total | 15,38 € |

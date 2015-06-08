@@ -1,8 +1,7 @@
 <?php
 
 use Page\Emotion\CheckoutCart;
-use Element\MultipleElement;
-use Element\Emotion\ArticleBox;
+use Element\Emotion\CartPosition;
 use Behat\Gherkin\Node\TableNode;
 
 require_once 'SubContext.php';
@@ -40,15 +39,10 @@ class CheckoutContext extends SubContext
     {
         /** @var CheckoutCart $page */
         $page = $this->getPage('CheckoutCart');
-        $language = Helper::getCurrentLanguage($page);
 
-        /** @var MultipleElement $cartPositions */
-        $cartPositions = $this->getElement('CartPosition');
-        $cartPositions->setParent($page);
-
-        /** @var ArticleBox $cartPosition */
-        $cartPosition = $cartPositions->setInstance($position);
-        Helper::clickNamedLink($cartPosition, 'remove', $language);
+        /** @var CartPosition $cartPosition */
+        $cartPosition = $this->getMultipleElement($page, 'CartPosition', $position);
+        $page->removeProduct($cartPosition);
     }
 
     /**
@@ -83,6 +77,30 @@ class CheckoutContext extends SubContext
     }
 
     /**
+     * @When /^I proceed to order confirmation$/
+     */
+    public function iProceedToOrderConfirmation()
+    {
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmation();
+    }
+
+    /**
+     * @Given /^I proceed to order confirmation with email "([^"]*)" and password "([^"]*)"$/
+     */
+    public function iProceedToOrderConfirmationWithEmailAndPassword($email, $password)
+    {
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithLogin($email, $password);
+    }
+
+    /**
+     * @Given /^I proceed to checkout as:$/
+     */
+    public function iProceedToCheckoutAs(TableNode $table)
+    {
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithRegistration($table->getHash());
+    }
+
+    /**
      * @When /^I proceed to checkout$/
      */
     public function iProceedToCheckout()
@@ -106,16 +124,27 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I enable the payment method (?P<paymentId>\d+)$/
-     *
-     * @param $paymentId
-     * @throws Zend_Db_Adapter_Exception
+     * @Given /^the cart contains the following products:$/
      */
-    public function enablePaymentMethod($paymentId)
+    public function theCartContainsTheFollowingProducts(TableNode $items)
     {
-        $database = $this->getContainer()->get('db');
+        /** @var CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+        $page->fillCartWithProducts($items->getHash());
+        $page->open();
+        $this->theCartShouldContainTheFollowingProducts($items);
+    }
 
-        $sql = "UPDATE s_core_paymentmeans SET active = 1 WHERE id = " . $paymentId . ";";
-        $database->exec($sql);
+    /**
+     * @Then /^the cart should contain the following products:$/
+     */
+    public function theCartShouldContainTheFollowingProducts(TableNode $items)
+    {
+        /** @var CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+
+        /** @var CartPosition $cartPositions */
+        $cartPositions = $this->getMultipleElement($page, 'CartPosition');
+        $page->checkCartProducts($cartPositions, $items->getHash());
     }
 }

@@ -12,7 +12,7 @@ class CartPosition extends MultipleElement
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.table_row');
+    protected $selector = array('css' => 'div.table_row:not(.small_quantities):not(.noborder):not(.non):not(.shipping)');
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -25,7 +25,7 @@ class CartPosition extends MultipleElement
             'number' => 'div.basket_details > p.ordernumber',
             'thumbnailLink' => 'a.thumb_image',
             'thumbnailImage' => 'a.thumb_image > img',
-            'quantity' => 'div > form > div:nth-of-type(3) > select > option',
+            'quantity' => 'div > form > div:nth-of-type(3) option[selected]',
             'itemPrice' => 'div > form > div:nth-of-type(4)',
             'sum' => 'div > form > div:nth-of-type(5)'
         );
@@ -43,72 +43,58 @@ class CartPosition extends MultipleElement
     }
 
     /**
+     * Returns the product name
      * @return array
      */
-    public function getNamesToCheck()
+    public function getNameProperty()
     {
         $locators = array('name', 'thumbnailLink', 'thumbnailImage');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'articleName' => $elements['name']->getText(),
+        $names = array(
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
             'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
+            'articleName' => rtrim($elements['name']->getText(), '.')
         );
+
+        return $this->getUniqueName($names);
     }
 
     /**
-     * @return array
+     * @param array $names
+     * @return string
+     * @throws \Exception
      */
-    public function getNumbersToCheck()
+    protected function getUniqueName(array $names)
     {
-        $locators = array('number');
-        $elements = \Helper::findElements($this, $locators);
+        $name = array_unique($names);
 
-        return array(
-            'articleNumber' => $elements['number']->getText()
-        );
-    }
+        switch (count($name)) {
+            //normal case
+            case 1:
+                return current($name);
 
-    public function getQuantitysTocheck()
-    {
-        $locators = array('quantity');
-        $elements = \Helper::findAllOfElements($this, $locators);
-
-        $quantity = 0;
-
-        /** @var NodeElement $option */
-        foreach($elements['quantity'] as $option)
-        {
-            if($option->hasAttribute('selected')) {
-                $quantity = $option->getText();
+            //if articleName is too long, it will be cut. So it's different from the other and has to be checked separately
+            case 2:
+                $check = array($name);
+                $result = \Helper::checkArray($check);
                 break;
-            }
+
+            default:
+                $result = false;
+                break;
         }
 
-        return array(
-            'quantity' => $quantity
-        );
-    }
+        if ($result !== true) {
+            $messages = array('The cart item has different names!');
+            foreach ($name as $key => $value) {
+                $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
+            }
 
-    public function getItemPricesTocheck()
-    {
-        $locators = array('itemPrice');
-        $elements = \Helper::findElements($this, $locators);
+            \Helper::throwException($messages);
+        }
 
-        return array(
-            'itemPrice' => $elements['itemPrice']->getText()
-        );
-    }
-
-    public function getSumsTocheck()
-    {
-        $locators = array('sum');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'totalPrice' => $elements['sum']->getText()
-        );
+        return $name['articleTitle'];
     }
 }

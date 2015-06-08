@@ -35,16 +35,14 @@ class AccountPayment extends Element implements \HelperSelectorInterface
         );
     }
 
-    public function getCurrentMethodsToCheck()
+    public function getPaymentMethodProperty()
     {
         $locators = array('currentMethod');
-        $elements = \Helper::findElements($this, $locators);
+        $element = \Helper::findElements($this, $locators);
 
-        $currentMethod = $elements['currentMethod']->getText();
+        $currentMethod = $element['currentMethod']->getText();
         $currentMethod = str_word_count($currentMethod, 1);
 
-        return array(
-            'currentMethod' => $currentMethod[0]
-        );
+        return $currentMethod[0];
     }
 }
