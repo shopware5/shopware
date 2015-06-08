@@ -1227,7 +1227,12 @@ class sBasket
 
             $promotions[] = $this->convertListProductToNote($product, $note, $average);
         }
-        return $promotions;
+
+        return $this->eventManager->filter(
+            'Shopware_Modules_Basket_GetNotes_FilterPromotions',
+            $promotions,
+            array('products' => $products)
+        );
     }
 
     /**
