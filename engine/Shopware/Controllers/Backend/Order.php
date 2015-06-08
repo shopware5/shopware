@@ -1446,6 +1446,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $data['billing']['attribute'] = $data['billingAttribute'][0];
         $data['shipping']['attribute'] = $data['shippingAttribute'][0];
 
+        //unset calculated values
+        unset($data['invoiceAmountNet']);
+        unset($data['invoiceAmountEuro']);
+
         //at least we return the prepared associated data.
         return $data;
     }
