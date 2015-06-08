@@ -269,6 +269,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      * Event will be fired when the user want to save the current emotion of the detail window
      * @param record
      * @param dataViewStore
+     * @param preview
      */
     onSaveEmotion: function(record, dataViewStore, preview) {
         var me = this, form = me.getSettingsForm(), win = me.getDetailWindow();
@@ -308,6 +309,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     });
 
                     gridStore.load();
+
+                    win.tabPanel.items.getAt(0).setDisabled(false);
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
                 }
@@ -320,9 +323,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.loadEmotionRecord(
             listStore.getAt(rowIndex).get('id'),
-            function(record) {
-                me.openDetailWindow(record);
-            }
+            me.openDetailWindow.bind(me)
         );
     },
 
