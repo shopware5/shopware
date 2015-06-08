@@ -2,6 +2,7 @@
 
 namespace Element\Emotion;
 
+use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
@@ -20,84 +21,127 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     public function getCssSelectors()
     {
         return array(
-            'title' => 'h2 > a',
-            'link' => 'div.blog_img > a',
-            'text' => 'p'
+            'article' => 'div.blog-entry',
+            'articleTitle' => 'h2 > a',
+            'articleLink' => 'div.blog_img > a',
+            'articleText' => 'p'
         );
     }
 
     /**
-     * @return array
+     * @param string[] $properties
+     * @return array[]
      */
-    public function getTitlesToCheck()
+    public function getArticles(array $properties)
     {
-        $locators = array('title', 'link');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $elements = \Helper::findAllOfElements($this, ['article']);
 
-        $titles = array();
+        $articles = [];
 
-        foreach ($elements['title'] as $key => $title) {
-            $titles[] = array(
-                $title->getText(),
-                $title->getAttribute('title'),
-                $elements['link'][$key]->getAttribute('title')
-            );
+        /** @var NodeElement $article */
+        foreach ($elements['article'] as $article) {
+            $articleProperties = [];
+
+            foreach ($properties as $property) {
+                $method = 'get' . ucfirst($property) . 'Property';
+                $articleProperties[$property] = $this->$method($article);
+            }
+
+            $articles[] = $articleProperties;
         }
 
-        return $titles;
+        return $articles;
     }
 
     /**
+     * @param NodeElement $article
      * @return array
      */
-    public function getImagesToCheck()
+    public function getTitleProperty(NodeElement $article)
     {
-        $locators = array('link');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selectors = \Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
-        $images = array();
+        $title = $article->find('css', $selectors['articleTitle']);
 
-        foreach ($elements['link'] as $image) {
-            $images[] = array($image->getAttribute('style'));
-        }
+        $titles = [
+            'titleTitle' => $title->getAttribute('title'),
+            'linkTitle' => $article->find('css', $selectors['articleLink'])->getAttribute('title'),
+            'title' => rtrim($title->getText(), '.')
+        ];
 
-        return $images;
+        return $this->getUniqueTitle($titles);
     }
 
     /**
-     * @return array
+     * @param NodeElement $article
+     * @return mixed|null
      */
-    public function getLinksToCheck()
+    public function getImageProperty(NodeElement $article)
     {
-        $locators = array('title', 'link');
-        $elements = \Helper::findAllOfElements($this, $locators);
-
-        $links = array();
-
-        foreach ($elements['title'] as $key => $title) {
-            $links[] = array(
-                $title->getAttribute('href'),
-                $elements['link'][$key]->getAttribute('href')
-            );
-        }
-
-        return $links;
+        $selector = \Helper::getRequiredSelector($this, 'articleLink');
+        return $article->find('css', $selector)->getAttribute('style');
     }
 
     /**
-     * @return array
+     * @param NodeElement $article
+     * @return string
      */
-    public function getTextsToCheck()
+    public function getLinkProperty(NodeElement $article)
     {
-        $locators = array('text');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selectors = \Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
-        $texts = array();
+        $links = [
+            'titleLink' => $article->find('css', $selectors['articleTitle'])->getAttribute('href'),
+            'link' => $article->find('css', $selectors['articleLink'])->getAttribute('href')
+        ];
 
-        foreach ($elements['text'] as $text) {
-            $texts[] = array($text->getText());
+        return \Helper::getUnique($links);
+    }
+
+    /**
+     * @param NodeElement $article
+     * @return null|string
+     */
+    public function getTextProperty(NodeElement $article)
+    {
+        $selector = \Helper::getRequiredSelector($this, 'articleText');
+        return $article->find('css', $selector)->getText();
+    }
+
+    /**
+     * @param array $titles
+     * @return string
+     * @throws \Exception
+     */
+    protected function getUniqueTitle(array $titles)
+    {
+        $title = array_unique($titles);
+
+        switch (count($title)) {
+            //normal case
+            case 1:
+                return current($title);
+
+            //if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
+            case 2:
+                $check = array($title);
+                $result = \Helper::checkArray($check);
+                break;
+
+            default:
+                $result = false;
+                break;
         }
 
-        return $texts;
+        if ($result !== true) {
+            $messages = array('The blog article has different titles!');
+            foreach ($title as $key => $value) {
+                $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
+            }
+
+            \Helper::throwException($messages);
+        }
+
+        return $title['titleTitle'];
     }
 }

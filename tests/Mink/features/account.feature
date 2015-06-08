@@ -57,15 +57,11 @@ Feature: My account (without changing login data)
 
     @payment
     Scenario Outline: I can change my payment method
-        Given the element "AccountPayment" should have the content:
-            | position      | content          |
-            | currentMethod | <oldPaymentName> |
+        Then  the current payment method should be "<oldPaymentName>"
 
         When  I change the payment method to <paymentId>
         Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And   the element "AccountPayment" should have the content:
-            | position      | content       |
-            | currentMethod | <paymentName> |
+        And   the current payment method should be "<paymentName>"
 
     Examples:
         | oldPaymentName | paymentId | paymentName |
@@ -74,18 +70,15 @@ Feature: My account (without changing login data)
         | Rechnung       | 5         | Vorkasse    |
 
     @payment
-    Scenario: I can change my payment method
-        When  I enable the payment method 2
-        And   I change the payment method to 2:
+    Scenario: I can change my payment method with additional data
+        When  I change the payment method to 2:
             | field             | value          |
             | sDebitAccount     | 123456789      |
             | sDebitBankcode    | 1234567        |
             | sDebitBankName    | Shopware Bank  |
             | sDebitBankHolder  | Max Mustermann |
         Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And   the element "AccountPayment" should have the content:
-            | position      | content     |
-            | currentMethod | Lastschrift |
+        And   the current payment method should be "Lastschrift"
 
         When  I change the payment method to 6:
             | field             | value                  |
@@ -94,6 +87,12 @@ Feature: My account (without changing login data)
             | sSepaBankName     | Shopware Bank          |
 
         Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
-        And   the element "AccountPayment" should have the content:
-            | position      | content |
-            | currentMethod | SEPA    |
+        And   the current payment method should be "SEPA"
+
+    @configChange @esd
+    Scenario: I can disable ESD-Articles in account
+        Given I should see "Meine Sofortdownloads"
+        When  I disable the config "showEsd"
+        And   I reload the page
+        Then  I should see "Willkommen, Max Mustermann"
+        But   I should not see "Meine Sofortdownloads"

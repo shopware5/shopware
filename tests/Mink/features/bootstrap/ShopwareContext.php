@@ -2,6 +2,7 @@
 
 use Page\Emotion\Homepage;
 use Behat\Gherkin\Node\TableNode;
+use Element\Emotion\CompareColumn;
 
 require_once 'SubContext.php';
 
@@ -40,44 +41,17 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^The comparison should look like this:$/
+     * @Then /^the comparison should contain the following products:$/
      */
-    public function theComparisonShouldLookLikeThis(TableNode $articles)
+    public function theComparisonShouldContainTheFollowingProducts(TableNode $items)
     {
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Element\Emotion\CompareColumn $element */
-        $element = $this->getElement('CompareColumn');
-        $element->setParent($page);
+        /** @var CompareColumn $compareColumns */
+        $compareColumns = $this->getMultipleElement($page, 'CompareColumn');
 
-        $articles = $articles->getHash();
-
-        foreach($articles as $article) {
-            foreach($element as $key => $column) {
-                $shopArray = array();
-                $checkArray = array();
-
-                foreach($article as $property => $subCheck) {
-                    $shopValues = Helper::getValuesToCheck($column, $property);
-                    $checkValues = array_fill_keys(array_keys($shopValues), $subCheck);
-
-                    $shopArray[$property] = $shopValues;
-                    $checkArray[$property] = $checkValues;
-                }
-
-                $result = Helper::compareArrays($shopArray, $checkArray);
-
-                if ($result === true) {
-                    break;
-                }
-
-                if ($key >= count($element)-1) {
-                    $message = sprintf('Product "%s" not found in comparision!', $article['name']);
-                    Helper::throwException($message);
-                }
-            }
-        }
+        $page->checkComparisonProducts($compareColumns, $items->getHash());
     }
 
     /**
@@ -177,5 +151,188 @@ class ShopwareContext extends SubContext
             $confirmationLink = sprintf($mask, $link, $optin['hash']);
             $session->visit($confirmationLink);
         }
+    }
+
+    /**
+     * @When /^I enable the config "([^"]*)"$/
+     */
+    public function iEnableTheConfig($configName)
+    {
+        $this->theConfigValueOfIs($configName, true);
+    }
+
+    /**
+     * @When /^I disable the config "([^"]*)"$/
+     */
+    public function iDisableTheConfig($configName)
+    {
+        $this->theConfigValueOfIs($configName, false);
+    }
+
+    /**
+     * @When /^the config value of "([^"]*)" is (\d+)$/
+     */
+    public function theConfigValueOfIsNumeric($configName, $value)
+    {
+        $this->theConfigValueOfIs($configName, intval($value));
+    }
+
+    /**
+     * @When /^the config value of "([^"]*)" is "([^"]*)"$/
+     */
+    public function theConfigValueOfIs($configName, $value)
+    {
+        /** @var FeatureContext $featureContext */
+        $featureContext = $this->getMainContext();
+        $featureContext->changeConfigValue($configName, $value);
+    }
+
+    /**
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)"$/
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
+     */
+    public function iShouldSeeABanner($image, $link = null)
+    {
+        $this->iShouldSeeABannerOnPositionWithImage(1, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)"$/
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" to "([^"]*)"$/
+     */
+    public function iShouldSeeABannerOnPositionWithImage($position, $image, $link = null)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\Banner $banner */
+        $banner = $this->getMultipleElement($page, 'Banner', $position);
+        $page->checkLinkedBanner($banner, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)" and mapping:$/
+     */
+    public function iShouldSeeABannerWithMapping($image, TableNode $mapping)
+    {
+        $this->iShouldSeeABannerOnPositionWithImageAndMapping(1, $image, $mapping);
+    }
+
+    /**
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" and mapping:$/
+     */
+    public function iShouldSeeABannerOnPositionWithImageAndMapping($position, $image, TableNode $mapping)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\Banner $banner */
+        $banner = $this->getMultipleElement($page, 'Banner', $position);
+        $mapping = $mapping->getHash();
+
+        $page->checkMappedBanner($banner, $image, $mapping);
+    }
+
+
+    /**
+     * @Given /^the product box on position (\d+) should have the following properties:$/
+     */
+    public function iShouldSeeAnArticle($position, TableNode $data)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\Article $article */
+        $article = $this->getMultipleElement($page, 'Article', $position);
+
+        $page->checkArticle($article, $data->getHash());
+    }
+
+    /**
+     * @Given /^the category teaser on position (\d+) for "(?P<name>[^"]*)" should have the image "(?P<image>[^"]*)" and link to "(?P<link>[^"]*)"$/
+     */
+    public function iShouldSeeACategoryTeaserWithImageTo($position, $name, $image, $link)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\CategoryTeaser $teaser */
+        $teaser = $this->getMultipleElement($page, 'CategoryTeaser', $position);
+
+        $page->checkCategoryTeaser($teaser, $name, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see some blog articles:$/
+     */
+    public function iShouldSeeSomeBlogArticles(TableNode $articles)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\BannerSlider $slider */
+        $blogArticle = $this->getMultipleElement($page, 'BlogArticle', 1);
+
+        $articles = $articles->getHash();
+
+        $page->checkBlogArticles($blogArticle, $articles);
+    }
+
+    /**
+     * @Then /^I should see a banner slider:$/
+     */
+    public function iShouldSeeABannerSlider(TableNode $slides)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\BannerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'BannerSlider', 1);
+
+        $page->checkSlider($slider, $slides->getHash());
+    }
+
+    /**
+     * @Given /^I should see a YouTube-Video "(?P<code>[^"]*)"$/
+     */
+    public function iShouldSeeAYoutubeVideo($code)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\Youtube $slider */
+        $youtube = $this->getMultipleElement($page, 'YouTube', 1);
+
+        $page->checkYoutubeVideo($youtube, $code);
+    }
+
+    /**
+     * @Then /^I should see a manufacturer slider:$/
+     */
+    public function iShouldSeeAManufacturerSlider(TableNode $manufacturers)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\ManufacturerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'ManufacturerSlider', 1);
+
+        $page->checkSlider($slider, $manufacturers->getHash());
+    }
+
+    /**
+     * @Then /^I should see an article slider:$/
+     */
+    public function iShouldSeeAnArticleSlider(TableNode $articles)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Element\Emotion\ManufacturerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'ArticleSlider', 1);
+
+        $products = Helper::floatArray($articles->getHash(), ['price']);
+
+        $page->checkSlider($slider, $products);
     }
 }

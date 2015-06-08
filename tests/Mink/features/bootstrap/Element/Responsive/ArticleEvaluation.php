@@ -26,14 +26,11 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
     }
 
     /**
-     * @param NodeElement $element
-     * @return string
+     * @return float
      */
-    protected function getStars(NodeElement $element)
+    public function getStarsProperty()
     {
-        $rating = $element->getAttribute('content');
-        $rating = floatval($rating);
-        return $rating * 2;
+        $elements = \Helper::findElements($this, ['stars']);
+        return floatval($elements['stars']->getAttribute('content')) * 2;
     }
-
 }

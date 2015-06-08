@@ -61,4 +61,3 @@ Feature: forms
         Given I am on the detail page for article 167
         Then  I should see "Sonnenbrille Speed Eyes"
         And   I should see a captcha
-

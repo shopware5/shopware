@@ -1,5 +1,5 @@
 @detail
-Feature: detail page
+Feature: Detail page
 
     @captchaInactive @evaluations
     Scenario: I can see evaluations
@@ -83,13 +83,9 @@ Feature: detail page
         Then  I should see "<grade> <itemPrice>"
 
         When  I put the article "<quantity>" times into the basket
-        Then  the element "CartPosition" should have the content:
-            | position  | content       |
-            | name      | Staffelpreise |
-            | number    | SW10208       |
-            | quantity  | <quantity>    |
-            | itemPrice | <itemPrice>   |
-            | sum       | <sum>         |
+        Then  the cart should contain the following products:
+            | number  | name          | quantity   | itemPrice   | sum   |
+            | SW10208 | Staffelpreise | <quantity> | <itemPrice> | <sum> |
 
     Examples:
         | grade  | itemPrice | quantity | sum   |

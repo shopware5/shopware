@@ -27,7 +27,7 @@ class SpecialContext extends SubContext
 
     /**
      * @Given /^I am on the page "(?P<page>[^"]*)"$/
-     * @Given /^I go to the page "(?P<page>[^"]*)"$/
+     * @When /^I go to the page "(?P<page>[^"]*)"$/
      */
     public function iAmOnThePage($page)
     {
@@ -50,49 +50,8 @@ class SpecialContext extends SubContext
     {
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
-
-        /** @var MultipleElement $elements */
-        $elements = $this->getElement($elementClass);
-        $elements->setParent($page);
-
-        $page->assertElementCount($elements, intval($count));
-    }
-
-    /**
-     * @Then /^the page "(?P<pageClass>[^"]*)" should have the content:$/
-     */
-    public function thePageShouldHaveTheContent($pageClass, TableNode $content)
-    {
-        $page = $this->getPage($pageClass);
-        $this->getPage('Homepage')->assertElementContent($page, $content->getHash());
-    }
-
-    /**
-     * @Given /^the element "(?P<elementClass>[^"]*)" should have the content:$/
-     */
-    public function theElementShouldHaveTheContent($elementClass, TableNode $content)
-    {
-        $this->theElementOnPositionShouldHaveTheContent($elementClass, 1, $content);
-    }
-
-    /**
-     * @Given /^the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+) should have the content:$/
-     */
-    public function theElementOnPositionShouldHaveTheContent($elementClass, $position, TableNode $content)
-    {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
-
-        $element = $this->getElement($elementClass);
-
-        if ($element instanceof MultipleElement) {
-            /** @var MultipleElement $element */
-            $element->setParent($page);
-
-            $element = $element->setInstance($position);
-        }
-
-        $page->assertElementContent($element, $content->getHash());
+        $elements = $this->getMultipleElement($page, $elementClass);
+        Helper::assertElementCount($elements, intval($count));
     }
 
     /**

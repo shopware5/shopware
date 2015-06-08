@@ -16,7 +16,7 @@ class Detail extends \Page\Emotion\Detail
         return array(
             'productRating' => 'div.product--rating-container .product--rating > meta',
             'productRatingCount' => 'div.product--rating-container .product--rating > span',
-            'configuratorForm' => 'div.product--buybox > div.buybox--inner > form',
+            'configuratorForm' => 'form.configurator--form',
             'notificationForm' => 'form.notification--form',
             'notificationSubmit' => '.notification--button',
             'voteForm' => 'form.review--form'
@@ -24,7 +24,7 @@ class Detail extends \Page\Emotion\Detail
     }
 
     protected $configuratorTypes = array(
-        'table' => 'buybox--form',
+        'table' => 'configurator--form',
         'standard' => 'configurator--form upprice--form',
         'select' => 'configurator--form selection--form'
     );
@@ -80,6 +80,7 @@ class Detail extends \Page\Emotion\Detail
             }
         }
 
+        $check = \Helper::floatArray($check);
         $result = \Helper::checkArray($check);
 
         if ($result !== true) {

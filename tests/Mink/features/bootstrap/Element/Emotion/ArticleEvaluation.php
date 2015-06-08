@@ -28,11 +28,20 @@ class ArticleEvaluation extends BlogComment
     }
 
     /**
-     * @param NodeElement $element
+     * @return float
+     */
+    public function getStarsProperty()
+    {
+        $elements = \Helper::findElements($this, ['stars']);
+        return \Helper::floatValue($elements['stars']->getAttribute('class'));
+    }
+
+    /**
      * @return string
      */
-    protected function getAnswer(NodeElement $element)
+    public function getAnswerProperty()
     {
-        return $element->getText();
+        $elements = \Helper::findElements($this, ['answer'], false);
+        return ($elements['answer']) ? $elements['answer']->getText() : '';
     }
 }

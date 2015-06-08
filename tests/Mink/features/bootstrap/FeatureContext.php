@@ -23,6 +23,11 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     private static $template;
 
     /**
+     * @var array
+     */
+    private $dirtyConfigElements;
+
+    /**
      * Initializes context.
      * Every scenario gets it's own context object.
      *
@@ -35,6 +40,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         }
 
         self::$template = $parameters['template'];
+        $this->dirtyConfigElements = array();
 
         $this->useContext('shopware', new ShopwareContext($parameters));
         $this->useContext('account', new AccountContext($parameters));
@@ -76,21 +82,15 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             );
         }
 
-        //set the template for shop "Deutsch"
-        $sql = sprintf(
-            'UPDATE `s_core_shops` SET `template_id`= %d WHERE `id` = 1',
-            $templateId
-        );
-
+        //set the template for shop "Deutsch" and activate SEPA payment method
+        $sql = <<<"EOD"
+            UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
+            UPDATE `s_core_paymentmeans` SET `active`= 1;
+EOD;
         self::$statickernel->getContainer()->get('db')->exec($sql);
-
-        //activate SEPA payment method
-        $sql = 'UPDATE `s_core_paymentmeans` SET `active`= 1 WHERE `id` = 6';
-        self::$statickernel->getContainer()->get('db')->exec($sql);
-
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$statickernel->getContainer()->get('shopware_plugininstaller.plugin_Manager');
+        $pluginManager = self::$statickernel->getContainer()->get('shopware.plugin_manager');
 
         // hack to prevent behat error handler kicking in.
         $oldErrorReporting = error_reporting(0);
@@ -109,29 +109,15 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             return;
         }
 
-        //set "shopware" as password for all users and make sure they can login, additionally set "Vorkasse" as payment method
-        $sql = sprintf(
-            'UPDATE s_user SET password = "%s", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL',
-            md5('shopware')
-        );
+        $password = md5('shopware');
 
-        $this->getContainer()->get('db')->exec($sql);
-
-        //Remove all articles from basket
-        $sql = 'TRUNCATE s_order_basket_attributes';
-        $this->getContainer()->get('db')->exec($sql);
-
-        $sql = 'DELETE FROM s_order_basket';
-        $this->getContainer()->get('db')->exec($sql);
-
-        $sql = 'ALTER TABLE s_order_basket AUTO_INCREMENT = 1';
-        $this->getContainer()->get('db')->exec($sql);
-
-        //Remove all articles from notes and comparisons
-        $sql = 'TRUNCATE s_order_notes';
-        $this->getContainer()->get('db')->exec($sql);
-
-        $sql = 'TRUNCATE s_order_comparisons';
+        $sql = <<<"EOD"
+            UPDATE s_user SET password = "$password", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL;
+            TRUNCATE s_order_basket;
+            TRUNCATE s_order_basket_attributes;
+            TRUNCATE s_order_notes;
+            TRUNCATE s_order_comparisons;
+EOD;
         $this->getContainer()->get('db')->exec($sql);
     }
 
@@ -140,38 +126,79 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
      */
     public function deactivateCaptchas()
     {
-        //uses a small bug in shopware, which deactivate all captchas when the font color is empty
-        $sql = 'INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`) VALUES
-            (843, 1, \'s:0:"";\'),
-            (843, 2, \'s:0:"";\')'
-        ;
-        $this->getContainer()->get('db')->exec($sql);
-        $this->clearCache();
+        $this->changeConfigValue('captchaColor', '');
     }
 
     /**
-     * @AfterScenario @captchaInactive
+     * @param string $configName
+     * @param mixed $value
+     * @throws Exception
      */
-    public function reactivateCaptchas()
+    public function changeConfigValue($configName, $value)
     {
-        $sql = 'DELETE FROM `s_core_config_values` WHERE `element_id` = 843';
-        $this->getContainer()->get('db')->exec($sql);
+        //get the template id
+        $sql = sprintf(
+            'SELECT `id` FROM `s_core_config_elements` WHERE `name` = "%s"',
+            $configName
+        );
+
+        $configId = $this->getContainer()->get('db')->fetchOne($sql);
+        if (!$configId) {
+            $message = sprintf('Configuration "%s" doesn\'t exist!', $configName);
+            Helper::throwException($message);
+        }
+
+        $this->dirtyConfigElements[] = $configId;
+
+        /** @var \Shopware\Components\ConfigWriter $configWriter */
+        $configWriter = $this->getContainer()->get('config_writer');
+
+        $configWriter->save($configName, $value, null, 1);
+        $configWriter->save($configName, $value, null, 2);
+
         $this->clearCache();
     }
 
     /**
-     *
+     * @AfterScenario @captchaInactive,@configChange
      */
-    private function clearCache()
+    public function clearConfigValues()
+    {
+        if(!$this->dirtyConfigElements) {
+            return;
+        }
+
+        $dirtyElements = implode(',', $this->dirtyConfigElements);
+        $this->dirtyConfigElements = array();
+
+        $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
+
+        $this->getContainer()->get('db')->exec($sql);
+
+        $this->clearCache();
+    }
+
+    /**
+     * @BeforeScenario @configChange
+     */
+    public function clearCache(\Behat\Behat\Event\ScenarioEvent $event = null)
     {
         /** @var \Shopware\Components\CacheManager $cacheManager */
         $cacheManager = $this->getContainer()->get('shopware.cache_manager');
 
-        $cacheManager->clearHttpCache();
-        $cacheManager->clearTemplateCache();
+        $templateCache = $cacheManager->getTemplateCacheInfo();
+        if (!array_key_exists('message', $templateCache)) {
+            $cacheManager->clearHttpCache();
+            $cacheManager->clearTemplateCache();
+        }
+
         $cacheManager->clearConfigCache();
         $cacheManager->clearSearchCache();
         $cacheManager->clearProxyCache();
+
+        if($event) {
+            sleep(5);
+        }
     }
 
     /**

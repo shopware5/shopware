@@ -40,7 +40,7 @@ class ListingContext extends SubContext
             );
         }
 
-        $this->getPage('Listing')->openListing($params);
+        $this->getPage('Listing')->openListing($params, false);
     }
 
         /**
@@ -84,20 +84,15 @@ class ListingContext extends SubContext
     /**
      * @Then /^the article on position (?P<num>\d+) should have this properties:$/
      */
-    public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties = null)
+    public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties)
     {
-        $properties = $properties->getHash();
-
         /** @var Listing $page */
         $page = $this->getPage('Listing');
 
-        /** @var MultipleElement $articleBoxes */
-        $articleBoxes = $this->getElement('ArticleBox');
-        $articleBoxes->setParent($page);
-
         /** @var ArticleBox $articleBox */
-        $articleBox = $articleBoxes->setInstance($position);
-        $articleBox->checkProperties($properties);
+        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        $properties = Helper::convertTableHashToArray($properties->getHash());
+        $page->checkArticleBox($articleBox, $properties);
     }
 
     /**

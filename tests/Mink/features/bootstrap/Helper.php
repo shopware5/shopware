@@ -29,15 +29,15 @@ class Helper
                 continue;
             }
 
-            if($strict) {
+            if ($strict || is_float($comparison[0]) || is_float($comparison[1])) {
                 return $key;
             }
 
-            $haystack = (string) $comparison[0];
-            $needle = (string) $comparison[1];
+            $haystack = (string)$comparison[0];
+            $needle = (string)$comparison[1];
 
             if (strlen($needle) === 0) {
-                if(strlen($haystack) === 0) {
+                if (strlen($haystack) === 0) {
                     return true;
                 }
 
@@ -53,40 +53,44 @@ class Helper
     }
 
     /**
-     * Helper function to validate values to floats
-     * @param  array $values
+     * @param mixed $value
+     * @return float
+     */
+    public static function floatValue($value)
+    {
+        if (is_float($value)) {
+            return $value;
+        }
+
+        $float = str_replace([' ', '.', ','], ['', '', '.'], $value);
+        preg_match("/([0-9]+[\\.]?[0-9]*)/", $float, $matches);
+
+        return floatval($matches[0]);
+    }
+
+    /**
+     * @param array $values
+     * @param array $keys
      * @return array
      */
-    public static function toFloat($values)
+    public static function floatArray(array $values, array $keys = [])
     {
-        if (!is_array($values)) {
-            $values = array($values);
+        if (is_array(current($values))) {
+            foreach ($values as &$array) {
+                $array = self::floatArray($array, $keys);
+            }
+
+            return $values;
         }
 
-        foreach ($values as $key => $value) {
-            if(empty($value)) {
-                $values[$key] = $value = floatval(0);
-            }
-
-            if (is_float($value)) {
-                continue;
-            }
-
-            preg_match("/\d+[\.*]*[\d+\.*]*[,\d+]*/", $value, $value); //matches also numbers like 123.456.789,00
-
-            $value = $value[0];
-
-            if (!is_numeric($value)) {
-                $value = str_replace('.', '', $value);
-                $value = str_replace(',', '.', $value);
-            }
-
-            $values[$key] = floatval($value);
+        if (empty($keys)) {
+            $keys = array_keys($values);
         }
 
-        if (count($values) === 1) {
-            $values = array_values($values);
-            $values = $values[0];
+        foreach ($keys as $key) {
+            if (isset($values[$key])) {
+                $values[$key] = self::floatValue($values[$key]);
+            }
         }
 
         return $values;
@@ -97,9 +101,9 @@ class Helper
      * If the number is equal to $count, the function will return true.
      * If the number is not equal to $count, the function will return the count of the element.
      *
-     * @param  Element  $parent
-     * @param  string   $elementLocator
-     * @param  int      $count
+     * @param  Element $parent
+     * @param  string $elementLocator
+     * @param  int $count
      * @return bool|int
      */
     public static function countElements($parent, $elementLocator, $count = 0)
@@ -107,7 +111,7 @@ class Helper
         $locator = array($elementLocator);
         $elements = self::findAllOfElements($parent, $locator, false);
 
-        $countElements = count($elements['element']);
+        $countElements = count($elements[$elementLocator]);
 
         if ($countElements === intval($count)) {
             return true;
@@ -119,8 +123,8 @@ class Helper
     /**
      * Recursive Helper function to compare two arrays over all their levels
      *
-     * @param  array      $array1
-     * @param  array      $array2
+     * @param  array $array1
+     * @param  array $array2
      * @return array|bool
      */
     public static function compareArrays($array1, $array2)
@@ -165,7 +169,7 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param array $keys
      * @param bool $throwExceptions
-     * @return array
+     * @return Element[]
      * @throws Exception|PendingException
      */
     public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
@@ -175,24 +179,24 @@ class Helper
 
         $selectors = self::getRequiredSelectors($parent, $keys);
 
-        foreach($selectors as $key => $locator) {
+        foreach ($selectors as $key => $locator) {
             $element = $parent->find('css', $locator);
 
-            if(!$element) {
+            if (!$element) {
                 $notFound[$key] = $locator;
             }
 
             $elements[$key] = $element;
         }
 
-        if($throwExceptions) {
+        if ($throwExceptions) {
             $messages = array('The following elements of ' . get_class($parent) . ' were not found:');
 
-            foreach($notFound as $key => $locator) {
+            foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
             }
 
-            if(count($messages) > 1) {
+            if (count($messages) > 1) {
                 self::throwException($messages);
             }
         }
@@ -215,24 +219,24 @@ class Helper
 
         $selectors = self::getRequiredSelectors($parent, $keys);
 
-        foreach($selectors as $key => $locator) {
+        foreach ($selectors as $key => $locator) {
             $element = $parent->findAll('css', $locator);
 
-            if(!$element) {
+            if (!$element) {
                 $notFound[$key] = $locator;
             }
 
             $elements[$key] = $element;
         }
 
-        if($throwExceptions) {
+        if ($throwExceptions) {
             $messages = array('The following elements of ' . get_class($parent) . ' were not found:');
 
-            foreach($notFound as $key => $locator) {
+            foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
             }
 
-            if(count($messages) > 1) {
+            if (count($messages) > 1) {
                 self::throwException($messages);
             }
         }
@@ -243,23 +247,24 @@ class Helper
     /**
      * @param Page|Element|HelperSelectorInterface $parent
      * @param array $keys
+     * @param bool $throwExceptions
      * @return array
      * @throws Exception
      * @throws PendingException
      */
-    public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys)
+    public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
         $errors = array();
         $locators = array();
         $selectors = $parent->getCssSelectors();
 
-        foreach($keys as $key) {
-            if(!array_key_exists($key, $selectors)) {
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $selectors)) {
                 $errors['noSelector'][] = $key;
                 continue;
             }
 
-            if(empty($selectors[$key])) {
+            if (empty($selectors[$key])) {
                 $errors['emptySelector'][] = $key;
                 continue;
             }
@@ -267,7 +272,7 @@ class Helper
             $locators[$key] = $selectors[$key];
         }
 
-        if(empty($errors)) {
+        if (empty($errors) || !$throwExceptions) {
             return $locators;
         }
 
@@ -286,12 +291,13 @@ class Helper
     /**
      * @param HelperSelectorInterface $parent
      * @param string $key
-     * @return string
+     * @return string|bool
      */
     public static function getRequiredSelector(HelperSelectorInterface $parent, $key)
     {
-        $selectors = self::getRequiredSelectors($parent, array($key));
-        return $selectors[$key];
+        $selectors = self::getRequiredSelectors($parent, array($key), false);
+
+        return (isset($selectors[$key])) ? $selectors[$key] : false;
     }
 
     const EXCEPTION_GENERIC = 1;
@@ -334,7 +340,7 @@ class Helper
         $messages = array_merge(array($message), $messages);
         $message = implode("\r\n", $messages);
 
-        switch($type) {
+        switch ($type) {
             case self::EXCEPTION_GENERIC:
                 throw new \Exception($message);
                 break;
@@ -354,20 +360,49 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
      * @param string $language
+     * @return bool
+     * @throws Exception
+     * @throws PendingException
      */
-    public static function clickNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    public static function hasNamedLink(HelperSelectorInterface $parent, $key, $language = '')
     {
         $locatorArray = $parent->getNamedSelectors();
 
-        if(empty($language)) {
-            if($parent instanceof Page) {
+        if (empty($language)) {
+            if ($parent instanceof Page) {
                 $language = self::getCurrentLanguage($parent);
             } else {
                 self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
             }
         }
 
-       if($parent instanceof Page) {
+        if ($parent instanceof Page) {
+            $parent = self::getContentBlock($parent);
+        }
+
+        return $parent->hasLink($locatorArray[$key][$language]);
+    }
+
+    /**
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string $key
+     * @param string $language
+     * @throws Exception
+     * @throws PendingException
+     */
+    public static function clickNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    {
+        $locatorArray = $parent->getNamedSelectors();
+
+        if (empty($language)) {
+            if ($parent instanceof Page) {
+                $language = self::getCurrentLanguage($parent);
+            } else {
+                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
+            }
+        }
+
+        if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
@@ -383,15 +418,15 @@ class Helper
     {
         $locatorArray = $parent->getNamedSelectors();
 
-        if(empty($language)) {
-            if($parent instanceof Page) {
+        if (empty($language)) {
+            if ($parent instanceof Page) {
                 $language = self::getCurrentLanguage($parent);
             } else {
                 self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
             }
         }
 
-        if($parent instanceof Page) {
+        if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
@@ -410,10 +445,10 @@ class Helper
             'responsive' => 'div.content-main--inner'
         );
 
-        foreach($contentBlocks as $locator) {
+        foreach ($contentBlocks as $locator) {
             $block = $parent->find('css', $locator);
 
-            if($block) {
+            if ($block) {
                 return $block;
             }
         }
@@ -492,7 +527,7 @@ class Helper
         $meta = $page->find('css', 'meta[name=application-name]');
         $shop = $meta->getAttribute('content');
 
-        if($shop === 'English') {
+        if ($shop === 'English') {
             return 'en';
         }
 
@@ -549,38 +584,38 @@ class Helper
         $body = $session->getPage()->find('css', 'body');
         $class = $body->getAttribute('class');
 
-        foreach($prefixes as $template => $modes) {
+        foreach ($prefixes as $template => $modes) {
             $activeModes = array();
 
-            foreach($modes as $mode => $prefix) {
-                if(in_array($mode, $selectionMode)) {
+            foreach ($modes as $mode => $prefix) {
+                if (in_array($mode, $selectionMode)) {
                     $activeModes[] = $prefix . '([A-Za-z]+)';
                 }
             }
 
-            if(empty($activeModes)) {
+            if (empty($activeModes)) {
                 continue;
             }
 
             $regex = '/' . implode(' ', $activeModes) . '/';
 
-            if(preg_match($regex, $class, $mode) !== 1) {
+            if (preg_match($regex, $class, $mode) !== 1) {
                 continue;
             }
 
             $result = array_fill_keys($selectionMode, null);
 
-            if(array_key_exists('controller', $result)) {
+            if (array_key_exists('controller', $result)) {
                 $result['controller'] = $mode['1'];
 
-                if(array_key_exists('action', $result) && isset($mode['2'])) {
+                if (array_key_exists('action', $result) && isset($mode['2'])) {
                     $result['action'] = $mode['2'];
                 }
-            } elseif(array_key_exists('action', $result) && isset($mode['1'])) {
+            } elseif (array_key_exists('action', $result) && isset($mode['1'])) {
                 $result['action'] = $mode['1'];
             }
 
-            if(array_key_exists('template', $result)) {
+            if (array_key_exists('template', $result)) {
                 $result['template'] = $template;
             }
 
@@ -603,7 +638,7 @@ class Helper
         $result = array_fill_keys($locators, null);
 
         foreach ($elements as $key => $subElement) {
-            if(empty($subElement)) {
+            if (empty($subElement)) {
                 continue;
             }
             $method = 'get' . ucfirst($key) . 'Data';
@@ -611,5 +646,159 @@ class Helper
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $hash
+     * @param string $keyKey
+     * @param string $valueKey
+     * @return array
+     */
+    public static function convertTableHashToArray(array $hash, $keyKey = 'property', $valueKey = 'value')
+    {
+        $result = array();
+
+        foreach ($hash as $item) {
+            $key = $item[$keyKey];
+            $value = $item[$valueKey];
+            $result[$key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $array
+     * @return string
+     * @throws Exception
+     */
+    public static function getUnique(array $array)
+    {
+        $unique = array_unique($array);
+
+        if (count($unique) > 1) {
+            $messages = array('There are more than one unique values in the array!');
+            foreach ($unique as $key => $value) {
+                $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
+            }
+
+            self::throwException($messages);
+        }
+
+        return current($unique);
+    }
+
+    /**
+     * @param Element $element
+     * @param array $properties
+     * @return bool|array
+     */
+    public static function assertElementProperties(Element $element, array $properties)
+    {
+        $check = array();
+
+        foreach ($properties as $key => $value) {
+            $method = 'get' . ucFirst($key) . 'Property';
+
+            $property = $element->$method();
+
+            $check[$key] = array($property, $value);
+        }
+
+        $result = self::checkArray($check);
+
+        if ($result === true) {
+            return true;
+        }
+
+        return array(
+            'key' => $result,
+            'value' => $check[$result][0],
+            'value2' => $check[$result][1]
+        );
+    }
+
+    /** @var  \Element\MultipleElement */
+    private static $filterElements;
+
+    /**
+     * @param $var
+     * @return bool
+     */
+    private static function filter($var)
+    {
+        /** @var \Element\MultipleElement $element */
+        foreach (self::$filterElements as $element) {
+            if (self::assertElementProperties($element, $var) === true) {
+                self::$filterElements->remove();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $needles
+     * @param \Element\MultipleElement $haystack
+     * @return bool|array
+     */
+    public static function searchElements(array $needles, \Element\MultipleElement $haystack)
+    {
+        self::$filterElements = $haystack;
+        $result = array_filter($needles, array('self', 'filter'));
+
+        if ($result) {
+            return $result;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $needles
+     * @param \Element\MultipleElement $haystack
+     * @return array|bool
+     */
+    public static function assertElements(array $needles, \Element\MultipleElement $haystack)
+    {
+        $failures = array();
+
+        foreach ($needles as $key => $item) {
+            $element = $haystack->setInstance($key + 1);
+            $result = self::assertElementProperties($element, $item);
+
+            if ($result !== true) {
+                $failures[] = array(
+                    'properties' => $item,
+                    'result' => $result
+                );
+            }
+        }
+
+        if ($failures) {
+            return $failures;
+        }
+
+        return true;
+    }
+
+    /**
+     * Global method to check the count of an MultipleElement
+     * @param \Element\MultipleElement $elements
+     * @param int              $count
+     */
+    public static function assertElementCount(\Element\MultipleElement $elements, $count = 0)
+    {
+        if ($count !== count($elements)) {
+            $message = sprintf(
+                'There are %d elements of type "%s" on page (should be %d)',
+                count($elements),
+                get_class($elements),
+                $count
+            );
+            \Helper::throwException($message);
+        }
     }
 }

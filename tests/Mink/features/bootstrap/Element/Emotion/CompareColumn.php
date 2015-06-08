@@ -36,86 +36,60 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
     );
 
     /**
-     * @return array
+     * @return string
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
         $locators = array('thumbnailImage');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('src')
-        );
+        return $elements['thumbnailImage']->getAttribute('src');
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getNamesToCheck()
+    public function getNameProperty()
     {
         $locators = array('thumbnailImage', 'thumbnailLink', 'name', 'detailsButton');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
+        $names = array(
             'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
             'articleName' => $elements['name']->getText(),
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleDetailsButtonTitle' => $elements['detailsButton']->getAttribute('title')
         );
+
+        return \Helper::getUnique($names);
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getRankingsToCheck()
+    public function getRankingProperty()
     {
         $locators = array('stars');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
-            'articleRanking' => $elements['stars']->getAttribute('class')
-        );
+        return $elements['stars']->getAttribute('class');
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getDescriptionsToCheck()
-    {
-        $locators = array('description');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'articleDescription' => $elements['description']->getText()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getPricesToCheck()
-    {
-        $locators = array('price');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'articlePrice' => $elements['price']->getText()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getLinksToCheck()
+    public function getLinkProperty()
     {
         $locators = array('thumbnailLink', 'name', 'detailsButton');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
+        $links = array(
             'articleThumbnailLink' => $elements['thumbnailLink']->getAttribute('href'),
             'articleNameLink' => $elements['name']->getAttribute('href'),
             'articleDetailsButtonLink' => $elements['detailsButton']->getAttribute('href')
         );
+
+        return \Helper::getUnique($links);
     }
 }

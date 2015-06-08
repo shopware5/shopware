@@ -34,34 +34,43 @@ class AccountOrder extends MultipleElement
         );
     }
 
-    public function getNamedSelectors()
-    {
-        return array();
-    }
-
-    public function getDatesToCheck()
+    /**
+     * Returns the order date
+     * @return string
+     */
+    public function getDateProperty()
     {
         $locators = array('date', 'footerDate');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
+        $dates = array(
             'orderDate' => $elements['date']->getText(),
             'footerDate' => $elements['footerDate']->getText()
         );
+
+        return \Helper::getUnique($dates);
     }
 
-    public function getNumbersToCheck()
+    /**
+     * Returns the order number
+     * @return string
+     */
+    public function getNumberProperty()
     {
         $locators = array('number', 'footerNumber');
         $elements = \Helper::findElements($this, $locators);
 
-        return array(
+        $numbers = array(
             'orderNumber' => $elements['number']->getText(),
             'footerNumber' => $elements['footerNumber']->getText()
         );
+
+        return \Helper::getUnique($numbers);
     }
 
     /**
+     * Returns the order positions
+     *
      * @param array $locators
      * @return array
      */
@@ -77,22 +86,32 @@ class AccountOrder extends MultipleElement
         /** @var NodeElement $position */
         foreach($elements['positions'] as $position)
         {
-            $data = array();
-
-            foreach($selectors as $key => $selector) {
-                $element = $position->find('css', $selector);
-
-                $data[$key] = $element->getText();
-
-                if ($key !== 'product') {
-                    $data[$key] = \Helper::toFloat($data[$key]);
-                }
-            }
-
-            $positions[] = $data;
+            $positions[] = $this->getOrderPositionData($position, $selectors);
         }
 
         return $positions;
     }
 
+    /**
+     * Helper function returns the data of an order position
+     * @param NodeElement $position
+     * @param array $selectors
+     * @return array
+     */
+    private function getOrderPositionData(NodeElement $position, array $selectors)
+    {
+        $data = array();
+
+        foreach($selectors as $key => $selector) {
+            $element = $position->find('css', $selector);
+
+            $data[$key] = $element->getText();
+
+            if ($key !== 'product') {
+                $data[$key] = \Helper::floatValue($data[$key]);
+            }
+        }
+
+        return $data;
+    }
 }
