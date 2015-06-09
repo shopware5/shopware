@@ -470,6 +470,83 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return $article->getId();
     }
 
+
+
+    /**
+     * @depends testCreateWithImageShouldCreateThumbnails
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
+     */
+    public function testFlipArticleMainVariantShouldBeSuccessful($id)
+    {
+        $originalArticle = $this->resource->getOne($id);
+        $mainVariantNumber = $originalArticle['mainDetailId'];
+
+        $testData =  array(
+            'mainDetail' => array(
+                'number' => $mainVariantNumber,
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+
+            'variants' => array(
+                array(
+                    'number' => $mainVariantNumber,
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'isMain' => true,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+                ),
+            ),
+        );
+
+        $article = $this->resource->update($id, $testData);
+
+        $this->assertEquals($mainVariantNumber, $article->getMainDetail()->getNumber());
+    }
+
     /**
      * Test that updating an Article with images generates thumbnails
      *

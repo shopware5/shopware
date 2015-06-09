@@ -481,6 +481,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
      */
     public function testChangeVariantArticleMainVariantShouldBeSuccessful($id)
     {
@@ -546,6 +549,10 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @return
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
      */
     public function testDeleteArticlesShouldBeSuccessful($id)
     {

@@ -870,7 +870,8 @@ class Article extends Resource implements BatchInterface
                             $variant = $oldMain;
                         } elseif (!empty($oldMain['number'])) {
                             $oldMain = $this->getDetailRepository()->findOneBy(array('number' => $oldMain['number']));
-                            if ($oldMain) {
+                            $oldMainConfiguratorOptions = $oldMain ? $oldMain->getConfiguratorOptions()->toArray() : null;
+                            if ($oldMain && empty($oldMainConfiguratorOptions)) {
                                 $this->getManager()->remove($oldMain);
                             }
                         }
