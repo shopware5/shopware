@@ -129,21 +129,34 @@ class Shopware_Components_Config implements ArrayAccess
         $sql = "
             SELECT
               LOWER(REPLACE(e.name, '_', '')) as name,
-              IFNULL(IFNULL(v2.value, v1.value), e.value) as value,
-              LOWER(REPLACE(forms.name, '_', '')) as form
+              COALESCE(currentShop.value, parentShop.value, fallbackShop.value, e.value) as value,
+              LOWER(REPLACE(forms.name, '_', '')) as form,
+              currentShop.value as currentShopval,
+              parentShop.value as parentShopval,
+              fallbackShop.value as fallbackShopval
+
             FROM s_core_config_elements e
-            LEFT JOIN s_core_config_values v1
-            ON v1.element_id = e.id
-            AND v1.shop_id = ?
-            LEFT JOIN s_core_config_values v2
-            ON v2.element_id = e.id
-            AND v2.shop_id = ?
+
+            LEFT JOIN s_core_config_values currentShop
+              ON currentShop.element_id = e.id
+              AND currentShop.shop_id = :currentShopId
+
+            LEFT JOIN s_core_config_values parentShop
+              ON parentShop.element_id = e.id
+              AND parentShop.shop_id = :parentShopId
+
+            LEFT JOIN s_core_config_values fallbackShop
+              ON fallbackShop.element_id = e.id
+              AND fallbackShop.shop_id = :fallbackShopId
+
             LEFT JOIN s_core_config_forms forms
-            ON forms.id = e.form_id
+              ON forms.id = e.form_id
         ";
+
         $data = $this->_db->fetchAll($sql, array(
-            1, //Shop parent id
-            isset($this->_shop) ? $this->_shop->getId() : null
+            'fallbackShopId' => 1, //Shop parent id
+            'parentShopId'   => isset($this->_shop) && $this->_shop->getMain() !== null ? $this->_shop->getMain()->getId() : 1,
+            'currentShopId'  => isset($this->_shop) ? $this->_shop->getId() : null,
         ));
 
         $result = array();
