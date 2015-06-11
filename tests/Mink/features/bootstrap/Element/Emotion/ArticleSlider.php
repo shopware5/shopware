@@ -2,9 +2,12 @@
 
 namespace Element\Emotion;
 
+use Behat\Mink\Element\NodeElement;
+use Element\SliderElement;
+
 require_once 'tests/Mink/features/bootstrap/Element/Emotion/BannerSlider.php';
 
-class ArticleSlider extends BannerSlider implements \HelperSelectorInterface
+class ArticleSlider extends SliderElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -18,6 +21,7 @@ class ArticleSlider extends BannerSlider implements \HelperSelectorInterface
     public function getCssSelectors()
     {
         return array(
+            'slide' => 'div.article_box',
             'slideImage' => 'a.article-thumb-wrapper > img',
             'slideLink' => 'a.article-thumb-wrapper',
             'slideName' => 'a.title',
@@ -26,63 +30,60 @@ class ArticleSlider extends BannerSlider implements \HelperSelectorInterface
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getLinksToCheck()
+    public function getImageProperty(NodeElement $slide)
     {
-        $locators = array('slideLink', 'slideName');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selector = \Helper::getRequiredSelector($this, 'slideImage');
 
-        $links = array();
-
-        foreach ($elements['slideLink'] as $key => $link) {
-            $links[] = array(
-                $link->getAttribute('href'),
-                $elements['slideName'][$key]->getAttribute('href')
-            );
-        }
-
-        return $links;
+        return $slide->find('css', $selector)->getAttribute('src');
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getNamesToCheck()
+    public function getLinkProperty(NodeElement $slide)
     {
-        $locators = array('slideImage', 'slideLink', 'slideName');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selectors = \Helper::getRequiredSelectors($this, ['slideLink', 'slideName']);
 
-        $names = array();
+        $links = [
+            'slideLink' => $slide->find('css', $selectors['slideLink'])->getAttribute('href'),
+            'nameLink' => $slide->find('css', $selectors['slideName'])->getAttribute('href')
+        ];
 
-        foreach ($elements['slideImage'] as $key => $image) {
-            $names[] = array(
-                $image->getAttribute('title'),
-                $elements['slideLink'][$key]->getAttribute('title'),
-                $elements['slideName'][$key]->getText(),
-                $elements['slideName'][$key]->getAttribute('title'),
-            );
-        }
-
-        return $names;
+        return \Helper::getUnique($links);
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getPricesToCheck()
+    public function getNameProperty(NodeElement $slide)
     {
-        $locators = array('slidePrice');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selectors = \Helper::getRequiredSelectors($this, ['slideImage', 'slideLink', 'slideName']);
+        $nameElement = $slide->find('css', $selectors['slideName']);
 
-        $prices = array();
+        $names = [
+            'imageTitle' => $slide->find('css', $selectors['slideImage'])->getAttribute('title'),
+            'linkTitle' => $slide->find('css', $selectors['slideLink'])->getAttribute('title'),
+            'name' => $nameElement->getText(),
+            'nameTitle' => $nameElement->getAttribute('title'),
+        ];
 
-        foreach ($elements['slidePrice'] as $price) {
-            $prices[] = array(
-                \Helper::toFloat($price->getText())
-            );
-        }
+        return \Helper::getUnique($names);
+    }
 
-        return $prices;
+    /**
+     * @param NodeElement $slide
+     * @return float
+     */
+    public function getPriceProperty(NodeElement $slide)
+    {
+        $selector = \Helper::getRequiredSelector($this, 'slidePrice');
+        $price = $slide->find('css', $selector)->getText();
+
+        return \Helper::floatValue($price);
     }
 }

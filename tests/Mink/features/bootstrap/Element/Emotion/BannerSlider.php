@@ -2,11 +2,14 @@
 
 namespace Element\Emotion;
 
+use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
+use Element\SliderElement;
 
 require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
+require_once 'tests/Mink/features/bootstrap/Element/SliderElement.php';
 
-class BannerSlider extends MultipleElement implements \HelperSelectorInterface
+class BannerSlider extends SliderElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -20,42 +23,53 @@ class BannerSlider extends MultipleElement implements \HelperSelectorInterface
     public function getCssSelectors()
     {
         return array(
+            'slide' => 'div.slide',
             'slideImage' => 'div.slide img',
             'slideLink' => 'div.slide > a'
         );
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getImagesToCheck()
+    public function getImageProperty(NodeElement $slide)
     {
-        $locators = array('slideImage');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selector = \Helper::getRequiredSelector($this, 'slideImage');
 
-        $images = array();
-
-        foreach ($elements['slideImage'] as $image) {
-            $images[] = array($image->getAttribute('src'));
-        }
-
-        return $images;
+        return $slide->find('css', $selector)->getAttribute('src');
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getLinksToCheck()
+    public function getLinkProperty(NodeElement $slide)
     {
-        $locators = array('slideLink');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selector = \Helper::getRequiredSelector($this, 'slideLink');
 
-        $links = array();
+        return $slide->find('css', $selector)->getAttribute('href');
+    }
 
-        foreach ($elements['slideLink'] as $link) {
-            $links[] = array($link->getAttribute('href'));
-        }
+    /**
+     * @param NodeElement $slide
+     * @return string|null
+     */
+    protected function getAltProperty(NodeElement $slide)
+    {
+        $selector = \Helper::getRequiredSelector($this, 'slideImage');
 
-        return $links;
+        return $slide->find('css', $selector)->getAttribute('alt');
+    }
+
+    /**
+     * @param NodeElement $slide
+     * @return string|null
+     */
+    protected function getTitleProperty(NodeElement $slide)
+    {
+        $selector = \Helper::getRequiredSelector($this, 'slideImage');
+
+        return $slide->find('css', $selector)->getAttribute('title');
     }
 }

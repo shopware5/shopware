@@ -3,6 +3,8 @@ namespace Page\Emotion;
 
 use Behat\Mink\Element\NodeElement;
 use Element\Emotion\AccountOrder;
+use Element\Emotion\AccountPayment;
+use Element\Emotion\AddressBox;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Account extends Page implements \HelperSelectorInterface
@@ -45,6 +47,7 @@ class Account extends Page implements \HelperSelectorInterface
             'registerButton'        => array('de' => 'Neuer Kunde',               'en' => 'New customer'),
             'sendButton'            => array('de' => 'Registrierung abschließen', 'en' => 'Complete registration'),
             'changePaymentButton'   => array('de' => 'Ändern',                    'en' => 'Change'),
+            'changeBillingButton'   => array('de' => 'Ändern',                    'en' => 'Change'),
             'changeShippingButton'  => array('de' => 'Ändern',                    'en' => 'Change'),
             'changePasswordButton'  => array('de' => 'Passwort ändern',           'en' => 'Change password'),
             'changeEmailButton'     => array('de' => 'E-Mail ändern',             'en' => 'Change email'),
@@ -180,7 +183,7 @@ class Account extends Page implements \HelperSelectorInterface
      * Changes the billing address of the user
      * @param array $values
      */
-    public function changeBilling($values)
+    public function changeBillingAddress($values)
     {
         \Helper::fillForm($this, 'billingForm', $values);
         \Helper::pressNamedButton($this, 'changePaymentButton');
@@ -222,69 +225,89 @@ class Account extends Page implements \HelperSelectorInterface
     }
 
     /**
-     * @param AccountOrder $order
-     * @param $orderNumber
-     * @param $articles
+     * @param string $paymentMethod
      * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
-    public function checkOrder($order, $orderNumber, $articles)
+    public function checkPaymentMethod($paymentMethod)
     {
-        $date = $this->checkOrderDate($order);
+        /** @var AccountPayment $element */
+        $element = $this->getElement('AccountPayment');
+
+        $properties = array(
+            'paymentMethod' => $paymentMethod
+        );
+
+        $result = \Helper::assertElementProperties($element, $properties);
+
+        if($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The current payment method is "%s" (should be "%s")',
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * @param AccountOrder $order
+     * @param string $orderNumber
+     * @param array $articles
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
+     */
+    public function checkOrder(AccountOrder $order, $orderNumber, array $articles)
+    {
+        $date = $order->getDateProperty();
         $this->checkOrderNumber($order, $orderNumber);
         $this->checkOrderPositions($order, $articles);
         $this->checkEsdArticles($date, $articles);
     }
 
     /**
-     * Checks the dates of an order in the account. On success the date will be returned.
+     * Helper method checks the order number
      * @param AccountOrder $order
-     * @return string
-     * @throws \Exception
+     * @param string $orderNumber
      */
-    private function checkOrderDate(AccountOrder $order) {
-        $dates = \Helper::getValuesToCheck($order, 'date');
-        $dates = array_unique($dates);
-        if (count($dates) > 1) {
-            $message = sprintf("There are different dates in the order!\r\n%s", implode("\r\n", $dates));
-            \Helper::throwException($message);
-        }
-
-        return $dates['orderDate'];
-    }
-
-    /**
-     * @param AccountOrder $order
-     * @param $number
-     */
-    private function checkOrderNumber(AccountOrder $order, $number)
+    private function checkOrderNumber(AccountOrder $order, $orderNumber)
     {
-        /** @var Homepage $homepage */
-        $homepage = $this->getPage('Homepage');
-
-        $data = array(
-            array(
-                'position' => 'number',
-                'content' => $number
-            )
+        $properties = array(
+            'number' => $orderNumber
         );
 
-        $homepage->assertElementContent($order, $data);
+        $result = \Helper::assertElementProperties($order, $properties);
+
+        if($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The order number is "%s" (should be "%s")',
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
     }
 
     /**
+     * Helper method checks the order positions
      * @param AccountOrder $order
      * @param array $articles
      * @throws \Exception
      */
-    private function checkOrderPositions(AccountOrder $order, $articles)
+    private function checkOrderPositions(AccountOrder $order, array $articles)
     {
         $positions = $order->getPositions(array('product', 'quantity', 'price', 'sum'));
 
         $data = array();
 
         foreach($articles as $key => $article) {
-            $data[$key] = \Helper::toFloat(array(
+            $data[$key] = \Helper::floatArray(array(
                 'quantity' => $article['quantity'],
                 'price' => $article['price'],
                 'sum' => $article['sum']
@@ -304,11 +327,12 @@ class Account extends Page implements \HelperSelectorInterface
     }
 
     /**
+     * Helper method checks the ESD articles
      * @param string $date
      * @param array $articles
      * @throws \Exception
      */
-    private function checkEsdArticles($date, $articles)
+    private function checkEsdArticles($date, array $articles)
     {
         $esd = array();
 
@@ -378,5 +402,43 @@ class Account extends Page implements \HelperSelectorInterface
 
         \Helper::fillForm($this, 'registrationForm', $data);
         \Helper::pressNamedButton($this, 'sendButton');
+    }
+
+    /**
+     * @param AddressBox $addresses
+     * @param string $name
+     */
+    public function chooseAddress(AddressBox $addresses, $name)
+    {
+        $name = str_replace(', ', ',', $name);
+        $this->searchAddress($addresses, $name);
+    }
+
+    /**
+     * @param AddressBox $addresses
+     * @param string $name
+     * @throws \Exception
+     */
+    protected function searchAddress(AddressBox $addresses, $name)
+    {
+        /** @var AddressBox $address */
+        foreach($addresses as $address) {
+            if (strpos($address->getProperty('title'), $name) === false) {
+                continue;
+            }
+
+            $language = \Helper::getCurrentLanguage($this);
+            \Helper::pressNamedButton($address, 'chooseButton', $language);
+            return;
+        }
+
+        $messages = array('The address "' . $name .'" is not available. Available are:');
+
+        /** @var AddressBox $address */
+        foreach($addresses as $address) {
+            $messages[] = $address->getProperty('title');
+        }
+
+        \Helper::throwException($messages);
     }
 }

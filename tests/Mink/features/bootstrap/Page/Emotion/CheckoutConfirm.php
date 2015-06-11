@@ -1,6 +1,7 @@
 <?php
 namespace Page\Emotion;
 
+use Element\Emotion\CheckoutPayment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class CheckoutConfirm extends Page implements \HelperSelectorInterface
@@ -17,7 +18,6 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function getCssSelectors()
     {
         return array(
-            'pageIdentifier'  => 'div#confirm',
             'deliveryForm' => 'form.payment',
             'deliveryFormSubmit' => 'form.payment input[type="submit"]',
             'proceedCheckoutForm' => 'div.additional_footer > form',
@@ -32,21 +32,21 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function getNamedSelectors()
     {
         return array(
+            'gtc'  => array('de' => 'AGB und Widerrufsbelehrung', 'en' => 'Terms, conditions and cancellation policy'),
             'confirmButton'  => array('de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order')
         );
     }
 
-    public function verifyPage()
+    public function verifyPage($language = '')
     {
-        $locators = array('pageIdentifier');
-        $elements = \Helper::findElements($this, $locators, false);
+        $namedSelectors = $this->getNamedSelectors();
 
-        if (!empty($elements['pageIdentifier'])) {
-            return;
+        if(!$language) {
+            $language = \Helper::getCurrentLanguage($this);
         }
 
-        $message = array('You are not on CheckoutConfirm page!', 'Current URL: '. $this->getSession()->getCurrentUrl());
-        \Helper::throwException($message);
+        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert->pageTextContains($namedSelectors['gtc'][$language]);
     }
 
     public function getOrderNumber()
@@ -89,6 +89,20 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     /**
      * @param array $data
      */
+    public function changeBillingAddress($data = array())
+    {
+        $element = $this->getElement('CheckoutBilling');
+        $language = \Helper::getCurrentLanguage($this);
+        \Helper::clickNamedLink($element, 'changeButton', $language);
+
+        $account = $this->getPage('Account');
+        \Helper::fillForm($account, 'billingForm', $data);
+        \Helper::pressNamedButton($account, 'changeBillingButton', $language);
+    }
+
+    /**
+     * @param array $data
+     */
     public function changeShippingAddress($data = array())
     {
         $element = $this->getElement('CheckoutShipping');
@@ -100,6 +114,9 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
         \Helper::pressNamedButton($account, 'changeShippingButton', $language);
     }
 
+    /**
+     * @param array $data
+     */
     public function changeShippingMethod($data = array())
     {
         \Helper::fillForm($this, 'deliveryForm', $data);
@@ -107,5 +124,34 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
         $locators = array('deliveryFormSubmit');
         $elements = \Helper::findElements($this, $locators);
         $elements['deliveryFormSubmit']->press();
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
+     */
+    public function checkPaymentMethod($paymentMethod)
+    {
+        /** @var CheckoutPayment $element */
+        $element = $this->getElement('CheckoutPayment');
+
+        $properties = array(
+            'paymentMethod' => $paymentMethod
+        );
+
+        $result = \Helper::assertElementProperties($element, $properties);
+
+        if($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The current payment method is "%s" (should be "%s")',
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
     }
 }

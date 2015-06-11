@@ -14,15 +14,14 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
     public function getCssSelectors()
     {
         return array(
-            'a-thumb' => 'a.thumb_image',
-        	'img' => 'img',
-        	'a-zoom' => 'a.zoom_picture',
-        	'a-title' => 'a.title',
-        	'div-supplier' => 'div.supplier',
-        	'p-number' => 'p.ordernumber',
-        	'p-desc' => 'p.desc',
-        	'strong-price' => 'strong.price',
-        	'a-detail' => 'a.detail'
+            'name' => 'a.title',
+        	'supplier' => 'div.supplier',
+        	'number' => 'p.ordernumber',
+            'thumbnailLink' => 'a.thumb_image',
+            'thumbnailImage' => 'a.thumb_image > img',
+        	'description' => 'p.desc',
+        	'price' => 'strong.price',
+        	'detailLink' => 'a.detail'
         );
     }
 
@@ -41,61 +40,49 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
     }
 
     /**
-     * Searches an article from the array, that matches to the NotePosition.
-     * If an article was found, the function will return its key, otherwise if no article matches, false will be returned
-     * @param  array    $articles
-     * @return bool|int
+     * @return string
      */
-    public function search($articles)
+    public function getNameProperty()
     {
-        $locators = array_keys($this->getCssSelectors());
+        $locators = array('name', 'thumbnailLink', 'thumbnailImage', 'detailLink');
         $elements = \Helper::findElements($this, $locators);
 
-        foreach ($articles as $key => $article) {
-            $check = array();
+        $names = array(
+            'articleName' => $elements['name']->getText(),
+            'articleTitle' => $elements['name']->getAttribute('title'),
+            'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
+            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
+            'articleDetailLinkTitle' => $elements['detailLink']->getAttribute('title')
+        );
 
-            if (!empty($article['name'])) {
-                $check[] = array($elements['a-thumb']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
-                $check[] = array($elements['a-title']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['a-title']->getText(), $article['name']);
-                $check[] = array($elements['a-detail']->getAttribute('title'), $article['name']);
-            }
+        return \Helper::getUnique($names);
+    }
 
-            if (!empty($article['supplier'])) {
-                $check[] = array($elements['div-supplier']->getText(), $article['supplier']);
-            }
+    /**
+     * @return string
+     */
+    public function getImageProperty()
+    {
+        $locators = array('thumbnailImage');
+        $element = \Helper::findElements($this, $locators);
 
-            if (!empty($article['ordernumber'])) {
-                $check[] = array($elements['p-number']->getText(), $article['ordernumber']);
-            }
+        return $element['thumbnailImage']->getAttribute('src');
+    }
 
-            if (!empty($article['text']) && isset($elements['p-desc'])) {
-                $check[] = array($elements['p-desc']->getText(), $article['text']);
-            }
+    /**
+     * @return string
+     */
+    public function getLinkProperty()
+    {
+        $locators = array('name', 'thumbnailLink', 'detailLink');
+        $elements = \Helper::findElements($this, $locators);
 
-            if (!empty($article['price'])) {
-                $check[] = \Helper::toFloat(
-                    array($elements['strong-price']->getText(), $article['price'])
-                );
-            }
+        $names = array(
+            'articleNameLink' => $elements['name']->getAttribute('href'),
+            'articleThumbnailLink' => $elements['thumbnailLink']->getAttribute('href'),
+            'articleDetailLink' => $elements['detailLink']->getAttribute('href')
+        );
 
-            if (!empty($article['image'])) {
-                $check[] = array($elements['img']->getAttribute('src'), $article['image']);
-            }
-
-            if (!empty($article['link'])) {
-                $check[] = array($elements['a-thumb']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['a-title']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['a-detail']->getAttribute('href'), $article['link']);
-            }
-
-            $result = \Helper::checkArray($check);
-            if ($result === true) {
-                return $key;
-            }
-        }
-
-        return false;
+        return \Helper::getUnique($names);
     }
 }

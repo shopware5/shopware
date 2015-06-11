@@ -4,17 +4,29 @@ namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
-class Paging extends Element
+class Paging extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div.paging');
 
-    public $cssLocator = array(
-        'previous' => 'a.navi.prev',
-        'next' => 'a.navi.more'
-    );
+    public function getCssSelectors()
+    {
+        return array(
+            'previous' => 'a.navi.prev',
+            'next' => 'a.navi.more'
+        );
+    }
+
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array
+     */
+    public function getNamedSelectors()
+    {
+        return array();
+    }
 
     /**
      * @param $direction
@@ -26,10 +38,10 @@ class Paging extends Element
         $elements = \Helper::findElements($this, $locator);
 
         for ($i = 0; $i < $steps; $i++) {
-            $result = \Helper::countElements($this, $this->cssLocator[$direction], 1);
+            $result = \Helper::countElements($this, $direction, 1);
 
             if ($result !== true) {
-                $result = \Helper::countElements($this, $this->cssLocator[$direction], 2);
+                $result = \Helper::countElements($this, $direction, 2);
             }
 
             if ($result !== true) {
@@ -43,14 +55,14 @@ class Paging extends Element
     }
 
     /**
-     * @param $page
+     * @param integer $page
      */
     public function moveToPage($page)
     {
         while (!$this->hasLink($page)) {
             if ($this->noElement('next', false)) {
-                \Helper::throwException(array('Not found'));
-
+                $message = sprintf('Page %d was not found!', $page);
+                \Helper::throwException($message);
                 return;
             }
             $this->moveDirection('next');
@@ -60,16 +72,16 @@ class Paging extends Element
     }
 
     /**
-     * @param $element
+     * @param string $locator
      * @param  bool $throwException
      * @return bool
      */
-    public function noElement($element, $throwException = true)
+    public function noElement($locator, $throwException = true)
     {
-        if (isset($this->cssLocator[$element])) { //previous or next
-            $result = \Helper::countElements($this, $this->cssLocator[$element]);
+        if (\Helper::getRequiredSelector($this, $locator)) { //previous or next
+            $result = \Helper::countElements($this, $locator);
         } else { //page number (1, 2, 3, 4, ...)
-            $result = !$this->hasLink($element);
+            $result = !$this->hasLink($locator);
         }
 
         if ($result === true) {
@@ -77,7 +89,7 @@ class Paging extends Element
         }
 
         if ($throwException) {
-            \Helper::throwException(array(sprintf('The Paging Link "%s" exists, but should not!', $element)));
+            \Helper::throwException(array(sprintf('The Paging Link "%s" exists, but should not!', $locator)));
         }
 
         return false;

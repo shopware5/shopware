@@ -2,6 +2,8 @@
 
 namespace Element\Emotion;
 
+use Symfony\Component\Console\Helper\Helper;
+
 require_once 'tests/Mink/features/bootstrap/Element/Emotion/CategoryTeaser.php';
 
 class Article extends CategoryTeaser implements \HelperSelectorInterface
@@ -29,70 +31,60 @@ class Article extends CategoryTeaser implements \HelperSelectorInterface
     /**
      * @return array
      */
-    public function getNamesToCheck()
+    public function getNameProperty()
     {
-        $locators = array('name', 'link', 'more');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['name', 'link', 'more']);
 
-        return array(
+        $names = [
             $elements['name']->getText(),
             $elements['name']->getAttribute('title'),
             $elements['link']->getAttribute('title'),
             $elements['more']->getAttribute('title')
-        );
+        ];
+
+        return \Helper::getUnique($names);
     }
 
     /**
      * @return array
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
-        $locators = array('link');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'image' => $elements['link']->getAttribute('style')
-        );
+        $elements = \Helper::findElements($this, ['link']);
+        return $elements['link']->getAttribute('style');
     }
 
     /**
      * @return array
      */
-    public function getLinksToCheck()
+    public function getLinkProperty()
     {
-        $locators = array('name', 'link', 'more');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['name', 'link', 'more']);
 
-        return array(
+        $links = [
             $elements['name']->getAttribute('href'),
             $elements['link']->getAttribute('href'),
             $elements['more']->getAttribute('href')
-        );
+        ];
+
+        return \Helper::getUnique($links);
     }
 
     /**
      * @return array
      */
-    public function getTextsToCheck()
+    public function getTextProperty()
     {
-        $locators = array('text');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'text' => $elements['text']->getText()
-        );
+        $elements = \Helper::findElements($this, ['text']);
+        return $elements['text']->getText();
     }
 
     /**
      * @return array
      */
-    public function getPricesToCheck()
+    public function getPriceProperty()
     {
-        $locators = array('price');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'price' => \Helper::toFloat($elements['price']->getText())
-        );
+        $elements = \Helper::findElements($this, ['price']);
+        return \Helper::floatValue($elements['price']->getText());
     }
 }
