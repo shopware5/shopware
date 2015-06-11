@@ -49,6 +49,7 @@ To keep your master up to date:
     git checkout master
     git pull --rebase
     php build/ApplyDeltas.php
+    php bin/console sw:snippets:to:db
 
 Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
 
