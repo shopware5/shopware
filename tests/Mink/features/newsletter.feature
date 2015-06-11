@@ -1,7 +1,7 @@
 @newsletter
 Feature: Newsletter
 
-    Scenario: Subscribe to and unsubscripe from newsletter
+    Scenario: Subscribe to and unsubscribe from newsletter
         Given I am on the homepage
         When  I subscribe to the newsletter with "test@example.de"
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
@@ -25,7 +25,7 @@ Feature: Newsletter
         Then  I should see "Ihre eMail-Adresse wurde gelöscht"
 
     @javascript @account
-    Scenario:
+    Scenario: I can subscribe and unsubscribe from newsletter in my account
         Given I am on the page "Account"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
         When  I check "newsletter"

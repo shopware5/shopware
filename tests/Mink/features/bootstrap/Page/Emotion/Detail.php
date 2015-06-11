@@ -7,6 +7,7 @@ use Behat\Mink\Element\NodeElement;
 use Element\Emotion\ArticleEvaluation;
 use Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Symfony\Component\Console\Helper\Helper;
 
 class Detail extends Page implements \HelperSelectorInterface
 {
@@ -45,7 +46,7 @@ class Detail extends Page implements \HelperSelectorInterface
     }
 
     protected $configuratorTypes = array(
-        'table' => 'basketform',
+        'table' => 'configurator--form',
         'standard' => 'upprice_config',
         'select' => 'config_select'
     );
@@ -75,23 +76,6 @@ class Detail extends Page implements \HelperSelectorInterface
     }
 
     /**
-     * Go to the previous or next article
-     * @param $direction
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function goToNeighbor($direction)
-    {
-        $link = $this->find('css', 'a.article_' . $direction);
-
-        if (empty($link)) {
-            $message = sprintf('Detail page has no %s button', $direction);
-            \Helper::throwException($message);
-        }
-
-        $link->click();
-    }
-
-    /**
      * Checks the evaluations of the current article
      * @param MultipleElement $articleEvaluations
      * @param $average
@@ -102,27 +86,32 @@ class Detail extends Page implements \HelperSelectorInterface
     {
         $this->checkRating($articleEvaluations, $average);
 
-        $locators = array_keys(current($evaluations));
+        $evaluations = \Helper::floatArray($evaluations, ['stars']);
+        $result = \Helper::assertElements($evaluations, $articleEvaluations);
 
-        foreach ($evaluations as $key => $evaluation)
-        {
-            /** @var ArticleEvaluation $articleEvaluation */
-            $articleEvaluation = $articleEvaluations->setInstance($key + 1);
-
-            $result = \Helper::compareArrays($articleEvaluation->getProperties($locators), $evaluation);
-
-            if($result !== true) {
-                $message = sprintf(
-                    'The evaluations are different in "%s" ("%s" is not included in "%s")',
-                    $result['key'],
-                    $result['value2'],
-                    $result['value']
-                );
-                \Helper::throwException($message);
-            }
+        if($result === true) {
+            return;
         }
+
+        $messages = array('The following $evaluations are wrong:');
+        foreach ($result as $evaluation) {
+            $messages[] = sprintf(
+                '%s - Bewertung: %s (%s is "%s", should be "%s")',
+                $evaluation['properties']['author'],
+                $evaluation['properties']['stars'],
+                $evaluation['result']['key'],
+                $evaluation['result']['value'],
+                $evaluation['result']['value2']
+            );
+        }
+        \Helper::throwException($messages);
     }
 
+    /**
+     * @param MultipleElement $articleEvaluations
+     * @param $average
+     * @throws \Exception
+     */
     protected function checkRating(MultipleElement $articleEvaluations, $average)
     {
         $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
@@ -173,8 +162,7 @@ class Detail extends Page implements \HelperSelectorInterface
         $configuratorType = '';
 
         if ($this->getSession()->getDriver() instanceof GoutteDriver) {
-            $locators = array('configuratorForm');
-            $element = \Helper::findElements($this, $locators);
+            $element = \Helper::findElements($this, ['configuratorForm']);
 
             $configuratorClass = $element['configuratorForm']->getAttribute('class');
             $configuratorType = array_search($configuratorClass, $this->configuratorTypes);

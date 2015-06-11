@@ -4,6 +4,8 @@ use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Element\MultipleElement;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class SubContext extends PageObjectContext implements KernelAwareInterface
 {
@@ -52,5 +54,26 @@ class SubContext extends PageObjectContext implements KernelAwareInterface
     public function getContainer()
     {
         return $this->kernel->getContainer();
+    }
+
+    /**
+     * Returns a multiple element
+     *
+     * @param Page $page            Parent page
+     * @param string $elementName   Name of the element
+     * @param int $instance         Instance of the element
+     * @return MultipleElement
+     */
+    protected function getMultipleElement(Page $page, $elementName, $instance = 1)
+    {
+        /** @var MultipleElement $element */
+        $element = $this->getElement($elementName);
+        $element->setParent($page);
+
+        if($instance > 1) {
+            $element = $element->setInstance($instance);
+        }
+
+        return $element;
     }
 }

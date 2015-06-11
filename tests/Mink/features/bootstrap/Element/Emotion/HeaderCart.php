@@ -45,7 +45,7 @@ class HeaderCart extends Element implements \HelperSelectorInterface
 
         $check = array(
             'quantity' => array($element['quantity']->getText(), $quantity),
-            'amount' => \Helper::toFloat(array($element['amount']->getText(), $amount))
+            'amount' => \Helper::floatArray(array($element['amount']->getText(), $amount))
         );
 
         $result = \Helper::checkArray($check);

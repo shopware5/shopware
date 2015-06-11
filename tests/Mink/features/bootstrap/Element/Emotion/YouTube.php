@@ -27,13 +27,9 @@ class YouTube extends MultipleElement implements \HelperSelectorInterface
     /**
      * @return array
      */
-    public function getCodesToCheck()
+    public function getCodeProperty()
     {
-        $locator = array('code');
-        $elements = \Helper::findElements($this, $locator);
-
-        return array(
-            'code' => $elements['code']->getAttribute('src')
-        );
+        $elements = \Helper::findElements($this, ['code']);
+        return $elements['code']->getAttribute('src');
     }
 }

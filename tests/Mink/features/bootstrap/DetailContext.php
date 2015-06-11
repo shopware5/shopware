@@ -7,6 +7,7 @@ class DetailContext extends SubContext
 {
     /**
      * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
+     * @When /^I go to the detail page for article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForArticle($articleId)
     {
@@ -23,22 +24,6 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^I go to previous article$/
-     */
-    public function iGoToPreviousArticle()
-    {
-        $this->getPage('Detail')->goToNeighbor('back');
-    }
-
-    /**
-     * @Given /^I go to next article$/
-     */
-    public function iGoToNextArticle()
-    {
-        $this->getPage('Detail')->goToNeighbor('next');
-    }
-
-    /**
      * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
      */
     public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
@@ -47,8 +32,7 @@ class DetailContext extends SubContext
         $page = $this->getPage('Detail');
 
         /** @var \Element\MultipleElement $notePositions */
-        $articleEvaluations = $this->getElement('ArticleEvaluation');
-        $articleEvaluations = $articleEvaluations->setParent($page);
+        $articleEvaluations = $this->getMultipleElement($page, 'ArticleEvaluation');
 
         $evaluations = $evaluations->getHash();
 

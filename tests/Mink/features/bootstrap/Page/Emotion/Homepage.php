@@ -2,8 +2,18 @@
 
 namespace Page\Emotion;
 
+use Element\Emotion\Article;
+use Element\Emotion\ArticleSlider;
+use Element\Emotion\Banner;
+use Element\Emotion\BannerSlider;
+use Element\Emotion\BlogArticle;
+use Element\Emotion\CategoryTeaser;
+use Element\Emotion\CompareColumn;
+use Element\Emotion\ManufacturerSlider;
+use Element\Emotion\YouTube;
 use Element\MultipleElement;
 use Behat\Mink\Element\TraversableElement;
+use Element\SliderElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Homepage extends Page implements \HelperSelectorInterface
@@ -107,101 +117,220 @@ class Homepage extends Page implements \HelperSelectorInterface
     }
 
     /**
-     * Global method to check the count of an MultipleElement
-     * @param MultipleElement $elements
-     * @param int              $count
+     * Checks the product comparison
+     * Available properties are: image, name, ranking, description, price, link
+     *
+     * @param CompareColumn $compareColumns
+     * @param array $items
      */
-    public function assertElementCount(MultipleElement $elements, $count = 0)
+    public function checkComparisonProducts(CompareColumn $compareColumns, array $items)
     {
-        if ($count !== count($elements)) {
+        if (count($compareColumns) !== count($items)) {
             $message = sprintf(
-                'There are %d elements of type "%s" on page (should be %d)',
-                count($elements),
-                get_class($elements),
-                $count
+                'There are %d products in the comparison! (should be %d)',
+                count($compareColumns),
+                count($items)
             );
             \Helper::throwException($message);
         }
-    }
 
-    /**
-     * Global method to check the content of an Element or Page
-     * @param TraversableElement $element
-     * @param array              $content
-     * @throws \Exception
-     */
-    public function assertElementContent(TraversableElement $element, $content)
-    {
-        $check = array();
-
-        foreach ($content as $subCheck) {
-            if(empty($subCheck['position'])) {
-                $this->assertElementItems($element, $content);
-                return;
-            }
-
-            $checkValues = \Helper::getValuesToCheck($element, $subCheck['position']);
-
-            foreach ($checkValues as $key => $checkValue) {
-                //Convert the contentValue to a float if checkValue is also one
-                if (is_float($checkValue)) {
-                    $subCheck['content'] = \Helper::toFloat($subCheck['content']);
-                }
-
-                $check[$key] = array($checkValue, $subCheck['content']);
-            }
-        }
-
-        $result = \Helper::checkArray($check);
+        $result = \Helper::searchElements($items, $compareColumns);
 
         if ($result !== true) {
-            $message = sprintf(
-                '"%s" not found in "%s" of "%s"! (is "%s")',
-                $check[$result][1],
-                $result,
-                get_class($element),
-                $check[$result][0]
-            );
-            \Helper::throwException($message);
+            $messages = array('The following articles were not found:');
+            foreach ($result as $product) {
+                $messages[] = $product['name'];
+            }
+            \Helper::throwException($messages);
         }
     }
 
     /**
-     * Helper function to assert the items of an element (called from assertElementContent when content array doesn't include a position column)
-     *
-     * @param TraversableElement $element
-     * @param $items
+     * Checks an emotion banner with or without link
+     * @param Banner $banner
+     * @param string $image
+     * @param string|null $link
      */
-    private function assertElementItems(TraversableElement $element, $items)
+    public function checkLinkedBanner(Banner $banner, $image, $link = null)
     {
-        $positions = array_keys($items[0]);
+        $properties = [
+            'image' => $image
+        ];
 
-        foreach($positions as $position)
-        {
-            $checkValues = \Helper::getValuesToCheck($element, $position);
-            $values = array_column($items, $position);
-
-            foreach($values as &$value) {
-                //Convert the contentValue to a float if checkValue is also one
-                if (is_float($checkValues[0][0])) {
-                    $value = \Helper::toFloat($value);
-                }
-
-                $value = array_fill(0, count($checkValues[0]), $value);
-            }
-
-            $result = \Helper::compareArrays($checkValues, $values);
-
-            if ($result === true) {
-                continue;
-            }
-
-            if($result['key'] >= count($values)) {
-                continue;
-            }
-
-            $message = sprintf('Item %d is different! ("%s" not found in "%s")', $result['key'] + 1, $result['value2'], $result['value']);
-            \Helper::throwException($message);
+        if (!is_null($link)) {
+            $properties['link'] = $link;
         }
+
+        $result = \Helper::assertElementProperties($banner, $properties);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The banner %s is "%s" (should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion banner with mapping
+     * @param Banner $banner
+     * @param string $image
+     * @param string[] $mapping
+     */
+    public function checkMappedBanner(Banner $banner, $image, array $mapping)
+    {
+        $this->checkLinkedBanner($banner, $image);
+
+        $bannerMapping = $banner->getMapping();
+        $result = \Helper::compareArrays($bannerMapping, $mapping);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = [
+            'The banner mappings are different!',
+            'Given: ' . $result['value'],
+            'Expected: ' . $result['value2']
+        ];
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion blog element
+     * @param array $articles
+     */
+    public function checkBlogArticles(BlogArticle $blogArticle, $articles)
+    {
+        $properties = array_keys(current($articles));
+
+        $blogArticles = $blogArticle->getArticles($properties);
+
+        $result = \Helper::compareArrays($blogArticles, $articles);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = [
+            sprintf('The slides have a different %s!', $result['key']),
+            'Given: ' . $result['value'],
+            'Expected: ' . $result['value2']
+        ];
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion Youtube element
+     * @param YouTube $youtube
+     * @param string $code
+     * @throws \Exception
+     */
+    public function checkYoutubeVideo(YouTube $youtube, $code)
+    {
+        $result = \Helper::assertElementProperties($youtube, ['code' => $code]);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = [
+            'The YouTube video has a different code!',
+            'Given: ' . $result['value'],
+            'Expected: ' . $result['value2']
+        ];
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion slider element
+     * @param SliderElement $slider
+     * @param array $slides
+     */
+    public function checkSlider(SliderElement $slider, array $slides)
+    {
+        $properties = array_keys(current($slides));
+
+        $sliderSlides = $slider->getSlides($properties);
+
+        $result = \Helper::compareArrays($sliderSlides, $slides);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = [
+            sprintf('The slides have a different %s!', $result['key']),
+            'Given: ' . $result['value'],
+            'Expected: ' . $result['value2']
+        ];
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion category teaser element
+     * @param CategoryTeaser $teaser
+     * @param string $name
+     * @param string $image
+     * @param string $link
+     */
+    public function checkCategoryTeaser(CategoryTeaser $teaser, $name, $image, $link)
+    {
+        $properties = [
+            'name' => $name,
+            'image' => $image,
+            'link'  => $link
+        ];
+
+        $result = \Helper::assertElementProperties($teaser, $properties);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The category teaser %s is "%s" (should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
+    }
+
+    /**
+     * Checks an emotion article element
+     * @param Article $article
+     * @param array $data
+     */
+    public function checkArticle(Article $article, array $data)
+    {
+        $properties = \Helper::convertTableHashToArray($data);
+        $properties = \Helper::floatArray($properties, ['price']);
+
+        $result = \Helper::assertElementProperties($article, $properties);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf(
+            'The article %s is "%s" (should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
+
+        \Helper::throwException($message);
     }
 }

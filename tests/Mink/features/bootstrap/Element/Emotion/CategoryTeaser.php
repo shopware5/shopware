@@ -29,40 +29,33 @@ class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
     /**
      * @return array
      */
-    public function getNamesToCheck()
+    public function getNameProperty()
     {
-        $locators = array('name', 'link');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['name', 'link']);
 
-        return array(
+        $names = [
             $elements['name']->getText(),
             $elements['link']->getAttribute('title')
-        );
+        ];
+
+        return \Helper::getUnique($names);
     }
 
     /**
      * @return array
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
-        $locators = array('image');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'image' => $elements['image']->getAttribute('style')
-        );
+        $elements = \Helper::findElements($this, ['image']);
+        return $elements['image']->getAttribute('style');
     }
 
     /**
      * @return array
      */
-    public function getLinksToCheck()
+    public function getLinkProperty()
     {
-        $locators = array('link');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'link' => $elements['link']->getAttribute('href')
-        );
+        $elements = \Helper::findElements($this, ['link']);
+        return $elements['link']->getAttribute('href');
     }
 }

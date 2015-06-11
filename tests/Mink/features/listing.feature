@@ -139,14 +139,14 @@ Feature: Show Listing
             | sCategory | 30    |
 
         Then  the article on position 1 should have this properties:
-            | property | value     |
-            | price    | "42,02 €" |
+            | property | value   |
+            | price    | 42,02 € |
         And   the article on position 2 should have this properties:
-            | property | value     |
-            | price    | "16,81 €" |
+            | property | value   |
+            | price    | 16,81 € |
         And   the article on position 3 should have this properties:
-            | property | value    |
-            | price    | "6,71 €" |
+            | property | value  |
+            | price    | 6,71 € |
 
         When  I am on the page "Account"
         And   I log me out
@@ -155,20 +155,21 @@ Feature: Show Listing
             | sCategory | 30    |
 
         Then  the article on position 1 should have this properties:
-            | property | value     |
-            | price    | "50,00 €" |
+            | property | value   |
+            | price    | 50,00 € |
         And   the article on position 2 should have this properties:
-            | property | value     |
-            | price    | "20,00 €" |
+            | property | value   |
+            | price    | 20,00 € |
         And   the article on position 3 should have this properties:
-            | property | value    |
-            | price    | "7,99 €" |
+            | property | value  |
+            | price    | 7,99 € |
 
-    @browsing @knownFailing
+    @browsing @noResponsive
     Scenario Outline: I can browse through the listing
         Given I am on the listing page:
             | parameter | value     |
             | sPage     | 4         |
+            | sSort     | 5         |
             | sPerPage  | <perPage> |
 
         Then  I should see <perPage> elements of type "ArticleBox"
@@ -177,8 +178,8 @@ Feature: Show Listing
         Then  I should not be able to browse to "previous" page
 
         When  I browse to "next" page <countNextPage> times
-        Then  I should see "ESD Download Artikel"
-        And   I should see "Sonnenbrille Speed Eyes"
+        Then  I should see "iPadtasche mit Stiftmappe"
+        And   I should see "Kickerball Kork"
 
         When  I browse to page <lastPage>
         Then  I should see <countLastPage> elements of type "ArticleBox"

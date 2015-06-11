@@ -4,6 +4,7 @@ namespace Element;
 
 require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
 
+use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
 use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
@@ -13,13 +14,10 @@ use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
  */
 abstract class MultipleElement extends Element implements \Countable, \Iterator, \HelperSelectorInterface
 {
-    /** @var  integer */
-    protected $position;
-
     /** @var  string */
     private $xPath;
 
-    /** @var  array */
+    /** @var  NodeElement[] array */
     private $siblings;
 
     public function __construct(Session $session, PageFactoryInterface $pageFactory)
@@ -59,10 +57,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
         $this->siblings = $parent->findAll($selectorType, $locator);
 
-        $this->position = 0;
-
         if ($this->valid()) {
-            $this->setInstance(1);
+            $this->setInstance();
         }
 
         return $this;
@@ -80,9 +76,10 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      * @param  integer         $position
      * @return MultipleElement $this
      */
-    public function setInstance($position)
+    public function setInstance($position = 0)
     {
-        $this->xPath = $this->siblings[$position - 1]->getXpath();
+        $position = ($position > 0) ? $position - 1 : $this->key();
+        $this->xPath = $this->siblings[$position]->getXpath();
 
         return $this;
     }
@@ -105,7 +102,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      * @link http://php.net/manual/en/iterator.current.php
-     * @return Element Can return any type.
+     * @return MultipleElement Can return any type.
      */
     public function current()
     {
@@ -120,9 +117,9 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function next()
     {
-        $this->position++;
+        next($this->siblings);
         if ($this->valid()) {
-            $this->setInstance($this->position + 1);
+            $this->setInstance();
         }
     }
 
@@ -134,7 +131,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function key()
     {
-        return $this->position;
+        return key($this->siblings);
     }
 
     /**
@@ -146,7 +143,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function valid()
     {
-        return isset($this->siblings[$this->position]);
+        return (bool) current($this->siblings);
     }
 
     /**
@@ -157,7 +154,43 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function rewind()
     {
-        $this->position = 0;
-        $this->setInstance(1);
+        reset($this->siblings);
+        $this->setInstance();
+    }
+
+    /**
+     * Removes the current element
+     */
+    public function remove()
+    {
+        unset($this->siblings[$this->key()]);
+    }
+
+    /**
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return string
+     */
+    public function __call($name, $arguments)
+    {
+        preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
+
+        if(!$property) {
+            parent::__call($name, $arguments);
+        }
+
+        return $this->getProperty(lcfirst($property[1]));
+    }
+
+    /**
+     * @param string $property
+     * @return null|string
+     */
+    public function getProperty($property)
+    {
+        $element = \Helper::findElements($this, array($property));
+
+        return $element[$property]->getText();
     }
 }

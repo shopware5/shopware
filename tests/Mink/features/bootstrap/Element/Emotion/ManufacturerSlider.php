@@ -2,7 +2,10 @@
 
 namespace Element\Emotion;
 
-class ManufacturerSlider extends BannerSlider implements \HelperSelectorInterface
+use Behat\Mink\Element\NodeElement;
+use Element\SliderElement;
+
+class ManufacturerSlider extends SliderElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -16,28 +19,47 @@ class ManufacturerSlider extends BannerSlider implements \HelperSelectorInterfac
     public function getCssSelectors()
     {
         return array(
-            'slideImage' => 'div.supplier img',
-            'slideLink' => 'div.supplier > a'
+            'slide' => 'div.supplier',
+            'slideImage' => 'div img',
+            'slideLink' => 'div > a'
         );
     }
 
     /**
-     * @return array
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getNamesToCheck()
+    public function getImageProperty(NodeElement $slide)
     {
-        $locators = array('slideImage', 'slideLink');
-        $elements = \Helper::findAllOfElements($this, $locators);
+        $selector = \Helper::getRequiredSelector($this, 'slideImage');
 
-        $names = array();
+        return $slide->find('css', $selector)->getAttribute('src');
+    }
 
-        foreach ($elements['slideImage'] as $key => $image) {
-            $names[] = array(
-                $image->getAttribute('alt'),
-                $elements['slideLink'][$key]->getAttribute('title')
-            );
-        }
+    /**
+     * @param NodeElement $slide
+     * @return string
+     */
+    public function getLinkProperty(NodeElement $slide)
+    {
+        $selector = \Helper::getRequiredSelector($this, 'slideLink');
 
-        return $names;
+        return $slide->find('css', $selector)->getAttribute('href');
+    }
+
+    /**
+     * @param NodeElement $slide
+     * @return string
+     */
+    public function getNameProperty(NodeElement $slide)
+    {
+        $selectors = \Helper::getRequiredSelectors($this, ['slideImage', 'slideLink']);
+
+        $names = [
+            $slide->find('css', $selectors['slideImage'])->getAttribute('alt'),
+            $slide->find('css', $selectors['slideLink'])->getAttribute('title')
+        ];
+
+        return \Helper::getUnique($names);
     }
 }

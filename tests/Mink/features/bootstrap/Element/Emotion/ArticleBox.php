@@ -35,40 +35,11 @@ class ArticleBox extends CartPosition
     }
 
     /**
-     * @param array $properties
+     * @return float
      */
-    public function checkProperties($properties)
+    public function getPriceProperty()
     {
-        $check = array();
-
-        $locators = array_column($properties, 'property');
-        $elements = \Helper::findElements($this, $locators);
-
-        foreach ($properties as $row) {
-            $element = $elements[$row['property']];
-
-            $comparison = array($element->getText(), $row['value']);
-
-            if ($row['property'] === 'price') {
-                $comparison = \Helper::toFloat($comparison);
-            }
-
-            $check[$row['property']] = $comparison;
-        }
-
-        $result = \Helper::checkArray($check);
-
-        if ($result !== true) {
-            $message = sprintf(
-                'The %s of the article on position %d is "%s" (should be "%s")',
-                $result,
-                $this->position,
-                $check[$result][0],
-                $check[$result][1]
-            );
-            \Helper::throwException(array($message));
-        }
-
-//        var_dump('Konnte lesen: Article ' . $this->position);
+        $price = $this->getProperty('price');
+        return \Helper::floatValue($price);
     }
 }

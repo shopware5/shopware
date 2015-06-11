@@ -54,7 +54,18 @@ class AccountContext extends SubContext
      */
     public function iChangeMyBillingAddress(TableNode $table)
     {
-        $this->getPage('Account')->changeBilling($table->getHash());
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageName = ucfirst($pageInfo['controller']);
+
+        if($pageName === 'Checkout') {
+            $pageName = 'CheckoutConfirm';
+        }
+
+        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        $page = $this->getPage($pageName);
+        $data = $table->getHash();
+
+        $page->changeBillingAddress($data);
     }
 
     /**
@@ -120,4 +131,29 @@ class AccountContext extends SubContext
 
         $page->changePaymentMethod($data);
     }
+
+    /**
+     * @Then /^the current payment method should be "([^"]*)"$/
+     */
+    public function theCurrentPaymentMethodShouldBe($paymentMethod)
+    {
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageName = (ucfirst($pageInfo['controller']) === 'Checkout') ? 'CheckoutConfirm' : 'Account';
+
+        $this->getPage($pageName)->checkPaymentMethod($paymentMethod);
+    }
+
+    /**
+     * @When /^I choose the address "([^"]*)"$/
+     */
+    public function iChooseTheAddress($name)
+    {
+        /** @var \Page\Emotion\Account $page */
+        $page = $this->getPage("Account");
+
+        $addresses = $this->getMultipleElement($page, 'AddressBox');
+
+        $page->chooseAddress($addresses, $name);
+    }
+
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Page\Responsive;
 
+use Element\Emotion\AddressBox;
+
 class Account extends \Page\Emotion\Account
 {
     /**
@@ -35,6 +37,7 @@ class Account extends \Page\Emotion\Account
             'registerButton'        => array('de' => 'Neuer Kunde',             'en' => 'New customer'),
             'sendButton'            => array('de' => 'Weiter',                  'en' => 'Continue'),
             'changePaymentButton'   => array('de' => 'Ändern',                  'en' => 'Change'),
+            'changeBillingButton'   => array('de' => 'Ändern',                  'en' => 'Change'),
             'changeShippingButton'  => array('de' => 'Ändern',                  'en' => 'Change'),
             'changePasswordButton'  => array('de' => 'Passwort ändern',         'en' => ''),
             'changeEmailButton'     => array('de' => 'E-Mail ändern',           'en' => ''),
@@ -55,5 +58,14 @@ class Account extends \Page\Emotion\Account
 
         \Helper::fillForm($this, 'registrationForm', $data);
         \Helper::pressNamedButton($this, 'sendButton');
+    }
+
+    /**
+     * @param AddressBox $addresses
+     * @param string $name
+     */
+    public function chooseAddress(AddressBox $addresses, $name)
+    {
+        $this->searchAddress($addresses, $name);
     }
 }

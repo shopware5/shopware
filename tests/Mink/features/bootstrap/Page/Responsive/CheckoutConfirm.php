@@ -10,7 +10,6 @@ class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
     public function getCssSelectors()
     {
         return array(
-            'pageIdentifier'  => 'div#confirm--content',
             'shippingPaymentForm' => 'form.payment',
             'proceedCheckoutForm' => 'form#confirm--form',
             'orderNumber' => 'div.finish--details > div.panel--body'
@@ -24,8 +23,9 @@ class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
     public function getNamedSelectors()
     {
         return array(
-            'confirmButton'         => array('de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order'),
-            'changePaymentButton'   => array('de' => 'Weiter',                      'en' => 'Next'),
+            'gtc' => array('de' => 'AGB und Widerrufsbelehrung', 'en' => 'Terms, conditions and cancellation policy'),
+            'confirmButton' => array('de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order'),
+            'changePaymentButton' => array('de' => 'Weiter', 'en' => 'Next')
         );
     }
 
