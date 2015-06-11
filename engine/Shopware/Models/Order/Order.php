@@ -286,7 +286,7 @@ class Order extends ModelEntity
     private $deviceType = 'desktop';
 
     /**
-     * @var
+     * @var \Shopware\Models\Customer\Customer
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
@@ -864,7 +864,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \Shopware\Models\Customer\Customer
      */
     public function getCustomer()
     {
