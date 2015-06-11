@@ -151,30 +151,38 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $sql = "
                 SELECT
                   ce.name,
-                  IFNULL(IFNULL(cv.value, cm.value), IFNULL(cd.value, ce.value)) as value
+                  COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value
+
                 FROM s_core_plugins p
-                JOIN s_core_config_forms cf
-                ON cf.plugin_id = p.id
-                JOIN s_core_config_elements ce
-                ON ce.form_id = cf.id
-                LEFT JOIN s_core_config_values cv
-                ON cv.element_id = ce.id
-                AND cv.shop_id = ?
-                LEFT JOIN s_core_config_values cm
-                ON cm.element_id = ce.id
-                AND cm.shop_id = ?
-                LEFT JOIN s_core_config_values cd
-                ON cd.element_id = ce.id
-                AND cd.shop_id = ?
-                WHERE p.name=?
+
+                INNER JOIN s_core_config_forms cf
+                  ON cf.plugin_id = p.id
+
+                INNER JOIN s_core_config_elements ce
+                  ON ce.form_id = cf.id
+
+                LEFT JOIN s_core_config_values currentShop
+                  ON currentShop.element_id = ce.id
+                  AND currentShop.shop_id = :currentShopId
+
+                LEFT JOIN s_core_config_values parentShop
+                  ON parentShop.element_id = ce.id
+                  AND parentShop.shop_id = :parentShopId
+
+                LEFT JOIN s_core_config_values fallbackShop
+                  ON fallbackShop.element_id = ce.id
+                  AND fallbackShop.shop_id = :fallbackShopId
+
+                WHERE p.name=:pluginName
             ";
 
             $config = $this->Application()->Db()->fetchPairs($sql, array(
-                $shop !== null ? $shop->getId() : null,
-                $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
-                1,
-                $name
+                'fallbackShopId' => 1, //Shop parent id
+                'parentShopId'   => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
+                'currentShopId'  => $shop !== null ? $shop->getId() : null,
+                'pluginName'     => $name,
             ));
+
             foreach ($config as $key => $value) {
                 $config[$key] = unserialize($value);
             }
