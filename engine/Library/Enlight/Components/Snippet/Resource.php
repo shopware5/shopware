@@ -83,10 +83,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             return '';
         }
 
-        if (empty($content) && !empty($params['name'])) {
-            $content = '#' . $params['name'] . '#';
-        }
-
         if (!empty($params['tag']) && !empty($params['namespace'])) {
             if (!empty($params['class'])) {
                 $params['class'] .= ' ' . str_replace('/', '_', $params['namespace']);
@@ -96,14 +92,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         }
 
         if (!empty($params['tag'])) {
-
             $params['tag'] = strtolower($params['tag']);
-
-            //if (!empty($params['class'])) {
-            //    $params['class'] .= ' shopware_studio_snippet';
-            //} else {
-            //    $params['class'] = 'shopware_studio_snippet';
-            //}
 
             $attr = '';
             foreach ($params as $key => $param) {
@@ -191,7 +180,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         while (preg_match($pattern, $source->content, $_block_match, PREG_OFFSET_CAPTURE)) {
             $_block_editable = !empty($_block_match[1][0]);
             $_block_args = $_block_match[2][0];
-            $_block_default = $_block_match[3][0];
+            $_block_default = $_block_match[3][0] ? : null;
             list($_block_tag, $_block_start) = $_block_match[0];
             $_block_length = strlen($_block_tag);
             if (!preg_match("!(.?)(name=)(.*?)(?=(\s|$))!", $_block_args, $_match) && empty($_block_default)) {
@@ -222,7 +211,11 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             $_rdl = $source->smarty->right_delimiter;
             $_ldl = $source->smarty->left_delimiter;
 
-            $_block_content = "{$_ldl}snippet$_block_args{$_rdl}{$_block_content}{$_ldl}/snippet{$_rdl}";
+            if ($_block_content !== null) {
+                $_block_content = "{$_ldl}snippet$_block_args{$_rdl}{$_block_content}{$_ldl}/snippet{$_rdl}";
+            } else {
+                $_block_content = '#' . $_block_name . '#';;
+            }
 
             $source->content = substr_replace($source->content, $_block_content, $_block_start, $_block_length);
         }
