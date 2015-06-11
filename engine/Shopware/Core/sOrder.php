@@ -338,7 +338,7 @@ class sOrder
     }
 
     /**
-     * Create temporary order (for order cancelation reports)
+     * Create temporary order (for order cancellation reports)
      * @access public
      */
     public function sCreateTemporaryOrder()
