@@ -233,7 +233,7 @@ Ext.define('Shopware.form.PluginPanel',
         me.shopStore.each(function(shop) {
             var fields = [];
             form.getElements().each(function(element) {
-                value = element.getValues().find('shopId', shop.getId());
+                value = element.getValues().find('shopId', shop.getId(), 0, false, true, true);
                 value = element.getValues().getAt(value);
                 var initialValue = value;
                 type = element.get('type').toLowerCase();

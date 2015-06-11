@@ -74,7 +74,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
                 'openPreview': me.onOpenPreview
             },
             'newsletter-manager-newsletter-settings': {
-                'formChanged': me.onFormChanged
+                'formChanged': me.onFormChanged,
+                'changePublish': me.onChangePublish
             },
             'newsletter-manager-bottom-toolbar': {
                 'backToOverview': me.onBackToOverview,
@@ -399,6 +400,16 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         });
 
 
+    },
+
+    /**
+     * called when the user changes the value of the publish checkbox
+     *
+     * @param record
+     * @param newValue
+     */
+    onChangePublish: function(record, newValue) {
+        record.set('publish', newValue);
     }
 
 });

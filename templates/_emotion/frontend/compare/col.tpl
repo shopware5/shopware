@@ -44,8 +44,8 @@
 	{* Price *}
 	<div class="price">
 		{block name='frontend_compare_price'}
-		<p {if $sArticle.pseudoprice} class="article-price2" {else} class="article-price"{/if}>
-    		{if $sArticle.pseudoprice}<s>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s><br />{/if}
+		<p {if $sArticle.pseudoprice|number > $sArticle.price|number} class="article-price2" {else} class="article-price"{/if}>
+    		{if $sArticle.pseudoprice|number > $sArticle.price|number}<s>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s><br />{/if}
     		<strong>{if $sArticle.priceStartingFrom}ab {/if}{$sArticle.price|currency}</strong>*
     	</p>
     	{/block}

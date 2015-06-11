@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         // Create the items of the container
         me.items = me.getItems();
 
+        /*{if {acl_is_allowed privilege=clear}}*/
         me.dockedItems = [{
             xtype: 'toolbar',
             dock: 'bottom',
@@ -64,6 +65,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
             cls: 'shopware-toolbar',
             items: me.getButtons()
         }];
+        /*{/if}*/
 
         me.callParent(arguments);
     },
@@ -93,7 +95,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         clearText += '{s name=tabs/start/info_text_clear_all}{/s}:<br/>';
         clearText += '<ul>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line1}{/s}</li>';
-        clearText += '<li>{s name=tabs/start/info_text_clear_all_line2}{/s}</li>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line3}{/s}</li>';
         clearText += '<li>{s name=tabs/start/info_text_clear_all_line4}{/s}</li>';
         clearText += '</ul>';
@@ -121,9 +122,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.start.Main', {
         return Ext.create('Ext.form.RadioGroup', {
             columns : 1,
             items   : [
-                { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name=tabs/start/production_mode_title}{/s}</b>' },
+                { name: 'productiveMode', inputValue: true, boxLabel: '<b>{s name=tabs/start/production_mode_title}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
                 { xtype: 'component', cls:'component-first', html: '{s name=tabs/start/production_mode_description}{/s}'},
-                { name: 'productiveMode', inputValue: false, boxLabel: '<b>{s name=tabs/start/development_mode_title}{/s}</b>' },
+                { name: 'productiveMode', inputValue: false, boxLabel: '<b>{s name=tabs/start/development_mode_title}{/s}</b>'/*{if !{acl_is_allowed privilege=update}}*/, disabled: true/*{/if}*/ },
                 { xtype: 'component', html: '{s name=tabs/start/development_mode_description}{/s}' }
             ],
             listeners: {

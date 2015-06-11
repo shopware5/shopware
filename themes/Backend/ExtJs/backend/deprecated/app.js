@@ -27,9 +27,7 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
+//{block name="backend/deprecated/app"}
 Ext.define('Shopware.apps.Deprecated', {
 	extend: 'Enlight.app.SubApplication',
     loadPath: "{url action=load}",
@@ -54,3 +52,4 @@ Ext.define('Shopware.apps.Deprecated', {
         return mainController.mainWindow;
     }
 });
+//{/block}

@@ -110,7 +110,7 @@
 			        <div class="currentPrice">
 			     	{if $article.currentPrice}
 			   		  	<strong>{se name="OrderItemInfoCurrentPrice"}{/se}:</strong>
-			     		{if $article.currentPseudoprice}
+			     		{if $article.currentPseudoprice|number > $article.currentPrice|number}
 			     			<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.currentPseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
 			     		{/if}
 			     		{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}

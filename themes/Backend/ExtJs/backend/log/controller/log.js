@@ -53,11 +53,10 @@ Ext.define('Shopware.apps.Log.controller.Log', {
 		var me = this;
 
 		me.control({
-			'log-main-list actioncolumn':{
-				deleteColumn: me.onDeleteSingleLog
-			},
-			'log-main-list toolbar combobox': {
-				change: me.onSelectFilter
+			'log-main-list':{
+				deleteColumn: me.onDeleteSingleLog,
+                openLog: me.onViewLog,
+                searchLog: me.onSearchLog
 			},
 
 			'log-main-list button[action=deleteMultipleLogs]':{
@@ -139,38 +138,38 @@ Ext.define('Shopware.apps.Log.controller.Log', {
 		})
 	},
 
-	/**
-	 * This function is called, when the user selects a filter by using the combobox in the toolbar.
-	 * It handles the filtering of the store.
-	 *
-	 * @param combobox Contains the combobox itself
-	 * @param newValue Contains the new selected and active value
-	 */
-	onSelectFilter: function(combobox, newValue){
-		var win = combobox.up('window'),
-			grid   = win.down('grid'),
-			store  = grid.getStore();
+    /**
+     * Filters the logs by the given search term.
+     * Will be called when the content of the search bar was changed.
+     *
+     * @param searchTerm
+     */
+    onSearchLog: function (searchTerm) {
+        var me = this,
+            store = me.subApplication.logStore;
 
-		//When you delete the filter of the combobox this function is called twice
-		//1st time it's an empty string, 2nd time it is null
-		if(newValue === null) {
-			return;
-		}
-		//If the value is an empty string
-		if(newValue.length == 0) {
-			store.clearFilter();
-		}else{
-			//contains the displayText of the selected value in the combobox
-			var selectedDisplayText = combobox.store.data.findBy(function(item){
-				if(item.internalId == newValue) {
-					return true;
-				}
-			}).data.name;
-			//This won't reload the store
-			store.filters.clear();
-			//Loads the store with a special filter
-			store.filter('searchValue',selectedDisplayText);
-		}
-	}
+        //If the search-value is empty, reset the filter
+        if (!searchTerm.length) {
+            store.clearFilter();
+        }
+
+        if (searchTerm.length < 3) {
+            return;
+        }
+
+        //This won't reload the store
+        store.filters.clear();
+
+        //Loads the store with a special filter
+        store.filter('searchValue', searchTerm);
+    },
+
+    onViewLog: function (log) {
+        var me = this;
+
+        me.getView('log.Detail').create({
+            log: log.data
+        });
+    }
 });
 //{/block}

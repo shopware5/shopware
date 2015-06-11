@@ -34,6 +34,7 @@
  * which reprents the application wide
  * notification system.
  */
+//{block name="backend/growl/growl"}
 Ext.define('Shopware.app.Growl', {
 	extend: 'Shopware.app.Controller',
 	singleton: true,
@@ -139,3 +140,4 @@ Ext.define('Shopware.app.Growl', {
 		});
 	}
 });
+//{/block}

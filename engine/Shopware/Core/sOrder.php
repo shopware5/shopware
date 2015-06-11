@@ -700,10 +700,10 @@ class sOrder
             $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
             $this->db->executeUpdate($attributeSql);
 
-            $attributes = $this->getOrderDetailAttributes($orderdetailsID);
-            unset($attributes['id']);
-            unset($attributes['detailID']);
-            $this->sBasketData['content'][$key]['attributes'] = $attributes;
+            $detailAttributes = $this->getOrderDetailAttributes($orderdetailsID);
+            unset($detailAttributes['id']);
+            unset($detailAttributes['detailID']);
+            $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
             if ($basketRow["priceNumeric"] >= 0) {
@@ -744,6 +744,7 @@ class sOrder
             "sShippingCosts"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts)." ".$this->sSYSTEM->sCurrency["currency"],
             "sAmount"=>$this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax)." ".$this->sSYSTEM->sCurrency["currency"] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount)." ".$this->sSYSTEM->sCurrency["currency"],
             "sAmountNet"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData["AmountNetNumeric"])." ".$this->sSYSTEM->sCurrency["currency"],
+            "sTaxRates"   => $this->sBasketData["sTaxRates"],
             "ordernumber"=>$orderNumber,
             "sOrderDay" => date("d.m.Y"),
             "sOrderTime" => date("H:i"),
@@ -1115,6 +1116,7 @@ class sOrder
             'shippingaddress' => $variables["shippingaddress"],
             'additional'      => $variables["additional"],
 
+            'sTaxRates'      => $variables["sTaxRates"],
             'sShippingCosts' => $variables["sShippingCosts"],
             'sAmount'        => $variables["sAmount"],
             'sAmountNet'     => $variables["sAmountNet"],
@@ -1133,7 +1135,6 @@ class sOrder
 
             'sEsd'    => $variables["sEsd"],
             'sNet'    => $this->sNet,
-
         );
 
         // Support for individual payment means with custom-tables

@@ -1,6 +1,11 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.0.2
+* Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
+* Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
+* It's no longer possible to have spaces in article numbers. Existing articles with spaces in their numbers will still work, but the article cannot be changed without fixing the number.
+
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
 * Rename \Shopware\Components\Theme\Compiler::preCompile to \Shopware\Components\Theme\Compiler::compile
@@ -25,6 +30,7 @@ In this document you will find a changelog of the important changes related to t
     * The `icon-element` mixin can now be found in the Responsive theme as well.
 
 ## 5.0.0
+* \sArticles::sGetProductByOrdernumber result is now equals with the \sArticles::sGetPromotionById result.
 * Add console command `sw:refresh:search:index` to manually regenerate the search index. The optional parameter `--clear-table` can be used to clear the index tables before regenerating the data again.
 * Remove `price` field override in AjaxSearch controller.
 * Include `frontend/listing/product-box/product-price.tpl` template in ajax search to display product prices.

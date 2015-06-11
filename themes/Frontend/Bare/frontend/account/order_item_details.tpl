@@ -88,7 +88,7 @@
 										{/block}
 
 										{block name="frontend_account_order_item_pseudo_price"}
-											{if $article.currentPseudoprice}
+											{if $article.currentPseudoprice|number > $article.currentPrice|number}
 												<span class="order--pseudo-price is--italic is--soft is--line-through">
 													{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
 													{$article.currentPseudoprice|currency}

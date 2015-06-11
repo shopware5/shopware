@@ -599,8 +599,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setMaxResults($limit);
 
         $query = $builder->getQuery();
-        $total = Shopware()->Models()->getQueryCount($query);
-        $orders = $query->getArrayResult();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = $this->getModelManager()->createPaginator($query);
+        $total = $paginator->count();
+        $orders = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign(array(
             'success' => true,

@@ -113,6 +113,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                     array(4, '100%')
                 ),
                 'value' => 2,
+                'editable' => false
             )
         );
 
@@ -295,7 +296,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
             ->orderBy('category.position')
             ->setParameter(':depth', $depth)
-            ->setParameter(':path', '%|' . $parentId . '|');
+            ->setParameter(':path', '%|' . $parentId . '|%');
 
         /**@var $statement PDOStatement*/
         $statement = $query->execute();

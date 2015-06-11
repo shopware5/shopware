@@ -55,7 +55,7 @@
                                                         {/if}
                                                     </div>
                                                 {/if}
-                                                {if $sArticle.pseudoprice}
+                                                {if $sArticle.pseudoprice|number > $sArticle.price|number}
                                                     <span style="color:#999; font-size:13px; line-height:13px;"><s>{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s></span>
                                                     <br/>
                                                     <strong style="color:#990000;font-size:14px;">

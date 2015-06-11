@@ -151,8 +151,8 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
         Ext.Ajax.request({
             url: '{url controller=Cache action=clearCache}?cache=Config',
             params:{
+              'cache[config]'   : 'on',
               'cache[template]' : 'on',
-              'cache[theme]'    : 'on',
               'cache[search]'   : 'on',
               'cache[router]'   : 'on'
             },
@@ -170,7 +170,6 @@ Ext.define('Shopware.apps.Performance.controller.Start', {
 
         Ext.getStore('Info').load({
             callback: function (records, operation) {
-                Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
                 Shopware.Notification.createGrowlMessage(
                     me.infoTitle,
                     me.infoMessageSuccess,

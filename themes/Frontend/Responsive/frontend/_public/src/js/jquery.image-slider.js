@@ -1706,8 +1706,10 @@
 
             me.updateMaxZoomValue();
 
-            me._$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
-            me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
+            if (opts.arrowControls) {
+                me._$arrowLeft.toggleClass(opts.hiddenClass, !opts.loopSlides && index <= 0);
+                me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
+            }
 
             $.publish('plugin/imageSlider/slide', [ me ]);
         },

@@ -371,8 +371,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      * Init mailing method
      *
      * Initializes the mailing using the mailing id.
+     * @param int|null $mailingID
+     * @return array|null
      */
-    public function initMailing($mailingID=null)
+    public function initMailing($mailingID = null)
     {
         $mailing = $this->getMailing($mailingID);
         if (empty($mailing)) {
@@ -380,11 +382,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($mailing['languageID']);
-        $shop->registerResources(Shopware()->Bootstrap());
 
         $this->Request()
             ->setHttpHost($shop->getHost())
+            ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
+
+        $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->sUserGroup = $mailing['customergroup'];
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';

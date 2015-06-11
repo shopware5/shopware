@@ -50,7 +50,25 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             'Enlight_Bootstrap_InitResource_Adodb',
             'onInitResourceAdodb'
         );
+        $this->subscribeEvent(
+            'Enlight_Controller_Front_DispatchLoopShutdown',
+            'onDispatchLoopShutdown'
+        );
         return true;
+    }
+
+    /**
+     * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
+     * If the request is from a Bot, discard the session
+     *
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
+    {
+        $container = Shopware()->Container();
+        if ($container->initialized('session') && $container->get('session')->Bot && PHP_SAPI !== 'cli') {
+            Enlight_Components_Session::destroy();
+        }
     }
 
     /**

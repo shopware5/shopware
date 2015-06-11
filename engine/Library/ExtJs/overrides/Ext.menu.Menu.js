@@ -19,36 +19,23 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Order
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
+Ext.override(Ext.menu.Menu, {
 
-/**
- * Shopware Store - Order list backend module
- *
- * The list store is used from the order list grid.
- */
-//{block name="backend/order/store/statistic"}
-Ext.define('Shopware.apps.Order.store.Statistic', {
     /**
-     * Extend for the standard ExtJS 4
-     * @string
+     * Fixes the hover issue on sub menu items in chrome.
+     *
+     * @param ev
      */
-    extend:'Ext.data.Store',
-    /**
-     * Auto load the store after the component is initialized
-     * @boolean
-     */
-    autoLoad:false,
-    /**
-     * Define the used model for this store
-     * @string
-     */
-    model:'Shopware.apps.Order.model.Statistic'
+    onMouseLeave: function(ev) {
+        var activeItem = this.activeItem,
+            menu = activeItem && activeItem.menu,
+            menuEl = menu && menu.getEl();
+
+        if (Ext.isChrome && menuEl && menuEl.contains(ev.getRelatedTarget())) {
+            return;
+        }
+
+        this.callParent([ev]);
+    }
 });
-//{/block}
-

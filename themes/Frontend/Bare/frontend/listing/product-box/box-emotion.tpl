@@ -29,18 +29,38 @@
 
                                         {block name='frontend_listing_box_article_image_media'}
                                             <span class="image--media">
-                                                {if isset($sArticle.image.thumbnails)}
-                                                    {block name='frontend_listing_box_article_image_picture_element'}
-                                                        <picture>
-                                                            <source srcset="{$sArticle.image.thumbnails[2].sourceSet}" media="(min-width: 78em)">
-                                                            <source srcset="{$sArticle.image.thumbnails[1].sourceSet}" media="(min-width: 48em)">
 
-                                                            <img srcset="{$sArticle.image.thumbnails[0].sourceSet}" alt="{$sArticle.articleName|escape}" />
-                                                        </picture>
-                                                    {/block}
-                                                {else}
-                                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sArticle.articleName|escape}" />
-                                                {/if}
+                                                {block name='frontend_listing_box_article_image_picture'}
+                                                    {if $sArticle.image.thumbnails}
+
+                                                        {$baseSource = $sArticle.image.thumbnails[0].source}
+
+                                                        {if $itemCols && $emotion.grid.cols}
+                                                            {$colSize = 100 / $emotion.grid.cols}
+                                                            {$itemSize = "{$itemCols * $colSize}vw"}
+                                                        {else}
+                                                            {$itemSize = "200px"}
+                                                        {/if}
+
+                                                        {foreach $sArticle.image.thumbnails as $image}
+                                                            {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
+
+                                                            {if $image.retinaSource}
+                                                                {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
+                                                            {/if}
+                                                        {/foreach}
+                                                    {elseif $sArticle.image.source}
+                                                        {$baseSource = $sArticle.image.source}
+                                                    {else}
+                                                        {$baseSource = "{link file='frontend/_public/src/img/no-picture.jpg'}"}
+                                                    {/if}
+
+                                                    <picture>
+                                                        {if $srcSetRetina}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
+                                                        {if $srcSet}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSet}" />{/if}
+                                                        <img src="{$baseSource}" alt="{$sArticle.articleName|escape}" />
+                                                    </picture>
+                                                {/block}
                                             </span>
                                         {/block}
                                     </span>

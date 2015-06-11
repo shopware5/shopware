@@ -191,29 +191,10 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     overflow: hidden;
 
     .banner--content {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        margin: auto;
-        overflow: hidden;
-        background-position: center center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: transparent;
-    }
-
-    .banner--link {
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-
-    .banner--mapping {
         .transform(translate(-50%, -50%));
         display: block;
         position: absolute;
         top: 50%; left: 50%;
-        margin: auto;
 
         &.left.top {
             .transform(translate(0, 0));
@@ -244,9 +225,30 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
             left: 100%; top: 50%;
         }
         &.right.bottom {
-            .transform(translate(-100%, 0));
-            left: 100%; bottom: 0;
+            .transform(translate(-100%, -100%));
+            left: 100%; top: 100%;
         }
+    }
+
+    .banner--image {
+        width: 100%;
+    }
+
+    .banner--link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: @zindex-emotion-mapping-link;
+    }
+
+    .banner--mapping {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
     }
 
     .banner--mapping-link {
@@ -289,17 +291,31 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 
     .banner-slider--item {
+        width: 100%;
         height: 100%;
-        background-position: center center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .banner-slider--banner {
+        .transform(translate(-50%, -50%));
+        display: block;
+        position: absolute;
+        top: 50%; left: 50%;
+        z-index: 100;
+    }
+
+    .banner-slider--image {
+        width: 100%;
     }
 
     .banner-slider--link {
         display: block;
         height: 100%;
         width: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        z-index: 200;
         text-indent: 200%;
         white-space: nowrap;
         overflow: hidden;

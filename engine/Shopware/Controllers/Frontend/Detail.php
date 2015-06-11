@@ -175,7 +175,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $repository->getPathById($categoryId);
 
-        if (array_shift(array_keys($categoryPath)) != $defaultShopCategoryId) {
+        if (!array_key_exists($defaultShopCategoryId , $categoryPath)) {
             return false;
         }
 

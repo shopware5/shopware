@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 	extend: 'Ext.app.Controller',
 
     refs: [
+        { ref: 'mainWindow', selector: 'emotion-main-window' },
         { ref: 'detailWindow', selector: 'emotion-detail-window' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
@@ -302,7 +303,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         return;
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
-                    win.destroy();
+
+                    me.loadEmotionRecord(record.get('id'), function(newRecord) {
+                        win.loadRecord(newRecord);
+                    });
+
                     gridStore.load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
@@ -312,15 +317,28 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
-        var me = this,
-            detailStore = me.getStore('Detail'),
-            listStore = scope.getStore();
+        var me = this, listStore = scope.getStore();
 
-        detailStore.getProxy().extraParams.id = listStore.getAt(rowIndex).get('id');
+        me.getMainWindow().setLoading(true);
+
+        me.loadEmotionRecord(
+            listStore.getAt(rowIndex).get('id'),
+            function(record) {
+                me.openDetailWindow(record);
+            }
+        );
+    },
+
+    loadEmotionRecord: function(emotionId, callback) {
+        var me = this,
+            detailStore = me.getStore('Detail');
+
+        detailStore.getProxy().extraParams.id = emotionId;
+
         detailStore.load({
             callback: function(records, operation) {
                 if (operation.success) {
-                    me.openDetailWindow(records[0]);
+                    callback(records[0]);
                 }
             }
         });
@@ -329,6 +347,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     onOpenDetail: function() {
         var me = this,
             record;
+
+        me.getMainWindow().setLoading(true);
 
         record = Ext.create('Shopware.apps.Emotion.model.Emotion', {
             cols: 4,
@@ -344,15 +364,31 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     openDetailWindow: function(record) {
         var me = this,
-            libraryStore = me.getStore('Library');
+            libraryStore = me.getStore('Library'),
+            categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath'),
+            categoryStoreLoaded = false, libraryStoreLoaded = false;
 
-        libraryStore.load({
-            callback: function() {
-                me.getView('detail.Window').create({
-                    emotion: record,
-                    libraryStore: libraryStore,
-                    categoryPathStore: me.subApplication.categoryPathStore
-                });
+        var createWindow = function() {
+            me.getMainWindow().setLoading(false);
+            me.getView('detail.Window').create({
+                emotion: record,
+                libraryStore: libraryStore,
+                categoryPathStore: categoryPathStore
+            });
+        };
+
+        categoryPathStore.getProxy().extraParams.parents = true;
+        categoryPathStore.load(function() {
+            categoryStoreLoaded = true;
+            if (libraryStoreLoaded) {
+                createWindow();
+            }
+        });
+
+        libraryStore.load(function() {
+            libraryStoreLoaded = true;
+            if (categoryStoreLoaded) {
+                createWindow();
             }
         });
     },

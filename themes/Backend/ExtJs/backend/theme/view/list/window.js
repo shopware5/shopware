@@ -86,9 +86,13 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         items.push({ xtype: 'tbspacer', width: 6 });
         items.push(me.createShopCombo());
         items.push({ xtype: 'tbspacer', width: 12 });
+        /*{if {acl_is_allowed privilege=createTheme}}*/
         items.push(me.createAddButton());
+        /*{/if}*/
         items.push(me.createRefreshButton());
+        /*{if {acl_is_allowed privilege=configureSystem}}*/
         items.push(me.createSettingsButton());
+        /*{/if}*/
         items.push('->');
         items.push(me.createSearchField());
 

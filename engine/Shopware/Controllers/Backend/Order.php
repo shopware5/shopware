@@ -434,23 +434,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'totalResult' => $totalResult
         );
     }
-    /**
-     * The getStatisticAction function selects the sales for each payment method.
-     * It is used for the order module statistic chart.
-     * @return Array
-     */
-    public function getStatisticAction()
-    {
-        //todo@dr: add grouping for the order status
-        $sql= "SELECT s_core_paymentmeans.description as description, SUM(`invoice_amount` / `currencyFactor`)  as value
-        FROM s_order, s_core_paymentmeans
-        WHERE s_order.paymentID = s_core_paymentmeans.id
-        GROUP BY paymentID";
-
-        $data = Shopware()->Db()->fetchAll($sql);
-
-        $this->View()->assign(array('success' => true, 'data' => $data));
-    }
 
     /**
      * Returns an array of all defined taxes. Used for the position grid combo box on the detail page of the backend order module.

@@ -44,10 +44,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
 
     snippets : {
         columns : {
-            mail: '{s name=columns/mailAdress}Mail adress{/s}',
+            mail: '{s name=columns/mailAddress}Mail address{/s}',
             group: '{s name=columns/group}Group{/s}',
             actions: '{s name=columns/actions}Actions{/s}',
-            lastNewsletter: '{s name=columns/lastNewsletter}Last newsletter{/s}'
+            lastNewsletter: '{s name=columns/lastNewsletter}Last newsletter{/s}',
+            doubleOptInDate: '{s name=columns/doubleOptInDate}Double-Opt-In date{/s}'
         }
     },
 
@@ -214,6 +215,20 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 dataIndex: 'lastNewsletter.subject',
                 flex: 1,
                 renderer: me.lastNewsletterRenderer
+            },
+            {
+                header: me.snippets.columns.doubleOptInDate,
+                dataIndex: 'address.added',
+                flex: 1,
+                xtype: 'datecolumn',
+                renderer: function(value, metaData, record) {
+                    value = record.get('added');
+
+                    if ( typeof value === Ext.undefined ) {
+                        return value;
+                    }
+                    return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+                }
             },
             {
                 header: me.snippets.columns.actions,

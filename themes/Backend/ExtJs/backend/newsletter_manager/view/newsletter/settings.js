@@ -220,7 +220,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 fieldLabel: '{s name=sender}Sender:{/s}',
                 allowBlank: false,
                 valueField: 'id',
-                editable: false,
                 displayField: 'name',
                 store: me.senderStore,
                 queryMode: 'local',
@@ -259,6 +258,19 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 queryMode: 'local',
                 name: 'dispatch',
                 editable: false
+            },
+            {
+                xtype: 'checkbox',
+                fieldLabel: '{s name=publish}Published:{/s}',
+                name: 'publish',
+                checked: me.record.get('publish'),
+                inputValue: 1,
+                uncheckedValue: 0,
+                listeners: {
+                    change: function(field, newValue, oldValue) {
+                        me.fireEvent('changePublish', me.record, newValue);
+                    }
+                }
             }
         ];
     }
