@@ -1712,6 +1712,59 @@ class sBasket
     }
 
     /**
+     * Checks if the vouchers on the current basket have already been used.
+     * Return true if the current cart doesn't have a voucher or if the voucher is valid
+     * Returns false if the current voucher has already been used.
+     *
+     * @param $sessionId
+     * @return bool
+     */
+    public function validateVoucher($sessionId)
+    {
+        $sql = "
+            SELECT
+                vouchers.modus AS voucherMode,
+                details.articleID as voucherId,
+                details.articleordernumber AS voucherOrderNumber,
+                vouchers.numorder AS maxPerUser
+            FROM s_emarketing_vouchers AS vouchers
+            LEFT JOIN s_order_details details ON vouchers.ordercode = details.articleordernumber
+            LEFT JOIN s_order AS orders ON details.orderID = orders.id
+            WHERE orders.temporaryID = :sessionId
+            AND details.modus = 2
+        ";
+
+        $voucherData = $this->db->fetchRow($sql, array('sessionId' => $sessionId));
+
+        if (!$voucherData) {
+            return true;
+        }
+
+        if ($voucherData['voucherMode'] == 1) {
+            $sql = "
+                SELECT id
+                FROM s_emarketing_voucher_codes
+                WHERE id = :voucherId AND cashed = 0
+            ";
+
+            $result = $this->db->fetchRow($sql, array('voucherId' => $voucherData['voucherId']));
+
+            return (bool) $result;
+        }
+
+        $sql = "
+            SELECT count(*) AS usedVoucherCount
+            FROM s_order_details
+            WHERE articleordernumber = :voucherOrderNumber
+            AND ordernumber != 0
+        ";
+
+        $result = $this->db->fetchRow($sql, array('voucherOrderNumber' => $voucherData['voucherOrderNumber']));
+
+        return (!$result || $result['usedVoucherCount'] < $voucherData['maxPerUser']);
+    }
+
+    /**
      * Check if voucher has already been cashed
      *
      * @param int $userId The current user id
