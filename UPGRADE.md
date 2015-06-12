@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.0
+- Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
+
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
 * Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
