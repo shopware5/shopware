@@ -164,9 +164,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
         var me = this;
 
         //open the order listing window
-        me.mainWindow = me.getView('batch.Window').create({
-            mail: mail,
-            mode: 'single'
+        me.mainWindow = me.getView('mail.Window').create({
+            mail: mail
         }).show();
     },
 
@@ -176,8 +175,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
         //open the order listing window
         me.mainWindow = me.getView('batch.Window').create({
             orderStatusStore: grid.orderStatusStore,
-            records: records,
-            mode: 'multi'
+            records: records
         }).show();
     },
 
