@@ -99,19 +99,20 @@
     <target name="build-database" depends="build-database-foundation, build-database-apply-deltas, build-database-deploy-demodata" />
 
     <target name="build-database-foundation">
-        <concat destfile="${build.dir}/scripts/deploy.template.sql">
+        <concat destfile="${build.dir}/scripts/deploy.sql">
+
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
-        </concat>
 
-        <copy file="${build.dir}/scripts/deploy.template.sql" toFile="${build.dir}/scripts/deploy.sql">
-            <filterset>
-                <filter token="database" value="${db.name}"/>
-                <filter token="host" value="${app.host}"/>
-                <filter token="path" value="${app.path}"/>
-            </filterset>
-        </copy>
+            <filterchain>
+                <replacetokens>
+                    <token key="database" value="${db.name}"/>
+                    <token key="host" value="${app.host}"/>
+                    <token key="path" value="${app.path}"/>
+                </replacetokens>
+            </filterchain>
+        </concat>
 
         <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/deploy.sql">
             <arg value="-u${db.user}"/>
@@ -119,7 +120,6 @@
             <arg value="--host=${db.host}"/>
         </exec>
 
-        <delete file="${build.dir}/scripts/deploy.template.sql"/>
         <delete file="${build.dir}/scripts/deploy.sql"/>
     </target>
 
