@@ -96,7 +96,9 @@
         </exec>
     </target>
 
-    <target name="build-database">
+    <target name="build-database" depends="build-database-foundation, build-database-apply-deltas, build-database-deploy-demodata" />
+
+    <target name="build-database-foundation">
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
@@ -119,12 +121,19 @@
 
         <delete file="${build.dir}/scripts/deploy.template.sql"/>
         <delete file="${build.dir}/scripts/deploy.sql"/>
-
-        <antcall target="build-database-deploy"/>
-        <antcall target="build-demodata-deploy"/>
     </target>
 
-    <target name="build-demodata-deploy">
+    <target name="build-database-apply-deltas">
+        <exec executable="php" failonerror="true">
+            <arg value="${build.dir}/ApplyDeltas.php"/>
+            <arg value="--password=${db.password}"/>
+            <arg value="--host=${db.host}"/>
+            <arg value="--username=${db.user}"/>
+            <arg value="--dbname=${db.name}"/>
+        </exec>
+    </target>
+
+    <target name="build-database-deploy-demodata">
         <concat destfile="${build.dir}/scripts/demo.template.sql">
             <fileset file="${demo.data}"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
@@ -148,16 +157,6 @@
 
         <delete file="${build.dir}/scripts/demo.template.sql"/>
         <delete file="${build.dir}/scripts/demo.deploy.sql"/>
-    </target>
-
-    <target name="build-database-deploy">
-        <exec executable="php" failonerror="true">
-            <arg value="${build.dir}/ApplyDeltas.php"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
-            <arg value="--username=${db.user}"/>
-            <arg value="--dbname=${db.name}"/>
-        </exec>
     </target>
 
     <target name="build-generate-attributes">
