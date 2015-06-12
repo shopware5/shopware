@@ -349,6 +349,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 translationKey: null
             }],
             items: [
+                me.createActionsFieldSet(),
                 me.createBaseFieldSet(),
                 me.createPriceFieldSet(),
                 me.createDescriptionFieldSet(),
@@ -390,6 +391,16 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     },
 
     /**
+     * Creates the field set for the article actions.
+     * @return Shopware.apps.Article.view.detail.Actions
+     */
+    createActionsFieldSet: function() {
+        return Ext.create('Shopware.apps.Article.view.detail.Actions', {
+            subApp: this.subApp
+        });
+    },
+
+    /**
      * Creates the base field set for the detail form.
      * @return Shopware.apps.Article.view.detail.Base
      */
@@ -401,8 +412,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Creates the field set for the article price configuration.
      */
     createPriceFieldSet: function() {
-        var me = this;
-
         return Ext.create('Shopware.apps.Article.view.detail.Prices');
     },
 

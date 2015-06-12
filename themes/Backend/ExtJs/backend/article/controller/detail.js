@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 addDownload: me.onAddDownload,
                 removeDownload: me.onRemoveDownload
             },
-            'article-detail-window article-sidebar-option': {
+            'article-detail-window article-actions-field-set': {
                 articlePreview: me.onArticlePreview,
                 deleteArticle: me.onDeleteArticle,
                 duplicateArticle: me.onDuplicateArticle,
