@@ -27,13 +27,20 @@
             <argument type="service" id="shopware.locale"/>
         </service>
 
+        <service id="snippet_resource"
+                 class="Enlight_Components_Snippet_Resource"
+                 public="false">
+            <argument type="service" id="snippets"/>
+            <argument>%shopware.snippet.showSnippetPlaceholder%</argument>
+        </service>
+
         <service id="template_factory" class="Shopware\Components\DependencyInjection\Bridge\Template" />
         <service id="template"
                  class="Enlight_Template_Manager"
                  factory-service="template_factory"
                  factory-method="factory">
             <argument type="service" id="events"/>
-            <argument type="service" id="snippets"/>
+            <argument type="service" id="snippet_resource"/>
             <argument>%shopware.template%</argument>
         </service>
 
