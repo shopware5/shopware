@@ -37,41 +37,58 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
 
     /**
      * Define that the order main window is an extension of the enlight application window
-     * @string
+     *
+     * @type { String }
      */
     extend:'Enlight.app.Window',
 
     /**
      * Set base css class prefix and module individual css class for css styling
-     * @string
+     *
+     * @type { String }
      */
     cls: Ext.baseCSSPrefix + 'order-mail-window',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
+     *
+     * @type { String }
      */
     alias:'widget.order-mail-window',
 
     /**
      * Define window width
-     * @integer
+     *
+     * @type { Number }
      */
     width: 600,
 
     /**
      * Define window height
-     * @integer
+     *
+     * @type { String }
      */
     height:'90%',
 
+    /**
+     * Show scroll bar when the content is overflowing the window viewport
+     *
+     * @type { Boolean }
+     */
     autoScroll: true,
 
     /**
      * Set layout for this component to fit
+     *
+     * @type { String }
      */
     layout: 'fit',
 
+    /**
+     * The text of the window title.
+     *
+     * @type { String }
+     */
     title: '{s name=mail/title}Send an email to the customer{/s}',
 
     /**
