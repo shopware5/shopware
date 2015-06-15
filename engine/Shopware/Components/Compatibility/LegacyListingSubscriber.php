@@ -513,6 +513,12 @@ class LegacyListingSubscriber implements SubscriberInterface
             $filteredOptions = array();
         }
 
+        /** @var $mapper \Shopware\Components\QueryAliasMapper  */
+        $mapper = Shopware()->Container()->get('query_alias_mapper');
+
+        $shortAliasFilterProperties = $mapper->getShortAlias('sFilterProperties');
+
+
         $params = $this->getListingLinkParameters($config);
 
         $grouped = array();
@@ -562,11 +568,21 @@ class LegacyListingSubscriber implements SubscriberInterface
                 if ($group['active']) {
                     $removeOptions = array_diff($filteredOptions, $activeGroupOptions);
 
+                    if(!is_null($shortAliasFilterProperties)) {
+                        $filterParams = array(
+                            'sFilterProperties' => implode('|', $removeOptions),
+                            $shortAliasFilterProperties => implode('|', $removeOptions)
+                        );
+                    } else {
+                        $filterParams = array(
+                            'sFilterProperties' => implode('|', $removeOptions)
+                        );
+
+                    }
+
                     $params = array_merge(
                         $params,
-                        array(
-                            'sFilterProperties' => implode('|', $removeOptions)
-                        )
+                        $filterParams
                     );
 
                     $group['removeLink'] = $this->buildListingLink($params);
