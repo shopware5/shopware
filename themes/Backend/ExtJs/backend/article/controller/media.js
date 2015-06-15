@@ -69,7 +69,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         { ref:'previewButton', selector:'article-detail-window article-image-list button[action=previewImage]' },
         { ref:'removeButton', selector:'article-detail-window article-image-list button[action=removeImage]' },
         { ref:'mediaInfo', selector:'article-detail-window article-image-info' },
-        { ref:'sidebarMediaDropZone', selector:'article-detail-window article-sidebar-option article-image-drop-zone' },
         { ref:'mediaDropZone', selector:'article-detail-window article-image-upload article-image-drop-zone' }
     ],
 
@@ -115,9 +114,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
-            },
-            'article-detail-window article-sidebar-option': {
-                mediaUpload: me.onSidebarMediaUpload
             }
         });
         me.callParent(arguments);

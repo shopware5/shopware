@@ -71,7 +71,6 @@ Ext.define('Shopware.apps.Article', {
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
-        'detail.sidebar.Option',
         'detail.sidebar.Link',
         'detail.sidebar.Similar',
         'detail.sidebar.Accessory',

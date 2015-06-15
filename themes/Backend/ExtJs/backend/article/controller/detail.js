@@ -449,9 +449,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         });
         priceFieldSet.tabPanel.setActiveTab(0);
 
-        //reconfigure the category grid in the option panel of the sidebar.
-        mainWindow.down('article-sidebar article-sidebar-option article-category-list').reconfigure(article.getCategory());
-
         //reconfigure the article link listing
         mainWindow.down('article-sidebar article-sidebar-link grid[name=link-listing]').reconfigure(article.getLink());
 
