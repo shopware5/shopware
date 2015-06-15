@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
 * It's no longer possible to have spaces in article numbers. Existing articles with spaces in their numbers will still work, but the article cannot be changed without fixing the number.
 * Change structure of `build-database` target in `build/build.xml` to allow a more fine grained build process.
 * Introduce new configuration option `snippet.showSnippetPlaceholder`. Empty snippets are now hidden by default. If `showSnippetPlaceholder` is `true` snippet placeholders will be shown.
+* Removed table `s_emarketing_vouchers_cashed`.
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
