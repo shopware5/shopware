@@ -310,7 +310,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     gridStore.load();
 
-                    win.tabPanel.items.getAt(0).setDisabled(false);
+                    win.enableTabs();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
                 }
@@ -323,7 +323,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.loadEmotionRecord(
             listStore.getAt(rowIndex).get('id'),
-            me.openDetailWindow.bind(me)
+            Ext.bind(me.openDetailWindow, me)
         );
     },
 

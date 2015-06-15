@@ -89,9 +89,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             me.changeTitle(elements);
             me.createDataViewStore(elements, settings);
 
+            var items = me.createItems();
             me.removeAll();
 
-            me.add(me.createItems());
+            me.add(items);
         } catch (e) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage);
 
@@ -322,6 +323,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 me.fireEvent('saveEmotion', me.emotion, me.dataviewStore);
             }
         }];
+    },
+
+    enableTabs: function () {
+        var me = this,
+            tabs = me.tabPanel.items,
+            len = tabs.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            tabs[i].setDisabled(false);
+        }
     }
 });
 //{/block}
