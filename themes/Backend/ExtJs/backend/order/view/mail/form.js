@@ -71,6 +71,11 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      */
     bodyPadding: 10,
 
+    /**
+     * Whether or not the form panel should have a border.
+     *
+     * @type { Boolean }
+     */
     border: false,
 
     /**
@@ -104,6 +109,9 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         me.callParent(arguments);
     },
 
+    /**
+     * Registers the custom component events.
+     */
     registerEvents: function() {
         this.addEvents(
             /**
@@ -117,6 +125,11 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         );
     },
 
+    /**
+     * Creates and returns the toolbar which contains the send mail button.
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
     getToolbar: function () {
         var me = this;
 
@@ -136,6 +149,11 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         });
     },
 
+    /**
+     * Creates and returns an array of the form elements to send a mail.
+     *
+     * @returns { Array }
+     */
     getFormItems: function() {
         var me = this;
 
