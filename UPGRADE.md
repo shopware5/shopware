@@ -2,7 +2,23 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 5.1.0
-- Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
+* Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
+* Removed unused snippets in `snippets/backend/article/view/main.ini`:
+    * `detail/sidebar/options/article_options`
+    * `detail/sidebar/options/article_preview`
+    * `detail/sidebar/options/columns/name`
+    * `detail/sidebar/options/delete`
+    * `detail/sidebar/options/drop_zone`
+    * `detail/sidebar/options/duplicate`
+    * `detail/sidebar/options/image_field_set`
+    * `detail/sidebar/options/rapid_categorization`
+    * `detail/sidebar/options/select_category`
+    * `detail/sidebar/options/selected_categories`
+    * `detail/sidebar/options/shop`
+    * `detail/sidebar/options/title`
+    * `detail/sidebar/options/tooltip`
+    * `detail/sidebar/options/translate`
+    * `detail/sidebar/options/upload_button`
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
