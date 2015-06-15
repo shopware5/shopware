@@ -2193,7 +2193,7 @@ class sAdmin
                         foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
-                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",", $numbers);
+                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(", ", $numbers);
                         // Building download link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->config->get('sBASEFILE')
                             .'?sViewport=account&sAction=download&esdID='
