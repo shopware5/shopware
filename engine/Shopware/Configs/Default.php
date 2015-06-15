@@ -20,6 +20,7 @@ return array_replace_recursive([
         'writeToDb' => true,
         'readFromIni' => false,
         'writeToIni' => false,
+        'showSnippetPlaceholder' => false,
     ],
     'db' => [
         'username' => 'root',
