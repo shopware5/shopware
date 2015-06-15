@@ -85,8 +85,8 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
 
     /**
      * Event listener method which is fired when the user clicks the "send email button" to send the displayed
-     * email to the customer
-     * .
+     * email to the customer.
+     *
      * @param { Ext.form.Panel } form
      */
     onSendMail: function(form) {
@@ -116,9 +116,5 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
             }
         });
     }
-
-
-
-
 });
 //{/block}
