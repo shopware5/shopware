@@ -92,13 +92,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             var items = me.createItems();
             me.removeAll();
 
-            Ext.each(items, function (item) {
-                me.add(item);
-            });
+            me.add(items);
         } catch (e) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage);
 
-            me.destory();
+            me.destroy();
         }
     },
 
@@ -237,13 +235,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     },
 
     createTabPanel: function() {
-        var me = this;
+        var me = this,
+            activeTab = 1,
+            designerDisabled = true;
 
-        var activeTab = 0;
         if (me.emotion.get('name')) {
-            activeTab = 1;
+            activeTab = 0;
+            designerDisabled = false;
         }
-        if (me.tabPanel) {
+        if (me.tabPanel && (me.tabPanel.getActiveTab() !== null)) {
             activeTab = me.tabPanel.getActiveTab();
             activeTab = activeTab.tabIndex;
         }
@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 initialTitle: 'designer',
                 emotion: me.emotion,
                 dataviewStore: me.dataviewStore,
-                disabled: me.emotion.get('name') ? false : true,
+                disabled: designerDisabled,
                 tabIndex: 0
             }, {
                 xtype: 'emotion-detail-settings',
@@ -323,6 +323,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 me.fireEvent('saveEmotion', me.emotion, me.dataviewStore);
             }
         }];
+    },
+
+    enableTabs: function () {
+        var me = this,
+            tabs = me.tabPanel.items,
+            len = tabs.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            tabs[i].setDisabled(false);
+        }
     }
 });
 //{/block}

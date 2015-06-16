@@ -324,6 +324,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
             $alreadyExists = $this->hasEmotionForSameDeviceType($data['categoryId']);
 
+            $data['id'] = $emotion->getId();
+
             $this->View()->assign(array(
                 'data' => $data,
                 'success' => true,
