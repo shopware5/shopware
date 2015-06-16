@@ -6200,7 +6200,6 @@ INSERT INTO `s_emarketing_vouchers` (`id`, `description`, `vouchercode`, `number
 (4, 'Individuelle Gutscheine', '', 100, 15, 50, 0, NULL, NULL, NULL, 'GUTINDI', 1, 0, 0, NULL, '', 0, NULL, 'auto');
 
 TRUNCATE TABLE `s_emarketing_vouchers_attributes`;
-TRUNCATE TABLE `s_emarketing_vouchers_cashed`;
 TRUNCATE TABLE `s_emarketing_voucher_codes`;
 INSERT INTO `s_emarketing_voucher_codes` (`id`, `voucherID`, `userID`, `code`, `cashed`) VALUES
 (1, 4, NULL, '23A7BCA4', 0),
