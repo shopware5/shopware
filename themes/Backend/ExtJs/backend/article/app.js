@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Article', {
      * @array
      */
     views:[
+        'detail.Toolbar',
         'detail.Window',
         'detail.Settings',
         'detail.Properties',

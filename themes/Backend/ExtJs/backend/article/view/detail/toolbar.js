@@ -29,36 +29,42 @@
 
 /**
  * Shopware UI - Article detail page
- * The actions component displays a small actions toolbar above the article base data.
+ * The toolbar component displays a small actions toolbar above the article base data.
  * It contains important article actions such as article deleting or duplication.
  */
 //{namespace name="backend/article/view/main"}
-//{block name="backend/article/view/detail/actions"}
-Ext.define('Shopware.apps.Article.view.detail.Actions', {
+//{block name="backend/article/view/detail/toolbar"}
+Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
 
     /**
-     * Define that the actions field set is an extension of the Ext.form.FieldSet
+     * Define that the actions toolbar is an extension of the Ext.toolbar.Toolbar
      * @string
      */
-    extend: 'Ext.form.FieldSet',
+    extend: 'Ext.toolbar.Toolbar',
 
     /**
-     * The Ext.container.Container.layout for the fieldset's immediate child items.
-     * @object
-     */
-    layout: 'column',
-
-    /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     * Set the toolbar position.
      * @string
      */
-    alias: 'widget.article-actions-field-set',
+    dock: 'top',
+
+    /**
+     * Set ui styling for the toolbar
+     * @string
+     */
+    ui: 'shopware-ui',
 
     /**
      * Set css class for this component
      * @string
      */
-    cls: Ext.baseCSSPrefix + 'article-actions-field-set',
+    cls: 'shopware-toolbar',
+
+    /**
+     * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     * @string
+     */
+    alias: 'widget.article-actions-toolbar',
 
     /**
      * Contains all snippets for the view component
@@ -69,7 +75,8 @@ Ext.define('Shopware.apps.Article.view.detail.Actions', {
         duplicate: '{s name=detail/actions/duplicate}Duplicate{/s}',
         delete: '{s name=detail/actions/delete}Delete{/s}',
         translate: '{s name=detail/actions/translate}Translate{/s}',
-        preview: '{s name=detail/actions/preview}Article preview{/s}',
+        preview: '{s name=detail/actions/preview}Preview{/s}',
+        previewLabel: '{s name=detail/actions/preview_label}Article preview{/s}',
         previewShopSelect: '{s name=detail/actions/preview_select_shop}Select shop{/s}'
     },
 
@@ -88,8 +95,7 @@ Ext.define('Shopware.apps.Article.view.detail.Actions', {
             mainWindow = me.subApp.articleWindow;
 
         mainWindow.on('storesLoaded', me.onStoresLoaded, me);
-        me.title = me.snippets.title;
-        me.items = me.createElements();
+        me.items = me.createToolbarElements();
         me.registerEvents();
         me.callParent(arguments);
     },
@@ -131,94 +137,33 @@ Ext.define('Shopware.apps.Article.view.detail.Actions', {
     },
 
     /**
-     * Creates all elements for the article actions fieldset
+     * Creates all elements for the toolbar
      * @returns Array
      */
-    createElements: function() {
-        var me = this;
+    createToolbarElements: function() {
+        var me = this,
+            items = [];
 
-        me.actionsContainer = Ext.create('Ext.container.Container', {
-            columnWidth: 0.5,
-            padding: '0 20 0 0',
-            layout: 'anchor',
-            border: false,
-            items: me.createActionElements()
-        });
+        items.push(me.createShopComboBox());
+        items.push(me.createPreviewButton());
+        items.push({ xtype: 'tbspacer', width: 10 });
+        items.push(me.createDuplicateButton());
+        items.push(me.createDeleteButton());
+        items.push(me.createTranslateButton());
 
-        me.previewContainer = Ext.create('Ext.container.Container', {
-            columnWidth: 0.5,
-            border: false,
-            items: me.createPreviewElements()
-        });
-
-        return [
-            me.actionsContainer,
-            me.previewContainer
-        ];
+        return items;
     },
 
     /**
-     * Creates the action buttons
+     * Creates the article preview combobox
      * @returns Ext.container.Container
      */
-    createActionElements: function() {
+    createShopComboBox: function() {
         var me = this;
 
-        me.actionsDuplicateBtn = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-duplicate-article',
-            text: me.snippets.duplicate,
-            cls: 'small secondary',
-            margin: '0 10 0 0',
-            handler: function() {
-                me.fireEvent('duplicateArticle', me.article);
-            }
-        });
-
-        me.actionsDeleteBtn = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-minus-circle-frame',
-            text: me.snippets.delete,
-            cls: 'small secondary',
-            margin: '0 10 0 0',
-            handler: function() {
-                me.fireEvent('deleteArticle', me.article);
-            }
-        });
-
-        me.actionsTranslateBtn = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-globe-green',
-            text: me.snippets.translate,
-            cls: 'small secondary',
-            handler: function() {
-                me.fireEvent('translateArticle', me.article);
-            }
-        });
-
-        return Ext.create('Ext.container.Container', {
-            layout: {
-                type: 'hbox',
-                pack: 'start',
-                align: 'stretch'
-            },
-            items: [
-                me.actionsDuplicateBtn,
-                me.actionsDeleteBtn,
-                me.actionsTranslateBtn
-            ]
-        });
-    },
-
-    /**
-     * Creates the article preview button and combobox
-     * @returns Ext.container.Container
-     */
-    createPreviewElements: function() {
-        var me = this;
-
-        me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: me.snippets.preview,
+        me.shopComboBox = Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: me.snippets.previewLabel,
             store: me.shopStore,
-            labelWidth: 155,
-            flex: 1,
             queryMode: 'local',
             valueField: 'id',
             displayField: 'name',
@@ -226,29 +171,95 @@ Ext.define('Shopware.apps.Article.view.detail.Actions', {
             emptyText: me.snippets.previewShopSelect
         });
 
-        me.actionsPreviewBtn = Ext.create('Ext.button.Button', {
+        return me.shopComboBox;
+    },
+
+    /**
+     * Creates the article preview button
+     * @returns Ext.button.Button
+     */
+    createPreviewButton: function() {
+        var me = this;
+
+        me.previewButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-globe--arrow',
-            cls: 'small secondary',
-            margin: '2 0 0',
+            text: me.snippets.preview,
             handler: function() {
-                me.fireEvent('articlePreview', me.article, me.shopCombo);
+                me.fireEvent('articlePreview', me.article, me.shopComboBox);
             }
         });
 
-        return Ext.create('Ext.container.Container', {
-            layout: 'hbox',
-            items: [
-                me.shopCombo,
-                me.actionsPreviewBtn
-            ]
-        });
+        return me.previewButton;
     },
 
+    /**
+     * Creates the duplicate button
+     * @returns Ext.button.Button
+     */
+    createDuplicateButton: function() {
+        var me = this;
+
+        me.duplicateButton = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-duplicate-article',
+            text: me.snippets.duplicate,
+            handler: function() {
+                me.fireEvent('duplicateArticle', me.article);
+            }
+        });
+
+        return me.duplicateButton;
+    },
+
+    /**
+     * Creates the delete button
+     * @returns Ext.button.Button
+     */
+    createDeleteButton: function() {
+        var me = this;
+
+        me.deleteButton = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-minus-circle-frame',
+            text: me.snippets.delete,
+            handler: function() {
+                me.fireEvent('deleteArticle', me.article);
+            }
+        });
+
+        return me.deleteButton;
+    },
+
+    /**
+     * Creates the translate button
+     * @returns Ext.button.Button
+     */
+    createTranslateButton: function() {
+        var me = this;
+
+        me.translateButton = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-globe-green',
+            text: me.snippets.translate,
+            handler: function() {
+                me.fireEvent('translateArticle', me.article);
+            }
+        });
+
+        return me.translateButton;
+    },
+
+    /**
+     * Event listener method which will be fired when the available batch store is loaded.
+     * The batch store contains all necessary data for the product except variants and product attributes.
+     * We're using this pattern to provide the fields in the module as soon as possible.
+     * The data for example comboboxes or grids will be injected in his method.
+     *
+     * @param article
+     * @param stores
+     */
     onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
         me.shopStore = stores['shops'];
-        me.shopCombo.bindStore(me.shopStore);
+        me.shopComboBox.bindStore(me.shopStore);
     }
 });
 //{/block}
