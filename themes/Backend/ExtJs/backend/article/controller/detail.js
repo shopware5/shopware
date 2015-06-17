@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 addDownload: me.onAddDownload,
                 removeDownload: me.onRemoveDownload
             },
-            'article-detail-window article-sidebar-option': {
+            'article-detail-window article-actions-toolbar': {
                 articlePreview: me.onArticlePreview,
                 deleteArticle: me.onDeleteArticle,
                 duplicateArticle: me.onDuplicateArticle,
@@ -448,9 +448,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             grid.reconfigure(article.getPrice());
         });
         priceFieldSet.tabPanel.setActiveTab(0);
-
-        //reconfigure the category grid in the option panel of the sidebar.
-        mainWindow.down('article-sidebar article-sidebar-option article-category-list').reconfigure(article.getCategory());
 
         //reconfigure the article link listing
         mainWindow.down('article-sidebar article-sidebar-link grid[name=link-listing]').reconfigure(article.getLink());

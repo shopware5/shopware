@@ -65,13 +65,13 @@ Ext.define('Shopware.apps.Article', {
      * @array
      */
     views:[
+        'detail.Toolbar',
         'detail.Window',
         'detail.Settings',
         'detail.Properties',
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
-        'detail.sidebar.Option',
         'detail.sidebar.Link',
         'detail.sidebar.Similar',
         'detail.sidebar.Accessory',
