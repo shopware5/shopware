@@ -292,7 +292,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             );
         }
 
-        if (!$this->basket->validateVoucher($this->session['sessionId'])) {
+        if (!$this->basket->validateVoucher($this->session['sessionId'], $this->session['sUserId'])) {
             $namespace = $this->container->get('snippets')->getNamespace('frontend/basket/internalMessages');
             return $this->forward(
                 'confirm',
