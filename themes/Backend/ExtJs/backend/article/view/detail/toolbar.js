@@ -181,15 +181,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
     createPreviewButton: function() {
         var me = this;
 
-        me.previewButton = Ext.create('Ext.button.Button', {
+        return Ext.create('Ext.button.Button', {
             iconCls: 'sprite-globe--arrow',
             text: me.snippets.preview,
             handler: function() {
                 me.fireEvent('articlePreview', me.article, me.shopComboBox);
             }
         });
-
-        return me.previewButton;
     },
 
     /**
@@ -199,15 +197,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
     createDuplicateButton: function() {
         var me = this;
 
-        me.duplicateButton = Ext.create('Ext.button.Button', {
+        return Ext.create('Ext.button.Button', {
             iconCls: 'sprite-duplicate-article',
             text: me.snippets.duplicate,
             handler: function() {
                 me.fireEvent('duplicateArticle', me.article);
             }
         });
-
-        return me.duplicateButton;
     },
 
     /**
@@ -217,15 +213,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
     createDeleteButton: function() {
         var me = this;
 
-        me.deleteButton = Ext.create('Ext.button.Button', {
+        return Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle-frame',
             text: me.snippets.delete,
             handler: function() {
                 me.fireEvent('deleteArticle', me.article);
             }
         });
-
-        return me.deleteButton;
     },
 
     /**
@@ -235,15 +229,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
     createTranslateButton: function() {
         var me = this;
 
-        me.translateButton = Ext.create('Ext.button.Button', {
+        return Ext.create('Ext.button.Button', {
             iconCls: 'sprite-globe-green',
             text: me.snippets.translate,
             handler: function() {
                 me.fireEvent('translateArticle', me.article);
             }
         });
-
-        return me.translateButton;
     },
 
     /**
