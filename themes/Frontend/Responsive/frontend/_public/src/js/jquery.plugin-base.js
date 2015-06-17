@@ -398,14 +398,14 @@
      * but you still have the ability to access the overwritten method(s) using the ```superclass``` object property.
      *
      * @example How to overwrite the ```showResult```-method in the "search" plugin.
-     * $.overwritePlugin('search', {
+     * $.overridePlugin('search', {
      *    showResult: function(response) {
      *        //.. do something with the response
      *    }
      * });
      *
      * @example Call the original method without modifications
-     * $.overwritePlugin('search', {
+     * $.overridePlugin('search', {
      *    showResult: function(response) {
      *        this.superclass.showResult.apply(this, arguments);
      *    }
