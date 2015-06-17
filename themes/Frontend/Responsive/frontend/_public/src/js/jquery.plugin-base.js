@@ -17,7 +17,7 @@
     };
 }(jQuery));
 
-;(function ($) {
+;(function ($, window) {
     'use strict';
 
     var numberRegex = /^\-?\d*\.?\d*$/,
@@ -40,7 +40,7 @@
                     : numberRegex.test(value) ? +value
                     : objectRegex.test(value) ? $.parseJSON(value)
                     : value
-                )
+            )
         } catch (e) {
             return value;
         }
@@ -363,6 +363,9 @@
      * $('.test').yourName();
      */
     $.plugin = function (name, plugin) {
+        window.PluginsCollection = window.PluginsCollection || {};
+        window.PluginsCollection[name] = plugin;
+
         $.fn[name] = function (options) {
             return this.each(function () {
                 var element = this,
@@ -377,7 +380,6 @@
                         };
 
                         Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
-
                         pluginData = new Plugin();
                     }
 
@@ -386,4 +388,52 @@
             });
         };
     };
-})(jQuery);
+
+    /**
+     * Provides the ability to overwrite jQuery plugins which are built on top of the {@link PluginBase} class. All of
+     * our jQuery plugins (or to be more technical about it, the prototypes of our plugins) are registered in the object
+     * {@link window.PluginsCollection} which can be accessed from anywhere in your storefront.
+     *
+     * Please keep in mind that the method overwrites the plugin in jQuery's plugin namespace {@link jQuery.fn} as well,
+     * but you still have the ability to access the overwritten method(s) using the ```superclass``` object property.
+     *
+     * @example How to overwrite the ```showResult```-method in the "search" plugin.
+     * $.overridePlugin('search', {
+     *    showResult: function(response) {
+     *        //.. do something with the response
+     *    }
+     * });
+     *
+     * @example Call the original method without modifications
+     * $.overridePlugin('search', {
+     *    showResult: function(response) {
+     *        this.superclass.showResult.apply(this, arguments);
+     *    }
+     * });
+     */
+    $.overridePlugin = function (pluginName, override) {
+        var overridePlugin = window.PluginsCollection[pluginName];
+
+        if (typeof overridePlugin !== 'object' || typeof override !== 'object') {
+            return false;
+        }
+
+        $.fn[pluginName] = function (options) {
+            return this.each(function () {
+                var element = this,
+                    pluginData = $.data(element, 'plugin_' + pluginName);
+
+                if (!pluginData) {
+                    var Plugin = function () {
+                        PluginBase.call(this, pluginName, element, options);
+                    };
+
+                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin, superclass: overridePlugin }, overridePlugin, override);
+                    pluginData = new Plugin();
+
+                    $.data(element, 'plugin_' + pluginName, pluginData);
+                }
+            });
+        };
+    };
+})(jQuery, window);
