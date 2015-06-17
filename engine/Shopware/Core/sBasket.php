@@ -1717,16 +1717,18 @@ class sBasket
      * Returns false if the current voucher has already been used.
      *
      * @param $sessionId
+     * @param $userId
      * @return bool
      */
-    public function validateVoucher($sessionId)
+    public function validateVoucher($sessionId, $userId)
     {
         $sql = "
             SELECT
                 vouchers.modus AS voucherMode,
                 details.articleID as voucherId,
                 details.articleordernumber AS voucherOrderNumber,
-                vouchers.numorder AS maxPerUser
+                vouchers.numorder AS maxPerUser,
+                vouchers.numberofunits AS maxGlobal
             FROM s_emarketing_vouchers AS vouchers
             LEFT JOIN s_order_details details ON vouchers.ordercode = details.articleordernumber
             LEFT JOIN s_order AS orders ON details.orderID = orders.id
@@ -1753,15 +1755,31 @@ class sBasket
         }
 
         $sql = "
-            SELECT count(*) AS usedVoucherCount
-            FROM s_order_details
+            SELECT
+              COUNT(DISTINCT details.id) AS usedVoucherCount,
+              SUM(CASE WHEN orders.userID = :userID THEN 1 ELSE 0 END) usedByUserVoucherCount
+            FROM s_order_details details
+            LEFT JOIN s_order orders ON orders.id = details.orderID
             WHERE articleordernumber = :voucherOrderNumber
-            AND ordernumber != 0
+            AND details.ordernumber != 0
         ";
 
-        $result = $this->db->fetchRow($sql, array('voucherOrderNumber' => $voucherData['voucherOrderNumber']));
+        $result = $this->db->fetchRow(
+            $sql,
+            array(
+                'voucherOrderNumber' => $voucherData['voucherOrderNumber'],
+                'userID' => $userId
+            )
+        );
 
-        return (!$result || $result['usedVoucherCount'] < $voucherData['maxPerUser']);
+        if (!$result) {
+            return true;
+        }
+
+        $passedVoucherPerUserLimit = $result['usedByUserVoucherCount'] < $voucherData['maxPerUser'];
+        $passedVoucherGlobalLimit = $result['usedVoucherCount'] < $voucherData['maxGlobal'];
+
+        return ($passedVoucherPerUserLimit && $passedVoucherGlobalLimit);
     }
 
     /**
