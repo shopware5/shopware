@@ -137,8 +137,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 articlePreview: me.onArticlePreview,
                 deleteArticle: me.onDeleteArticle,
                 duplicateArticle: me.onDuplicateArticle,
-                translateArticle: me.onTranslate,
-                addCategory: me.onAddCategory
+                translateArticle: me.onTranslate
             },
             'article-prices-field-set': {
                 priceTabChanged: me.onPriceTabChanged,
@@ -527,36 +526,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     onCancel: function(win) {
         var me = this;
         win.destroy();
-    },
-
-    /**
-     * Event will be fired when the user select an item of the category combo box.
-     *
-     * @event
-     * @param [Ext.data.Model] - The category model
-     * @param [Ext.grid.Panel] - The category list
-     */
-    onAddCategory: function(categories, grid) {
-        var me = this,
-            store = grid.getStore();
-
-        if (!Ext.isArray(categories)) {
-            return true;
-        }
-
-        Ext.each(categories, function(model) {
-            var category = Ext.create('Shopware.apps.Article.model.Category', {
-                id: model.data.id,
-                name: model.data.name
-            });
-
-            if (!store.getById(category.get('id'))) {
-                store.add(category);
-            } else {
-                var message = Ext.String.format(me.snippets.alreadyExist.message, category.get('name'));
-                Shopware.Notification.createGrowlMessage(me.snippets.alreadyExist.title, message, me.snippets.growlMessage);
-            }
-        });
     },
 
     /**

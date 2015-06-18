@@ -19,6 +19,13 @@ In this document you will find a changelog of the important changes related to t
     * `detail/sidebar/options/tooltip`
     * `detail/sidebar/options/translate`
     * `detail/sidebar/options/upload_button`
+* Removed `article-detail-window article-sidebar-option` event listeners in `Shopware.apps.Article.controller.Media`
+* Removed `onSidebarMediaUpload` method in `Shopware.apps.Article.controller.Media`
+* Removed `addCategory: me.onAddCategory` event listener in `Shopware.apps.Article.controller.Detail`
+* Removed `onAddCategory` method in `Shopware.apps.Article.controller.Detail`
+* Changed event listener alias from `article-detail-window article-sidebar-option` to `article-detail-window article-actions-toolbar` in `Shopware.apps.Article.controller.Detail`
+* Removed `article-sidebar-option` object in `Shopware.apps.Article.view.detail.Sidebar`
+* Removed `detail.sidebar.Option` from `views` array in `Shopware.apps.Article`
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent

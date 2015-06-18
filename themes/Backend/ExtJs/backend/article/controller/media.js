@@ -426,26 +426,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     },
 
     /**
-     * Event listener function which fired when the user uploads images
-     * over the file field of the sidebar.
-     * @param field
-     */
-    onSidebarMediaUpload: function(field) {
-        var dropZone = this.getSidebarMediaDropZone(), me = this;
-
-        if(Ext.isIE || Ext.isSafari) {
-        	var form = field.ownerCt;
-        	form.submit({
-        		success: function() {
-	        		Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
-        		}
-        	});
-        } else {
-            this.uploadMedia(field, dropZone);
-        }
-    },
-
-    /**
      * Event will be fired when the user want to upload images over the button on the image tab.
      *
      * @event
