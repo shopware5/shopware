@@ -1198,7 +1198,6 @@ class sBasket
     public function sGetNotes()
     {
         $notes = $this->getNoteProducts();
-
         if (empty($notes)) {
             return $notes;
         }
@@ -1213,35 +1212,33 @@ class sBasket
         $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
             ->buildAdditionalTextLists($products, $context);
 
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')
-            ->getAverages($products, $context);
-
         $promotions = array();
         /**@var $product ListProduct */
         foreach ($products as $product) {
             $average = null;
             $note = $notes[$product->getNumber()];
-            if (array_key_exists($product->getNumber(), $votes)) {
-                $average = $votes[$product->getNumber()];
-            }
 
-            $promotions[] = $this->convertListProductToNote($product, $note, $average);
+            $promotions[] = $this->convertListProductToNote($product, $note);
         }
-        return $promotions;
+
+        return $this->eventManager->filter(
+            'Shopware_Modules_Basket_GetNotes_FilterPromotions',
+            $promotions,
+            array('products' => $products)
+        );
     }
 
     /**
      * @param ListProduct $product
-     * @param $note
-     * @param VoteAverage $voteAverage
-     * @return mixed
+     * @param array $note
+     * @return array
      */
-    private function convertListProductToNote(ListProduct $product, $note, VoteAverage $voteAverage = null)
+    private function convertListProductToNote(ListProduct $product, array $note)
     {
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
         $promotion = $structConverter->convertListProductStruct($product);
 
-        if ($voteAverage !== null) {
+        if ($voteAverage = $product->getVoteAverage()) {
             $average = $structConverter->convertVoteAverageStruct($voteAverage);
             $average['averange'] = $average['averange'] / 2;
             $promotion['sVoteAverange'] = $average;
