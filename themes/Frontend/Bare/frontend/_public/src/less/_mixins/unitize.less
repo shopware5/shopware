@@ -1,23 +1,27 @@
 /*
 Unitize mixin
 ================================================
-The unitize mixins provide all the benefits of relative units like em and rem without running calculations.
+The unitize mixins is a function to calculate values from `px-units` to the relative `rem-units` to provide all the benefits of units like em and rem without running any calculations by yourself.
 
 ######Syntax:
-`@value` = pixel-value<br/>
-`@basevalue` = default browser font-size (@remScaleFactor in most cases)<br/>
 `@property` = the property that should be unitized.
+`@value` = pixel-value<br/>
+`@baseValue` (optional) = default browser font-size (@remScaleFactor in most cases)<br/>
 
-######Examples
-Unitize font-size: `.unitize(@value, @baseValue: @remScaleFactor, @property: font-size)`<br/>
-Unitize height: `.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
-Unitize width: `.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
-Unitize max-height: `.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
-Unitize max-width `.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
-Unitize min-width: `.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
-Unitize padding: `.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-Unitize margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-Unitize variable: `.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
+#####Example Unitize mixin with custom property
+`.unitize(@property, @value);`<br/>
+`.unitize(font-size, 16);`
+
+######Specific built-in functions
+font-size: `.unitize(@value, @baseValue: @remScaleFactor, @property: font-size)`<br/>
+height: `.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
+width: `.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
+max-height: `.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
+max-width: `.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
+min-width: `.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
+padding: `.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+variable: `.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
 */
 
 	// @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
