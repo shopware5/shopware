@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Components\Compatibility;
 
@@ -11,6 +33,11 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Shop\Shop;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Compatibility
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class LegacyListingSubscriber implements SubscriberInterface
 {
     /**
@@ -49,16 +76,17 @@ class LegacyListingSubscriber implements SubscriberInterface
         );
     }
 
-    public function convertBlogMedia(\Enlight_Event_EventArgs $args)
+    /**
+     * @param \Enlight_Controller_ActionEventArgs $args
+     */
+    public function convertBlogMedia(\Enlight_Controller_ActionEventArgs $args)
     {
         $controller = $args->getSubject();
         if ($controller->Request()->getActionName() !== 'detail') {
             return;
         }
 
-        /**@var $shop Shop */
-        $shop = $this->container->get('shop');
-        if ($shop->getTemplate()->getVersion() >= 3) {
+        if (!$this->isLegacyTemplate()) {
             return;
         }
 
@@ -89,9 +117,7 @@ class LegacyListingSubscriber implements SubscriberInterface
     {
         $data = $args->getReturn();
 
-        /**@var $shop Shop */
-        $shop = $this->container->get('shop');
-        if ($shop->getTemplate()->getVersion() >= 3) {
+        if (!$this->isLegacyTemplate()) {
             return $data;
         }
 
@@ -113,23 +139,19 @@ class LegacyListingSubscriber implements SubscriberInterface
             return;
         }
 
-        /**@var $shop Shop */
-        $shop = $this->container->get('shop');
-        if ($shop->getTemplate()->getVersion() >= 3) {
+        if (!$this->isLegacyTemplate()) {
             return;
         }
 
-        return $controller->forward('index');
+        $controller->forward('index');
     }
 
     /**
-     * @param \Enlight_Controller_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      */
-    public function convertListing(\Enlight_Controller_EventArgs $args)
+    public function convertListing(\Enlight_Controller_ActionEventArgs $args)
     {
-        /**@var $shop Shop */
-        $shop = $this->container->get('shop');
-        if ($shop->getTemplate()->getVersion() >= 3) {
+        if (!$this->isLegacyTemplate()) {
             return;
         }
 
@@ -153,7 +175,11 @@ class LegacyListingSubscriber implements SubscriberInterface
         $view->assign($facets);
     }
 
-    private function getCategoryConfig(\Enlight_Controller_Request_RequestHttp $request)
+    /**
+     * @param \Enlight_Controller_Request_Request $request
+     * @return array
+     */
+    private function getCategoryConfig(\Enlight_Controller_Request_Request $request)
     {
         return array(
             'sSort' => $request->getParam('sSort', 0),
@@ -170,11 +196,11 @@ class LegacyListingSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param $shortParameters
-     * @param $config
+     * @param array $shortParameters
+     * @param array $config
      * @return array
      */
-    private function getFilteredCategoryParams($shortParameters, $config)
+    private function getFilteredCategoryParams(array $shortParameters, array $config)
     {
         $params = $this->getListingLinkParameters($config);
 
@@ -233,10 +259,10 @@ class LegacyListingSubscriber implements SubscriberInterface
      * Helper function which returns all category listing configurations
      * which are required for the listing links like "add filter", "next page", ...
      *
-     * @param $config
+     * @param array $config
      * @return array
      */
-    private function getListingLinkParameters($config)
+    private function getListingLinkParameters(array $config)
     {
         $params = array();
 
@@ -290,7 +316,7 @@ class LegacyListingSubscriber implements SubscriberInterface
      * a field "markup" if the page is currently selected and a field
      * "link" which contains a link to change the page.
      *
-     * @param $totalCount
+     * @param int $totalCount
      * @param $config
      * @return array
      */
@@ -431,7 +457,13 @@ class LegacyListingSubscriber implements SubscriberInterface
         return array_slice($data, 0, $limit);
     }
 
-    private function getActiveListingSupplier($suppliers, $config)
+    /**
+     * @param array $suppliers
+     * @param array $config
+     * @return array
+     *
+     */
+    private function getActiveListingSupplier(array $suppliers, array $config)
     {
         if (!$config['sSupplier']) {
             return array();
@@ -516,9 +548,6 @@ class LegacyListingSubscriber implements SubscriberInterface
         /** @var $mapper \Shopware\Components\QueryAliasMapper  */
         $mapper = Shopware()->Container()->get('query_alias_mapper');
 
-        $shortAliasFilterProperties = $mapper->getShortAlias('sFilterProperties');
-
-
         $params = $this->getListingLinkParameters($config);
 
         $grouped = array();
@@ -568,16 +597,9 @@ class LegacyListingSubscriber implements SubscriberInterface
                 if ($group['active']) {
                     $removeOptions = array_diff($filteredOptions, $activeGroupOptions);
 
-                    if(!is_null($shortAliasFilterProperties)) {
-                        $filterParams = array(
-                            'sFilterProperties' => implode('|', $removeOptions),
-                            $shortAliasFilterProperties => implode('|', $removeOptions)
-                        );
-                    } else {
-                        $filterParams = array(
-                            'sFilterProperties' => implode('|', $removeOptions)
-                        );
-
+                    $filterParams['sFilterProperties'] = implode('|', $removeOptions);
+                    if ($shortAlias = $mapper->getShortAlias('sFilterProperties')) {
+                        $filterParams[$shortAlias] = implode('|', $removeOptions);
                     }
 
                     $params = array_merge(
@@ -618,5 +640,16 @@ class LegacyListingSubscriber implements SubscriberInterface
         );
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isLegacyTemplate()
+    {
+        /**@var $shop Shop */
+        $shop = $this->container->get('shop');
+
+        return $shop->getTemplate()->getVersion() < 3;
     }
 }
