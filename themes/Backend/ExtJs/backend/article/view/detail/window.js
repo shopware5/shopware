@@ -124,6 +124,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         crossSellingTab:'{s name=cross_selling_tab}Cross-Selling{/s}',
         esdTab:'{s name=esd_tab}ESD{/s}',
         statisticTab:'{s name=statistic_tab}Statistics{/s}',
+        resourcesTab: '{s name=resources_tab}Resources{/s}',
         save:'{s name=save_button}Save article{/s}',
         cancel:'{s name=cancel_button}Cancel{/s}',
         categoryNotice:'{s name=category/category_notice}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
@@ -292,6 +293,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             }
         });
 
+        me.resourcesTab = Ext.create('Ext.form.Panel', {
+            title: me.snippets.resourcesTab,
+            name: 'resources-tab',
+            disabled: true,
+            autoScroll: true,
+            bodyPadding: 10
+        });
+
         return me.mainTab = Ext.create('Ext.tab.Panel', {
             name: 'main-tab-panel',
             items: [
@@ -300,7 +309,8 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.imageTab,
                 me.variantTab,
                 me.esdTab,
-                me.statisticTab
+                me.statisticTab,
+                me.resourcesTab
             ]
         });
     },
@@ -832,6 +842,23 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         return [ chart, list ];
     },
 
+    /**
+     * Creates the resources tab that contains the additional links
+     */
+    createResourcesTab: function() {
+        var me = this;
+
+        me.resourcesLinks = Ext.create('Shopware.apps.Article.view.resources.Links', {
+            article: me.article
+        });
+
+        me.resourcesDownloads = Ext.create('Shopware.apps.Article.view.resources.Downloads', {
+            article: me.article
+        });
+
+        return [ me.resourcesLinks, me.resourcesDownloads ]
+    },
+
     onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
@@ -856,6 +883,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.statisticTab.add(me.createStatisticTab());
         me.statisticTab.setDisabled(me.article.get('id') === null);
+
+        me.resourcesTab.add(me.createResourcesTab());
+        me.resourcesTab.setDisabled(false);
 
         me.variantListing.customerGroupStore = stores['customerGroups'];
 
