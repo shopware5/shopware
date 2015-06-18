@@ -94,7 +94,17 @@ Ext.define('Shopware.apps.Order', {
      * Array of stores to require from AppName.store namespace.
      * @array
      */
-    stores:[ 'OrderHistory', 'Order', 'Voucher', 'DocType','Configuration', 'Batch', 'Tax',  'DetailBatch', 'ListBatch' ],
+    stores:[
+        'OrderHistory',
+        'Order',
+        'Voucher',
+        'DocType',
+        'Configuration',
+        'Batch',
+        'Tax',
+        'DetailBatch',
+        'ListBatch'
+    ],
 
     /**
      * Array of models to require from AppName.model namespace.
