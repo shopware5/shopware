@@ -112,15 +112,19 @@ class sMarketing
         }
 
         $sql = "
-            SELECT STRAIGHT_JOIN
-                 lastArticles.articleID as id,
+            SELECT
                  similarShown.viewed as hits,
+                 similarShown.related_article_id as id,
                  detail.ordernumber as `number`
 
-            FROM s_articles_similar_shown_ro as similarShown FORCE INDEX (viewed)
+            FROM s_articles_similar_shown_ro as similarShown
 
-              INNER JOIN s_emarketing_lastarticles as lastArticles
-                ON  lastArticles.articleID = similarShown.related_article_id
+              INNER JOIN s_articles as a
+                ON  a.id = similarShown.related_article_id
+                AND a.active = 1
+
+              INNER JOIN s_articles_details as detail
+                ON detail.id = a.main_detail_id
 
               INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = similarShown.related_article_id
@@ -129,13 +133,6 @@ class sMarketing
               INNER JOIN s_categories c
                 ON  c.id = ac.categoryID
                 AND c.active = 1
-
-              INNER JOIN s_articles as a
-                ON  a.id = similarShown.related_article_id
-                AND a.active = 1
-
-              INNER JOIN s_articles_details as detail
-                ON detail.id = a.main_detail_id
 
               LEFT JOIN s_articles_avoid_customergroups ag
                 ON  ag.articleID = a.id
@@ -149,7 +146,6 @@ class sMarketing
             GROUP BY similarShown.viewed, similarShown.related_article_id
             ORDER BY similarShown.viewed DESC, similarShown.related_article_id DESC
             LIMIT $limit";
-
 
         $similarShownArticles = Shopware()->Db()->fetchAll($sql, array(
             'articleId'       => (int) $articleId,
@@ -218,7 +214,6 @@ class sMarketing
             'categoryId' => (int) $this->categoryId,
             'customerGroupId' => (int) $this->customerGroupId
         ));
-
 
         Shopware()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', array(
             'subject'  => $this,
