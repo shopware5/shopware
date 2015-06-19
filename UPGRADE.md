@@ -26,6 +26,7 @@ In this document you will find a changelog of the important changes related to t
 * Changed event listener alias from `article-detail-window article-sidebar-option` to `article-detail-window article-actions-toolbar` in `Shopware.apps.Article.controller.Detail`
 * Removed `article-sidebar-option` object in `Shopware.apps.Article.view.detail.Sidebar`
 * Removed `detail.sidebar.Option` from `views` array in `Shopware.apps.Article`
+* Removed `Shopware.apps.Article.view.detail.sidebar.Option` backend component
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
