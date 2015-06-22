@@ -440,7 +440,6 @@
             me.$bannerElements = me.$elements.find(me.opts.bannerElSelector);
             me.$videoElements = me.$elements.find(me.opts.videoElSelector);
             me.$productSliderElements = me.$elements.find('*[data-product-slider="true"]');
-            me.$imageSliderElements = me.$elements.find('*[data-image-slider="true"]');
 
             me.remSpacing = ~~me.opts.cellSpacing / 16;
 
@@ -476,13 +475,8 @@
                 $(item).emotionVideo();
             });
 
-            $.each(me.$productSliderElements, function(index, item){
-                StateManager.updatePlugin($(item), 'productSlider');
-            });
-
-            $.each(me.$imageSliderElements, function(index, item){
-                StateManager.updatePlugin($(item), 'imageSlider');
-            });
+            StateManager.updatePlugin('*[data-product-slider="true"]', 'productSlider');
+            StateManager.updatePlugin('*[data-image-slider="true"]', 'imageSlider');
 
             window.picturefill();
 
