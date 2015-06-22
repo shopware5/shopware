@@ -61,8 +61,12 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
         convertOrder: {
             title: '{s name=convertOrder/title}Convert order?{/s}',
             message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
-            successTitle: '{s name=convertOrderSuccess/tile}Order converted{/s}',
-            successMessage: '{s name=convertOrderSuccess/message}The order was converted. Do you want to open this order now?{/s}'
+            refreshInStockTitle: '{s name=convertOrder/refreshInStockTitle}Refresh stocks{/s}',
+            refreshInStockMessage: '{s name=convertOrder/refreshInStockMessage}Do you want to refresh the stocks?{/s}',
+            successTitle: '{s name=convertOrderSuccess/title}Order converted{/s}',
+            successMessage: '{s name=convertOrderSuccess/message}Converted the order successfully.{/s}',
+            withInStockSuccessMessage: '{s name=convertOrderSuccess/withInStockMessage}Converted the order and refreshed the in stock successfully.{/s}',
+            showOrderMessage: '{s name=convertOrderSuccess/showOrderMessage}The order was converted. Do you want to open this order now?{/s}'
         }
     },
 
@@ -302,39 +306,66 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
      * @param record
      */
     onConvertOrder: function(record) {
-        var me = this,
-            orderGrid = me.getOrderGrid(),
-            orderStore = orderGrid.getStore();
+        var me = this;
 
+        //Confirm message to ask the user if he is sure to convert the order
         Ext.MessageBox.confirm(me.snippets.convertOrder.title, me.snippets.convertOrder.message, function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
 
-            // do the actual request to convert he order
-            Ext.Ajax.request({
-                url: '{url controller=CanceledOrder action="convertOrder"}',
-                method: 'POST',
-                params: {
-                    orderId: record.get('id')
-                },
-                success: function(response) {
-                    var status = Ext.decode(response.responseText);
-                    if (status.success) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.convertOrder.successTitle);
-                        orderStore.reload();
-                        Ext.MessageBox.confirm(me.snippets.convertOrder.successTitle, me.snippets.convertOrder.successMessage, function (response) {
-                            if ( response !== 'yes' ) {
-                                return;
-                            }
-                            me.onOpenOrder(record);
-                        });
-                    } else {
-                        Shopware.Notification.createGrowlMessage('{s name=convertError}Order was not converted{/s}', status.message);
-                    }
+            //Confirm message to refresh the stock of for the articles in the converted order, if "no" the order will be created
+            //but the stock will not be refreshed
+            Ext.MessageBox.confirm(me.snippets.convertOrder.refreshInStockTitle, me.snippets.convertOrder.refreshInStockMessage, function (responseInStock) {
+                if ( responseInStock === 'yes' ) {
+                    me.convertOrderRequest(record, true);
+                } else {
+                    me.convertOrderRequest(record, false);
                 }
-            });
 
+            });
+        });
+    },
+
+    /**
+     * sends the request to convert the order
+     *
+     * @param record
+     * @param shouldRefreshInStock
+     */
+    convertOrderRequest: function(record, shouldRefreshInStock) {
+        var me = this,
+            orderGrid = me.getOrderGrid(),
+            orderStore = orderGrid.getStore();
+
+        // do the actual request to convert the order
+        Ext.Ajax.request({
+            url: '{url controller=CanceledOrder action="convertOrder"}',
+            method: 'POST',
+            params: {
+                orderId: record.get('id'),
+                refreshInStock: shouldRefreshInStock
+            },
+            success: function(response) {
+                var status = Ext.decode(response.responseText);
+                if (status.success) {
+                    if (shouldRefreshInStock) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.convertOrder.successTitle, me.snippets.convertOrder.withInStockSuccessMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage(me.snippets.convertOrder.successTitle, me.snippets.convertOrder.successMessage);
+                    }
+
+                    orderStore.reload();
+                    Ext.MessageBox.confirm(me.snippets.convertOrder.successTitle, me.snippets.convertOrder.showOrderMessage, function (response) {
+                        if ( response !== 'yes' ) {
+                            return;
+                        }
+                        me.onOpenOrder(record);
+                    });
+                } else {
+                    Shopware.Notification.createGrowlMessage('{s name=convertError}Order was not converted{/s}', status.message);
+                }
+            }
         });
     },
 
