@@ -577,7 +577,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $testData = array(
             'images' => array(
                 array(
-                    'link' => 'https://de.shopware.com/media/image/home-teaser-store.png'
+                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png'
                 )
             ),
         );
