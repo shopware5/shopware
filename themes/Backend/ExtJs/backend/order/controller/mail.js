@@ -91,16 +91,21 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
      */
     onSendMail: function(form) {
         var me = this,
+            win = me.getMailWindow(),
             snippets = me.snippets,
             mail = form.getRecord(),
             rawData,
             message;
+
+        win.setLoading(true);
 
         form.getForm().updateRecord(mail);
         mail.setDirty();
 
         mail.save({
             callback: function(record, operation) {
+                win.setLoading(false);
+
                 rawData = record.getProxy().getReader().rawData;
 
                 if (!operation.success) {
@@ -112,7 +117,7 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
                 message = Ext.String.format(snippets.successMessage, mail.get('to'));
                 Shopware.Notification.createGrowlMessage(snippets.successTitle, message, snippets.growlMessage);
 
-                me.getMailWindow().destroy();
+                win.destroy();
             }
         });
     }
