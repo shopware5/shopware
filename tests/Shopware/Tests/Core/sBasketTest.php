@@ -1971,17 +1971,17 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Get random non-esd article and add it to the basket
-        $randomNoESDArticle = $this->db->fetchRow(
-            'SELECT detail.ordernumber
+        $randomNoESDArticle = $this->db->fetchRow('
+            SELECT detail.ordernumber
             FROM s_articles_details detail
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
             WHERE detail.active = 1
-            AND esd.id IS NULL
-            ORDER BY RAND() LIMIT 1'
-        );
+            AND esd.id IS NULL LIMIT 1
+        ');
+
         $this->assertGreaterThan(0, $this->module->sAddArticle($randomNoESDArticle['ordernumber'], 1));
 
         $this->assertFalse($this->module->sCheckForESD());
