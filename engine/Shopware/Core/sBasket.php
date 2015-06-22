@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 use Shopware\Bundle\StoreFrontBundle;
 
 /**
@@ -1215,7 +1214,6 @@ class sBasket
         $promotions = array();
         /**@var $product ListProduct */
         foreach ($products as $product) {
-            $average = null;
             $note = $notes[$product->getNumber()];
 
             $promotions[] = $this->convertListProductToNote($product, $note);
