@@ -662,7 +662,6 @@
          * @returns {StateManager}
          */
         updatePlugin: function (selector, pluginName) {
-
             var me = this,
                 state = me._currentState,
                 pluginConfigs = me._plugins[state][selector] || {},
@@ -703,12 +702,32 @@
          */
         _initPlugin: function (selector, pluginName) {
             var me = this,
-                $el = $(selector),
+                $el = $(selector);
+
+            if ($el.length > 1) {
+                $.each($el, function (index, item) {
+                    me._initSinglePlugin($(item), selector, pluginName);
+                })
+            } else {
+                me._initSinglePlugin($el, selector, pluginName);
+            }
+
+        },
+
+        /**
+         * @private
+         * @method _initSinglePlugin
+         * @param {Object} element
+         * @param {String} selector
+         * @param {String} pluginName
+         */
+        _initSinglePlugin: function (element, selector, pluginName) {
+            var me = this,
                 currentConfig = me._getPluginConfig(me._currentState, selector, pluginName),
-                plugin = $el.data('plugin_' + pluginName);
+                plugin = element.data('plugin_' + pluginName);
 
             if (!plugin) {
-                $el[pluginName](currentConfig);
+                element[pluginName](currentConfig);
                 return;
             }
 
@@ -719,9 +738,9 @@
                 return;
             }
 
-            me.destroyPlugin($el, pluginName);
+            me.destroyPlugin(element, pluginName);
 
-            $el[pluginName](currentConfig);
+            element[pluginName](currentConfig);
         },
 
         /**
