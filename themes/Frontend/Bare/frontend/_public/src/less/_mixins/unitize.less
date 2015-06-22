@@ -16,14 +16,14 @@ The unitize mixins is a function to calculate values from `px-units` to the rela
 In addition to the general `.unitize()` mixin, shopware contains specific mixins to quickly calculate values which (for example) have more than one property.<br/>
 <br/>
 
-`.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
-`.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
-`.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
-`.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
-`.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
-`.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-`.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-`.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-height(@value)`<br/>
+`.unitize-width(@value)`<br/>
+`.unitize-max-height(@value)`<br/>
+`.unitize-max-width(@value)`<br/>
+`.unitize-min-width(@value)`<br/>
+`.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
+`.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue)`<br/>
+`.unitize-variable(@value)`<br/>
 */
 
 	// @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
