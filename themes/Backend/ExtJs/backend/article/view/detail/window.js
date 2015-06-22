@@ -274,6 +274,13 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             } : { }
         });
 
+        me.crossSellingTab = Ext.create('Ext.form.Panel', {
+            title: me.snippets.crossSellingTab,
+            disabled: true,
+            layout: 'fit',
+            deferredRender: true
+        });
+
         me.esdTab = Ext.create('Ext.container.Container', {
             title: me.snippets.esdTab,
             disabled: true,
@@ -308,6 +315,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.categoryTab,
                 me.imageTab,
                 me.variantTab,
+                me.crossSellingTab,
                 me.esdTab,
                 me.statisticTab,
                 me.resourcesTab
@@ -784,6 +792,15 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
     },
 
+    createCrossselingTab: function() {
+        var me = this;
+
+        return Ext.create('Shopware.apps.Article.view.crossselling.Tab', {
+            name: 'crossselling',
+            article: me.article
+        });
+    },
+
     /**
      * Creates the esd tab which contains the configuration for the esd options.
      * @return Ext.container.Container
@@ -877,6 +894,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.imageTab.setDisabled(false);
 
         me.variantTab.add(me.createVariantTab());
+
+        me.crossSellingTab.add(me.createCrossselingTab());
+        me.crossSellingTab.setDisabled(false);
 
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));

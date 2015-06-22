@@ -65,6 +65,17 @@ In this document you will find a changelog of the important changes related to t
 * Removed `detail.sidebar.Option` from `views` array in `Shopware.apps.Article`
 * Removed `Shopware.apps.Article.view.detail.sidebar.Option` backend component
 * Removed `onTranslate` method from `Shopware.apps.Article.controller.Detail`
+* Removed unused snippets in `snippets/backend/article/view/main.ini`:
+    * detail/sidebar/accessory/article_number`
+    * `detail/sidebar/accessory/article_search`
+    * `detail/sidebar/accessory/assignment_box`
+    * `detail/sidebar/accessory/assignment_field`
+    * `detail/sidebar/accessory/bundle_box`
+    * `detail/sidebar/accessory/bundle_field`
+    * `detail/sidebar/accessory/delete`
+    * `detail/sidebar/accessory/edit`
+    * `detail/sidebar/accessory/name`
+    * `detail/sidebar/accessory/number`
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent

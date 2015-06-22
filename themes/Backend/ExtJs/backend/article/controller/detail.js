@@ -456,10 +456,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         mainWindow.down('article-resources-downloads grid[name=download-listing]').reconfigure(article.getDownload());
 
         //reconfigure the article accessory articles listing
-        mainWindow.down('article-sidebar article-sidebar-accessory grid[name=accessory-listing]').reconfigure(article.getAccessory());
+        mainWindow.down('article-crossselling-tab grid[name=accessory-listing]').reconfigure(article.getAccessory());
 
         //reconfigure the article similar articles listing
-        mainWindow.down('article-sidebar article-sidebar-similar grid[name=similar-listing]').reconfigure(article.getSimilar());
+        mainWindow.down('article-crossselling-tab grid[name=similar-listing]').reconfigure(article.getSimilar());
 
         //reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());
@@ -694,93 +694,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             store = grid.getStore();
 
         if (store instanceof Ext.data.Store && record instanceof Ext.data.Model) {
-            store.remove(record);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to add a similar article
-     *
-     * @event
-     */
-    onAddSimilarArticle: function(form, grid, searchField) {
-        var me = this,
-            selected = searchField.returnRecord,
-            store = grid.getStore(),
-            values = form.getValues();
-
-        if (!form.getForm().isValid() || !(selected instanceof Ext.data.Model)) {
-            return false;
-        }
-        var model = Ext.create('Shopware.apps.Article.model.Similar', values);
-        model.set('id', selected.get('id'));
-        model.set('name', selected.get('name'));
-        model.set('number', selected.get('number'));
-
-        //check if the article is already assigned
-        var exist = store.getById(model.get('id'));
-        if (!(exist instanceof Ext.data.Model)) {
-            store.add(model);
-            form.getForm().reset();
-        } else {
-            Shopware.Notification.createGrowlMessage(me.snippets.existTitle,  Ext.String.format(me.snippets.similar.exist, model.get('number')), me.snippets.growlMessage);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to remove an assigned similar article
-     *
-     * @event
-     */
-    onRemoveSimilarArticle: function(grid, record) {
-        var me = this,
-            store = grid.getStore();
-
-        if (record instanceof Ext.data.Model) {
-            store.remove(record);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to add a similar article
-     *
-     * @event
-     */
-    onAddAccessoryArticle: function(form, grid, searchField) {
-        var me = this,
-            selected = searchField.returnRecord,
-            store = grid.getStore(),
-            values = form.getValues();
-
-        if (!form.getForm().isValid() || !(selected instanceof Ext.data.Model)) {
-            return false;
-        }
-        var model = Ext.create('Shopware.apps.Article.model.Accessory', values);
-        model.set('id', selected.get('id'));
-        model.set('name', selected.get('name'));
-        model.set('number', selected.get('number'));
-
-        //check if the article is already assigned
-        var exist = store.getById(model.get('id'));
-        if (!(exist instanceof Ext.data.Model)) {
-            store.add(model);
-            form.getForm().reset();
-        } else {
-            Shopware.Notification.createGrowlMessage(me.snippets.existTitle,  Ext.String.format(me.snippets.similar.exist, model.get('number')), me.snippets.growlMessage);
-        }
-
-    },
-
-    /**
-     * Event will be fired when the user want to remove an assigned similar article
-     *
-     * @event
-     */
-    onRemoveAccessoryArticle: function(grid, record) {
-        var me = this,
-            store = grid.getStore();
-
-        if (record instanceof Ext.data.Model) {
             store.remove(record);
         }
     },
