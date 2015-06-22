@@ -4,24 +4,26 @@ Unitize mixin
 The unitize mixins is a function to calculate values from `px-units` to the relative `rem-units` to provide all the benefits of units like em and rem without running any calculations by yourself.
 
 ######Syntax:
-`@property` = the property that should be unitized.
+`@property` = the property that should be unitized.<br/>
 `@value` = pixel-value<br/>
 `@baseValue` (optional) = default browser font-size (@remScaleFactor in most cases)<br/>
 
-#####Example Unitize mixin with custom property
+######Example Unitize mixin with custom property
 `.unitize(@property, @value);`<br/>
 `.unitize(font-size, 16);`
 
 ######Specific built-in functions
-font-size: `.unitize(@value, @baseValue: @remScaleFactor, @property: font-size)`<br/>
-height: `.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
-width: `.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
-max-height: `.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
-max-width: `.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
-min-width: `.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
-padding: `.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-margin: `.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
-variable: `.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
+In addition to the general `.unitize()` mixin, shopware contains specific mixins to quickly calculate values which (for example) have more than one property.<br/>
+<br/>
+
+`.unitize-height(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-width(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-max-height(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-max-width(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-min-width(@value, @baseValue: @remScaleFactor)`<br/>
+`.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+`.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor)`<br/>
+`.unitize-variable(@value, @baseValue: @remScaleFactor)`<br/>
 */
 
 	// @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
