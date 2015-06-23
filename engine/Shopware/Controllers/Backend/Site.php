@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         if (!empty($nodeName)) {
             $sites = $this->getSiteRepository()
                 ->getSitesByNodeNameQuery($nodeName)
-                ->getResult();
+                ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $nodes = array();
 
@@ -170,42 +170,25 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getSiteNode($idPrefix, $site)
     {
         //set icons
-        if ($site->getLink()) {
+        if ($site['link']) {
             $iconCls = 'sprite-chain-small';
         } else {
             $iconCls = 'sprite-blue-document-text';
         }
 
         //build the structure
-        $node = array(
-            'id' => $idPrefix . $site->getId(),
-            'text' => $site->getDescription() . "(" . $site->getId() . ")",
-            'description' => $site->getDescription(),
-            'helperId' => $site->getId(),
-            'tpl1variable' => $site->getTpl1Variable(),
-            'tpl2variable' => $site->getTpl2Variable(),
-            'tpl3variable' => $site->getTpl3Variable(),
-            'tpl1path' => $site->getTpl1Path(),
-            'tpl2path' => $site->getTpl2Path(),
-            'tpl3path' => $site->getTpl3Path(),
-            'grouping' => $site->getGrouping(),
-            'position' => $site->getPosition(),
-            'pageTitle' => $site->getPageTitle(),
-            'metaKeywords' => $site->getMetaKeywords(),
-            'metaDescription' => $site->getMetaDescription(),
-            'html' => $site->getHtml(),
-            'link' => $site->getLink(),
-            'target' => $site->getTarget(),
-            'leaf' => true,
-            'iconCls' => $iconCls,
-            'shopIds' => $site->getExplodedShopIds()
-        );
+        $node = $site;
+        $node['id'] = $idPrefix . $site['id'];
+        $node['text'] = $site['description'] . "(" . $site['id'] . ")";
+        $node['helperId'] = $site['id'];
+        $node['iconCls'] = $iconCls;
+        $node['leaf'] = true;
 
         //if the site has children, append them
-        if ($site->getChildren()->count() > 0) {
+        if (count($site['children']) > 0) {
             $children = array();
-            foreach ($site->getChildren() as $child) {
-                $children[] = $this->getSiteNode($idPrefix . $site->getId() . '_', $child);
+            foreach ($site['children'] as $child) {
+                $children[] = $this->getSiteNode($idPrefix . $site['id'] . '_', $child);
             }
             $node['nodes'] = $children;
             $node['leaf'] = false;
@@ -386,6 +369,10 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //this was a javascript array
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
+
+        if (!empty($params['attribute'][0])) {
+            $params['attribute'] = $params['attribute'][0];
+        }
 
         $params['shopIds'] = array_filter($params['shopIds']) ? '|' . implode('|', $params['shopIds']) . '|' : null;
 

@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Site.controller.Form', {
 			record = form.getRecord(),
             model;
 
-        record.data = Ext.Object.merge(record.data, values);
+        form.getForm().updateRecord(record);
 
         model = record;
 
