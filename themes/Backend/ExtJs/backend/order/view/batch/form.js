@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      * @object
      */
     snippets:{
-        info: '{s name=settings/info}Caution: If you have selected orders with an already existing receipt, these will be regenerated. Click on print receipts only if all selected orders have already been transformed into receipts.{/s}',
+        info: '{s name=settings/info}Caution: If you have selected orders with an already existing receipt, these will be regenerated.{/s}',
         mode: {
             label: '{s name=settings/mode}Mode{/s}',
             override: '{s name=settings/override}Recreate all documents{/s}',
@@ -112,9 +112,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
         me.callParent(arguments);
     },
 
-    /**
-     *
-     */
     registerEvents: function() {
         this.addEvents(
 
@@ -142,20 +139,13 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
         });
     },
 
-    /**
-     *
-     */
     createSettingsContainer: function() {
-        var me = this, flex = 0;
-
-        if (me.mode === 'single') {
-            flex = 1;
-        }
+        var me = this;
 
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.settingsFieldSetLabel,
             layout: 'anchor',
-            flex: flex,
+            flex: 1,
             defaults: {
                 labelWidth: 150,
                 xtype: 'combobox',
