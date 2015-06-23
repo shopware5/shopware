@@ -1278,7 +1278,7 @@ class Repository
                     "SUM(IF(orders.language=" . $shopId . ", invoice_amount / currencyFactor, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
-                    "IF(orders.language=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
+                    "SUM(orders.language=" . $shopId . ") as orderCount" . $shopId
                 );
             }
         }
