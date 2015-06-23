@@ -664,10 +664,10 @@ jQuery(document).ready(function ($) {
         ajaxValidation: function (action, data, $form) {
 
             $.ajax({
-                'data': 'action=' + action + '&' + data,
+                'data': data,
                 'type': 'post',
                 'dataType': 'json',
-                'url': $.controller.ajax_validate,
+                'url': $.controller.ajax_validate + '?action=' + action,
                 'success': function (result) {
 
                     $.each(result.error_flags, function (key, val) {
