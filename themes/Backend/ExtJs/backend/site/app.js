@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Site', {
      * Required models for sub-application
      * @array
      */
-    models: [ 'Nodes', 'Groups', 'Selected' ],
+    models: [ 'Nodes', 'Groups', 'Selected', 'Attribute' ],
 
     /**
      * Returns the main application window for this is expected
