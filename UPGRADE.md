@@ -10,6 +10,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed table `s_emarketing_vouchers_cashed`.
 * 'Shopware.form.field.ArticleSearch' search using the "variants" option is deprecated. Use "configurator" to load configurator articles or "searchVariants" to load article variants with the correct additional text and ordernumber.
 * Added column `added` to the table `s_campaigns_mailaddresses` which holds the date of the newsletter registration. It will be displayed in the newsletter administration under "Recipients" as the "Double-Opt-In date" column.
+* Removed the expert layout and the corresponding mail form inside the batch processing window of the order backend module.
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
