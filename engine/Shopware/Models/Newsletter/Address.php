@@ -125,7 +125,7 @@ class Address extends LazyFetchModelEntity
      * The Double-Opt-In date
      *
      * @var \DateTime $added
-     * @ORM\Column(name="added", type="datetime", nullable=false)
+     * @ORM\Column(name="added", type="datetime", nullable=true)
      */
     private $added;
 
