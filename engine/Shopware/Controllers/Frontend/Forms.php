@@ -88,19 +88,20 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     private function handleFormPost($formId)
     {
-        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
-            $this->commitForm();
-
-            $this->redirect(
-                array(
-                    'controller' => 'ticket',
-                    'action' => 'index',
-                    'sFid' => $formId,
-                    'success' => 1
-                )
-            );
+        if (count($this->_errors) || empty($this->Request()->Submit)) {
             return;
         }
+
+        $this->commitForm();
+
+        $this->redirect(
+            array(
+                'controller' => 'ticket',
+                'action' => 'index',
+                'sFid' => $formId,
+                'success' => 1
+            )
+        );
     }
 
     /**
@@ -269,9 +270,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     public function commitForm()
     {
-        $mail = Shopware()->System()->sMailer;
-        $template = Shopware()->Config()->Templates->sSUPPORT;
-        $mail->IsHTML($template['ishtml']);
+        /** @var Enlight_Components_Mail $mail */
+        $mail = $this->get('mail');
 
         //Email field available check
         foreach ($this->_elements as $element) {
@@ -282,36 +282,32 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if (!empty($postEmail)) {
-            $mail->From = $postEmail;
-        } else {
-            $mail->From = Shopware()->Config()->Mail;
+            $mail->setReplyTo($postEmail);
         }
 
         $content = $this->View()->sSupport;
 
-        $mail->FromName = $mail->From;
-        $mail->Subject  = $content["email_subject"];
-        $mail->Body     = $content["email_template"];
-
+        $mailBody = $content["email_template"];
         foreach ($this->_postData as $key => $value) {
             if ($this->_elements[$key]['typ'] == "text2") {
                 $names = explode(";", $this->_elements[$key]['name']);
-
-                $mail->Body = str_replace("{sVars." . $names[0] . "}", $value[0], $mail->Body);
-                $mail->Body = str_replace("{sVars." . $names[1] . "}", $value[1], $mail->Body);
+                $mailBody = str_replace("{sVars." . $names[0] . "}", $value[0], $mailBody);
+                $mailBody = str_replace("{sVars." . $names[1] . "}", $value[1], $mailBody);
             } else {
-                $mail->Body = str_replace("{sVars." . $this->_elements[$key]['name'] . "}", $value, $mail->Body);
+                $mailBody = str_replace("{sVars." . $this->_elements[$key]['name'] . "}", $value, $mailBody);
             }
         }
 
-        $mail->Body = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mail->Body);
-        $mail->Body = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mail->Body);
-        $mail->Body = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mail->Body);
-        $mail->Body = strip_tags($mail->Body);
+        $mailBody = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mailBody);
+        $mailBody = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mailBody);
+        $mailBody = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mailBody);
+        $mailBody = strip_tags($mailBody);
 
-        $mail->ClearAddresses();
-
-        $mail->AddAddress($content["email"], "");
+        $mail->setFrom(Shopware()->Config()->Mail);
+        $mail->clearRecipients();
+        $mail->addTo($content["email"]);
+        $mail->setBodyText($mailBody);
+        $mail->setSubject($content["email_subject"]);
 
         $mail = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
