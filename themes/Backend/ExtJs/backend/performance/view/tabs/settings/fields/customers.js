@@ -94,7 +94,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         uncheckedValue: false,
                         inputValue: true
                     }
-                ]},
+                ]
+            },
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
@@ -112,7 +113,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
-                    },                    {
+                    },
+                    {
                         fieldLabel: '{s name=fieldset/customers/fieldset/alsobought/text/show}Show{/s}',
                         name: 'customer[similarViewedShow]',
                         xtype: 'checkbox',
@@ -153,7 +155,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Customers', {
             }
         ];
     }
-
-
 });
 //{/block}

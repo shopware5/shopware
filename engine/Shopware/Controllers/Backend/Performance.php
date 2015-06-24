@@ -276,7 +276,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 )
             ),
             'customer' => $this->genericConfigLoader(
-                array('alsoBoughtShow', 'similarViewedShow', 'similarRefreshStrategy', 'similarValidationTime', 'similarActive')
+                array(
+                    'alsoBoughtShow',
+                    'similarViewedShow',
+                    'similarRefreshStrategy',
+                    'similarValidationTime',
+                    'similarActive'
+                )
             ),
         );
     }
