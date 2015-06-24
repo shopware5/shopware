@@ -87,6 +87,13 @@ Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
     autoScroll: true,
 
     /**
+     * Defines if the component should have a border.
+     *
+     * @boolean
+     */
+    border: 0,
+
+    /**
      * System texts for the component.
      *
      * @object

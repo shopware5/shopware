@@ -240,7 +240,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createMainTabPanel: function() {
         var me = this, tooltip = '';
 
-
         if (me.subApp.splitViewActive) {
             tooltip = me.snippets.variantTabTooltip;
         }
@@ -281,6 +280,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             deferredRender: true
         });
 
+        me.propertiesTab = Ext.create('Ext.container.Container', {
+            disabled: true,
+            layout: 'fit',
+            name: 'properties-tab',
+            title: me.snippets.propertyTab,
+            items: [ me.createPropertiesFieldSet() ]
+        });
+
         me.esdTab = Ext.create('Ext.container.Container', {
             title: me.snippets.esdTab,
             disabled: true,
@@ -315,6 +322,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.categoryTab,
                 me.imageTab,
                 me.variantTab,
+                me.propertiesTab,
                 me.crossSellingTab,
                 me.esdTab,
                 me.statisticTab,
@@ -372,8 +380,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createDescriptionFieldSet(),
                 me.createMetaFieldSet(),
                 me.createBasePriceFieldSet(),
-                me.createSettingsFieldSet(),
-                me.createPropertiesFieldSet()
+                me.createSettingsFieldSet()
             ],
             dockedItems: [
                 me.createActionsToolbar()
@@ -381,17 +388,11 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
 
         return me.detailContainer = Ext.create('Ext.container.Container', {
-            layout: 'border',
+            layout: 'fit',
             name: 'main',
             title: me.snippets.formTab,
             items: [
-                me.detailForm,
-                {
-                    xtype: 'article-sidebar',
-                    region: 'east',
-                    article: me.article,
-                    shopStore: me.shopStore
-                }
+                me.detailForm
             ]
         });
     },
@@ -897,6 +898,8 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.crossSellingTab.add(me.createCrossselingTab());
         me.crossSellingTab.setDisabled(false);
+
+        me.propertiesTab.setDisabled(false);
 
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));

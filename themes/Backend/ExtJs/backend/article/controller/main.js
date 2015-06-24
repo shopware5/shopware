@@ -507,7 +507,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             });
 
             if(edit) {
-                detailCtrl.loadPropertyStore(article);
+                //detailCtrl.loadPropertyStore(article);
                 me.mainWindow.changeTitle();
             }
 

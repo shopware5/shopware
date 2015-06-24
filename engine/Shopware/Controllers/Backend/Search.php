@@ -49,7 +49,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         if (!empty($ids)) {
             $ids = json_decode($ids, true);
             $this->addIdsCondition($builder, $ids);
-        } else if ($id !== null) {
+        } else if (!empty($id)) {
             $this->addIdsCondition($builder, [$id]);
         } else {
             if (!empty($term)) {
@@ -117,10 +117,18 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 break;
 
             case 'Shopware\Models\Property\Value':
-                $query->andWhere('entity.optionId = :optionId')
-                    ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                if ($groupId = $this->Request()->getParam('groupId')) {
+                    $query->andWhere('entity.optionId = :optionId')
+                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                }
                 break;
 
+            case 'Shopware\Models\Property\Option':
+                if ($setId = $this->Request()->getParam('setId')) {
+                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
+                        ->setParameter(':setId', $setId);
+                }
+                break;
             case 'Shopware\Models\Category\Category':
                 $query->andWhere('entity.parent IS NOT NULL')
                     ->addOrderBy('entity.parentId')
@@ -139,10 +147,13 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function addSearchTermCondition($entity, $query, $term)
     {
         $fields = $this->getEntitySearchFields($entity);
+        $where = [];
         foreach ($fields as $field) {
             $field = 'entity.' . $field;
-            $query->orWhere($field . ' LIKE :search');
+            $where[] = $field . ' LIKE :search';
         }
+        $where = implode(' OR ', $where);
+        $query->andWhere('('.$where.')');
         $query->setParameter('search', '%' . $term . '%');
     }
 
