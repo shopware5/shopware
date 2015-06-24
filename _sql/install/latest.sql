@@ -5343,7 +5343,7 @@ CREATE TABLE IF NOT EXISTS `s_order_basket` (
   `userID` int(11) NOT NULL DEFAULT '0',
   `articlename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `articleID` int(11) NOT NULL DEFAULT '0',
-  `ordernumber` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `ordernumber` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `shippingfree` int(1) NOT NULL DEFAULT '0',
   `quantity` int(11) NOT NULL DEFAULT '0',
   `price` double NOT NULL DEFAULT '0',
