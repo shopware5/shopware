@@ -705,8 +705,8 @@
                 $el = $(selector);
 
             if ($el.length > 1) {
-                $.each($el, function (index, item) {
-                    me._initSinglePlugin($(item), selector, pluginName);
+                $.each($el, function () {
+                    me._initSinglePlugin($(this), selector, pluginName);
                 })
             } else {
                 me._initSinglePlugin($el, selector, pluginName);
