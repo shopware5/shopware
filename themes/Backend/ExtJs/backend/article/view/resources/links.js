@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
             ]
         });
 
-        return me.linkElements;
+        return [ me.linkElements ];
     },
 
     /**

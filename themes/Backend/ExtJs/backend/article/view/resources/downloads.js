@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
             ]
         });
 
-        return me.downloadElements;
+        return [ me.downloadElements ];
     },
 
     /**
