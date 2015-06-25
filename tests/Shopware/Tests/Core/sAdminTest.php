@@ -613,7 +613,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
         $this->assertContains(
-            'Bitte w&auml;hlen Sie ein Passwort welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
+            'Bitte w&auml;hlen Sie ein Passwort, welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
             $result['sErrorMessages']
         );
         $this->assertCount(2, $result['sErrorFlag']);
