@@ -189,6 +189,13 @@ class Repository extends ModelRepository
      */
     public function getCustomerDetailQueryBuilder($customerId)
     {
+        // sub query to select the canceledOrderAmount. This can't be done with another join condition
+        $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
+            ->from('Shopware\Models\Customer\Customer', 'customer2')
+            ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
+            ->where($subQueryBuilder->expr()->eq('customer2', $customerId));
+        
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
@@ -203,7 +210,7 @@ class Repository extends ModelRepository
             'shop.name as shopName',
             $builder->expr()->count('doneOrders.id') . ' as orderCount',
             'SUM(doneOrders.invoiceAmount) as amount',
-            'SUM(canceledOrders.id as canceledOrderAmount'
+            '('. $subQueryBuilder->getDQL(). ') as canceledOrderAmount'
         ));
         //join s_orders second time to display the count of canceled orders and the count and total amount of done orders
         $builder->from($this->getEntityName(), 'customer')
@@ -215,7 +222,6 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
-                ->leftJoin('customer.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('customer.attribute', 'attribute')
