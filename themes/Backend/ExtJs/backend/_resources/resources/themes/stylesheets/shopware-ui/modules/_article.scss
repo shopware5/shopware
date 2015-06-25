@@ -38,10 +38,10 @@
     		display: block;
     	}
 
-    	// Hide the translation globes here
-    	.#{$prefix}translation-globe {
-    		display: none !important;
-    	}
+        // Increase the margin of the TinyMCE translation globe icon
+        td[id^=tinymcefield] .#{$prefix}translation-globe {
+            margin: 8px;
+        }
 
     	// Increase the grid row height of the price grid
     	div[id^=article-price-grid].#{$prefix}grid-with-row-lines .#{$prefix}grid-cell-inner {

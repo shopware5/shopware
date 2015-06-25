@@ -138,8 +138,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             'article-detail-window article-actions-toolbar': {
                 articlePreview: me.onArticlePreview,
                 deleteArticle: me.onDeleteArticle,
-                duplicateArticle: me.onDuplicateArticle,
-                translateArticle: me.onTranslate
+                duplicateArticle: me.onDuplicateArticle
             },
             'article-prices-field-set': {
                 priceTabChanged: me.onPriceTabChanged,
@@ -566,17 +565,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             }
         });
 
-    },
-
-    /**
-     * Event listener function which fired when the user clicks the translate button.
-     * @param record
-     */
-    onTranslate: function(record) {
-        var me = this,
-            formPnl = me.getDetailForm();
-
-        formPnl.getPlugin('translation').onOpenTranslationWindow();
     },
 
     /**

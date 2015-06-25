@@ -120,13 +120,6 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
             'deleteArticle',
 
             /**
-             * Event will be fired when the user clicks the translate button
-             * @event
-             * @param [Ext.data.Model] - The article record
-             */
-            'translateArticle',
-
-            /**
              * Event will be fired when the user clicks the preview button
              * @event
              * @param [Ext.data.Model] - The article record
@@ -149,7 +142,6 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
         items.push({ xtype: 'tbspacer', width: 10 });
         items.push(me.createDuplicateButton());
         items.push(me.createDeleteButton());
-        items.push(me.createTranslateButton());
 
         return items;
     },
@@ -226,24 +218,6 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
         });
 
         return me.deleteButton;
-    },
-
-    /**
-     * Creates the translate button
-     * @returns Ext.button.Button
-     */
-    createTranslateButton: function() {
-        var me = this;
-
-        me.translateButton = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-globe-green',
-            text: me.snippets.translate,
-            handler: function() {
-                me.fireEvent('translateArticle', me.article);
-            }
-        });
-
-        return me.translateButton;
     },
 
     /**

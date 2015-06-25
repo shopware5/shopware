@@ -64,7 +64,8 @@ In this document you will find a changelog of the important changes related to t
 * Removed `article-sidebar-option` object in `Shopware.apps.Article.view.detail.Sidebar`
 * Removed `detail.sidebar.Option` from `views` array in `Shopware.apps.Article`
 * Removed `Shopware.apps.Article.view.detail.sidebar.Option` backend component
-    
+* Removed `onTranslate` method from `Shopware.apps.Article.controller.Detail`
+
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
 * Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
