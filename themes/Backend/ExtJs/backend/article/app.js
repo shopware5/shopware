@@ -72,8 +72,6 @@ Ext.define('Shopware.apps.Article', {
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
-        'detail.sidebar.Similar',
-        'detail.sidebar.Accessory',
         'category.Tree',
         'category.Seo',
         'category.List',
@@ -102,6 +100,8 @@ Ext.define('Shopware.apps.Article', {
         'esd.Serials',
         'statistics.List',
         'statistics.Chart',
+        'crossselling.Tab',
+        'crossselling.Base',
         'resources.Links',
         'resources.Downloads'
     ],
@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Article', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic' ]
+    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic', 'Crossselling' ]
 });
 //{/block}
 
