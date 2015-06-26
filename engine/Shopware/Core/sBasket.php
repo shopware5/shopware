@@ -2022,7 +2022,7 @@ class sBasket
         $totalAmountNet = 0;
         $totalCount = 0;
 
-        foreach ($getArticles as $key => $value) {
+        foreach (array_keys($getArticles) as $key) {
             $getArticles[$key] = $this->eventManager->filter(
                 'Shopware_Modules_Basket_GetBasket_FilterItemStart',
                 $getArticles[$key],
@@ -2061,7 +2061,7 @@ class sBasket
 
             // Get additional basket meta data for each product
             if ($getArticles[$key]["modus"] == 0) {
-                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($value['ordernumber']);
+                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($getArticles[$key]['ordernumber']);
 
                 if (empty($tempArticle)) {
                     $getArticles[$key]["additional_details"] = array("properties" => array());
@@ -2119,7 +2119,7 @@ class sBasket
             $price = $getArticles[$key]["price"];
             $netprice = $getArticles[$key]["netprice"];
 
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 $ticketResult = $this->db->fetchRow(
                     'SELECT vouchercode,taxconfig
                     FROM s_emarketing_vouchers
@@ -2145,7 +2145,7 @@ class sBasket
                 }
             }
 
-            $tax = $value["tax_rate"];
+            $tax = $getArticles[$key]["tax_rate"];
 
             // If shop is in net mode, we have to consider
             // the tax separately
@@ -2153,7 +2153,7 @@ class sBasket
                 ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
-                if (empty($value["modus"])) {
+                if (empty($getArticles[$key]["modus"])) {
                     $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
 
                     $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
@@ -2161,16 +2161,16 @@ class sBasket
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
                     }
-                } elseif ($value["modus"] == 3) {
+                } elseif ($getArticles[$key]["modus"] == 3) {
                     $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
                     // Basket discount
-                } elseif ($value["modus"] == 2) {
+                } elseif ($getArticles[$key]["modus"] == 2) {
                     $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
                     }
-                } elseif ($value["modus"] == 4 || $value["modus"] == 10) {
+                } elseif ($getArticles[$key]["modus"] == 4 || $getArticles[$key]["modus"] == 10) {
                     $getArticles[$key]["amountWithTax"] = round(1 * ($price / 100 * (100 + $tax)), 2);
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
@@ -2196,7 +2196,7 @@ class sBasket
             }
 
 
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 // Gutscheine
                 if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
                     $getArticles[$key]["amountnet"] = $quantity * round($price, 2);
@@ -2260,7 +2260,7 @@ class sBasket
             }
             // Links to details, basket
             $getArticles[$key]["linkDetails"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=" . $getArticles[$key]["articleID"];
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=voucher";
             } else {
                 $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=" . $getArticles[$key]["id"];
