@@ -90,16 +90,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
 
-        $form->setElement('boolean', 'caching', array(
-            'label' => 'Caching aktivieren',
-            'value' => 1
-        ));
-
-        $form->setElement('number', 'cachetime', array(
-            'label' => 'Cachezeit',
-            'value' => 86400
-        ));
-
         $form->setElement(
             'select',
             'columnAmount',
@@ -113,9 +103,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                     array(4, '100%')
                 ),
                 'value' => 2,
-                'editable' => false
+                'editable' => false,
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
             )
         );
+
+        $form->setElement('boolean', 'caching', array(
+            'label' => 'Caching aktivieren',
+            'value' => 1
+        ));
+
+        $form->setElement('number', 'cachetime', array(
+            'label' => 'Cachezeit',
+            'value' => 86400
+        ));
 
         $this->translateForm();
     }
