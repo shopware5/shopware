@@ -150,6 +150,8 @@
             }
 
             me.productSlider.initSlider();
+
+            $.publish('plugin/lastSeenProducts/onCreateProductList', me);
         },
 
         /**
@@ -160,15 +162,18 @@
          * @param {Object} article
          */
         createTemplate: function (article) {
-            var me = this;
+            var me = this,
+                $template = $('<div>', {
+                    'class': me.opts.itemCls,
+                    'html': [
+                        me.createProductImage(article),
+                        me.createProductTitle(article)
+                    ]
+                });
 
-            return $('<div>', {
-                'class': me.opts.itemCls,
-                'html': [
-                    me.createProductImage(article),
-                    me.createProductTitle(article)
-                ]
-            });
+            $.publish('plugin/lastSeenProducts/onCreateTemplate', [me, $template, article]);
+
+            return $template;
         },
 
         /**
@@ -179,15 +184,18 @@
          * @param {Object} data
          */
         createProductTitle: function (data) {
-            var me = this;
+            var me = this,
+                $title = $('<a>', {
+                    'rel': 'nofollow',
+                    'class': me.opts.titleCls,
+                    'title': data.articleName,
+                    'href': data.linkDetailsRewritten,
+                    'html': data.articleName
+                });
 
-            return $('<a>', {
-                'rel': 'nofollow',
-                'class': me.opts.titleCls,
-                'title': data.articleName,
-                'href': data.linkDetailsRewritten,
-                'html': data.articleName
-            });
+            $.publish('plugin/lastSeenProducts/onCreateProductTitle', [me, $title, data]);
+
+            return $title;
         },
 
         /**
@@ -226,6 +234,8 @@
                 'alt': data.articleName,
                 'title': data.articleName
             }).appendTo(imageMedia);
+
+            $.publish('plugin/lastSeenProducts/onCreateProductImage', [me, element, data]);
 
             return element;
         },
@@ -274,6 +284,8 @@
             }
 
             me.storage.setItem(itemKey, JSON.stringify(products));
+
+            $.publish('plugin/lastSeenProducts/onCollectProduct', [me, newProduct]);
         }
     });
 }(jQuery));

@@ -229,7 +229,9 @@
             // Allow the user to close the off canvas menu
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
 
-            $.subscribe('plugin/' + me.getName() + '/beforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+            $.subscribe('plugin/offcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+
+            $.publish('plugin/offcanvasMenu/onRegisterEvents', me);
         },
 
         /**
@@ -264,6 +266,8 @@
             }
 
             me.openMenu();
+
+            $.publish('plugin/offcanvasMenu/onClickElement', [me, event]);
         },
 
         /**
@@ -275,10 +279,14 @@
          * @param {jQuery.Event} event
          */
         onClickCloseButton: function (event) {
+            var me = this;
+
             event.preventDefault();
             event.stopPropagation();
 
-            this.closeMenu();
+            me.closeMenu();
+
+            $.publish('plugin/offcanvasMenu/onClickCloseButton', [me, event]);
         },
 
         /**
@@ -300,7 +308,10 @@
             }
             me.isOpened = true;
 
-            $.publish('plugin/' + me.getName() + '/beforeOpenMenu', me);
+            /** @deprecated - will be removed in 5.1 */
+            $.publish('plugin/offcanvasMenu/beforeOpenMenu', me);
+
+            $.publish('plugin/offcanvasMenu/onBeforeOpenMenu', me);
 
             $html.addClass('no--scroll');
 
@@ -318,7 +329,10 @@
 
             me.$offCanvas.addClass(opts.openClass);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/offCanvasMenu/openMenu', me);
+
+            $.publish('plugin/offcanvasMenu/onOpenMenu', me);
 
             if (opts.mode === 'ajax' && opts.ajaxURL) {
                 $.ajax({
@@ -357,7 +371,10 @@
 
             me.$offCanvas.removeClass(opts.openClass);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/offCanvasMenu/closeMenu', me);
+
+            $.publish('plugin/offcanvasMenu/onCloseMenu', me);
         },
 
         /**

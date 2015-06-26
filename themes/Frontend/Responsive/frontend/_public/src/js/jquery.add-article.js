@@ -129,14 +129,14 @@
                 });
             }
 
-            $.publish('plugin/' + me.getName() + '/onBeforeAddArticle', [ me, ajaxData ]);
+            $.publish('plugin/addArticle/onBeforeAddArticle', [ me, ajaxData ]);
 
             $.ajax({
                 'data': ajaxData,
                 'dataType': 'jsonp',
                 'url': opts.addArticleUrl,
                 'success': function (result) {
-                    $.publish('plugin/' + me.getName() + '/onAddArticle', [ me, result ]);
+                    $.publish('plugin/addArticle/onAddArticle', [ me, result ]);
 
                     if (!opts.showModal) {
                         return;
@@ -152,6 +152,8 @@
                         picturefill();
 
                         StateManager.updatePlugin(opts.productSliderSelector, 'productSlider');
+
+                        $.publish('plugin/addArticle/onAddArticleOpenModal', [me, result]);
                     });
                 }
             });
@@ -163,10 +165,12 @@
          * @public
          * @event closeModal
          */
-        closeModal: function () {
+        closeModal: function (event) {
             event.preventDefault();
 
             $.modal.close();
+
+            $.publish('plugin/addArticle/onCloseModal', this);
         },
 
         /**
@@ -177,7 +181,11 @@
          * @event onCloseModal
          */
         onCloseModal: function () {
-            StateManager.destroyPlugin(this.opts.productSliderSelector, 'productSlider');
+            var me = this;
+
+            StateManager.destroyPlugin(me.opts.productSliderSelector, 'productSlider');
+
+            $.publish('plugin/addArticle/onCloseModal', me);
         }
     });
 });

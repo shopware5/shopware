@@ -89,6 +89,8 @@
             var me = this;
 
             me.$el.on(me.getEventName('click'), '.action--note, .link--notepad', $.proxy(me.triggerRequest, me));
+
+            $.publish('plugin/ajaxWishlist/onRegisterEvents', me);
         },
 
         /**
@@ -114,6 +116,8 @@
                 'dataType': 'jsonp',
                 'success': $.proxy(me.responseHandler, me, $target)
             });
+
+            $.publish('plugin/ajaxWishlist/onTriggerRequest', [me, event, url]);
         },
 
         /**
@@ -128,12 +132,16 @@
             var me = this,
                 response = JSON.parse(json);
 
+            $.publish('plugin/ajaxWishlist/onTriggerRequestLoaded', [me, $target, response]);
+
             if (!response.success) {
                 return;
             }
 
             me.updateCounter(response.notesCount);
             me.animateElement($target);
+
+            $.publish('plugin/ajaxWishlist/onTriggerRequestFinished', [me, $target, response]);
         },
 
         /**
@@ -156,7 +164,11 @@
                 $target.removeClass(me.opts.savedCls);
                 $text.html(originalText);
                 $icon.removeClass(me.opts.iconCls).addClass(originalIcon);
+
+                $.publish('plugin/ajaxWishlist/onAnimateElementFinished', [me, $target]);
             }, me.opts.delay);
+
+            $.publish('plugin/ajaxWishlist/onAnimateElement', [me, $target]);
         },
 
         /**
@@ -191,6 +203,8 @@
             me.$counter[animate]({
                 'opacity': 1
             }, 500);
+
+            $.publish('plugin/ajaxWishlist/onUpdateCounter', [me, me.$counter, count]);
 
             return me.$counter;
         },

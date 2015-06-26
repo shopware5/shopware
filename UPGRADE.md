@@ -12,6 +12,55 @@ In this document you will find a changelog of the important changes related to t
 * Added column `added` to the table `s_campaigns_mailaddresses` which holds the date of the newsletter registration. It will be displayed in the newsletter administration under "Recipients" as the "Double-Opt-In date" column.
 * Removed the expert layout and the corresponding mail form inside the batch processing window of the order backend module.
 * Added support for attributes in backend module site
+* Added a lot more jQuery plugin events.
+* Marked some jQuery plugin events as deprecated which will be removed in the version 5.1. They were replaced with more conventional names:
+    * plugin/collapseCart/afterRemoveArticle    => plugin/collapseCart/onRemoveArticleFinished
+    * plugin/collapseCart/afterLoadCart         => plugin/collapseCart/onLoadCartFinished
+    * plugin/emotionLoader/loadEmotion          => plugin/emotionLoader/onLoadEmotion
+    * plugin/emotionLoader/initEmotion          => plugin/emotionLoader/onInitEmotion
+    * plugin/emotionLoader/showEmotion          => plugin/emotionLoader/onShowEmotion
+    * plugin/emotionLoader/hideEmotion          => plugin/emotionLoader/onHideEmotion
+    * plugin/emotionLoader/showFallbackContent  => plugin/emotionLoader/onShowFallbackContent
+    * plugin/emotionLoader/hideFallbackContent  => plugin/emotionLoader/onHideFallbackContent
+    * plugin/emotion/initElements               => plugin/emotion/onInitElements
+    * plugin/emotion/initFullscreen             => plugin/emotion/onInitFullscreen
+    * plugin/emotion/removeFullscreen           => plugin/emotion/onRemoveFullscreen
+    * plugin/emotion/initMasonryGrid            => plugin/emotion/onInitMasonryGrid
+    * plugin/emotion/initScaleGrid              => plugin/emotion/onInitScaleGrid
+    * plugin/emotion/registerEvents             => plugin/emotion/onRegisterEvents
+    * plugin/imageSlider/updateTransform        => plugin/imageSlider/onUpdateTransform
+    * plugin/imageSlider/slide                  => plugin/imageSlider/onSlide
+    * plugin/imageSlider/slideNext              => plugin/imageSlider/onSlideNext
+    * plugin/imageSlider/slidePrev              => plugin/imageSlider/onSlidePrev
+    * plugin/menuScroller/updateResize          => plugin/menuScroller/onUpdateResize
+    * plugin/offcanvasMenu/beforeOpenMenu       => plugin/offcanvasMenu/onBeforeOpenMenu
+    * plugin/offCanvasMenu/openMenu             => plugin/offcanvasMenu/onOpenMenu
+    * plugin/offCanvasMenu/closeMenu            => plugin/offcanvasMenu/onCloseMenu
+    * plugin/-PLUGIN_NAME-/init                 => plugin/-PLUGIN_NAME-/onInit (PluginBase)
+    * plugin/-PLUGIN_NAME-/destroy              => plugin/-PLUGIN_NAME-/onDestroy (PluginBase)
+    * plugin/-PLUGIN_NAME-/on                   => plugin/-PLUGIN_NAME-/onRegisterEvent (PluginBase)
+    * plugin/-PLUGIN_NAME-/off                  => plugin/-PLUGIN_NAME-/onRemoveEvent (PluginBase)
+    * plugin/productSlider/trackItems           => plugin/productSlider/onTrackItems
+    * plugin/productSlider/trackArrows          => plugin/productSlider/onTrackArrows
+    * plugin/productSlider/itemsLoaded          => plugin/productSlider/onLoadItemsSuccess
+    * plugin/productSlider/loadItems            => plugin/productSlider/onLoadItems
+    * plugin/productSlider/createContainer      => plugin/productSlider/onCreateContainer
+    * plugin/productSlider/createArrows         => plugin/productSlider/onCreateArrows
+    * plugin/productSlider/slideNext            => plugin/productSlider/onSlideNext
+    * plugin/productSlider/slidePrev            => plugin/productSlider/onSlidePrev
+    * plugin/productSlider/slideToElement       => plugin/productSlider/onSlideToElement
+    * plugin/productSlider/slide                => plugin/productSlider/onSlide
+    * plugin/productSlider/autoSlide            => plugin/productSlider/onAutoSlide
+    * plugin/productSlider/stopAutoSlide        => plugin/productSlider/onStopAutoSlide
+    * plugin/productSlider/scrollNext           => plugin/productSlider/onScrollNext
+    * plugin/productSlider/scrollPrev           => plugin/productSlider/onScrollPrev
+    * plugin/productSlider/autoScroll           => plugin/productSlider/onAutoScroll
+    * plugin/productSlider/stopAutoScroll       => plugin/productSlider/onStopAutoScroll
+    * plugin/productSlider/buffer               => plugin/productSlider/onBuffer
+    * plugin/rangeSlider/changeMin              => plugin/rangeSlider/onSetMin
+    * plugin/rangeSlider/changeMax              => plugin/rangeSlider/onSetMax
+    * plugin/rangeSlider/reset                  => plugin/rangeSlider/onReset
+    * plugin/rangeSlider/onChange               => plugin/rangeSlider/onEndDrag
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling

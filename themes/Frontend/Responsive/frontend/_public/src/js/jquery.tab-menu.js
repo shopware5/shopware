@@ -145,6 +145,8 @@
             me.$tabs.each(function (i, el) {
                 me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
+
+            $.publish('plugin/tabMenu/onRegisterEvents', me);
         },
 
         /**
@@ -196,6 +198,8 @@
             if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
                 $container.load($tab.attr('data-url'));
             }
+
+            $.publish('plugin/tabMenu/onChangeTab', [me, index]);
         },
 
         /**
