@@ -153,10 +153,11 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
             multiSelect: false,
             anchor: '100%',
             allowBlank: false,
-            buttonOnly: true,
+            buttonOnly: false,
+            buttonText: false,
             // Setting width manually as firefox shows a very small button otherwise
             buttonConfig: {
-                width: 170
+                width: 30
             }
         });
 
