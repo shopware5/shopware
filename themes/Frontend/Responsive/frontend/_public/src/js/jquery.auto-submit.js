@@ -55,6 +55,8 @@
 
             // Will be automatically removed when destroy() is called.
             me._on(me.$el, 'change', $.proxy(me.onChangeSelection, me));
+
+            $.publish('plugin/ajaxWishlist/onRegisterEvents', me);
         },
 
         onChangeSelection: function () {

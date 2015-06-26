@@ -31,20 +31,18 @@
 
         /**
          * Initializes the plugin and sets up the necessary event listeners.
-         *
-         * @returns {boolean}
          */
         init: function () {
             var me = this,
-                selector = $(me.$el.attr('data-selector'));
+                selector = $(me.$el.attr('data-selector')),
+                val;
 
             if(!selector.length) {
                 throw new Error('Given selector does not match any element on the page.');
-                return false;
             }
 
             me._on(me.$el, me.opts.eventType, function() {
-                var val = me.$el.val();
+                val = me.$el.val();
                 selector.val(val.length ? val : '');
             });
         }

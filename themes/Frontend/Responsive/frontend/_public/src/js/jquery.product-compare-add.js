@@ -1,4 +1,4 @@
-;(function($, window, undefined) {
+;(function($) {
     "use strict";
 
     /**
@@ -27,6 +27,8 @@
 
             // On add article to compare button
             me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
+
+            $.publish('plugin/productCompareAdd/onRegisterEvents', me);
         },
 
         /**
@@ -54,6 +56,8 @@
                 openOverlay: false
             });
 
+            $.publish('plugin/productCompareAdd/onAddArticleCompareBefore', [me, event]);
+
             // Ajax request for adding article to compare list
             $.ajax({
                 'url': addArticleUrl,
@@ -74,24 +78,27 @@
                             });
                         });
 
-                        return;
+                    } else {
+                        compareMenu.html(data);
+
+                        // Reload compare menu plugin
+                        $('*[data-product-compare-menu="true"]').productCompareMenu();
+
+                        // Prevent too fast closing of loadingIndicator and overlay
+                        $.loadingIndicator.close(function() {
+                            $('html, body').animate({
+                                scrollTop: ($('.top-bar').offset().top)
+                            }, 'slow');
+
+                            $.overlay.close();
+                        })
                     }
 
-                    compareMenu.html(data);
-
-                    // Reload compare menu plugin
-                    $('*[data-product-compare-menu="true"]').productCompareMenu();
-
-                    // Prevent too fast closing of loadingIndicator and overlay
-                    $.loadingIndicator.close(function() {
-                        $('html, body').animate({
-                            scrollTop: ($('.top-bar').offset().top)
-                        }, 'slow');
-
-                        $.overlay.close();
-                    })
+                    $.publish('plugin/productCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
                 }
             });
+
+            $.publish('plugin/productCompareAdd/onAddArticleCompare', [me, event]);
         },
 
         /** Destroys the plugin */
@@ -101,4 +108,4 @@
             this._destroy();
         }
     });
-})(jQuery, window);
+})(jQuery);

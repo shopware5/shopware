@@ -663,6 +663,8 @@
             }
 
             StateManager.on('resize', me.onResize, me);
+
+            $.publish('plugin/imageSlider/onRegisterEvents', me);
         },
 
         /**
@@ -908,6 +910,8 @@
                 event.preventDefault();
                 event.stopImmediatePropagation();
             }
+
+            $.publish('plugin/imageSlider/onClick', [me, event]);
         },
 
         /**
@@ -928,6 +932,8 @@
             }
 
             event.preventDefault();
+
+            $.publish('plugin/imageSlider/onScroll', [me, event]);
         },
 
         /**
@@ -950,10 +956,11 @@
 
             if (me._imageScale <= 1) {
                 me.scale(1, true);
-                return;
+            } else {
+                me.setScale(1, true);
             }
 
-            me.setScale(1, true);
+            $.publish('plugin/imageSlider/onDoubleClick', [me, event]);
         },
 
         /**
@@ -964,11 +971,13 @@
          * @param {jQuery.Event} event
          */
         onLeftArrowClick: function (event) {
+            var me = this;
+
             event.preventDefault();
 
-            this.slidePrev();
+            me.slidePrev();
 
-            $.publish('plugin/imageSlider/onLeftArrowClick', this);
+            $.publish('plugin/imageSlider/onLeftArrowClick', [me, event]);
         },
 
         /**
@@ -979,11 +988,13 @@
          * @param {jQuery.Event} event
          */
         onRightArrowClick: function (event) {
+            var me = this;
+
             event.preventDefault();
 
-            this.slideNext();
+            me.slideNext();
 
-            $.publish('plugin/imageSlider/onRightArrowClick', this);
+            $.publish('plugin/imageSlider/onRightArrowClick', [me, event]);
         },
 
         /**
@@ -1016,6 +1027,8 @@
                 size = me._thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
 
             me.setThumbnailSlidePosition(me._thumbnailOffset - (size / 2), true);
+
+            $.publish('plugin/imageSlider/onThumbnailNextArrowClick', [me, event]);
         },
 
         /**
@@ -1024,13 +1037,15 @@
          *
          * @event onMouseLeave
          */
-        onMouseLeave: function () {
+        onMouseLeave: function (event) {
             var me = this;
 
             me._grabImage = false;
             me._$slideContainer.removeClass(me.opts.dragClass);
 
             me.slide(me._slideIndex);
+
+            $.publish('plugin/imageSlider/onMouseLeave', [me, event]);
         },
 
         /**
@@ -1040,7 +1055,7 @@
          *
          * @event onResize
          */
-        onResize: function () {
+        onResize: function (newWidth) {
             var me = this;
 
             me.updateMaxZoomValue();
@@ -1051,6 +1066,8 @@
             if (me.opts.thumbnails) {
                 me.trackThumbnailControls();
             }
+
+            $.publish('plugin/imageSlider/onResize', [me, newWidth]);
         },
 
         /**
@@ -1065,6 +1082,8 @@
                 pointerA = pointers[0];
 
             me._startTouchPoint.set(pointerA.clientX, pointerA.clientY);
+
+            $.publish('plugin/imageSlider/onThumbnailSlideTouch', [me, event, pointerA.clientX, pointerA.clientY]);
         },
 
         /**
@@ -1092,6 +1111,8 @@
             me.setThumbnailSlidePosition(me._thumbnailOffset + delta, false);
 
             me.trackThumbnailControls();
+
+            $.publish('plugin/imageSlider/onThumbnailSlideTouch', [me, event, pointerA.clientX, pointerA.clientY]);
         },
 
         /**
@@ -1123,12 +1144,15 @@
                 $image = me._$currentImage,
                 $container = me._$slideContainer,
                 minX = Math.max(0, (($image.width() * scale - $container.width()) / scale) / 2),
-                minY = Math.max(0, (($image.height() * scale - $container.height()) / scale) / 2);
+                minY = Math.max(0, (($image.height() * scale - $container.height()) / scale) / 2),
+                newPos = new Vector(
+                    Math.max(minX * -1, Math.min(minX, x)),
+                    Math.max(minY * -1, Math.min(minY, y))
+                );
 
-            return new Vector(
-                Math.max(minX * -1, Math.min(minX, x)),
-                Math.max(minY * -1, Math.min(minY, y))
-            );
+            $.publish('plugin/imageSlider/onGetTransformedPosition', [me, newPos, x, y, scale]);
+
+            return newPos;
         },
 
         /**
@@ -1168,6 +1192,8 @@
             me._imageTranslation.set(newPos.x, newPos.y);
 
             me.updateTransform(false);
+
+            $.publish('plugin/imageSlider/onSetTranslation', [me, x, y]);
         },
 
         /**
@@ -1184,6 +1210,8 @@
                 translation = me._imageTranslation;
 
             me.setTranslation(translation.x + x, translation.y + y);
+
+            $.publish('plugin/imageSlider/onTranslate', [me, x, y]);
         },
 
         /**
@@ -1213,6 +1241,8 @@
             }
 
             me.updateTransform(animate, callback);
+
+            $.publish('plugin/imageSlider/onSetScale', [me, scale, animate, callback]);
         },
 
         /**
@@ -1237,7 +1267,11 @@
          * @param {Function} callback
          */
         scale: function (factor, animate, callback) {
-            this.setScale(this._imageScale + factor, animate, callback);
+            var me = this;
+
+            me.setScale(me._imageScale + factor, animate, callback);
+
+            $.publish('plugin/imageSlider/onScale', [me, factor, animate, callback]);
         },
 
         /**
@@ -1265,7 +1299,10 @@
 
             image.style[transformProperty] = 'scale(' + scale + ') translate(' + translation.x + 'px, ' + translation.y + 'px)';
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/imageSlider/updateTransform', [ me ]);
+
+            $.publish('plugin/imageSlider/onUpdateTransform', [me, animate, callback]);
 
             if (!callback) {
                 return;
@@ -1297,6 +1334,8 @@
                 event.preventDefault();
                 me.slide(i);
             });
+
+            $.publish('plugin/imageSlider/onApplyClickEventHandler', [me, index, el]);
         },
 
         /**
@@ -1331,6 +1370,8 @@
             me._$arrowRight = $('<a>', {
                 'class': opts.rightArrowCls + ((opts.loopSlides || me._slideIndex < me._itemCount - 1) && me._itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me._$slideContainer);
+
+            $.publish('plugin/imageSlider/onCreateArrows', [me, me._$arrowLeft, me._$arrowRight]);
         },
 
         /**
@@ -1367,6 +1408,8 @@
             me._$thumbnailArrowNext = $('<a>', {
                 'class': opts.thumbnailArrowCls + ' ' + nextClass
             }).appendTo(me._$thumbnailContainer);
+
+            $.publish('plugin/imageSlider/onCreateThumbnailArrows', [me, me._$thumbnailArrowPrev, me._$thumbnailArrowNext]);
         },
 
         /**
@@ -1433,6 +1476,8 @@
              * @type {jQuery}
              */
             me._itemCount = me._$items.length;
+
+            $.publish('plugin/imageSlider/onTrackItems', me);
         },
 
         /**
@@ -1457,6 +1502,8 @@
             me._$currentImage = $(me._$images[index]);
 
             me.updateMaxZoomValue();
+
+            $.publish('plugin/imageSlider/onSetIndex', [me, index]);
         },
 
         /**
@@ -1491,6 +1538,8 @@
             }
 
             me._maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
+
+            $.publish('plugin/imageSlider/onUpdateMaxZoomValue', [me, me._maxZoom]);
         },
 
         /**
@@ -1539,6 +1588,8 @@
             $thumbnail.addClass(activeClass);
 
             me.setThumbnailSlidePosition(newPos, true);
+
+            $.publish('plugin/imageSlider/onSetActiveThumbnail', [me, index]);
         },
 
         /**
@@ -1556,6 +1607,8 @@
                 $dots.removeClass(me.opts.activeStateClass);
                 $dots.eq(index || me._slideIndex).addClass(me.opts.activeStateClass);
             }
+
+            $.publish('plugin/imageSlider/onSetActiveDot', [me, index]);
         },
 
         /**
@@ -1584,10 +1637,11 @@
 
             if (!animate) {
                 $slide.css(css);
-                return;
+            } else {
+                $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, $.proxy(me.trackThumbnailControls, me));
             }
 
-            $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, $.proxy(me.trackThumbnailControls, me));
+            $.publish('plugin/imageSlider/onSetThumbnailSlidePosition', [me, offset, animate]);
         },
 
         /**
@@ -1626,11 +1680,12 @@
             if (me._thumbnailOrientation === 'horizontal') {
                 $prevArr.toggleClass(activeCls, pos.left < 0);
                 $nextArr.toggleClass(activeCls, ($slide.innerWidth() + pos.left) > $container.innerWidth());
-                return;
+            } else {
+                $prevArr.toggleClass(activeCls, pos.top < 0);
+                $nextArr.toggleClass(activeCls, ($slide.innerHeight() + pos.top) > $container.innerHeight());
             }
 
-            $prevArr.toggleClass(activeCls, pos.top < 0);
-            $nextArr.toggleClass(activeCls, ($slide.innerHeight() + pos.top) > $container.innerHeight());
+            $.publish('plugin/imageSlider/onTrackThumbnailControls', me);
         },
 
         /**
@@ -1645,6 +1700,8 @@
             me.stopAutoSlide(me._slideInterval);
 
             me._slideInterval = window.setTimeout($.proxy(me.slideNext, me), me.opts.autoSlideInterval);
+
+            $.publish('plugin/imageSlider/onStartAutoSlide', [me, me._slideInterval]);
         },
 
         /**
@@ -1654,7 +1711,11 @@
          * @method stopAutoSlide
          */
         stopAutoSlide: function () {
-            window.clearTimeout(this._slideInterval);
+            var me = this;
+
+            window.clearTimeout(me._slideInterval);
+
+            $.publish('plugin/imageSlider/onStopAutoSlide', me);
         },
 
         /**
@@ -1711,7 +1772,10 @@
                 me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
             }
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/imageSlider/slide', [ me ]);
+
+            $.publish('plugin/imageSlider/onSlide', [me, index, callback]);
         },
 
         /**
@@ -1740,6 +1804,8 @@
             } else if (callback) {
                 callback.call(me);
             }
+
+            $.publish('plugin/imageSlider/onResetTransformation', [me, animate, callback]);
         },
 
         /**
@@ -1758,7 +1824,10 @@
 
             me.slide((newIndex >= itemCount && isLooping) ? 0 : Math.min(itemCount - 1, newIndex));
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/imageSlider/slideNext', [ me ]);
+
+            $.publish('plugin/imageSlider/onSlideNext', [me, newIndex]);
         },
 
         /**
@@ -1777,7 +1846,10 @@
 
             me.slide((newIndex < 0 && isLooping) ? itemCount - 1 : Math.max(0, newIndex));
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/imageSlider/slidePrev', [ me ]);
+
+            $.publish('plugin/imageSlider/onSlidePrev', [me, newIndex]);
         },
 
         /**

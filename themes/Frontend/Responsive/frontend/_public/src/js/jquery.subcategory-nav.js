@@ -346,6 +346,8 @@
             $sidebar.on(me.getEventName(eventName), opts.forwardsSelector, $.proxy(me.onClickForwardButton, me));
 
             $sidebar.on(me.getEventName(eventName), opts.mainMenuSelector, $.proxy(me.onClickMainMenuButton, me));
+
+            $.publish('plugin/subCategoryNav/onRegisterEvents', me);
         },
 
         /**
@@ -371,6 +373,8 @@
             }
 
             me.inProgress = true;
+
+            $.publish('plugin/subCategoryNav/onClickBackButton', [me, event]);
 
             // decide if there is a parent group or main sidebar
             if (!url || parentId === me.opts.mainCategoryId) {
@@ -402,6 +406,8 @@
 
             me.inProgress = true;
 
+            $.publish('plugin/subCategoryNav/onClickForwardButton', [me, event]);
+
             // Disable scrolling on main menu
             me.$sidebar.addClass(me.opts.disableScrollingClass);
 
@@ -427,6 +433,8 @@
 
             me.inProgress = true;
 
+            $.publish('plugin/subCategoryNav/onClickMainMenuButton', [me, event]);
+
             me.slideToMainMenu();
         },
 
@@ -442,8 +450,14 @@
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
 
+            $.publish('plugin/subCategoryNav/onLoadTemplateBefore', me);
+
             if (!$loadingTarget) {
-                $.get(url, callback.bind(me));
+                $.get(url, function (template) {
+                    $.publish('plugin/subCategoryNav/onLoadTemplate', me);
+
+                    callback.call(me, template)
+                });
                 return;
             }
 
@@ -455,6 +469,9 @@
 
             $.get(url, function (template) {
                 me.$loadingIcon.hide();
+
+                $.publish('plugin/subCategoryNav/onLoadTemplate', me);
+
                 callback.call(me, template);
             });
         },
@@ -472,6 +489,8 @@
                 $overlays,
                 $slide;
 
+            $.publish('plugin/subCategoryNav/onSlideOutBefore', me);
+
             me.$sidebar.append(template);
 
             // get all overlays
@@ -486,6 +505,8 @@
                 $slide.remove();
 
                 me.inProgress = false;
+
+                $.publish('plugin/subCategoryNav/onSlideOut', me);
             });
         },
 
@@ -504,6 +525,8 @@
                 $overlays,
                 $slide,
                 $el;
+
+            $.publish('plugin/subCategoryNav/onSlideInBefore', me);
 
             // hide main menu
             me.$sidebar.scrollTop(0);
@@ -537,6 +560,8 @@
                 $slide.addClass(opts.backSlideClass);
 
                 me.inProgress = false;
+
+                $.publish('plugin/subCategoryNav/onSlideIn', me);
             });
         },
 
@@ -552,6 +577,8 @@
                 opts = me.opts,
                 $overlay = $(opts.overlaySelector);
 
+            $.publish('plugin/subCategoryNav/onSlideToMainMenuBefore', me);
+
             // make the main menu visible
             me.$sidebarWrapper.css('display', 'block');
 
@@ -565,6 +592,8 @@
                 me.$sidebar.removeClass(opts.disableScrollingClass);
 
                 me.inProgress = false;
+
+                $.publish('plugin/subCategoryNav/onSlideToMainMenu', me);
             });
         },
 

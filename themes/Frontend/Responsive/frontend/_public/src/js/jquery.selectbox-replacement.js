@@ -80,6 +80,8 @@
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
 
+            $.publish('plugin/selectboxReplacement/onCreateTemplate', [me, wrapEl]);
+
             return wrapEl;
         },
 
@@ -92,6 +94,8 @@
 
             me.$wrapEl.addClass(me.opts.disabledCls);
             me.$el.attr('disabled', 'disabled');
+
+            $.publish('plugin/selectboxReplacement/onSetDisabled', me);
 
             return me.$el;
         },
@@ -106,6 +110,8 @@
             me.$wrapEl.removeClass(me.opts.disabledCls);
             me.$el.removeAttr('disabled');
 
+            $.publish('plugin/selectboxReplacement/onSetEnabled', me);
+
             return me.$el;
         },
 
@@ -115,7 +121,12 @@
          */
         setError: function () {
             var me = this;
-            return me.$wrapEl.addClass(me.opts.errorCls);
+
+            me.$wrapEl.addClass(me.opts.errorCls);
+
+            $.publish('plugin/selectboxReplacement/onSetError', me);
+
+            return me.$wrapEl;
         },
 
         /**
@@ -124,7 +135,12 @@
          */
         removeError: function () {
             var me = this;
-            return me.$wrapEl.removeClass(me.opts.errorCls);
+
+            me.$wrapEl.removeClass(me.opts.errorCls);
+
+            $.publish('plugin/selectboxReplacement/onRemoveError', me);
+
+            return me.$wrapEl;
         },
 
         /**
@@ -140,6 +156,8 @@
                 me.setSelectedOnTextElement();
             }
 
+            $.publish('plugin/selectboxReplacement/onSetVal', me);
+
             return val;
         },
 
@@ -150,7 +168,11 @@
         show: function() {
             var me = this;
 
-            return me.$wrapEl.show.apply(me.$wrapEl, arguments);
+            me.$wrapEl.show.apply(me.$wrapEl, arguments);
+
+            $.publish('plugin/selectboxReplacement/onShow', me);
+
+            return me.$wrapEl;
         },
 
         /**
@@ -160,7 +182,11 @@
         hide: function() {
             var me = this;
 
-            return me.$wrapEl.hide.apply(me.$wrapEl, arguments);
+            me.$wrapEl.hide.apply(me.$wrapEl, arguments);
+
+            $.publish('plugin/selectboxReplacement/onHide', me);
+
+            return me.$wrapEl;
         },
 
         /**
@@ -175,6 +201,8 @@
             me._on(me.$el, 'keyup', $.proxy(me.onKeyUp, me));
             me._on(me.$el, 'focus', $.proxy(me.onFocus, me));
             me._on(me.$el, 'blur', $.proxy(me.onBlur, me));
+
+            $.publish('plugin/selectboxReplacement/onRegisterEvents', me);
 
             return true;
         },
@@ -191,6 +219,8 @@
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
 
+            $.publish('plugin/selectboxReplacement/onSetSelected', [me, me.selected]);
+
             return me.selected;
         },
 
@@ -206,6 +236,8 @@
             var me = this;
 
             me.setSelectedOnTextElement();
+
+            $.publish('plugin/selectboxReplacement/onChange', me);
         },
 
         /**
@@ -225,6 +257,9 @@
             if(event.which === 38 || event.which === 40) {
                 me.setSelectedOnTextElement();
             }
+
+            $.publish('plugin/selectboxReplacement/onKeyUp', me);
+
             return false;
         },
 
@@ -239,6 +274,8 @@
             var me = this;
 
             me.$wrapEl.addClass(me.opts.focusCls);
+
+            $.publish('plugin/selectboxReplacement/onFocus', me);
         },
 
         /**
@@ -252,6 +289,8 @@
             var me = this;
 
             me.$wrapEl.removeClass(me.opts.focusCls);
+
+            $.publish('plugin/selectboxReplacement/onBlur', me);
         },
 
         /**

@@ -145,6 +145,8 @@
                 me._on(me._$triggerEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             }
+
+            $.publish('plugin/collapseCart/onRegisterEvents', me);
         },
 
         /**
@@ -158,6 +160,8 @@
 
             me.showLoadingIndicator();
             me.openMenu();
+
+            $.publish('plugin/collapseCart/onBeforeAddArticle', me);
         },
 
         /**
@@ -179,6 +183,8 @@
                 .removeClass('is--hidden');
 
             picturefill();
+
+            $.publish('plugin/collapseCart/onArticleAdded', me);
         },
 
         /**
@@ -197,14 +203,19 @@
                 event.preventDefault();
 
                 me.loadCart();
-                return;
+            } else {
+                me.buffer(function () {
+                    me.loadCart(function () {
+                        $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+
+                        $.publish('plugin/collapseCart/onMouseEnterLoaded', [me, event]);
+                    });
+
+                    $.publish('plugin/collapseCart/onMouseEnterBuffer', [me, event]);
+                }, 500);
             }
 
-            me.buffer(function () {
-                me.loadCart(function () {
-                    $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
-                });
-            }, 500);
+            $.publish('plugin/collapseCart/onMouseEnter', [me, event]);
         },
 
         /**
@@ -266,7 +277,10 @@
 
                     picturefill();
 
+                    /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/collapseCart/afterRemoveArticle', [me, event]);
+
+                    $.publish('plugin/collapseCart/onRemoveArticleFinished', [me, event, result]);
                 }
             });
         },
@@ -324,6 +338,8 @@
                 'class': me.opts.loadingIconWrapperClass,
                 'html': me._$loadingIcon.clone()
             }));
+
+            $.publish('plugin/collapseCart/onShowLoadingIndicator', me);
         },
 
         /**
@@ -374,7 +390,10 @@
                         callback();
                     }
 
+                    /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/collapseCart/afterLoadCart', me);
+
+                    $.publish('plugin/collapseCart/onLoadCartFinished', [me, result]);
                 }
             });
         },

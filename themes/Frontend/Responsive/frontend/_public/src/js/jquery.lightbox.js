@@ -1,4 +1,4 @@
-;(function ($) {
+;(function ($, window, Math) {
     'use strict';
 
     /**
@@ -54,6 +54,8 @@
             };
 
             me.image.src = imageURL;
+
+            $.publish('plugin/lightbox/onOpen', me);
         },
 
         /**
@@ -63,13 +65,18 @@
          * @returns {*|HTMLElement}
          */
         createContent: function(imageURL) {
-            return $('<div>', {
+            var me = this,
+                content = $('<div>', {
                 'class': 'lightbox--container',
                 'html':  $('<img>', {
                     'src': imageURL,
                     'class': 'lightbox--image'
                 })
             });
+
+            $.publish('plugin/lightbox/onCreateContent', [me, content, imageURL]);
+
+            return content;
         },
 
         /**
@@ -88,6 +95,8 @@
 
             me.modal.setWidth(size.width);
             me.modal.setHeight(size.height);
+
+            $.publish('plugin/lightbox/onSetSize', [me, width, height]);
         },
 
         /**
@@ -99,9 +108,11 @@
          * @returns {{width: *, height: *}}
          */
         getOptimizedSize: function(width, height) {
-            var aspect = width / height,
+            var me = this,
+                aspect = width / height,
                 maxWidth = Math.round(window.innerWidth * 0.9),
-                maxHeight = Math.round(window.innerHeight * 0.9);
+                maxHeight = Math.round(window.innerHeight * 0.9),
+                size;
 
             if (width > maxWidth) {
                 width = maxWidth;
@@ -113,10 +124,14 @@
                 width = Math.round(height * aspect);
             }
 
-            return {
+            size = {
                 'width': width,
                 'height': height
-            }
+            };
+
+            $.publish('plugin/lightbox/onGetOptimizedSize', [me, size]);
+
+            return size;
         }
     }
-})(jQuery);
+})(jQuery, window, Math);
