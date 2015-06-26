@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Article', {
         'detail.Prices',
         'detail.Base',
         'detail.Sidebar',
-        'detail.sidebar.Link',
         'detail.sidebar.Similar',
         'detail.sidebar.Accessory',
         'category.Tree',
@@ -102,7 +101,9 @@ Ext.define('Shopware.apps.Article', {
         'esd.Detail',
         'esd.Serials',
         'statistics.List',
-        'statistics.Chart'
+        'statistics.Chart',
+        'resources.Links',
+        'resources.Downloads'
     ],
 
     /**

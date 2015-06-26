@@ -112,12 +112,6 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
         var me = this;
         return [
             {
-                xtype: 'article-sidebar-link',
-                article: me.article,
-                animCollapse: Ext.isChrome,
-                animate: Ext.isChrome
-            },
-            {
                 xtype: 'article-sidebar-accessory',
                 article: me.article,
                 gridStore: me.article.getAccessory(),

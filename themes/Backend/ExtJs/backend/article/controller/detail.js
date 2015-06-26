@@ -127,9 +127,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 addAccessoryArticle: me.onAddAccessoryArticle,
                 removeAccessoryArticle: me.onRemoveAccessoryArticle
             },
-            'article-detail-window article-sidebar-link': {
+            'article-detail-window article-resources-links': {
                 addLink: me.onAddLink,
-                removeLink: me.onRemoveLink,
+                removeLink: me.onRemoveLink
+            },
+            'article-detail-window article-resources-downloads': {
                 addDownload: me.onAddDownload,
                 removeDownload: me.onRemoveDownload
             },
@@ -449,10 +451,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         priceFieldSet.tabPanel.setActiveTab(0);
 
         //reconfigure the article link listing
-        mainWindow.down('article-sidebar article-sidebar-link grid[name=link-listing]').reconfigure(article.getLink());
+        mainWindow.down('article-resources-links grid[name=link-listing]').reconfigure(article.getLink());
 
         //reconfigure the article download listing
-        mainWindow.down('article-sidebar article-sidebar-link grid[name=download-listing]').reconfigure(article.getDownload());
+        mainWindow.down('article-resources-downloads grid[name=download-listing]').reconfigure(article.getDownload());
 
         //reconfigure the article accessory articles listing
         mainWindow.down('article-sidebar article-sidebar-accessory grid[name=accessory-listing]').reconfigure(article.getAccessory());
@@ -624,8 +626,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the add link button.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the add link button.
      * @event
      * @param [Ext.grid.Panel] The link grid
      * @param [Ext.form.Panel] The form panel for the link
@@ -649,8 +651,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the remove link action column.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the remove link action column.
      * @event
      * @param [Ext.grid.Panel] The link grid
      * @param [Ext.data.Model] The link record
@@ -666,8 +668,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the add download button.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the add download button.
      *
      * @event
      * @param [Ext.grid.Panel] The download grid
@@ -692,8 +694,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the remove download action column.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the remove download action column.
      *
      * @event
      * @param [Ext.grid.Panel] The download grid
