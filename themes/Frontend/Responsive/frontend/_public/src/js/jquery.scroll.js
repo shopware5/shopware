@@ -68,6 +68,8 @@
             var me = this;
 
             me._on(me.$el, 'touchstart click', $.proxy(me.onClickElement, me));
+
+            $.publish('plugin/scrollAnimate/onRegisterEvents', me);
         },
 
         /**
@@ -82,6 +84,8 @@
 
             var me = this,
                 opts = me.opts;
+
+            $.publish('plugin/scrollAnimate/onClickElement', [me, event]);
 
             if (me.$targetEl) {
                 me.scrollToElement(me.$targetEl);
@@ -100,12 +104,15 @@
          * @param {Number} offset
          */
         scrollToElement: function ($targetEl, offset) {
+            var me = this;
 
             if (!$targetEl.length) {
                 return;
             }
 
-            this.scrollToPosition($targetEl.offset().top + ~~(offset));
+            $.publish('plugin/scrollAnimate/onScrollToElement', [me, $targetEl, offset]);
+
+            me.scrollToPosition($targetEl.offset().top + ~~(offset));
         },
 
         /**
@@ -121,6 +128,8 @@
             me.$container.animate({
                 scrollTop: position
             }, me.opts.animationSpeed);
+
+            $.publish('plugin/scrollAnimate/onScrollToPosition', [me, position]);
         },
 
         /**

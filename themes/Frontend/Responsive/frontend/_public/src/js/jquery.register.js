@@ -207,6 +207,8 @@
             me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
             me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
+
+            $.publish('plugin/register/onRegisterEvents', me);
         },
 
         /**
@@ -229,6 +231,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/register/onCheckType', [me, hideCompanyFields]);
         },
 
         /**
@@ -251,6 +255,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/register/onCheckSkipAccount', [me, isChecked]);
         },
 
         /**
@@ -273,6 +279,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/register/onCheckChangeShipping', [me, isChecked]);
         },
 
         /**
@@ -295,6 +303,8 @@
                 select,
                 plugin;
 
+            $.publish('plugin/register/onCountryChangedBefore', [me, event]);
+
             $parent.find(opts.stateContainerSelector).addClass(hiddenClass);
             select = areaSelection.find('select');
             areaSelection.addClass(hiddenClass);
@@ -307,13 +317,14 @@
                 plugin.$el.addClass(hiddenClass);
                 plugin.$wrapEl.addClass(hiddenClass);
                 plugin.setDisabled();
-                return;
+            } else {
+                plugin.$el.removeClass(hiddenClass);
+                plugin.$wrapEl.removeClass(hiddenClass);
+                areaSelection.removeClass(hiddenClass);
+                plugin.setEnabled();
             }
 
-            plugin.$el.removeClass(hiddenClass);
-            plugin.$wrapEl.removeClass(hiddenClass);
-            areaSelection.removeClass(hiddenClass);
-            plugin.setEnabled();
+            $.publish('plugin/register/onCountryChanged', [me, event]);
         },
 
         /**
@@ -349,6 +360,8 @@
                 $fieldSet = $el.find(paymentSelector);
                 $fieldSet[((isChecked) ? 'removeClass' : 'addClass')](hiddenClass);
             });
+
+            $.publish('plugin/register/onPaymentChanged', me);
         },
 
         /**
@@ -370,6 +383,8 @@
                     me.setFieldAsError($input);
                 }
             });
+
+            $.publish('plugin/register/onSubmitButton', me);
         },
 
         /**
@@ -413,6 +428,8 @@
             } else {
                 me.setFieldAsSuccess($el);
             }
+
+            $.publish('plugin/register/onValidateInput', [me, event, action]);
         },
 
         /**
@@ -428,6 +445,8 @@
                 'required': 'required',
                 'aria-required': 'true'
             });
+
+            $.publish('plugin/register/onSetHtmlRequired', [this, $elements]);
         },
 
         /**
@@ -439,6 +458,8 @@
          */
         removeHtmlRequired: function ($inputs) {
             $inputs.removeAttr('required aria-required');
+
+            $.publish('plugin/register/onRemoveHtmlRequired', [this, $inputs]);
         },
 
         /**
@@ -456,10 +477,11 @@
 
             if ((plugin = $el.data('plugin_selectboxReplacement'))) {
                 plugin.setError();
-                return;
+            } else {
+                $el.addClass(me.opts.errorClass);
             }
 
-            $el.addClass(me.opts.errorClass);
+            $.publish('plugin/register/onSetFieldAsError', [me, $el]);
         },
 
         /**
@@ -477,10 +499,11 @@
 
             if ((plugin = $el.data('plugin_selectboxReplacement'))) {
                 plugin.removeError();
-                return;
+            } else {
+                $el.removeClass(me.opts.errorClass);
             }
 
-            $el.removeClass(me.opts.errorClass);
+            $.publish('plugin/register/onSetFieldAsSuccess', [me, $el]);
         },
 
         /**
@@ -499,6 +522,8 @@
             if (!URL) {
                 return;
             }
+
+            $.publish('plugin/register/onValidateBefore', [me, data, URL]);
 
             $.ajax({
                 'data': data,
@@ -547,6 +572,8 @@
 
                 me.setFieldAsError($input);
             }
+
+            $.publish('plugin/register/onValidateSuccess', [me, $input]);
         },
 
         /**
@@ -577,6 +604,8 @@
 
                 me.setFieldAsSuccess($input);
             }
+
+            $.publish('plugin/register/onUpdateFields', [me, flags]);
         },
 
         /**

@@ -1,4 +1,4 @@
-;(function($, window, document, undefined) {
+;(function($) {
     'use strict';
 
     $.plugin('formPolyfill', {
@@ -29,6 +29,8 @@
             var me = this;
 
             me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
+
+            $.publish('plugin/formPolyfill/onRegisterEvents', me);
         },
 
         /**
@@ -58,6 +60,8 @@
             }
 
             $form.submit();
+
+            $.publish('plugin/formPolyfill/onSubmitForm', [me, $form]);
         },
 
         /**
@@ -70,4 +74,4 @@
             me._destroy();
         }
     });
-})(jQuery, window, document);
+})(jQuery);

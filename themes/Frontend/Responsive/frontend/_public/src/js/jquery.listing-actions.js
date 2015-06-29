@@ -223,6 +223,8 @@
                     exit: exitFn
                 }
             ]);
+
+            $.publish('plugin/listingActions/onInitStateHandling', me);
         },
 
         /**
@@ -240,6 +242,8 @@
             me.$filterCont.removeClass(opts.collapsedCls);
 
             me.$filterTrigger.removeClass(opts.activeCls);
+
+            $.publish('plugin/listingActions/onEnterMobile', me);
         },
 
         /**
@@ -257,6 +261,8 @@
             if (Object.keys(me.activeFilterElements).length) {
                 me.$activeFilterCont.addClass(me.opts.disabledCls);
             }
+
+            $.publish('plugin/listingActions/onExitMobile', me);
         },
 
         /**
@@ -274,6 +280,8 @@
             me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
             me.$el.on(me.getEventName('click'), '.' + me.opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
+
+            $.publish('plugin/listingActions/onRegisterEvents', me);
         },
 
         /**
@@ -290,6 +298,8 @@
                 categoryParams = me.setCategoryParamsFromData(formData);
 
             me.applyCategoryParams(categoryParams);
+
+            $.publish('plugin/listingActions/onFilterSubmit', [me, event]);
         },
 
         /**
@@ -307,6 +317,8 @@
                 categoryParams = me.setCategoryParamsFromData(formData, true);
 
             me.applyCategoryParams(categoryParams);
+
+            $.publish('plugin/listingActions/onActionSubmit', [me, event]);
         },
 
         /**
@@ -326,6 +338,8 @@
             me.applyCategoryParams(
                 me.setCategoryParamsFromUrlParams(linkParams)
             );
+
+            $.publish('plugin/listingActions/onActionLink', [me, event]);
         },
 
         /**
@@ -348,6 +362,8 @@
             } else {
                 me.openFilterPanel();
             }
+
+            $.publish('plugin/listingActions/onFilterTriggerClick', [me, event]);
         },
 
         /**
@@ -364,6 +380,8 @@
                     $(item).data('plugin_filterComponent').close();
                 });
             }
+
+            $.publish('plugin/listingActions/onBodyClick', [me, event]);
         },
 
         /**
@@ -372,10 +390,8 @@
          * component values to the category params.
          *
          * @param event
-         * @param component
-         * @param $el
          */
-        onComponentChange: function(event, component, $el) {
+        onComponentChange: function(event) {
             var me = this,
                 formData = me.$filterForm.serializeArray(),
                 categoryParams = me.setCategoryParamsFromData(formData),
@@ -385,7 +401,9 @@
 
             me.$applyFilterBtn.addClass(me.opts.loadingClass);
 
-            me.buffer($.proxy(me.getFilterResult, me, urlParams), me.opts.bufferTime)
+            me.buffer($.proxy(me.getFilterResult, me, urlParams), me.opts.bufferTime);
+
+            $.publish('plugin/listingActions/onComponentChange', [me, event]);
         },
 
         /**
@@ -415,6 +433,8 @@
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
+
+            $.publish('plugin/listingActions/onActiveFilterClick', [me, event]);
         },
 
         getPropertyFieldNames: function() {
@@ -430,6 +450,8 @@
                     me.propertyFieldNames.push(fieldName);
                 }
             });
+
+            $.publish('plugin/listingActions/onGetPropertyFieldNames', [me, me.propertyFieldNames]);
 
             return me.propertyFieldNames;
         },
@@ -454,7 +476,11 @@
                 return $.extend(me.categoryParams, tempParams);
             }
 
-            return me.categoryParams = tempParams;
+            me.categoryParams = tempParams;
+
+            $.publish('plugin/listingActions/onSetCategoryParamsFromData', [me, tempParams]);
+
+            return tempParams;
         },
 
         /**
@@ -464,9 +490,12 @@
          */
         setCategoryParamsFromTopLocation: function() {
             var me = this,
-                urlParams = decodeURI(window.location.search).substr(1);
+                urlParams = decodeURI(window.location.search).substr(1),
+                categoryParams = me.setCategoryParamsFromUrlParams(urlParams);
 
-            return me.setCategoryParamsFromUrlParams(urlParams);
+            $.publish('plugin/listingActions/onSetCategoryParamsFromData', [me, categoryParams]);
+
+            return categoryParams;
         },
 
         /**
@@ -476,34 +505,44 @@
          * @returns {{}|*}
          */
         setCategoryParamsFromUrlParams: function(urlParamString) {
+            var me = this,
+                categoryParams,
+                urlParams,
+                params;
 
             if (urlParamString.length <= 0) {
-                return {};
+                categoryParams = {};
+
+                $.publish('plugin/listingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
+
+                return categoryParams;
             }
 
-            var me = this,
-                urlParams = decodeURIComponent(urlParamString),
-                params = urlParams.split('&');
+            categoryParams = me.categoryParams;
+            urlParams = decodeURIComponent(urlParamString);
+            params = urlParams.split('&');
 
             $.each(params, function(index, item) {
                 var param = item.split('=');
 
                 if (param[1] == 'reset') {
-                    delete me.categoryParams[param[0]];
+                    delete categoryParams[param[0]];
 
                 } else if (me.propertyFieldNames.indexOf(param[0]) != -1) {
                     var properties = param[1].split('|');
 
                     $.each(properties, function(index, property) {
-                        me.categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
+                        categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
                     });
 
                 } else {
-                    me.categoryParams[param[0]] = param[1];
+                    categoryParams[param[0]] = param[1];
                 }
             });
 
-            return me.categoryParams;
+            $.publish('plugin/listingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
+
+            return categoryParams;
         },
 
         /**
@@ -518,6 +557,8 @@
                 urlParams = me.createUrlParams(params);
 
             me.applyUrlParams(urlParams);
+
+            $.publish('plugin/listingActions/onApplyCategoryParams', [me, categoryParams]);
         },
 
         /**
@@ -551,7 +592,11 @@
                 filterParams += '&' + key + '=' + value;
             });
 
-            return me.urlParams = filterParams;
+            me.urlParams = filterParams;
+
+            $.publish('plugin/listingActions/onCreateUrlParams', [me, filterParams]);
+
+            return filterParams;
         },
 
         /**
@@ -564,6 +609,8 @@
                 params = urlParams || me.urlParams;
 
             window.location.href = me.getListingUrl(params, true);
+
+            $.publish('plugin/listingActions/onApplyUrlParams', [me, urlParams]);
         },
 
         /**
@@ -576,13 +623,18 @@
          */
         getListingUrl: function(urlParams, encode) {
             var me = this,
-                params = urlParams || me.urlParams;
+                params = urlParams || me.urlParams,
+                url;
 
             if (encode) {
-                return encodeURI(me.controllerURL + params);
+                url = encodeURI(me.controllerURL + params);
+            } else {
+                url = me.controllerURL + params;
             }
 
-            return me.controllerURL + params;
+            $.publish('plugin/listingActions/onApplyUrlParams', [me, url, urlParams, encode]);
+
+            return url;
         },
 
         /**
@@ -599,13 +651,19 @@
             }
 
             me.bufferTimeout = setTimeout(func, bufferTime);
+
+            $.publish('plugin/listingActions/onBuffer', [me, me.bufferTimeout, func, bufferTime]);
         },
 
         /**
          * Resets the current buffer timeout.
          */
         resetBuffer: function() {
-            this.bufferTimeout = 0;
+            var me = this;
+
+            me.bufferTimeout = 0;
+
+            $.publish('plugin/listingActions/onResetBuffer', [me, me.bufferTimeout]);
         },
 
         /**
@@ -628,8 +686,12 @@
                     me.$applyFilterBtn.removeClass(me.opts.loadingClass);
 
                     me.updateFilterButton(response.totalCount);
+
+                    $.publish('plugin/listingActions/onGetFilterResultFinished', [me, response, params]);
                 }
             });
+
+            $.publish('plugin/listingActions/onGetFilterResult', [me, params]);
         },
 
         /**
@@ -648,6 +710,8 @@
             } else {
                 me.$applyFilterBtn.removeAttr('disabled');
             }
+
+            $.publish('plugin/listingActions/onUpdateFilterButton', [me, count]);
         },
 
         /**
@@ -657,7 +721,11 @@
          * @param activeFilterCount
          */
         updateFilterTriggerButton: function(activeFilterCount) {
-            this.$filterTriggerIcon.html(activeFilterCount || '');
+            var me = this;
+
+            me.$filterTriggerIcon.html(activeFilterCount || '');
+
+            $.publish('plugin/listingActions/onUpdateFilterTriggerButton', [me, activeFilterCount]);
         },
 
         /**
@@ -690,6 +758,8 @@
 
             me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
             me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
+
+            $.publish('plugin/listingActions/onCreateActiveFiltersFromCategoryParams', [me, categoryParams]);
         },
 
         /**
@@ -711,6 +781,8 @@
                     me.createActiveFilterElement(param, label);
                 }
             }
+
+            $.publish('plugin/listingActions/onCreateActiveFilter', [me, param, value]);
         },
 
         /**
@@ -727,6 +799,8 @@
                 'html': me.getLabelIcon() + label,
                 'data-filter-param': param
             }).appendTo(me.$activeFilterCont);
+
+            $.publish('plugin/listingActions/onCreateActiveFilterElement', [me, param, label]);
         },
 
         /**
@@ -739,6 +813,8 @@
             var me = this;
 
             me.activeFilterElements[param].html(me.getLabelIcon() + label);
+
+            $.publish('plugin/listingActions/onUpdateActiveFilterElement', [me, param, label]);
         },
 
         /**
@@ -752,6 +828,8 @@
             me.activeFilterElements[param].remove();
 
             delete me.activeFilterElements[param];
+
+            $.publish('plugin/listingActions/onRemoveActiveFilter', [me, param]);
         },
 
         /**
@@ -761,22 +839,24 @@
          * @param param
          */
         resetFilterProperty: function(param) {
-            var me = this;
+            var me = this,
+                $input,
+                rangeSlider;
 
             if (param == 'rating') {
                 me.$el.find('#star--reset').prop('checked', true).trigger('change');
-                return;
-            }
-
-            var $input = me.$el.find('[name="'+param+'"]');
-
-            if ($input.is('[data-range-input]')) {
-                var rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_rangeSlider');
-                    rangeSlider.reset($input.attr('data-range-input'));
-
             } else {
-                $input.removeAttr('checked').trigger('change');
+                $input = me.$el.find('[name="'+param+'"]');
+
+                if ($input.is('[data-range-input]')) {
+                    rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_rangeSlider');
+                    rangeSlider.reset($input.attr('data-range-input'));
+                } else {
+                    $input.removeAttr('checked').trigger('change');
+                }
             }
+
+            $.publish('plugin/listingActions/onResetFilterProperty', [me, param]);
         },
 
         /**
@@ -808,6 +888,8 @@
                 }
             }
 
+            $.publish('plugin/listingActions/onCreateActiveFilterLabel', [me, labelText, param, value]);
+
             return labelText;
         },
 
@@ -818,7 +900,9 @@
          * @returns {string}
          */
         createStarLabel: function(stars) {
-            var label = '', i = 0;
+            var me = this,
+                label = '',
+                i = 0;
 
             for (i; i < 5; i++) {
                 if (i < stars) {
@@ -827,6 +911,8 @@
                     label += '<i class="icon--star-empty"></i>';
                 }
             }
+
+            $.publish('plugin/listingActions/onCreateStarLabel', [me, label, stars]);
 
             return label;
         },
@@ -838,7 +924,12 @@
          * @returns {string}
          */
         getLabelIcon: function() {
-            return '<span class="' + this.opts.activeFilterIconCls + '"></span>';
+            var me = this,
+                icon = '<span class="' + me.opts.activeFilterIconCls + '"></span>';
+
+            $.publish('plugin/listingActions/onCreateStarLabel', [me, icon]);
+
+            return icon;
         },
 
         /**
@@ -855,6 +946,8 @@
             me.$activeFilterCont.removeClass(me.opts.disabledCls);
             me.$filterCont.addClass(me.opts.collapsedCls);
             me.$filterTrigger.addClass(me.opts.activeCls);
+
+            $.publish('plugin/listingActions/onOpenFilterPanel', me);
         },
 
         /**
@@ -871,6 +964,8 @@
             me.$activeFilterCont.addClass(me.opts.disabledCls);
             me.$filterCont.removeClass(me.opts.collapsedCls);
             me.$filterTrigger.removeClass(me.opts.activeCls);
+
+            $.publish('plugin/listingActions/onCloseFilterPanel', me);
         },
 
         /**

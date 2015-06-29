@@ -187,6 +187,8 @@
 
             me._on($document, 'mouseup touchend', $.proxy(me.onEndDrag, me));
             me._on($document, 'mousemove touchmove', $.proxy(me.slide, me));
+
+            $.publish('plugin/rangeSlider/onRegisterEvents', me);
         },
 
         createSliderTemplate: function() {
@@ -205,28 +207,37 @@
         },
 
         createRangeContainer: function() {
-            var me = this;
+            var me = this,
+                $container = $('<div>', {
+                    'class': me.opts.sliderContainerCls
+                });
 
-            return $('<div>', {
-                'class': me.opts.sliderContainerCls
-            });
+            $.publish('plugin/rangeSlider/onCreateRangeContainer', [me, $container]);
+
+            return $container;
         },
 
         createRangeBar: function() {
-            var me = this;
+            var me = this,
+                $bar = $('<div>', {
+                    'class': me.opts.rangeBarCls
+                });
 
-            return $('<div>', {
-                'class': me.opts.rangeBarCls
-            });
+            $.publish('plugin/rangeSlider/onCreateRangeBar', [me, $bar]);
+
+            return $bar;
         },
 
         createHandle: function(type) {
             var me = this,
-                typeClass = (type == 'max') ? me.opts.handleMaxCls : me.opts.handleMinCls;
+                typeClass = (type == 'max') ? me.opts.handleMaxCls : me.opts.handleMinCls,
+                $handle = $('<div>', {
+                    'class': me.opts.handleCls + ' ' + typeClass
+                });
 
-            return $('<div>', {
-                'class': me.opts.handleCls + ' ' + typeClass
-            });
+            $.publish('plugin/rangeSlider/onCreateHandle', [me, $handle]);
+
+            return $handle;
         },
 
         computeBaseValues: function() {
@@ -251,6 +262,8 @@
                 me.maxValue = me.maxRange;
             }
 
+            $.publish('plugin/rangeSlider/onComputeBaseValues', [me, me.minValue, me.maxValue]);
+
             me.setRangeBarPosition(me.minValue, me.maxValue);
             me.updateLayout();
         },
@@ -266,14 +279,8 @@
                 'left': left + '%',
                 'width': width + '%'
             });
-        },
 
-        getMin: function() {
-            return this.minValue;
-        },
-
-        getMax: function() {
-            return this.maxValue;
+            $.publish('plugin/rangeSlider/onSetRangeBarPosition', [me, me.$rangeBar, minValue, maxValue]);
         },
 
         setMin: function(min, updateInput) {
@@ -289,7 +296,10 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/rangeSlider/changeMin', min);
+
+            $.publish('plugin/rangeSlider/onSetMin', [me, min, updateInput]);
         },
 
         setMax: function(max, updateInput) {
@@ -305,7 +315,10 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/rangeSlider/changeMax', max);
+
+            $.publish('plugin/rangeSlider/onSetMax', [me, max, updateInput]);
         },
 
         reset: function(param) {
@@ -326,7 +339,10 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/rangeSlider/reset');
+
+            $.publish('plugin/rangeSlider/onReset', [me, param]);
         },
 
         onStartDrag: function(type, $handle) {
@@ -336,50 +352,60 @@
 
             me.dragState = true;
             me.dragType = type;
+
+            $.publish('plugin/rangeSlider/onStartDrag', [me, type, $handle]);
         },
 
         onEndDrag: function() {
             var me = this;
 
-            if (me.dragState) {
-                me.dragState = false;
-
-                me.updateLayout();
-
-                me.$minHandle.removeClass(me.opts.activeDraggingCls);
-                me.$maxHandle.removeClass(me.opts.activeDraggingCls);
-
-                if (me.dragType == 'max') {
-                    me.updateMaxInput(me.maxValue);
-                } else {
-                    me.updateMinInput(me.minValue);
-                }
-
-                $(me).trigger('rangeChange', me);
-
-                $.publish('plugin/rangeSlider/onChange', me);
+            if (!me.dragState) {
+                return;
             }
+            me.dragState = false;
+
+            me.updateLayout();
+
+            me.$minHandle.removeClass(me.opts.activeDraggingCls);
+            me.$maxHandle.removeClass(me.opts.activeDraggingCls);
+
+            if (me.dragType == 'max') {
+                me.updateMaxInput(me.maxValue);
+            } else {
+                me.updateMinInput(me.minValue);
+            }
+
+            $(me).trigger('rangeChange', me);
+
+            /** @deprecated - will be removed in 5.1 */
+            $.publish('plugin/rangeSlider/onChange', me);
+
+            $.publish('plugin/rangeSlider/onEndDrag', [me, me.dragType]);
         },
 
         slide: function(event) {
             var me = this;
 
-            if (me.dragState) {
-               var pageX = (event.originalEvent.touches) ? event.originalEvent.touches[0].pageX : event.pageX,
-                   offset = me.$container.offset(),
-                   width = me.$container.innerWidth(),
-                   mouseX = pageX - offset.left,
-                   xPercent = clamp(round((100 / width * mouseX), me.stepWidth, 'round'), 0, 100),
-                   value = (me.range / 100 * xPercent) + me.minRange;
-
-               event.preventDefault();
-
-               if (me.dragType == 'max') {
-                   me.setMax(clamp(value, me.minValue + me.stepSize * 2, me.maxRange));
-               } else {
-                   me.setMin(clamp(value, me.minRange, me.maxValue - me.stepSize * 2));
-               }
+            if (!me.dragState) {
+                return;
             }
+
+            var pageX = (event.originalEvent.touches) ? event.originalEvent.touches[0].pageX : event.pageX,
+                offset = me.$container.offset(),
+                width = me.$container.innerWidth(),
+                mouseX = pageX - offset.left,
+                xPercent = clamp(round((100 / width * mouseX), me.stepWidth, 'round'), 0, 100),
+                value = (me.range / 100 * xPercent) + me.minRange;
+
+            event.preventDefault();
+
+            if (me.dragType == 'max') {
+               me.setMax(clamp(value, me.minValue + me.stepSize * 2, me.maxRange));
+            } else {
+               me.setMin(clamp(value, me.minRange, me.maxValue - me.stepSize * 2));
+            }
+
+            $.publish('plugin/rangeSlider/onSlide', [me, event, xPercent, value]);
         },
 
         updateMinInput: function(value) {
@@ -389,6 +415,8 @@
                 me.$minInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
+
+                $.publish('plugin/rangeSlider/onUpdateMinInput', [me, me.$minInputEl, value]);
             }
         },
 
@@ -399,6 +427,8 @@
                 me.$maxInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
+
+                $.publish('plugin/rangeSlider/onUpdateMaxInput', [me, me.$maxInputEl, value]);
             }
         },
 
@@ -407,6 +437,8 @@
 
             if (me.$minLabel.length) {
                 me.$minLabel.html(me.formatValue(value));
+
+                $.publish('plugin/rangeSlider/onUpdateMinLabel', [me, me.$minLabel, value]);
             }
         },
 
@@ -415,6 +447,8 @@
 
             if (me.$maxLabel.length) {
                 me.$maxLabel.html(me.formatValue(value));
+
+                $.publish('plugin/rangeSlider/onUpdateMaxLabel', [me, me.$maxLabel, value]);
             }
         },
 
@@ -425,10 +459,14 @@
 
             me.updateMinLabel(min);
             me.updateMaxLabel(max);
+
+            $.publish('plugin/rangeSlider/onUpdateLayout', [me, minValue, maxValue]);
         },
 
         formatValue: function(value) {
             var me = this;
+
+            $.publish('plugin/rangeSlider/onFormatValueBefore', [me, value]);
 
             if (!me.opts.labelFormat.length) {
                 return value.toFixed(2);
@@ -443,6 +481,8 @@
                 value = value.replace('.', ',');
                 value = me.opts.labelFormat.replace('0,00', value);
             }
+
+            $.publish('plugin/rangeSlider/onFormatValue', [me, value]);
 
             return value;
         },

@@ -63,7 +63,11 @@
 
             me._updateLoader();
 
-            me.$loader.fadeIn(me.options.animationSpeed);
+            me.$loader.fadeIn(me.options.animationSpeed, function () {
+                $.publish('plugin/loadingIndicator/onOpenFinished', me);
+            });
+
+            $.publish('plugin/loadingIndicator/onOpen', me);
         },
 
         /**
@@ -78,8 +82,14 @@
             }
 
             if (me.$loader !== null) {
-                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, $.proxy(callback, me));
+                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
+                    callback.call(me);
+
+                    $.publish('plugin/loadingIndicator/onCloseFinished', me);
+                });
             }
+
+            $.publish('plugin/loadingIndicator/onClose', me);
         },
 
         /**

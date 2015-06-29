@@ -1,4 +1,4 @@
-;(function($, window, undefined) {
+;(function($) {
     "use strict";
 
     /**
@@ -59,6 +59,8 @@
 
             // On delete single product item from comparison
             me._on(me.opts.deleteCompareItemSelector, 'touchstart click', $.proxy(me.onDeleteItem, me));
+
+            $.publish('plugin/productCompareMenu/onRegisterEvents', me);
         },
 
         /**
@@ -83,11 +85,15 @@
                 openOverlay: false
             });
 
+            $.publish('plugin/productCompareMenu/onStartCompareBefore', me);
+
             // Load compare modal before opening modal box
             $.ajax({
                 'url': modalUrl,
                 'dataType': 'jsonp',
                 'success': function(template) {
+                    $.publish('plugin/productCompareMenu/onStartCompareSuccess', [me, template]);
+
                     $.loadingIndicator.close(function() {
 
                         $.modal.open(template, {
@@ -128,9 +134,12 @@
 
                             $(rowSelector).height(maximumHeight);
                         }
+                        $.publish('plugin/productCompareMenu/onStartCompareFinished', [me, template]);
                     });
                 }
             });
+
+            $.publish('plugin/productCompareMenu/onStartCompare', me);
         },
 
         /**
@@ -149,8 +158,14 @@
             $.ajax({
                 'url': deleteUrl,
                 'dataType': 'jsonp',
-                'success': $.proxy($menu.empty, $menu)
+                'success': function () {
+                    $menu.empty();
+
+                    $.publish('plugin/productCompareMenu/onDeleteCompareSuccess', me);
+                }
             });
+
+            $.publish('plugin/productCompareMenu/onDeleteCompare', me);
         },
 
         /**
@@ -180,23 +195,29 @@
                 // remove product silent in the background
                 $.ajax({
                     'url': deleteUrl,
-                    'dataType': 'jsonp'
+                    'dataType': 'jsonp',
+                    'success': function (response) {
+                        $.publish('plugin/productCompareMenu/onDeleteItemSuccess', [me, response]);
+                    }
                 });
 
-                return;
+            } else {
+                // remove last product, reload full compare plugin
+                $.ajax({
+                    'url': deleteUrl,
+                    'dataType': 'jsonp',
+                    'success': function (response) {
+                        $(me.opts.compareMenuSelector).html(response);
+
+                        //Reload compare menu plugin
+                        $('*[data-product-compare-menu="true"]').productCompareMenu();
+
+                        $.publish('plugin/productCompareMenu/onDeleteItemSuccess', [me, response]);
+                    }
+                });
             }
 
-            // remove last product, reload full compare plugin
-            $.ajax({
-                'url': deleteUrl,
-                'dataType': 'jsonp',
-                'success': function (response) {
-                    $(me.opts.compareMenuSelector).html(response);
-
-                    //Reload compare menu plugin
-                    $('*[data-product-compare-menu="true"]').productCompareMenu();
-                }
-            });
+            $.publish('plugin/productCompareMenu/onDeleteItem', [me, event, deleteUrl]);
         },
 
         /** Destroys the plugin */
@@ -204,4 +225,4 @@
             this._destroy();
         }
     });
-})(jQuery, window);
+})(jQuery);

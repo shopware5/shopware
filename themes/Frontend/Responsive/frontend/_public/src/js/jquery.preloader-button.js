@@ -31,6 +31,8 @@
             me.opts.checkFormIsValid = me.checkForValiditySupport();
 
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
+
+            $.publish('plugin/preloaderButton/onRegisterEvents', me);
         },
 
         /**
@@ -40,15 +42,18 @@
          * @returns {boolean}
          */
         checkForValiditySupport: function() {
-            var element = document.createElement('input');
-            return (typeof element.validity === 'object');
+            var me = this,
+                element = document.createElement('input'),
+                valid = (typeof element.validity === 'object');
+
+            $.publish('plugin/preloaderButton/onCheckForValiditySupport', [me, valid]);
+
+            return valid;
         },
 
         /**
          * Event handler method which will be called when the user clicks on the
          * associated element.
-         *
-         * @returns {boolean}
          */
         onShowPreloader: function() {
             var me = this;
@@ -64,6 +69,8 @@
             //... we have to use a timeout, otherwise the element will not be inserted in the page.
             window.setTimeout(function() {
                 me.$el.html(me.$el.text() + '<div class="' + me.opts.loaderCls + '"></div>').attr('disabled', 'disabled');
+
+                $.publish('plugin/preloaderButton/onShowPreloader', me);
             }, 25);
         }
     });
