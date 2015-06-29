@@ -186,6 +186,8 @@
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }
 
+            $.publish('plugin/ajaxProductNavigation/onParseQueryString', [this, url, params]);
+
             return params;
         },
 
@@ -197,7 +199,12 @@
          * @returns {Object} The last saved product state or an empty object.
          */
         getProductState: function () {
-            return JSON.parse(this.storage.getItem('lastProductState')) || {};
+            var me = this,
+                state = JSON.parse(me.storage.getItem('lastProductState')) || {};
+
+            $.publish('plugin/ajaxProductNavigation/onSetProductState', [me, state]);
+
+            return state;
         },
 
         /**
@@ -209,7 +216,11 @@
          * @param {Object} params
          */
         setProductState: function (params) {
-            this.storage.setItem('lastProductState', JSON.stringify(params));
+            var me = this;
+
+            me.storage.setItem('lastProductState', JSON.stringify(params));
+
+            $.publish('plugin/ajaxProductNavigation/onSetProductState', [me, params]);
         },
 
         /**
@@ -219,7 +230,11 @@
          * @method clearProductState
          */
         clearProductState: function () {
-            this.storage.removeItem('lastProductState');
+            var me = this;
+
+            me.storage.removeItem('lastProductState');
+
+            $.publish('plugin/ajaxProductNavigation/onClearProductState', me);
         },
 
         /**
@@ -233,6 +248,8 @@
                 selectors = me.opts.listingSelectors.join(', ');
 
             me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
+
+            $.publish('plugin/ajaxProductNavigation/onRegisterEventsListing', me);
         },
 
         /**
@@ -253,6 +270,8 @@
                 'categoryId': ~~($parent.attr('data-category-id')),
                 'ordernumber': $parent.attr('data-ordernumber')
             }));
+
+            $.publish('plugin/ajaxProductNavigation/onClickProductInListing', [me, event]);
         },
 
         /**
@@ -268,6 +287,8 @@
 
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
+
+            $.publish('plugin/ajaxProductNavigation/onRegisterEventsDetail', me);
         },
 
         /**
@@ -282,6 +303,8 @@
                 me.productState.ordernumber = $target.attr('data-ordernumber');
                 me.setProductState(me.productState);
             }
+
+            $.publish('plugin/ajaxProductNavigation/onArrowClick', [me, event]);
         },
 
         /**
@@ -321,6 +344,8 @@
 
             $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
             $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
+
+            $.publish('plugin/ajaxProductNavigation/onCheckPossibleSliding', me);
         },
 
         /**
@@ -352,6 +377,8 @@
                 'dataType': 'json',
                 'success': $.proxy(me.onProductNavigationLoaded, me)
             });
+
+            $.publish('plugin/ajaxProductNavigation/onGetProductNavigation', me);
         },
 
         /**
@@ -374,6 +401,8 @@
                 animCss = {
                     opacity: 1
                 };
+
+            $.publish('plugin/ajaxProductNavigation/onProductNavigationLoaded', [me, response]);
 
             if (listing && listing.href) {
                 me.$backButton.attr('href', listing.href);
@@ -422,6 +451,8 @@
             }
 
             me.checkPossibleSliding();
+
+            $.publish('plugin/ajaxProductNavigation/onProductNavigationFinished', [me, response]);
         },
 
         /**

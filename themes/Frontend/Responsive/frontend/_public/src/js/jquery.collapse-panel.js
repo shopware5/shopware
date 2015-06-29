@@ -103,6 +103,8 @@
                 e.preventDefault();
                 me.toggleCollapse();
             });
+
+            $.publish('plugin/collapsePanel/onRegisterEvents', me);
         },
 
         /**
@@ -116,10 +118,11 @@
 
             if (me.$targetEl.hasClass(me.opts.collapsedStateCls)) {
                 me.closePanel();
-                return;
+            } else {
+                me.openPanel();
             }
 
-            me.openPanel();
+            $.publish('plugin/collapsePanel/onToggleCollapse', me);
         },
 
         /**
@@ -149,6 +152,8 @@
             $.each($targetEl.find('.product-slider'), function(index, item) {
                 $(item).data('plugin_productSlider').update();
             });
+
+            $.publish('plugin/collapsePanel/onOpenPanel', me);
         },
 
         /**
@@ -165,6 +170,8 @@
             me.$targetEl.slideUp(opts.animationSpeed, function() {
                 $.publish('plugin/collapsePanel/onClose', me);
             }).removeClass(opts.collapsedStateCls);
+
+            $.publish('plugin/collapsePanel/onClosePanel', me);
         },
 
         /**

@@ -29,6 +29,8 @@
             var me = this;
 
             me.$el.on('change', me.opts.radioSelector, $.proxy(me.onInputChanged, me));
+
+            $.publish('plugin/shippingPayment/onRegisterEvents', me);
         },
 
         /**
@@ -39,6 +41,8 @@
                 form = me.$el.find(me.opts.formSelector),
                 url = form.attr('action'),
                 data = form.serialize() + '&isXHR=1';
+
+            $.publish('plugin/shippingPayment/onInputChangedBefore', me);
 
             $.loadingIndicator.open();
 
@@ -51,6 +55,8 @@
                     me.$el.find('input[type="submit"][form], button[form]').formPolyfill();
                     $.loadingIndicator.close();
                     window.picturefill();
+
+                    $.publish('plugin/shippingPayment/onInputChanged', me);
                 }
             })
         },

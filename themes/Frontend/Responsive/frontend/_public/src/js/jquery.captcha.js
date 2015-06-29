@@ -61,8 +61,14 @@
             $.ajax({
                 url: url,
                 cache: false,
-                success: $el.html.bind($el)
+                success: function (response) {
+                    $el.html(response);
+
+                    $.publish('plugin/ajaxWishlist/onSendRequestSuccess', me);
+                }
             });
+
+            $.publish('plugin/ajaxWishlist/onSendRequest', me);
         }
     });
 })(jQuery, window);

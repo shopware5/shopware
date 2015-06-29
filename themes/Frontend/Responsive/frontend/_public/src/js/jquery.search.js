@@ -280,6 +280,8 @@
                     me.closeMobileSearch();
                 }
             });
+
+            $.publish('plugin/search/onRegisterEvents', me);
         },
 
         /**

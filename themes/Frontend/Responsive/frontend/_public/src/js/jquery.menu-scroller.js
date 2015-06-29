@@ -231,6 +231,8 @@
                 }),
                 'class': opts.rightArrowClass
             }).appendTo($el);
+
+            $.publish('plugin/menuScroller/onInitTemplate', me);
         },
 
         /**
@@ -250,6 +252,8 @@
                 'bottom': offset,
                 'margin-top': offset
             });
+
+            $.publish('plugin/menuScroller/onUpdateScrollBarOffset', [me, offset]);
         },
 
         /**
@@ -268,6 +272,8 @@
             me._on(me.$rightArrow, 'click touchstart', $.proxy(me.onRightArrowClick, me));
 
             me._on(me.$list, 'scroll', $.proxy(me.updateButtons, me));
+
+            $.publish('plugin/menuScroller/onRegisterEvents', me);
         },
 
         /**
@@ -291,7 +297,10 @@
 
             me.updateButtons();
 
-            $.publish('plugin/' + me.getName() + '/updateResize', [ me ]);
+            /** @deprecated - will be removed in 5.1 */
+            $.publish('plugin/menuScroller/updateResize', me);
+
+            $.publish('plugin/menuScroller/onUpdateResize', me);
         },
 
         /**
@@ -309,7 +318,7 @@
 
             me.addOffset(me.scrollStep * -1);
 
-            $.publish('plugin/' + me.getName() + '/onLeftArrowClick', [ me ]);
+            $.publish('plugin/menuScroller/onLeftArrowClick', me);
         },
 
         /**
@@ -327,7 +336,7 @@
 
             me.addOffset(me.scrollStep);
 
-            $.publish('plugin/' + me.getName() + '/onRightArrowClick', [ me ]);
+            $.publish('plugin/menuScroller/onRightArrowClick', me);
         },
 
         /**
@@ -361,12 +370,16 @@
                 $list.stop(true).animate({
                     'scrollLeft': newPos
                 }, opts.animationSpeed, $.proxy(me.updateButtons, me));
+
+                $.publish('plugin/menuScroller/onSetOffset', [me, offset, animate]);
                 return;
             }
 
             $list.scrollLeft(newPos);
 
             me.updateButtons();
+
+            $.publish('plugin/menuScroller/onSetOffset', [me, offset, animate]);
         },
 
         /**
@@ -384,6 +397,8 @@
 
             me.$leftArrow.toggle(scrollLeft > 0);
             me.$rightArrow.toggle(listWidth > elWidth && scrollLeft < (listWidth - elWidth));
+
+            $.publish('plugin/menuScroller/onUpdateButtons', [me, me.$leftArrow, me.$rightArrow]);
         },
 
         /**
@@ -408,6 +423,8 @@
             }
 
             me.setOffset(newPos, false);
+
+            $.publish('plugin/menuScroller/onJumpToElement', [me, $el, newPos]);
         },
 
         /**

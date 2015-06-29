@@ -195,6 +195,8 @@
             // on load previous button event for manually fetching previous pages
             var loadPreviousSelector = '.' + me.opts.loadPreviousCls;
             $body.delegate(loadPreviousSelector, 'click', $.proxy(me.onLoadPrevious, me));
+
+            $.publish('plugin/infiniteScrolling/onRegisterEvents', me);
         },
 
         update: function () {
@@ -202,6 +204,8 @@
 
             // disable infinite scrolling, because listing container is not visible
             me.opts.enabled = me.$el.is(':visible');
+
+            $.publish('plugin/infiniteScrolling/onUpdate', me);
         },
 
         /**
@@ -278,6 +282,8 @@
 
                 history.pushState('data', '', me.currentPushState);
             }
+
+            $.publish('plugin/infiniteScrolling/onScrolling', me);
         },
 
         /**
@@ -328,6 +334,8 @@
             $.get(url, function(data) {
                 var template = data.trim();
 
+                $.publish('plugin/infiniteScrolling/onFetchNewPageLoaded', [me, template]);
+
                 // Cancel is no data provided
                 if(!template) {
                     me.isFinished = true;
@@ -351,19 +359,26 @@
                 if(me.params.p >= me.maxPages) {
                     me.isFinished = true;
                 }
+
+                $.publish('plugin/infiniteScrolling/onFetchNewPageFinished', [me, template]);
             });
+
+            $.publish('plugin/infiniteScrolling/onFetchNewPage', me);
         },
 
         generateButton: function(buttonType) {
             var me = this,
                 type = buttonType || 'next',
                 cls = (type == 'previous') ? me.opts.loadPreviousCls : me.opts.loadMoreCls,
-                snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet;
-
-            return $('<a>', {
+                snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet,
+                $button = $('<a>', {
                     'class': me.opts.loadBtnCls + ' ' + cls,
                     'html': snippet + ' <i class="icon--cw is--large"></i>'
-            });
+                });
+
+            $.publish('plugin/infiniteScrolling/onLoadMore', [me, $button, buttonType]);
+
+            return $button;
         },
 
         /**
@@ -389,6 +404,8 @@
 
             // fetching new page
             me.fetchNewPage();
+
+            $.publish('plugin/infiniteScrolling/onLoadMore', [me, event]);
         },
 
         /**
@@ -402,6 +419,8 @@
 
             // append load previous button
             me.buttonWrapperTop.html(button);
+
+            $.publish('plugin/infiniteScrolling/onShowLoadPrevious', [me, button]);
         },
 
         /**
@@ -450,7 +469,11 @@
                 if(tmpParams.p > 1) {
                     me.showLoadPrevious();
                 }
+
+                $.publish('plugin/infiniteScrolling/onLoadPreviousFinished', [me, event, data]);
             });
+
+            $.publish('plugin/infiniteScrolling/onLoadPrevious', [me, event]);
         },
 
         /**
@@ -475,10 +498,11 @@
 
             if(!type) {
                 me.$el.parent().after($indicator);
-                return;
+            } else {
+                me.$el.parent().before($indicator);
             }
 
-            me.$el.parent().before($indicator);
+            $.publish('plugin/infiniteScrolling/onOpenLoadingIndicator', [me, $indicator]);
         },
 
         /**
@@ -488,13 +512,15 @@
          */
         closeLoadingIndicator: function() {
             var me = this,
-            $indicator = $('.js--loading-indicator.indicator--relative');
+                $indicator = $('.js--loading-indicator.indicator--relative');
 
             if(!$indicator.length) {
                 return;
             }
 
             $indicator.remove();
+
+            $.publish('plugin/infiniteScrolling/onCloseLoadingIndicator', me);
         }
     });
 });
