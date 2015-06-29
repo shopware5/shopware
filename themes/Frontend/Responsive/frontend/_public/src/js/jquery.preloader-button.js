@@ -8,7 +8,9 @@
      * @example
      * <button type="submit" data-preloader-button="true">Submit me!</button>
      */
-    $.plugin('preloaderButton', {
+    $.plugin('swPreloaderButton', {
+
+        alias: 'preloaderButton',
 
         /** @object Default configuration */
         defaults: {
@@ -32,7 +34,7 @@
 
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
 
-            $.publish('plugin/preloaderButton/onRegisterEvents', me);
+            $.publish('plugin/swPreloaderButton/onRegisterEvents', me);
         },
 
         /**
@@ -46,7 +48,7 @@
                 element = document.createElement('input'),
                 valid = (typeof element.validity === 'object');
 
-            $.publish('plugin/preloaderButton/onCheckForValiditySupport', [me, valid]);
+            $.publish('plugin/swPreloaderButton/onCheckForValiditySupport', [me, valid]);
 
             return valid;
         },
@@ -70,7 +72,7 @@
             window.setTimeout(function() {
                 me.$el.html(me.$el.text() + '<div class="' + me.opts.loaderCls + '"></div>').attr('disabled', 'disabled');
 
-                $.publish('plugin/preloaderButton/onShowPreloader', me);
+                $.publish('plugin/swPreloaderButton/onShowPreloader', me);
             }, 25);
         }
     });

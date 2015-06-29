@@ -9,7 +9,10 @@
      * scrolls to the correct page position where the alert messages
      * are shown.
      */
-    $.plugin('jumpToTab', {
+    $.plugin('swJumpToTab', {
+
+        alias: 'jumpToTab',
+
         defaults: {
             contentCls: 'has--content',
             tabDetail: '.tab-menu--product',
@@ -21,7 +24,7 @@
                 param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]);
 
             me.$htmlBody = $('body, html');
-            me.tabMenuProduct = me.$el.find(me.opts.tabDetail).data('plugin_tabMenu');
+            me.tabMenuProduct = me.$el.find(me.opts.tabDetail).data('plugin_swTabMenu');
             me.$tabMenuCrossSelling = me.$el.find(me.opts.tabCrossSelling);
 
             me.resizeCrossSelling();
@@ -61,19 +64,26 @@
             var me = this;
 
             me.$el.find('.product--rating-link, .link--publish-comment').on(me.getEventName('click'), $.proxy(me.onJumpToTab, me));
+
+            $.publish('plugin/swJumpToTab/onRegisterEvents', me);
         },
 
         onJumpToTab: function (event) {
             event.preventDefault();
 
             this.jumpToTab(1);
+
+            $.publish('plugin/swJumpToTab/onClick', [this, event]);
         },
 
         jumpToTab: function (tabIndex, jumpTo) {
             var me = this;
+
             if (!me.$el.hasClass('is--ctl-blog')) {
-                me.tabMenuProduct.changeTab(1);
+                me.tabMenuProduct.changeTab(tabIndex);
             }
+
+            $.publish('plugin/swJumpToTab/onChangeTab', [me, tabIndex, jumpTo]);
 
             if (!jumpTo || !jumpTo.length) {
                 return;
@@ -82,6 +92,8 @@
             me.$htmlBody.animate({
                 scrollTop: $(jumpTo).offset().top
             }, 0);
+
+            $.publish('plugin/swJumpToTab/onJumpToTab', [me, tabIndex, jumpTo]);
         }
     });
 

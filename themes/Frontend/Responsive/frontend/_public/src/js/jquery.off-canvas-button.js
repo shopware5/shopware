@@ -4,7 +4,9 @@
     /**
      * Shopware Menu Scroller Plugin
      */
-    $.plugin('offcanvasButton', {
+    $.plugin('swOffcanvasButton', {
+
+        alias: 'offcanvasButton',
 
         /**
          * Default options for the offcanvas button plugin
@@ -61,7 +63,7 @@
 
             $el.addClass(opts.pluginClass);
 
-            $el.offcanvasMenu({
+            $el.swOffcanvasMenu({
                 'direction': 'fromRight',
                 'offCanvasSelector': $el.find(opts.contentSelector),
                 'fullscreen': opts.fullscreen,
@@ -78,7 +80,7 @@
         destroy: function () {
             var me = this,
                 $el = me.$el,
-                plugin = $el.data('plugin_offcanvasMenu');
+                plugin = $el.data('plugin_swOffcanvasMenu');
 
             if (plugin) {
                 plugin.destroy();

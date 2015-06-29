@@ -4,7 +4,9 @@
     /**
      * Shopware Collapse Panel Plugin.
      */
-    $.plugin('collapsePanel', {
+    $.plugin('swCollapsePanel', {
+
+        alias: 'collapsePanel',
 
         /**
          * Default options for the collapse panel plugin.
@@ -104,7 +106,7 @@
                 me.toggleCollapse();
             });
 
-            $.publish('plugin/collapsePanel/onRegisterEvents', me);
+            $.publish('plugin/swCollapsePanel/onRegisterEvents', me);
         },
 
         /**
@@ -122,7 +124,7 @@
                 me.openPanel();
             }
 
-            $.publish('plugin/collapsePanel/onToggleCollapse', me);
+            $.publish('plugin/swCollapsePanel/onToggleCollapse', me);
         },
 
         /**
@@ -140,7 +142,10 @@
             me.$el.addClass(opts.activeTriggerCls);
 
             $targetEl.slideDown(opts.animationSpeed, function () {
+                /** @deprecated - will be removed in 5.1 */
                 $.publish('plugin/collapsePanel/onOpen', me );
+
+                $.publish('plugin/swCollapsePanel/onOpen', me);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
@@ -150,10 +155,10 @@
             }
 
             $.each($targetEl.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_productSlider').update();
+                $(item).data('plugin_swProductSlider').update();
             });
 
-            $.publish('plugin/collapsePanel/onOpenPanel', me);
+            $.publish('plugin/swCollapsePanel/onOpenPanel', me);
         },
 
         /**
@@ -168,10 +173,13 @@
 
             me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.slideUp(opts.animationSpeed, function() {
+                /** @deprecated - will be removed in 5.1 */
                 $.publish('plugin/collapsePanel/onClose', me);
+
+                $.publish('plugin/swCollapsePanel/onClose', me);
             }).removeClass(opts.collapsedStateCls);
 
-            $.publish('plugin/collapsePanel/onClosePanel', me);
+            $.publish('plugin/swCollapsePanel/onClosePanel', me);
         },
 
         /**

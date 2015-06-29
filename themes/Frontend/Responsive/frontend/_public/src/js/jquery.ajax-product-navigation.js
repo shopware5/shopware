@@ -10,7 +10,10 @@
      * Please keep in mind that the plugin only works when the url contains the category parameter and the browser
      * needs to support {@link window.sessionStorage}.
      */
-    $.plugin('ajaxProductNavigation', {
+    $.plugin('swAjaxProductNavigation', {
+
+        alias: 'ajaxProductNavigation',
+
         /**
          * Default configuration of the plugin
          *
@@ -186,7 +189,7 @@
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }
 
-            $.publish('plugin/ajaxProductNavigation/onParseQueryString', [this, url, params]);
+            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [this, url, params]);
 
             return params;
         },
@@ -202,7 +205,7 @@
             var me = this,
                 state = JSON.parse(me.storage.getItem('lastProductState')) || {};
 
-            $.publish('plugin/ajaxProductNavigation/onSetProductState', [me, state]);
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, state]);
 
             return state;
         },
@@ -220,7 +223,7 @@
 
             me.storage.setItem('lastProductState', JSON.stringify(params));
 
-            $.publish('plugin/ajaxProductNavigation/onSetProductState', [me, params]);
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, params]);
         },
 
         /**
@@ -234,7 +237,7 @@
 
             me.storage.removeItem('lastProductState');
 
-            $.publish('plugin/ajaxProductNavigation/onClearProductState', me);
+            $.publish('plugin/swAjaxProductNavigation/onClearProductState', me);
         },
 
         /**
@@ -249,7 +252,7 @@
 
             me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
 
-            $.publish('plugin/ajaxProductNavigation/onRegisterEventsListing', me);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', me);
         },
 
         /**
@@ -271,7 +274,7 @@
                 'ordernumber': $parent.attr('data-ordernumber')
             }));
 
-            $.publish('plugin/ajaxProductNavigation/onClickProductInListing', [me, event]);
+            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [me, event]);
         },
 
         /**
@@ -288,7 +291,7 @@
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
 
-            $.publish('plugin/ajaxProductNavigation/onRegisterEventsDetail', me);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', me);
         },
 
         /**
@@ -304,7 +307,7 @@
                 me.setProductState(me.productState);
             }
 
-            $.publish('plugin/ajaxProductNavigation/onArrowClick', [me, event]);
+            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [me, event]);
         },
 
         /**
@@ -345,7 +348,7 @@
             $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
             $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
 
-            $.publish('plugin/ajaxProductNavigation/onCheckPossibleSliding', me);
+            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', me);
         },
 
         /**
@@ -378,7 +381,7 @@
                 'success': $.proxy(me.onProductNavigationLoaded, me)
             });
 
-            $.publish('plugin/ajaxProductNavigation/onGetProductNavigation', me);
+            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', me);
         },
 
         /**
@@ -402,7 +405,7 @@
                     opacity: 1
                 };
 
-            $.publish('plugin/ajaxProductNavigation/onProductNavigationLoaded', [me, response]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [me, response]);
 
             if (listing && listing.href) {
                 me.$backButton.attr('href', listing.href);
@@ -452,7 +455,7 @@
 
             me.checkPossibleSliding();
 
-            $.publish('plugin/ajaxProductNavigation/onProductNavigationFinished', [me, response]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [me, response]);
         },
 
         /**

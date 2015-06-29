@@ -28,7 +28,7 @@
 
                 me.$rangeSliderEl = me.$el.find(me.opts.rangeSliderSelector);
                 me.$rangeInputs = me.$rangeSliderEl.find('input');
-                me.rangeSlider = me.$rangeSliderEl.data('plugin_rangeSlider');
+                me.rangeSlider = me.$rangeSliderEl.data('plugin_swRangeSlider');
 
                 me.registerComponentEvents();
             },
@@ -100,7 +100,9 @@
     /**
      * The actual plugin.
      */
-    $.plugin('filterComponent', {
+    $.plugin('swFilterComponent', {
+
+        alias: 'filterComponent',
 
         defaults: {
             /**
@@ -172,7 +174,7 @@
 
             me.registerComponentEvents();
 
-            $.publish('plugin/filterComponent/onInitComponent', me);
+            $.publish('plugin/swFilterComponent/onInitComponent', me);
         },
 
         /**
@@ -185,7 +187,7 @@
                 me._on(me.$title, 'click', $.proxy(me.toggleCollapse, me, true));
             }
 
-            $.publish('plugin/filterComponent/onRegisterEvents', me);
+            $.publish('plugin/swFilterComponent/onRegisterEvents', me);
         },
 
         /**
@@ -197,7 +199,7 @@
 
             me._on(me.$inputs, 'change', $.proxy(me.onChange, me));
 
-            $.publish('plugin/filterComponent/onRegisterComponentEvents', me);
+            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', me);
         },
 
         /**
@@ -214,7 +216,10 @@
 
             me.$el.trigger('onChange', [me, $el]);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/filterComponent/onChange', me);
+
+            $.publish('plugin/swFilterComponent/onChange', [me, event]);
         },
 
         /**
@@ -240,7 +245,7 @@
 
             me.$el.addClass(me.opts.collapseCls);
 
-            $.publish('plugin/filterComponent/onOpen', me);
+            $.publish('plugin/swFilterComponent/onOpen', me);
         },
 
         /**
@@ -251,7 +256,7 @@
 
             me.$el.removeClass(me.opts.collapseCls);
 
-            $.publish('plugin/filterComponent/onClose', me);
+            $.publish('plugin/swFilterComponent/onClose', me);
         },
 
         /**
@@ -267,7 +272,7 @@
                 me.close();
             }
 
-            $.publish('plugin/filterComponent/onToggleCollapse', [me, shouldOpen]);
+            $.publish('plugin/swFilterComponent/onToggleCollapse', [me, shouldOpen]);
         },
 
         /**
