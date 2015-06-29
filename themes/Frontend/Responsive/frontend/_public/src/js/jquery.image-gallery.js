@@ -9,7 +9,9 @@
      * and reset zoom) and also enables advanced features of the
      * image slider plugin like pinch-to-zoom, double-tap, moving scaled images.
      */
-    $.plugin('imageGallery', {
+    $.plugin('swImageGallery', {
+
+        alias: 'imageGallery',
 
         defaults: {
 
@@ -223,7 +225,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomInClass
                 });
 
-            $.publish('plugin/imageGallery/onCreateZoomInButton', [me, $zoomInButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomInButton', [me, $zoomInButton]);
 
             return $zoomInButton;
         },
@@ -241,7 +243,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomOutClass
                 });
 
-            $.publish('plugin/imageGallery/onCreateZoomOutButton', [me, $zoomOutButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomOutButton', [me, $zoomOutButton]);
 
             return $zoomOutButton;
         },
@@ -259,7 +261,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomResetClass
                 });
 
-            $.publish('plugin/imageGallery/onCreateZoomResetButton', [me, $zoomResetButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomResetButton', [me, $zoomResetButton]);
 
             return $zoomResetButton;
         },
@@ -275,12 +277,12 @@
 
             me._on(me._$imageContainer.find(me.opts.imageSlideSelector), 'click', $.proxy(me.onClick, me));
 
-            $.subscribe('plugin/imageSlider/slide', $.proxy(me.onImageUpdate, me));
-            $.subscribe('plugin/imageSlider/updateTransform', $.proxy(me.onImageUpdate, me));
+            $.subscribe('plugin/swImageSlider/onSlide', $.proxy(me.onImageUpdate, me));
+            $.subscribe('plugin/swImageSlider/onUpdateTransform', $.proxy(me.onImageUpdate, me));
 
             me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
 
-            $.publish('plugin/imageGallery/onRegisterEvents', me);
+            $.publish('plugin/swImageGallery/onRegisterEvents', me);
         },
 
         /**
@@ -294,9 +296,9 @@
         getImageSlider: function () {
             var me = this,
                 $template = me.$template,
-                slider = ($template && $template.data('plugin_imageSlider')) || null;
+                slider = ($template && $template.data('plugin_swImageSlider')) || null;
 
-            $.publish('plugin/imageGallery/onGetImageSlider', [me, slider]);
+            $.publish('plugin/swImageGallery/onGetImageSlider', [me, slider]);
 
             return slider;
         },
@@ -320,7 +322,7 @@
 
             me.toggleButtons(plugin);
 
-            $.publish('plugin/imageGallery/onImageUpdate', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onImageUpdate', [me, event, plugin]);
         },
 
         /**
@@ -345,10 +347,10 @@
             plugin.resetTransformation(true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/imageGallery/onResetZoomFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onResetZoomFinished', [me, event, plugin]);
             });
 
-            $.publish('plugin/imageGallery/onResetZoom', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onResetZoom', [me, event, plugin]);
         },
 
         /**
@@ -373,10 +375,10 @@
             plugin.scale(1, true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/imageGallery/onZoomInFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onZoomInFinished', [me, event, plugin]);
             });
 
-            $.publish('plugin/imageGallery/onZoomIn', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onZoomIn', [me, event, plugin]);
         },
 
         /**
@@ -401,10 +403,10 @@
             plugin.scale(-1, true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/imageGallery/onZoomOutFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onZoomOutFinished', [me, event, plugin]);
             });
 
-            $.publish('plugin/imageGallery/onZoomOut', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onZoomOut', [me, event, plugin]);
         },
 
         /**
@@ -433,7 +435,7 @@
                 plugin.slideNext();
             }
 
-            $.publish('plugin/imageGallery/onKeyDown', [me, event, keyCode]);
+            $.publish('plugin/swImageGallery/onKeyDown', [me, event, keyCode]);
         },
 
         /**
@@ -472,7 +474,7 @@
                 ]
             });
 
-            $.publish('plugin/imageGallery/onCreateTemplate', [me, $template]);
+            $.publish('plugin/swImageGallery/onCreateTemplate', [me, $template]);
 
             return $template;
         },
@@ -485,7 +487,7 @@
          */
         onClick: function (event) {
             var me = this,
-                plugin = me.$el.data('plugin_imageSlider');
+                plugin = me.getImageSlider();
 
             $.modal.open(me.$template || (me.$template = me.createTemplate()), {
                 width: '100%',
@@ -501,7 +503,7 @@
 
             picturefill();
 
-            me.$template.imageSlider({
+            me.$template.swImageSlider({
                 dotNavigation: false,
                 swipeToSlide: true,
                 pinchToZoom: true,
@@ -513,7 +515,7 @@
 
             me.toggleButtons(me.getImageSlider());
 
-            $.publish('plugin/imageGallery/onClick', [me, event]);
+            $.publish('plugin/swImageGallery/onClick', [me, event]);
         },
 
         /**
@@ -532,7 +534,7 @@
 
             plugin.destroy();
 
-            $.publish('plugin/imageGallery/onCloseModal', me);
+            $.publish('plugin/swImageGallery/onCloseModal', me);
         },
 
         /**
@@ -550,7 +552,7 @@
             me.$zoomOutBtn.addClass(disabledClass);
             me.$zoomInBtn.addClass(disabledClass);
 
-            $.publish('plugin/imageGallery/onDisableButtons', me);
+            $.publish('plugin/swImageGallery/onDisableButtons', me);
         },
 
         /**
@@ -579,7 +581,7 @@
             me.$zoomOutBtn.toggleClass(disabledClass, scale === minScale);
             me.$zoomInBtn.toggleClass(disabledClass, scale === maxScale);
 
-            $.publish('plugin/imageGallery/onToggleButtons', me);
+            $.publish('plugin/swImageGallery/onToggleButtons', me);
         },
 
         /**

@@ -25,7 +25,9 @@
      * If you now change either an input or an option in the select, the form will be submitted.
      *
      */
-    $.plugin('autoSubmit', {
+    $.plugin('swAutoSubmit', {
+
+        alias: 'autoSubmit',
 
         defaults: {
 
@@ -56,7 +58,7 @@
             // Will be automatically removed when destroy() is called.
             me._on(me.$el, 'change', $.proxy(me.onChangeSelection, me));
 
-            $.publish('plugin/ajaxWishlist/onRegisterEvents', me);
+            $.publish('plugin/swAutoSubmit/onRegisterEvents', me);
         },
 
         onChangeSelection: function () {

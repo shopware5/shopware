@@ -1,7 +1,9 @@
 ;(function($) {
     'use strict';
 
-    $.plugin('formPolyfill', {
+    $.plugin('swFormPolyfill', {
+
+        alias: 'formPolyfill',
 
         defaults: {
             eventType: 'click'
@@ -30,7 +32,7 @@
 
             me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
 
-            $.publish('plugin/formPolyfill/onRegisterEvents', me);
+            $.publish('plugin/swFormPolyfill/onRegisterEvents', me);
         },
 
         /**
@@ -61,7 +63,7 @@
 
             $form.submit();
 
-            $.publish('plugin/formPolyfill/onSubmitForm', [me, $form]);
+            $.publish('plugin/swFormPolyfill/onSubmitForm', [me, $form]);
         },
 
         /**

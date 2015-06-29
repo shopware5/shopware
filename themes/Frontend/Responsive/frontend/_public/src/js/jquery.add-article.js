@@ -29,10 +29,12 @@
      *
      * JS:
      *
-     * $('*[data-add-article="true"]').addArticle();
+     * $('*[data-add-article="true"]').swAddArticle();
      *
      */
-    $.plugin('addArticle', {
+    $.plugin('swAddArticle', {
+
+        alias: 'addArticle',
 
         defaults: {
             /**
@@ -97,7 +99,7 @@
             // Close modal on continue shopping button
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
 
-            StateManager.addPlugin(opts.productSliderSelector, 'productSlider');
+            StateManager.addPlugin(opts.productSliderSelector, 'swProductSlider');
         },
 
         /**
@@ -129,14 +131,14 @@
                 });
             }
 
-            $.publish('plugin/addArticle/onBeforeAddArticle', [ me, ajaxData ]);
+            $.publish('plugin/swAddArticle/onBeforeAddArticle', [me, ajaxData]);
 
             $.ajax({
                 'data': ajaxData,
                 'dataType': 'jsonp',
                 'url': opts.addArticleUrl,
                 'success': function (result) {
-                    $.publish('plugin/addArticle/onAddArticle', [ me, result ]);
+                    $.publish('plugin/swAddArticle/onAddArticle', [me, result]);
 
                     if (!opts.showModal) {
                         return;
@@ -151,9 +153,9 @@
 
                         picturefill();
 
-                        StateManager.updatePlugin(opts.productSliderSelector, 'productSlider');
+                        StateManager.updatePlugin(opts.productSliderSelector, 'swProductSlider');
 
-                        $.publish('plugin/addArticle/onAddArticleOpenModal', [me, result]);
+                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [me, result]);
                     });
                 }
             });
@@ -170,7 +172,7 @@
 
             $.modal.close();
 
-            $.publish('plugin/addArticle/onCloseModal', this);
+            $.publish('plugin/swAddArticle/onCloseModal', this);
         },
 
         /**
@@ -183,9 +185,9 @@
         onCloseModal: function () {
             var me = this;
 
-            StateManager.destroyPlugin(me.opts.productSliderSelector, 'productSlider');
+            StateManager.destroyPlugin(me.opts.productSliderSelector, 'swProductSlider');
 
-            $.publish('plugin/addArticle/onCloseModal', me);
+            $.publish('plugin/swAddArticle/onCloseModal', me);
         }
     });
 });

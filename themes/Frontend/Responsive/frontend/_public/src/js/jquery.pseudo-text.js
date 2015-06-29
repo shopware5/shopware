@@ -18,7 +18,9 @@
      * <textarea data-pseudo-text="true" data-selector=".my-field--hidden"></textarea>
      * ```
      */
-    $.plugin('pseudoText', {
+    $.plugin('swPseudoText', {
+
+        alias: 'pseudoText',
 
         /**
          * Default settings for the plugin

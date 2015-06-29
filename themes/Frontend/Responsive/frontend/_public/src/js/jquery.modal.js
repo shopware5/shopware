@@ -645,7 +645,9 @@
      * The content of the offcanvas can either be passed to the plugin
      * or the target element will be used as the content.
      */
-    $.plugin('modalbox', {
+    $.plugin('swModalbox', {
+
+        alias: 'modalbox',
 
         defaults: {
 

@@ -31,7 +31,9 @@
         return qparams;
     };
 
-    $.plugin('infiniteScrolling', {
+    $.plugin('swInfiniteScrolling', {
+
+        alias: 'infiniteScrolling',
 
         defaults: {
 
@@ -196,7 +198,7 @@
             var loadPreviousSelector = '.' + me.opts.loadPreviousCls;
             $body.delegate(loadPreviousSelector, 'click', $.proxy(me.onLoadPrevious, me));
 
-            $.publish('plugin/infiniteScrolling/onRegisterEvents', me);
+            $.publish('plugin/swInfiniteScrolling/onRegisterEvents', me);
         },
 
         update: function () {
@@ -205,7 +207,7 @@
             // disable infinite scrolling, because listing container is not visible
             me.opts.enabled = me.$el.is(':visible');
 
-            $.publish('plugin/infiniteScrolling/onUpdate', me);
+            $.publish('plugin/swInfiniteScrolling/onUpdate', me);
         },
 
         /**
@@ -283,7 +285,7 @@
                 history.pushState('data', '', me.currentPushState);
             }
 
-            $.publish('plugin/infiniteScrolling/onScrolling', me);
+            $.publish('plugin/swInfiniteScrolling/onScrolling', me);
         },
 
         /**
@@ -334,7 +336,7 @@
             $.get(url, function(data) {
                 var template = data.trim();
 
-                $.publish('plugin/infiniteScrolling/onFetchNewPageLoaded', [me, template]);
+                $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [me, template]);
 
                 // Cancel is no data provided
                 if(!template) {
@@ -360,10 +362,10 @@
                     me.isFinished = true;
                 }
 
-                $.publish('plugin/infiniteScrolling/onFetchNewPageFinished', [me, template]);
+                $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [me, template]);
             });
 
-            $.publish('plugin/infiniteScrolling/onFetchNewPage', me);
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPage', me);
         },
 
         generateButton: function(buttonType) {
@@ -376,7 +378,7 @@
                     'html': snippet + ' <i class="icon--cw is--large"></i>'
                 });
 
-            $.publish('plugin/infiniteScrolling/onLoadMore', [me, $button, buttonType]);
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, $button, buttonType]);
 
             return $button;
         },
@@ -405,7 +407,7 @@
             // fetching new page
             me.fetchNewPage();
 
-            $.publish('plugin/infiniteScrolling/onLoadMore', [me, event]);
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, event]);
         },
 
         /**
@@ -420,7 +422,7 @@
             // append load previous button
             me.buttonWrapperTop.html(button);
 
-            $.publish('plugin/infiniteScrolling/onShowLoadPrevious', [me, button]);
+            $.publish('plugin/swInfiniteScrolling/onShowLoadPrevious', [me, button]);
         },
 
         /**
@@ -470,10 +472,10 @@
                     me.showLoadPrevious();
                 }
 
-                $.publish('plugin/infiniteScrolling/onLoadPreviousFinished', [me, event, data]);
+                $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [me, event, data]);
             });
 
-            $.publish('plugin/infiniteScrolling/onLoadPrevious', [me, event]);
+            $.publish('plugin/swInfiniteScrolling/onLoadPrevious', [me, event]);
         },
 
         /**
@@ -502,7 +504,7 @@
                 me.$el.parent().before($indicator);
             }
 
-            $.publish('plugin/infiniteScrolling/onOpenLoadingIndicator', [me, $indicator]);
+            $.publish('plugin/swInfiniteScrolling/onOpenLoadingIndicator', [me, $indicator]);
         },
 
         /**
@@ -520,7 +522,7 @@
 
             $indicator.remove();
 
-            $.publish('plugin/infiniteScrolling/onCloseLoadingIndicator', me);
+            $.publish('plugin/swInfiniteScrolling/onCloseLoadingIndicator', me);
         }
     });
 });

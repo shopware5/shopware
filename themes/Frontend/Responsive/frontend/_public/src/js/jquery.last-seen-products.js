@@ -9,7 +9,9 @@
      * Those articles will be collected, when the user opens a detail page.
      * The created list will be showed as a product slider.
      */
-    $.plugin('lastSeenProducts', {
+    $.plugin('swLastSeenProducts', {
+
+        alias: 'lastSeenProducts',
 
         defaults: {
 
@@ -110,7 +112,7 @@
             me.$list = me.$el.find(me.opts.listSelector);
             me.$container = me.$list.find(me.opts.containerSelector);
 
-            me.productSlider = me.$list.data('plugin_productSlider');
+            me.productSlider = me.$list.data('plugin_swProductSlider');
 
             if (!me.productSlider) {
                 return;
@@ -151,7 +153,7 @@
 
             me.productSlider.initSlider();
 
-            $.publish('plugin/lastSeenProducts/onCreateProductList', me);
+            $.publish('plugin/swLastSeenProducts/onCreateProductList', me);
         },
 
         /**
@@ -171,7 +173,7 @@
                     ]
                 });
 
-            $.publish('plugin/lastSeenProducts/onCreateTemplate', [me, $template, article]);
+            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [me, $template, article]);
 
             return $template;
         },
@@ -193,7 +195,7 @@
                     'html': data.articleName
                 });
 
-            $.publish('plugin/lastSeenProducts/onCreateProductTitle', [me, $title, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [me, $title, data]);
 
             return $title;
         },
@@ -235,7 +237,7 @@
                 'title': data.articleName
             }).appendTo(imageMedia);
 
-            $.publish('plugin/lastSeenProducts/onCreateProductImage', [me, element, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
 
             return element;
         },
@@ -285,7 +287,7 @@
 
             me.storage.setItem(itemKey, JSON.stringify(products));
 
-            $.publish('plugin/lastSeenProducts/onCollectProduct', [me, newProduct]);
+            $.publish('plugin/swLastSeenProducts/onCollectProduct', [me, newProduct]);
         }
     });
 }(jQuery));

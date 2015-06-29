@@ -21,7 +21,9 @@
      *
      * @ToDo: Implement swipe gesture control. The old swipe gesture was removed due to a scrolling bug.
      */
-    $.plugin('offcanvasMenu', {
+    $.plugin('swOffcanvasMenu', {
+
+        alias: 'offcanvasMenu',
 
         /**
          * Plugin default options.
@@ -229,9 +231,9 @@
             // Allow the user to close the off canvas menu
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
 
-            $.subscribe('plugin/offcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+            $.subscribe('plugin/swOffcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
 
-            $.publish('plugin/offcanvasMenu/onRegisterEvents', me);
+            $.publish('plugin/swOffcanvasMenu/onRegisterEvents', me);
         },
 
         /**
@@ -267,7 +269,7 @@
 
             me.openMenu();
 
-            $.publish('plugin/offcanvasMenu/onClickElement', [me, event]);
+            $.publish('plugin/swOffcanvasMenu/onClickElement', [me, event]);
         },
 
         /**
@@ -286,7 +288,7 @@
 
             me.closeMenu();
 
-            $.publish('plugin/offcanvasMenu/onClickCloseButton', [me, event]);
+            $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [me, event]);
         },
 
         /**
@@ -311,7 +313,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/offcanvasMenu/beforeOpenMenu', me);
 
-            $.publish('plugin/offcanvasMenu/onBeforeOpenMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onBeforeOpenMenu', me);
 
             $html.addClass('no--scroll');
 
@@ -332,7 +334,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/offCanvasMenu/openMenu', me);
 
-            $.publish('plugin/offcanvasMenu/onOpenMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onOpenMenu', me);
 
             if (opts.mode === 'ajax' && opts.ajaxURL) {
                 $.ajax({
@@ -374,7 +376,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/offCanvasMenu/closeMenu', me);
 
-            $.publish('plugin/offcanvasMenu/onCloseMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onCloseMenu', me);
         },
 
         /**
@@ -402,7 +404,7 @@
 
             me.$el.off(me.getEventName('click'), opts.closeButtonSelector);
 
-            $.unsubscribe('plugin/' + me.getName() + '/beforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
+            $.unsubscribe('plugin/swOffcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
 
             me._destroy();
         }
