@@ -581,9 +581,11 @@ Ext.onReady(function() {
         override: 'Shopware.notification.SubscriptionWarning',
 
         snippets: {
-            licence_upgrade_warning: 'Es stehen noch Lizenzupgrades für [0] Plugin(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
-            subscription_warning: 'Es sind [0] Plugin Subscription(s) abgelaufen. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
-            invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
+            licence_upgrade_warning: 'Es stehen noch Lizenzupgrades für [0] Plugin(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Nötige Upgrades:</b><br />[1]',
+            subscription_warning: 'Es sind [0] Plugin Subscription(s) abgelaufen. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Abgelaufene Plugins:</b><br />[1]',
+            expired_soon_subscription_warning: 'Es laufen [0] Plugin Subscription(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Bald abgelaufene Plugins:</b><br />[1]',
+            expired_soon_subscription_days_warning: ' Tage',
+            invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Ungültige Lizenzen:</b><br />[1]',
             shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>'
         }
     });
