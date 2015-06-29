@@ -246,7 +246,7 @@ class sConfigurator
             } elseif ($settings['type'] == self::TYPE_SELECTION) {
                 array_pop($this->sSYSTEM->_POST["group"]);
             }
-            if(sizeof($this->sSYSTEM->_POST["group"])) {
+            if (count($this->sSYSTEM->_POST["group"])) {
                 return $this->getArticleConfigurator($id, $articleData, true);
             }
         }
