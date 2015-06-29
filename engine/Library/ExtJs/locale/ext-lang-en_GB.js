@@ -555,9 +555,11 @@ Ext.onReady(function() {
         override: 'Shopware.notification.SubscriptionWarning',
 
         snippets: {
-            licence_upgrade_warning: '[0] plugin(s) require a licence upgrade. <a target="_blank" href="https://account.shopware.com">Open account</a>',
-            subscription_warning: 'Subscription(s) for [0] plugin(s) have expired or will expire soon. <a target="_blank" href="https://account.shopware.com">Open account</a>',
-            invalid_licence: 'Licence(s) of [0] plugin(s) are invalid. <a target="_blank" href="https://account.shopware.com">Open account</a>',
+            licence_upgrade_warning: '[0] plugin(s) require a licence upgrade. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Required upgrades:</b><br />[1]',
+            subscription_warning: 'Subscription(s) for [0] plugin(s) have expired. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Expired plugins:</b><br />[1]',
+            expired_soon_subscription_warning: 'Subscription(s) for [0] plugin(s) will expire soon. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Soon expiring plugins:</b><br />[1]',
+            expired_soon_subscription_days_warning: ' days',
+            invalid_licence: 'Licence(s) of [0] plugin(s) are invalid. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><b>Invalid licences:</b><br />[1]',
             shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet. <a target="_blank" href="https://account.shopware.com">Open account</a>'
         }
     });

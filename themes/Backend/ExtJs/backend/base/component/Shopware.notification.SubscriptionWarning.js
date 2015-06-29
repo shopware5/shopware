@@ -26,9 +26,11 @@
 Ext.define('Shopware.notification.SubscriptionWarning', {
 
     snippets: {
-        licence_upgrade_warning: '[0]x plugin(s) require a licence upgrade',
-        subscription_warning: 'Subscription(s) for [0]x plugin(s) are expired or expire in a few days',
-        invalid_licence: 'Licence(s) of [0]x plugin(s) are invalid',
+        licence_upgrade_warning: '[0]x plugin(s) require a licence upgrade.<br /><br /><b>Required upgrades:</b><br />[1]',
+        subscription_warning: 'Subscription(s) for [0]x plugin(s) are expired. <br /><br /><b>Expired plugins:</b><br />[1]',
+        expired_soon_subscription_warning: 'Subscription(s) for [0]x plugin(s) expire in a few days.<br /><br /><b>Soon expired plugins:</b><br />[1]',
+        expired_soon_subscription_days_warning: ' days',
+        invalid_licence: 'Licence(s) of [0]x plugin(s) are invalid.<br /><br /><b>Invalid licence(s):</b><br />[1]',
         shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.'
     },
 
@@ -39,6 +41,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         var me = this;
 
         me.getPluginsSubscriptionState(function (data) {
+            data.expiredPluginSubscriptions.sort(me.sortPluginsByDaysLeftCallback);
             me.displayNotices(data);
         });
     },
@@ -85,32 +88,54 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             me.displayWrongVersionNotice(data.wrongVersionPlugins);
         }
 
-        if (data.expiredPluginSubscriptions && data.expiredPluginSubscriptions.length > 0) {
-            me.displaySubscriptionNotice(data.expiredPluginSubscriptions);
+        var expiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, true);
+        if (expiredPlugins && expiredPlugins.length > 0) {
+            me.displaySubscriptionNotice(expiredPlugins);
+        }
+
+        var soonExpiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, false);
+        if (soonExpiredPlugins && soonExpiredPlugins.length > 0) {
+            me.displayExpiredSoonSubscriptionNotice(soonExpiredPlugins);
         }
     },
 
     displayWrongVersionNotice: function (plugins) {
-        var me = this;
+        var me          = this,
+            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+
         Shopware.Notification.createStickyGrowlMessage({
-            text: Ext.String.format(me.snippets.invalid_licence, plugins.length),
+            text: Ext.String.format(me.snippets.invalid_licence, plugins.length, pluginNames),
             width: 440
         });
     },
 
     displayNotUpgradedNotice: function (plugins) {
-        var me = this;
+        var me          = this,
+            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+
         Shopware.Notification.createStickyGrowlMessage({
-            text: Ext.String.format(me.snippets.licence_upgrade_warning, plugins.length),
+            text: Ext.String.format(me.snippets.licence_upgrade_warning, plugins.length, pluginNames),
             width: 440
         });
 
     },
 
     displaySubscriptionNotice: function (plugins) {
-        var me = this;
+        var me          = this,
+            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+
         Shopware.Notification.createStickyGrowlMessage({
-            text: Ext.String.format(me.snippets.subscription_warning, plugins.length),
+            text: Ext.String.format(me.snippets.subscription_warning, plugins.length, pluginNames),
+            width: 440
+        });
+    },
+
+    displayExpiredSoonSubscriptionNotice: function(plugins) {
+        var me          = this,
+            pluginNames = me.getSoonExpiredPluginNamesMessage(plugins, '<br />');
+
+        Shopware.Notification.createStickyGrowlMessage({
+            text: Ext.String.format(me.snippets.expired_soon_subscription_warning, plugins.length, pluginNames),
             width: 440
         });
     },
@@ -121,5 +146,76 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             text: '<b>' + me.snippets.shop_license_upgrade + '</b>',
             width: 440
         });
+    },
+
+    /**
+     * Creates a string with all plugin names as a string separated by a defined separator, the default value for the
+     * separator is a ','
+     * @param plugins
+     * @param separator
+     * @returns [string]
+     */
+    getPluginNamesMessage: function (plugins, separator) {
+        separator = (typeof separator == 'undefined' ? ',' : separator);
+
+        var pluginNameList = plugins.map(function (plugin) {
+            return plugin.label;
+        });
+        return pluginNameList.join(separator);
+    },
+
+    /**
+     * Filters the plugin array for expired plugins or soon expired plugins
+     * @param plugins
+     * @param expired
+     * @returns [object]
+     */
+    filterExpiredPlugins: function (plugins, expired) {
+        if (expired) {
+            return plugins.filter(function (plugin) {
+                if (plugin.expired && plugin.daysLeft == 0) {
+                    return plugin;
+                }
+            });
+        } else {
+            return plugins.filter(function (plugin) {
+                if (!plugin.expired && plugin.daysLeft > 0) {
+                    return plugin;
+                }
+            });
+        }
+    },
+
+    /**
+     * Returns an array with all plugins names including the days left until the subscription will expire
+     * @param plugins
+     * @param separator
+     * @returns [string]
+     */
+    getSoonExpiredPluginNamesMessage: function (plugins, separator) {
+        var me = this;
+        separator = (typeof separator == 'undefined' ? ',' : separator);
+
+        var pluginNameList = plugins.map(function (plugin) {
+            return plugin.label + ' (' + plugin.daysLeft + me.snippets.expired_soon_subscription_days_warning + ')';
+        });
+
+        return pluginNameList.join(separator);
+    },
+
+    /**
+    * Sorts the plugins by days left ascending
+    * @param a
+    * @param b
+    * @returns [number]
+    */
+    sortPluginsByDaysLeftCallback: function(a, b) {
+        if (a.daysLeft < b.daysLeft) {
+            return -1;
+        }
+        if (a.daysLeft > b.daysLeft) {
+            return 1;
+        }
+        return 0;
     }
 });
