@@ -7,7 +7,9 @@
      * This plugin scrolls the page or given element to a certain point when the
      * plugin element was clicked.
      */
-    $.plugin('scrollAnimate', {
+    $.plugin('swScrollAnimate', {
+
+        alias: 'scrollAnimate',
 
         defaults: {
 
@@ -68,6 +70,8 @@
             var me = this;
 
             me._on(me.$el, 'touchstart click', $.proxy(me.onClickElement, me));
+
+            $.publish('plugin/swScrollAnimate/onRegisterEvents', me);
         },
 
         /**
@@ -82,6 +86,8 @@
 
             var me = this,
                 opts = me.opts;
+
+            $.publish('plugin/swScrollAnimate/onClickElement', [me, event]);
 
             if (me.$targetEl) {
                 me.scrollToElement(me.$targetEl);
@@ -100,12 +106,15 @@
          * @param {Number} offset
          */
         scrollToElement: function ($targetEl, offset) {
+            var me = this;
 
             if (!$targetEl.length) {
                 return;
             }
 
-            this.scrollToPosition($targetEl.offset().top + ~~(offset));
+            $.publish('plugin/swScrollAnimate/onScrollToElement', [me, $targetEl, offset]);
+
+            me.scrollToPosition($targetEl.offset().top + ~~(offset));
         },
 
         /**
@@ -121,6 +130,8 @@
             me.$container.animate({
                 scrollTop: position
             }, me.opts.animationSpeed);
+
+            $.publish('plugin/swScrollAnimate/onScrollToPosition', [me, position]);
         },
 
         /**

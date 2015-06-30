@@ -17,7 +17,7 @@
     };
 }(jQuery));
 
-;(function ($) {
+;(function ($, window) {
     'use strict';
 
     var numberRegex = /^\-?\d*\.?\d*$/,
@@ -40,7 +40,7 @@
                     : numberRegex.test(value) ? +value
                     : objectRegex.test(value) ? $.parseJSON(value)
                     : value
-                )
+            )
         } catch (e) {
             return value;
         }
@@ -94,7 +94,10 @@
         // Call the init method of the plugin
         me.init();
 
+        /** @deprecated - will be removed in 5.1 */
         $.publish('plugin/' + name + '/init', [ me ]);
+
+        $.publish('plugin/' + name + '/onInit', me);
     }
 
     PluginBase.prototype = {
@@ -163,7 +166,10 @@
 
             me.$el.removeData('plugin_' + name);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/' + name + '/destroy', [ me ]);
+
+            $.publish('plugin/' + name + '/onDestroy', me);
 
             return me;
         },
@@ -186,7 +192,10 @@
             args.unshift(event);
             $el.on.apply($el, args);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/' + me._name + '/on', [ $el, event ]);
+
+            $.publish('plugin/' + me._name + '/onRegisterEvent', [ $el, event ]);
 
             return me;
         },
@@ -222,7 +231,10 @@
                 delete events[id];
             });
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/' + me._name + '/off', [ $element, pluginEvent ]);
+
+            $.publish('plugin/' + me._name + '/onRemoveEvent', [ $element, event ]);
 
             return me;
         },
@@ -363,27 +375,99 @@
      * $('.test').yourName();
      */
     $.plugin = function (name, plugin) {
-        $.fn[name] = function (options) {
+        var alias = plugin.alias,
+            pluginFn = function (options) {
+                return this.each(function () {
+                    var element = this,
+                        pluginData = $.data(element, 'plugin_' + alias) || $.data(element, 'plugin_' + name);
+
+                    if (!pluginData) {
+                        if (typeof plugin === 'function') {
+                            pluginData = new plugin();
+                        } else {
+                            var Plugin = function () {
+                                PluginBase.call(this, name, element, options);
+                            };
+
+                            Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
+                            pluginData = new Plugin();
+                        }
+
+                        $.data(element, 'plugin_' + name, pluginData);
+
+                        if (alias) {
+                            $.data(element, 'plugin_' + alias, pluginData);
+                        }
+                    }
+                });
+            };
+
+        window.PluginsCollection = window.PluginsCollection || {};
+        window.PluginsCollection[name] = plugin;
+
+        $.fn[name] = pluginFn;
+
+        if (alias) {
+            window.PluginsCollection[alias] = plugin;
+
+            if (!$.fn[alias]) {
+                $.fn[alias] = pluginFn;
+            }
+        }
+    };
+
+    /**
+     * Provides the ability to overwrite jQuery plugins which are built on top of the {@link PluginBase} class. All of
+     * our jQuery plugins (or to be more technical about it, the prototypes of our plugins) are registered in the object
+     * {@link window.PluginsCollection} which can be accessed from anywhere in your storefront.
+     *
+     * Please keep in mind that the method overwrites the plugin in jQuery's plugin namespace {@link jQuery.fn} as well,
+     * but you still have the ability to access the overwritten method(s) using the ```superclass``` object property.
+     *
+     * @example How to overwrite the ```showResult```-method in the "search" plugin.
+     * $.overridePlugin('search', {
+     *    showResult: function(response) {
+     *        //.. do something with the response
+     *    }
+     * });
+     *
+     * @example Call the original method without modifications
+     * $.overridePlugin('search', {
+     *    showResult: function(response) {
+     *        this.superclass.showResult.apply(this, arguments);
+     *    }
+     * });
+     */
+    $.overridePlugin = function (pluginName, override) {
+        var overridePlugin = window.PluginsCollection[pluginName],
+            alias;
+
+        if (typeof overridePlugin !== 'object' || typeof override !== 'object') {
+            return false;
+        }
+
+        alias = overridePlugin.alias;
+
+        $.fn[pluginName] = function (options) {
             return this.each(function () {
                 var element = this,
-                    pluginData = $.data(element, 'plugin_' + name);
+                    pluginData = $.data(element, 'plugin_' + alias) || $.data(element, 'plugin_' + pluginName);
 
                 if (!pluginData) {
-                    if (typeof plugin === 'function') {
-                        pluginData = new plugin();
-                    } else {
-                        var Plugin = function () {
-                            PluginBase.call(this, name, element, options);
-                        };
+                    var Plugin = function () {
+                        PluginBase.call(this, pluginName, element, options);
+                    };
 
-                        Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
+                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin, superclass: overridePlugin }, overridePlugin, override);
+                    pluginData = new Plugin();
 
-                        pluginData = new Plugin();
+                    $.data(element, 'plugin_' + pluginName, pluginData);
+
+                    if (alias) {
+                        $.data(element, 'plugin_' + pluginName, pluginData);
                     }
-
-                    $.data(element, 'plugin_' + name, pluginData);
                 }
             });
         };
     };
-})(jQuery);
+})(jQuery, window);

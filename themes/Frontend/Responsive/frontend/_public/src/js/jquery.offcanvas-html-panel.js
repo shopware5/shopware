@@ -25,14 +25,17 @@
      *
      * jQuery Initializing for all viewports
      *
-     * StateManager.addPlugin('.category--teaser', 'offcanvasHtmlPanel');
+     * StateManager.addPlugin('.category--teaser', 'swOffcanvasHtmlPanel');
      *
      * jQuery Initializing for some states
      *
-     * StateManager.addPlugin('.category--teaser', 'offcanvasHtmlPanel', ['xs', 's']);
+     * StateManager.addPlugin('.category--teaser', 'swOffcanvasHtmlPanel', ['xs', 's']);
      *
      */
-    $.plugin('offcanvasHtmlPanel', {
+    $.plugin('swOffcanvasHtmlPanel', {
+
+        alias: 'offcanvasHtmlPanel',
+
         defaults: {
             /**
              * Offcanvas Content which will be displayed in the off canvas menu
@@ -107,7 +110,7 @@
             me._$offCanvas = $el.find(opts.offCanvasSelector).removeClass(opts.hiddenCls);
             me._$offcanvasTrigger = $el.find(opts.offcanvasTrigger);
 
-            me._$offcanvasTrigger.offcanvasMenu({
+            me._$offcanvasTrigger.swOffcanvasMenu({
                 'offCanvasSelector': opts.offCanvasSelector,
                 'closeButtonSelector': opts.offCanvasCloseSelector,
                 'direction': opts.offCanvasDirection
@@ -124,7 +127,7 @@
         destroy: function () {
             var me = this,
                 hiddenClass = me.opts.hiddenCls,
-                plugin = me._$offcanvasTrigger.data('plugin_offcanvasMenu');
+                plugin = me._$offcanvasTrigger.data('plugin_swOffcanvasMenu');
 
             // redesign content to old structure
             me._$longText.removeClass(hiddenClass);

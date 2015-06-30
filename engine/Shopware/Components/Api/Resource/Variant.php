@@ -618,6 +618,10 @@ class Variant extends Resource implements BatchInterface
                 $priceData['customerGroupKey'] = 'EK';
             }
 
+            if (empty($priceData['from']) && $price->getFrom() == 0) {
+                $priceData['from'] = 1;
+            }
+
             // load the customer group of the price definition
             $customerGroup = $this->getManager()
                 ->getRepository('Shopware\Models\Customer\Group')

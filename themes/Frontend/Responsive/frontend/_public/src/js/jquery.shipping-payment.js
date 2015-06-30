@@ -1,7 +1,9 @@
 ;(function($) {
     'use strict';
 
-    $.plugin('shippingPayment', {
+    $.plugin('swShippingPayment', {
+
+        alias: 'shippingPayment',
 
         defaults: {
 
@@ -29,6 +31,8 @@
             var me = this;
 
             me.$el.on('change', me.opts.radioSelector, $.proxy(me.onInputChanged, me));
+
+            $.publish('plugin/swShippingPayment/onRegisterEvents', me);
         },
 
         /**
@@ -40,6 +44,8 @@
                 url = form.attr('action'),
                 data = form.serialize() + '&isXHR=1';
 
+            $.publish('plugin/swShippingPayment/onInputChangedBefore', me);
+
             $.loadingIndicator.open();
 
             $.ajax({
@@ -48,9 +54,11 @@
                 data: data,
                 success: function(res) {
                     me.$el.empty().html(res);
-                    me.$el.find('input[type="submit"][form], button[form]').formPolyfill();
+                    me.$el.find('input[type="submit"][form], button[form]').swFormPolyfill();
                     $.loadingIndicator.close();
                     window.picturefill();
+
+                    $.publish('plugin/swShippingPayment/onInputChanged', me);
                 }
             })
         },

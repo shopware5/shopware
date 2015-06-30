@@ -1,4 +1,4 @@
-;(function($, window, undefined) {
+;(function($) {
     "use strict";
 
     /**
@@ -6,7 +6,9 @@
      *
      * The plugin handles the compare add button on every product box.
      */
-    $.plugin('productCompareAdd', {
+    $.plugin('swProductCompareAdd', {
+
+        alias: 'productCompareAdd',
 
         /** Your default options */
         defaults: {
@@ -27,6 +29,8 @@
 
             // On add article to compare button
             me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
+
+            $.publish('plugin/swProductCompareAdd/onRegisterEvents', me);
         },
 
         /**
@@ -54,6 +58,8 @@
                 openOverlay: false
             });
 
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [me, event]);
+
             // Ajax request for adding article to compare list
             $.ajax({
                 'url': addArticleUrl,
@@ -74,24 +80,27 @@
                             });
                         });
 
-                        return;
+                    } else {
+                        compareMenu.html(data);
+
+                        // Reload compare menu plugin
+                        $('*[data-product-compare-menu="true"]').swProductCompareMenu();
+
+                        // Prevent too fast closing of loadingIndicator and overlay
+                        $.loadingIndicator.close(function() {
+                            $('html, body').animate({
+                                scrollTop: ($('.top-bar').offset().top)
+                            }, 'slow');
+
+                            $.overlay.close();
+                        })
                     }
 
-                    compareMenu.html(data);
-
-                    // Reload compare menu plugin
-                    $('*[data-product-compare-menu="true"]').productCompareMenu();
-
-                    // Prevent too fast closing of loadingIndicator and overlay
-                    $.loadingIndicator.close(function() {
-                        $('html, body').animate({
-                            scrollTop: ($('.top-bar').offset().top)
-                        }, 'slow');
-
-                        $.overlay.close();
-                    })
+                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
                 }
             });
+
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [me, event]);
         },
 
         /** Destroys the plugin */
@@ -101,4 +110,4 @@
             this._destroy();
         }
     });
-})(jQuery, window);
+})(jQuery);

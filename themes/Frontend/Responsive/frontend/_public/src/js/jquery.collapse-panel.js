@@ -4,7 +4,9 @@
     /**
      * Shopware Collapse Panel Plugin.
      */
-    $.plugin('collapsePanel', {
+    $.plugin('swCollapsePanel', {
+
+        alias: 'collapsePanel',
 
         /**
          * Default options for the collapse panel plugin.
@@ -103,6 +105,8 @@
                 e.preventDefault();
                 me.toggleCollapse();
             });
+
+            $.publish('plugin/swCollapsePanel/onRegisterEvents', me);
         },
 
         /**
@@ -116,10 +120,11 @@
 
             if (me.$targetEl.hasClass(me.opts.collapsedStateCls)) {
                 me.closePanel();
-                return;
+            } else {
+                me.openPanel();
             }
 
-            me.openPanel();
+            $.publish('plugin/swCollapsePanel/onToggleCollapse', me);
         },
 
         /**
@@ -137,7 +142,10 @@
             me.$el.addClass(opts.activeTriggerCls);
 
             $targetEl.slideDown(opts.animationSpeed, function () {
+                /** @deprecated - will be removed in 5.1 */
                 $.publish('plugin/collapsePanel/onOpen', me );
+
+                $.publish('plugin/swCollapsePanel/onOpen', me);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
@@ -147,8 +155,10 @@
             }
 
             $.each($targetEl.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_productSlider').update();
+                $(item).data('plugin_swProductSlider').update();
             });
+
+            $.publish('plugin/swCollapsePanel/onOpenPanel', me);
         },
 
         /**
@@ -163,8 +173,13 @@
 
             me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.slideUp(opts.animationSpeed, function() {
+                /** @deprecated - will be removed in 5.1 */
                 $.publish('plugin/collapsePanel/onClose', me);
+
+                $.publish('plugin/swCollapsePanel/onClose', me);
             }).removeClass(opts.collapsedStateCls);
+
+            $.publish('plugin/swCollapsePanel/onClosePanel', me);
         },
 
         /**

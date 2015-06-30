@@ -9,7 +9,9 @@
      * Those articles will be collected, when the user opens a detail page.
      * The created list will be showed as a product slider.
      */
-    $.plugin('lastSeenProducts', {
+    $.plugin('swLastSeenProducts', {
+
+        alias: 'lastSeenProducts',
 
         defaults: {
 
@@ -110,7 +112,7 @@
             me.$list = me.$el.find(me.opts.listSelector);
             me.$container = me.$list.find(me.opts.containerSelector);
 
-            me.productSlider = me.$list.data('plugin_productSlider');
+            me.productSlider = me.$list.data('plugin_swProductSlider');
 
             if (!me.productSlider) {
                 return;
@@ -150,6 +152,8 @@
             }
 
             me.productSlider.initSlider();
+
+            $.publish('plugin/swLastSeenProducts/onCreateProductList', me);
         },
 
         /**
@@ -160,15 +164,18 @@
          * @param {Object} article
          */
         createTemplate: function (article) {
-            var me = this;
+            var me = this,
+                $template = $('<div>', {
+                    'class': me.opts.itemCls,
+                    'html': [
+                        me.createProductImage(article),
+                        me.createProductTitle(article)
+                    ]
+                });
 
-            return $('<div>', {
-                'class': me.opts.itemCls,
-                'html': [
-                    me.createProductImage(article),
-                    me.createProductTitle(article)
-                ]
-            });
+            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [me, $template, article]);
+
+            return $template;
         },
 
         /**
@@ -179,15 +186,18 @@
          * @param {Object} data
          */
         createProductTitle: function (data) {
-            var me = this;
+            var me = this,
+                $title = $('<a>', {
+                    'rel': 'nofollow',
+                    'class': me.opts.titleCls,
+                    'title': data.articleName,
+                    'href': data.linkDetailsRewritten,
+                    'html': data.articleName
+                });
 
-            return $('<a>', {
-                'rel': 'nofollow',
-                'class': me.opts.titleCls,
-                'title': data.articleName,
-                'href': data.linkDetailsRewritten,
-                'html': data.articleName
-            });
+            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [me, $title, data]);
+
+            return $title;
         },
 
         /**
@@ -226,6 +236,8 @@
                 'alt': data.articleName,
                 'title': data.articleName
             }).appendTo(imageMedia);
+
+            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
 
             return element;
         },
@@ -274,6 +286,8 @@
             }
 
             me.storage.setItem(itemKey, JSON.stringify(products));
+
+            $.publish('plugin/swLastSeenProducts/onCollectProduct', [me, newProduct]);
         }
     });
 }(jQuery));

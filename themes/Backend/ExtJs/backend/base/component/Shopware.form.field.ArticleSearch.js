@@ -122,6 +122,14 @@ Ext.define('Shopware.form.field.ArticleSearch',
     dropDownStore: null,
 
     /**
+     * Store which holds the articles
+     *
+     * @default null
+     * @object
+     */
+    store: null,
+
+    /**
      * Offset for the drop down menu based on the position of the search field.
      * @array
      */
@@ -190,10 +198,27 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * Contains the search scopes for the article search component.
      * Supports the following options:
      *  - Contains "articles" => search for normal articles
-     *  - Contains "variants" => search for variant articles
-     *  - Contains "configurator" => search for configurator articles.
+     *  - Contains "variants" => search for variant articles - DEPRECATED
+     *  - Contains "configurator" => search for configurator articles
+     *
+     * Deprecated: "variants", to search for variant articles you can configure the store like this:
+     *
+     * Ext.create('Shopware.form.field.ArticleSearch', {
+     *      name: 'articleNumber',
+     *      returnValue: 'number',
+     *      hiddenReturnValue: 'name',
+     *      store: Ext.create('Shopware.apps.Base.store.Variant'),
+     *      getValue: function() {
+     *          return this.getSearchField().getValue();
+     *      },
+     *      setValue: function(value) {
+     *          this.getSearchField().setValue(value);
+     *      }
+     * }
+     *
      * Example: ['articles','variants'] => Selects normal articles and variant articles
      * Default: ['articles','variants','configurator']
+     *
      * @array
      */
     searchScope: ['articles','variants','configurator'],
@@ -223,22 +248,31 @@ Ext.define('Shopware.form.field.ArticleSearch',
 
         me.registerEvents();
 
-        if (!(me.articleStore instanceof Ext.data.Store)) {
-            me.articleStore = Ext.create('Shopware.apps.Base.store.Article');
+        //maps the article store to the store attribute
+        if (!(me.store instanceof Ext.data.Store)) {
+            if (!(me.articleStore instanceof Ext.data.Store)) {
+                me.store = Ext.create('Shopware.apps.Base.store.Article');
+            } else {
+                me.store = me.articleStore;
+            }
         }
 
+        //gets the dropDownStore name because the DropDownStore and the ArticleStore must be the same
+        var dropDownStoreName = me.store.$className;
+
         // We need to filter the store on loading to prevent to show the first article in the store on startup
-        me.dropDownStore = Ext.create('Shopware.apps.Base.store.Article', {
+        me.dropDownStore = Ext.create(dropDownStoreName, {
             listeners: {
                 single: true,
                 load: function() {
-                    me.loadArticleStore(me.articleStore);
+                    me.loadArticleStore(me.store);
                 }
             }
         });
+
         //article store passed to the component?
-        if (Ext.isObject(me.articleStore) && me.articleStore.data.items.length > 0 ) {
-            me.loadArticleStore(me.articleStore);
+        if (Ext.isObject(me.store) && me.store.data.items.length > 0 ) {
+            me.loadArticleStore(me.store);
         }
 
         if (Ext.isArray(me.searchScope) && me.searchScope.length > 0) {

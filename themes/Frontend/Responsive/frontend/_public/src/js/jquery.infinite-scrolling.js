@@ -31,7 +31,9 @@
         return qparams;
     };
 
-    $.plugin('infiniteScrolling', {
+    $.plugin('swInfiniteScrolling', {
+
+        alias: 'infiniteScrolling',
 
         defaults: {
 
@@ -195,6 +197,8 @@
             // on load previous button event for manually fetching previous pages
             var loadPreviousSelector = '.' + me.opts.loadPreviousCls;
             $body.delegate(loadPreviousSelector, 'click', $.proxy(me.onLoadPrevious, me));
+
+            $.publish('plugin/swInfiniteScrolling/onRegisterEvents', me);
         },
 
         update: function () {
@@ -202,6 +206,8 @@
 
             // disable infinite scrolling, because listing container is not visible
             me.opts.enabled = me.$el.is(':visible');
+
+            $.publish('plugin/swInfiniteScrolling/onUpdate', me);
         },
 
         /**
@@ -278,6 +284,8 @@
 
                 history.pushState('data', '', me.currentPushState);
             }
+
+            $.publish('plugin/swInfiniteScrolling/onScrolling', me);
         },
 
         /**
@@ -328,6 +336,8 @@
             $.get(url, function(data) {
                 var template = data.trim();
 
+                $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [me, template]);
+
                 // Cancel is no data provided
                 if(!template) {
                     me.isFinished = true;
@@ -351,19 +361,26 @@
                 if(me.params.p >= me.maxPages) {
                     me.isFinished = true;
                 }
+
+                $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [me, template]);
             });
+
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPage', me);
         },
 
         generateButton: function(buttonType) {
             var me = this,
                 type = buttonType || 'next',
                 cls = (type == 'previous') ? me.opts.loadPreviousCls : me.opts.loadMoreCls,
-                snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet;
-
-            return $('<a>', {
+                snippet = (type == 'previous') ? me.opts.loadPreviousSnippet : me.opts.loadMoreSnippet,
+                $button = $('<a>', {
                     'class': me.opts.loadBtnCls + ' ' + cls,
                     'html': snippet + ' <i class="icon--cw is--large"></i>'
-            });
+                });
+
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, $button, buttonType]);
+
+            return $button;
         },
 
         /**
@@ -389,6 +406,8 @@
 
             // fetching new page
             me.fetchNewPage();
+
+            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, event]);
         },
 
         /**
@@ -402,6 +421,8 @@
 
             // append load previous button
             me.buttonWrapperTop.html(button);
+
+            $.publish('plugin/swInfiniteScrolling/onShowLoadPrevious', [me, button]);
         },
 
         /**
@@ -450,7 +471,11 @@
                 if(tmpParams.p > 1) {
                     me.showLoadPrevious();
                 }
+
+                $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [me, event, data]);
             });
+
+            $.publish('plugin/swInfiniteScrolling/onLoadPrevious', [me, event]);
         },
 
         /**
@@ -475,10 +500,11 @@
 
             if(!type) {
                 me.$el.parent().after($indicator);
-                return;
+            } else {
+                me.$el.parent().before($indicator);
             }
 
-            me.$el.parent().before($indicator);
+            $.publish('plugin/swInfiniteScrolling/onOpenLoadingIndicator', [me, $indicator]);
         },
 
         /**
@@ -488,13 +514,15 @@
          */
         closeLoadingIndicator: function() {
             var me = this,
-            $indicator = $('.js--loading-indicator.indicator--relative');
+                $indicator = $('.js--loading-indicator.indicator--relative');
 
             if(!$indicator.length) {
                 return;
             }
 
             $indicator.remove();
+
+            $.publish('plugin/swInfiniteScrolling/onCloseLoadingIndicator', me);
         }
     });
 });

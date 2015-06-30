@@ -81,6 +81,85 @@ In this document you will find a changelog of the important changes related to t
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
 * Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
 * It's no longer possible to have spaces in article numbers. Existing articles with spaces in their numbers will still work, but the article cannot be changed without fixing the number.
+* Change structure of `build-database` target in `build/build.xml` to allow a more fine grained build process.
+* Introduce new configuration option `snippet.showSnippetPlaceholder`. Empty snippets are now hidden by default. If `showSnippetPlaceholder` is `true` snippet placeholders will be shown.
+* Removed table `s_emarketing_vouchers_cashed`.
+* 'Shopware.form.field.ArticleSearch' search using the "variants" option is deprecated. Use "configurator" to load configurator articles or "searchVariants" to load article variants with the correct additional text and ordernumber.
+* Added column `added` to the table `s_campaigns_mailaddresses` which holds the date of the newsletter registration. It will be displayed in the newsletter administration under "Recipients" as the "Double-Opt-In date" column.
+* Removed the expert layout and the corresponding mail form inside the batch processing window of the order backend module.
+* Added support for attributes in backend module site
+* Added a lot more jQuery plugin events.
+* Marked some jQuery plugin events as deprecated which will be removed in the version 5.1. They were replaced with more conventional names:
+    * plugin/collapseCart/afterRemoveArticle    => plugin/swCollapseCart/onRemoveArticleFinished
+    * plugin/collapseCart/afterLoadCart         => plugin/swCollapseCart/onLoadCartFinished
+    * plugin/collapseCart/onMouseLeave          => plugin/swCollapseCart/onMouseLeave
+    * plugin/collapseCart/onCloseButton         => plugin/swCollapseCart/onCloseButton
+    * plugin/collapseCart/onRemoveArticle       => plugin/swCollapseCart/onRemoveArticle
+    * plugin/collapseCart/onMenuOpen            => plugin/swCollapseCart/onMenuOpen
+    * plugin/collapseCart/onLoadCart            => plugin/swCollapseCart/onLoadCart
+    * plugin/collapseCart/onCloseMenu           => plugin/swCollapseCart/onCloseMenu
+    * plugin/collapsePanel/onOpen               => plugin/swCollapsePanel/onOpen
+    * plugin/collapsePanel/onClose              => plugin/swCollapsePanel/onClose
+    * plugin/filterComponent/onChange           => plugin/swFilterComponent/onChange
+    * plugin/emotionLoader/loadEmotion          => plugin/swEmotionLoader/onLoadEmotion
+    * plugin/emotionLoader/initEmotion          => plugin/swEmotionLoader/onInitEmotion
+    * plugin/emotionLoader/showEmotion          => plugin/swEmotionLoader/onShowEmotion
+    * plugin/emotionLoader/hideEmotion          => plugin/swEmotionLoader/onHideEmotion
+    * plugin/emotionLoader/showFallbackContent  => plugin/swEmotionLoader/onShowFallbackContent
+    * plugin/emotionLoader/hideFallbackContent  => plugin/swEmotionLoader/onHideFallbackContent
+    * plugin/emotion/initElements               => plugin/swEmotion/onInitElements
+    * plugin/emotion/initFullscreen             => plugin/swEmotion/onInitFullscreen
+    * plugin/emotion/removeFullscreen           => plugin/swEmotion/onRemoveFullscreen
+    * plugin/emotion/initMasonryGrid            => plugin/swEmotion/onInitMasonryGrid
+    * plugin/emotion/initScaleGrid              => plugin/swEmotion/onInitScaleGrid
+    * plugin/emotion/registerEvents             => plugin/swEmotion/onRegisterEvents
+    * plugin/imageSlider/updateTransform        => plugin/swImageSlider/onUpdateTransform
+    * plugin/imageSlider/slide                  => plugin/swImageSlider/onSlide
+    * plugin/imageSlider/slideNext              => plugin/swImageSlider/onSlideNext
+    * plugin/imageSlider/slidePrev              => plugin/swImageSlider/onSlidePrev
+    * plugin/menuScroller/updateResize          => plugin/swMenuScroller/onUpdateResize
+    * plugin/offcanvasMenu/beforeOpenMenu       => plugin/swOffcanvasMenu/onBeforeOpenMenu
+    * plugin/offCanvasMenu/openMenu             => plugin/swOffcanvasMenu/onOpenMenu
+    * plugin/offCanvasMenu/closeMenu            => plugin/swOffcanvasMenu/onCloseMenu
+    * plugin/-PLUGIN_NAME-/init                 => plugin/-PLUGIN_NAME-/onInit (PluginBase)
+    * plugin/-PLUGIN_NAME-/destroy              => plugin/-PLUGIN_NAME-/onDestroy (PluginBase)
+    * plugin/-PLUGIN_NAME-/on                   => plugin/-PLUGIN_NAME-/onRegisterEvent (PluginBase)
+    * plugin/-PLUGIN_NAME-/off                  => plugin/-PLUGIN_NAME-/onRemoveEvent (PluginBase)
+    * plugin/productSlider/trackItems           => plugin/swProductSlider/onTrackItems
+    * plugin/productSlider/trackArrows          => plugin/swProductSlider/onTrackArrows
+    * plugin/productSlider/itemsLoaded          => plugin/swProductSlider/onLoadItemsSuccess
+    * plugin/productSlider/loadItems            => plugin/swProductSlider/onLoadItems
+    * plugin/productSlider/createContainer      => plugin/swProductSlider/onCreateContainer
+    * plugin/productSlider/createArrows         => plugin/swProductSlider/onCreateArrows
+    * plugin/productSlider/slideNext            => plugin/swProductSlider/onSlideNext
+    * plugin/productSlider/slidePrev            => plugin/swProductSlider/onSlidePrev
+    * plugin/productSlider/slideToElement       => plugin/swProductSlider/onSlideToElement
+    * plugin/productSlider/slide                => plugin/swProductSlider/onSlide
+    * plugin/productSlider/autoSlide            => plugin/swProductSlider/onAutoSlide
+    * plugin/productSlider/stopAutoSlide        => plugin/swProductSlider/onStopAutoSlide
+    * plugin/productSlider/scrollNext           => plugin/swProductSlider/onScrollNext
+    * plugin/productSlider/scrollPrev           => plugin/swProductSlider/onScrollPrev
+    * plugin/productSlider/autoScroll           => plugin/swProductSlider/onAutoScroll
+    * plugin/productSlider/stopAutoScroll       => plugin/swProductSlider/onStopAutoScroll
+    * plugin/productSlider/buffer               => plugin/swProductSlider/onBuffer
+    * plugin/rangeSlider/changeMin              => plugin/swRangeSlider/onSetMin
+    * plugin/rangeSlider/changeMax              => plugin/swRangeSlider/onSetMax
+    * plugin/rangeSlider/reset                  => plugin/swRangeSlider/onReset
+    * plugin/rangeSlider/onChange               => plugin/swRangeSlider/onEndDrag
+    * plugin/search/onKeyDown                   => plugin/swSearch/onKeyDown
+    * plugin/search/onKeyUp                     => plugin/swSearch/onKeyUp
+    * plugin/search/onSearchRequest             => plugin/swSearch/onSearchRequest
+    * plugin/search/onSearchResponse            => plugin/swSearch/onSearchResponse
+    * plugin/search/onShowResult                => plugin/swSearch/onShowResult
+    * plugin/search/onCloseResult               => plugin/swSearch/onCloseResult
+    * plugin/search/onKeyboardNavigation        => plugin/swSearch/onKeyboardNavigation
+    * plugin/search/onClickSearchEntry          => plugin/swSearch/onClickSearchEntry
+    * plugin/search/onOpenMobileSearch          => plugin/swSearch/onOpenMobileSearch
+    * plugin/search/onCloseMobileSearch         => plugin/swSearch/onCloseMobileSearch
+* Every jquery plugin was renamed with an 'sw' prefix to avoid issues with third party libraries.
+    * The plugins can still be accessed by their old names until 5.1, where this fallback will be removed.
+    * The plugin instance of an element can still be accessed by its old name as well as the new one.
+    * The Singleton Objects are not affected by this change. ($.modal, $.overlay, $.loadingIndicator, $.lightbox, StateManager)
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling

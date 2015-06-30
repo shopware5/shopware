@@ -83,6 +83,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @group performance
      *
      * @depends testPerformanceCreateBigOne
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
     public function testPerformanceGetBigOneObject($id)
     {
@@ -96,6 +99,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @group performance
      *
      * @depends testPerformanceCreateBigOne
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
     public function testPerformanceGetBigOneArray($id)
     {
@@ -171,7 +177,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
-                        'from' => 1,
                         'to' => 20,
                         'price' => 500,
                     ),
@@ -237,7 +242,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'prices' => array(
                         array(
                             'customerGroupKey' => 'H',
-                            'from' => 1,
                             'to' => 20,
                             'price' => 500,
                         ),
@@ -304,6 +308,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals(2, count($article->getSimilar()));
         $this->assertEquals(2, count($article->getLinks()));
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
+        foreach($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+        foreach($article->getDetails() as $variant) {
+            foreach($variant->getPrices() as $price) {
+                $this->assertGreaterThan(0, $price->getFrom());
+            }
+        }
 
         return $article->getId();
     }
@@ -364,7 +376,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
-                        'from' => 1,
                         'to' => 20,
                         'price' => 500,
                     ),
@@ -466,8 +477,93 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
             }
         }
+        foreach($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+        foreach($article->getDetails() as $variant) {
+            foreach($variant->getPrices() as $price) {
+                $this->assertGreaterThan(0, $price->getFrom());
+            }
+        }
 
         return $article->getId();
+    }
+
+
+
+    /**
+     * @depends testCreateWithImageShouldCreateThumbnails
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
+     */
+    public function testFlipArticleMainVariantShouldBeSuccessful($id)
+    {
+        $originalArticle = $this->resource->getOne($id);
+        $mainVariantNumber = $originalArticle['mainDetailId'];
+
+        $testData =  array(
+            'mainDetail' => array(
+                'number' => $mainVariantNumber,
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+
+            'variants' => array(
+                array(
+                    'number' => $mainVariantNumber,
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'isMain' => true,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+                ),
+            ),
+        );
+
+        $article = $this->resource->update($id, $testData);
+
+        $this->assertEquals($mainVariantNumber, $article->getMainDetail()->getNumber());
     }
 
     /**
@@ -481,7 +577,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $testData = array(
             'images' => array(
                 array(
-                    'link' => 'https://de.shopware.com/media/image/home-teaser-store.png'
+                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png'
                 )
             ),
         );

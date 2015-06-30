@@ -41,39 +41,42 @@
     var lastFrame,
         requestAnimationFrame = (function () {
             return  window.requestAnimationFrame       ||
-                    window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame    ||
-                    window.msRequestAnimationFrame     ||
-                    window.oRequestAnimationFrame      ||
-                    function(callback, element) {
-                        var currFrame = new Date().getTime(),
-                            animationTime = Math.max(0, 16 - (currFrame - lastFrame)),
-                            animationID = window.setTimeout(function() { callback(currFrame + animationTime); }, animationTime);
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                window.msRequestAnimationFrame     ||
+                window.oRequestAnimationFrame      ||
+                function(callback, element) {
+                    var currFrame = new Date().getTime(),
+                        animationTime = Math.max(0, 16 - (currFrame - lastFrame)),
+                        animationID = window.setTimeout(function() { callback(currFrame + animationTime); }, animationTime);
 
-                        lastFrame = currFrame + animationTime;
-                        return animationID;
-                    };
+                    lastFrame = currFrame + animationTime;
+                    return animationID;
+                };
         })(),
         cancelAnimationFrame = (function () {
             return  window.cancelAnimationFrame                 ||
-                    window.cancelRequestAnimationFrame          ||
-                    window.webkitCancelAnimationFrame           ||
-                    window.webkitCancelRequestAnimationFrame    ||
-                    window.mozCancelAnimationFrame              ||
-                    window.mozCancelRequestAnimationFrame       ||
-                    window.msCancelAnimationFrame               ||
-                    window.msCancelRequestAnimationFrame        ||
-                    window.oCancelAnimationFrame                ||
-                    window.oCancelRequestAnimationFrame         ||
-                    function(id) {
-                        clearTimeout(id);
-                    };
+                window.cancelRequestAnimationFrame          ||
+                window.webkitCancelAnimationFrame           ||
+                window.webkitCancelRequestAnimationFrame    ||
+                window.mozCancelAnimationFrame              ||
+                window.mozCancelRequestAnimationFrame       ||
+                window.msCancelAnimationFrame               ||
+                window.msCancelRequestAnimationFrame        ||
+                window.oCancelAnimationFrame                ||
+                window.oCancelRequestAnimationFrame         ||
+                function(id) {
+                    clearTimeout(id);
+                };
         })();
 
     /**
      * Product Slider Plugin
      */
-    $.plugin('productSlider', {
+    $.plugin('swProductSlider', {
+
+        alias: 'productSlider',
+
         defaults: {
 
             /**
@@ -333,6 +336,8 @@
              */
             me.setPosition(0);
             me.trackArrows();
+
+            $.publish('plugin/swProductSlider/onUpdate', me);
         },
 
         /**
@@ -364,6 +369,8 @@
             if (me.opts.arrowControls && me.isActive()) me.createArrows();
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
+
+            $.publish('plugin/swProductSlider/onInitSlider', me);
         },
 
         /**
@@ -381,6 +388,8 @@
             me._on(me.$container, 'scroll', $.proxy(me.onScroll, me));
 
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
+
+            $.publish('plugin/swProductSlider/onRegisterEvents', me);
         },
 
         /**
@@ -425,6 +434,8 @@
 
             me.$container[method](pos);
             me.currentPosition = pos;
+
+            $.publish('plugin/swProductSlider/onSetPosition', [me, pos]);
         },
 
         /**
@@ -458,6 +469,8 @@
              * Triggered for sizing lazy loaded images.
              */
             window.picturefill();
+
+            $.publish('plugin/swProductSlider/onSetSizes', [me, orientation]);
         },
 
         /**
@@ -472,8 +485,14 @@
 
             me.$items = me.$container.find(me.opts.itemSelector);
 
+            me.itemsCount = me.$items.length;
+
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/trackItems', me);
-            return me.itemsCount = me.$items.length;
+
+            $.publish('plugin/swProductSlider/onTrackItems', [me, me.items, me.itemsCount]);
+
+            return me.itemsCount;
         },
 
         /**
@@ -481,7 +500,6 @@
          *
          * @public
          * @method trackArrows
-         * @returns {Void}
          */
         trackArrows: function() {
             var me = this;
@@ -504,7 +522,10 @@
             me.$arrowPrev[(me.currentPosition > 5) ? 'show' : 'hide']();
             me.$arrowNext[(slideEnd >= parseInt(me.itemSize * me.itemsCount, 10) - 5) ? 'hide' : 'show']();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/trackArrows', me);
+
+            $.publish('plugin/swProductSlider/onTrackArrows', [me, me.$arrowPrev, me.$arrowNext]);
         },
 
         /**
@@ -517,18 +538,21 @@
          * @param {Function} callback
          */
         loadItems: function (start, limit, callback) {
-            var me = this;
+            var me = this,
+                data = {
+                    'category': me.opts.ajaxCategoryID,
+                    'start': start,
+                    'limit': limit
+                };
 
             me.isLoading = true;
+
+            $.publish('plugin/swProductSlider/onLoadItemsBefore', [me, data]);
 
             $.ajax({
                 url: me.opts.ajaxCtrlUrl,
                 method: 'POST',
-                data: {
-                    'category': me.opts.ajaxCategoryID,
-                    'start': start,
-                    'limit': limit
-                },
+                data: data,
                 success: function (response) {
                     me.isLoading = false;
                     me.$container.append(response);
@@ -536,7 +560,10 @@
                     me.setSizes();
                     me.trackArrows();
 
+                    /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/productSlider/itemsLoaded');
+
+                    $.publish('plugin/swProductSlider/onLoadItemsSuccess', [me, response]);
 
                     if (typeof callback === 'function') {
                         callback.call(me, response);
@@ -544,7 +571,10 @@
                 }
             });
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/loadItems', me);
+
+            $.publish('plugin/swProductSlider/onLoadItems', me);
         },
 
         /**
@@ -569,8 +599,14 @@
 
             $container.addClass(orientationCls);
 
+            me.$container = $container;
+
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/createContainer', me);
-            return me.$container = $container;
+
+            $.publish('plugin/swProductSlider/onCreateContainer', [me, $container, orientation]);
+
+            return $container;
         },
 
         /**
@@ -609,7 +645,10 @@
 
             me.trackArrows();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/createArrows', me);
+
+            $.publish('plugin/swProductSlider/onCreateArrows', [me, me.$arrowPrev, me.$arrowNext]);
         },
 
         /**
@@ -628,6 +667,8 @@
             event.preventDefault();
 
             me[(type === 'prev') ? prev : next]();
+
+            $.publish('plugin/swProductSlider/onArrowClick', [me, event, type]);
         },
 
         /**
@@ -636,24 +677,28 @@
          * @public
          * @method onMouseEnter
          */
-        onMouseEnter: function () {
+        onMouseEnter: function (event) {
             var me = this;
 
             me.stopAutoScroll();
             me.stopAutoSlide();
+
+            $.publish('plugin/swProductSlider/onMouseEnter', [me, event]);
         },
 
         /**
          * Event listener for mouseleave event.
          *
          * @public
-         * @method onMouseEnter
+         * @method onMouseLeave
          */
-        onMouseLeave: function () {
+        onMouseLeave: function (event) {
             var me = this;
 
             if (me.isActive() && me.opts.autoScroll) me.autoScroll();
             if (me.isActive() && me.opts.autoSlide) me.autoSlide();
+
+            $.publish('plugin/swProductSlider/onMouseLeave', [me, event]);
         },
 
         /**
@@ -662,7 +707,7 @@
          * @public
          * @method onScroll
          */
-        onScroll: function () {
+        onScroll: function (event) {
             var me = this;
 
             if (!me.isAnimating) {
@@ -684,7 +729,7 @@
                 me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
-            $.publish('plugin/productSlider/onScroll', me);
+            $.publish('plugin/swProductSlider/onScroll', [me, event]);
         },
 
         /**
@@ -700,7 +745,10 @@
             me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slideNext', me);
+
+            $.publish('plugin/swProductSlider/onSlideNext', [me, me.currentPosition]);
         },
 
         /**
@@ -716,7 +764,10 @@
             me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slidePrev', me);
+
+            $.publish('plugin/swProductSlider/onSlidePrev', [me, me.currentPosition]);
         },
 
         /**
@@ -735,7 +786,10 @@
 
             me.slide(slide);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slideToElement', me);
+
+            $.publish('plugin/swProductSlider/onSlideToElement', [me, $el, orientation]);
         },
 
         /**
@@ -756,9 +810,14 @@
             me.$container.stop().animate(animation, me.opts.animationSpeed, 'easeOutExpo', function () {
                 me.currentPosition = me.getScrollPosition();
                 me.isAnimating = false;
+
+                $.publish('plugin/swProductSlider/onSlideFinished', [me, me.currentPosition]);
             });
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slide', me);
+
+            $.publish('plugin/swProductSlider/onSlide', [me, position]);
         },
 
         /**
@@ -777,7 +836,10 @@
 
             me.autoSlideAnimation = window.setInterval($.proxy(method, me), speed * 1000);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/autoSlide', me);
+
+            $.publish('plugin/swProductSlider/onAutoSlide', [me, me.autoSlideAnimation, slideDirection, slideSpeed]);
         },
 
         /**
@@ -792,7 +854,10 @@
             window.clearInterval(me.autoSlideAnimation);
             me.autoSlideAnimation = false;
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/stopAutoSlide', me);
+
+            $.publish('plugin/swProductSlider/onStopAutoSlide', me);
         },
 
         /**
@@ -809,7 +874,10 @@
 
             me.slide(me.currentPosition);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/scrollNext', me);
+
+            $.publish('plugin/swProductSlider/onScrollNext', [me, me.currentPosition, scrollDistance]);
         },
 
         /**
@@ -826,7 +894,10 @@
 
             me.slide(me.currentPosition);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/scrollPrev', me);
+
+            $.publish('plugin/swProductSlider/onScrollPrev', [me, me.currentPosition, scrollDistance]);
         },
 
         /**
@@ -847,7 +918,10 @@
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/autoScroll', me);
+
+            $.publish('plugin/swProductSlider/onAutoScroll', [me, me.autoScrollAnimation, scrollDirection, scrollSpeed]);
         },
 
         /**
@@ -862,7 +936,10 @@
             cancelAnimationFrame(me.autoScrollAnimation);
             me.autoScrollAnimation = false;
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/stopAutoScroll', me);
+
+            $.publish('plugin/swProductSlider/onStopAutoScroll', me);
         },
 
         /**
@@ -874,11 +951,14 @@
         buffer: function(func, bufferTime) {
             var me = this;
 
-             window.clearTimeout(me.bufferedCall);
+            window.clearTimeout(me.bufferedCall);
 
-             me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime)
+            me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime);
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/buffer', me);
+
+            $.publish('plugin/swProductSlider/onBuffer', [me, me.bufferedCall, func, bufferTime]);
         },
 
         /**

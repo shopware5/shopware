@@ -298,6 +298,7 @@
                         },
                         success: function (result) {
                             me.setContent(result);
+                            $.publish('plugin/modal/onOpenAjax', me);
                         }
                     });
                     me.options.src = content;
@@ -387,6 +388,8 @@
             }
 
             $modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
+
+            $.publish('plugin/modal/onSetTransition', [me, css, opts]);
         },
 
         /**
@@ -397,7 +400,11 @@
          * @param {String} title
          */
         setTitle: function (title) {
-            this._$title.html(title);
+            var me = this;
+
+            me._$title.html(title);
+
+            $.publish('plugin/modal/onSetTitle', [me, title]);
         },
 
         /**
@@ -508,7 +515,7 @@
             me._$closeButton.on('click.modal touchstart.modal', $.proxy(me.close, me));
 
             $window.on('keydown.modal', $.proxy(me.onKeyDown, me));
-            $window.on('resize.modal', $.proxy(me.onWindowResize, me));
+            StateManager.on('resize', me.onWindowResize, me);
 
             StateManager.registerListener({
                 state: 'xs',
@@ -519,6 +526,8 @@
                     me._$modalBox.removeClass('is--fullscreen');
                 }
             });
+
+            $.publish('plugin/modal/onRegisterEvents', me);
         },
 
         /**
@@ -544,6 +553,8 @@
                     me.close();
                 }
             }
+
+            $.publish('plugin/modal/onKeyDown', [me, event, keyCode]);
         },
 
         /**
@@ -559,6 +570,8 @@
             if (me.options.sizing === 'content') {
                 me.center();
             }
+
+            $.publish('plugin/modal/onWindowResize', [me, event]);
         },
 
         /**
@@ -572,6 +585,8 @@
                 $modalBox = me._$modalBox;
 
             $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
+
+            $.publish('plugin/modal/onCenter', me);
         },
 
         /**
@@ -618,6 +633,8 @@
                 }
                 delete me.options[p];
             }
+
+            StateManager.off('resize', me.onWindowResize, me);
         }
     };
 
@@ -628,7 +645,9 @@
      * The content of the offcanvas can either be passed to the plugin
      * or the target element will be used as the content.
      */
-    $.plugin('modalbox', {
+    $.plugin('swModalbox', {
+
+        alias: 'modalbox',
 
         defaults: {
 
@@ -683,6 +702,8 @@
             me._on(me.$target, 'click', $.proxy(me.onClick, me));
 
             $.subscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
+
+            $.publish('plugin/modalbox/onRegisterEvents', me);
         },
 
         /**
@@ -701,6 +722,8 @@
             $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? me.$target.attr('href') : me.$target), me.opts);
 
             me._isOpened = true;
+
+            $.publish('plugin/modalbox/onClick', [me, event]);
         },
 
         /**
@@ -710,7 +733,11 @@
          * @method onClick
          */
         onClose: function () {
-            this._isOpened = false;
+            var me = this;
+
+            me._isOpened = false;
+
+            $.publish('plugin/modalbox/onClose', me);
         },
 
         /**
@@ -726,6 +753,8 @@
             if (me._isOpened) {
                 $.modal.close();
             }
+
+            $.unsubscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
 
             me._destroy();
         }

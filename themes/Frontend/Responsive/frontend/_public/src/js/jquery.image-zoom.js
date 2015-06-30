@@ -8,7 +8,9 @@
      * You can move a lens object over the original image to
      * see the zoomed view of the hovered area.
      */
-    $.plugin('imageZoom', {
+    $.plugin('swImageZoom', {
+
+        alias: 'imageZoom',
 
         defaults: {
 
@@ -78,10 +80,12 @@
             me._on(me.$container, 'mouseout', $.proxy(me.stopZoom, me));
             me._on(me.$lens, 'click', $.proxy(me.onLensClick, me));
 
-            $.subscribe('plugin/imageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onLightbox', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onLightbox', $.proxy(me.stopZoom, me));
+
+            $.publish('plugin/swImageZoom/onRegisterEvents', me);
         },
 
         /**
@@ -90,12 +94,15 @@
          * @returns {*}
          */
         createLensElement: function() {
-            var me = this;
+            var me = this,
+                $el = $('<div>', {
+                    'class': me.opts.lensCls,
+                    'html': '&nbsp;'
+                }).appendTo(me.$container);
 
-            return $('<div>', {
-                'class': me.opts.lensCls,
-                'html': '&nbsp;'
-            }).appendTo(me.$container);
+            $.publish('plugin/swImageZoom/onCreateLensElement', [me, $el]);
+
+            return $el;
         },
 
         /**
@@ -105,11 +112,14 @@
          * @returns {*}
          */
         createFlyoutElement: function() {
-            var me = this;
+            var me = this,
+                $el = $('<div>', {
+                    'class': me.opts.flyoutCls
+                }).appendTo(me.$el);
 
-            return $('<div>', {
-                'class': me.opts.flyoutCls
-            }).appendTo(me.$el);
+            $.publish('plugin/swImageZoom/onCreateFlyoutElement', [me, $el]);
+
+            return $el;
         },
 
         /**
@@ -119,15 +129,20 @@
          * @returns {*}
          */
         createTitleContainer: function() {
-            var me = this;
+            var me = this,
+                $el;
 
             if (!me.$flyout.length || !me.opts.showTitle) {
                 return;
             }
 
-            return $('<div>', {
+            $el = $('<div>', {
                 'class': me.opts.titleContainerCls
             }).appendTo(me.$flyout);
+
+            $.publish('plugin/swImageZoom/onCreateTitleContainer', [me, $el]);
+
+            return $el;
         },
 
         /**
@@ -137,9 +152,12 @@
          * @returns {*|Array}
          */
         getActiveImageThumbnail: function() {
-            var me = this;
+            var me = this,
+                $thumbnail = me.$thumbnails.filter(me.opts.activeSelector);
 
-            return me.$thumbnails.filter(me.opts.activeSelector);
+            $.publish('plugin/swImageZoom/onGetActiveImageThumbnail', [me, $thumbnail]);
+
+            return $thumbnail;
         },
 
         /**
@@ -149,15 +167,20 @@
          * @returns {*}
          */
         getActiveImageElement: function() {
-            var me = this;
+            var me = this,
+                $el;
 
             me.$activeImageThumbnail = me.getActiveImageThumbnail();
 
             if (!me.$activeImageThumbnail.length) {
-                return me.$imageElements.eq(0);
+                $el = me.$imageElements.eq(0);
+            } else {
+                $el = me.$imageElements.eq(me.$activeImageThumbnail.index());
             }
 
-            return me.$imageElements.eq(me.$activeImageThumbnail.index());
+            $.publish('plugin/swImageZoom/onGetActiveImageElement', [me, $el]);
+
+            return $el;
         },
 
         /**
@@ -185,6 +208,8 @@
                 'width': me.lensWidth,
                 'height': me.lensHeight
             });
+
+            $.publish('plugin/swImageZoom/onSetLensSize', [me, me.$lens, factor]);
         },
 
         /**
@@ -201,6 +226,8 @@
                 'top': y,
                 'left': x
             });
+
+            $.publish('plugin/swImageZoom/onSetLensPosition', [me, me.$lens, x, y]);
         },
 
         /**
@@ -210,6 +237,8 @@
             var me = this;
 
             me.$lens.stop(true, true).fadeIn(me.opts.animationSpeed);
+
+            $.publish('plugin/swImageZoom/onShowLens', [me, me.$lens]);
         },
 
         /**
@@ -219,6 +248,8 @@
             var me = this;
 
             me.$lens.stop(true, true).fadeOut(me.opts.animationSpeed);
+
+            $.publish('plugin/swImageZoom/onHideLens', [me, me.$lens]);
         },
 
         /**
@@ -231,6 +262,8 @@
             var me = this;
 
             me.$flyout.css('backgroundPosition', x+'px '+y+'px');
+
+            $.publish('plugin/swImageZoom/onSetZoomPosition', [me, me.$flyout, x, y]);
         },
 
         /**
@@ -240,6 +273,8 @@
             var me = this;
 
             me.$flyout.stop(true, true).fadeIn(me.opts.animationSpeed);
+
+            $.publish('plugin/swImageZoom/onShowZoom', [me, me.$flyout]);
         },
 
         /**
@@ -249,6 +284,8 @@
             var me = this;
 
             me.$flyout.stop(true, true).fadeOut(me.opts.animationSpeed);
+
+            $.publish('plugin/swImageZoom/onHideZoom', [me, me.$flyout]);
         },
 
         /**
@@ -257,14 +294,15 @@
          * @param title
          */
         setImageTitle: function(title) {
-            var me = this,
-                title = title || me.imageTitle;
+            var me = this;
 
             if (!me.opts.showTitle || !me.$title.length) {
                 return;
             }
 
-            me.$title.html('<span>' + title + '</span>');
+            me.$title.html('<span>' + (title || me.imageTitle) + '</span>');
+
+            $.publish('plugin/swImageZoom/onSetImageTitle', [me, me.$title, title]);
         },
 
         /**
@@ -322,6 +360,7 @@
          */
         setActiveImage: function() {
             var me = this;
+
             me.$activeImageElement = me.getActiveImageElement();
             me.$activeImage = me.$activeImageElement.find('img');
 
@@ -330,7 +369,7 @@
             me.imageHeight = me.$activeImage.innerHeight();
             me.imageOffset = me.$activeImage.offset();
 
-            $.publish('plugin/imageZoom/onSetActiveImage', this);
+            $.publish('plugin/swImageZoom/onSetActiveImage', me);
         },
 
         /**
@@ -354,12 +393,14 @@
                     if (me.opts.showTitle) {
                         me.setImageTitle(me.title);
                     }
+
+                    $.publish('plugin/swImageZoom/onZoomImageLoaded', [me, me.zoomImage]);
                 };
 
                 me.zoomImage.src = me.zoomImageUrl;
             }
 
-            $.publish('plugin/imageZoom/onActivateZoom', this);
+            $.publish('plugin/swImageZoom/onActivateZoom', me);
 
             me.active = true;
         },
@@ -375,7 +416,7 @@
             me.zoomImage = false;
             me.active = false;
 
-            $.publish('plugin/imageZoom/onStopZoom', this);
+            $.publish('plugin/swImageZoom/onStopZoom', me);
         },
 
         /**
@@ -386,7 +427,7 @@
          * @param event
          */
         onLensClick: function(event) {
-            $.publish('plugin/imageZoom/onLensClick', this);
+            $.publish('plugin/swImageZoom/onLensClick', [this, event]);
         },
 
         /**

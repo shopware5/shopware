@@ -1,7 +1,9 @@
-;(function($, window, document, undefined) {
+;(function($) {
     'use strict';
 
-    $.plugin('formPolyfill', {
+    $.plugin('swFormPolyfill', {
+
+        alias: 'formPolyfill',
 
         defaults: {
             eventType: 'click'
@@ -29,6 +31,8 @@
             var me = this;
 
             me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
+
+            $.publish('plugin/swFormPolyfill/onRegisterEvents', me);
         },
 
         /**
@@ -58,6 +62,8 @@
             }
 
             $form.submit();
+
+            $.publish('plugin/swFormPolyfill/onSubmitForm', [me, $form]);
         },
 
         /**
@@ -70,4 +76,4 @@
             me._destroy();
         }
     });
-})(jQuery, window, document);
+})(jQuery);

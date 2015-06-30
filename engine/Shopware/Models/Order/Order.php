@@ -1043,7 +1043,7 @@ class Order extends ModelEntity
 
             $tax = $detail->getTax();
 
-            $taxValue = 0;
+            $taxValue = $detail->getTaxRate();
 
             // additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {

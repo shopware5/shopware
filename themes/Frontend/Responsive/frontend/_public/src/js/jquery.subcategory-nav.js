@@ -15,10 +15,12 @@
      *      data-categoryId="{$sCategoryContent.id}"
      *      data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}"></div>
      *
-     *    $('*[data-subcategory-nav="true"]').subCategoryNav();
+     *    $('*[data-subcategory-nav="true"]').swSubCategoryNav();
      * ```
      */
-    $.plugin('subCategoryNav', {
+    $.plugin('swSubCategoryNav', {
+
+        alias: 'subCategoryNav',
 
         defaults: {
 
@@ -346,6 +348,8 @@
             $sidebar.on(me.getEventName(eventName), opts.forwardsSelector, $.proxy(me.onClickForwardButton, me));
 
             $sidebar.on(me.getEventName(eventName), opts.mainMenuSelector, $.proxy(me.onClickMainMenuButton, me));
+
+            $.publish('plugin/swSubCategoryNav/onRegisterEvents', me);
         },
 
         /**
@@ -371,6 +375,8 @@
             }
 
             me.inProgress = true;
+
+            $.publish('plugin/swSubCategoryNav/onClickBackButton', [me, event]);
 
             // decide if there is a parent group or main sidebar
             if (!url || parentId === me.opts.mainCategoryId) {
@@ -402,6 +408,8 @@
 
             me.inProgress = true;
 
+            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [me, event]);
+
             // Disable scrolling on main menu
             me.$sidebar.addClass(me.opts.disableScrollingClass);
 
@@ -427,6 +435,8 @@
 
             me.inProgress = true;
 
+            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [me, event]);
+
             me.slideToMainMenu();
         },
 
@@ -442,8 +452,14 @@
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
 
+            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', me);
+
             if (!$loadingTarget) {
-                $.get(url, callback.bind(me));
+                $.get(url, function (template) {
+                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
+
+                    callback.call(me, template)
+                });
                 return;
             }
 
@@ -455,6 +471,9 @@
 
             $.get(url, function (template) {
                 me.$loadingIcon.hide();
+
+                $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
+
                 callback.call(me, template);
             });
         },
@@ -472,6 +491,8 @@
                 $overlays,
                 $slide;
 
+            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', me);
+
             me.$sidebar.append(template);
 
             // get all overlays
@@ -486,6 +507,8 @@
                 $slide.remove();
 
                 me.inProgress = false;
+
+                $.publish('plugin/swSubCategoryNav/onSlideOut', me);
             });
         },
 
@@ -504,6 +527,8 @@
                 $overlays,
                 $slide,
                 $el;
+
+            $.publish('plugin/swSubCategoryNav/onSlideInBefore', me);
 
             // hide main menu
             me.$sidebar.scrollTop(0);
@@ -537,6 +562,8 @@
                 $slide.addClass(opts.backSlideClass);
 
                 me.inProgress = false;
+
+                $.publish('plugin/swSubCategoryNav/onSlideIn', me);
             });
         },
 
@@ -552,6 +579,8 @@
                 opts = me.opts,
                 $overlay = $(opts.overlaySelector);
 
+            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', me);
+
             // make the main menu visible
             me.$sidebarWrapper.css('display', 'block');
 
@@ -565,6 +594,8 @@
                 me.$sidebar.removeClass(opts.disableScrollingClass);
 
                 me.inProgress = false;
+
+                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', me);
             });
         },
 

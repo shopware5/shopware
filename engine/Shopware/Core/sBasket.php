@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 use Shopware\Bundle\StoreFrontBundle;
 
 /**
@@ -1198,7 +1197,6 @@ class sBasket
     public function sGetNotes()
     {
         $notes = $this->getNoteProducts();
-
         if (empty($notes)) {
             return $notes;
         }
@@ -1213,35 +1211,32 @@ class sBasket
         $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
             ->buildAdditionalTextLists($products, $context);
 
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')
-            ->getAverages($products, $context);
-
         $promotions = array();
         /**@var $product ListProduct */
         foreach ($products as $product) {
-            $average = null;
             $note = $notes[$product->getNumber()];
-            if (array_key_exists($product->getNumber(), $votes)) {
-                $average = $votes[$product->getNumber()];
-            }
 
-            $promotions[] = $this->convertListProductToNote($product, $note, $average);
+            $promotions[] = $this->convertListProductToNote($product, $note);
         }
-        return $promotions;
+
+        return $this->eventManager->filter(
+            'Shopware_Modules_Basket_GetNotes_FilterPromotions',
+            $promotions,
+            array('products' => $products)
+        );
     }
 
     /**
      * @param ListProduct $product
-     * @param $note
-     * @param VoteAverage $voteAverage
-     * @return mixed
+     * @param array $note
+     * @return array
      */
-    private function convertListProductToNote(ListProduct $product, $note, VoteAverage $voteAverage = null)
+    private function convertListProductToNote(ListProduct $product, array $note)
     {
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
         $promotion = $structConverter->convertListProductStruct($product);
 
-        if ($voteAverage !== null) {
+        if ($voteAverage = $product->getVoteAverage()) {
             $average = $structConverter->convertVoteAverageStruct($voteAverage);
             $average['averange'] = $average['averange'] / 2;
             $promotion['sVoteAverange'] = $average;
@@ -1712,6 +1707,77 @@ class sBasket
     }
 
     /**
+     * Checks if the vouchers on the current basket have already been used.
+     * Return true if the current cart doesn't have a voucher or if the voucher is valid
+     * Returns false if the current voucher has already been used.
+     *
+     * @param $sessionId
+     * @param $userId
+     * @return bool
+     */
+    public function validateVoucher($sessionId, $userId)
+    {
+        $sql = "
+            SELECT
+                vouchers.modus AS voucherMode,
+                details.articleID as voucherId,
+                details.articleordernumber AS voucherOrderNumber,
+                vouchers.numorder AS maxPerUser,
+                vouchers.numberofunits AS maxGlobal
+            FROM s_emarketing_vouchers AS vouchers
+            LEFT JOIN s_order_details details ON vouchers.ordercode = details.articleordernumber
+            LEFT JOIN s_order AS orders ON details.orderID = orders.id
+            WHERE orders.temporaryID = :sessionId
+            AND details.modus = 2
+        ";
+
+        $voucherData = $this->db->fetchRow($sql, array('sessionId' => $sessionId));
+
+        if (!$voucherData) {
+            return true;
+        }
+
+        if ($voucherData['voucherMode'] == 1) {
+            $sql = "
+                SELECT id
+                FROM s_emarketing_voucher_codes
+                WHERE id = :voucherId AND cashed = 0
+            ";
+
+            $result = $this->db->fetchRow($sql, array('voucherId' => $voucherData['voucherId']));
+
+            return (bool) $result;
+        }
+
+        $sql = "
+            SELECT
+              COUNT(DISTINCT details.id) AS usedVoucherCount,
+              SUM(CASE WHEN orders.userID = :userID THEN 1 ELSE 0 END) usedByUserVoucherCount
+            FROM s_order_details details
+            LEFT JOIN s_order orders ON orders.id = details.orderID
+            WHERE articleordernumber = :voucherOrderNumber
+            AND details.ordernumber != 0
+        ";
+
+        $result = $this->db->fetchRow(
+            $sql,
+            array(
+                'voucherOrderNumber' => $voucherData['voucherOrderNumber'],
+                'userID' => $userId
+            )
+        );
+
+        if (!$result) {
+            return true;
+        }
+
+        $passedVoucherPerUserLimit = $result['usedByUserVoucherCount'] < $voucherData['maxPerUser'];
+        $passedVoucherGlobalLimit = $result['usedVoucherCount'] < $voucherData['maxGlobal'];
+
+        return ($passedVoucherPerUserLimit && $passedVoucherGlobalLimit);
+    }
+
+    /**
      * Check if voucher has already been cashed
      *
      * @param int $userId The current user id
@@ -1956,7 +2022,7 @@ class sBasket
         $totalAmountNet = 0;
         $totalCount = 0;
 
-        foreach ($getArticles as $key => $value) {
+        foreach (array_keys($getArticles) as $key) {
             $getArticles[$key] = $this->eventManager->filter(
                 'Shopware_Modules_Basket_GetBasket_FilterItemStart',
                 $getArticles[$key],
@@ -1995,7 +2061,7 @@ class sBasket
 
             // Get additional basket meta data for each product
             if ($getArticles[$key]["modus"] == 0) {
-                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($value['ordernumber']);
+                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($getArticles[$key]['ordernumber']);
 
                 if (empty($tempArticle)) {
                     $getArticles[$key]["additional_details"] = array("properties" => array());
@@ -2053,7 +2119,7 @@ class sBasket
             $price = $getArticles[$key]["price"];
             $netprice = $getArticles[$key]["netprice"];
 
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 $ticketResult = $this->db->fetchRow(
                     'SELECT vouchercode,taxconfig
                     FROM s_emarketing_vouchers
@@ -2079,7 +2145,7 @@ class sBasket
                 }
             }
 
-            $tax = $value["tax_rate"];
+            $tax = $getArticles[$key]["tax_rate"];
 
             // If shop is in net mode, we have to consider
             // the tax separately
@@ -2087,7 +2153,7 @@ class sBasket
                 ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
-                if (empty($value["modus"])) {
+                if (empty($getArticles[$key]["modus"])) {
                     $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
 
                     $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
@@ -2095,16 +2161,16 @@ class sBasket
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
                     }
-                } elseif ($value["modus"] == 3) {
+                } elseif ($getArticles[$key]["modus"] == 3) {
                     $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
                     // Basket discount
-                } elseif ($value["modus"] == 2) {
+                } elseif ($getArticles[$key]["modus"] == 2) {
                     $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
                     }
-                } elseif ($value["modus"] == 4 || $value["modus"] == 10) {
+                } elseif ($getArticles[$key]["modus"] == 4 || $getArticles[$key]["modus"] == 10) {
                     $getArticles[$key]["amountWithTax"] = round(1 * ($price / 100 * (100 + $tax)), 2);
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
@@ -2130,7 +2196,7 @@ class sBasket
             }
 
 
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 // Gutscheine
                 if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
                     $getArticles[$key]["amountnet"] = $quantity * round($price, 2);
@@ -2194,7 +2260,7 @@ class sBasket
             }
             // Links to details, basket
             $getArticles[$key]["linkDetails"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=" . $getArticles[$key]["articleID"];
-            if ($value["modus"] == 2) {
+            if ($getArticles[$key]["modus"] == 2) {
                 $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=voucher";
             } else {
                 $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=" . $getArticles[$key]["id"];

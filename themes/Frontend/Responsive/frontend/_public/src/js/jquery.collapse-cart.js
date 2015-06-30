@@ -1,7 +1,9 @@
 ;jQuery(function ($) {
     'use strict';
 
-    $.plugin('collapseCart', {
+    $.plugin('swCollapseCart', {
+
+        alias: 'collapseCart',
 
         defaults: {
 
@@ -114,7 +116,7 @@
 
             // if the display mode is "offcanvas", call the offcanvas plugin.
             if (me.isDisplayMode('offcanvas')) {
-                me._$triggerEl.offcanvasMenu({
+                me._$triggerEl.swOffcanvasMenu({
                     'offCanvasSelector': me.$el,
                     'direction': 'fromRight'
                 });
@@ -138,13 +140,15 @@
             if (me.isDisplayMode('offcanvas')) {
                 me._on(me._$triggerEl, 'click touchstart', $.proxy(me.onMouseEnter, me));
 
-                $.subscribe('plugin/addArticle/onAddArticle', $.proxy(me.onArticleAdded, me));
-                $.subscribe('plugin/addArticle/onBeforeAddArticle', $.proxy(me.onBeforeAddArticle, me));
+                $.subscribe('plugin/swAddArticle/onAddArticle', $.proxy(me.onArticleAdded, me));
+                $.subscribe('plugin/swAddArticle/onBeforeAddArticle', $.proxy(me.onBeforeAddArticle, me));
             } else {
                 me._on(me._$triggerEl, 'mouseenter touchstart', $.proxy(me.onMouseEnter, me));
                 me._on(me._$triggerEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             }
+
+            $.publish('plugin/swCollapseCart/onRegisterEvents', me);
         },
 
         /**
@@ -158,6 +162,8 @@
 
             me.showLoadingIndicator();
             me.openMenu();
+
+            $.publish('plugin/swCollapseCart/onBeforeAddArticle', me);
         },
 
         /**
@@ -179,6 +185,8 @@
                 .removeClass('is--hidden');
 
             picturefill();
+
+            $.publish('plugin/swCollapseCart/onArticleAdded', me);
         },
 
         /**
@@ -197,14 +205,19 @@
                 event.preventDefault();
 
                 me.loadCart();
-                return;
+            } else {
+                me.buffer(function () {
+                    me.loadCart(function () {
+                        $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+
+                        $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [me, event]);
+                    });
+
+                    $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [me, event]);
+                }, 500);
             }
 
-            me.buffer(function () {
-                me.loadCart(function () {
-                    $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
-                });
-            }, 500);
+            $.publish('plugin/swCollapseCart/onMouseEnter', [me, event]);
         },
 
         /**
@@ -217,7 +230,10 @@
             var me = this,
                 target = event.toElement || event.relatedTarget || event.target;
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onMouseLeave', me);
+
+            $.publish('plugin/swCollapseCart/onMouseLeave', [me, event]);
 
             if (me.isElementOrChild(me.$el[0], target) || me.isElementOrChild(me._$triggerEl[0], target)) {
                 return;
@@ -235,7 +251,10 @@
         onCloseButtonClick: function (event) {
             event.preventDefault();
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onCloseButton', this);
+
+            $.publish('plugin/swCollapseCart/onCloseButton', this);
 
             this.closeMenu();
         },
@@ -254,7 +273,10 @@
                 $parent = $currentTarget.parent(),
                 url = $currentTarget.attr('href');
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onRemoveArticle', [me, event]);
+
+            $.publish('plugin/swCollapseCart/onRemoveArticle', [me, event]);
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
@@ -266,7 +288,10 @@
 
                     picturefill();
 
+                    /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/collapseCart/afterRemoveArticle', [me, event]);
+
+                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [me, event, result]);
                 }
             });
         },
@@ -324,6 +349,8 @@
                 'class': me.opts.loadingIconWrapperClass,
                 'html': me._$loadingIcon.clone()
             }));
+
+            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', me);
         },
 
         /**
@@ -339,13 +366,16 @@
 
             me._isOpened = true;
 
-            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_offcanvasMenu'))) {
+            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_swOffcanvasMenu'))) {
                 plugin.openMenu();
             } else {
                 me.$el.addClass(me.opts.activeClass);
             }
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onMenuOpen', me);
+
+            $.publish('plugin/swCollapseCart/onMenuOpen', me);
         },
 
         /**
@@ -361,7 +391,10 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onLoadCart', me);
+
+            $.publish('plugin/swCollapseCart/onLoadCart', me);
 
             $.ajax({
                 'url': opts.ajaxCartURL,
@@ -374,7 +407,10 @@
                         callback();
                     }
 
+                    /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/collapseCart/afterLoadCart', me);
+
+                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [me, result]);
                 }
             });
         },
@@ -392,13 +428,16 @@
 
             me._isOpened = false;
 
-            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_offcanvasMenu'))) {
+            if (me.isDisplayMode('offcanvas') && (plugin = me._$triggerEl.data('plugin_swOffcanvasMenu'))) {
                 plugin.closeMenu();
             } else {
                 me.$el.removeClass(me.opts.activeClass);
             }
 
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/collapseCart/onCloseMenu', me);
+
+            $.publish('plugin/swCollapseCart/onCloseMenu', me);
         },
 
         /**

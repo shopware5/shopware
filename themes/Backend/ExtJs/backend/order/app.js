@@ -83,8 +83,9 @@ Ext.define('Shopware.apps.Order', {
         'list.Navigation',
         'list.Position',
         'list.Document',
+        'mail.Window',
+        'mail.Form',
         'batch.Window',
-        'batch.Mail',
         'batch.Form',
         'batch.List',
         'batch.Progress'
@@ -94,7 +95,17 @@ Ext.define('Shopware.apps.Order', {
      * Array of stores to require from AppName.store namespace.
      * @array
      */
-    stores:[ 'OrderHistory', 'Order', 'Voucher', 'DocType','Configuration', 'Batch', 'Tax',  'DetailBatch', 'ListBatch' ],
+    stores:[
+        'OrderHistory',
+        'Order',
+        'Voucher',
+        'DocType',
+        'Configuration',
+        'Batch',
+        'Tax',
+        'DetailBatch',
+        'ListBatch'
+    ],
 
     /**
      * Array of models to require from AppName.model namespace.
@@ -127,7 +138,14 @@ Ext.define('Shopware.apps.Order', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'List', 'Filter', 'Detail', 'Batch' ],
+    controllers:[
+        'Main',
+        'List',
+        'Filter',
+        'Detail',
+        'Batch',
+        'Mail'
+    ],
 
     /**
      * Returns the main application window for this is expected

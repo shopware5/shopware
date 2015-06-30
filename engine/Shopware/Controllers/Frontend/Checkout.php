@@ -133,7 +133,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     /**
      * Mostly equivalent to cartAction
-     * Get user- basket- and payment-data for view assignment
+     * Get user, basket and payment data for view assignment
      * Create temporary entry in s_order table
      * Check some conditions (minimum charge)
      *
@@ -219,6 +219,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($errors)) {
             $this->View()->assign('agreementErrors', $errors);
         }
+
+        $voucherErrors = $this->Request()->getParam('voucherErrors');
+        if (!empty($voucherErrors)) {
+            $this->View()->assign('sVoucherError', $voucherErrors);
+        }
     }
 
     /**
@@ -284,6 +289,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 null,
                 null,
                 ['agreementErrors' => $agreements]
+            );
+        }
+
+        if (!$this->basket->validateVoucher($this->session['sessionId'], $this->session['sUserId'])) {
+            $namespace = $this->container->get('snippets')->getNamespace('frontend/basket/internalMessages');
+            return $this->forward(
+                'confirm',
+                null,
+                null,
+                ['voucherErrors' => array(
+                    $namespace->get('VoucherFailureAlreadyUsed', 'This voucher was used in an previous order')
+                )]
             );
         }
 

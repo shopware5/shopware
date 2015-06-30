@@ -1,16 +1,28 @@
 // Advanced menu container that contains every category listing
+
+@adv-menu-header-bg: @text-color-dark;
+@adv-menu-header-text-color: @btn-secondary-text-color;
+@adv-menu-bg: @btn-secondary-text-color;
+@adv-menu-text-color: @text-color-dark;
+@adv-menu-link-color: @adv-menu-text-color;
+@adv-menu-link-hover-color: @link-color;
+@adv-menu-delimiter: @border-color;
+@adv-menu-teaser-link-color: @link-color;
+@adv-menu-teaser-link-hover-color: @adv-menu-teaser-link-color;
+
 .advanced-menu {
     .clearfix();
     .unitize-max-width(1260, 16);
     .box-shadow(0 10px 25px -15px #000);
     .tap-highlight-color(rgba(0, 0, 0, 0));
-    background: @btn-secondary-text-color;
+    background: @adv-menu-bg;
     width: 100%;
     position: absolute;
-    color: @text-color-dark;
+    color: @adv-menu-text-color;
     z-index: 3000;
 
     .menu--list {
+        .transform-style(preserve-3d);
         list-style: none;
         display: block;
     }
@@ -23,7 +35,7 @@
     .menu--delimiter {
         content: "";
         width: 1px;
-        background: @border-color;
+        background: @adv-menu-delimiter;
         position: absolute;
         display: block;
         top: 0;
@@ -56,6 +68,13 @@
         font-weight: bold;
     }
 
+    .teaser--text-link {
+        color: @adv-menu-teaser-link-color;
+        &:hover {
+            color: @adv-menu-teaser-link-hover-color;
+        }
+    }
+
     .menu--list-item {
         .hyphens(auto);
         word-break: normal;
@@ -66,26 +85,26 @@
         .unitize-padding(5, 0);
         .unitize(font-size, 16);
         .transition(all 0.1s ease);
-        color: @text-color-dark;
+        color: @adv-menu-link-color;
         display: block;
 
         &:hover {
             .unitize-padding(5, 0, 5, 3);
-            color: @link-color;
+            color: @adv-menu-link-hover-color;
         }
     }
 
     .button-container {
         .unitize(font-size, 16);
         .unitize-padding(20, 30, 20, 0);
-        background: @text-color-dark;
-        color: @btn-secondary-text-color;
+        background: @adv-menu-header-bg;
+        color: @adv-menu-header-text-color;
         font-weight: bold;
 
         .button--category {
             .unitize-padding(20, 50);
             .transition(padding .1s ease);
-            color: @btn-secondary-text-color;
+            color: @adv-menu-header-text-color;
             position: relative;
 
             &:hover {
@@ -184,11 +203,11 @@
 .navigation-main .navigation--list .navigation--entry.is--hovered {
     .border-radius-multi(3px, 3px);
     .tap-highlight-color(rgba(0, 0, 0, 0));
-    background: @text-color-dark;
+    background: @adv-menu-header-bg;
 
     .navigation--link {
-        background: @text-color-dark;
-        color: @btn-secondary-text-color;
+        background: @adv-menu-header-bg;
+        color: @adv-menu-header-text-color;
     }
 }
 

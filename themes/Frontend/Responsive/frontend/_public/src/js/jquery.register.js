@@ -6,7 +6,9 @@
      *
      * This plugin handles validation and addition logic for the registration form and its fields.
      */
-    $.plugin('register', {
+    $.plugin('swRegister', {
+
+        alias: 'register',
 
         /**
          * Plugin default options.
@@ -207,6 +209,8 @@
             me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
             me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
+
+            $.publish('plugin/swRegister/onRegisterEvents', me);
         },
 
         /**
@@ -229,6 +233,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/swRegister/onCheckType', [me, hideCompanyFields]);
         },
 
         /**
@@ -251,6 +257,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/swRegister/onCheckSkipAccount', [me, isChecked]);
         },
 
         /**
@@ -273,6 +281,8 @@
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+
+            $.publish('plugin/swRegister/onCheckChangeShipping', [me, isChecked]);
         },
 
         /**
@@ -295,11 +305,13 @@
                 select,
                 plugin;
 
+            $.publish('plugin/swRegister/onCountryChangedBefore', [me, event]);
+
             $parent.find(opts.stateContainerSelector).addClass(hiddenClass);
             select = areaSelection.find('select');
             areaSelection.addClass(hiddenClass);
 
-            if (!(plugin = select.data('plugin_selectboxReplacement'))) {
+            if (!(plugin = select.data('plugin_swSelectboxReplacement'))) {
                 return;
             }
 
@@ -307,13 +319,14 @@
                 plugin.$el.addClass(hiddenClass);
                 plugin.$wrapEl.addClass(hiddenClass);
                 plugin.setDisabled();
-                return;
+            } else {
+                plugin.$el.removeClass(hiddenClass);
+                plugin.$wrapEl.removeClass(hiddenClass);
+                areaSelection.removeClass(hiddenClass);
+                plugin.setEnabled();
             }
 
-            plugin.$el.removeClass(hiddenClass);
-            plugin.$wrapEl.removeClass(hiddenClass);
-            areaSelection.removeClass(hiddenClass);
-            plugin.setEnabled();
+            $.publish('plugin/swRegister/onCountryChanged', [me, event]);
         },
 
         /**
@@ -349,6 +362,8 @@
                 $fieldSet = $el.find(paymentSelector);
                 $fieldSet[((isChecked) ? 'removeClass' : 'addClass')](hiddenClass);
             });
+
+            $.publish('plugin/swRegister/onPaymentChanged', me);
         },
 
         /**
@@ -370,6 +385,8 @@
                     me.setFieldAsError($input);
                 }
             });
+
+            $.publish('plugin/swRegister/onSubmitButton', me);
         },
 
         /**
@@ -413,6 +430,8 @@
             } else {
                 me.setFieldAsSuccess($el);
             }
+
+            $.publish('plugin/swRegister/onValidateInput', [me, event, action]);
         },
 
         /**
@@ -428,6 +447,8 @@
                 'required': 'required',
                 'aria-required': 'true'
             });
+
+            $.publish('plugin/swRegister/onSetHtmlRequired', [this, $elements]);
         },
 
         /**
@@ -439,6 +460,8 @@
          */
         removeHtmlRequired: function ($inputs) {
             $inputs.removeAttr('required aria-required');
+
+            $.publish('plugin/swRegister/onRemoveHtmlRequired', [this, $inputs]);
         },
 
         /**
@@ -454,12 +477,13 @@
             var me = this,
                 plugin;
 
-            if ((plugin = $el.data('plugin_selectboxReplacement'))) {
+            if ((plugin = $el.data('plugin_swSelectboxReplacement'))) {
                 plugin.setError();
-                return;
+            } else {
+                $el.addClass(me.opts.errorClass);
             }
 
-            $el.addClass(me.opts.errorClass);
+            $.publish('plugin/swRegister/onSetFieldAsError', [me, $el]);
         },
 
         /**
@@ -475,12 +499,13 @@
             var me = this,
                 plugin;
 
-            if ((plugin = $el.data('plugin_selectboxReplacement'))) {
+            if ((plugin = $el.data('plugin_swSelectboxReplacement'))) {
                 plugin.removeError();
-                return;
+            } else {
+                $el.removeClass(me.opts.errorClass);
             }
 
-            $el.removeClass(me.opts.errorClass);
+            $.publish('plugin/swRegister/onSetFieldAsSuccess', [me, $el]);
         },
 
         /**
@@ -499,6 +524,8 @@
             if (!URL) {
                 return;
             }
+
+            $.publish('plugin/swRegister/onValidateBefore', [me, data, URL]);
 
             $.ajax({
                 'data': data,
@@ -547,6 +574,8 @@
 
                 me.setFieldAsError($input);
             }
+
+            $.publish('plugin/swRegister/onValidateSuccess', [me, $input]);
         },
 
         /**
@@ -577,6 +606,8 @@
 
                 me.setFieldAsSuccess($input);
             }
+
+            $.publish('plugin/swRegister/onUpdateFields', [me, flags]);
         },
 
         /**

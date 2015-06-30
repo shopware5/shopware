@@ -29,10 +29,12 @@
      *
      * JS:
      *
-     * $('*[data-add-article="true"]').addArticle();
+     * $('*[data-add-article="true"]').swAddArticle();
      *
      */
-    $.plugin('addArticle', {
+    $.plugin('swAddArticle', {
+
+        alias: 'addArticle',
 
         defaults: {
             /**
@@ -97,7 +99,7 @@
             // Close modal on continue shopping button
             $('body').delegate('*[data-modal-close="true"]', 'click.modal', $.proxy(me.closeModal, me));
 
-            StateManager.addPlugin(opts.productSliderSelector, 'productSlider');
+            StateManager.addPlugin(opts.productSliderSelector, 'swProductSlider');
         },
 
         /**
@@ -129,14 +131,14 @@
                 });
             }
 
-            $.publish('plugin/' + me.getName() + '/onBeforeAddArticle', [ me, ajaxData ]);
+            $.publish('plugin/swAddArticle/onBeforeAddArticle', [me, ajaxData]);
 
             $.ajax({
                 'data': ajaxData,
                 'dataType': 'jsonp',
                 'url': opts.addArticleUrl,
                 'success': function (result) {
-                    $.publish('plugin/' + me.getName() + '/onAddArticle', [ me, result ]);
+                    $.publish('plugin/swAddArticle/onAddArticle', [me, result]);
 
                     if (!opts.showModal) {
                         return;
@@ -151,7 +153,9 @@
 
                         picturefill();
 
-                        StateManager.updatePlugin(opts.productSliderSelector, 'productSlider');
+                        StateManager.updatePlugin(opts.productSliderSelector, 'swProductSlider');
+
+                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [me, result]);
                     });
                 }
             });
@@ -163,10 +167,12 @@
          * @public
          * @event closeModal
          */
-        closeModal: function () {
+        closeModal: function (event) {
             event.preventDefault();
 
             $.modal.close();
+
+            $.publish('plugin/swAddArticle/onCloseModal', this);
         },
 
         /**
@@ -177,7 +183,11 @@
          * @event onCloseModal
          */
         onCloseModal: function () {
-            StateManager.destroyPlugin(this.opts.productSliderSelector, 'productSlider');
+            var me = this;
+
+            StateManager.destroyPlugin(me.opts.productSliderSelector, 'swProductSlider');
+
+            $.publish('plugin/swAddArticle/onCloseModal', me);
         }
     });
 });

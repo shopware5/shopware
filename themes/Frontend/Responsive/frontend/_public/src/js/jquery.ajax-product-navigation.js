@@ -10,7 +10,10 @@
      * Please keep in mind that the plugin only works when the url contains the category parameter and the browser
      * needs to support {@link window.sessionStorage}.
      */
-    $.plugin('ajaxProductNavigation', {
+    $.plugin('swAjaxProductNavigation', {
+
+        alias: 'ajaxProductNavigation',
+
         /**
          * Default configuration of the plugin
          *
@@ -186,6 +189,8 @@
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }
 
+            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [this, url, params]);
+
             return params;
         },
 
@@ -197,7 +202,12 @@
          * @returns {Object} The last saved product state or an empty object.
          */
         getProductState: function () {
-            return JSON.parse(this.storage.getItem('lastProductState')) || {};
+            var me = this,
+                state = JSON.parse(me.storage.getItem('lastProductState')) || {};
+
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, state]);
+
+            return state;
         },
 
         /**
@@ -209,7 +219,11 @@
          * @param {Object} params
          */
         setProductState: function (params) {
-            this.storage.setItem('lastProductState', JSON.stringify(params));
+            var me = this;
+
+            me.storage.setItem('lastProductState', JSON.stringify(params));
+
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, params]);
         },
 
         /**
@@ -219,7 +233,11 @@
          * @method clearProductState
          */
         clearProductState: function () {
-            this.storage.removeItem('lastProductState');
+            var me = this;
+
+            me.storage.removeItem('lastProductState');
+
+            $.publish('plugin/swAjaxProductNavigation/onClearProductState', me);
         },
 
         /**
@@ -233,6 +251,8 @@
                 selectors = me.opts.listingSelectors.join(', ');
 
             me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
+
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', me);
         },
 
         /**
@@ -253,6 +273,8 @@
                 'categoryId': ~~($parent.attr('data-category-id')),
                 'ordernumber': $parent.attr('data-ordernumber')
             }));
+
+            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [me, event]);
         },
 
         /**
@@ -268,6 +290,8 @@
 
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
+
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', me);
         },
 
         /**
@@ -282,6 +306,8 @@
                 me.productState.ordernumber = $target.attr('data-ordernumber');
                 me.setProductState(me.productState);
             }
+
+            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [me, event]);
         },
 
         /**
@@ -321,6 +347,8 @@
 
             $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
             $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
+
+            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', me);
         },
 
         /**
@@ -352,6 +380,8 @@
                 'dataType': 'json',
                 'success': $.proxy(me.onProductNavigationLoaded, me)
             });
+
+            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', me);
         },
 
         /**
@@ -374,6 +404,8 @@
                 animCss = {
                     opacity: 1
                 };
+
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [me, response]);
 
             if (listing && listing.href) {
                 me.$backButton.attr('href', listing.href);
@@ -422,6 +454,8 @@
             }
 
             me.checkPossibleSliding();
+
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [me, response]);
         },
 
         /**

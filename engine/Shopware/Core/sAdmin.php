@@ -637,12 +637,12 @@ class sAdmin
             if (!empty($customer)) {
                 $this->db->insert(
                     's_campaigns_mailaddresses',
-                    array('customer' => 1, 'email' => $email)
+                    array('customer' => 1, 'email' => $email, 'added' => $this->getCurrentDateFormatted())
                 );
             } else {
                 $this->db->insert(
                     's_campaigns_mailaddresses',
-                    array('groupID' => $groupID, 'email' => $email)
+                    array('groupID' => $groupID, 'email' => $email, 'added' => $this->getCurrentDateFormatted())
                 );
             }
         }
@@ -1749,7 +1749,8 @@ class sAdmin
                 array(
                     'customer' => 1,
                     'groupID' => 0,
-                    'email' => $userObject["auth"]["email"]
+                    'email' => $userObject["auth"]["email"],
+                    'added' => $this->getCurrentDateFormatted()
                 )
             );
         }
@@ -2193,7 +2194,7 @@ class sAdmin
                         foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
-                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",", $numbers);
+                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(", ", $numbers);
                         // Building download link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->config->get('sBASEFILE')
                             .'?sViewport=account&sAction=download&esdID='
@@ -4484,7 +4485,8 @@ class sAdmin
                 array(
                     'customer' => (int) !empty($customer),
                     'groupID' => $groupID,
-                    'email' => $email
+                    'email' => $email,
+                    'added' => $this->getCurrentDateFormatted()
                 )
             );
 
@@ -4794,5 +4796,17 @@ class sAdmin
 
         $context = array('exception' => $e);
         Shopware()->Container()->get('corelogger')->error($message, $context);
+    }
+
+    /**
+     * Helper function to return the current date formatted
+     *
+     * @param string $format
+     * @return string
+     */
+    private function getCurrentDateFormatted($format = 'Y-m-d H:i:s')
+    {
+        $date = new DateTime();
+        return $date->format($format);
     }
 }

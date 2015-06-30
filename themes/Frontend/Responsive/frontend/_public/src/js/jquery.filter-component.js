@@ -28,7 +28,7 @@
 
                 me.$rangeSliderEl = me.$el.find(me.opts.rangeSliderSelector);
                 me.$rangeInputs = me.$rangeSliderEl.find('input');
-                me.rangeSlider = me.$rangeSliderEl.data('plugin_rangeSlider');
+                me.rangeSlider = me.$rangeSliderEl.data('plugin_swRangeSlider');
 
                 me.registerComponentEvents();
             },
@@ -100,7 +100,9 @@
     /**
      * The actual plugin.
      */
-    $.plugin('filterComponent', {
+    $.plugin('swFilterComponent', {
+
+        alias: 'filterComponent',
 
         defaults: {
             /**
@@ -171,6 +173,8 @@
             me.$inputs = me.$el.find(me.opts.checkBoxSelector);
 
             me.registerComponentEvents();
+
+            $.publish('plugin/swFilterComponent/onInitComponent', me);
         },
 
         /**
@@ -182,6 +186,8 @@
             if (me.type != 'value') {
                 me._on(me.$title, 'click', $.proxy(me.toggleCollapse, me, true));
             }
+
+            $.publish('plugin/swFilterComponent/onRegisterEvents', me);
         },
 
         /**
@@ -192,6 +198,8 @@
             var me = this;
 
             me._on(me.$inputs, 'change', $.proxy(me.onChange, me));
+
+            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', me);
         },
 
         /**
@@ -207,7 +215,11 @@
                 $el = $(event.currentTarget);
 
             me.$el.trigger('onChange', [me, $el]);
+
+            /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/filterComponent/onChange', me);
+
+            $.publish('plugin/swFilterComponent/onChange', [me, event]);
         },
 
         /**
@@ -232,26 +244,35 @@
             }
 
             me.$el.addClass(me.opts.collapseCls);
+
+            $.publish('plugin/swFilterComponent/onOpen', me);
         },
 
         /**
          * Closes the component flyout panel.
          */
         close: function()  {
-            this.$el.removeClass(this.opts.collapseCls);
+            var me = this;
+
+            me.$el.removeClass(me.opts.collapseCls);
+
+            $.publish('plugin/swFilterComponent/onClose', me);
         },
 
         /**
          * Toggles the viewed state of the component.
          */
         toggleCollapse: function() {
-            var me = this;
+            var me = this,
+                shouldOpen = !me.$el.hasClass(me.opts.collapseCls);
 
-            if (me.$el.hasClass(me.opts.collapseCls)) {
-                me.close();
-            } else {
+            if (shouldOpen) {
                 me.open(true);
+            } else {
+                me.close();
             }
+
+            $.publish('plugin/swFilterComponent/onToggleCollapse', [me, shouldOpen]);
         },
 
         /**

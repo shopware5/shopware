@@ -680,9 +680,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         var me = this;
 
         //open the order listing window
-        me.mainWindow = me.getView('batch.Window').create({
-            mail: mail,
-            mode: 'single'
+        me.mainWindow = me.getView('mail.Window').create({
+            mail: mail
         }).show();
     },
 

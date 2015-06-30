@@ -15,10 +15,13 @@
      *
      * JS:
      *
-     * $('*[data-captcha="true"]').captcha();
+     * $('*[data-captcha="true"]').swCaptcha();
      *
      */
-    $.plugin('captcha', {
+    $.plugin('swCaptcha', {
+
+        alias: 'captcha',
+
         /**
          * Default plugin initialisation function.
          * Registers all needed event listeners and sends a request to load the captcha image.
@@ -61,8 +64,14 @@
             $.ajax({
                 url: url,
                 cache: false,
-                success: $el.html.bind($el)
+                success: function (response) {
+                    $el.html(response);
+
+                    $.publish('plugin/swCaptcha/onSendRequestSuccess', me);
+                }
             });
+
+            $.publish('plugin/swCaptcha/onSendRequest', me);
         }
     });
 })(jQuery, window);
