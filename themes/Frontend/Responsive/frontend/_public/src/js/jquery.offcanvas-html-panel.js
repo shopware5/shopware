@@ -34,8 +34,6 @@
      */
     $.plugin('swOffcanvasHtmlPanel', {
 
-        alias: 'offcanvasHtmlPanel',
-
         defaults: {
             /**
              * Offcanvas Content which will be displayed in the off canvas menu

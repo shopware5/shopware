@@ -33,8 +33,6 @@
 
     $.plugin('swInfiniteScrolling', {
 
-        alias: 'infiniteScrolling',
-
         defaults: {
 
             /** @bool enabled - enable or disable infinite scrolling plugin */

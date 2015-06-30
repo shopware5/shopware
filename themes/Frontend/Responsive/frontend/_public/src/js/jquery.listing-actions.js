@@ -54,8 +54,6 @@
      */
     $.plugin('swListingActions', {
 
-        alias: 'listingActions',
-
         defaults: {
 
             /**

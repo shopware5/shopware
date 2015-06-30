@@ -26,7 +26,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed `article-sidebar-link` object in `Shopware.apps.Article.view.detail.Sidebar`
 * Changed views in `Shopware.apps.Article`:
     * Removed `detail.sidebar.Link`
-    * Added `resources.Links` 
+    * Added `resources.Links`
     * Added `resources.Downloads`
 * Changed events in `Shopware.apps.Article.controller.Detail`:
     * Removed `article-detail-window article-sidebar-link` event alias
@@ -76,6 +76,8 @@ In this document you will find a changelog of the important changes related to t
     * `detail/sidebar/accessory/edit`
     * `detail/sidebar/accessory/name`
     * `detail/sidebar/accessory/number`
+* Removed unprefixed versions of jQuery plugins that were deprecated in the 5.0.2 Release.
+
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent

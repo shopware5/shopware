@@ -11,8 +11,6 @@
      */
     $.plugin('swLastSeenProducts', {
 
-        alias: 'lastSeenProducts',
-
         defaults: {
 
             /**
@@ -230,7 +228,7 @@
             } else {
                 srcSet = me.opts.noPicture
             }
-            
+
             $('<img>', {
                 'srcset': srcSet,
                 'alt': data.articleName,

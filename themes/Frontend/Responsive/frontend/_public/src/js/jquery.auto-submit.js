@@ -27,8 +27,6 @@
      */
     $.plugin('swAutoSubmit', {
 
-        alias: 'autoSubmit',
-
         defaults: {
 
             /**

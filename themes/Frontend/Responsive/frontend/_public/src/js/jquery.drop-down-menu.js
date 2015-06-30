@@ -3,8 +3,6 @@
 
     $.plugin('swDropdownMenu', {
 
-        alias: 'dropdownMenu',
-
         defaults: {
             activeCls: 'js--is--dropdown-active',
             preventDefault: true,

@@ -10,8 +10,6 @@
      */
     $.plugin('swImageZoom', {
 
-        alias: 'imageZoom',
-
         defaults: {
 
             /* Setting for showing the image title in the zoom view */

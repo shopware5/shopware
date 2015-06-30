@@ -20,8 +20,6 @@
      */
     $.plugin('swPseudoText', {
 
-        alias: 'pseudoText',
-
         /**
          * Default settings for the plugin
          * @type {Object}

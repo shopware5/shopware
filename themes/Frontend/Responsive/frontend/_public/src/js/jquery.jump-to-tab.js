@@ -11,8 +11,6 @@
      */
     $.plugin('swJumpToTab', {
 
-        alias: 'jumpToTab',
-
         defaults: {
             contentCls: 'has--content',
             tabDetail: '.tab-menu--product',

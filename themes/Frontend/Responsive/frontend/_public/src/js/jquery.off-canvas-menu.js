@@ -23,8 +23,6 @@
      */
     $.plugin('swOffcanvasMenu', {
 
-        alias: 'offcanvasMenu',
-
         /**
          * Plugin default options.
          * Get merged automatically with the user configuration.

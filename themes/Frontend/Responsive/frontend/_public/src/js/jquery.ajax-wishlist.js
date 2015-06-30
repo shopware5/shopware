@@ -16,8 +16,6 @@
      */
     $.plugin('swAjaxWishlist', {
 
-        alias: 'ajaxWishlist',
-
         /** @object Default configuration */
         defaults: {
 

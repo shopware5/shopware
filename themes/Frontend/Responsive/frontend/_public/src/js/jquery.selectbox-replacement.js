@@ -3,8 +3,6 @@
 
     $.plugin('swSelectboxReplacement', {
 
-        alias: 'selectboxReplacement',
-
         /** @property {Object} Default settings for the plugin **/
         defaults: {
 

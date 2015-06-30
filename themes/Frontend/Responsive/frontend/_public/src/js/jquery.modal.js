@@ -647,8 +647,6 @@
      */
     $.plugin('swModalbox', {
 
-        alias: 'modalbox',
-
         defaults: {
 
             /**

@@ -102,8 +102,6 @@
      */
     $.plugin('swFilterComponent', {
 
-        alias: 'filterComponent',
-
         defaults: {
             /**
              * The type of the filter component

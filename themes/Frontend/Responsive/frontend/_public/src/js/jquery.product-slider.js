@@ -75,8 +75,6 @@
      */
     $.plugin('swProductSlider', {
 
-        alias: 'productSlider',
-
         defaults: {
 
             /**

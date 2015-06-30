@@ -11,8 +11,6 @@
      */
     $.plugin('swSearch', {
 
-        alias: 'search',
-
         defaults: {
 
             /**

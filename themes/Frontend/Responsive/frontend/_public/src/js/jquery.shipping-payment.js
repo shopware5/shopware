@@ -3,8 +3,6 @@
 
     $.plugin('swShippingPayment', {
 
-        alias: 'shippingPayment',
-
         defaults: {
 
             formSelector: '#shippingPaymentForm',

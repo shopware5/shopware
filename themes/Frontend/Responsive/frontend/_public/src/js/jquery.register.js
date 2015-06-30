@@ -8,8 +8,6 @@
      */
     $.plugin('swRegister', {
 
-        alias: 'register',
-
         /**
          * Plugin default options.
          * Get merged automatically with the user configuration.

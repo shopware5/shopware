@@ -15,8 +15,6 @@
      */
     $.plugin('swEmotionLoader', {
 
-        alias: 'emotionLoader',
-
         defaults: {
 
             /**
@@ -354,8 +352,6 @@
      * for handling the grid sizing and all elements in it.
      */
     $.plugin('swEmotion', {
-
-        alias: 'emotion',
 
         defaults: {
 
@@ -701,8 +697,6 @@
      */
     $.plugin('swEmotionBanner', {
 
-        alias: 'emotionBanner',
-
         defaults: {
 
             /**
@@ -795,8 +789,6 @@
      * This plugin handles html5 video elements in an emotion world.
      */
     $.plugin('swEmotionVideo', {
-
-        alias: 'emotionVideo',
 
         defaults: {
 
