@@ -6,7 +6,9 @@
      *
      * The plugin handles the compare add button on every product box.
      */
-    $.plugin('productCompareAdd', {
+    $.plugin('swProductCompareAdd', {
+
+        alias: 'productCompareAdd',
 
         /** Your default options */
         defaults: {
@@ -28,7 +30,7 @@
             // On add article to compare button
             me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
 
-            $.publish('plugin/productCompareAdd/onRegisterEvents', me);
+            $.publish('plugin/swProductCompareAdd/onRegisterEvents', me);
         },
 
         /**
@@ -56,7 +58,7 @@
                 openOverlay: false
             });
 
-            $.publish('plugin/productCompareAdd/onAddArticleCompareBefore', [me, event]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [me, event]);
 
             // Ajax request for adding article to compare list
             $.ajax({
@@ -82,7 +84,7 @@
                         compareMenu.html(data);
 
                         // Reload compare menu plugin
-                        $('*[data-product-compare-menu="true"]').productCompareMenu();
+                        $('*[data-product-compare-menu="true"]').swProductCompareMenu();
 
                         // Prevent too fast closing of loadingIndicator and overlay
                         $.loadingIndicator.close(function() {
@@ -94,11 +96,11 @@
                         })
                     }
 
-                    $.publish('plugin/productCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
+                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
                 }
             });
 
-            $.publish('plugin/productCompareAdd/onAddArticleCompare', [me, event]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [me, event]);
         },
 
         /** Destroys the plugin */

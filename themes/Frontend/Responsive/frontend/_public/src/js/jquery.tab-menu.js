@@ -5,7 +5,10 @@
      *
      * This plugin sets up a menu with tabs you can switch between.
      */
-    $.plugin('tabMenu', {
+    $.plugin('swTabMenu', {
+
+        alias: 'tabMenu',
+
         defaults: {
 
             /**
@@ -146,7 +149,7 @@
                 me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
 
-            $.publish('plugin/tabMenu/onRegisterEvents', me);
+            $.publish('plugin/swTabMenu/onRegisterEvents', me);
         },
 
         /**
@@ -192,14 +195,14 @@
             $container.addClass(activeContainerClass);
 
             $.each($container.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_productSlider').update();
+                $(item).data('plugin_swProductSlider').update();
             });
 
             if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
                 $container.load($tab.attr('data-url'));
             }
 
-            $.publish('plugin/tabMenu/onChangeTab', [me, index]);
+            $.publish('plugin/swTabMenu/onChangeTab', [me, index]);
         },
 
         /**

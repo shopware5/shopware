@@ -13,7 +13,9 @@
      * This plugin is called on emotion wrappers to load emotion worlds
      * for the specific device types dynamically via ajax.
      */
-    $.plugin('emotionLoader', {
+    $.plugin('swEmotionLoader', {
+
+        alias: 'emotionLoader',
 
         defaults: {
 
@@ -132,7 +134,7 @@
 
             StateManager.on('resize', $.proxy(me.onDeviceChange, me));
 
-            $.publish('plugin/emotionLoader/onRegisterEvents', me);
+            $.publish('plugin/swEmotionLoader/onRegisterEvents', me);
         },
 
         /**
@@ -143,7 +145,7 @@
 
             me.loadEmotion();
 
-            $.publish('plugin/emotionLoader/onDeviceChange', me);
+            $.publish('plugin/swEmotionLoader/onDeviceChange', me);
         },
 
         /**
@@ -223,7 +225,7 @@
                     me.isLoading = false;
                     me.$overlay.remove();
 
-                    $.publish('plugin/emotionLoader/onLoadEmotionLoaded', me);
+                    $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', me);
 
                     if (!response.length) {
                         me.hideEmotion();
@@ -235,14 +237,14 @@
 
                     me.initEmotion(response);
 
-                    $.publish('plugin/emotionLoader/onLoadEmotionFinished', me);
+                    $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', me);
                 }
             });
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/loadEmotion', me);
 
-            $.publish('plugin/emotionLoader/onLoadEmotion', me);
+            $.publish('plugin/swEmotionLoader/onLoadEmotion', me);
         },
 
         /**
@@ -262,12 +264,12 @@
                 return;
             }
 
-            me.$emotion.emotion();
+            me.$emotion.swEmotion();
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/initEmotion', me);
 
-            $.publish('plugin/emotionLoader/onInitEmotion', [me, html]);
+            $.publish('plugin/swEmotionLoader/onInitEmotion', [me, html]);
         },
 
         /**
@@ -281,7 +283,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/showEmotion', me);
 
-            $.publish('plugin/emotionLoader/onShowEmotion', me);
+            $.publish('plugin/swEmotionLoader/onShowEmotion', me);
         },
 
         /**
@@ -295,7 +297,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/hideEmotion', me);
 
-            $.publish('plugin/emotionLoader/onHideEmotion', me);
+            $.publish('plugin/swEmotionLoader/onHideEmotion', me);
         },
 
         /**
@@ -309,12 +311,12 @@
 
             me.$overlay.remove();
 
-            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling');
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/showFallbackContent', me);
 
-            $.publish('plugin/emotionLoader/onShowFallbackContent', me);
+            $.publish('plugin/swEmotionLoader/onShowFallbackContent', me);
         },
 
         /**
@@ -326,12 +328,12 @@
             me.$fallbackContent.addClass('is--hidden');
             me.$showListingLink.removeClass('is--hidden');
 
-            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'infiniteScrolling');
+            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling');
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotionLoader/hideFallbackContent', me);
 
-            $.publish('plugin/emotionLoader/onHideFallbackContent', me);
+            $.publish('plugin/swEmotionLoader/onHideFallbackContent', me);
         },
 
         /**
@@ -351,7 +353,9 @@
      * This plugin is called on each single emotion world
      * for handling the grid sizing and all elements in it.
      */
-    $.plugin('emotion', {
+    $.plugin('swEmotion', {
+
+        alias: 'emotion',
 
         defaults: {
 
@@ -492,22 +496,22 @@
             var me = this;
 
             $.each(me.$bannerElements, function(index, item) {
-                $(item).emotionBanner();
+                $(item).swEmotionBanner();
             });
 
             $.each(me.$videoElements, function(index, item) {
-                $(item).emotionVideo();
+                $(item).swEmotionVideo();
             });
 
-            StateManager.updatePlugin('*[data-product-slider="true"]', 'productSlider');
-            StateManager.updatePlugin('*[data-image-slider="true"]', 'imageSlider');
+            StateManager.updatePlugin('*[data-product-slider="true"]', 'swProductSlider');
+            StateManager.updatePlugin('*[data-image-slider="true"]', 'swImageSlider');
 
             window.picturefill();
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/initElements', me);
 
-            $.publish('plugin/emotion/onInitElements', me);
+            $.publish('plugin/swEmotion/onInitElements', me);
         },
 
         /**
@@ -522,7 +526,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/initFullscreen', me);
 
-            $.publish('plugin/emotion/onInitFullscreen', me);
+            $.publish('plugin/swEmotion/onInitFullscreen', me);
         },
 
         /**
@@ -537,7 +541,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/removeFullscreen', me);
 
-            $.publish('plugin/emotion/onRemoveFullscreen', [me, showSidebar]);
+            $.publish('plugin/swEmotion/onRemoveFullscreen', [me, showSidebar]);
         },
 
         /**
@@ -560,7 +564,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/initMasonryGrid', me);
 
-            $.publish('plugin/emotion/onInitMasonryGrid', me);
+            $.publish('plugin/swEmotion/onInitMasonryGrid', me);
         },
 
         /**
@@ -583,7 +587,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/initScaleGrid', me);
 
-            $.publish('plugin/emotion/onInitScaleGrid', me);
+            $.publish('plugin/swEmotion/onInitScaleGrid', me);
         },
 
         /**
@@ -595,14 +599,14 @@
             StateManager.on('resize', $.proxy(me.onResize, me));
 
             if (me.opts.fullscreen) {
-                $.subscribe('plugin/emotionLoader/showEmotion', $.proxy(me.onShow, me));
-                $.subscribe('plugin/emotionLoader/hideEmotion', $.proxy(me.onHide, me));
+                $.subscribe('plugin/swEmotionLoader/onShowEmotion', $.proxy(me.onShow, me));
+                $.subscribe('plugin/swEmotionLoader/onHideEmotion', $.proxy(me.onHide, me));
             }
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/emotion/registerEvents', me);
 
-            $.publish('plugin/emotion/onRegisterEvents', me);
+            $.publish('plugin/swEmotion/onRegisterEvents', me);
         },
 
         /**
@@ -618,7 +622,7 @@
             me.$bannerElements.trigger('emotionResize');
             me.$videoElements.trigger('emotionResize');
 
-            $.publish('plugin/emotion/onResize', me);
+            $.publish('plugin/swEmotion/onResize', me);
         },
 
         onShow: function(event, emotion) {
@@ -628,7 +632,7 @@
                 me.initFullscreen();
             }
 
-            $.publish('plugin/emotion/onShow', [me, event, emotion]);
+            $.publish('plugin/swEmotion/onShow', [me, event, emotion]);
         },
 
         onHide: function(event, emotion) {
@@ -638,7 +642,7 @@
                 me.removeFullscreen();
             }
 
-            $.publish('plugin/emotion/onHide', [me, event, emotion]);
+            $.publish('plugin/swEmotion/onHide', [me, event, emotion]);
         },
 
         /**
@@ -660,7 +664,7 @@
 
             me.$wrapper.css('height', wrapperHeight);
 
-            $.publish('plugin/emotion/onScale', [me, width, factor, wrapperHeight]);
+            $.publish('plugin/swEmotion/onScale', [me, width, factor, wrapperHeight]);
         },
 
         /**
@@ -676,7 +680,7 @@
 
             me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime);
 
-            $.publish('plugin/emotion/onBuffer', [me, me.bufferedCall, func, bufferTime]);
+            $.publish('plugin/swEmotion/onBuffer', [me, me.bufferedCall, func, bufferTime]);
         },
 
         /**
@@ -695,7 +699,9 @@
      *
      * This plugin handles banner elements in an emotion world.
      */
-    $.plugin('emotionBanner', {
+    $.plugin('swEmotionBanner', {
+
+        alias: 'emotionBanner',
 
         defaults: {
 
@@ -748,7 +754,7 @@
 
             me._on(me.$el, 'emotionResize', $.proxy(me.resizeBanner, me));
 
-            $.publish('plugin/emotionBanner/onRegisterEvents', me);
+            $.publish('plugin/swEmotionBanner/onRegisterEvents', me);
         },
 
         /**
@@ -769,7 +775,7 @@
                 'height': bannerHeight
             });
 
-            $.publish('plugin/emotionBanner/onResizeBanner', me);
+            $.publish('plugin/swEmotionBanner/onResizeBanner', me);
         },
 
         /**
@@ -788,7 +794,9 @@
      *
      * This plugin handles html5 video elements in an emotion world.
      */
-    $.plugin('emotionVideo', {
+    $.plugin('swEmotionVideo', {
+
+        alias: 'emotionVideo',
 
         defaults: {
 
@@ -916,7 +924,7 @@
             me._on(me.$videoCover, 'click', $.proxy(me.onPlayClick, me));
             me._on(me.$playBtn, 'click', $.proxy(me.onPlayClick, me));
 
-            $.publish('plugin/emotionVideo/onRegisterEvents', me);
+            $.publish('plugin/swEmotionVideo/onRegisterEvents', me);
         },
 
         /**
@@ -932,7 +940,7 @@
 
             me.resizeVideo();
 
-            $.publish('plugin/emotionVideo/onLoadMeta', [me, event]);
+            $.publish('plugin/swEmotionVideo/onLoadMeta', [me, event]);
         },
 
         /**
@@ -946,7 +954,7 @@
                 me.$playBtnIcon.addClass(me.opts.pauseIconCls).removeClass(me.opts.playIconCls);
             }
 
-            $.publish('plugin/emotionVideo/onCanPlay', [me, event]);
+            $.publish('plugin/swEmotionVideo/onCanPlay', [me, event]);
         },
 
         /**
@@ -957,7 +965,7 @@
 
             me.$videoCover.hide();
 
-            $.publish('plugin/emotionVideo/onVideoPlay', [me, event]);
+            $.publish('plugin/swEmotionVideo/onVideoPlay', [me, event]);
         },
 
         /**
@@ -969,7 +977,7 @@
 
             me.$playBtnIcon.removeClass(me.opts.pauseIconCls).addClass(me.opts.playIconCls);
 
-            $.publish('plugin/emotionVideo/onVideoEnded', [me, event]);
+            $.publish('plugin/swEmotionVideo/onVideoEnded', [me, event]);
         },
 
         /**
@@ -983,7 +991,7 @@
 
             (me.player.paused) ? me.playVideo() : me.stopVideo();
 
-            $.publish('plugin/emotionVideo/onPlayClick', [me, event]);
+            $.publish('plugin/swEmotionVideo/onPlayClick', [me, event]);
         },
 
         /**
@@ -995,7 +1003,7 @@
             me.$playBtnIcon.addClass(me.opts.pauseIconCls).removeClass(me.opts.playIconCls);
             me.player.play();
 
-            $.publish('plugin/emotionVideo/onPlayVideo', me);
+            $.publish('plugin/swEmotionVideo/onPlayVideo', me);
         },
 
         /**
@@ -1007,7 +1015,7 @@
             me.$playBtnIcon.removeClass(me.opts.pauseIconCls).addClass(me.opts.playIconCls);
             me.player.pause();
 
-            $.publish('plugin/emotionVideo/onStopVideo', me);
+            $.publish('plugin/swEmotionVideo/onStopVideo', me);
         },
 
         /**
@@ -1056,7 +1064,7 @@
                 }
             }
 
-            $.publish('plugin/emotionVideo/onResizeVideo', me);
+            $.publish('plugin/swEmotionVideo/onResizeVideo', me);
         },
 
         /**
@@ -1079,7 +1087,7 @@
                 'transform-origin': origin
             });
 
-            $.publish('plugin/emotionVideo/onSetScaleOrigin', [me, x, y]);
+            $.publish('plugin/swEmotionVideo/onSetScaleOrigin', [me, x, y]);
         },
 
         /**
@@ -1098,7 +1106,7 @@
                 'transform': transformation
             });
 
-            $.publish('plugin/emotionVideo/onTransformVideo', [me, transformation]);
+            $.publish('plugin/swEmotionVideo/onTransformVideo', [me, transformation]);
         },
 
         /**

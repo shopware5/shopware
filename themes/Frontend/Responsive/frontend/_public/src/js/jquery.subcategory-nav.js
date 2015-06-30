@@ -15,10 +15,12 @@
      *      data-categoryId="{$sCategoryContent.id}"
      *      data-fetchUrl="{url module=widgets controller=listing action=getCategory categoryId={$sCategoryContent.id}}"></div>
      *
-     *    $('*[data-subcategory-nav="true"]').subCategoryNav();
+     *    $('*[data-subcategory-nav="true"]').swSubCategoryNav();
      * ```
      */
-    $.plugin('subCategoryNav', {
+    $.plugin('swSubCategoryNav', {
+
+        alias: 'subCategoryNav',
 
         defaults: {
 
@@ -347,7 +349,7 @@
 
             $sidebar.on(me.getEventName(eventName), opts.mainMenuSelector, $.proxy(me.onClickMainMenuButton, me));
 
-            $.publish('plugin/subCategoryNav/onRegisterEvents', me);
+            $.publish('plugin/swSubCategoryNav/onRegisterEvents', me);
         },
 
         /**
@@ -374,7 +376,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/subCategoryNav/onClickBackButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickBackButton', [me, event]);
 
             // decide if there is a parent group or main sidebar
             if (!url || parentId === me.opts.mainCategoryId) {
@@ -406,7 +408,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/subCategoryNav/onClickForwardButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [me, event]);
 
             // Disable scrolling on main menu
             me.$sidebar.addClass(me.opts.disableScrollingClass);
@@ -433,7 +435,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/subCategoryNav/onClickMainMenuButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [me, event]);
 
             me.slideToMainMenu();
         },
@@ -450,11 +452,11 @@
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
 
-            $.publish('plugin/subCategoryNav/onLoadTemplateBefore', me);
+            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', me);
 
             if (!$loadingTarget) {
                 $.get(url, function (template) {
-                    $.publish('plugin/subCategoryNav/onLoadTemplate', me);
+                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
 
                     callback.call(me, template)
                 });
@@ -470,7 +472,7 @@
             $.get(url, function (template) {
                 me.$loadingIcon.hide();
 
-                $.publish('plugin/subCategoryNav/onLoadTemplate', me);
+                $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
 
                 callback.call(me, template);
             });
@@ -489,7 +491,7 @@
                 $overlays,
                 $slide;
 
-            $.publish('plugin/subCategoryNav/onSlideOutBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', me);
 
             me.$sidebar.append(template);
 
@@ -506,7 +508,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/subCategoryNav/onSlideOut', me);
+                $.publish('plugin/swSubCategoryNav/onSlideOut', me);
             });
         },
 
@@ -526,7 +528,7 @@
                 $slide,
                 $el;
 
-            $.publish('plugin/subCategoryNav/onSlideInBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideInBefore', me);
 
             // hide main menu
             me.$sidebar.scrollTop(0);
@@ -561,7 +563,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/subCategoryNav/onSlideIn', me);
+                $.publish('plugin/swSubCategoryNav/onSlideIn', me);
             });
         },
 
@@ -577,7 +579,7 @@
                 opts = me.opts,
                 $overlay = $(opts.overlaySelector);
 
-            $.publish('plugin/subCategoryNav/onSlideToMainMenuBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', me);
 
             // make the main menu visible
             me.$sidebarWrapper.css('display', 'block');
@@ -593,7 +595,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/subCategoryNav/onSlideToMainMenu', me);
+                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', me);
             });
         },
 

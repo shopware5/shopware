@@ -73,7 +73,10 @@
     /**
      * Product Slider Plugin
      */
-    $.plugin('productSlider', {
+    $.plugin('swProductSlider', {
+
+        alias: 'productSlider',
+
         defaults: {
 
             /**
@@ -334,7 +337,7 @@
             me.setPosition(0);
             me.trackArrows();
 
-            $.publish('plugin/productSlider/onUpdate', me);
+            $.publish('plugin/swProductSlider/onUpdate', me);
         },
 
         /**
@@ -367,7 +370,7 @@
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
 
-            $.publish('plugin/productSlider/onInitSlider', me);
+            $.publish('plugin/swProductSlider/onInitSlider', me);
         },
 
         /**
@@ -386,7 +389,7 @@
 
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
 
-            $.publish('plugin/productSlider/onRegisterEvents', me);
+            $.publish('plugin/swProductSlider/onRegisterEvents', me);
         },
 
         /**
@@ -432,7 +435,7 @@
             me.$container[method](pos);
             me.currentPosition = pos;
 
-            $.publish('plugin/productSlider/onSetPosition', [me, pos]);
+            $.publish('plugin/swProductSlider/onSetPosition', [me, pos]);
         },
 
         /**
@@ -467,7 +470,7 @@
              */
             window.picturefill();
 
-            $.publish('plugin/productSlider/onSetSizes', [me, orientation]);
+            $.publish('plugin/swProductSlider/onSetSizes', [me, orientation]);
         },
 
         /**
@@ -487,7 +490,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/trackItems', me);
 
-            $.publish('plugin/productSlider/onTrackItems', [me, me.items, me.itemsCount]);
+            $.publish('plugin/swProductSlider/onTrackItems', [me, me.items, me.itemsCount]);
 
             return me.itemsCount;
         },
@@ -522,7 +525,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/trackArrows', me);
 
-            $.publish('plugin/productSlider/onTrackArrows', [me, me.$arrowPrev, me.$arrowNext]);
+            $.publish('plugin/swProductSlider/onTrackArrows', [me, me.$arrowPrev, me.$arrowNext]);
         },
 
         /**
@@ -544,7 +547,7 @@
 
             me.isLoading = true;
 
-            $.publish('plugin/productSlider/onLoadItemsBefore', [me, data]);
+            $.publish('plugin/swProductSlider/onLoadItemsBefore', [me, data]);
 
             $.ajax({
                 url: me.opts.ajaxCtrlUrl,
@@ -560,7 +563,7 @@
                     /** @deprecated - will be removed in 5.1 */
                     $.publish('plugin/productSlider/itemsLoaded');
 
-                    $.publish('plugin/productSlider/onLoadItemsSuccess', [me, response]);
+                    $.publish('plugin/swProductSlider/onLoadItemsSuccess', [me, response]);
 
                     if (typeof callback === 'function') {
                         callback.call(me, response);
@@ -571,7 +574,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/loadItems', me);
 
-            $.publish('plugin/productSlider/onLoadItems', me);
+            $.publish('plugin/swProductSlider/onLoadItems', me);
         },
 
         /**
@@ -601,7 +604,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/createContainer', me);
 
-            $.publish('plugin/productSlider/onCreateContainer', [me, $container, orientation]);
+            $.publish('plugin/swProductSlider/onCreateContainer', [me, $container, orientation]);
 
             return $container;
         },
@@ -645,7 +648,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/createArrows', me);
 
-            $.publish('plugin/productSlider/onCreateArrows', [me, me.$arrowPrev, me.$arrowNext]);
+            $.publish('plugin/swProductSlider/onCreateArrows', [me, me.$arrowPrev, me.$arrowNext]);
         },
 
         /**
@@ -665,7 +668,7 @@
 
             me[(type === 'prev') ? prev : next]();
 
-            $.publish('plugin/productSlider/onArrowClick', [me, event, type]);
+            $.publish('plugin/swProductSlider/onArrowClick', [me, event, type]);
         },
 
         /**
@@ -680,7 +683,7 @@
             me.stopAutoScroll();
             me.stopAutoSlide();
 
-            $.publish('plugin/productSlider/onMouseEnter', [me, event]);
+            $.publish('plugin/swProductSlider/onMouseEnter', [me, event]);
         },
 
         /**
@@ -695,7 +698,7 @@
             if (me.isActive() && me.opts.autoScroll) me.autoScroll();
             if (me.isActive() && me.opts.autoSlide) me.autoSlide();
 
-            $.publish('plugin/productSlider/onMouseLeave', [me, event]);
+            $.publish('plugin/swProductSlider/onMouseLeave', [me, event]);
         },
 
         /**
@@ -726,7 +729,7 @@
                 me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
-            $.publish('plugin/productSlider/onScroll', [me, event]);
+            $.publish('plugin/swProductSlider/onScroll', [me, event]);
         },
 
         /**
@@ -745,7 +748,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slideNext', me);
 
-            $.publish('plugin/productSlider/onSlideNext', [me, me.currentPosition]);
+            $.publish('plugin/swProductSlider/onSlideNext', [me, me.currentPosition]);
         },
 
         /**
@@ -764,7 +767,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slidePrev', me);
 
-            $.publish('plugin/productSlider/onSlidePrev', [me, me.currentPosition]);
+            $.publish('plugin/swProductSlider/onSlidePrev', [me, me.currentPosition]);
         },
 
         /**
@@ -786,7 +789,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slideToElement', me);
 
-            $.publish('plugin/productSlider/onSlideToElement', [me, $el, orientation]);
+            $.publish('plugin/swProductSlider/onSlideToElement', [me, $el, orientation]);
         },
 
         /**
@@ -808,13 +811,13 @@
                 me.currentPosition = me.getScrollPosition();
                 me.isAnimating = false;
 
-                $.publish('plugin/productSlider/onSlideFinished', [me, me.currentPosition]);
+                $.publish('plugin/swProductSlider/onSlideFinished', [me, me.currentPosition]);
             });
 
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/slide', me);
 
-            $.publish('plugin/productSlider/onSlide', [me, position]);
+            $.publish('plugin/swProductSlider/onSlide', [me, position]);
         },
 
         /**
@@ -836,7 +839,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/autoSlide', me);
 
-            $.publish('plugin/productSlider/onAutoSlide', [me, me.autoSlideAnimation, slideDirection, slideSpeed]);
+            $.publish('plugin/swProductSlider/onAutoSlide', [me, me.autoSlideAnimation, slideDirection, slideSpeed]);
         },
 
         /**
@@ -854,7 +857,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/stopAutoSlide', me);
 
-            $.publish('plugin/productSlider/onStopAutoSlide', me);
+            $.publish('plugin/swProductSlider/onStopAutoSlide', me);
         },
 
         /**
@@ -874,7 +877,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/scrollNext', me);
 
-            $.publish('plugin/productSlider/onScrollNext', [me, me.currentPosition, scrollDistance]);
+            $.publish('plugin/swProductSlider/onScrollNext', [me, me.currentPosition, scrollDistance]);
         },
 
         /**
@@ -894,7 +897,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/scrollPrev', me);
 
-            $.publish('plugin/productSlider/onScrollPrev', [me, me.currentPosition, scrollDistance]);
+            $.publish('plugin/swProductSlider/onScrollPrev', [me, me.currentPosition, scrollDistance]);
         },
 
         /**
@@ -918,7 +921,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/autoScroll', me);
 
-            $.publish('plugin/productSlider/onAutoScroll', [me, me.autoScrollAnimation, scrollDirection, scrollSpeed]);
+            $.publish('plugin/swProductSlider/onAutoScroll', [me, me.autoScrollAnimation, scrollDirection, scrollSpeed]);
         },
 
         /**
@@ -936,7 +939,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/stopAutoScroll', me);
 
-            $.publish('plugin/productSlider/onStopAutoScroll', me);
+            $.publish('plugin/swProductSlider/onStopAutoScroll', me);
         },
 
         /**
@@ -955,7 +958,7 @@
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/productSlider/buffer', me);
 
-            $.publish('plugin/productSlider/onBuffer', [me, me.bufferedCall, func, bufferTime]);
+            $.publish('plugin/swProductSlider/onBuffer', [me, me.bufferedCall, func, bufferTime]);
         },
 
         /**

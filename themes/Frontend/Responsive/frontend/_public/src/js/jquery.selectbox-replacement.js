@@ -1,7 +1,9 @@
 ;(function ($, window, document, undefined) {
     "use strict";
 
-    $.plugin('selectboxReplacement', {
+    $.plugin('swSelectboxReplacement', {
+
+        alias: 'selectboxReplacement',
 
         /** @property {Object} Default settings for the plugin **/
         defaults: {
@@ -80,7 +82,7 @@
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
 
-            $.publish('plugin/selectboxReplacement/onCreateTemplate', [me, wrapEl]);
+            $.publish('plugin/swSelectboxReplacement/onCreateTemplate', [me, wrapEl]);
 
             return wrapEl;
         },
@@ -95,7 +97,7 @@
             me.$wrapEl.addClass(me.opts.disabledCls);
             me.$el.attr('disabled', 'disabled');
 
-            $.publish('plugin/selectboxReplacement/onSetDisabled', me);
+            $.publish('plugin/swSelectboxReplacement/onSetDisabled', me);
 
             return me.$el;
         },
@@ -110,7 +112,7 @@
             me.$wrapEl.removeClass(me.opts.disabledCls);
             me.$el.removeAttr('disabled');
 
-            $.publish('plugin/selectboxReplacement/onSetEnabled', me);
+            $.publish('plugin/swSelectboxReplacement/onSetEnabled', me);
 
             return me.$el;
         },
@@ -124,7 +126,7 @@
 
             me.$wrapEl.addClass(me.opts.errorCls);
 
-            $.publish('plugin/selectboxReplacement/onSetError', me);
+            $.publish('plugin/swSelectboxReplacement/onSetError', me);
 
             return me.$wrapEl;
         },
@@ -138,7 +140,7 @@
 
             me.$wrapEl.removeClass(me.opts.errorCls);
 
-            $.publish('plugin/selectboxReplacement/onRemoveError', me);
+            $.publish('plugin/swSelectboxReplacement/onRemoveError', me);
 
             return me.$wrapEl;
         },
@@ -156,7 +158,7 @@
                 me.setSelectedOnTextElement();
             }
 
-            $.publish('plugin/selectboxReplacement/onSetVal', me);
+            $.publish('plugin/swSelectboxReplacement/onSetVal', me);
 
             return val;
         },
@@ -170,7 +172,7 @@
 
             me.$wrapEl.show.apply(me.$wrapEl, arguments);
 
-            $.publish('plugin/selectboxReplacement/onShow', me);
+            $.publish('plugin/swSelectboxReplacement/onShow', me);
 
             return me.$wrapEl;
         },
@@ -184,7 +186,7 @@
 
             me.$wrapEl.hide.apply(me.$wrapEl, arguments);
 
-            $.publish('plugin/selectboxReplacement/onHide', me);
+            $.publish('plugin/swSelectboxReplacement/onHide', me);
 
             return me.$wrapEl;
         },
@@ -202,7 +204,7 @@
             me._on(me.$el, 'focus', $.proxy(me.onFocus, me));
             me._on(me.$el, 'blur', $.proxy(me.onBlur, me));
 
-            $.publish('plugin/selectboxReplacement/onRegisterEvents', me);
+            $.publish('plugin/swSelectboxReplacement/onRegisterEvents', me);
 
             return true;
         },
@@ -219,7 +221,7 @@
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
 
-            $.publish('plugin/selectboxReplacement/onSetSelected', [me, me.selected]);
+            $.publish('plugin/swSelectboxReplacement/onSetSelected', [me, me.selected]);
 
             return me.selected;
         },
@@ -237,7 +239,7 @@
 
             me.setSelectedOnTextElement();
 
-            $.publish('plugin/selectboxReplacement/onChange', me);
+            $.publish('plugin/swSelectboxReplacement/onChange', me);
         },
 
         /**
@@ -258,7 +260,7 @@
                 me.setSelectedOnTextElement();
             }
 
-            $.publish('plugin/selectboxReplacement/onKeyUp', me);
+            $.publish('plugin/swSelectboxReplacement/onKeyUp', me);
 
             return false;
         },
@@ -275,7 +277,7 @@
 
             me.$wrapEl.addClass(me.opts.focusCls);
 
-            $.publish('plugin/selectboxReplacement/onFocus', me);
+            $.publish('plugin/swSelectboxReplacement/onFocus', me);
         },
 
         /**
@@ -290,7 +292,7 @@
 
             me.$wrapEl.removeClass(me.opts.focusCls);
 
-            $.publish('plugin/selectboxReplacement/onBlur', me);
+            $.publish('plugin/swSelectboxReplacement/onBlur', me);
         },
 
         /**
