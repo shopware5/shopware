@@ -1,7 +1,10 @@
 ;(function ($) {
     "use strict";
 
-    $.plugin('newsletter', {
+    $.plugin('swNewsletter', {
+
+        alias: 'newsletter',
+        
         init: function () {
             var me = this;
 
@@ -9,6 +12,9 @@
             me.$addionalForm = me.$el.find('.newsletter--additional-form');
 
             me._on(me.$checkMail, 'change', $.proxy(me.refreshAction, me));
+
+            $.publish('plugin/swNewsletter/onRegisterEvents', me);
+
             me.$checkMail.trigger('change');
         },
 
@@ -23,7 +29,7 @@
                 me.$addionalForm.show();
             }
 
-            $.publish('plugin/newsletter/onRefreshAction', me);
+            $.publish('plugin/swNewsletter/onRefreshAction', me);
         },
 
         destroy: function () {

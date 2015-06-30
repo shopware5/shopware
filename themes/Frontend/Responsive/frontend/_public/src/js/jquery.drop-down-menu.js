@@ -1,7 +1,10 @@
 ;(function($) {
     'use strict';
 
-    $.plugin('dropdownMenu', {
+    $.plugin('swDropdownMenu', {
+
+        alias: 'dropdownMenu',
+
         defaults: {
             activeCls: 'js--is--dropdown-active',
             preventDefault: true,
@@ -13,7 +16,7 @@
 
             me._on(me.$el, 'touchstart click', $.proxy(me.onClickMenu, me));
 
-            $.publish('plugin/dropdownMenu/onRegisterEvents', me);
+            $.publish('plugin/swDropdownMenu/onRegisterEvents', me);
         },
 
         onClickMenu: function (event) {
@@ -34,7 +37,7 @@
                 $('body').on(me.getEventName('touchstart.dropdownMenu click.dropdownMenu'), $.proxy(me.onClickBody, me));
             }
 
-            $.publish('plugin/dropdownMenu/onClickMenu', [me, event]);
+            $.publish('plugin/swDropdownMenu/onClickMenu', [me, event]);
         },
 
         onClickBody: function(event) {
@@ -50,7 +53,7 @@
 
             me.$el.removeClass(me.opts.activeCls);
 
-            $.publish('plugin/dropdownMenu/onClickBody', [me, event]);
+            $.publish('plugin/swDropdownMenu/onClickBody', [me, event]);
         },
 
         destroy: function () {

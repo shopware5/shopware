@@ -8,7 +8,9 @@
      * You can move a lens object over the original image to
      * see the zoomed view of the hovered area.
      */
-    $.plugin('imageZoom', {
+    $.plugin('swImageZoom', {
+
+        alias: 'imageZoom',
 
         defaults: {
 
@@ -78,12 +80,12 @@
             me._on(me.$container, 'mouseout', $.proxy(me.stopZoom, me));
             me._on(me.$lens, 'click', $.proxy(me.onLensClick, me));
 
-            $.subscribe('plugin/imageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onClick', $.proxy(me.stopZoom, me));
-            $.subscribe('plugin/imageSlider/onLightbox', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/swImageSlider/onLightbox', $.proxy(me.stopZoom, me));
 
-            $.publish('plugin/imageZoom/onRegisterEvents', me);
+            $.publish('plugin/swImageZoom/onRegisterEvents', me);
         },
 
         /**
@@ -98,7 +100,7 @@
                     'html': '&nbsp;'
                 }).appendTo(me.$container);
 
-            $.publish('plugin/imageZoom/onCreateLensElement', [me, $el]);
+            $.publish('plugin/swImageZoom/onCreateLensElement', [me, $el]);
 
             return $el;
         },
@@ -115,7 +117,7 @@
                     'class': me.opts.flyoutCls
                 }).appendTo(me.$el);
 
-            $.publish('plugin/imageZoom/onCreateFlyoutElement', [me, $el]);
+            $.publish('plugin/swImageZoom/onCreateFlyoutElement', [me, $el]);
 
             return $el;
         },
@@ -138,7 +140,7 @@
                 'class': me.opts.titleContainerCls
             }).appendTo(me.$flyout);
 
-            $.publish('plugin/imageZoom/onCreateTitleContainer', [me, $el]);
+            $.publish('plugin/swImageZoom/onCreateTitleContainer', [me, $el]);
 
             return $el;
         },
@@ -153,7 +155,7 @@
             var me = this,
                 $thumbnail = me.$thumbnails.filter(me.opts.activeSelector);
 
-            $.publish('plugin/imageZoom/onGetActiveImageThumbnail', [me, $thumbnail]);
+            $.publish('plugin/swImageZoom/onGetActiveImageThumbnail', [me, $thumbnail]);
 
             return $thumbnail;
         },
@@ -176,7 +178,7 @@
                 $el = me.$imageElements.eq(me.$activeImageThumbnail.index());
             }
 
-            $.publish('plugin/imageZoom/onGetActiveImageElement', [me, $el]);
+            $.publish('plugin/swImageZoom/onGetActiveImageElement', [me, $el]);
 
             return $el;
         },
@@ -207,7 +209,7 @@
                 'height': me.lensHeight
             });
 
-            $.publish('plugin/imageZoom/onSetLensSize', [me, me.$lens, factor]);
+            $.publish('plugin/swImageZoom/onSetLensSize', [me, me.$lens, factor]);
         },
 
         /**
@@ -225,7 +227,7 @@
                 'left': x
             });
 
-            $.publish('plugin/imageZoom/onSetLensPosition', [me, me.$lens, x, y]);
+            $.publish('plugin/swImageZoom/onSetLensPosition', [me, me.$lens, x, y]);
         },
 
         /**
@@ -236,7 +238,7 @@
 
             me.$lens.stop(true, true).fadeIn(me.opts.animationSpeed);
 
-            $.publish('plugin/imageZoom/onShowLens', [me, me.$lens]);
+            $.publish('plugin/swImageZoom/onShowLens', [me, me.$lens]);
         },
 
         /**
@@ -247,7 +249,7 @@
 
             me.$lens.stop(true, true).fadeOut(me.opts.animationSpeed);
 
-            $.publish('plugin/imageZoom/onHideLens', [me, me.$lens]);
+            $.publish('plugin/swImageZoom/onHideLens', [me, me.$lens]);
         },
 
         /**
@@ -261,7 +263,7 @@
 
             me.$flyout.css('backgroundPosition', x+'px '+y+'px');
 
-            $.publish('plugin/imageZoom/onSetZoomPosition', [me, me.$flyout, x, y]);
+            $.publish('plugin/swImageZoom/onSetZoomPosition', [me, me.$flyout, x, y]);
         },
 
         /**
@@ -272,7 +274,7 @@
 
             me.$flyout.stop(true, true).fadeIn(me.opts.animationSpeed);
 
-            $.publish('plugin/imageZoom/onShowZoom', [me, me.$flyout]);
+            $.publish('plugin/swImageZoom/onShowZoom', [me, me.$flyout]);
         },
 
         /**
@@ -283,7 +285,7 @@
 
             me.$flyout.stop(true, true).fadeOut(me.opts.animationSpeed);
 
-            $.publish('plugin/imageZoom/onHideZoom', [me, me.$flyout]);
+            $.publish('plugin/swImageZoom/onHideZoom', [me, me.$flyout]);
         },
 
         /**
@@ -300,7 +302,7 @@
 
             me.$title.html('<span>' + (title || me.imageTitle) + '</span>');
 
-            $.publish('plugin/imageZoom/onSetImageTitle', [me, me.$title, title]);
+            $.publish('plugin/swImageZoom/onSetImageTitle', [me, me.$title, title]);
         },
 
         /**
@@ -367,7 +369,7 @@
             me.imageHeight = me.$activeImage.innerHeight();
             me.imageOffset = me.$activeImage.offset();
 
-            $.publish('plugin/imageZoom/onSetActiveImage', me);
+            $.publish('plugin/swImageZoom/onSetActiveImage', me);
         },
 
         /**
@@ -392,13 +394,13 @@
                         me.setImageTitle(me.title);
                     }
 
-                    $.publish('plugin/imageZoom/onZoomImageLoaded', [me, me.zoomImage]);
+                    $.publish('plugin/swImageZoom/onZoomImageLoaded', [me, me.zoomImage]);
                 };
 
                 me.zoomImage.src = me.zoomImageUrl;
             }
 
-            $.publish('plugin/imageZoom/onActivateZoom', me);
+            $.publish('plugin/swImageZoom/onActivateZoom', me);
 
             me.active = true;
         },
@@ -414,7 +416,7 @@
             me.zoomImage = false;
             me.active = false;
 
-            $.publish('plugin/imageZoom/onStopZoom', me);
+            $.publish('plugin/swImageZoom/onStopZoom', me);
         },
 
         /**
@@ -425,7 +427,7 @@
          * @param event
          */
         onLensClick: function(event) {
-            $.publish('plugin/imageZoom/onLensClick', [this, event]);
+            $.publish('plugin/swImageZoom/onLensClick', [this, event]);
         },
 
         /**

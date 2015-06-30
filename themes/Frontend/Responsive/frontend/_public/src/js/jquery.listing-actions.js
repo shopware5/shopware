@@ -52,7 +52,9 @@
      * <a href="?p=1&l=list" data-action-link="true">list view</a>
      *
      */
-    $.plugin('listingActions', {
+    $.plugin('swListingActions', {
+
+        alias: 'listingActions',
 
         defaults: {
 
@@ -224,7 +226,7 @@
                 }
             ]);
 
-            $.publish('plugin/listingActions/onInitStateHandling', me);
+            $.publish('plugin/swListingActions/onInitStateHandling', me);
         },
 
         /**
@@ -243,7 +245,7 @@
 
             me.$filterTrigger.removeClass(opts.activeCls);
 
-            $.publish('plugin/listingActions/onEnterMobile', me);
+            $.publish('plugin/swListingActions/onEnterMobile', me);
         },
 
         /**
@@ -262,7 +264,7 @@
                 me.$activeFilterCont.addClass(me.opts.disabledCls);
             }
 
-            $.publish('plugin/listingActions/onExitMobile', me);
+            $.publish('plugin/swListingActions/onExitMobile', me);
         },
 
         /**
@@ -281,7 +283,7 @@
 
             me.$el.on(me.getEventName('click'), '.' + me.opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
 
-            $.publish('plugin/listingActions/onRegisterEvents', me);
+            $.publish('plugin/swListingActions/onRegisterEvents', me);
         },
 
         /**
@@ -299,7 +301,7 @@
 
             me.applyCategoryParams(categoryParams);
 
-            $.publish('plugin/listingActions/onFilterSubmit', [me, event]);
+            $.publish('plugin/swListingActions/onFilterSubmit', [me, event]);
         },
 
         /**
@@ -318,7 +320,7 @@
 
             me.applyCategoryParams(categoryParams);
 
-            $.publish('plugin/listingActions/onActionSubmit', [me, event]);
+            $.publish('plugin/swListingActions/onActionSubmit', [me, event]);
         },
 
         /**
@@ -339,7 +341,7 @@
                 me.setCategoryParamsFromUrlParams(linkParams)
             );
 
-            $.publish('plugin/listingActions/onActionLink', [me, event]);
+            $.publish('plugin/swListingActions/onActionLink', [me, event]);
         },
 
         /**
@@ -363,7 +365,7 @@
                 me.openFilterPanel();
             }
 
-            $.publish('plugin/listingActions/onFilterTriggerClick', [me, event]);
+            $.publish('plugin/swListingActions/onFilterTriggerClick', [me, event]);
         },
 
         /**
@@ -377,11 +379,11 @@
 
             if (!$target.is(me.opts.filterComponentSelector + ', ' + me.opts.filterComponentSelector + ' *')) {
                 $.each(me.$filterComponents, function(index, item) {
-                    $(item).data('plugin_filterComponent').close();
+                    $(item).data('plugin_swFilterComponent').close();
                 });
             }
 
-            $.publish('plugin/listingActions/onBodyClick', [me, event]);
+            $.publish('plugin/swListingActions/onBodyClick', [me, event]);
         },
 
         /**
@@ -403,7 +405,7 @@
 
             me.buffer($.proxy(me.getFilterResult, me, urlParams), me.opts.bufferTime);
 
-            $.publish('plugin/listingActions/onComponentChange', [me, event]);
+            $.publish('plugin/swListingActions/onComponentChange', [me, event]);
         },
 
         /**
@@ -434,7 +436,7 @@
                 me.resetFilterProperty(param);
             }
 
-            $.publish('plugin/listingActions/onActiveFilterClick', [me, event]);
+            $.publish('plugin/swListingActions/onActiveFilterClick', [me, event]);
         },
 
         getPropertyFieldNames: function() {
@@ -451,7 +453,7 @@
                 }
             });
 
-            $.publish('plugin/listingActions/onGetPropertyFieldNames', [me, me.propertyFieldNames]);
+            $.publish('plugin/swListingActions/onGetPropertyFieldNames', [me, me.propertyFieldNames]);
 
             return me.propertyFieldNames;
         },
@@ -478,7 +480,7 @@
 
             me.categoryParams = tempParams;
 
-            $.publish('plugin/listingActions/onSetCategoryParamsFromData', [me, tempParams]);
+            $.publish('plugin/swListingActions/onSetCategoryParamsFromData', [me, tempParams]);
 
             return tempParams;
         },
@@ -493,7 +495,7 @@
                 urlParams = decodeURI(window.location.search).substr(1),
                 categoryParams = me.setCategoryParamsFromUrlParams(urlParams);
 
-            $.publish('plugin/listingActions/onSetCategoryParamsFromData', [me, categoryParams]);
+            $.publish('plugin/swListingActions/onSetCategoryParamsFromData', [me, categoryParams]);
 
             return categoryParams;
         },
@@ -513,7 +515,7 @@
             if (urlParamString.length <= 0) {
                 categoryParams = {};
 
-                $.publish('plugin/listingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
+                $.publish('plugin/swListingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
 
                 return categoryParams;
             }
@@ -540,7 +542,7 @@
                 }
             });
 
-            $.publish('plugin/listingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
+            $.publish('plugin/swListingActions/onSetCategoryParamsFromUrlParams', [me, categoryParams]);
 
             return categoryParams;
         },
@@ -558,7 +560,7 @@
 
             me.applyUrlParams(urlParams);
 
-            $.publish('plugin/listingActions/onApplyCategoryParams', [me, categoryParams]);
+            $.publish('plugin/swListingActions/onApplyCategoryParams', [me, categoryParams]);
         },
 
         /**
@@ -594,7 +596,7 @@
 
             me.urlParams = filterParams;
 
-            $.publish('plugin/listingActions/onCreateUrlParams', [me, filterParams]);
+            $.publish('plugin/swListingActions/onCreateUrlParams', [me, filterParams]);
 
             return filterParams;
         },
@@ -610,7 +612,7 @@
 
             window.location.href = me.getListingUrl(params, true);
 
-            $.publish('plugin/listingActions/onApplyUrlParams', [me, urlParams]);
+            $.publish('plugin/swListingActions/onApplyUrlParams', [me, urlParams]);
         },
 
         /**
@@ -652,7 +654,7 @@
 
             me.bufferTimeout = setTimeout(func, bufferTime);
 
-            $.publish('plugin/listingActions/onBuffer', [me, me.bufferTimeout, func, bufferTime]);
+            $.publish('plugin/swListingActions/onBuffer', [me, me.bufferTimeout, func, bufferTime]);
         },
 
         /**
@@ -663,7 +665,7 @@
 
             me.bufferTimeout = 0;
 
-            $.publish('plugin/listingActions/onResetBuffer', [me, me.bufferTimeout]);
+            $.publish('plugin/swListingActions/onResetBuffer', [me, me.bufferTimeout]);
         },
 
         /**
@@ -687,11 +689,11 @@
 
                     me.updateFilterButton(response.totalCount);
 
-                    $.publish('plugin/listingActions/onGetFilterResultFinished', [me, response, params]);
+                    $.publish('plugin/swListingActions/onGetFilterResultFinished', [me, response, params]);
                 }
             });
 
-            $.publish('plugin/listingActions/onGetFilterResult', [me, params]);
+            $.publish('plugin/swListingActions/onGetFilterResult', [me, params]);
         },
 
         /**
@@ -711,7 +713,7 @@
                 me.$applyFilterBtn.removeAttr('disabled');
             }
 
-            $.publish('plugin/listingActions/onUpdateFilterButton', [me, count]);
+            $.publish('plugin/swListingActions/onUpdateFilterButton', [me, count]);
         },
 
         /**
@@ -725,7 +727,7 @@
 
             me.$filterTriggerIcon.html(activeFilterCount || '');
 
-            $.publish('plugin/listingActions/onUpdateFilterTriggerButton', [me, activeFilterCount]);
+            $.publish('plugin/swListingActions/onUpdateFilterTriggerButton', [me, activeFilterCount]);
         },
 
         /**
@@ -759,7 +761,7 @@
             me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
             me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
 
-            $.publish('plugin/listingActions/onCreateActiveFiltersFromCategoryParams', [me, categoryParams]);
+            $.publish('plugin/swListingActions/onCreateActiveFiltersFromCategoryParams', [me, categoryParams]);
         },
 
         /**
@@ -782,7 +784,7 @@
                 }
             }
 
-            $.publish('plugin/listingActions/onCreateActiveFilter', [me, param, value]);
+            $.publish('plugin/swListingActions/onCreateActiveFilter', [me, param, value]);
         },
 
         /**
@@ -800,7 +802,7 @@
                 'data-filter-param': param
             }).appendTo(me.$activeFilterCont);
 
-            $.publish('plugin/listingActions/onCreateActiveFilterElement', [me, param, label]);
+            $.publish('plugin/swListingActions/onCreateActiveFilterElement', [me, param, label]);
         },
 
         /**
@@ -814,7 +816,7 @@
 
             me.activeFilterElements[param].html(me.getLabelIcon() + label);
 
-            $.publish('plugin/listingActions/onUpdateActiveFilterElement', [me, param, label]);
+            $.publish('plugin/swListingActions/onUpdateActiveFilterElement', [me, param, label]);
         },
 
         /**
@@ -829,7 +831,7 @@
 
             delete me.activeFilterElements[param];
 
-            $.publish('plugin/listingActions/onRemoveActiveFilter', [me, param]);
+            $.publish('plugin/swListingActions/onRemoveActiveFilter', [me, param]);
         },
 
         /**
@@ -849,14 +851,14 @@
                 $input = me.$el.find('[name="'+param+'"]');
 
                 if ($input.is('[data-range-input]')) {
-                    rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_rangeSlider');
+                    rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                     rangeSlider.reset($input.attr('data-range-input'));
                 } else {
                     $input.removeAttr('checked').trigger('change');
                 }
             }
 
-            $.publish('plugin/listingActions/onResetFilterProperty', [me, param]);
+            $.publish('plugin/swListingActions/onResetFilterProperty', [me, param]);
         },
 
         /**
@@ -888,7 +890,7 @@
                 }
             }
 
-            $.publish('plugin/listingActions/onCreateActiveFilterLabel', [me, labelText, param, value]);
+            $.publish('plugin/swListingActions/onCreateActiveFilterLabel', [me, labelText, param, value]);
 
             return labelText;
         },
@@ -912,7 +914,7 @@
                 }
             }
 
-            $.publish('plugin/listingActions/onCreateStarLabel', [me, label, stars]);
+            $.publish('plugin/swListingActions/onCreateStarLabel', [me, label, stars]);
 
             return label;
         },
@@ -927,7 +929,7 @@
             var me = this,
                 icon = '<span class="' + me.opts.activeFilterIconCls + '"></span>';
 
-            $.publish('plugin/listingActions/onCreateStarLabel', [me, icon]);
+            $.publish('plugin/swListingActions/onCreateStarLabel', [me, icon]);
 
             return icon;
         },
@@ -947,7 +949,7 @@
             me.$filterCont.addClass(me.opts.collapsedCls);
             me.$filterTrigger.addClass(me.opts.activeCls);
 
-            $.publish('plugin/listingActions/onOpenFilterPanel', me);
+            $.publish('plugin/swListingActions/onOpenFilterPanel', me);
         },
 
         /**
@@ -965,7 +967,7 @@
             me.$filterCont.removeClass(me.opts.collapsedCls);
             me.$filterTrigger.removeClass(me.opts.activeCls);
 
-            $.publish('plugin/listingActions/onCloseFilterPanel', me);
+            $.publish('plugin/swListingActions/onCloseFilterPanel', me);
         },
 
         /**
