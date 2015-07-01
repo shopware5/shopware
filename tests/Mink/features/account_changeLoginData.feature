@@ -88,7 +88,7 @@ Feature: Successful changes of login data
             | street               |                    | Musterstr. 55     |
 
         Then  I should see "Diese eMail-Adresse ist bereits registriert"
-        And   I should see "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht."
+        And   I should see "Bitte wählen Sie ein Passwort, welches aus mindestens 8 Zeichen besteht."
         But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
 
         When  I register me:
