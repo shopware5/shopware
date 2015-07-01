@@ -270,6 +270,8 @@
             <argument>%kernel.root_dir%</argument>
         </service>
 
+        <service id="shopware.snippet_validator" class="Shopware\Components\Snippet\SnippetValidator" />
+
         <service id="shopware.snippet_query_handler" class="Shopware\Components\Snippet\QueryHandler">
             <argument>%kernel.root_dir%/snippets/</argument>
         </service>
