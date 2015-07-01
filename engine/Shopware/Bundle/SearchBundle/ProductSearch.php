@@ -62,28 +62,20 @@ class ProductSearch implements ProductSearchInterface
         Criteria $criteria,
         StoreFrontBundle\Struct\ProductContextInterface $context
     ) {
-        $result = $this->searchGateway->search(
-            $criteria,
-            $context
-        );
+        $numberResult = $this->searchGateway->search($criteria, $context);
 
-        $numbers = array_keys($result->getProducts());
+        $numbers = array_keys($numberResult->getProducts());
+        $products = $this->productService->getList($numbers, $context);
+        $products = $this->assignAttributes($products, $numberResult->getProducts());
 
-        $products = $this->productService->getList(
-            $numbers,
-            $context
-        );
-
-        $products = $this->assignAttributes(
+        $result = new ProductSearchResult(
             $products,
-            $result->getProducts()
+            $numberResult->getTotalCount(),
+            $numberResult->getFacets()
         );
 
-        return new ProductSearchResult(
-            $products,
-            $result->getTotalCount(),
-            $result->getFacets()
-        );
+        $result->addAttributes($numberResult->getAttributes());
+        return $result;
     }
 
     /**

@@ -655,6 +655,102 @@ class FieldHelper
         ];
     }
 
+    public function getShopFields()
+    {
+        return [
+            'shop.id as __shop_id',
+            'shop.main_id as __shop_main_id',
+            'shop.name as __shop_name',
+            'shop.title as __shop_title',
+            'shop.position as __shop_position',
+            'shop.host as __shop_host',
+            'shop.base_path as __shop_base_path',
+            'shop.base_url as __shop_base_url',
+            'shop.hosts as __shop_hosts',
+            'shop.secure as __shop_secure',
+            'shop.secure_host as __shop_secure_host',
+            'shop.secure_base_path as __shop_secure_base_path',
+            'shop.template_id as __shop_template_id',
+            'shop.document_template_id as __shop_document_template_id',
+            'shop.category_id as __shop_category_id',
+            'shop.locale_id as __shop_locale_id',
+            'shop.currency_id as __shop_currency_id',
+            'shop.customer_group_id as __shop_customer_group_id',
+            'shop.fallback_id as __shop_fallback_id',
+            'shop.customer_scope as __shop_customer_scope',
+            'shop.default as __shop_default',
+            'shop.active as __shop_active',
+            'shop.always_secure as __shop_always_secure',
+        ];
+    }
+
+    public function getCurrencyFields()
+    {
+        return [
+            'currency.id as __currency_id',
+            'currency.currency as __currency_currency',
+            'currency.name as __currency_name',
+            'currency.standard as __currency_standard',
+            'currency.factor as __currency_factor',
+            'currency.templatechar as __currency_templatechar',
+            'currency.symbol_position as __currency_symbol_position',
+            'currency.position as __currency_position'
+        ];
+    }
+
+    public function getTemplateFields()
+    {
+        return [
+            'template.id as __template_id',
+            'template.template as __template_template',
+            'template.name as __template_name',
+            'template.description as __template_description',
+            'template.author as __template_author',
+            'template.license as __template_license',
+            'template.esi as __template_esi',
+            'template.style_support as __template_style_support',
+            'template.emotion as __template_emotion',
+            'template.version as __template_version',
+            'template.plugin_id as __template_plugin_id',
+            'template.parent_id as __template_parent_id'
+        ];
+    }
+
+    public function getLocaleFields()
+    {
+        return [
+            'locale.id as __locale_id',
+            'locale.locale as __locale_locale',
+            'locale.language as __locale_language',
+            'locale.territory as __locale_territory'
+        ];
+    }
+
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addAllPropertyTranslations(QueryBuilder $query, ShopContextInterface $context)
+    {
+        if ($context->getShop()->isDefault()) {
+            return;
+        }
+
+        $this->addPropertySetTranslationWithSuffix($query);
+        $this->addPropertyGroupTranslationWithSuffix($query);
+        $this->addPropertyOptionTranslationWithSuffix($query);
+
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
+            $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
+            $this->addPropertyGroupTranslationWithSuffix($query, 'Fallback');
+            $this->addPropertyOptionTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
+    }
+
     /**
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
@@ -668,10 +764,94 @@ class FieldHelper
         $this->addPropertySetTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        if ($context->getShop()->isDefault()) {
+            return;
+        }
+
+        $this->addPropertyGroupTranslationWithSuffix($query);
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
+            $this->addPropertyGroupTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        if ($context->getShop()->isDefault()) {
+            return;
+        }
+
+        $this->addPropertyOptionTranslationWithSuffix($query);
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
+            $this->addPropertyOptionTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addPropertyOptionTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
+        $query->leftJoin(
+            'propertyOption',
+            's_core_translations',
+            'propertyOptionTranslation' . $suffix,
+            'propertyOptionTranslation' . $suffix . '.objecttype = :optionTranslation AND
+             propertyOptionTranslation' . $suffix . '.objectkey = propertyOption.id AND
+             propertyOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
+        );
+
+        $query->setParameter(':optionTranslation', 'propertyvalue');
+
+        $query->addSelect([
+            'propertyOptionTranslation' . $suffix . '.objectdata as __propertyOption_translation' . $selectSuffix
+        ]);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addPropertyGroupTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $query->leftJoin(
+            'propertyGroup',
+            's_core_translations',
+            'propertyGroupTranslation' . $suffix,
+            'propertyGroupTranslation' . $suffix . '.objecttype = :groupTranslation AND
+             propertyGroupTranslation' . $suffix . '.objectkey = propertyGroup.id AND
+             propertyGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
+        );
+
+        $query->setParameter(':groupTranslation', 'propertyoption');
+        $query->addSelect([
+            'propertyGroupTranslation' . $suffix . '.objectdata as __propertyGroup_translation' . $selectSuffix,
+        ]);
     }
 
     /**
@@ -691,36 +871,11 @@ class FieldHelper
              propertySetTranslation' . $suffix . '.objectlanguage = :language' . $suffix
         );
 
-        $query->leftJoin(
-            'propertyGroup',
-            's_core_translations',
-            'propertyGroupTranslation' . $suffix,
-            'propertyGroupTranslation' . $suffix . '.objecttype = :groupTranslation AND
-             propertyGroupTranslation' . $suffix . '.objectkey = propertyGroup.id AND
-             propertyGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
+        $query->setParameter(':setTranslation', 'propertygroup');
 
-        $query->leftJoin(
-            'propertyOption',
-            's_core_translations',
-            'propertyOptionTranslation' . $suffix,
-            'propertyOptionTranslation' . $suffix . '.objecttype = :optionTranslation AND
-             propertyOptionTranslation' . $suffix . '.objectkey = propertyOption.id AND
-             propertyOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->setParameter(':setTranslation', 'propertygroup')
-            ->setParameter(':groupTranslation', 'propertyoption')
-            ->setParameter(':optionTranslation', 'propertyvalue')
-        ;
-
-        $query->addSelect(
-            [
-            'propertySetTranslation' . $suffix . '.objectdata as __propertySet_translation' . $selectSuffix,
-            'propertyGroupTranslation' . $suffix . '.objectdata as __propertyGroup_translation' . $selectSuffix,
-            'propertyOptionTranslation' . $suffix . '.objectdata as __propertyOption_translation' . $selectSuffix
-            ]
-        );
+        $query->addSelect([
+            'propertySetTranslation' . $suffix . '.objectdata as __propertySet_translation' . $selectSuffix
+        ]);
     }
 
     /**
@@ -736,7 +891,7 @@ class FieldHelper
         $this->addImageTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addImageTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -780,7 +935,7 @@ class FieldHelper
         $this->addConfiguratorTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addConfiguratorTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -836,7 +991,7 @@ class FieldHelper
         $this->addUnitTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addUnitTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -876,7 +1031,7 @@ class FieldHelper
         $this->addVariantTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addVariantTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -916,7 +1071,7 @@ class FieldHelper
         $this->addCountryTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addCountryTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -955,7 +1110,7 @@ class FieldHelper
         $this->addCountryStateTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addCountryStateTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -995,7 +1150,7 @@ class FieldHelper
         $this->addProductTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() != $context->getShop()->getId()) {
             $this->addProductTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }
@@ -1035,7 +1190,7 @@ class FieldHelper
         $this->addManufacturerTranslationWithSuffix($query);
         $query->setParameter(':language', $context->getShop()->getId());
 
-        if ($context->getShop()->getFallbackId()) {
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
             $this->addManufacturerTranslationWithSuffix($query, 'Fallback');
             $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
         }

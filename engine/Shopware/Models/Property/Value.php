@@ -180,7 +180,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param string $option
+     * @param Option $option
      */
     public function setOption($option)
     {
@@ -188,7 +188,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return Option
      */
     public function getOption()
     {

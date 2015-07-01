@@ -125,7 +125,7 @@ class PropertyHydrator extends Hydrator
      * @param array $data
      * @return Struct\Property\Group
      */
-    private function hydrateGroup(array $data)
+    public function hydrateGroup(array $data)
     {
         $group = new Struct\Property\Group();
         $translation = $this->getTranslation(
@@ -147,7 +147,7 @@ class PropertyHydrator extends Hydrator
      * @param array $data
      * @return Struct\Property\Option
      */
-    private function hydrateOption(array $data)
+    public function hydrateOption(array $data)
     {
         $option = new Struct\Property\Option();
         $translation = $this->getTranslation(
@@ -160,6 +160,7 @@ class PropertyHydrator extends Hydrator
 
         $option->setId((int) $data['__propertyOption_id']);
         $option->setName($data['__propertyOption_value']);
+        $option->setPosition((int) $data['__propertyOption_position']);
 
         if (isset($data['__media_id']) && $data['__media_id']) {
             $option->setMedia(

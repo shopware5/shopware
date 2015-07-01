@@ -72,6 +72,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 
         if ($result->getTotalCount() > 0) {
             $articles = $this->convertProducts($result);
+            $this->View()->searchResult = $result;
             $this->View()->sSearchRequest = array("sSearch" => $term);
             $this->View()->sSearchResults = array("sResults" => $articles, "sArticlesCount" => $result->getTotalCount());
         }

@@ -126,6 +126,15 @@ class Criteria implements \JsonSerializable
      * @param $name
      * @return bool
      */
+    public function hasBaseCondition($name)
+    {
+        return array_key_exists($name, $this->baseConditions);
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
     public function hasSorting($name)
     {
         return array_key_exists($name, $this->sortings);

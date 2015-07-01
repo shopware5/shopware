@@ -330,6 +330,16 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $fallbackPriceCount;
 
     /**
+     * @var int
+     */
+    protected $mainVariantId;
+
+    /**
+     * @var bool
+     */
+    protected $isMainVariant;
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -345,6 +355,14 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function getStates()
     {
         return $this->states;
+    }
+
+    /**
+     * Resets the struct states
+     */
+    public function resetStates()
+    {
+        $this->states = [];
     }
 
     /**
@@ -804,7 +822,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup $priceGroup
      */
-    public function setPriceGroup(PriceGroup $priceGroup)
+    public function setPriceGroup(PriceGroup $priceGroup = null)
     {
         $this->priceGroup = $priceGroup;
     }
@@ -948,7 +966,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * @param Esd $esd
      */
-    public function setEsd(Esd $esd)
+    public function setEsd(Esd $esd = null)
     {
         $this->esd = $esd;
     }
@@ -994,7 +1012,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
+     * @return VoteAverage
      */
     public function getVoteAverage()
     {
@@ -1002,7 +1020,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage $voteAverage
+     * @param VoteAverage $voteAverage
      */
     public function setVoteAverage($voteAverage)
     {
@@ -1083,5 +1101,30 @@ class ListProduct extends BaseProduct implements \JsonSerializable
             ||
             $this->getFallbackPriceCount() > 1
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getMainVariantId()
+    {
+        return $this->mainVariantId;
+    }
+
+    /**
+     * @param int $mainVariantId
+     */
+    public function setMainVariantId($mainVariantId)
+    {
+        $this->mainVariantId = $mainVariantId;
+        $this->isMainVariant = ($this->variantId == $this->mainVariantId);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMainVariant()
+    {
+        return $this->isMainVariant;
     }
 }

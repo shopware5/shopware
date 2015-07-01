@@ -35,7 +35,7 @@ abstract class Struct
         foreach ($this as $key => $value) {
             if (is_object($value)) {
                 $this->$key = clone $this->$key;
-            } else if (is_array($value)) {
+            } elseif (is_array($value)) {
                 $this->$key = $this->cloneArray($value);
             }
         }

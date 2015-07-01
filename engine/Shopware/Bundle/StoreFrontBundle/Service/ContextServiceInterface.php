@@ -114,4 +114,20 @@ interface ContextServiceInterface
      * @return void
      */
     public function initializeProductContext();
+
+    /**
+     * @param int $shopId
+     * @param null|int $currencyId
+     * @param string|null $customerGroupKey
+     * @return Struct\ProductContext
+     */
+    public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null);
+
+    /**
+     * @param int $shopId
+     * @param null|int $currencyId
+     * @param string|null $customerGroupKey
+     * @return Struct\ShopContext
+     */
+    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null);
 }

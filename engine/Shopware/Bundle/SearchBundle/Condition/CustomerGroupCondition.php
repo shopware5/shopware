@@ -34,12 +34,12 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 class CustomerGroupCondition implements ConditionInterface
 {
     /**
-     * @var array
+     * @var int[]
      */
     private $customerGroupIds;
 
     /**
-     * @param array $customerGroupIds
+     * @param int[] $customerGroupIds
      */
     public function __construct(array $customerGroupIds)
     {
@@ -55,7 +55,7 @@ class CustomerGroupCondition implements ConditionInterface
     }
 
     /**
-     * @return int
+     * @return int[]
      */
     public function getCustomerGroupIds()
     {

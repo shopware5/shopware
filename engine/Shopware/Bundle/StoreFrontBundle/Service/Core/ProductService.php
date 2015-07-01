@@ -34,7 +34,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
  */
 class ProductService implements Service\ProductServiceInterface
 {
-
     /**
      * @var Service\MediaServiceInterface
      */
@@ -132,8 +131,8 @@ class ProductService implements Service\ProductServiceInterface
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
-
-        return $this->createFromListProducts($listProducts, $context);
+        $products = $this->createFromListProducts($listProducts, $context);
+        return $products;
     }
 
     /**
@@ -163,7 +162,7 @@ class ProductService implements Service\ProductServiceInterface
         foreach ($listProducts as $listProduct) {
             $number = $listProduct->getNumber();
 
-            $product = $this->createProductStruct($listProduct);
+            $product = Struct\Product::createFromListProduct($listProduct);
 
             if (isset($relatedProducts[$number])) {
                 $product->setRelatedProducts($relatedProducts[$number]);
@@ -201,71 +200,5 @@ class ProductService implements Service\ProductServiceInterface
         }
 
         return $products;
-    }
-
-    /**
-     * @param  Struct\ListProduct $listProduct
-     * @return Struct\Product
-     */
-    private function createProductStruct(Struct\ListProduct $listProduct)
-    {
-        $product = new Struct\Product(
-            $listProduct->getId(),
-            $listProduct->getVariantId(),
-            $listProduct->getNumber()
-        );
-
-        $product->setShippingFree($listProduct->isShippingFree());
-        $product->setAllowsNotification($listProduct->allowsNotification());
-        $product->setHighlight($listProduct->highlight());
-        $product->setUnit($listProduct->getUnit());
-        $product->setTax($listProduct->getTax());
-        $product->setPrices($listProduct->getPrices());
-        $product->setManufacturer($listProduct->getManufacturer());
-        $product->setCover($listProduct->getCover());
-        $product->setCheapestPrice($listProduct->getCheapestPrice());
-        $product->setName($listProduct->getName());
-        $product->setAdditional($listProduct->getAdditional());
-        $product->setCloseouts($listProduct->isCloseouts());
-        $product->setEan($listProduct->getEan());
-        $product->setHeight($listProduct->getHeight());
-        $product->setKeywords($listProduct->getKeywords());
-        $product->setLength($listProduct->getLength());
-        $product->setLongDescription($listProduct->getLongDescription());
-        $product->setMinStock($listProduct->getMinStock());
-        $product->setReleaseDate($listProduct->getReleaseDate());
-        $product->setShippingTime($listProduct->getShippingTime());
-        $product->setShortDescription($listProduct->getShortDescription());
-        $product->setStock($listProduct->getStock());
-        $product->setWeight($listProduct->getWeight());
-        $product->setWidth($listProduct->getWidth());
-        $product->setPriceGroup($listProduct->getPriceGroup());
-        $product->setCreatedAt($listProduct->getCreatedAt());
-        $product->setPriceRules($listProduct->getPriceRules());
-        $product->setCheapestPriceRule($listProduct->getCheapestPriceRule());
-        $product->setManufacturerNumber($listProduct->getManufacturerNumber());
-        $product->setMetaTitle($listProduct->getMetaTitle());
-        $product->setTemplate($listProduct->getTemplate());
-        $product->setHasConfigurator($listProduct->hasConfigurator());
-        $product->setSales($listProduct->getSales());
-        $product->setHasEsd($listProduct->hasEsd());
-        $product->setEsd($listProduct->getEsd());
-        $product->setIsPriceGroupActive($listProduct->isPriceGroupActive());
-        $product->setBlockedCustomerGroupIds($listProduct->getBlockedCustomerGroupIds());
-        $product->setVoteAverage($listProduct->getVoteAverage());
-        $product->setHasAvailableVariant($listProduct->hasAvailableVariant());
-        $product->setCheapestUnitPrice($listProduct->getCheapestUnitPrice());
-        $product->setCustomerPriceCount($listProduct->getCustomerPriceCount());
-        $product->setFallbackPriceCount($listProduct->getFallbackPriceCount());
-
-        foreach ($listProduct->getAttributes() as $name => $attribute) {
-            $product->addAttribute($name, $attribute);
-        }
-
-        foreach ($listProduct->getStates() as $state) {
-            $product->addState($state);
-        }
-
-        return $product;
     }
 }

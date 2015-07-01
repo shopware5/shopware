@@ -190,6 +190,7 @@ class ProductHydrator extends Hydrator
         $product->setShippingFree((bool) ($data['__variant_shippingfree']));
         $product->setStock((int) $data['__variant_instock']);
         $product->setManufacturerNumber($data['__variant_suppliernumber']);
+        $product->setMainVariantId((int) $data['__product_main_detail_id']);
 
         if ($data['__variant_shippingtime']) {
             $product->setShippingTime($data['__variant_shippingtime']);
@@ -317,6 +318,6 @@ class ProductHydrator extends Hydrator
      */
     private function unserializeTranslation($serializedTranslation)
     {
-        return unserialize($serializedTranslation) ? : [];
+        return @unserialize($serializedTranslation) ? : [];
     }
 }

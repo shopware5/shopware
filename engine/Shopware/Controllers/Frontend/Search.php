@@ -159,7 +159,11 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     protected function searchFuzzyCheck($search)
     {
+        /** @var Shopware_Components_Config $config */
         $config = $this->get('config');
+        if (!$config->get('activateNumberSearch')) {
+            return false;
+        }
 
         $minSearch = empty($config->sMINSEARCHLENGHT) ? 2 : (int) $config->sMINSEARCHLENGHT;
         $number = null;
