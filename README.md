@@ -53,19 +53,23 @@ You can also start testing with lower permissions due to security reasons (644 f
     ant configure
     ant build-unit
 
-4.) Download the demo data files and extract them:
+4.) Download the test images and extract them:
 
-Go to the checkout directory and download the demo data files:
+Go to the checkout directory and download the test images:
 
-	wget -O demo.zip http://releases.s3.shopware.com/demo_4.2.0.zip
+	wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
 
 Unzip the files to the checkout directory:
 
-	unzip demo.zip
+	unzip test_images.zip
 
 You can now access your shop
 
 Backend Login: demo/demo
+
+The test_images.zip file includes thumbnails for the new responsive theme and the old deprecated template.
+
+If you want to have full featured demo data, you should download the respective demo data plugin in the First Run Wizard or in the Plugin Manager.
 
 # Get involved
 
