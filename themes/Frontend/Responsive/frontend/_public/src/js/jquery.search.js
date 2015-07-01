@@ -158,7 +158,7 @@
              * @property requestURL
              * @type {String}
              */
-            me.requestURL = opts.requestUrl || $.controller.ajax_search;
+            me.requestURL = opts.requestUrl || window.controller.ajax_search;
 
             if (!me.requestURL) {
                 throw new Error('Parameter "requestUrl" needs to be set.');

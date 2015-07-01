@@ -175,7 +175,7 @@
         init: function () {
             var me = this,
                 opts = me.opts,
-                themeConfig = $.themeConfig,
+                themeConfig = window.themeConfig,
                 $offCanvas;
 
             opts.moveWrapper = opts.moveWrapper || !!(themeConfig && !~~themeConfig.offcanvasOverlayPage);

@@ -12,7 +12,7 @@
              *
              * @type {String}
              */
-            'ajaxCartURL': $.controller['ajax_cart'],
+            'ajaxCartURL': controller['ajax_cart'],
 
             /**
              * Selector for the trigger element.
