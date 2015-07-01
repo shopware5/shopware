@@ -166,6 +166,10 @@
 
             me.$el.removeData('plugin_' + name);
 
+            if (me.alias) {
+                me.$el.removeData('plugin_' + me.alias);
+            }
+
             /** @deprecated - will be removed in 5.1 */
             $.publish('plugin/' + name + '/destroy', [ me ]);
 
