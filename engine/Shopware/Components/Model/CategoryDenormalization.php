@@ -522,7 +522,7 @@ class CategoryDenormalization
     }
 
     /**
-     * Adds new assignment beween $articleId and $categoryId
+     * Adds new assignment between $articleId and $categoryId
      *
      * @param int $articleId
      * @param int $categoryId

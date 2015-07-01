@@ -90,7 +90,7 @@
              * @property startIndex
              * @type {Number}
              */
-            'startIndex': 0
+            'startIndex': -1
         },
 
         /**
@@ -125,8 +125,16 @@
                 if ($container.find(opts.contentSelector).html().length) {
                     $container.addClass(opts.hasContentClass);
                     $tab.addClass(opts.hasContentClass);
+                    
+                    // When no start index is specified, we take the first tab with content.
+                    if (opts.startIndex === -1) {
+                        $tab.addClass(opts.activeTabClass);
+                        opts.startIndex = i;
+                    }
                 }
             });
+
+            opts.startIndex = Math.max(opts.startIndex, 0);
 
             me._index = null;
 
