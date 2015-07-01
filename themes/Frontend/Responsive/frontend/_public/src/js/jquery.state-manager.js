@@ -399,7 +399,7 @@
             me._browserDetection();
             me._setDeviceCookie();
 
-            $(me._initQueuedPlugins.bind(me));
+            $($.proxy(me.initQueuedPlugins, me, true));
 
             return me;
         },
@@ -630,7 +630,7 @@
                     continue;
                 }
 
-                me._addPluginToQueue(selector, pluginName);
+                me.addPluginToQueue(selector, pluginName);
             }
 
             return me;
@@ -679,7 +679,7 @@
             }
 
             if (!me._pluginsInitialized) {
-                me._removePluginFromQueue(selector, pluginName);
+                me.removePluginFromQueue(selector, pluginName);
             }
 
             return me;
@@ -747,12 +747,12 @@
         },
 
         /**
-         * @private
-         * @method _addPluginToQueue
+         * @public
+         * @method addPluginToQueue
          * @param {String} selector
          * @param {String} pluginName
          */
-        _addPluginToQueue: function (selector, pluginName) {
+        addPluginToQueue: function (selector, pluginName) {
             var me = this,
                 queue = me._pluginQueue,
                 pluginNames = queue[selector] || (queue[selector] = []);
@@ -763,12 +763,12 @@
         },
 
         /**
-         * @private
-         * @method _removePluginFromQueue
+         * @public
+         * @method removePluginFromQueue
          * @param {String} selector
          * @param {String} pluginName
          */
-        _removePluginFromQueue: function (selector, pluginName) {
+        removePluginFromQueue: function (selector, pluginName) {
             var me = this,
                 queue = me._pluginQueue,
                 pluginNames = queue[selector],
@@ -780,10 +780,11 @@
         },
 
         /**
-         * @private
-         * @method _initQueuedPlugins
+         * @public
+         * @method initQueuedPlugins
+         * @param {Boolean} clearQueue
          */
-        _initQueuedPlugins: function () {
+        initQueuedPlugins: function (clearQueue) {
             var me = this,
                 queue = me._pluginQueue,
                 selectors = Object.keys(queue),
@@ -800,6 +801,10 @@
 
                 for (j = 0, pluginLen = plugins.length; j < pluginLen; j++) {
                     me._initPlugin(selector, plugins[j]);
+                }
+
+                if (clearQueue !== false) {
+                    delete queue[selector];
                 }
             }
 
