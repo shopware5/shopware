@@ -49,41 +49,31 @@ In this document you will find a changelog of the important changes related to t
     * plugin/-PLUGIN_NAME-/destroy              => plugin/-PLUGIN_NAME-/onDestroy (PluginBase)
     * plugin/-PLUGIN_NAME-/on                   => plugin/-PLUGIN_NAME-/onRegisterEvent (PluginBase)
     * plugin/-PLUGIN_NAME-/off                  => plugin/-PLUGIN_NAME-/onRemoveEvent (PluginBase)
-    * plugin/productSlider/trackItems           => plugin/swProductSlider/onTrackItems
-    * plugin/productSlider/trackArrows          => plugin/swProductSlider/onTrackArrows
-    * plugin/productSlider/itemsLoaded          => plugin/swProductSlider/onLoadItemsSuccess
-    * plugin/productSlider/loadItems            => plugin/swProductSlider/onLoadItems
-    * plugin/productSlider/createContainer      => plugin/swProductSlider/onCreateContainer
-    * plugin/productSlider/createArrows         => plugin/swProductSlider/onCreateArrows
-    * plugin/productSlider/slideNext            => plugin/swProductSlider/onSlideNext
-    * plugin/productSlider/slidePrev            => plugin/swProductSlider/onSlidePrev
-    * plugin/productSlider/slideToElement       => plugin/swProductSlider/onSlideToElement
-    * plugin/productSlider/slide                => plugin/swProductSlider/onSlide
-    * plugin/productSlider/autoSlide            => plugin/swProductSlider/onAutoSlide
-    * plugin/productSlider/stopAutoSlide        => plugin/swProductSlider/onStopAutoSlide
-    * plugin/productSlider/scrollNext           => plugin/swProductSlider/onScrollNext
-    * plugin/productSlider/scrollPrev           => plugin/swProductSlider/onScrollPrev
-    * plugin/productSlider/autoScroll           => plugin/swProductSlider/onAutoScroll
-    * plugin/productSlider/stopAutoScroll       => plugin/swProductSlider/onStopAutoScroll
-    * plugin/productSlider/buffer               => plugin/swProductSlider/onBuffer
-    * plugin/rangeSlider/changeMin              => plugin/swRangeSlider/onSetMin
-    * plugin/rangeSlider/changeMax              => plugin/swRangeSlider/onSetMax
-    * plugin/rangeSlider/reset                  => plugin/swRangeSlider/onReset
-    * plugin/rangeSlider/onChange               => plugin/swRangeSlider/onEndDrag
-    * plugin/search/onKeyDown                   => plugin/swSearch/onKeyDown
-    * plugin/search/onKeyUp                     => plugin/swSearch/onKeyUp
-    * plugin/search/onSearchRequest             => plugin/swSearch/onSearchRequest
-    * plugin/search/onSearchResponse            => plugin/swSearch/onSearchResponse
-    * plugin/search/onShowResult                => plugin/swSearch/onShowResult
-    * plugin/search/onCloseResult               => plugin/swSearch/onCloseResult
-    * plugin/search/onKeyboardNavigation        => plugin/swSearch/onKeyboardNavigation
-    * plugin/search/onClickSearchEntry          => plugin/swSearch/onClickSearchEntry
-    * plugin/search/onOpenMobileSearch          => plugin/swSearch/onOpenMobileSearch
-    * plugin/search/onCloseMobileSearch         => plugin/swSearch/onCloseMobileSearch
-* Every jquery plugin was renamed with an 'sw' prefix to avoid issues with third party libraries.
-    * The plugins can still be accessed by their old names until 5.1, where this fallback will be removed.
-    * The plugin instance of an element can still be accessed by its old name as well as the new one.
-    * The Singleton Objects are not affected by this change. ($.modal, $.overlay, $.loadingIndicator, $.lightbox, StateManager)
+    * plugin/productSlider/trackItems           => plugin/productSlider/onTrackItems
+    * plugin/productSlider/trackArrows          => plugin/productSlider/onTrackArrows
+    * plugin/productSlider/itemsLoaded          => plugin/productSlider/onLoadItemsSuccess
+    * plugin/productSlider/loadItems            => plugin/productSlider/onLoadItems
+    * plugin/productSlider/createContainer      => plugin/productSlider/onCreateContainer
+    * plugin/productSlider/createArrows         => plugin/productSlider/onCreateArrows
+    * plugin/productSlider/slideNext            => plugin/productSlider/onSlideNext
+    * plugin/productSlider/slidePrev            => plugin/productSlider/onSlidePrev
+    * plugin/productSlider/slideToElement       => plugin/productSlider/onSlideToElement
+    * plugin/productSlider/slide                => plugin/productSlider/onSlide
+    * plugin/productSlider/autoSlide            => plugin/productSlider/onAutoSlide
+    * plugin/productSlider/stopAutoSlide        => plugin/productSlider/onStopAutoSlide
+    * plugin/productSlider/scrollNext           => plugin/productSlider/onScrollNext
+    * plugin/productSlider/scrollPrev           => plugin/productSlider/onScrollPrev
+    * plugin/productSlider/autoScroll           => plugin/productSlider/onAutoScroll
+    * plugin/productSlider/stopAutoScroll       => plugin/productSlider/onStopAutoScroll
+    * plugin/productSlider/buffer               => plugin/productSlider/onBuffer
+    * plugin/rangeSlider/changeMin              => plugin/rangeSlider/onSetMin
+    * plugin/rangeSlider/changeMax              => plugin/rangeSlider/onSetMax
+    * plugin/rangeSlider/reset                  => plugin/rangeSlider/onReset
+    * plugin/rangeSlider/onChange               => plugin/rangeSlider/onEndDrag
+* Added new validation rules for snippets
+    * Use `bin/console sw:snippets:validate <your-plugin-snippets-path>` to check the validity of your snippets.
+    * Defining a snippet value in multiple lines is deprecated.
+    * All snippet values that don't pass the validation should be refactored.
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
