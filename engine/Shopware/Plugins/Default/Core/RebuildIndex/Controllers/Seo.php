@@ -213,6 +213,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             '1900-01-01'
         ));
 
+        $articles = $this->RewriteTable()->mapArticleTranslationObjectData($articles);
+
         $articles = $this->get('events')->filter(
             'Shopware_Controllers_Backend_Seo_seoArticle_filterArticles',
             $articles,
