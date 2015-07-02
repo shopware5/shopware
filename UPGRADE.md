@@ -74,6 +74,7 @@ In this document you will find a changelog of the important changes related to t
     * Use `bin/console sw:snippets:validate <your-plugin-snippets-path>` to check the validity of your snippets.
     * Defining a snippet value in multiple lines is deprecated.
     * All snippet values that don't pass the validation should be refactored.
+* The method `getSeoArticleQuery` in `sRewriteTable.php` was changed to select the translations for the article attributes.
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
