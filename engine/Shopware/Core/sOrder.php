@@ -942,6 +942,11 @@ class sOrder
             WHERE ordernumber = :number",
             array(':quantity' => $quantity, ':number' => $orderNumber)
         );
+
+        $this->eventManager->notify(
+            'product_stock_was_changed',
+            ['number' => $orderNumber, 'quantity' => $quantity]
+        );
     }
 
     /**

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop as ShopEntity;
 
 /**
@@ -59,7 +60,17 @@ class Shop extends Extendable implements \JsonSerializable
     /**
      * @var string
      */
+    protected $title;
+
+    /**
+     * @var string
+     */
     protected $host;
+
+    /**
+     * @var string[]
+     */
+    protected $hosts;
 
     /**
      * @var string
@@ -95,6 +106,26 @@ class Shop extends Extendable implements \JsonSerializable
      * @var int
      */
     protected $fallbackId;
+
+    /**
+     * @var Template
+     */
+    protected $template;
+
+    /**
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
+     * @var CustomerGroup
+     */
+    protected $customerGroup;
+
+    /**
+     * @var Currency
+     */
+    protected $currency;
 
     /**
      * @param ShopEntity $shop
@@ -335,5 +366,101 @@ class Shop extends Extendable implements \JsonSerializable
     public function getFallbackId()
     {
         return $this->fallbackId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getHosts()
+    {
+        return $this->hosts;
+    }
+
+    /**
+     * @param \string[] $hosts
+     */
+    public function setHosts($hosts)
+    {
+        $this->hosts = $hosts;
+    }
+
+    /**
+     * @return Currency
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param Currency $currency
+     */
+    public function setCurrency(Currency $currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @return CustomerGroup
+     */
+    public function getCustomerGroup()
+    {
+        return $this->customerGroup;
+    }
+
+    /**
+     * @param CustomerGroup $customerGroup
+     */
+    public function setCustomerGroup(CustomerGroup $customerGroup)
+    {
+        $this->customerGroup = $customerGroup;
+    }
+
+    /**
+     * @return Locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param Locale $locale
+     */
+    public function setLocale(Locale $locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @return Template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate(Template $template)
+    {
+        $this->template = $template;
     }
 }

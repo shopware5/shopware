@@ -35,13 +35,8 @@ namespace Shopware\Bundle\SearchBundle;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface SortingInterface
+interface SortingInterface extends CriteriaPartInterface
 {
     const SORT_ASC = 'ASC';
     const SORT_DESC = 'DESC';
-
-    /**
-     * @return string
-     */
-    public function getName();
 }

@@ -50,13 +50,13 @@ The ShopContextInterface class contains the current user/shop context like which
 
 This both classes are required for a search request.
 
-The ProductNumberSearchInterface is only the definition of the search API. The ProductNumberSearch is implemented for a specify database platform like Mysql or Elastic Search.
+The ProductNumberSearchInterface is only the definition of the search API. The ProductNumberSearch is implemented for a specify database platform like Mysql or Elasticsearch.
 
 The implementation of the ProductNumberSearch has to interpret the provided ShopContextInterface and Criteria object to the specify database language.
 
 
 ## Default ProductNumberSearch
-Shopware implements a DBAL ProductNumberSearch as default. This implementation of the ProductNumberSearch interprets the provided context and criteria object over associated handler classes. 
+Shopware implements a DBAL ProductNumberSearch as default. This implementation of the ProductNumberSearch interprets the provided context and criteria object over associated handler classes.
 
 - Shopware\Bundle\SearchBundleDBAL\SortingHandler
 - Shopware\Bundle\SearchBundleDBAL\ConditionHandler
@@ -64,7 +64,7 @@ Shopware implements a DBAL ProductNumberSearch as default. This implementation o
 
 Notice: Each term has his own handler class and can only be handled by one handler class.
 
-**Important: This design pattern isn't necessary and couldn't be implemented in other replacements of the ProductNumberSearch like Elastic Search.**
+**Important: This design pattern isn't necessary and couldn't be implemented in other replacements of the ProductNumberSearch like Elasticsearch.**
 
 The DBAL implementation of the ProductNumberSearch provides interfaces for this handler classes, which allows third party developers to extend the default implementation or to overwrite existing handler classes:
 
@@ -73,7 +73,7 @@ The DBAL implementation of the ProductNumberSearch provides interfaces for this 
 - Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface
 
 ## Define own handler classes
-Each handler class has to implement on the associated database platform. For example, a handler class which expects a DBAL query builder to extend the search request can't be used in the Elastic Search ProductNumberSearch.
+Each handler class has to implement on the associated database platform. For example, a handler class which expects a DBAL query builder to extend the search request can't be used in the Elasticsearch ProductNumberSearch.
 
 Additionally handlers can only be implemented if the platform implementation of the ProductNumberSearch supports this concept.
 
@@ -159,7 +159,7 @@ A FacetHandler has to implement the following functions:
 The following FacetHandler wants to display the total count of products which sold more than 20x times.
 
 **Notice: The FacetHandler has to load all required data to display the facet in the store front. This includes translations, too.**
-  
+
 ```
 class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface
 {
@@ -221,7 +221,7 @@ The Shopware\Bundle\SearchBundle provides interfaces for this classes:
 ### Sorting term
 In most cases the sorting term contains a sorting direction for ascending or descending sorting.
 
-The following sorting term defines that the product result has to be sorted by their sales ascending or descending. 
+The following sorting term defines that the product result has to be sorted by their sales ascending or descending.
 
 **Notice: It is important to use the constant of the SortingInterface for the direction.**
 
@@ -287,9 +287,9 @@ class PluginCondition implements ConditionInterface
 ```
 
 ### Facet term
-In most cases a facet term contains a property to store the total count of the products which matches to the facet definition. Additionally to the total property the facet contains in some cases a parameter property to shrink the query data. 
+In most cases a facet term contains a property to store the total count of the products which matches to the facet definition. Additionally to the total property the facet contains in some cases a parameter property to shrink the query data.
 
-The FacetInterface defines that a Facet has to implement a isFiltered function which returns true if the facet is already filtered by a condition. 
+The FacetInterface defines that a Facet has to implement a isFiltered function which returns true if the facet is already filtered by a condition.
 For example, if the search result is filtered with a price range, the price facet is filtered.
 
 The following facet selects the total count of products which sold more than X times.

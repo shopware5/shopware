@@ -104,7 +104,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             $key = $product['__variant_ordernumber'];
             $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
-        
+
         return $products;
     }
 

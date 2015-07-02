@@ -244,7 +244,7 @@ class Unit extends Extendable implements \JsonSerializable
      */
     public function getMinPurchase()
     {
-        return $this->minPurchase;
+        return empty($this->minPurchase) ? 1 : $this->minPurchase;
     }
 
     /**

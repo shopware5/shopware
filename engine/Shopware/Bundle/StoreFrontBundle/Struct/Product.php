@@ -75,6 +75,23 @@ class Product extends ListProduct implements \JsonSerializable
     protected $configuration;
 
     /**
+     * @param ListProduct $listProduct
+     * @return Product
+     */
+    public static function createFromListProduct(ListProduct $listProduct)
+    {
+        $product = new self(
+            $listProduct->getId(),
+            $listProduct->getVariantId(),
+            $listProduct->getNumber()
+        );
+        foreach ($listProduct as $key => $value) {
+            $product->$key = $value;
+        }
+        return $product;
+    }
+
+    /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media[] $media
      */
     public function setMedia($media)

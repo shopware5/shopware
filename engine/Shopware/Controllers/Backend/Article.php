@@ -1660,6 +1660,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 }
             }
         }
+        $article->setPropertyValues($propertyValues);
         $models->flush();
 
         $this->View()->assign(array(

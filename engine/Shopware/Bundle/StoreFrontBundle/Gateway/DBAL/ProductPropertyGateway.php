@@ -174,7 +174,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
             'mediaSettings.albumID = media.albumID'
         );
 
-        $this->fieldHelper->addPropertySetTranslation($query, $context);
+        $this->fieldHelper->addAllPropertyTranslations($query, $context);
 
         $query->where('products.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);

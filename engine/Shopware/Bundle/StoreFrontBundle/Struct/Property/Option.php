@@ -50,6 +50,11 @@ class Option extends Extendable implements \JsonSerializable
     protected $media;
 
     /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @param int $id
      * @return $this
      */
@@ -109,5 +114,21 @@ class Option extends Extendable implements \JsonSerializable
     public function setMedia($media)
     {
         $this->media = $media;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 }

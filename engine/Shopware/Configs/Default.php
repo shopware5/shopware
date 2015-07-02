@@ -30,6 +30,15 @@ return array_replace_recursive([
         'charset' => 'utf8',
         'adapter' => 'pdo_mysql'
     ],
+    'es' => [
+        'prefix' => 'sw_shop',
+        'enabled' => false,
+        'client' => [
+            'hosts' => [
+                'localhost:9200'
+            ]
+        ]
+    ],
     'front' => [
         'noErrorHandler' => false,
         'throwExceptions' => false,

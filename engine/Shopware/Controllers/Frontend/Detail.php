@@ -112,7 +112,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        if (!empty($article['template'])) {
+        $template = trim($article['template']);
+        if (!empty($template)) {
             $this->View()->loadTemplate('frontend/detail/' . $article['template']);
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');

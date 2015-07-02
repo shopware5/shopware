@@ -24,8 +24,13 @@
 
 namespace Shopware;
 
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
+use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -334,6 +339,15 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isElasticSearchEnabled()
+    {
+        $config = $this->getElasticSearchConfig();
+        return (isset($config['enabled']) && $config['enabled']);
+    }
+
+    /**
      * Gets the environment.
      *
      * @return string The current environment
@@ -452,6 +466,11 @@ class Kernel implements HttpKernelInterface
         $loader->load('SearchBundleDBAL/services.xml');
         $loader->load('StoreFrontBundle/services.xml');
         $loader->load('PluginInstallerBundle/services.xml');
+        $loader->load('ESIndexingBundle/services.xml');
+
+        if ($this->isElasticSearchEnabled()) {
+            $loader->load('SearchBundleES/services.xml');
+        }
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -465,6 +484,14 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
+        $container->addCompilerPass(new MappingCompilerPass());
+        $container->addCompilerPass(new SynchronizerCompilerPass());
+        $container->addCompilerPass(new DataIndexerCompilerPass());
+        $container->addCompilerPass(new SettingsCompilerPass());
+
+        if ($this->isElasticSearchEnabled()) {
+            $container->addCompilerPass(new SearchHandlerCompilerPass());
+        }
 
         return $container;
     }
@@ -578,6 +605,14 @@ class Kernel implements HttpKernelInterface
      */
     public function getHttpCacheConfig()
     {
-        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : array();
+        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getElasticSearchConfig()
+    {
+        return is_array($this->config['es']) ? $this->config['es'] : [];
     }
 }
