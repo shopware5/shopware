@@ -180,20 +180,29 @@
         background: #fff;
     }
 
-    .toolbar {
-        padding: 0 40px 20px;
-    }
+	.section-title {
+		font-weight: bold;
+		font-size: 14px;
+	}
 
     .forgot {
-        margin-top: 20px;
-    }
+		margin: 0 0 10px 135px;
 
-    .forgot a {
-        text-decoration: none;
-        color: #1491e7;
-        cursor: pointer;
-        font-size: 14px;
-    }
+		a {
+			text-decoration: none;
+			color: #1491e7;
+			cursor: pointer;
+			font-size: 12px;
+		}
+	}
+
+	.cancel-button {
+		color: #1491e7;
+		display: inline-block;
+		padding: 4px 0;
+		font-size: 12px;
+		cursor: pointer;
+	}
 
     .headline {
         font-weight: 300;
@@ -204,14 +213,18 @@
         color: #0e384f;
     }
 
-    .password, .shopware-id {
-        input {
+    .input--field {
+		label {
+			font-size: 12px;
+		}
+
+        input[type=text], input[type=password] {
             font-family: 'Open Sans', Arial, sans-serif !important;
             -webkit-font-smoothing: antialiased !important;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 100;
             color: rgb(92, 111, 124);
-            height: 35px;
+
         }
     }
 

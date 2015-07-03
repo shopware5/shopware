@@ -15,7 +15,36 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     snippets: {
         'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}{/s}',
         'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}{/s}',
-        'licencePluginActivate':         '{s name="licence_plugin_activate"}{/s}'
+        'licencePluginActivate':         '{s name="licence_plugin_activate"}{/s}',
+
+        newRegistrationForm: {
+            successTitle: '{s name=newRegistrationForm/successTitle}Shopware ID registration{/s}',
+            successMessage: '{s name=newRegistrationForm/successMessage}Your Shopware ID has been successfully registered{/s}',
+            errorTitle: '{s name=newRegistrationForm/errorTitle}Error registering your Shopware ID{/s}',
+            errorFormValidationMessage: '{s name=newRegistrationForm/errorFormValidationMessage}The field [0] is not valid{/s}',
+            errorServerMessage: '{s name=newRegistrationForm/errorServerMessage}The following error was detected: [0]{/s}',
+            waitTitle: '{s name=newRegistrationForm/waitTitle}Registering your Shopware ID{/s}',
+            waitMessage: '{s name=newRegistrationForm/waitMessage}This process might take a few seconds{/s}'
+        },
+
+        domainRegistration: {
+            successTitle: '{s name=domainRegistration/successTitle}Domain registration{/s}',
+            successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
+            errorServerMessage: '{s name=domainRegistration/errorServerMessage}The following error was detected: [0]{/s}',
+            waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
+            waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
+            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
+        },
+
+        login: {
+            successTitle: '{s name=login/successTitle}Shopware ID{/s}',
+            successMessage: '{s name=login/successMessage}Login successful{/s}',
+            errorServerMessage: '{s name=login/errorServerMessage}The following error was detected: [0]{/s}',
+            waitTitle: '{s name=login/waitTitle}Logging in...{/s}',
+            waitMessage: '{s name=login/waitMessage}This process might take a few seconds{/s}'
+        },
+
+        growlMessage:'{s name=growlMessage}Plugin Manager{/s}'
     },
 
     init: function() {
@@ -55,6 +84,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'store-login':                 me.login,
             'check-store-login':           me.checkLogin,
             'open-login':                  me.openLogin,
+            'destroy-login':               me.destroyLogin,
+            'store-register':              me.register,
             'check-licence-plugin':        me.checkLicencePlugin,
             scope: me
         };
@@ -377,8 +408,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
     },
 
-
-
     authenticateForUpdate: function(plugin, callback) {
         var me = this;
         
@@ -403,12 +432,13 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.checkAccessToken(function(response) {
+
             if (response.success == false) {
                 me.openLogin(callback);
             } else {
 
                 if (response.hasOwnProperty('shopwareId')) {
-                    me.fireRefreshAccountData(response.shopwareId);
+                    me.fireRefreshAccountData(response);
                 }
 
                 callback();
@@ -430,33 +460,146 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         });
     },
 
+    destroyLogin: function() {
+        var me = this;
+
+        me.loginMask.destroy();
+    },
+
     openLogin: function(callback) {
         var me = this;
 
-        me.loginMask = Ext.create('Shopware.apps.PluginManager.view.account.Login', {
+        me.loginMask = Ext.create('Shopware.apps.PluginManager.view.account.LoginWindow', {
             callback: callback
         }).show();
     },
 
-    login: function(shopwareId, password, callback, errorCallback) {
+    login: function(params, callback, errorCallback) {
         var me = this;
+
+        me.splashScreen = Ext.Msg.wait(
+            me.snippets.login.waitMessage,
+            me.snippets.login.waitTitle
+        );
 
         me.sendAjaxRequest(
             '{url controller=PluginManager action=login}',
-            {
-                shopwareId: shopwareId,
-                password: password
-            },
+            params,
             function(response) {
-                response.shopwareId = shopwareId;
+                response.shopwareId = params.shopwareID;
                 if (response.success == true) {
                     Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
+
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.login.successTitle,
+                        me.snippets.login.successMessage,
+                        me.snippets.growlMessage
+                    );
+
+                    me.splashScreen.close();
+
+                    if (params.registerDomain !== false) {
+                        me.submitShopwareDomainRequest(params, callback);
+                    } else {
+                        me.fireRefreshAccountData(response);
+                        me.destroyLogin();
+                        callback(response);
+                    }
                 }
-                me.fireRefreshAccountData(response);
-                callback(response);
             },
             errorCallback
         );
+    },
+
+    register: function(registerData, callback) {
+        var me = this;
+
+        me.submitShopwareIdRequest(
+            registerData,
+            '{url controller="firstRunWizard" action="registerNewId"}',
+            callback
+        );
+
+    },
+
+    submitShopwareIdRequest: function(params, url, callback) {
+        var me = this;
+
+        me.splashScreen = Ext.Msg.wait(
+            me.snippets.newRegistrationForm.waitMessage,
+            me.snippets.newRegistrationForm.waitTitle
+        );
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'POST',
+            params: params,
+            callback: function(options, success, response) {
+                var result = Ext.JSON.decode(response.responseText, true);
+
+                if (!result || result.success == false) {
+
+                    response = Ext.decode(response.responseText);
+                    me.displayErrorMessage(response);
+
+                    me.splashScreen.close();
+
+                } else if (result.success) {
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.newRegistrationForm.successTitle,
+                        me.snippets.newRegistrationForm.successMessage,
+                        me.snippets.growlMessage
+                    );
+
+                    Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
+
+                    if (params.registerDomain !== false) {
+                        me.submitShopwareDomainRequest(params, callback);
+                    }
+
+                    response.shopwareId = params.shopwareID;
+                    me.fireRefreshAccountData(response);
+                    callback(response);
+                }
+            }
+        });
+    },
+
+    submitShopwareDomainRequest: function(params, callback) {
+        var me = this;
+
+        me.splashScreen = Ext.Msg.wait(
+            me.snippets.domainRegistration.waitMessage,
+            me.snippets.domainRegistration.waitTitle
+        );
+
+        Ext.Ajax.request({
+            url: '{url controller="firstRunWizard" action="registerDomain"}',
+            method: 'POST',
+            params: params,
+            success: function(response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result || result.success == false) {
+
+                    response = Ext.decode(response.responseText);
+                    me.displayErrorMessage({ message: me.snippets.domainRegistration.validationFailed });
+                    me.displayErrorMessage(response);
+
+                    me.splashScreen.close();
+
+                } else if (result.success) {
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.domainRegistration.successTitle,
+                        me.snippets.domainRegistration.successMessage,
+                        me.snippets.growlMessage
+                    );
+                    callback(response);
+                }
+
+
+            }
+        });
     },
 
     installPlugin: function(plugin, callback) {

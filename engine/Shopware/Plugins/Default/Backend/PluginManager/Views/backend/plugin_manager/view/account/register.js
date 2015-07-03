@@ -1,0 +1,258 @@
+//{namespace name=backend/plugin_manager/translation}
+Ext.define('Shopware.apps.PluginManager.view.account.Register', {
+    extend: 'Ext.container.Container',
+
+    cls: 'plugin-manager-login-window',
+
+
+    /**
+     * Contains all snippets for the view component
+     * @object
+     */
+    snippets: {
+        title: '{s name=account/register/title}New to Shopware?{/s}',
+        shopwareId: '{s name=account/register/shopwareId}Shopware ID{/s}',
+        password: '{s name=account/register/password}Password{/s}',
+        passwordMessage: '{s name=account/register/passwordMessage}The passwords do not match.{/s}',
+        confirmPassword: '{s name=account/register/confirmPassword}Confirm password{/s}',
+        email: '{s name=account/register/email}Email{/s}',
+        registerButton: '{s name=account/register/register_button}Register{/s}',
+        cancelButton: '{s name=account/register/cancel_button}Cancel{/s}',
+        registerDomain: '{s name=account/register/register_domain}Register domain{/s}'
+    },
+
+    width: 360,
+    border: false,
+    layout: 'fit',
+
+    initComponent: function () {
+        var me = this;
+
+        me.items = [
+            me.createFormPanel()
+        ];
+
+        me.callParent(arguments);
+    },
+
+    createFormPanel: function () {
+        var me = this;
+
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            border: false,
+            layout: 'vbox',
+            cls: 'form-panel',
+            items: [
+                me.createRegisterText(),
+                me.createShopwareIdField(),
+                me.createPasswordField(),
+                me.createPasswordConfirmationField(),
+                me.createEmailField(),
+                me.createRegisterDomainCheckbox(),
+                me.createActionButtons()
+            ]
+        });
+
+        return me.formPanel;
+    },
+
+    createRegisterText: function () {
+        var me = this;
+
+        me.newRegistrationRegisterText = {
+            border: false,
+            margin: '0 0 10 0',
+            html: '<span class="section-title">' + me.snippets.title + '</span>'
+        };
+
+        return me.newRegistrationRegisterText;
+    },
+
+    createShopwareIdField: function () {
+        var me = this;
+
+        me.newRegistrationShopwareId = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.snippets.shopwareId,
+            name: 'shopwareID',
+            allowBlank: false,
+            cls: 'input--field',
+            emptyText: me.snippets.shopwareId,
+            required: true,
+            enableKeyEvents: true,
+            checkChangeBuffer: 700,
+            margin: '10 0',
+            labelWidth: 150,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.sendRegisterForm();
+                    }
+                }
+            }
+        });
+
+        return me.newRegistrationShopwareId;
+    },
+
+    createPasswordField: function () {
+        var me = this;
+
+        me.newRegistrationPasswordField = Ext.create('Ext.form.field.Text', {
+            name: 'password',
+            inputType: 'password',
+            emptyText: me.snippets.password,
+            allowBlank: false,
+            required: true,
+            fieldLabel: me.snippets.password,
+            cls: Ext.baseCSSPrefix + 'password-field input--field',
+            minLength: 5,
+            labelWidth: 150,
+            validator: function (value) {
+                if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordConfirmationField.getValue())) {
+                    me.newRegistrationPasswordConfirmationField.clearInvalid();
+                    return true;
+                } else {
+                    return me.snippets.passwordMessage;
+                }
+            },
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.sendRegisterForm();
+                    }
+                }
+            }
+        });
+
+        return me.newRegistrationPasswordField;
+    },
+
+    createPasswordConfirmationField: function () {
+        var me = this;
+
+        me.newRegistrationPasswordConfirmationField = Ext.create('Ext.form.field.Text', {
+            name: 'passwordConfirmation',
+            inputType: 'password',
+            emptyText: me.snippets.confirmPassword,
+            allowBlank: false,
+            required: true,
+            fieldLabel: me.snippets.confirmPassword,
+            minLength: 5,
+            labelWidth: 150,
+            cls: 'input--field',
+            validator: function (value) {
+                if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordField.getValue())) {
+                    me.newRegistrationPasswordField.clearInvalid();
+                    return true;
+                } else {
+                    return me.snippets.passwordMessage;
+                }
+            },
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.sendRegisterForm();
+                    }
+                }
+            }
+        });
+
+        return me.newRegistrationPasswordConfirmationField;
+    },
+
+    createEmailField: function () {
+        var me = this;
+
+        me.newRegistrationEmail = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.snippets.email,
+            name: 'email',
+            emptyText: me.snippets.email,
+            vtype: 'remote',
+            cls: 'input--field',
+            validationUrl: '{url controller="base" action="validateEmail"}',
+            validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
+            allowBlank: false,
+            required: true,
+            enableKeyEvents: true,
+            checkChangeBuffer: 700,
+            labelWidth: 150,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.sendRegisterForm();
+                    }
+                }
+            }
+        });
+
+        return me.newRegistrationEmail;
+    },
+
+    createRegisterDomainCheckbox: function () {
+        var me = this;
+
+        me.newRegistrationRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: me.snippets.registerDomain,
+            name: 'registerDomain',
+            boxLabel: me.snippets.registerDomain,
+            cls: 'input--field',
+            labelWidth: 150,
+            checked: true
+        });
+
+        return me.newRegistrationRegisterDomain;
+    },
+
+    createActionButtons: function () {
+        var me = this;
+
+        me.cancelButton = Ext.create('PluginManager.container.Container', {
+            html: me.snippets.cancelButton,
+            cls: 'cancel-button',
+            handler: function () {
+                Shopware.app.Application.fireEvent('destroy-login');
+            }
+        });
+
+        me.registerButton = Ext.create('PluginManager.container.Container', {
+            html: me.snippets.registerButton,
+            cls: 'plugin-manager-action-button primary',
+            handler: function () {
+                me.sendRegisterForm();
+            }
+        });
+
+        me.actionButtons = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'bottom',
+            background: '#fff',
+            cls: 'toolbar',
+            margin: '10 0 0 0',
+            width: 360,
+            items: [me.cancelButton, '->', me.registerButton]
+        });
+
+        return me.actionButtons;
+    },
+
+    sendRegisterForm: function () {
+        var me = this;
+
+        if (!me.formPanel.getForm().isValid()) {
+            return;
+        }
+
+        var formValues = me.formPanel.getForm().getValues();
+
+        formValues.registerDomain = formValues.registerDomain === "on";
+
+        Shopware.app.Application.fireEvent(
+            'store-register',
+            formValues,
+            function () {
+                me.callback();
+            }
+        );
+
+    }
+
+});
