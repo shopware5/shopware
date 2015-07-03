@@ -52,19 +52,19 @@
 
 							{block name="frontend_listing_actions_filter_form_sort"}
 								{if $sSort}
-									<input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort}" />
+									<input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort|escape}" />
 								{/if}
 							{/block}
 
 							{block name="frontend_listing_actions_filter_form_perpage"}
 								{if $criteria->getLimit()}
-									<input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()}" />
+									<input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escape}" />
 								{/if}
 							{/block}
 
 							{block name="frontend_listing_actions_filter_form_category"}
 								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart}
-									<input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent}" />
+									<input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent|escape}" />
 								{/if}
 							{/block}
 
