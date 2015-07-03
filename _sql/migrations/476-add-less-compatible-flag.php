@@ -4,7 +4,7 @@ class Migrations_Migration476 Extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        $statement = $this->getConnection()->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "s_core_templates_config_elements";');
+        $statement = $this->getConnection()->prepare('SHOW COLUMNS FROM `s_core_templates_config_elements`;');
         $statement->execute();
         $result = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
