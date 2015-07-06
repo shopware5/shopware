@@ -86,6 +86,7 @@
 
 {include file='backend/base/application/Shopware.store.Association.js'}
 {include file='backend/base/application/Shopware.form.field.Media.js'}
+{include file='backend/base/application/Shopware.store.Search.js'}
 
 
 
