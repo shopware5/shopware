@@ -198,7 +198,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Calculate the number of articles which have been update since the last update time
         $sql = "
-            SELECT COUNT(a.id)
+            SELECT COUNT(DISTINCT a.id)
             FROM s_articles a
 
             INNER JOIN s_articles_categories_ro ac
