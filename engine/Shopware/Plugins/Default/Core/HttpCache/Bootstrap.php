@@ -530,6 +530,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
+        // Don't cache when using admin session
+        if (Shopware()->Session()->Admin) {
+            return false;
+        }
+
         // Don't cache filled basket or wishlist
         if ($controllerName == 'widgets/checkout' && (!empty(Shopware()->Session()->sBasketQuantity) || !empty(Shopware()->Session()->sNotesQuantity))) {
             $this->response->setHeader('Cache-Control', 'private, no-cache');
