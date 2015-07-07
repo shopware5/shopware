@@ -234,51 +234,49 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareConfigData()
     {
-        return array(
+        return [
             'check'     => $this->getPerformanceCheckData(),
             'httpCache' => $this->prepareHttpCacheConfig(),
-            'topSeller' => $this->genericConfigLoader(
-                array(
-                    'topSellerActive',
-                    'topSellerValidationTime',
-                    'chartinterval',
-                    'topSellerRefreshStrategy',
-                    'topSellerPseudoSales'
-                )
-            ),
+            'topSeller' => $this->genericConfigLoader([
+                'topSellerActive',
+                'topSellerValidationTime',
+                'chartinterval',
+                'topSellerRefreshStrategy',
+                'topSellerPseudoSales'
+            ]),
             'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->genericConfigLoader(array('searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate')),
-            'categories' => $this->genericConfigLoader(
-                array(
-                    'moveBatchModeEnabled',
-                    'articlesperpage',
-                    'defaultListingSorting'
-                )
-            ),
-            'filters' => $this->genericConfigLoader(array(
-                    'propertySorting',
-                    'displayFiltersOnDetailPage',
-                    'showSupplierInCategories',
-                    'showImmediateDeliveryFacet',
-                    'showShippingFreeFacet',
-                    'showPriceFacet',
-                    'showVoteAverageFacet',
-                    'displayFiltersInListings',
-                    'defaultListingSorting',
-                )),
-            'various' => $this->genericConfigLoader(
-                array(
-                    'disableShopwareStatistics',
-                    'TagCloud:show',
-                    'LastArticles:show',
-                    'LastArticles:lastarticlestoshow',
-                    'disableArticleNavigation'
-                )
-            ),
-            'customer' => $this->genericConfigLoader(
-                array('alsoBoughtShow', 'similarViewedShow', 'similarRefreshStrategy', 'similarValidationTime', 'similarActive')
-            ),
-        );
+            'search'    => $this->prepareSearchConfig(),
+            'categories' => $this->genericConfigLoader([
+                'moveBatchModeEnabled',
+                'articlesperpage',
+                'defaultListingSorting'
+            ]),
+            'filters' => $this->genericConfigLoader([
+                'propertySorting',
+                'displayFiltersOnDetailPage',
+                'showSupplierInCategories',
+                'showImmediateDeliveryFacet',
+                'showShippingFreeFacet',
+                'showPriceFacet',
+                'showVoteAverageFacet',
+                'displayFiltersInListings',
+                'defaultListingSorting',
+            ]),
+            'various' => $this->genericConfigLoader([
+                'disableShopwareStatistics',
+                'TagCloud:show',
+                'LastArticles:show',
+                'LastArticles:lastarticlestoshow',
+                'disableArticleNavigation'
+            ]),
+            'customer' => $this->genericConfigLoader([
+                'alsoBoughtShow',
+                'similarViewedShow',
+                'similarRefreshStrategy',
+                'similarValidationTime',
+                'similarActive'
+            ])
+        ];
     }
 
     /**
@@ -706,5 +704,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'data' => array('count' => count($urls))
             )
         );
+    }
+
+    /**
+     * Converts the fuzzysearchlastupdate to a DateTime object
+     * @return array
+     */
+    private function prepareSearchConfig()
+    {
+        $data = $this->genericConfigLoader(['searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate']);
+        $data['fuzzysearchlastupdate'] = new DateTime($data['fuzzysearchlastupdate']);
+        return $data;
     }
 }

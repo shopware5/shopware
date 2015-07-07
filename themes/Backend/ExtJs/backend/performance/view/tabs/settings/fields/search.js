@@ -128,27 +128,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                         name: 'search[fuzzysearchlastupdate]',
                         xtype: 'displayfield',
                         renderer: function(value) {
-                            var date = me.createNewDate(value);
-
-                            if ( date === Ext.undefined ) {
-                                return date;
+                            if (typeof value === Ext.undefined ) {
+                                return value;
                             }
-
-                            return Ext.util.Format.date(date) + ' ' + Ext.util.Format.date(date, timeFormat);
+                            return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
                         }
                     }
                 ]
             }
         ];
-    },
-
-    createNewDate: function(date) {
-        date = date.replace(' ', 'T');
-        date += '+00:00';
-        date = new Date(date);
-        date = new Date((date.getTime() + (date.getTimezoneOffset() * 60 * 1000)));
-
-        return date;
     }
 
 });
