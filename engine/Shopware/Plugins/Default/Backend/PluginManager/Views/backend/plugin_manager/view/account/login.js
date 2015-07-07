@@ -79,30 +79,20 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
     createActionButtons: function () {
         var me = this;
 
-        me.cancelButton = Ext.create('PluginManager.container.Container', {
-            html: me.snippets.cancelButton,
-            cls: 'cancel-button',
-            handler: function () {
-                Shopware.app.Application.fireEvent('destroy-login');
-            }
-        });
-
         me.registerButton = Ext.create('PluginManager.container.Container', {
             html: me.snippets.loginButton,
             cls: 'plugin-manager-action-button primary',
-            margin: '0 30 0 0',
+            margin: '36 50 0 0',
             handler: function () {
                 me.applyLogin();
             }
         });
 
-        me.actionButtons = Ext.create('Ext.toolbar.Toolbar', {
-            dock: 'bottom',
-            background: '#fff',
-            cls: 'toolbar',
+        me.actionButtons = Ext.create('Ext.container.Container', {
             margin: '10 0 0 0',
             width: 360,
-            items: [me.cancelButton, '->', me.registerButton]
+            cls: 'action-buttons',
+            items: [me.registerButton]
         });
 
         return me.actionButtons;
@@ -117,7 +107,14 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
             name: 'registerDomain',
             boxLabel: me.snippets.registerDomain,
             cls: 'input--field',
-            labelWidth: 130
+            labelWidth: 130,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.applyLogin();
+                    }
+                }
+            }
         });
 
         return me.LoginRegisterDomain;

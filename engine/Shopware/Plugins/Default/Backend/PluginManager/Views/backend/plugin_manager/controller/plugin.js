@@ -20,9 +20,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         newRegistrationForm: {
             successTitle: '{s name=newRegistrationForm/successTitle}Shopware ID registration{/s}',
             successMessage: '{s name=newRegistrationForm/successMessage}Your Shopware ID has been successfully registered{/s}',
-            errorTitle: '{s name=newRegistrationForm/errorTitle}Error registering your Shopware ID{/s}',
-            errorFormValidationMessage: '{s name=newRegistrationForm/errorFormValidationMessage}The field [0] is not valid{/s}',
-            errorServerMessage: '{s name=newRegistrationForm/errorServerMessage}The following error was detected: [0]{/s}',
             waitTitle: '{s name=newRegistrationForm/waitTitle}Registering your Shopware ID{/s}',
             waitMessage: '{s name=newRegistrationForm/waitMessage}This process might take a few seconds{/s}'
         },
@@ -30,7 +27,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         domainRegistration: {
             successTitle: '{s name=domainRegistration/successTitle}Domain registration{/s}',
             successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
-            errorServerMessage: '{s name=domainRegistration/errorServerMessage}The following error was detected: [0]{/s}',
             waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
             waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
             validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
@@ -39,7 +35,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         login: {
             successTitle: '{s name=login/successTitle}Shopware ID{/s}',
             successMessage: '{s name=login/successMessage}Login successful{/s}',
-            errorServerMessage: '{s name=login/errorServerMessage}The following error was detected: [0]{/s}',
             waitTitle: '{s name=login/waitTitle}Logging in...{/s}',
             waitMessage: '{s name=login/waitMessage}This process might take a few seconds{/s}'
         },
@@ -464,17 +459,20 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.loginMask.destroy();
+        me.loginMask = null;
     },
 
     openLogin: function(callback) {
         var me = this;
 
-        me.loginMask = Ext.create('Shopware.apps.PluginManager.view.account.LoginWindow', {
-            callback: callback
-        }).show();
+        if(!me.loginMask) {
+            me.loginMask = Ext.create('Shopware.apps.PluginManager.view.account.LoginWindow', {
+                callback: callback
+            }).show();
+        }
     },
 
-    login: function(params, callback, errorCallback) {
+    login: function(params, callback) {
         var me = this;
 
         me.splashScreen = Ext.Msg.wait(
@@ -486,7 +484,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginManager action=login}',
             params,
             function(response) {
+
                 response.shopwareId = params.shopwareID;
+                me.splashScreen.close();
+
                 if (response.success == true) {
                     Ext.create('Shopware.notification.SubscriptionWarning').checkSecret();
 
@@ -496,18 +497,20 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                         me.snippets.growlMessage
                     );
 
-                    me.splashScreen.close();
+                    me.fireRefreshAccountData(response);
 
                     if (params.registerDomain !== false) {
                         me.submitShopwareDomainRequest(params, callback);
                     } else {
-                        me.fireRefreshAccountData(response);
                         me.destroyLogin();
                         callback(response);
                     }
                 }
             },
-            errorCallback
+            function(response) {
+                me.splashScreen.close();
+                me.displayErrorMessage(response, callback);
+            }
         );
     },
 

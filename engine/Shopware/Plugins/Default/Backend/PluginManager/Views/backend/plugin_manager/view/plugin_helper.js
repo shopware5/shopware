@@ -315,7 +315,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         });
     },
 
-    displayErrorMessage: function(response) {
+    displayErrorMessage: function(response, callback) {
         var message = response.message;
 
         Shopware.Notification.createStickyGrowlMessage({
@@ -324,8 +324,10 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             width: 350
         });
 
+        callback = typeof callback === 'function' && callback || function() {};
+
         if (response.hasOwnProperty('authentication') && response.authentication) {
-            Shopware.app.Application.fireEvent('open-login', function() { });
+            Shopware.app.Application.fireEvent('open-login', callback);
         }
 
         this.hideLoadingMask();

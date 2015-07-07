@@ -52,10 +52,26 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
     createHeadline: function () {
         var me = this;
 
-        return Ext.create('Ext.Component', {
-            html: me.snippets.title,
-            cls: 'headline',
-            anchor: '100%'
+        return Ext.create('Ext.container.Container', {
+            border: false,
+            layout: 'hbox',
+            anchor: '100%',
+            cls: 'headline-container',
+            items: [
+                Ext.create('Ext.Component', {
+                    html: me.snippets.title,
+                    width: 680,
+                    cls: 'headline'
+                }),
+                Ext.create('PluginManager.container.Container', {
+                    html: 'X',
+                    cls: 'headline-close',
+                    width: 40,
+                    handler: function() {
+                        Shopware.app.Application.fireEvent('destroy-login');
+                    }
+                })
+            ]
         });
     },
 
@@ -64,6 +80,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
         return {
             html: me.snippets.descriptionMessage,
             margin: '0 0 20 0',
+            cls: 'description-text',
             width: 720,
             border: false
         }

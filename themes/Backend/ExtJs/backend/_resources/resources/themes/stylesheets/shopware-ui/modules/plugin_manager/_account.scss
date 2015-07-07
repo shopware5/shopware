@@ -180,6 +180,22 @@
         background: #fff;
     }
 
+	.action-buttons {
+		position: relative;
+
+		.plugin-manager-action-button {
+			float: right;
+		}
+
+		&:after {
+			content: ".";
+			clear: both;
+			display: block;
+			visibility: hidden;
+			height: 0px;
+		}
+	}
+
 	.section-title {
 		font-weight: bold;
 		font-size: 14px;
@@ -196,22 +212,29 @@
 		}
 	}
 
-	.cancel-button {
-		color: #1491e7;
-		display: inline-block;
-		padding: 4px 0;
-		font-size: 12px;
-		cursor: pointer;
+    .headline-container {
+		margin-bottom: 10px;
+
+		.headline {
+			font-weight: 300;
+			font-size: 41px;
+			color: #0e384f;
+		}
+
+		.headline-close {
+			font-size: 24px;
+			padding-top: 10px;
+			color: #1491e7;
+			cursor: pointer;
+			font-weight: bold;
+		}
 	}
 
-    .headline {
-        font-weight: 300;
-        font-size: 41px;
-        border-bottom: 1px solid #cad9e0;
-        padding-bottom: 10px;
-        margin-bottom: 25px;
-        color: #0e384f;
-    }
+	.description-text {
+		margin-top: 10px;
+		padding-top: 15px;
+		border-top: 1px solid #cad9e0;
+	}
 
     .input--field {
 		label {
