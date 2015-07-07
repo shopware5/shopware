@@ -60,8 +60,8 @@ Ext.define('Shopware.apps.NewsletterManager.model.Mailing', {
         { name: 'clicked', type: 'int', defaultValue: 0 },
         { name: 'revenue', type: 'float', defaultValue: 0 },
         { name: 'plaintext', type: 'boolean' },
-        { name: 'languageId', type: 'int' }
-
+        { name: 'languageId', type: 'int' },
+        { name: 'timedDelivery', type: 'date' }
     ],
 
     /**
