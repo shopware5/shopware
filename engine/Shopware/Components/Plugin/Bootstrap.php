@@ -514,9 +514,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Helper function to register a plugin controller.
      *
      * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
-     *  1. The plugin directory must contain a 'Controller' subdirectory.
-     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
-     *  3. The controller must be filed in the module directory.
+     *  1. The plugin directory must contain a 'Controllers' subdirectory.
+     *  2. The 'Controllers' directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in this module directory.
      *  4. The controller file must have the same name as the controller class.
      *
      * If all the requirements are fulfilled, the controller is registered automatically.
