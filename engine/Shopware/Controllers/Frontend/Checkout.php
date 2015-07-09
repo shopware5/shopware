@@ -766,6 +766,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $order->sShippingcostsNumericNet = $this->View()->sBasket['sShippingcostsNet'];
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
+        $order->deviceType = $this->Request()->getDeviceType();
 
         $order->sDeleteTemporaryOrder();    // Delete previous temporary orders
         $order->sCreateTemporaryOrder();    // Create new temporary order

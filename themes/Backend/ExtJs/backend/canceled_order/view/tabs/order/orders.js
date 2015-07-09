@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             transaction: '{s name=columns/transaction}Transaction{/s}',
             payment: '{s name=columns/payment}Payment{/s}',
             customer: '{s name=columns/customer}Customer{/s}',
-            action: '{s name=columns/action}Action{/s}'
+            action: '{s name=columns/action}Action{/s}',
+            deviceType: '{s name=columns/device_type}Device-Type{/s}'
         }
     },
 
@@ -136,6 +137,12 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
                 dataIndex: 'billing.lastName',
                 flex: 1,
                 renderer: me.customerRenderer
+            },
+            {
+                header: me.snippets.columns.deviceType,
+                dataIndex: 'orders.deviceType',
+                flex: 1,
+                renderer: me.deviceTypeRenderer
             },
             {
                 xtype : 'actioncolumn',
@@ -237,6 +244,23 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
         }
 
         return value
+    },
+
+    /**
+     * Renders the device type and converts the first letter to upper case
+     * @param value
+     * @param metaData
+     * @param record
+     * @return string
+     */
+    deviceTypeRenderer: function(value, metaData, record) {
+        var deviceType = record.get('deviceType');
+
+        if (deviceType.length) {
+            return deviceType.charAt(0).toUpperCase() + deviceType.slice(1);
+        } else {
+            return deviceType;
+        }
     },
 
     /**

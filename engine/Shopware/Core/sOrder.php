@@ -414,7 +414,8 @@ class sOrder
             'dispatchID' => $dispatchId,
             'currency' => $this->sSYSTEM->sCurrency["currency"],
             'currencyFactor' => $this->sSYSTEM->sCurrency["factor"],
-            'subshopID' => $mainShop->getId()
+            'subshopID' => $mainShop->getId(),
+            'deviceType' => $this->deviceType
         );
 
         try {
