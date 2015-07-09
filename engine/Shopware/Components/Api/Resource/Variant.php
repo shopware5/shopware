@@ -77,7 +77,7 @@ class Variant extends Resource implements BatchInterface
      * @param array $options
      * @return array|\Shopware\Models\Article\Detail
      */
-    public function getOneByNumber($number, array $options = array())
+    public function getOneByNumber($number, array $options = [])
     {
         $id = $this->getIdFromNumber($number);
         return $this->getOne($id, $options);
@@ -91,7 +91,7 @@ class Variant extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return array|\Shopware\Models\Article\Detail
      */
-    public function getOne($id, array $options = array())
+    public function getOne($id, array $options = [])
     {
         $this->checkPrivilege('read');
 
@@ -115,31 +115,84 @@ class Variant extends Resource implements BatchInterface
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
             if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
-                $tax = Shopware()->Db()->fetchOne(
-                    "SELECT tax
-                     FROM s_core_tax
-                         INNER JOIN s_articles
-                             ON s_articles.taxID = s_core_tax.id
-                             AND s_articles.id = :articleId",
-                    array(':articleId' => $variant['articleId'])
-                );
-
-                if (empty($tax)) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf("No article tax configured for variant: %s", $id)
-                    );
-                }
-
-                $variant['prices'] = $this->getArticleResource()->getTaxPrices(
-                    $variant['prices'],
-                    $tax
-                );
+                $variant = $this->considerTaxInput($variant);
             }
         }
 
         return $variant;
     }
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param array $criteria
+     * @param array $orderBy
+     * @param array $options
+     * @return array
+     */
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [], array $options = [])
+    {
+        $this->checkPrivilege('read');
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder */
+        $builder = $this->getRepository()->createQueryBuilder('detail');
+
+        $builder->addSelect(['prices', 'attribute', 'customerGroup'])
+                ->leftJoin('detail.prices', 'prices')
+                ->innerJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('detail.attribute', 'attribute')
+                ->addFilter($criteria)
+                ->addOrderBy($orderBy)
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode($this->getResultMode());
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+
+        //returns the article data
+        $variants = $paginator->getIterator()->getArrayCopy();
+
+        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
+            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
+                foreach ($variants as &$variant) {
+                    $variant = $this->considerTaxInput($variant);
+                }
+            }
+        }
+
+        return ['data' => $variants, 'total' => $totalResult];
+    }
+
+    private function considerTaxInput($variant)
+    {
+        $tax = Shopware()->Db()->fetchOne(
+            "SELECT tax
+                 FROM s_core_tax
+                     INNER JOIN s_articles
+                         ON s_articles.taxID = s_core_tax.id
+                         AND s_articles.id = :articleId",
+            [':articleId' => $variant['articleId']]
+        );
+
+        if (empty($tax)) {
+            throw new ApiException\CustomValidationException(
+                sprintf("No article tax configured for variant: %s", $variant['id'])
+            );
+        }
+
+        $variant['prices'] = $this->getArticleResource()->getTaxPrices(
+            $variant['prices'],
+            $tax
+        );
+
+        return $variant;
+    }
 
     /**
      * Little helper function for the ...ByNumber methods
@@ -155,7 +208,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $this->getRepository()->findOneBy(array('number' => $number));
+        $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
             throw new ApiException\NotFoundException("Variant by number {$number} not found");
@@ -708,10 +761,10 @@ class Variant extends Resource implements BatchInterface
         $options = new ArrayCollection();
 
         foreach ($data['configuratorOptions'] as $optionData) {
-            $availableGroup = $this->getAvailableGroup($availableGroups, array(
+            $availableGroup = $this->getAvailableGroup($availableGroups, [
                 'id' => $optionData['groupId'],
                 'name' => $optionData['group']
-            ));
+            ]);
 
             //group is in the article configurator set configured?
             if (!$availableGroup) {
@@ -719,10 +772,10 @@ class Variant extends Resource implements BatchInterface
             }
 
             //check if the option is available in the configured article configurator set.
-            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+            $option = $this->getAvailableOption($availableGroup->getOptions(), [
                 'id'   => $optionData['optionId'],
                 'name' => $optionData['option']
-            ));
+            ]);
 
             if (!$option) {
                 if (!$optionData['option']) {
@@ -882,15 +935,15 @@ class Variant extends Resource implements BatchInterface
     private function getUnitFindCondition($data)
     {
         if (isset($data['id'])) {
-            return array('id' => $data['id']);
+            return ['id' => $data['id']];
         }
 
         if (isset($data['unit'])) {
-            return array('unit' => $data['unit']);
+            return ['unit' => $data['unit']];
         }
 
         if (isset($data['name'])) {
-            return array('name' => $data['name']);
+            return ['name' => $data['name']];
         }
 
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));

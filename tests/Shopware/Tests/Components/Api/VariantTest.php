@@ -261,6 +261,20 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     }
 
     /**
+     * @depends testCreateShouldBeSuccessful
+     */
+    public function testGetListShouldBeSuccessful()
+    {
+        $result = $this->resource->getList();
+
+        $this->assertArrayHasKey('data', $result);
+        $this->assertArrayHasKey('total', $result);
+
+        $this->assertGreaterThanOrEqual(1, $result['total']);
+        $this->assertGreaterThanOrEqual(1, $result['data']);
+    }
+
+    /**
      * @depends testGetOneShouldBeSuccessful
      * @param $article\Shopware\Models\Article\Article
      */
