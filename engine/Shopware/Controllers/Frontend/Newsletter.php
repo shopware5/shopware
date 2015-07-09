@@ -191,7 +191,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
 
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
+            SELECT SQL_CALC_FOUND_ROWS id, IF(locked IS NULL, IF(datum IS NULL,'',datum), locked) as `date`, subject as description, sendermail, sendername
             FROM `s_campaigns_mailings`
             WHERE `status`!=0
             AND plaintext=0
