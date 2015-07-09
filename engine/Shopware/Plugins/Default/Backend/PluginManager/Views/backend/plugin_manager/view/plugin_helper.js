@@ -2,10 +2,11 @@
 //{namespace name=backend/plugin_manager/translation}
 Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
-    displayPluginEvent: function(record) {
+    displayPluginEvent: function(record, callback) {
         Shopware.app.Application.fireEvent(
             'display-plugin',
-            record
+            record,
+            callback
         );
     },
 

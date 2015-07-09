@@ -13,6 +13,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.DemoData',
         'main.Recommendation',
         'main.ShopwareId',
+        'main.PremiumListing'
     ],
 
     stores:[

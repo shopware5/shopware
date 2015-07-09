@@ -7,7 +7,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
     refs: [
         { ref: 'navigation', selector: 'plugin-manager-listing-window plugin-category-navigation' },
         { ref: 'localListing', selector: 'plugin-manager-local-plugin-listing' },
-        { ref: 'updatePage', selector: 'plugin-manager-update-page' }
+        { ref: 'updatePage', selector: 'plugin-manager-update-page' },
+        { ref: 'listingWindow', selector: 'plugin-manager-listing-window' }
     ],
 
     init: function() {
@@ -41,10 +42,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
         Shopware.app.Application.on({
             'load-update-listing': me.loadUpdateListing,
+            'enable-premium-plugins-mode': me.enablePremiumPluginsMode,
             scope: me
         });
 
         this.callParent(arguments);
+    },
+
+    enablePremiumPluginsMode: function() {
+        var me = this;
+
+        me.getListingWindow().setWidth(1028);
+        me.getListingWindow().setTitle('{s name="premium_plugins/title"}Try features{/s}');
+        me.getNavigation().hide();
     },
 
     loadUpdateListing: function(callback) {
@@ -76,6 +86,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         if (!Shopware.app.Application.sbpAvailable) {
             var navController = me.subApplication.getController('Navigation');
             navController.displayLocalPluginPage();
+        }
+
+        if (me.subApplication.action == 'PremiumPlugins') {
+            Shopware.app.Application.fireEvent('display-premium-plugins');
+            return;
         }
 
         Ext.Function.defer(function () {
