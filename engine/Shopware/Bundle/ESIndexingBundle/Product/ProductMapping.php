@@ -126,8 +126,8 @@ class ProductMapping implements MappingInterface
                 'fallbackPriceCount' => ['type' => 'long'],
 
                 //dates
-                'formattedCreatedAt' => ['type' => 'date', 'format' => 'yyyy/MM/dd HH:mm:ss'],
-                'formattedReleaseDate' => ['type' => 'date', 'format' => 'yyyy/MM/dd HH:mm:ss'],
+                'formattedCreatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+                'formattedReleaseDate' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
 
                 //nested structs
                 'manufacturer' => $this->getManufacturerMapping($shop),
@@ -257,10 +257,24 @@ class ProductMapping implements MappingInterface
         foreach ($currencies as $currency) {
             foreach ($customerGroups as $customerGroup) {
                 $key = $customerGroup . '_' . $currency;
-                $prices[$key] = ['type' => 'double'];
+                $prices[$key] = $this->getPriceMapping();
             }
         }
 
         return ['properties' => $prices];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPriceMapping()
+    {
+        return [
+            'properties' => [
+                'calculatedPrice' => ['type' => 'double'],
+                'calculatedReferencePrice' => ['type' => 'double'],
+                'calculatedPseudoPrice' => ['type' => 'double']
+            ]
+        ];
     }
 }

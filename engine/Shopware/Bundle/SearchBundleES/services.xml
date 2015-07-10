@@ -37,6 +37,18 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.has_pseudo_price_condtion_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\HasPseudoPriceConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.create_date_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CreateDateConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.release_date_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\ReleaseDateConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.immediate_delivery_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\ImmediateDeliveryConditionHandler" >
             <tag name="shopware_search_es.search_handler" />
         </service>
@@ -142,6 +154,10 @@
         </service>
 
         <service id="shopware_search_es.release_date_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\ReleaseDateSortingHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.search_ranking_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\SearchRankingSortingHandler">
             <tag name="shopware_search_es.search_handler" />
         </service>
 

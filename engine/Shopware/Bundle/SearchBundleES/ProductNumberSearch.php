@@ -156,7 +156,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
                 return $handler;
             }
         }
-        return null;
+        throw new \RuntimeException(sprintf("%s class not supported", get_class($criteriaPart)));
     }
 
     /**

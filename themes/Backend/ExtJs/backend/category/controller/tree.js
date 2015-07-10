@@ -234,7 +234,14 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // load record into forms
                 settingForm.loadRecord(me.detailRecord);
 
-                var disableTab = !record.data.leaf;
+                var disableTab = !record.get('leaf');
+                if (me.detailRecord.get('streamId')) {
+                    disableTab = true;
+                    settingForm.streamStore.load({
+                        params: { id: me.detailRecord.get('streamId') }
+                    });
+                }
+
 
                 // Just create the selection view once, if created just refresh the stores and the detail record.
                 if(!me.productMappingRendered) {
@@ -243,6 +250,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                         assignedProductsStore: me.subApplication.assignedProductsStore,
                         record: me.detailRecord
                     });
+
                     me.updateTab(articleMappingContainer, me.selectorView, disableTab);
                     me.productMappingRendered = true;
                 } else {

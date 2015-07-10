@@ -55,11 +55,6 @@ class ServiceSubscriber implements SubscriberInterface
 
     public function registerSimilarProductsService()
     {
-        $enabled = $this->container->getParameter('shopware.es.enabled');
-        if (!$enabled) {
-            return;
-        }
-
         $this->container->set(
             'shopware_storefront.similar_products_service',
             $this->container->get('shopware_search_es.similar_products_service')
@@ -68,11 +63,6 @@ class ServiceSubscriber implements SubscriberInterface
 
     public function registerProductNumberSearch()
     {
-        $enabled = $this->container->getParameter('shopware.es.enabled');
-        if (!$enabled) {
-            return;
-        }
-
         $this->container->set(
             'shopware_search.product_number_search',
             $this->container->get('shopware_search_es.product_number_search')

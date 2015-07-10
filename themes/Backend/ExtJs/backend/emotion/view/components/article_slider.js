@@ -72,6 +72,9 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
 
         me.articleType = me.down('emotion-components-fields-article-slider-type');
         me.categoryFilter = me.down('emotion-components-fields-category-selection');
+        me.streamSelection = me.down('emotion-components-fields-product-stream-selection');
+
+        me.streamSelection.hide();
         if(!me.articleType.getValue()) {
             me.maxCountField.hide();
             me.categoryFilter.hide();
@@ -83,6 +86,13 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+        } else if (me.articleType.getValue() == 'product_stream') {
+            me.maxCountField.hide();
+            me.categoryFilter.hide();
+            me.articleFieldset.hide();
+            me.rotateSpeed.show().enable();
+            me.rotation.show().enable();
+            me.streamSelection.show();
         } else {
             me.maxCountField.show();
             me.categoryFilter.show();
@@ -98,18 +108,26 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
     onChange: function(field, newValue) {
         var me = this;
 
-        if(newValue !== 'selected_article') {
-            me.maxCountField.show();
-            me.categoryFilter.show();
-            me.articleFieldset.hide();
-            me.rotateSpeed.hide().disable();
-            me.rotation.hide().disable();
-        } else {
+        me.streamSelection.hide();
+        if (newValue == 'selected_article') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+        } else if (newValue == 'product_stream') {
+            me.maxCountField.hide();
+            me.categoryFilter.hide();
+            me.articleFieldset.hide();
+            me.rotateSpeed.show().enable();
+            me.rotation.show().enable();
+            me.streamSelection.show();
+        } else {
+            me.maxCountField.show();
+            me.categoryFilter.show();
+            me.articleFieldset.hide();
+            me.rotateSpeed.hide().disable();
+            me.rotation.hide().disable();
         }
     },
 
