@@ -517,7 +517,7 @@
         validateUsingAjax: function ($input, action) {
             var me = this,
                 data = 'action=' + action + '&' + me.$el.find('form').serialize(),
-                URL = $.controller.ajax_validate;
+                URL = window.controller.ajax_validate;
 
             if (!URL) {
                 return;

@@ -145,7 +145,7 @@
 
             // Ajax configuration
             me.ajax = {
-                'url': $.controller.ajax_listing,
+                'url': window.controller.ajax_listing,
                 'params': parseQueryString(window.location.href)
             };
 
