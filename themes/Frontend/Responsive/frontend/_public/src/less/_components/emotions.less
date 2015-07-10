@@ -646,7 +646,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .emotion--blog {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
 
     .blog--container {
         height: 100%;
@@ -656,7 +656,6 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     .blog--entry {
         height: 100%;
         padding-left: 1%;
-        overflow: hidden;
     }
 
     .blog--image {
@@ -684,6 +683,8 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
         .unitize(font-size, 14);
         .unitize(line-height, 20);
         color: @text-color;
+		height: auto;
+		max-height: 60%;
     }
 }
 
@@ -692,7 +693,13 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     width: 100%;
     height: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+	.emotion--blog {
+		overflow: hidden;
+	}
 }
 
 @media screen and(min-width: @desktopViewportWidth) {

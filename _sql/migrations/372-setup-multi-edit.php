@@ -67,17 +67,11 @@ EOD;
               PRIMARY KEY (`id`),
               KEY (`detail_id`),
               KEY (`queue_id`),
-              UNIQUE (`queue_id`, `detail_id`)
+              UNIQUE (`queue_id`, `detail_id`),
+              CONSTRAINT `s_multi_edit_queue_articles_ibfk_1` FOREIGN KEY (`detail_id`) REFERENCES `s_articles_details` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+              CONSTRAINT `s_multi_edit_queue_articles_ibfk_2` FOREIGN KEY (`queue_id`) REFERENCES `s_multi_edit_queue` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT 'Products belonging to a certain queue';
 EOD;
-        $this->addSql($sql);
-
-        $sql = <<<'EOD'
-        ALTER TABLE `s_multi_edit_queue_articles`
-          ADD CONSTRAINT `s_multi_edit_queue_articles_ibfk_1` FOREIGN KEY (`detail_id`) REFERENCES `s_articles_details` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-          ADD CONSTRAINT `s_multi_edit_queue_articles_ibfk_2` FOREIGN KEY (`queue_id`) REFERENCES `s_multi_edit_queue` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-EOD;
-
         $this->addSql($sql);
     }
 

@@ -906,6 +906,8 @@ class sRewriteTable
             )
         );
 
+        $result = $this->mapArticleTranslationObjectData($result);
+
         $result = Shopware()->Events()->filter(
             'Shopware_Modules_RewriteTable_sCreateRewriteTableArticles_filterArticles',
             $result,
@@ -947,9 +949,8 @@ class sRewriteTable
     public function getSeoArticleQuery()
     {
         return "
-            SELECT a.*, IF(atr.name IS NULL OR atr.name='', a.name, atr.name) as name,
-                d.ordernumber, d.suppliernumber, s.name as supplier, datum as date,
-                d.releasedate, changetime as changed, metaTitle, at.attr1, at.attr2,
+            SELECT a.*, d.ordernumber, d.suppliernumber, s.name as supplier, datum as date,
+                d.releasedate, changetime as changed, metaTitle, ct.objectdata, at.attr1, at.attr2,
                 at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9,
                 at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16,
                 at.attr17, at.attr18, at.attr19, at.attr20
@@ -968,9 +969,10 @@ class sRewriteTable
             LEFT JOIN s_articles_attributes at
                 ON at.articledetailsID=d.id
 
-            LEFT JOIN s_articles_translations atr
-                ON atr.articleID=a.id
-                AND atr.languageID=?
+            LEFT JOIN s_core_translations ct
+                ON ct.objectkey=a.id
+                AND ct.objectlanguage=?
+                AND ct.objecttype='article'
 
             LEFT JOIN s_articles_supplier s
                 ON s.id=a.supplierID
@@ -1273,5 +1275,40 @@ class sRewriteTable
             $path = $this->sCleanupPath($path, false);
             $this->sInsertUrl($org_path, $path);
         }
+    }
+
+    /**
+     * Maps the translation of the objectdata from the s_core_translations in the article array
+     * @param array $articles
+     * @return mixed
+     */
+    public function mapArticleTranslationObjectData($articles)
+    {
+        foreach ($articles as &$article) {
+            if (empty($article['objectdata'])) {
+                unset($article['objectdata']);
+                continue;
+            }
+
+            $data = unserialize($article['objectdata']);
+            if (!$data) {
+                continue;
+            }
+
+            $data['name'] = (!empty($data['txtArtikel'])) ? $data['txtArtikel'] : $article['name'];
+            $data['description_long'] = (!empty($data['txtlangbeschreibung'])) ? $data['txtlangbeschreibung'] : $article['description_long'];
+            $data['description'] = (!empty($data['txtshortdescription'])) ? $data['txtshortdescription'] : $article['description'];
+            $data['keywords'] = (!empty($data['txtkeywords'])) ? $data['txtkeywords'] : $article['keykwords'];
+
+            unset($article['objectdata']);
+            unset($data['txtArtikel']);
+            unset($data['txtlangbeschreibung']);
+            unset($data['txtlangbeschreibung']);
+            unset($data['txtkeywords']);
+
+            $article = array_merge($article, $data);
+        }
+
+        return $articles;
     }
 }
