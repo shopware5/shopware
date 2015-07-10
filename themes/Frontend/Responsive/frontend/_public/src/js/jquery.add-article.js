@@ -51,7 +51,7 @@
              *
              * @type {String}
              */
-            'addArticleUrl': $.controller['ajax_add_article'],
+            'addArticleUrl': window.controller['ajax_add_article'],
 
             /**
              * Default value that is used for the per-page amount when the current device is not mapped.

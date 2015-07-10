@@ -323,6 +323,24 @@
         _plugins: {},
 
         /**
+         * Collection of all plugins that should be initialized when the DOM is ready
+         *
+         * @private
+         * @property _pluginQueue
+         * @type {Object}
+         */
+        _pluginQueue: {},
+
+        /**
+         * Flag whether the queued plugins were initialized or not
+         *
+         * @private
+         * @property _pluginsInitialized
+         * @type {Boolean}
+         */
+        _pluginsInitialized: false,
+
+        /**
          * Current breakpoint type
          *
          * @private
@@ -380,6 +398,8 @@
             me._checkResize();
             me._browserDetection();
             me._setDeviceCookie();
+
+            $($.proxy(me.initQueuedPlugins, me, true));
 
             return me;
         },
@@ -574,6 +594,7 @@
          */
         addPlugin: function (selector, pluginName, config, viewport) {
             var me = this,
+                pluginsInitialized = me._pluginsInitialized,
                 breakpoints = me._breakpoints,
                 currentState = me._currentState,
                 len,
@@ -600,9 +621,16 @@
             for (i = 0, len = viewport.length; i < len; i++) {
                 me._addPluginOption(viewport[i], selector, pluginName, config);
 
-                if (currentState === viewport[i]) {
-                    me._initPlugin(selector, pluginName);
+                if (currentState !== viewport[i]) {
+                    continue;
                 }
+
+                if (pluginsInitialized) {
+                    me._initPlugin(selector, pluginName);
+                    continue;
+                }
+
+                me.addPluginToQueue(selector, pluginName);
             }
 
             return me;
@@ -648,6 +676,10 @@
                 }
 
                 delete sel[pluginName];
+            }
+
+            if (!me._pluginsInitialized) {
+                me.removePluginFromQueue(selector, pluginName);
             }
 
             return me;
@@ -707,11 +739,76 @@
             if ($el.length > 1) {
                 $.each($el, function () {
                     me._initSinglePlugin($(this), selector, pluginName);
-                })
-            } else {
-                me._initSinglePlugin($el, selector, pluginName);
+                });
+                return;
             }
 
+            me._initSinglePlugin($el, selector, pluginName);
+        },
+
+        /**
+         * @public
+         * @method addPluginToQueue
+         * @param {String} selector
+         * @param {String} pluginName
+         */
+        addPluginToQueue: function (selector, pluginName) {
+            var me = this,
+                queue = me._pluginQueue,
+                pluginNames = queue[selector] || (queue[selector] = []);
+
+            if (pluginNames.indexOf(pluginName) === -1) {
+                pluginNames.push(pluginName);
+            }
+        },
+
+        /**
+         * @public
+         * @method removePluginFromQueue
+         * @param {String} selector
+         * @param {String} pluginName
+         */
+        removePluginFromQueue: function (selector, pluginName) {
+            var me = this,
+                queue = me._pluginQueue,
+                pluginNames = queue[selector],
+                index;
+
+            if (pluginNames && (index = pluginNames.indexOf(pluginName)) !== -1) {
+                pluginNames.splice(index, 1);
+            }
+        },
+
+        /**
+         * @public
+         * @method initQueuedPlugins
+         * @param {Boolean} clearQueue
+         */
+        initQueuedPlugins: function (clearQueue) {
+            var me = this,
+                queue = me._pluginQueue,
+                selectors = Object.keys(queue),
+                selectorLen = selectors.length,
+                i = 0,
+                selector,
+                plugins,
+                pluginLen,
+                j;
+
+            for (; i < selectorLen; i++) {
+                selector = selectors[i];
+                plugins = queue[selector];
+
+                for (j = 0, pluginLen = plugins.length; j < pluginLen; j++) {
+                    me._initPlugin(selector, plugins[j]);
+                }
+
+                if (clearQueue !== false) {
+                    delete queue[selector];
+                }
+            }
+
+            me._pluginsInitialized = true;
         },
 
         /**
