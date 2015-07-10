@@ -390,7 +390,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getCacheDir()
     {
-        return $this->getRootDir().'/cache/'.$this->environment.'_'.\Shopware::REVISION;
+        return $this->getRootDir().'/var/cache/'.$this->environment.'_'.\Shopware::REVISION;
     }
 
     /**
@@ -400,7 +400,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getLogDir()
     {
-        return $this->getRootDir().'/logs';
+        return $this->getRootDir().'/var/log';
     }
 
     /**

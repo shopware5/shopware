@@ -242,7 +242,7 @@ class UpdateCommand extends Command
 
     private function cleanupCache()
     {
-        $cachePath = SW_PATH . '/' . 'cache';
+        $cachePath = SW_PATH . '/var/cache';
         foreach (new \DirectoryIterator($cachePath) as $cacheDirectory) {
             if ($cacheDirectory->isDot() || !$cacheDirectory->isDir()) {
                 continue;
