@@ -240,10 +240,17 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
                     continue;
                 }
+
                 // Do not save default value
                 if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
                     continue;
                 }
+
+                // Simple data validation
+                if (!$this->validateData($elementData, $valueData['value'])) {
+                    continue;
+                }
+
                 $value = new Shopware\Models\Config\Value();
                 $value->setElement($element);
                 $value->setShop($shop);
@@ -1088,5 +1095,37 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementCollection->add($elementModel);
 
         return $elementCollection;
+    }
+
+    /**
+     * Simple validation for backend config elements
+     *
+     * @param $elementData
+     * @param $value
+     * @return boolean
+     */
+    private function validateData($elementData, $value)
+    {
+        switch ($elementData['name']) {
+            /**
+             * Add rules for a bad case and return false to abort saving
+             */
+            case 'backendLocales':
+                if (!is_array($value) || count($value) === 0) {
+                    return false;
+                }
+
+                // check existence of each locale
+                foreach ($value as $localeId) {
+                    $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
+                    if (null === $locale) {
+                        return false;
+                    }
+                }
+
+                break;
+        }
+
+        return true;
     }
 }
