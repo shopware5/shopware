@@ -599,7 +599,7 @@ class LegacyStructConverter
             );
             
             $mediaValues = array();
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
                 /**@var $option StoreFrontBundle\Struct\Property\Option */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(array('valueId' => $option->getId()), $this->convertMediaStruct($option->getMedia()));
