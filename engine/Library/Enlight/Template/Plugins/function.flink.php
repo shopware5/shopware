@@ -63,6 +63,15 @@ function smarty_function_flink($params, $template)
             $docPath = getcwd() . DIRECTORY_SEPARATOR;
         }
 
+        // If the Plugins/Community-folder is a symlink (e.g. as shared folder in a
+        // capistrano deployment environment), the following code block "some clean
+        // up code" will not work as expected. So we rewrite the path.
+        $canonicalCommunityPath = $docPath . 'engine/Shopware/Plugins/Community';
+        $realCommunityPath = realpath($canonicalCommunityPath);
+        if (($realCommunityPath != $canonicalCommunityPath) && (strpos($file, $realCommunityPath) === 0)) {
+            $file = $canonicalCommunityPath . substr($file, strlen($realCommunityPath));
+        }
+
         // some clean up code
         if (strpos($file, $docPath) === 0) {
             $file = substr($file, strlen($docPath));
