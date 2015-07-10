@@ -12,8 +12,6 @@
      */
     $.plugin('swAjaxProductNavigation', {
 
-        alias: 'ajaxProductNavigation',
-
         /**
          * Default configuration of the plugin
          *

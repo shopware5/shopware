@@ -3,8 +3,6 @@
 
     $.plugin('swCollapseCart', {
 
-        alias: 'collapseCart',
-
         defaults: {
 
             /**

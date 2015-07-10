@@ -72,8 +72,6 @@
 
     $.plugin('swRangeSlider', {
 
-        alias: 'rangeSlider',
-
         defaults: {
             /**
              * The css class for the range slider container element.

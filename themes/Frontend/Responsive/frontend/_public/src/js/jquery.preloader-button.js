@@ -10,8 +10,6 @@
      */
     $.plugin('swPreloaderButton', {
 
-        alias: 'preloaderButton',
-
         /** @object Default configuration */
         defaults: {
 

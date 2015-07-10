@@ -7,8 +7,6 @@
      */
     $.plugin('swTabMenu', {
 
-        alias: 'tabMenu',
-
         defaults: {
 
             /**

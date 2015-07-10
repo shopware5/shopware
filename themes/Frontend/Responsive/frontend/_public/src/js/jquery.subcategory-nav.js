@@ -20,8 +20,6 @@
      */
     $.plugin('swSubCategoryNav', {
 
-        alias: 'subCategoryNav',
-
         defaults: {
 
             /**

@@ -34,8 +34,6 @@
      */
     $.plugin('swAddArticle', {
 
-        alias: 'addArticle',
-
         defaults: {
             /**
              * Event name that the plugin listens to.

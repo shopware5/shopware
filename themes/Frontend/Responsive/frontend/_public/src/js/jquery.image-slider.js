@@ -35,8 +35,6 @@
      */
     $.plugin('swImageSlider', {
 
-        alias: 'imageSlider',
-
         defaults: {
 
             /**

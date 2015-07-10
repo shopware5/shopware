@@ -6,8 +6,6 @@
      */
     $.plugin('swOffcanvasButton', {
 
-        alias: 'offcanvasButton',
-
         /**
          * Default options for the offcanvas button plugin
          *

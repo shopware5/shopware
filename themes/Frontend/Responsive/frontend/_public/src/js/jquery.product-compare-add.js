@@ -8,8 +8,6 @@
      */
     $.plugin('swProductCompareAdd', {
 
-        alias: 'productCompareAdd',
-
         /** Your default options */
         defaults: {
             /** @string compareMenuSelector Listener Class for compare button */

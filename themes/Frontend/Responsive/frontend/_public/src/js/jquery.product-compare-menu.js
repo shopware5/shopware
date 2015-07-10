@@ -8,8 +8,6 @@
      */
     $.plugin('swProductCompareMenu', {
 
-        alias: 'productCompareMenu',
-
         /** Your default options */
         defaults: {
             /** @string compareMenuSelector HTML class for the topbarnavigation menu wrapper */
@@ -183,7 +181,7 @@
                 deleteUrl = $deleteBtn.attr('href'),
                 rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
                 compareCount = $(me.opts.compareEntriesSelector).length;
-            
+
             if(compareCount > 1) {
 
                 // slide up and remove product from unordered list

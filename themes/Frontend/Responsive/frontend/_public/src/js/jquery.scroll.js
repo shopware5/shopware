@@ -9,8 +9,6 @@
      */
     $.plugin('swScrollAnimate', {
 
-        alias: 'scrollAnimate',
-
         defaults: {
 
             /**

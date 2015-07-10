@@ -11,8 +11,6 @@
      */
     $.plugin('swImageGallery', {
 
-        alias: 'imageGallery',
-
         defaults: {
 
             /**

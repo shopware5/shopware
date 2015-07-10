@@ -28,8 +28,6 @@
      */
     $.plugin('swMenuScroller', {
 
-        alias: 'menuScroller',
-
         /**
          * Default options for the menu scroller plugin
          *

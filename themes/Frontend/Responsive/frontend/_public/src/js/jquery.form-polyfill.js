@@ -3,8 +3,6 @@
 
     $.plugin('swFormPolyfill', {
 
-        alias: 'formPolyfill',
-
         defaults: {
             eventType: 'click'
         },

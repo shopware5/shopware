@@ -20,8 +20,6 @@
      */
     $.plugin('swCaptcha', {
 
-        alias: 'captcha',
-
         /**
          * Default plugin initialisation function.
          * Registers all needed event listeners and sends a request to load the captcha image.

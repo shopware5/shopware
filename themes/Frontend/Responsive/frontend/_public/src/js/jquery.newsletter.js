@@ -3,8 +3,6 @@
 
     $.plugin('swNewsletter', {
 
-        alias: 'newsletter',
-        
         init: function () {
             var me = this;
 
