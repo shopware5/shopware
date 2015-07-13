@@ -248,6 +248,14 @@
         </exec>
     </target>
 
+    <target name="karma-shopware-continuous">
+        <exec executable="${script.karma}" failonerror="true" dir="${log.dir}">
+            <arg value="start"/>
+            <arg value="${karma.config}"/>
+            <arg value="${log.dir}/karma/"/>
+        </exec>
+    </target>
+
     <target name="start-server">
         <exec executable="${script.server.start}" failonerror="true">
             <arg value="${app.host}"/>
