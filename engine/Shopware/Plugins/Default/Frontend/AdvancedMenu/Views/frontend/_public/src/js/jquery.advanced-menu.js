@@ -1,7 +1,9 @@
 ;(function ($, window) {
     'use strict';
 
-    var $body = $('body');
+    var $body = $('body'),
+        $html = $('html'),
+        isTouchIE = $html.hasClass('is--ie-touch');
 
     /**
      * Shopware Advanced Menu Plugin
@@ -136,9 +138,9 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
-                if (window.PointerEvent) {
+                if (window.PointerEvent && isTouchIE) {
                     me._on($el, 'pointerdown', $.proxy(me.onClickNavigationLink, me, i));
-                } else if (window.MSPointerEvent) {
+                } else if (window.MSPointerEvent && isTouchIE) {
                     me._on($el, 'MSPointerDown', $.proxy(me.onClickNavigationLink, me, i));
                 } else {
                     me._on($el, 'touchstart', $.proxy(me.onTouchStart, me, i, $el));
