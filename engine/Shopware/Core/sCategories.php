@@ -542,7 +542,7 @@ class sCategories
         }
 
         $canonicalParams = $this->getCategoryCanonicalParams($category);
-        
+
         $category = array_merge(
             $category,
             array(
@@ -674,6 +674,10 @@ class sCategories
         $data = $query->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+
+        if (!$data) {
+            return null;
+        }
 
         $data['childrenCount'] = $this->getCategoryChildrenCount($id);
 
