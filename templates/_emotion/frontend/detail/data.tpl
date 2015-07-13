@@ -263,7 +263,7 @@
 						<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
 						{if $sArticle.pseudopricePercent.float}
 							<span>
-								({$sArticle.pseudopricePercent.float}% {se name="DetailDataInfoSavePercent"}{/se})
+								({$sArticle.pseudopricePercent.float|number}% {se name="DetailDataInfoSavePercent"}{/se})
 							</span>
 						{/if}
 					</div>
