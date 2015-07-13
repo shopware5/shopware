@@ -69,7 +69,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         { ref:'previewButton', selector:'article-detail-window article-image-list button[action=previewImage]' },
         { ref:'removeButton', selector:'article-detail-window article-image-list button[action=removeImage]' },
         { ref:'mediaInfo', selector:'article-detail-window article-image-info' },
-        { ref:'sidebarMediaDropZone', selector:'article-detail-window article-sidebar-option article-image-drop-zone' },
         { ref:'mediaDropZone', selector:'article-detail-window article-image-upload article-image-drop-zone' }
     ],
 
@@ -115,9 +114,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
-            },
-            'article-detail-window article-sidebar-option': {
-                mediaUpload: me.onSidebarMediaUpload
             }
         });
         me.callParent(arguments);
@@ -427,26 +423,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             media.set('id', 0);
             store.add(media);
         });
-    },
-
-    /**
-     * Event listener function which fired when the user uploads images
-     * over the file field of the sidebar.
-     * @param field
-     */
-    onSidebarMediaUpload: function(field) {
-        var dropZone = this.getSidebarMediaDropZone(), me = this;
-
-        if(Ext.isIE || Ext.isSafari) {
-        	var form = field.ownerCt;
-        	form.submit({
-        		success: function() {
-	        		Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
-        		}
-        	});
-        } else {
-            this.uploadMedia(field, dropZone);
-        }
     },
 
     /**

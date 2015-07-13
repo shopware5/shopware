@@ -127,18 +127,18 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 addAccessoryArticle: me.onAddAccessoryArticle,
                 removeAccessoryArticle: me.onRemoveAccessoryArticle
             },
-            'article-detail-window article-sidebar-link': {
+            'article-detail-window article-resources-links': {
                 addLink: me.onAddLink,
-                removeLink: me.onRemoveLink,
+                removeLink: me.onRemoveLink
+            },
+            'article-detail-window article-resources-downloads': {
                 addDownload: me.onAddDownload,
                 removeDownload: me.onRemoveDownload
             },
-            'article-detail-window article-sidebar-option': {
+            'article-detail-window article-actions-toolbar': {
                 articlePreview: me.onArticlePreview,
                 deleteArticle: me.onDeleteArticle,
-                duplicateArticle: me.onDuplicateArticle,
-                translateArticle: me.onTranslate,
-                addCategory: me.onAddCategory
+                duplicateArticle: me.onDuplicateArticle
             },
             'article-prices-field-set': {
                 priceTabChanged: me.onPriceTabChanged,
@@ -449,20 +449,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         });
         priceFieldSet.tabPanel.setActiveTab(0);
 
-        //reconfigure the category grid in the option panel of the sidebar.
-        mainWindow.down('article-sidebar article-sidebar-option article-category-list').reconfigure(article.getCategory());
-
         //reconfigure the article link listing
-        mainWindow.down('article-sidebar article-sidebar-link grid[name=link-listing]').reconfigure(article.getLink());
+        mainWindow.down('article-resources-links grid[name=link-listing]').reconfigure(article.getLink());
 
         //reconfigure the article download listing
-        mainWindow.down('article-sidebar article-sidebar-link grid[name=download-listing]').reconfigure(article.getDownload());
+        mainWindow.down('article-resources-downloads grid[name=download-listing]').reconfigure(article.getDownload());
 
         //reconfigure the article accessory articles listing
-        mainWindow.down('article-sidebar article-sidebar-accessory grid[name=accessory-listing]').reconfigure(article.getAccessory());
+        mainWindow.down('article-crossselling-tab grid[name=accessory-listing]').reconfigure(article.getAccessory());
 
         //reconfigure the article similar articles listing
-        mainWindow.down('article-sidebar article-sidebar-similar grid[name=similar-listing]').reconfigure(article.getSimilar());
+        mainWindow.down('article-crossselling-tab grid[name=similar-listing]').reconfigure(article.getSimilar());
 
         //reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());
@@ -533,36 +530,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event will be fired when the user select an item of the category combo box.
-     *
-     * @event
-     * @param [Ext.data.Model] - The category model
-     * @param [Ext.grid.Panel] - The category list
-     */
-    onAddCategory: function(categories, grid) {
-        var me = this,
-            store = grid.getStore();
-
-        if (!Ext.isArray(categories)) {
-            return true;
-        }
-
-        Ext.each(categories, function(model) {
-            var category = Ext.create('Shopware.apps.Article.model.Category', {
-                id: model.data.id,
-                name: model.data.name
-            });
-
-            if (!store.getById(category.get('id'))) {
-                store.add(category);
-            } else {
-                var message = Ext.String.format(me.snippets.alreadyExist.message, category.get('name'));
-                Shopware.Notification.createGrowlMessage(me.snippets.alreadyExist.title, message, me.snippets.growlMessage);
-            }
-        });
-    },
-
-    /**
      * Event listener function which fired when the user clicks the duplicate button
      * in the side bar.
      * @return void
@@ -598,17 +565,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             }
         });
 
-    },
-
-    /**
-     * Event listener function which fired when the user clicks the translate button.
-     * @param record
-     */
-    onTranslate: function(record) {
-        var me = this,
-            formPnl = me.getDetailForm();
-
-        formPnl.getPlugin('translation').onOpenTranslationWindow();
     },
 
     /**
@@ -658,8 +614,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the add link button.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the add link button.
      * @event
      * @param [Ext.grid.Panel] The link grid
      * @param [Ext.form.Panel] The form panel for the link
@@ -683,8 +639,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the remove link action column.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the remove link action column.
      * @event
      * @param [Ext.grid.Panel] The link grid
      * @param [Ext.data.Model] The link record
@@ -700,8 +656,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the add download button.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the add download button.
      *
      * @event
      * @param [Ext.grid.Panel] The download grid
@@ -726,8 +682,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
-     * Event listener function of the sidebar option component. Fired
-     * when the user clicks the remove download action column.
+     * Event listener function of the resources component.
+     * Fired when the user clicks the remove download action column.
      *
      * @event
      * @param [Ext.grid.Panel] The download grid
@@ -738,93 +694,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             store = grid.getStore();
 
         if (store instanceof Ext.data.Store && record instanceof Ext.data.Model) {
-            store.remove(record);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to add a similar article
-     *
-     * @event
-     */
-    onAddSimilarArticle: function(form, grid, searchField) {
-        var me = this,
-            selected = searchField.returnRecord,
-            store = grid.getStore(),
-            values = form.getValues();
-
-        if (!form.getForm().isValid() || !(selected instanceof Ext.data.Model)) {
-            return false;
-        }
-        var model = Ext.create('Shopware.apps.Article.model.Similar', values);
-        model.set('id', selected.get('id'));
-        model.set('name', selected.get('name'));
-        model.set('number', selected.get('number'));
-
-        //check if the article is already assigned
-        var exist = store.getById(model.get('id'));
-        if (!(exist instanceof Ext.data.Model)) {
-            store.add(model);
-            form.getForm().reset();
-        } else {
-            Shopware.Notification.createGrowlMessage(me.snippets.existTitle,  Ext.String.format(me.snippets.similar.exist, model.get('number')), me.snippets.growlMessage);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to remove an assigned similar article
-     *
-     * @event
-     */
-    onRemoveSimilarArticle: function(grid, record) {
-        var me = this,
-            store = grid.getStore();
-
-        if (record instanceof Ext.data.Model) {
-            store.remove(record);
-        }
-    },
-
-    /**
-     * Event will be fired when the user want to add a similar article
-     *
-     * @event
-     */
-    onAddAccessoryArticle: function(form, grid, searchField) {
-        var me = this,
-            selected = searchField.returnRecord,
-            store = grid.getStore(),
-            values = form.getValues();
-
-        if (!form.getForm().isValid() || !(selected instanceof Ext.data.Model)) {
-            return false;
-        }
-        var model = Ext.create('Shopware.apps.Article.model.Accessory', values);
-        model.set('id', selected.get('id'));
-        model.set('name', selected.get('name'));
-        model.set('number', selected.get('number'));
-
-        //check if the article is already assigned
-        var exist = store.getById(model.get('id'));
-        if (!(exist instanceof Ext.data.Model)) {
-            store.add(model);
-            form.getForm().reset();
-        } else {
-            Shopware.Notification.createGrowlMessage(me.snippets.existTitle,  Ext.String.format(me.snippets.similar.exist, model.get('number')), me.snippets.growlMessage);
-        }
-
-    },
-
-    /**
-     * Event will be fired when the user want to remove an assigned similar article
-     *
-     * @event
-     */
-    onRemoveAccessoryArticle: function(grid, record) {
-        var me = this,
-            store = grid.getStore();
-
-        if (record instanceof Ext.data.Model) {
             store.remove(record);
         }
     },

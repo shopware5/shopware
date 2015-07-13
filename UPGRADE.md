@@ -1,6 +1,82 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.0
+* Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
+* Removed unused snippets in `snippets/backend/article/view/main.ini`:
+    * `detail/sidebar/options/article_options`
+    * `detail/sidebar/options/article_preview`
+    * `detail/sidebar/options/columns/name`
+    * `detail/sidebar/options/delete`
+    * `detail/sidebar/options/drop_zone`
+    * `detail/sidebar/options/duplicate`
+    * `detail/sidebar/options/image_field_set`
+    * `detail/sidebar/options/rapid_categorization`
+    * `detail/sidebar/options/select_category`
+    * `detail/sidebar/options/selected_categories`
+    * `detail/sidebar/options/shop`
+    * `detail/sidebar/options/title`
+    * `detail/sidebar/options/tooltip`
+    * `detail/sidebar/options/translate`
+    * `detail/sidebar/options/upload_button`
+* Removed `Shopware.apps.Article.view.detail.sidebar.Link` backend component and created two new components instead:
+    * `Shopware.apps.Article.view.resources.Downloads`
+    * `Shopware.apps.Article.view.resources.Links`
+* Removed unused file: `themes/Backend/ExtJs/backend/article/view/detail/sidebar/link.js`
+* Removed `article-sidebar-link` object in `Shopware.apps.Article.view.detail.Sidebar`
+* Changed views in `Shopware.apps.Article`:
+    * Removed `detail.sidebar.Link`
+    * Added `resources.Links` 
+    * Added `resources.Downloads`
+* Changed events in `Shopware.apps.Article.controller.Detail`:
+    * Removed `article-detail-window article-sidebar-link` event alias
+    * Added `article-detail-window article-resources-links` event alias
+    * Added `article-detail-window article-resources-downloads` event alias
+* Changed grid reconfigures in `Shopware.apps.Article.controller.Detail`:
+    * Removed `mainWindow.down('article-sidebar article-sidebar-link grid[name=link-listing]').reconfigure(article.getLink());`
+    * Removed ` mainWindow.down('article-sidebar article-sidebar-link grid[name=download-listing]').reconfigure(article.getDownload());`
+    * Added `mainWindow.down('article-resources-links grid[name=link-listing]').reconfigure(article.getLink());`
+    * Added `mainWindow.down('article-resources-links grid[name=link-listing]').reconfigure(article.getLink());`
+* Removed unused snippets in `snippets/backend/article/view/main.ini`:
+    * `detail/sidebar/links/download/button`
+    * `detail/sidebar/links/download/field_set`
+    * `detail/sidebar/links/download/grid/delete`
+    * `detail/sidebar/links/download/grid/edit`
+    * `detail/sidebar/links/download/grid/title`
+    * `detail/sidebar/links/download/link`
+    * `detail/sidebar/links/download/name`
+    * `detail/sidebar/links/download/notice`
+    * `detail/sidebar/links/link/button`
+    * `detail/sidebar/links/link/field_set`
+    * `detail/sidebar/links/link/grid/delete`
+    * `detail/sidebar/links/link/grid/edit`
+    * `detail/sidebar/links/link/grid/external`
+    * `detail/sidebar/links/link/grid/title`
+    * `detail/sidebar/links/link/link`
+    * `detail/sidebar/links/link/name`
+    * `detail/sidebar/links/link/notice`
+    * `detail/sidebar/links/title`
+* Removed `article-detail-window article-sidebar-option` event listeners in `Shopware.apps.Article.controller.Media`
+* Removed `onSidebarMediaUpload` method in `Shopware.apps.Article.controller.Media`
+* Removed `addCategory: me.onAddCategory` event listener in `Shopware.apps.Article.controller.Detail`
+* Removed `onAddCategory` method in `Shopware.apps.Article.controller.Detail`
+* Changed event listener alias from `article-detail-window article-sidebar-option` to `article-detail-window article-actions-toolbar` in `Shopware.apps.Article.controller.Detail`
+* Removed `article-sidebar-option` object in `Shopware.apps.Article.view.detail.Sidebar`
+* Removed `detail.sidebar.Option` from `views` array in `Shopware.apps.Article`
+* Removed `Shopware.apps.Article.view.detail.sidebar.Option` backend component
+* Removed `onTranslate` method from `Shopware.apps.Article.controller.Detail`
+* Removed unused snippets in `snippets/backend/article/view/main.ini`:
+    * detail/sidebar/accessory/article_number`
+    * `detail/sidebar/accessory/article_search`
+    * `detail/sidebar/accessory/assignment_box`
+    * `detail/sidebar/accessory/assignment_field`
+    * `detail/sidebar/accessory/bundle_box`
+    * `detail/sidebar/accessory/bundle_field`
+    * `detail/sidebar/accessory/delete`
+    * `detail/sidebar/accessory/edit`
+    * `detail/sidebar/accessory/name`
+    * `detail/sidebar/accessory/number`
+
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
 * Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.

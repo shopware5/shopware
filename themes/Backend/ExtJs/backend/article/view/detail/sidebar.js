@@ -110,34 +110,7 @@ Ext.define('Shopware.apps.Article.view.detail.Sidebar', {
      */
     createElements: function() {
         var me = this;
-        return [
-            {
-                xtype: 'article-sidebar-option',
-                shopStore: me.shopStore,
-                article: me.article,
-                animCollapse: Ext.isChrome,
-                animate: Ext.isChrome
-            }, {
-                xtype: 'article-sidebar-link',
-                article: me.article,
-                animCollapse: Ext.isChrome,
-                animate: Ext.isChrome
-            },
-            {
-                xtype: 'article-sidebar-accessory',
-                article: me.article,
-                gridStore: me.article.getAccessory(),
-                animCollapse: Ext.isChrome,
-                animate: Ext.isChrome
-            },
-            {
-                xtype: 'article-sidebar-similar',
-                article: me.article,
-                gridStore: me.article.getSimilar(),
-                animCollapse: Ext.isChrome,
-                animate: Ext.isChrome
-            }
-        ];
+        return [ ];
     },
 
     onStoresLoaded: function(article, stores) {
