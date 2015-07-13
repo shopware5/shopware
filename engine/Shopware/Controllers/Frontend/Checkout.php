@@ -110,6 +110,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sCountryList = $this->getCountryList();
         $this->View()->sPayments = $this->getPayments();
         $this->View()->sDispatches = $this->getDispatches();
+        $this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
         $this->View()->sState = $this->getSelectedState();
 
         $this->View()->sUserData = $this->getUserData();
@@ -648,7 +649,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $sErrorFlag = array();
         $sErrorMessages = array();
 
-        if (is_null($dispatch) && ($this->getDispatches($payment) || Shopware()->Config()->get('premiumshippingnoorder'))) {
+        if (is_null($dispatch) && Shopware()->Config()->get('premiumshippingnoorder') === true && !$this->getDispatches($payment)) {
             $sErrorFlag['sDispatch'] = true;
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
                 ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
@@ -1440,6 +1441,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $view->sAmountWithTax = $basket['sAmountWithTax'];
         $view->sAmountTax = $basket['sAmountTax'];
         $view->sAmountNet = $basket['AmountNetNumeric'];
+        $view->sDispatches = $this->getDispatches();
+        $view->sDispatchNoOrder = $this->getDispatchNoOrder();
     }
 
     /**
