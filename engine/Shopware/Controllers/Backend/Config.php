@@ -249,8 +249,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
-
-                Shopware()->Config()->offsetSet($element->getName(), $values);
             }
 
             $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
