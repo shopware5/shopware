@@ -2,12 +2,19 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: AccountOrder
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class AccountOrder extends \Element\Emotion\AccountOrder
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => '.order--item');
+    protected $selector = ['css' => '.order--item'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,7 +22,7 @@ class AccountOrder extends \Element\Emotion\AccountOrder
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'date' => '.order--date > .column--value',
             'number' => '.order--number > .column--value',
             'footerDate' => 'div + .order--details .column--info-data > p:nth-of-type(1)',
@@ -26,6 +33,6 @@ class AccountOrder extends \Element\Emotion\AccountOrder
             'quantity' => '.order--quantity > .column--value',
             'price' => '.order--price > .column--value',
             'sum' => '.order--amount > .column--value'
-        );
+        ];
     }
 }

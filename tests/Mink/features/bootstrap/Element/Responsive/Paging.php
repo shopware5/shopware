@@ -2,18 +2,25 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: Paging
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class Paging extends \Element\Emotion\Paging
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.listing--paging');
+    protected $selector = ['css' => 'div.listing--paging'];
 
     public function getCssSelectors()
     {
-        return array(
+        return [
             'previous' => 'a.pagination--link.paging--prev',
             'next' => 'a.pagination--link.paging--next'
-        );
+        ];
     }
 }

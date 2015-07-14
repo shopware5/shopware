@@ -1,7 +1,5 @@
 <?php
 
-require_once 'SubContext.php';
-
 class SeoContext extends SubContext
 {
     /**

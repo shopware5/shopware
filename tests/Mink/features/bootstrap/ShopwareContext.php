@@ -4,8 +4,6 @@ use Page\Emotion\Homepage;
 use Behat\Gherkin\Node\TableNode;
 use Element\Emotion\CompareColumn;
 
-require_once 'SubContext.php';
-
 class ShopwareContext extends SubContext
 {
     /**

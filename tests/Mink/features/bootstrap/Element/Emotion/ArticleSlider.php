@@ -5,8 +5,16 @@ namespace Element\Emotion;
 use Behat\Mink\Element\NodeElement;
 use Element\SliderElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/Emotion/BannerSlider.php';
-
+/**
+ * Element: ArticleSlider
+ * Location: Emotion element for product sliders
+ *
+ * Available retrievable properties (per slide):
+ * - image (string, e.g. "beach1503f8532d4648.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - alt (string, e.g. "foo")
+ * - title (string, e.g. "bar")
+ */
 class ArticleSlider extends SliderElement implements \HelperSelectorInterface
 {
     /**
@@ -30,6 +38,7 @@ class ArticleSlider extends SliderElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the image source path
      * @param NodeElement $slide
      * @return string
      */
@@ -41,6 +50,7 @@ class ArticleSlider extends SliderElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the link
      * @param NodeElement $slide
      * @return string
      */
@@ -57,6 +67,7 @@ class ArticleSlider extends SliderElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the name
      * @param NodeElement $slide
      * @return string
      */
@@ -76,6 +87,7 @@ class ArticleSlider extends SliderElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the price
      * @param NodeElement $slide
      * @return float
      */

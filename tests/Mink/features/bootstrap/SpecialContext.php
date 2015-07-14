@@ -5,8 +5,6 @@ use Element\MultipleElement;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 
-require_once 'SubContext.php';
-
 class SpecialContext extends SubContext
 {
     /**

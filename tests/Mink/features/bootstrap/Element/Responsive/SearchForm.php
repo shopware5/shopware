@@ -2,12 +2,19 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: SearchForm
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class SearchForm extends \Element\Emotion\SearchForm
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'form.main-search--form');
+    protected $selector = ['css' => 'form.main-search--form'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,8 +22,8 @@ class SearchForm extends \Element\Emotion\SearchForm
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'searchForm' => '.main-search--form',
-        );
+        ];
     }
 }

@@ -4,6 +4,13 @@ namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
+/**
+ * Element: HeaderCart
+ * Location: Cart on the top right of the shop
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class HeaderCart extends Element implements \HelperSelectorInterface
 {
     /**
@@ -17,11 +24,11 @@ class HeaderCart extends Element implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'quantity' => 'a.quantity',
             'amount' => 'span.amount',
             'link' => 'a.quantity'
-        );
+        ];
     }
 
     /**
@@ -30,18 +37,18 @@ class HeaderCart extends Element implements \HelperSelectorInterface
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
+     *
      * @param string $quantity
      * @param float $amount
      * @throws \Exception
      */
     public function checkCart($quantity, $amount)
     {
-        $locators = array('quantity', 'amount');
-        $element = \Helper::findElements($this, $locators);
+        $element = \Helper::findElements($this, ['quantity', 'amount']);
 
         $check = array(
             'quantity' => array($element['quantity']->getText(), $quantity),
@@ -64,8 +71,7 @@ class HeaderCart extends Element implements \HelperSelectorInterface
      */
     public function clickCart()
     {
-        $locators = array('link');
-        $element = \Helper::findElements($this, $locators);
+        $element = \Helper::findElements($this, 'link');
 
         $element['link']->click();
     }

@@ -4,6 +4,13 @@ namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
+/**
+ * Element: LanguageSwitcher
+ * Location: Language switcher on top of the shop
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class LanguageSwitcher extends Element
 {
     /**
@@ -11,10 +18,16 @@ class LanguageSwitcher extends Element
      */
     protected $selector = array('css' => 'div#topbar > div.topbar_lang select.lang_select');
 
-    public $cssLocators = array(
+    public $cssLocators = [
         'languages' => 'option'
-    );
+    ];
 
+    /**
+     * Returns the current language
+     * Use this only for asserts. If you only need the current language, use Helper::getCurrentLanguage().
+     * @return string
+     * @deprecated
+     */
     public function getCurrentLanguage()
     {
         $languageKeys = array(1 => 'de', 2 => 'en');
@@ -30,6 +43,11 @@ class LanguageSwitcher extends Element
         return 'de';
     }
 
+    /**
+     * Changes the language
+     * @param string $language
+     * @throws \Behat\Mink\Exception\ElementNotFoundException
+     */
     public function setLanguage($language)
     {
         $this->selectOption($language);

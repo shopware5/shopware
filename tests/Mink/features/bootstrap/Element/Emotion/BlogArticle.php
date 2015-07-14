@@ -5,14 +5,22 @@ namespace Element\Emotion;
 use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: BlogArticle
+ * Location: Emotion element for blog articles
+ *
+ * Available retrievable properties (per blog article):
+ * - image (string, e.g. "beach1503f8532d4648.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - alt (string, e.g. "foo")
+ * - title (string, e.g. "bar")
+ */
 class BlogArticle extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.blog-element');
+    protected $selector = ['css' => 'div.emotion-element > div.blog-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -20,15 +28,16 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'article' => 'div.blog-entry',
             'articleTitle' => 'h2 > a',
             'articleLink' => 'div.blog_img > a',
             'articleText' => 'p'
-        );
+        ];
     }
 
     /**
+     * Returns all blog articles of the element
      * @param string[] $properties
      * @return array[]
      */
@@ -54,8 +63,9 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the title of the blog article
      * @param NodeElement $article
-     * @return array
+     * @return string
      */
     public function getTitleProperty(NodeElement $article)
     {
@@ -73,8 +83,9 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the image of the blog article
      * @param NodeElement $article
-     * @return mixed|null
+     * @return string|null
      */
     public function getImageProperty(NodeElement $article)
     {
@@ -83,6 +94,7 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the link to the blog article
      * @param NodeElement $article
      * @return string
      */
@@ -99,6 +111,7 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the text preview of the blog article
      * @param NodeElement $article
      * @return null|string
      */
@@ -109,7 +122,8 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
-     * @param array $titles
+     * Helper method to get the unique title
+     * @param string[] $titles
      * @return string
      * @throws \Exception
      */
@@ -124,7 +138,7 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
 
             //if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
-                $check = array($title);
+                $check = [$title];
                 $result = \Helper::checkArray($check);
                 break;
 
@@ -134,7 +148,7 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
         }
 
         if ($result !== true) {
-            $messages = array('The blog article has different titles!');
+            $messages = ['The blog article has different titles!'];
             foreach ($title as $key => $value) {
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
             }

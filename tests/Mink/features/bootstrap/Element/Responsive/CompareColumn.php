@@ -2,12 +2,19 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: CompareColumn
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class CompareColumn extends \Element\Emotion\CompareColumn
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'ul.compare--group-list:not(.list--head)');
+    protected $selector = ['css' => 'ul.compare--group-list:not(.list--head)'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,7 +22,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'thumbnailImage'    => 'li.entry--picture > a img',
             'thumbnailLink'     => 'li.entry--picture > a',
             'name'              => 'li.entry--name > a.link--name',
@@ -23,7 +30,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
             'stars'             => 'li.entry--voting meta:nth-of-type(1)',
             'description'       => 'li.entry--description',
             'price'             => 'li.entry--price > .price--normal'
-        );
+        ];
     }
 
     /**
@@ -31,8 +38,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
      */
     public function getImageProperty()
     {
-        $locators = array('thumbnailImage');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['thumbnailImage']);
 
         return $elements['thumbnailImage']->getAttribute('srcset');
     }
@@ -42,8 +48,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
      */
     public function getRankingProperty()
     {
-        $locators = array('stars');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['stars']);
 
         $ranking = $elements['stars']->getAttribute('content');
 

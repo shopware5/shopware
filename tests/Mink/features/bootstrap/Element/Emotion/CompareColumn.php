@@ -4,8 +4,13 @@ namespace Element\Emotion;
 
 use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: CompareColumn
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class CompareColumn extends MultipleElement implements \HelperSelectorInterface
 {
     /**
@@ -15,11 +20,11 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'thumbnailImage'    => 'div.picture > a > img',
             'thumbnailLink'     => 'div.picture > a',
             'name'              => 'div.name > h3 > a',
@@ -27,32 +32,38 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
             'stars'             => 'div.votes > div.star',
             'description'       => 'div.desc',
             'price'             => 'div.price > p > strong'
-        );
+        ];
     }
 
-    /** @var array $namedSelectors */
-    protected $namedSelectors = array(
-        'details'  => array('de' => 'Zum Produkt',   'en' => 'View product')
-    );
+    /**
+     * Returns an array of all named selectors of the element/page
+     * @return array[]
+     */
+    public function getNamedSelectors()
+    {
+        return [
+            'details'  => ['de' => 'Zum Produkt',   'en' => 'View product']
+        ];
+    }
 
     /**
+     * Returns the image source path
      * @return string
      */
     public function getImageProperty()
     {
-        $locators = array('thumbnailImage');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['thumbnailImage']);
 
         return $elements['thumbnailImage']->getAttribute('src');
     }
 
     /**
+     * Returns the name
      * @return string
      */
     public function getNameProperty()
     {
-        $locators = array('thumbnailImage', 'thumbnailLink', 'name', 'detailsButton');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['thumbnailImage', 'thumbnailLink', 'name', 'detailsButton']);
 
         $names = array(
             'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
@@ -66,23 +77,23 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the star ranking
      * @return string
      */
     public function getRankingProperty()
     {
-        $locators = array('stars');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['stars']);
 
         return $elements['stars']->getAttribute('class');
     }
 
     /**
+     * Returns the link to the product
      * @return string
      */
     public function getLinkProperty()
     {
-        $locators = array('thumbnailLink', 'name', 'detailsButton');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['thumbnailLink', 'name', 'detailsButton']);
 
         $links = array(
             'articleThumbnailLink' => $elements['thumbnailLink']->getAttribute('href'),

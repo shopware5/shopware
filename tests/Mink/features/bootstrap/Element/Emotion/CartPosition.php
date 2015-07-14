@@ -2,11 +2,19 @@
 
 namespace Element\Emotion;
 
-use Behat\Mink\Element\NodeElement;
 use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: CartPosition
+ * Location: Cart positions on cart and checkout confirm page
+ *
+ * Available retrievable properties:
+ * - number (string, e.g. "SW10181")
+ * - name (string, e.g. "Reisekoffer Set")
+ * - quantity (float, e.g. "1")
+ * - itemPrice (float, e.g. "139,99")
+ * - sum (float, e.g. "139,99")
+ */
 class CartPosition extends MultipleElement
 {
     /**
@@ -16,11 +24,11 @@ class CartPosition extends MultipleElement
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'div.basket_details > a.title',
             'number' => 'div.basket_details > p.ordernumber',
             'thumbnailLink' => 'a.thumb_image',
@@ -28,7 +36,7 @@ class CartPosition extends MultipleElement
             'quantity' => 'div > form > div:nth-of-type(3) option[selected]',
             'itemPrice' => 'div > form > div:nth-of-type(4)',
             'sum' => 'div > form > div:nth-of-type(5)'
-        );
+        ];
     }
 
     /**
@@ -37,26 +45,25 @@ class CartPosition extends MultipleElement
      */
     public function getNamedSelectors()
     {
-        return array(
-            'remove'  => array('de' => 'Löschen',   'en' => 'Delete')
-        );
+        return [
+            'remove'  => ['de' => 'Löschen',   'en' => 'Delete']
+        ];
     }
 
     /**
      * Returns the product name
-     * @return array
+     * @return string
      */
     public function getNameProperty()
     {
-        $locators = array('name', 'thumbnailLink', 'thumbnailImage');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage']);
 
-        $names = array(
+        $names = [
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
             'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
             'articleName' => rtrim($elements['name']->getText(), '.')
-        );
+        ];
 
         return $this->getUniqueName($names);
     }
@@ -87,7 +94,7 @@ class CartPosition extends MultipleElement
         }
 
         if ($result !== true) {
-            $messages = array('The cart item has different names!');
+            $messages = ['The cart item has different names!'];
             foreach ($name as $key => $value) {
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
             }
@@ -96,5 +103,43 @@ class CartPosition extends MultipleElement
         }
 
         return $name['articleTitle'];
+    }
+
+    /**
+     * Returns the quantity
+     * @return float
+     */
+    public function getQuantityProperty()
+    {
+        return $this->getFloatProperty('quantity');
+    }
+
+    /**
+     * Returns the item price
+     * @return float
+     */
+    public function getItemPriceProperty()
+    {
+        return $this->getFloatProperty('itemPrice');
+    }
+
+    /**
+     * Returns the sum
+     * @return float
+     */
+    public function getSumProperty()
+    {
+        return $this->getFloatProperty('sum');
+    }
+
+    /**
+     * Helper method to read a float property
+     * @param string $propertyName
+     * @return float
+     */
+    protected function getFloatProperty($propertyName)
+    {
+        $element = \Helper::findElements($this, [$propertyName]);
+        return \Helper::floatValue($element[$propertyName]->getText());
     }
 }

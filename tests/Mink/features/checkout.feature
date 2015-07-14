@@ -124,7 +124,7 @@ Feature: Checkout articles
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    @currency @payment @jsResponsive
+    @currency @payment @noResponsive
     Scenario: I can change the currency and pay via prepayment
         Given I proceed to order confirmation
         And   I change the currency to "USD"

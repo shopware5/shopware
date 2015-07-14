@@ -4,8 +4,6 @@ use Page\Emotion\CheckoutCart;
 use Element\Emotion\CartPosition;
 use Behat\Gherkin\Node\TableNode;
 
-require_once 'SubContext.php';
-
 class CheckoutContext extends SubContext
 {
     /**
@@ -61,10 +59,8 @@ class CheckoutContext extends SubContext
         Helper::clickNamedLink($page, 'myOrdersLink', $language);
 
         /** @var \Element\Emotion\AccountOrder $order */
-        $order = $this->getElement('AccountOrder');
-        $order->setParent($page);
-
-        $this->getPage('Account')->checkOrder($order, $orderNumber, $values);
+        $order = $this->getMultipleElement($page, 'AccountOrder');
+        $page->checkOrder($order, $orderNumber, $values);
     }
 
     /**

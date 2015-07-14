@@ -4,28 +4,39 @@ namespace Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
+/**
+ * Element: Paging
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class Paging extends Element implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.paging');
+    protected $selector = ['css' => 'div.paging'];
 
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
+     */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'previous' => 'a.navi.prev',
             'next' => 'a.navi.more'
-        );
+        ];
     }
 
     /**
      * Returns an array of all named selectors of the element/page
-     * @return array
+     * @return array[]
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -89,7 +100,8 @@ class Paging extends Element implements \HelperSelectorInterface
         }
 
         if ($throwException) {
-            \Helper::throwException(array(sprintf('The Paging Link "%s" exists, but should not!', $locator)));
+            $message = sprintf('The Paging Link "%s" exists, but should not!', $locator);
+            \Helper::throwException($message);
         }
 
         return false;

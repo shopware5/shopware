@@ -2,34 +2,45 @@
 
 namespace Element\Emotion;
 
-use Symfony\Component\Console\Helper\Helper;
+use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/Emotion/CategoryTeaser.php';
-
-class Article extends CategoryTeaser implements \HelperSelectorInterface
+/**
+ * Element: Article
+ * Location: Emotion element for products
+ *
+ * Available retrievable properties:
+ * - name (string, e.g. "All Natural - Lemon Honey Soap")
+ * - text (string, e.g. "Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, ..."
+ * - price (float, e.g. "11,40 €")
+ * - link (string, e.g. "/sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap")
+ *
+ * Currently not retrievable properties:
+ * - image (string)
+ */
+class Article extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.article-element');
+    protected $selector = ['css' => 'div.emotion-element > div.article-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'a.title',
             'link' => 'a.artbox_thumb',
             'text' => 'p.desc',
             'price' => 'span.price',
             'more' => 'a.more'
-        );
+        ];
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getNameProperty()
     {
@@ -46,16 +57,17 @@ class Article extends CategoryTeaser implements \HelperSelectorInterface
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getImageProperty()
     {
         $elements = \Helper::findElements($this, ['link']);
+
         return $elements['link']->getAttribute('style');
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getLinkProperty()
     {
@@ -71,20 +83,12 @@ class Article extends CategoryTeaser implements \HelperSelectorInterface
     }
 
     /**
-     * @return array
-     */
-    public function getTextProperty()
-    {
-        $elements = \Helper::findElements($this, ['text']);
-        return $elements['text']->getText();
-    }
-
-    /**
-     * @return array
+     * @return float
      */
     public function getPriceProperty()
     {
         $elements = \Helper::findElements($this, ['price']);
+
         return \Helper::floatValue($elements['price']->getText());
     }
 }
