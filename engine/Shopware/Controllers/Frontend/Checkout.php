@@ -1384,6 +1384,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return;
         }
 
+        if (is_string($quantities)) {
+            $quantities = explode(';', $quantities);
+        }
+        
         foreach ($accessories as $key => $accessory) {
             try {
                 $quantity = 1;
