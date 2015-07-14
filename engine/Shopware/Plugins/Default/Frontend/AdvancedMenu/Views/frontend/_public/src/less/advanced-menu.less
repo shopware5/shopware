@@ -25,6 +25,10 @@
         .transform-style(preserve-3d);
         list-style: none;
         display: block;
+
+        .is--safari & {
+            .backface-visibility(hidden);
+        }
     }
 
     .content--wrapper {

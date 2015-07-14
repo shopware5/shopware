@@ -5,7 +5,7 @@
         {$menuSizePercentage = 100 - (25 * $columnAmount * intval($hasTeaser))}
         {$columnCount = 4 - ($columnAmount * intval($hasTeaser))}
 
-        <ul class="menu--list menu--level-{$level} columns--{$columnCount}"{if $level === 0} style="width: {$menuSizePercentage}%;{/if}">
+        <ul class="menu--list menu--level-{$level} columns--{$columnCount}"{if $level === 0} style="width: {$menuSizePercentage}%;"{/if}>
             {block name="frontend_plugins_advanced_menu_list"}
                 {foreach $categories as $category}
                     {if $category.hidetop}
@@ -14,7 +14,7 @@
 
                     <li class="menu--list-item item--level-{$level}"{if $level === 0} style="width: 100%"{/if}>
                         {block name="frontend_plugins_advanced_menu_list_item"}
-                            <a href="{$category.link}" class="menu--list-item-link" title="{$category.name}">{$category.name}</a>
+                            <a href="{$category.link}" class="menu--list-item-link" title="{$category.name|escape}">{$category.name}</a>
 
                             {if $category.sub}
                                 {call name=categories_top categories=$category.sub level=$level+1}
