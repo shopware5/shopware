@@ -5,6 +5,13 @@ namespace Element\Emotion;
 use Behat\Mink\Element\NodeElement;
 use Element\SliderElement;
 
+/**
+ * Element: ManufacturerSlider
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class ManufacturerSlider extends SliderElement implements \HelperSelectorInterface
 {
     /**
@@ -14,15 +21,15 @@ class ManufacturerSlider extends SliderElement implements \HelperSelectorInterfa
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'slide' => 'div.supplier',
             'slideImage' => 'div img',
             'slideLink' => 'div > a'
-        );
+        ];
     }
 
     /**

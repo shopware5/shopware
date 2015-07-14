@@ -1,6 +1,6 @@
 Feature: General functionality
 
-    @currency @jsResponsive
+    @currency @noResponsive
     Scenario Outline: I can put articles into my basket in different currencies
         Given I am on the listing page:
             | parameter | value |

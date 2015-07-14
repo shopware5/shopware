@@ -4,14 +4,19 @@ namespace Element\Emotion;
 
 use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: YouTube
+ * Location: Emotion element for Youtube videos
+ *
+ * Available retrievable properties:
+ * - code (string, e.g. "RVz71XsJIEA")
+ */
 class YouTube extends MultipleElement implements \HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.youtube-element');
+    protected $selector = ['css' => 'div.emotion-element > div.youtube-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -19,12 +24,13 @@ class YouTube extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'code' => 'iframe'
-        );
+        ];
     }
 
     /**
+     * Returns the video code
      * @return array
      */
     public function getCodeProperty()

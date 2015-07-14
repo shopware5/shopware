@@ -2,12 +2,19 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: CheckoutPayment
+ * Location: Payment box on checkout confirm page
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class CheckoutPayment extends \Element\Emotion\CheckoutPayment
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.payment--panel');
+    protected $selector = ['css' => 'div.payment--panel'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,15 +22,14 @@ class CheckoutPayment extends \Element\Emotion\CheckoutPayment
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'currentMethod' => 'span.payment--description'
-        );
+        ];
     }
 
     public function getPaymentMethodProperty()
     {
-        $locators = array('currentMethod');
-        $element = \Helper::findElements($this, $locators);
+        $element = \Helper::findElements($this, ['currentMethod']);
 
         return $element['currentMethod']->getText();
     }

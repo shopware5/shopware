@@ -130,6 +130,26 @@ EOD;
     }
 
     /**
+     * @BeforeScenario @jsEmotion
+     */
+    public function emotionJs()
+    {
+        if (self::$template === 'Emotion') {
+            $this->getMink()->setDefaultSessionName('sahi');
+        }
+    }
+
+    /**
+     * @BeforeScenario @jsResponsive
+     */
+    public function responsiveJs()
+    {
+        if (self::$template === 'Responsive') {
+            $this->getMink()->setDefaultSessionName('sahi');
+        }
+    }
+
+    /**
      * @param string $configName
      * @param mixed $value
      * @throws Exception

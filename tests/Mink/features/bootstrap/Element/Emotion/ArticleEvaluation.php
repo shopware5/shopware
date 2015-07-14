@@ -2,10 +2,13 @@
 
 namespace Element\Emotion;
 
-use Behat\Mink\Element\NodeElement;
-
-require_once 'tests/Mink/features/bootstrap/Element/Emotion/BlogComment.php';
-
+/**
+ * Element: ArticleEvaluation
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class ArticleEvaluation extends BlogComment
 {
     /** @var array $selector */
@@ -13,21 +16,22 @@ class ArticleEvaluation extends BlogComment
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'author' => 'div.left_container > .author > .name',
             'date' => 'div.left_container > .date',
             'stars' => 'div.left_container > .star',
             'headline' => 'div.right_container > h3',
             'comment' => 'div.right_container > p',
             'answer' => 'div + div.answer > div.right_container'
-        );
+        ];
     }
 
     /**
+     * Returns the star rating
      * @return float
      */
     public function getStarsProperty()
@@ -37,6 +41,7 @@ class ArticleEvaluation extends BlogComment
     }
 
     /**
+     * Returns the shop owners answer to customers evaluation
      * @return string
      */
     public function getAnswerProperty()

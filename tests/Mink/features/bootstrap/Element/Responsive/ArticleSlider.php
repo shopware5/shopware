@@ -2,55 +2,57 @@
 
 namespace Element\Responsive;
 
+use Behat\Mink\Element\NodeElement;
+
+/**
+ * Element: ArticleSlider
+ * Location: Emotion element for product sliders
+ *
+ * Available retrievable properties (per slide):
+ * - image (string, e.g. "beach1503f8532d4648.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - alt (string, e.g. "foo")
+ * - title (string, e.g. "bar")
+ */
 class ArticleSlider extends \Element\Emotion\ArticleSlider
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion--element.article-slider-element');
-
-    public $cssLocator = array(
-        'slideImage' => 'div.product-slider--item a.product--image > .image--element > span:nth-of-type(2)',
-        'slideContainer' => 'div.product-slider--item a.product--image > .image--element',
-        'slideLink' => 'div.product-slider--item a.product--image',
-        'slideName' => 'div.product-slider--item a.product--title'
-    );
+    protected $selector = ['css' => 'div.emotion--product-slider'];
 
     /**
+     * Returns an array of all css selectors of the element/page
      * @return array
      */
-    public function getImagesToCheck()
+    public function getCssSelectors()
     {
-        $locators = array('slideImage');
-        $elements = \Helper::findElements($this, $locators, null, true);
-
-        $images = array();
-
-        foreach ($elements['slideImage'] as $image) {
-            $images[] = array($image->getAttribute('data-src'));
-        }
-
-        return $images;
+        return array(
+            'slide' => '.product--box',
+            'slideImage' => '.product--image img',
+            'slideLink' => '.product--image',
+            'slideName' => '.product--title',
+            'slidePrice' => '.product--price'
+        );
     }
 
     /**
-     * @return array
+     * Returns the name
+     * @param NodeElement $slide
+     * @return string
      */
-    public function getNamesToCheck()
+    public function getNameProperty(NodeElement $slide)
     {
-        $locators = array('slideContainer', 'slideLink', 'slideName');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $selectors = \Helper::getRequiredSelectors($this, ['slideImage', 'slideLink', 'slideName']);
+        $nameElement = $slide->find('css', $selectors['slideName']);
 
-        $names = array();
+        $names = [
+            'imageAlt' => $slide->find('css', $selectors['slideImage'])->getAttribute('alt'),
+            'linkTitle' => $slide->find('css', $selectors['slideLink'])->getAttribute('title'),
+            'name' => $nameElement->getText(),
+            'nameTitle' => $nameElement->getAttribute('title'),
+        ];
 
-        foreach ($elements['slideContainer'] as $key => $container) {
-            $names[] = array(
-                $container->getAttribute('data-alt'),
-                $elements['slideLink'][$key]->getAttribute('title'),
-                $elements['slideName'][$key]->getAttribute('title'),
-            );
-        }
-
-        return $names;
+        return \Helper::getUnique($names);
     }
 }

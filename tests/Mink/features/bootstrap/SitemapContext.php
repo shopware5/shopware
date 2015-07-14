@@ -1,7 +1,5 @@
 <?php
 
-require_once 'SubContext.php';
-
 class SitemapContext extends SubContext
 {
     /**
@@ -37,8 +35,7 @@ class SitemapContext extends SubContext
         $page = $this->getPage('Sitemap');
 
         /** @var \Element\Emotion\SitemapGroup $groups */
-        $groups = $this->getElement('SitemapGroup');
-        $groups->setParent($page);
+        $groups = $this->getMultipleElement($page, 'SitemapGroup');
 
         $sitemapGroup = $name;
 

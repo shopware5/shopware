@@ -28,8 +28,7 @@ class Listing extends \Page\Emotion\Listing
      */
     protected function resetFilters()
     {
-        $locators = array('filterFilterProperties');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = \Helper::findAllOfElements($this, ['filterFilterProperties']);
         /** @var NodeElement $property */
         foreach($elements['filterFilterProperties'] as $property) {
             if($property->isChecked()) {
@@ -55,8 +54,7 @@ class Listing extends \Page\Emotion\Listing
      */
     private function pressShowResults()
     {
-        $locators = array('filterShowResults');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['filterShowResults']);
         /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
         $showResults->press();

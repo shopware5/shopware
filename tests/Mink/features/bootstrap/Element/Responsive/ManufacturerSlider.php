@@ -2,15 +2,30 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: ManufacturerSlider
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class ManufacturerSlider extends \Element\Emotion\ManufacturerSlider
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion--element.manufacturer-slider-element');
+    protected $selector = ['css' => 'div.emotion--manufacturer'];
 
-    public $cssLocator = array(
-        'slideImage' => 'div.manufacturer--item img',
-        'slideLink' => 'div.manufacturer--item > a'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
+     */
+    public function getCssSelectors()
+    {
+        return [
+            'slide' => '.manufacturer--item',
+            'slideImage' => '.manufacturer--image',
+            'slideLink' => '.manufacturer--link'
+        ];
+    }
 }

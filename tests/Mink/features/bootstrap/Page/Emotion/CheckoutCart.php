@@ -243,6 +243,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
             \Helper::throwException($message);
         }
 
+        $items = \Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
         $result = \Helper::assertElements($items, $cartPositions);
 
         if($result !== true) {

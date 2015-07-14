@@ -37,7 +37,7 @@ Feature: Search things
         | bril       | 6    |
         | str        | 13   |
         | arti       | 15   |
-        | tee        | 20   |
+        | tee        | 21   |
 
     @javascript
     Scenario: Live-Search with no hits

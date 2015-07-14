@@ -4,8 +4,13 @@ namespace Element\Emotion;
 
 use Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: AddressBox
+ * Location: Billing/Shipping address boxes on address selections
+ *
+ * Available retrievable properties:
+ * -
+ */
 class AddressBox extends MultipleElement
 {
     /**
@@ -15,13 +20,13 @@ class AddressBox extends MultipleElement
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'title' => '.bold'
-        );
+        ];
     }
 
     /**
@@ -30,8 +35,8 @@ class AddressBox extends MultipleElement
      */
     public function getNamedSelectors()
     {
-        return array(
-            'chooseButton'  => array('de' => 'Auswählen',   'en' => 'Select')
-        );
+        return [
+            'chooseButton' => ['de' => 'Auswählen', 'en' => 'Select']
+        ];
     }
 }

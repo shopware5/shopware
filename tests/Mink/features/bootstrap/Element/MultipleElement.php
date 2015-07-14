@@ -2,8 +2,6 @@
 
 namespace Element;
 
-require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
-
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
@@ -20,6 +18,11 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /** @var  NodeElement[] array */
     private $siblings;
 
+    /**
+     * Constructor
+     * @param Session $session
+     * @param PageFactoryInterface $pageFactory
+     */
     public function __construct(Session $session, PageFactoryInterface $pageFactory)
     {
         parent::__construct($session, $pageFactory);
@@ -29,7 +32,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
@@ -38,7 +41,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Returns an array of all named selectors of the element/page
-     * @return array
+     * @return array[]
      */
     public function getNamedSelectors()
     {
@@ -65,6 +68,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
+     * Returns the XPath of the current element
      * @return string
      */
     public function getXpath()
@@ -73,6 +77,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
+     * Sets the instance to the element to use.
      * @param  integer         $position
      * @return MultipleElement $this
      */
@@ -167,7 +172,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
-     *
+     * If an undefined property method was requested, getProperty() will be called.
      * @param string $name
      * @param array $arguments
      * @return string
@@ -184,6 +189,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
+     * Default method to get an element property
      * @param string $property
      * @return null|string
      */

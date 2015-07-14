@@ -5,6 +5,7 @@ use Behat\Mink\Element\NodeElement;
 use Element\Emotion\AccountOrder;
 use Element\Emotion\AccountPayment;
 use Element\Emotion\AddressBox;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Account extends Page implements \HelperSelectorInterface
@@ -385,10 +386,41 @@ class Account extends Page implements \HelperSelectorInterface
     {
         $this->open();
 
+        $testAddress = explode(', ', $address);
+        $testAddress = array_filter($testAddress);
+        $testAddress = array_values($testAddress);
+
         $type = strtolower($type);
         $type = ucfirst($type);
 
-        $this->getElement('Account'.$type)->checkAddress($address);
+        $addressBox = $this->getElement('Account'.$type);
+        $addressData = \Helper::getElementProperty($addressBox, 'address');
+
+        $givenAddress = array();
+
+        /** @var Element $data */
+        foreach ($addressData as $data) {
+            $part = $data->getHtml();
+            $parts = explode('<br />', $part);
+            foreach ($parts as &$part) {
+                $part = strip_tags($part);
+                $part = str_replace(array(chr(0x0009), '  '), ' ', $part);
+                $part = str_replace(array(chr(0x0009), '  '), ' ', $part);
+                $part = trim($part);
+            }
+            unset($part);
+
+            $givenAddress = array_merge($givenAddress, $parts);
+        }
+
+        $result = \Helper::compareArrays($givenAddress, $testAddress);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = sprintf('The addresses are different! ("%s" not was found in "%s")', $result['value2'], $result['value']);
+        \Helper::throwException($message);
     }
 
     /**

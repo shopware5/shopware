@@ -1,7 +1,6 @@
 <?php
 
 use Behat\Gherkin\Node\TableNode;
-require_once 'SubContext.php';
 
 class DetailContext extends SubContext
 {

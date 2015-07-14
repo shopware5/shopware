@@ -4,12 +4,10 @@ namespace Element;
 
 use Behat\Mink\Element\NodeElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
 class SliderElement extends MultipleElement
 {
     /**
-     *
+     * If an undefined property method was requested, getSlideProperty() will be called.
      * @param string $name
      * @param array $arguments
      * @return string
@@ -26,6 +24,7 @@ class SliderElement extends MultipleElement
     }
 
     /**
+     * Default method to get a slide property
      * @param NodeElement $slide
      * @param string $property
      * @return null|string
@@ -37,12 +36,15 @@ class SliderElement extends MultipleElement
     }
 
     /**
+     * Returns the slides
      * @param string[] $properties
      * @return array[]
      */
     public function getSlides(array $properties)
     {
         $elements = \Helper::findAllOfElements($this, ['slide']);
+
+        //var_dump(count($elements['slide']));
 
         $slides = [];
 

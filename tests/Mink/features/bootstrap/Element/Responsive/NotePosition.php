@@ -2,10 +2,17 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: NotePosition
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class NotePosition extends \Element\Emotion\NotePosition
 {
     /** @var array $selector */
-    protected $selector = array('css' => 'div.note--item');
+    protected $selector = ['css' => 'div.note--item'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -13,7 +20,7 @@ class NotePosition extends \Element\Emotion\NotePosition
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'a.note--title',
             'supplier' => 'div.note--supplier',
             'number' => 'div.note--ordernumber',
@@ -21,7 +28,7 @@ class NotePosition extends \Element\Emotion\NotePosition
             'thumbnailImage' => 'a.note--image-link > img',
             'price' => 'div.note--price',
             'detailLink' => 'a.note--title'
-        );
+        ];
     }
 
     /**
@@ -30,10 +37,10 @@ class NotePosition extends \Element\Emotion\NotePosition
      */
     public function getNamedSelectors()
     {
-        return array(
-            'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
-            'compare' => array('de' => 'Vergleichen',   'en' => 'Compare')
-        );
+        return [
+            'remove'  => ['de' => 'Löschen',       'en' => 'Delete'],
+            'compare' => ['de' => 'Vergleichen',   'en' => 'Compare']
+        ];
     }
 
     /**
@@ -41,8 +48,7 @@ class NotePosition extends \Element\Emotion\NotePosition
      */
     public function getImageProperty()
     {
-        $locators = array('thumbnailImage');
-        $element = \Helper::findElements($this, $locators);
+        $element = \Helper::findElements($this, ['thumbnailImage']);
 
         return $element['thumbnailImage']->getAttribute('srcset');
     }

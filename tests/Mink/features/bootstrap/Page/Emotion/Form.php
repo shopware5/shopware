@@ -8,7 +8,7 @@ class Form extends Page implements \HelperSelectorInterface
     /**
      * @var string $path
      */
-    protected $path = '?sViewport=ticket&sFid={formId}';
+    protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
 
     /**
      * Returns an array of all css selectors of the element/page

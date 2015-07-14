@@ -2,10 +2,17 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: BlogArticleBox
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class BlogArticleBox extends ArticleBox
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.blog--crossselling div.product-slider--item');
+    protected $selector = ['css' => 'div.blog--crossselling div.product-slider--item'];
 }

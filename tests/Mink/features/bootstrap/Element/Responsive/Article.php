@@ -2,61 +2,77 @@
 
 namespace Element\Responsive;
 
+/**
+ * Element: Article
+ * Location: Emotion element for products
+ *
+ * Available retrievable properties:
+ * - name (string, e.g. "All Natural - Lemon Honey Soap")
+ * - text (string, e.g. "Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, ..."
+ * - price (float, e.g. "11,40 €")
+ * - link (string, e.g. "/sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap")
+ *
+ * Currently not retrievable properties:
+ * - image (string)
+ */
 class Article extends \Element\Emotion\Article
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion--element.article-element');
-
-    public $cssLocator = array(
-        'name' => 'a.product--title',
-        'link' => 'a.box--image',
-        'container' =>  'a.box--image > .image--element',
-        'image' => 'a.box--image > .image--element > span:nth-of-type(2)',
-        'price' => 'div.product--price > .price--default'
-    );
+    protected $selector = ['css' => 'div.emotion--product'];
 
     /**
-     * @return array
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
      */
-    public function getNamesToCheck()
+    public function getCssSelectors()
     {
-        $locators = array('name', 'link', 'container');
-        $elements = \Helper::findElements($this, $locators);
+        return [
+            'name' => '.product--title',
+            'link' => '.product--image',
+            'price' => '.product--price'
+        ];
+    }
 
-        return array(
+    /**
+     * @return string
+     */
+    public function getNameProperty()
+    {
+        $elements = \Helper::findElements($this, ['name', 'link']);
+
+        $names = [
             $elements['name']->getText(),
             $elements['name']->getAttribute('title'),
-            $elements['link']->getAttribute('title'),
-            $elements['container']->getAttribute('data-alt')
-        );
+            $elements['link']->getAttribute('title')
+        ];
+
+        return \Helper::getUnique($names);
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getImagesToCheck()
+    public function getImageProperty()
     {
-        $locators = array('image');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['image']);
 
-        return array(
-            'image' => $elements['image']->getAttribute('data-src')
-        );
+        return $elements['image']->getAttribute('src');
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getLinksToCheck()
+    public function getLinkProperty()
     {
-        $locators = array('name', 'link');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = \Helper::findElements($this, ['name', 'link']);
 
-        return array(
+        $links = [
             $elements['name']->getAttribute('href'),
             $elements['link']->getAttribute('href')
-        );
+        ];
+
+        return \Helper::getUnique($links);
     }
 }
