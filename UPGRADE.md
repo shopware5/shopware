@@ -77,7 +77,7 @@ In this document you will find a changelog of the important changes related to t
     * `detail/sidebar/accessory/name`
     * `detail/sidebar/accessory/number`
 * Removed unprefixed versions of jQuery plugins that were deprecated in the 5.0.2 Release.
-
+* Move directory `logs/` to `var/log/` and `cache/` to `var/cache`
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent

@@ -173,7 +173,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         }
 
         // Ignore access to not initialized variables in smarty templates
-        if ($errno === E_NOTICE && stripos($errfile, '/cache/') !== false && stripos($errfile, '/templates/') !== false) {
+        if ($errno === E_NOTICE && stripos($errfile, '/var/cache/') !== false && stripos($errfile, '/templates/') !== false) {
             return;
         }
 
