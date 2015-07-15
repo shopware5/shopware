@@ -12,7 +12,7 @@
 		</a>
 		{/if}
 		<a title="{$article.articleName}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>
-		
+
         {if $article.purchaseunit != $article.referenceunit}
             <div class="article_price_unit">
                 <p>
@@ -23,13 +23,13 @@
                 </p>
             </div>
         {/if}
-		
+
 		<p class="price{if $article.purchaseunit}{else} up{/if}">
-		<span class="price{if $article.pseudoprice|number > $article.price|number} pseudo{/if}">
+		<span class="price{if $article.has_pseudoprice} pseudo{/if}">
 		{if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt' namespace="frontend/plugins/recommendation/slide_articles"}{/s} {/if}{$article.price|currency} *</span>
-		{if $article.pseudoprice|number > $article.price|number}
+		{if $article.has_pseudoprice}
         	<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
-		{/if}         
+		{/if}
 		</p>
 		</div>
 	{/foreach}
