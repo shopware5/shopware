@@ -35,7 +35,7 @@
 			{/if}
 		{else}
 
-			<div class="product--price price--default{if $sArticle.pseudoprice|number > $sArticle.price|number} price--discount{/if}">
+			<div class="product--price price--default{if $sArticle.has_pseudoprice} price--discount{/if}">
 
 				{* Default price *}
 				{block name='frontend_detail_data_price_configurator'}
@@ -59,7 +59,7 @@
 
                 {* Discount price *}
                 {block name='frontend_detail_data_pseudo_price'}
-					{if $sArticle.pseudoprice|number > $sArticle.price|number}
+					{if $sArticle.has_pseudoprice}
 
                         {block name='frontend_detail_data_pseudo_price_discount_icon'}
                             <span class="price--discount-icon">

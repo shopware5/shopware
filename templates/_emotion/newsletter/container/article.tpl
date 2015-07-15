@@ -4,21 +4,21 @@
 
 <table width="560" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
 	<tr>
-	<td width="100%">            	                 
+	<td width="100%">
 
      <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica;">
      {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
      {if $sArticle@index%3==0}<tr>{/if}
      <!-- ANFANG Artikel  -->
        <td height="320" width="180" align="center" valign="top" border="0" cellpadding="0" cellspacing="0" style="border: 1px solid #dfdfdf; padding:0;margin:0; width:180px;">
-       
+
        <!--ARTIKEL CONTENT-->
-                                    
+
         <table width="100%" height="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="padding:0;margin:0;background-color:#ffffff;font-family:Arial,Helvetica;">
-        
+
         <tr>
         <td height="180" valign="center" style="text-align:center;background-color:#fff;">
-        
+
         <div align="center" style="overflow:hidden;">
             <a target="_blank" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}">
             {if $sArticle.image.src}
@@ -28,13 +28,13 @@
            {/if}
            </a>
         </div>
-      
+
         </tr>
-        
+
         <tr>
         <td valign="top" style="color:#000; font-size:13px; background-color:#fff; height:5px; padding: 8px 10px 5px 10px; font-weight:bold;">
             <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" target="_blank" title="{$sArticle.articleName}" style="color:#000000;text-decoration:underline;font-size:13px;">{$sArticle.articleName|truncate:20:"[..]"}</a>
-        
+
         </td>
         </tr>
         <tr>
@@ -43,7 +43,7 @@
         </td>
         </tr>
 
-        
+
         <tr>
         <td height="40" style="text-align:left; padding:10px;">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-family:Arial,Helvetica;">
@@ -64,7 +64,7 @@
                 {/if}
             </div>
         {/if}
-        {if $sArticle.pseudoprice|number > $sArticle.price|number}
+        {if $sArticle.has_pseudoprice}
         <span style="color:#999; font-size:13px; line-height:13px;"><s>{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s></span><br />
             <strong style="color:#990000;font-size:14px;">
             	{if $sArticle.priceStartingFrom}{se name='NewsletterBoxArticleStartsAt'}ab{/se} {/if}
@@ -83,8 +83,8 @@
 		</tr>
         </table>
 
-        
-        <!--END#ARTIKEL CONTENT-->   
+
+        <!--END#ARTIKEL CONTENT-->
         </td>
 		{if $sArticle@index%3==2}
 			</tr>
@@ -95,12 +95,12 @@
 			{/if}
 		{elseif !$sArticle@last}
 			<td style="width:10px;height:10px;"></td>
-		{/if}				
+		{/if}
 
-          {/foreach}  
+          {/foreach}
          </table>
       <!--CONTENT-->
      </td>
      </tr>
- </table>     
+ </table>
 <div style="height:25px;">&nbsp;</div>

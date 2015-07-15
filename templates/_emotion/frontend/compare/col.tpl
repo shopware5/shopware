@@ -1,5 +1,5 @@
 <div class="grid_3 compare_article">
-	
+
 	{* Picture *}
 	<div class="picture">
 		{block name="frontend_compare_article_picture"}
@@ -12,7 +12,7 @@
 		</a>
 		{/block}
 	</div>
-	
+
 	{* Name *}
 	<div class="name">
 		{block name='frontend_compare_article_name'}
@@ -24,32 +24,32 @@
 			</a>
 		{/block}
 	</div>
-	
+
 	{* User Votings *}
 	<div class="votes">
 		{block name='frontend_compare_votings'}
 		<div class="star star{$sArticle.sVoteAverange.averange|round}">Star Rating</div>
 		{/block}
 	</div>
-	
+
 	{* Description *}
 	<div class="desc">
 		{block name='frontend_compare_description'}
 		<p>
     		{$sArticle.description_long|truncate:150}
     	</p>
-    	{/block}	
+    	{/block}
 	</div>
-	
+
 	{* Price *}
 	<div class="price">
 		{block name='frontend_compare_price'}
-		<p {if $sArticle.pseudoprice|number > $sArticle.price|number} class="article-price2" {else} class="article-price"{/if}>
-    		{if $sArticle.pseudoprice|number > $sArticle.price|number}<s>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s><br />{/if}
+		<p {if $sArticle.has_pseudoprice} class="article-price2" {else} class="article-price"{/if}>
+    		{if $sArticle.has_pseudoprice}<s>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</s><br />{/if}
     		<strong>{if $sArticle.priceStartingFrom}ab {/if}{$sArticle.price|currency}</strong>*
     	</p>
     	{/block}
-    	
+
     	{block name='frontend_compare_unitprice'}
     	{if $sArticle.purchaseunit}
             <div class="article_price_unit">
@@ -67,7 +67,7 @@
         {/if}
         {/block}
 	</div>
-	
+
 	{* Properties *}
 	{foreach from=$sArticle.sProperties item=property}
 		{block name='frontend_compare_properties'}

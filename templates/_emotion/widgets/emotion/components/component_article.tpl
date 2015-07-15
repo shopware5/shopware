@@ -6,7 +6,7 @@
 {* Article picture *}
 {block name='frontend_listing_box_article_picture'}
 
-				
+
 	{* 3 spalter bilder *}
 	{if $sTemplate eq 'listing-3col'}
 		{* 1/3 *}
@@ -19,7 +19,7 @@
 		{else}
 			{assign var=image value=$sArticle.image.src.3}
 		{/if}
-		
+
 	{* 4 spalter *}
 	{else}
 		{* 1/4 *}
@@ -36,8 +36,8 @@
 			{assign var=image value=$sArticle.image.src.3}
 		{/if}
 	{/if}
-	
-	<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb" {if isset($sArticle.image.src)} 
+
+	<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb" {if isset($sArticle.image.src)}
 		style="background: url({$image}) no-repeat center center"{/if}>
 	{if !isset($sArticle.image.src)}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}</a>
 {/block}
@@ -56,7 +56,7 @@
 			{else}
 				{assign var=size value=200}
 			{/if}
-	
+
 		{* 4 spalter *}
 		{else}
 			{if $colWidth eq 4}
@@ -69,10 +69,10 @@
 				{assign var=size value=165}
 			{/if}
 		{/if}
-		
+
 		{* emotions im listing *}
 		{else}
-					
+
 		{* 3 spalter *}
 		{if $sTemplate eq 'listing-3col'}
 			{if $colWidth eq 3}
@@ -82,7 +82,7 @@
 			{else}
 				{assign var=size value=180}
 			{/if}
-	
+
 		{* 4 spalter *}
 		{else}
 			{if $colWidth eq 4}
@@ -96,17 +96,17 @@
 			{/if}
 		{/if}
 	{/if}
-	
+
 	<p class="desc">
 	    {$Data.description_long|strip_tags|truncate:$size}
 	</p>
-	
+
 {/block}
 
 {* Unit price *}
 {block name='frontend_listing_box_article_unit'}
 {if $sArticle.purchaseunit}
-    <div class="{if !$sArticle.pseudoprice|number > $sArticle.price|number}article_price_unit{else}article_price_unit_pseudo{/if}">
+    <div class="{if !$sArticle.has_pseudoprice}article_price_unit{else}article_price_unit_pseudo{/if}">
         {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
             <p>
             	<span class="purchaseunit">

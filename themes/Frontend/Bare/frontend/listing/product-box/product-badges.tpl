@@ -6,7 +6,7 @@
 
 		{* Discount badge *}
 		{block name='frontend_listing_box_article_discount'}
-			{if $sArticle.pseudoprice|number > $sArticle.price|number}
+			{if $sArticle.has_pseudoprice}
 				<div class="product--badge badge--discount">
                     <i class="icon--percent2"></i>
                 </div>

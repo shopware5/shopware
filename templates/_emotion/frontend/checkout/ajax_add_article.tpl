@@ -1,6 +1,6 @@
 <div class="heading">
 	<h2>{if !$sBasketInfo}{s name="AjaxAddHeader"}{/s}{else}{s name='AjaxAddHeaderError'}Hinweis:{/s}{/if}</h2>
-	
+
 	{* Close button *}
 	<a href="#" class="modal_close" title="{s name='LoginActionClose'}{/s}">
 		{s name='LoginActionClose'}{/s}
@@ -59,7 +59,7 @@
 		<div class="space">&nbsp;</div>
 	</div>
     {/block}
-	
+
 	<div class="bottom">
 		{block name='frontend_checkout_ajax_add_article_cross_selling'}
 			{if $sCrossSimilarShown|@count || $sCrossBoughtToo|@count}
@@ -99,9 +99,9 @@
 			            {/if}
 
 			            <p class="price">
-			                <span class="price{if $article.pseudoprice|number > $article.price|number} pseudo{/if}">
+			                <span class="price{if $article.has_pseudoprice} pseudo{/if}">
 			                	{if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-								{if $article.pseudoprice|number > $article.price|number}
+								{if $article.has_pseudoprice}
 									<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
 								{/if}
 			                </span>

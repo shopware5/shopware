@@ -117,3 +117,18 @@ Feature: Detail page
         And   I press "Auswählen"
         Then  I should not see "59,99"
         But   I should see "199,00"
+
+    @pseudoprice
+    Scenario Outline: An article can have a pseudo price
+        Given I am on the detail page for article <id>
+        Then  I should see "<price>"
+        And   I should see "<pseudoprice>"
+        And   I should see "<discount>%"
+
+        Examples:
+            | id  | price    | pseudoprice | discount |
+            | 36  | 24,99    | 29,99       | 16.67    |
+            | 81  | 7,99     | 9,98        | 19.97    |
+            | 113 | 599,00   | 698,99      | 14.31    |
+            | 208 | 500,00   | 1.000,01    | 50       |
+            | 239 | 2.499,00 | 2.799,00    | 10.72    |
