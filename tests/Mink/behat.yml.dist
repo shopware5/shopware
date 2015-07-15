@@ -30,7 +30,7 @@ emotion:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Shopware\Tests\MinkPage\Emotion
+                page: Shopware\Tests\Mink\Page\Emotion
                 element: Shopware\Tests\Mink\Element\Emotion
     context:
         parameters:
