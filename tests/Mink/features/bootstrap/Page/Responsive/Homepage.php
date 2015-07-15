@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Mink\Page\Responsive;
 
-use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\WebAssert;
 use Shopware\Tests\Mink\Helper;
 
@@ -37,7 +37,7 @@ class Homepage extends \Shopware\Tests\Mink\Page\Emotion\Homepage
      */
     public function changeCurrency($currency)
     {
-        if(!$this->getSession()->getDriver() instanceof SahiDriver) {
+        if(!$this->getSession()->getDriver() instanceof Selenium2Driver) {
             Helper::throwException('Changing the currency in Responsive template requires Javascript!');
         }
 

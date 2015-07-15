@@ -139,7 +139,7 @@ EOD;
     public function emotionJs()
     {
         if (self::$template === 'Emotion') {
-            $this->getMink()->setDefaultSessionName('sahi');
+            $this->getMink()->setDefaultSessionName('selenium2');
         }
     }
 
@@ -149,7 +149,7 @@ EOD;
     public function responsiveJs()
     {
         if (self::$template === 'Responsive') {
-            $this->getMink()->setDefaultSessionName('sahi');
+            $this->getMink()->setDefaultSessionName('selenium2');
         }
     }
 

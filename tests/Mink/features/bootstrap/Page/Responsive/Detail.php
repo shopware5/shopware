@@ -1,7 +1,7 @@
 <?php
 namespace Shopware\Tests\Mink\Page\Responsive;
 
-use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
 use Shopware\Tests\Mink\Element\MultipleElement;
 use Shopware\Tests\Mink\Helper;
@@ -53,7 +53,7 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
         $this->fillField('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof SahiDriver) {
+        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
