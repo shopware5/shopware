@@ -23,3 +23,17 @@ To append unimplemented snippets to a context
 ```
 $ ./behat features/search.feature --append-snippets
 ```
+
+### Run Javascript Tests
+
+## PhantomJS
+
+```
+$ phantomjs --webdriver=4444
+```
+
+## Selenium
+
+```
+$ java -jar selenium-server-standalone.jar
+```

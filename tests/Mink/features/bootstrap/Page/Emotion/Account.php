@@ -118,7 +118,7 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * Logout a customer (important by using the Sahi driver)
+     * Logout a customer (important when using the Selenium driver)
      * @return bool
      */
     public function logout()

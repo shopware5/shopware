@@ -10,7 +10,11 @@ default:
             ## defined in buildscript
             #base_url: 'http://localhost/shopware/'
             default_session: 'goutte'
+            javascript_session: 'selenium2'
             goutte: ~
+            selenium2:
+                wd_host: "http://localhost:4444/wd/hub"
+            browser_name: firefox
 
 responsive:
     filters:

@@ -2,7 +2,7 @@
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Behat\Mink\Driver\GoutteDriver;
-use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
 
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -72,7 +72,7 @@ class Detail extends Page implements HelperSelectorInterface
         $this->selectFieldOption('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof SahiDriver) {
+        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
