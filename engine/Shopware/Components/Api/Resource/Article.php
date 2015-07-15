@@ -992,7 +992,9 @@ class Article extends Resource implements BatchInterface
 
                 $option->fromArray($optionData);
                 $option->setGroup($group);
-                $option->setPosition($optionPosition++);
+                if (!isset($optionData['position'])) {
+                    $option->setPosition($optionPosition++);
+                }
                 $allOptions[] = $option;
                 $groupOptions[] = $option;
             }
