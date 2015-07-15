@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: YouTube
@@ -11,7 +12,7 @@ use Element\MultipleElement;
  * Available retrievable properties:
  * - code (string, e.g. "RVz71XsJIEA")
  */
-class YouTube extends MultipleElement implements \HelperSelectorInterface
+class YouTube extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -35,7 +36,7 @@ class YouTube extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCodeProperty()
     {
-        $elements = \Helper::findElements($this, ['code']);
+        $elements = Helper::findElements($this, ['code']);
         return $elements['code']->getAttribute('src');
     }
 }

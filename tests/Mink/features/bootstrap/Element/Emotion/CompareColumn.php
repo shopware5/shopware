@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CompareColumn
@@ -11,7 +12,7 @@ use Element\MultipleElement;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class CompareColumn extends MultipleElement implements \HelperSelectorInterface
+class CompareColumn extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -52,7 +53,7 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['thumbnailImage']);
+        $elements = Helper::findElements($this, ['thumbnailImage']);
 
         return $elements['thumbnailImage']->getAttribute('src');
     }
@@ -63,7 +64,7 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['thumbnailImage', 'thumbnailLink', 'name', 'detailsButton']);
+        $elements = Helper::findElements($this, ['thumbnailImage', 'thumbnailLink', 'name', 'detailsButton']);
 
         $names = array(
             'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
@@ -73,7 +74,7 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
             'articleDetailsButtonTitle' => $elements['detailsButton']->getAttribute('title')
         );
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 
     /**
@@ -82,7 +83,7 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
      */
     public function getRankingProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
+        $elements = Helper::findElements($this, ['stars']);
 
         return $elements['stars']->getAttribute('class');
     }
@@ -93,7 +94,7 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['thumbnailLink', 'name', 'detailsButton']);
+        $elements = Helper::findElements($this, ['thumbnailLink', 'name', 'detailsButton']);
 
         $links = array(
             'articleThumbnailLink' => $elements['thumbnailLink']->getAttribute('href'),
@@ -101,6 +102,6 @@ class CompareColumn extends MultipleElement implements \HelperSelectorInterface
             'articleDetailsButtonLink' => $elements['detailsButton']->getAttribute('href')
         );
 
-        return \Helper::getUnique($links);
+        return Helper::getUnique($links);
     }
 }

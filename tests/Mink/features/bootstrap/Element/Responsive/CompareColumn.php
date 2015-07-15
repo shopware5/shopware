@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CompareColumn
@@ -9,7 +11,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class CompareColumn extends \Element\Emotion\CompareColumn
+class CompareColumn extends \Shopware\Tests\Mink\Element\Emotion\CompareColumn
 {
     /**
      * @var array $selector
@@ -38,7 +40,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['thumbnailImage']);
+        $elements = Helper::findElements($this, ['thumbnailImage']);
 
         return $elements['thumbnailImage']->getAttribute('srcset');
     }
@@ -48,7 +50,7 @@ class CompareColumn extends \Element\Emotion\CompareColumn
      */
     public function getRankingProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
+        $elements = Helper::findElements($this, ['stars']);
 
         $ranking = $elements['stars']->getAttribute('content');
 

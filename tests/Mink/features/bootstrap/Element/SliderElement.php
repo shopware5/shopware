@@ -1,8 +1,9 @@
 <?php
 
-namespace Element;
+namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
 class SliderElement extends MultipleElement
 {
@@ -31,7 +32,7 @@ class SliderElement extends MultipleElement
      */
     public function getSlideProperty(NodeElement $slide, $property)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slide'.$property);
+        $selector = Helper::getRequiredSelector($this, 'slide'.$property);
         return $slide->find('css', $selector)->getText();
     }
 
@@ -42,7 +43,7 @@ class SliderElement extends MultipleElement
      */
     public function getSlides(array $properties)
     {
-        $elements = \Helper::findAllOfElements($this, ['slide']);
+        $elements = Helper::findAllOfElements($this, ['slide']);
 
         //var_dump(count($elements['slide']));
 

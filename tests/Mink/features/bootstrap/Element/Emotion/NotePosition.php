@@ -1,6 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
+
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
 /**
  * Element: NotePosition
@@ -9,7 +12,7 @@ namespace Element\Emotion;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class NotePosition extends CartPosition implements \HelperSelectorInterface
+class NotePosition extends CartPosition implements HelperSelectorInterface
 {
     /** @var array $selector */
     protected $selector = array('css' => 'div.table_row');
@@ -52,7 +55,7 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage', 'detailLink']);
+        $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage', 'detailLink']);
 
         $names = array(
             'articleName' => $elements['name']->getText(),
@@ -62,7 +65,7 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
             'articleDetailLinkTitle' => $elements['detailLink']->getAttribute('title')
         );
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 
     /**
@@ -71,7 +74,7 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
      */
     public function getImageProperty()
     {
-        $element = \Helper::findElements($this, ['thumbnailImage']);
+        $element = Helper::findElements($this, ['thumbnailImage']);
 
         return $element['thumbnailImage']->getAttribute('src');
     }
@@ -82,7 +85,7 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'thumbnailLink', 'detailLink']);
+        $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'detailLink']);
 
         $names = array(
             'articleNameLink' => $elements['name']->getAttribute('href'),
@@ -90,6 +93,6 @@ class NotePosition extends CartPosition implements \HelperSelectorInterface
             'articleDetailLink' => $elements['detailLink']->getAttribute('href')
         );
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 }

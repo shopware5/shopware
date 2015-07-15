@@ -1,9 +1,10 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\SliderElement;
+use Shopware\Tests\Mink\Element\SliderElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: BannerSlider
@@ -15,7 +16,7 @@ use Element\SliderElement;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class BannerSlider extends SliderElement implements \HelperSelectorInterface
+class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -42,7 +43,7 @@ class BannerSlider extends SliderElement implements \HelperSelectorInterface
      */
     public function getImageProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideImage');
+        $selector = Helper::getRequiredSelector($this, 'slideImage');
         return $slide->find('css', $selector)->getAttribute('src');
     }
 
@@ -53,7 +54,7 @@ class BannerSlider extends SliderElement implements \HelperSelectorInterface
      */
     public function getLinkProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideLink');
+        $selector = Helper::getRequiredSelector($this, 'slideLink');
         return $slide->find('css', $selector)->getAttribute('href');
     }
 
@@ -64,7 +65,7 @@ class BannerSlider extends SliderElement implements \HelperSelectorInterface
      */
     protected function getAltProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideImage');
+        $selector = Helper::getRequiredSelector($this, 'slideImage');
         return $slide->find('css', $selector)->getAttribute('alt');
     }
 
@@ -75,7 +76,7 @@ class BannerSlider extends SliderElement implements \HelperSelectorInterface
      */
     protected function getTitleProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideImage');
+        $selector = Helper::getRequiredSelector($this, 'slideImage');
         return $slide->find('css', $selector)->getAttribute('title');
     }
 }

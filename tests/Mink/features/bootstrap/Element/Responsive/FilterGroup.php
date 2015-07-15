@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: FilterGroup
@@ -11,7 +12,7 @@ use Behat\Mink\Element\NodeElement;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class FilterGroup extends \Element\Emotion\FilterGroup
+class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
 {
     /** @var array $selector */
     protected $selector = ['css' => 'div.filter--container label.filter-panel--title'];
@@ -33,7 +34,7 @@ class FilterGroup extends \Element\Emotion\FilterGroup
      */
     public function setProperty($propertyName)
     {
-        $elements = \Helper::findElements($this, ['properties']);
+        $elements = Helper::findElements($this, ['properties']);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];

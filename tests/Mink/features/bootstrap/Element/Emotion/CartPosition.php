@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CartPosition
@@ -56,7 +57,7 @@ class CartPosition extends MultipleElement
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage']);
+        $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage']);
 
         $names = [
             'articleTitle' => $elements['name']->getAttribute('title'),
@@ -85,7 +86,7 @@ class CartPosition extends MultipleElement
             //if articleName is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
                 $check = array($name);
-                $result = \Helper::checkArray($check);
+                $result = Helper::checkArray($check);
                 break;
 
             default:
@@ -99,7 +100,7 @@ class CartPosition extends MultipleElement
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
             }
 
-            \Helper::throwException($messages);
+            Helper::throwException($messages);
         }
 
         return $name['articleTitle'];
@@ -139,7 +140,7 @@ class CartPosition extends MultipleElement
      */
     protected function getFloatProperty($propertyName)
     {
-        $element = \Helper::findElements($this, [$propertyName]);
-        return \Helper::floatValue($element[$propertyName]->getText());
+        $element = Helper::findElements($this, [$propertyName]);
+        return Helper::floatValue($element[$propertyName]->getText());
     }
 }

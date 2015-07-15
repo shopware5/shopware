@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: HeaderCart
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class HeaderCart extends \Element\Emotion\HeaderCart
+class HeaderCart extends \Shopware\Tests\Mink\Element\Emotion\HeaderCart
 {
     /**
      * @var array $selector

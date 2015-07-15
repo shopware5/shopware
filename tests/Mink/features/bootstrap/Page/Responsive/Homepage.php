@@ -1,10 +1,12 @@
 <?php
 
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
 use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\WebAssert;
+use Shopware\Tests\Mink\Helper;
 
-class Homepage extends \Page\Emotion\Homepage
+class Homepage extends \Shopware\Tests\Mink\Page\Emotion\Homepage
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -24,7 +26,7 @@ class Homepage extends \Page\Emotion\Homepage
     public function receiveNoResultsMessageForKeyword($keyword)
     {
         // $keyword gets ignored in responsive template
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert = new WebAssert($this->getSession());
         $assert->pageTextContains('Leider wurden zu Ihrer Suchanfrage keine Artikel gefunden');
     }
 
@@ -36,7 +38,7 @@ class Homepage extends \Page\Emotion\Homepage
     public function changeCurrency($currency)
     {
         if(!$this->getSession()->getDriver() instanceof SahiDriver) {
-            \Helper::throwException('Changing the currency in Responsive template requires Javascript!');
+            Helper::throwException('Changing the currency in Responsive template requires Javascript!');
         }
 
         $valid = array('EUR' => '€ EUR', 'USD' => '$ USD');

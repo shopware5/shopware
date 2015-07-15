@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: AddressBox
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * -
  */
-class AddressBox extends \Element\Emotion\AddressBox
+class AddressBox extends \Shopware\Tests\Mink\Element\Emotion\AddressBox
 {
     /**
      * @var array $selector

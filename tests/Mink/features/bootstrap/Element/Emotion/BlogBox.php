@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 /**
  * Element: BlogBox

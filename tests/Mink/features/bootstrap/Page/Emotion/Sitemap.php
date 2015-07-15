@@ -1,10 +1,12 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\SitemapGroup;
+use Shopware\Tests\Mink\Element\Emotion\SitemapGroup;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Sitemap extends Page implements \HelperSelectorInterface
+class Sitemap extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -32,16 +34,18 @@ class Sitemap extends Page implements \HelperSelectorInterface
     /**
      * @param SitemapGroup|string $group
      * @param string $link
-     * @param array $links
+     * @param array $sites
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
      */
     public function checkGroup($group, $link, array $sites)
     {
         if(!($group instanceof SitemapGroup)) {
             $message = sprintf('Sitemap group "%s" was not found!', $group);
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
 
-        $data = \Helper::getElementData($group, false);
+        $data = Helper::getElementData($group, false);
 
         $this->checkGroupTitleLink($group->getText(), $link, $data['titleLink']);
 
@@ -69,7 +73,7 @@ class Sitemap extends Page implements \HelperSelectorInterface
             'link'  => array($data['link'],  $link),
         );
 
-        $result = \Helper::checkArray($check);
+        $result = Helper::checkArray($check);
 
         if($result === true) {
             return;
@@ -86,7 +90,7 @@ class Sitemap extends Page implements \HelperSelectorInterface
             $message = sprintf('The link of "%s" is different! ("%s" not found in "%s")', $title, $check['link'][1], $check['link'][0]);
         }
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -104,7 +108,7 @@ class Sitemap extends Page implements \HelperSelectorInterface
                 array($site['link'],  $link)
             );
 
-            $result = \Helper::checkArray($check);
+            $result = Helper::checkArray($check);
 
             if($result === true) {
                 return;
@@ -112,7 +116,7 @@ class Sitemap extends Page implements \HelperSelectorInterface
         }
 
         $message = sprintf('The site "%s" with link "%s" was not found!', $title, $link);
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -133,14 +137,14 @@ class Sitemap extends Page implements \HelperSelectorInterface
                     sprintf('(%d sites in sitemap.xml, %d in test data', count($xml), count($links))
                 );
 
-                \Helper::throwException($messages);
+                Helper::throwException($messages);
             }
 
             $check[] = array((string) $link->loc, $homepageUrl . $links[$i]['link']);
             $i++;
         }
 
-        $result = \Helper::checkArray($check, true);
+        $result = Helper::checkArray($check, true);
 
         if($result === true) {
             return;
@@ -152,6 +156,6 @@ class Sitemap extends Page implements \HelperSelectorInterface
             'Expected: ' . $check[$result][1]
         );
 
-        \Helper::throwException($messages);
+        Helper::throwException($messages);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: SearchForm
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class SearchForm extends \Element\Emotion\SearchForm
+class SearchForm extends \Shopware\Tests\Mink\Element\Emotion\SearchForm
 {
     /**
      * @var array $selector

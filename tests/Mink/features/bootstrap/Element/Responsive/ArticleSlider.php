@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: ArticleSlider
@@ -14,7 +15,7 @@ use Behat\Mink\Element\NodeElement;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class ArticleSlider extends \Element\Emotion\ArticleSlider
+class ArticleSlider extends \Shopware\Tests\Mink\Element\Emotion\ArticleSlider
 {
     /**
      * @var array $selector
@@ -43,7 +44,7 @@ class ArticleSlider extends \Element\Emotion\ArticleSlider
      */
     public function getNameProperty(NodeElement $slide)
     {
-        $selectors = \Helper::getRequiredSelectors($this, ['slideImage', 'slideLink', 'slideName']);
+        $selectors = Helper::getRequiredSelectors($this, ['slideImage', 'slideLink', 'slideName']);
         $nameElement = $slide->find('css', $selectors['slideName']);
 
         $names = [
@@ -53,6 +54,6 @@ class ArticleSlider extends \Element\Emotion\ArticleSlider
             'nameTitle' => $nameElement->getAttribute('title'),
         ];
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 }

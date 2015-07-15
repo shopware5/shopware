@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: AccountShipping
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class AccountShipping extends \Element\Emotion\AccountShipping
+class AccountShipping extends \Shopware\Tests\Mink\Element\Emotion\AccountShipping
 {
     /**
      * @var array $selector

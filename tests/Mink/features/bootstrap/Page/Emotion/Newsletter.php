@@ -1,9 +1,11 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Newsletter extends Page implements \HelperSelectorInterface
+class Newsletter extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -46,8 +48,8 @@ class Newsletter extends Page implements \HelperSelectorInterface
 
         $data = array_merge($data, $mode);
 
-        \Helper::fillForm($this, 'newsletterForm', $data);
-        \Helper::pressNamedButton($this, 'newsletterFormSubmit');
+        Helper::fillForm($this, 'newsletterForm', $data);
+        Helper::pressNamedButton($this, 'newsletterFormSubmit');
     }
 
     /**
@@ -64,7 +66,7 @@ class Newsletter extends Page implements \HelperSelectorInterface
 
         $data = array_merge($data, $mode);
 
-        \Helper::fillForm($this, 'newsletterForm', $data);
-        \Helper::pressNamedButton($this, 'newsletterFormSubmit');
+        Helper::fillForm($this, 'newsletterForm', $data);
+        Helper::pressNamedButton($this, 'newsletterFormSubmit');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: ManufacturerSlider
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class ManufacturerSlider extends \Element\Emotion\ManufacturerSlider
+class ManufacturerSlider extends \Shopware\Tests\Mink\Element\Emotion\ManufacturerSlider
 {
     /**
      * @var array $selector

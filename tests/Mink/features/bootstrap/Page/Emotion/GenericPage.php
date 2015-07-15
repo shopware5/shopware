@@ -1,9 +1,11 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class GenericPage extends Page implements \HelperSelectorInterface
+class GenericPage extends Page implements HelperSelectorInterface
 {
     public $cssLocator = array(
         'canonical' => 'link[rel=canonical]',
@@ -92,13 +94,13 @@ class GenericPage extends Page implements \HelperSelectorInterface
      */
     private function checkLink($locator, $path = null, $query = array())
     {
-        $elements = \Helper::findElements($this, array($locator), false);
+        $elements = Helper::findElements($this, array($locator), false);
         $linkElement = $elements[$locator];
 
         if ($path !== null && empty($linkElement)) {
-            \Helper::throwException(array("Link expected but not found while looking for " . $locator));
+            Helper::throwException(array("Link expected but not found while looking for " . $locator));
         } elseif ($path === null && !empty($linkElement)) {
-            \Helper::throwException(array("Link not expected but found while looking for " . $locator));
+            Helper::throwException(array("Link not expected but found while looking for " . $locator));
         } elseif ($path === null && empty($linkElement)) {
             return;
         }
@@ -120,7 +122,7 @@ class GenericPage extends Page implements \HelperSelectorInterface
                 $expectedUrl
             );
 
-            \Helper::throwException(array($message));
+            Helper::throwException(array($message));
         }
     }
 
@@ -133,7 +135,7 @@ class GenericPage extends Page implements \HelperSelectorInterface
     {
         $locator = array('robots');
 
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, $locator);
         $robotsElement = $elements['robots'];
         $robotsValue = $robotsElement->getAttribute('content');
         $robotsParts = explode(',', $robotsValue);
@@ -141,7 +143,7 @@ class GenericPage extends Page implements \HelperSelectorInterface
         $robotsParts = array_map('trim', $robotsParts);
 
         if (empty($robotsParts)) {
-            \Helper::throwException(array('Missing robots data'));
+            Helper::throwException(array('Missing robots data'));
         }
 
         if ($robotsParts != $content) {
@@ -151,7 +153,7 @@ class GenericPage extends Page implements \HelperSelectorInterface
                 implode(', ', $content)
             );
 
-            \Helper::throwException(array($message));
+            Helper::throwException(array($message));
         }
     }
 }

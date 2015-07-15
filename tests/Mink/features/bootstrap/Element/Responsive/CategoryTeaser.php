@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CategoryTeaser
@@ -11,7 +13,7 @@ namespace Element\Responsive;
  * - image (string, e.g. "genuss_tees_banner.jpg")
  * - link (string, e.g. "/genusswelten/tees-und-zubehoer/")
  */
-class CategoryTeaser extends \Element\Emotion\CategoryTeaser
+class CategoryTeaser extends \Shopware\Tests\Mink\Element\Emotion\CategoryTeaser
 {
     /**
      * @var array $selector
@@ -37,7 +39,7 @@ class CategoryTeaser extends \Element\Emotion\CategoryTeaser
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['image']);
+        $elements = Helper::findElements($this, ['image']);
         return $elements['image']->getText();
     }
 }

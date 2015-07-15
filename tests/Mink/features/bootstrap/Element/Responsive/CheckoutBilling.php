@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: CheckoutBilling
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - ???
  */
-class CheckoutBilling extends \Element\Emotion\CheckoutBilling
+class CheckoutBilling extends \Shopware\Tests\Mink\Element\Emotion\CheckoutBilling
 {
     /**
      * @var array $selector

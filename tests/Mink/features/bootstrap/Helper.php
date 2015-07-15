@@ -1,8 +1,13 @@
 <?php
-use \Behat\Mink\Element\TraversableElement;
+
+namespace Shopware\Tests\Mink;
+
+
 use \Behat\Behat\Exception\PendingException;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper as MinkHelper;
 
 class Helper
 {
@@ -14,7 +19,7 @@ class Helper
      * @param array $check
      * @param bool $strict
      * @return bool|int|string
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkArray(array $check, $strict = false)
     {
@@ -172,7 +177,7 @@ class Helper
      * @param array $keys
      * @param bool $throwExceptions
      * @return Element[]
-     * @throws Exception|PendingException
+     * @throws \Exception|PendingException
      */
     public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -213,7 +218,7 @@ class Helper
      * @param array $keys
      * @param bool $throwExceptions
      * @return array
-     * @throws Exception|PendingException
+     * @throws \Exception|PendingException
      */
     public static function findAllOfElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -253,7 +258,7 @@ class Helper
      * @param array $keys
      * @param bool $throwExceptions
      * @return array
-     * @throws Exception
+     * @throws \Exception
      * @throws PendingException
      */
     public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
@@ -312,7 +317,7 @@ class Helper
      * Throws a generic or pending exception
      * @param array|string $messages
      * @param int $type
-     * @throws Exception|PendingException
+     * @throws \Exception|PendingException
      */
     public static function throwException($messages = array(), $type = self::EXCEPTION_GENERIC)
     {
@@ -368,7 +373,7 @@ class Helper
      * @param string $key
      * @param string $language
      * @return bool
-     * @throws Exception
+     * @throws \Exception
      * @throws PendingException
      */
     public static function hasNamedLink(HelperSelectorInterface $parent, $key, $language = '')
@@ -395,7 +400,7 @@ class Helper
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
      * @param string $language
-     * @throws Exception
+     * @throws \Exception
      * @throws PendingException
      */
     public static function clickNamedLink(HelperSelectorInterface $parent, $key, $language = '')
@@ -446,7 +451,7 @@ class Helper
      * Helper method that returns the content block of a page
      * @param Page $parent
      * @return \Behat\Mink\Element\NodeElement
-     * @throws Exception
+     * @throws \Exception
      */
     private static function getContentBlock(Page $parent)
     {
@@ -656,7 +661,7 @@ class Helper
      * Returns the unique value of an array, throws in exception if there are differences
      * @param $array
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUnique(array $array)
     {
@@ -714,7 +719,7 @@ class Helper
         );
     }
 
-    /** @var  \Element\MultipleElement */
+    /** @var  MultipleElement */
     private static $filterElements;
 
     /**
@@ -724,7 +729,7 @@ class Helper
      */
     private static function filter($var)
     {
-        /** @var \Element\MultipleElement $element */
+        /** @var MultipleElement $element */
         foreach (self::$filterElements as $element) {
             if (self::assertElementProperties($element, $var) === true) {
                 self::$filterElements->remove();
@@ -739,10 +744,10 @@ class Helper
     /**
      *
      * @param array $needles
-     * @param \Element\MultipleElement $haystack
+     * @param MultipleElement $haystack
      * @return bool|array
      */
-    public static function searchElements(array $needles, \Element\MultipleElement $haystack)
+    public static function searchElements(array $needles, MultipleElement $haystack)
     {
         self::$filterElements = $haystack;
         $result = array_filter($needles, array('self', 'filter'));
@@ -755,12 +760,12 @@ class Helper
     }
 
     /**
-     * 
+     *
      * @param array $needles
-     * @param \Element\MultipleElement $haystack
+     * @param MultipleElement $haystack
      * @return array|bool
      */
-    public static function assertElements(array $needles, \Element\MultipleElement $haystack)
+    public static function assertElements(array $needles, MultipleElement $haystack)
     {
         $failures = array();
 
@@ -785,10 +790,10 @@ class Helper
 
     /**
      * Global method to check the count of an MultipleElement
-     * @param \Element\MultipleElement $elements
+     * @param MultipleElement $elements
      * @param int              $count
      */
-    public static function assertElementCount(\Element\MultipleElement $elements, $count = 0)
+    public static function assertElementCount(MultipleElement $elements, $count = 0)
     {
         if ($count !== count($elements)) {
             $message = sprintf(
@@ -797,7 +802,7 @@ class Helper
                 get_class($elements),
                 $count
             );
-            \Helper::throwException($message);
+            MinkHelper::throwException($message);
         }
     }
 }

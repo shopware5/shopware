@@ -1,5 +1,7 @@
 <?php
 
+namespace Shopware\Tests\Mink;
+
 class SitemapContext extends SubContext
 {
     /**
@@ -31,15 +33,15 @@ class SitemapContext extends SubContext
             $links = $entries->getHash();
         }
 
-        /** @var \Page\Emotion\Sitemap $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Sitemap $page */
         $page = $this->getPage('Sitemap');
 
-        /** @var \Element\Emotion\SitemapGroup $groups */
+        /** @var \Shopware\Tests\Mink\Element\Emotion\SitemapGroup $groups */
         $groups = $this->getMultipleElement($page, 'SitemapGroup');
 
         $sitemapGroup = $name;
 
-        /** @var \Element\Emotion\SitemapGroup $group */
+        /** @var \Shopware\Tests\Mink\Element\Emotion\SitemapGroup $group */
         foreach($groups as $group) {
             if ($group->getTitle() === $name) {
                 $sitemapGroup = $group;

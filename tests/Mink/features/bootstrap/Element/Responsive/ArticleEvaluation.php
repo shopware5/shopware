@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: ArticleEvaluation
@@ -9,7 +11,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
+class ArticleEvaluation extends \Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation
 {
     /** @var array $selector */
     protected $selector = ['css' => 'div.review--entry:not(.is--answer)'];
@@ -35,7 +37,7 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
      */
     public function getStarsProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
+        $elements = Helper::findElements($this, ['stars']);
         return floatval($elements['stars']->getAttribute('content')) * 2;
     }
 }

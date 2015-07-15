@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: Article
@@ -17,7 +18,7 @@ use Element\MultipleElement;
  * Currently not retrievable properties:
  * - image (string)
  */
-class Article extends MultipleElement implements \HelperSelectorInterface
+class Article extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -44,7 +45,7 @@ class Article extends MultipleElement implements \HelperSelectorInterface
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'link', 'more']);
+        $elements = Helper::findElements($this, ['name', 'link', 'more']);
 
         $names = [
             $elements['name']->getText(),
@@ -53,7 +54,7 @@ class Article extends MultipleElement implements \HelperSelectorInterface
             $elements['more']->getAttribute('title')
         ];
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 
     /**
@@ -61,7 +62,7 @@ class Article extends MultipleElement implements \HelperSelectorInterface
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['link']);
+        $elements = Helper::findElements($this, ['link']);
 
         return $elements['link']->getAttribute('style');
     }
@@ -71,7 +72,7 @@ class Article extends MultipleElement implements \HelperSelectorInterface
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'link', 'more']);
+        $elements = Helper::findElements($this, ['name', 'link', 'more']);
 
         $links = [
             $elements['name']->getAttribute('href'),
@@ -79,7 +80,7 @@ class Article extends MultipleElement implements \HelperSelectorInterface
             $elements['more']->getAttribute('href')
         ];
 
-        return \Helper::getUnique($links);
+        return Helper::getUnique($links);
     }
 
     /**
@@ -87,8 +88,8 @@ class Article extends MultipleElement implements \HelperSelectorInterface
      */
     public function getPriceProperty()
     {
-        $elements = \Helper::findElements($this, ['price']);
+        $elements = Helper::findElements($this, ['price']);
 
-        return \Helper::floatValue($elements['price']->getText());
+        return Helper::floatValue($elements['price']->getText());
     }
 }

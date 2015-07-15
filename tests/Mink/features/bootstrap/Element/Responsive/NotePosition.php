@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: NotePosition
@@ -9,7 +11,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class NotePosition extends \Element\Emotion\NotePosition
+class NotePosition extends \Shopware\Tests\Mink\Element\Emotion\NotePosition
 {
     /** @var array $selector */
     protected $selector = ['css' => 'div.note--item'];
@@ -48,7 +50,7 @@ class NotePosition extends \Element\Emotion\NotePosition
      */
     public function getImageProperty()
     {
-        $element = \Helper::findElements($this, ['thumbnailImage']);
+        $element = Helper::findElements($this, ['thumbnailImage']);
 
         return $element['thumbnailImage']->getAttribute('srcset');
     }

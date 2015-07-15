@@ -1,5 +1,7 @@
 <?php
 
+namespace Shopware\Tests\Mink;
+
 use Behat\Gherkin\Node\TableNode;
 
 class DetailContext extends SubContext
@@ -27,10 +29,10 @@ class DetailContext extends SubContext
      */
     public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
     {
-        /** @var \Page\Emotion\Detail $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Detail $page */
         $page = $this->getPage('Detail');
 
-        /** @var \Element\MultipleElement $notePositions */
+        /** @var \Shopware\Tests\Mink\Element\MultipleElement $notePositions */
         $articleEvaluations = $this->getMultipleElement($page, 'ArticleEvaluation');
 
         $evaluations = $evaluations->getHash();

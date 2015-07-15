@@ -1,8 +1,10 @@
 <?php
 
-use Page\Emotion\Listing;
-use Element\Emotion\FilterGroup;
-use Element\Emotion\ArticleBox;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\Listing;
+use Shopware\Tests\Mink\Element\Emotion\FilterGroup;
+use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
 use Behat\Gherkin\Node\TableNode;
 
 class ListingContext extends SubContext

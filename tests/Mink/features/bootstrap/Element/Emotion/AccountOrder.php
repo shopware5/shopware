@@ -1,9 +1,10 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: AccountOrder
@@ -45,14 +46,14 @@ class AccountOrder extends MultipleElement
      */
     public function getDateProperty()
     {
-        $elements = \Helper::findElements($this, ['date', 'footerDate']);
+        $elements = Helper::findElements($this, ['date', 'footerDate']);
 
         $dates = [
             'orderDate' => $elements['date']->getText(),
             'footerDate' => $elements['footerDate']->getText()
         ];
 
-        return \Helper::getUnique($dates);
+        return Helper::getUnique($dates);
     }
 
     /**
@@ -61,14 +62,14 @@ class AccountOrder extends MultipleElement
      */
     public function getNumberProperty()
     {
-        $elements = \Helper::findElements($this, ['number', 'footerNumber']);
+        $elements = Helper::findElements($this, ['number', 'footerNumber']);
 
         $numbers = [
             'orderNumber' => $elements['number']->getText(),
             'footerNumber' => $elements['footerNumber']->getText()
         ];
 
-        return \Helper::getUnique($numbers);
+        return Helper::getUnique($numbers);
     }
 
     /**
@@ -78,8 +79,8 @@ class AccountOrder extends MultipleElement
      */
     public function getPositions($locators = ['product', 'currentPrice', 'quantity', 'price', 'sum'])
     {
-        $selectors = \Helper::getRequiredSelectors($this, $locators);
-        $elements = \Helper::findAllOfElements($this, ['positions']);
+        $selectors = Helper::getRequiredSelectors($this, $locators);
+        $elements = Helper::findAllOfElements($this, ['positions']);
         $positions = [];
 
         /** @var NodeElement $position */
@@ -106,7 +107,7 @@ class AccountOrder extends MultipleElement
             $data[$key] = $element->getText();
 
             if ($key !== 'product') {
-                $data[$key] = \Helper::floatValue($data[$key]);
+                $data[$key] = Helper::floatValue($data[$key]);
             }
         }
 

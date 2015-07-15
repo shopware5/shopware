@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: Paging
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class Paging extends \Element\Emotion\Paging
+class Paging extends \Shopware\Tests\Mink\Element\Emotion\Paging
 {
     /**
      * @var array $selector

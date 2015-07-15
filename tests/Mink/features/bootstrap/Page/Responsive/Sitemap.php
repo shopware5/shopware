@@ -1,7 +1,7 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class Sitemap extends \Page\Emotion\Sitemap
+class Sitemap extends \Shopware\Tests\Mink\Page\Emotion\Sitemap
 {
 
 }

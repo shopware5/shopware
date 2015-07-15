@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: AccountPayment
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * -
  */
-class AccountPayment extends \Element\Emotion\AccountPayment
+class AccountPayment extends \Shopware\Tests\Mink\Element\Emotion\AccountPayment
 {
     /**
      * @var array $selector
