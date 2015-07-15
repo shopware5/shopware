@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: AccountBilling
@@ -11,7 +12,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class AccountBilling extends Element implements \HelperSelectorInterface
+class AccountBilling extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -47,7 +48,7 @@ class AccountBilling extends Element implements \HelperSelectorInterface
      */
     public function getAddressProperty()
     {
-        $elements = \Helper::findAllOfElements($this, ['addressData']);
+        $elements = Helper::findAllOfElements($this, ['addressData']);
 
         return $elements['addressData'];
     }

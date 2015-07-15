@@ -1,7 +1,9 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
+use Shopware\Tests\Mink\Helper;
+
+class CheckoutConfirm extends \Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -46,10 +48,10 @@ class CheckoutConfirm extends \Page\Emotion\CheckoutConfirm
     public function changeShippingMethod($data = array())
     {
         $element = $this->getElement('CheckoutPayment');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($element, 'changeButton', $language);
 
-        \Helper::fillForm($this, 'shippingPaymentForm', $data);
-        \Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'shippingPaymentForm', $data);
+        Helper::pressNamedButton($this, 'changePaymentButton');
     }
 }

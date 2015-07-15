@@ -1,7 +1,7 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class Newsletter extends \Page\Emotion\Newsletter
+class Newsletter extends \Shopware\Tests\Mink\Page\Emotion\Newsletter
 {
     /**
      * Returns an array of all css selectors of the element/page

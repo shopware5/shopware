@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: ArticleBox
@@ -46,6 +48,6 @@ class ArticleBox extends CartPosition
     public function getPriceProperty()
     {
         $price = $this->getProperty('price');
-        return \Helper::floatValue($price);
+        return Helper::floatValue($price);
     }
 }

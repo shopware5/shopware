@@ -1,14 +1,17 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\Emotion\AccountOrder;
-use Element\Emotion\AccountPayment;
-use Element\Emotion\AddressBox;
+use Behat\Mink\WebAssert;
+use Shopware\Tests\Mink\Element\Emotion\AccountOrder;
+use Shopware\Tests\Mink\Element\Emotion\AccountPayment;
+use Shopware\Tests\Mink\Element\Emotion\AddressBox;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Account extends Page implements \HelperSelectorInterface
+class Account extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -75,10 +78,12 @@ class Account extends Page implements \HelperSelectorInterface
 
     /**
      * Check if the user was successfully logged in
+     * @param string $username
+     * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function verifyLogin($username)
     {
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert = new WebAssert($this->getSession());
         $assert->pageTextContains(
             'Dies ist Ihr Konto Dashboard, wo Sie die Möglichkeit haben, Ihre letzten Kontoaktivitäten einzusehen'
         );
@@ -93,12 +98,12 @@ class Account extends Page implements \HelperSelectorInterface
     public function verifyPage($action = null)
     {
         $locators = $this->identifiers;
-        $elements = \Helper::findElements($this, $locators, false);
+        $elements = Helper::findElements($this, $locators, false);
         $elements = array_filter($elements);
 
         if (empty($elements)) {
             $message = array('You are not on Account page!', 'Current URL: ' . $this->getSession()->getCurrentUrl());
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
 
         if (!$action) {
@@ -119,7 +124,7 @@ class Account extends Page implements \HelperSelectorInterface
     public function logout()
     {
         if($this->verifyPage('identifierDashboard') === true) {
-            \Helper::clickNamedLink($this, 'logoutLink');
+            Helper::clickNamedLink($this, 'logoutLink');
             return true;
         }
 
@@ -149,8 +154,8 @@ class Account extends Page implements \HelperSelectorInterface
             )
         );
 
-        \Helper::fillForm($this, 'passwordForm', $data);
-        \Helper::pressNamedButton($this, 'changePasswordButton');
+        Helper::fillForm($this, 'passwordForm', $data);
+        Helper::pressNamedButton($this, 'changePasswordButton');
     }
 
     /**
@@ -176,8 +181,8 @@ class Account extends Page implements \HelperSelectorInterface
             )
         );
 
-        \Helper::fillForm($this, 'emailForm', $data);
-        \Helper::pressNamedButton($this, 'changeEmailButton');
+        Helper::fillForm($this, 'emailForm', $data);
+        Helper::pressNamedButton($this, 'changeEmailButton');
     }
 
     /**
@@ -186,8 +191,8 @@ class Account extends Page implements \HelperSelectorInterface
      */
     public function changeBillingAddress($values)
     {
-        \Helper::fillForm($this, 'billingForm', $values);
-        \Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'billingForm', $values);
+        Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     /**
@@ -196,18 +201,18 @@ class Account extends Page implements \HelperSelectorInterface
      */
     public function changeShippingAddress($values)
     {
-        \Helper::fillForm($this, 'shippingForm', $values);
-        \Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'shippingForm', $values);
+        Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     public function checkPayment($payment)
     {
         $locators = array('payment');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         if (strcmp($elements['payment']->getText(), $payment) !== 0) {
             $message = sprintf('The current payment method is %s! (should be %s)', $elements['payment']->getText(), $payment);
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
     }
 
@@ -218,11 +223,11 @@ class Account extends Page implements \HelperSelectorInterface
     public function changePaymentMethod($data = array())
     {
         $element = $this->getElement('AccountPayment');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($element, 'changeButton', $language);
 
-        \Helper::fillForm($this, 'paymentForm', $data);
-        \Helper::pressNamedButton($this, 'changePaymentButton', $language);
+        Helper::fillForm($this, 'paymentForm', $data);
+        Helper::pressNamedButton($this, 'changePaymentButton', $language);
     }
 
     /**
@@ -239,7 +244,7 @@ class Account extends Page implements \HelperSelectorInterface
             'paymentMethod' => $paymentMethod
         );
 
-        $result = \Helper::assertElementProperties($element, $properties);
+        $result = Helper::assertElementProperties($element, $properties);
 
         if($result === true) {
             return;
@@ -251,7 +256,7 @@ class Account extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -280,7 +285,7 @@ class Account extends Page implements \HelperSelectorInterface
             'number' => $orderNumber
         );
 
-        $result = \Helper::assertElementProperties($order, $properties);
+        $result = Helper::assertElementProperties($order, $properties);
 
         if($result === true) {
             return;
@@ -292,7 +297,7 @@ class Account extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -308,7 +313,7 @@ class Account extends Page implements \HelperSelectorInterface
         $data = array();
 
         foreach($articles as $key => $article) {
-            $data[$key] = \Helper::floatArray(array(
+            $data[$key] = Helper::floatArray(array(
                 'quantity' => $article['quantity'],
                 'price' => $article['price'],
                 'sum' => $article['sum']
@@ -317,14 +322,14 @@ class Account extends Page implements \HelperSelectorInterface
             $data[$key]['product'] = $article['product'];
         }
 
-        $result = \Helper::compareArrays($positions, $data);
+        $result = Helper::compareArrays($positions, $data);
 
         if ($result === true) {
             return;
         }
 
         $message = sprintf('The %s of a position is different! (is "%s", should be "%s")', $result['key'], $result['value'], $result['value2']);
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -349,12 +354,12 @@ class Account extends Page implements \HelperSelectorInterface
             return;
         }
 
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($this, 'myEsdDownloads', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($this, 'myEsdDownloads', $language);
 
         $locators = array('esdDownloads');
-        $elements = \Helper::findAllOfElements($this, $locators);
-        $locator = \Helper::getRequiredSelector($this, 'esdDownloadName');
+        $elements = Helper::findAllOfElements($this, $locators);
+        $locator = Helper::getRequiredSelector($this, 'esdDownloadName');
         $downloads = array();
 
         /** @var NodeElement $esdDownload */
@@ -372,7 +377,7 @@ class Account extends Page implements \HelperSelectorInterface
 
                 if($download === end($downloads)) {
                     $message = sprintf('ESD-Article "%s" not found in account!', $givenEsd);
-                    \Helper::throwException($message);
+                    Helper::throwException($message);
                 }
             }
         }
@@ -394,7 +399,7 @@ class Account extends Page implements \HelperSelectorInterface
         $type = ucfirst($type);
 
         $addressBox = $this->getElement('Account'.$type);
-        $addressData = \Helper::getElementProperty($addressBox, 'address');
+        $addressData = Helper::getElementProperty($addressBox, 'address');
 
         $givenAddress = array();
 
@@ -413,14 +418,14 @@ class Account extends Page implements \HelperSelectorInterface
             $givenAddress = array_merge($givenAddress, $parts);
         }
 
-        $result = \Helper::compareArrays($givenAddress, $testAddress);
+        $result = Helper::compareArrays($givenAddress, $testAddress);
 
         if ($result === true) {
             return;
         }
 
         $message = sprintf('The addresses are different! ("%s" not was found in "%s")', $result['value2'], $result['value']);
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -429,11 +434,11 @@ class Account extends Page implements \HelperSelectorInterface
     public function register($data)
     {
         if ($this->verifyPage('identifierLogin') === true) {
-            \Helper::pressNamedButton($this, 'registerButton');
+            Helper::pressNamedButton($this, 'registerButton');
         }
 
-        \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton($this, 'sendButton');
+        Helper::fillForm($this, 'registrationForm', $data);
+        Helper::pressNamedButton($this, 'sendButton');
     }
 
     /**
@@ -459,8 +464,8 @@ class Account extends Page implements \HelperSelectorInterface
                 continue;
             }
 
-            $language = \Helper::getCurrentLanguage($this);
-            \Helper::pressNamedButton($address, 'chooseButton', $language);
+            $language = Helper::getCurrentLanguage($this);
+            Helper::pressNamedButton($address, 'chooseButton', $language);
             return;
         }
 
@@ -471,6 +476,6 @@ class Account extends Page implements \HelperSelectorInterface
             $messages[] = $address->getProperty('title');
         }
 
-        \Helper::throwException($messages);
+        Helper::throwException($messages);
     }
 }

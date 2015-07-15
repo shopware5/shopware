@@ -1,16 +1,17 @@
 <?php
 
-namespace Element;
+namespace Shopware\Tests\Mink\Element;
 
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
 use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Class MultipleElement
  */
-abstract class MultipleElement extends Element implements \Countable, \Iterator, \HelperSelectorInterface
+abstract class MultipleElement extends Element implements \Countable, \Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /** @var  string */
     private $xPath;
@@ -195,7 +196,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      */
     public function getProperty($property)
     {
-        $element = \Helper::findElements($this, array($property));
+        $element = Helper::findElements($this, array($property));
 
         return $element[$property]->getText();
     }

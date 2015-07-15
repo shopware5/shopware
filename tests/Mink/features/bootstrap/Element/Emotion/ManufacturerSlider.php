@@ -1,9 +1,11 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\SliderElement;
+use Shopware\Tests\Mink\Element\SliderElement;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
 /**
  * Element: ManufacturerSlider
@@ -12,7 +14,7 @@ use Element\SliderElement;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class ManufacturerSlider extends SliderElement implements \HelperSelectorInterface
+class ManufacturerSlider extends SliderElement implements HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -38,7 +40,7 @@ class ManufacturerSlider extends SliderElement implements \HelperSelectorInterfa
      */
     public function getImageProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideImage');
+        $selector = Helper::getRequiredSelector($this, 'slideImage');
 
         return $slide->find('css', $selector)->getAttribute('src');
     }
@@ -49,7 +51,7 @@ class ManufacturerSlider extends SliderElement implements \HelperSelectorInterfa
      */
     public function getLinkProperty(NodeElement $slide)
     {
-        $selector = \Helper::getRequiredSelector($this, 'slideLink');
+        $selector = Helper::getRequiredSelector($this, 'slideLink');
 
         return $slide->find('css', $selector)->getAttribute('href');
     }
@@ -60,13 +62,13 @@ class ManufacturerSlider extends SliderElement implements \HelperSelectorInterfa
      */
     public function getNameProperty(NodeElement $slide)
     {
-        $selectors = \Helper::getRequiredSelectors($this, ['slideImage', 'slideLink']);
+        $selectors = Helper::getRequiredSelectors($this, ['slideImage', 'slideLink']);
 
         $names = [
             $slide->find('css', $selectors['slideImage'])->getAttribute('alt'),
             $slide->find('css', $selectors['slideLink'])->getAttribute('title')
         ];
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 }

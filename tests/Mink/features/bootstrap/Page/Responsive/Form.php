@@ -1,7 +1,7 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class Form extends \Page\Emotion\Form
+class Form extends \Shopware\Tests\Mink\Page\Emotion\Form
 {
     /**
      * Returns an array of all css selectors of the element/page

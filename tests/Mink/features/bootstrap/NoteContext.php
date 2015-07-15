@@ -1,8 +1,10 @@
 <?php
 
-use Page\Emotion\Note;
-use Element\MultipleElement;
-use Element\Emotion\NotePosition;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\Note;
+
+use Shopware\Tests\Mink\Element\Emotion\NotePosition;
 use Behat\Gherkin\Node\TableNode;
 
 class NoteContext extends SubContext

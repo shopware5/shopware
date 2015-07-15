@@ -1,9 +1,10 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-use Element\Emotion\AddressBox;
+use Shopware\Tests\Mink\Element\Emotion\AddressBox;
+use Shopware\Tests\Mink\Helper;
 
-class Account extends \Page\Emotion\Account
+class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -56,8 +57,8 @@ class Account extends \Page\Emotion\Account
     {
         $this->verifyPage();
 
-        \Helper::fillForm($this, 'registrationForm', $data);
-        \Helper::pressNamedButton($this, 'sendButton');
+        Helper::fillForm($this, 'registrationForm', $data);
+        Helper::pressNamedButton($this, 'sendButton');
     }
 
     /**

@@ -1,22 +1,24 @@
 <?php
 
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\Article;
-use Element\Emotion\ArticleSlider;
-use Element\Emotion\Banner;
-use Element\Emotion\BannerSlider;
-use Element\Emotion\BlogArticle;
-use Element\Emotion\CategoryTeaser;
-use Element\Emotion\CompareColumn;
-use Element\Emotion\ManufacturerSlider;
-use Element\Emotion\YouTube;
-use Element\MultipleElement;
-use Behat\Mink\Element\TraversableElement;
-use Element\SliderElement;
+use Behat\Mink\WebAssert;
+use Shopware\Tests\Mink\Element\Emotion\Article;
+
+use Shopware\Tests\Mink\Element\Emotion\Banner;
+
+use Shopware\Tests\Mink\Element\Emotion\BlogArticle;
+use Shopware\Tests\Mink\Element\Emotion\CategoryTeaser;
+use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
+
+use Shopware\Tests\Mink\Element\Emotion\YouTube;
+
+use Shopware\Tests\Mink\Element\SliderElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Homepage extends Page implements \HelperSelectorInterface
+class Homepage extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -58,9 +60,9 @@ class Homepage extends Page implements \HelperSelectorInterface
         );
 
         $searchForm = $this->getElement('SearchForm');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::fillForm($searchForm, 'searchForm', $data);
-        \Helper::pressNamedButton($searchForm, 'searchButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::fillForm($searchForm, 'searchForm', $data);
+        Helper::pressNamedButton($searchForm, 'searchButton', $language);
         $this->verifyResponse();
     }
 
@@ -78,7 +80,7 @@ class Homepage extends Page implements \HelperSelectorInterface
         );
 
         $searchForm = $this->getElement('SearchForm');
-        \Helper::fillForm($searchForm, 'searchForm', $data);
+        Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
 
@@ -87,7 +89,7 @@ class Homepage extends Page implements \HelperSelectorInterface
      */
     public function receiveNoResultsMessageForKeyword($keyword)
     {
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert = new WebAssert($this->getSession());
         $assert->pageTextContains(sprintf(
             'Leider wurden zu "%s" keine Artikel gefunden',
             $keyword
@@ -109,10 +111,10 @@ class Homepage extends Page implements \HelperSelectorInterface
      */
     public function subscribeNewsletter(array $data)
     {
-        \Helper::fillForm($this, 'newsletterForm', $data);
+        Helper::fillForm($this, 'newsletterForm', $data);
 
         $locators = array('newsletterFormSubmit');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
         $elements['newsletterFormSubmit']->press();
     }
 
@@ -131,17 +133,17 @@ class Homepage extends Page implements \HelperSelectorInterface
                 count($compareColumns),
                 count($items)
             );
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
 
-        $result = \Helper::searchElements($items, $compareColumns);
+        $result = Helper::searchElements($items, $compareColumns);
 
         if ($result !== true) {
             $messages = array('The following articles were not found:');
             foreach ($result as $product) {
                 $messages[] = $product['name'];
             }
-            \Helper::throwException($messages);
+            Helper::throwException($messages);
         }
     }
 
@@ -161,7 +163,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             $properties['link'] = $link;
         }
 
-        $result = \Helper::assertElementProperties($banner, $properties);
+        $result = Helper::assertElementProperties($banner, $properties);
 
         if ($result === true) {
             return;
@@ -174,7 +176,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -188,7 +190,7 @@ class Homepage extends Page implements \HelperSelectorInterface
         $this->checkLinkedBanner($banner, $image);
 
         $bannerMapping = $banner->getMapping();
-        $result = \Helper::compareArrays($bannerMapping, $mapping);
+        $result = Helper::compareArrays($bannerMapping, $mapping);
 
         if ($result === true) {
             return;
@@ -200,12 +202,15 @@ class Homepage extends Page implements \HelperSelectorInterface
             'Expected: ' . $result['value2']
         ];
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
      * Checks an emotion blog element
+     * @param BlogArticle $blogArticle
      * @param array $articles
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)
     {
@@ -213,7 +218,7 @@ class Homepage extends Page implements \HelperSelectorInterface
 
         $blogArticles = $blogArticle->getArticles($properties);
 
-        $result = \Helper::compareArrays($blogArticles, $articles);
+        $result = Helper::compareArrays($blogArticles, $articles);
 
         if ($result === true) {
             return;
@@ -225,7 +230,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             'Expected: ' . $result['value2']
         ];
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -236,7 +241,7 @@ class Homepage extends Page implements \HelperSelectorInterface
      */
     public function checkYoutubeVideo(YouTube $youtube, $code)
     {
-        $result = \Helper::assertElementProperties($youtube, ['code' => $code]);
+        $result = Helper::assertElementProperties($youtube, ['code' => $code]);
 
         if ($result === true) {
             return;
@@ -248,7 +253,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             'Expected: ' . $result['value2']
         ];
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -262,7 +267,7 @@ class Homepage extends Page implements \HelperSelectorInterface
 
         $sliderSlides = $slider->getSlides($properties);
 
-        $result = \Helper::compareArrays($sliderSlides, $slides);
+        $result = Helper::compareArrays($sliderSlides, $slides);
 
         if ($result === true) {
             return;
@@ -274,7 +279,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             'Expected: ' . $result['value2']
         ];
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -292,7 +297,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             'link'  => $link
         ];
 
-        $result = \Helper::assertElementProperties($teaser, $properties);
+        $result = Helper::assertElementProperties($teaser, $properties);
 
         if ($result === true) {
             return;
@@ -305,7 +310,7 @@ class Homepage extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -315,10 +320,10 @@ class Homepage extends Page implements \HelperSelectorInterface
      */
     public function checkArticle(Article $article, array $data)
     {
-        $properties = \Helper::convertTableHashToArray($data);
-        $properties = \Helper::floatArray($properties, ['price']);
+        $properties = Helper::convertTableHashToArray($data);
+        $properties = Helper::floatArray($properties, ['price']);
 
-        $result = \Helper::assertElementProperties($article, $properties);
+        $result = Helper::assertElementProperties($article, $properties);
 
         if ($result === true) {
             return;
@@ -331,6 +336,6 @@ class Homepage extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 }

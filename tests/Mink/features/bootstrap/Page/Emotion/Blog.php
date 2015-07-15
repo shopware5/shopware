@@ -1,11 +1,13 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\BlogComment;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\Emotion\BlogComment;
+
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Blog extends Page implements \HelperSelectorInterface
+class Blog extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -39,8 +41,8 @@ class Blog extends Page implements \HelperSelectorInterface
      */
     public function writeComment(array $data)
     {
-        \Helper::fillForm($this, 'commentForm', $data);
-        \Helper::pressNamedButton($this, 'commentFormSubmit');
+        Helper::fillForm($this, 'commentForm', $data);
+        Helper::pressNamedButton($this, 'commentFormSubmit');
     }
 
     /**
@@ -54,8 +56,8 @@ class Blog extends Page implements \HelperSelectorInterface
     {
         $this->checkRating($blogComments, $average);
 
-        $comments = \Helper::floatArray($comments, ['stars']);
-        $result = \Helper::assertElements($comments, $blogComments);
+        $comments = Helper::floatArray($comments, ['stars']);
+        $result = Helper::assertElements($comments, $blogComments);
 
         if($result === true) {
             return;
@@ -72,7 +74,7 @@ class Blog extends Page implements \HelperSelectorInterface
                 $evaluation['result']['value2']
             );
         }
-        \Helper::throwException($messages);
+        Helper::throwException($messages);
     }
 
     /**
@@ -84,7 +86,7 @@ class Blog extends Page implements \HelperSelectorInterface
     {
 //        $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
 //
-//        $elements = \Helper::findElements($this, $locators);
+//        $elements = Helper::findElements($this, $locators);
 //
 //        $check = array();
 //
@@ -103,11 +105,11 @@ class Blog extends Page implements \HelperSelectorInterface
 //            }
 //        }
 //
-//        $result = \Helper::checkArray($check);
+//        $result = Helper::checkArray($check);
 //
 //        if ($result !== true) {
 //            $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
-//            \Helper::throwException($message);
+//            Helper::throwException($message);
 //        }
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: BlogComment
@@ -38,8 +39,8 @@ class BlogComment extends MultipleElement
      */
     public function getStarsProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
-        return \Helper::floatValue($elements['stars']->getAttribute('class'));
+        $elements = Helper::findElements($this, ['stars']);
+        return Helper::floatValue($elements['stars']->getAttribute('class'));
     }
 
     /**
@@ -50,7 +51,7 @@ class BlogComment extends MultipleElement
     {
         $return = array();
 
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         foreach($elements as $locator => $element)
         {

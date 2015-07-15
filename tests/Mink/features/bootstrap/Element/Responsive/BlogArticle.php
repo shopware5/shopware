@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: BlogArticle
@@ -12,7 +12,7 @@ namespace Element\Responsive;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class BlogArticle extends \Element\Emotion\BlogArticle
+class BlogArticle extends \Shopware\Tests\Mink\Element\Emotion\BlogArticle
 {
     /**
      * @var array $selector

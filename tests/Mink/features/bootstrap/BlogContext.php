@@ -1,7 +1,9 @@
 <?php
 
-use Page\Emotion\Blog;
-use Element\Emotion\BlogBox;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\Blog;
+use Shopware\Tests\Mink\Element\Emotion\BlogBox;
 use Behat\Gherkin\Node\TableNode;
 
 class BlogContext extends SubContext
@@ -52,10 +54,10 @@ class BlogContext extends SubContext
      */
     public function iShouldSeeAnAverageEvaluationOfFromFollowingComments($average, TableNode $comments)
     {
-        /** @var \Page\Emotion\Blog $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Blog $page */
         $page = $this->getPage('Blog');
 
-        /** @var \Element\MultipleElement $blogComments */
+        /** @var \Shopware\Tests\Mink\Element\MultipleElement $blogComments */
         $blogComments = $this->getMultipleElement($page, 'BlogComment');
 
         $page->checkComments($blogComments, $average, $comments->getHash());

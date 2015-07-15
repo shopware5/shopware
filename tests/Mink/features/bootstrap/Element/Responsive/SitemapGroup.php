@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: SitemapGroup
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class SitemapGroup extends \Element\Emotion\SitemapGroup
+class SitemapGroup extends \Shopware\Tests\Mink\Element\Emotion\SitemapGroup
 {
     /** @var array $selector */
     protected $selector = ['css' => '.sitemap--navigation-head'];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: BlogBox
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class BlogBox extends \Element\Emotion\BlogBox
+class BlogBox extends \Shopware\Tests\Mink\Element\Emotion\BlogBox
 {
     /**
      * @var array $selector

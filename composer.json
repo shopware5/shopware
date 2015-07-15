@@ -48,7 +48,6 @@
     },
     "autoload": {
         "psr-0": {
-            "Behat\\Mink\\Driver\\BrowserKitDriver": "engine/Library/",
             "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
             "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
             "Shopware": "engine/",
@@ -56,14 +55,19 @@
             "Zend": "engine/Library/",
             "JSMin": "engine/Library/minify/"
         },
-        "psr-4": {
-            "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension"
-        },
         "classmap": [
-            "engine/Shopware/Core/",
-            "tests/Mink/features/bootstrap/"
+            "engine/Shopware/Core/"
         ],
         "files": ["engine/Shopware/Application.php"]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Behat\\Mink\\Driver\\BrowserKitDriver": "engine/Library/"
+        },
+        "psr-4": {
+            "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
+            "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap"
+        }
     },
     "config": {
         "autoloader-suffix": "Shopware"

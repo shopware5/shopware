@@ -1,7 +1,9 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class CheckoutCart extends \Page\Emotion\CheckoutCart
+use Shopware\Tests\Mink\Helper;
+
+class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -64,7 +66,7 @@ class CheckoutCart extends \Page\Emotion\CheckoutCart
      */
     public function changeShippingMethod($data = array())
     {
-        \Helper::fillForm($this, 'shippingPaymentForm', $data);
-        \Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'shippingPaymentForm', $data);
+        Helper::pressNamedButton($this, 'changePaymentButton');
     }
 }

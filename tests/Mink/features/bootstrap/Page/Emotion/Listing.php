@@ -1,12 +1,14 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\ArticleBox;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
+use Shopware\Tests\Mink\Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Listing extends Page implements \HelperSelectorInterface
+class Listing extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $basePath
@@ -54,7 +56,7 @@ class Listing extends Page implements \HelperSelectorInterface
         $parameters = array_merge(
             ['sCategory' => 3],
             ($autoPage) ? ['sPage' => 1] : [],
-            \Helper::convertTableHashToArray($params, 'parameter')
+            Helper::convertTableHashToArray($params, 'parameter')
         );
 
         $categoryId = array_shift($parameters);
@@ -82,7 +84,7 @@ class Listing extends Page implements \HelperSelectorInterface
     protected function resetFilters()
     {
         $locators = array('filterCloseLinks');
-        $elements = \Helper::findAllOfElements($this, $locators, false);
+        $elements = Helper::findAllOfElements($this, $locators, false);
 
         if (empty($elements['filterCloseLinks'])) {
             return;
@@ -114,7 +116,7 @@ class Listing extends Page implements \HelperSelectorInterface
                     if (!$success) {
                         $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'],
                             $property['filter']);
-                        \Helper::throwException($message);
+                        Helper::throwException($message);
                     }
 
                     break;
@@ -123,7 +125,7 @@ class Listing extends Page implements \HelperSelectorInterface
 
             if (!$found) {
                 $message = sprintf('The filter "%s" was not found!', $property['filter']);
-                \Helper::throwException($message);
+                Helper::throwException($message);
             }
         }
     }
@@ -135,12 +137,12 @@ class Listing extends Page implements \HelperSelectorInterface
     public function checkView($view)
     {
         $views = array('viewTable', 'viewList');
-        $elements = \Helper::findElements($this, $views, false);
+        $elements = Helper::findElements($this, $views, false);
         $elements = array_filter($elements);
 
         if (key($elements) !== $view) {
             $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
     }
 
@@ -165,7 +167,7 @@ class Listing extends Page implements \HelperSelectorInterface
                 ($negation) ? '' : ' not',
                 ($negation) ? ' not' : ''
             );
-            \Helper::throwException(array($message));
+            Helper::throwException(array($message));
         }
     }
 
@@ -176,7 +178,7 @@ class Listing extends Page implements \HelperSelectorInterface
     private function isArticleInListing($name)
     {
         $locator = array('listingBox');
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, $locator);
 
         /** @var Element $listingBox */
         $listingBox = $elements['listingBox'];
@@ -191,8 +193,8 @@ class Listing extends Page implements \HelperSelectorInterface
      */
     public function checkArticleBox(ArticleBox $articleBox, array $properties)
     {
-        $properties = \Helper::floatArray($properties, ['price']);
-        $result = \Helper::assertElementProperties($articleBox, $properties);
+        $properties = Helper::floatArray($properties, ['price']);
+        $result = Helper::assertElementProperties($articleBox, $properties);
 
         if ($result === true) {
             return;
@@ -205,6 +207,6 @@ class Listing extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 }

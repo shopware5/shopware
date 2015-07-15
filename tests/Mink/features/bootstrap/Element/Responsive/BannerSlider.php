@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: BannerSlider
@@ -12,7 +12,7 @@ namespace Element\Responsive;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class BannerSlider extends \Element\Emotion\BannerSlider
+class BannerSlider extends \Shopware\Tests\Mink\Element\Emotion\BannerSlider
 {
     /**
      * @var array $selector

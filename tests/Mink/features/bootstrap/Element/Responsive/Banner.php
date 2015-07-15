@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: Banner
@@ -11,7 +11,7 @@ namespace Element\Responsive;
  * - link (string, e.g. "/Campaign/index/emotionId/6")
  * - mapping (array[])
  */
-class Banner extends \Element\Emotion\Banner
+class Banner extends \Shopware\Tests\Mink\Element\Emotion\Banner
 {
     /**
      * @var array $selector

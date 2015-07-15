@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: CartPosition
@@ -13,7 +13,7 @@ namespace Element\Responsive;
  * - itemPrice (float, e.g. "139,99")
  * - sum (float, e.g. "139,99")
  */
-class CartPosition extends \Element\Emotion\CartPosition
+class CartPosition extends \Shopware\Tests\Mink\Element\Emotion\CartPosition
 {
     /**
      * @var array $selector

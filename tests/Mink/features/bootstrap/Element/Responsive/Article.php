@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: Article
@@ -15,7 +17,7 @@ namespace Element\Responsive;
  * Currently not retrievable properties:
  * - image (string)
  */
-class Article extends \Element\Emotion\Article
+class Article extends \Shopware\Tests\Mink\Element\Emotion\Article
 {
     /**
      * @var array $selector
@@ -40,7 +42,7 @@ class Article extends \Element\Emotion\Article
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'link']);
+        $elements = Helper::findElements($this, ['name', 'link']);
 
         $names = [
             $elements['name']->getText(),
@@ -48,7 +50,7 @@ class Article extends \Element\Emotion\Article
             $elements['link']->getAttribute('title')
         ];
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 
     /**
@@ -56,7 +58,7 @@ class Article extends \Element\Emotion\Article
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['image']);
+        $elements = Helper::findElements($this, ['image']);
 
         return $elements['image']->getAttribute('src');
     }
@@ -66,13 +68,13 @@ class Article extends \Element\Emotion\Article
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'link']);
+        $elements = Helper::findElements($this, ['name', 'link']);
 
         $links = [
             $elements['name']->getAttribute('href'),
             $elements['link']->getAttribute('href')
         ];
 
-        return \Helper::getUnique($links);
+        return Helper::getUnique($links);
     }
 }

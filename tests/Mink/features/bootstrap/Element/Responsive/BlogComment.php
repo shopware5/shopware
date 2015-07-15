@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: BlogComment
@@ -9,7 +11,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class BlogComment extends \Element\Emotion\BlogComment
+class BlogComment extends \Shopware\Tests\Mink\Element\Emotion\BlogComment
 {
     /** @var array $selector */
     protected $selector = ['css' => 'ul.comments--list > li.list--entry'];
@@ -35,7 +37,7 @@ class BlogComment extends \Element\Emotion\BlogComment
      */
     public function getStarsProperty()
     {
-        $elements = \Helper::findAllOfElements($this, ['stars', 'half-star'], false);
+        $elements = Helper::findAllOfElements($this, ['stars', 'half-star'], false);
         return 2 * (count($elements['stars']) + 0.5 * count($elements['half-star']));
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CheckoutPayment
@@ -11,7 +12,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class CheckoutPayment extends Element implements \HelperSelectorInterface
+class CheckoutPayment extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -46,7 +47,7 @@ class CheckoutPayment extends Element implements \HelperSelectorInterface
      */
     public function getPaymentMethodProperty()
     {
-        $element = \Helper::findElements($this, ['currentMethod']);
+        $element = Helper::findElements($this, ['currentMethod']);
 
         $currentMethod = $element['currentMethod']->getText();
         $currentMethod = str_word_count($currentMethod, 1);

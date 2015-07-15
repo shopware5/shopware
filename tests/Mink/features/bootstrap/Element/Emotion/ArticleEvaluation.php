@@ -1,6 +1,8 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
+
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: ArticleEvaluation
@@ -36,8 +38,8 @@ class ArticleEvaluation extends BlogComment
      */
     public function getStarsProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
-        return \Helper::floatValue($elements['stars']->getAttribute('class'));
+        $elements = Helper::findElements($this, ['stars']);
+        return Helper::floatValue($elements['stars']->getAttribute('class'));
     }
 
     /**
@@ -46,7 +48,7 @@ class ArticleEvaluation extends BlogComment
      */
     public function getAnswerProperty()
     {
-        $elements = \Helper::findElements($this, ['answer'], false);
+        $elements = Helper::findElements($this, ['answer'], false);
         return ($elements['answer']) ? $elements['answer']->getText() : '';
     }
 }

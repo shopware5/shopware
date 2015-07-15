@@ -2,6 +2,8 @@ default:
     paths:
         features: features
         bootstrap: %behat.paths.features%/bootstrap
+    context:
+        class: Shopware\Tests\Mink\FeatureContext
     extensions:
         Shopware\Behat\ShopwareExtension\Extension: ~
         Behat\MinkExtension\Extension:
@@ -19,8 +21,8 @@ responsive:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Page\Responsive
-                element: Element\Responsive
+                page: Shopware\Tests\Mink\Page\Responsive
+                element: Shopware\Tests\Mink\Element\Responsive
     context:
         parameters:
             template: "Responsive"
@@ -31,8 +33,8 @@ emotion:
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
-                page: Page\Emotion
-                element: Element\Emotion
+                page: Shopware\Tests\MinkPage\Emotion
+                element: Shopware\Tests\Mink\Element\Emotion
     context:
         parameters:
             template: "emotion_orange"

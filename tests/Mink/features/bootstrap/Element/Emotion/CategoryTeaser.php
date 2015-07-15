@@ -1,8 +1,9 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: CategoryTeaser
@@ -13,7 +14,7 @@ use Element\MultipleElement;
  * - image (string, e.g. "genuss_tees_banner.jpg")
  * - link (string, e.g. "/genusswelten/tees-und-zubehoer/")
  */
-class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
+class CategoryTeaser extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -39,14 +40,14 @@ class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
      */
     public function getNameProperty()
     {
-        $elements = \Helper::findElements($this, ['name', 'link']);
+        $elements = Helper::findElements($this, ['name', 'link']);
 
         $names = [
             $elements['name']->getText(),
             $elements['link']->getAttribute('title')
         ];
 
-        return \Helper::getUnique($names);
+        return Helper::getUnique($names);
     }
 
     /**
@@ -55,7 +56,7 @@ class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['image']);
+        $elements = Helper::findElements($this, ['image']);
         return $elements['image']->getAttribute('style');
     }
 
@@ -65,7 +66,7 @@ class CategoryTeaser extends MultipleElement implements \HelperSelectorInterface
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['link']);
+        $elements = Helper::findElements($this, ['link']);
         return $elements['link']->getAttribute('href');
     }
 }

@@ -1,6 +1,6 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-class GenericPage extends \Page\Emotion\GenericPage
+class GenericPage extends \Shopware\Tests\Mink\Page\Emotion\GenericPage
 {
 }

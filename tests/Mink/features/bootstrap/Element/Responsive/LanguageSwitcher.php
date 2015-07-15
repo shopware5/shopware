@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 /**
  * Element: LanguageSwitcher
@@ -9,7 +9,7 @@ namespace Element\Responsive;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class LanguageSwitcher extends \Element\Emotion\LanguageSwitcher
+class LanguageSwitcher extends \Shopware\Tests\Mink\Element\Emotion\LanguageSwitcher
 {
     /**
      * @var array $selector

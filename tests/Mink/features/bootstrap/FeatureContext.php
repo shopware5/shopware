@@ -1,4 +1,8 @@
 <?php
+
+namespace Shopware\Tests\Mink;
+
+use Behat\Behat\Event\OutlineExampleEvent;
 use Behat\MinkExtension\Context\MinkContext;
 use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -105,7 +109,7 @@ EOD;
     /** @BeforeScenario */
     public function before($event)
     {
-        if ($event instanceof Behat\Behat\Event\OutlineExampleEvent && $event->getIteration()) {
+        if ($event instanceof OutlineExampleEvent && $event->getIteration()) {
             return;
         }
 
@@ -152,7 +156,7 @@ EOD;
     /**
      * @param string $configName
      * @param mixed $value
-     * @throws Exception
+     * @throws \Exception
      */
     public function changeConfigValue($configName, $value)
     {
@@ -233,7 +237,7 @@ EOD;
     }
 
     /**
-     * @return Shopware\Kernel
+     * @return \Shopware\Kernel
      */
     public function getKernel()
     {

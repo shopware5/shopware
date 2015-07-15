@@ -1,8 +1,8 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
 
 /**
  * Element: AddressBox

@@ -1,8 +1,10 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
 /**
  * Element: Banner
@@ -13,7 +15,7 @@ use Element\MultipleElement;
  * - link (string, e.g. "/Campaign/index/emotionId/6")
  * - mapping (array[])
  */
-class Banner extends MultipleElement implements \HelperSelectorInterface
+class Banner extends MultipleElement implements HelperSelectorInterface
 {
     /**
      * @var array $selector
@@ -39,7 +41,7 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
      */
     public function getImageProperty()
     {
-        $elements = \Helper::findElements($this, ['image']);
+        $elements = Helper::findElements($this, ['image']);
         return $elements['image']->getAttribute('src');
     }
 
@@ -49,7 +51,7 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
      */
     public function getLinkProperty()
     {
-        $elements = \Helper::findElements($this, ['link']);
+        $elements = Helper::findElements($this, ['link']);
         return $elements['link']->getAttribute('href');
     }
 
@@ -59,7 +61,7 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
      */
     public function getMapping()
     {
-        $elements = \Helper::findAllOfElements($this, ['mapping']);
+        $elements = Helper::findAllOfElements($this, ['mapping']);
         $mapping = [];
 
         foreach ($elements['mapping'] as $link) {
@@ -75,7 +77,7 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
      */
     public function click()
     {
-        $elements = \Helper::findElements($this, ['link']);
+        $elements = Helper::findElements($this, ['link']);
         $elements['link']->click();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
@@ -11,7 +11,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
  * Available retrievable properties:
  * - ???
  */
-class CheckoutShipping extends Element implements \HelperSelectorInterface
+class CheckoutShipping extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
