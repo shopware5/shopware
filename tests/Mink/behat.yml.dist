@@ -10,10 +10,7 @@ default:
             ## defined in buildscript
             #base_url: 'http://localhost/shopware/'
             default_session: 'goutte'
-            javascript_session: 'sahi'
-            sahi: ~
             goutte: ~
-            browser_name: firefox
 
 responsive:
     filters:
