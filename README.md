@@ -1,6 +1,6 @@
 # Shopware 5
 
-[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.0)](https://travis-ci.org/shopware/shopware)
+[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.1)](https://travis-ci.org/shopware/shopware)
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
@@ -92,7 +92,7 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.0>.
+The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.1>.
 
 ## Further reading
 
