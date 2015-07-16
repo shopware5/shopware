@@ -1,15 +1,17 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Behat\Mink\Driver\GoutteDriver;
-use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
-use Element\Emotion\ArticleEvaluation;
-use Element\MultipleElement;
+
+use Shopware\Tests\Mink\Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper as MinkHelper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 use Symfony\Component\Console\Helper\Helper;
 
-class Detail extends Page implements \HelperSelectorInterface
+class Detail extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -57,7 +59,7 @@ class Detail extends Page implements \HelperSelectorInterface
     public function verifyPage()
     {
         if (!$this->hasButton('In den Warenkorb')) {
-            \Helper::throwException('Detail page has no basket button');
+            MinkHelper::throwException('Detail page has no basket button');
         }
     }
 
@@ -70,7 +72,7 @@ class Detail extends Page implements \HelperSelectorInterface
         $this->selectFieldOption('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof SahiDriver) {
+        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
@@ -86,8 +88,8 @@ class Detail extends Page implements \HelperSelectorInterface
     {
         $this->checkRating($articleEvaluations, $average);
 
-        $evaluations = \Helper::floatArray($evaluations, ['stars']);
-        $result = \Helper::assertElements($evaluations, $articleEvaluations);
+        $evaluations = MinkHelper::floatArray($evaluations, ['stars']);
+        $result = MinkHelper::assertElements($evaluations, $articleEvaluations);
 
         if($result === true) {
             return;
@@ -104,7 +106,7 @@ class Detail extends Page implements \HelperSelectorInterface
                 $evaluation['result']['value2']
             );
         }
-        \Helper::throwException($messages);
+        MinkHelper::throwException($messages);
     }
 
     /**
@@ -116,7 +118,7 @@ class Detail extends Page implements \HelperSelectorInterface
     {
         $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
 
-        $elements = \Helper::findElements($this, $locators);
+        $elements = MinkHelper::findElements($this, $locators);
 
         $check = array();
 
@@ -135,11 +137,11 @@ class Detail extends Page implements \HelperSelectorInterface
             }
         }
 
-        $result = \Helper::checkArray($check);
+        $result = MinkHelper::checkArray($check);
 
         if ($result !== true) {
             $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
-            \Helper::throwException($message);
+            MinkHelper::throwException($message);
         }
     }
 
@@ -162,7 +164,7 @@ class Detail extends Page implements \HelperSelectorInterface
         $configuratorType = '';
 
         if ($this->getSession()->getDriver() instanceof GoutteDriver) {
-            $element = \Helper::findElements($this, ['configuratorForm']);
+            $element = MinkHelper::findElements($this, ['configuratorForm']);
 
             $configuratorClass = $element['configuratorForm']->getAttribute('class');
             $configuratorType = array_search($configuratorClass, $this->configuratorTypes);
@@ -192,7 +194,7 @@ class Detail extends Page implements \HelperSelectorInterface
 
         if (empty($group)) {
             $message = sprintf('Configurator group "%s" was not found!', $configuratorGroup);
-            \Helper::throwException($message);
+            MinkHelper::throwException($message);
         }
 
         $options = $group->findAll('css', 'option');
@@ -200,7 +202,7 @@ class Detail extends Page implements \HelperSelectorInterface
         foreach ($options as $option) {
             if ($option->getText() == $configuratorOption) {
                 $message = sprintf('Configurator option %s founded but should not', $configuratorOption);
-                \Helper::throwException($message);
+                MinkHelper::throwException($message);
             }
         }
     }
@@ -211,8 +213,8 @@ class Detail extends Page implements \HelperSelectorInterface
      */
     public function writeEvaluation(array $data)
     {
-        \Helper::fillForm($this, 'voteForm', $data);
-        \Helper::pressNamedButton($this, 'voteFormSubmit');
+        MinkHelper::fillForm($this, 'voteForm', $data);
+        MinkHelper::pressNamedButton($this, 'voteFormSubmit');
     }
 
     /**
@@ -229,7 +231,7 @@ class Detail extends Page implements \HelperSelectorInterface
 
         if (empty($selectBox)) {
             $message = sprintf('Select box "%s" was not found!', $select);
-            \Helper::throwException($message);
+            MinkHelper::throwException($message);
         }
 
         $options = $selectBox->findAll('css', 'option');
@@ -259,7 +261,7 @@ class Detail extends Page implements \HelperSelectorInterface
         }
 
         if(!empty($errors)) {
-            \Helper::throwException($errors);
+            MinkHelper::throwException($errors);
         }
     }
 
@@ -276,7 +278,7 @@ class Detail extends Page implements \HelperSelectorInterface
             )
         );
 
-        \Helper::fillForm($this, 'notificationForm', $data);
-        \Helper::pressNamedButton($this, 'notificationFormSubmit');
+        MinkHelper::fillForm($this, 'notificationForm', $data);
+        MinkHelper::pressNamedButton($this, 'notificationFormSubmit');
     }
 }

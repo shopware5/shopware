@@ -1,48 +1,57 @@
 <?php
 
-namespace Element\Emotion;
-
-require_once 'tests/Mink/features/bootstrap/HelperSelectorInterface.php';
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Helper;
 
-class AccountPayment extends Element implements \HelperSelectorInterface
+/**
+ * Element: AccountPayment
+ * Location: Payment box on account dashboard
+ *
+ * Available retrievable properties:
+ * -
+ */
+class AccountPayment extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div#selected_payment > div.inner_container');
+    protected $selector = ['css' => 'div#selected_payment > div.inner_container'];
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'currentMethod' => 'p'
-        );
+        ];
     }
 
     /**
      * Returns an array of all named selectors of the element/page
-     * @return array
+     * @return array[]
      */
     public function getNamedSelectors()
     {
-        return array(
-            'changeButton' => array('de' => 'Zahlungsart ändern', 'en' => 'Change payment method')
-        );
+        return [
+            'changeButton' => ['de' => 'Zahlungsart ändern', 'en' => 'Change payment method']
+        ];
     }
 
+    /**
+     * Returns the name of the current payment method
+     * @return string
+     */
     public function getPaymentMethodProperty()
     {
-        $locators = array('currentMethod');
-        $element = \Helper::findElements($this, $locators);
+        $element = Helper::findElements($this, ['currentMethod']);
 
         $currentMethod = $element['currentMethod']->getText();
         $currentMethod = str_word_count($currentMethod, 1);
 
-        return $currentMethod[0];
+        return current($currentMethod);
     }
 }

@@ -1,7 +1,9 @@
-;(function ($) {
+;(function ($, window) {
     'use strict';
 
-    var $body = $('body');
+    var $body = $('body'),
+        $html = $('html'),
+        isTouchIE = $html.hasClass('is--ie-touch');
 
     /**
      * Shopware Advanced Menu Plugin
@@ -106,15 +108,15 @@
              */
             me._$closeButton = me.$el.find(me.opts.closeButtonSelector);
 
-
             /**
-             * PreviousTarget will be used for pointer events to prevent
-             * the default behaviour on the first click of the category.
+             * The index of the last touched navigation element.
+             * Is used to support pointer events.
              *
-             * @type {null}
              * @private
+             * @property _targetIndex
+             * @type {Number}
              */
-            me._previousTarget = null;
+            me._targetIndex = -1;
 
             // Register all needed events
             me.registerEvents();
@@ -136,13 +138,16 @@
             $.each(me._$listItems, function (i, el) {
                 $el = $(el);
 
-                me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
-
-                if (window.navigator.pointerEnabled || window.navigator.msPointerEnabled) {
-                    me._on($el, 'click', $.proxy(me.onClickNavigationLink, me, i, $el))
+                if (window.PointerEvent && isTouchIE) {
+                    me._on($el, 'pointerdown', $.proxy(me.onClickNavigationLink, me, i));
+                } else if (window.MSPointerEvent && isTouchIE) {
+                    me._on($el, 'MSPointerDown', $.proxy(me.onClickNavigationLink, me, i));
                 } else {
-                    me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
+                    me._on($el, 'touchstart', $.proxy(me.onTouchStart, me, i, $el));
                 }
+
+                me._on($el, 'mouseenter', $.proxy(me.onListItemEnter, me, i, $el));
+                me._on($el, 'click', $.proxy(me.onClick, me, i, $el));
             });
 
             $body.on('mousemove touchstart', $.proxy(me.onMouseMove, me));
@@ -151,46 +156,43 @@
         },
 
         /**
-         * Called when a click event is triggered.
-         * If touch is available preventing default behaviour.
+         * Will be called when the user starts touching a navigation item.
          *
-         * @param event
+         * @param {Number} index
+         * @param {jQuery} $el
          */
-        onClick: function () {
-            var me = this;
-
-            if(me.isTouchDevice()) {
-                event.preventDefault();
-            }
+        onTouchStart: function (index, $el) {
+            this._shouldPrevent = !$el.hasClass(this.opts.itemHoverClass);
         },
 
         /**
-         * Detecting touch device.
+         * Called when a click event is triggered.
+         * If touch is available preventing default behaviour.
          *
-         * @returns {boolean}
+         * @param {Number} index
+         * @param {jQuery} $el
+         * @param {jQuery.Event} event
          */
-        isTouchDevice: function() {
-            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+        onClick: function (index, $el, event) {
+            var me = this;
+
+            if (me._shouldPrevent || !$el.hasClass(me.opts.itemHoverClass)) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            }
         },
 
         /**
          * Fired when the navigation list items were clicked / tapped or when the mouse enters them.
          *
          * @event onMouseEnter
-         * @param {jQuery.Event} event
-         * @param {jQuery} $el
          * @param {Number} index
+         * @param {jQuery} $el
+         * @param {jQuery.Event} event
          */
         onListItemEnter: function (index, $el, event) {
             var me = this,
                 opts = me.opts;
-
-            event.stopPropagation();
-
-            if (!(event.originalEvent instanceof MouseEvent)) {
-                event.preventDefault();
-                return;
-            }
 
             me.setMenuIndex(index);
 
@@ -201,17 +203,18 @@
             me.onMouseEnter(event);
         },
 
-        onClickNavigationLink: function (index, $el, event) {
+        /**
+         * Will be called when the user starts touching a navigation item with on pointer based events.
+         *
+         * @event onClickNavigationLink
+         * @param {Number} index
+         */
+        onClickNavigationLink: function (index) {
             var me = this;
 
-            me._inProgress = true;
+            me._shouldPrevent = me._targetIndex !== index;
 
-            if(me._previousTarget !== $el[0]) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            me._previousTarget = $el[0];
+            me._targetIndex = index;
         },
 
         /**
@@ -307,12 +310,12 @@
 
             me.$el.hide();
 
-            me._previousTarget = null;
+            me._targetIndex = -1;
 
             $.publish('plugin/advancedMenu/onCloseMenu', me);
         }
     });
-})(jQuery);
+})(jQuery, window);
 
 /**
  * Call the plugin when the shop is ready

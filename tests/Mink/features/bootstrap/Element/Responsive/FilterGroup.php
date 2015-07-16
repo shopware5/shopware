@@ -1,13 +1,21 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
-class FilterGroup extends \Element\Emotion\FilterGroup
+/**
+ * Element: FilterGroup
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
 {
     /** @var array $selector */
-    protected $selector = array('css' => 'div.filter--container label.filter-panel--title');
+    protected $selector = ['css' => 'div.filter--container label.filter-panel--title'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,9 +23,9 @@ class FilterGroup extends \Element\Emotion\FilterGroup
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'properties' => 'label ~ div.filter-panel--content'
-        );
+        ];
     }
 
     /**
@@ -26,8 +34,7 @@ class FilterGroup extends \Element\Emotion\FilterGroup
      */
     public function setProperty($propertyName)
     {
-        $locator = array('properties');
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, ['properties']);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];

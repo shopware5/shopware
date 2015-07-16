@@ -1,9 +1,14 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-require_once 'tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php';
-
+/**
+ * Element: BlogBox
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class BlogBox extends CartPosition
 {
     /** @var array $selector */
@@ -15,7 +20,7 @@ class BlogBox extends CartPosition
      */
     public function getCssSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -24,8 +29,8 @@ class BlogBox extends CartPosition
      */
     public function getNamedSelectors()
     {
-        return array(
-            'readMore'   => array('de' => 'Mehr lesen', 'en' => 'Read more')
-        );
+        return [
+            'readMore'   => ['de' => 'Mehr lesen', 'en' => 'Read more']
+        ];
     }
 }

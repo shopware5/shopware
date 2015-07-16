@@ -1,11 +1,18 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class AccountPayment extends \Element\Emotion\AccountPayment
+/**
+ * Element: AccountPayment
+ * Location: Payment box on account dashboard
+ *
+ * Available retrievable properties:
+ * -
+ */
+class AccountPayment extends \Shopware\Tests\Mink\Element\Emotion\AccountPayment
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.account--payment.account--box');
+    protected $selector = ['css' => 'div.account--payment.account--box'];
 }

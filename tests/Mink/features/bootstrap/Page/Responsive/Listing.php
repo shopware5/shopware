@@ -1,10 +1,11 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-class Listing extends \Page\Emotion\Listing
+class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -28,8 +29,7 @@ class Listing extends \Page\Emotion\Listing
      */
     protected function resetFilters()
     {
-        $locators = array('filterFilterProperties');
-        $elements = \Helper::findElements($this, $locators, null, true);
+        $elements = Helper::findAllOfElements($this, ['filterFilterProperties']);
         /** @var NodeElement $property */
         foreach($elements['filterFilterProperties'] as $property) {
             if($property->isChecked()) {
@@ -55,8 +55,7 @@ class Listing extends \Page\Emotion\Listing
      */
     private function pressShowResults()
     {
-        $locators = array('filterShowResults');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['filterShowResults']);
         /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
         $showResults->press();

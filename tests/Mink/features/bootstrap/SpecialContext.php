@@ -1,11 +1,10 @@
 <?php
 
-use Page\Emotion\Homepage;
-use Element\MultipleElement;
-use Behat\Behat\Context\Step;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\Homepage;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Behat\Behat\Context\Step;
 
 class SpecialContext extends SubContext
 {

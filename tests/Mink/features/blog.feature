@@ -48,7 +48,7 @@ Feature: Blog
             | field    | value           |
             | name     | Max Mustermann  |
             | eMail    | info@example.de |
-            | points   | 10              |
+            | points   | 9               |
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
             | sCaptcha | 123456          |
@@ -58,4 +58,6 @@ Feature: Blog
         But   I should not see "Hallo Welt"
 
         When  the shop owner activates my latest comment
-        Then  I should see "Hallo Welt"
+        Then  I should see an average evaluation of 5 from following comments:
+            | author         | stars | headline       | comment    |
+            | Max Mustermann | 9     | Neue Bewertung | Hallo Welt |

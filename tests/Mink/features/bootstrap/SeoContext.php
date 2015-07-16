@@ -1,6 +1,6 @@
 <?php
 
-require_once 'SubContext.php';
+namespace Shopware\Tests\Mink;
 
 class SeoContext extends SubContext
 {

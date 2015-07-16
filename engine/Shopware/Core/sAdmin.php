@@ -4247,6 +4247,8 @@ class sAdmin
                     $getOrderDetails[$orderDetailsKey]['currentPseudoprice'] = $tmpArticle['pseudoprice'];
                 }
 
+                $getOrderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpArticle['has_pseudoprice'];
+
                 // Set article in deactivate state if it's an variant or configurator article
                 if ($tmpArticle['sVariantArticle'] === true || $tmpArticle['sConfigurator'] === true) {
                     $getOrderDetails[$orderDetailsKey]['active'] = 0;

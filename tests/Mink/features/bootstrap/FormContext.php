@@ -1,5 +1,7 @@
 <?php
 
+namespace Shopware\Tests\Mink;
+
 class FormContext extends SubContext
 {
     /**

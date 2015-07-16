@@ -27,20 +27,14 @@
  *
  * @link http://framework.zend.com/manual/de/zend.locale.parsing.html
  * @param int|float $value
- * @param array $options
+ * @param array     $format
  * @return mixed
  */
-function smarty_modifier_number($value, $options = array())
+function smarty_modifier_number($value, $format = array())
 {
-    $options['locale'] = empty($options['locale']) ? Enlight_Application::Instance()->Locale() : $options['locale'];
-    $options['precision'] = empty($options['precision']) ? 2 : $options['precision'];
-
-    //remove all separators
-    $value = str_replace(['.', ','], '', $value, $availableSeparators);
-
-    // add decimal separator
-    if ($availableSeparators > 0) {
-        $value = substr_replace($value, '.', strlen($value) - $options['precision'], 0);
+    if (empty($format['locale'])) {
+        $format['locale'] = Enlight_Application::Instance()->Locale();
     }
-    return Zend_Locale_Format::toNumber($value, $options);
+
+    return Zend_Locale_Format::toNumber($value, $format);
 }

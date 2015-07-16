@@ -1,30 +1,33 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class Banner extends \Element\Emotion\Banner
+/**
+ * Element: Banner
+ * Location: Emotion element for image banners
+ *
+ * Available retrievable properties:
+ * - image (string, e.g. "deli_teaser503886c2336e3.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - mapping (array[])
+ */
+class Banner extends \Shopware\Tests\Mink\Element\Emotion\Banner
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion--element.banner-element');
-
-    public $cssLocator = array(
-        'image' => 'div.emotion--element-banner',
-        'link' => 'a.emotion--element-link',
-        'mapping' => 'a.emotion--element-mapping'
-    );
+    protected $selector = ['css' => 'div.emotion--banner'];
 
     /**
+     * Returns an array of all css selectors of the element/page
      * @return array
      */
-    public function getImagesToCheck()
+    public function getCssSelectors()
     {
-        $locators = array('image');
-        $elements = \Helper::findElements($this, $locators);
-
-        return array(
-            'image' => $elements['image']->getAttribute('data-image-src')
-        );
+        return [
+            'image' => '.banner--image',
+            'link' => '.banner--link',
+            'mapping' => '.banner--mapping-link'
+        ];
     }
 }

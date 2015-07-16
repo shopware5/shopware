@@ -110,26 +110,6 @@ Feature: Show Listing
         | 36   | 48 |
         | 48   | 12 |
 
-    @language @javascript
-    Scenario: I can change the language
-        Given I am on the listing page:
-            | parameter | value |
-            | sCategory | 69    |
-        Then  I should see "Artikel mit ähnlichen Produkten"
-        And   I should see "Artikel mit Zubehör"
-
-        When  I select "English" from "__shop"
-        Then  I should see "Articles with similar products"
-        And   I should see "Articles with accessories"
-
-        When  I go to the listing page:
-            | parameter | value |
-            | sSupplier | 5     |
-        Then  I should see "Suitcase set"
-
-        When  I select "Deutsch" from "__shop"
-        Then  I should see "Reisekoffer Set"
-
     @customergroups
     Scenario:
         Given I am on the page "Account"

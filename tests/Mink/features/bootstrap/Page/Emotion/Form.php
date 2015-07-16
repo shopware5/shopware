@@ -1,14 +1,16 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Form extends Page implements \HelperSelectorInterface
+class Form extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
      */
-    protected $path = '?sViewport=ticket&sFid={formId}';
+    protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -35,7 +37,7 @@ class Form extends Page implements \HelperSelectorInterface
     public function checkCaptcha()
     {
         $locators = array('captchaPlaceholder', 'captchaImage', 'captchaHidden');
-        $element = \Helper::findElements($this, $locators);
+        $element = Helper::findElements($this, $locators);
 
         $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');
@@ -46,7 +48,7 @@ class Form extends Page implements \HelperSelectorInterface
             || (empty($captchaHidden))
         ) {
             $message = 'There is no capture in this form!';
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
     }
 }

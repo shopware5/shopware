@@ -1,18 +1,27 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
-class BlogArticle extends MultipleElement implements \HelperSelectorInterface
+/**
+ * Element: BlogArticle
+ * Location: Emotion element for blog articles
+ *
+ * Available retrievable properties (per blog article):
+ * - image (string, e.g. "beach1503f8532d4648.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - alt (string, e.g. "foo")
+ * - title (string, e.g. "bar")
+ */
+class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.blog-element');
+    protected $selector = ['css' => 'div.emotion-element > div.blog-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -20,21 +29,22 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'article' => 'div.blog-entry',
             'articleTitle' => 'h2 > a',
             'articleLink' => 'div.blog_img > a',
             'articleText' => 'p'
-        );
+        ];
     }
 
     /**
+     * Returns all blog articles of the element
      * @param string[] $properties
      * @return array[]
      */
     public function getArticles(array $properties)
     {
-        $elements = \Helper::findAllOfElements($this, ['article']);
+        $elements = Helper::findAllOfElements($this, ['article']);
 
         $articles = [];
 
@@ -54,12 +64,13 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the title of the blog article
      * @param NodeElement $article
-     * @return array
+     * @return string
      */
     public function getTitleProperty(NodeElement $article)
     {
-        $selectors = \Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
+        $selectors = Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
         $title = $article->find('css', $selectors['articleTitle']);
 
@@ -73,43 +84,47 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
     }
 
     /**
+     * Returns the image of the blog article
      * @param NodeElement $article
-     * @return mixed|null
+     * @return string|null
      */
     public function getImageProperty(NodeElement $article)
     {
-        $selector = \Helper::getRequiredSelector($this, 'articleLink');
+        $selector = Helper::getRequiredSelector($this, 'articleLink');
         return $article->find('css', $selector)->getAttribute('style');
     }
 
     /**
+     * Returns the link to the blog article
      * @param NodeElement $article
      * @return string
      */
     public function getLinkProperty(NodeElement $article)
     {
-        $selectors = \Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
+        $selectors = Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
         $links = [
             'titleLink' => $article->find('css', $selectors['articleTitle'])->getAttribute('href'),
             'link' => $article->find('css', $selectors['articleLink'])->getAttribute('href')
         ];
 
-        return \Helper::getUnique($links);
+        return Helper::getUnique($links);
     }
 
     /**
+     * Returns the text preview of the blog article
      * @param NodeElement $article
      * @return null|string
      */
     public function getTextProperty(NodeElement $article)
     {
-        $selector = \Helper::getRequiredSelector($this, 'articleText');
+        $selector = Helper::getRequiredSelector($this, 'articleText');
         return $article->find('css', $selector)->getText();
     }
 
     /**
-     * @param array $titles
+     * Helper method to get the unique title
+     * @param string[] $titles
      * @return string
      * @throws \Exception
      */
@@ -124,8 +139,8 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
 
             //if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
-                $check = array($title);
-                $result = \Helper::checkArray($check);
+                $check = [$title];
+                $result = Helper::checkArray($check);
                 break;
 
             default:
@@ -134,12 +149,12 @@ class BlogArticle extends MultipleElement implements \HelperSelectorInterface
         }
 
         if ($result !== true) {
-            $messages = array('The blog article has different titles!');
+            $messages = ['The blog article has different titles!'];
             foreach ($title as $key => $value) {
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
             }
 
-            \Helper::throwException($messages);
+            Helper::throwException($messages);
         }
 
         return $title['titleTitle'];

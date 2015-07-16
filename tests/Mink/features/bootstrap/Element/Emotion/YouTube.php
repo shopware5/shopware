@@ -1,17 +1,23 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
-class YouTube extends MultipleElement implements \HelperSelectorInterface
+/**
+ * Element: YouTube
+ * Location: Emotion element for Youtube videos
+ *
+ * Available retrievable properties:
+ * - code (string, e.g. "RVz71XsJIEA")
+ */
+class YouTube extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.youtube-element');
+    protected $selector = ['css' => 'div.emotion-element > div.youtube-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -19,17 +25,18 @@ class YouTube extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'code' => 'iframe'
-        );
+        ];
     }
 
     /**
+     * Returns the video code
      * @return array
      */
     public function getCodeProperty()
     {
-        $elements = \Helper::findElements($this, ['code']);
+        $elements = Helper::findElements($this, ['code']);
         return $elements['code']->getAttribute('src');
     }
 }

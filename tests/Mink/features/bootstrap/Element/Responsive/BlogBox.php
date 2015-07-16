@@ -1,11 +1,18 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class BlogBox extends \Element\Emotion\BlogBox
+/**
+ * Element: BlogBox
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class BlogBox extends \Shopware\Tests\Mink\Element\Emotion\BlogBox
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.blog--box.panel');
+    protected $selector = ['css' => 'div.blog--box.panel'];
 }

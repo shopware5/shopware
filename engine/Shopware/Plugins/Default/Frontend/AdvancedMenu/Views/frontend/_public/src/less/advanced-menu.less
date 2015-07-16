@@ -25,6 +25,10 @@
         .transform-style(preserve-3d);
         list-style: none;
         display: block;
+
+        .is--safari & {
+            .backface-visibility(hidden);
+        }
     }
 
     .content--wrapper {
@@ -130,10 +134,6 @@
 
     .menu--container {
         display: none;
-
-        &:first-child {
-            border-left: block;
-        }
 
         &.menu--is-active {
             display: block;

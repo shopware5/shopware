@@ -1,29 +1,43 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
-class BlogComment extends \Element\Emotion\BlogComment
+/**
+ * Element: BlogComment
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class BlogComment extends \Shopware\Tests\Mink\Element\Emotion\BlogComment
 {
     /** @var array $selector */
-    protected $selector = array('css' => 'div.blog--comments-entry-inner');
-
-    /** @var array $namedSelectors */
-    protected $cssLocator = array(
-        'author' => 'div.blog--comments-entry-left > .comments--author',
-        'date' => 'div.blog--comments-entry-left > .comments--date',
-        'stars' => 'div.blog--comments-entry-left .product--rating > meta:nth-of-type(2)',
-        'headline' => 'div.blog--comments-entry-right > .blog--comments-entry-headline',
-        'comment' => 'div.blog--comments-entry-right > .blog--comments-entry-text'
-    );
+    protected $selector = ['css' => 'ul.comments--list > li.list--entry'];
 
     /**
-     * @param NodeElement $element
-     * @return string
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
      */
-    protected function getStars(NodeElement $element)
+    public function getCssSelectors()
     {
-        return $element->getAttribute('content');
+        return [
+            'author' => '.author--name',
+            'date' => '.date--creation',
+            'stars' => '.product--rating > .icon--star',
+            'half-star' => '.product--rating > .icon--star-half',
+            'headline' => '.content--headline',
+            'comment' => '.content--comment'
+        ];
+    }
+
+    /**
+     * @return float
+     */
+    public function getStarsProperty()
+    {
+        $elements = Helper::findAllOfElements($this, ['stars', 'half-star'], false);
+        return 2 * (count($elements['stars']) + 0.5 * count($elements['half-star']));
     }
 }

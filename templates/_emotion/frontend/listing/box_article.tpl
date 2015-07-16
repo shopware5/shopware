@@ -7,28 +7,28 @@
 			<div class="ico_tipp">{se name='ListingBoxTip'}{/se}</div>
 			{/if}
 		{/block}
-		
+
 		{* New *}
 		{block name='frontend_listing_box_article_new'}
 			{if $sArticle.newArticle}
-				<div class="ico_new" {if $sArticle.pseudoprice|number > $sArticle.price|number}style="top:50px;"{/if}>{se name='ListingBoxNew'}{/se}</div>
+				<div class="ico_new" {if $sArticle.has_pseudoprice}style="top:50px;"{/if}>{se name='ListingBoxNew'}{/se}</div>
 			{/if}
 		{/block}
-		
+
 		{* ESD article *}
 		{block name='frontend_listing_box_article_esd'}
 			{if $sArticle.esd}
 			<div class="ico_esd">{se name='ListingBoxInstantDownload'}{/se}</div>
 			{/if}
 		{/block}
-		
+
 		{* Article rating *}
         {block name='frontend_listing_box_article_rating'}
         	{if $sArticle.sVoteAverange.averange}
                 <div class="star star{($sArticle.sVoteAverange.averange * 2)|round:0}"></div>
 	        {/if}
 	    {/block}
-        
+
 		{* Article picture *}
 		{block name='frontend_listing_box_article_picture'}
 		{if $sTemplate eq 'listing-3col' || $sTemplate eq 'listing-2col'}
@@ -40,12 +40,12 @@
 			style="background: url({$image}) no-repeat center center"{/if}>
 		{if !isset($sArticle.image.src)}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}</a>
 		{/block}
-				
+
 		{* Article name *}
 		{block name='frontend_listing_box_article_name'}
 		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="title" title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a>
 		{/block}
-		
+
 		{* Description *}
 		{block name='frontend_listing_box_article_description'}
 			{if $sTemplate eq 'listing-1col'}
@@ -59,11 +59,11 @@
 				{/if}
 			</p>
 		{/block}
-		
+
 		{* Unit price *}
 		{block name='frontend_listing_box_article_unit'}
 			{if $sArticle.purchaseunit}
-			    <div class="{if !$sArticle.pseudoprice|number > $sArticle.price|number}article_price_unit{else}article_price_unit_pseudo{/if}">
+			    <div class="{if !$sArticle.has_pseudoprice}article_price_unit{else}article_price_unit_pseudo{/if}">
 			        {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
 			            <p>
 			            	<span class="purchaseunit">
@@ -80,18 +80,18 @@
 			        {/if}
 			    </div>
 			{/if}
-		{/block}    	
-		
+		{/block}
+
 		{* Article Price *}
 		{block name='frontend_listing_box_article_price'}
-			<p class="{if $sArticle.pseudoprice|number > $sArticle.price|number}pseudoprice{else}price both{/if}">
-			    {if $sArticle.pseudoprice|number > $sArticle.price|number}
+			<p class="{if $sArticle.has_pseudoprice}pseudoprice{else}price both{/if}">
+			    {if $sArticle.has_pseudoprice}
 			    	<span class="pseudo">{s name="reducedPrice"}Statt:{/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
 			    {/if}
 			    <span class="price">{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency} {s name="Star"}*{/s}</span>
 			</p>
         {/block}
-       	
+
        	{* Compare and more *}
        	{block name='frontend_listing_box_article_actions'}
 			<div class="actions">
@@ -116,7 +116,7 @@
 				{/block}
 			</div>
 
-			{if $sArticle.pseudoprice|number > $sArticle.price|number}
+			{if $sArticle.has_pseudoprice}
 				<div class="pseudo_percent">%</div>
 			{/if}
 		{/block}

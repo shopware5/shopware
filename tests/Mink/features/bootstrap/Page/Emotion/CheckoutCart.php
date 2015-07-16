@@ -1,10 +1,11 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\CartPosition;
+use Shopware\Tests\Mink\Element\Emotion\CartPosition;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
 
-class CheckoutCart extends Page implements \HelperSelectorInterface
+class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -61,14 +62,14 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     public function checkAggregation($aggregation)
     {
         $locators = array('aggregationLabels', 'aggregationValues');
-        $elements = \Helper::findAllOfElements($this, $locators);
-        $lang = \Helper::getCurrentLanguage($this);
+        $elements = Helper::findAllOfElements($this, $locators);
+        $lang = Helper::getCurrentLanguage($this);
         $check = array();
 
         foreach($aggregation as $property) {
             $key = $this->getAggregationPosition($elements['aggregationLabels'], $property['label'], $lang);
 
-            $check[$property['label']] = \Helper::floatArray(
+            $check[$property['label']] = Helper::floatArray(
                 array(
                     $property['value'],
                     $elements['aggregationValues'][$key]->getText()
@@ -79,7 +80,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
             unset($elements['aggregationValues'][$key]);
         }
 
-        $result = \Helper::checkArray($check);
+        $result = Helper::checkArray($check);
 
         if($result !== true) {
             $message = sprintf(
@@ -89,7 +90,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
                 $check[$result][0]
             );
 
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
     }
 
@@ -113,7 +114,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
         }
 
         $message = sprintf('Label "%s" is not defined for language key "%s"', $key, $language);
-        \Helper::throwException($message, \Helper::EXCEPTION_PENDING);
+        Helper::throwException($message, Helper::EXCEPTION_PENDING);
     }
 
     /**
@@ -143,7 +144,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
         } while($key <= $lastKey);
 
         $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 
     /**
@@ -153,7 +154,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     public function addVoucher($voucher)
     {
         $locators = array('addVoucherInput', 'addVoucherSubmit');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         $elements['addVoucherInput']->setValue($voucher);
         $elements['addVoucherSubmit']->press();
@@ -166,7 +167,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     public function addArticle($article)
     {
         $locators = array('addArticleInput', 'addArticleSubmit');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         $elements['addArticleInput']->setValue($article);
         $elements['addArticleSubmit']->press();
@@ -180,10 +181,10 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     public function removeProduct(CartPosition $item, $language = '')
     {
         if(empty($language)) {
-            $language = \Helper::getCurrentLanguage($this);
+            $language = Helper::getCurrentLanguage($this);
         }
 
-        \Helper::clickNamedLink($item, 'remove', $language);
+        Helper::clickNamedLink($item, 'remove', $language);
     }
 
     /**
@@ -193,7 +194,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
     public function removeVoucher()
     {
         $locator = array('removeVoucher');
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, $locator);
 
         $elements['removeVoucher']->click();
     }
@@ -203,7 +204,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
      */
     public function emptyCart(CartPosition $items)
     {
-        $language = \Helper::getCurrentLanguage($this);
+        $language = Helper::getCurrentLanguage($this);
 
         /** @var CartPosition $item */
         foreach($items as $item) {
@@ -240,10 +241,11 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
                 count($cartPositions),
                 count($items)
             );
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
 
-        $result = \Helper::assertElements($items, $cartPositions);
+        $items = Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
+        $result = Helper::assertElements($items, $cartPositions);
 
         if($result !== true) {
             $messages = array('The following articles are wrong:');
@@ -257,7 +259,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
                     $product['result']['value2']
                 );
             }
-            \Helper::throwException($messages);
+            Helper::throwException($messages);
         }
     }
 
@@ -267,7 +269,7 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
      */
     public function verifyPage($language = '')
     {
-        return \Helper::hasNamedLink($this, 'checkout', $language);
+        return Helper::hasNamedLink($this, 'checkout', $language);
     }
 
     /**
@@ -275,10 +277,10 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
      */
     public function proceedToOrderConfirmation()
     {
-        $language = \Helper::getCurrentLanguage($this);
+        $language = Helper::getCurrentLanguage($this);
 
         if($this->verifyPage($language)) {
-            \Helper::clickNamedLink($this, 'checkout', $language);
+            Helper::clickNamedLink($this, 'checkout', $language);
         }
 
         $this->getPage('CheckoutConfirm')->verifyPage($language);
@@ -291,10 +293,10 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
      */
     public function proceedToOrderConfirmationWithLogin($eMail, $password)
     {
-        $language = \Helper::getCurrentLanguage($this);
+        $language = Helper::getCurrentLanguage($this);
 
         if($this->verifyPage($language)) {
-            \Helper::clickNamedLink($this, 'checkout', $language);
+            Helper::clickNamedLink($this, 'checkout', $language);
         }
 
         $this->getPage('Account')->login($eMail, $password);
@@ -307,10 +309,10 @@ class CheckoutCart extends Page implements \HelperSelectorInterface
      */
     public function proceedToOrderConfirmationWithRegistration(array $data)
     {
-        $language = \Helper::getCurrentLanguage($this);
+        $language = Helper::getCurrentLanguage($this);
 
         if($this->verifyPage($language)) {
-            \Helper::clickNamedLink($this, 'checkout', $language);
+            Helper::clickNamedLink($this, 'checkout', $language);
         }
 
         $this->getPage('Account')->register($data);

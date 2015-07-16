@@ -1,11 +1,11 @@
 <?php
 
-use Page\Emotion\Note;
-use Element\MultipleElement;
-use Element\Emotion\NotePosition;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\Note;
+
+use Shopware\Tests\Mink\Element\Emotion\NotePosition;
+use Behat\Gherkin\Node\TableNode;
 
 class NoteContext extends SubContext
 {
@@ -48,12 +48,8 @@ class NoteContext extends SubContext
         $page = $this->getPage('Note');
         $language = Helper::getCurrentLanguage($page);
 
-        /** @var MultipleElement $notePositions */
-        $notePositions = $this->getElement('NotePosition');
-        $notePositions->setParent($page);
-
         /** @var NotePosition $notePosition */
-        $notePosition = $notePositions->setInstance($position);
+        $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
         Helper::clickNamedLink($notePosition, $name, $language);
     }
 

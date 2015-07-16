@@ -1,31 +1,43 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Helper;
 
-class Paging extends Element implements \HelperSelectorInterface
+/**
+ * Element: Paging
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.paging');
+    protected $selector = ['css' => 'div.paging'];
 
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
+     */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'previous' => 'a.navi.prev',
             'next' => 'a.navi.more'
-        );
+        ];
     }
 
     /**
      * Returns an array of all named selectors of the element/page
-     * @return array
+     * @return array[]
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -35,17 +47,17 @@ class Paging extends Element implements \HelperSelectorInterface
     public function moveDirection($direction, $steps = 1)
     {
         $locator = array(strtolower($direction));
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, $locator);
 
         for ($i = 0; $i < $steps; $i++) {
-            $result = \Helper::countElements($this, $direction, 1);
+            $result = Helper::countElements($this, $direction, 1);
 
             if ($result !== true) {
-                $result = \Helper::countElements($this, $direction, 2);
+                $result = Helper::countElements($this, $direction, 2);
             }
 
             if ($result !== true) {
-                \Helper::throwException(
+                Helper::throwException(
                     array(sprintf('There is no more "%s" button! (after %d steps)', $direction, $i))
                 );
             }
@@ -62,7 +74,7 @@ class Paging extends Element implements \HelperSelectorInterface
         while (!$this->hasLink($page)) {
             if ($this->noElement('next', false)) {
                 $message = sprintf('Page %d was not found!', $page);
-                \Helper::throwException($message);
+                Helper::throwException($message);
                 return;
             }
             $this->moveDirection('next');
@@ -78,8 +90,8 @@ class Paging extends Element implements \HelperSelectorInterface
      */
     public function noElement($locator, $throwException = true)
     {
-        if (\Helper::getRequiredSelector($this, $locator)) { //previous or next
-            $result = \Helper::countElements($this, $locator);
+        if (Helper::getRequiredSelector($this, $locator)) { //previous or next
+            $result = Helper::countElements($this, $locator);
         } else { //page number (1, 2, 3, 4, ...)
             $result = !$this->hasLink($locator);
         }
@@ -89,7 +101,8 @@ class Paging extends Element implements \HelperSelectorInterface
         }
 
         if ($throwException) {
-            \Helper::throwException(array(sprintf('The Paging Link "%s" exists, but should not!', $locator)));
+            $message = sprintf('The Paging Link "%s" exists, but should not!', $locator);
+            Helper::throwException($message);
         }
 
         return false;

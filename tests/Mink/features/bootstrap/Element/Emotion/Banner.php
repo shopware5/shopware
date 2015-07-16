@@ -1,17 +1,26 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
+use Shopware\Tests\Mink\HelperSelectorInterface;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
-class Banner extends MultipleElement implements \HelperSelectorInterface
+/**
+ * Element: Banner
+ * Location: Emotion element for image banners
+ *
+ * Available retrievable properties:
+ * - image (string, e.g. "deli_teaser503886c2336e3.jpg")
+ * - link (string, e.g. "/Campaign/index/emotionId/6")
+ * - mapping (array[])
+ */
+class Banner extends MultipleElement implements HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion-element > div.banner-element');
+    protected $selector = ['css' => 'div.emotion-element > div.banner-element'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -19,44 +28,41 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'image' => 'img',
             'link' => 'div.mapping > a',
             'mapping' => 'div.banner-mapping > a.emotion-banner-mapping'
-        );
+        ];
     }
 
     /**
+     * Returns the banner image
      * @return array
      */
     public function getImageProperty()
     {
-        $locators = array('image');
-        $elements = \Helper::findElements($this, $locators);
-
+        $elements = Helper::findElements($this, ['image']);
         return $elements['image']->getAttribute('src');
     }
 
     /**
+     * Returns the banner link
      * @return string
      */
     public function getLinkProperty()
     {
-        $locators = array('link');
-        $elements = \Helper::findElements($this, $locators);
-
+        $elements = Helper::findElements($this, ['link']);
         return $elements['link']->getAttribute('href');
     }
 
     /**
-     * @return array
+     * Returns the banner mapping
+     * @return array[]
      */
     public function getMapping()
     {
-        $locators = array('mapping');
-        $elements = \Helper::findAllOfElements($this, $locators);
-
-        $mapping = array();
+        $elements = Helper::findAllOfElements($this, ['mapping']);
+        $mapping = [];
 
         foreach ($elements['mapping'] as $link) {
             $mapping[] = ['mapping' => $link->getAttribute('href')];
@@ -65,11 +71,13 @@ class Banner extends MultipleElement implements \HelperSelectorInterface
         return $mapping;
     }
 
+    /**
+     * Clicks the banner link
+     * @throws \Behat\Mink\Exception\ElementException
+     */
     public function click()
     {
-        $locators = array('link');
-        $elements = \Helper::findElements($this, $locators);
-
+        $elements = Helper::findElements($this, ['link']);
         $elements['link']->click();
     }
 }

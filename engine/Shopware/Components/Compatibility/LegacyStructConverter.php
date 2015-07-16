@@ -190,8 +190,11 @@ class LegacyStructConverter
         $promotion = array_merge(
             $promotion,
             array(
+                'has_pseudoprice' => $cheapestPrice->getCalculatedPseudoPrice() > $cheapestPrice->getCalculatedPrice(),
                 'price' => $price,
+                'price_numeric' => $cheapestPrice->getCalculatedPrice(),
                 'pseudoprice' => $pseudoPrice,
+                'pseudoprice_numeric' => $cheapestPrice->getCalculatedPseudoPrice(),
                 'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
             )
         );
@@ -228,10 +231,10 @@ class LegacyStructConverter
             $promotion['image'] = $this->convertMediaStruct($product->getCover());
         }
 
-        
+
         if ($product->getVoteAverage()) {
             $promotion['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
-            
+
             /** @deprecated sVoteAverange value, use sVoteAverage instead */
             $promotion['sVoteAverange'] = $promotion['sVoteAverage'];
         }
@@ -282,13 +285,11 @@ class LegacyStructConverter
         /** @var $variantPrice StoreFrontBundle\Struct\Product\Price */
         $variantPrice = $product->getVariantPrice();
 
-        $data['price'] = $this->sFormatPrice(
-            $variantPrice->getCalculatedPrice()
-        );
-
-        $data['pseudoprice'] = $this->sFormatPrice(
-            $variantPrice->getCalculatedPseudoPrice()
-        );
+        $data['price'] = $this->sFormatPrice($variantPrice->getCalculatedPrice());
+        $data['price_numeric'] = $variantPrice->getCalculatedPrice();
+        $data['pseudoprice'] = $this->sFormatPrice($variantPrice->getCalculatedPseudoPrice());
+        $data['pseudoprice_numeric'] = $variantPrice->getCalculatedPseudoPrice();
+        $data['has_pseudoprice'] = $variantPrice->getCalculatedPseudoPrice() > $variantPrice->getCalculatedPrice();
 
         if ($variantPrice->getCalculatedPseudoPrice()) {
             $discPseudo = $variantPrice->getCalculatedPseudoPrice();
@@ -332,14 +333,14 @@ class LegacyStructConverter
         }
 
         $data['sVoteAverage'] = array('average' => 0, 'count' => 0);
-        
+
         /** @deprecated averange value, use average instead */
         $data['sVoteAverage']['averange'] = 0;
-        
+
         if ($product->getVoteAverage()) {
             $data['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
         }
-        
+
         /** @deprecated sVoteAverange value, use sVoteAverage instead */
         $data['sVoteAverange'] = $data['sVoteAverage'];
 
@@ -406,7 +407,7 @@ class LegacyStructConverter
         );
 
         $data['attributes'] = $average->getAttributes();
-        
+
         /** @deprecated averange value, use average instead */
         $data['averange'] = $data['average'];
 

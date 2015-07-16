@@ -1,11 +1,18 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class AccountShipping extends \Element\Emotion\AccountShipping
+/**
+ * Element: AccountShipping
+ * Location: Shipping address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class AccountShipping extends \Shopware\Tests\Mink\Element\Emotion\AccountShipping
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.account--shipping.account--box');
+    protected $selector = ['css' => 'div.account--shipping.account--box'];
 }

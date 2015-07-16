@@ -1,8 +1,8 @@
 <?php
 
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Behat\Gherkin\Node\TableNode;
 
 class AccountContext extends SubContext
 {
@@ -61,7 +61,7 @@ class AccountContext extends SubContext
             $pageName = 'CheckoutConfirm';
         }
 
-        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -80,7 +80,7 @@ class AccountContext extends SubContext
             $pageName = 'CheckoutConfirm';
         }
 
-        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -116,7 +116,7 @@ class AccountContext extends SubContext
             $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
-        /** @var \Page\Emotion\Account|\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = array(
             array(
@@ -148,7 +148,7 @@ class AccountContext extends SubContext
      */
     public function iChooseTheAddress($name)
     {
-        /** @var \Page\Emotion\Account $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account $page */
         $page = $this->getPage("Account");
 
         $addresses = $this->getMultipleElement($page, 'AddressBox');

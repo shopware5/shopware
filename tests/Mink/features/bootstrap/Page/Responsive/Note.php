@@ -1,9 +1,9 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-use Element\Emotion\NotePosition;
+use Shopware\Tests\Mink\Element\Emotion\NotePosition;
 
-class Note extends \Page\Emotion\Note
+class Note extends \Shopware\Tests\Mink\Page\Emotion\Note
 {
     /**
      * @param NotePosition $notePositions

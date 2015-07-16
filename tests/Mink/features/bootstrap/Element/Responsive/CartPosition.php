@@ -1,17 +1,28 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class CartPosition extends \Element\Emotion\CartPosition
+/**
+ * Element: CartPosition
+ * Location: Cart positions on cart and checkout confirm page
+ *
+ * Available retrievable properties:
+ * - number (string, e.g. "SW10181")
+ * - name (string, e.g. "Reisekoffer Set")
+ * - quantity (float, e.g. "1")
+ * - itemPrice (float, e.g. "139,99")
+ * - sum (float, e.g. "139,99")
+ */
+class CartPosition extends \Shopware\Tests\Mink\Element\Emotion\CartPosition
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.row--product');
+    protected $selector = ['css' => 'div.row--product'];
 
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'div.table--content > a.content--title',
             'number' => 'div.table--content > p.content--sku',
             'thumbnailLink' => 'div.table--media a.table--media-link',
@@ -19,6 +30,6 @@ class CartPosition extends \Element\Emotion\CartPosition
             'quantity' => 'div.column--quantity option[selected]',
             'itemPrice' => 'div.column--unit-price',
             'sum' => 'div.column--total-price'
-        );
+        ];
     }
 }

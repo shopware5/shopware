@@ -1,8 +1,9 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\NotePosition;
+use Shopware\Tests\Mink\Element\Emotion\NotePosition;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
 
 class Note extends Page
 {
@@ -38,17 +39,17 @@ class Note extends Page
                 count($notePositions),
                 count($items)
             );
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
 
-        $result = \Helper::searchElements($items, $notePositions);
+        $result = Helper::searchElements($items, $notePositions);
 
         if($result !== true) {
             $messages = array('The following articles were not found:');
             foreach ($result as $product) {
                 $messages[] = $product['number'] . ' - ' . $product['name'];
             }
-            \Helper::throwException($messages);
+            Helper::throwException($messages);
         }
     }
 }

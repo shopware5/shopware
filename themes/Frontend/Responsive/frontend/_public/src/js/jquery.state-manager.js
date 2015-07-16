@@ -1279,6 +1279,7 @@
             detections['is--webkit']    = me._checkUserAgent(/webkit/);
             detections['is--safari']    = !detections['is--chrome'] && me._checkUserAgent(/safari/);
             detections['is--ie']        = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
+            detections['is--ie-touch']  = detections['is--ie'] && me._checkUserAgent(/touch/);
             detections['is--gecko']     = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
 
             $.each(detections, function(key, value) {

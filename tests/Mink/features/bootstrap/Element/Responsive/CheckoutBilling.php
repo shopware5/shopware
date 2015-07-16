@@ -1,11 +1,18 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class CheckoutBilling extends \Element\Emotion\CheckoutBilling
+/**
+ * Element: CheckoutBilling
+ * Location: Billing address box on checkout confirm page
+ *
+ * Available retrievable properties:
+ * - ???
+ */
+class CheckoutBilling extends \Shopware\Tests\Mink\Element\Emotion\CheckoutBilling
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.billing--panel');
+    protected $selector = ['css' => 'div.billing--panel'];
 }

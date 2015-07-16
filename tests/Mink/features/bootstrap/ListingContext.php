@@ -1,11 +1,11 @@
 <?php
 
-use Page\Emotion\Listing;
-use Element\MultipleElement;
-use Element\Emotion\ArticleBox;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\Listing;
+use Shopware\Tests\Mink\Element\Emotion\FilterGroup;
+use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
+use Behat\Gherkin\Node\TableNode;
 
 class ListingContext extends SubContext
 {
@@ -58,10 +58,8 @@ class ListingContext extends SubContext
         /** @var Listing $page */
         $page = $this->getPage('Listing');
 
-        /** @var MultipleElement $filterGroups */
-        $filterGroups = $this->getElement('FilterGroup');
-        $filterGroups->setParent($page);
-
+        /** @var FilterGroup $filterGroups */
+        $filterGroups = $this->getMultipleElement($page, 'FilterGroup');
         $page->filter($filterGroups, $properties);
     }
 
@@ -104,13 +102,9 @@ class ListingContext extends SubContext
         $page = $this->getPage('Listing');
         $language = Helper::getCurrentLanguage($page);
 
-        /** @var MultipleElement $articleBoxes */
-        $articleBoxes = $this->getElement('ArticleBox');
-        $articleBoxes->setParent($page);
-
         /** @var ArticleBox $articleBox */
-        $articleBox = $articleBoxes->setInstance($position);
-        $articleBox->clickActionLink('order', $language);
+        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        Helper::clickNamedLink($articleBox, 'order', $language);
     }
 
     /**

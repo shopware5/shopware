@@ -1,32 +1,38 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: SitemapGroup
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class SitemapGroup extends MultipleElement
 {
     /** @var array $selector */
-    protected $selector = array('css' => '.sitemap > div:not(.clear) > ul > li');
+    protected $selector = ['css' => '.sitemap > div:not(.clear) > ul > li'];
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'titleLink' => 'a',
             'level1' => 'li ~ ul > li > a',
             'level2' => 'li ~ ul > li > ul > li > a'
-        );
+        ];
     }
 
     /**
-     * @return null|string
+     * Returns the group title
+     * @return string
      */
     public function getTitle()
     {
@@ -34,43 +40,46 @@ class SitemapGroup extends MultipleElement
     }
 
     /**
-     * @param array $element
-     * @return array
+     * Returns the title links
+     * @param NodeElement[] $element
+     * @return string[]
      */
     public function getTitleLinkData(array $element)
     {
         /** @var NodeElement $titleLink */
         $titleLink = $element[0];
 
-        return array(
+        return [
             'title' => $titleLink->getAttribute('title'),
             'link' => $titleLink->getAttribute('href')
-        );
+        ];
     }
 
     /**
-     * @param array $elements
-     * @return array
+     * Returns the data of entries on 1st level
+     * @param NodeElement[] $elements
+     * @return array[]
      */
     public function getLevel1Data(array $elements)
     {
-        $result = array();
+        $result = [];
 
         /** @var NodeElement $element */
         foreach ($elements as $element) {
-            $result[] = array(
+            $result[] = [
                 'value' => $element->getText(),
                 'title' => $element->getAttribute('title'),
                 'link' => $element->getAttribute('href')
-            );
+            ];
         }
 
         return $result;
     }
 
     /**
-     * @param array $elements
-     * @return array
+     * Returns the data of entries on 2nd level
+     * @param NodeElement[] $elements
+     * @return array[]
      */
     public function getLevel2Data(array $elements)
     {

@@ -1,13 +1,20 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Helper;
 
-class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
+/**
+ * Element: ArticleEvaluation
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class ArticleEvaluation extends \Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation
 {
     /** @var array $selector */
-    protected $selector = array('css' => 'div.review--entry:not(.is--answer)');
+    protected $selector = ['css' => 'div.review--entry:not(.is--answer)'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,14 +22,14 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'author' => 'span.content--field:nth-of-type(2)',
             'date' => 'span.content--field:nth-of-type(3)',
             'stars' => 'span.product--rating > meta:nth-of-type(1)',
             'headline' => 'h4.content--title',
             'comment' => 'p.review--content',
             'answer' => 'div + div.is--answer'
-        );
+        ];
     }
 
     /**
@@ -30,7 +37,7 @@ class ArticleEvaluation extends \Element\Emotion\ArticleEvaluation
      */
     public function getStarsProperty()
     {
-        $elements = \Helper::findElements($this, ['stars']);
+        $elements = Helper::findElements($this, ['stars']);
         return floatval($elements['stars']->getAttribute('content')) * 2;
     }
 }

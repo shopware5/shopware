@@ -1,31 +1,57 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: BlogComment
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class BlogComment extends MultipleElement
 {
     /** @var array $selector */
     protected $selector = array('css' => 'div.comment_outer');
 
-    /** @var array $namedSelectors */
-    protected $cssLocator = array(
-        'author' => 'div.comment_left > .author',
-        'date' => 'div.comment_left > .date',
-        'stars' => 'div.comment_left > .star',
-        'headline' => 'div.comment_right > .hline',
-        'comment' => 'div.comment_right > .comment'
-    );
+    /**
+     * Returns an array of all css selectors of the element/page
+     * @return string[]
+     */
+    public function getCssSelectors()
+    {
+        return [
+            'author' => 'div.comment_left > .author',
+            'date' => 'div.comment_left > .date',
+            'stars' => 'div.comment_left > .star',
+            'headline' => 'div.comment_right > .hline',
+            'comment' => 'div.comment_right > .comment'
+        ];
+    }
 
+    /**
+     * Returns the star rating
+     * @return float
+     */
+    public function getStarsProperty()
+    {
+        $elements = Helper::findElements($this, ['stars']);
+        return Helper::floatValue($elements['stars']->getAttribute('class'));
+    }
+
+    /**
+     * @param array $locators
+     * @return array
+     */
     public function getProperties(array $locators)
     {
         $return = array();
 
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         foreach($elements as $locator => $element)
         {

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'SubContext.php';
+namespace Shopware\Tests\Mink;
 
 class BasicSettingsContext extends SubContext
 {
@@ -9,7 +9,7 @@ class BasicSettingsContext extends SubContext
      *
      * @param $configElementName
      * @param $configValue
-     * @throws Zend_Db_Adapter_Exception
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function basicSettingsElementHasValue($configElementName, $configValue)
     {

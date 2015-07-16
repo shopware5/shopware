@@ -1,13 +1,20 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class ArticleBox extends \Element\Emotion\ArticleBox
+/**
+ * Element: ArticleBox
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class ArticleBox extends \Shopware\Tests\Mink\Element\Emotion\ArticleBox
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.product--box.box--basic');
+    protected $selector = ['css' => 'div.product--box.box--basic'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,10 +22,10 @@ class ArticleBox extends \Element\Emotion\ArticleBox
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'div.product--info > a:product--title',
             'price' => 'div.product--price > .price--default'
-        );
+        ];
     }
 
     /**
@@ -27,9 +34,9 @@ class ArticleBox extends \Element\Emotion\ArticleBox
      */
     public function getNamedSelectors()
     {
-        return array(
-            'compare'  => array('de' => 'Vergleichen',  'en' => 'Compare'),
-            'remember' => array('de' => 'Merken',       'en' => 'Remember')
-        );
+        return [
+            'compare'  => ['de' => 'Vergleichen',  'en' => 'Compare'],
+            'remember' => ['de' => 'Merken',       'en' => 'Remember']
+        ];
     }
 }

@@ -1,36 +1,43 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
-class SearchForm extends Element implements \HelperSelectorInterface
+/**
+ * Element: SearchForm
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
+class SearchForm extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => '#searchcontainer');
+    protected $selector = ['css' => '#searchcontainer'];
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'searchForm' => '#searchform',
-        );
+        ];
     }
 
     /**
      * Returns an array of all named selectors of the element/page
-     * @return array
+     * @return array[]
      */
     public function getNamedSelectors()
     {
-        return array(
-            'searchButton' => array('de' => 'Suchen', 'en' => 'Search')
-        );
+        return [
+            'searchButton' => ['de' => 'Suchen', 'en' => 'Search']
+        ];
     }
 
 

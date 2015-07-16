@@ -1,11 +1,18 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class YouTube extends \Element\Emotion\YouTube
+/**
+ * Element: YouTube
+ * Location: Emotion element for Youtube videos
+ *
+ * Available retrievable properties:
+ * - code (string, e.g. "RVz71XsJIEA")
+ */
+class YouTube extends \Shopware\Tests\Mink\Element\Emotion\YouTube
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.emotion--element.youtube-element');
+    protected $selector = ['css' => 'div.emotion--element.youtube-element'];
 }

@@ -1,11 +1,10 @@
 <?php
 
-use Page\Emotion\Blog;
-use Element\MultipleElement;
-use Element\Emotion\BlogBox;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\Blog;
+use Shopware\Tests\Mink\Element\Emotion\BlogBox;
+use Behat\Gherkin\Node\TableNode;
 
 class BlogContext extends SubContext
 {
@@ -27,12 +26,8 @@ class BlogContext extends SubContext
         $page = $this->getPage('Blog');
         $language = Helper::getCurrentLanguage($page);
 
-        /** @var MultipleElement $blogBoxes */
-        $blogBoxes = $this->getElement('BlogBox');
-        $blogBoxes->setParent($page);
-
         /** @var BlogBox $blogBox */
-        $blogBox = $blogBoxes->setInstance($position);
+        $blogBox = $this->getMultipleElement($page, 'BlogBox', $position);
         Helper::clickNamedLink($blogBox, 'readMore', $language);
     }
 
@@ -52,5 +47,19 @@ class BlogContext extends SubContext
         $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
         $this->getContainer()->get('db')->exec($sql);
         $this->getSession()->reload();
+    }
+
+    /**
+     * @Then /^I should see an average evaluation of (\d+) from following comments:$/
+     */
+    public function iShouldSeeAnAverageEvaluationOfFromFollowingComments($average, TableNode $comments)
+    {
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Blog $page */
+        $page = $this->getPage('Blog');
+
+        /** @var \Shopware\Tests\Mink\Element\MultipleElement $blogComments */
+        $blogComments = $this->getMultipleElement($page, 'BlogComment');
+
+        $page->checkComments($blogComments, $average, $comments->getHash());
     }
 }

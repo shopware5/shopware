@@ -1,13 +1,20 @@
 <?php
 
-namespace Element\Responsive;
+namespace Shopware\Tests\Mink\Element\Responsive;
 
-class AddressBox extends \Element\Emotion\AddressBox
+/**
+ * Element: AddressBox
+ * Location: Billing/Shipping address boxes on address selections
+ *
+ * Available retrievable properties:
+ * -
+ */
+class AddressBox extends \Shopware\Tests\Mink\Element\Emotion\AddressBox
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.address--container .panel');
+    protected $selector = ['css' => 'div.address--container .panel'];
 
     /**
      * Returns an array of all css selectors of the element/page
@@ -15,8 +22,8 @@ class AddressBox extends \Element\Emotion\AddressBox
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'title' => '.panel--title'
-        );
+        ];
     }
 }

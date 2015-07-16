@@ -1,12 +1,18 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: FilterGroup
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class FilterGroup extends MultipleElement
 {
     /** @var array $selector */
@@ -14,13 +20,13 @@ class FilterGroup extends MultipleElement
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'properties' => 'div + div.slideContainer'
-        );
+        ];
     }
 
     /**
@@ -29,8 +35,7 @@ class FilterGroup extends MultipleElement
      */
     public function setProperty($propertyName)
     {
-        $locator = array('properties');
-        $elements = \Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, ['properties']);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];

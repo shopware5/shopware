@@ -1,10 +1,13 @@
 <?php
+
+namespace Shopware\Tests\Mink;
+
 use Behat\Mink\Driver\DriverInterface;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class SubContext extends PageObjectContext implements KernelAwareInterface

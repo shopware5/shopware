@@ -1,26 +1,32 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-require_once 'tests/Mink/features/bootstrap/Element/MultipleElement.php';
-
+/**
+ * Element: AccountOrder
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class AccountOrder extends MultipleElement
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.orderoverview_active > .table > .table_row');
+    protected $selector = ['css' => 'div.orderoverview_active > .table > .table_row'];
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'date' => 'div > div:nth-of-type(1)',
             'number' => 'div > div:nth-of-type(2)',
             'footerDate' => 'div + .displaynone > .table > .table_foot > div:nth-of-type(2) > p:nth-of-type(1)',
@@ -31,7 +37,7 @@ class AccountOrder extends MultipleElement
             'quantity' => '.grid_2 > .center',
             'price' => '.grid_3 > .textright',
             'sum' => '.grid_2.bold > .textright'
-        );
+        ];
     }
 
     /**
@@ -40,15 +46,14 @@ class AccountOrder extends MultipleElement
      */
     public function getDateProperty()
     {
-        $locators = array('date', 'footerDate');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['date', 'footerDate']);
 
-        $dates = array(
+        $dates = [
             'orderDate' => $elements['date']->getText(),
             'footerDate' => $elements['footerDate']->getText()
-        );
+        ];
 
-        return \Helper::getUnique($dates);
+        return Helper::getUnique($dates);
     }
 
     /**
@@ -57,35 +62,29 @@ class AccountOrder extends MultipleElement
      */
     public function getNumberProperty()
     {
-        $locators = array('number', 'footerNumber');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['number', 'footerNumber']);
 
-        $numbers = array(
+        $numbers = [
             'orderNumber' => $elements['number']->getText(),
             'footerNumber' => $elements['footerNumber']->getText()
-        );
+        ];
 
-        return \Helper::getUnique($numbers);
+        return Helper::getUnique($numbers);
     }
 
     /**
      * Returns the order positions
-     *
-     * @param array $locators
-     * @return array
+     * @param string[] $locators
+     * @return array[]
      */
-    public function getPositions($locators = array('product', 'currentPrice', 'quantity', 'price', 'sum'))
+    public function getPositions($locators = ['product', 'currentPrice', 'quantity', 'price', 'sum'])
     {
-        $selectors = \Helper::getRequiredSelectors($this, $locators);
-
-        $locators = array('positions');
-        $elements = \Helper::findAllOfElements($this, $locators);
-
-        $positions = array();
+        $selectors = Helper::getRequiredSelectors($this, $locators);
+        $elements = Helper::findAllOfElements($this, ['positions']);
+        $positions = [];
 
         /** @var NodeElement $position */
-        foreach($elements['positions'] as $position)
-        {
+        foreach ($elements['positions'] as $position) {
             $positions[] = $this->getOrderPositionData($position, $selectors);
         }
 
@@ -95,20 +94,20 @@ class AccountOrder extends MultipleElement
     /**
      * Helper function returns the data of an order position
      * @param NodeElement $position
-     * @param array $selectors
+     * @param string[] $selectors
      * @return array
      */
     private function getOrderPositionData(NodeElement $position, array $selectors)
     {
-        $data = array();
+        $data = [];
 
-        foreach($selectors as $key => $selector) {
+        foreach ($selectors as $key => $selector) {
             $element = $position->find('css', $selector);
 
             $data[$key] = $element->getText();
 
             if ($key !== 'product') {
-                $data[$key] = \Helper::floatValue($data[$key]);
+                $data[$key] = Helper::floatValue($data[$key]);
             }
         }
 

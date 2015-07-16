@@ -1,9 +1,16 @@
 <?php
 
-namespace Element\Emotion;
+namespace Shopware\Tests\Mink\Element\Emotion;
 
-require_once 'tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php';
+use Shopware\Tests\Mink\Helper;
 
+/**
+ * Element: ArticleBox
+ * Location: Billing address box on account dashboard
+ *
+ * Available retrievable properties:
+ * - address (Element[], please use Account::checkAddress())
+ */
 class ArticleBox extends CartPosition
 {
     /** @var array $selector */
@@ -11,14 +18,14 @@ class ArticleBox extends CartPosition
 
     /**
      * Returns an array of all css selectors of the element/page
-     * @return array
+     * @return string[]
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'name' => 'div.inner > a:nth-of-type(2)',
             'price' => 'p.price'
-        );
+        ];
     }
 
     /**
@@ -27,19 +34,20 @@ class ArticleBox extends CartPosition
      */
     public function getNamedSelectors()
     {
-        return array(
-            'order'   => array('de' => 'Jetzt bestellen', 'en' => 'Order now'),
-            'compare' => array('de' => 'Vergleichen',     'en' => 'Compare'),
-            'details' => array('de' => 'Zum Produkt',     'en' => 'See details')
-        );
+        return [
+            'order'   => ['de' => 'Jetzt bestellen', 'en' => 'Order now'],
+            'compare' => ['de' => 'Vergleichen',     'en' => 'Compare'],
+            'details' => ['de' => 'Zum Produkt',     'en' => 'See details']
+        ];
     }
 
     /**
+     * Returns the price
      * @return float
      */
     public function getPriceProperty()
     {
         $price = $this->getProperty('price');
-        return \Helper::floatValue($price);
+        return Helper::floatValue($price);
     }
 }

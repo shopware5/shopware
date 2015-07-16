@@ -1,11 +1,12 @@
 <?php
-namespace Page\Responsive;
+namespace Shopware\Tests\Mink\Page\Responsive;
 
-use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
-use Element\MultipleElement;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Helper;
 
-class Detail extends \Page\Emotion\Detail
+class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
 {
     /**
      * Returns an array of all css selectors of the element/page
@@ -52,7 +53,7 @@ class Detail extends \Page\Emotion\Detail
         $this->fillField('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof SahiDriver) {
+        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
@@ -61,7 +62,7 @@ class Detail extends \Page\Emotion\Detail
     {
         $locators = array('productRating', 'productRatingCount');
 
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         $check = array();
 
@@ -80,12 +81,12 @@ class Detail extends \Page\Emotion\Detail
             }
         }
 
-        $check = \Helper::floatArray($check);
-        $result = \Helper::checkArray($check);
+        $check = Helper::floatArray($check);
+        $result = Helper::checkArray($check);
 
         if ($result !== true) {
             $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
-            \Helper::throwException($message);
+            Helper::throwException($message);
         }
     }
 
@@ -102,10 +103,10 @@ class Detail extends \Page\Emotion\Detail
             )
         );
 
-        \Helper::fillForm($this, 'notificationForm', $data);
+        Helper::fillForm($this, 'notificationForm', $data);
 
         $locators = array('notificationSubmit');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
         $elements['notificationSubmit']->press();
     }
 }

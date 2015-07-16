@@ -1,10 +1,10 @@
 <?php
 
-use Page\Emotion\CheckoutCart;
-use Element\Emotion\CartPosition;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\CheckoutCart;
+use Shopware\Tests\Mink\Element\Emotion\CartPosition;
+use Behat\Gherkin\Node\TableNode;
 
 class CheckoutContext extends SubContext
 {
@@ -53,18 +53,16 @@ class CheckoutContext extends SubContext
         $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
         $values = $positions->getHash();
 
-        /** @var \Page\Emotion\Account $page */
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account $page */
         $page = $this->getPage('Account');
         $language = Helper::getCurrentLanguage($page);
 
         $page->open();
         Helper::clickNamedLink($page, 'myOrdersLink', $language);
 
-        /** @var \Element\Emotion\AccountOrder $order */
-        $order = $this->getElement('AccountOrder');
-        $order->setParent($page);
-
-        $this->getPage('Account')->checkOrder($order, $orderNumber, $values);
+        /** @var \Shopware\Tests\Mink\Element\Emotion\AccountOrder $order */
+        $order = $this->getMultipleElement($page, 'AccountOrder');
+        $page->checkOrder($order, $orderNumber, $values);
     }
 
     /**

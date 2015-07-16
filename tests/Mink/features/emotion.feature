@@ -7,20 +7,20 @@ Feature: Emotion
     @slider @banner @blog
     Scenario: Check the frontpage emotions
         Then  I should see a banner slider:
-            | image                   |
-            | beach1503f8532d4648.jpg |
-            | beach2503f8535275aa.jpg |
-            | beach3503f853820fa7.jpg |
+            | image               |
+            | beach1503f8532d4648 |
+            | beach2503f8535275aa |
+            | beach3503f853820fa7 |
 
-        And   I should see a banner on position 1 with image "beach_teaser5038874e87338.jpg" and mapping:
+        And   I should see a banner on position 1 with image "beach_teaser5038874e87338" and mapping:
             | mapping                                        |
             | /sommerwelten/beachwear/213/surfbrett          |
             | /sommerwelten/accessoires/170/sonnenbrille-red |
             | /sommerwelten/beachwear/178/strandtuch-ibiza   |
 
-        And   I should see a banner on position 2 with image "deli_teaser503886c2336e3.jpg" to "/Campaign/index/emotionId/6"
-        And   I should see a banner on position 3 with image "flip_teaser503886e4dd480.jpg"
-        And   I should see a banner on position 4 with image "bienen_teaser.jpg"
+        And   I should see a banner on position 2 with image "deli_teaser503886c2336e3" to "/Campaign/index/emotionId/6"
+        And   I should see a banner on position 3 with image "flip_teaser503886e4dd480"
+        And   I should see a banner on position 4 with image "bienen_teaser"
 
         And   I should see a manufacturer slider:
             | image            | link                           | name                          |
@@ -45,11 +45,11 @@ Feature: Emotion
     Scenario: Check emotions on category "Genusswelten"
         When  I follow "Genusswelten"
 
-        Then  I should see a banner with image "genuss_top_banner.jpg"
+        Then  I should see a banner with image "genuss_top_banner"
 
-        And   the category teaser on position 1 for "Tees und Zubehör" should have the image "genuss_tees_banner.jpg" and link to "/genusswelten/tees-und-zubehoer/"
-        And   the category teaser on position 2 for "Edelbrände" should have the image "genuss_wein_banner.jpg" and link to "/genusswelten/edelbraende/"
-        And   the category teaser on position 3 for "Köstlichkeiten" should have the image "genuss_deli_banner.jpg" and link to "/genusswelten/koestlichkeiten/"
+        And   the category teaser on position 1 for "Tees und Zubehör" should have the image "genuss_tees_banner" and link to "/genusswelten/tees-und-zubehoer/"
+        And   the category teaser on position 2 for "Edelbrände" should have the image "genuss_wein_banner" and link to "/genusswelten/edelbraende/"
+        And   the category teaser on position 3 for "Köstlichkeiten" should have the image "genuss_deli_banner" and link to "/genusswelten/koestlichkeiten/"
 
         And   I should see an article slider:
             | link                                                           | name                              | price   |
@@ -70,31 +70,27 @@ Feature: Emotion
         And   I should see a YouTube-Video "RVz71XsJIEA"
 
         And   the product box on position 1 should have the following properties:
-            | property | value                                                                                                            |
-            | name     | All Natural - Sesame Sage Bodylotion                                                                             |
-            | text     | subringor voco ara recolo, labia boo volutarie avus expio ergo via Daci, in for nec fortis, se primoris. Frux eo |
-            | price    | 21,40 €                                                                                                          |
-            | link     | /sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion                                             |
+            | property | value                                                                |
+            | name     | All Natural - Sesame Sage Bodylotion                                 |
+            | price    | 21,40 €                                                              |
+            | link     | /sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion |
 
         And   the product box on position 2 should have the following properties:
-            | property | value                                                                                                       |
-            | name     | All Natural - Rosemary Grapefruit Shampoo                                                                   |
-            | text     | Dicatio grate. Quia sal loco Pareo in Jacio capulatio si inhalo laus aut faveo Obscoena Sublime quartus pax |
-            | price    | 12,80 €                                                                                                     |
-            | link     | /sommerwelten/beauty-und-care/215/all-natural-rosemary-grapefruit-shampoo                                   |
+            | property | value                                                                     |
+            | name     | All Natural - Rosemary Grapefruit Shampoo                                 |
+            | price    | 12,80 €                                                                   |
+            | link     | /sommerwelten/beauty-und-care/215/all-natural-rosemary-grapefruit-shampoo |
 
         And   the product box on position 3 should have the following properties:
-            | property | value                                                                                                          |
-            | name     | All Natural - Lemon Honey Soap                                                                                 |
-            | text     | Ichilominus Fultus ordior, ora Sterilis qua Se sum cum Conspicio sed Eo at ver oportet, filia cedo comprehendo |
-            | price    | 11,40 €                                                                                                        |
-            | link     | /sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap                                                 |
+            | property | value                                                          |
+            | name     | All Natural - Lemon Honey Soap                                 |
+            | price    | 11,40 €                                                        |
+            | link     | /sommerwelten/beauty-und-care/218/all-natural-lemon-honey-soap |
 
         And   the product box on position 4 should have the following properties:
-            | property | value                                                                                                              |
-            | name     | All Natural - Orange Wild Herbs Shower Gel                                                                         |
-            | text     | Ilis ala comitatus oro labia, tergus aro saeta ius nomen. Vox Tractare nos premo quinquagesimus recedo excello tot |
-            | price    | 12,80 €                                                                                                            |
-            | link     | /sommerwelten/beauty-und-care/217/all-natural-orange-wild-herbs-shower-gel                                         |
+            | property | value                                                                      |
+            | name     | All Natural - Orange Wild Herbs Shower Gel                                 |
+            | price    | 12,80 €                                                                    |
+            | link     | /sommerwelten/beauty-und-care/217/all-natural-orange-wild-herbs-shower-gel |
 
         And   I should see "Aliquam erat volutpat. Nulla sollicitudin tincidunt lacus eget lobortis. Nam cursus mattis arcu, eget ornare sapien elementum ut. Vestibulum egestas urna sed quam adipiscing vel tempor erat cursus. Morbi imperdiet, nibh et hendrerit mollis, nisl leo vulputate sapien, non accumsan tortor magna in nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus tempor suscipit sem, quis blandit velit faucibus quis. Sed sagittis nisi id elit commodo sed vulputate tortor consectetur. Aliquam tristique egestas justo."

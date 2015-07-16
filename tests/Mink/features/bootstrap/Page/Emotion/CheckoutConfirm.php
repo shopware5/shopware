@@ -1,10 +1,11 @@
 <?php
-namespace Page\Emotion;
+namespace  Shopware\Tests\Mink\Page\Emotion;
 
-use Element\Emotion\CheckoutPayment;
+use Shopware\Tests\Mink\Element\Emotion\CheckoutPayment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Helper;
 
-class CheckoutConfirm extends Page implements \HelperSelectorInterface
+class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var string $path
@@ -42,7 +43,7 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
         $namedSelectors = $this->getNamedSelectors();
 
         if(!$language) {
-            $language = \Helper::getCurrentLanguage($this);
+            $language = Helper::getCurrentLanguage($this);
         }
 
         $assert = new \Behat\Mink\WebAssert($this->getSession());
@@ -52,7 +53,7 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function getOrderNumber()
     {
         $locators = array('orderNumber');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
 
         $orderDetails = $elements['orderNumber']->getText();
 
@@ -68,7 +69,7 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function proceedToCheckout()
     {
         $this->checkField('sAGB');
-        \Helper::pressNamedButton($this, 'confirmButton');
+        Helper::pressNamedButton($this, 'confirmButton');
     }
 
     /**
@@ -78,12 +79,12 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function changePaymentMethod($data = array())
     {
         $element = $this->getElement('CheckoutPayment');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($element, 'changeButton', $language);
 
         $account = $this->getPage('Account');
-        \Helper::fillForm($account, 'paymentForm', $data);
-        \Helper::pressNamedButton($account, 'changePaymentButton', $language);
+        Helper::fillForm($account, 'paymentForm', $data);
+        Helper::pressNamedButton($account, 'changePaymentButton', $language);
     }
 
     /**
@@ -92,12 +93,12 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function changeBillingAddress($data = array())
     {
         $element = $this->getElement('CheckoutBilling');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($element, 'changeButton', $language);
 
         $account = $this->getPage('Account');
-        \Helper::fillForm($account, 'billingForm', $data);
-        \Helper::pressNamedButton($account, 'changeBillingButton', $language);
+        Helper::fillForm($account, 'billingForm', $data);
+        Helper::pressNamedButton($account, 'changeBillingButton', $language);
     }
 
     /**
@@ -106,12 +107,12 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
     public function changeShippingAddress($data = array())
     {
         $element = $this->getElement('CheckoutShipping');
-        $language = \Helper::getCurrentLanguage($this);
-        \Helper::clickNamedLink($element, 'changeButton', $language);
+        $language = Helper::getCurrentLanguage($this);
+        Helper::clickNamedLink($element, 'changeButton', $language);
 
         $account = $this->getPage('Account');
-        \Helper::fillForm($account, 'shippingForm', $data);
-        \Helper::pressNamedButton($account, 'changeShippingButton', $language);
+        Helper::fillForm($account, 'shippingForm', $data);
+        Helper::pressNamedButton($account, 'changeShippingButton', $language);
     }
 
     /**
@@ -119,10 +120,10 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
      */
     public function changeShippingMethod($data = array())
     {
-        \Helper::fillForm($this, 'deliveryForm', $data);
+        Helper::fillForm($this, 'deliveryForm', $data);
 
         $locators = array('deliveryFormSubmit');
-        $elements = \Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, $locators);
         $elements['deliveryFormSubmit']->press();
     }
 
@@ -140,7 +141,7 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
             'paymentMethod' => $paymentMethod
         );
 
-        $result = \Helper::assertElementProperties($element, $properties);
+        $result = Helper::assertElementProperties($element, $properties);
 
         if($result === true) {
             return;
@@ -152,6 +153,6 @@ class CheckoutConfirm extends Page implements \HelperSelectorInterface
             $result['value2']
         );
 
-        \Helper::throwException($message);
+        Helper::throwException($message);
     }
 }
