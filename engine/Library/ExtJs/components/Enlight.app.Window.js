@@ -308,6 +308,21 @@ Ext.define('Enlight.app.Window', {
     },
 
     /**
+     * Sets the title of the header.
+     *
+     * @param { String } title - The title to be set
+     */
+    setTitle: function(title) {
+        var me = this;
+
+        me.callParent(arguments);
+
+        if(me.footerButton) {
+            me._toolbarBtn.setText(title);
+        }
+    },
+
+    /**
      * Special ExtJS method which will be called
      * after the window is rendered.
      *
@@ -375,7 +390,6 @@ Ext.define('Enlight.app.Window', {
             me.hiddenLayer = viewport.getHiddenLayer();
             me.hiddenLayer.setStyle('z-index', '9999999');
             me.hiddenLayer.appendTo(Ext.getBody());
-
         }
         Ext.each(activeWindows, function(window) {
             if(window != me) {
