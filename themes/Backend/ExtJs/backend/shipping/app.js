@@ -107,6 +107,7 @@ Ext.define('Shopware.apps.Shipping', {
         'Costsmatrix',
         'Attribute',
         'Dispatch',
+        'DispatchList',
         'Holiday',
 		'Tax'
     ],
