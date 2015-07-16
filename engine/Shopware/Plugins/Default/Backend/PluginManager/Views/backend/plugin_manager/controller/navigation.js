@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
         Shopware.app.Application.on({
             'display-plugin': me.displayDetailPage,
+            'display-plugin-by-name': me.displayDetailPageByName,
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
             'display-premium-plugins': me.displayPremiumPluginsPage,
             scope: me
@@ -237,6 +238,23 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         if (Ext.isFunction(callback)) {
             callback(detailWindow);
         }
+    },
+
+    displayDetailPageByName: function (technicalName) {
+        var me = this;
+
+        me.communityStore = Ext.create('Shopware.apps.PluginManager.store.StorePlugin');
+        me.communityStore.filter({
+            property: 'search',
+            value: technicalName
+        });
+
+        me.communityStore.load({
+            callback: function(items) {
+                var detailWindow = me.getView('detail.Window').create().show();
+                detailWindow.loadRecord(items[0]);
+            }
+        });
     },
 
     displayAccountPage: function () {

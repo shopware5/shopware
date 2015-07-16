@@ -88,7 +88,10 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
     	not_imported: '{s name=not_imported}not imported{/s}',
 		empty: '{s name=empty}empty{/s}',
 		file: '{s name=file}File{/s}',
-		noticeMessage: '{s name=notice_message}The import / export options do possibly not support all of your maintained fields. Please read our \<a href=\'http://wiki.shopware.de/Datenaustausch_detail_308.html\' target=\'_blank\' \>wiki\</a\> documentation before using the module.{/s}'
+        noticeMessage: '{s name=notice_message}The import / export options do possibly not support all of your maintained fields. Please read our \<a href=\'http://wiki.shopware.de/Datenaustausch_detail_308.html\' target=\'_blank\' \>wiki\</a\> documentation before using the module.{/s}',
+        deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed in Shopware 5.2. Please refer to our new import / export module.{/s}',
+        deprecationButton: '{s name=deprecated_button}get new import / export{/s}',
+        deprecationTitle: '{s name=deprecated_title}Heads up!{/s}'
     },
 
     /**
@@ -99,12 +102,12 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
     initComponent: function() {
         var me = this;
 
-		var block = Shopware.Notification.createBlockMessage(me.snippets.noticeMessage, 'notice');
         me.title = me.snippets.title;
 
         /* {if {acl_is_allowed privilege=read}} */
         me.items = [
-			block,
+			me.getCreateHeader(),
+            me.getInformationText(),
             me.getExportArticlesForm(),
             me.getExportOrdersForm(),
             me.getExportMiscForm(),
@@ -113,6 +116,71 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
         /* {/if} */
 
         me.callParent(arguments);
+    },
+
+    /**
+     * @return [Ext.container.Container]
+     */
+    getInformationText: function() {
+        var me = this;
+
+        me.InformationText = Ext.create('Ext.container.Container', {
+            html: me.snippets.noticeMessage,
+            plain: true,
+            padding: '21 7 14 7'
+        });
+
+        return me.InformationText;
+    },
+
+    /**
+     * @return [Ext.container.Container]
+     */
+    getCreateHeader: function() {
+        var me = this;
+
+        me.headerDeprecatedTitle = Ext.create('Ext.container.Container', {
+            html: me.snippets.deprecationTitle,
+            plain: true,
+            style: {
+                fontWeight: 700
+            }
+        });
+
+        me.headerDeprecatedPanel = Ext.create('Ext.container.Container', {
+            html: me.snippets.deprecationMessage,
+            plain: true,
+            margin: '0 0 10 0'
+        });
+
+        me.headerAction = Ext.create('Ext.button.Button', {
+            html: me.snippets.deprecationButton,
+            cls: 'primary',
+            handler: function() {
+                openNewModule('Shopware.apps.PluginManager', {
+                    params: {
+                        hidden: true,
+                        displayPlugin: 'SwagImportExport'
+                    }
+                });
+            }
+        });
+
+        me.headerContainer = Ext.create('Ext.container.Container', {
+            margin: 1,
+            padding: 7,
+            plain: true,
+            style: {
+                textAlign: 'center'
+            },
+            items: [
+                me.headerDeprecatedTitle,
+                me.headerDeprecatedPanel,
+                me.headerAction
+            ]
+        });
+
+        return me.headerContainer;
     },
 
     /**
