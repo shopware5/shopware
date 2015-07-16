@@ -315,6 +315,7 @@ In this document you will find a changelog of the important changes related to t
     * `s_core_sessions_backend.created`
     * `s_emarketing_promotions*`
     * `s_core_plugins.capability_dummy`
+    * `s_articles_details.impressions`
 * The new Shopware core selects all required data for `sGetArticleById`, `sGetPromotionById` and `sGetArticlesByCategory`. The following events and internal functions are no longer used in these functions:
     * `sGetPromotionById` events
         * `Shopware_Modules_Articles_GetPromotionById_FilterSql`
