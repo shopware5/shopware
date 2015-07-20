@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Performance.model.Search', {
         { name: 'searchRefreshStrategy', type: 'int'},
         { name: 'cachesearch', type: 'int'},
         { name: 'traceSearch', type: 'boolean'},
-        { name: 'fuzzysearchlastupdate' }
+        { name: 'fuzzysearchlastupdate', type: 'date' }
     ]
 
 });
