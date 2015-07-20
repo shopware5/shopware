@@ -179,8 +179,12 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		rules.push('<b> {s name=exampleFieldSet/rules/newCustomer}Customer IS NEW{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/zoneIs}Zone IS{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/zoneIsNot}Zone IS NOT{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingZoneIs}Billing Zone IS{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingZoneIsNot}Billing Zone IS NOT{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/countryIs}Country IS{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/countryIsNot}Country IS NOT{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingCountryIs}Billing Country IS{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingCountryIsNot}Billing Country IS NOT{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/orderPositionsGt}Order positions >={/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/dunninglevelone}Dunning level one IS TRUE{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/dunningleveltwo}Dunning level two IS TRUE{/s} </b>');
@@ -191,6 +195,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		rules.push('<b> {s name=exampleFieldSet/rules/articleFromCategory}Article from category{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/zipCodeIs}Zip code IS{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/streetNameContains}Street name CONTAINS X{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingZipCodeIs}Billing Zip code IS{/s} </b>');
+		rules.push('<b> {s name=exampleFieldSet/rules/billingStreetNameContains}Billing Street name CONTAINS X{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/customerNumberIs}Customer number IS{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/lastNameContains}Last name CONTAINS X{/s} </b>');
 		rules.push('<b> {s name=exampleFieldSet/rules/subShopIs}Shop IS{/s} </b>');
@@ -210,6 +216,10 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		syntax.push('{s name=exampleFieldSet/syntax/oneOrZero}1 or 0{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/zone}germany, europe, world{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/zone}germany, europe, world{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/zone}germany, europe, world{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/zone}germany, europe, world{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/countryIso}Country-Iso{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/countryIso}Country-Iso{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/countryIso}Country-Iso{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/countryIso}Country-Iso{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
@@ -221,6 +231,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/categoryId}ID of the category{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
+		syntax.push('{s name=exampleFieldSet/syntax/streetName}Street name or a part of the name{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/streetName}Street name or a part of the name{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/numericalValue}Value numerical{/s}');
 		syntax.push('{s name=exampleFieldSet/syntax/lastName}Last name{/s}');
@@ -241,6 +253,10 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		example.push('1');
 		example.push('{s name=exampleFieldSet/example/zone}germany, europe, world{/s}');
 		example.push('{s name=exampleFieldSet/example/zone}germany, europe, world{/s}');
+		example.push('{s name=exampleFieldSet/example/zone}germany, europe, world{/s}');
+		example.push('{s name=exampleFieldSet/example/zone}germany, europe, world{/s}');
+		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
+		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
 		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
 		example.push('{s name=exampleFieldSet/example/countryIso}e.g. DE for germany{/s}');
 		example.push('5');
@@ -252,6 +268,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
 		example.push('30');
 		example.push('3');
 		example.push('48624');
+		example.push('48624');
+		example.push('{s name=exampleFieldSet/example/streetName}e.g. \'delivery\', disables the payment for every address, which contains \'delivery\'{/s}');
 		example.push('{s name=exampleFieldSet/example/streetName}e.g. \'delivery\', disables the payment for every address, which contains \'delivery\'{/s}');
 		example.push('12345');
 		example.push('{s name=exampleFieldSet/example/lastName}Smith{/s}');
