@@ -260,31 +260,13 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             },
             /*{/if}*/
             {
-                iconCls:'sprite-arrow-circle-double',
+                iconCls:'sprite-arrow-circle',
                 action:'convert',
                 tooltip:'{s name=order_details_convert}Convert to regular order{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('convertOrder', record);
                 }
             }
-            /* For testing reasons only
-            {
-                iconCls:'sprite-mail--pencil',
-                action:'view',
-                tooltip:'{s name=order/askWhy}Ask for reason{/s}',
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('contactUser', 'sCANCELEDQUESTION', record);
-                }
-            },
-            {
-                iconCls:'sprite-mail-open-image',
-                action:'view',
-                tooltip:'{s name=order/sendVoucher}Send Voucher{/s}',
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('contactUser', 'sCANCELEDVOUCHER', record);
-                }
-            }
-            */
         ];
     },
 
