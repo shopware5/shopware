@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle;
 
 use Shopware\Bundle\PluginInstallerBundle\Exception\AccountException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
-use Shopware\Bundle\PluginInstallerBundle\Exception\DomainValidationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\DomainVerificationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\LicenceException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\OrderException;
@@ -299,7 +298,7 @@ class StoreClient
      * Parses it to detect and extract details provided
      * by SBP about what happened
      *
-     * @param \Exception $requestException
+     * @param RequestException $requestException
      * @throws \Exception
      * @throws SbpServerException
      * @throws AuthenticationException
@@ -309,7 +308,7 @@ class StoreClient
      * @throws StoreException
      * @throws DomainVerificationException
      */
-    private function handleRequestException(\Exception $requestException)
+    private function handleRequestException(RequestException $requestException)
     {
         if (!$requestException->getBody()) {
             throw $requestException;

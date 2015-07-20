@@ -256,5 +256,4 @@ class ShopIndexer implements ShopIndexerInterface
             }
         }
     }
-
 }

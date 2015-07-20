@@ -29,14 +29,9 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand;
-use Shopware\Bundle\ESIndexingBundle\Commands\CleanupIndicesCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\IndexCleanupCommand;
-use Shopware\Bundle\ESIndexingBundle\Commands\IndexCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand;
-use Shopware\Bundle\ESIndexingBundle\Commands\ReIndexCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\SwitchAliasCommand;
-use Shopware\Bundle\ESIndexingBundle\Commands\SyncBacklogCommand;
-use Shopware\Bundle\ESIndexingBundle\Commands\ClearBacklogCommand;
 
 class ServiceSubscriber implements SubscriberInterface
 {

@@ -63,7 +63,7 @@ EOF
     {
         $this->container->load('plugins');
 
-        /** @var $manager $manager */
+        /** @var \Enlight_Components_Cron_Manager $manager */
         $manager = $this->container->get('cron');
 
         $stack = array();

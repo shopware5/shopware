@@ -25,6 +25,9 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Controller_Request_Request as Request;
+use Enlight_Controller_Response_ResponseHttp as Response;
+use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\SubscriptionStateStruct;
@@ -112,11 +115,11 @@ class SubscriptionService
 
     /**
      * Returns not upgraded plugins, "hacked" plugins, plugins, after do some check secret and cookie
-     * @param Enlight_Controller_Response_ResponseHttp $response
-     * @param Enlight_Controller_Response_RequestHttp $request
+     * @param Response $response
+     * @param Request $request
      * @return SubscriptionStateStruct|bool
      */
-    public function getPluginsSubscription($response, $request)
+    public function getPluginsSubscription(Response $response, Request $request)
     {
         if ($this->isPluginsSubscriptionCookieValid($request) == false) {
             return false;
@@ -132,7 +135,7 @@ class SubscriptionService
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
             return $pluginStates;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($e instanceof ShopSecretException) {
                 $this->resetShopSecret();
             }
@@ -219,9 +222,10 @@ class SubscriptionService
 
     /**
      * Check the date of the last subscription-check var
+     * @param Request $request
      * @return bool
      */
-    private function isPluginsSubscriptionCookieValid($request)
+    private function isPluginsSubscriptionCookieValid(Request $request)
     {
         $lastCheck = $request->getCookie('lastCheckSubscriptionDate');
 

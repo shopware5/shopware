@@ -51,9 +51,9 @@ abstract class Extendable extends Struct implements \JsonSerializable
     }
 
     /**
-     * @param $attributes
+     * @param Attribute[] $attributes
      */
-    public function addAttributes($attributes)
+    public function addAttributes(array $attributes)
     {
         foreach ($attributes as $key => $attribute) {
             $this->addAttribute($key, $attribute);

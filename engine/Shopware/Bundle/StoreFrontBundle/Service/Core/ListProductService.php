@@ -23,7 +23,6 @@
  */
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;

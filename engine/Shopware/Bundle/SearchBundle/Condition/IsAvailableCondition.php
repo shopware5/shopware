@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  * @package   Shopware\Bundle\SearchBundle\Condition
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class isAvailableCondition implements ConditionInterface
+class IsAvailableCondition implements ConditionInterface
 {
     /**
      * {@inheritdoc}
