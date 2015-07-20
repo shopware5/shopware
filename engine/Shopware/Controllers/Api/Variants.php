@@ -35,6 +35,26 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
     }
 
     /**
+     * Get list of variants
+     *
+     * GET /api/variants/
+     */
+    public function indexAction()
+    {
+        $offset = $this->Request()->getParam('start', 0);
+        $limit  = $this->Request()->getParam('limit', 1000);
+        $filter = $this->Request()->getParam('filter', []);
+        $sort   = $this->Request()->getParam('sort', []);
+
+        $result = $this->resource->getList($offset, $limit, $filter, $sort, [
+            'considerTaxInput' => (boolean) $this->Request()->getParam('considerTaxInput', false)
+        ]);
+
+        $this->View()->assign($result);
+        $this->View()->assign('success', true);
+    }
+
+    /**
      * Get one variant
      *
      * GET /api/variants/{id}
@@ -45,13 +65,13 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $articleDetail = $this->resource->getOneByNumber($id, array(
+            $articleDetail = $this->resource->getOneByNumber($id, [
                 'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
-            ));
+            ]);
         } else {
-            $articleDetail = $this->resource->getOne($id, array(
+            $articleDetail = $this->resource->getOne($id, [
                 'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
-            ));
+            ]);
         }
 
         $this->View()->assign('data', $articleDetail);
@@ -68,12 +88,12 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $article = $this->resource->create($this->Request()->getPost());
 
         $location = $this->apiBaseUrl . 'variants/' . $article->getId();
-        $data = array(
+        $data = [
             'id'       => $article->getId(),
             'location' => $location
-        );
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
         $this->Response()->setHeader('Location', $location);
     }
 
@@ -95,12 +115,12 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         }
 
         $location = $this->apiBaseUrl . 'variants/' . $article->getId();
-        $data = array(
+        $data = [
             'id'       => $article->getId(),
             'location' => $location
-        );
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -119,6 +139,6 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
             $this->resource->delete($id);
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

@@ -1931,7 +1931,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'esd.id as id',
             'esd.date as date',
             'esd.file as file',
@@ -1943,16 +1943,16 @@ class Repository extends ModelRepository
             'articleDetail.id as articleDetailId',
             'articleDetail.additionalText as additionalText',
             'article.id as articleId',
-        ))
-                ->from('Shopware\Models\Article\Esd', 'esd')
-                ->leftJoin('esd.serials', 'serials')
-                ->leftJoin('serials.esdOrder', 'esdOrder')
-                ->leftJoin('esd.article', 'article')
-                ->leftJoin('esd.articleDetail', 'articleDetail')
-                ->leftJoin('esd.attribute', 'attribute')
-                ->groupBy('esd.id')
-                ->where('esd.article = :articleId')
-                ->setParameter('articleId', $articleId);
+        ]);
+        $builder->from('Shopware\Models\Article\Esd', 'esd')
+            ->leftJoin('esd.serials', 'serials')
+            ->leftJoin('serials.esdOrder', 'esdOrder')
+            ->leftJoin('esd.article', 'article')
+            ->leftJoin('esd.articleDetail', 'articleDetail')
+            ->leftJoin('esd.attribute', 'attribute')
+            ->groupBy('esd.id')
+            ->where('esd.article = :articleId')
+            ->setParameter('articleId', $articleId);
 
         if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
@@ -2004,19 +2004,19 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'serial.id as id',
             'serial.serialnumber as serialnumber',
             'esdOrder.date as date',
             'customer.id as customerId',
             'customer.accountMode as accountMode',
             'customer.email as customerEmail'
-        ))
-                ->from('Shopware\Models\Article\EsdSerial', 'serial')
-                ->leftJoin('serial.esdOrder', 'esdOrder')
-                ->leftJoin('esdOrder.customer', 'customer')
-                ->where('serial.esd = :esdId')
-                ->setParameter('esdId', $esdId);
+        ])
+            ->from('Shopware\Models\Article\EsdSerial', 'serial')
+            ->leftJoin('serial.esdOrder', 'esdOrder')
+            ->leftJoin('esdOrder.customer', 'customer')
+            ->where('serial.esd = :esdId')
+            ->setParameter('esdId', $esdId);
 
 
         if ($filter !== null) {
@@ -2123,7 +2123,7 @@ class Repository extends ModelRepository
     public function getArticleCoverImageQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images', 'attribute'))
+        $builder->select(['images', 'attribute'])
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.attribute', 'attribute')
                 ->leftJoin('images.children', 'children')
@@ -2161,7 +2161,7 @@ class Repository extends ModelRepository
     public function getArticleFallbackCoverQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images', 'attribute'))
+        $builder->select(['images', 'attribute'])
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.attribute', 'attribute')
                 ->where('images.articleId = :articleId')
@@ -2203,7 +2203,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'imageParent.id',
             'imageParent.articleId',
             'imageParent.articleDetailId',
@@ -2218,15 +2218,15 @@ class Repository extends ModelRepository
             'attribute.attribute1',
             'attribute.attribute2',
             'attribute.attribute3',
-        ))
-                ->from('Shopware\Models\Article\Image', 'images')
-                ->innerJoin('images.articleDetail', 'articleDetail')
-                ->innerJoin('images.parent', 'imageParent')
-                ->leftJoin('imageParent.attribute', 'attribute')
-                ->where('articleDetail.number = ?1')
-                ->setParameter(1, $number)
-                ->orderBy('imageParent.main', 'ASC')
-                ->addOrderBy('imageParent.position', 'ASC');
+        ])
+            ->from('Shopware\Models\Article\Image', 'images')
+            ->innerJoin('images.articleDetail', 'articleDetail')
+            ->innerJoin('images.parent', 'imageParent')
+            ->leftJoin('imageParent.attribute', 'attribute')
+            ->where('articleDetail.number = ?1')
+            ->setParameter(1, $number)
+            ->orderBy('imageParent.main', 'ASC')
+            ->addOrderBy('imageParent.position', 'ASC');
 
         return $builder;
     }
@@ -2251,7 +2251,7 @@ class Repository extends ModelRepository
     public function getArticleImagesQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images'))
+        $builder->select(['images'])
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.children', 'children')
                 ->where('images.articleId = :articleId')
@@ -2470,14 +2470,14 @@ class Repository extends ModelRepository
     public function getVariantDetailQuery()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'variants',
             'attribute',
             'prices',
             'customerGroup',
             'options',
             'images'
-        ));
+        ]);
 
         $builder->from('Shopware\Models\Article\Detail', 'variants')
             ->innerJoin('variants.article', 'article')
