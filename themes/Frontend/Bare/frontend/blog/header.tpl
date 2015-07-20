@@ -13,9 +13,11 @@
 {block name='frontend_index_header_canonical'}
     {* Count of available product pages *}
     {$pages = ceil($sNumberArticles / $sPerPage)}
-    
-    {if {config name=seoIndexPaginationLinks} && $pages > 1}
-        
+
+    {if $sArticle}
+        <link rel="canonical" href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" />
+    {elseif {config name=seoIndexPaginationLinks} && $pages > 1}
+
         {* Previous rel tag *}
         {if $sPage > 1}
             {$sCategoryContent.canonicalParams.sPage = $sPage - 1}
@@ -27,8 +29,8 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif $pages > 1}
-        <link rel="canonical" href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{elseif $sCategoryContent.sSelfCanonical}{$sCategoryContent.sSelfCanonical}{else}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/if}" />
+    {elseif !{config name=seoIndexPaginationLinks}}
+        <link rel="canonical" href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{elseif $sCategoryContent.sSelfCanonical}{$sCategoryContent.sSelfCanonical}{/if}" />
     {/if}
 {/block}
 
