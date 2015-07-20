@@ -85,6 +85,11 @@ In this document you will find a changelog of the important changes related to t
     * Property values are now creates on demand with an AJAX request
     * The selection of property values is now on select to allow for a faster usage of the component
 * Added library [beberlei/assert](https://github.com/beberlei/assert) for low-level validation.
+* Changed returning array keys to `ordernumber` in `\sArticles::sGetArticlesByCategory` which introduces an BC break for plugins hooking into the following methods:
+    * `\Shopware_Controllers_Frontend_Listing::manufacturerAction`
+    * `\Shopware_Controllers_Frontend_Listing::indexAction`
+    * `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`
+    * `\sArticles::sGetArticlesByCategory`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
