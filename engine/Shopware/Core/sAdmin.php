@@ -2265,6 +2265,8 @@ class sAdmin
         foreach ($getOrders as $orderKey => $orderValue) {
             $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_amount"]);
+            $getOrders[$orderKey]["invoice_amount_net"] = $this->moduleManager->Articles()
+                ->sFormatPrice($orderValue["invoice_amount_net"]);
             $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_shipping"]);
 
