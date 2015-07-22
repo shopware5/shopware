@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\SubscriptionStateStruct;
@@ -132,10 +133,10 @@ class SubscriptionService
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
             return $pluginStates;
-        } catch (Exception $e) {
-            if ($e instanceof ShopSecretException) {
-                $this->resetShopSecret();
-            }
+        } catch (ShopSecretException $e) {
+            $this->resetShopSecret();
+            return false;
+        } catch (\Exception $e) {
             return false;
         }
     }
