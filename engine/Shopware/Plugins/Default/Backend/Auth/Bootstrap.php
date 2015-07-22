@@ -419,6 +419,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
           && strpos($referer, 'http') === 0) {
             $referer = substr($referer, 0, strpos($referer, '/backend/'));
             $referer .= '/backend/';
+
             if (!isset($_SESSION['__SW_REFERER'])) {
                 $_SESSION['__SW_REFERER'] = $referer;
             } elseif (strpos($referer, $_SESSION['__SW_REFERER']) !== 0) {
@@ -481,12 +482,13 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
-        $auth = Shopware()->Auth();
-
-        if ($auth->hasIdentity()) {
-            $user = $auth->getIdentity();
-            if (isset($user->locale)) {
-                return $user->locale;
+        if (Shopware()->Container()->initialized('auth')) {
+            $auth = Shopware()->Auth();
+            if ($auth->hasIdentity()) {
+                $user = $auth->getIdentity();
+                if (isset($user->locale)) {
+                    return $user->locale;
+                }
             }
         }
 
