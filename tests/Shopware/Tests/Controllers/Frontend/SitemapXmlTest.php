@@ -49,6 +49,9 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
         $response = $this->dispatch('/SitemapXml');
         $content = $response->getBody();
 
-        $this->assertSelectCount('url', array('>=' => 40), $content);
+        $crawler = new Symfony\Component\DomCrawler\Crawler($content);
+        $crawler =  $crawler->filter('url');
+
+        $this->assertGreaterThanOrEqual(40, count($crawler));
     }
 }
