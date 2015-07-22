@@ -124,6 +124,25 @@
 
     $(function($) {
 
+        // Check if cookies are disabled and show notification
+        if (!StorageManager.hasCookiesSupport) {
+            createNoCookiesNoticeBox(window.snippets.noCookiesNotice);
+        }
+
+        // Create the no cookies notification message
+        function createNoCookiesNoticeBox(message) {
+            $('<div/>', { 'class': 'alert is--warning' }).append(
+                $('<div/>', {'class': 'alert--icon'}).append(
+                    $('<i/>', {'class': 'icon--element icon--warning'})
+                )
+            ).append(
+                $('<div/>', {
+                    'class': 'alert--content',
+                    'html': message
+                })
+            ).prependTo('.page-wrap');
+        }
+
         // Lightbox auto trigger
         $('*[data-lightbox="true"]').on('click.lightbox', function (event) {
             var $el = $(this),
