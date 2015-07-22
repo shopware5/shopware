@@ -1430,21 +1430,29 @@ class sArticles
      */
     protected function getRandomArticle($mode, $category = 0)
     {
-        $category = (int) $category;
+        $category = (int)$category;
         $context = $this->contextService->getShopContext();
         if (empty($category)) {
             $category = $context->getShop()->getCategory()->getId();
         }
 
         $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
-        $criteria->offset(0)
-            ->limit(50);
-        
-        if ($mode == 'top') {
-            $criteria->addSorting(new PopularitySorting());
-        } else {
-            $criteria->addSorting(new ReleaseDateSorting());
+
+        $criteria->offset(0)->limit(100);
+
+        switch ($mode) {
+            case 'top':
+                $criteria->addSorting(new PopularitySorting());
+                $criteria->limit(25);
+                break;
+            case 'new':
+                $criteria->limit(1);
+                $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
+                break;
+            default:
+                $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
         }
+
         $result = $this->productNumberSearch->search($criteria, $context);
 
         $ids = array_map(function (BaseProduct $product) {
@@ -1456,17 +1464,11 @@ class sArticles
             $diff = $ids;
         }
 
-        shuffle($diff);
-
-        if ($mode == 'random') {
-            $value = array_rand($diff);
-            $value = $diff[$value];
-        } else {
+        if ($mode == 'new') {
             $value = current($diff);
-        }
-
-        if (!$value) {
-            $value = current($ids);
+        } else {
+            shuffle($diff);
+            $value = $diff[array_rand($diff)];
         }
 
         $this->cachePromotions[] = $value;
