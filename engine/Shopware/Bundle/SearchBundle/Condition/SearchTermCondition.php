@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -39,10 +40,11 @@ class SearchTermCondition implements ConditionInterface
     private $term;
 
     /**
-     * @param $term
+     * @param string $term
      */
     public function __construct($term)
     {
+        Assertion::string($term);
         $this->term = $term;
     }
 

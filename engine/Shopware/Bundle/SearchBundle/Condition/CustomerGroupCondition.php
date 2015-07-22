@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -43,7 +44,8 @@ class CustomerGroupCondition implements ConditionInterface
      */
     public function __construct(array $customerGroupIds)
     {
-        $this->customerGroupIds = $customerGroupIds;
+        Assertion::allIntegerish($customerGroupIds);
+        $this->customerGroupIds = array_map('intval', $customerGroupIds);
     }
 
     /**

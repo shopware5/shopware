@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -41,11 +42,12 @@ class VoteAverageCondition implements ConditionInterface
     private $average;
 
     /**
-     * @param $average
+     * @param float $average
      */
     public function __construct($average)
     {
-        $this->average = $average;
+        Assertion::numeric($average);
+        $this->average = (float) $average;
     }
 
     /**

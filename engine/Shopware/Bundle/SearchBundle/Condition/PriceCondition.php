@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -44,13 +45,15 @@ class PriceCondition implements ConditionInterface
     private $maxPrice;
 
     /**
-     * @param $minPrice
-     * @param $maxPrice
+     * @param float $minPrice
+     * @param float $maxPrice
      */
-    public function __construct($minPrice, $maxPrice)
+    public function __construct($minPrice = 0.00, $maxPrice = 0.00)
     {
-        $this->minPrice = $minPrice;
-        $this->maxPrice = $maxPrice;
+        Assertion::numeric($minPrice);
+        Assertion::numeric($maxPrice);
+        $this->minPrice = (float)$minPrice;
+        $this->maxPrice = (float)$maxPrice;
     }
 
     /**

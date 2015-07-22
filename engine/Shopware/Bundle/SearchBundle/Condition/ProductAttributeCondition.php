@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -67,6 +68,7 @@ class ProductAttributeCondition implements ConditionInterface
      */
     public function __construct($field, $operator, $value)
     {
+        Assertion::string($field);
         $this->field = $field;
         $this->value = $value;
         $this->operator = $operator;

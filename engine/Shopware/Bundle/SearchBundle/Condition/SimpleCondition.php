@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -43,11 +44,9 @@ class SimpleCondition implements ConditionInterface
      */
     public function __construct($name)
     {
+        Assertion::string($name);
+        Assertion::notEmpty($name);
         $this->name = $name;
-
-        if (empty($name)) {
-            throw new \RuntimeException('No condition name provided');
-        }
     }
 
     /**

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -34,20 +35,21 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 class CategoryCondition implements ConditionInterface
 {
     /**
-     * @var array
+     * @var int[]
      */
     private $categoryIds;
 
     /**
-     * @param $categoryIds
+     * @param int[] $categoryIds
      */
     public function __construct(array $categoryIds)
     {
-        $this->categoryIds = $categoryIds;
+        Assertion::allIntegerish($categoryIds);
+        $this->categoryIds = array_map('intval', $categoryIds);
     }
 
     /**
-     * @return array
+     * @return int[]
      */
     public function getCategoryIds()
     {
