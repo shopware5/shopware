@@ -176,7 +176,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
                 $validationResult = $paymentClass->validate(Shopware()->Front()->Request());
                 $this->assertTrue(is_array($validationResult));
-                if(count($validationResult)) {
+                if (count($validationResult)) {
                     $this->assertArrayHasKey('sErrorFlag', $validationResult);
                     $this->assertArrayHasKey('sErrorMessages', $validationResult);
                 }
@@ -361,7 +361,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $shippingDetailsWithHash = $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']);
         $billingDetailsWithHash = $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']);
 
-        foreach(array($shippingDetails, $billingDetails, $billingDetailsWithHash, $shippingDetailsWithHash) as $details) {
+        foreach (array($shippingDetails, $billingDetails, $billingDetailsWithHash, $shippingDetailsWithHash) as $details) {
             $this->assertInternalType('array', $details);
             $this->assertArrayHasKey('company', $details);
             $this->assertArrayHasKey('department', $details);
@@ -984,11 +984,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objecttype' => 'config_countries',
             'objectdata' => serialize(
                 array(
-                    2 => array (
+                    2 => array(
                         'active' => '1',
                         'countryname' => 'Germany',
                     ),
-                    5 => array (
+                    5 => array(
                         'active' => '1',
                         'countryname' => 'Belgium',
                     )
@@ -996,7 +996,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
@@ -1032,7 +1032,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
@@ -1058,12 +1058,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objecttype' => 'config_dispatch',
             'objectdata' => serialize(
                 array(
-                    9 => array (
+                    9 => array(
                         'dispatch_name' => 'Standard shipping',
                         'dispatch_description' => 'Standard shipping description',
                         'dispatch_status_link' => 'http://www.dhl.com',
                     ),
-                    10 => array (
+                    10 => array(
                         'dispatch_name' => 'Shipping by weight',
                         'dispatch_description' => 'Shipping by weight description',
                         'dispatch_status_link' => 'url',
@@ -1072,7 +1072,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
@@ -1114,7 +1114,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
@@ -1139,31 +1139,31 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectlanguage' => 2,
             'objecttype' => 'config_payment',
             'objectdata' => serialize(
-                array (
-                    4 => array (
+                array(
+                    4 => array(
                         'description' => 'Invoice',
                         'additionalDescription' => 'Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.',
                     ),
-                    2 => array (
+                    2 => array(
                         'description' => 'Debit',
                         'additionalDescription' => 'Additional text',
                     ),
-                    3 => array (
+                    3 => array(
                         'description' => 'Cash on delivery',
                         'additionalDescription' => '(including 2.00 Euro VAT)',
                     ),
-                    5 => array (
+                    5 => array(
                         'description' => 'Paid in advance',
                         'additionalDescription' => 'The goods are delivered directly upon receipt of payment.',
                     ),
-                    6 => array (
+                    6 => array(
                         'additionalDescription' => 'SEPA direct debit',
                     ),
                 )
             )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
@@ -1206,7 +1206,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
@@ -1231,18 +1231,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
             'objectdata' => serialize(
-                array (
-                    24 => array (
+                array(
+                    24 => array(
                         'name' => 'California',
                     ),
-                    23 => array (
+                    23 => array(
                         'name' => 'Arkansas (english)',
                     ),
                 )
             )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
@@ -1272,8 +1272,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectlanguage' => 10000,
             'objecttype' => 'config_country_states',
             'objectdata' => serialize(
-                array (
-                    2 => array (
+                array(
+                    2 => array(
                         'name' => 'asdfasfdasdfa',
                     ),
                 )
@@ -1294,7 +1294,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('California', $result[24]['name']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
@@ -1340,8 +1340,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectlanguage' => 1,
             'objecttype' => 'config_countries',
             'objectdata' => serialize(
-                array (
-                    2 => array (
+                array(
+                    2 => array(
                         'active' => '1',
                         'countryname' => 'Germany',
                     ),
@@ -1353,23 +1353,23 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
             'objectdata' => serialize(
-                array (
-                    2 => array (
+                array(
+                    2 => array(
                         'name' => '111',
                     ),
-                    3 => array (
+                    3 => array(
                         'name' => '222',
                     ),
                 )
             )
         );
 
-        if($existingCountryData) {
+        if ($existingCountryData) {
             Shopware()->Db()->update('s_core_translations', $demoCountryData, 'id = '.$existingCountryData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoCountryData);
         }
-        if($existingStateData) {
+        if ($existingStateData) {
             Shopware()->Db()->update('s_core_translations', $demoStateData, 'id = '.$existingStateData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoStateData);
@@ -1433,17 +1433,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertContains('111', array_column($country['states'], 'name'));
 
         // If backup data exists, restore it
-        if($existingCountryData) {
+        if ($existingCountryData) {
             $existingCountryDataId = $existingCountryData['id'];
             unset($existingCountryData['id']);
             Shopware()->Db()->update('s_core_translations', $existingCountryData, 'id = '.$existingCountryDataId);
         }
-        if($existingStateData) {
+        if ($existingStateData) {
             $existingStateDataId = $existingStateData['id'];
             unset($existingStateData['id']);
             Shopware()->Db()->update('s_core_translations', $existingStateData, 'id = '.$existingStateDataId);
         }
-        if($existingGermanyData) {
+        if ($existingGermanyData) {
             $existingGermanyDataId = $existingGermanyData['id'];
             unset($existingGermanyData['id']);
             Shopware()->Db()->update('s_core_countries', $existingGermanyData, 'id = '.$existingGermanyDataId);
@@ -1460,7 +1460,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsSaveRegisterMainDataWithEmptyData()
     {
         $this->module->sSaveRegisterMainData(array());
-
     }
 
     /**
@@ -1566,7 +1565,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $testData['countryID'] = $testData['country'];
         unset($testData['country']);
         $testData['birthday'] = mktime(
-            0,0,0,
+            0, 0, 0,
             (int) $testData['birthmonth'],
             (int) $testData['birthday'],
             (int) $testData['birthyear']
@@ -1792,7 +1791,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'trackingcode' => '',
             'language' => '2',
             'dispatchID' => '9',
@@ -1922,7 +1921,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'trackingcode' => '',
             'language' => '2',
             'dispatchID' => '9',
@@ -2103,10 +2102,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'customerBillingId' => $customer->getBilling()->getId(),
                 'text1' => 'Freitext1',
                 'text2' => 'Freitext2',
-                'text3' => NULL,
-                'text4' => NULL,
-                'text5' => NULL,
-                'text6' => NULL,
+                'text3' => null,
+                'text4' => null,
+                'text5' => null,
+                'text6' => null,
                 'id' => $customer->getBilling()->getId(),
                 'userID' => $customer->getId(),
                 'company' => '',
@@ -2115,13 +2114,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => '',
+                'street' => 'Kraftweg, 22',
                 'zipcode' => '12345',
                 'city' => '',
                 'phone' => '',
                 'fax' => '',
                 'countryID' => '2',
-                'stateID' => NULL,
+                'stateID' => null,
                 'ustid' => '',
                 'birthday' => '1986-12-20',
                 'additional_address_line1' => 'IT-Department',
@@ -2143,7 +2142,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'active' => '1',
                     'iso3' => 'DEU',
                     'display_state_in_registration' => '0',
-                    'force_state_in_registration' => '0'
+                    'force_state_in_registration' => '0',
+                    'countryarea' => 'deutschland'
                 ),
                 'state' => array(),
                 'user' => array(
@@ -2166,28 +2166,28 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'language' => '1',
                     'subshopID' => '1',
                     'referer' => '',
-                    'pricegroupID' => NULL,
+                    'pricegroupID' => null,
                     'internalcomment' => '',
                     'failedlogins' => '0',
-                    'lockeduntil' => NULL,
+                    'lockeduntil' => null,
                 ),
                 'countryShipping' => array(
-                    'id' => '2',
-                    'countryname' => 'Germany',
-                    'countryiso' => 'DE',
-                    'areaID' => '1',
-                    'countryen' => 'GERMANY',
-                    'position' => '1',
+                    'id' => '4',
+                    'countryname' => 'Australien',
+                    'countryiso' => 'AU',
+                    'areaID' => '2',
+                    'countryen' => 'AUSTRALIA',
+                    'position' => '10',
                     'notice' => '',
                     'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',
                     'active' => '1',
-                    'iso3' => 'DEU',
+                    'iso3' => 'AUS',
                     'display_state_in_registration' => '0',
                     'force_state_in_registration' => '0',
-                    'countryarea' => 'deutschland'
+                    'countryarea' => 'welt'
                 ),
                 'stateShipping' => array(),
                 'payment' => array(
@@ -2208,19 +2208,19 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'mobile_inactive' => '0',
                     'embediframe' => '',
                     'hideprospect' => '0',
-                    'action' => NULL,
-                    'pluginID' => NULL,
-                    'source' => NULL,
+                    'action' => null,
+                    'pluginID' => null,
+                    'source' => null,
                 ),
             ),
             'shippingaddress' => array(
                 'customerShippingId' => $customer->getShipping()->getId(),
                 'text1' => 'Freitext1',
                 'text2' => 'Freitext2',
-                'text3' => NULL,
-                'text4' => NULL,
-                'text5' => NULL,
-                'text6' => NULL,
+                'text3' => null,
+                'text4' => null,
+                'text5' => null,
+                'text6' => null,
                 'id' => $customer->getShipping()->getId(),
                 'userID' => $customer->getId(),
                 'company' => 'Widgets Inc.',
@@ -2229,10 +2229,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Merkel Strasse, 10',
-                'zipcode' => '',
+                'zipcode' => '98765',
                 'city' => '',
-                'countryID' => '0',
-                'stateID' => NULL,
+                'countryID' => '4',
+                'stateID' => null,
                 'additional_address_line1' => 'Sales-Department',
                 'additional_address_line2' => 'Third Floor'
             ),
@@ -2250,10 +2250,15 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskCUSTOMERGROUPIS
      * @covers sAdmin::sRiskCUSTOMERGROUPISNOT
      * @covers sAdmin::sRiskZIPCODE
+     * @covers sAdmin::sRiskBILLINGZIPCODE
      * @covers sAdmin::sRiskZONEIS
+     * @covers sAdmin::sRiskBILLINGZONEIS
      * @covers sAdmin::sRiskZONEISNOT
+     * @covers sAdmin::sRiskBILLINGZONEISNOT
      * @covers sAdmin::sRiskLANDIS
+     * @covers sAdmin::sRiskBILLINGLANDIS
      * @covers sAdmin::sRiskLANDISNOT
+     * @covers sAdmin::sRiskBILLINGLANDISNOT
      * @covers sAdmin::sRiskNEWCUSTOMER
      * @covers sAdmin::sRiskORDERPOSITIONSMORE
      * @covers sAdmin::sRiskATTRIS
@@ -2266,6 +2271,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskARTICLESFROM
      * @covers sAdmin::sRiskLASTORDERSLESS
      * @covers sAdmin::sRiskPREGSTREET
+     * @covers sAdmin::sRiskBILLINGPREGSTREET
      * @covers sAdmin::sRiskDIFFER
      * @covers sAdmin::sRiskCUSTOMERNR
      * @covers sAdmin::sRiskLASTNAME
@@ -2306,7 +2312,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'cleared' => 16,
             'trackingcode' => '',
             'language' => '2',
@@ -2377,9 +2383,22 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'ZIPCODE',
+                'value1' => '98765'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskBILLINGZIPCODE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'BILLINGZIPCODE',
                 'value1' => '12345'
             )
         );
+
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
@@ -2414,8 +2433,23 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'LANDIS',
-                'value1' => 'DE',
+                'value1' => 'AU',
                 'rule2' => 'LANDISNOT',
+                'value2' => 'UK'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskBILLINGLANDIS
+        // sRiskBILLINGLANDISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'BILLINGLANDIS',
+                'value1' => 'DE',
+                'rule2' => 'BILLINGLANDISNOT',
                 'value2' => 'UK'
             )
         );
@@ -2604,6 +2638,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
+        // sRiskPREGBILLINGSTREET
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'PREGBILLINGSTREET',
+                'value1' => 'Google'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
         // sRiskDIFFER
         Shopware()->Db()->insert(
             's_core_rulesets',
@@ -2775,7 +2821,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 5,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('ErrorFillIn','Please fill in all red fields'),
+                        ->get('ErrorFillIn', 'Please fill in all red fields'),
                 'sErrorFlag' => array('newsletter' => true)
             ),
             $result
@@ -2882,7 +2928,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 2,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
             ),
             $result
         );
@@ -2894,7 +2940,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 2,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
             ),
             $result
         );
@@ -3038,11 +3084,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'mobile_inactive' => '0',
                 'embediframe' => '',
                 'hideprospect' => '0',
-                'action' => NULL,
-                'pluginID' => NULL,
-                'source' => NULL,
+                'action' => null,
+                'pluginID' => null,
+                'source' => null,
                 'country_surcharge' =>
-                    array (
+                    array(
                     ),
             ),
             $result
@@ -3135,7 +3181,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $result = $this->module->sGetPremiumDispatchSurcharge($fullBasket);
         $this->assertEquals(0, $result);
-
     }
 
     /**
@@ -3203,6 +3248,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'text2' => 'Freitext2',
                 ),
                 "zipcode"   => '12345',
+                "street"    => 'Kraftweg, 22',
                 "countryId" => '2',
                 "additionalAddressLine1" => 'IT-Department',
                 "additionalAddressLine2" => 'Second Floor',
@@ -3213,7 +3259,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
+                "zipcode"     => "98765",
                 "street"     => "Merkel Strasse, 10",
+                "countryId"  => '4',
                 "attribute"  => array(
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',
@@ -3244,11 +3292,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', array($customer->getId()));
         $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', array($customer->getId()));
 
-        if($billingId) {
+        if ($billingId) {
             Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
             Shopware()->Db()->delete('s_user_billingaddress', 'id = '.$billingId);
         }
-        if($shippingId) {
+        if ($shippingId) {
             Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
             Shopware()->Db()->delete('s_user_shippingaddress', 'id = '.$shippingId);
         }

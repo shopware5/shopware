@@ -87,7 +87,11 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-        <a class="item--link" href="{if $basketItem.modus != 4}{$detailLink}{else}#{/if}" title="{$basketItem.articlename|escape}">
+		{if $basketItem.modus != 4}
+        	<a class="item--link" href="{$detailLink}" title="{$basketItem.articlename|escape}">
+		{else}
+			<div class="item--link">
+		{/if}
             {block name="frontend_checkout_ajax_cart_articlename_quantity"}
 				<span class="item--quantity">{$basketItem.quantity}x</span>
 			{/block}
@@ -107,6 +111,10 @@
 			{block name="frontend_checkout_ajax_cart_articlename_price"}
 				<span class="item--price">{if $basketItem.amount}{$basketItem.amount|currency}{else}{s name="AjaxCartInfoFree" namespace="frontend/checkout/ajax_cart"}{/s}{/if}*</span>
 			{/block}
-		</a>
+		{if $basketItem.modus != 4}
+			</a>
+		{else}
+			</div>
+		{/if}
     {/block}
 </div>

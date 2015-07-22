@@ -60,7 +60,7 @@
                                 {block name="frontend_checkout_actions_confirm"}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !$sDispatchNoOrder}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
                                         {block name="frontend_checkout_actions_checkout"}
                                             <a href="{url action=confirm}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
@@ -68,6 +68,15 @@
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
                                                 <i class="icon--arrow-right"></i>
                                             </a>
+                                        {/block}
+                                    {else}
+                                        {block name="frontend_checkout_actions_checkout"}
+                                            <span
+                                               title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
+                                               class="btn is--disabled btn--checkout-proceed is--primary right is--icon-right is--large">
+                                                {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
+                                                <i class="icon--arrow-right"></i>
+                                            </span>
                                         {/block}
                                     {/if}
                                 {/block}
@@ -128,7 +137,7 @@
                                     {/if}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !$sDispatchNoOrder}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                             <a href="{url action=confirm}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
@@ -136,6 +145,15 @@
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
                                                 <i class="icon--arrow-right"></i>
                                             </a>
+                                        {/block}
+                                    {else}
+                                        {block name="frontend_checkout_actions_confirm_bottom_checkout"}
+                                            <span
+                                               title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
+                                               class="btn is--disabled btn--checkout-proceed is--primary right is--icon-right is--large">
+                                                {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
+                                                <i class="icon--arrow-right"></i>
+                                            </span>
                                         {/block}
                                     {/if}
                                 </div>

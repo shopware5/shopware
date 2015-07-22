@@ -771,7 +771,7 @@ class sBasket
                 'subject' => $this,
                 "params" => $params,
                 "voucher" => $voucherDetails,
-                "name" => $voucherName,
+                "vouchername" => $voucherName,
                 "shippingfree" => $freeShipping,
                 "tax" => $tax
             )

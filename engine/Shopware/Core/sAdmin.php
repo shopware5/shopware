@@ -2265,6 +2265,8 @@ class sAdmin
         foreach ($getOrders as $orderKey => $orderValue) {
             $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_amount"]);
+            $getOrders[$orderKey]["invoice_amount_net"] = $this->moduleManager->Articles()
+                ->sFormatPrice($orderValue["invoice_amount_net"]);
             $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_shipping"]);
 
@@ -2634,7 +2636,7 @@ class sAdmin
     }
 
     /**
-     * Risk management - Shipping or billing zip code match value
+     * Risk management - Shipping zip code match value
      *
      * @param  $user User data
      * @param  $order Order data
@@ -2646,7 +2648,23 @@ class sAdmin
         if ($value == "-1") {
             $value = "";
         }
-        return ($user["shippingaddress"]["zipcode"] == $value || $user["billingaddress"]["zipcode"] == $value);
+        return $user["shippingaddress"]["zipcode"] == $value;
+    }
+
+    /**
+     * Risk management - Billing zip code match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskBILLINGZIPCODE($user, $order, $value)
+    {
+        if ($value == "-1") {
+            $value = "";
+        }
+        return $user["billingaddress"]["zipcode"] == $value;
     }
 
     /**
@@ -2673,6 +2691,32 @@ class sAdmin
     public function sRiskZONEISNOT($user, $order, $value)
     {
         return ($user["additional"]["countryShipping"]["countryarea"] != $value);
+    }
+
+    /**
+     * Risk management - Billing Country zone matches value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskBILLINGZONEIS($user, $order, $value)
+    {
+        return ($user["additional"]["country"]["countryarea"] == $value);
+    }
+
+    /**
+     * Risk management - Billing Country zone doesn't match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskBILLINGZONEISNOT($user, $order, $value)
+    {
+        return ($user["additional"]["country"]["countryarea"] != $value);
     }
 
     /**
@@ -2706,6 +2750,39 @@ class sAdmin
         }
 
         return ($user["additional"]["countryShipping"]["countryiso"] != $value);
+    }
+
+    /**
+     * Risk management - Billing Country matches value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskBILLINGLANDIS($user, $order, $value)
+    {
+        if (preg_match("/$value/", $user["additional"]["country"]["countryiso"])) {
+            return true;
+        }
+        return ($user["additional"]["country"]["countryiso"] == $value);
+    }
+
+    /**
+     * Risk management - Billing Country doesn't match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskBILLINGLANDISNOT($user, $order, $value)
+    {
+        if (!preg_match("/$value/", $user["additional"]["country"]["countryiso"])) {
+            return true;
+        }
+
+        return ($user["additional"]["country"]["countryiso"] != $value);
     }
 
 
@@ -2967,6 +3044,23 @@ class sAdmin
         return (bool) preg_match(
             "/$value/",
             strtolower($user["shippingaddress"]["street"])
+        );
+    }
+
+    /**
+     * Risk management - Block if street contains pattern
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
+     */
+    public function sRiskPREGBILLINGSTREET($user, $order, $value)
+    {
+        $value = strtolower($value);
+        return (bool) preg_match(
+            "/$value/",
+            strtolower($user["billingaddress"]["street"])
         );
     }
 
@@ -4302,9 +4396,14 @@ class sAdmin
     {
         // Query country information
         $userData["additional"]["country"] = $this->db->fetchRow(
-            "SELECT * FROM s_core_countries WHERE id = ?",
+        'SELECT c.*, a.name AS countryarea
+          FROM s_core_countries c
+          LEFT JOIN s_core_countries_areas a
+           ON a.id = c.areaID AND a.active = 1
+          WHERE c.id = ?',
             array($userData["billingaddress"]["countryID"])
         );
+
         $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
         // State selection
         $userData["additional"]["state"] = $this->db->fetchRow(

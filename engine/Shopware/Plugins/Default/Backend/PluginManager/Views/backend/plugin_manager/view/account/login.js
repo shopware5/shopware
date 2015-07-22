@@ -1,141 +1,138 @@
-
 //{namespace name=backend/plugin_manager/translation}
 Ext.define('Shopware.apps.PluginManager.view.account.Login', {
-    extend: 'Ext.window.Window',
-    modal: true,
+    extend: 'Ext.container.Container',
 
     cls: 'plugin-manager-login-window',
 
-    header: false,
-
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
+    /**
+     * Contains all snippets for the view component
+     * @object
+     */
+    snippets: {
+        title: '{s name=account/login/title}Already have an account?{/s}',
+        shopwareId: '{s name=account/login/shopwareId}Shopware ID{/s}',
+        password: '{s name=account/login/password}Password{/s}',
+        passwordMessage: '{s name=account/login/passwordMessage}The passwords do not match.{/s}',
+        forgotPassword: '{s name=account/login/forgotPassword}Forgot your password?{/s}',
+        forgotPasswordLink: '{s name=account/login/forgotPasswordLink}https://account.shopware.com/#/forgotPassword{/s}',
+        registerDomain: '{s name=account/login/register_domain}Register domain{/s}',
+        cancelButton: '{s name="account/login/cancel"}Cancel{/s}',
+        loginButton: '{s name="account/login/login"}Login{/s}'
     },
 
-    bodyPadding: 40,
-    minHeight: 440,
-    minWidth: 500,
+    width: 360,
+    anchor: '100%',
+    border: false,
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.items = [
-            me.createHeadline(),
-            me.createForm(),
-            me.createForgotLink(),
-            me.createRegisterLink()
+            me.createForm()
         ];
-
-        me.dockedItems = [ me.createToolbar() ];
 
         me.callParent(arguments);
     },
 
-    createHeadline: function() {
+    createForgotLink: function () {
         var me = this;
 
         return Ext.create('Ext.Component', {
-            html: '{s name="welcome"}{/s}',
-            cls: 'headline'
-        });
-    },
-
-    createForgotLink: function() {
-        var me = this;
-
-        return Ext.create('Ext.Component', {
-            html: '<a href="https://account.shopware.com/#/forgotPassword" target="_blank">{s name="forgot_password"}{/s}</a>',
+            html: '<a href="' + me.snippets.forgotPasswordLink + '" target="_blank">' + me.snippets.forgotPassword + '</a>',
             cls: 'forgot'
         });
     },
 
-    createRegisterLink: function() {
-        var me = this;
-
-        return Ext.create('Ext.Component', {
-            html: '<a href="https://account.shopware.com/#/" target="_blank">{s name="register_now"}{/s}</a>',
-            cls: 'forgot'
-        });
-    },
-
-    createForm: function() {
+    createForm: function () {
         var me = this;
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             border: false,
             layout: {
-                type: 'vbox',
-                align: 'stretch'
+                type: 'vbox'
             },
+            anchor: '100%',
             cls: 'form-panel',
             items: [
+                me.createLoginText(),
                 me.createShopwareIdField(),
-                me.createPasswordField()
+                me.createPasswordField(),
+                me.createForgotLink(),
+                me.createRegisterDomainField(),
+                me.createActionButtons()
             ]
         });
 
         return me.formPanel;
     },
 
-    createToolbar: function() {
+    createLoginText: function() {
         var me = this;
 
-        var cancelButton = Ext.create('PluginManager.container.Container', {
-            html: '{s name="cancel"}{/s}',
-            cls: 'plugin-manager-action-button',
-            handler: function() {
-                me.destroy();
-            }
-        });
+        return {
+            border: false,
+            margin: '0 0 10 0',
+            html: '<span class="section-title">' + me.snippets.title + '</span>'
+        };
+    },
 
-        var applyButton = Ext.create('PluginManager.container.Container', {
-            html: '{s name="login"}{/s}',
+    createActionButtons: function () {
+        var me = this;
+
+        me.registerButton = Ext.create('PluginManager.container.Container', {
+            html: me.snippets.loginButton,
             cls: 'plugin-manager-action-button primary',
-            handler: function() {
+            margin: '36 50 0 0',
+            handler: function () {
                 me.applyLogin();
             }
         });
 
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock: 'bottom',
-            cls: 'toolbar',
-            padding: '0 40 30',
-            items: [ cancelButton ,'->', applyButton]
+        me.actionButtons = Ext.create('Ext.container.Container', {
+            margin: '10 0 0 0',
+            width: 360,
+            cls: 'action-buttons',
+            items: [me.registerButton]
         });
+
+        return me.actionButtons;
+
     },
 
-    applyLogin: function() {
+    createRegisterDomainField: function() {
         var me = this;
 
-        if (!me.formPanel.getForm().isValid()) {
-            return;
-        }
-
-        me.destroy();
-
-        Shopware.app.Application.fireEvent(
-            'store-login',
-            me.shopwareIdField.getValue(),
-            me.passwordField.getValue(),
-            function(response) {
-                me.callback();
+        me.LoginRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
+            fieldLabel: me.snippets.registerDomain,
+            name: 'registerDomain',
+            boxLabel: me.snippets.registerDomain,
+            cls: 'input--field',
+            labelWidth: 130,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        me.applyLogin();
+                    }
+                }
             }
-        );
+        });
+
+        return me.LoginRegisterDomain;
     },
 
-    createShopwareIdField: function() {
+    createShopwareIdField: function () {
         var me = this;
 
         me.shopwareIdField = Ext.create('Ext.form.field.Text', {
-            name: 'shopwareId',
+            name: 'shopwareID',
+            fieldLabel: me.snippets.shopwareId,
             allowBlank: false,
-            cls: 'shopware-id',
-            emptyText: '{s name="shopware_id"}{/s}',
+            cls: 'input--field',
+            emptyText: me.snippets.shopwareId,
             margin: '10 0',
-            flex: 1,
+            labelWidth: 130,
             listeners: {
-                specialkey: function(field, e){
+                specialkey: function (field, e) {
                     if (e.getKey() == e.ENTER) {
                         me.applyLogin();
                     }
@@ -146,18 +143,19 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         return me.shopwareIdField;
     },
 
-    createPasswordField: function() {
+    createPasswordField: function () {
         var me = this;
 
         me.passwordField = Ext.create('Ext.form.field.Text', {
             name: 'password',
+            fieldLabel: me.snippets.password,
             allowBlank: false,
-            flex: 1,
-            cls: 'password',
-            emptyText: '{s name="password"}{/s}',
+            labelWidth: 130,
+            cls: 'input--field',
+            emptyText: me.snippets.password,
             inputType: 'password',
             listeners: {
-                specialkey: function(field, e){
+                specialkey: function (field, e) {
                     if (e.getKey() == e.ENTER) {
                         me.applyLogin();
                     }
@@ -166,5 +164,26 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         });
 
         return me.passwordField;
+    },
+
+    applyLogin: function () {
+        var me = this;
+
+        if (!me.formPanel.getForm().isValid()) {
+            return;
+        }
+
+        var loginData = me.formPanel.getForm().getValues();
+
+        loginData.registerDomain = loginData.registerDomain === "on";
+        loginData.shopwareId = loginData.shopwareID;
+
+        Shopware.app.Application.fireEvent(
+            'store-login',
+            loginData,
+            function () {
+                me.callback();
+            }
+        );
     }
 });

@@ -27,6 +27,7 @@ namespace Shopware\Commands;
 use Shopware\Components\Snippet\SnippetValidator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -63,7 +64,10 @@ class SnippetsValidateCommand extends ShopwareCommand
 
         if (empty($argument)) {
             $invalidPaths = $validator->validate($this->container->getParameter('kernel.root_dir').'/snippets');
-            $invalidPaths = array_merge($invalidPaths, $this->validateDefaultPlugins($validator));
+            $invalidPaths = array_merge(
+                $invalidPaths,
+                $this->validatePlugins($validator, ['Default', 'Local', 'Community'])
+            );
         } else {
             $invalidPaths = $validator->validate($argument);
         }
@@ -71,28 +75,32 @@ class SnippetsValidateCommand extends ShopwareCommand
         if (empty($invalidPaths)) {
             $output->writeln('<info>All snippets are correctly defined</info>');
         } else {
-            $output->writeln('<error>The following errors occured:</error>');
+            $output->writeln('<error>The following errors occurred:</error>');
             foreach ($invalidPaths as $error) {
-                $output->writeln($error);
+                $output->writeln('<error>'.$error.'</error>');
             }
         }
     }
 
     /**
      * @param SnippetValidator $validator
-     * @return string[]
+     * @return \string[]
+     * @throws \Exception
      */
-    protected function validateDefaultPlugins(SnippetValidator $validator)
+    protected function validatePlugins(SnippetValidator $validator)
     {
         $invalidPaths = [];
-        $pluginBasePath = $this->container->get('application')->AppPath('Plugins_Default');
-        foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
-            foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
-                if ($pluginDir->isDot() || !$pluginDir->isDir()) {
-                    continue;
-                }
+        $pluginPaths = ['Default', 'Local', 'Community'];
+        foreach ($pluginPaths as $path) {
+            $pluginBasePath = $this->container->get('application')->AppPath('Plugins_'.$path);
+            foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
+                foreach (new \DirectoryIterator($pluginBasePath.$namespace) as $pluginDir) {
+                    if ($pluginDir->isDot() || !$pluginDir->isDir()) {
+                        continue;
+                    }
 
-                $invalidPaths = array_merge($invalidPaths, $validator->validate($pluginDir->getPathname()));
+                    $invalidPaths = array_merge($invalidPaths, $validator->validate($pluginDir->getPathname()));
+                }
             }
         }
 

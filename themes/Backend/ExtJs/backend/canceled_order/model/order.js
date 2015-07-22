@@ -52,7 +52,8 @@ Ext.define('Shopware.apps.CanceledOrder.model.Order', {
         { name: 'cleared', type: 'int' },
         { name: 'userId', type: 'string' },
         { name: 'customerId', type: 'int' },
-        { name: 'comment', type: 'string' }
+        { name: 'comment', type: 'string' },
+        { name: 'deviceType', type: 'string' }
     ],
 
     /**

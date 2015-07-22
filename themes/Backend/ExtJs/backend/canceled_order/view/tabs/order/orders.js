@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             transaction: '{s name=columns/transaction}Transaction{/s}',
             payment: '{s name=columns/payment}Payment{/s}',
             customer: '{s name=columns/customer}Customer{/s}',
-            action: '{s name=columns/action}Action{/s}'
+            action: '{s name=columns/action}Action{/s}',
+            deviceType: '{s name=columns/device_type}Device-Type{/s}'
         }
     },
 
@@ -136,6 +137,12 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
                 dataIndex: 'billing.lastName',
                 flex: 1,
                 renderer: me.customerRenderer
+            },
+            {
+                header: me.snippets.columns.deviceType,
+                dataIndex: 'orders.deviceType',
+                flex: 1,
+                renderer: me.deviceTypeRenderer
             },
             {
                 xtype : 'actioncolumn',
@@ -240,6 +247,23 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
     },
 
     /**
+     * Renders the device type and converts the first letter to upper case
+     * @param value
+     * @param metaData
+     * @param record
+     * @return string
+     */
+    deviceTypeRenderer: function(value, metaData, record) {
+        var deviceType = record.get('deviceType');
+
+        if (deviceType.length) {
+            return deviceType.charAt(0).toUpperCase() + deviceType.slice(1);
+        } else {
+            return deviceType;
+        }
+    },
+
+    /**
      * Returns an array of icons for the action column
      *
      * @return Array of buttons
@@ -260,31 +284,13 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             },
             /*{/if}*/
             {
-                iconCls:'sprite-arrow-circle-double',
+                iconCls:'sprite-arrow-circle',
                 action:'convert',
                 tooltip:'{s name=order_details_convert}Convert to regular order{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('convertOrder', record);
                 }
             }
-            /* For testing reasons only
-            {
-                iconCls:'sprite-mail--pencil',
-                action:'view',
-                tooltip:'{s name=order/askWhy}Ask for reason{/s}',
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('contactUser', 'sCANCELEDQUESTION', record);
-                }
-            },
-            {
-                iconCls:'sprite-mail-open-image',
-                action:'view',
-                tooltip:'{s name=order/sendVoucher}Send Voucher{/s}',
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('contactUser', 'sCANCELEDVOUCHER', record);
-                }
-            }
-            */
         ];
     },
 

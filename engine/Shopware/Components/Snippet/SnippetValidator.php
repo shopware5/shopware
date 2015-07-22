@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Snippet;
 
+use Doctrine\DBAL\Connection;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\Snippet
@@ -32,13 +34,26 @@ namespace Shopware\Components\Snippet;
 class SnippetValidator
 {
     /**
+     * @var Connection
+     */
+    private $db;
+
+    /**
+     * @param Connection $db
+     */
+    public function __construct(Connection $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
      * @param string $snippetsDir
      * @return array
      */
     public function validate($snippetsDir)
     {
         if (!file_exists($snippetsDir)) {
-            throw new \RuntimeException('Could not find ' . $snippetsDir . ' folder for snippet validation');
+            throw new \RuntimeException('Could not find '.$snippetsDir.' folder for snippet validation');
         }
 
         $dirIterator = new \RecursiveDirectoryIterator($snippetsDir, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -48,6 +63,7 @@ class SnippetValidator
         );
 
         $invalidSnippets = [];
+        $validLocales = $this->getValidLocales();
 
         /** @var $entry \SplFileInfo */
         foreach ($iterator as $entry) {
@@ -55,13 +71,37 @@ class SnippetValidator
                 continue;
             }
 
+
             $data = @parse_ini_file($entry->getRealPath(), true, INI_SCANNER_RAW);
-            if ($data  === false) {
+            $diffGroups = array_diff(array_keys($data), $validLocales);
+
+            if ($data === false) {
                 $error = error_get_last();
-                $invalidSnippets[] = $error['message'];
+                $invalidSnippets[] = $error['message'].' ('.$entry->getRealPath().')';
+            } elseif (array_key_exists('default', $data)) {
+                $invalidSnippets[] = '"Default" snippet group is deprecated ('.$entry->getRealPath().')';
+            } elseif ($diffGroups) {
+                $invalidSnippets[] = sprintf(
+                    'Invalid snippet group(s): %s (%s)',
+                    implode(', ', $diffGroups),
+                    $entry->getRealPath()
+                );
             }
         }
 
         return $invalidSnippets;
+    }
+
+    /**
+     * @return array
+     */
+    private function getValidLocales()
+    {
+        $locales = $this->db->executeQuery(
+            "SELECT locale
+            FROM `s_core_locales`"
+        )->fetchAll(\PDO::FETCH_COLUMN);
+
+        return $locales;
     }
 }

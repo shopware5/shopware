@@ -414,7 +414,8 @@ class sOrder
             'dispatchID' => $dispatchId,
             'currency' => $this->sSYSTEM->sCurrency["currency"],
             'currencyFactor' => $this->sSYSTEM->sCurrency["factor"],
-            'subshopID' => $mainShop->getId()
+            'subshopID' => $mainShop->getId(),
+            'deviceType' => $this->deviceType
         );
 
         try {
@@ -449,6 +450,9 @@ class sOrder
             if (!$basketRow["taxID"]) {
                 $basketRow["taxID"] = "0";
             }
+            if (!$basketRow["releasedate"]) {
+                $basketRow["releasedate"] = '0000-00-00';
+            }
 
             $data = array(
                 'orderID' => $orderID,
@@ -459,7 +463,7 @@ class sOrder
                 'quantity' => $basketRow["quantity"],
                 'name' => $basketRow["articlename"],
                 'status' => 0,
-                'releasedate' => '0000-00-00',
+                'releasedate' => $basketRow["releasedate"],
                 'modus' => $basketRow["modus"],
                 'esdarticle' => $basketRow["esdarticle"],
                 'taxID' => $basketRow["taxID"],
@@ -649,7 +653,7 @@ class sOrder
                 $basketRow["quantity"],
                 $this->db->quote((string) $basketRow["articlename"]),
                 0,
-                '0000-00-00',
+                $this->db->quote((string) $basketRow["releasedate"]),
                 $basketRow["modus"],
                 $basketRow["esdarticle"],
                 $basketRow["taxID"],
@@ -1095,6 +1099,9 @@ class sOrder
         }
         if (!$basketRow["ean"]) {
             $basketRow["ean"] = '';
+        }
+        if (!$basketRow["releasedate"]) {
+            $basketRow["releasedate"] = '0000-00-00';
         }
 
         return $basketRow;

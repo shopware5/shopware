@@ -9,6 +9,11 @@
     {/if}
 {/block}
 
+{* Canonical URL *}
+{block name='frontend_index_header_canonical'}
+    <link rel="canonical" href="{url controller='index'}" />
+{/block}
+
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="content content--home">

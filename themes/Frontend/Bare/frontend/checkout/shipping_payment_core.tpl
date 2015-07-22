@@ -9,7 +9,7 @@
 		{* Action top *}
 		{block name='frontend_checkout_shipping_payment_core_buttons'}
 			<div class="confirm--actions table--actions block">
-				<button type="submit" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
+                <button type="submit" class="btn is--primary is--icon-right is--large right main--actions">{s namespace='frontend/checkout/shipping_payment' name='NextButton'}{/s}<i class="icon--arrow-right"></i></button>
 			</div>
 		{/block}
 
@@ -24,7 +24,7 @@
             </div>
 
             {* Shipping method *}
-            {if $sDispatches|count}
+            {if $sDispatches}
                 <div class="confirm--inner-container block">
                     {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
                         {include file="frontend/checkout/change_shipping.tpl"}
