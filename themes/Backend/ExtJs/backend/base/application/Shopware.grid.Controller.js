@@ -512,8 +512,13 @@ Ext.define('Shopware.grid.Controller', {
         alias = alias.replace('widget.', '');
         controls[alias] = me.createListingWindowControls();
 
-        events[me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
+        events['grid-' + me.getConfig('eventAlias') + '-batch-delete-item'] = me.onBatchDeleteItem;
         controls['shopware-progress-window'] = events;
+
+        // We need to map the controller context, since we are using the global eventbus.
+        Shopware.app.Application.on('grid-' + me.getConfig('eventAlias') + '-batch-delete-item', function() {
+            me.onBatchDeleteItem.apply(me, arguments);
+        });
 
         Shopware.app.Application.fireEvent(me.getEventName('after-create-controls'), me, controls);
 
@@ -584,7 +589,7 @@ Ext.define('Shopware.grid.Controller', {
                         tasks: [
                             {
                                 text: me.deleteProgressBarText,
-                                event: me.getConfig('eventAlias') + '-batch-delete-item',
+                                event: 'grid-' + me.getConfig('eventAlias') + '-batch-delete-item',
                                 totalCount: records.length,
                                 data: records
                             }
@@ -598,7 +603,7 @@ Ext.define('Shopware.grid.Controller', {
             }
 
             //reload store after all items deleted.
-            window.on('process-done', function() {
+            Shopware.app.Application.on('grid-process-done', function() {
                 grid.getStore().load();
             }, me, { single: true });
 
