@@ -30,7 +30,8 @@
                                 {$rangeMax = $facet->getMax()}
                                 {$roundPretty = 'false'}
                                 {$format = ''}
-                                {$stepCount = 20}
+                                {$stepCount = 100}
+                                {$stepCurve = 'linear'}
                             {/block}
 
 							<div class="range-slider"
@@ -38,10 +39,11 @@
                                  data-roundPretty="{$roundPretty}"
                                  data-labelFormat="{$format}"
                                  data-stepCount="{$stepCount}"
-								 data-startMin="{$startMin}"
-								 data-startMax="{$startMax}"
-								 data-rangeMin="{$rangeMin}"
-								 data-rangeMax="{$rangeMax}">
+                                 data-stepCurve="{$stepCurve}"
+                                 data-startMin="{$startMin}"
+                                 data-startMax="{$startMax}"
+                                 data-rangeMin="{$rangeMin}"
+                                 data-rangeMax="{$rangeMax}">
 
 								{block name="frontend_listing_filter_facet_range_input_min"}
 									<input type="hidden"
