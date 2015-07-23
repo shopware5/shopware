@@ -1438,19 +1438,20 @@ class sArticles
 
         $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
 
-        $criteria->offset(0)->limit(100);
+        $criteria->offset(0);
 
         switch ($mode) {
             case 'top':
-                $criteria->addSorting(new PopularitySorting());
-                $criteria->limit(25);
+                $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
+                $criteria->limit(10);
                 break;
             case 'new':
-                $criteria->limit(1);
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
+                $criteria->limit(1);
                 break;
             default:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
+                $criteria->limit(100);
         }
 
         $result = $this->productNumberSearch->search($criteria, $context);
@@ -2329,7 +2330,7 @@ class sArticles
             );
             $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
             $data = array_merge($data, $convertedConfigurator);
-            
+
             $convertedConfiguratorPrice = $this->legacyStructConverter->convertConfiguratorPrice($product, $configurator);
             $data = array_merge($data, $convertedConfiguratorPrice);
         }
