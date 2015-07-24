@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 formPnl.up('window').destroy();
                 Shopware.Notification.createGrowlMessage(
                     '{s name=user/Success}Successful{/s}',
-                    '{s name="user/editSuccessful"}User ' +  formPnl.getForm().getValues().name + ' was updated{/s}',
+                    Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
                     '{s name="user/userManager"}User Manager{/s}'
                 );
                 Ext.Ajax.request({
