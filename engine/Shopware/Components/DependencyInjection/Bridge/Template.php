@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\Escaper\EscaperInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
@@ -34,12 +36,14 @@ class Template
     /**
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Enlight_Components_Snippet_Resource $snippetResource
-     * @param array $templateConfig
+     * @param EscaperInterface $escaper
      * @return \Enlight_Template_Manager
+     * @param array $templateConfig
      */
     public function factory(
         \Enlight_Event_EventManager $eventManager,
         \Enlight_Components_Snippet_Resource $snippetResource,
+        EscaperInterface $escaper,
         array $templateConfig
     ) {
 
@@ -55,6 +59,12 @@ class Template
 
         $template->registerResource('snippet', $snippetResource);
         $template->setDefaultResourceType('snippet');
+
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtml', array($escaper, 'escapeHtml'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtmlAttr', array($escaper, 'escapeHtmlAttr'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeJs', array($escaper, 'escapeJs'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeCss', array($escaper, 'escapeCss'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeUrl', array($escaper, 'escapeUrl'));
 
         return $template;
     }

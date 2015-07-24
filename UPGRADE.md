@@ -95,6 +95,17 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware_Controllers_Frontend_Listing::indexAction`
     * `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`
     * `\sArticles::sGetArticlesByCategory`
+* Added Escaper component to escape output data, dependent on the context in which the data will be used
+    * Added library [zendframework/zend-escaper](https://github.com/zendframework/zend-escaper)
+    * New interface: `\Shopware\Components\Escaper\EscaperInterface`
+    * Default implementation: `\Shopware\Components\Escaper\Escaper`, uses `Zend\Escaper`
+    * Available in DI-Container: `shopware.escaper`
+    * Smarty Modifiers:
+        * escapeHtml
+        * escapeHtmlAttr
+        * escapeJs
+        * escapeUrl
+        * escapeCss
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.

@@ -34,6 +34,7 @@
             <factory service="template_factory" method="factory" />
             <argument type="service" id="events"/>
             <argument type="service" id="snippet_resource"/>
+            <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
         </service>
 
@@ -221,6 +222,14 @@
 
         <service id="shopware.holiday_table_updater" class="Shopware\Components\HolidayTableUpdater">
             <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="zend.escaper" class="Zend\Escaper\Escaper" public="false">
+            <argument type="string">utf-8</argument>
+        </service>
+
+        <service id="shopware.escaper" class="Shopware\Components\Escaper\Escaper">
+            <argument type="service" id="zend.escaper" />
         </service>
 
         <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">
