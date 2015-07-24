@@ -151,6 +151,10 @@
                 'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}'
             {rdelim};
 
+            var snippets = snippets || {ldelim}
+                'noCookiesNotice': '{s name="IndexNoCookiesNotice"}{/s}'
+            {rdelim};
+
             var themeConfig = themeConfig || {ldelim}
                 'offcanvasOverlayPage': '{$theme.offcanvasOverlayPage}'
             {rdelim};
