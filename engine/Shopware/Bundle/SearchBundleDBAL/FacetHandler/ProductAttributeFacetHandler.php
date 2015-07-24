@@ -68,6 +68,14 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function supportsFacet(FacetInterface $facet)
+    {
+        return ($facet instanceof ProductAttributeFacet);
+    }
+
+    /**
      * Generates the facet data for the passed query, criteria and context object.
      *
      * @param FacetInterface|ProductAttributeFacet $facet
@@ -96,7 +104,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         switch ($facet->getMode()) {
             case (ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
             case (ProductAttributeFacet::MODE_RADIO_LIST_RESULT):
-                $result = $this->createValueListFacetResult($query, $facet, $criteria);
+                $result = $this->createValueListFacetResult($query, $facet, $criteria, $context);
                 break;
 
             case (ProductAttributeFacet::MODE_BOOLEAN_RESULT):
@@ -119,10 +127,18 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         return $result;
     }
 
+    /**
+     * @param QueryBuilder $query
+     * @param ProductAttributeFacet $facet
+     * @param Criteria $criteria
+     * @param Struct\ShopContextInterface $context
+     * @return null|RadioFacetResult|ValueListFacetResult
+     */
     private function createValueListFacetResult(
         QueryBuilder $query,
         ProductAttributeFacet $facet,
-        Criteria $criteria
+        Criteria $criteria,
+        Struct\ShopContextInterface $context
     ) {
         $sqlField = 'productAttribute.' . $facet->getField();
 
@@ -130,10 +146,11 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
             ->orderBy($sqlField)
             ->groupBy($sqlField);
 
+        $this->addTranslations($query, $context);
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
-        $result = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
+        $result = $statement->fetchAll();
         if (empty($result)) {
             return null;
         }
@@ -144,8 +161,14 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
             $actives = $condition->getValue();
         }
 
-        $items = array_map(function ($row) use ($actives) {
-            return new ValueListItem($row, $row, in_array($row, $actives));
+        $items = array_map(function ($row) use ($actives, $facet) {
+            $viewName = $row[$facet->getField()];
+            $translation = $this->extractTranslations($row, $facet->getField());
+            if ($translation !== null) {
+                $viewName = $translation;
+            }
+
+            return new ValueListItem($row[$facet->getField()], $viewName, in_array($row[$facet->getField()], $actives));
         }, $result);
 
         if ($facet->getMode() == ProductAttributeFacet::MODE_RADIO_LIST_RESULT) {
@@ -167,7 +190,12 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         }
     }
 
-
+    /**
+     * @param QueryBuilder $query
+     * @param ProductAttributeFacet $facet
+     * @param Criteria $criteria
+     * @return null|RangeFacetResult
+     */
     private function createRangeFacetResult(
         QueryBuilder $query,
         ProductAttributeFacet $facet,
@@ -211,7 +239,12 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         );
     }
 
-
+    /**
+     * @param QueryBuilder $query
+     * @param ProductAttributeFacet $facet
+     * @param Criteria $criteria
+     * @return null|BooleanFacetResult
+     */
     private function createBooleanFacetResult(
         QueryBuilder $query,
         ProductAttributeFacet $facet,
@@ -237,12 +270,84 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         );
     }
 
+    /**
+     * @param QueryBuilder $query
+     * @param Struct\ShopContextInterface $context
+     */
+    private function addTranslations($query, $context)
+    {
+        if ($context->getShop()->isDefault()) {
+            return;
+        }
+
+        $query
+            ->addSelect('attributeTranslations.objectdata as __attribute_translation')
+            ->leftJoin(
+                'product',
+                's_core_translations',
+                'attributeTranslations',
+                'attributeTranslations.objectkey = product.id AND attributeTranslations.objecttype = "article" AND attributeTranslations.objectlanguage = :language'
+            )
+        ;
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if (!$context->getShop()->getFallbackId() || $context->getShop()->getFallbackId() === $context->getShop()->getId()) {
+            return;
+        }
+
+        $query
+            ->addSelect('attributeTranslations_fallback.objectdata as __attribute_translation_fallback')
+            ->leftJoin(
+                'product',
+                's_core_translations',
+                'attributeTranslations_fallback',
+                'attributeTranslations_fallback.objectkey = product.id AND attributeTranslations_fallback.objecttype = "article" AND attributeTranslations_fallback.objectlanguage = :languageFallback'
+            )
+        ;
+        $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+    }
 
     /**
-     * {@inheritdoc}
+     * @param array $row
+     * @param string $fieldName
+     * @return null|string
      */
-    public function supportsFacet(FacetInterface $facet)
+    private function extractTranslations($row, $fieldName)
     {
-        return ($facet instanceof ProductAttributeFacet);
+        $translation = $this->unserializeTranslation($row, '__attribute_translation', $fieldName);
+        if ($translation !== null) {
+            return $translation;
+        }
+
+        $translation = $this->unserializeTranslation($row, '__attribute_translation_fallback', $fieldName);
+        if ($translation !== null) {
+            return $translation;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $row
+     * @param string $key
+     * @param string $fieldName
+     * @return string|null
+     */
+    private function unserializeTranslation($row, $key, $fieldName)
+    {
+        if (!isset($row[$key])) {
+            return null;
+        }
+
+        $result = @unserialize($row[$key]);
+        if (!$result) {
+            return null;
+        }
+
+        if (!isset($result[$fieldName]) || empty($result[$fieldName])) {
+            return null;
+        }
+
+        return $result[$fieldName];
     }
 }
