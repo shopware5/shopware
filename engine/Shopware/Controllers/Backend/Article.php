@@ -1527,18 +1527,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->join('pv.articles', 'pa', 'with', 'pa.id = :articleId')
             ->setParameter('articleId', $articleId)
             ->join('pv.option', 'po')
-            ->select(array('po.id as optionId', 'pv.id as value'));
+            ->select(array('po.id as optionId', 'pv.id', 'pv.value'));
 
         $query = $builder->getQuery();
-        foreach ($query->getArrayResult() as $value) {
-            if (!isset($options[$value['optionId']])) {
+        $values = $query->getArrayResult();
+
+        foreach ($values as $value) {
+            $optionId = $value['optionId'];
+            if (!isset($options[$optionId])) {
                 continue;
             }
-            if (!isset($options[$value['optionId']]['name'])) {
-                $options[$value['optionId']]['value'] = array($value['value']);
-            } else {
-                $options[$value['optionId']]['value'][] = $value['value'];
-            }
+            $options[$optionId]['value'][] = [
+                'id' => $value['id'],
+                'value' => $value['value']
+            ];
         }
 
         $this->View()->assign(array(
@@ -1546,6 +1548,39 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             'total' =>  count($options),
             'success' => true
         ));
+    }
+
+    public function createPropertyValueAction()
+    {
+        $groupId = $this->Request()->getParam('groupId', null);
+        $value   = $this->Request()->getParam('value');
+
+        if (!$groupId) {
+            return $this->View()->assign(['success' => false, 'message' => 'No property group selected!']);
+        }
+        if (!$this->Request()->has('value')) {
+            return $this->View()->assign(['success' => false, 'message' => 'No property value provided!']);
+        }
+
+        $entityManager = Shopware()->Container()->get('models');
+        $group = $entityManager->find('Shopware\Models\Property\Option', $groupId);
+
+        if (!$group) {
+            return $this->View()->assign(['success' => false, 'message' => 'No property group selected!']);
+        }
+
+        try {
+            $option = new \Shopware\Models\Property\Value($group, $value);
+            $entityManager->persist($option);
+            $entityManager->flush($option);
+        } catch (Exception $e) {
+            return $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => ['id' => $option->getId(), 'value' => $option->getValue()]
+        ]);
     }
 
     /**

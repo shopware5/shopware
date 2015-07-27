@@ -277,4 +277,33 @@
             background: #fff;
         }
     }
+
+    .#{$prefix}item-bubble-list li {
+        display: block;
+        float: left;
+        margin: 2px 4px 2px 0;
+    }
+
+    .#{$prefix}item-bubble {
+        @include border-radius(4px);
+        background: #dee7f8;
+        display: inline-block;
+        padding: 0 15px 0 4px;
+        position: relative;
+        border: 1px solid transparent;
+        cursor: pointer;
+
+        .cross-btn {
+            font-size: 10px;
+            font-weight: bold;
+            position: absolute;
+            right: 4px;
+            top: -1px;
+        }
+
+        &:hover {
+            background: #bbcef1;
+            border-color: #6d95e0;
+        }
+    }
 }

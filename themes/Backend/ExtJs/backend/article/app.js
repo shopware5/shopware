@@ -71,7 +71,6 @@ Ext.define('Shopware.apps.Article', {
         'detail.Properties',
         'detail.Prices',
         'detail.Base',
-        'detail.Sidebar',
         'category.Tree',
         'category.Seo',
         'category.List',
@@ -126,8 +125,7 @@ Ext.define('Shopware.apps.Article', {
         'Dependency',
         'ConfiguratorSet',
         'MediaMapping',
-        'Property',
-        'PropertyValue'
+        'Property'
     ],
 
     /**
@@ -140,7 +138,6 @@ Ext.define('Shopware.apps.Article', {
         'Attribute',
         'PropertyGroup',
         'PropertyOption',
-        'PropertyValue',
         'Template',
         'Category',
         'Media',

@@ -78,7 +78,13 @@ In this document you will find a changelog of the important changes related to t
     * `detail/sidebar/accessory/number`
 * Removed unprefixed versions of jQuery plugins that were deprecated in the 5.0.2 Release.
 * Move directory `logs/` to `var/log/` and `cache/` to `var/cache`
-* Addded library [beberlei/assert](https://github.com/beberlei/assert) for low-level validation.
+* The property selection for an product is now a dedicated tab.
+    * The `beforeedit` event will now be triggered on the `article-detail-window grid[name=property-grid]`
+    * The property selection was built from scratch to provide a better user experience but the method names haven't changed
+    * The store `Shopware.apps.Article.store.PropertyValue` and the associated model `Shopware.apps.Article.model.PropertyValue` are not available anymore
+    * Property values are now creates on demand with an AJAX request
+    * The selection of property values is now on select to allow for a faster usage of the component
+* Added library [beberlei/assert](https://github.com/beberlei/assert) for low-level validation.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
@@ -155,6 +161,12 @@ In this document you will find a changelog of the important changes related to t
     * plugin/rangeSlider/changeMax              => plugin/rangeSlider/onSetMax
     * plugin/rangeSlider/reset                  => plugin/rangeSlider/onReset
     * plugin/rangeSlider/onChange               => plugin/rangeSlider/onEndDrag
+    * plugin/search/onKeyDown                   => plugin/swSearch/onKeyDown
+    * plugin/search/onKeyUp                     => plugin/swSearch/onKeyUp
+    * plugin/search/onSearchRequest             => plugin/swSearch/onSearchRequest
+    * plugin/search/onShowResult                => plugin/swSearch/onShowResult
+    * plugin/search/onCloseResult               => plugin/swSearch/onCloseResult
+    * plugin/search/onKeyboardNavigation        => plugin/swSearch/onKeyboardNavigation
 * Added new validation rules for snippets
     * Use `bin/console sw:snippets:validate <your-plugin-snippets-path>` to check the validity of your snippets.
     * Defining a snippet value in multiple lines is deprecated.

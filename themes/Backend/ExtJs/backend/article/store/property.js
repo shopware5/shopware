@@ -36,6 +36,7 @@ Ext.define('Shopware.apps.Article.store.Property', {
     alias: 'widget.article-store-property',
     model: 'Shopware.apps.Article.model.Property',
     batch: true,
+    autoLoad: false,
     proxy: {
         type: 'ajax',
         api: {
