@@ -28,6 +28,23 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
         var me = this;
 
         me.communityStore = Ext.create('Shopware.apps.PluginManager.store.StorePlugin');
+        me.storeListing = me.createListing();
+
+        me.filterPanel = me.createFilterPanel();
+
+        me.content = Ext.create('Ext.container.Container', {
+            items: [
+                me.filterPanel,
+                me.storeListing
+            ]
+        });
+
+        return me.content;
+    },
+
+    createListing: function() {
+        var me = this;
+
         me.storeListing = Ext.create('PluginManager.components.Listing', {
             store: me.communityStore,
             name: 'community-store-listing',
@@ -35,8 +52,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
             padding: 30,
             width: 1007
         });
+        return me.storeListing;
+    },
 
-        me.filterPanel = Ext.create('Ext.container.Container', {
+    createFilterPanel: function() {
+        var me = this;
+
+        return Ext.create('Ext.container.Container', {
             cls: 'filter-panel',
             layout: 'hbox',
             padding: '15 0 15',
@@ -47,15 +69,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
                 me.createSorting()
             ]
         });
-
-        me.content = Ext.create('Ext.container.Container', {
-            items: [
-                me.filterPanel,
-                me.storeListing
-            ]
-        });
-
-        return me.content;
     },
 
     createSorting: function() {

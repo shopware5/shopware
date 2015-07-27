@@ -254,12 +254,12 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             });
             me.metaDataContainer.add(content);
         } else {
-            content = Ext.create('Shopware.apps.PluginManager.view.detail.Prices', {
+            me.pricesContainer = Ext.create('Shopware.apps.PluginManager.view.detail.Prices', {
                 prices: plugin['getPricesStore'],
                 plugin: plugin
             });
 
-            me.metaDataContainer.add(content);
+            me.metaDataContainer.add(me.pricesContainer);
 
             me.metaDataContainer.add({
                 xtype: 'component',

@@ -81,6 +81,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
 
     basePath: '{link file=""}',
 
+    navigationIndex: {
+        welcome: 0,
+        localization: 1,
+        demo_data: 2,
+        recommendation: 3,
+        config: 4,
+        shopware_id: 5,
+        premium: 6,
+        finish: 7
+    },
+
     initComponent: function() {
         var me = this;
 
@@ -181,6 +192,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             Ext.create('Shopware.apps.FirstRunWizard.view.main.ShopwareId')
         );
         items.push(
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.PremiumListing')
+        );
+        items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Finish')
         );
 
@@ -190,16 +204,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     createNavigation: function() {
         var me = this;
 
-        var store = Ext.create('Ext.data.Store', {
+        me.navigationStore = Ext.create('Ext.data.Store', {
             fields: ['name', 'disabled'],
             data: [
-                { name: '{s name=home/content/title}Welcome to Shopware{/s}',       disabled: false },
-                { name: '{s name=localization/content/title}Localization{/s}',      disabled: !(me.isConnected === true) },
-                { name: '{s name=demo_data/content/title}Demo Data{/s}',            disabled: !(me.isConnected === true) },
-                { name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: !(me.isConnected === true) },
-                { name: '{s name=config/content/title}Configuration{/s}',           disabled: false },
-                { name: '{s name=shopware_id/content/title}Shopware ID{/s}',        disabled: !(me.isConnected === true) },
-                { name: '{s name=finish/content/title}Finished{/s}',                disabled: false }
+                { id: me.navigationIndex.welcome, name: '{s name=home/content/title}Welcome to Shopware{/s}',       disabled: false },
+                { id: me.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}',      disabled: !(me.isConnected === true) },
+                { id: me.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}',            disabled: !(me.isConnected === true) },
+                { id: me.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: !(me.isConnected === true) },
+                { id: me.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}',           disabled: false },
+                { id: me.navigationIndex.shopware_id, name: '{s name=shopware_id/content/title}Shopware ID{/s}',        disabled: !(me.isConnected === true) },
+                { id: me.navigationIndex.premium, name: '{s name=premium/content/title}Additional features{/s}',    disabled: false },
+                { id: me.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}',                disabled: false }
             ]
         });
 
@@ -207,7 +222,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             tpl: me.createNavigationTemplate(),
             width: 200,
             name: 'navigation',
-            store: store,
+            store: me.navigationStore,
             region: 'west',
             itemSelector: '.item',
             cls: 'wizard-navigation'

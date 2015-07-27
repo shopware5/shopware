@@ -19,7 +19,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         me.on('afterrender', function(comp) {
             comp.el.on('click', function(event, el) {
                 if (!el.classList.contains('button')) {
-                    me.displayPluginEvent(me.record);
+                    me.onClickElement(me.record);
                 }
             });
         });
@@ -35,6 +35,11 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             me.hideLoadingMask();
         });
 
+    },
+
+    onClickElement: function(record) {
+        var me = this;
+        me.displayPluginEvent(record);
     },
 
     loadRecord: function(plugin) {

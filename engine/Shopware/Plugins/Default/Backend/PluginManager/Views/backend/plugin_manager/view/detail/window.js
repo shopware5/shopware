@@ -29,6 +29,16 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Window', {
 
     },
 
+    setActivePriceTab: function(priceName) {
+        var me = this;
+
+        if (!me.detailContainer.pricesContainer) {
+            return;
+        }
+        var tabIndex = me.detailContainer.pricesContainer.tabIndex[priceName];
+        me.detailContainer.pricesContainer.navigationClick(tabIndex);
+    },
+
     loadRecord: function(plugin) {
         var me = this;
 

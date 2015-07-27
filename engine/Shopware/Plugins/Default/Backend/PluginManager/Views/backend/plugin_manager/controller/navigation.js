@@ -18,7 +18,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         pluginUpdatesPage: 2,
         listingPage: 3,
         accountPage: 4,
-        licencePage: 5
+        licencePage: 5,
+        premiumPluginsPage: 6
     },
 
     animationSpeed: 150,
@@ -55,6 +56,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         Shopware.app.Application.on({
             'display-plugin': me.displayDetailPage,
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
+            'display-premium-plugins': me.displayPremiumPluginsPage,
             scope: me
         });
 
@@ -202,6 +204,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.setActiveNavigationLink(navigation.localInstalledLink);
     },
 
+    displayPremiumPluginsPage: function () {
+        var me = this,
+            navigation = me.getNavigation();
+
+        Shopware.app.Application.fireEvent('enable-premium-plugins-mode');
+
+        me.switchView(me.cards.premiumPluginsPage);
+    },
+
     displayPluginUpdatesPage: function () {
         var me = this,
             updatePage = me.getUpdatePage(),
@@ -217,11 +228,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.switchView(me.cards.listingPage);
     },
 
-    displayDetailPage: function (plugin) {
+    displayDetailPage: function (plugin, callback) {
         var me = this;
 
         var detailWindow = me.getView('detail.Window').create().show();
         detailWindow.loadRecord(plugin);
+
+        if (Ext.isFunction(callback)) {
+            callback(detailWindow);
+        }
     },
 
     displayAccountPage: function () {

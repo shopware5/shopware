@@ -8,7 +8,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
     alias: 'widget.plugin-manager-listing-window',
 
     height: '90%',
-    width: 1281,
+    width: 1283,
 
     title: '{s name="title"}{/s}',
 
@@ -36,7 +36,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
             me.createPluginUpdatesPage(),
             me.createListingPage(),
             me.createAccountPage(),
-            me.createLicencePage()
+            me.createLicencePage(),
+            me.createPremiumPluginsPage()
         ];
 
         me.centerPanel = Ext.create('Ext.container.Container', {
@@ -130,5 +131,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
         });
 
         return this.licencePage;
+    },
+
+    createPremiumPluginsPage: function() {
+        this.createPremiumPluginPage = Ext.create('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
+            cardIndex: 6
+        });
+
+        return this.createPremiumPluginPage;
     }
 });
