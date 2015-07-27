@@ -274,7 +274,6 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             // store for the dispatch
             mainStore               : Ext.create('Shopware.apps.Shipping.store.Dispatch').load()
         });
-
     },
 
      /**
@@ -327,8 +326,16 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         // needs to be loaded here to have the data ready on view
         costsmatrix.load();
 
-        // supply data to the main view
-       me.createEditForm(record, costsmatrix).show();
+        me.getGrid().setLoading(true);
+
+        // load full entity from api and create detail window
+        me.getModel('Dispatch').load(record.get('id'), {
+            callback: function (record) {
+                // supply data to the main view
+                me.createEditForm(record, costsmatrix).show();
+                me.getGrid().setLoading(false);
+            }
+        });
     },
 
     /**
@@ -372,8 +379,19 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
 
         // save costsmatrix for further reference
 //        me.costsmatrix = costsmatrix;
-        // supply data to the main view
-       me.createEditForm(record, costsmatrix).show();
+
+        me.getGrid().setLoading(true);
+
+        // load full entity from api and create detail window
+        me.getModel('Dispatch').load(record.get('id'), {
+            callback: function (record) {
+                record.data.clone = true;
+
+                // supply data to the main view
+                me.createEditForm(record, costsmatrix).show();
+                me.getGrid().setLoading(false);
+            }
+        });
     },
 
     /**

@@ -35,7 +35,6 @@ use Shopware\Models\Customer;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * @param $filter
      * @param $order
@@ -106,6 +105,28 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns basic info about known shipping and dispatch settings
+     *
+     * @param null $filter - Used to search in the name and description of the dispatch data set
+     * @param array $order - Name of the field which should considered as sorting field
+     * @param null $limit - Reduce the number of returned data sets
+     * @param null $offset - Start the output based on that offset
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getListQuery($filter = null, $order = array(), $limit = null, $offset = null)
+    {
+        $builder = $this->getListQueryBuilder($filter, $order);
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper function to create the query builder for the "getShippingCostsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      * @param $dispatchId - If this parameter is given, only one data set will be returned
@@ -119,7 +140,7 @@ class Repository extends ModelRepository
         $expr     = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
-        $builder->select(array('dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'))
+        $builder->select(['dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'])
                 ->leftJoin('dispatch.countries', 'countries')
                 ->leftJoin('dispatch.categories', 'categories')
                 ->leftJoin('dispatch.holidays', 'holidays')
@@ -129,6 +150,38 @@ class Repository extends ModelRepository
             $builder->where($expr->eq('dispatch.id', '?2'))
                     ->setParameter(2, $dispatchId);
         }
+
+        // Set the filtering logic
+        if (null !== $filter) {
+            $builder->andWhere(
+                $expr->orX(
+                    $expr->like('dispatch.name', '?1'),
+                    $expr->like('dispatch.description', '?1')
+                )
+            );
+            $builder->setParameter(1, '%' . $filter . '%');
+        }
+
+        // Set the order logic
+        $this->addOrderBy($builder, $order);
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to create the query builder for the "getShippingCostsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param null $filter - Used to search in the name and description of the dispatch data set
+     * @param array $order - Name of the field which should considered as sorting field
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getListQueryBuilder($filter = null, $order = array())
+    {
+        $builder  = $this->createQueryBuilder('dispatch');
+        $expr     = $this->getEntityManager()->getExpressionBuilder();
+
+        // Build the query
+        $builder->select(['dispatch']);
 
         // Set the filtering logic
         if (null !== $filter) {
