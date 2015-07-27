@@ -71,21 +71,30 @@ class SnippetValidator
                 continue;
             }
 
-
-            $data = @parse_ini_file($entry->getRealPath(), true, INI_SCANNER_RAW);
-            $diffGroups = array_diff(array_keys($data), $validLocales);
+            $data = @parse_ini_file($entry->getRealPath(), true);
 
             if ($data === false) {
                 $error = error_get_last();
                 $invalidSnippets[] = $error['message'].' ('.$entry->getRealPath().')';
-            } elseif (array_key_exists('default', $data)) {
-                $invalidSnippets[] = '"Default" snippet group is deprecated ('.$entry->getRealPath().')';
-            } elseif ($diffGroups) {
-                $invalidSnippets[] = sprintf(
-                    'Invalid snippet group(s): %s (%s)',
-                    implode(', ', $diffGroups),
-                    $entry->getRealPath()
-                );
+                continue;
+            }
+
+            $dataRaw = @parse_ini_file($entry->getRealPath(), true, INI_SCANNER_RAW);
+
+            if ($dataRaw === false) {
+                $error = error_get_last();
+                $invalidSnippets[] = $error['message'].' ('.$entry->getRealPath().')';
+            } else {
+                $diffGroups = array_diff(array_keys($data), $validLocales);
+                if (array_key_exists('default', $data)) {
+                    $invalidSnippets[] = '"Default" snippet group is deprecated ('.$entry->getRealPath().')';
+                } elseif ($diffGroups) {
+                    $invalidSnippets[] = sprintf(
+                        'Invalid snippet group(s): %s (%s)',
+                        implode(', ', $diffGroups),
+                        $entry->getRealPath()
+                    );
+                }
             }
         }
 
