@@ -81,7 +81,7 @@ module.exports = function (grunt) {
                     '../themes/Frontend/**/_public/src/js/*.js',
                     '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
                 ],
-                tasks: ['uglify']
+                tasks: ['uglify:development']
             }
         },
         jshint: {
