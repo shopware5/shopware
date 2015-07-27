@@ -691,7 +691,7 @@ Ext.define('Shopware.window.Progress', {
             if (me.cancelProcess) {
                 me.updateProgressBar(current, me.processCanceledText);
             }
-            me.fireEvent('process-done', me, current, me.cancelProcess);
+            Shopware.app.Application.fireEvent('grid-process-done', me, current, me.cancelProcess);
 
             return false;
         }
@@ -732,7 +732,7 @@ Ext.define('Shopware.window.Progress', {
          * },
          *
          */
-        me.fireEvent(current.event, current, record, function(result, operation) {
+        Shopware.app.Application.fireEvent(current.event, current, record, function(result, operation) {
             //no result grid configured? Continue with next operation.
             if (!me.getConfig('displayResultGrid')) {
                 //recursive call!

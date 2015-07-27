@@ -238,11 +238,46 @@
             };
         }
 
-        var localStorageSupported = (typeof window.localStorage !== 'undefined'),
-            sessionStorageSupported = (typeof window.sessionStorage !== 'undefined'),
+        /**
+         * Helper function to detect if cookies are enabled.
+         * @returns {boolean}
+         */
+        function hasCookiesSupport() {
+            return ('cookie' in document && (document.cookie.length > 0 ||
+            (document.cookie = 'test').indexOf.call(document.cookie, 'test') > -1));
+        }
+
+        /**
+         * Helper function to detect if localStorage is enabled.
+         * @returns {boolean}
+         */
+        function hasLocalStorageSupport() {
+            try {
+                return (typeof window.localStorage !== 'undefined');
+            }
+            catch (err) {
+                return false;
+            }
+        }
+
+        /**
+         * Helper function to detect if sessionStorage is enabled.
+         * @returns {boolean}
+         */
+        function hasSessionStorageSupport() {
+            try {
+                return (typeof window.sessionStorage !== 'undefined');
+            }
+            catch (err) {
+                return false;
+            }
+        }
+
+        var localStorageSupport = hasLocalStorageSupport(),
+            sessionStorageSupport = hasSessionStorageSupport(),
             storage = {
-                local: localStorageSupported ? window.localStorage : new StoragePolyFill('local'),
-                session: sessionStorageSupported ? window.sessionStorage : new StoragePolyFill('session')
+                local: localStorageSupport ? window.localStorage : new StoragePolyFill('local'),
+                session: sessionStorageSupport ? window.sessionStorage : new StoragePolyFill('session')
             },
             p;
 
@@ -340,7 +375,22 @@
              */
             setItem: function (type, key, value) {
                 this.getStorage(type).setItem(key, value);
-            }
+            },
+
+            /**
+             * Helper function call to check if cookies are enabled.
+             */
+            hasCookiesSupport: hasCookiesSupport(),
+
+            /**
+             * Helper function call to check if localStorage is enabled.
+             */
+            hasLocalStorageSupport: hasLocalStorageSupport(),
+
+            /**
+             * Helper function call to check if sessionStorage is enabled.
+             */
+            hasSessionStorageSupport: hasSessionStorageSupport()
         };
     })();
 })(window, document);

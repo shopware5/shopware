@@ -135,10 +135,10 @@ class SubscriptionService
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
             return $pluginStates;
+        } catch (ShopSecretException $e) {
+            $this->resetShopSecret();
+            return false;
         } catch (\Exception $e) {
-            if ($e instanceof ShopSecretException) {
-                $this->resetShopSecret();
-            }
             return false;
         }
     }

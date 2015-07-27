@@ -398,12 +398,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'sessionId' => Shopware()->SessionID()
         ));
 
-        foreach ($combinations as $combination) {
-            $this->AlsoBought()->refreshBoughtArticles(
-                $combination['article_id'],
-                $combination['related_article_id']
-            );
-        }
+        $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);
         return $arguments->getReturn();
     }
 

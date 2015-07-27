@@ -603,11 +603,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->View()->sFormData = $values;
         }
 
-        $this->View()->sBasket = $this->getBasket();
-
         // Load current and all shipping methods
         $this->View()->sDispatch = $this->getSelectedDispatch();
         $this->View()->sDispatches = $this->getDispatches($this->View()->sFormData['payment']);
+
+        $this->View()->sBasket = $this->getBasket();
 
         $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
         $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];

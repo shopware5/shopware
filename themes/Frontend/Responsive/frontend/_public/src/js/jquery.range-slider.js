@@ -475,7 +475,7 @@
             value = Math.round(value * 100) / 100;
             value = value.toFixed(2);
 
-            if (me.opts.labelFormat.indexOf('0.00') > 0) {
+            if (me.opts.labelFormat.indexOf('0.00') >= 0) {
                 value = me.opts.labelFormat.replace('0.00', value);
             } else {
                 value = value.replace('.', ',');

@@ -285,7 +285,7 @@ Ext.define('Ext.util.FileUpload', {
         filesFrom: '{s name=file_upload/progress_bar_text}from{/s}',
         messageText: '{s name=file_upload/upload_ready_message}[0] files uploaded{/s}',
         messageTitle: '{s name=file_upload/upload_ready_title}Media manager{/s}',
-        legacyMessage: "{s name=file_upload/legacy_message}Your browser doesn't support the neccessary feature to support drag'n'drop uploads.{/s}",
+        legacyMessage: '{s name=file_upload/legacy_message}Your browser doesn\'t support the necessary feature to support drag &drop uploads.{/s}',
         maxUploadSizeTitle: '{s name=file_upload/max_upload_size_title}The file exceeds the file size limit{/s}',
         maxUploadSizeText: "{s name=file_upload/max_upload_size_text}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}",
         blackListTitle:'{s name=file_upload/black_list_title}Blacklist{/s}',
