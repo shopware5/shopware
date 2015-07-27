@@ -107,6 +107,7 @@ Ext.define('Shopware.apps.Property.view.main.SetAssignGrid', {
             {
                 header: me.snippets.columnName,
                 dataIndex: 'name',
+                renderer: 'htmlEncode',
                 flex: 2,
                 editor: {
                     allowBlank: false

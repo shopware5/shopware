@@ -14,14 +14,14 @@
 
 {block name="frontend_detail_description"}
 <div class="content--description">
-	
+
 	{* Headline *}
 	{block name='frontend_detail_description_title'}
 		<div class="content--title">
 			{s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName}"
 		</div>
 	{/block}
-	
+
 	{* Product description *}
 	{block name='frontend_detail_description_text'}
         <div class="product--description" itemprop="description">
@@ -38,12 +38,12 @@
 						<tr class="product--properties-row">
 							{* Property label *}
 							{block name='frontend_detail_description_properties_label'}
-								<td class="product--properties-label is--bold">{$sProperty.name}:</td>
+								<td class="product--properties-label is--bold">{$sProperty.name|escape}:</td>
 							{/block}
 
 							{* Property content *}
 							{block name='frontend_detail_description_properties_content'}
-								<td class="product--properties-value">{$sProperty.value}</td>
+								<td class="product--properties-value">{$sProperty.value|escape}</td>
 							{/block}
 						</tr>
 					{/foreach}
@@ -51,7 +51,7 @@
 			</div>
 		{/if}
 	{/block}
-	
+
 	{* Product - Further links *}
 	{block name='frontend_detail_description_links'}
 
@@ -134,7 +134,7 @@
 			{/block}
 		{/if}
 	{/block}
-		
+
 	{* Comment - Item open text fields attr3 *}
 	{block name='frontend_detail_description_our_comment'}
 		{if $sArticle.attr3}

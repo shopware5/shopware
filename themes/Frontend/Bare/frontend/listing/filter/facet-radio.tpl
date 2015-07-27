@@ -1,16 +1,16 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_radio"}
-    <div class="filter-panel filter--radio facet--{$facet->getFacetName()}"
+    <div class="filter-panel filter--radio facet--{$facet->getFacetName()|escape:'htmlall'}"
          data-filter-type="radio"
-         data-field-name="{$facet->getFieldName()}">
+         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_radio_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_radio_title"}
-                    <label class="filter-panel--title" for="{$facet->getFieldName()}">
-                        {$facet->getLabel()}
+                    <label class="filter-panel--title" for="{$facet->getFieldName()|escape:'htmlall'}">
+                        {$facet->getLabel()|escape}
                     </label>
                 {/block}
 
@@ -35,9 +35,9 @@
                                                     {block name="frontend_listing_filter_facet_radio_list_input"}
                                                         <span class="filter-panel--radio">
                                                             <input type="radio"
-                                                                   id="__{$facet->getFieldName()}__{$option->getId()}"
-                                                                   name="{$facet->getFieldName()}"
-                                                                   value="{$option->getId()}"
+                                                                   id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                                   name="{$facet->getFieldName()|escape:'htmlall'}"
+                                                                   value="{$option->getId()|escape:'htmlall'}"
                                                                    {if $option->isActive()}checked="checked" {/if}/>
 
                                                             <span class="radio--state">&nbsp;</span>
@@ -46,8 +46,8 @@
 
                                                     {block name="frontend_listing_filter_facet_radio_list_label"}
                                                         <label class="filter-panel--label"
-                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
-                                                            {$option->getLabel()} &nbsp;
+                                                               for="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}">
+                                                            {$option->getLabel()|escape} &nbsp;
                                                         </label>
                                                     {/block}
                                                 </div>
