@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             (me.subApp.currencyAtEnd == 1)
         );
 
-        tip.setTitle(storeItem.get('displayDate') + '<br><br>&nbsp;' + sales);
+        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'l') + '<br><br>&nbsp;' + sales);
     }
 
 });
