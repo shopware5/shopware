@@ -401,7 +401,6 @@ class Repository extends ModelRepository
             $shop->setSecureHost($main->getSecureHost());
             $shop->setSecureBasePath($main->getSecureBasePath());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
-            $shop->setBaseUrl($shop->getBaseUrl() ?: $main->getBaseUrl());
             $shop->setTemplate($main->getTemplate());
             $shop->setCurrencies($main->getCurrencies());
             $shop->setChildren($main->getChildren());
