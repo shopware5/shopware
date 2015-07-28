@@ -67,7 +67,7 @@ class DownloadStep
         $download = new Download();
         $startTime = microtime(true);
         $download->setHaltCallback(function () use ($startTime) {
-            if (microtime(true) - $startTime > 3) {
+            if (microtime(true) - $startTime > 10) {
                 return true;
             }
 
