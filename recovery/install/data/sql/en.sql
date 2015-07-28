@@ -7,6 +7,9 @@ UPDATE `s_core_paymentmeans` SET description = 'Prepayment', additionaldescripti
 -- s_campaigns_sender --
 UPDATE `s_campaigns_sender` SET `name` = 'Newsletter sender' WHERE id = 1;
 
+-- s_campaigns_groups --
+UPDATE `s_campaigns_groups` SET `name` = 'Newsletter recipients' WHERE id = 1;
+
 -- s_core_detail_states --
 UPDATE s_core_detail_states SET description = 'Open' WHERE id = 0;
 UPDATE s_core_detail_states SET description = 'In progress' WHERE id = 1;
@@ -407,3 +410,51 @@ UPDATE s_core_locales SET language = 'Chinese', territory = 'Macao' WHERE locale
 UPDATE s_core_locales SET language = 'Chinese', territory = 'Singapur' WHERE locale = 'zh_SG';
 UPDATE s_core_locales SET language = 'Chinese', territory = 'Taiwan' WHERE locale = 'zh_TW';
 UPDATE s_core_locales SET language = 'Zulu', territory = 'South Africa' WHERE locale = 'zu_ZA';
+
+-- s_order_number --
+UPDATE s_order_number SET `desc` = 'Customers' WHERE id = 1;
+UPDATE s_order_number SET `desc` = 'Orders' WHERE id = 920;
+UPDATE s_order_number SET `desc` = 'Packing list' WHERE id = 921;
+UPDATE s_order_number SET `desc` = 'Credits' WHERE id = 922;
+UPDATE s_order_number SET `desc` = 'Invoices' WHERE id = 924;
+UPDATE s_order_number SET `desc` = 'Article order number' WHERE id = 925;
+
+-- s_crontab --
+UPDATE s_crontab SET `name` = 'Birthday wishes' WHERE id = 1;
+UPDATE s_crontab SET `name` = 'Cleanup' WHERE id = 2;
+UPDATE s_crontab SET `name` = 'Article stock warning' WHERE id = 3;
+UPDATE s_crontab SET `name` = 'Search' WHERE id = 5;
+UPDATE s_crontab SET `name` = 'Email notification' WHERE id = 6;
+UPDATE s_crontab SET `name` = 'Article rating by email' WHERE id = 7;
+UPDATE s_crontab SET `name` = 'Clear HTTP cache' WHERE id = 12;
+
+-- s_core_units --
+UPDATE s_core_units SET `description` = 'Liter' WHERE id = 1;
+UPDATE s_core_units SET `description` = 'Gram' WHERE id = 2;
+UPDATE s_core_units SET `description` = 'Kilogram' WHERE id = 6;
+UPDATE s_core_units SET `description` = 'Package(s)', `unit` = 'Package(s)' WHERE id = 8;
+UPDATE s_core_units SET `description` = 'Unit', `unit` = 'unit' WHERE id = 9;
+
+-- s_core_engine_elements --
+UPDATE s_core_engine_elements SET `label` = 'Comment', `help` = 'Optional comment' WHERE id = 22;
+UPDATE s_core_engine_elements SET `label` = 'Free text 1', `help` = 'Free text to display on the detail page' WHERE id = 33;
+UPDATE s_core_engine_elements SET `label` = 'Free text 2', `help` = 'Free text to display on the detail page' WHERE id = 34;
+
+-- s_core_config_elements --
+UPDATE s_core_config_elements SET `value` = 's:226:"0,a,according,against,all,and,are,as,be,before,but,by,can,etc,for,from,has,have,he,her,his,I,in,it,itis,its,just,like,make,more,new,not,now,of,on,one,or,over,players,style,that,the,thewhy,to,well,who,will,with,yet,you,you,your";' WHERE id = 625;
+UPDATE s_core_config_elements SET `value` = 's:7:"Voucher";' WHERE id = 614;
+UPDATE s_core_config_elements SET `value` = 's:30:"Surcharge for small quantities";' WHERE id = 623;
+UPDATE s_core_config_elements SET `value` = 's:15:"Basket discount";' WHERE id = 637;
+UPDATE s_core_config_elements SET `value` = 's:15:"Basket discount";' WHERE id = 620;
+UPDATE s_core_config_elements SET `value` = 's:21:"Surcharge for payment";' WHERE id = 897;
+UPDATE s_core_config_elements SET `value` = 's:21:"Surcharge for payment";' WHERE id = 626;
+UPDATE s_core_config_elements SET `value` = 's:21:"Deduction for payment";' WHERE id = 627;
+
+UPDATE s_core_config_elements SET `value` = 's:48:"
+Kind Regards,
+
+Your {config name=shopName} team";' WHERE id = 995;
+UPDATE s_core_config_elements SET `value` = 's:69:"<br/>
+Kind Regards,<br/><br/>
+
+Your {config name=shopName} team</div>";' WHERE id = 997;
