@@ -4,6 +4,7 @@ In this document you will find a changelog of the important changes related to t
 ## 5.0.4
 * Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
 * Fixed jsonrenderer for backend order batchprocessing
+* `sOrder::sManageEsdOrder` is deprecated, use `sOrder::handleESDOrder` instead.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
