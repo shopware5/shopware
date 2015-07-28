@@ -1,6 +1,7 @@
 {extends file='frontend/account/index.tpl'}
 
-{block name="frontend_index_header_javascript_inline" append}
+{block name="frontend_index_header_javascript_jquery" append}
+<script>
     {* Configuration of the partner chart *}
     jQuery.partnerChart =  {ldelim}
         'timeUnit': '{s name='PartnerStatisticLabelTimeUnit'}{/s}',
@@ -31,6 +32,7 @@
     {rdelim};
 
     $('*[data-datepicker="true"]').datepicker(jQuery.datePickerRegional);
+</script>
 {/block}
 
 {block name="frontend_index_header_javascript_jquery_lib" append}
@@ -52,7 +54,7 @@
 <div class="content account--content partner-statistic">
     {* Welcome text *}
     {block name="frontend_account_orders_welcome"}
-        <div class="account--welcome panel has--border">
+        <div class="account--welcome panel">
             {block name="frontend_account_orders_welcome_headline"}
                 <h1 class="panel--title">{s name="PartnerStatisticHeader"}{/s}</h1>
             {/block}
