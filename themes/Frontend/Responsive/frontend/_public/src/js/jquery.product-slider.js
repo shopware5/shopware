@@ -335,7 +335,7 @@
             me.setPosition(0);
             me.trackArrows();
 
-            $.publish('plugin/swProductSlider/onUpdate', me);
+            $.publish('plugin/swProductSlider/onUpdate', [ me ]);
         },
 
         /**
@@ -368,7 +368,7 @@
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
 
-            $.publish('plugin/swProductSlider/onInitSlider', me);
+            $.publish('plugin/swProductSlider/onInitSlider', [ me ]);
         },
 
         /**
@@ -387,7 +387,7 @@
 
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
 
-            $.publish('plugin/swProductSlider/onRegisterEvents', me);
+            $.publish('plugin/swProductSlider/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -433,7 +433,7 @@
             me.$container[method](pos);
             me.currentPosition = pos;
 
-            $.publish('plugin/swProductSlider/onSetPosition', [me, pos]);
+            $.publish('plugin/swProductSlider/onSetPosition', [ me, pos ]);
         },
 
         /**
@@ -468,7 +468,7 @@
              */
             window.picturefill();
 
-            $.publish('plugin/swProductSlider/onSetSizes', [me, orientation]);
+            $.publish('plugin/swProductSlider/onSetSizes', [ me, orientation ]);
         },
 
         /**
@@ -485,10 +485,7 @@
 
             me.itemsCount = me.$items.length;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/trackItems', me);
-
-            $.publish('plugin/swProductSlider/onTrackItems', [me, me.items, me.itemsCount]);
+            $.publish('plugin/swProductSlider/onTrackItems', [ me, me.items, me.itemsCount ]);
 
             return me.itemsCount;
         },
@@ -520,10 +517,7 @@
             me.$arrowPrev[(me.currentPosition > 5) ? 'show' : 'hide']();
             me.$arrowNext[(slideEnd >= parseInt(me.itemSize * me.itemsCount, 10) - 5) ? 'hide' : 'show']();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/trackArrows', me);
-
-            $.publish('plugin/swProductSlider/onTrackArrows', [me, me.$arrowPrev, me.$arrowNext]);
+            $.publish('plugin/swProductSlider/onTrackArrows', [ me, me.$arrowPrev, me.$arrowNext ]);
         },
 
         /**
@@ -545,7 +539,7 @@
 
             me.isLoading = true;
 
-            $.publish('plugin/swProductSlider/onLoadItemsBefore', [me, data]);
+            $.publish('plugin/swProductSlider/onLoadItemsBefore', [ me, data ]);
 
             $.ajax({
                 url: me.opts.ajaxCtrlUrl,
@@ -558,10 +552,7 @@
                     me.setSizes();
                     me.trackArrows();
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/productSlider/itemsLoaded');
-
-                    $.publish('plugin/swProductSlider/onLoadItemsSuccess', [me, response]);
+                    $.publish('plugin/swProductSlider/onLoadItemsSuccess', [ me, response ]);
 
                     if (typeof callback === 'function') {
                         callback.call(me, response);
@@ -569,10 +560,7 @@
                 }
             });
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/loadItems', me);
-
-            $.publish('plugin/swProductSlider/onLoadItems', me);
+            $.publish('plugin/swProductSlider/onLoadItems', [ me ]);
         },
 
         /**
@@ -599,10 +587,7 @@
 
             me.$container = $container;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/createContainer', me);
-
-            $.publish('plugin/swProductSlider/onCreateContainer', [me, $container, orientation]);
+            $.publish('plugin/swProductSlider/onCreateContainer', [ me, $container, orientation ]);
 
             return $container;
         },
@@ -643,10 +628,7 @@
 
             me.trackArrows();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/createArrows', me);
-
-            $.publish('plugin/swProductSlider/onCreateArrows', [me, me.$arrowPrev, me.$arrowNext]);
+            $.publish('plugin/swProductSlider/onCreateArrows', [ me, me.$arrowPrev, me.$arrowNext ]);
         },
 
         /**
@@ -666,7 +648,7 @@
 
             me[(type === 'prev') ? prev : next]();
 
-            $.publish('plugin/swProductSlider/onArrowClick', [me, event, type]);
+            $.publish('plugin/swProductSlider/onArrowClick', [ me, event, type ]);
         },
 
         /**
@@ -681,7 +663,7 @@
             me.stopAutoScroll();
             me.stopAutoSlide();
 
-            $.publish('plugin/swProductSlider/onMouseEnter', [me, event]);
+            $.publish('plugin/swProductSlider/onMouseEnter', [ me, event ]);
         },
 
         /**
@@ -696,7 +678,7 @@
             if (me.isActive() && me.opts.autoScroll) me.autoScroll();
             if (me.isActive() && me.opts.autoSlide) me.autoSlide();
 
-            $.publish('plugin/swProductSlider/onMouseLeave', [me, event]);
+            $.publish('plugin/swProductSlider/onMouseLeave', [ me, event ]);
         },
 
         /**
@@ -727,7 +709,7 @@
                 me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
-            $.publish('plugin/swProductSlider/onScroll', [me, event]);
+            $.publish('plugin/swProductSlider/onScroll', [ me, event ]);
         },
 
         /**
@@ -743,10 +725,7 @@
             me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/slideNext', me);
-
-            $.publish('plugin/swProductSlider/onSlideNext', [me, me.currentPosition]);
+            $.publish('plugin/swProductSlider/onSlideNext', [ me, me.currentPosition ]);
         },
 
         /**
@@ -762,10 +741,7 @@
             me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/slidePrev', me);
-
-            $.publish('plugin/swProductSlider/onSlidePrev', [me, me.currentPosition]);
+            $.publish('plugin/swProductSlider/onSlidePrev', [ me, me.currentPosition ]);
         },
 
         /**
@@ -784,10 +760,7 @@
 
             me.slide(slide);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/slideToElement', me);
-
-            $.publish('plugin/swProductSlider/onSlideToElement', [me, $el, orientation]);
+            $.publish('plugin/swProductSlider/onSlideToElement', [ me, $el, orientation ]);
         },
 
         /**
@@ -812,10 +785,7 @@
                 $.publish('plugin/swProductSlider/onSlideFinished', [me, me.currentPosition]);
             });
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/slide', me);
-
-            $.publish('plugin/swProductSlider/onSlide', [me, position]);
+            $.publish('plugin/swProductSlider/onSlide', [ me, position ]);
         },
 
         /**
@@ -834,10 +804,7 @@
 
             me.autoSlideAnimation = window.setInterval($.proxy(method, me), speed * 1000);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/autoSlide', me);
-
-            $.publish('plugin/swProductSlider/onAutoSlide', [me, me.autoSlideAnimation, slideDirection, slideSpeed]);
+            $.publish('plugin/swProductSlider/onAutoSlide', [ me, me.autoSlideAnimation, slideDirection, slideSpeed ]);
         },
 
         /**
@@ -852,10 +819,7 @@
             window.clearInterval(me.autoSlideAnimation);
             me.autoSlideAnimation = false;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/stopAutoSlide', me);
-
-            $.publish('plugin/swProductSlider/onStopAutoSlide', me);
+            $.publish('plugin/swProductSlider/onStopAutoSlide', [ me ]);
         },
 
         /**
@@ -872,10 +836,7 @@
 
             me.slide(me.currentPosition);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/scrollNext', me);
-
-            $.publish('plugin/swProductSlider/onScrollNext', [me, me.currentPosition, scrollDistance]);
+            $.publish('plugin/swProductSlider/onScrollNext', [ me, me.currentPosition, scrollDistance ]);
         },
 
         /**
@@ -892,10 +853,7 @@
 
             me.slide(me.currentPosition);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/scrollPrev', me);
-
-            $.publish('plugin/swProductSlider/onScrollPrev', [me, me.currentPosition, scrollDistance]);
+            $.publish('plugin/swProductSlider/onScrollPrev', [ me, me.currentPosition, scrollDistance ]);
         },
 
         /**
@@ -916,10 +874,7 @@
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/autoScroll', me);
-
-            $.publish('plugin/swProductSlider/onAutoScroll', [me, me.autoScrollAnimation, scrollDirection, scrollSpeed]);
+            $.publish('plugin/swProductSlider/onAutoScroll', [ me, me.autoScrollAnimation, scrollDirection, scrollSpeed ]);
         },
 
         /**
@@ -934,10 +889,7 @@
             cancelAnimationFrame(me.autoScrollAnimation);
             me.autoScrollAnimation = false;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/stopAutoScroll', me);
-
-            $.publish('plugin/swProductSlider/onStopAutoScroll', me);
+            $.publish('plugin/swProductSlider/onStopAutoScroll', [ me ]);
         },
 
         /**
@@ -953,10 +905,7 @@
 
             me.bufferedCall = window.setTimeout($.proxy(func, me), bufferTime);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/productSlider/buffer', me);
-
-            $.publish('plugin/swProductSlider/onBuffer', [me, me.bufferedCall, func, bufferTime]);
+            $.publish('plugin/swProductSlider/onBuffer', [ me, me.bufferedCall, func, bufferTime ]);
         },
 
         /**

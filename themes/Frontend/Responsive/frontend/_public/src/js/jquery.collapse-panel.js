@@ -106,7 +106,7 @@
                 me.toggleCollapse();
             });
 
-            $.publish('plugin/swCollapsePanel/onRegisterEvents', me);
+            $.publish('plugin/swCollapsePanel/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -124,7 +124,7 @@
                 me.openPanel();
             }
 
-            $.publish('plugin/swCollapsePanel/onToggleCollapse', me);
+            $.publish('plugin/swCollapsePanel/onToggleCollapse', [ me ]);
         },
 
         /**
@@ -142,10 +142,8 @@
             me.$el.addClass(opts.activeTriggerCls);
 
             $targetEl.slideDown(opts.animationSpeed, function () {
-                /** @deprecated - will be removed in 5.1 */
-                $.publish('plugin/collapsePanel/onOpen', me );
 
-                $.publish('plugin/swCollapsePanel/onOpen', me);
+                $.publish('plugin/swCollapsePanel/onOpen', [ me ]);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
@@ -158,7 +156,7 @@
                 $(item).data('plugin_swProductSlider').update();
             });
 
-            $.publish('plugin/swCollapsePanel/onOpenPanel', me);
+            $.publish('plugin/swCollapsePanel/onOpenPanel', [ me ]);
         },
 
         /**
@@ -173,13 +171,11 @@
 
             me.$el.removeClass(opts.activeTriggerCls);
             me.$targetEl.slideUp(opts.animationSpeed, function() {
-                /** @deprecated - will be removed in 5.1 */
-                $.publish('plugin/collapsePanel/onClose', me);
 
-                $.publish('plugin/swCollapsePanel/onClose', me);
+                $.publish('plugin/swCollapsePanel/onClose', [ me ]);
             }).removeClass(opts.collapsedStateCls);
 
-            $.publish('plugin/swCollapsePanel/onClosePanel', me);
+            $.publish('plugin/swCollapsePanel/onClosePanel', [ me ]);
         },
 
         /**

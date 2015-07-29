@@ -155,7 +155,7 @@
                 me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
 
-            $.publish('plugin/swTabMenu/onRegisterEvents', me);
+            $.publish('plugin/swTabMenu/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -208,7 +208,7 @@
                 $container.load($tab.attr('data-url'));
             }
 
-            $.publish('plugin/swTabMenu/onChangeTab', [me, index]);
+            $.publish('plugin/swTabMenu/onChangeTab', [ me, index ]);
         },
 
         /**

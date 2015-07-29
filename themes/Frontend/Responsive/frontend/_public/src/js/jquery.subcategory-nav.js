@@ -347,7 +347,7 @@
 
             $sidebar.on(me.getEventName(eventName), opts.mainMenuSelector, $.proxy(me.onClickMainMenuButton, me));
 
-            $.publish('plugin/swSubCategoryNav/onRegisterEvents', me);
+            $.publish('plugin/swSubCategoryNav/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -374,7 +374,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickBackButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickBackButton', [ me, event ]);
 
             // decide if there is a parent group or main sidebar
             if (!url || parentId === me.opts.mainCategoryId) {
@@ -406,7 +406,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickForwardButton', [ me, event ]);
 
             // Disable scrolling on main menu
             me.$sidebar.addClass(me.opts.disableScrollingClass);
@@ -433,7 +433,7 @@
 
             me.inProgress = true;
 
-            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [me, event]);
+            $.publish('plugin/swSubCategoryNav/onClickMainMenuButton', [ me, event ]);
 
             me.slideToMainMenu();
         },
@@ -450,11 +450,11 @@
         loadTemplate: function (url, callback, $loadingTarget) {
             var me = this;
 
-            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', me);
+            $.publish('plugin/swSubCategoryNav/onLoadTemplateBefore', [ me ]);
 
             if (!$loadingTarget) {
                 $.get(url, function (template) {
-                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
+                    $.publish('plugin/swSubCategoryNav/onLoadTemplate', [ me ]);
 
                     callback.call(me, template)
                 });
@@ -470,7 +470,7 @@
             $.get(url, function (template) {
                 me.$loadingIcon.hide();
 
-                $.publish('plugin/swSubCategoryNav/onLoadTemplate', me);
+                $.publish('plugin/swSubCategoryNav/onLoadTemplate', [ me ]);
 
                 callback.call(me, template);
             });
@@ -489,7 +489,7 @@
                 $overlays,
                 $slide;
 
-            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideOutBefore', [ me ]);
 
             me.$sidebar.append(template);
 
@@ -506,7 +506,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideOut', me);
+                $.publish('plugin/swSubCategoryNav/onSlideOut', [ me ]);
             });
         },
 
@@ -526,7 +526,7 @@
                 $slide,
                 $el;
 
-            $.publish('plugin/swSubCategoryNav/onSlideInBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideInBefore', [ me ]);
 
             // hide main menu
             me.$sidebar.scrollTop(0);
@@ -561,7 +561,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideIn', me);
+                $.publish('plugin/swSubCategoryNav/onSlideIn', [ me ]);
             });
         },
 
@@ -577,7 +577,7 @@
                 opts = me.opts,
                 $overlay = $(opts.overlaySelector);
 
-            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', me);
+            $.publish('plugin/swSubCategoryNav/onSlideToMainMenuBefore', [ me ]);
 
             // make the main menu visible
             me.$sidebarWrapper.css('display', 'block');
@@ -593,7 +593,7 @@
 
                 me.inProgress = false;
 
-                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', me);
+                $.publish('plugin/swSubCategoryNav/onSlideToMainMenu', [ me ]);
             });
         },
 

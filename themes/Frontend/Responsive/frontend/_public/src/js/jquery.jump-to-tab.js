@@ -63,7 +63,7 @@
 
             me.$el.find('.product--rating-link, .link--publish-comment').on(me.getEventName('click'), $.proxy(me.onJumpToTab, me));
 
-            $.publish('plugin/swJumpToTab/onRegisterEvents', me);
+            $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
         },
 
         onJumpToTab: function (event) {
@@ -71,7 +71,7 @@
 
             this.jumpToTab(1);
 
-            $.publish('plugin/swJumpToTab/onClick', [this, event]);
+            $.publish('plugin/swJumpToTab/onClick', [ this, event ]);
         },
 
         jumpToTab: function (tabIndex, jumpTo) {
@@ -81,7 +81,7 @@
                 me.tabMenuProduct.changeTab(tabIndex);
             }
 
-            $.publish('plugin/swJumpToTab/onChangeTab', [me, tabIndex, jumpTo]);
+            $.publish('plugin/swJumpToTab/onChangeTab', [ me, tabIndex, jumpTo ]);
 
             if (!jumpTo || !jumpTo.length) {
                 return;
@@ -91,7 +91,7 @@
                 scrollTop: $(jumpTo).offset().top
             }, 0);
 
-            $.publish('plugin/swJumpToTab/onJumpToTab', [me, tabIndex, jumpTo]);
+            $.publish('plugin/swJumpToTab/onJumpToTab', [ me, tabIndex, jumpTo ]);
         }
     });
 

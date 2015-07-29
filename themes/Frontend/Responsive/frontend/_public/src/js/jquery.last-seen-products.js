@@ -151,7 +151,7 @@
 
             me.productSlider.initSlider();
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductList', me);
+            $.publish('plugin/swLastSeenProducts/onCreateProductList', [ me ]);
         },
 
         /**
@@ -171,7 +171,7 @@
                     ]
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [me, $template, article]);
+            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [ me, $template, article ]);
 
             return $template;
         },
@@ -193,7 +193,7 @@
                     'html': data.articleName
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [me, $title, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [ me, $title, data ]);
 
             return $title;
         },
@@ -235,7 +235,7 @@
                 'title': data.articleName
             }).appendTo(imageMedia);
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [ me, element, data ]);
 
             return element;
         },
@@ -285,7 +285,7 @@
 
             me.storage.setItem(itemKey, JSON.stringify(products));
 
-            $.publish('plugin/swLastSeenProducts/onCollectProduct', [me, newProduct]);
+            $.publish('plugin/swLastSeenProducts/onCollectProduct', [ me, newProduct ]);
         }
     });
 }(jQuery));

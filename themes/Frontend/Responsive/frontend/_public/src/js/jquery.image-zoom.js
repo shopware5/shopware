@@ -83,7 +83,7 @@
             $.subscribe('plugin/swImageSlider/onClick', $.proxy(me.stopZoom, me));
             $.subscribe('plugin/swImageSlider/onLightbox', $.proxy(me.stopZoom, me));
 
-            $.publish('plugin/swImageZoom/onRegisterEvents', me);
+            $.publish('plugin/swImageZoom/onRegisterEvents', [ me ]);
         },
 
         /**

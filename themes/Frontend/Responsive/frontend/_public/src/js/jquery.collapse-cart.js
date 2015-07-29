@@ -146,7 +146,7 @@
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
             }
 
-            $.publish('plugin/swCollapseCart/onRegisterEvents', me);
+            $.publish('plugin/swCollapseCart/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -161,7 +161,7 @@
             me.showLoadingIndicator();
             me.openMenu();
 
-            $.publish('plugin/swCollapseCart/onBeforeAddArticle', me);
+            $.publish('plugin/swCollapseCart/onBeforeAddArticle', [ me ]);
         },
 
         /**
@@ -184,7 +184,7 @@
 
             picturefill();
 
-            $.publish('plugin/swCollapseCart/onArticleAdded', me);
+            $.publish('plugin/swCollapseCart/onArticleAdded', [ me ]);
         },
 
         /**
@@ -208,14 +208,14 @@
                     me.loadCart(function () {
                         $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
 
-                        $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [me, event]);
+                        $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [ me, event ]);
                     });
 
-                    $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [me, event]);
+                    $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [ me, event ]);
                 }, 500);
             }
 
-            $.publish('plugin/swCollapseCart/onMouseEnter', [me, event]);
+            $.publish('plugin/swCollapseCart/onMouseEnter', [ me, event ]);
         },
 
         /**
@@ -228,10 +228,7 @@
             var me = this,
                 target = event.toElement || event.relatedTarget || event.target;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onMouseLeave', me);
-
-            $.publish('plugin/swCollapseCart/onMouseLeave', [me, event]);
+            $.publish('plugin/swCollapseCart/onMouseLeave', [ me, event ]);
 
             if (me.isElementOrChild(me.$el[0], target) || me.isElementOrChild(me._$triggerEl[0], target)) {
                 return;
@@ -249,10 +246,7 @@
         onCloseButtonClick: function (event) {
             event.preventDefault();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onCloseButton', this);
-
-            $.publish('plugin/swCollapseCart/onCloseButton', this);
+            $.publish('plugin/swCollapseCart/onCloseButton', [ this ]);
 
             this.closeMenu();
         },
@@ -271,10 +265,7 @@
                 $parent = $currentTarget.parent(),
                 url = $currentTarget.attr('href');
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onRemoveArticle', [me, event]);
-
-            $.publish('plugin/swCollapseCart/onRemoveArticle', [me, event]);
+            $.publish('plugin/swCollapseCart/onRemoveArticle', [ me, event ]);
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
@@ -286,10 +277,7 @@
 
                     picturefill();
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/collapseCart/afterRemoveArticle', [me, event]);
-
-                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [me, event, result]);
+                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [ me, event, result ]);
                 }
             });
         },
@@ -348,7 +336,7 @@
                 'html': me._$loadingIcon.clone()
             }));
 
-            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', me);
+            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', [ me ]);
         },
 
         /**
@@ -370,10 +358,7 @@
                 me.$el.addClass(me.opts.activeClass);
             }
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onMenuOpen', me);
-
-            $.publish('plugin/swCollapseCart/onMenuOpen', me);
+            $.publish('plugin/swCollapseCart/onMenuOpen', [ me ]);
         },
 
         /**
@@ -389,10 +374,7 @@
                 opts = me.opts,
                 $el = me.$el;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onLoadCart', me);
-
-            $.publish('plugin/swCollapseCart/onLoadCart', me);
+            $.publish('plugin/swCollapseCart/onLoadCart', [ me ]);
 
             $.ajax({
                 'url': opts.ajaxCartURL,
@@ -405,10 +387,7 @@
                         callback();
                     }
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/collapseCart/afterLoadCart', me);
-
-                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [me, result]);
+                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [ me, result ]);
                 }
             });
         },
@@ -432,10 +411,7 @@
                 me.$el.removeClass(me.opts.activeClass);
             }
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onCloseMenu', me);
-
-            $.publish('plugin/swCollapseCart/onCloseMenu', me);
+            $.publish('plugin/swCollapseCart/onCloseMenu', [ me ]);
         },
 
         /**
