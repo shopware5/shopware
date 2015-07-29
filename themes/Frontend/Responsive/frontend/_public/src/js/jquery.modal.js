@@ -318,7 +318,7 @@
 
             $html.addClass('no--scroll');
 
-            $.publish('plugin/modal/onOpen', me);
+            $.publish('plugin/modal/onOpen', [ me ]);
 
             return me;
         },
@@ -356,7 +356,7 @@
                 });
             }
 
-            $.publish('plugin/modal/onClose', me);
+            $.publish('plugin/modal/onClose', [ me ]);
 
             return me;
         },
@@ -389,7 +389,7 @@
 
             $modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
 
-            $.publish('plugin/modal/onSetTransition', [me, css, opts]);
+            $.publish('plugin/modal/onSetTransition', [ me, css, opts ]);
         },
 
         /**
@@ -404,7 +404,7 @@
 
             me._$title.html(title);
 
-            $.publish('plugin/modal/onSetTitle', [me, title]);
+            $.publish('plugin/modal/onSetTitle', [ me, title ]);
         },
 
         /**
@@ -432,7 +432,7 @@
                 picturefill();
             }
 
-            $.publish('plugin/modal/onSetContent', me);
+            $.publish('plugin/modal/onSetContent', [ me ]);
         },
 
         /**
@@ -448,7 +448,7 @@
 
             me._$modalBox.css('width', (typeof width === 'string' && !(/^\d+$/.test(width))) ? width : parseInt(width, 10));
 
-            $.publish('plugin/modal/onSetWidth', me);
+            $.publish('plugin/modal/onSetWidth', [ me ]);
         },
 
         /**
@@ -464,7 +464,7 @@
 
             me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : parseInt(height, 10));
 
-            $.publish('plugin/modal/onSetHeight', me);
+            $.publish('plugin/modal/onSetHeight', [ me ]);
         },
 
         /**
@@ -499,7 +499,7 @@
 
             $('body').append(me._$modalBox);
 
-            $.publish('plugin/modal/onInit', me);
+            $.publish('plugin/modal/onInit', [ me ]);
         },
 
         /**
@@ -527,7 +527,7 @@
                 }
             });
 
-            $.publish('plugin/modal/onRegisterEvents', me);
+            $.publish('plugin/modal/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -554,7 +554,7 @@
                 }
             }
 
-            $.publish('plugin/modal/onKeyDown', [me, event, keyCode]);
+            $.publish('plugin/modal/onKeyDown', [ me, event, keyCode ]);
         },
 
         /**
@@ -571,7 +571,7 @@
                 me.center();
             }
 
-            $.publish('plugin/modal/onWindowResize', [me, event]);
+            $.publish('plugin/modal/onWindowResize', [ me, event ]);
         },
 
         /**
@@ -586,7 +586,7 @@
 
             $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
 
-            $.publish('plugin/modal/onCenter', me);
+            $.publish('plugin/modal/onCenter', [ me ]);
         },
 
         /**
@@ -605,7 +605,7 @@
 
             me.close();
 
-            $.publish('plugin/modal/onOverlayClick', me);
+            $.publish('plugin/modal/onOverlayClick', [ me ]);
         },
 
         /**
@@ -634,7 +634,7 @@
                 delete me.options[p];
             }
 
-            StateManager.off('resize', me.onWindowResize, me);
+            StateManager.off('resize', me.onWindowResize, [ me ]);
         }
     };
 
@@ -701,7 +701,7 @@
 
             $.subscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
 
-            $.publish('plugin/modalbox/onRegisterEvents', me);
+            $.publish('plugin/modalbox/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -721,7 +721,7 @@
 
             me._isOpened = true;
 
-            $.publish('plugin/modalbox/onClick', [me, event]);
+            $.publish('plugin/modalbox/onClick', [ me, event ]);
         },
 
         /**
@@ -735,7 +735,7 @@
 
             me._isOpened = false;
 
-            $.publish('plugin/modalbox/onClose', me);
+            $.publish('plugin/modalbox/onClose', [ me ]);
         },
 
         /**

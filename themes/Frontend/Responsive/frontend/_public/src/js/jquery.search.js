@@ -281,7 +281,7 @@
                 }
             });
 
-            $.publish('plugin/swSearch/onRegisterEvents', me);
+            $.publish('plugin/swSearch/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -299,10 +299,7 @@
                 keyCode = event.which,
                 navKeyPressed = opts.keyBoardNavigation && (keyCode === keyMap.UP || keyCode === keyMap.DOWN || keyCode === keyMap.ENTER);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyDown', [ me, event ]);
-
-            $.publish('plugin/swSearch/onKeyDown', [me, event]);
+            $.publish('plugin/swSearch/onKeyDown', [ me, event ]);
 
             if (navKeyPressed && me.$results.hasClass(opts.activeCls)) {
                 me.onKeyboardNavigation(keyCode);
@@ -326,10 +323,7 @@
                 term = me.$searchField.val() + '',
                 timeout = me.keyupTimeout;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyUp', [ me, event ]);
-
-            $.publish('plugin/swSearch/onKeyUp', [me, event]);
+            $.publish('plugin/swSearch/onKeyUp', [ me, event ]);
 
             if (timeout) {
                 window.clearTimeout(timeout);
@@ -362,10 +356,7 @@
 
             me.lastSearchTerm = $.trim(searchTerm);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onSearchRequest', [ me, searchTerm ]);
-
-            $.publish('plugin/swSearch/onSearchRequest', [me, searchTerm]);
+            $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
 
             $.ajax({
                 'url': me.requestURL,
@@ -375,10 +366,7 @@
                 'success': function (response) {
                     me.showResult(response);
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/search/onSearchResponse', [ me, searchTerm, response ]);
-
-                    $.publish('plugin/swSearch/onSearchResponse', [me, searchTerm, response]);
+                    $.publish('plugin/swSearch/onSearchResponse', [ me, searchTerm, response ]);
                 }
             });
         },
@@ -403,10 +391,7 @@
 
             picturefill();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onShowResult', me);
-
-            $.publish('plugin/swSearch/onShowResult', me);
+            $.publish('plugin/swSearch/onShowResult', [ me ]);
         },
 
         /**
@@ -420,10 +405,7 @@
 
             me.$results.removeClass(me.opts.activeCls).hide().empty();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onCloseResult', me);
-
-            $.publish('plugin/swSearch/onCloseResult', me);
+            $.publish('plugin/swSearch/onCloseResult', [ me ]);
         },
 
         /**
@@ -467,10 +449,7 @@
                 $nextSibling,
                 firstLast;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyboardNavigation', [ me, keyCode ]);
-
-            $.publish('plugin/swSearch/onKeyboardNavigation', [me, keyCode]);
+            $.publish('plugin/swSearch/onKeyboardNavigation', [ me, keyCode ]);
 
             if (keyCode === keyMap.UP || keyCode === keyMap.DOWN) {
                 $resultItems = $results.find(opts.resultItemSelector);
@@ -516,10 +495,7 @@
                 $el = me.$el,
                 opts = me.opts;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onClickSearchEntry', [ me, event ]);
-
-            $.publish('plugin/swSearch/onClickSearchEntry', [me, event]);
+            $.publish('plugin/swSearch/onClickSearchEntry', [ me, event ]);
 
             if (!StateManager.isCurrentState('xs')) {
                 return;
@@ -551,10 +527,7 @@
 
             me.$searchField.focus();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onOpenMobileSearch', [ me ]);
-
-            $.publish('plugin/swSearch/onOpenMobileSearch', me);
+            $.publish('plugin/swSearch/onOpenMobileSearch', [ me ]);
         },
 
         /**
@@ -575,10 +548,7 @@
 
             me.$searchField.blur();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onCloseMobileSearch', [ me ]);
-
-            $.publish('plugin/swSearch/onCloseMobileSearch', me);
+            $.publish('plugin/swSearch/onCloseMobileSearch', [ me ]);
 
             me.closeResult();
         },

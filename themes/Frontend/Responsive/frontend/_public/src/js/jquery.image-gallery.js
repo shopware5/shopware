@@ -223,7 +223,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomInClass
                 });
 
-            $.publish('plugin/swImageGallery/onCreateZoomInButton', [me, $zoomInButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomInButton', [ me, $zoomInButton ]);
 
             return $zoomInButton;
         },
@@ -241,7 +241,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomOutClass
                 });
 
-            $.publish('plugin/swImageGallery/onCreateZoomOutButton', [me, $zoomOutButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomOutButton', [ me, $zoomOutButton ]);
 
             return $zoomOutButton;
         },
@@ -259,7 +259,7 @@
                     'class': opts.btnClass + ' ' + opts.zoomResetClass
                 });
 
-            $.publish('plugin/swImageGallery/onCreateZoomResetButton', [me, $zoomResetButton]);
+            $.publish('plugin/swImageGallery/onCreateZoomResetButton', [ me, $zoomResetButton ]);
 
             return $zoomResetButton;
         },
@@ -280,7 +280,7 @@
 
             me._on(window, 'keydown', $.proxy(me.onKeyDown, me));
 
-            $.publish('plugin/swImageGallery/onRegisterEvents', me);
+            $.publish('plugin/swImageGallery/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -296,7 +296,7 @@
                 $template = me.$template,
                 slider = ($template && $template.data('plugin_swImageSlider')) || null;
 
-            $.publish('plugin/swImageGallery/onGetImageSlider', [me, slider]);
+            $.publish('plugin/swImageGallery/onGetImageSlider', [ me, slider ]);
 
             return slider;
         },
@@ -320,7 +320,7 @@
 
             me.toggleButtons(plugin);
 
-            $.publish('plugin/swImageGallery/onImageUpdate', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onImageUpdate', [ me, event, plugin ]);
         },
 
         /**
@@ -345,10 +345,10 @@
             plugin.resetTransformation(true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/swImageGallery/onResetZoomFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onResetZoomFinished', [ me, event, plugin ]);
             });
 
-            $.publish('plugin/swImageGallery/onResetZoom', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onResetZoom', [ me, event, plugin ]);
         },
 
         /**
@@ -373,10 +373,10 @@
             plugin.scale(1, true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/swImageGallery/onZoomInFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onZoomInFinished', [ me, event, plugin ]);
             });
 
-            $.publish('plugin/swImageGallery/onZoomIn', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onZoomIn', [ me, event, plugin ]);
         },
 
         /**
@@ -401,10 +401,10 @@
             plugin.scale(-1, true, function () {
                 me.toggleButtons(plugin);
 
-                $.publish('plugin/swImageGallery/onZoomOutFinished', [me, event, plugin]);
+                $.publish('plugin/swImageGallery/onZoomOutFinished', [ me, event, plugin ]);
             });
 
-            $.publish('plugin/swImageGallery/onZoomOut', [me, event, plugin]);
+            $.publish('plugin/swImageGallery/onZoomOut', [ me, event, plugin ]);
         },
 
         /**
@@ -433,7 +433,7 @@
                 plugin.slideNext();
             }
 
-            $.publish('plugin/swImageGallery/onKeyDown', [me, event, keyCode]);
+            $.publish('plugin/swImageGallery/onKeyDown', [ me, event, keyCode ]);
         },
 
         /**
@@ -472,7 +472,7 @@
                 ]
             });
 
-            $.publish('plugin/swImageGallery/onCreateTemplate', [me, $template]);
+            $.publish('plugin/swImageGallery/onCreateTemplate', [ me, $template ]);
 
             return $template;
         },
@@ -513,7 +513,7 @@
 
             me.toggleButtons(me.getImageSlider());
 
-            $.publish('plugin/swImageGallery/onClick', [me, event]);
+            $.publish('plugin/swImageGallery/onClick', [ me, event ]);
         },
 
         /**
@@ -532,7 +532,7 @@
 
             plugin.destroy();
 
-            $.publish('plugin/swImageGallery/onCloseModal', me);
+            $.publish('plugin/swImageGallery/onCloseModal', [ me ]);
         },
 
         /**
@@ -550,7 +550,7 @@
             me.$zoomOutBtn.addClass(disabledClass);
             me.$zoomInBtn.addClass(disabledClass);
 
-            $.publish('plugin/swImageGallery/onDisableButtons', me);
+            $.publish('plugin/swImageGallery/onDisableButtons', [ me ]);
         },
 
         /**
@@ -579,7 +579,7 @@
             me.$zoomOutBtn.toggleClass(disabledClass, scale === minScale);
             me.$zoomInBtn.toggleClass(disabledClass, scale === maxScale);
 
-            $.publish('plugin/swImageGallery/onToggleButtons', me);
+            $.publish('plugin/swImageGallery/onToggleButtons', [ me ]);
         },
 
         /**

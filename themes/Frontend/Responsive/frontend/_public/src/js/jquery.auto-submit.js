@@ -56,7 +56,7 @@
             // Will be automatically removed when destroy() is called.
             me._on(me.$el, 'change', $.proxy(me.onChangeSelection, me));
 
-            $.publish('plugin/swAutoSubmit/onRegisterEvents', me);
+            $.publish('plugin/swAutoSubmit/onRegisterEvents', [ me ]);
         },
 
         onChangeSelection: function () {

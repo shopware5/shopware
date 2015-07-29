@@ -55,7 +55,7 @@
 
             me.image.src = imageURL;
 
-            $.publish('plugin/lightbox/onOpen', me);
+            $.publish('plugin/lightbox/onOpen', [ me ]);
         },
 
         /**
@@ -74,7 +74,7 @@
                 })
             });
 
-            $.publish('plugin/lightbox/onCreateContent', [me, content, imageURL]);
+            $.publish('plugin/lightbox/onCreateContent', [ me, content, imageURL ]);
 
             return content;
         },
@@ -96,7 +96,7 @@
             me.modal.setWidth(size.width);
             me.modal.setHeight(size.height);
 
-            $.publish('plugin/lightbox/onSetSize', [me, width, height]);
+            $.publish('plugin/lightbox/onSetSize', [ me, width, height ]);
         },
 
         /**
@@ -129,7 +129,7 @@
                 'height': height
             };
 
-            $.publish('plugin/lightbox/onGetOptimizedSize', [me, size]);
+            $.publish('plugin/lightbox/onGetOptimizedSize', [ me, size ]);
 
             return size;
         }

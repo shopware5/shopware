@@ -30,7 +30,7 @@
 
             me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
 
-            $.publish('plugin/swFormPolyfill/onRegisterEvents', me);
+            $.publish('plugin/swFormPolyfill/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -61,7 +61,7 @@
 
             $form.submit();
 
-            $.publish('plugin/swFormPolyfill/onSubmitForm', [me, $form]);
+            $.publish('plugin/swFormPolyfill/onSubmitForm', [ me, $form ]);
         },
 
         /**

@@ -14,7 +14,7 @@
 
             me._on(me.$el, 'touchstart click', $.proxy(me.onClickMenu, me));
 
-            $.publish('plugin/swDropdownMenu/onRegisterEvents', me);
+            $.publish('plugin/swDropdownMenu/onRegisterEvents', [ me ]);
         },
 
         onClickMenu: function (event) {
@@ -35,7 +35,7 @@
                 $('body').on(me.getEventName('touchstart.dropdownMenu click.dropdownMenu'), $.proxy(me.onClickBody, me));
             }
 
-            $.publish('plugin/swDropdownMenu/onClickMenu', [me, event]);
+            $.publish('plugin/swDropdownMenu/onClickMenu', [ me, event ]);
         },
 
         onClickBody: function(event) {
@@ -51,7 +51,7 @@
 
             me.$el.removeClass(me.opts.activeCls);
 
-            $.publish('plugin/swDropdownMenu/onClickBody', [me, event]);
+            $.publish('plugin/swDropdownMenu/onClickBody', [ me, event ]);
         },
 
         destroy: function () {

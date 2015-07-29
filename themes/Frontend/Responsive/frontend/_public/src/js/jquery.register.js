@@ -208,7 +208,7 @@
             me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
 
-            $.publish('plugin/swRegister/onRegisterEvents', me);
+            $.publish('plugin/swRegister/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -232,7 +232,7 @@
 
             $fieldSet[classMethod](opts.hiddenClass);
 
-            $.publish('plugin/swRegister/onCheckType', [me, hideCompanyFields]);
+            $.publish('plugin/swRegister/onCheckType', [ me, hideCompanyFields ]);
         },
 
         /**
@@ -256,7 +256,7 @@
 
             $fieldSet[classMethod](opts.hiddenClass);
 
-            $.publish('plugin/swRegister/onCheckSkipAccount', [me, isChecked]);
+            $.publish('plugin/swRegister/onCheckSkipAccount', [ me, isChecked ]);
         },
 
         /**
@@ -280,7 +280,7 @@
 
             $fieldSet[classMethod](opts.hiddenClass);
 
-            $.publish('plugin/swRegister/onCheckChangeShipping', [me, isChecked]);
+            $.publish('plugin/swRegister/onCheckChangeShipping', [ me, isChecked ]);
         },
 
         /**
@@ -303,7 +303,7 @@
                 select,
                 plugin;
 
-            $.publish('plugin/swRegister/onCountryChangedBefore', [me, event]);
+            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event ]);
 
             $parent.find(opts.stateContainerSelector).addClass(hiddenClass);
             select = areaSelection.find('select');
@@ -324,7 +324,7 @@
                 plugin.setEnabled();
             }
 
-            $.publish('plugin/swRegister/onCountryChanged', [me, event]);
+            $.publish('plugin/swRegister/onCountryChanged', [ me, event ]);
         },
 
         /**
@@ -361,7 +361,7 @@
                 $fieldSet[((isChecked) ? 'removeClass' : 'addClass')](hiddenClass);
             });
 
-            $.publish('plugin/swRegister/onPaymentChanged', me);
+            $.publish('plugin/swRegister/onPaymentChanged', [ me ]);
         },
 
         /**
@@ -384,7 +384,7 @@
                 }
             });
 
-            $.publish('plugin/swRegister/onSubmitButton', me);
+            $.publish('plugin/swRegister/onSubmitButton', [ me ]);
         },
 
         /**
@@ -429,7 +429,7 @@
                 me.setFieldAsSuccess($el);
             }
 
-            $.publish('plugin/swRegister/onValidateInput', [me, event, action]);
+            $.publish('plugin/swRegister/onValidateInput', [ me, event, action ]);
         },
 
         /**
@@ -446,7 +446,7 @@
                 'aria-required': 'true'
             });
 
-            $.publish('plugin/swRegister/onSetHtmlRequired', [this, $elements]);
+            $.publish('plugin/swRegister/onSetHtmlRequired', [ this, $elements ]);
         },
 
         /**
@@ -459,7 +459,7 @@
         removeHtmlRequired: function ($inputs) {
             $inputs.removeAttr('required aria-required');
 
-            $.publish('plugin/swRegister/onRemoveHtmlRequired', [this, $inputs]);
+            $.publish('plugin/swRegister/onRemoveHtmlRequired', [ this, $inputs ]);
         },
 
         /**
@@ -481,7 +481,7 @@
                 $el.addClass(me.opts.errorClass);
             }
 
-            $.publish('plugin/swRegister/onSetFieldAsError', [me, $el]);
+            $.publish('plugin/swRegister/onSetFieldAsError', [ me, $el ]);
         },
 
         /**
@@ -503,7 +503,7 @@
                 $el.removeClass(me.opts.errorClass);
             }
 
-            $.publish('plugin/swRegister/onSetFieldAsSuccess', [me, $el]);
+            $.publish('plugin/swRegister/onSetFieldAsSuccess', [ me, $el ]);
         },
 
         /**
@@ -523,7 +523,7 @@
                 return;
             }
 
-            $.publish('plugin/swRegister/onValidateBefore', [me, data, URL]);
+            $.publish('plugin/swRegister/onValidateBefore', [ me, data, URL ]);
 
             $.ajax({
                 'data': data,
@@ -573,7 +573,7 @@
                 me.setFieldAsError($input);
             }
 
-            $.publish('plugin/swRegister/onValidateSuccess', [me, $input]);
+            $.publish('plugin/swRegister/onValidateSuccess', [ me, $input ]);
         },
 
         /**
@@ -605,7 +605,7 @@
                 me.setFieldAsSuccess($input);
             }
 
-            $.publish('plugin/swRegister/onUpdateFields', [me, flags]);
+            $.publish('plugin/swRegister/onUpdateFields', [ me, flags ]);
         },
 
         /**

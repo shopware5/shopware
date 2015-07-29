@@ -30,7 +30,7 @@
 
             me.$el.on('change', me.opts.radioSelector, $.proxy(me.onInputChanged, me));
 
-            $.publish('plugin/swShippingPayment/onRegisterEvents', me);
+            $.publish('plugin/swShippingPayment/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -42,7 +42,7 @@
                 url = form.attr('action'),
                 data = form.serialize() + '&isXHR=1';
 
-            $.publish('plugin/swShippingPayment/onInputChangedBefore', me);
+            $.publish('plugin/swShippingPayment/onInputChangedBefore', [ me ]);
 
             $.loadingIndicator.open();
 
@@ -56,7 +56,7 @@
                     $.loadingIndicator.close();
                     window.picturefill();
 
-                    $.publish('plugin/swShippingPayment/onInputChanged', me);
+                    $.publish('plugin/swShippingPayment/onInputChanged', [ me ]);
                 }
             })
         },

@@ -64,10 +64,10 @@
             me._updateLoader();
 
             me.$loader.fadeIn(me.options.animationSpeed, function () {
-                $.publish('plugin/loadingIndicator/onOpenFinished', me);
+                $.publish('plugin/loadingIndicator/onOpenFinished', [ me ]);
             });
 
-            $.publish('plugin/loadingIndicator/onOpen', me);
+            $.publish('plugin/loadingIndicator/onOpen', [ me ]);
         },
 
         /**
@@ -85,11 +85,11 @@
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
                     callback.call(me);
 
-                    $.publish('plugin/loadingIndicator/onCloseFinished', me);
+                    $.publish('plugin/loadingIndicator/onCloseFinished', [ me ]);
                 });
             }
 
-            $.publish('plugin/loadingIndicator/onClose', me);
+            $.publish('plugin/loadingIndicator/onClose', [ me ]);
         },
 
         /**

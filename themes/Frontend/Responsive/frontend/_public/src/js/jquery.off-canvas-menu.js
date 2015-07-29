@@ -231,7 +231,7 @@
 
             $.subscribe('plugin/swOffcanvasMenu/onBeforeOpenMenu', $.proxy(me.onBeforeOpenMenu, me));
 
-            $.publish('plugin/swOffcanvasMenu/onRegisterEvents', me);
+            $.publish('plugin/swOffcanvasMenu/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -267,7 +267,7 @@
 
             me.openMenu();
 
-            $.publish('plugin/swOffcanvasMenu/onClickElement', [me, event]);
+            $.publish('plugin/swOffcanvasMenu/onClickElement', [ me, event ]);
         },
 
         /**
@@ -286,7 +286,7 @@
 
             me.closeMenu();
 
-            $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [me, event]);
+            $.publish('plugin/swOffcanvasMenu/onClickCloseButton', [ me, event ]);
         },
 
         /**
@@ -308,10 +308,7 @@
             }
             me.isOpened = true;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/offcanvasMenu/beforeOpenMenu', me);
-
-            $.publish('plugin/swOffcanvasMenu/onBeforeOpenMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onBeforeOpenMenu', [ me ]);
 
             $html.addClass('no--scroll');
 
@@ -329,10 +326,7 @@
 
             me.$offCanvas.addClass(opts.openClass);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/offCanvasMenu/openMenu', me);
-
-            $.publish('plugin/swOffcanvasMenu/onOpenMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onOpenMenu', [ me ]);
 
             if (opts.mode === 'ajax' && opts.ajaxURL) {
                 $.ajax({
@@ -371,10 +365,7 @@
 
             me.$offCanvas.removeClass(opts.openClass);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/offCanvasMenu/closeMenu', me);
-
-            $.publish('plugin/swOffcanvasMenu/onCloseMenu', me);
+            $.publish('plugin/swOffcanvasMenu/onCloseMenu', [ me ]);
         },
 
         /**

@@ -65,11 +65,11 @@
                 success: function (response) {
                     $el.html(response);
 
-                    $.publish('plugin/swCaptcha/onSendRequestSuccess', me);
+                    $.publish('plugin/swCaptcha/onSendRequestSuccess', [ me ]);
                 }
             });
 
-            $.publish('plugin/swCaptcha/onSendRequest', me);
+            $.publish('plugin/swCaptcha/onSendRequest', [ me ]);
         }
     });
 })(jQuery, window);
