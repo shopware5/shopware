@@ -235,7 +235,7 @@
                                             </strong>
 
                                             <span class="entry--content">
-                                                {$sArticle.attr1|lescape}
+                                                {$sArticle.attr1|escape}
                                             </span>
                                         </li>
                                     {/if}
