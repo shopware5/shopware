@@ -98,6 +98,7 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
             header: me.snippets.columnOption,
             dataIndex: 'value',
             flex: 1,
+            renderer: 'htmlEncode',
             translationEditor: {
                 xtype: 'textfield',
                 name: 'optionValue',

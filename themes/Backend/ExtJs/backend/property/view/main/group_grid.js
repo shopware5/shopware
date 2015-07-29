@@ -175,6 +175,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
             header: me.snippets.columnName,
             dataIndex: 'name',
             flex: 2,
+            renderer: 'htmlEncode',
             translationEditor: {
                 xtype: 'textfield',
                 name: 'optionName',

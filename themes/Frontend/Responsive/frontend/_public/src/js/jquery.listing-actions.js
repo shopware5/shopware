@@ -509,7 +509,6 @@
         setCategoryParamsFromUrlParams: function(urlParamString) {
             var me = this,
                 categoryParams,
-                urlParams,
                 params;
 
             if (urlParamString.length <= 0) {
@@ -521,11 +520,12 @@
             }
 
             categoryParams = me.categoryParams;
-            urlParams = decodeURIComponent(urlParamString);
-            params = urlParams.split('&');
+            params = urlParamString.split('&');
 
             $.each(params, function(index, item) {
                 var param = item.split('=');
+
+                param = $.map(param, function(val) { return decodeURIComponent(val); });
 
                 if (param[1] == 'reset') {
                     delete categoryParams[param[0]];
@@ -571,12 +571,26 @@
          */
         createUrlParams: function(categoryParams) {
             var me = this,
-                params = categoryParams || me.categoryParams,
-                filterParams = '', propertyParams = {};
+                categoryParams = categoryParams || me.categoryParams,
+                params = me.cleanParams(categoryParams),
+                filterList = [];
 
             $.each(params, function(key, value) {
-                var urlParamChar = (filterParams.length > 0) ? '&' : '?';
+                filterList.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+            });
 
+            me.urlParams = '?' + filterList.join('&');
+
+            $.publish('plugin/swListingActions/onCreateUrlParams', [me, me.urlParams]);
+
+            return me.urlParams;
+        },
+
+        cleanParams: function(params) {
+            var me = this,
+                propertyParams = {};
+
+            $.each(params, function(key, value) {
                 if (key.substr(0, 2) == me.opts.propertyPrefixChar) {
                     var propertyKey = key.split(me.opts.propertyPrefixChar)[1];
 
@@ -586,19 +600,11 @@
                         propertyParams[propertyKey] = value;
                     }
                 } else {
-                    filterParams += urlParamChar + key + '=' + value;
+                    propertyParams[key] = value;
                 }
             });
 
-            $.each(propertyParams, function(key, value) {
-                filterParams += '&' + key + '=' + value;
-            });
-
-            me.urlParams = filterParams;
-
-            $.publish('plugin/swListingActions/onCreateUrlParams', [me, filterParams]);
-
-            return filterParams;
+            return propertyParams;
         },
 
         /**
@@ -610,7 +616,7 @@
             var me = this,
                 params = urlParams || me.urlParams;
 
-            window.location.href = me.getListingUrl(params, true);
+            window.location.href = me.getListingUrl(params, false);
 
             $.publish('plugin/swListingActions/onApplyUrlParams', [me, urlParams]);
         },
@@ -848,8 +854,7 @@
             if (param == 'rating') {
                 me.$el.find('#star--reset').prop('checked', true).trigger('change');
             } else {
-                $input = me.$el.find('[name="'+param+'"]');
-
+                $input = me.$el.find('[name="'+me.escapeDoubleQuotes(param)+'"]');
                 if ($input.is('[data-range-input]')) {
                     rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                     rangeSlider.reset($input.attr('data-range-input'));
@@ -877,9 +882,8 @@
 
             if (param == 'rating' && value > 0) {
                 labelText = me.createStarLabel(value);
-
             } else {
-                $label = me.$filterForm.find('label[for="'+param+'"]');
+                $label = me.$filterForm.find('label[for="'+me.escapeDoubleQuotes(param)+'"]');
 
                 if ($label.is('[data-range-label]')) {
                     labelText = $label.prev('span').html() + $label.html();
@@ -893,6 +897,15 @@
             $.publish('plugin/swListingActions/onCreateActiveFilterLabel', [me, labelText, param, value]);
 
             return labelText;
+        },
+
+        /**
+         * Only escapes a " if it's not already escaped
+         * @param string str
+         * @returns string
+         */
+        escapeDoubleQuotes: function (str) {
+            return str.replace(/\\([\s\S])|(")/g,"\\$1$2");
         },
 
         /**

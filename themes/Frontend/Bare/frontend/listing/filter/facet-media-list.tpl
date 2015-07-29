@@ -1,16 +1,16 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_media_list"}
-    <div class="filter-panel filter--media facet--{$facet->getFacetName()}"
+    <div class="filter-panel filter--media facet--{$facet->getFacetName()|escape:'htmlall'}"
          data-filter-type="media"
-         data-field-name="{$facet->getFieldName()}">
+         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_media_list_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_media_list_title"}
                     <label class="filter-panel--title">
-                        {$facet->getLabel()}
+                        {$facet->getLabel()|escape}
                     </label>
                 {/block}
 
@@ -34,10 +34,10 @@
 
                                                     {block name="frontend_listing_filter_facet_media_list_input"}
                                                         <input type="checkbox"
-                                                               id="__{$facet->getFieldName()}__{$option->getId()}"
-                                                               name="__{$facet->getFieldName()}__{$option->getId()}"
-                                                               value="{$option->getId()}"
-                                                               title="{$option->getLabel()}"
+                                                               id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                               name="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                               value="{$option->getId()|escape:'htmlall'}"
+                                                               title="{$option->getLabel()|escape:'htmlall'}"
                                                                {if $option->isActive()}checked="checked" {/if}/>
                                                     {/block}
 
@@ -48,10 +48,10 @@
                                                         {/if}
 
                                                         <label class="filter-panel--media-label"
-                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
+                                                               for="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}">
                                                             <img class="filter-panel--media-image"
                                                                  src="{$mediaFile}"
-                                                                 alt="{$option->getLabel()}" />
+                                                                 alt="{$option->getLabel()|escape:'htmlall'}" />
                                                         </label>
                                                     {/block}
                                                 </div>

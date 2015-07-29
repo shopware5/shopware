@@ -1,16 +1,16 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_rating"}
-    <div class="filter-panel filter--rating facet--{$facet->getFacetName()}"
+    <div class="filter-panel filter--rating facet--{$facet->getFacetName()|escape:'htmlall'}"
          data-filter-type="rating"
-         data-field-name="{$facet->getFieldName()}">
+         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_rating_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_rating_title"}
                     <label class="filter-panel--title">
-                        {$facet->getLabel()}
+                        {$facet->getLabel()|escape}
                     </label>
                 {/block}
 

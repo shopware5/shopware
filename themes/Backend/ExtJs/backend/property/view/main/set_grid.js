@@ -193,6 +193,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             flex: 2,
             sortable: false,
             dataIndex: 'name',
+            renderer: 'htmlEncode',
             translationEditor: {
                 xtype: 'textfield',
                 name: 'groupName',

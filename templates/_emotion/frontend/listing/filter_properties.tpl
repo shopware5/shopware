@@ -5,7 +5,7 @@
 			{if $sPropertiesGrouped|@count > 1 && $sCategoryContent.showFilterGroups}
 				{foreach from=$sPropertiesGrouped item=sPropertyGroup key=name}
 					<a href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryInfo.name}">
-						<div{if $activeFilterGroup == $name} class="active"{/if}>{$name}</div>
+						<div{if $activeFilterGroup == $name} class="active"{/if}>{$name|escape}</div>
 					</a>
 					{if $activeFilterGroup == $name}
 						{foreach from=$sPropertiesOptionsOnly item=value key=option}
@@ -14,12 +14,12 @@
 								<ul class="active">
 									{foreach from=$value.values item=optionValue}
 										{if $optionValue.active}
-											<li>{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if}
+											<li>{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if}
 												({$optionValue.count})
 											</li>
 										{else}
 											<li><a href="{$optionValue.link}"
-												   title="{$sCategoryInfo.name}">{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}</a>
+												   title="{$sCategoryInfo.name}">{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}</a>
 											</li>
 										{/if}
 									{/foreach}
@@ -36,19 +36,19 @@
 			{else}
 				{foreach from=$sPropertiesOptionsOnly item=value key=option}
 					{if $value|@count}
-						<div{if $value.properties.active} class="active"{/if}>{$option} <span
+						<div{if $value.properties.active} class="active"{/if}>{$option|escape} <span
 									class="expandcollapse">+</span></div>
 						<div class="slideContainer">
 							<ul>
 								{foreach from=$value.values item=optionValue}
 									{if $optionValue.active}
 										<li class="active">
-											{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
+											{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
 										</li>
 									{else}
 										<li>
 											<a href="{$optionValue.link}" title="{$sCategoryInfo.name}">
-												{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
+												{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
 											</a>
 										</li>
 									{/if}
