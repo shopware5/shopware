@@ -81,6 +81,11 @@ In this document you will find a changelog of the important changes related to t
     * `jquery.lightbox.js`
     * `jquery.loading-indicator.js`
     * `jquery.modal.js`
+* Added prefixes to the jQuery event names inside the advancedMenu plugin.
+* Changes the jQuery plugin events to new prefixed values in these plugins:
+    * `jquery.lightbox.js`
+    * `jquery.loading-indicator.js`
+    * `jquery.modal.js`
 * Move directory `logs/` to `var/log/` and `cache/` to `var/cache`
 * The property selection for an product is now a dedicated tab.
     * The `beforeedit` event will now be triggered on the `article-detail-window grid[name=property-grid]`
