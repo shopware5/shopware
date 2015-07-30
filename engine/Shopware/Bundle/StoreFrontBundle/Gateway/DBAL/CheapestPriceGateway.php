@@ -192,13 +192,16 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
          *
          * The `laststock` column contains "1" if the product is a closeout product.
          * In the case that the product contains the closeout flag,
-         * the stock and minpurchase are used as they defined in the database
+         * the stock and minpurchase are used as they defined in the database.
+         *
+         * If the product is a closeout product and isn't in stock anymore, it will return
+         * this product aswell.
          *
          * In the case that the product isn't a closeout product,
          * the stock and minpurchase are set to 0
          */
         $subQuery->andWhere(
-            '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+            '(((product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)) OR (product.laststock = 1 AND variant.instock = 0))'
         );
 
         $subQuery->setMaxResults(1);
