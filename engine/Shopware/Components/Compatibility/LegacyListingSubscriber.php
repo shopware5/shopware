@@ -432,21 +432,22 @@ class LegacyListingSubscriber implements SubscriberInterface
         $ids = array_column($data, 'id');
 
         $query = $this->get('dbal_connection')->createQueryBuilder();
-        $query->select(array('id', 'img'))
+        $query->select(array('id', 'img', 'description'))
             ->from('s_articles_supplier', 'supplier')
             ->where('supplier.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement PDOStatement*/
         $statement = $query->execute();
-        $covers = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $supplierData = $statement->fetchAll();
 
-        foreach ($covers as $id => $cover) {
-            if (!isset($data[$id])) {
+        foreach ($supplierData as $row) {
+            if (!isset($data[$row['id']])) {
                 continue;
             }
 
-            $data[$id]['image'] = $cover;
+            $data[$row['id']]['image'] = $row['img'];
+            $data[$row['id']]['description'] = $row['description'];
         }
 
         $limit = 30;
