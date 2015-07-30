@@ -19,11 +19,15 @@
             {* Real product *}
             {block name='frontend_checkout_ajax_cart_articleimage_product'}
                 {if $basketItem.modus == $IS_PRODUCT || $basketItem.modus == $IS_PREMIUM_PRODUCT}
+                    {$desc = $basketItem.articlename|escape}
                     {if $basketItem.additional_details.image.thumbnails}
-                        <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$basketItem.articlename|escape}" class="thumbnail--image" />
+                        {if $basketItem.additional_details.image.description}
+                            {$desc = $basketItem.additional_details.image.description|escape}
+                        {/if}
+                        <img srcset="{$basketItem.additional_details.image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:25:""}" class="thumbnail--image" />
 
                     {elseif $basketItem.image.src.0}
-                        <img src="{$basketItem.image.src.0}" alt="{$basketItem.articlename|escape}" class="thumbnail--image" />
+                        <img src="{$basketItem.image.src.0}" alt="{$desc}" title="{$desc|truncate:25:""}" class="thumbnail--image" />
                     {/if}
                 {/if}
             {/block}

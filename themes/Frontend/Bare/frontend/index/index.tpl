@@ -174,6 +174,7 @@
                     'articleId': ~~('{$sArticle.articleID}'),
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
                     'articleName': '{$sArticle.articleName|escape:"javascript"}',
+                    'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
                     'images': {ldelim}
 						{foreach $sArticle.image.thumbnails as $key => $image}
 							'{$key}': {ldelim}
