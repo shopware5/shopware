@@ -687,6 +687,25 @@ class Component extends ModelEntity
         return $this->createField($options);
     }
 
+    /**
+     * Creates a media selection component field.
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
+     *
+     * @return Field
+     */
+    public function createMediaField(array $options)
+    {
+        $options += array(
+            'xtype' => 'mediafield'
+        );
+
+        return $this->createField($options);
+    }
+
     public function getMaxPositionValue()
     {
         if (is_null($this->maxFieldPositionValue)) {
