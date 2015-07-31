@@ -87,13 +87,15 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             },
             'usermanager-user-list': {
                 editUser: me.onEditUser,
-                deleteUser: me.onDeleteUser
+                deleteUser: me.onDeleteUser,
+                deleteUsers: me.onDeleteUsers
             },
             'usermanager-user-list textfield[action=searchUser]':{
                 change:me.onSearchUser
             }
         });
 	},
+
     /**
      * Filters the grid with the passed search value to find the right voucher
      *
@@ -187,6 +189,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             edit: false
         });
     },
+
     /**
      * Event that catches while deleting backend users from grid
      * @param view
@@ -212,6 +215,27 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             });
         });
     },
+
+    /**
+     * Event that catches batch user deleting
+     * @param view
+     */
+    onDeleteUsers: function(view) {
+        var me = this,
+            records = view.getSelectionModel().getSelection(),
+            userStore = me.getStore('User');
+
+        if(records.length > 0) {
+            Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', '{s name="user/messageDeleteMultipleUsers"}Are you sure you want delete these users?{/s}', function (response) {
+                if (response !== 'yes') return false;
+                me.deleteMultipleRecords(records, function() {
+                    userStore.load();
+                    Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/multipleDeletedSuccessfully"}Users has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                })
+            });
+        }
+    },
+
     /**
      * Event that will be fired on click the user edit symbol in grids
      * @param view
@@ -232,6 +256,27 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 });
             }
         });
-    }
+    },
+
+    /**
+     * Will delete a list of records one after another and finally call the callback method
+     *
+     * @param records
+     * @param callback
+     */
+    deleteMultipleRecords: function(records, callback) {
+        var me = this,
+            record = records.pop();
+
+        record.destroy({
+            callback: function () {
+                if (records.length == 0) {
+                    callback();
+                } else {
+                    me.deleteMultipleRecords(records, callback);
+                }
+            }
+        })
+    },
 });
 //{/block}
