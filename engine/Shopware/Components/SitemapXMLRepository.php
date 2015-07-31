@@ -67,9 +67,14 @@ class SitemapXMLRepository
     {
         $parentId = $this->contextService->getShopContext()->getShop()->getCategory()->getId();
 
+        $categories = $this->readCategoryUrls($parentId);
+        $validCategoryIds = array_map(function($category) {
+            return $category['id'];
+        }, $categories);
+
         return array(
-            'categories'   => $this->readCategoryUrls($parentId),
-            'articles'     => $this->readArticleUrls($parentId),
+            'categories'   => $categories,
+            'articles'     => $this->readArticleUrls($parentId, $validCategoryIds),
             'blogs'        => $this->readBlogUrls($parentId),
             'customPages'  => $this->readStaticUrls(),
             'suppliers'    => $this->readSupplierUrls(),
@@ -111,20 +116,22 @@ class SitemapXMLRepository
      * @param integer $parentId
      * @return array
      */
-    private function readArticleUrls($parentId)
+    private function readArticleUrls($parentId, $validCategoryIds)
     {
+        if(empty($validCategoryIds)) {
+            return [];
+        }
+
         $sql = "
             SELECT
                 a.id,
                 DATE(a.changetime) as changed
-            FROM s_articles a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID  = a.id
-                    AND ac.categoryID = ?
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-            WHERE a.active = 1
+            FROM
+              s_articles_categories_ro ac
+            INNER JOIN
+              s_articles a ON ac.articleID = a.id AND a.active = 1
+            WHERE
+              ac.categoryID IN (" . join(", ", $validCategoryIds) . ")
             GROUP BY a.id
         ";
 
