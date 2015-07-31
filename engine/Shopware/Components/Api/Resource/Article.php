@@ -1165,7 +1165,7 @@ class Article extends Resource implements BatchInterface
         $this->resetArticleCategoryAssignment($data, $article);
 
         $categories = $article->getCategories();
-        $categoryIds = $categories->map(function($category) {
+        $categoryIds = $categories->map(function ($category) {
             return $category->getId();
         });
 
@@ -1178,21 +1178,23 @@ class Article extends Resource implements BatchInterface
                 '\Shopware\Models\Category\Category'
             );
 
-            if (!$category && !empty($categoryData['path'])) {
-                $category = $this->getResource('Category')->findCategoryByPath(
-                    $categoryData['path'],
-                    true
-                );
+            if (!$category) {
+                if (!empty($categoryData['path'])) {
+                    $category = $this->getResource('Category')->findCategoryByPath($categoryData['path'], true);
 
-                if (!$category) {
-                    throw new ApiException\CustomValidationException(sprintf("Could not find or create category by path: %s.", $categoryData['path']));
+                    if (!$category) {
+                        throw new ApiException\CustomValidationException(sprintf("Could not find or create category by path: %s.",
+                            $categoryData['path']));
+                    }
+
+                    if (isset($categoryIds[$category->getId()])) {
+                        continue;
+                    }
+
+                    $categories->add($category);
                 }
-
-                if (isset($categoryIds[$category->getId()])) {
-                    continue;
-                }
-
-                $categories->add($category);
+            } else {
+                $categoryIds[$category->getId()] = 1;
             }
         }
 
