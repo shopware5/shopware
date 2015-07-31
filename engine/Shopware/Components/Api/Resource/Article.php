@@ -1165,6 +1165,11 @@ class Article extends Resource implements BatchInterface
         $this->resetArticleCategoryAssignment($data, $article);
 
         $categories = $article->getCategories();
+        $categoryIds = $categories->map(function($category) {
+            return $category->getId();
+        });
+
+        $categoryIds = array_flip($categoryIds->toArray());
 
         foreach ($data['categories'] as $categoryData) {
             $category = $this->getManyToManySubElement(
@@ -1181,6 +1186,10 @@ class Article extends Resource implements BatchInterface
 
                 if (!$category) {
                     throw new ApiException\CustomValidationException(sprintf("Could not find or create category by path: %s.", $categoryData['path']));
+                }
+
+                if (isset($categoryIds[$category->getId()])) {
+                    continue;
                 }
 
                 $categories->add($category);
