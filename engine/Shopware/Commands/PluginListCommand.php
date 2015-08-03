@@ -88,7 +88,7 @@ class PluginListCommand extends ShopwareCommand
 
         $namespace = $input->getOption('namespace');
         if (count($namespace)) {
-            $builder->andWhere('p.namespace IN (:namespace)');
+            $builder->andWhere('plugin.namespace IN (:namespace)');
             $builder->setParameter('namespace', $namespace);
         }
 
