@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.RiskManagement.model.Areas', {
 	proxy: {
 		type: 'ajax',
 		api: {
-			read: '{url controller="Config" action="getList" name="countryArea"}'
+			read: '{url controller="Config" action="getList" _repositoryClass="countryArea"}'
 		},
 		reader: {
 			type: 'json',
