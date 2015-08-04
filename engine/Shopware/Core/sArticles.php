@@ -2235,14 +2235,14 @@ class sArticles
      *
      * @param $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @param SearchBundle\Criteria $criteria
      * @return array
      */
     private function getListing(
         $categoryId,
         StoreFrontBundle\Struct\ProductContextInterface $context,
-        Enlight_Controller_Request_RequestHttp $request,
+        Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
         $searchResult = $this->searchService->search(
@@ -2300,7 +2300,7 @@ class sArticles
      */
     private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
-        $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
+        $data = $this->legacyStructConverter->convertProductStruct($product);
 
         $relatedArticles = array();
         foreach ($data['sRelatedArticles'] as $related) {

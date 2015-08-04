@@ -91,7 +91,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sSupplier' => $manufacturerId,
             'sCategory' => $context->getShop()->getCategory()->getId()
         ]);
-        
+
         $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
     }
 
@@ -166,9 +166,21 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /**@var $criteria Criteria*/
-        $criteria = $this->get('shopware_search.store_front_criteria_factory')
-            ->createListingCriteria($this->Request(), $context);
+        if ($categoryContent['streamId']) {
+            /**@var $criteria Criteria*/
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createProductStreamCriteria($this->Request(), $context);
+
+            $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
+            $conditions = $streamRepo->getConditionsByProductStreamId($categoryContent['streamId']);
+            foreach ($conditions as $condition) {
+                $criteria->addCondition($condition);
+            }
+        } else {
+            /**@var $criteria Criteria*/
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createListingCriteria($this->Request(), $context);
+        }
 
         if ($categoryContent['hideFilter']) {
             $criteria->resetFacets();
@@ -202,6 +214,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign($categoryArticles);
     }
 
+    /**
+     * @param array $categoryContent
+     * @param bool $hasEmotion
+     * @return array|bool
+     */
     private function getRedirectLocation($categoryContent, $hasEmotion)
     {
         $location = false;
@@ -268,7 +285,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $content['canonicalParams'] = $canonicalParams;
-        
+
         $path = $this->Front()->Router()->assemble($canonicalParams);
 
         if ($path) {
@@ -330,7 +347,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if (empty($data)) {
             return array();
         }
-        
+
         return array(
             'id' => $data[0]['id'],
             'showListing' => $data[0]['showListing']
@@ -415,7 +432,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module');
         $queryParamsNames = array_keys($this->Request()->getParams());
         $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
-        
+
         return ($defaultShopCategoryId == $categoryId && !$paramsDiff);
     }
 

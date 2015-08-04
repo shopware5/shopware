@@ -151,11 +151,23 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')
-            ->getProductContext();
+        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
-        $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
-            ->createAjaxListingCriteria($this->Request(), $context);
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+
+        if ($productStreamId) {
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createProductStreamCriteria($this->Request(), $context);
+
+            $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
+            $conditions = $streamRepo->getConditionsByProductStreamId($productStreamId);
+            foreach ($conditions as $condition) {
+                $criteria->addCondition($condition);
+            }
+        } else {
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createAjaxListingCriteria($this->Request(), $context);
+        }
 
         $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
         $articles = $articles['sArticles'];
@@ -243,5 +255,23 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
         return $childrenIds;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return int|null
+     */
+    private function findStreamIdByCategoryId($categoryId)
+    {
+        $streamId = $this->get('dbal_connection')->fetchColumn(
+            'SELECT stream_id FROM s_categories WHERE id = :id',
+            ['id' => $categoryId]
+        );
+
+        if ($streamId) {
+            return (int)$streamId;
+        }
+
+        return null;
     }
 }

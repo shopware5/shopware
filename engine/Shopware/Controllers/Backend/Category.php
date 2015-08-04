@@ -681,7 +681,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             unset($params['parent']);
 
             $categoryModel->fromArray($params);
-
             Shopware()->Models()->flush();
 
             $categoryId = $categoryModel->getId();

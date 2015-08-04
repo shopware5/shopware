@@ -99,6 +99,26 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
      * @param ShopContextInterface $context
      * @return Criteria
      */
+    public function createProductStreamCriteria(Request $request, ShopContextInterface $context)
+    {
+        $category = $context->getShop()->getCategory()->getId();
+
+        $criteria = $this->createListingCriteria($request, $context);
+
+        $criteria->removeBaseCondition('category');
+        $criteria->resetFacets();
+        $criteria->resetConditions();
+
+        $criteria->addBaseCondition(new CategoryCondition([$category]));
+
+        return $criteria;
+    }
+
+    /**
+     * @param Request $request
+     * @param ShopContextInterface $context
+     * @return Criteria
+     */
     public function createSearchCriteria(Request $request, ShopContextInterface $context)
     {
         $criteria = $this->getSearchCriteria($request, $context);

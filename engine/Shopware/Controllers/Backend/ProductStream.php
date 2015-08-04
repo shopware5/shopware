@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -15,15 +37,22 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $conditions = json_decode($conditions, true);
 
         $criteria = new Criteria();
-        $criteria
-            ->offset($this->Request()->getParam('start', 0))
-            ->limit($this->Request()->getParam('limit', 20));
+
+        $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
+        $conditions = $streamRepo->unserializeConditions($conditions);
+        foreach ($conditions as $condition) {
+            $criteria->addCondition($condition);
+        }
+
+        $criteria->offset($this->Request()->getParam('start', 0));
+        $criteria->limit($this->Request()->getParam('limit', 20));
 
         $context = $this->createContext(
             $this->Request()->getParam('shopId', null),
             $this->Request()->getParam('currencyId', null),
             $this->Request()->getParam('customerGroupKey', null)
         );
+
 
         $result = Shopware()->Container()->get('shopware_search.product_search')
             ->search($criteria, $context);
@@ -41,14 +70,17 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     {
         $data['conditions'] = json_encode($data['conditions']);
         $data['sorting'] = json_encode($data['sorting']);
+
         return parent::save($data);
     }
 
     public function getDetail($id)
     {
         $data = parent::getDetail($id);
+
         $data['data']['conditions'] = json_decode($data['data']['conditions'], true);
         $data['data']['sorting'] = json_decode($data['data']['sorting'], true);
+
         return $data;
     }
 
