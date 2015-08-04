@@ -439,12 +439,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'lastname'=>array('required'=>1),
             'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
-            'text1'=>array('required'=>0),
-            'text2'=>array('required'=>0),
-            'text3'=>array('required'=>0),
-            'text4'=>array('required'=>0),
-            'text5'=>array('required'=>0),
-            'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
             'birthyear'=>array('required'=> $requireBirthday),
             'birthmonth'=>array('required'=> $requireBirthday),
@@ -492,7 +486,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             ),
             'additional_address_line2' => array(
                 'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
-            )
+            ),
+            'text1'         => array('required' => 0),
+            'text2'         => array('required' => 0),
+            'text3'         => array('required' => 0),
+            'text4'         => array('required' => 0),
+            'text5'         => array('required' => 0),
+            'text6'         => array('required' => 0)
         );
 
         // Check if state selection is required
