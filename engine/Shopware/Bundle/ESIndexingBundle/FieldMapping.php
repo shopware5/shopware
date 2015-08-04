@@ -53,7 +53,7 @@ class FieldMapping implements FieldMappingInterface
     {
         $key = $context->getCurrentCustomerGroup()->getKey();
         $currency = $context->getCurrency()->getId();
-        return 'calculatedPrices.' . $key . '_' . $currency;
+        return 'calculatedPrices.' . $key . '_' . $currency . '.calculatedPrice';
     }
 
     /**

@@ -67,6 +67,5 @@ class SearchTermConditionHandler implements HandlerInterface
         /** @var SearchTermCondition $criteriaPart */
         $query = $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm());
         $search->addQuery($query);
-        $search->setMinScore(0.2);
     }
 }

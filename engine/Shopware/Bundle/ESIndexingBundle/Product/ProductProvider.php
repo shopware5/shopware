@@ -192,7 +192,7 @@ class ProductProvider implements ProductProviderInterface
      */
     private function formatDate(\DateTime $date = null)
     {
-        return !$date ? null : $date->format('y/m/d H:i:s');
+        return !$date ? null : $date->format('Y-m-d');
     }
 
     /**
@@ -334,7 +334,7 @@ class ProductProvider implements ProductProviderInterface
                 $this->priceCalculationService->calculateProduct($product, $context);
 
                 if ($product->getCheapestPrice()) {
-                    $prices[$number][$key] = $product->getCheapestPrice()->getCalculatedPrice();
+                    $prices[$number][$key] = $product->getCheapestPrice();
                 }
             }
         }

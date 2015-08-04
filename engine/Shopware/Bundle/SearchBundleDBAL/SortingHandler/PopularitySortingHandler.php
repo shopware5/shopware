@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -60,14 +61,17 @@ class PopularitySortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->leftJoin(
-            'product',
-            's_articles_top_seller_ro',
-            'topSeller',
-            'topSeller.article_id = product.id'
-        );
+        if (!$query->hasState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE)) {
+            $query->leftJoin(
+                'product',
+                's_articles_top_seller_ro',
+                'topSeller',
+                'topSeller.article_id = product.id'
+            );
+            $query->addState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE);
+        }
 
         $query->addOrderBy('topSeller.sales', $sorting->getDirection())
-            ->addOrderBy('topSeller.article_id', $sorting->getDirection());
+              ->addOrderBy('topSeller.article_id', $sorting->getDirection());
     }
 }

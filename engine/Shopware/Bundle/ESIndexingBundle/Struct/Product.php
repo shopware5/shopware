@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
 
 /**
@@ -140,7 +141,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return array
+     * @return Price[]
      */
     public function getCalculatedPrices()
     {
@@ -148,7 +149,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param array $calculatedPrices
+     * @param Price[] $calculatedPrices
      */
     public function setCalculatedPrices($calculatedPrices)
     {

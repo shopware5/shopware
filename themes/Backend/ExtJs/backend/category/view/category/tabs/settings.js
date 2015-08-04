@@ -363,6 +363,24 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             }
         });
 
+        me.streamStore =  Ext.create('Shopware.store.Search', {
+            fields: ['id', 'name'],
+            pageSize: 10,
+            configure: function() {
+                return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
+            }
+        });
+
+        me.streamSelection = Ext.create('Shopware.form.field.Search', {
+            store: me.streamStore,
+            name: 'streamId',
+            displayField: 'name',
+            labelWidth:180,
+            valueField: 'id',
+            fieldLabel: 'Product stream',
+            pageSize: me.streamStore.pageSize
+        });
+
         return [
             {
                 xtype:'checkboxgroup',
@@ -394,6 +412,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             },
             me.templateComboBox,
             me.productLayoutField,
+            me.streamSelection,
             {
                 xtype:'textfield',
                 fieldLabel:me.snippets.defaultSettingsLinkExternalPageLabel,

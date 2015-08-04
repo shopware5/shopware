@@ -90,9 +90,12 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
                 form.templateComboBox.show();
             }
 
+            form.streamSelection.enable();
+
             //to select the settings if the tree element is not a leaf
             if(!treeRecord.get('leaf')){
                 me.getMainWindow().tabPanel.setActiveTab(0);
+                form.streamSelection.disable();
             }
 
             //show or hide the emotionNotice if an emotion is mapped to this category
