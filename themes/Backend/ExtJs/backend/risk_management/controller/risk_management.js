@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.RiskManagement.controller.RiskManagement', {
 			nextItem = comboBox.up('container').items.items[indexOfNextItem];
 
 		//If the user selected the risk ZONEIS or ZONEISNOT, add a comboBox instead of a textField
-		if(newValue == 'ZONEIS' || newValue=='ZONEISNOT'){
+		if(['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(newValue) >= 0) {
             var newComboBox = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subApplication.areasStore,
                 displayField: 'name',

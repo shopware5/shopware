@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
 				}
 			}
 		});
-		if(me.values && (me.values.rule1 == 'ZONEIS' || me.values.rule1 == 'ZONEISNOT')){
+		if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule1) >= 0){
 			var field1 = Ext.create('Ext.form.field.ComboBox', {
 				store: me.areasStore,
 				displayField: 'name',
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             field1.show();
         }
 
-		if(me.values && (me.values.rule2 == 'ZONEIS' || me.values.rule2 == 'ZONEISNOT')){
+		if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule2) >= 0){
 			var field2 = Ext.create('Ext.form.field.ComboBox', {
 				store: me.areasStore,
 				displayField: 'name',
