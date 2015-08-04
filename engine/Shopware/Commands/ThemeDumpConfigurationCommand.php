@@ -77,7 +77,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
         $pathResolver = $this->container->get('theme_path_resolver');
         $file         = $pathResolver->getCacheDirectory() . '/config_' . $shop->getId() . '.json';
 
-        file_put_contents($file, json_encode($configuration));
+        file_put_contents($file, json_encode($configuration, JSON_PRETTY_PRINT));
         return $file;
     }
 }
