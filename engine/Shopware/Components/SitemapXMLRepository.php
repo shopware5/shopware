@@ -24,6 +24,7 @@
 
 namespace Shopware\Components;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -40,7 +41,7 @@ class SitemapXMLRepository
     private $em;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 
@@ -66,10 +67,12 @@ class SitemapXMLRepository
     public function getSitemapContent()
     {
         $parentId = $this->contextService->getShopContext()->getShop()->getCategory()->getId();
+        $categories = $this->readCategoryUrls($parentId);
+        $categoryIds = array_column($categories, 'id');
 
         return array(
-            'categories'   => $this->readCategoryUrls($parentId),
-            'articles'     => $this->readArticleUrls($parentId),
+            'categories'   => $categories,
+            'articles'     => $this->readArticleUrls($categoryIds),
             'blogs'        => $this->readBlogUrls($parentId),
             'customPages'  => $this->readStaticUrls(),
             'suppliers'    => $this->readSupplierUrls(),
@@ -108,27 +111,34 @@ class SitemapXMLRepository
     /**
      * Read article urls
      *
-     * @param integer $parentId
+     * @param int[] $categoryIds
      * @return array
+     * @throws \Doctrine\DBAL\DBALException
      */
-    private function readArticleUrls($parentId)
+    private function readArticleUrls(array $categoryIds)
     {
+        if (empty($categoryIds)) {
+            return [];
+        }
+
         $sql = "
             SELECT
                 a.id,
                 DATE(a.changetime) as changed
-            FROM s_articles a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID  = a.id
-                    AND ac.categoryID = ?
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-            WHERE a.active = 1
+            FROM
+              s_articles_categories_ro ac
+            INNER JOIN
+              s_articles a ON ac.articleID = a.id AND a.active = 1
+            WHERE
+              ac.categoryID IN (:categoryIds)
             GROUP BY a.id
         ";
 
-        $result = $this->connection->executeQuery($sql, array($parentId));
+        $result = $this->connection->executeQuery(
+            $sql,
+            [':categoryIds' => $categoryIds],
+            [':categoryIds' => Connection::PARAM_INT_ARRAY]
+        );
 
         $articles = array();
         while ($article = $result->fetch()) {
@@ -175,7 +185,7 @@ class SitemapXMLRepository
         $result = $this->connection->executeQuery(
             $sql,
             [$blogIds],
-            [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+            [Connection::PARAM_INT_ARRAY]
         );
 
         while ($blog = $result->fetch()) {
