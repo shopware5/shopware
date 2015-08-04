@@ -16,16 +16,17 @@
 					{s name="ListingTextPrevious"}&lt;{/s}
 				</a>
 			{/if}
+
 			{foreach from=$sPages.pages item=page}
-                {if $page<$sRequests.currentPage+4 AND $page>$sRequests.currentPage-4}
-                    {if $sRequests.currentPage==$page}
+                {if $page<$sRequests.sPage+4 AND $page>$sRequests.sPage-4}
+                    {if $sRequests.sPage==$page}
                         <a title="{$sCategoryInfo.name}" class="navi on">{$page}</a>
-                        {else}
+					{else}
                         <a href="{$sLinks.sPage}&sPage={$page}" title="{$sCategoryInfo.name}" class="navi">
                             {$page}
                         </a>
                     {/if}
-                    {elseif $page==$sRequests.currentPage+4 OR $page==$sRequests.currentPage-4}
+				{elseif $page==$sRequests.sPage+4 OR $page==$sRequests.sPage-4}
                     <div class="more">...</div>
                 {/if}
 			{/foreach}
