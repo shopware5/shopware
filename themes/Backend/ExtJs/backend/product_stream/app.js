@@ -29,6 +29,9 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.condition.CreateDate',
         'condition_list.condition.HasPseudoPrice',
         'condition_list.condition.ImmediateDelivery',
+        'condition_list.condition.VoteAverage',
+        'condition_list.condition.Sales',
+        'condition_list.condition.SearchTerm',
 
         'condition_list.field.Grid',
         'condition_list.field.Price',
@@ -38,6 +41,9 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.field.ReleaseDate',
         'condition_list.field.CreateDate',
         'condition_list.field.AttributeWindow',
+        'condition_list.field.VoteAverage',
+        'condition_list.field.Sales',
+        'condition_list.field.SearchTerm',
 
         'defined_list.Window',
         'defined_list.Product',

@@ -179,6 +179,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.sales_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler" >
             <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
             <tag name="condition_handler_dbal"/>

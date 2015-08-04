@@ -22,56 +22,52 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
+namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PopularitySortingHandler implements SortingHandlerInterface
+class SalesConditionHandler implements ConditionHandlerInterface
 {
+    const STATE_INCLUDES_TOPSELLER_TABLE = 'topseller';
+
     /**
      * {@inheritdoc}
      */
-    public function supportsSorting(SortingInterface $sorting)
+    public function supportsCondition(ConditionInterface $condition)
     {
-        return ($sorting instanceof PopularitySorting);
+        return $condition instanceof SalesCondition;
     }
 
     /**
-     * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
-     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
-     *
-     * @param SortingInterface|PopularitySorting $sorting
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function generateSorting(
-        SortingInterface $sorting,
-        QueryBuilder $query,
+    public function generateCondition(
+        ConditionInterface $condition,
+        QueryBuilder  $query,
         ShopContextInterface $context
     ) {
-        if (!$query->hasState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE)) {
+        if (!$query->hasState(self::STATE_INCLUDES_TOPSELLER_TABLE)) {
             $query->leftJoin(
                 'product',
                 's_articles_top_seller_ro',
                 'topSeller',
                 'topSeller.article_id = product.id'
             );
-            $query->addState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE);
+            $query->addState(self::STATE_INCLUDES_TOPSELLER_TABLE);
         }
 
-        $query->addOrderBy('topSeller.sales', $sorting->getDirection())
-              ->addOrderBy('topSeller.article_id', $sorting->getDirection());
+        $query->andWhere('topSeller.sales > :sales');
+
+        /** @var SalesCondition $condition */
+        $query->setParameter('sales', $condition->getMinSales());
     }
 }
