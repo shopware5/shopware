@@ -48,14 +48,7 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
-     *
-     * @param ConditionInterface $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,

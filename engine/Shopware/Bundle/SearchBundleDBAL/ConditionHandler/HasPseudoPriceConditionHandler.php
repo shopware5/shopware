@@ -69,10 +69,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface|HasPseudoPriceCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,

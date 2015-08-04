@@ -43,10 +43,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface|ReleaseDateSorting $criteriaPart
-     * @param Criteria $criteria
-     * @param Search $search
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -54,6 +51,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var ReleaseDateSorting $criteriaPart */
         $search->addSort(
             new Sort('formattedReleaseDate', strtolower($criteriaPart->getDirection()))
         );

@@ -43,10 +43,7 @@ class PopularitySortingHandler implements HandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface|PopularitySorting $criteriaPart
-     * @param Criteria $criteria
-     * @param Search $search
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -54,6 +51,7 @@ class PopularitySortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var PopularitySorting $criteriaPart */
         $search->addSort(
             new Sort('sales', strtolower($criteriaPart->getDirection()))
         );

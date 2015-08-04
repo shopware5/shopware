@@ -51,6 +51,7 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var HasPseudoPriceCondition $criteriaPart */
         $field = $this->getPseudoPriceField($context);
         $filter = new RangeFilter($field, ['gt' => 0]);
 

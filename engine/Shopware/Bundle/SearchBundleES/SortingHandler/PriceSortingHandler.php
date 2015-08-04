@@ -47,6 +47,7 @@ class PriceSortingHandler implements HandlerInterface
     {
         $this->fieldMapping = $fieldMapping;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -56,10 +57,7 @@ class PriceSortingHandler implements HandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface|PriceSorting $criteriaPart
-     * @param Criteria $criteria
-     * @param Search $search
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -67,6 +65,7 @@ class PriceSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var PriceSorting $criteriaPart */
         $field = $this->fieldMapping->getPriceField($context);
         $sort  = new Sort($field, strtolower($criteriaPart->getDirection()));
         $search->addSort($sort);

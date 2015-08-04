@@ -70,13 +70,7 @@ class HasPriceConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Extends the query with two inner joins which validates
-     * that the selected products has a defined price for the fallback customer group.
-     *
-     * @param ConditionInterface|HasPriceCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,

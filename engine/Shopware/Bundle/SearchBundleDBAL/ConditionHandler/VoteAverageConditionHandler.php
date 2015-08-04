@@ -49,14 +49,7 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
-     *
-     * @param ConditionInterface|VoteAverageCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -64,11 +57,9 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $table = '
-               SELECT SUM(vote.points) / COUNT(vote.id) AS average,
-                   vote.articleID                    AS product_id
-            FROM   s_articles_vote vote
-            GROUP BY vote.articleID
-        ';
+SELECT SUM(vote.points) / COUNT(vote.id) AS average, vote.articleID AS product_id
+FROM s_articles_vote vote
+GROUP BY vote.articleID';
 
         $query->innerJoin(
             'product',
@@ -78,6 +69,7 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
              AND voteAverage.average >= :average'
         );
 
+        /** @var VoteAverageCondition $condition */
         $query->setParameter(':average', (float) $condition->getAverage());
         $query->addSelect('voteAverage.average');
         $query->addState(VoteAverageCondition::STATE_INCLUDES_VOTE_TABLE);

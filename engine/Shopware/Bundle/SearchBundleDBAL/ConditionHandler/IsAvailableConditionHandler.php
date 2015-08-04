@@ -61,10 +61,7 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface|CategoryCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,

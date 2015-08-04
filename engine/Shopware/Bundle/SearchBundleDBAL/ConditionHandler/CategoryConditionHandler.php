@@ -47,14 +47,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Extends the query with a category condition.
-     * The passed category condition contains an array of multiple category ids.
-     * The searched product has to be in one of the passed categories.
-     *
-     * @param ConditionInterface|CategoryCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -69,6 +62,7 @@ class CategoryConditionHandler implements ConditionHandlerInterface
              AND productCategory.categoryID IN (:category)'
         );
 
+        /** @var CategoryCondition $condition */
         $query->setParameter(
             ':category',
             $condition->getCategoryIds(),

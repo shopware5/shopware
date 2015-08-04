@@ -43,10 +43,7 @@ class ProductNameSortingHandler implements HandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface|ProductNameSorting $criteriaPart
-     * @param Criteria $criteria
-     * @param Search $search
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -54,6 +51,7 @@ class ProductNameSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var ProductNameSorting $criteriaPart */
         $search->addSort(
             new Sort('name', strtolower($criteriaPart->getDirection()))
         );

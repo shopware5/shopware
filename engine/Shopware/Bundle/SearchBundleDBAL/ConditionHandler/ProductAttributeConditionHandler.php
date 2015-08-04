@@ -47,21 +47,14 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
-     *
-     * @param ConditionInterface|ProductAttributeCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @throws \Exception
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        /** @var ProductAttributeCondition $condition */
         if (!$condition->getField()) {
             throw new \Exception('ProductAttributeCondition class requires a defined attribute field!');
         }

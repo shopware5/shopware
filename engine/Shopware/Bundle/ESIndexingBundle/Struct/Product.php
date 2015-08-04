@@ -55,7 +55,7 @@ class Product extends ListProduct
     protected $categoryIds = [];
 
     /**
-     * @var array[]
+     * @var Price[]
      */
     protected $calculatedPrices = [];
 

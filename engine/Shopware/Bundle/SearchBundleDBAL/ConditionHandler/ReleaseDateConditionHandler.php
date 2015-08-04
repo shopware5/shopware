@@ -46,10 +46,7 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface|ReleaseDateCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -57,10 +54,11 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $date = new \DateTime();
+        /** @var ReleaseDateCondition $condition */
         $intervalSpec = 'P' . $condition->getDays() . 'D';
         $interval = new \DateInterval($intervalSpec);
 
-        $dateNow = new\DateTime();
+        $dateNow = new \DateTime();
 
         switch ($condition->getDirection()) {
             case ReleaseDateCondition::DIRECTION_FUTURE:

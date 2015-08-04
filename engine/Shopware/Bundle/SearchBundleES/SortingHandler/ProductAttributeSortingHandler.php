@@ -43,10 +43,7 @@ class ProductAttributeSortingHandler implements HandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface|ProductAttributeSorting $criteriaPart
-     * @param Criteria $criteria
-     * @param Search $search
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -54,6 +51,7 @@ class ProductAttributeSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+        /** @var ProductAttributeSorting $criteriaPart */
         $field = 'attributes.core.' . $criteriaPart->getField();
         $search->addSort(
             new Sort($field, strtolower($criteriaPart->getDirection()))

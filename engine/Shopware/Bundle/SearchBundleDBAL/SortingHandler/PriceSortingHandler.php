@@ -60,14 +60,7 @@ class PriceSortingHandler implements SortingHandlerInterface
     }
 
     /**
-     * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
-     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
-     *
-     * @param SortingInterface|PriceSorting $sorting
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateSorting(
         SortingInterface $sorting,
@@ -77,9 +70,9 @@ class PriceSortingHandler implements SortingHandlerInterface
         $selection = $this->priceHelper->getSelection($context);
 
         $this->priceHelper->joinPrices($query, $context);
-
         $query->addSelect('MIN('. $selection .') as cheapest_price');
 
+        /** @var PriceSorting $sorting */
         $query->addOrderBy('cheapest_price', $sorting->getDirection())
             ->addOrderBy('product.id', $sorting->getDirection());
     }

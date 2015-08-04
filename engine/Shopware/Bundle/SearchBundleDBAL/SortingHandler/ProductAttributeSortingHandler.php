@@ -46,21 +46,14 @@ class ProductAttributeSortingHandler implements SortingHandlerInterface
     }
 
     /**
-     * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
-     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
-     *
-     * @param SortingInterface|ProductAttributeSorting $sorting
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @throws \Exception
-     * @return void
+     * {@inheritdoc}
      */
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        /** @var ProductAttributeSorting $sorting */
         if (!$sorting->getField()) {
             throw new \Exception('ProductAttributeSorting class requires a defined attribute field!');
         }
