@@ -226,8 +226,10 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $dataQuery = $this->getVoucherRepository()
                               ->getVoucherCodeListQuery($voucherId, $filter, $orderBy, $offset, $limit);
 
-            $totalCount = $this->getManager()->getQueryCount($dataQuery);
-            $voucherCodes = $dataQuery->getArrayResult();
+            $paginator = $this->getManager()->createPaginator($dataQuery);
+
+            $totalCount = $paginator->count();
+            $voucherCodes = $paginator->getIterator()->getArrayCopy();
 
             $this->View()->assign(array('success' => true, 'data' => $voucherCodes, 'totalCount' => $totalCount));
         } catch (Exception $e) {
