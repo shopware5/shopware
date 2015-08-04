@@ -24,7 +24,11 @@
                                                 data-title="{$sBasketItem.articlename|strip_tags|escape}"
                                                 data-updateImages="true"
                                             {/if}>
-                                            <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
+                                            {$desc = $sBasketItem.articlename|escape}
+                                            {if $sBasketItem.image.description}
+                                                {$desc = $sBasketItem.image.description|escape}
+                                            {/if}
+                                            <img src="{$sBasketItem.image.src.2}" alt="{$desc}" title="{$desc|truncate:25:""}" />
                                             <span class="cart--badge">
                                                 <span>{s name="CartItemInfoFree"}{/s}</span>
                                             </span>

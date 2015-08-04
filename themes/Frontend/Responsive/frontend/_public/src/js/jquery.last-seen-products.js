@@ -230,11 +230,10 @@
             } else {
                 srcSet = me.opts.noPicture
             }
-            
             $('<img>', {
                 'srcset': srcSet,
-                'alt': data.articleName,
-                'title': data.articleName
+                'alt': data.imageTitle || data.articleName,
+                'title': data.imageTitle || data.articleName
             }).appendTo(imageMedia);
 
             $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
