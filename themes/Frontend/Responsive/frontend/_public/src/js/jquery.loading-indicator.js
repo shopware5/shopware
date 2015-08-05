@@ -26,6 +26,7 @@
         defaults: {
             loaderCls: 'js--loading-indicator',
             iconCls: 'icon--default',
+            delay: 0,
             animationSpeed: 500,
             closeOnClick: true,
             openOverlay: true
@@ -63,9 +64,11 @@
 
             me._updateLoader();
 
-            me.$loader.fadeIn(me.options.animationSpeed, function () {
-                $.publish('plugin/swLoadingIndicator/onOpenFinished', [ me ]);
-            });
+            window.setTimeout(function() {
+                me.$loader.fadeIn(me.options.animationSpeed, function () {
+                    $.publish('plugin/swLoadingIndicator/onOpenFinished', [ me ]);
+                });
+            }, me.options.delay);
 
             $.publish('plugin/swLoadingIndicator/onOpen', [ me ]);
         },
@@ -76,6 +79,8 @@
         close: function (callback) {
             var me = this,
                 opts = me.options;
+
+            callback = callback || function() {};
 
             if (opts.openOverlay !== false) {
                 $.overlay.close();

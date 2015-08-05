@@ -114,6 +114,9 @@ In this document you will find a changelog of the important changes related to t
     * `shippingdiscountname`
     * `surchargename`
     * `vouchername`
+* Added the ability to change variants using an AJAX call, therefore the page won't reload anymore. The configuration can be enabled / disabled in theme config, the default value is `true`, therefore the variants will be loaded via AJAX by default.
+    * Plugin developers which supports variants needs to change their plugin accordingly. They can subscribe to the event `plugin/swAjaxVariant/onRequestData` to update their plugin.
+    * If your plugin modifies the product page using Smarty, you're good to go.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
