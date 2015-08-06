@@ -126,7 +126,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             ]
         );
 
-        $enableAndSearchLogic = $this->config->get('enableAndSearchLogic', true);
+        $enableAndSearchLogic = $this->config->get('enableAndSearchLogic', false);
         if ($enableAndSearchLogic) {
             $this->addAndSearchLogic($query, $term, $keywords);
         }
