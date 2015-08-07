@@ -31,13 +31,13 @@ Feature: Search things
         When I received the search-results for "<searchTerm>"
         Then I should see "<hits> Treffer"
 
-    Examples:
-        | searchTerm | hits |
-        | ibi        | 1    |
-        | bril       | 6    |
-        | str        | 13   |
-        | arti       | 15   |
-        | tee        | 21   |
+        Examples:
+            | searchTerm | hits |
+            | ibi        | 1    |
+            | bril       | 6    |
+            | str        | 13   |
+            | arti       | 15   |
+            | tee        | 21   |
 
     @javascript
     Scenario: Live-Search with no hits

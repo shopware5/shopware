@@ -6,12 +6,11 @@ use Shopware\Tests\Mink\Helper;
 class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
 {
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'aggregationAmounts' => 'ul.aggregation--list',
             'sum' => 'li.entry--sum > div.entry--value',
             'shipping' => 'li.entry--shipping > div.entry--value',
@@ -27,34 +26,49 @@ class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
             'aggregationLabels' => 'ul.aggregation--list .entry--label',
             'aggregationValues' => 'ul.aggregation--list .entry--value',
             'shippingPaymentForm' => 'form.payment'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array(
-            'checkout' => array('de' => 'Zur Kasse',   'en' => 'Checkout'),
-            'sum' => array('de' => 'Summe:', 'en' => 'Proceed to checkout'),
-            'shipping' => array('de' => 'Versandkosten:', 'en' => 'Proceed to checkout'),
-            'total' => array('de' => 'Gesamtsumme:', 'en' => 'Proceed to checkout'),
-            'sumWithoutVat' => array('de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'),
-            'tax' => array('de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'),
-            'changePaymentButton'   => array('de' => 'Weiter',                      'en' => 'Next'),
-        );
+        return [
+            'checkout' => ['de' => 'Zur Kasse',   'en' => 'Checkout'],
+            'sum' => ['de' => 'Summe:', 'en' => 'Proceed to checkout'],
+            'shipping' => ['de' => 'Versandkosten:', 'en' => 'Proceed to checkout'],
+            'total' => ['de' => 'Gesamtsumme:', 'en' => 'Proceed to checkout'],
+            'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'],
+            'tax' => ['de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
+            'changePaymentButton'   => ['de' => 'Weiter', 'en' => 'Next'],
+        ];
     }
 
-    protected $taxesPositionFirst = 5;
-    public $cartPositionFirst = 1;
+    /**
+     * @param string $language
+     * @return bool
+     * @throws \Exception
+     */
+    public function verifyPage($language = '')
+    {
+        $info = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
+
+        if (($info['controller'] === 'checkout') && ($info['action'] === 'cart')) {
+            return Helper::hasNamedLink($this, 'checkout', $language);
+        }
+
+        $message = ['You are not on the cart!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        Helper::throwException($message);
+
+        return false;
+    }
 
     /**
      * Changes the payment method
      * @param array   $data
      */
-    public function changePaymentMethod($data = array())
+    public function changePaymentMethod($data = [])
     {
         $data[0]['field'] = 'payment';
         $this->changeShippingMethod($data);
@@ -64,9 +78,26 @@ class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
      * Changes the shipping method
      * @param array $data
      */
-    public function changeShippingMethod($data = array())
+    public function changeShippingMethod($data = [])
     {
         Helper::fillForm($this, 'shippingPaymentForm', $data);
         Helper::pressNamedButton($this, 'changePaymentButton');
+    }
+
+    /**
+     * Proceeds to the confirmation page with login
+     * @param string $eMail
+     * @param string $password
+     */
+    public function proceedToOrderConfirmationWithLogin($eMail, $password)
+    {
+        $language = Helper::getCurrentLanguage($this);
+
+        if($this->verifyPage($language)) {
+            Helper::clickNamedLink($this, 'checkout', $language);
+        }
+
+        $this->getPage('Account')->login($eMail, $password);
+        $this->getPage('CheckoutConfirm')->verifyPage($language);
     }
 }

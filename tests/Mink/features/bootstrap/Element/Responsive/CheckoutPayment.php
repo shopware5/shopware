@@ -19,8 +19,7 @@ class CheckoutPayment extends \Shopware\Tests\Mink\Element\Emotion\CheckoutPayme
     protected $selector = ['css' => 'div.payment--panel'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

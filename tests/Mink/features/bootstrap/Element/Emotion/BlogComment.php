@@ -19,8 +19,7 @@ class BlogComment extends MultipleElement
     protected $selector = array('css' => 'div.comment_outer');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

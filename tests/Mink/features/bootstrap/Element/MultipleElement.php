@@ -32,21 +32,19 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     }
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
     /**

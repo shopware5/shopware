@@ -23,8 +23,7 @@ class ArticleSlider extends \Shopware\Tests\Mink\Element\Emotion\ArticleSlider
     protected $selector = ['css' => 'div.emotion--product-slider'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

@@ -5,26 +5,24 @@ use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
 
-use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Shopware\Tests\Mink\Helper as MinkHelper;
+use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
-use Symfony\Component\Console\Helper\Helper;
 
 class Detail extends Page implements HelperSelectorInterface
 {
     /**
      * @var string $path
      */
-    protected $path = '/detail/index/sArticle/{articleId}';
+    protected $path = '/detail/index/sArticle/{articleId}?number={number}';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'productRating' => 'div#detailbox_middle > div.detail_comments > .star',
             'productRatingCount' => 'div#detailbox_middle > div.detail_comments > .comment_numbers',
             'productEvaluationAverage' => 'div#comments > div.overview_rating > .star',
@@ -32,26 +30,28 @@ class Detail extends Page implements HelperSelectorInterface
             'configuratorForm' => 'div#buybox > form',
             'notificationForm' => 'form#sendArticleNotification',
             'voteForm' => 'div#comments > form'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array(
-            'notificationFormSubmit' => array('de' => 'Eintragen', 'en' => 'Enter'),
-            'voteFormSubmit'         => array('de' => 'Speichern', 'en' => 'Save')
-        );
+        return [
+            'notificationFormSubmit' => ['de' => 'Eintragen', 'en' => 'Enter'],
+            'voteFormSubmit'         => ['de' => 'Speichern', 'en' => 'Save']
+        ];
     }
 
-    protected $configuratorTypes = array(
+    /**
+     * @var string[]
+     */
+    protected $configuratorTypes = [
         'table' => 'configurator--form',
         'standard' => 'upprice_config',
         'select' => 'config_select'
-    );
+    ];
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
@@ -59,7 +59,7 @@ class Detail extends Page implements HelperSelectorInterface
     public function verifyPage()
     {
         if (!$this->hasButton('In den Warenkorb')) {
-            MinkHelper::throwException('Detail page has no basket button');
+            Helper::throwException('Detail page has no basket button');
         }
     }
 
@@ -72,30 +72,30 @@ class Detail extends Page implements HelperSelectorInterface
         $this->selectFieldOption('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
+        if ($this->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
 
     /**
      * Checks the evaluations of the current article
-     * @param MultipleElement $articleEvaluations
+     * @param ArticleEvaluation $articleEvaluations
      * @param $average
      * @param array $evaluations
      * @throws \Exception
      */
-    public function checkEvaluations(MultipleElement $articleEvaluations, $average, array $evaluations)
+    public function checkEvaluations(ArticleEvaluation $articleEvaluations, $average, array $evaluations)
     {
         $this->checkRating($articleEvaluations, $average);
 
-        $evaluations = MinkHelper::floatArray($evaluations, ['stars']);
-        $result = MinkHelper::assertElements($evaluations, $articleEvaluations);
+        $evaluations = Helper::floatArray($evaluations, ['stars']);
+        $result = Helper::assertElements($evaluations, $articleEvaluations);
 
         if($result === true) {
             return;
         }
 
-        $messages = array('The following $evaluations are wrong:');
+        $messages = ['The following $evaluations are wrong:'];
         foreach ($result as $evaluation) {
             $messages[] = sprintf(
                 '%s - Bewertung: %s (%s is "%s", should be "%s")',
@@ -106,65 +106,44 @@ class Detail extends Page implements HelperSelectorInterface
                 $evaluation['result']['value2']
             );
         }
-        MinkHelper::throwException($messages);
+        Helper::throwException($messages);
     }
 
     /**
-     * @param MultipleElement $articleEvaluations
+     * @param ArticleEvaluation $articleEvaluations
      * @param $average
      * @throws \Exception
      */
-    protected function checkRating(MultipleElement $articleEvaluations, $average)
+    protected function checkRating(ArticleEvaluation $articleEvaluations, $average)
     {
-        $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
+        $elements = Helper::findElements($this, ['productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount']);
 
-        $elements = MinkHelper::findElements($this, $locators);
+        $check = [
+            'productRating' => [$elements['productRating']->getAttribute('class'), $average],
+            'productRatingCount' => [$elements['productRatingCount']->getText(), count($articleEvaluations)],
+            'productEvaluationAverage' => [$elements['productEvaluationAverage']->getAttribute('class'), $average],
+            'productEvaluationCount' => [$elements['productEvaluationCount']->getText(), count($articleEvaluations)]
+        ];
 
-        $check = array();
-
-        foreach($elements as $locator => $element)
-        {
-            switch($locator) {
-                case 'productRating':
-                case 'productEvaluationAverage':
-                    $check[$locator] = array($element->getAttribute('class'), $average);
-                    break;
-
-                case 'productRatingCount':
-                case 'productEvaluationCount':
-                    $check[$locator] = array($element->getText(), count($articleEvaluations));
-                    break;
-            }
-        }
-
-        $result = MinkHelper::checkArray($check);
+        $check = Helper::floatArray($check);
+        $result = Helper::checkArray($check);
 
         if ($result !== true) {
             $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
-            MinkHelper::throwException($message);
+            Helper::throwException($message);
         }
-    }
-
-    /**
-     * Helper function how to read the evaluation from the evaluation element
-     * @param  NodeElement $element
-     * @return string
-     */
-    protected function getEvaluation($element)
-    {
-        return (string) $element->getAttribute('class');
     }
 
     /**
      * Sets the configuration of a configurator article
-     * @param array $configuration
+     * @param array[] $configuration
      */
-    public function configure($configuration)
+    public function configure(array $configuration)
     {
         $configuratorType = '';
 
         if ($this->getSession()->getDriver() instanceof GoutteDriver) {
-            $element = MinkHelper::findElements($this, ['configuratorForm']);
+            $element = Helper::findElements($this, ['configuratorForm']);
 
             $configuratorClass = $element['configuratorForm']->getAttribute('class');
             $configuratorType = array_search($configuratorClass, $this->configuratorTypes);
@@ -188,13 +167,19 @@ class Detail extends Page implements HelperSelectorInterface
         }
     }
 
+    /**
+     * @param $configuratorOption
+     * @param $configuratorGroup
+     * @throws \Behat\Behat\Exception\PendingException
+     * @throws \Exception
+     */
     public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
     {
         $group = $this->findField($configuratorGroup);
 
         if (empty($group)) {
             $message = sprintf('Configurator group "%s" was not found!', $configuratorGroup);
-            MinkHelper::throwException($message);
+            Helper::throwException($message);
         }
 
         $options = $group->findAll('css', 'option');
@@ -202,7 +187,7 @@ class Detail extends Page implements HelperSelectorInterface
         foreach ($options as $option) {
             if ($option->getText() == $configuratorOption) {
                 $message = sprintf('Configurator option %s founded but should not', $configuratorOption);
-                MinkHelper::throwException($message);
+                Helper::throwException($message);
             }
         }
     }
@@ -213,8 +198,8 @@ class Detail extends Page implements HelperSelectorInterface
      */
     public function writeEvaluation(array $data)
     {
-        MinkHelper::fillForm($this, 'voteForm', $data);
-        MinkHelper::pressNamedButton($this, 'voteFormSubmit');
+        Helper::fillForm($this, 'voteForm', $data);
+        Helper::pressNamedButton($this, 'voteFormSubmit');
     }
 
     /**
@@ -228,15 +213,17 @@ class Detail extends Page implements HelperSelectorInterface
     public function checkSelect($select, $min, $max, $graduation)
     {
         $selectBox = $this->findField($select);
+        $min = strval($min);
+        $max = strval($max);
 
         if (empty($selectBox)) {
             $message = sprintf('Select box "%s" was not found!', $select);
-            MinkHelper::throwException($message);
+            Helper::throwException($message);
         }
 
         $options = $selectBox->findAll('css', 'option');
 
-        $errors = array();
+        $errors = [];
         $optionText = $options[0]->getText();
         $parts = explode(' ', $optionText, 2);
         $value = $parts[0];
@@ -261,7 +248,7 @@ class Detail extends Page implements HelperSelectorInterface
         }
 
         if(!empty($errors)) {
-            MinkHelper::throwException($errors);
+            Helper::throwException($errors);
         }
     }
 
@@ -271,14 +258,14 @@ class Detail extends Page implements HelperSelectorInterface
      */
     public function submitNotification($email)
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'sNotificationEmail',
                 'value' => $email
-            )
-        );
+            ]
+        ];
 
-        MinkHelper::fillForm($this, 'notificationForm', $data);
-        MinkHelper::pressNamedButton($this, 'notificationFormSubmit');
+        Helper::fillForm($this, 'notificationForm', $data);
+        Helper::pressNamedButton($this, 'notificationFormSubmit');
     }
 }

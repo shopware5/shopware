@@ -4,32 +4,13 @@ namespace  Shopware\Tests\Mink\Page\Emotion;
 use Shopware\Tests\Mink\Element\Emotion\SitemapGroup;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
-use Shopware\Tests\Mink\HelperSelectorInterface;
 
-class Sitemap extends Page implements HelperSelectorInterface
+class Sitemap extends Page
 {
     /**
      * @var string $path
      */
     protected $path = '/sitemap{xml}';
-
-    /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
-     */
-    public function getCssSelectors()
-    {
-        return array();
-    }
-
-    /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
-     */
-    public function getNamedSelectors()
-    {
-        return array();
-    }
 
     /**
      * @param SitemapGroup|string $group
@@ -68,10 +49,10 @@ class Sitemap extends Page implements HelperSelectorInterface
      */
     private function checkGroupTitleLink($title, $link, array $data)
     {
-        $check = array(
-            'title' => array($data['title'], $title),
-            'link'  => array($data['link'],  $link),
-        );
+        $check = [
+            'title' => [$data['title'], $title],
+            'link'  => [$data['link'],  $link],
+        ];
 
         $result = Helper::checkArray($check);
 
@@ -82,10 +63,10 @@ class Sitemap extends Page implements HelperSelectorInterface
         if ($result === 'title') {
             $message = sprintf('Title of "%s" has a different value! (is "%s")', $check['title'][1], $check['title'][0]);
         } elseif (empty($link)) {
-            $message = array(
+            $message = [
                 sprintf('There is a link for the group "%s"!', $title),
                 $check['link'][0]
-            );
+            ];
         } else {
             $message = sprintf('The link of "%s" is different! ("%s" not found in "%s")', $title, $check['link'][1], $check['link'][0]);
         }
@@ -102,11 +83,11 @@ class Sitemap extends Page implements HelperSelectorInterface
     private function checkGroupSite($title, $link, array $data)
     {
         foreach($data as $site) {
-            $check = array(
-                array($site['value'], $title),
-                array($site['title'], $title),
-                array($site['link'],  $link)
-            );
+            $check = [
+                [$site['value'], $title],
+                [$site['title'], $title],
+                [$site['link'],  $link]
+            ];
 
             $result = Helper::checkArray($check);
 
@@ -127,20 +108,20 @@ class Sitemap extends Page implements HelperSelectorInterface
         $homepageUrl = rtrim($this->getParameter('base_url'), '/');
         $xml = new \SimpleXMLElement($this->getContent());
 
-        $check = array();
+        $check = [];
         $i = 0;
 
         foreach($xml as $link) {
             if(empty($links[$i])) {
-                $messages = array(
+                $messages = [
                     'There are more links in the sitemap.xml as expected!',
                     sprintf('(%d sites in sitemap.xml, %d in test data', count($xml), count($links))
-                );
+                ];
 
                 Helper::throwException($messages);
             }
 
-            $check[] = array((string) $link->loc, $homepageUrl . $links[$i]['link']);
+            $check[] = [(string) $link->loc, $homepageUrl . $links[$i]['link']];
             $i++;
         }
 
@@ -150,11 +131,11 @@ class Sitemap extends Page implements HelperSelectorInterface
             return;
         }
 
-        $messages = array(
+        $messages = [
             'A link is different!',
             'Read: ' . $check[$result][0],
             'Expected: ' . $check[$result][1]
-        );
+        ];
 
         Helper::throwException($messages);
     }

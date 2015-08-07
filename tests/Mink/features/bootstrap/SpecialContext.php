@@ -2,9 +2,9 @@
 
 namespace Shopware\Tests\Mink;
 
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Emotion\Homepage;
 use Shopware\Tests\Mink\Element\MultipleElement;
-use Behat\Behat\Context\Step;
 
 class SpecialContext extends SubContext
 {
@@ -13,32 +13,31 @@ class SpecialContext extends SubContext
      */
     public function theArticlesFromHaveTaxId($supplier, $taxId)
     {
-        $taxId = intval($taxId);
-
         $sql = sprintf(
             'UPDATE s_articles SET taxID = %d WHERE supplierID =
                 (SELECT id FROM s_articles_supplier WHERE name = "%s")',
             $taxId,
             $supplier
         );
+
         $this->getContainer()->get('db')->exec($sql);
     }
 
     /**
-     * @Given /^I am on the page "(?P<page>[^"]*)"$/
-     * @When /^I go to the page "(?P<page>[^"]*)"$/
+     * @Given /^I am on the (page "[^"]*")$/
+     * @When /^I go to the (page "[^"]*")$/
      */
-    public function iAmOnThePage($page)
+    public function iAmOnThePage(Page $page)
     {
-        $this->getPage($page)->open();
+        $page->open();
     }
 
     /**
-     * @Then /^I should be on the page "(?P<page>[^"]*)"$/
+     * @Then /^I should be on the (page "[^"]*")$/
      */
-    public function iShouldBeOnThePage($page)
+    public function iShouldBeOnThePage(Page $page)
     {
-        $this->getPage($page)->verifyPage();
+        $page->verifyPage();
     }
 
     /**
@@ -50,15 +49,14 @@ class SpecialContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
         $elements = $this->getMultipleElement($page, $elementClass);
-        Helper::assertElementCount($elements, intval($count));
+        Helper::assertElementCount($elements, $count);
     }
 
     /**
-     * @When /^I follow the link "(?P<linkName>[^"]*)" of the page "(?P<pageClass>[^"]*)"$/
+     * @When /^I follow the link "(?P<linkName>[^"]*)" of the (page "[^"]*")$/
      */
-    public function iFollowTheLinkOfThePage($linkName, $pageClass)
+    public function iFollowTheLinkOfThePage($linkName, Page $page)
     {
-        $page = $this->getPage($pageClass);
         Helper::clickNamedLink($page, $linkName);
     }
 

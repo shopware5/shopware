@@ -18,8 +18,7 @@ class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
     protected $selector = ['css' => 'div.filter--container label.filter-panel--title'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

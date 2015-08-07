@@ -17,8 +17,7 @@ class HeaderCart extends \Shopware\Tests\Mink\Element\Emotion\HeaderCart
     protected $selector = ['css' => 'li.navigation--entry.entry--cart'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

@@ -29,14 +29,14 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    Examples:
-        | paymentMethod | shippingMethod | shippingCosts | totalSum |
-        | 5             | 9              | 3,90 €        | 141,89 € |
-        | 3             | 9              | 3,90 €        | 141,89 € |
-        | 4             | 9              | 3,90 €        | 146,89 € |
-        | 5             | 14             | 9,90 €        | 147,89 € |
-        | 3             | 14             | 9,90 €        | 147,89 € |
-        | 4             | 14             | 9,90 €        | 152,89 € |
+        Examples:
+            | paymentMethod | shippingMethod | shippingCosts | totalSum |
+            | 5             | 9              | 3,90 €        | 141,89 € |
+            | 3             | 9              | 3,90 €        | 141,89 € |
+            | 4             | 9              | 3,90 €        | 146,89 € |
+            | 5             | 14             | 9,90 €        | 147,89 € |
+            | 3             | 14             | 9,90 €        | 147,89 € |
+            | 4             | 14             | 9,90 €        | 152,89 € |
 
     @fastOrder @payment @shipping @noEmotion
     Scenario: I can finish my order with different payment and delivery methods
