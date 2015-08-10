@@ -322,7 +322,7 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        $filname = md5($timestamp.$shop->getTemplate()->getId().$shop->getId().\Shopware::REVISION);
+        $filname = $timestamp.'_'.md5($timestamp.$shop->getTemplate()->getId().$shop->getId().\Shopware::REVISION);
 
         return $filname.'.'.$suffix;
     }

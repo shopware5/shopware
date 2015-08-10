@@ -50,7 +50,7 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
         $templateMock = $this->createTemplateMock($templateId);
         $shopMock = $this->createShopMock($shopId, $templateMock);
 
-        $filenameHash = md5($timestamp.$templateId.$shopId.\Shopware::REVISION);
+        $filenameHash = $timestamp.'_'.md5($timestamp.$templateId.$shopId.\Shopware::REVISION);
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.css';
         $this->assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));
