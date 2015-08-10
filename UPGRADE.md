@@ -106,6 +106,14 @@ In this document you will find a changelog of the important changes related to t
         * escapeJs
         * escapeUrl
         * escapeCss
+* The following basic settings values are deprecated and will be removed in Shopware 5.2. Their corresponding snippet values from the `backend/static/discounts_surcharges` namespace should be used instead:
+    * `discountname`
+    * `paymentSurchargeAbsolute`
+    * `paymentsurchargeadd`
+    * `paymentsurchargedev`
+    * `shippingdiscountname`
+    * `surchargename`
+    * `vouchername`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
