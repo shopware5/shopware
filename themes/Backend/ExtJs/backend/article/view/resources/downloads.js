@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
                 {
                     xtype: 'button',
                     iconCls: 'sprite-chain-plus',
-                    cls: 'small',
+                    cls: 'small primary',
                     text: me.snippets.button,
                     handler: function() {
                         me.fireEvent('addDownload', me.downloadGrid, me.downloadForm)

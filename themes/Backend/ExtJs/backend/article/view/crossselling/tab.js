@@ -53,26 +53,6 @@ Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
     cls: Ext.baseCSSPrefix + 'article-crossselling-tab',
 
     /**
-     * Layout definition for the component.
-     *
-     * @object
-     */
-    layout: {
-        type: 'vbox',
-        pack: 'start',
-        align: 'stretch'
-    },
-
-    /**
-     * Default settings for direct childrens of the component.
-     *
-     * @object
-     */
-    defaults: {
-        flex: 1
-    },
-
-    /**
      * Padding for the body element.
      *
      * @number

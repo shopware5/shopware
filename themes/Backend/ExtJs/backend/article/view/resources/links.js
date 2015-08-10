@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
                 }, {
                     xtype: 'button',
                     iconCls: 'sprite-chain-plus',
-                    cls: 'small',
+                    cls: 'small primary',
                     text: me.snippets.button,
                     handler: function() {
                         me.fireEvent('addLink', me.linkGrid, me.linkForm);

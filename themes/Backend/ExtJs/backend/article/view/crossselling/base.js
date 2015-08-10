@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
         'productSearch':'{s name=detail/sidebar/similar/article_search}Article{/s}',
         'crossField': '{s name=detail/sidebar/similar/assignment_field}Assignment{/s}',
         'crossBox': '{s name=detail/sidebar/similar/assignment_box}Assign each other{/s}',
+        'crossGrid': '{s name=detail/sidebar/similar/assignment_grid}Assigned to each other{/s}',
         'delete': '{s name=detail/sidebar/similar/delete}Remove entry{/s}',
         'name': '{s name=detail/sidebar/similar/name}Article name{/s}'
     },
@@ -133,7 +134,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
         var me = this;
 
         return me.form = Ext.create('Ext.form.Panel', {
-            margin: '0 10 0 0',
+            margin: '0 20 0 0',
             layout: 'anchor',
             border: false,
             columnWidth: 0.35,
@@ -228,18 +229,21 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
             cls: Ext.baseCSSPrefix + 'free-standing-grid',
             store: me.gridStore,
             name: me.listingName,
-            margin: '0 0 0 10',
-            minHeight: 180,
+            height: 180,
             columnWidth: 0.65,
             columns: [
                 {
                     header: me.systemTexts.productSearch,
                     dataIndex: 'number',
-                    flex: 1
+                    width: 120
                 }, {
                     header: me.systemTexts.name,
                     dataIndex: 'name',
                     flex: 1
+                }, {
+                    header: me.systemTexts.crossGrid,
+                    dataIndex: 'cross',
+                    width: 150
                 }, {
                     xtype: 'actioncolumn',
                     width: 30,
