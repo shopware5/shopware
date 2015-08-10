@@ -101,7 +101,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
                 $output->writeln('<comment>Error stack:</comment>');
                 $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
                 foreach ($stack as $trace) {
-                    $output->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', $trace['class'], $trace['type'], $trace['function'], $trace['file'], $trace['line']));
+                    $output->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', isset($trace['class']) ? $trace['class'] : '', isset($trace['type']) ? $trace['type'] : '', isset($trace['function']) ? $trace['function'] : '', isset($trace['file']) ? $trace['file'] : '', isset($trace['line']) ? $trace['line'] : ''));
                 }
                 $output->writeln('');
                 $output->writeln('');
