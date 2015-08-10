@@ -57,21 +57,29 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $searchIndexer;
 
     /**
+     * @var TermHelperInterface
+     */
+    private $termHelper;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
      * @param KeywordFinderInterface $keywordFinder
      * @param SearchIndexerInterface $searchIndexer
+     * @param TermHelperInterface $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
         KeywordFinderInterface $keywordFinder,
-        SearchIndexerInterface $searchIndexer
+        SearchIndexerInterface $searchIndexer,
+        TermHelperInterface $termHelper
     ) {
         $this->config = $config;
         $this->connection = $connection;
         $this->keywordFinder = $keywordFinder;
         $this->searchIndexer = $searchIndexer;
+        $this->termHelper = $termHelper;
 
         $this->searchIndexer->validate();
     }
@@ -97,6 +105,11 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     {
         $keywords = $this->keywordFinder->getKeywordsOfTerm($term);
 
+//        echo "<pre>";
+//        var_dump($keywords);
+//        echo "</pre>";
+//        exit();
+
         if (empty($keywords)) {
             return null;
         }
@@ -117,6 +130,16 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
                 "(" . $this->getRelevanceSelection() . ") as ranking"
             ]
         );
+
+        $enableAndSearchLogic = $this->config->get('enableAndSearchLogic', false);
+        if ($enableAndSearchLogic) {
+            $this->addAndSearchLogic($query, $term, $keywords);
+        }
+
+//        echo "<pre>";
+//        var_dump($query->getSQL());
+//        echo "</pre>";
+//        exit();
 
         return $query;
     }
@@ -224,5 +247,77 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
                     AND sf.relevance != 0
             GROUP BY sf.tableID
        ");
+    }
+
+    /**
+     * checks if the given result set matches all search terms
+     *
+     * @param QueryBuilder $query
+     * @param string $term
+     * @param Keyword[] $keywords
+     */
+    private function addAndSearchLogic($query, $term, $keywords)
+    {
+        $searchTerms = $this->termHelper->splitTerm($term);
+
+        $searchTermMatchQueries = $this->createSearchTermMatchQueries($keywords, $searchTerms);
+
+        $totalSearchTermMatchesQuery = $this->connection->createQueryBuilder();
+
+        $totalSearchTermMatchesQuery->select('sum(matches)')
+            ->from('(' . $searchTermMatchQueries . ')', 'termMatches')
+            ->where('termMatches.elementID = product_id');
+
+        $query->addSelect('(' . $totalSearchTermMatchesQuery->getSQL() . ') AS searchTermMatches');
+        $query->having('searchTermMatches >= ' . count($searchTerms));
+    }
+
+    /**
+     * creates the search term match query. makes sure that, for each search term at least one keyword matches
+     *
+     * @param Keyword[] $keywords
+     * @param $searchTerms
+     * @return string
+     */
+    private function createSearchTermMatchQueries($keywords, $searchTerms)
+    {
+        $searchTermMatchQueries = [];
+        foreach ($searchTerms as $searchTerm) {
+
+            $searchKeywordIds = [];
+            foreach ($keywords as $keyword) {
+                if ($keyword->getTerm() == $searchTerm) {
+                    $searchKeywordIds[] = $keyword->getId();
+                }
+            }
+
+            $searchTermMatchQueries[] = $this->createSearchTermMatchQuery($searchKeywordIds);
+        }
+
+        $searchTermMatchQueries = "\n" . implode("\n     UNION ALL\n", $searchTermMatchQueries);
+
+        return $searchTermMatchQueries;
+    }
+
+    /**
+     * checks if at least one keyword matches to a search term
+     *
+     * @param $searchKeywordIds
+     * @return string
+     */
+    private function createSearchTermMatchQuery($searchKeywordIds)
+    {
+        //if there is no keyword for a search term we need this little hack to prevent an empty IN condition
+        if (empty($searchKeywordIds)) {
+            $searchKeywordIds[] = -1;
+        }
+
+        $searchTermMatchQuery = $this->connection->createQueryBuilder();
+        $searchTermMatchQuery->select('DISTINCT 1 AS matches, elementID')
+            ->from('s_search_index', 'search_index')
+            ->innerJoin('search_index', 's_search_keywords', 'search_keywords', 'search_keywords.id = search_index.keywordID')
+            ->where("search_keywords.id IN(" . implode(',', $searchKeywordIds) . ")");
+
+        return $searchTermMatchQuery->getSQL();
     }
 }
