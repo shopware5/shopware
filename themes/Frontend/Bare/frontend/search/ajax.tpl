@@ -41,7 +41,7 @@
 								<span class="entry--price block">
                                     {$sArticle = $search_result}
                                     {*reset pseudo price value to prevent discount boxes*}
-                                    {$sArticle.pseudoprice = 0}
+                                    {$sArticle.has_pseudoprice = 0}
                                     {include file="frontend/listing/product-box/product-price.tpl" sArticle=$sArticle}
 								</span>
 							{/block}
