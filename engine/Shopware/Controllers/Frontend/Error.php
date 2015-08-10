@@ -159,6 +159,12 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                 'error_file' => $error_file,
                 'error_trace' => $error_trace
             ));
+        } else {
+            /**
+             * Prevent sending error code 503 because of an exception,
+             * if it's not configured that way
+             */
+            $response->unsetExceptions();
         }
 
         if ($this->View()->getAssign('success') !== null) {
