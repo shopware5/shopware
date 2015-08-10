@@ -39,25 +39,25 @@ Ext.define('Shopware.apps.Base.model.PaymentStatus', {
 
     snippets: {
         //{block name="backend/base/model/payment_status/snippets"}{/block}
-        state9: '{s name=partially_invoiced}Partially invoiced{/s}',
-        state10: '{s name=completely_invoiced}Completely invoiced{/s}',
-        state11: '{s name=partially_paid}Partially paid{/s}',
-        state12: '{s name=completely_paid}Completely paid{/s}',
-        state13: '{s name=1st_reminder}1st reminder{/s}',
-        state14: '{s name=2nd_reminder}2nd reminder{/s}',
-        state15: '{s name=3rd_reminder}3rd reminder{/s}',
-        state16: '{s name=encashment}Encashment{/s}',
-        state17: '{s name=open}Open{/s}',
-        state18: '{s name=reserved}Reserved{/s}',
-        state19: '{s name=delayed}Delayed{/s}',
-        state20: '{s name=re_crediting}Re-crediting{/s}',
-        state21: '{s name=review_necessary}Review necessary{/s}',
-        state30: '{s name=no_credit_approved}No credit approved{/s}',
-        state31: '{s name=the_credit_has_been_preliminarily_accepted}The credit has been preliminarily accepted{/s}',
-        state32: '{s name=the_credit_has_been_accepted}The credit has been accepted{/s}',
-        state33: '{s name=the_payment_has_been_ordered_by_hanseatic_bank}The payment has been ordered by Hanseatic Bank.{/s}',
-        state34: '{s name=a_time_extension_has_been_registered}A time extension has been registered{/s}',
-        state35: '{s name=the_process_has_been_cancelled}The process has been cancelled.{/s}'
+        partially_invoiced: '{s name=partially_invoiced}Partially invoiced{/s}',
+        completely_invoiced: '{s name=completely_invoiced}Completely invoiced{/s}',
+        partially_paid: '{s name=partially_paid}Partially paid{/s}',
+        completely_paid: '{s name=completely_paid}Completely paid{/s}',
+        '1st_reminder': '{s name=1st_reminder}1st reminder{/s}',
+        '2nd_reminder': '{s name=2nd_reminder}2nd reminder{/s}',
+        '3rd_reminder': '{s name=3rd_reminder}3rd reminder{/s}',
+        encashment: '{s name=encashment}Encashment{/s}',
+        open: '{s name=open}Open{/s}',
+        reserved: '{s name=reserved}Reserved{/s}',
+        delayed: '{s name=delayed}Delayed{/s}',
+        re_crediting: '{s name=re_crediting}Re-crediting{/s}',
+        review_necessary: '{s name=review_necessary}Review necessary{/s}',
+        no_credit_approved: '{s name=no_credit_approved}No credit approved{/s}',
+        the_credit_has_been_preliminarily_accepted: '{s name=the_credit_has_been_preliminarily_accepted}The credit has been preliminarily accepted{/s}',
+        the_credit_has_been_accepted: '{s name=the_credit_has_been_accepted}The credit has been accepted{/s}',
+        the_payment_has_been_ordered_by_hanseatic_bank: '{s name=the_payment_has_been_ordered_by_hanseatic_bank}The payment has been ordered by Hanseatic Bank.{/s}',
+        a_time_extension_has_been_registered: '{s name=a_time_extension_has_been_registered}A time extension has been registered{/s}',
+        the_process_has_been_cancelled: '{s name=the_process_has_been_cancelled}The process has been cancelled.{/s}'
     },
 
     /**
@@ -84,13 +84,14 @@ Ext.define('Shopware.apps.Base.model.PaymentStatus', {
     fields:[
 		//{block name="backend/base/model/payment_status/fields"}{/block}
         { name:'id', type: 'int' },
+        { name:'name', type: 'string' },
         {
             name:'description',
             type: 'string',
             convert: function(value, record) {
                 var snippet = value;
                 if (record && record.snippets) {
-                    snippet = record.snippets['state' + record.get('id')];
+                    snippet = record.snippets[record.get('name')];
                 }
                 if (Ext.isString(snippet) && snippet.length > 0) {
                     return snippet;

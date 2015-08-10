@@ -118,6 +118,10 @@ In this document you will find a changelog of the important changes related to t
     * Plugin developers which supports variants needs to change their plugin accordingly. They can subscribe to the event `plugin/swAjaxVariant/onRequestData` to update their plugin.
     * If your plugin modifies the product page using Smarty, you're good to go.
 * Deprecated pre-installed import / export module in favor of the new import / export plugin, which is for free now
+* Changed the way in which order and payment status translations are handled:
+    * Added `Shopware\Models\Order\Status::name`. Its value should be matched to the corresponding snippet name in one of the `backend/base/model/order_status/*` namespaces
+    * Deprecated `Shopware\Models\Order\Status::description`
+    * `Shopware.apps.Base.model.OrderStatus` and `Shopware.apps.Base.model.PaymentStatus` ExtJs translations are now done using the `name` instead of the `id`.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
