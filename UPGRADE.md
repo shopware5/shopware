@@ -76,21 +76,12 @@ In this document you will find a changelog of the important changes related to t
     * `detail/sidebar/accessory/edit`
     * `detail/sidebar/accessory/name`
     * `detail/sidebar/accessory/number`
-* Removed unprefixed versions of jQuery plugin events that were deprecated in the 5.0.2 Release.
-* Changed the jQuery core plugin events to new prefixed values in these plugins:
+* Removed all unprefixed jQuery plugin events of the core plugins that were deprecated in the 5.0.2 Release.
+* Removed the jQuery plugin events and added new prefixed values in these core plugins:
     * `jquery.lightbox.js`
     * `jquery.loading-indicator.js`
     * `jquery.modal.js`
     * `jquery.advancedMenu.js`
-* Added new prefixed jQuery Event values to the shopware premium plugins:
-    * `swagAdvancedCart`
-    * `swagLiveShopping`
-    * `swagEmotionAdvanced`
-    * `swagAboCommerce`
-    * `swagCustomizing`
-    * `swagBonusSystem`
-    * `swagBundle`
-    * `swagFuzzy`
 * Move directory `logs/` to `var/log/` and `cache/` to `var/cache`
 * The property selection for an product is now a dedicated tab.
     * The `beforeedit` event will now be triggered on the `article-detail-window grid[name=property-grid]`
