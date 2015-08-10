@@ -95,7 +95,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         if (Shopware()->Bootstrap()->issetResource('Session')) {
             $system->_SESSION = Shopware()->Session();
             $system->sSESSION_ID = Shopware()->SessionID();
-            if (Shopware()->Session()->Bot === null) {
+            if ($request !== null && Shopware()->Session()->Bot === null) {
                 /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
                 Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
