@@ -381,26 +381,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     {
         $options = $this->Application()->getOption('backendSession', array());
 
-        if (!isset($options['cookie_path']) && $this->request !== null) {
-            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';
-        }
-        if (empty($options['gc_maxlifetime'])) {
-            $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = $backendTimeout;
-        }
-        $refererCheck = false;
-        $clientCheck = false;
-        if (is_bool($options['referer_check'])) {
-            $refererCheck = $options['referer_check'];
-            unset($options['referer_check']);
-        }
-        if (!empty($options['client_check'])) {
-            $clientCheck = true;
-        }
-        unset($options['client_check']);
+        $refererCheck = boolval($options['referer_check']);
+        $clientCheck = boolval($options['client_check']);
+
+        $options = $this->prepareSessionOptions($options);
 
         if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
-            // SW-4819 Add database backend support
             $config_save_handler = array(
                'name'           => 's_core_sessions_backend',
                'primary'        => 'id',
@@ -415,8 +401,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
         Enlight_Components_Session::start($options);
 
-        if ($refererCheck && ($referer = $this->request->getHeader('referer')) !== null
-          && strpos($referer, 'http') === 0) {
+        if (
+            !$this->isBackendHomepage()
+            && $refererCheck
+            && ($referer = $this->request->getHeader('referer')) !== null
+            && strpos($referer, 'http') === 0
+        ) {
             $referer = substr($referer, 0, strpos($referer, '/backend/'));
             $referer .= '/backend/';
 
@@ -427,7 +417,10 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                 throw new Exception('Referer check for backend session failed');
             }
         }
-        if ($clientCheck && ($client = $this->request->getHeader('userAgent')) !== null) {
+        if (
+            $clientCheck
+            && ($client = $this->request->getHeader('userAgent')) !== null
+        ) {
             if (!isset($_SESSION['__SW_CLIENT'])) {
                 $_SESSION['__SW_CLIENT'] = $client;
             } elseif ($client !==  $_SESSION['__SW_CLIENT']) {
@@ -437,6 +430,29 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         return new Enlight_Components_Session_Namespace('ShopwareBackend');
+    }
+
+    /**
+     * Detects if the current request represents a request for the backend's homepage
+     *
+     * @return bool
+     */
+    private function isBackendHomepage()
+    {
+        if ($this->request->getParam('controller', 'index') != 'index') {
+            return false;
+        }
+        if ($this->request->getParam('action', 'index') != 'index') {
+            return false;
+        }
+        if ($this->request->getParam('module', 'backend') != 'backend') {
+            return false;
+        }
+
+        $basePath = $this->request->getBasePath();
+        $uri = $this->request->getRequestUri();
+
+        return (str_replace($basePath, '', $uri) === '/backend/');
     }
 
     /**
@@ -482,7 +498,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
-        if (Shopware()->Container()->initialized('auth')) {
+        $options = $this->Application()->getOption('backendSession', array());
+        $options = $this->prepareSessionOptions($options);
+
+        Enlight_Components_Session::setOptions($options);
+
+        if (Enlight_Components_Session::sessionExists()) {
             $auth = Shopware()->Auth();
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
@@ -498,5 +519,28 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         )->find($default);
 
         return $locale;
+    }
+
+    /**
+     * Filters and transforms the session options array
+     * so it complies with the format expected by Enlight_Components_Session
+     *
+     * @param array $options
+     * @return array
+     */
+    private function prepareSessionOptions($options)
+    {
+        if (!isset($options['cookie_path']) && $this->request !== null) {
+            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/').'/backend/';
+        }
+        if (empty($options['gc_maxlifetime'])) {
+            $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
+            $options['gc_maxlifetime'] = $backendTimeout;
+        }
+
+        unset($options['referer_check']);
+        unset($options['client_check']);
+
+        return $options;
     }
 }
