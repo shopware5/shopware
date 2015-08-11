@@ -591,23 +591,26 @@ class LegacyStructConverter
     public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
     {
         $result = [];
-        foreach ($set->getGroups() as $group) {
-            $values = array_map(
-                function (StoreFrontBundle\Struct\Property\Option $option) {
-                    return $option->getName();
-                },
-                $group->getOptions()
-            );
 
-            $result[$group->getId()] = [
-                'id'        => $group->getId(),
-                'optionID'  => $group->getId(),
-                'name'      => $group->getName(),
-                'groupID'   => $set->getId(),
-                'groupName' => $set->getName(),
-                'value'     => implode(', ', $values),
-                'values'    => $values,
-            ];
+        if ($set instanceof StoreFrontBundle\Struct\Property\Set) {
+            foreach ($set->getGroups() as $group) {
+                $values = array_map(
+                    function (StoreFrontBundle\Struct\Property\Option $option) {
+                        return $option->getName();
+                    },
+                    $group->getOptions()
+                );
+
+                $result[$group->getId()] = [
+                    'id'        => $group->getId(),
+                    'optionID'  => $group->getId(),
+                    'name'      => $group->getName(),
+                    'groupID'   => $set->getId(),
+                    'groupName' => $set->getName(),
+                    'value'     => implode(', ', $values),
+                    'values'    => $values,
+                ];
+            }
         }
 
         return $result;
