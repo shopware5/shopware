@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
         'productSearch':'{s name=detail/sidebar/similar/article_search}Article{/s}',
         'crossField': '{s name=detail/sidebar/similar/assignment_field}Assignment{/s}',
         'crossBox': '{s name=detail/sidebar/similar/assignment_box}Assign each other{/s}',
-        'crossGrid': '{s name=detail/sidebar/similar/assignment_grid}Assigned to each other{/s}',
         'delete': '{s name=detail/sidebar/similar/delete}Remove entry{/s}',
         'name': '{s name=detail/sidebar/similar/name}Article name{/s}'
     },
@@ -240,10 +239,6 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
                     header: me.systemTexts.name,
                     dataIndex: 'name',
                     flex: 1
-                }, {
-                    header: me.systemTexts.crossGrid,
-                    dataIndex: 'cross',
-                    width: 150
                 }, {
                     xtype: 'actioncolumn',
                     width: 30,
