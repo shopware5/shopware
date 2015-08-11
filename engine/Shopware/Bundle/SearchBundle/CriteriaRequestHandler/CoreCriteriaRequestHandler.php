@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Controller_Request_Request as Request;
+use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
