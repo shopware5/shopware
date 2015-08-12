@@ -111,7 +111,6 @@ class CategoryFacetHandler implements FacetHandlerInterface
         ShopContextInterface $context
     ) {
         $ids = $this->getCategoryIds($criteria, $context);
-
         $categories = $this->categoryService->getList($ids, $context);
 
         $active = [];
@@ -133,6 +132,9 @@ class CategoryFacetHandler implements FacetHandlerInterface
     private function createTreeFacet($categories, $facet, $active)
     {
         $items = $this->getCategoriesOfParent($categories, null);
+        if (!$items) {
+            return null;
+        }
 
         $values = [];
         foreach ($items as $item) {
@@ -176,6 +178,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
                 $result[] = $category;
             }
         }
+
         return $result;
     }
 
