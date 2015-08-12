@@ -222,6 +222,7 @@ class Kernel implements HttpKernelInterface
                 $cookieContent['value'],
                 $cookieContent['expire'],
                 $cookieContent['path'],
+                $cookieContent['domain'],
                 (bool) $cookieContent['secure'],
                 (bool) $cookieContent['httpOnly']
             );
