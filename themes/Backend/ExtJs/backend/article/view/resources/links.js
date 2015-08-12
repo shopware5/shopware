@@ -219,9 +219,7 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
                         xtype: 'checkbox'
                     },
                     // return true / false instead of active/inactive
-                    renderer: function(value) {
-                        return value;
-                    }
+                    renderer: me.statusColumn
                 }, {
                     xtype: 'actioncolumn',
                     width: 30,
@@ -239,6 +237,21 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
         });
 
         return me.linkGridElements;
+    },
+
+    /**
+      * Column renderer function for the status column.
+      *
+      * @param [string] value    - The field value
+      * @param [string] metaData - The model meta data
+      * @param [string] record   - The whole data model
+      */
+    statusColumn: function(value, metaData, record) {
+        if (record.get('target')) {
+            return '<div class="sprite-ui-check-box" style="width: 12px; height: 12px">&nbsp;</div>';
+        } else {
+            return '<div class="sprite-cross-small" style="width: 12px; height: 12px">&nbsp;</div>';
+        }
     }
 
 });

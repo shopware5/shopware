@@ -271,6 +271,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         article.setDirty();
         article.save({
             success: function(record, operation) {
+
                 var newArticle = operation.getResultSet().records[0],
                     message = Ext.String.format(me.snippets.saved.message, article.get('name'));
 
@@ -685,7 +686,14 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     prepareArticleProperties: function(article, callback) {
         var me = this,
-            propertyStore = me.getStore('Property');
+            propertyStore = me.getStore('Property'),
+            opts = {
+                callback: function () {
+                    if (Ext.isFunction(callback)) {
+                        callback();
+                    }
+                }
+            };
 
         if(article.get('id')) {
             propertyStore.getProxy().extraParams.articleId = article.get('id');
@@ -693,13 +701,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         propertyStore.each(function(property) {
             property.setDirty();
         });
-        propertyStore.save({
-            callback: function() {
-                if (Ext.isFunction(callback)) {
-                    callback();
-                }
-            }
-        });
+
+        propertyStore[propertyStore.getUpdatedRecords().length ? 'save' : 'load'](opts);
     },
 
     /**
