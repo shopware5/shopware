@@ -45,7 +45,9 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
             $templateModule = 'frontend';
             if ($this->Request()->getModuleName() == 'backend') {
                 $templateModule = 'backend';
+                $this->enableBackendTheme();
             }
+
             if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
                 $this->Front()->Plugins()->Json()->setRenderer();
                 $this->View()->assign('success', false);
@@ -171,5 +173,20 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
     public function serviceAction()
     {
         $this->Response()->setHttpResponseCode(503);
+    }
+
+    /**
+     * Ensure the backend theme is enabled.
+     * This is important in cases when a backend request uses the storefront context eg. "$shop->registerResources($this)".
+     */
+    private function enableBackendTheme()
+    {
+        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
+        Shopware()->Container()->get('template')->setTemplateDir(
+            array(
+                'backend' => $directory,
+                'include_dir' => '.'
+            )
+        );
     }
 }
