@@ -33,6 +33,7 @@
         "doctrine/dbal": "2.4.2",
         "doctrine/orm": "2.4.4",
         "beberlei/assert": "2.3.0",
+        "zendframework/zend-escaper": "2.5.1",
         "oyejorge/less.php": "1.7.0.3",
         "guzzlehttp/guzzle": "5.1.0",
         "egulias/email-validator": "1.2.7",
