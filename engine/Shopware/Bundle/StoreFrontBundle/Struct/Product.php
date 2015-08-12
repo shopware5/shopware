@@ -40,6 +40,11 @@ class Product extends ListProduct implements \JsonSerializable
     protected $relatedProducts;
 
     /**
+     * @var ProductStream[]
+     */
+    protected $relatedProductStreams;
+
+    /**
      * @var ListProduct[]
      */
     protected $similarProducts;
@@ -169,6 +174,22 @@ class Product extends ListProduct implements \JsonSerializable
     public function getRelatedProducts()
     {
         return $this->relatedProducts;
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[]
+     */
+    public function getRelatedProductStreams()
+    {
+        return $this->relatedProductStreams;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[] $relatedProductStreams
+     */
+    public function setRelatedProductStreams($relatedProductStreams)
+    {
+        $this->relatedProductStreams = $relatedProductStreams;
     }
 
     /**

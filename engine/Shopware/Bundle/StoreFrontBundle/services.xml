@@ -41,6 +41,7 @@
             <argument type="service" id="shopware_storefront.vote_service"/>
             <argument type="service" id="shopware_storefront.media_service"/>
             <argument type="service" id="shopware_storefront.related_products_service"/>
+            <argument type="service" id="shopware_storefront.related_product_streams_service"/>
             <argument type="service" id="shopware_storefront.similar_products_service"/>
             <argument type="service" id="shopware_storefront.product_download_service"/>
             <argument type="service" id="shopware_storefront.product_link_service"/>
@@ -64,6 +65,10 @@
         <service id="shopware_storefront.related_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\RelatedProductsService">
             <argument type="service" id="shopware_storefront.related_products_gateway"/>
             <argument type="service" id="shopware_storefront.list_product_service"/>
+        </service>
+
+        <service id="shopware_storefront.related_product_streams_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\RelatedProductStreamsService">
+            <argument type="service" id="shopware_storefront.related_product_streams_gateway"/>
         </service>
 
         <service id="shopware_storefront.similar_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\SimilarProductsService">
@@ -205,6 +210,12 @@
             <argument type="service" id="dbal_connection"/>
         </service>
 
+        <service id="shopware_storefront.related_product_streams_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\RelatedProductStreamsGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.product_stream_hydrator_dbal"/>
+        </service>
+
         <service id="shopware_storefront.similar_products_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\SimilarProductsGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="config"/>
@@ -307,6 +318,8 @@
         <service id="shopware_storefront.tax_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
 
         <service id="shopware_storefront.unit_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
+
+        <service id="shopware_storefront.product_stream_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator"/>
 
         <service id="shopware_storefront.vote_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator"/>
 

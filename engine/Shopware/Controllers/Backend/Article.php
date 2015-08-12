@@ -1801,6 +1801,21 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Loads related product streams data for the given article
+     *
+     * @param $articleId
+     * @return array
+     */
+    public function getArticleRelatedProductStreams($articleId)
+    {
+        $result = $this->get('models')->getRepository('Shopware\Models\Article\Article')
+            ->getArticleRelatedProductStreamsQuery($articleId)
+            ->getArrayResult();
+
+        return $result ? : [];
+    }
+
+    /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
      * data. The full article data stack is defined in the
@@ -2020,6 +2035,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data[0]['seoCategories'] = $this->getArticleSeoCategories($id);
 
         $data[0]['similar'] = $this->getArticleSimilars($id);
+        $data[0]['streams'] = $this->getArticleRelatedProductStreams($id);
         $data[0]['related'] = $this->getArticleRelated($id);
         $data[0]['images'] = $this->getArticleImages($id);
 
@@ -2753,6 +2769,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs related article association
         $data = $this->prepareRelatedAssociatedData($data, $article);
 
+        //format the posted extJs related product streams association
+        $data = $this->prepareRelatedProductStreamsData($data);
+
         //format the posted extJs similar article association
         $data = $this->prepareSimilarAssociatedData($data, $article);
 
@@ -3047,6 +3066,29 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $related[] = $relatedArticle;
         }
         $data['related'] = $related;
+
+        return $data;
+    }
+
+    /**
+     * This function loads the related product stream models for the passed ids in the "streams" parameter.
+     * @param [] $data
+     * @return Shopware\Models\ProductStream\ProductStream[]
+     */
+    protected function prepareRelatedProductStreamsData($data)
+    {
+        $relatedStreams = array();
+        foreach ($data['streams'] as $relatedProductStreamData) {
+            if (empty($relatedProductStreamData['id'])) {
+                continue;
+            }
+            /** @var $relatedProductStream \Shopware\Models\ProductStream\ProductStream */
+            $relatedProductStream = $this->get('models')->getRepository('Shopware\Models\ProductStream\ProductStream')
+                ->find($relatedProductStreamData['id']);
+
+            $relatedStreams[] = $relatedProductStream;
+        }
+        $data['relatedProductStreams'] = $relatedStreams;
 
         return $data;
     }

@@ -55,6 +55,11 @@ class ProductService implements Service\ProductServiceInterface
     private $relatedProductsService;
 
     /**
+     * @var Service\RelatedProductStreamsServiceInterface
+     */
+    private $relatedProductStreamsService;
+
+    /**
      * @var Service\SimilarProductsServiceInterface
      */
     private $similarProductsService;
@@ -84,6 +89,7 @@ class ProductService implements Service\ProductServiceInterface
      * @param Service\VoteServiceInterface $voteService
      * @param Service\MediaServiceInterface $mediaService
      * @param Service\RelatedProductsServiceInterface $relatedProductsService
+     * @param Service\RelatedProductStreamsServiceInterface $relatedProductStreamsService
      * @param Service\SimilarProductsServiceInterface $similarProductsService
      * @param Service\ProductDownloadServiceInterface $downloadService
      * @param Service\ProductLinkServiceInterface $linkService
@@ -96,6 +102,7 @@ class ProductService implements Service\ProductServiceInterface
         Service\VoteServiceInterface $voteService,
         Service\MediaServiceInterface $mediaService,
         Service\RelatedProductsServiceInterface $relatedProductsService,
+        Service\RelatedProductStreamsServiceInterface $relatedProductStreamsService,
         Service\SimilarProductsServiceInterface $similarProductsService,
         Service\ProductDownloadServiceInterface $downloadService,
         Service\ProductLinkServiceInterface $linkService,
@@ -105,6 +112,7 @@ class ProductService implements Service\ProductServiceInterface
     ) {
         $this->voteService = $voteService;
         $this->relatedProductsService = $relatedProductsService;
+        $this->relatedProductStreamsService = $relatedProductStreamsService;
         $this->similarProductsService = $similarProductsService;
         $this->downloadService = $downloadService;
         $this->linkService = $linkService;
@@ -146,6 +154,8 @@ class ProductService implements Service\ProductServiceInterface
 
         $relatedProducts = $this->relatedProductsService->getList($listProducts, $context);
 
+        $relatedProductStreams = $this->relatedProductStreamsService->getList($listProducts, $context);
+
         $similarProducts = $this->similarProductsService->getList($listProducts, $context);
 
         $downloads = $this->downloadService->getList($listProducts, $context);
@@ -166,6 +176,10 @@ class ProductService implements Service\ProductServiceInterface
 
             if (isset($relatedProducts[$number])) {
                 $product->setRelatedProducts($relatedProducts[$number]);
+            }
+
+            if (isset($relatedProductStreams[$number])) {
+                $product->setRelatedProductStreams($relatedProductStreams[$number]);
             }
 
             if (isset($similarProducts[$number])) {

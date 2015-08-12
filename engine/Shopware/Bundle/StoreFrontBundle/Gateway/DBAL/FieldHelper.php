@@ -726,6 +726,21 @@ class FieldHelper
         ];
     }
 
+    /**
+     * Returns an array with all required related product stream fields.
+     * Requires that the s_product_stream table is included with table alias 'stream'
+     *
+     * @return array
+     */
+    public function getRelatedProductStreamFields()
+    {
+        return [
+            'stream.id as __stream_id',
+            'stream.name as __stream_name',
+            'stream.description as __stream_description',
+            'stream.type as __stream_type',
+        ];
+    }
 
     /**
      * @param QueryBuilder $query
@@ -1216,5 +1231,46 @@ class FieldHelper
             ['manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix]
         )
             ->setParameter(':manufacturerType', 'supplier');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        if ($context->getShop()->isDefault()) {
+            return;
+        }
+
+        $this->addProductStreamTranslationWithSuffix($query);
+        $query->setParameter(':language', $context->getShop()->getId());
+
+        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
+            $this->addProductStreamTranslationWithSuffix($query, 'Fallback');
+            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+        }
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param string $suffix
+     */
+    private function addProductStreamTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    {
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
+        $query->leftJoin(
+            'stream',
+            's_core_translations',
+            'streamTranslation' . $suffix,
+            'streamTranslation' . $suffix . '.objecttype = :streamType AND
+             streamTranslation' . $suffix . '.objectkey = stream.id AND
+             streamTranslation' . $suffix . '.objectlanguage = :language' . $suffix
+        );
+        $query->addSelect(
+            ['streamTranslation' . $suffix . '.objectdata as __stream_translation' . $selectSuffix]
+        )
+            ->setParameter(':streamType', 'productStream');
     }
 }

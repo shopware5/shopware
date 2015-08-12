@@ -9,12 +9,16 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         { ref: 'shopCombo', selector: 'product-stream-preview-grid combo[name=shop]' },
         { ref: 'currencyCombo', selector: 'product-stream-preview-grid combo[name=currency]' },
         { ref: 'customerGroupCombo', selector: 'product-stream-preview-grid combo[name=customerGroup]' },
+        { ref: 'productStreamGrid', selector: 'product-stream-listing-grid' },
     ],
 
     init: function() {
         var me = this;
 
         me.control({
+            'product-stream-defined-list-window': {
+                'save-defined-list': me.saveDefinedList
+            },
             'product-stream-condition-panel': {
                 'load-preview': me.loadPreview
             },
@@ -27,6 +31,21 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
+    },
+
+    saveDefinedList: function(record) {
+        var me = this;
+
+        var settingsPanel = me.getSettingsPanel();
+
+        if (!settingsPanel.getForm().isValid()) {
+            return;
+        }
+
+        settingsPanel.getForm().updateRecord(record);
+        record.set('sorting', me.getSorting());
+        record.set('conditions', null);
+        this.saveRecord(record);
     },
 
     saveFilteredStream: function(record) {
@@ -46,6 +65,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         settingsPanel.getForm().updateRecord(record);
         record.set('sorting', me.getSorting());
         record.set('conditions', me.getConditions());
+
         me.saveRecord(record);
     },
 
@@ -68,6 +88,14 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         var me = this;
         record.save({
             callback: function() {
+                var productGrid = me.getProductStreamGrid(),
+                    store = productGrid.store;
+
+                store.reload({
+                    callback: function() {
+                        productGrid.reconfigure(store);
+                    }
+                });
                 Shopware.Notification.createGrowlMessage('Product stream', 'Stream saved');
             }
         });
@@ -104,6 +132,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             currencyId: currencyCombo.getValue(),
             customerGroupKey: customerGroupCombo.getValue()
         };
+
         previewGrid.getStore().load();
     },
 
@@ -125,9 +154,11 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         if (!sortModel) {
             return null;
         }
+
         sortData[sort] = {
             direction: sortModel.get('direction')
         };
+
         return sortData;
     }
 });

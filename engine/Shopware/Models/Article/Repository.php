@@ -135,6 +135,32 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleRelatedProductStreamsQuery($articleId)
+    {
+        return $this->getArticleRelatedProductStreamsQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleRelatedProductStreamsQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article.id', 'relatedProductStreams.id', 'relatedProductStreams.name', 'relatedProductStreams.description'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.relatedProductStreams', 'relatedProductStreams')
+                ->where('article.id = :articleId')
+                ->andWhere('relatedProductStreams.id IS NOT NULL')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
      * data. The full article data stack is defined in the

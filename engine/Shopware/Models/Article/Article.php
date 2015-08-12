@@ -294,6 +294,21 @@ class Article extends ModelEntity
     protected $customerGroups;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
+     * @ORM\JoinTable(name="s_product_stream_articles",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $relatedProductStreams;
+
+    /**
      * OWNING SIDE
      *
      * @var ArrayCollection
@@ -1282,5 +1297,21 @@ class Article extends ModelEntity
             'seoCategories',
             'article'
         );
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRelatedProductStreams()
+    {
+        return $this->relatedProductStreams;
+    }
+
+    /**
+     * @param ArrayCollection $relatedProductStreams
+     */
+    public function setRelatedProductStreams($relatedProductStreams)
+    {
+        $this->relatedProductStreams = $relatedProductStreams;
     }
 }

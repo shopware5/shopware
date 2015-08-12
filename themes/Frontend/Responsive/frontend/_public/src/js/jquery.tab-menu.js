@@ -173,6 +173,8 @@
                 activeTabClass = opts.activeTabClass,
                 activeContainerClass = opts.activeContainerClass,
                 $tab,
+                tabId,
+                dataUrl,
                 $container;
 
             if (event) {
@@ -200,12 +202,15 @@
 
             $container.addClass(activeContainerClass);
 
-            $.each($container.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_swProductSlider').update();
-            });
+            dataUrl = $tab.attr('data-url');
+            tabId = $container.attr('data-tab-id');
 
-            if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
-                $container.load($tab.attr('data-url'));
+            if ($tab.attr('data-mode') === 'remote' && dataUrl) {
+                $container.load(dataUrl);
+            }
+
+            if (tabId !== undefined) {
+                $.publish('plugin/swTabMenu/onChangeTab-' + tabId, [ me, index ]);
             }
 
             $.publish('plugin/swTabMenu/onChangeTab', [ me, index ]);

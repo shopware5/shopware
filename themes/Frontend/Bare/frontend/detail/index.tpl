@@ -337,6 +337,13 @@
                                     <a href="#content--customer-viewed" title="{s name="DetailRecommendationAlsoViewedLabel"}{/s}" class="tab--link">{s name="DetailRecommendationAlsoViewedLabel"}{/s}</a>
                                 {/if}
                             {/block}
+
+                            {* Related product streams *}
+                            {block name="frontend_detail_index_tabs_entry_related_product_streams"}
+                                {foreach $sArticle.relatedProductStreams as $key => $relatedProductStream}
+                                    <a href="#content--related-product-streams-{$key}" title="{$relatedProductStream.name}" class="tab--link">{$relatedProductStream.name}</a>
+                                {/foreach}
+                            {/block}
                         {/block}
                     </ul>
                 {/block}
@@ -407,6 +414,22 @@
                                     </div>
                                 {/block}
                             {/if}
+
+                            {* Related product streams *}
+                            {foreach $sArticle.relatedProductStreams as $key => $relatedProductStream}
+                                {block name="frontend_detail_index_tabs_related_product_streams"}
+                                    <div class="tab--container" data-tab-id="productStreamSliderId-{$relatedProductStream.id}">
+                                        {block name="frontend_detail_index_tabs_related_product_streams_inner"}
+                                            <div class="tab--header">
+                                                <a href="#" class="tab--title" title="{$relatedProductStream.name}">{$relatedProductStream.name}</a>
+                                            </div>
+                                            <div class="tab--content content--related-product-streams-{$key}">
+                                                {include file='frontend/detail/tabs/product_streams.tpl'}
+                                            </div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            {/foreach}
 
                             {block name='frontend_detail_index_after_tabs'}{/block}
                         {/block}
