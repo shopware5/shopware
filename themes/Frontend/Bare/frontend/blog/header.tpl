@@ -3,6 +3,30 @@
 {* Title *}
 {block name='frontend_index_header_title'}{if $sArticle.metaTitle}{$sArticle.metaTitle} | {config name=sShopname}{else}{$smarty.block.parent}{/if}{/block}
 
+{block name='frontend_index_header_meta_tags_opengraph'}
+    {if $sArticle}
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="{config name=sShopname}" />
+        <meta property="og:title" content="{$sArticle.title|escape}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240}" />
+
+        {if $sArticle.author}
+        <meta property="article:author" content="{$sArticle.author.name|escape}" />
+        {/if}
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="{$sArticle.title|escape}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240}" />
+
+        {if $sArticle.media[0].source}
+            <meta property="og:image" content="{$sArticle.media[0].source}" />
+            <meta name="twitter:image" content="{$sArticle.media[0].source}" />
+        {/if}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sArticle.metaKeyWords}{$sArticle.metaKeyWords}{else}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/if}{/block}
 
