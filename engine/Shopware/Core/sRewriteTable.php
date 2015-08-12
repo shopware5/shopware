@@ -1298,7 +1298,7 @@ class sRewriteTable
             $data['name'] = (!empty($data['txtArtikel'])) ? $data['txtArtikel'] : $article['name'];
             $data['description_long'] = (!empty($data['txtlangbeschreibung'])) ? $data['txtlangbeschreibung'] : $article['description_long'];
             $data['description'] = (!empty($data['txtshortdescription'])) ? $data['txtshortdescription'] : $article['description'];
-            $data['keywords'] = (!empty($data['txtkeywords'])) ? $data['txtkeywords'] : $article['keykwords'];
+            $data['keywords'] = (!empty($data['txtkeywords'])) ? $data['txtkeywords'] : $article['keywords'];
 
             unset($article['objectdata']);
             unset($data['txtArtikel']);
