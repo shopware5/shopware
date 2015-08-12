@@ -380,7 +380,9 @@ class sBasket
         $discountNumber = $this->config->get('sDISCOUNTNUMBER');
         $name = isset($discountNumber) ? $discountNumber: "DISCOUNT";
 
-        $discountName = - $basketDiscount . ' % ' . $this->config->get('sDISCOUNTNAME');
+        $discountName = - $basketDiscount . ' % ' . $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('discount_name');
 
         $this->db->insert(
             's_order_basket',
@@ -734,7 +736,10 @@ class sBasket
 
         $timeInsert = date("Y-m-d H:i:s");
 
-        $voucherName = $this->config->get('sVOUCHERNAME');
+        $voucherName = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('voucher_name', 'Voucher');
+
         if ($voucherDetails["percental"]) {
             $value = $voucherDetails["value"];
             $voucherName .= " ".$value." %";
@@ -877,12 +882,15 @@ class sBasket
                 }
 
                 $surcharge = $minimumOrderSurcharge * $factor;
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('surcharge_name');
 
                 $this->db->insert(
                     's_order_basket',
                     $params = array(
                         'sessionID'      => $this->session->get('sessionId'),
-                        'articlename'    => $this->config->get('sSURCHARGENAME'),
+                        'articlename'    => $surchargeName,
                         'articleID'      => 0,
                         'ordernumber'    => $name,
                         'quantity'       => 1,
@@ -946,9 +954,13 @@ class sBasket
             $amount = $this->sGetAmount();
 
             if ($percent >= 0) {
-                $surchargeName = $this->config->get('sPAYMENTSURCHARGEADD');
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_add');
             } else {
-                $surchargeName = $this->config->get('sPAYMENTSURCHARGEDEV');
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_dev');
             }
 
             $surcharge = $amount["totalAmount"] / 100 * $percent;

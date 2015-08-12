@@ -4676,7 +4676,9 @@ class sAdmin
     private function handleBasketDiscount($amount, $currencyFactor, $discount_tax)
     {
         $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
-        $discount_basket_name = $this->config->get('sDISCOUNTNAME', 'Warenkorbrabatt');
+        $discount_basket_name = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('discount_name', 'Warenkorbrabatt');
 
         $basket_discount = $this->db->fetchOne(
             'SELECT basketdiscount
@@ -4730,7 +4732,9 @@ class sAdmin
     private function handleDispatchDiscount($basket, $currencyFactor, $discount_tax)
     {
         $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
-        $discount_name = $this->config->get('sSHIPPINGDISCOUNTNAME', 'Warenkorbrabatt');
+        $discount_name = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('shipping_discount_name', 'Basket discount');
 
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
 
@@ -4775,7 +4779,9 @@ class sAdmin
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {
-        $surcharge_name = $this->config->get('sPAYMENTSURCHARGEABSOLUTE', 'Zuschlag für Zahlungsart');
+        $surcharge_name = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('payment_surcharge_absolute', 'Surcharge for payment');
         $surcharge_ordernumber = $this->config->get('sPAYMENTSURCHARGEABSOLUTENUMBER', 'PAYMENTSURCHARGEABSOLUTENUMBER');
         $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', "PAYMENTSURCHARGE");
 
@@ -4827,9 +4833,13 @@ class sAdmin
             $percent = round($amount / 100 * $payment['debit_percent'], 2);
 
             if ($percent > 0) {
-                $percent_name = $this->config->get('sPAYMENTSURCHARGEADD');
+                $percent_name = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_add');
             } else {
-                $percent_name = $this->config->get('sPAYMENTSURCHARGEDEV');
+                $percent_name = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_dev');
             }
 
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
