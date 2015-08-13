@@ -843,7 +843,7 @@ class sExport
         }
 
         if (!empty($this->sSettings["active_filter"])) {
-            $sql_add_where[] = "(v.active=1 OR (v.active IS NULL AND a.active=1))";
+            $sql_add_where[] = "(a.active = 1 AND (v.active=1 OR (v.active IS NULL AND d.active=1)))";
         }
         if (!empty($this->sSettings["stockmin_filter"])) {
             $sql_add_where[] ="(v.instock>=d.stockmin OR (v.instock IS NULL AND d.instock>=d.stockmin))";
@@ -1024,7 +1024,7 @@ class sExport
         if (!empty($this->sSettings["count_filter"])) {
             $sql .= "LIMIT ".$this->sSettings["count_filter"];
         }
-        
+
         return $sql;
     }
 
