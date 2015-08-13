@@ -25,6 +25,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_searchdbal.cache_keyword_finder" />
             <argument type="service" id="shopware_searchdbal.search_indexer" />
+            <argument type="service" id="shopware_searchdbal.search_term_helper" />
         </service>
 
         <service id="shopware_searchdbal.cache_keyword_finder" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\CacheKeywordFinder">
