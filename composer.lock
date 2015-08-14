@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "03a9560a8f1e340ede3b677c3f933219",
+    "hash": "5b3f00a488ce7d9967f72fc1cbf0fe8d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1080,12 +1080,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "bc96c9474dd169500e86e630c9fe453ab70b351c"
+                "reference": "ee124db609e88841743bc89a418f8a7242446907"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/313bb031d4e9c28c25c4456a8a56968361f28425",
-                "reference": "bc96c9474dd169500e86e630c9fe453ab70b351c",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/ee124db609e88841743bc89a418f8a7242446907",
+                "reference": "ee124db609e88841743bc89a418f8a7242446907",
                 "shasum": ""
             },
             "require": {
@@ -1116,7 +1116,7 @@
             ],
             "description": "Elasticsearch DSL library",
             "homepage": "http://ongr.io",
-            "time": "2015-06-30 10:53:32"
+            "time": "2015-08-12 07:39:18"
         },
         {
             "name": "oyejorge/less.php",

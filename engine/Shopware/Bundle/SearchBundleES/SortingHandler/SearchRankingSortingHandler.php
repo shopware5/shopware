@@ -25,11 +25,10 @@
 namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\Sort;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -54,7 +53,7 @@ class SearchRankingSortingHandler implements HandlerInterface
     ) {
         /** @var SearchRankingSorting $criteriaPart */
         $search->addSort(
-            new Sort('_score', strtolower($criteriaPart->getDirection()))
+            new FieldSort('_score', strtolower($criteriaPart->getDirection()))
         );
     }
 }

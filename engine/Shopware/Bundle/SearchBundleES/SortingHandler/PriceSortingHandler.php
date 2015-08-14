@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\Sort;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -67,7 +67,7 @@ class PriceSortingHandler implements HandlerInterface
     ) {
         /** @var PriceSorting $criteriaPart */
         $field = $this->fieldMapping->getPriceField($context);
-        $sort  = new Sort($field, strtolower($criteriaPart->getDirection()));
+        $sort  = new FieldSort($field, strtolower($criteriaPart->getDirection()));
         $search->addSort($sort);
     }
 }

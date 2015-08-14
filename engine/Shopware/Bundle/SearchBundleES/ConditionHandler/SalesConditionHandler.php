@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Filter\RangeFilter;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\ReleaseDateCondition;
 use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;

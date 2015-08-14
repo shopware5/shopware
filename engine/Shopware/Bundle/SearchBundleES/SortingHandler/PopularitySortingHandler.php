@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\Sort;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
@@ -51,9 +51,10 @@ class PopularitySortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
+
         /** @var PopularitySorting $criteriaPart */
         $search->addSort(
-            new Sort('sales', strtolower($criteriaPart->getDirection()))
+            new FieldSort('sales', strtolower($criteriaPart->getDirection()))
         );
     }
 }

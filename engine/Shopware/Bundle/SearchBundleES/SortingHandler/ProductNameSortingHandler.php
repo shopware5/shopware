@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\Sort;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
@@ -53,7 +53,7 @@ class ProductNameSortingHandler implements HandlerInterface
     ) {
         /** @var ProductNameSorting $criteriaPart */
         $search->addSort(
-            new Sort('name', strtolower($criteriaPart->getDirection()))
+            new FieldSort('name', strtolower($criteriaPart->getDirection()))
         );
     }
 }
