@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         title: '{s name=title}Title{/s}'
     },
 
-    basePath: '{link file=""}',
+    basePath: '',
 
     initComponent: function() {
         var me = this,

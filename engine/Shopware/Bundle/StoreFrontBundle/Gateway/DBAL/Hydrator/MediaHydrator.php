@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models;
 
@@ -44,15 +45,21 @@ class MediaHydrator extends Hydrator
      * @var Manager
      */
     private $thumbnailManager;
+    /**
+     * @var MediaService
+     */
+    private $mediaService;
 
     /**
      * @param AttributeHydrator $attributeHydrator
      * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
+     * @param MediaService $mediaService
      */
-    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager)
+    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->thumbnailManager = $thumbnailManager;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -84,7 +91,7 @@ class MediaHydrator extends Hydrator
         }
 
         if (isset($data['__media_path'])) {
-            $media->setFile($data['__media_path']);
+            $media->setFile($this->mediaService->getUrl($data['__media_path']));
         }
 
         if ($media->getType() == Struct\Media::TYPE_IMAGE
@@ -100,7 +107,6 @@ class MediaHydrator extends Hydrator
             );
             $media->addAttribute('media', $attribute);
         }
-
         return $media;
     }
 

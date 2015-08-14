@@ -491,6 +491,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
         $article = $this->resourceArticle->create($data);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
@@ -524,7 +525,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
             $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+                $this->assertTrue($mediaService->has(Shopware()->OldPath() . $thumbnail));
             }
 
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");

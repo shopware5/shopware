@@ -247,6 +247,12 @@ class sMarketing
 
 
         $images = array_column($getBanners, 'image');
+        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+
+        array_walk($images, function(&$image) use ($pathNormalizer) {
+            $image = $pathNormalizer->get($image);
+        });
+
         $mediaIds = $this->getMediaIdsOfPath($images);
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $medias = Shopware()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);

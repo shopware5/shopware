@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     alias: 'widget.emotion-components-banner-mapping',
     width:'80%',
     height:'90%',
-    basePath: '{link file=""}',
+    basePath: '',
     resizeCollection: Ext.create('Ext.util.MixedCollection'),
 
     initComponent: function() {

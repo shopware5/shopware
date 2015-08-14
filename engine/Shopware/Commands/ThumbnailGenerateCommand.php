@@ -173,7 +173,8 @@ EOF
      */
     private function thumbnailExists($thumbnailPath)
     {
-        return file_exists(Shopware()->DocPath() . $thumbnailPath);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        return $mediaService->has(Shopware()->DocPath() . $thumbnailPath);
     }
 
     /**
@@ -182,7 +183,8 @@ EOF
      */
     private function imageExists(Media $media)
     {
-        return file_exists(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        return $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
     }
 
     /**

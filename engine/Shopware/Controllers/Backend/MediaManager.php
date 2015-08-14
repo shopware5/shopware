@@ -39,7 +39,6 @@ use Shopware\Models\Media\Media as Media;
  */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs
 {
-
     protected $blackList = array(
         'php',
         'php3',
@@ -188,6 +187,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $file = $media['path'];
         $tmpFileName = $media['name'] . '.' . $media['extension'];
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         @set_time_limit(0);
         $response = $this->Response();
@@ -195,8 +195,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $response->setHeader('Content-Description', 'File Transfer');
         $response->setHeader('Content-disposition', 'attachment; filename=' . $tmpFileName);
         $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', filesize($file));
-        readfile($file);
+        $response->setHeader('Content-Length', $mediaService->getSize($file));
+        print file_get_contents($mediaService->getUrl($file));
     }
 
     /**
@@ -238,6 +238,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $totalResult = $paginator->count();
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         /** @var $media Media */
         foreach ($mediaList as &$media) {
@@ -247,9 +248,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             $thumbnails = $this->getMediaThumbnailPaths($media);
 
-            if (!empty($thumbnails) && file_exists(Shopware()->OldPath() . $thumbnails['140x140'])) {
+            foreach ($thumbnails as $index => $thumbnail) {
+                $thumbnails[$index] = $thumbnail;
+            }
+
+            $media['path'] = $mediaService->getUrl($media['path']);
+
+            if (!empty($thumbnails) && $mediaService->has($thumbnails['140x140'])) {
                 $size = getimagesize($media['path']);
-                $media['thumbnail'] = $thumbnails['140x140'];
+                $media['thumbnail'] = $mediaService->getUrl($thumbnails['140x140']);
                 $media['width'] = $size[0];
                 $media['height'] = $size[1];
             }
@@ -582,6 +589,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $manager->createMediaThumbnail($media, array(), true);
             }
 
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
+
             $this->Response()->setHeader('Content-Type', 'text/plain');
 
             die(json_encode(array('success' => true, 'data' => $data[0])));
@@ -772,13 +782,14 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $oldName = $media->getName();
         $media->setName($params['name']);
         $name = $media->getName();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         //check if the name passed and is valid
         if (!empty($name)) {
             $path = 'media/' . strtolower($media->getType()) . '/' .   $name . '.' . $media->getExtension();
             $path = Shopware()->DocPath() . $path;
 
-            if (file_exists($path) && $name !== $oldName) {
+            if ($mediaService->has($path) && $name !== $oldName) {
                 $this->View()->assign(array('success' => false, 'message' => 'Name already exist'));
                 return;
             }

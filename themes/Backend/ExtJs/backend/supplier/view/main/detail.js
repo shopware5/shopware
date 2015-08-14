@@ -73,13 +73,12 @@ Ext.define('Shopware.apps.Supplier.view.main.Detail', {
      * @return array of string
      */
     getTemplate : function() {
-        var path = '{link file=""}';
         return [
             '{literal}',
                 // Check if we're having a logo
                 '<tpl if="image">',
                     '<div class="supplier-logo">',
-                        '<img src="'+path+'{literal}{image}{/literal}" alt="{name}" style="max-height: 200px; max-width: 150px" />',
+                        '<img src="{literal}{image}{/literal}" alt="{name}" style="max-height: 200px; max-width: 150px" />',
                     '</div>',
                 '</tpl>',
                 '<div class="supplier-info">',

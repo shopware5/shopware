@@ -157,6 +157,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $id = $this->Request()->getParam('id', null);
         $query = $this->getRepository()->getEmotionDetailQuery($id);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
@@ -198,6 +199,19 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         $value = $entry['value'];
                         break;
                 }
+
+                if ($entry['name'] === 'file') {
+                    $value = $mediaService->getUrl($value);
+                }
+
+                if (in_array($entry['name'], ['selected_manufacturers', 'banner_slider'])) {
+                    foreach ($value as $k => $v) {
+                        if (isset($v['path'])) {
+                            $value[$k]['path'] = $mediaService->getUrl($v['path']);
+                        }
+                    }
+                }
+
                 $data[] = array(
                     'id' => $entry['id'],
                     'valueType' => $entry['valueType'],
@@ -400,6 +414,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function fillElements($emotion, $data)
     {
         $elements= array();
+        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
 
         foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
@@ -418,6 +433,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $value = '';
                 switch (strtolower($field->getValueType())) {
                     case "json":
+
+                        if (is_array($item['value'])) {
+                            foreach($item['value'] as &$val) {
+                                $val['path'] = $pathNormalizer->get($val['path']);
+                            }
+                        }
+
                         $value = Zend_Json::encode($item['value']);
                         break;
                     case "string":
@@ -425,6 +447,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         $value = $item['value'];
                         break;
                 }
+
+                if ($field->getName() == 'file' || $field->getName() == 'image') {
+                    $value = $pathNormalizer->get($value);
+                }
+
                 $model->setValue($value);
                 $model->setEmotionId($emotion->getId());
                 Shopware()->Models()->persist($model);

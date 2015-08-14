@@ -299,6 +299,7 @@
         <service id="shopware_storefront.media_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
             <argument type="service" id="thumbnail_manager"/>
+            <argument type="service" id="shopware_media.media_service"/>
         </service>
 
         <service id="shopware_storefront.download_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\DownloadHydrator">

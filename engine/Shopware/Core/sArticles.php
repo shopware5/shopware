@@ -535,7 +535,8 @@ class sArticles
                 $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
             }
             if ($supplierValue["image"]) {
-                $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
+                $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+                $getSupplier[$supplierKey]["image"] = $mediaService->getUrl($supplierValue['image']);
             }
 
             if ($id !== Shopware()->Shop()->getCategory()->getId()) {
@@ -1504,6 +1505,7 @@ class sArticles
     {
         //initial the data array
         $imageData = array();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         if (empty($image["path"])) {
             return $imageData;
@@ -1559,9 +1561,9 @@ class sArticles
             if (strpos($size, 'x')===0) {
                 $size = $size.'x'.$size;
             }
-            $imageData["src"][$key] = $thumbDir . $image['path'] . '_'. $size .'.'. $image['extension'];
+            $imageData["src"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'.'. $image['extension']);
             if ($highDpiThumbnails) {
-                $imageData["srchd"][$key] = $thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension'];
+                $imageData["srchd"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
             }
         }
 
@@ -1684,7 +1686,6 @@ class sArticles
         } else {
             $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
         }
-
 
         if ($onlyCover) {
             $cover = Enlight()->Events()->filter(

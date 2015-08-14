@@ -13,8 +13,29 @@
             <argument type="service" id="events"/>
             <argument type="service" id="dbal_connection" />
         </service>
+
         <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
             <factory service="shopware_media.garbage_collector_factory" method="factory" />
         </service>
+
+        <service id="shopware_media.media_service" class="Shopware\Bundle\MediaBundle\MediaService">
+            <argument type="service" id="shopware_media.backend" />
+            <argument type="service" id="shopware_media.path_normalizer" />
+        </service>
+
+        <service id="shopware_media.media_migration" class="Shopware\Bundle\MediaBundle\MediaMigration">
+            <argument type="service" id="shopware_media.path_normalizer" />
+        </service>
+
+        <service id="shopware_media.backend_factory" class="Shopware\Bundle\MediaBundle\MediaBackendFactory">
+            <argument>%shopware.cdn%</argument>
+        </service>
+
+        <service id="shopware_media.backend" class="Shopware\Bundle\MediaBundle\MediaBackendInterface">
+            <factory service="shopware_media.backend_factory" method="factory" />
+            <argument>%shopware.cdn.backend%</argument>
+        </service>
+
+        <service id="shopware_media.path_normalizer" class="Shopware\Bundle\MediaBundle\MediaPathNormalizer" />
     </services>
 </container>

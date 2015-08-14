@@ -175,10 +175,7 @@
                 settings = ed.settings, path,
                 args;
 
-            if(settings.document_base_url.length && settings.relative_urls == false) {
-                path = settings.document_base_url + record.get('path');
-            }else
-                path = record.get('path');
+            path = record.get('path');
 
             args = {
                 'class': me.imageCls,

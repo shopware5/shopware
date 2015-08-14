@@ -69,10 +69,12 @@ class Media extends Resource
         /** @var $media \Shopware\Models\Media\Media*/
         $media = $query->getOneOrNullResult($this->getResultMode());
 
-
         if (!$media) {
             throw new ApiException\NotFoundException("Media by id $id not found");
         }
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $media['path'] = $mediaService->getUrl($media['path']);
 
         return $media;
     }
@@ -98,6 +100,11 @@ class Media extends Resource
 
         //returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        array_walk($media, function (&$item) use ($mediaService) {
+            $item['path'] = $mediaService->getUrl($item['path']);
+        });
 
         return array('data' => $media, 'total' => $totalResult);
     }
@@ -434,7 +441,8 @@ class Media extends Resource
      */
     private function getUniqueFileName($destPath, $baseFileName = null)
     {
-        if (!file_exists("$destPath/$baseFileName") && $baseFileName !== null) {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if (!$mediaService->has("$destPath/$baseFileName") && $baseFileName !== null) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }
 
@@ -447,7 +455,7 @@ class Media extends Resource
 
         $filename = substr($filename, 0, self::FILENAME_LENGTH);
 
-        while (file_exists("$destPath/$filename")) {
+        while ($mediaService->has("$destPath/$filename")) {
             if ($baseFileName) {
                 $filename = "$counter-$baseFileName";
                 $counter++;

@@ -486,6 +486,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         if (operation.success === true) {
             var media = Ext.create('Shopware.apps.Article.model.Media', operation.data);
             media.set('path', operation.data.name);
+            media.set('original', operation.data.path);
+            media.set('thumbnail', operation.data.path);
             media.set('main', 2);
             media.set('mediaId', operation.data.id);
 

@@ -223,4 +223,12 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path, 'some test title'));
         }
     }
+
+    public function testUnittestShopContext()
+    {
+        $assembled = Shopware()->Front()->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
+        $expected = (Shopware()->Shop()->getSecure() ? 'https' : 'http') . '://' . Shopware()->Shop()->getHost() . Shopware()->Shop()->getBasePath() . "/";
+
+        $this->assertEquals($expected, $assembled);
+    }
 }

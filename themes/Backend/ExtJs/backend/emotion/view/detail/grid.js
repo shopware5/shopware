@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
                     return [
                         { tag: 'div', cls: 'x-emotion-banner-preview', children: [
-                            { tag: 'img', cls: 'x-emotion-banner-image', src: '{link file="" fullPath}' + file.value  },
+                            { tag: 'img', cls: 'x-emotion-banner-image', src: file.value  },
                             { tag: 'div', cls: 'x-emotion-banner-preview-inner' }
                         ] },
                         { tag: 'div', cls: 'x-emotion-element-handle' },

@@ -122,6 +122,19 @@ In this document you will find a changelog of the important changes related to t
     * Added `Shopware\Models\Order\Status::name`. Its value should be matched to the corresponding snippet name in one of the `backend/base/model/order_status/*` namespaces
     * Deprecated `Shopware\Models\Order\Status::description`
     * `Shopware.apps.Base.model.OrderStatus` and `Shopware.apps.Base.model.PaymentStatus` ExtJs translations are now done using the `name` instead of the `id`.
+* Deprecated `Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail::getSourceSet` since it should be placed in a hydrator or view
+* Introducing the `MediaBundle` to support huge amounts of media items and add support for CDN's (Content Delivery Network)
+	* Added library [thephpleague/flysystem](https://github.com/thephpleague/flysystem) to switch the underlying filesystem.
+	* Media directory structure has been changed
+		* Paths in `s_media` are now virtual paths, meaning that the files will no longer be accessible with the given path.
+		* A MediaBackend decides how and where media files are getting stored (e.g. /media/image/blue_shoes_size37.jpg could be /media/image/e0/77/f8/blue_shoes_size37.jpg)
+		* A MediaService handles file operations and generation of urls
+		* A MediaPathNormalizer removes all unrelevant parts of a string to get a coherent syntax like `media/image/blue_shoes_size37.jpg`
+		* A live migration, which is disabled by default, migrates media files to the new filesystem and format as they get requested
+		* The store front, product feed and api endpoints have already been updated to make use of the underlying filesystem.
+	* Added `sw:media` cli commands to easily manage your new media system
+		* `sw:media:migrate` migrates from one filesystem to another
+		    * E.g. use `sw:media:migrate --from=local --to=aws` to migrate all media items to Amazon S3
 * Added `sw:media:cleanup` cli command to find all unused media and place them in a new album called Trash
     * Optional: `sw:media:cleanup --delete` to find all unused media and remove them automatically
 * Added event `Shopware_Collect_MediaPositions` to collect more tables to scan for unused images. You should return a ArrayCollection of MediaPosition instances.

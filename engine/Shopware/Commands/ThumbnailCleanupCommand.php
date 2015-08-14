@@ -80,6 +80,7 @@ EOF
         }
 
         $albumArray = $builder->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($albumArray as $album) {
             $output->writeln("Deleting unused Thumbnails for album {$album['name']} (ID: {$album['id']})");
@@ -92,15 +93,15 @@ EOF
 
             foreach ($album['media'] as $media) {
                 $path = Shopware()->oldPath() . $media['path'];
-                if (file_exists($path)) {
+                if ($mediaService->has($path)) {
                     continue;
                 }
 
                 $paths = $this->getMediaThumbnailPaths($media, explode(';', $sizes));
 
                 foreach ($paths as $path) {
-                    if (file_exists($path)) {
-                        unlink($path);
+                    if ($mediaService->has($path)) {
+                        $mediaService->delete($path);
                         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                             $output->writeln("Deleting {$path}");
                         }

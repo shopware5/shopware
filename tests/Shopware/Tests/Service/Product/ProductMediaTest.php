@@ -56,6 +56,7 @@ class ProductMediaTest extends TestCase
 
     public function testProductMediaList()
     {
+        $this->resetContext();
         $context = $this->getContext();
         $numbers = array('testProductMediaList-1', 'testProductMediaList-2');
         foreach ($numbers as $number) {
@@ -92,6 +93,7 @@ class ProductMediaTest extends TestCase
 
     public function testVariantMediaList()
     {
+        $this->resetContext();
         $numbers = array('testVariantMediaList1-', 'testVariantMediaList2-');
         $context = $this->getContext();
         $articles = array();
@@ -141,6 +143,7 @@ class ProductMediaTest extends TestCase
 
     public function testProductImagesWithVariant()
     {
+        $this->resetContext();
         $number = 'testProductImagesWithVariant';
         $context = $this->getContext();
 
@@ -169,5 +172,17 @@ class ProductMediaTest extends TestCase
         foreach ($media->getThumbnails() as $thumbnail) {
             $matcher->evaluate($thumbnail);
         }
+    }
+
+    private function resetContext()
+    {
+        // correct router context for url building
+        Shopware()->Container()->get('router')->setContext(
+            new \Shopware\Components\Routing\Context(
+                'localhost',
+                Shopware()->Shop()->getBasePath(),
+                Shopware()->Shop()->getSecure()
+            )
+        );
     }
 }

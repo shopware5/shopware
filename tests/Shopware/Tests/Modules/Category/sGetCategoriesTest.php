@@ -216,6 +216,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
         Shopware()->Db()->executeUpdate("UPDATE s_categories SET mediaID = 564 WHERE id = ?", array($first1->getId()));
 
         $result = $this->module->sGetCategories($second1->getId());
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $result = array_values($result);
         $category = $result[1];
@@ -237,7 +238,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
                     'id' => 564,
                     'name' => 'deli_teaser503886c2336e3',
                     'description' => '',
-                    'path' => 'media/image/deli_teaser503886c2336e3.jpg',
+                    'path' => $mediaService->getUrl('media/image/deli_teaser503886c2336e3.jpg'),
                     'type' => 'IMAGE',
                     'extension' => 'jpg',
                 )
