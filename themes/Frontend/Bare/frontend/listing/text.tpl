@@ -2,7 +2,7 @@
 
 {* Categorie headline *}
 {block name="frontend_listing_text"}
-    {if $sCategoryContent.cmsheadline && $sCategoryContent.cmstext}
+    {if $sCategoryContent.cmsheadline || $sCategoryContent.cmstext}
         <div class="hero-unit category--teaser panel has--border is--rounded">
 
             {* Headline *}
@@ -14,8 +14,8 @@
 
             {* Category text *}
             {block name="frontend_listing_text_content"}
-                {if $sCategoryContent.cmstext}
-                    <div class="hero--text panel--body is--wide">
+                <div class="hero--text panel--body is--wide">
+                    {if $sCategoryContent.cmstext}
 
                         {* Long description *}
                         {block name="frontend_listing_text_content_long"}
@@ -53,8 +53,8 @@
                                 {/block}
                             </div>
                         {/block}
-                    </div>
-                {/if}
+                    {/if}
+                </div>
             {/block}
         </div>
     {/if}
