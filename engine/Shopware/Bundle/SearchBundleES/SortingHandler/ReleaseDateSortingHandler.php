@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\Sort;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
@@ -53,7 +53,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
     ) {
         /** @var ReleaseDateSorting $criteriaPart */
         $search->addSort(
-            new Sort('formattedReleaseDate', strtolower($criteriaPart->getDirection()))
+            new FieldSort('formattedReleaseDate', strtolower($criteriaPart->getDirection()))
         );
     }
 }

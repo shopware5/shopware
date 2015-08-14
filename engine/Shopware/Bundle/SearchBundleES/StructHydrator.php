@@ -37,6 +37,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
  */
 class StructHydrator
 {
+    /**
+     * @param array $data
+     * @return PropertyGroup
+     */
     public function createPropertyGroup($data)
     {
         $group = new PropertyGroup();
@@ -54,6 +58,10 @@ class StructHydrator
         return $group;
     }
 
+    /**
+     * @param array $data
+     * @return PropertyOption
+     */
     public function createPropertyOption($data)
     {
         $option = new PropertyOption();

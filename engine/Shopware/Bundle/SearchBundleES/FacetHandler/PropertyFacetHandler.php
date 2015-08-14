@@ -30,6 +30,7 @@ use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Filter\IdsFilter;
 use ONGR\ElasticsearchDSL\Filter\TermFilter;
 use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchDSL\Sort\Sort;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
@@ -148,7 +149,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $search = new Search();
         $search->addFilter(new IdsFilter($groupIds));
         $search->addFilter(new TermFilter('filterable', 1));
-        $search->addSort(new Sort('name'));
+        $search->addSort(new FieldSort('name'));
 
         $index = $this->indexFactory->createShopIndex($context->getShop());
         $data = $this->client->search([
