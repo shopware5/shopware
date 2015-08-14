@@ -122,6 +122,9 @@ In this document you will find a changelog of the important changes related to t
     * Added `Shopware\Models\Order\Status::name`. Its value should be matched to the corresponding snippet name in one of the `backend/base/model/order_status/*` namespaces
     * Deprecated `Shopware\Models\Order\Status::description`
     * `Shopware.apps.Base.model.OrderStatus` and `Shopware.apps.Base.model.PaymentStatus` ExtJs translations are now done using the `name` instead of the `id`.
+* Added `sw:media:cleanup` cli command to find all unused media and place them in a new album called Trash
+    * Optional: `sw:media:cleanup --delete` to find all unused media and remove them automatically
+* Added event `Shopware_Collect_MediaPositions` to collect more tables to scan for unused images. You should return a ArrayCollection of MediaPosition instances.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
@@ -129,6 +132,7 @@ In this document you will find a changelog of the important changes related to t
 * Change event argument property `name` to `vouchername` in `Shopware_Modules_Basket_AddVoucher_FilterSql` in `sBasket.php` due to reserved word.
 * Support for batch user deleting in Backend UserManager
 * Added `createMediaField` to Emotion Component Model
+* Deprecated pre-installed import / export module in favor of the new import / export plugin, which is for free now
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent

@@ -7350,6 +7350,7 @@ INSERT INTO `s_media` (`id`, `albumID`, `name`, `description`, `path`, `type`, `
 
 TRUNCATE TABLE `s_media_album`;
 INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
+(-13, 'Papierkorb', NULL, 12),
 (-12, 'Hersteller', NULL, 12),
 (-11, 'Blog', NULL, 3),
 (-10, 'Unsortiert', NULL, 7),
@@ -7378,7 +7379,8 @@ INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thu
 (10, -1, 1, '200x200;600x600;1280x1280', 'sprite-inbox', 1, 90, 60),
 (11, -11, 1, '200x200;600x600;1280x1280', 'sprite-leaf', 1, 90, 60),
 (12, 1, 0, '', 'sprite-hard-hat', 0, 90, 60),
-(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60);
+(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(14, -13, 0, '', 'sprite-bin-metal-full', 0, 90, 60);
 
 TRUNCATE TABLE `s_media_association`;
 TRUNCATE TABLE `s_media_attributes`;
