@@ -1,11 +1,7 @@
 {extends file='parent:frontend/home/index.tpl'}
 
 {block name='frontend_index_header_canonical'}
-    {if $landingPage.categoryId}
-        <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id sCategory=$landingPage.categoryId}" />
-    {else}
-        <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id}" />
-    {/if}
+    <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id}" />
 {/block}
 
 {* Google optimized crawling *}
