@@ -79,7 +79,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     /**
      * @var array
      */
-    private $inserts;
+    private $inserts = [];
 
     /**
      * @var bool
