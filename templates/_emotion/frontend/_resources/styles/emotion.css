@@ -1485,6 +1485,7 @@ div#searchresults ul.searchresult li.active a h3 {color: #e1540f;}
 
 div#searchresults li.searchresult {background: #fff;overflow: hidden;padding: 0;}
 div#searchresults li.searchresult .searchthumb {width: 96px;background: transparent;float: left;height: 57px;text-align: center; margin: 10px 0;}
+div#searchresults li.searchresult .searchthumb img { display: block; max-height: 100%; max-width: 100%; margin: 0 auto }
 div#searchresults li.searchresult .searchinner {float: left;height: 57px; width: 364px;padding: 10px 5px;}
 div#searchresults li.searchresult .searchinner a h3 {color: #000;}
 div#searchresults a.resultall {margin: 0 14px; width: 490px;}
