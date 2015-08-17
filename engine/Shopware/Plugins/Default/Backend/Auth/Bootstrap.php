@@ -381,8 +381,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     {
         $options = $this->Application()->getOption('backendSession', array());
 
-        $refererCheck = boolval($options['referer_check']);
-        $clientCheck = boolval($options['client_check']);
+        $refererCheck = (bool) $options['referer_check'];
+        $clientCheck = (bool) $options['client_check'];
 
         $options = $this->prepareSessionOptions($options);
 
