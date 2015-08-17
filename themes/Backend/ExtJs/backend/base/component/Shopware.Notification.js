@@ -457,7 +457,13 @@ Ext.define('Shopware.Notification', {
      * @param [boolean] log - If the growlMessage should be logged
      */
     createGrowlMessage: function(title, text, caller, iconCls, log) {
-        var me = this, msgData, growlMsg, id = Ext.id(), compTop = me.offsetTop
+        var me = this,
+            msgData,
+            growlMsg,
+            id = Ext.id(),
+            compTop = me.offsetTop;
+
+        text = text || '';
 
 		if(log != false){
 			Ext.Ajax.request({
