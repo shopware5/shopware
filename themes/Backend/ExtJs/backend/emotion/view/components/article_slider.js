@@ -74,7 +74,9 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         me.categoryFilter = me.down('emotion-components-fields-category-selection');
         me.streamSelection = me.down('emotion-components-fields-product-stream-selection');
 
+        me.streamSelection.allowBlank = true;
         me.streamSelection.hide();
+
         if(!me.articleType.getValue()) {
             me.maxCountField.hide();
             me.categoryFilter.hide();
@@ -86,6 +88,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+            me.streamSelection.allowBlank = true;
         } else if (me.articleType.getValue() == 'product_stream') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
@@ -93,13 +96,16 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
             me.streamSelection.show();
+            me.streamSelection.allowBlank = false;
         } else {
             me.maxCountField.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
+            me.streamSelection.allowBlank = true;
         }
+        me.streamSelection.validate();
         me.articleType.on('change', me.onChange, me);
 
         me.refreshHiddenValue();
@@ -108,13 +114,16 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
     onChange: function(field, newValue) {
         var me = this;
 
+        me.streamSelection.allowBlank = true;
         me.streamSelection.hide();
+
         if (newValue == 'selected_article') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+            me.streamSelection.allowBlank = true;
         } else if (newValue == 'product_stream') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
@@ -122,13 +131,16 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
             me.streamSelection.show();
+            me.streamSelection.allowBlank = false;
         } else {
             me.maxCountField.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
+            me.streamSelection.allowBlank = true;
         }
+        me.streamSelection.validate();
     },
 
     /**
