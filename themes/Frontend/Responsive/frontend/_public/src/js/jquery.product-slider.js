@@ -551,7 +551,7 @@
 
             $.ajax({
                 url: me.opts.ajaxCtrlUrl,
-                method: 'POST',
+                method: 'GET',
                 data: data,
                 success: function (response) {
                     me.isLoading = false;
