@@ -160,10 +160,27 @@
 
                     {* Product data *}
                     {block name='frontend_detail_index_buy_container_inner'}
-                        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
+                        <div itemprop="offers" itemscope itemtype="{if $sArticle.sBlockPrices}http://schema.org/AggregateOffer{else}http://schema.org/Offer{/if}" class="buybox--inner">
 
                             {block name='frontend_detail_index_data'}
-                                <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
+                                {if $sArticle.sBlockPrices}
+                                    {$lowestPrice=false}
+                                    {$highestPrice=false}
+                                    {foreach $sArticle.sBlockPrices as $blockPrice}
+                                        {if $lowestPrice === false || $blockPrice.price < $lowestPrice}
+                                            {$lowestPrice=$blockPrice.price}
+                                        {/if}
+                                        {if $highestPrice === false || $blockPrice.price > $highestPrice}
+                                            {$highestPrice=$blockPrice.price}
+                                        {/if}
+                                    {/foreach}
+
+                                    <meta itemprop="lowPrice" content="{$lowestPrice}" />
+                                    <meta itemprop="highPrice" content="{$highestPrice}" />
+                                    <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}" />
+                                {else}
+                                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
+                                {/if}
                                 {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                             {/block}
 
