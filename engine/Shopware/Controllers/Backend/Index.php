@@ -81,7 +81,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
 
         // Check session
         try {
-            $this->Request()->setHeader('referer', '');
             $auth = $this->auth->checkAuth();
         } catch (Exception $e) {
         }
