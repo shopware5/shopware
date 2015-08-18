@@ -7,16 +7,16 @@
     {if $sArticle}
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="{config name=sShopname}" />
-        <meta property="og:title" content="{$sArticle.title|escape}" />
-        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240}" />
+        <meta property="og:title" content="{$sArticle.title|escape:'htmlall'}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escape:'htmlall'}" />
 
         {if $sArticle.author}
-        <meta property="article:author" content="{$sArticle.author.name|escape}" />
+        <meta property="article:author" content="{$sArticle.author.name|escape:'htmlall'}" />
         {/if}
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="{$sArticle.title|escape}" />
-        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240}" />
+        <meta name="twitter:title" content="{$sArticle.title|escape:'htmlall'}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escape:'htmlall'}" />
 
         {if $sArticle.media[0].source}
             <meta property="og:image" content="{$sArticle.media[0].source}" />

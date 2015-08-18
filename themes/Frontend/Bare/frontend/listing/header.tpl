@@ -9,13 +9,13 @@
 {block name='frontend_index_header_meta_tags_opengraph'}
     <meta property="og:type" content="product" />
     <meta property="og:site_name" content="{config name=sShopname}" />
-    <meta property="og:title" content="{$sCategoryContent.name|escape}" />
-    <meta property="og:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240}" />
+    <meta property="og:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
+    <meta property="og:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
 
     <meta name="twitter:card" content="product" />
     <meta name="twitter:site" content="{config name=sShopname}" />
-    <meta name="twitter:title" content="{$sCategoryContent.name|escape}" />
-    <meta name="twitter:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240}" />
+    <meta name="twitter:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
+    <meta name="twitter:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
 
     {* Images *}
     {if $sCategoryContent.media.path}
