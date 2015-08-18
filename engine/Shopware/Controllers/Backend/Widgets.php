@@ -21,13 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Shop\Locale;
 
 /**
  * Backend widget controller
  */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Returns the list of active widgets for the current logged
      * in user as an JSON string.
@@ -428,6 +428,21 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         );
     }
 
+    public function getShopwareNewsAction()
+    {
+        /** @var $auth Shopware_Components_Auth */
+        $auth = Shopware()->Auth();
+        $user = $auth->getIdentity();
+        $result = $this->fetchRssFeedData($user->locale, 20);
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $result
+            )
+        );
+    }
+
     /**
      * Gets the latest orders for the "last orders" widget.
      *
@@ -719,5 +734,44 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             }
         }
         $this->View()->assign(array('success' => true, 'message' => 'The mail was send successfully.'));
+    }
+
+    /**
+     * @param Locale $locale
+     * @param int $limit
+     * @return array
+     */
+    private function fetchRssFeedData(Locale $locale, $limit = 20)
+    {
+        $lang = 'de';
+
+        if ($locale->getLocale() != 'de_DE') {
+            $lang = 'en';
+        }
+
+        $result = [];
+        $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1'));
+
+        /**
+         * @var \SimpleXMLElement $news
+         */
+        foreach ($xml->channel->item as $news) {
+            $tmp = (array)$news->children();
+
+            $date = new \DateTime($tmp['pubDate']);
+
+            $result[] = [
+                'title' => $tmp['title'],
+                'link' => $tmp['link'],
+                'linkHash' => md5($tmp['link']),
+                'pubDate' => $date->format('Y-m-d\TH:i:s')
+            ];
+        }
+
+        if ($limit) {
+            $result = array_slice($result, 0, $limit);
+        }
+
+        return $result;
     }
 }

@@ -398,6 +398,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         $hasErrors = false;
         try {
             $adminService->createAdmin($adminUser);
+            $adminService->addWidgets($adminUser);
             $shopService->updateShop($shop);
             $currencyService->updateCurrency($shop);
             $shopService->updateConfig($shop);
