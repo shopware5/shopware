@@ -503,8 +503,8 @@ div#article_details .delivery_container {margin: 5px 0 0 0;}
 /* Blog description */
 .blogdetail_content .description h2, #comments h2, #related h2, #description ul, #description ol {margin: 0 0 1.5em;}
 .blogdetail_content .description h2, #comments h2, #related h2 {font-size: 14px; font-weight: 700; margin: 0 0 15px 0;}
-.blogdetail_content .description ol {margin-left: 25px;}
-.blogdetail_content .description ul {margin-left: 20px;}
+.blogdetail_content .description ol {margin-left: 25px; padding-left: 20px;}
+.blogdetail_content .description ul {margin-left: 20px; padding-left: 25px;}
 .blogdetail_content .description ul li, #description ol li {list-style: disc;float:none;}
 .blogdetail_content .description ol li {list-style: decimal}
 

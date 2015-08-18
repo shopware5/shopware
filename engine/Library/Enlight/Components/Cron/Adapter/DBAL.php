@@ -194,7 +194,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $field = 'c'.$column;
+        $field = 'c.'.$column;
 
         $qb->select('*')
             ->from($this->tableName, 'c')

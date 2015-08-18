@@ -101,6 +101,9 @@ class PathResolver
         return $this->rootDir . '/templates';
     }
 
+    /**
+     * @return string
+     */
     private function getBaseThemeDirectory()
     {
         return $this->rootDir . DIRECTORY_SEPARATOR . 'themes';
@@ -308,9 +311,9 @@ class PathResolver
 
     /**
      * Helper function to build a unique file name.
-     * @param $timestamp
+     * @param string $timestamp
      * @param Shop\Shop $shop
-     * @param $suffix
+     * @param string $suffix
      * @return string
      */
     public function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
@@ -319,7 +322,9 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        return $timestamp . '_' . 't' . $shop->getTemplate()->getId() . '_s' . $shop->getId() . '.' . $suffix;
+        $filname = $timestamp.'_'.md5($timestamp.$shop->getTemplate()->getId().$shop->getId().\Shopware::REVISION);
+
+        return $filname.'.'.$suffix;
     }
 
     /**

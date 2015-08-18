@@ -330,7 +330,7 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Support the readOnly property
         if(me.readOnly) {
-            me.config.editor.readOnly = true;
+            me.config.editor.readonly = true;
         }
 
         // Fire the "beforerendereditor" event

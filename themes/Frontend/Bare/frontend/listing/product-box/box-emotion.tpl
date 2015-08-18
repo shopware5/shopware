@@ -55,10 +55,16 @@
                                                         {$baseSource = "{link file='frontend/_public/src/img/no-picture.jpg'}"}
                                                     {/if}
 
+                                                    {$desc = $sArticle.articleName|escape}
+
+                                                    {if $sArticle.image.description}
+                                                        {$desc = $sArticle.image.description|escape}
+                                                    {/if}
+
                                                     <picture>
                                                         {if $srcSetRetina}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
                                                         {if $srcSet}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSet}" />{/if}
-                                                        <img src="{$baseSource}" alt="{$sArticle.articleName|escape}" />
+                                                        <img src="{$baseSource}" alt="{$desc}" title="{$desc|truncate:25:""}" />
                                                     </picture>
                                                 {/block}
                                             </span>

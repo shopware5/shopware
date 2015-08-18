@@ -504,6 +504,7 @@ class Kernel implements HttpKernelInterface
     {
         $files = array(
             '/config.php',
+            '/config_dev.php',
         );
         foreach ($files as $file) {
             if (!is_file($filePath = $this->getRootDir() . $file)) {

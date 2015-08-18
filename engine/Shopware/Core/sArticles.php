@@ -324,6 +324,9 @@ class sArticles
         }
 
         $set = $this->propertyService->get($product, $productContext);
+        if (!$set) {
+            return [];
+        }
 
         return $this->legacyStructConverter->convertPropertySetStruct($set);
     }

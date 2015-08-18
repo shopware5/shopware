@@ -183,6 +183,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
         Ext.Ajax.request({
             url: '{url controller=SwagUpdate action=isUpdateAllowed}',
             async: true,
+            timeout: 180000,
             success: function(response) {
                 if (!response || !response.responseText) {
                     return;

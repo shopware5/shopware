@@ -117,12 +117,14 @@ In this document you will find a changelog of the important changes related to t
 * Added the ability to change variants using an AJAX call, therefore the page won't reload anymore. The configuration can be enabled / disabled in theme config, the default value is `true`, therefore the variants will be loaded via AJAX by default.
     * Plugin developers which supports variants needs to change their plugin accordingly. They can subscribe to the event `plugin/swAjaxVariant/onRequestData` to update their plugin.
     * If your plugin modifies the product page using Smarty, you're good to go.
+* Deprecated pre-installed import / export module in favor of the new import / export plugin, which is for free now
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
 * The getList method of the articles API resource now returns additionally the attributes of an article.
 * Change event argument property `name` to `vouchername` in `Shopware_Modules_Basket_AddVoucher_FilterSql` in `sBasket.php` due to reserved word.
-* Deprecated pre-installed import / export module in favor of the new import / export plugin, which is for free now
+* Support for batch user deleting in Backend UserManager
+* Added `createMediaField` to Emotion Component Model
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
@@ -193,12 +195,6 @@ In this document you will find a changelog of the important changes related to t
     * plugin/rangeSlider/changeMax              => plugin/rangeSlider/onSetMax
     * plugin/rangeSlider/reset                  => plugin/rangeSlider/onReset
     * plugin/rangeSlider/onChange               => plugin/rangeSlider/onEndDrag
-    * plugin/search/onKeyDown                   => plugin/swSearch/onKeyDown
-    * plugin/search/onKeyUp                     => plugin/swSearch/onKeyUp
-    * plugin/search/onSearchRequest             => plugin/swSearch/onSearchRequest
-    * plugin/search/onShowResult                => plugin/swSearch/onShowResult
-    * plugin/search/onCloseResult               => plugin/swSearch/onCloseResult
-    * plugin/search/onKeyboardNavigation        => plugin/swSearch/onKeyboardNavigation
 * Added new validation rules for snippets
     * Use `bin/console sw:snippets:validate <your-plugin-snippets-path>` to check the validity of your snippets.
     * Defining a snippet value in multiple lines is deprecated.
@@ -444,6 +440,7 @@ In this document you will find a changelog of the important changes related to t
     * `s_core_sessions_backend.created`
     * `s_emarketing_promotions*`
     * `s_core_plugins.capability_dummy`
+    * `s_articles_details.impressions`
 * The new Shopware core selects all required data for `sGetArticleById`, `sGetPromotionById` and `sGetArticlesByCategory`. The following events and internal functions are no longer used in these functions:
     * `sGetPromotionById` events
         * `Shopware_Modules_Articles_GetPromotionById_FilterSql`

@@ -1,16 +1,16 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_value_list"}
-	<div class="filter-panel filter--property facet--{$facet->getFacetName()}"
+	<div class="filter-panel filter--property facet--{$facet->getFacetName()|escape:'htmlall'}"
 		 data-filter-type="value-list"
-		 data-field-name="{$facet->getFieldName()}">
+		 data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
 		{block name="frontend_listing_filter_facet_value_list_flyout"}
 			<div class="filter-panel--flyout">
 
 				{block name="frontend_listing_filter_facet_value_list_title"}
 					<label class="filter-panel--title">
-						{$facet->getLabel()}
+						{$facet->getLabel()|escape}
 					</label>
 				{/block}
 
@@ -35,9 +35,9 @@
                                                     {block name="frontend_listing_filter_facet_value_list_input"}
                                                         <span class="filter-panel--checkbox">
                                                             <input type="checkbox"
-                                                                   id="__{$facet->getFieldName()}__{$option->getId()}"
-                                                                   name="__{$facet->getFieldName()}__{$option->getId()}"
-                                                                   value="{$option->getId()}"
+                                                                   id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                                   name="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                                   value="{$option->getId()|escape:'htmlall'}"
                                                                    {if $option->isActive()}checked="checked" {/if}/>
 
                                                             <span class="checkbox--state">&nbsp;</span>
@@ -46,8 +46,8 @@
 
                                                     {block name="frontend_listing_filter_facet_value_list_label"}
                                                         <label class="filter-panel--label"
-                                                               for="__{$facet->getFieldName()}__{$option->getId()}">
-                                                            {$option->getLabel()}
+                                                               for="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}">
+                                                            {$option->getLabel()|escape}
                                                         </label>
                                                     {/block}
                                                 </div>

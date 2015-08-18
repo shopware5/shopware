@@ -45,8 +45,13 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             {
                 type: 'Category',
                 position: 'bottom',
-                fields: ['displayDate'],
-                title: '{s name=chart/weekday/titleBottom}Weekday{/s}'
+                fields: ['date'],
+                title: '{s name=chart/weekday/titleBottom}Weekday{/s}',
+                label: {
+                    renderer:function (value) {
+                        return Ext.util.Format.date(value, 'l');
+                    }
+                }
             }
         ];
 
@@ -124,7 +129,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             (me.subApp.currencyAtEnd == 1)
         );
 
-        tip.setTitle(storeItem.get('displayDate') + '<br><br>&nbsp;' + sales);
+        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'l') + '<br><br>&nbsp;' + sales);
     }
 
 });

@@ -612,13 +612,14 @@
             var me = this,
                 width = (me.opts.fullscreen) ? $window.outerWidth() : me.$wrapper.outerWidth(),
                 factor = width / me.baseWidth,
+                containerStyle = me.$el.get(0).style,
                 wrapperHeight = width / me.ratio;
 
-            me.$el.css({
-                '-ms-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
-                '-o-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
-                '-moz-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
-                '-webkit-transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+            $.extend(containerStyle, {
+                'MsTransform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                'OTransform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                'MozTransform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
+                'webkitTransform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',
                 'transform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)'
             });
 
@@ -1052,13 +1053,14 @@
          * @param transformation
          */
         transformVideo: function(transformation) {
-            var me = this;
+            var me = this,
+                videoElementStyle = me.player.style;
 
-            me.$video.css({
-                '-ms-transform': transformation,
-                '-o-transform': transformation,
-                '-moz-transform': transformation,
-                '-webkit-transform': transformation,
+            $.extend(videoElementStyle, {
+                'MsTransform': transformation,
+                'OTransform': transformation,
+                'MozTransform': transformation,
+                'webkitTransform': transformation,
                 'transform': transformation
             });
 

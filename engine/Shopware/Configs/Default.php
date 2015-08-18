@@ -126,7 +126,7 @@ return array_replace_recursive([
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
         'use_trans_sid' => false,
-        'referer_check' => true, // true, false or a fix value
+        'referer_check' => true,
         'client_check' => false // true or false (is not compatible with firebug)
     ],
 ], $customConfig);

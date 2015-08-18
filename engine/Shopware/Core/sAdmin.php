@@ -2047,16 +2047,7 @@ class sAdmin
                     'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber',
                     array('subject' => $this, 'id' => $userID))
                 ) {
-                    $sql = "
-                        UPDATE
-                          s_order_number, s_user_billingaddress
-                        SET
-                          s_order_number.number = s_order_number.number+1,
-                          s_user_billingaddress.customernumber = s_order_number.number
-                        WHERE s_order_number.name = 'user'
-                        AND s_user_billingaddress.userID = ?
-                    ";
-                    $this->db->query($sql, array($userID));
+                    $this->assignCustomerNumber($userID);
                 }
             }
 
@@ -4534,14 +4525,7 @@ class sAdmin
         if (empty($userData["billingaddress"]['customernumber'])
             && $this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')
         ) {
-            $this->db->query(
-                "UPDATE s_order_number, s_user_billingaddress
-                SET s_order_number.number = s_order_number.number+1,
-                s_user_billingaddress.customernumber = s_order_number.number+1
-                WHERE s_order_number.name = 'user'
-                AND s_user_billingaddress.userID = ?",
-                array($userId));
-            return $userData;
+            $this->assignCustomerNumber($userId);
         }
         return $userData;
     }
@@ -4919,5 +4903,30 @@ class sAdmin
     {
         $date = new DateTime();
         return $date->format($format);
+    }
+
+    /**
+     * Assigns the next CustomerNumber from s_order_number
+     * to given $userId and updates s_order_number
+     * in an atomic operation.
+     *
+     * @param int $userId
+     */
+    private function assignCustomerNumber($userId)
+    {
+        $sql = <<<SQL
+UPDATE
+    s_order_number,
+    s_user_billingaddress
+SET
+    s_order_number.number = s_order_number.number+1,
+    s_user_billingaddress.customernumber = s_order_number.number
+WHERE
+    s_order_number.name = 'user'
+AND
+    s_user_billingaddress.userID = ?
+SQL;
+
+        $this->db->query($sql, array($userId));
     }
 }

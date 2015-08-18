@@ -14,7 +14,7 @@
             var me = this;
 
             // If the browser supports the feature, we don't need to take action
-            if(!me.isIE()) {
+            if(!me.isSupportedBrowser()) {
                 return false;
             }
 
@@ -34,6 +34,17 @@
         },
 
         /**
+         * Wrapper method to return supported browser checks.
+         *
+         * @returns {Boolean|*|boolean}
+         */
+        isSupportedBrowser: function() {
+            var me = this;
+
+            return me.isIE() || me.isEdge();
+        },
+
+        /**
          * Checks if we're dealing with the internet explorer.
          *
          * @private
@@ -41,7 +52,18 @@
          */
         isIE: function() {
             var myNav = navigator.userAgent.toLowerCase();
-            return myNav.indexOf('msie') != -1 || !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
+            return myNav.indexOf('msie') !== -1 || !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
+        },
+
+        /**
+         * Checks if we're dealing with the Windows 10 Edge browser.
+         *
+         * @private
+         * @returns {boolean}
+         */
+        isEdge: function() {
+            var myNav = navigator.userAgent.toLowerCase();
+            return myNav.indexOf('edge') !== -1;
         },
 
         /**

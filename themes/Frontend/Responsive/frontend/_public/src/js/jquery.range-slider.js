@@ -156,7 +156,12 @@
             /**
              * The number of steps the slider is divided in.
              */
-            stepCount: 20
+            stepCount: 100,
+
+            /**
+             * Function for calculation
+             */
+            stepCurve: 'linear'
         },
 
         init: function() {
@@ -174,9 +179,21 @@
             me.dragType = 'min';
 
             me.createSliderTemplate();
+            me.validateStepCurve();
 
             me.computeBaseValues();
             me.registerEvents();
+        },
+
+        validateStepCurve: function() {
+            var me = this,
+                validCurves = ['linear', 'log'];
+
+            me.opts.stepCurve = me.opts.stepCurve.toString().toLowerCase();
+
+            if (validCurves.indexOf(me.opts.stepCurve) < 0) {
+                me.opts.stepCurve = 'linear';
+            }
         },
 
         registerEvents: function() {
@@ -255,8 +272,8 @@
             me.stepSize = me.range / int(me.opts.stepCount);
             me.stepWidth = 100 / int(me.opts.stepCount);
 
-            me.minValue = (me.opts.startMin == me.opts.rangeMin || me.opts.startMin <= me.minRange) ? me.minRange : int(me.opts.startMin);
-            me.maxValue = (me.opts.startMax == me.opts.rangeMax || me.opts.startMax >= me.maxRange) ? me.maxRange : int(me.opts.startMax);
+            me.minValue = (me.opts.startMin === me.opts.rangeMin || me.opts.startMin <= me.minRange) ? me.minRange : int(me.opts.startMin);
+            me.maxValue = (me.opts.startMax === me.opts.rangeMax || me.opts.startMax >= me.maxRange) ? me.maxRange : int(me.opts.startMax);
 
             if (me.maxValue == me.minValue || me.maxValue == 0) {
                 me.maxValue = me.maxRange;
@@ -272,8 +289,9 @@
             var me = this,
                 min = minValue || me.minValue,
                 max = maxValue || me.maxValue,
-                left = 100 / me.range * (min - me.minRange),
-                width = 100 / me.range * (max - min);
+                left = me.getPositionByValue(min),
+                right = me.getPositionByValue(max),
+                width = right - left;
 
             me.$rangeBar.css({
                 'left': left + '%',
@@ -287,6 +305,7 @@
             var me = this,
                 update = updateInput || false;
 
+            min = (min === me.opts.rangeMin || min <= me.minRange) ? me.minRange : int(min);
             me.minValue = min;
 
             if (update) {
@@ -303,6 +322,7 @@
             var me = this,
                 update = updateInput || false;
 
+            max = (max === me.opts.rangeMax || max >= me.maxRange) ? me.maxRange : int(max);
             me.maxValue = max;
 
             if (update) {
@@ -383,14 +403,16 @@
                 width = me.$container.innerWidth(),
                 mouseX = pageX - offset.left,
                 xPercent = clamp(round((100 / width * mouseX), me.stepWidth, 'round'), 0, 100),
-                value = (me.range / 100 * xPercent) + me.minRange;
+                value = me.getValueByPosition(xPercent);
 
             event.preventDefault();
 
             if (me.dragType == 'max') {
-               me.setMax(clamp(value, me.minValue + me.stepSize * 2, me.maxRange));
+                var minValue = me.getValueByPosition(me.getPositionByValue(me.minValue) + me.stepWidth);
+                me.setMax(clamp(value, minValue, me.maxRange));
             } else {
-               me.setMin(clamp(value, me.minRange, me.maxValue - me.stepSize * 2));
+                var maxValue = me.getValueByPosition(me.getPositionByValue(me.maxValue) - me.stepWidth);
+                me.setMin(clamp(value, me.minRange, maxValue));
             }
 
             $.publish('plugin/swRangeSlider/onSlide', [ me, event, xPercent, value ]);
@@ -451,10 +473,28 @@
             $.publish('plugin/swRangeSlider/onUpdateLayout', [ me, minValue, maxValue ]);
         },
 
+        roundValue: function(value) {
+            var me = this;
+
+            if (value < 10) {
+                value = me.roundTo(value, 0.10);
+            } else if (value < 100) {
+                value = me.roundTo(value, 1);
+            } else {
+                value = me.roundTo(value, 5);
+            }
+
+            return value;
+        },
+
         formatValue: function(value) {
             var me = this;
 
             $.publish('plugin/swRangeSlider/onFormatValueBefore', [ me, value ]);
+
+            if (value != me.minRange && value != me.maxRange) {
+                value = me.roundValue(value);
+            }
 
             if (!me.opts.labelFormat.length) {
                 return value.toFixed(2);
@@ -473,6 +513,92 @@
             $.publish('plugin/swRangeSlider/onFormatValue', [ me, value ]);
 
             return value;
+        },
+
+        roundTo: function(value, num) {
+            var resto = value%num;
+
+            if (resto <= (num/2)) {
+                return value - resto;
+            } else {
+                return value + num - resto;
+            }
+        },
+
+        getPositionByValue: function(value) {
+            var me = this;
+
+            if(me.opts.stepCurve == 'log') {
+                return me._getPositionLog(value);
+            }
+
+            return me._getPositionLinear(value);
+        },
+
+        _getPositionLog: function(value) {
+            var me = this,
+                minp = 0,
+                maxp = me.opts.stepCount,
+                minv = Math.log(me.opts.rangeMin),
+                maxv = Math.log(me.opts.rangeMax),
+                scale = (maxv-minv) / (maxp-minp),
+                pos = minp + (Math.log(value) - minv) / scale;
+
+            pos = Math.round(pos * me.stepWidth);
+
+            return pos > 0 && pos || 0;
+        },
+
+        _getPositionLinear: function(value) {
+            var me = this;
+
+            return 100 / me.range * (value - me.minRange);
+        },
+
+        getValueByPosition: function(position) {
+            var me = this;
+
+            if(me.opts.stepCurve == 'log') {
+                return me._getValueLog(position);
+            }
+
+            return me._getValueLinear(position);
+        },
+
+        _getValueLinear: function(position) {
+            var me = this;
+
+            return (me.range / 100 * position) + me.minRange;
+        },
+
+        _getValueLog: function(position) {
+            var me = this;
+
+            if (position === 0) {
+                return me.minRange;
+            } else if (position === 100) {
+                return me.maxRange;
+            }
+
+            var minp = 0,
+                maxp = me.opts.stepCount,
+                minv = Math.log(me.opts.rangeMin),
+                maxv = Math.log(me.opts.rangeMax),
+                scale = (maxv-minv) / (maxp-minp);
+
+            position = position / me.stepWidth;
+
+            return Math.exp(minv + scale*(position-minp));
+        },
+
+        getStepWidth: function(value) {
+            var me = this;
+
+            if (me.opts.stepCurve == 'log') {
+                return value;
+            }
+
+            return me.stepWidth;
         },
 
         destroy: function() {

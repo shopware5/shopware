@@ -10,7 +10,7 @@
 			<li class="searchresult">
 				{if $search_result.thumbNails.1}
 					<a href="{$search_result.link}" class="searchthumb" title="{$search_result.name}">
-						<img src="{$search_result.thumbNails.1}" class="resultimage" style="margin: 0pt 5px 0pt 0pt;">
+						<img src="{$search_result.thumbNails.1}" class="resultimage">
 					</a>
 				{else}
 					{if !isset($sArticle.image.src)}

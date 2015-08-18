@@ -61,6 +61,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->registerErrorHandler($output);
         $this->container->load('plugins');
 
         /** @var \Enlight_Components_Cron_Manager $manager */

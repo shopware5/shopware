@@ -715,9 +715,10 @@
         onClick: function (event) {
             event.preventDefault();
 
-            var me = this;
+            var me = this,
+                target = me.$target.length === 1 && me.$target || $(event.target);
 
-            $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? me.$target.attr('href') : me.$target), me.opts);
+            $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? target.attr('href') : target), me.opts);
 
             me._isOpened = true;
 

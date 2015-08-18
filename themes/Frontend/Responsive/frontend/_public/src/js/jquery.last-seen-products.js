@@ -10,7 +10,7 @@
      * The created list will be showed as a product slider.
      */
     $.plugin('swLastSeenProducts', {
-
+        
         defaults: {
 
             /**

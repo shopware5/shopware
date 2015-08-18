@@ -24,6 +24,7 @@
 											{block name="frontend_checkout_cart_item_image_container_inner"}
 
 											    {$image = $sBasketItem.additional_details.image}
+                                                {$desc = $sBasketItem.articlename|escape}
 
 												{if $image.thumbnails[0]}
 													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
@@ -36,10 +37,15 @@
                                                        data-title="{$sBasketItem.articlename|strip_tags|escape}"
                                                        data-updateImages="true"
                                                        {/if}>
-                                                        <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$sBasketItem.articlename|escape}" />
+
+                                                        {if $image.description}
+                                                            {$desc = $image.description|escape}
+                                                        {/if}
+
+                                                        <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:25:""}" />
 													</a>
 												{else}
-													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
+													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:25:""} />
 												{/if}
 											{/block}
 										</div>

@@ -11,12 +11,22 @@
                         <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="box--image">
                             <span class="image--element">
                                 <span class="image--media">
+
+                                    {$desc = $sArticle.articleName|escape}
+
                                     {if isset($sArticle.image.thumbnails)}
+
+                                        {if $sArticle.image.description}
+                                            {$desc = $sArticle.image.description|escape}
+                                        {/if}
+
                                         <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
-                                             alt="{$sArticle.articleName|escape}" />
+                                             alt="{$desc}"
+                                             title="{$desc|truncate:25:""}" />
                                     {else}
                                         <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-                                             alt="{$sArticle.articleName|escape}">
+                                             alt="{$desc}"
+                                             title="{$desc|truncate:25:""}" />
                                     {/if}
                                 </span>
                             </span>

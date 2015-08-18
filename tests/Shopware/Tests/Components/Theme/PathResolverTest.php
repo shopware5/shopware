@@ -50,10 +50,12 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
         $templateMock = $this->createTemplateMock($templateId);
         $shopMock = $this->createShopMock($shopId, $templateMock);
 
-        $expected = '/my/root/dir/web/cache/' . $timestamp . '_t' . $templateId . '_s' . $shopId . '.css';
+        $filenameHash = $timestamp.'_'.md5($timestamp.$templateId.$shopId.\Shopware::REVISION);
+
+        $expected = '/my/root/dir/web/cache/' . $filenameHash . '.css';
         $this->assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));
 
-        $expected = '/my/root/dir/web/cache/' . $timestamp . '_t' . $templateId . '_s' . $shopId . '.js';
+        $expected = '/my/root/dir/web/cache/' . $filenameHash . '.js';
         $this->assertEquals($expected, $this->pathResolver->getJsFilePath($shopMock, $timestamp));
     }
 

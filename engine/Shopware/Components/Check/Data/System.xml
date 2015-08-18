@@ -5,7 +5,7 @@
 	 	<name>php</name><group>core</group><required>5.4.0</required>
 	</requirement>
 	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>4.6.0</required>
+	 	<name>ionCube Loader</name><group>core</group><required>4.6</required>
 	</requirement>
 	<requirement>
 	 	<name>mysql</name><group>core</group><required>5.5.0</required>
