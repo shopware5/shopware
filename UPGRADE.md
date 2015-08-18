@@ -6,6 +6,7 @@ In this document you will find a changelog of the important changes related to t
 * The getList method of the articles API resource now returns additionally the attributes of an article.
 * Change event argument property `name` to `vouchername` in `Shopware_Modules_Basket_AddVoucher_FilterSql` in `sBasket.php` due to reserved word.
 * Support for batch user deleting in Backend UserManager
+* Added open graph and twitter meta tags to a new block `frontend_index_header_meta_tags_opengraph` in the `header.tpl`
 
 ## 5.0.2
 * Added `createMediaField` to Emotion Component Model

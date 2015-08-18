@@ -13,6 +13,21 @@
 	<meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
 	<meta name="description" content="{block name='frontend_index_header_meta_description'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
 
+    {* Meta opengraph tags *}
+    {block name='frontend_index_header_meta_tags_opengraph'}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="{config name=sShopname}" />
+        <meta property="og:title" content="{config name=sShopname}" />
+        <meta property="og:description" content="{s name='IndexMetaDescriptionStandard'}{/s}" />
+        <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
+
+        <meta name="twitter:card" content="website" />
+        <meta name="twitter:site" content="{config name=sShopname}" />
+        <meta name="twitter:title" content="{config name=sShopname}" />
+        <meta name="twitter:description" content="{s name='IndexMetaDescriptionStandard'}{/s}" />
+        <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
+    {/block}
+
 	{block name='frontend_index_header_meta_tags_schema_webpage'}
 		<meta itemprop="copyrightHolder" content="{config name=sShopname}" />
 		<meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}{/s}" />
