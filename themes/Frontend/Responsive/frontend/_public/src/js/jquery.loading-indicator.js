@@ -50,13 +50,6 @@
 
             me.options = $.extend({}, me.defaults, indicatorOptions);
 
-            if (me.options.openOverlay !== false) {
-                $.overlay.open($.extend({}, {
-                    closeOnClick: me.options.closeOnClick,
-                    onClose: me.close.bind(me)
-                }));
-            }
-
             if (me.$loader === null) {
                 me.$loader = me._createLoader();
                 $('body').append(me.$loader);
@@ -64,7 +57,14 @@
 
             me._updateLoader();
 
-            window.setTimeout(function() {
+            me._timeout = window.setTimeout(function() {
+                if (me.options.openOverlay !== false) {
+                    $.overlay.open($.extend({}, {
+                        closeOnClick: me.options.closeOnClick,
+                        onClose: me.close.bind(me)
+                    }));
+                }
+
                 me.$loader.fadeIn(me.options.animationSpeed, function () {
                     $.publish('plugin/swLoadingIndicator/onOpenFinished', [ me ]);
                 });
@@ -82,13 +82,17 @@
 
             callback = callback || function() {};
 
-            if (opts.openOverlay !== false) {
-                $.overlay.close();
-            }
-
             if (me.$loader !== null) {
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
                     callback.call(me);
+
+                    if(me._timeout) {
+                        window.clearTimeout(me._timeout);
+                    }
+
+                    if (opts.openOverlay !== false) {
+                        $.overlay.close();
+                    }
 
                     $.publish('plugin/swLoadingIndicator/onCloseFinished', [ me ]);
                 });
