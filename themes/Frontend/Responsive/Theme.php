@@ -97,6 +97,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.image-gallery.js',
         'src/js/jquery.offcanvas-html-panel.js',
         'src/js/jquery.jump-to-tab.js',
+        'src/js/jquery.ajax-variant.js',
         'src/js/jquery.shopware-responsive.js'
     ];
 
@@ -1231,6 +1232,18 @@ class Theme extends \Shopware\Components\Theme
                 '__apple_web_app_title__',
                 '',
                 ['attributes' => ['lessCompatible' => false]]
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'ajaxVariantSwitch',
+                '__ajax_variant_switch__',
+                true,
+                ['attributes' => [
+                    'lessCompatible' => false,
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                ]]
             )
         );
 
