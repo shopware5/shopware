@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.Translation.model.Language',
         { name: 'leaf', convert: function(v, record) { return record.data.childrenCount <= 0; } },
         { name: 'name', type: 'string' },
         { name: 'default', type: 'boolean' },
-        { name: 'childrenCount', type: 'int' }
+        { name: 'childrenCount', type: 'int' },
+        { name: 'expanded', type: 'boolean', defaultValue: true, persist: false }
     ],
 
     /**
