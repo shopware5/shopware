@@ -55,6 +55,9 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
         accessory: {
             exist: '{s name=sidebar/accessory/already_assigned_message}The article [0] has been already assigned as accessory article!{/s}'
         },
+        streams: {
+            exist: '{s name=cross_selling/streams/already_assigned_message}The stream with the ID [0] has already been assigned to this article.{/s}'
+        },
         saved: {
             title: '{s name=article_saved/title}Successful{/s}',
             errorTitle: '{s name=article_saved/error_title}Error{/s}'
@@ -78,6 +81,10 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
                 removeSimilarArticle: me.onRemoveSimilarArticle,
                 addAccessoryArticle: me.onAddAccessoryArticle,
                 removeAccessoryArticle: me.onRemoveAccessoryArticle
+            },
+            'article-detail-window article-crossselling-product-streams': {
+                addStream: me.onAddStream,
+                removeStream: me.onRemoveStream
             }
         });
 
@@ -165,6 +172,55 @@ Ext.define('Shopware.apps.Article.controller.Crossselling', {
     onRemoveAccessoryArticle: function(grid, record) {
         var me = this,
             store = grid.getStore();
+
+        if (record instanceof Ext.data.Model) {
+            store.remove(record);
+        }
+    },
+
+    /**
+     * Event will be fired when the user wants to assign a product stream
+     *
+     * @event
+     */
+    onAddStream: function(form, grid, streamSelection) {
+        var me = this,
+            store = grid.getStore(),
+            values = form.getValues(),
+            streamModel, model, exist;
+
+        if (!form.getForm().isValid()) {
+            return;
+        }
+
+        streamModel = streamSelection.store.getById(values.id);
+        if(streamModel instanceof Ext.data.Model) {
+            values.description = streamModel.get('description');
+            values.name = streamModel.get('name');
+        }
+
+        model = Ext.create('Shopware.apps.Article.model.Stream', values);
+
+        // Check if product stream is already assigned
+        exist = store.getById(model.get('id'));
+        if (!(exist instanceof Ext.data.Model)) {
+            store.add(model);
+            form.getForm().reset();
+        } else {
+            Shopware.Notification.createGrowlMessage(
+                me.snippets.existTitle,
+                Ext.String.format(me.snippets.streams.exist, model.get('id'))
+            );
+        }
+    },
+
+    /**
+     * Event will be fired when the user wants to remove an assigned product stream.
+     *
+     * @event
+     */
+    onRemoveStream: function(grid, record) {
+        var store = grid.getStore();
 
         if (record instanceof Ext.data.Model) {
             store.remove(record);

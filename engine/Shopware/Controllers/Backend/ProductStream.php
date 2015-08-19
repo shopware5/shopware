@@ -23,8 +23,11 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
 {
@@ -47,12 +50,21 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $criteria->offset($this->Request()->getParam('start', 0));
         $criteria->limit($this->Request()->getParam('limit', 20));
 
+
         $context = $this->createContext(
-            $this->Request()->getParam('shopId', null),
-            $this->Request()->getParam('currencyId', null),
-            $this->Request()->getParam('customerGroupKey', null)
+            $this->Request()->getParam('shopId'),
+            $this->Request()->getParam('currencyId'),
+            $this->Request()->getParam('customerGroupKey')
         );
 
+        $criteria->addBaseCondition(
+            new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()])
+        );
+
+        $category = $context->getShop()->getCategory()->getId();
+        $criteria->addBaseCondition(
+            new CategoryCondition([$category])
+        );
 
         $result = Shopware()->Container()->get('shopware_search.product_search')
             ->search($criteria, $context);
@@ -68,7 +80,12 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     public function save($data)
     {
-        $data['conditions'] = json_encode($data['conditions']);
+        if (isset($data['conditions'])) {
+            $data['conditions'] = json_encode($data['conditions']);
+        } else {
+            $data['conditions'] = null;
+        }
+
         $data['sorting'] = json_encode($data['sorting']);
 
         return parent::save($data);
@@ -84,17 +101,24 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         return $data;
     }
 
-    private function createContext($shopId, $currencyId, $customerGroupKey)
+    /**
+     * @param $shopId
+     * @param int $currencyId
+     * @param int $customerGroupKey
+     * @return ProductContext
+     */
+    private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
+        /** @var Shopware\Models\Shop\Repository $repo */
         $repo = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
-        $shop = $repo->getActiveDefault();
 
-        if (!$shopId) {
-            $shopId = $shop->getId();
-        }
+        $shop = $repo->getActiveById($shopId);
+        $shopId = $shop->getId();
+
         if (!$currencyId) {
             $currencyId = $shop->getCurrency()->getId();
         }
+
         if (!$customerGroupKey) {
             $customerGroupKey = ContextService::FALLBACK_CUSTOMER_GROUP;
         }

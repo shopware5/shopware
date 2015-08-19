@@ -887,31 +887,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function productStreamArticleSliderAction()
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
-        $category = (int) $this->Request()->getParam("category");
         $limit = (int) $this->Request()->getParam("limit", 5);
-        $elementHeight = $this->Request()->getParam("elementHeight");
-        $elementWidth = $this->Request()->getParam("elementWidth");
 
         $streamId = $this->Request()->getParam('streamId');
 
-        $pages = $this->Request()->getParam("pages");
+        $pages = $this->Request()->getParam("pages", 1);
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
-
-        if (!$category) {
-            $this->Response()->setHttpResponseCode(404);
-            return;
-        }
 
         $values = $this->getProductStream($streamId, $offset, $limit);
 
         $this->View()->assign('articles', $values["values"]);
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
-        $this->View()->assign('sElementWidth', $elementWidth);
-        $this->View()->assign('sElementHeight', $elementHeight);
+        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
     }
 
     /**

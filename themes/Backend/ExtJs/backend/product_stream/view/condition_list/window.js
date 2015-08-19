@@ -3,7 +3,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-detail-window',
 
-    title : '{s name=title}ProductStream details{/s}',
+    title : '{s name=title}Product Stream details{/s}',
     height: '90%',
     width: '90%',
     layout: { type: 'vbox', align: 'stretch'},
@@ -54,6 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
         me.previewGrid = Ext.create('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             flex: 3
         });
+
         me.conditionPanel = Ext.create('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             flex: 2,
             margin: '0 10 0 0'
@@ -73,7 +74,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     },
 
     createSettingPanel: function() {
-        this.settingsPanel = Ext.create('Shopware.apps.ProductStream.view.defined_list.Settings');
+        this.settingsPanel = Ext.create('Shopware.apps.ProductStream.view.common.Settings');
         return this.settingsPanel;
     }
 });

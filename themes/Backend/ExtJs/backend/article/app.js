@@ -101,8 +101,10 @@ Ext.define('Shopware.apps.Article', {
         'statistics.Chart',
         'crossselling.Tab',
         'crossselling.Base',
+        'crossselling.ProductStreams',
         'resources.Links',
-        'resources.Downloads'
+        'resources.Downloads',
+        'components.fields.ProductStreamSelection'
     ],
 
     /**
@@ -167,6 +169,7 @@ Ext.define('Shopware.apps.Article', {
         'Dependency',
         'PriceVariation',
         'Field',
+        'Stream',
         'MediaMapping',
         'MediaMappingRule',
         'Property'

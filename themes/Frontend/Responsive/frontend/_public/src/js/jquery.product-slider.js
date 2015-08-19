@@ -114,7 +114,7 @@
             /**
              * Number of items moved on each slide.
              *
-             * @property itemsPerPage
+             * @property itemsPerSlide
              * @type {Number}
              */
             itemsPerSlide: 1,
@@ -279,7 +279,7 @@
              * @property ajaxCategoryID
              * @type {Number}
              */
-            ajaxCategoryID: 3,
+            ajaxCategoryID: null,
 
             /**
              * The maximum number of items to load via ajax.
@@ -287,7 +287,39 @@
              * @property ajaxMaxShow
              * @type {Number}
              */
-            ajaxMaxShow: 30
+            ajaxMaxShow: 30,
+
+            /**
+             * Option to toggle the ajax loading indicator
+             *
+             * @property ajaxShowLoadingIndicator
+             * @type {Boolean}
+             */
+            ajaxShowLoadingIndicator: true,
+
+            /**
+             * The css class for the ajax loading indicator container
+             *
+             * @property ajaxLoadingIndicatorCls
+             * @type {String}
+             */
+            ajaxLoadingIndicatorCls: 'js--loading-indicator indicator--absolute',
+
+            /**
+             * The css class for the ajax loading indicator icon
+             *
+             * @property ajaxLoadingIndicatorIconCls
+             * @type {String}
+             */
+            ajaxLoadingIndicatorIconCls: 'icon--default',
+
+            /**
+             * Optional event to initialize the product slider
+             *
+             * @property initOnEvent
+             * @type {String}
+             */
+            initOnEvent: null
         },
 
         /**
@@ -304,6 +336,7 @@
             me.autoScrollAnimation = false;
             me.autoSlideAnimation = false;
             me.bufferedCall = false;
+            me.initialized = false;
 
             me.isLoading = false;
             me.isAnimating = false;
@@ -313,8 +346,21 @@
                 return;
             }
 
-            me.initSlider();
-            me.registerEvents();
+            if (me.opts.mode === 'ajax' && me.opts.ajaxShowLoadingIndicator) {
+                me.showLoadingIndicator();
+            }
+
+            if (me.opts.initOnEvent !== null) {
+                $.subscribe(me.opts.initOnEvent, function() {
+                    if (!me.initialized) {
+                        me.initSlider();
+                        me.registerEvents();
+                    }
+                });
+            } else {
+                me.initSlider();
+                me.registerEvents();
+            }
         },
 
         /**
@@ -368,6 +414,8 @@
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
 
+            me.initialized = true;
+
             $.publish('plugin/swProductSlider/onInitSlider', [ me ]);
         },
 
@@ -386,6 +434,8 @@
             me._on(me.$container, 'scroll', $.proxy(me.onScroll, me));
 
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
+
+            $.subscribe('plugin/swTabMenu/onChangeTab', $.proxy(me.update, me));
 
             $.publish('plugin/swProductSlider/onRegisterEvents', [ me ]);
         },
@@ -521,6 +571,39 @@
         },
 
         /**
+         * Helper function to show a loading indicator.
+         * Gets called when ajax products are being loaded.
+         *
+         * @public
+         * @method showLoadingIndicator
+         */
+        showLoadingIndicator: function() {
+            var me = this;
+
+            me.$ajaxLoadingIndicator = $('<div>', {
+                'class': me.opts.ajaxLoadingIndicatorCls,
+                'html': $('<i>', {
+                    'class': me.opts.ajaxLoadingIndicatorIconCls
+                })
+            }).appendTo(me.$el);
+        },
+
+        /**
+         * Helper function to remove the loading indicator.
+         * Gets called when ajax products have been successfully loaded.
+         *
+         * @public
+         * @method removeLoadingIndicator
+         */
+        removeLoadingIndicator: function() {
+            var me = this;
+
+            if (me.$ajaxLoadingIndicator) {
+                me.$ajaxLoadingIndicator.remove();
+            }
+        },
+
+        /**
          * Loads new items via ajax.
          *
          * @public
@@ -532,10 +615,13 @@
         loadItems: function (start, limit, callback) {
             var me = this,
                 data = {
-                    'category': me.opts.ajaxCategoryID,
                     'start': start,
                     'limit': limit
                 };
+
+            if (me.opts.ajaxCategoryID !== null) {
+                data['category'] = me.opts.ajaxCategoryID
+            }
 
             me.isLoading = true;
 
@@ -547,6 +633,7 @@
                 data: data,
                 success: function (response) {
                     me.isLoading = false;
+                    me.removeLoadingIndicator();
 
                     if (!response) {
                         // Prevent infinite loop

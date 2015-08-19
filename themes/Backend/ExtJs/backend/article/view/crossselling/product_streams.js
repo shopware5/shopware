@@ -24,15 +24,15 @@
  * @package    Article
  * @subpackage Esd
  * @version    $Id$
- * @author shopware AG
+ * @author     shopware AG
  */
 
 /**
  * Shopware UI - Article crosselling page
  */
 //{namespace name=backend/article/view/main}
-//{block name="backend/article/view/crossseling/base"}
-Ext.define('Shopware.apps.Article.view.crossselling.Base', {
+//{block name="backend/article/view/crossseling/product_streams"}
+Ext.define('Shopware.apps.Article.view.crossselling.ProductStreams', {
 
     /**
      * Extend from the standard ExtJS 4
@@ -44,13 +44,13 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.article-crossselling-base',
+    alias: 'widget.article-crossselling-product-streams',
 
     /**
      * Set css class
      * @string
      */
-    cls: Ext.baseCSSPrefix + 'article-crossselling-base',
+    cls: Ext.baseCSSPrefix + 'article-crossselling-product-streams',
 
     /**
      * Padding of the body element of the component
@@ -69,21 +69,15 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
      * provided snippets at initialization of the component.
      * @object
      */
-    systemTexts: {
-        'productSearch':'{s name=detail/sidebar/similar/article_search}Article{/s}',
-        'crossField': '{s name=detail/sidebar/similar/assignment_field}Assignment{/s}',
-        'crossBox': '{s name=detail/sidebar/similar/assignment_box}Assign each other{/s}',
-        'delete': '{s name=detail/sidebar/similar/delete}Remove entry{/s}',
-        'name': '{s name=detail/sidebar/similar/name}Article name{/s}'
-    },
-
-    /**
-     * Additional events which needs to be registered.
-     * @object
-     */
-    customEvents: {
-        addEvent: '',
-        removeEvent: ''
+    snippets: {
+        'title': '{s name=cross_selling/streams/title}Product streams{/s}',
+        'gridTitle': '{s name=cross_selling/streams/grid_title}Assigned product streams{/s}',
+        'notice': '{s name=cross_selling/streams/notice}Custom product streams can be assigned to the article. The product streams will be shown as additional tab panels on the article detail page.{/s}',
+        'streamId': '{s name=cross_selling/streams/stream_id}Stream ID{/s}',
+        'streamName': '{s name=cross_selling/streams/stream_name}Name{/s}',
+        'streamDescription': '{s name=cross_selling/streams/stream_description}Description{/s}',
+        'addStream': '{s name=cross_selling/streams/stream_add}Add product stream{/s}',
+        'removeStream': '{s name=cross_selling/streams/stream_remove}Delete product stream{/s}'
     },
 
     /**
@@ -99,10 +93,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     initComponent: function() {
         var me = this;
 
-        me.systemTexts = Ext.apply({ }, me.systemTexts, me.snippets);
-        me.title = me.systemTexts.title;
-
-        me.registerAdditionalEvents();
+        me.title = me.snippets.title;
 
         me.items = [ me.createFormElements(), me.createGridPanel() ];
 
@@ -110,19 +101,32 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     },
 
     /**
-     * Registers additional events for the component based on { @link this.customEvents }.
-     *
-     * @returns void
+     * Registers additional component events.
      */
-    registerAdditionalEvents: function() {
-        var me = this,
-            events = {};
+    registerEvents: function() {
+        this.addEvents(
 
-        Ext.iterate(me.customEvents, function(key, value) {
-            events[value] = true;
-        });
+            /**
+             * Event will be fired when the user clicks on the add Product-Stream button.
+             *
+             * @event
+             * @param { Ext.form.Panel } The stream form
+             * @param { Ext.grid.Panel } The grid for the assigned streams
+             * @param { Shopware.apps.Article.view.components.fields.ProductStreamSelection }
+             *        The stream selection component
+             */
+            'addStream',
 
-        me.addEvents(events);
+            /**
+             * Event will be fired when the user clicks on the remove Product-Stream button
+             * within the Product-Streams grid.
+             *
+             * @event
+             * @param { Ext.grid.View } The grid view
+             * @param { Ext.data.Model } The streams record
+             */
+            'removeStream'
+        )
     },
 
     /**
@@ -132,7 +136,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     createFormElements: function() {
         var me = this;
 
-        return me.form = Ext.create('Ext.form.Panel', {
+        return me.streamForm = Ext.create('Ext.form.Panel', {
             margin: '0 20 0 0',
             layout: 'anchor',
             border: false,
@@ -143,57 +147,21 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
             },
             items: [
                 me.createNoticeContainer(),
-                me.createProductSearch(),
-                me.createCheckbox(),
+                me.createStreamSelection(),
                 me.createAddButton()
             ]
         });
     },
 
     /**
-     * Creates a special product search field for the form of the component.
+     * Creates a special product stream search field.
      *
-     * @returns { Shopware.form.field.ArticleSearch }
+     * @returns { Shopware.apps.Article.view.components.fields.ProductStreamSelection }
      */
-    createProductSearch: function() {
-        var me = this;
-
-        return me.productSearch = Ext.create('Shopware.form.field.ArticleSearch', {
-            name: 'number',
-            fieldLabel: me.systemTexts.productSearch,
-            returnValue: 'name',
-            hiddenReturnValue: 'number',
-            articleStore: Ext.create('Shopware.store.Article'),
-            width: '100%',
-            anchor: '100%',
-            formFieldConfig: {
-                labelWidth: 155
-            },
-            allowBlank: false,
-            getValue: function() {
-                return this.getSearchField().getValue();
-            },
-            setValue: function(value) {
-                this.getSearchField().setValue(value);
-            }
-        });
-    },
-
-    /**
-     * Creates the cross assignment checkbox for the form of the component.
-     *
-     * @returns { Ext.form.field.Checkbox }
-     */
-    createCheckbox: function() {
-        var me = this;
-
-        return Ext.create('Ext.form.field.Checkbox', {
-            name: 'cross',
-            labelWidth: 155,
-            fieldLabel: me.systemTexts.crossField,
-            boxLabel: me.systemTexts.crossBox,
-            inputValue: true,
-            uncheckedValue: false
+    createStreamSelection: function() {
+        return this.streamSelection = Ext.create('Shopware.apps.Article.view.components.fields.ProductStreamSelection', {
+            name: 'id',
+            allowBlank: false
         });
     },
 
@@ -206,11 +174,11 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     createAddButton: function() {
         var me = this;
 
-        return Ext.create('Ext.button.Button', {
+        return me.streamAddButton = Ext.create('Ext.button.Button', {
             cls: 'small primary',
-            text: me.systemTexts.add,
+            text: me.snippets.addStream,
             handler: function() {
-                me.fireEvent(me.customEvents.addEvent, me.form, me.productGrid, me.productSearch);
+                me.fireEvent('addStream', me.streamForm, me.streamGrid, me.streamSelection);
             }
         });
     },
@@ -223,21 +191,25 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     createGridPanel: function() {
         var me = this;
 
-        return me.productGrid = Ext.create('Ext.grid.Panel', {
-            title: me.systemTexts.gridTitle,
+        return me.streamGrid = Ext.create('Ext.grid.Panel', {
+            title: me.snippets.gridTitle,
             cls: Ext.baseCSSPrefix + 'free-standing-grid',
-            store: me.gridStore,
-            name: me.listingName,
-            height: 180,
+            name: 'streams-listing',
+            minHeight: 180,
+            store: me.streamStore,
             columnWidth: 0.65,
             columns: [
                 {
-                    header: me.systemTexts.productSearch,
-                    dataIndex: 'number',
-                    width: 120
+                    header: me.snippets.streamId,
+                    dataIndex: 'id',
+                    width: 100
                 }, {
-                    header: me.systemTexts.name,
+                    header: me.snippets.streamName,
                     dataIndex: 'name',
+                    flex: 1
+                }, {
+                    header: me.snippets.streamDescription,
+                    dataIndex: 'description',
                     flex: 1
                 }, {
                     xtype: 'actioncolumn',
@@ -245,9 +217,9 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
                     items: [
                         {
                             iconCls: 'sprite-minus-circle-frame',
-                            tooltip: me.systemTexts.delete,
+                            tooltip: me.snippets.removeStream,
                             handler: function (view, rowIndex, colIndex, item, opts, record) {
-                                me.fireEvent(me.customEvents.removeEvent, view, record);
+                                me.fireEvent('removeStream', view, record);
                             }
                         }
                     ]
@@ -264,9 +236,9 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
     createNoticeContainer: function() {
         var me = this;
 
-        return Ext.create('Ext.container.Container', {
+        return me.streamNotice = Ext.create('Ext.container.Container', {
             cls: Ext.baseCSSPrefix + 'global-notice-text',
-            html: me.systemTexts.notice
+            html: me.snippets.notice
         });
     }
 });

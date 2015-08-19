@@ -249,6 +249,26 @@ class LegacyStructConverter
     }
 
     /**
+     * Converts the passed ProductStream struct to an array structure.
+     *
+     * @param StoreFrontBundle\Struct\ProductStream $productStream
+     * @return array
+     */
+    public function convertRelatedProductStreamStruct(StoreFrontBundle\Struct\ProductStream $productStream)
+    {
+        if (!$productStream instanceof StoreFrontBundle\Struct\ProductStream) {
+            return array();
+        }
+
+        return [
+            'id' => $productStream->getId(),
+            'name' => $productStream->getName(),
+            'description' => $productStream->getDescription(),
+            'type' => $productStream->getType()
+        ];
+    }
+
+    /**
      * @param StoreFrontBundle\Struct\Product $product
      * @return array
      */
@@ -389,6 +409,11 @@ class LegacyStructConverter
         $data['sSimilarArticles'] = array();
         foreach ($product->getSimilarProducts() as $similarProduct) {
             $data['sSimilarArticles'][] = $this->convertListProductStruct($similarProduct);
+        }
+
+        $data['relatedProductStreams'] = array();
+        foreach ($product->getRelatedProductStreams() as $relatedProductStream) {
+            $data['relatedProductStreams'][] = $this->convertRelatedProductStreamStruct($relatedProductStream);
         }
 
         return $data;

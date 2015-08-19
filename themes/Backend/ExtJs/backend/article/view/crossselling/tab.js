@@ -28,7 +28,7 @@
  */
 
 /**
- * Shopware UI - Article esd page
+ * Shopware UI - Article crosselling page
  */
 //{namespace name=backend/article/view/main}
 //{block name="backend/article/view/esd/panel"}
@@ -106,7 +106,12 @@ Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
     initComponent: function() {
         var me = this;
 
-        me.items = [ me.createSimilarFieldset(), me.createAccessoryFieldset() ];
+        me.items = [
+            me.createSimilarFieldset(),
+            me.createAccessoryFieldset(),
+            me.createProductsStreamsFieldset()
+        ];
+
         me.callParent(arguments);
     },
 
@@ -145,6 +150,19 @@ Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
                 addEvent: 'addAccessoryArticle',
                 removeEvent: 'removeAccessoryArticle'
             }
+        });
+    },
+
+    /**
+     * Creates the product streams fieldset.
+     *
+     * @returns { Shopware.apps.Article.view.crossselling.ProductStreams }
+     */
+    createProductsStreamsFieldset: function() {
+        var me = this;
+
+        return Ext.create('Shopware.apps.Article.view.crossselling.ProductStreams', {
+            streamStore: me.article.getStreams()
         });
     }
 });
