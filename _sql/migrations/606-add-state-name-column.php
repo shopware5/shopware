@@ -1,5 +1,5 @@
 <?php
-class Migrations_Migration604 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration606 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -15,7 +15,7 @@ class Migrations_Migration604 extends Shopware\Components\Migrations\AbstractMig
         $this->addSql("UPDATE s_core_states SET `name` = 'partially_delivered' WHERE `description` LIKE 'Teilweise ausgeliefert' AND `group` LIKE 'state';");
         $this->addSql("UPDATE s_core_states SET `name` = 'completely_delivered' WHERE `description` LIKE 'Komplett ausgeliefert' AND `group` LIKE 'state';");
         $this->addSql("UPDATE s_core_states SET `name` = 'clarification_required' WHERE `description` LIKE 'Klärung notwendig' AND `group` LIKE 'state';");
-        $this->addSql("UPDATE s_core_states SET `name` = 'no_credit_approved' WHERE `description` LIKE 'Teilweise in Rechnung gestellt' AND `group` LIKE 'payment';");
+        $this->addSql("UPDATE s_core_states SET `name` = 'partially_invoiced' WHERE `description` LIKE 'Teilweise in Rechnung gestellt' AND `group` LIKE 'payment';");
         $this->addSql("UPDATE s_core_states SET `name` = 'completely_invoiced' WHERE `description` LIKE 'Komplett in Rechnung gestellt' AND `group` LIKE 'payment';");
         $this->addSql("UPDATE s_core_states SET `name` = 'partially_paid' WHERE `description` LIKE 'Teilweise bezahlt' AND `group` LIKE 'payment';");
         $this->addSql("UPDATE s_core_states SET `name` = 'completely_paid' WHERE `description` LIKE 'Komplett bezahlt' AND `group` LIKE 'payment';");
