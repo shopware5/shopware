@@ -20,7 +20,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         loginButton: '{s name="account/login/login"}Login{/s}'
     },
 
-    width: 360,
+    width: 280,
     anchor: '100%',
     border: false,
 
@@ -48,10 +48,10 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             border: false,
-            layout: {
-                type: 'vbox'
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
             },
-            anchor: '100%',
             cls: 'form-panel',
             items: [
                 me.createLoginText(),
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
 
         return {
             border: false,
-            margin: '0 0 10 0',
+            margin: '22 0 20 0',
             html: '<span class="section-title">' + me.snippets.title + '</span>'
         };
     },
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         me.registerButton = Ext.create('PluginManager.container.Container', {
             html: me.snippets.loginButton,
             cls: 'plugin-manager-action-button primary',
-            margin: '36 50 0 0',
+            margin: '0 0 0 0',
             handler: function () {
                 me.applyLogin();
             }
@@ -90,7 +90,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
 
         me.actionButtons = Ext.create('Ext.container.Container', {
             margin: '10 0 0 0',
-            width: 360,
+            padding: '10 0',
+            width: 280,
             cls: 'action-buttons',
             items: [me.registerButton]
         });
@@ -103,7 +104,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
         var me = this;
 
         me.LoginRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: me.snippets.registerDomain,
             name: 'registerDomain',
             boxLabel: me.snippets.registerDomain,
             cls: 'input--field',
@@ -125,7 +125,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
 
         me.shopwareIdField = Ext.create('Ext.form.field.Text', {
             name: 'shopwareID',
-            fieldLabel: me.snippets.shopwareId,
             allowBlank: false,
             cls: 'input--field',
             emptyText: me.snippets.shopwareId,
@@ -148,7 +147,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Login', {
 
         me.passwordField = Ext.create('Ext.form.field.Text', {
             name: 'password',
-            fieldLabel: me.snippets.password,
             allowBlank: false,
             labelWidth: 130,
             cls: 'input--field',
