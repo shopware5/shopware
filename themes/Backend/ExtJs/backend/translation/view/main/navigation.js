@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Translation.view.main.Navigation',
 	extend: 'Ext.tree.Panel',
     alias: 'widget.translation-main-navigation',
     rootVisible: false,
-    singleExpand: true,
+    singleExpand: false,
     useArrows: true,
     title: '{s name=navigation_title}Available language(s){/s}',
     width: 200,
@@ -77,6 +77,39 @@ Ext.define('Shopware.apps.Translation.view.main.Navigation',
         me.store.load();
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Find and select first editable language
+     * after all nodes have been loaded
+     */
+    listeners: {
+        afteritemexpand: function() {
+            var me = this;
+
+            if (me.getRootNode()) {
+                var node = me.getFirstLanguage(me.getRootNode());
+                if (node) {
+                    me.getSelectionModel().select(node);
+                    me.fireEvent('itemclick', me, node);
+                }
+            }
+        }
+    },
+
+    /**
+     * Search recursively through the store to find the first editable language
+     * @param node
+     * @returns object
+     */
+    getFirstLanguage: function(node) {
+        var me = this;
+
+        if (node.firstChild) {
+            return me.getFirstLanguage(node.firstChild);
+        }
+
+        return node;
     }
 });
 //{/block}
