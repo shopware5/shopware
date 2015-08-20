@@ -128,6 +128,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             // Add dialog box
             'category-category-tree button[action=deleteCategory]' : {
                 'click' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) }
+            },
+            'duplication-settings-window': {
+                'start-duplication': me.onStartDuplication
             }
         });
         // need to call parent
@@ -193,9 +196,13 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         var me          = this,
             tree        = me.getCategoryTree(),
             selection   = tree.getSelectionModel( ).getSelection(),
-            store       = me.subApplication.getStore('Tree');
+            record      = selection[0];
 
-        Ext.MessageBox.confirm(
+        me.getView('main.DuplicateSettings').create({
+            treeRecord: record
+        }).show();
+
+        /* Ext.MessageBox.confirm(
             me.snippets.confirmDuplicateCategoryHeadline,
             Ext.String.format(me.snippets.confirmDuplicateCategory, selection[0].get('text')),
             function (response) {
@@ -214,6 +221,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 }).show();
                 batch.run();
             });
+            */
     },
 
     /**
@@ -670,6 +678,31 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         } else {
             return treeStore.getRootNode();
         }
+    },
+
+    onStartDuplication: function(window, treeRecord) {
+        var me = this,
+            form = window.form,
+            values = form.getValues(),
+            store = me.getStore('Tree'),
+            batch;
+
+        if(!values.categoryId) {
+            values.categoryId = NaN;
+        }
+
+        window.close();
+
+        batch = me.getView('main.DuplicateTasks').create({
+            categoryId: treeRecord.get('id'),
+            parentId: values.categoryId,
+            reassignArticleAssociations: values.reassignArticleAssociations,
+            originalParentId: treeRecord.get('id'),
+            callback: function() {
+                store.load({ node: treeRecord.parentNode });
+            }
+        }).show();
+        batch.run();
     }
 });
 //{/block}

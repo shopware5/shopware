@@ -72,16 +72,18 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
         me.callParent(arguments);
     },
 
-    onWindowReady: function (window, categoryId, parentId, callback) {
+    onWindowReady: function (window, categoryId, parentId, reassignArticleAssociations, callback) {
         var me = this;
 
         me.originalCategoryId = categoryId;
         me.newCategoryId = categoryId;
+        me.reassignArticleAssociations = reassignArticleAssociations;
 
         me.pool.push(
             {
                 categoryId: parentId,
-                children: [categoryId]
+                children: [categoryId],
+                reassignArticleAssociations: reassignArticleAssociations
             }
         );
 
@@ -129,7 +131,9 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
         Ext.Ajax.request({
             url: currentConfig.initUrl,
             params: {
-                categoryId: me.newCategoryId
+                categoryId: me.newCategoryId,
+                reassignArticleAssociations: me.reassignArticleAssociations,
+                originalCategoryId: me.originalCategoryId
             },
             success: function (response) {
                 var json = Ext.decode(response.responseText);
@@ -198,6 +202,8 @@ Ext.define('Shopware.apps.Category.controller.DuplicateTasks', {
         }
 
         var str = '?categoryId=' + params.categoryId;
+        str += '&reassignArticleAssociations=' + me.reassignArticleAssociations;
+        str += '&originalCategoryId=' + me.originalCategoryId;
         Ext.each(params.children, function(child)  {
            str += '&children[]=' + child;
         });

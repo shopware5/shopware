@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
 
     run: function() {
         var me = this;
-        me.fireEvent('duplicateTasksWindowReady', me, me.categoryId, me.parentId, me.callback);
+        me.fireEvent('duplicateTasksWindowReady', me, me.categoryId, me.parentId, me.reassignArticleAssociations, me.callback);
     },
 
     /**
