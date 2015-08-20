@@ -67,6 +67,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
+            'status.name as name',
             'status.description as description'
         ));
         $builder->from('Shopware\Models\Order\Status', 'status')
@@ -115,6 +116,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
+            'status.name as name',
             'status.description as description'
         ));
         $builder->from('Shopware\Models\Order\Status', 'status');
