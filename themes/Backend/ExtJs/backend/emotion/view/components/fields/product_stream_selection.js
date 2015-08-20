@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ProductStreamSelection'
             triggerAction: 'all',
             valueField: 'id',
             fieldLabel: 'Product stream',
-            displayField: 'name',
+            displayField: 'formatted_name',
             emptyText: me.snippets.fields.please_select,
             store: me.createStore()
         });
@@ -75,7 +75,9 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ProductStreamSelection'
         var me = this;
 
         var store = Ext.create('Shopware.store.Search', {
-            fields: ['id', 'name'],
+            fields: [ 'id', 'name', { name: 'formatted_name', convert: function (v, r) {
+                return r.get('id') + " | " + r.get('name');
+            }}],
             pageSize: 15,
             configure: function() {
                 return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }

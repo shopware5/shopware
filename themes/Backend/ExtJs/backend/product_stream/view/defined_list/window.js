@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
             cls: 'primary',
             handler: function () {
                 me.fireEvent('save-defined-list', me.record);
+                me.activateProductGrid(me.record);
             }
         });
 

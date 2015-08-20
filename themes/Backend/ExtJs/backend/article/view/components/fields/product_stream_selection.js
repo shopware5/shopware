@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Article.view.components.fields.ProductStreamSelection'
             valueField: 'id',
             fieldLabel: me.snippets.fields.streamFieldLabel,
             labelWidth: 155,
-            displayField: 'name',
+            displayField: 'formatted_name',
             emptyText: me.snippets.fields.streamFieldSelection,
             store: me.store
         });
@@ -79,7 +79,9 @@ Ext.define('Shopware.apps.Article.view.components.fields.ProductStreamSelection'
         var me = this;
 
         var store = Ext.create('Shopware.store.Search', {
-            fields: ['id', 'name', 'description'],
+            fields: [ 'id', 'name', { name: 'formatted_name', convert: function (v, r) {
+                return r.get('id') + " | " + r.get('name');
+            }}],
             pageSize: 15,
             configure: function() {
                 return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
@@ -92,6 +94,7 @@ Ext.define('Shopware.apps.Article.view.components.fields.ProductStreamSelection'
                 me.select(record);
             }
         });
+
         return store;
     }
 });
