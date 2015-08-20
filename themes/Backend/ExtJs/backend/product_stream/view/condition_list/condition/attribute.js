@@ -26,21 +26,24 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'
         }).show();
     },
 
-    load: function(key, value) {
+    load: function(key, value, container) {
         if (key.indexOf(this.getName()) < 0) {
             return;
         }
 
         var field = this.createField(value.field);
         field.setValue(value);
+
         this.updateTitle(container, value.field);
         container.fixToggleTool();
+
         return field;
     },
 
     createField: function(attribute) {
         return Ext.create('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
-            name: this.getName() + '|' + attribute
+            name: 'condition.' + this.getName() + '|' + attribute,
+            attributeField: attribute
         });
     },
 

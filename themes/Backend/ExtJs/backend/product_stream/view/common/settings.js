@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
 
     getSortings: function() {
         return [
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDate', value: 'Release date', direction: 'desc' },
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting', value: 'Release date', direction: 'desc' },
             { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting', value: 'Popularity', direction: 'desc' },
             { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: 'Cheapest price', direction: 'asc' },
             { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: 'Highest price', direction: 'desc' },
