@@ -598,6 +598,14 @@ class LegacyStructConverter
                 },
                 $group->getOptions()
             );
+            
+            $mediaValues = array();
+            foreach ($group->getOptions() as $option) {
+                /**@var $option StoreFrontBundle\Struct\Property\Option */
+                if ($option->getMedia()) {
+                    $mediaValues[$option->getId()] = array_merge(array('valueId' => $option->getId()), $this->convertMediaStruct($option->getMedia()));
+                }
+            }
 
             $result[$group->getId()] = [
                 'id'        => $group->getId(),
@@ -607,6 +615,7 @@ class LegacyStructConverter
                 'groupName' => $set->getName(),
                 'value'     => implode(', ', $values),
                 'values'    => $values,
+                'media'     => $mediaValues,
             ];
         }
 
