@@ -74,6 +74,14 @@ class sArticles
      */
     protected $mediaRepository = null;
 
+
+    /**
+     * Internal helper
+     *
+     * @var array
+     */
+    protected $cachedPromotions = array();
+
     /**
      * Constant for the alphanumeric sort configuration of the category filters
      */
@@ -3699,6 +3707,12 @@ class sArticles
         }
 
         $category = (int) $category;
+
+        $cacheKey = implode('-', array($mode, $category, $value, $withImage));
+        if(isset($this->cachedPromotions[$cacheKey])) {
+            return $this->cachedPromotions[$cacheKey];
+        }
+
         $categoryJoin = "";
 
         if (!empty($category)) {
@@ -3990,6 +4004,8 @@ class sArticles
             $getPromotionResult,
             array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value)
         );
+
+        $this->cachedPromotions[$cacheKey] = $getPromotionResult;
 
         return $getPromotionResult;
     }
