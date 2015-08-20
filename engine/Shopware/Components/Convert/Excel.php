@@ -84,7 +84,7 @@ class Shopware_Components_Convert_Excel
     {
         // deliver header (as recommended in php manual)
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
-        header("Content-Disposition: inline; filename=\"" . $filename . ".xlsx\"");
+        header("Content-Disposition: inline; filename=\"" . $filename . ".xls\"");
 
         // print out document to the browser
         // need to use stripslashes for the damn ">"
