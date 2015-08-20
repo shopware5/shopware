@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.controller.Main', {
     extend: 'Enlight.app.Controller',
@@ -124,7 +125,10 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                         productGrid.reconfigure(store);
                     }
                 });
-                Shopware.Notification.createGrowlMessage('Product stream', 'Stream saved');
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=stream_saved_title}Product stream{/s}',
+                    '{s name=stream_saved_description}Stream saved{/s}'
+                );
             }
         });
     },

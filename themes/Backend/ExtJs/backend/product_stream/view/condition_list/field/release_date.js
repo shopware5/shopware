@@ -26,13 +26,14 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', {
 
     extend: 'Ext.form.FieldContainer',
-    layout: { type: 'hbox', align: 'stretch' },
+    layout: { type: 'vbox', align: 'stretch' },
     mixins: [ 'Ext.form.field.Base' ],
-    height: 30,
+    height: 70,
     value: undefined,
 
     initComponent: function() {
@@ -55,18 +56,19 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', 
         me.directionStore = Ext.create('Ext.data.Store', {
             fields: ['value', 'label'],
             data: [
-                { value: 'past', label: 'Past' },
-                { value: 'future', label: 'Future' }
+                { value: 'past', label: '{s name=release_date/past}Past{/s}' },
+                { value: 'future', label: '{s name=release_date/future}Future{/s}' }
             ]
         });
 
         me.directionField = Ext.create('Ext.form.field.ComboBox', {
             allowBlank: false,
-            fieldLabel: 'Direction',
+            fieldLabel: '{s name=release_date/input_text}Release date in the{/s}',
             value: 'past',
             displayField: 'label',
             valueField: 'value',
-            store: me.directionStore
+            store: me.directionStore,
+            labelWidth: 160
         });
 
         return me.directionField;
@@ -77,12 +79,10 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.ReleaseDate', 
 
         me.dayField = Ext.create('Ext.form.field.Number', {
             labelWidth: 30,
-            fieldLabel: 'days',
+            fieldLabel: '{s name=days}days{/s}',
             allowBlank: false,
             minValue: 1,
             value: 1,
-            padding: '0 0 0 10',
-            flex: 1
         });
         return me.dayField;
     },

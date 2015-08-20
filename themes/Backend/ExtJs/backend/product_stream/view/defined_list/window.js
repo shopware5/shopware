@@ -26,11 +26,12 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-defined-list-window',
-    title : '{s name=title}Product Stream details{/s}',
+    title : '{s name=detail_window_title}Product stream details{/s}',
     height: '90%',
     width: '90%',
     layout: { type: 'vbox', align: 'stretch'},
@@ -64,7 +65,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
         var me = this;
 
         me.saveButton = Ext.create('Ext.button.Button', {
-            text: 'Save',
+            text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
                 me.fireEvent('save-defined-list', me.record);

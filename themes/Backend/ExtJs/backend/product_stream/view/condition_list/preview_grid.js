@@ -26,10 +26,11 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     extend: 'Ext.grid.Panel',
-    title: 'Preview',
+    title: '{s name=preview}Preview{/s}',
     alias: 'widget.product-stream-preview-grid',
 
     initComponent: function() {
@@ -71,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             valueField: 'id',
             store: me.currencyStore,
             value: 1,
-            fieldLabel: 'Currency',
+            fieldLabel: '{s name=currency}Currency{/s}',
             forceSelection: true,
             name: 'currency',
             labelWidth: 100
@@ -82,7 +83,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             store: me.customerGroupStore,
             value: 'EK',
             name: 'customerGroup',
-            fieldLabel: 'Customer group',
+            fieldLabel: '{s name=customer_group}Customer group{/s}',
             forceSelection: true,
             labelWidth: 100
         });
@@ -93,7 +94,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             name: 'shop',
             forceSelection: true,
             value: 1,
-            fieldLabel: 'Shop',
+            fieldLabel: '{s name=shop}Shop{/s}',
             labelWidth: 100
         });
 
@@ -105,19 +106,19 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
 
     createColumns: function() {
         return [{
-            header: 'Number',
+            header: '{s name=number}Number{/s}',
             width: 110,
             dataIndex: 'number'
         },{
-            header: 'Name',
+            header: '{s name=name}Name{/s}',
             flex: 1,
             dataIndex: 'name'
         }, {
-            header: 'Stock',
+            header: '{s name=stock}Stock{/s}',
             width: 60,
             dataIndex: 'stock'
         }, {
-            header: 'Price',
+            header: '{s name=price}Price{/s}',
             dataIndex: 'cheapestPrice',
             renderer: this.priceRenderer
         }];

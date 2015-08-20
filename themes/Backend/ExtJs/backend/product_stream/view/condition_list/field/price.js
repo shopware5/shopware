@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
 
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
         var me = this;
 
         me.fromField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: 'from',
+            fieldLabel: '{s name=from}from{/s}',
             minValue: 0,
             labelWidth: 30,
             flex: 1,
@@ -71,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
 
         me.toField = Ext.create('Ext.form.field.Number', {
             labelWidth: 30,
-            fieldLabel: 'to',
+            fieldLabel: '{s name=to}to{/s}',
             minValue: 0,
             padding: '0 0 0 10',
             flex: 1,
@@ -122,7 +123,10 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
         var valid = (this.fromField.getValue() !== null || this.toField.getValue());
 
         if (!valid) {
-            Shopware.Notification.createGrowlMessage('Validation', this.getErrorMessage());
+            Shopware.Notification.createGrowlMessage(
+                '{s name=validation_title}Validation{/s}',
+                this.getErrorMessage()
+            );
         }
 
         return valid;

@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.CreateDate', {
 
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.CreateDate', {
 
         me.dayField = Ext.create('Ext.form.field.Number', {
             labelWidth: 150,
-            fieldLabel: 'in den letzten X tagen',
+            fieldLabel: '{s name=create_date/input_text}in the last X days{/s}',
             allowBlank: false,
             minValue: 1,
             value: 1,

@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.CreateDate', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -35,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.CreateDate
     },
 
     getLabel: function() {
-        return 'Create date condition';
+        return '{s name=creation_date_condition}Creation date condition{/s}';
     },
 
     isSingleton: function() {

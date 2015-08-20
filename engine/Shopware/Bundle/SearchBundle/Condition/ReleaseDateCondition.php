@@ -54,7 +54,7 @@ class ReleaseDateCondition implements ConditionInterface
     public function __construct($direction, $days)
     {
         Assertion::integerish($days);
-        Assertion::choice($direction, [self::DIRECTION_FUTURE, self::DIRECTION_FUTURE]);
+        Assertion::choice($direction, [self::DIRECTION_PAST, self::DIRECTION_FUTURE]);
         $this->direction = $direction;
         $this->days = (int)$days;
     }

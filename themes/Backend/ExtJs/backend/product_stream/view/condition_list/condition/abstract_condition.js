@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.AbstractCondition', {
     alternateClassName: 'ProductStream.filter.AbstractCondition',

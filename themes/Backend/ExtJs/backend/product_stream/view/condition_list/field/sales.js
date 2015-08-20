@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Sales', {
 
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Sales', {
 
         me.minSales = Ext.create('Ext.form.field.Number', {
             labelWidth: 150,
-            fieldLabel: 'Minimum Sales',
+            fieldLabel: '{s name=minimum_sales}Minimum sales{/s}',
             allowBlank: false,
             minValue: 1,
             value: null,

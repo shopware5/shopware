@@ -26,12 +26,13 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.list.Window', {
     extend: 'Shopware.window.Listing',
     alias: 'widget.product-stream-list-window',
     height: 450,
-    title : '{s name=window_title}Product Stream listing{/s}',
+    title : '{s name=list_window_title}Product Stream listing{/s}',
 
     configure: function() {
         return {

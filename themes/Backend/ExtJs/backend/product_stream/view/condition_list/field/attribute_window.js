@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindow', {
     extend: 'Ext.window.Window',
@@ -55,7 +56,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
 
         me.attributeCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'attribute',
-            fieldLabel: 'Select product attribute',
+            fieldLabel: '{s name=select_product_attribute}Select product attribute{/s}',
             pageSize: 20,
             store: store,
             valueField: 'column',
@@ -64,7 +65,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
         });
 
         me.notice = Ext.create('Ext.container.Container', {
-            html: 'Bitte wählen Sie zunächst ein Produkt Attribute aus',
+            html: '{s name=attribute/input_text}Please choose a product attribute{/s}',
             height: 40
         });
 
@@ -77,7 +78,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
             dock: 'bottom',
             items: ['->', {
                 xtype: 'button',
-                text: 'Apply',
+                text: '{s name=apply}Apply{/s}',
                 cls: 'primary',
                 handler: function() {
                     if (me.attributeCombo.getValue()) {

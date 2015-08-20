@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
@@ -35,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     bodyPadding: 10,
     conditions: [],
 
-    title: 'Conditions',
+    title: '{s name=conditions}Conditions{/s}',
 
     initComponent: function() {
         var me = this;
@@ -131,7 +132,10 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
 
 
             if (singleton && me.conditions.indexOf(name) > -1) {
-                Shopware.Notification.createGrowlMessage('Singleton filter', 'Filter can only be added one time');
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=singleton_filter_title}Unique filter{/s}',
+                    '{s name=singleton_filter_description}Each filter type can only be added once{/s}'
+                );
                 return;
             }
 
@@ -184,13 +188,13 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             items = [];
 
         me.addButton = Ext.create('Ext.button.Split', {
-            text: 'Add condition',
+            text: '{s name=add_condition}Add condition{/s}',
             iconCls: 'sprite-plus-circle-frame',
             menu: me.createMenu()
         });
 
         me.previewButton = Ext.create('Ext.button.Button', {
-            text: 'Refresh preview',
+            text: '{s name=refresh_preview}Refresh preview{/s}',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: function() {
                 me.loadPreview();

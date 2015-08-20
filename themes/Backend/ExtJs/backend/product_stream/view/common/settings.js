@@ -26,11 +26,12 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.product-stream-settings',
-    title: 'Settings',
+    title: '{s name=settings}Settings{/s}',
     height: 170,
     margin: '0 0 10',
     bodyPadding: 10,
@@ -80,7 +81,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         me.sortingCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'sorting',
             store: me.sortingStore,
-            fieldLabel: 'Sorting',
+            fieldLabel: '{s name=sorting}Sorting{/s}',
             valueField: 'key',
             displayField: 'value',
             queryMode: 'local',
@@ -94,11 +95,11 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
 
     getSortings: function() {
         return [
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting', value: 'Release date', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting', value: 'Popularity', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: 'Cheapest price', direction: 'asc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: 'Highest price', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductNameSorting', value: 'Article description', direction: 'asc' }
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting', value: '{s name=release_date}Release date{/s}', direction: 'desc' },
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting', value: '{s name=popularity}Popularity{/s}', direction: 'desc' },
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: '{s name=cheapest_price}Cheapest price{/s}', direction: 'asc' },
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: '{s name=highest_price}Highest price{/s}', direction: 'desc' },
+            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductNameSorting', value: '{s name=article_description}Article description{/s}', direction: 'asc' }
         ];
     },
 
@@ -107,7 +108,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             name: 'name',
             anchor: '100%',
             allowBlank: false,
-            fieldLabel: 'Name',
+            fieldLabel: '{s name=name}Name{/s}',
             translatable: true,
         });
 
@@ -119,7 +120,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             name: 'description',
             anchor: '100%',
             rows: 3,
-            fieldLabel: 'Description',
+            fieldLabel: '{s name=description}Description{/s}',
             translatable: true,
         });
 

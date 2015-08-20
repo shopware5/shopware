@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Property', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -35,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Property',
     },
 
     getLabel: function() {
-        return 'Property condition';
+        return '{s name=property_condition}Property condition{/s}';
     },
 
     isSingleton: function() {

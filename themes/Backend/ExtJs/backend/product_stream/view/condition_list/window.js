@@ -26,12 +26,13 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-detail-window',
 
-    title : '{s name=title}Product Stream details{/s}',
+    title : '{s name=detail_window_title}Product stream details{/s}',
     height: '90%',
     width: '90%',
     layout: { type: 'vbox', align: 'stretch'},
@@ -59,7 +60,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
         var me = this;
 
         me.saveButton = Ext.create('Ext.button.Button', {
-            text: 'Save',
+            text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
                 me.fireEvent('save-filtered-stream', me.record);

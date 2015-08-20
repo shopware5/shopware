@@ -26,20 +26,21 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.list.List', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.product-stream-listing-grid',
     region: 'center',
 
-    addButtonText: 'Add condition stream',
+    addButtonText: '{s name=add_condition_stream}Add condition stream{/s}',
 
     configure: function () {
         return {
             detailWindow: 'Shopware.apps.ProductStream.view.condition_list.Window',
             columns: {
-                name: null,
-                description: null
+                name: { header: '{s name=name}Name{/s}' },
+                description: { header: '{s name=description}Description{/s}' }
             }
         };
     },
@@ -61,9 +62,9 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
                 {
                     formatName: function(type) {
                         if (type == 2) {
-                            return 'Defined stream(s)';
+                            return '{s name=defined_streams}Defined streams{/s}';
                         } else {
-                            return 'Condition stream(s)';
+                            return '{s name=condition_streams}Condition streams{/s}';
                         }
                     }
                 }
@@ -78,7 +79,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
         items = Ext.Array.insert(items, 1, [{
             xtype: 'button',
             iconCls: 'sprite-plus-circle-frame',
-            text: 'Add defined stream',
+            text: '{s name=add_defined_stream}Add defined stream{/s}',
             handler: function () {
                 var record = Ext.create('Shopware.apps.ProductStream.model.Stream');
                 record.set('type', 2);

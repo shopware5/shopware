@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.VoteAverage', {
 
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.VoteAverage', 
 
         me.average = Ext.create('Ext.form.field.Number', {
             labelWidth: 150,
-            fieldLabel: 'Minimum Average',
+            fieldLabel: '{s name=minimum_average}Minimum average{/s}',
             allowBlank: false,
             minValue: 1,
             value: 3,

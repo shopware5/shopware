@@ -26,6 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.SearchTerm', {
     extend: 'ProductStream.filter.AbstractCondition',
@@ -35,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.SearchTerm
     },
 
     getLabel: function() {
-        return 'Search term condition';
+        return '{s name=search_term_condition}Search term condition{/s}';
     },
 
     isSingleton: function() {
