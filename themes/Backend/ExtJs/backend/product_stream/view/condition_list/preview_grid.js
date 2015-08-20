@@ -1,7 +1,36 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    ProductStream
+ * @subpackage Window
+ * @version    $Id$
+ * @author shopware AG
+ */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     extend: 'Ext.grid.Panel',
-    title: 'Preview',
+    title: '{s name=preview}Preview{/s}',
     alias: 'widget.product-stream-preview-grid',
 
     initComponent: function() {
@@ -43,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             valueField: 'id',
             store: me.currencyStore,
             value: 1,
-            fieldLabel: 'Currency',
+            fieldLabel: '{s name=currency}Currency{/s}',
             forceSelection: true,
             name: 'currency',
             labelWidth: 100
@@ -54,7 +83,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             store: me.customerGroupStore,
             value: 'EK',
             name: 'customerGroup',
-            fieldLabel: 'Customer group',
+            fieldLabel: '{s name=customer_group}Customer group{/s}',
             forceSelection: true,
             labelWidth: 100
         });
@@ -65,7 +94,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             name: 'shop',
             forceSelection: true,
             value: 1,
-            fieldLabel: 'Shop',
+            fieldLabel: '{s name=shop}Shop{/s}',
             labelWidth: 100
         });
 
@@ -77,19 +106,19 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
 
     createColumns: function() {
         return [{
-            header: 'Number',
+            header: '{s name=number}Number{/s}',
             width: 110,
             dataIndex: 'number'
         },{
-            header: 'Name',
+            header: '{s name=name}Name{/s}',
             flex: 1,
             dataIndex: 'name'
         }, {
-            header: 'Stock',
+            header: '{s name=stock}Stock{/s}',
             width: 60,
             dataIndex: 'stock'
         }, {
-            header: 'Price',
+            header: '{s name=price}Price{/s}',
             dataIndex: 'cheapestPrice',
             renderer: this.priceRenderer
         }];

@@ -1,3 +1,32 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    ProductStream
+ * @subpackage Window
+ * @version    $Id$
+ * @author shopware AG
+ */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
 
@@ -39,7 +68,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
         var me = this;
 
         me.fromField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: 'from',
+            fieldLabel: '{s name=attribute/from_text}From{/s}',
             flex: 1,
             listeners: {
                 change: function() {
@@ -55,7 +84,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
 
         me.toField = Ext.create('Ext.form.field.Number', {
             labelWidth: 50,
-            fieldLabel: 'to',
+            fieldLabel: '{s name=attribute/to_text}to{/s}',
             padding: '0 0 0 10',
             flex: 1,
             listeners: {
@@ -73,23 +102,23 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
         var store = Ext.create('Ext.data.Store', {
             fields: [ 'name', 'value' ],
             data: [
-                { name: 'equals', value: '=' },
-                { name: 'not equals', value: '!=' },
-                { name: 'less than', value: '<' },
-                { name: 'less than equals', value: '<=' },
-                { name: 'between', value: 'BETWEEN' },
-                { name: 'greater than', value: '>' },
-                { name: 'greater than equals', value: '>=' },
-                { name: 'in', value: 'IN' },
-                { name: 'starts with', value: 'STARTS_WITH' },
-                { name: 'ends with', value: 'ENDS_WITH' },
-                { name: 'like', value: 'CONTAINS' }
+                { name: '{s name=attribute_condition/equals}equals{/s}', value: '=' },
+                { name: '{s name=attribute_condition/not_equals}not equals{/s}', value: '!=' },
+                { name: '{s name=attribute_condition/less_than}less than{/s}', value: '<' },
+                { name: '{s name=attribute_condition/less_than_equals}less than equals{/s}', value: '<=' },
+                { name: '{s name=attribute_condition/between}between{/s}', value: 'BETWEEN' },
+                { name: '{s name=attribute_condition/greater_than}greater than{/s}', value: '>' },
+                { name: '{s name=attribute_condition/greater_than_equals}greater than equals{/s}', value: '>=' },
+                { name: '{s name=attribute_condition/in}in{/s}', value: 'IN' },
+                { name: '{s name=attribute_condition/starts_with}starts with{/s}', value: 'STARTS_WITH' },
+                { name: '{s name=attribute_condition/ends_with}ends with{/s}', value: 'ENDS_WITH' },
+                { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
             ]
         });
 
         me.operatorSelection = Ext.create('Ext.form.field.ComboBox', {
             store: store,
-            fieldLabel: 'Operator',
+            fieldLabel: '{s name=operator}Operator{/s}',
             displayField: 'name',
             valueField: 'value',
             allowBlank: false,
@@ -113,7 +142,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
         var me = this;
 
         me.valueField = Ext.create('Ext.form.field.Text', {
-            fieldLabel: 'Value'
+            fieldLabel: '{s name=value}Value{/s}',
         });
 
         return me.valueField;

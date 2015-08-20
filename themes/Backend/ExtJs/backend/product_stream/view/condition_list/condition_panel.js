@@ -1,3 +1,32 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    ProductStream
+ * @subpackage Window
+ * @version    $Id$
+ * @author shopware AG
+ */
+//{namespace name=backend/product_stream/main}
 
 Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
@@ -7,7 +36,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     bodyPadding: 10,
     conditions: [],
 
-    title: 'Conditions',
+    title: '{s name=conditions}Conditions{/s}',
 
     initComponent: function() {
         var me = this;
@@ -103,7 +132,10 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
 
 
             if (singleton && me.conditions.indexOf(name) > -1) {
-                Shopware.Notification.createGrowlMessage('Singleton filter', 'Filter can only be added one time');
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=singleton_filter_title}Unique filter{/s}',
+                    '{s name=singleton_filter_description}Each filter type can only be added once{/s}'
+                );
                 return;
             }
 
@@ -156,13 +188,13 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             items = [];
 
         me.addButton = Ext.create('Ext.button.Split', {
-            text: 'Add condition',
+            text: '{s name=add_condition}Add condition{/s}',
             iconCls: 'sprite-plus-circle-frame',
             menu: me.createMenu()
         });
 
         me.previewButton = Ext.create('Ext.button.Button', {
-            text: 'Refresh preview',
+            text: '{s name=refresh_preview}Refresh preview{/s}',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: function() {
                 me.loadPreview();
