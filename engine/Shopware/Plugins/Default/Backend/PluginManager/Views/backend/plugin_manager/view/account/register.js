@@ -21,7 +21,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
         registerDomain: '{s name=account/register/register_domain}Register domain{/s}'
     },
 
-    width: 360,
+    width: 400,
     border: false,
     layout: 'fit',
 
@@ -40,7 +40,10 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             border: false,
-            layout: 'vbox',
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
             cls: 'form-panel',
             items: [
                 me.createRegisterText(),
@@ -61,7 +64,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
 
         me.newRegistrationRegisterText = {
             border: false,
-            margin: '0 0 10 0',
+            margin: '0 0 20 0',
             html: '<span class="section-title">' + me.snippets.title + '</span>'
         };
 
@@ -72,7 +75,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
         var me = this;
 
         me.newRegistrationShopwareId = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.snippets.shopwareId,
             name: 'shopwareID',
             allowBlank: false,
             cls: 'input--field',
@@ -81,7 +83,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             enableKeyEvents: true,
             checkChangeBuffer: 700,
             margin: '10 0',
-            labelWidth: 150,
             listeners: {
                 specialkey: function (field, e) {
                     if (e.getKey() == e.ENTER) {
@@ -103,10 +104,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             emptyText: me.snippets.password,
             allowBlank: false,
             required: true,
-            fieldLabel: me.snippets.password,
             cls: Ext.baseCSSPrefix + 'password-field input--field',
             minLength: 5,
-            labelWidth: 150,
             validator: function (value) {
                 if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordConfirmationField.getValue())) {
                     me.newRegistrationPasswordConfirmationField.clearInvalid();
@@ -136,9 +135,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             emptyText: me.snippets.confirmPassword,
             allowBlank: false,
             required: true,
-            fieldLabel: me.snippets.confirmPassword,
             minLength: 5,
-            labelWidth: 150,
             cls: 'input--field',
             validator: function (value) {
                 if (Ext.String.trim(value) == Ext.String.trim(me.newRegistrationPasswordField.getValue())) {
@@ -164,7 +161,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
         var me = this;
 
         me.newRegistrationEmail = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.snippets.email,
             name: 'email',
             emptyText: me.snippets.email,
             vtype: 'remote',
@@ -175,7 +171,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
             required: true,
             enableKeyEvents: true,
             checkChangeBuffer: 700,
-            labelWidth: 150,
             listeners: {
                 specialkey: function (field, e) {
                     if (e.getKey() == e.ENTER) {
@@ -192,11 +187,9 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
         var me = this;
 
         me.newRegistrationRegisterDomain = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: me.snippets.registerDomain,
             name: 'registerDomain',
             boxLabel: me.snippets.registerDomain,
             cls: 'input--field',
-            labelWidth: 150,
             checked: true,
             listeners: {
                 specialkey: function (field, e) {
@@ -216,7 +209,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
         me.registerButton = Ext.create('PluginManager.container.Container', {
             html: me.snippets.registerButton,
             cls: 'plugin-manager-action-button primary',
-            margin: '0 30 0 0',
+            margin: '0 0 0 0',
             handler: function () {
                 me.sendRegisterForm();
             }
@@ -224,7 +217,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Register', {
 
         me.actionButtons = Ext.create('Ext.container.Container', {
             margin: '10 0 0 0',
-            width: 360,
+            width: 400,
             cls: 'action-buttons',
             items: [me.registerButton]
         });

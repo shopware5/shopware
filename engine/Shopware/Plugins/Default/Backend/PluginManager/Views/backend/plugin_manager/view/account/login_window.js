@@ -66,7 +66,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
                 Ext.create('PluginManager.container.Container', {
                     html: 'X',
                     cls: 'headline-close',
-                    width: 40,
                     handler: function() {
                         Shopware.app.Application.fireEvent('destroy-login');
                     }
@@ -90,7 +89,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
         var me = this;
 
         return Ext.create('Shopware.apps.PluginManager.view.account.Login', {
-            callback: me.callback
+            callback: me.callback,
+            margin: '0 25 0 0'
         });
     },
 
@@ -98,7 +98,9 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
         var me = this;
 
         return Ext.create('Shopware.apps.PluginManager.view.account.Register', {
-            callback: me.callback
+            cls: 'plugin-manager-login-window plugin-manager-register-form',
+            callback: me.callback,
+            margin: '0 0 0 15'
         });
     }
 
