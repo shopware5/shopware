@@ -88,7 +88,17 @@
              * @property startIndex
              * @type {Number}
              */
-            'startIndex': -1
+            'startIndex': -1,
+
+            /**
+             * This option can make the tab menu container horizontally
+             * scrollable when too many tab menu items are displayed.
+             * The functionality is provided by the swMenuScroller plugin.
+             *
+             * @property scrollable
+             * @type {Boolean}
+             */
+            'scrollable': false
         },
 
         /**
@@ -131,6 +141,12 @@
                     }
                 }
             });
+
+            if (me.opts.scrollable) {
+                me.$el.swMenuScroller({
+                    'listSelector': me.$tabContainer
+                });
+            }
 
             opts.startIndex = Math.max(opts.startIndex, 0);
 
@@ -210,7 +226,7 @@
             }
 
             if (tabId !== undefined) {
-                $.publish('plugin/swTabMenu/onChangeTab-' + tabId, [ me, index ]);
+                $.publish('onShowContent-' + tabId, [ me, index ]);
             }
 
             $.publish('plugin/swTabMenu/onChangeTab', [ me, index ]);
@@ -224,7 +240,12 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            var me = this,
+                menuScroller = me.$el.data('plugin_swMenuScroller');
+
+            if (menuScroller !== undefined) {
+                menuScroller.destroy();
+            }
 
             me.$el.removeClass(me.opts.pluginClass);
 

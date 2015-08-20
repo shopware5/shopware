@@ -137,7 +137,8 @@
             var me = this,
                 opts = me.opts,
                 $targetEl = me.$targetEl,
-                siblings = $('.' + opts.collapseTargetCls).not($targetEl);
+                siblings = $('.' + opts.collapseTargetCls).not($targetEl),
+                tabId = $targetEl.parent().attr('data-tab-id');
 
             me.$el.addClass(opts.activeTriggerCls);
 
@@ -152,9 +153,9 @@
                 });
             }
 
-            $.each($targetEl.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_swProductSlider').update();
-            });
+            if(tabId !== undefined) {
+                $.publish('onShowContent-' + tabId, [ me ]);
+            }
 
             $.publish('plugin/swCollapsePanel/onOpenPanel', [ me ]);
         },
