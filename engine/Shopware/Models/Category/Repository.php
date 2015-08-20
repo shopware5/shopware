@@ -544,6 +544,36 @@ class Repository extends ModelRepository
         }
         return $categories;
     }
+
+    /**
+     * @param      $id
+     *
+     * @return array
+     */
+    public function getChildrenCountList($id)
+    {
+        $builder = $this->getCategoriesByParentBuilder($id);
+        $builder->select('COUNT(categories) as categoriesCount');
+
+        $count = $builder->getQuery()->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
+     * @param      $id
+     *
+     * @return array
+     */
+    public function getFullChildrenList($id)
+    {
+        $builder = $this->getCategoriesByParentBuilder($id);
+
+        $categories = $builder->getQuery()->getArrayResult();
+
+        return $categories;
+    }
+
     /**
      * Returns first active articleId for given category
      *
@@ -602,9 +632,24 @@ class Repository extends ModelRepository
      */
     public function getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
-        $builder = $this->createQueryBuilder('categories')
-                ->select(array('categories'))
+        return $this->getCategoriesByParentBuilder($parentId, $offset, $limit)
                 ->andWhere('categories.blog = 1');
+    }
+
+    /**
+     * Helper method to create the query builder for the "getBlogCategoriesByParentQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $parentId
+     * @param $offset
+     * @param $limit
+     *
+     * @return  \Shopware\Components\Model\QueryBuilder
+     */
+    public function getCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
+    {
+        $builder = $this->createQueryBuilder('categories')
+                ->select(array('categories'));
 
         if ($parentId > 1) {
             $builder->andWhere('categories.path LIKE :path')
@@ -613,7 +658,6 @@ class Repository extends ModelRepository
 
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
-
 
         return $builder;
     }
@@ -658,41 +702,6 @@ class Repository extends ModelRepository
         ));
         $builder->having('childrenCount > 0 OR blog = 1');
         $builder->addSelect('(' . $subQuery->getDQL() . ') as childrenCount');
-
-        return $builder;
-    }
-
-    /**
-     * Returns the \Doctrine\ORM\Query to select the informations of an category and its children by category id
-     * @param integer $categoryId
-     * @return Query
-     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
-     */
-    public function getCategoryByIdQuery($categoryId)
-    {
-        $builder = $this->getCategoryQueryBuilder()
-            ->where('category.id = :categoryId')
-            ->setParameters(array('categoryId' => $categoryId));
-
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getCategoryByIdQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
-     */
-    public function getCategoryQueryBuilder()
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('category', 'attribute', 'media', 'children', 'childrenAttribute', 'childrenMedia'))
-            ->from('Shopware\Models\Category\Category', 'category')
-            ->leftJoin('category.attribute', 'attribute')
-            ->leftJoin('category.media', 'media')
-            ->leftJoin('category.children', 'children')
-            ->leftJoin('children.attribute', 'childrenAttribute')
-            ->leftJoin('children.media', 'childrenMedia');
 
         return $builder;
     }

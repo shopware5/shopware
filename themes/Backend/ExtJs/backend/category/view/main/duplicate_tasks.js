@@ -23,8 +23,8 @@
 
 /* {namespace name=backend/category/main} */
 
-//{block name="backend/category/view/main"}
-Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
+//{block name="backend/category/view/duplicate/main"}
+Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
 
     /**
      * Define that the order main window is an extension of the enlight application window
@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.category-main-multi-request-tasks',
+    alias: 'widget.category-main-duplicate-tasks',
 
     /**
      * Define window width
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
     /**
      * @string
      */
-    title:  '{s name=batch/title}Move category{/s}',
+    title:  '{s name=batch/duplicate/title}Duplicate category tree{/s}',
 
     /**
      * Contains all snippets for the component
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
 
     run: function() {
         var me = this;
-        me.fireEvent('multiRequestTasksWindowReady', me, me.categoryId);
+        me.fireEvent('duplicateTasksWindowReady', me, me.categoryId, me.parentId, me.callback);
     },
 
     /**
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
      */
     registerEvents: function() {
         this.addEvents(
-            'multiRequestTasksWindowReady'
+            'duplicateTasksWindowReady'
         );
     },
     /**
@@ -151,15 +151,15 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
     createItems: function() {
         var me = this;
 
-        me.rebuildCategoryProgress     = me.createProgressBar();
-        me.rebuildAssignmentsProgress  = me.createProgressBar();
+        me.duplicateCategoryProgress = me.createProgressBar();
+        me.rebuildAssignmentsProgress = me.createProgressBar();
 
         return [
             {
                 xtype: 'container',
                 padding: '10 0',
                 items: [
-                    me.rebuildCategoryProgress,
+                    me.duplicateCategoryProgress,
                     me.rebuildAssignmentsProgress
                 ]
             },

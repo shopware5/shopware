@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Category\Category;
 
 /**
  * Shopware Categories
@@ -218,7 +219,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return array('success' => false, 'error' => 'No category id passed.');
         }
 
-        /** @var \Shopware\Models\Category\Category $category */
+        /** @var Category $category */
         $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
 
         $counter = 0;
@@ -256,7 +257,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return array('success' => false, 'error' => 'No category id passed.');
         }
 
-        /** @var \Shopware\Models\Category\Category $category */
+        /** @var Category $category */
         $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
 
         $counter = 0;
@@ -559,7 +560,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $itemId     = (int) $this->Request()->getParam('id');
         $parentId   = (int) $this->Request()->getParam('parentId', 1);
 
-        /** @var $item \Shopware\Models\Category\Category */
+        /** @var $item Category */
         $item = $this->getRepository()->find($itemId);
         if ($item === null) {
             $this->View()->assign(array(
@@ -570,7 +571,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return;
         }
 
-        /** @var $parent \Shopware\Models\Category\Category */
+        /** @var $parent Category */
         $parent = $this->getRepository()->find($parentId);
         if ($parent === null) {
             $this->View()->assign(array(
@@ -622,7 +623,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
-            /** @var $category \Shopware\Models\Category\Category */
+            /** @var $category Category */
             $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
             $category->setPosition($key);
         }
@@ -645,7 +646,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryId = $params['id'];
 
             if (empty($categoryId)) {
-                $categoryModel = new \Shopware\Models\Category\Category();
+                $categoryModel = new Category();
                 Shopware()->Models()->persist($categoryModel);
 
                 // Find parent for newly created category
@@ -774,7 +775,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         return $data;
     }
 
-
     public function getRebuildCategoryPathCountAction()
     {
         $categoryId = $this->Request()->getParam('categoryId');
@@ -865,6 +865,74 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $this->view->assign(array(
             'success' => true,
+        ));
+    }
+
+    /**
+     * Returns the number of categories that exist under the given one
+     */
+    public function getCategoryTreeCountAction()
+    {
+        $categoryId = $this->Request()->getParam('categoryId');
+
+        $count = $this->getRepository()->getChildrenCountList($categoryId);
+
+        $this->view->assign(array(
+            'success' => true,
+            'data' => array(
+                'count'     => $count,
+                'batchSize' => 1
+            )
+        ));
+    }
+
+    /**
+     * Duplicates the given categories into the new parent
+     */
+    public function duplicateCategoryAction()
+    {
+        /** @var \Shopware\Components\CategoryHandling\CategoryDuplicator $categoryDuplicator */
+        $categoryDuplicator = $this->get('CategoryDuplicator');
+
+        $categoryIds = $this->Request()->getParam('children');
+        if (!is_array($categoryIds)) {
+            $categoryIds = [$categoryIds];
+        }
+        $newParentId = $this->Request()->getParam('categoryId');
+        $newParentId = $newParentId == 0 ? 1 : $newParentId;
+        $result = [];
+
+        foreach ($categoryIds as $categoryId) {
+            $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId);
+
+            if (empty($newCategoryId)) {
+                $this->view->assign(array(
+                    'success' => false,
+                    'message' => "Category by id $categoryId not found"
+                ));
+
+                return ;
+            }
+
+            $categoryDuplicator->duplicateCategoryArticleAssociations($categoryId, $newCategoryId);
+
+            $childrenStmt = $this->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
+            $childrenStmt->execute([':parent' => $categoryId]);
+            $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
+
+            if (count($children)) {
+                $result[] = [
+                    'categoryId' => $newCategoryId,
+                    'children' => $children
+                ];
+            }
+        }
+
+        $this->view->assign(array(
+            'success' => true,
+            'processed' => count($categoryIds),
+            'needsRebuild' => true,
+            'result' => $result
         ));
     }
 }

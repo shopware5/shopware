@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Category', {
     views: [
         'main.Window',
         'main.MultiRequestTasks',
+        'main.DuplicateTasks',
         'category.Tree',
         'category.tabs.Settings',
         'category.tabs.ArticleMapping',
@@ -94,7 +95,8 @@ Ext.define('Shopware.apps.Category', {
         'Tree',
         'Settings',
         'ArticleMapping',
-        'MultiRequest'
+        'MultiRequest',
+        'DuplicateTasks'
     ],
 
     /**

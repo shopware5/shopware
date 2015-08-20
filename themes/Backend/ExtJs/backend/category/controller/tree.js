@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         { ref: 'mainWindow', selector: 'category-main-window' },
         { ref: 'categoryTree', selector: 'category-category-tree' },
         { ref: 'deleteButton', selector: 'category-category-tree button[action=deleteCategory]' },
+        { ref: 'duplicateButton', selector: 'category-category-tree button[action=duplicateCategory]' },
         { ref: 'saveCategoryButton', selector: 'button[action=saveDetail]' },
         { ref: 'settingsForm', selector: 'category-category-tabs-settings' },
         { ref: 'articleMappingForm', selector: 'category-category-tabs-article_mapping' }
@@ -67,10 +68,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         moveCategorySuccess : '{s name=tree/move_success}Category has been moved.{/s}',
         moveCategoryFailure : '{s name=tree/move_failure}Category could not be moved.{/s}',
         confirmDeleteCategoryTitle   : '{s name=tree/delete_confirmation_title}Are you sure you want to delete the category?{/s}',
-        confirmDeleteCategory   : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
+        confirmDeleteCategory : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
         confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
         deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
+        confirmDuplicateCategoryTitle: '{s name=tree/duplicate_confirmation_title}Are you sure you want to duplicate the category?{/s}',
+        confirmDuplicateCategory : '{s name=tree/duplicate_confirmation}This process will duplicate the \'[0]\' category, all its subcategories and respective article associations. Once this is done, you can move or rename the new categories. Do you wish to proceed?{/s}',
+        confirmDuplicateCategoryHeadline: '{s name=tree/duplicate_confirmation_headline}Duplicate this category?{/s}',
+        duplicateItemSuccess : '{s name=tree/duplicate_success}Category has been duplicated.{/s}',
+        duplicateItemFailure : '{s name=tree/duplicate_failure}Category could not be duplicated.{/s}',
         onSaveChangesSuccess    : '{s name=settings/save_success}Changes have been saved successfully.{/s}',
         onSaveChangesError      : '{s name=settings/save_error}An error has occurred while saving the changes.{/s}',
         emptySubcategoryField   : '{s name=tree/empty_subcategory}Required field.{/s}',
@@ -99,8 +105,10 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 'reload'        : me.onReload,
                 // delete event
                 'deleteSubCategory' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) },
-                // event when ever someone tries to  add a new category into the category tree
+                // event when ever someone tries to add a new category into the category tree
                 'addSubCategory'    : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) },
+                // event when ever someone tries to duplicate a category from the category tree
+                'duplicateSubCategory'    : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) },
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
                 //
@@ -113,6 +121,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
              // Add Category in settings tab
             'category-category-tabs-settings [action=addCategory]':{
                 'click' : function() { me._destroyOtherModuleInstances(me.onAddCategory, arguments) }
+            },
+            'category-category-tree button[action=duplicateCategory]' : {
+                'click' : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) }
             },
             // Add dialog box
             'category-category-tree button[action=deleteCategory]' : {
@@ -170,6 +181,38 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     }
                 });
 
+            });
+    },
+
+    /**
+     * Duplicate selected category and children
+     *
+     * @return void
+     */
+    onDuplicateCategory: function() {
+        var me          = this,
+            tree        = me.getCategoryTree(),
+            selection   = tree.getSelectionModel( ).getSelection(),
+            store       = me.subApplication.getStore('Tree');
+
+        Ext.MessageBox.confirm(
+            me.snippets.confirmDuplicateCategoryHeadline,
+            Ext.String.format(me.snippets.confirmDuplicateCategory, selection[0].get('text')),
+            function (response) {
+                if (response !== 'yes') {
+                    return false;
+                }
+                var record = selection[0],
+                    parentNode = record.parentNode;
+
+                var batch = me.getView('main.DuplicateTasks').create({
+                    categoryId: record.get('id'),
+                    parentId: record.get('parentId'),
+                    callback: function() {
+                        store.load({ node: parentNode });
+                    }
+                }).show();
+                batch.run();
             });
     },
 
@@ -445,12 +488,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
             deleteButton = me.getDeleteButton(),
+            duplicateButton = me.getDuplicateButton(),
             selectedNode = selection[0];
         // do not delete the root node
         if(selection.length > 0 && ! selectedNode.isRoot() ) {
             deleteButton.enable();
+            duplicateButton.enable();
         } else {
             deleteButton.disable(true);
+            duplicateButton.disable(true);
         }
         /* {/if} */
     },
