@@ -5,6 +5,18 @@
 	{$sBreadcrumb[] = ["name"=>"{s name="SelectBillingTitle"}{/s}", "link"=>{url}]}
 {/block}
 
+{* Back to the shop button *}
+{block name='frontend_index_logo_trusted_shops' append}
+	{if $theme.checkoutHeader}
+		<a href="{url controller='index'}"
+		   class="btn is--small btn--back-top-shop is--icon-left"
+		   title="{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}">
+			<i class="icon--arrow-left"></i>
+			{s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+		</a>
+	{/if}
+{/block}
+
 {* Main content *}
 {block name="frontend_index_content"}
 	<div class="content account--billing-address account--content">
