@@ -199,7 +199,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends', 'orderPdf'))) {
+        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends', 'orderPdf', 'mergeDocuments'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
@@ -979,6 +979,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $data = $this->Request()->getParam('data', null);
 
+        // Disable Smarty rendering
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
         if ($data === null) {
             $this->View()->assign(array(
                 'success' => false,
@@ -1031,6 +1034,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $hash = md5(uniqid(rand()));
+
         $pdf->Output($hash.'.pdf', "D");
     }
 
