@@ -114,11 +114,14 @@ Ext.define('Shopware.ModuleManager', {
      *
      * @param { String } name - Technical name of the module
      * @param { String } instance - Unique ID of the module
+     * @param { Boolean } fullPath - Truthy to pass in the full url
      * @returns { Ext.dom.Element }
      */
-    createContentFrame: function(name, instance) {
+    createContentFrame: function(name, instance, fullPath) {
         var me = this,
             frame;
+
+        fullPath = fullPath || false;
 
         frame = Ext.get(Ext.DomHelper.createDom({
             'id': Ext.id(),
@@ -127,7 +130,7 @@ Ext.define('Shopware.ModuleManager', {
             'width': '100%',
             'height': '100%',
             'border': '0',
-            'src': '{url module="backend" controller="" fullPath}' + name,
+            'src': (fullPath ? name : '{url module="backend" controller="" fullPath}' + name),
             'data-instance': instance
         }));
 
@@ -231,7 +234,7 @@ Ext.define('Shopware.ModuleManager', {
     createSubWindow: function(payload) {
         var me = this,
             instance = payload.instance,
-            content = me.createContentFrame(payload.url, instance),
+            content = me.createContentFrame(payload.url, instance, true),
             config = me.createWindowConfiguration(payload),
             module = me.modules.get(instance),
             contentWindow;
@@ -446,7 +449,11 @@ Ext.define('Shopware.ModuleManager', {
         }
         component = subModule.windows.get(comp);
 
-        // Always sending back a response to the frame
+        // Always sending back a response to the frame when it's available
+        if(!component.content.dom || !component.content.dom.contentWindow) {
+            return;
+        }
+
         component.content.dom.contentWindow.postMessage(this.prefix + JSON.stringify({
             jsonrpc: '2.0',
             result: result,

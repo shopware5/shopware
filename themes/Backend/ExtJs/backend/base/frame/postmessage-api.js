@@ -202,11 +202,15 @@ window.postMessageApi = function (api, win) {
          * @param {String=} component - Component name. Default: main
          * @returns {RpcRequestObject}
          */
-        constructor: function (target, methodName, params, component) {
+        constructor: function (target, methodName, params, componentName) {
             Object.getPrototypeOf(RpcRequestObject.prototype).constructor.apply(this, arguments);
 
             params = params || {};
-            component = component || 'main';
+
+            if(!componentName) {
+                componentName = component || 'main';
+            }
+
 
             if (params.async) {
                 this.opts.async = params.async;
@@ -222,7 +226,7 @@ window.postMessageApi = function (api, win) {
             // Special attributes for the communication
             this.opts.instance = instance;
             this.opts.target = target;
-            this.opts.component = component;
+            this.opts.component = componentName;
 
             return this;
         },
@@ -459,7 +463,7 @@ window.postMessageApi = function (api, win) {
          * @param {Object} payload
          */
         createSubWindow: function (payload) {
-            var request = new RpcRequestObject('Shopware.ModuleManager', 'createSubWindow', payload).send();
+            var request = new RpcRequestObject('Shopware.ModuleManager', 'createSubWindow', payload, payload.component).send();
 
             win.events.publish('open-subwindow', request.getRequestOptions());
 
@@ -482,7 +486,7 @@ window.postMessageApi = function (api, win) {
          * @return {RpcRequestObject}
         */
         sendMessageToSubWindow: function(payload) {
-            var request = new RpcRequestObject('Shopware.ModuleManager', 'sendMessageToSubWindow', payload).send();
+            var request = new RpcRequestObject('Shopware.ModuleManager', 'sendMessageToSubWindow', payload, payload.component).send();
 
             win.events.publish('send-message-to-subwindow', request.getRequestOptions());
 

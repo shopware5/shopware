@@ -317,7 +317,7 @@ Ext.define('Enlight.app.Window', {
 
         me.callParent(arguments);
 
-        if(me.footerButton) {
+        if(me.footerButton && me._toolbarBtn) {
             me._toolbarBtn.setText(title);
         }
     },
