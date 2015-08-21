@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
             store: store,
             valueField: 'column',
             allowBlank: false,
-            displayField: 'column'
+            displayField: 'label'
         });
 
         me.notice = Ext.create('Ext.container.Container', {
