@@ -156,6 +156,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.ordernumber_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\OrdernumberConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.product_attribute_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ProductAttributeConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
