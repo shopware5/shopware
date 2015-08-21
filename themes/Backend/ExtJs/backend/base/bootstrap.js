@@ -181,6 +181,7 @@
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}
 {include file='backend/base/component/Shopware.color.Window.js'}
 {include file='backend/base/component/Shopware.grid.ButtonColumn.js'}
+{include file='backend/base/component/Shopware.window.SimpleModule.js'}
 
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/boolean_select.js'}
@@ -200,3 +201,5 @@
 {include file='backend/base/component/element/media_selection.js'}
 {include file='backend/base/component/element/product_box_layout_select.js'}
 {include file='backend/base/component/element/media_text_selection.js'}
+
+{include file='backend/base/component/Shopware.ModuleManager.js'}

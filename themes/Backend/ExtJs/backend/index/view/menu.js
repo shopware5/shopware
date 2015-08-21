@@ -46,30 +46,37 @@ Ext.define('Shopware.apps.Index.view.Menu', {
      * Creates the menu and sets the component items
      */
     initComponent: function () {
-
         var me = this;
 
         Ext.Ajax.request({
             url: '{url action=menu}',
-            async: false,
-            success: function(response) {
-                me.items = Ext.decode(response.responseText);
-                me.fireEvent('menu-created', me.items);
-
-                Ext.create('Shopware.notification.ExpiredLicence').check();
-                /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
-                Ext.create('Shopware.notification.SubscriptionWarning').check();
-                /*{/if}*/
-            }
+            success: Ext.bind(me.onMenuLoaded, me)
         });
 
         me.callParent(arguments);
         me.items.add(Ext.create('Shopware.Search'));
 
         // Add event listener which sets the width of the toolbar to the viewport width
-        Ext.EventManager.onWindowResize(function(width, height) {
+        Ext.EventManager.onWindowResize(function(width) {
             me.setWidth(width);
         });
+
+        // Hides the menu's when the user enters the frame of a simplied module
+        Shopware.app.Application.on('global-close-menu', function() {
+            Ext.menu.Manager.hideAll();
+        });
+    },
+
+    onMenuLoaded: function(response) {
+        var me = this;
+
+        me.insert(0, Ext.decode(response.responseText));
+        me.fireEvent('menu-created', me.items);
+
+        Ext.create('Shopware.notification.ExpiredLicence').check();
+        /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
+        Ext.create('Shopware.notification.SubscriptionWarning').check();
+        /*{/if}*/
     },
 
     afterRender: function() {

@@ -235,7 +235,6 @@ Ext.define('Enlight.app.SubApplication', {
      * be started please use the "beforeLaunch"-method which will be called
      * after the set up of the sub application is completed.
      *
-     * @private
      * @return void
      */
     onBeforeLaunch: function() {
@@ -244,7 +243,6 @@ Ext.define('Enlight.app.SubApplication', {
             controllers = me.appControllers,
             windowManager = me.windowManager,
             controller, cmp;
-
 
         // Check if the window manager has the "mainWindow" property
         if(!windowManager.hasOwnProperty('mainWindow')) {
