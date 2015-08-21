@@ -52,7 +52,14 @@
          */
         requestData: function(values, pushState) {
             var me = this,
-                location = window.location.origin + window.location.pathname;
+                location;
+
+            // `location.origin` isn't available in IE 11, so we have to create it
+            if (!window.location.origin) {
+                window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+            }
+
+            location = window.location.origin + window.location.pathname;
 
             $.loadingIndicator.open({
                 closeOnClick: false,
