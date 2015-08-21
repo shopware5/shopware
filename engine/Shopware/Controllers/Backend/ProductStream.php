@@ -184,12 +184,28 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $connection = $this->get('dbal_connection');
         $schemaManager = $connection->getSchemaManager();
         $tableColumns = $schemaManager->listTableColumns('s_articles_attributes');
-
+        $attributNames = [];
         $columns = [];
-        foreach ($tableColumns as $column) {
+
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select(['name', 'label'])
+            ->from('s_core_engine_elements', 'attributes')
+            ->where('name IN (:attributeNames)')
+            ->setParameter(':attributeNames', array_keys($tableColumns), \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+        $query = $query->execute();
+
+        foreach ($query->fetchAll() as $attribut) {
+            $attributNames[$attribut['name']] = $attribut['label'];
+        }
+
+        foreach (array_keys($tableColumns) as $column) {
+            if (isset($attributNames[$column])) {
+                $column = $attributNames[$column];
+            }
+
             $columns[] = [
-                'column' => $column->getName(),
-                'description' => $column->getName()
+                'column' => $column,
+                'description' => $column
             ];
         }
         $this->View()->assign(['success' => true, 'data' => $columns]);
