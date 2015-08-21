@@ -57,6 +57,10 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         me.callParent(arguments);
 
         var sorting = record.get('sorting');
+        if (!sorting) {
+            return;
+        }
+
         var sortingValue = me.findSorting(sorting);
 
         me.sortingCombo.setValue(sortingValue);
