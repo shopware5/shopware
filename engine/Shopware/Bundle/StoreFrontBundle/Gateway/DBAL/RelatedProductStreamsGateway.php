@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatewayInterface
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var Connection
      */
     private $connection;
 
@@ -70,7 +70,7 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $numbers = $this->getList([$product]);
+        $numbers = $this->getList([$product], $context);
 
         return array_shift($numbers);
     }

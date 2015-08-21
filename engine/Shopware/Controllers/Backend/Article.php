@@ -3072,7 +3072,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * This function loads the related product stream models for the passed ids in the "streams" parameter.
-     * @param [] $data
+     * @param array $data
      * @return Shopware\Models\ProductStream\ProductStream[]
      */
     protected function prepareRelatedProductStreamsData($data)
@@ -3082,6 +3082,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($relatedProductStreamData['id'])) {
                 continue;
             }
+
             /** @var $relatedProductStream \Shopware\Models\ProductStream\ProductStream */
             $relatedProductStream = $this->get('models')->getRepository('Shopware\Models\ProductStream\ProductStream')
                 ->find($relatedProductStreamData['id']);
