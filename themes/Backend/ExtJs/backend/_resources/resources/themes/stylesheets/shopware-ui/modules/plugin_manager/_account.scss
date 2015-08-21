@@ -257,12 +257,16 @@
             .#{$prefix}form-field:not(.#{$prefix}form-checkbox) {
                 @include border-radius(5px);
                 background: #fff;
-                border: 2px solid #cad9e0 !important;
+                border: 2px solid #cad9e0;
                 font-family: 'Open Sans', Arial, sans-serif;
                 font-size: 14px;
                 font-weight: 600;
-                padding: 16px 10px;
-                line-height: 16px;
+                line-height: 28px;
+                height: 32px;
+
+                &.#{$prefix}form-invalid-field {
+                    border-color: #FC9D9D;
+                }
 
                 &:focus {
                     @include reset-box-shadow();
@@ -306,5 +310,4 @@
 
         }
     }
-
 }
