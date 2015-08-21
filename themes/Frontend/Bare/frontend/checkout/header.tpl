@@ -3,7 +3,7 @@
 	{* Hide top bar navigation *}
 	{block name='frontend_index_top_bar_container'}{/block}
 
-	<div class="container">
+	<div class="container header--navigation">
 
 		{* Logo container *}
 		{block name='frontend_index_logo_container'}
