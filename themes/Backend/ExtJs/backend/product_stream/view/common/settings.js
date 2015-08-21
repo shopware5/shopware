@@ -57,9 +57,28 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         me.callParent(arguments);
 
         var sorting = record.get('sorting');
-        sorting = Object.keys(sorting)[0];
+        var sortingValue = me.findSorting(sorting);
 
-        me.sortingCombo.setValue(sorting);
+        me.sortingCombo.setValue(sortingValue);
+    },
+
+    findSorting: function(sorting) {
+        var me = this;
+
+        var key = Object.keys(sorting)[0];
+        var properties = sorting[key];
+        var direction = properties.direction;
+        var store = me.getSortings();
+        var match = null;
+
+        store.forEach(function(item) {
+            if (item.key === key && item.direction === direction) {
+                match = item.value;
+                return false;
+            }
+        });
+
+        return match;
     },
 
     createItems: function() {
@@ -82,7 +101,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             name: 'sorting',
             store: me.sortingStore,
             fieldLabel: '{s name=sorting}Sorting{/s}',
-            valueField: 'key',
+            valueField: 'value',
             displayField: 'value',
             queryMode: 'local',
             anchor: '100%',

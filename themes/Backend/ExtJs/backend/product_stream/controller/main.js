@@ -102,6 +102,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         var me = this;
         var conditionPanel = me.getConditionPanel();
         var values = conditionPanel.getValues();
+
         var conditions = { };
 
         for (var key in values) {
@@ -110,6 +111,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                 conditions[newKey] = values[key];
             }
         }
+
         return conditions;
     },
 
@@ -173,10 +175,11 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
 
         var sort = settingsPanel.sortingCombo.getValue();
         var store = settingsPanel.sortingCombo.getStore();
+
         var sortModel = null;
 
         store.each(function(item) {
-            if (item.get('key') == sort) {
+            if (item.get('value') == sort) {
                 sortModel = item;
                 return false;
             }
@@ -187,7 +190,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             return null;
         }
 
-        sortData[sort] = {
+        sortData[sortModel.get('key')] = {
             direction: sortModel.get('direction')
         };
 
