@@ -151,6 +151,7 @@ class InstallCommand extends Command
 
         $adminService = new AdminService($conn);
         $adminService->createAdmin($adminUser);
+        $adminService->addWidgets($adminUser);
 
         $this->activateResponsiveTheme();
 

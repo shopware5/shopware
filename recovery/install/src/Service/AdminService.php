@@ -100,4 +100,18 @@ EOT;
     {
         return md5("A9ASD:_AD!_=%a8nx0asssblPlasS$" . md5($password));
     }
+
+    public function addWidgets(AdminUser $adminUser)
+    {
+        $query = $this->connection->prepare('SELECT id FROM s_core_auth WHERE username = ? LIMIT 1');
+        $query->execute([$adminUser->username]);
+        $userId = $query->fetchColumn();
+
+        $query = $this->connection->prepare('SELECT id FROM s_core_widgets WHERE NAME = ? LIMIT 1');
+        $query->execute(['swag-shopware-news-widget']);
+        $widgetId = $query->fetchColumn();
+
+        $insert = $this->connection->prepare('INSERT INTO s_core_widget_views (widget_id, auth_id) VALUES (?, ?)');
+        $insert->execute([$widgetId, $userId]);
+    }
 }

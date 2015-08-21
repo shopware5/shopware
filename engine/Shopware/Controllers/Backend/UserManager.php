@@ -302,11 +302,13 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function updateUserAction()
     {
         $id = $this->Request()->getParam('id', null);
+        $isNewUser = false;
 
         if (!empty($id)) {
             $user = $this->getUserRepository()->find($id);
         } else {
             $user = new User();
+            $isNewUser = true;
         }
 
         try {
@@ -326,6 +328,17 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
             Shopware()->Models()->persist($user);
             Shopware()->Models()->flush();
+
+            if ($isNewUser) {
+                $sql = "INSERT INTO `s_core_widget_views` (`widget_id`, `auth_id`) VALUES ((SELECT id FROM `s_core_widgets` WHERE `name` = :widgetName LIMIT 1), :userId);";
+                Shopware()->Db()->executeQuery(
+                    $sql,
+                    [
+                        ':widgetName' => 'swag-shopware-news-widget',
+                        ':userId' => $user->getId()
+                    ]
+                );
+            }
 
             $this->View()->assign(array(
                     'success' => true,
