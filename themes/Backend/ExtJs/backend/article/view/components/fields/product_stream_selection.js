@@ -76,12 +76,21 @@ Ext.define('Shopware.apps.Article.view.components.fields.ProductStreamSelection'
      * @return [object] Ext.data.Store
      */
     createStore: function() {
-        var me = this;
+        var me = this,
+            storeFields = [
+                'id',
+                'name',
+                'description',
+                {
+                    name: 'formatted_name',
+                    convert: function (v, r) {
+                        return r.get('id') + " | " + r.get('name');
+                    }
+                }
+            ];
 
         var store = Ext.create('Shopware.store.Search', {
-            fields: [ 'id', 'name', { name: 'formatted_name', convert: function (v, r) {
-                return r.get('id') + " | " + r.get('name');
-            }}],
+            fields: storeFields,
             pageSize: 15,
             configure: function() {
                 return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
