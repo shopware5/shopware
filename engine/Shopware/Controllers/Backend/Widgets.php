@@ -433,7 +433,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         /** @var $auth Shopware_Components_Auth */
         $auth = Shopware()->Auth();
         $user = $auth->getIdentity();
-        $result = $this->fetchRssFeedData($user->locale, 20);
+        $result = $this->fetchRssFeedData($user->locale, 5);
 
         $this->View()->assign(
             array(
@@ -741,7 +741,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @param int $limit
      * @return array
      */
-    private function fetchRssFeedData(Locale $locale, $limit = 20)
+    private function fetchRssFeedData(Locale $locale, $limit = 5)
     {
         $lang = 'de';
 
