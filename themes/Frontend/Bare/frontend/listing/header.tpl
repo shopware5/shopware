@@ -6,6 +6,33 @@
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/block}
 
+{block name='frontend_index_header_meta_tags_opengraph'}
+    <meta property="og:type" content="product" />
+    <meta property="og:site_name" content="{config name=sShopname}" />
+    <meta property="og:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
+    <meta property="og:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
+
+    <meta name="twitter:card" content="product" />
+    <meta name="twitter:site" content="{config name=sShopname}" />
+    <meta name="twitter:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
+    <meta name="twitter:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
+
+    {* Images *}
+    {if $sCategoryContent.media.path}
+        {$metaImage = {link file="{$sCategoryContent.media.path}" fullPath}}
+    {else}
+        {foreach $sArticles as $sArticle}
+            {if $sArticle@first}
+                {$metaImage = $sArticle.image.source}
+                {break}
+            {/if}
+        {/foreach}
+    {/if}
+
+    <meta property="og:image" content="{$metaImage}" />
+    <meta name="twitter:image" content="{$metaImage}" />
+{/block}
+
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sCategoryContent.metadescription}{$sCategoryContent.metadescription|strip_tags|escape}{/if}{/block}
 
