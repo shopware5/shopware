@@ -35,42 +35,6 @@
     });
 
     /**
-     * Browser compatibility for requestAnimationFrame
-     * with polyfill for legacy browsers.
-     */
-    var lastFrame,
-        requestAnimationFrame = (function () {
-            return  window.requestAnimationFrame       ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame    ||
-                window.msRequestAnimationFrame     ||
-                window.oRequestAnimationFrame      ||
-                function(callback, element) {
-                    var currFrame = new Date().getTime(),
-                        animationTime = Math.max(0, 16 - (currFrame - lastFrame)),
-                        animationID = window.setTimeout(function() { callback(currFrame + animationTime); }, animationTime);
-
-                    lastFrame = currFrame + animationTime;
-                    return animationID;
-                };
-        })(),
-        cancelAnimationFrame = (function () {
-            return  window.cancelAnimationFrame                 ||
-                window.cancelRequestAnimationFrame          ||
-                window.webkitCancelAnimationFrame           ||
-                window.webkitCancelRequestAnimationFrame    ||
-                window.mozCancelAnimationFrame              ||
-                window.mozCancelRequestAnimationFrame       ||
-                window.msCancelAnimationFrame               ||
-                window.msCancelRequestAnimationFrame        ||
-                window.oCancelAnimationFrame                ||
-                window.oCancelRequestAnimationFrame         ||
-                function(id) {
-                    clearTimeout(id);
-                };
-        })();
-
-    /**
      * Product Slider Plugin
      */
     $.plugin('swProductSlider', {
@@ -914,7 +878,7 @@
                 speed = scrollSpeed || me.opts.autoScrollSpeed,
                 position = me.getScrollPosition();
 
-            me.autoScrollAnimation = requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
+            me.autoScrollAnimation = StateManager.requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
 
@@ -933,7 +897,7 @@
         stopAutoScroll: function () {
             var me = this;
 
-            cancelAnimationFrame(me.autoScrollAnimation);
+            StateManager.cancelAnimationFrame(me.autoScrollAnimation);
             me.autoScrollAnimation = false;
 
             /** @deprecated - will be removed in 5.1 */
