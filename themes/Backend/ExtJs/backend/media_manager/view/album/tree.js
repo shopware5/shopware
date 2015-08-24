@@ -71,7 +71,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 			createSubAlbum: '{s name="tree/createSubAlbum"}Create subalbum{/s}',
 			settings: '{s name="tree/settings"}Settings{/s}',
 			newAlbum: '{s name="tree/newAlbum"}Create new Album{/s}',
-			refresh: '{s name="tree/refresh"}Refresh list{/s}'
+			refresh: '{s name="tree/refresh"}Refresh list{/s}',
+			emptyTrash: '{s name="tree/emptyTrash"}Empty trash{/s}'
 		}
 	},
 
@@ -111,7 +112,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             'deleteAlbum',
             'editSettings',
             'addAlbum',
-            'reload'
+            'reload',
+            'emptyTrash'
         );
 
         // Select the correct node if we're in the media selection
@@ -160,14 +162,26 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 var target = e.getTarget();
                 var nodeId = target.parentNode.parentNode.parentNode.viewRecordId;
                 var record = me.store.getNodeById(nodeId);
-                me.fireEvent('editSettings', me, view, record);
+
+                if (record.getId() == -13) {
+                    me.fireEvent('emptyTrash', me, view, record);
+                } else {
+                    me.fireEvent('editSettings', me, view, record);
+                }
             },
             header: me.snippets.tree.columns.action,
             items: [{
                 iconCls: 'sprite-gear--arrow',
                 style: 'width: 16px; height:16px',
                 qtip: me.snippets.tree.columns.editAlbumSettings
-            }]
+            }],
+            renderer: function(value, meta, record) {
+                if (record.getId() == -13) {
+                    me.columns[2].items[0].iconCls = 'sprite-minus-circle-frame';
+                } else {
+                    me.columns[2].items[0].iconCls = 'sprite-gear--arrow';
+                }
+            }
         }
         /* {/if} */
 		];
@@ -295,39 +309,54 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         var me = this,
             nodeId = ~~(1 * record.get('id')),
-            disableStatus = (nodeId > 0 && record.data.leaf == true) ? false : true;
+            disableStatus = (nodeId > 0 && record.data.leaf == true) ? false : true,
+            isTrash = record.data.id == -13;
 
-        var menu = Ext.create('Ext.menu.Menu', {
-            items: [
-				/* {if {acl_is_allowed privilege=create}} */
-			{
+        var menuItems = [
+            /* {if {acl_is_allowed privilege=create}} */
+            {
                 text: me.snippets.tree.createSubAlbum,
                 iconCls: 'sprite-photo-album--plus',
                 handler: function() {
                     me.fireEvent('addSubAlbum', me, view, record, item, index);
                 }
             },
-            	/* {/if} */
-				/* {if {acl_is_allowed privilege=delete}} */
-			{
+            /* {/if} */
+            /* {if {acl_is_allowed privilege=delete}} */
+            {
                 text: me.snippets.tree.deleteAlbum,
                 iconCls: 'sprite-photo-album--minus',
                 disabled: disableStatus,
                 handler: function() {
                     me.fireEvent('deleteAlbum', me, view, record, item, index);
                 }
-			},
-            	/* {/if} */
-				/* {if {acl_is_allowed privilege=update}} */
-			{
+            },
+            /* {/if} */
+            /* {if {acl_is_allowed privilege=update}} */
+            {
                 text: me.snippets.tree.settings,
                 iconCls: 'sprite-gear--arrow',
                 handler: function() {
                     me.fireEvent('editSettings', me, view, record, item, index);
                 }
             }
-            	/* {/if} */
-			]
+            /* {/if} */
+        ];
+
+        if(isTrash) {
+            menuItems = [
+                {
+                    text: me.snippets.tree.emptyTrash,
+                    iconCls: 'sprite-bin-metal-full',
+                    handler: function() {
+                        me.fireEvent('emptyTrash', me, view, record, item, index);
+                    }
+                }
+            ];
+        }
+
+        var menu = Ext.create('Ext.menu.Menu', {
+            items: menuItems
         });
 
         menu.showAt(event.getPageX(), event.getPageY());

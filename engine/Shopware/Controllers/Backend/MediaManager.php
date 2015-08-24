@@ -991,4 +991,30 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         return $builder->getQuery()->getResult();
     }
+
+    /**
+     * Empty albumId -13
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function emptyTrashAction()
+    {
+        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', -13);
+        $mediaList = $album->getMedia();
+
+        //try to remove the media and the uploaded files.
+        try {
+            foreach($mediaList as $media) {
+                Shopware()->Models()->remove($media);
+            }
+            Shopware()->Models()->flush();
+
+            Shopware()->Db()->query("TRUNCATE TABLE `s_media_used`");
+
+            $this->View()->assign(array('success' => true));
+        } catch (\Doctrine\ORM\ORMException $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
 }

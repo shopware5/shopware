@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_media.service_subscriber" class="Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_media.garbage_collector_factory" class="Shopware\Bundle\MediaBundle\GarbageCollectorFactory">
+            <argument type="service" id="events"/>
+            <argument type="service" id="dbal_connection" />
+        </service>
+        <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
+            <factory service="shopware_media.garbage_collector_factory" method="factory" />
+        </service>
+    </services>
+</container>

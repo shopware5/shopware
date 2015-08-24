@@ -468,6 +468,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('StoreFrontBundle/services.xml');
         $loader->load('PluginInstallerBundle/services.xml');
         $loader->load('ESIndexingBundle/services.xml');
+        $loader->load('MediaBundle/services.xml');
 
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
