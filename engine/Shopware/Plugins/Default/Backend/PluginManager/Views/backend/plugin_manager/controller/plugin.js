@@ -455,10 +455,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         });
     },
 
-    destroyLogin: function() {
+    destroyLogin: function(comp) {
         var me = this;
 
-        me.loginMask.destroy();
+        comp.destroy();
         me.loginMask = null;
     },
 
