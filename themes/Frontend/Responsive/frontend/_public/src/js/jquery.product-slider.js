@@ -279,7 +279,7 @@
              * @property ajaxCategoryID
              * @type {Number}
              */
-            ajaxCategoryID: null,
+            ajaxCategoryID: 3,
 
             /**
              * The maximum number of items to load via ajax.
@@ -372,6 +372,10 @@
         update: function () {
             var me = this;
 
+            if (!me.initialized) {
+                return false;
+            }
+
             me.trackItems();
             me.setSizes();
 
@@ -436,6 +440,7 @@
             me._on($window, 'resize', $.proxy(me.buffer, me, me.update, 600));
 
             $.subscribe('plugin/swTabMenu/onChangeTab', $.proxy(me.update, me));
+            $.subscribe('plugin/swCollapsePanel/onOpenPanel', $.proxy(me.update, me));
 
             $.publish('plugin/swProductSlider/onRegisterEvents', [ me ]);
         },
@@ -632,7 +637,6 @@
                 method: 'GET',
                 data: data,
                 success: function (response) {
-                    me.isLoading = false;
                     me.removeLoadingIndicator();
 
                     if (!response) {
@@ -640,6 +644,7 @@
                         return;
                     }
 
+                    me.isLoading = false;
                     me.$container.append(response);
                     me.trackItems();
                     me.setSizes();

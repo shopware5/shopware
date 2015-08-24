@@ -296,11 +296,11 @@
             {$showAlsoViewed = {config name=similarViewedShow}}
             {$showAlsoBought = {config name=alsoBoughtShow}}
 
-            <div class="tab-menu--cross-selling">
+            <div class="tab-menu--cross-selling"{if $sArticle.relatedProductStreams} data-scrollable="true"{/if}>
 
                 {* Tab navigation *}
                 {block name="frontend_detail_index_tabs_navigation"}
-                    <ul class="tab--navigation">
+                    <div class="tab--navigation">
                         {block name="frontend_detail_index_tabs_navigation_inner"}
                             {block name="frontend_detail_index_related_similiar_tabs"}
 
@@ -345,7 +345,7 @@
                                 {/foreach}
                             {/block}
                         {/block}
-                    </ul>
+                    </div>
                 {/block}
 
                 {* Tab content container *}

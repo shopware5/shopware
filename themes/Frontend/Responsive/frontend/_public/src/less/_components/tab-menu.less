@@ -67,6 +67,23 @@ The functionality is provided by the `jquery.tab-menu.js` file.
         }
     }
 
+    // Different styling when tab navigation is scrollable
+    &.js--menu-scroller {
+        .tab--navigation { overflow: hidden; }
+        .tab--navigation .js--menu-scroller--item { top: 0; }
+
+        .js--menu-scroller--arrow {
+            .unitize(line-height, 46);
+            .unitize-height(46);
+            .border-radius();
+            border: 1px solid @btn-default-border-color;
+
+            &:hover {
+                border-color: @btn-default-hover-border-color;
+            }
+        }
+    }
+
     .tab--container-list .tab--container {
         border: 1px solid @panel-border;
         display: none;

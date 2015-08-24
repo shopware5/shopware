@@ -4,7 +4,7 @@
         <div class="product-slider"
              data-product-slider="true"
              data-mode="ajax"
-             data-initOnEvent="plugin/swTabMenu/onChangeTab-productStreamSliderId-{$relatedProductStream.id}"
+             data-initOnEvent="onShowContent-productStreamSliderId-{$relatedProductStream.id}"
              data-ajaxCtrlUrl="{url module=widgets controller=emotion action=productStreamArticleSlider streamId=$relatedProductStream.id productBoxLayout="slider"}"
              data-ajaxMaxShow="40">
 
