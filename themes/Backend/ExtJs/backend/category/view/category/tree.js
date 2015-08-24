@@ -101,9 +101,9 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         columnActionHeader : '{s name=view/action_column_title}Action{/s}',
         columnArticleHeader : '{s name=view/articles_column_title}Articles{/s}',
         // Context menu
-        contextAddSubCategory : '{s name=view/context_add_category}Add new category{/s}',
-        contextDuplicateSubCategory : '{s name=view/context_duplicate_category}Duplicate category tree{/s}',
-        contextDeleteSubCategory : '{s name=view/context_delete_category}Delete category{/s}',
+        contextAddSubCategory : '{s name=view/context_add_category}Add new{/s}',
+        contextDuplicateSubCategory : '{s name=view/context_duplicate_category}Duplicate{/s}',
+        contextDeleteSubCategory : '{s name=view/context_delete_category}Delete{/s}',
         contextReloadTree : '{s name=view/context_reload_tree}Reload{/s}',
 
         treeAdd : '{s name=view/tree_add}Add new{/s}',
@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /*{if {acl_is_allowed privilege=create}}*/
         menuElements.push({
                 text: me.snippets.contextAddSubCategory,
-                iconCls: 'sprite-blue-folder--plus',
+                iconCls: 'sprite-plus-circle',
                 handler: function() {
                     me.fireEvent('addSubCategory', record, item, index);
                 }
@@ -183,7 +183,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /*{if {acl_is_allowed privilege=create}}*/
         menuElements.push({
             text: me.snippets.contextDuplicateSubCategory,
-            iconCls: 'sprite-blue-folder--exclamation',
+            iconCls: 'sprite-document-copy',
             disabled: disableStatus,
             handler: function() {
                 me.fireEvent('duplicateSubCategory', record, item, index);
@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /* {if {acl_is_allowed privilege=delete}} */
         menuElements.push({
                 text: me.snippets.contextDeleteSubCategory,
-                iconCls: 'sprite-blue-folder--minus',
+                iconCls: 'sprite-minus-circle',
                 disabled: disableStatus,
                 handler: function() {
                     me.fireEvent('deleteSubCategory', me, view, record, item, index);
@@ -228,7 +228,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
          /* {if {acl_is_allowed privilege=create}} */
          menuElements.push({
              text:me.snippets.contextAddSubCategory,
-             iconCls: 'sprite-blue-folder--plus',
+             iconCls: 'sprite-plus-circle',
              handler:function () {
                  me.fireEvent('addSubCategory');
              }
@@ -259,7 +259,8 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             menu = [];
         /* {if {acl_is_allowed privilege=create}} */
         menu.push({
-            text   :me.snippets.treeAdd,
+            text   : me.snippets.treeAdd,
+            iconCls: 'sprite-plus-circle',
             action : 'addCategory',
             cls    : 'addBtn small secondary'
         });
@@ -268,6 +269,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /* {if {acl_is_allowed privilege=create}} */
         menu.push({
             text     : me.snippets.treeDuplicate,
+            iconCls  : 'sprite-document-copy',
             action   : 'duplicateCategory',
             disabled : true,
             cls      : 'small secondary'
@@ -276,6 +278,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /* {if {acl_is_allowed privilege=delete}} */
         menu.push({
             text     : me.snippets.treeDelete,
+            iconCls  : 'sprite-minus-circle',
             action   : 'deleteCategory',
             disabled : true,
             cls      : 'deleteBtn small secondary'

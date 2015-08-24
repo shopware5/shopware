@@ -321,6 +321,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         $data = array();
+
+        if ($this->Request()->getParam('includeRoot', false)) {
+            $data[] = array('id' => 1, 'name'=> 'Shopware');
+        }
+
         foreach ($result as $id => $name) {
             $data[] = array('id' => $id, 'name' => $name);
         }
@@ -877,13 +882,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $count = $this->getRepository()->getChildrenCountList($categoryId);
 
-        $this->view->assign(array(
-            'success' => true,
-            'data' => array(
-                'count'     => $count,
-                'batchSize' => 1
+        $this->view->assign(
+            array(
+                'success' => true,
+                'data' => array(
+                    'count' => $count,
+                    'batchSize' => 1
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -894,6 +901,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         /** @var \Shopware\Components\CategoryHandling\CategoryDuplicator $categoryDuplicator */
         $categoryDuplicator = $this->get('CategoryDuplicator');
 
+        $copyArticleAssociations = $this->Request()->getParam('reassignArticleAssociations');
         $categoryIds = $this->Request()->getParam('children');
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
@@ -902,37 +910,45 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $newParentId = $newParentId == 0 ? 1 : $newParentId;
         $result = [];
 
-        foreach ($categoryIds as $categoryId) {
-            $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId);
+        try {
+            foreach ($categoryIds as $categoryId) {
+                $newCategoryId = $categoryDuplicator->duplicateCategory(
+                    $categoryId,
+                    $newParentId,
+                    $copyArticleAssociations
+                );
 
-            if (empty($newCategoryId)) {
-                $this->view->assign(array(
-                    'success' => false,
-                    'message' => "Category by id $categoryId not found"
-                ));
+                $childrenStmt = $this->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
+                $childrenStmt->execute([':parent' => $categoryId]);
+                $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
 
-                return ;
+                if (count($children)) {
+                    $result[] = [
+                        'categoryId' => $newCategoryId,
+                        'children' => $children
+                    ];
+                }
             }
+        } catch (\Exception $e) {
+            if (empty($newCategoryId)) {
+                $this->view->assign(
+                    array(
+                        'success' => false,
+                        'message' => $e->getMessage()
+                    )
+                );
 
-            $categoryDuplicator->duplicateCategoryArticleAssociations($categoryId, $newCategoryId);
-
-            $childrenStmt = $this->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
-            $childrenStmt->execute([':parent' => $categoryId]);
-            $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
-
-            if (count($children)) {
-                $result[] = [
-                    'categoryId' => $newCategoryId,
-                    'children' => $children
-                ];
+                return;
             }
         }
 
-        $this->view->assign(array(
-            'success' => true,
-            'processed' => count($categoryIds),
-            'needsRebuild' => true,
-            'result' => $result
-        ));
+        $this->view->assign(
+            array(
+                'success' => true,
+                'processed' => count($categoryIds),
+                'needsRebuild' => true,
+                'result' => $result
+            )
+        );
     }
 }

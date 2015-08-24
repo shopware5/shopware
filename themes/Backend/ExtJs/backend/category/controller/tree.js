@@ -72,9 +72,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
         deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
-        confirmDuplicateCategoryTitle: '{s name=tree/duplicate_confirmation_title}Are you sure you want to duplicate the category?{/s}',
-        confirmDuplicateCategory : '{s name=tree/duplicate_confirmation}This process will duplicate the \'[0]\' category, all its subcategories and respective article associations. Once this is done, you can move or rename the new categories. Do you wish to proceed?{/s}',
-        confirmDuplicateCategoryHeadline: '{s name=tree/duplicate_confirmation_headline}Duplicate this category?{/s}',
         duplicateItemSuccess : '{s name=tree/duplicate_success}Category has been duplicated.{/s}',
         duplicateItemFailure : '{s name=tree/duplicate_failure}Category could not be duplicated.{/s}',
         onSaveChangesSuccess    : '{s name=settings/save_success}Changes have been saved successfully.{/s}',
@@ -201,27 +198,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         me.getView('main.DuplicateSettings').create({
             treeRecord: record
         }).show();
-
-        /* Ext.MessageBox.confirm(
-            me.snippets.confirmDuplicateCategoryHeadline,
-            Ext.String.format(me.snippets.confirmDuplicateCategory, selection[0].get('text')),
-            function (response) {
-                if (response !== 'yes') {
-                    return false;
-                }
-                var record = selection[0],
-                    parentNode = record.parentNode;
-
-                var batch = me.getView('main.DuplicateTasks').create({
-                    categoryId: record.get('id'),
-                    parentId: record.get('parentId'),
-                    callback: function() {
-                        store.load({ node: parentNode });
-                    }
-                }).show();
-                batch.run();
-            });
-            */
     },
 
     /**
@@ -699,7 +675,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             reassignArticleAssociations: values.reassignArticleAssociations,
             originalParentId: treeRecord.get('id'),
             callback: function() {
-                store.load({ node: treeRecord.parentNode });
+                store.load({ node: store.getById(values.categoryId) });
             }
         }).show();
         batch.run();

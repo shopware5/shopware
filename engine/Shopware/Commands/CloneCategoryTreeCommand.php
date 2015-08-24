@@ -104,18 +104,23 @@ class CloneCategoryTreeCommand extends ShopwareCommand
             }
         }
 
-        $skipArticleAssociationsCopy = $input->getOption('noArticleAssociations');
+        $copyArticleAssociations = !$input->getOption('noArticleAssociations');
 
         $count = $this->container->get('models')
             ->getRepository('Shopware\Models\Category\Category')
             ->getChildrenCountList($originalCategory->getId());
 
-        $this->progress = new ProgressBar($output, $count);
-        $this->progress->start();
+        $this->progressBar = new ProgressBar($output, $count);
+        $this->progressBar->start();
 
-        $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $skipArticleAssociationsCopy);
+        try {
+            $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $copyArticleAssociations);
+        } catch (\RuntimeException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return;
+        }
 
-        $this->progress->finish();
+        $this->progressBar->finish();
 
         $output->writeln('<info>Category tree duplicated successfully</info>');
     }
@@ -147,7 +152,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
             if (count($category) > 1) {
                 $this->printCategoriesTable($category);
 
-                return;
+                return null;
             } elseif (count($category) == 1) {
                 $category = array_shift($category);
             }
@@ -157,7 +162,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
                 '<error>The given id or name "'.$categoryInput.'" does not match an existing category</error>'
             );
 
-            return;
+            return null;
         }
 
         return $category;
@@ -166,38 +171,33 @@ class CloneCategoryTreeCommand extends ShopwareCommand
     /**
      * Recursively duplicates categories
      *
-     * @param int|string $categoryId
-     * @param int|string $newParentId
-     * @param bool $skipArticleAssociationsCopy
-     * @param null $newRootCategoryId
+     * @param int $categoryId
+     * @param int $newParentId
+     * @param bool $copyArticleAssociations
+     * @param int $newRootCategoryId
+     * @throws \RuntimeException
      */
-    private function duplicateCategory($categoryId, $newParentId, $skipArticleAssociationsCopy, $newRootCategoryId = null)
-    {
+    private function duplicateCategory(
+        $categoryId,
+        $newParentId,
+        $copyArticleAssociations,
+        $newRootCategoryId = null
+    ) {
         $categoryDuplicator = $this->container->get('CategoryDuplicator');
-        $categoryDenormalization = $this->container->get('CategoryDenormalization');
 
-        $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId);
-        $this->progress->advance();
-
-        if (empty($newCategoryId)) {
-            return;
-        }
-
-        if (!$skipArticleAssociationsCopy) {
-            $categoryDuplicator->duplicateCategoryArticleAssociations($categoryId, $newCategoryId);
-            $categoryDenormalization->rebuildAssignments($newCategoryId);
-        }
+        $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId, $copyArticleAssociations);
+        $this->progressBar->advance();
 
         $childrenStmt = $this->container->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
         $childrenStmt->execute([':parent' => $categoryId]);
         $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
 
 
-        $newRootCategoryId = $newRootCategoryId ? : $newCategoryId;
+        $newRootCategoryId = $newRootCategoryId ?: $newCategoryId;
 
         foreach ($children as $child) {
             if ($child != $newRootCategoryId) {
-                $this->duplicateCategory($child, $newCategoryId, $skipArticleAssociationsCopy, $newRootCategoryId);
+                $this->duplicateCategory($child, $newCategoryId, $copyArticleAssociations, $newRootCategoryId);
             }
         }
     }

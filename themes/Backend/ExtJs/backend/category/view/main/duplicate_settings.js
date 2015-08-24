@@ -35,8 +35,8 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateSettings', {
     snippets: {
         title: '{s name=settings/duplicate/title}Duplicate settings{/s}',
         emptyText: '{s name=settings/duplicate/emptyText}Please select...{/s}',
-        categoryName: '{s name=settings/duplicate/categoryName}Select a category{/s}',
-        association: '{s name=settings/duplicate/association}Re-assign associations{/s}',
+        categoryName: '{s name=settings/duplicate/categoryName}Select the destination category{/s}',
+        association: '{s name=settings/duplicate/association}Copy item associations{/s}',
         button: '{s name=settings/duplicate/button}Duplicate{/s}'
     },
 
@@ -82,6 +82,7 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateSettings', {
         me.associationField = Ext.create('Ext.form.field.Checkbox', {
             inputValue: true,
             uncheckedValue: false,
+            checked: true,
             labelWidth: 155,
             name: 'reassignArticleAssociations',
             fieldLabel: me.snippets.association

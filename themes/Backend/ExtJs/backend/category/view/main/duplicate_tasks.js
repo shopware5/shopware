@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
      * Define window height
      * @integer
      */
-    height: 190,
+    height: 160,
 
     /**
      * Display no footer button for the detail window
@@ -111,7 +111,7 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
      * @object
      */
     snippets: {
-        close:  '{s name=batch/close}Close window{/s}'
+        close:  '{s name=batch/cancel}Cancel{/s}'
     },
 
     /**
@@ -152,7 +152,6 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
         var me = this;
 
         me.duplicateCategoryProgress = me.createProgressBar();
-        me.rebuildAssignmentsProgress = me.createProgressBar();
 
         return [
             {
@@ -160,7 +159,6 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateTasks', {
                 padding: '10 0',
                 items: [
                     me.duplicateCategoryProgress,
-                    me.rebuildAssignmentsProgress
                 ]
             },
             me.createButtons()

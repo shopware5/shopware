@@ -546,8 +546,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param      $id
-     *
+     * @param int $id
      * @return array
      */
     public function getChildrenCountList($id)
@@ -561,8 +560,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param      $id
-     *
+     * @param int $id
      * @return array
      */
     public function getFullChildrenList($id)
@@ -640,10 +638,9 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getBlogCategoriesByParentQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $parentId
-     * @param $offset
-     * @param $limit
-     *
+     * @param int $parentId
+     * @param int $offset
+     * @param int $limit
      * @return  \Shopware\Components\Model\QueryBuilder
      */
     public function getCategoriesByParentBuilder($parentId, $offset = null, $limit = null)

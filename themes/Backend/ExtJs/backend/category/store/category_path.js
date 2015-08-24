@@ -58,6 +58,11 @@ Ext.define('Shopware.apps.Category.store.CategoryPath', {
          */
         url: '{url controller=category action=getPathByQuery}',
 
+        extraParams: {
+            parents: true,
+            includeRoot: true
+        },
+
         /**
          * Configure the data reader
          * @object

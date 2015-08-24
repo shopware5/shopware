@@ -47,15 +47,17 @@ class CategoryDuplicator
         $this->connection = $connection;
         $this->categoryDenormalization = $categoryDenormalization;
     }
-    
+
     /**
      * Duplicates the provided category into the provided parent category
      *
      * @param int $originalCategoryId
      * @param int $parentId
+     * @param bool $copyArticleAssociations
      * @return int
+     * @throws \RuntimeException
      */
-    public function duplicateCategory($originalCategoryId, $parentId)
+    public function duplicateCategory($originalCategoryId, $parentId, $copyArticleAssociations)
     {
         $originalCategoryStmt = $this->connection
             ->prepare('SELECT * FROM s_categories WHERE id = :id');
@@ -63,41 +65,87 @@ class CategoryDuplicator
         $originalCategory = $originalCategoryStmt->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($originalCategory)) {
-            return;
+            throw new \RuntimeException('Category ' . $originalCategoryId . ' not found');
         }
 
-        if ($parentId == $originalCategory['parent']) {
-            $newPosStmt = $this->connection
-                ->prepare('SELECT MAX(`position`) FROM s_categories WHERE parent = :parent');
-            $newPosStmt->execute([':parent' => $parentId]);
-            $newPos = $newPosStmt->fetchColumn(0);
-            $originalCategory['position'] = $newPos+1;
-        }
+        $newPosStmt = $this->connection
+            ->prepare('SELECT MAX(`position`) FROM s_categories WHERE parent = :parent');
+        $newPosStmt->execute([':parent' => $parentId]);
+        $newPos = (int) $newPosStmt->fetchColumn(0);
+        $originalCategory['position'] = $newPos + 1;
 
         $originalCategory['parent'] = $parentId;
 
         unset($originalCategory['id']);
         unset($originalCategory['path']);
 
-        $valuePlaceholders = array_fill(0, count($originalCategory),  '?');
+        $valuePlaceholders = array_fill(0, count($originalCategory), '?');
         $insertStmt = $this->connection->prepare(
-            "INSERT INTO s_categories (`" . implode(array_keys($originalCategory), "`, `") . "`)
-            VALUES (" . implode($valuePlaceholders, ", ") . ")"
+            "INSERT INTO s_categories (`".implode(array_keys($originalCategory), "`, `")."`)
+            VALUES (".implode($valuePlaceholders, ", ").")"
         );
         $insertStmt->execute(array_values($originalCategory));
         $newCategoryId = $this->connection->lastInsertId();
 
         $this->rebuildPath($newCategoryId);
-        $this->categoryDenormalization->rebuildAssignments($newCategoryId);
+
+        $this->duplicateCategoryAttributes($originalCategoryId, $newCategoryId);
+        $this->duplicateCategoryRestrictions($originalCategoryId, $newCategoryId);
+
+        if ($copyArticleAssociations) {
+            $this->duplicateCategoryArticleAssociations($originalCategoryId, $newCategoryId);
+        }
 
         return $newCategoryId;
     }
 
     /**
+     * Duplicates the category restrictions from one category to another
+     *
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
+     */
+    public function duplicateCategoryRestrictions($originalCategoryId, $newCategoryId)
+    {
+        $stmt = $this->connection->prepare(
+            'INSERT INTO s_categories_avoid_customergroups (`categoryID`, `customergroupID`)
+            SELECT :newCategoryID, `customergroupID`
+            FROM s_categories_avoid_customergroups WHERE categoryID = :categoryID'
+        );
+        $stmt->execute(
+            [
+                ':newCategoryID' => $newCategoryId,
+                ':categoryID' => $originalCategoryId
+            ]
+        );
+    }
+
+    /**
+     * Duplicates the category attributes from one category to another
+     *
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
+     */
+    public function duplicateCategoryAttributes($originalCategoryId, $newCategoryId)
+    {
+        $stmt = $this->connection->prepare(
+            'INSERT INTO s_categories_attributes (`categoryID`, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`)
+            SELECT :newCategoryID, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`
+            FROM s_categories_attributes WHERE categoryID = :categoryID'
+        );
+        $stmt->execute(
+            [
+                ':newCategoryID' => $newCategoryId,
+                ':categoryID' => $originalCategoryId
+            ]
+        );
+    }
+
+    /**
      * Duplicates the category article associations from one category to another
      *
-     * @param $originalCategoryId
-     * @param $newCategoryId
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
      */
     public function duplicateCategoryArticleAssociations($originalCategoryId, $newCategoryId)
     {
@@ -110,56 +158,21 @@ class CategoryDuplicator
         if ($articles) {
             $insertStmt = $this->connection->prepare(
                 "INSERT INTO s_articles_categories (categoryID, articleID)
-            VALUES (" .$newCategoryId .", " . implode($articles, "), (" . $newCategoryId . ", ") . ")"
+            VALUES (".$newCategoryId.", ".implode($articles, "), (".$newCategoryId.", ").")"
             );
             $insertStmt->execute();
+
+            foreach ($articles as $articleId) {
+                $this->categoryDenormalization->addAssignment($articleId, $newCategoryId);
+            }
         }
-    }
-
-
-    /**
-     * Sets path for categories with empty paths
-     *
-     * @param  int $count
-     * @return int
-     */
-    public function buildEmptyCategoryPath($count = null)
-    {
-        $sql = "
-            SELECT id, path
-            FROM  s_categories
-            WHERE (path LIKE '' OR path IS NULL)
-            AND parent > 1
-        ";
-
-
-        if ($count !== null) {
-            $sql = $this->limit($sql, $count);
-        }
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-
-        $categories = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        $count = 0;
-
-        $this->beginTransaction();
-
-        foreach ($categories as $category) {
-            $count += $this->rebuildPath($category['id'], $category['path']);
-        }
-
-        $this->commit();
-
-        return $count;
     }
 
     /**
      * Rebuilds the path for a single category
      *
-     * @param $categoryId
-     * @param $categoryPath
+     * @param int $categoryId
+     * @param String $categoryPath
      * @return int
      */
     public function rebuildPath($categoryId, $categoryPath = null)
@@ -178,10 +191,10 @@ class CategoryDuplicator
 
         if ($categoryPath != $path) {
             $updateStmt->execute(array(':path' => $path, ':categoryId' => $categoryId));
+
             return 1;
         }
 
         return 0;
     }
-
 }

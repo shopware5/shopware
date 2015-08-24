@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
      * Define window height
      * @integer
      */
-    height: 190,
+    height: 220,
 
     /**
      * Display no footer button for the detail window
