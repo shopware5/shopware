@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ProductStreamSelection'
             pageSize: 15,
             triggerAction: 'all',
             valueField: 'id',
-            fieldLabel: 'Product stream',
+            fieldLabel: '{s name=product_stream_selection/product_stream}Product stream{/s}',
             displayField: 'formatted_name',
             emptyText: me.snippets.fields.please_select,
             store: me.createStore()

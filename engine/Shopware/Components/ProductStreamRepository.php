@@ -78,7 +78,8 @@ class ProductStreamRepository
     {
         $this->assignConditions($productStream, $criteria);
 
-        if (empty($criteria->getSortings())) {
+        $sortings = $criteria->getSortings();
+        if (empty($sortings)) {
             $this->assignSortings($productStream, $criteria);
         }
     }
@@ -89,11 +90,12 @@ class ProductStreamRepository
      */
     private function prepareDefinedStream(array $productStream, Criteria $criteria)
     {
-        $ordernumbers = $this->getOrdernumbers($productStream['id']);
+        $orderNumbers = $this->getOrderNumbers($productStream['id']);
 
-        $criteria->addCondition(new OrdernumberCondition($ordernumbers));
+        $criteria->addCondition(new OrdernumberCondition($orderNumbers));
 
-        if (empty($criteria->getSortings())) {
+        $sortings = $criteria->getSortings();
+        if (empty($sortings)) {
             $this->assignSortings($productStream, $criteria);
         }
     }
@@ -119,7 +121,7 @@ class ProductStreamRepository
      * @param int $productStreamId
      * @return string[]
      */
-    private function getOrdernumbers($productStreamId)
+    private function getOrderNumbers($productStreamId)
     {
         $query = <<<SQL
 SELECT
