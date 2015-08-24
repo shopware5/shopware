@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         { ref: 'currencyCombo', selector: 'product-stream-preview-grid combo[name=currency]' },
         { ref: 'customerGroupCombo', selector: 'product-stream-preview-grid combo[name=customerGroup]' },
         { ref: 'productStreamGrid', selector: 'product-stream-listing-grid' },
+        { ref: 'productStreamDetailGrid', selector: 'product-stream-defined-list-grid' }
     ],
 
     init: function() {
@@ -120,11 +121,14 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         record.save({
             callback: function() {
                 var productGrid = me.getProductStreamGrid(),
-                    store = productGrid.store;
+                    listStore = productGrid.store,
+                    detailGrid = me.getProductStreamDetailGrid();
 
-                store.reload({
+                detailGrid.streamId = record.get('id');
+
+                listStore.reload({
                     callback: function() {
-                        productGrid.reconfigure(store);
+                        productGrid.reconfigure(listStore);
                     }
                 });
                 Shopware.Notification.createGrowlMessage(

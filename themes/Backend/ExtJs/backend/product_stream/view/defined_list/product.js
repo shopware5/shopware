@@ -30,6 +30,7 @@
 
 Ext.define('Shopware.apps.ProductStream.view.defined_list.Product', {
     extend: 'Shopware.apps.ProductStream.view.SearchGrid',
+    alias: 'widget.product-stream-defined-list-grid',
 
     enable: function() {
         this.grid.enable();
