@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @ORM\Table(name="s_product_stream")
+ * @ORM\Table(name="s_product_streams")
  * @ORM\Entity
  */
 class ProductStream extends ModelEntity

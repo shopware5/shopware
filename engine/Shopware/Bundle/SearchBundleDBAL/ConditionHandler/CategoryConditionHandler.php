@@ -39,6 +39,11 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 class CategoryConditionHandler implements ConditionHandlerInterface
 {
     /**
+     * @var int
+     */
+    private $counter = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function supportsCondition(ConditionInterface $condition)
@@ -54,17 +59,23 @@ class CategoryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        if ($this->counter++ === 0) {
+            $suffix = '';
+        } else {
+            $suffix = $this->counter;
+        }
+
         $query->innerJoin(
             'product',
             's_articles_categories_ro',
-            'productCategory',
-            'productCategory.articleID = product.id
-             AND productCategory.categoryID IN (:category)'
+            "productCategory{$suffix}",
+            "productCategory{$suffix}.articleID = product.id
+            AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
         );
 
         /** @var CategoryCondition $condition */
         $query->setParameter(
-            ':category',
+            ":category{$suffix}",
             $condition->getCategoryIds(),
             Connection::PARAM_INT_ARRAY
         );

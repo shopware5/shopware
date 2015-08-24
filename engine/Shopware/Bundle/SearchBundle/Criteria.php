@@ -72,7 +72,7 @@ class Criteria implements \JsonSerializable
     private $sortings = [];
 
     /**
-     * @param $offset
+     * @param integer $offset
      * @return $this
      */
     public function offset($offset)
@@ -83,7 +83,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $limit
+     * @param integer $limit
      * @return $this
      */
     public function limit($limit)
@@ -110,7 +110,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasCondition($name)
@@ -123,7 +123,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasBaseCondition($name)
@@ -132,7 +132,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasSorting($name)
@@ -141,7 +141,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function hasFacet($name)
@@ -211,7 +211,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return null|FacetInterface
      */
     public function getFacet($name)
@@ -220,7 +220,7 @@ class Criteria implements \JsonSerializable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return null|SortingInterface
      */
     public function getSorting($name)
@@ -229,13 +229,17 @@ class Criteria implements \JsonSerializable
     }
 
     /**
+     * Returns all conditions, including the base conditions.
+     *
+     * Do not rely on the array key or the order of the returned conditions.
+     *
      * @return \Shopware\Bundle\SearchBundle\ConditionInterface[]
      */
     public function getConditions()
     {
         return array_merge(
-            $this->baseConditions,
-            $this->conditions
+            array_values($this->baseConditions),
+            array_values($this->conditions)
         );
     }
 

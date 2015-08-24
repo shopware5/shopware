@@ -151,19 +151,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
-
         $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
                 ->createProductStreamCriteria($this->Request(), $context);
 
             $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-            $conditions = $streamRepo->getConditionsByProductStreamId($productStreamId);
-            foreach ($conditions as $condition) {
-                $criteria->addCondition($condition);
-            }
+            $streamRepo->prepareCriteria($criteria, $productStreamId);
         } else {
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
                 ->createAjaxListingCriteria($this->Request(), $context);

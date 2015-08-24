@@ -297,7 +297,7 @@ class Article extends ModelEntity
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
-     * @ORM\JoinTable(name="s_product_stream_articles",
+     * @ORM\JoinTable(name="s_product_streams_articles",
      *      joinColumns={
      *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      *      },

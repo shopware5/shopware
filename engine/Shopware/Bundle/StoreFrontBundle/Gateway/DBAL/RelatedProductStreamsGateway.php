@@ -91,11 +91,11 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
         $query->select(['relation.article_id']);
         $query->addSelect($this->fieldHelper->getRelatedProductStreamFields());
 
-        $query->from('s_product_stream_articles', 'relation');
+        $query->from('s_product_streams_articles', 'relation');
 
         $query->innerJoin(
             'relation',
-            's_product_stream',
+            's_product_streams',
             'stream',
             'stream.id = relation.stream_id'
         );

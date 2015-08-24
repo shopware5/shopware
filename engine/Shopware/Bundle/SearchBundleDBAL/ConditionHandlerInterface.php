@@ -50,7 +50,6 @@ interface ConditionHandlerInterface
      * @param ConditionInterface $condition
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
-     * @return void
      */
     public function generateCondition(
         ConditionInterface $condition,

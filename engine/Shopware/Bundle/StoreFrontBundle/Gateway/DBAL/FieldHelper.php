@@ -728,7 +728,7 @@ class FieldHelper
 
     /**
      * Returns an array with all required related product stream fields.
-     * Requires that the s_product_stream table is included with table alias 'stream'
+     * Requires that the s_product_streams table is included with table alias 'stream'
      *
      * @return array
      */

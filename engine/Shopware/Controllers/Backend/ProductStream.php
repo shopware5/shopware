@@ -39,10 +39,20 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $conditions = $this->Request()->getParam('conditions');
         $conditions = json_decode($conditions, true);
 
+        $sorting = $this->Request()->getParam('sort');
+
         $criteria = new Criteria();
 
         $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-        $conditions = $streamRepo->unserializeConditions($conditions);
+
+        $sorting = $streamRepo->unserialize($sorting);
+
+        foreach ($sorting as $sort) {
+            $criteria->addSorting($sort);
+        }
+
+        $conditions = $streamRepo->unserialize($conditions);
+
         foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
         }
@@ -134,7 +144,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
         $query->select(['product.id', 'variant.ordernumber as number', 'product.name'])
             ->from('s_articles', 'product')
-            ->innerJoin('product', 's_product_stream_articles', 'streamProducts', 'streamProducts.article_id = product.id')
+            ->innerJoin('product', 's_product_streams_selection', 'streamProducts', 'streamProducts.article_id = product.id')
             ->innerJoin('product', 's_articles_details', 'variant', 'variant.id = product.main_detail_id')
             ->where('streamProducts.stream_id = :streamId')
             ->setParameter(':streamId', $streamId)
@@ -158,7 +168,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $articleId = $this->Request()->getParam('articleId');
 
         Shopware()->Container()->get('dbal_connection')->executeUpdate(
-            "DELETE FROM s_product_stream_articles WHERE stream_id = :streamId AND article_id = :articleId",
+            "DELETE FROM s_product_streams_selection WHERE stream_id = :streamId AND article_id = :articleId",
             [':streamId' => $streamId, ':articleId' => $articleId]
         );
 
@@ -171,7 +181,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $articleId = $this->Request()->getParam('articleId');
 
         Shopware()->Container()->get('dbal_connection')->executeUpdate(
-            "INSERT IGNORE INTO s_product_stream_articles(stream_id, article_id) VALUES (:streamId, :articleId)",
+            "INSERT IGNORE INTO s_product_streams_selection(stream_id, article_id) VALUES (:streamId, :articleId)",
             [':streamId' => $streamId, ':articleId' => $articleId]
         );
 

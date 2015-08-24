@@ -172,10 +172,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 ->createProductStreamCriteria($this->Request(), $context);
 
             $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-            $conditions = $streamRepo->getConditionsByProductStreamId($categoryContent['streamId']);
-            foreach ($conditions as $condition) {
-                $criteria->addCondition($condition);
-            }
+            $streamRepo->prepareCriteria($criteria, $categoryContent['streamId']);
         } else {
             /**@var $criteria Criteria*/
             $criteria = $this->get('shopware_search.store_front_criteria_factory')

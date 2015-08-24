@@ -30,8 +30,8 @@ EOD;
     private function createProductStreamTable()
     {
         $sql = <<<'EOD'
-CREATE TABLE IF NOT EXISTS `s_product_stream` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `s_product_streams` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
     `conditions` text COLLATE utf8_unicode_ci,
     `type` int(11) COLLATE utf8_unicode_ci,
@@ -43,13 +43,32 @@ EOD;
         $this->addSql($sql);
 
         $sql = <<<'EOD'
-CREATE TABLE IF NOT EXISTS `s_product_stream_articles` (
-    `stream_id` int(11) NOT NULL,
-    `article_id` int(11) NOT NULL,
-    UNIQUE KEY `stream_id` (`stream_id`,`article_id`)
+CREATE TABLE IF NOT EXISTS `s_product_streams_articles` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `stream_id` int(11) unsigned NOT NULL,
+    `article_id` int(11) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `stream_id` (`stream_id`,`article_id`),
+    CONSTRAINT s_product_streams_articles_fk_stream_id FOREIGN KEY (stream_id) REFERENCES s_product_streams (id) ON DELETE CASCADE,
+    CONSTRAINT s_product_streams_articles_fk_article_id FOREIGN KEY (article_id) REFERENCES s_articles (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOD;
         $this->addSql($sql);
+
+        $sql = <<<'EOD'
+CREATE TABLE IF NOT EXISTS `s_product_streams_selection` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `stream_id` int(11) unsigned NOT NULL,
+    `article_id` int(11) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `stream_id` (`stream_id`,`article_id`),
+    CONSTRAINT s_product_streams_selection_fk_stream_id FOREIGN KEY (stream_id) REFERENCES s_product_streams (id) ON DELETE CASCADE,
+    CONSTRAINT s_product_streams_selection_fk_article_id FOREIGN KEY (article_id) REFERENCES s_articles (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+EOD;
+
+        $this->addSql($sql);
+
 
         return $sql;
     }
@@ -60,7 +79,10 @@ EOD;
     private function createProductStreamForeignKey()
     {
         $sql = <<<'EOD'
-ALTER TABLE `s_categories` ADD `stream_id` INT NULL DEFAULT NULL ;
+ALTER TABLE `s_categories`
+ADD `stream_id` int(11) unsigned NULL DEFAULT NULL,
+ADD INDEX `stream_id` (`stream_id`),
+ADD CONSTRAINT s_categories_fk_stream_id FOREIGN KEY (stream_id) REFERENCES s_product_streams (id) ON DELETE SET NULL;
 EOD;
         $this->addSql($sql);
 

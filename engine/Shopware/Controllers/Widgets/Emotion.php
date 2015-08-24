@@ -866,10 +866,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                  ->limit($limit);
 
         $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-        $conditions = $streamRepo->getConditionsByProductStreamId($productStreamId);
-        foreach ($conditions as $condition) {
-            $criteria->addCondition($condition);
-        }
+        $streamRepo->prepareCriteria($criteria, $productStreamId);
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
