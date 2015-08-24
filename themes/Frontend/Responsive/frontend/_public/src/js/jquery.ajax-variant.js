@@ -20,6 +20,12 @@
         hasHistorySupport: Modernizr.history,
 
         /**
+         * Safari specific property which prevent safari to do another request on page load.
+         * @boolean
+         */
+        initialPopState: true,
+
+        /**
          * Default configuration of the plugin
          * @object
          */
@@ -31,10 +37,24 @@
          * Initializes the plugin and sets up the necessary event handler
          */
         init: function() {
-            var me = this;
+            var me = this,
+                ie;
 
             me.applyDataAttributes();
 
+            // Detecting IE version using feature detection (IE7+, browsers prior to IE7 are detected as 7)
+            ie = (function (){
+                if (window.ActiveXObject === undefined) return null;
+                if (!document.querySelector) return 7;
+                if (!document.addEventListener) return 8;
+                if (!window.atob) return 9;
+                if (!document.__proto__) return 10;
+                return 11;
+            })();
+
+            if (ie && ie <= 9) {
+                me.hasHistorySupport = false;
+            }
             me.$el
                 .on(me.getEventName('click'), '*[data-ajax-variants="true"]', $.proxy(me.onChange, me))
                 .on(me.getEventName('change'), '*[data-ajax-select-variants="true"]', $.proxy(me.onChange, me))
@@ -81,8 +101,12 @@
                     $productDetails = $response.find(me.opts.productDetailsSelector);
 
                     $(me.opts.productDetailsSelector).html($productDetails.html());
-                    StateManager.addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement');
-                    StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true });
+
+                    StateManager.addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement')
+                        .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
+                        .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')
+                        .addPlugin('*[data-image-gallery="true"]', 'swImageGallery');
+
                     $.loadingIndicator.close();
 
                     // Plugin developers should subscribe to this event to update their plugins accordingly
@@ -110,6 +134,11 @@
         onPopState: function(event) {
             var me = this,
                 state = event.originalEvent.state;
+
+            if($('html').hasClass('is--safari') && me.initialPopState) {
+                me.initialPopState = false;
+                return;
+            }
 
             if(!state || !state.hasOwnProperty('type') || state.type !== 'ajaxVariant') {
                 me.requestData('', false);
@@ -139,9 +168,20 @@
         onChange: function(event) {
             var me = this,
                 $target = $(event.target),
-                values = $target.parents('form').serialize();
+                $form = $target.parents('form'),
+                values = $form.serialize();
 
             event.preventDefault();
+
+            if (!me.hasHistorySupport) {
+                $.loadingIndicator.open({
+                    closeOnClick: false,
+                    delay: 0
+                });
+                $form.submit();
+
+                return false;
+            }
 
             $.publish('plugin/swAjaxVariant/onChange', [ me, values, $target ]);
 
