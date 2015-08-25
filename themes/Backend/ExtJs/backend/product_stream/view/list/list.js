@@ -37,6 +37,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
 
     configure: function () {
         return {
+            deleteButton: false,
             detailWindow: 'Shopware.apps.ProductStream.view.condition_list.Window',
             columns: {
                 name: { header: '{s name=name}Name{/s}' },

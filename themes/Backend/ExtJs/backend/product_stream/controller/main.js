@@ -56,11 +56,30 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                 'save-filtered-stream': me.saveFilteredStream
             },
             'product-stream-listing-grid': {
-                'open-defined-list-window': me.openDefinedListWindow
+                'open-defined-list-window': me.openDefinedListWindow,
+                'stream-delete-item': me.onDeleteItem
             }
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
+    },
+
+    onDeleteItem: function(grid, record) {
+        var message = Ext.String.format('{s name=dialog_delete_stream_message}Do you really want to delete "[0]"?{/s}', record.get('name'));
+        Ext.MessageBox.confirm('{s name=dialog_delete_stream_title}Delete Prdoduct Stream{/s}', message, function (response) {
+            if (response !== 'yes') {
+                return false;
+            }
+
+            record.destroy({
+                callback: function() {
+                    grid.getStore().load();
+                }
+            });
+
+        });
+
+        return false;
     },
 
     saveDefinedList: function(record) {
