@@ -216,6 +216,11 @@
             <tag name="doctrine.event_subscriber" />
         </service>
 
+        <service id="CategoryDuplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
+            <argument type="service" id="db_connection" />
+            <argument type="service" id="CategoryDenormalization" />
+        </service>
+
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
             <argument type="service" id="db_connection" />
         </service>

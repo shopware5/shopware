@@ -21,8 +21,8 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Shopware_Performance
- * @subpackage Cache
+ * @package    Category
+ * @subpackage Controller
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
@@ -211,7 +211,7 @@ Ext.define('Shopware.apps.Category.controller.MultiRequest', {
             success: function(response) {
                 var json = Ext.decode(response.responseText);
 
-                // start recusive call here
+                // start recursive call here
                 me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
             },
             failure: function(response) {
