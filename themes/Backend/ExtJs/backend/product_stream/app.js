@@ -47,8 +47,8 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.field.Sales',
         'condition_list.field.SearchTerm',
 
-        'defined_list.Window',
-        'defined_list.Product'
+        'selected_list.Window',
+        'selected_list.Product'
     ],
 
     models: [ 'Stream', 'Product' ],

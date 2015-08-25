@@ -39,45 +39,50 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         { ref: 'currencyCombo', selector: 'product-stream-preview-grid combo[name=currency]' },
         { ref: 'customerGroupCombo', selector: 'product-stream-preview-grid combo[name=customerGroup]' },
         { ref: 'productStreamGrid', selector: 'product-stream-listing-grid' },
+        { ref: 'productStreamDetailGrid', selector: 'product-stream-selected-list-grid' }
     ],
 
     init: function() {
         var me = this;
 
         me.control({
-            'product-stream-defined-list-window': {
-                'save-defined-list': me.saveDefinedList
+            'product-stream-selected-list-window': {
+                'save-selection-stream': me.saveSelectionStream
             },
             'product-stream-condition-panel': {
                 'load-preview': me.loadPreview
             },
             'product-stream-detail-window': {
-                'save-filtered-stream': me.saveFilteredStream
+                'save-condition-stream': me.saveConditionStream
             },
             'product-stream-listing-grid': {
-                'open-defined-list-window': me.openDefinedListWindow
+                'open-selected-list-window': me.openSelectedListWindow,
+                'stream-delete-item': me.onDeleteItem
             }
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
     },
 
-    saveDefinedList: function(record) {
-        var me = this;
+    onDeleteItem: function(grid, record) {
+        var message = Ext.String.format('{s name=dialog_delete_stream_message}Do you really want to delete "[0]"?{/s}', record.get('name'));
+        Ext.MessageBox.confirm('{s name=dialog_delete_stream_title}Delete Prdoduct Stream{/s}', message, function (response) {
+            if (response !== 'yes') {
+                return false;
+            }
 
-        var settingsPanel = me.getSettingsPanel();
+            record.destroy({
+                callback: function() {
+                    grid.getStore().load();
+                }
+            });
 
-        if (!settingsPanel.getForm().isValid()) {
-            return;
-        }
+        });
 
-        settingsPanel.getForm().updateRecord(record);
-        record.set('sorting', me.getSorting());
-        record.set('conditions', null);
-        this.saveRecord(record);
+        return false;
     },
 
-    saveFilteredStream: function(record) {
+    saveConditionStream: function(record) {
         var me = this;
         var conditionPanel = me.getConditionPanel();
         var settingsPanel = me.getSettingsPanel();
@@ -95,7 +100,65 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         record.set('sorting', me.getSorting());
         record.set('conditions', me.getConditions());
 
-        me.saveRecord(record);
+        me.saveConditionStreamRecord(record);
+    },
+
+    saveConditionStreamRecord: function(record) {
+        var me = this;
+        record.save({
+            callback: function() {
+                var productGrid = me.getProductStreamGrid(),
+                        store = productGrid.store;
+
+                store.reload({
+                    callback: function() {
+                        productGrid.reconfigure(store);
+                    }
+                });
+                Shopware.Notification.createGrowlMessage(
+                        '{s name=stream_saved_title}Product stream{/s}',
+                        '{s name=stream_saved_description}Stream saved{/s}'
+                );
+            }
+        });
+    },
+
+    saveSelectionStream: function(record) {
+        var me = this;
+
+        var settingsPanel = me.getSettingsPanel();
+
+        if (!settingsPanel.getForm().isValid()) {
+            return;
+        }
+
+        settingsPanel.getForm().updateRecord(record);
+        record.set('sorting', me.getSorting());
+        record.set('conditions', null);
+        this.saveSelectionStreamRecord(record);
+    },
+
+    saveSelectionStreamRecord: function(record) {
+        var me = this;
+        record.save({
+            callback: function() {
+                var productGrid = me.getProductStreamGrid(),
+                        listStore = productGrid.store,
+                        detailGrid = me.getProductStreamDetailGrid();
+
+                detailGrid.streamId = record.get('id');
+
+                listStore.reload({
+                    callback: function() {
+                        productGrid.reconfigure(listStore);
+                    }
+                });
+                Shopware.Notification.createGrowlMessage(
+                        '{s name=stream_saved_title}Product stream{/s}',
+                        '{s name=stream_saved_description}Stream saved{/s}'
+                );
+            }
+        });
     },
 
     getConditions: function() {
@@ -115,30 +178,9 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         return conditions;
     },
 
-    saveRecord: function(record) {
+    openSelectedListWindow: function(record) {
         var me = this;
-        record.save({
-            callback: function() {
-                var productGrid = me.getProductStreamGrid(),
-                    store = productGrid.store;
-
-                store.reload({
-                    callback: function() {
-                        productGrid.reconfigure(store);
-                    }
-                });
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=stream_saved_title}Product stream{/s}',
-                    '{s name=stream_saved_description}Stream saved{/s}'
-                );
-            }
-        });
-    },
-
-
-    openDefinedListWindow: function(record) {
-        var me = this;
-        me.getView('defined_list.Window').create({ record: record }).show();
+        me.getView('selected_list.Window').create({ record: record }).show();
     },
 
     loadPreview: function(conditions) {

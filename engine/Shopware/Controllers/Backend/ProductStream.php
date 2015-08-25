@@ -137,7 +137,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             ->createProductContext($shopId, $currencyId, $customerGroupKey);
     }
 
-    public function loadDefinedProductsAction()
+    public function loadSelectedProductsAction()
     {
         $streamId = $this->Request()->getParam('streamId');
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true, 'data' => $products, 'total' => $total]);
     }
 
-    public function removeDefinedProductAction()
+    public function removeSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
         $articleId = $this->Request()->getParam('articleId');
@@ -175,7 +175,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
-    public function addDefinedProductAction()
+    public function addSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
         $articleId = $this->Request()->getParam('articleId');

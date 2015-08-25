@@ -37,6 +37,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
 
     configure: function () {
         return {
+            deleteButton: false,
             detailWindow: 'Shopware.apps.ProductStream.view.condition_list.Window',
             columns: {
                 name: { header: '{s name=name}Name{/s}' },
@@ -62,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
                 {
                     formatName: function(type) {
                         if (type == 2) {
-                            return '{s name=defined_streams}Defined streams{/s}';
+                            return '{s name=selection_streams}Selection streams{/s}';
                         } else {
                             return '{s name=condition_streams}Condition streams{/s}';
                         }
@@ -79,11 +80,11 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
         items = Ext.Array.insert(items, 1, [{
             xtype: 'button',
             iconCls: 'sprite-plus-circle-frame',
-            text: '{s name=add_defined_stream}Add defined stream{/s}',
+            text: '{s name=add_selection_stream}Add selection stream{/s}',
             handler: function () {
                 var record = Ext.create('Shopware.apps.ProductStream.model.Stream');
                 record.set('type', 2);
-                me.fireEvent('open-defined-list-window', record);
+                me.fireEvent('open-selected-list-window', record);
             }
         }]);
 
@@ -98,7 +99,7 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
             if (record.get('type') == 2) {
                 record.reload({
                     callback: function (result) {
-                        me.fireEvent('open-defined-list-window', result);
+                        me.fireEvent('open-selected-list-window', result);
                     }
                 });
             } else {
