@@ -47,13 +47,13 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
 
         me.control({
             'product-stream-selected-list-window': {
-                'save-selected-list': me.saveSelectedList
+                'save-selection-stream': me.saveSelectionStream
             },
             'product-stream-condition-panel': {
                 'load-preview': me.loadPreview
             },
             'product-stream-detail-window': {
-                'save-filtered-stream': me.saveFilteredStream
+                'save-condition-stream': me.saveConditionStream
             },
             'product-stream-listing-grid': {
                 'open-selected-list-window': me.openSelectedListWindow,
@@ -82,22 +82,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         return false;
     },
 
-    saveSelectedList: function(record) {
-        var me = this;
-
-        var settingsPanel = me.getSettingsPanel();
-
-        if (!settingsPanel.getForm().isValid()) {
-            return;
-        }
-
-        settingsPanel.getForm().updateRecord(record);
-        record.set('sorting', me.getSorting());
-        record.set('conditions', null);
-        this.saveRecord(record);
-    },
-
-    saveFilteredStream: function(record) {
+    saveConditionStream: function(record) {
         var me = this;
         var conditionPanel = me.getConditionPanel();
         var settingsPanel = me.getSettingsPanel();
@@ -115,7 +100,65 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         record.set('sorting', me.getSorting());
         record.set('conditions', me.getConditions());
 
-        me.saveRecord(record);
+        me.saveConditionStreamRecord(record);
+    },
+
+    saveConditionStreamRecord: function(record) {
+        var me = this;
+        record.save({
+            callback: function() {
+                var productGrid = me.getProductStreamGrid(),
+                        store = productGrid.store;
+
+                store.reload({
+                    callback: function() {
+                        productGrid.reconfigure(store);
+                    }
+                });
+                Shopware.Notification.createGrowlMessage(
+                        '{s name=stream_saved_title}Product stream{/s}',
+                        '{s name=stream_saved_description}Stream saved{/s}'
+                );
+            }
+        });
+    },
+
+    saveSelectionStream: function(record) {
+        var me = this;
+
+        var settingsPanel = me.getSettingsPanel();
+
+        if (!settingsPanel.getForm().isValid()) {
+            return;
+        }
+
+        settingsPanel.getForm().updateRecord(record);
+        record.set('sorting', me.getSorting());
+        record.set('conditions', null);
+        this.saveSelectionStreamRecord(record);
+    },
+
+    saveSelectionStreamRecord: function(record) {
+        var me = this;
+        record.save({
+            callback: function() {
+                var productGrid = me.getProductStreamGrid(),
+                        listStore = productGrid.store,
+                        detailGrid = me.getProductStreamDetailGrid();
+
+                detailGrid.streamId = record.get('id');
+
+                listStore.reload({
+                    callback: function() {
+                        productGrid.reconfigure(listStore);
+                    }
+                });
+                Shopware.Notification.createGrowlMessage(
+                        '{s name=stream_saved_title}Product stream{/s}',
+                        '{s name=stream_saved_description}Stream saved{/s}'
+                );
+            }
+        });
     },
 
     getConditions: function() {
@@ -134,30 +177,6 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
 
         return conditions;
     },
-
-    saveRecord: function(record) {
-        var me = this;
-        record.save({
-            callback: function() {
-                var productGrid = me.getProductStreamGrid(),
-                    listStore = productGrid.store,
-                    detailGrid = me.getProductStreamDetailGrid();
-
-                detailGrid.streamId = record.get('id');
-
-                listStore.reload({
-                    callback: function() {
-                        productGrid.reconfigure(listStore);
-                    }
-                });
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=stream_saved_title}Product stream{/s}',
-                    '{s name=stream_saved_description}Stream saved{/s}'
-                );
-            }
-        });
-    },
-
 
     openSelectedListWindow: function(record) {
         var me = this;

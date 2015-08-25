@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
             text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
-                me.fireEvent('save-selected-list', me.record);
+                me.fireEvent('save-selection-stream', me.record);
                 me.activateProductGrid(me.record);
             }
         });

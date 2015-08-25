@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
             text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
-                me.fireEvent('save-filtered-stream', me.record);
+                me.fireEvent('save-condition-stream', me.record);
             }
         });
 
