@@ -663,6 +663,7 @@ class BasicEntityPersister implements EntityPersister
                 $sourceColumn = $joinColumn['name'];
                 $targetColumn = $joinColumn['referencedColumnName'];
                 $quotedColumn = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
+                $restoreVal = isset($result[$owningTable][$sourceColumn]) ? $result[$owningTable][$sourceColumn] : null;
 
                 $this->quotedColumns[$sourceColumn]  = $quotedColumn;
                 $this->columnTypes[$sourceColumn]    = PersisterHelper::getTypeOfColumn($targetColumn, $targetClass, $this->em);
@@ -675,6 +676,7 @@ class BasicEntityPersister implements EntityPersister
 
                 // Set data to result set, only if no exits.
                 $skipValue = false;
+                $value = null;
                 switch (true) {
                     case $newVal === null:
                         if (!isset($result[$owningTable][$sourceColumn])) {
@@ -682,10 +684,6 @@ class BasicEntityPersister implements EntityPersister
                         } else {
                             $skipValue = true;
                         }
-                        break;
-
-                    case $targetClass->containsForeignIdentifier:
-                        $value = $newValId[$targetClass->getFieldForColumn($targetColumn)];
                         break;
 
                     case $isDefault:
@@ -699,7 +697,7 @@ class BasicEntityPersister implements EntityPersister
                 }
 
                 if (!$skipValue) {
-                    $result[$owningTable][$sourceColumn] = $value;
+                    $result[$owningTable][$sourceColumn] = $value !== null ? $value : $restoreVal;
                 }
             }
         }
