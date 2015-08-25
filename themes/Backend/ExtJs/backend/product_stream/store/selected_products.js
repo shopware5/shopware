@@ -27,14 +27,14 @@
  * @author shopware AG
  */
 
-Ext.define('Shopware.apps.ProductStream.store.DefinedProducts', {
+Ext.define('Shopware.apps.ProductStream.store.SelectedProducts', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.Base.model.Article',
     autoLoad: false,
     pageSize: 25,
     proxy:{
         type: 'ajax',
-        url: '{url controller=ProductStream action=loadDefinedProducts}',
+        url: '{url controller=ProductStream action=loadSelectedProducts}',
         extraParams: {
             streamId: null
         },

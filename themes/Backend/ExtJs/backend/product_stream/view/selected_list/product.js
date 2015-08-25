@@ -28,9 +28,9 @@
  */
 //{namespace name=backend/product_stream/main}
 
-Ext.define('Shopware.apps.ProductStream.view.defined_list.Product', {
+Ext.define('Shopware.apps.ProductStream.view.selected_list.Product', {
     extend: 'Shopware.apps.ProductStream.view.SearchGrid',
-    alias: 'widget.product-stream-defined-list-grid',
+    alias: 'widget.product-stream-selected-list-grid',
 
     enable: function() {
         this.grid.enable();
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Product', {
 
     initComponent: function() {
         var me = this;
-        me.store = Ext.create('Shopware.apps.ProductStream.store.DefinedProducts');
+        me.store = Ext.create('Shopware.apps.ProductStream.store.SelectedProducts');
         me.searchStore = me.createSearchStore();
         me.callParent(arguments);
     },
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Product', {
     addRecord: function(record) {
         this.callParent(arguments);
         this.sendAjaxRequest(
-            '{url controller=ProductStream action=addDefinedProduct}',
+            '{url controller=ProductStream action=addSelectedProduct}',
             { streamId: this.streamId, articleId: record.get('id') }
         );
     },
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Product', {
     removeRecord: function(record) {
         this.callParent(arguments);
         this.sendAjaxRequest(
-            '{url controller=ProductStream action=removeDefinedProduct}',
+            '{url controller=ProductStream action=removeSelectedProduct}',
             { streamId: this.streamId, articleId: record.get('id') }
         );
     },

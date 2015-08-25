@@ -39,15 +39,15 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         { ref: 'currencyCombo', selector: 'product-stream-preview-grid combo[name=currency]' },
         { ref: 'customerGroupCombo', selector: 'product-stream-preview-grid combo[name=customerGroup]' },
         { ref: 'productStreamGrid', selector: 'product-stream-listing-grid' },
-        { ref: 'productStreamDetailGrid', selector: 'product-stream-defined-list-grid' }
+        { ref: 'productStreamDetailGrid', selector: 'product-stream-selected-list-grid' }
     ],
 
     init: function() {
         var me = this;
 
         me.control({
-            'product-stream-defined-list-window': {
-                'save-defined-list': me.saveDefinedList
+            'product-stream-selected-list-window': {
+                'save-selected-list': me.saveSelectedList
             },
             'product-stream-condition-panel': {
                 'load-preview': me.loadPreview
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                 'save-filtered-stream': me.saveFilteredStream
             },
             'product-stream-listing-grid': {
-                'open-defined-list-window': me.openDefinedListWindow,
+                'open-selected-list-window': me.openSelectedListWindow,
                 'stream-delete-item': me.onDeleteItem
             }
         });
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         return false;
     },
 
-    saveDefinedList: function(record) {
+    saveSelectedList: function(record) {
         var me = this;
 
         var settingsPanel = me.getSettingsPanel();
@@ -159,9 +159,9 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     },
 
 
-    openDefinedListWindow: function(record) {
+    openSelectedListWindow: function(record) {
         var me = this;
-        me.getView('defined_list.Window').create({ record: record }).show();
+        me.getView('selected_list.Window').create({ record: record }).show();
     },
 
     loadPreview: function(conditions) {

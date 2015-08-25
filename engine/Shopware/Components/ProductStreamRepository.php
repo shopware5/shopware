@@ -65,7 +65,7 @@ class ProductStreamRepository
         }
 
         if ($productStream['type'] == 2) {
-            $this->prepareDefinedStream($productStream, $criteria);
+            $this->prepareSelectionStream($productStream, $criteria);
             return;
         }
     }
@@ -88,7 +88,7 @@ class ProductStreamRepository
      * @param array $productStream
      * @param Criteria $criteria
      */
-    private function prepareDefinedStream(array $productStream, Criteria $criteria)
+    private function prepareSelectionStream(array $productStream, Criteria $criteria)
     {
         $ordernumbers = $this->getOrdernumbers($productStream['id']);
 

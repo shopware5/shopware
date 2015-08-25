@@ -28,9 +28,9 @@
  */
 //{namespace name=backend/product_stream/main}
 
-Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
+Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     extend: 'Enlight.app.Window',
-    alias: 'widget.product-stream-defined-list-window',
+    alias: 'widget.product-stream-selected-list-window',
     title : '{s name=detail_window_title}Product stream details{/s}',
     height: '90%',
     width: '90%',
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
             text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
-                me.fireEvent('save-defined-list', me.record);
+                me.fireEvent('save-selected-list', me.record);
                 me.activateProductGrid(me.record);
             }
         });
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.ProductStream.view.defined_list.Window', {
     },
 
     createProductGrid: function() {
-        this.productGrid = Ext.create('Shopware.apps.ProductStream.view.defined_list.Product', {
+        this.productGrid = Ext.create('Shopware.apps.ProductStream.view.selected_list.Product', {
             flex: 1,
             disabled: true
         });
