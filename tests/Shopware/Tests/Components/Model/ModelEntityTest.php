@@ -314,17 +314,6 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
         $article->fromArray($data);
     }
 
-    public function testFromArrayWithFalseDoesNothing()
-    {
-        $article = new Article();
-
-        $articleBefore = serialize($article);
-
-        $article->fromArray(false);
-
-        $this->assertEquals($articleBefore, serialize($article));
-    }
-
     public function testCanAssignOneToMany()
     {
         $article = new Article();

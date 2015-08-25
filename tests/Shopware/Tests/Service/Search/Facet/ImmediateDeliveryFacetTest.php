@@ -2,10 +2,8 @@
 
 namespace Shopware\Tests\Service\Search\Facet;
 
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -14,13 +12,13 @@ class ImmediateDeliveryFacetTest extends TestCase
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param Context $context
+     * @param ProductContext $context
      * @param array $data
      * @return array
      */
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $data = array('inStock' => 0, 'minPurchase' => 1)
     ) {

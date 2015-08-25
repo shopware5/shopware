@@ -9,8 +9,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SearchProduct;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Components\MultiEdit\Resource\Product;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 
@@ -92,13 +92,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
      * @param Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param Context $context
+     * @param ProductContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
         Category $category,
         $conditions,
-        Context $context
+        ProductContext $context
     ) {
         if ($category) {
             $criteria->addBaseCondition(
@@ -113,7 +113,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected function addConditions(Criteria $criteria, $conditions)
     {
-        foreach($conditions as $condition) {
+        foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
         }
     }
@@ -124,7 +124,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected function addFacets(Criteria $criteria, $facets)
     {
-        foreach($facets as $facet) {
+        foreach ($facets as $facet) {
             $criteria->addFacet($facet);
         }
     }
@@ -135,21 +135,21 @@ class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected function addSortings(Criteria $criteria, $sortings)
     {
-        foreach($sortings as $sorting) {
+        foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);
         }
     }
 
     /**
      * @param $products
-     * @param Context $context
+     * @param ProductContext $context
      * @param Category $category
      * @return Article[]
      */
-    public function createProducts($products, Context $context, Category $category)
+    public function createProducts($products, ProductContext $context, Category $category)
     {
         $articles = array();
-        foreach($products as $number => $additionally) {
+        foreach ($products as $number => $additionally) {
             $articles[] = $this->createProduct(
                 $number,
                 $context,
@@ -162,14 +162,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param Context $context
+     * @param ProductContext $context
      * @param Category $category
-     * @param $additionally
      * @return \Shopware\Models\Article\Article
      */
     protected function createProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category,
         $additionally
     ) {
@@ -223,7 +222,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return Context
+     * @return TestContext
      */
     protected function getContext()
     {
@@ -241,13 +240,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param Context $context
+     * @param ProductContext $context
      * @param Category $category
      * @return array
      */
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null
     ) {
         $product = $this->helper->getSimpleProduct(

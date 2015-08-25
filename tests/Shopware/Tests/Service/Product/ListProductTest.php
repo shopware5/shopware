@@ -2,20 +2,18 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Tests\Service\TestCase;
 
 class ListProductTest extends TestCase
 {
     /**
      * @param $number
-     * @param Context $context
+     * @param ProductContext $context
      * @return ListProduct
      */
-    private function getListProduct($number, Context $context)
+    private function getListProduct($number, ProductContext $context)
     {
         return Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);

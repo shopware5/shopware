@@ -101,7 +101,7 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             ->will($this->returnValue('public_directory'));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
-            null,
+            $this->getEntityManager(),
             $util,
             $pathResolver,
             $this->getEventManager()

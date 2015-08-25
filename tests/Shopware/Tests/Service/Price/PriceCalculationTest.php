@@ -3,8 +3,7 @@
 namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Tests\Service\Helper;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Tests\Service\TestCase;
 
 class PriceCalculationTest extends TestCase
@@ -14,7 +13,7 @@ class PriceCalculationTest extends TestCase
      * @param bool $displayGross
      * @param int $discount
      * @param int $currencyFactor
-     * @return StoreFrontBundle\Struct\Context
+     * @return ProductContext
      */
     protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
     {
@@ -223,5 +222,4 @@ class PriceCalculationTest extends TestCase
         $this->assertEquals(73.44, $graduation->getCalculatedPseudoPrice());
         $this->assertEquals(122.40000, $graduation->getCalculatedReferencePrice());
     }
-
 }

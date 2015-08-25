@@ -2,14 +2,8 @@
 
 namespace Shopware\Tests\Service\Search\Sorting;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -22,7 +16,7 @@ class PriceSortingTest extends TestCase
         $data = array('key' => 'BAK', 'tax' => $displayGross);
 
         $context->setFallbackCustomerGroup(
-            $this->helper->createCustomerGroup($data)
+            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
         );
 
         $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
@@ -34,14 +28,14 @@ class PriceSortingTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param ProductContext $context
      * @param \Shopware\Models\Category\Category $category
      * @param array $prices
      * @return array
      */
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $prices = array()
     ) {

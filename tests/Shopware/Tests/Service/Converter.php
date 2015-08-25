@@ -35,7 +35,7 @@ class Converter
 
         $discounts = array();
 
-        foreach($entity->getDiscounts() as $discountEntity) {
+        foreach ($entity->getDiscounts() as $discountEntity) {
             $discount = new Struct\Product\PriceDiscount();
 
             $discount->setId($discountEntity->getId());
@@ -126,5 +126,4 @@ class Converter
 
         return $customerGroup;
     }
-
 }

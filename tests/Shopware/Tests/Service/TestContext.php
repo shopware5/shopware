@@ -2,11 +2,11 @@
 
 namespace Shopware\Tests\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 
-class TestContext extends Context
+class TestContext extends ProductContext
 {
-    function __construct()
+    public function __construct()
     {
     }
 
@@ -89,5 +89,4 @@ class TestContext extends Context
     {
         $this->taxRules = $taxRules;
     }
-
 }

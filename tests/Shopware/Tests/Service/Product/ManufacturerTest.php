@@ -60,5 +60,4 @@ class ManufacturerTest extends TestCase
             $this->assertTrue($manufacturer->hasAttribute('core'));
         }
     }
-
 }

@@ -2,10 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
-use Shopware\Models\Customer\Group;
-use Shopware\Models\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Tests\Service\TestCase;
@@ -126,6 +124,7 @@ class CoverTest extends TestCase
         $data = $this->getVariantImageProduct($number, $context);
         $this->helper->createArticle($data);
 
+        /** @var \Shopware_Components_Config $config */
         $config = $this->getMockBuilder('\Shopware_Components_Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -207,7 +206,7 @@ class CoverTest extends TestCase
 
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $imageCount = 1
     ) {
@@ -225,7 +224,7 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Context $context)
+    private function getVariantImageProduct($number, ProductContext $context)
     {
         $data = $this->getProduct($number, $context, null, 2);
 

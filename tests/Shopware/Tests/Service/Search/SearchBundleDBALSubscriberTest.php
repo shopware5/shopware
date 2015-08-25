@@ -3,7 +3,6 @@
 namespace Shopware\Tests\Service\Search;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler;
@@ -13,11 +12,16 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidCreate()
     {
+        $criteriaRequestHandler = $this->getMockBuilder('\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $subscriber = new SearchBundleDBALSubscriber([
             new CategoryConditionHandler(),
             new PopularitySortingHandler(),
-            $this->getMock('\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler')
+            $criteriaRequestHandler,
         ]);
+
         $this->assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
     }
 
@@ -27,7 +31,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testNestedArrays()
     {
-        $subscriber = new SearchBundleDBALSubscriber([
+        new SearchBundleDBALSubscriber([
             [new CategoryConditionHandler(), new CategoryConditionHandler()],
             new PopularitySortingHandler(),
             new ProductNameSortingHandler()
@@ -40,7 +44,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyArray()
     {
-        $subscriber = new SearchBundleDBALSubscriber([]);
+        new SearchBundleDBALSubscriber([]);
     }
 
     /**
@@ -49,7 +53,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidClass()
     {
-        $subscriber = new SearchBundleDBALSubscriber([
+        new SearchBundleDBALSubscriber([
             new CategoryCondition([1, 2]),
             new CategoryConditionHandler()
         ]);

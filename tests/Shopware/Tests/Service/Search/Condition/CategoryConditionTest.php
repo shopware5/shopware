@@ -4,8 +4,7 @@ namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -13,11 +12,11 @@ class CategoryConditionTest extends TestCase
 {
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $additionally
     ) {
-        return parent::getProduct($number, $context, $additionally, $additionally);
+        return parent::getProduct($number, $context, $additionally);
     }
 
 
@@ -26,13 +25,13 @@ class CategoryConditionTest extends TestCase
      * @param Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param Context $context
+     * @param ProductContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
         Category $category,
         $conditions,
-        Context $context
+        ProductContext $context
     ) {
     }
 
