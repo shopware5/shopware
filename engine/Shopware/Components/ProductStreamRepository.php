@@ -90,9 +90,9 @@ class ProductStreamRepository
      */
     private function prepareDefinedStream(array $productStream, Criteria $criteria)
     {
-        $orderNumbers = $this->getOrderNumbers($productStream['id']);
+        $ordernumbers = $this->getOrdernumbers($productStream['id']);
 
-        $criteria->addCondition(new OrdernumberCondition($orderNumbers));
+        $criteria->addCondition(new OrdernumberCondition($ordernumbers));
 
         $sortings = $criteria->getSortings();
         if (empty($sortings)) {
@@ -121,7 +121,7 @@ class ProductStreamRepository
      * @param int $productStreamId
      * @return string[]
      */
-    private function getOrderNumbers($productStreamId)
+    private function getOrdernumbers($productStreamId)
     {
         $query = <<<SQL
 SELECT
