@@ -125,6 +125,7 @@ In this document you will find a changelog of the important changes related to t
 * Added `sw:media:cleanup` cli command to find all unused media and place them in a new album called Trash
     * Optional: `sw:media:cleanup --delete` to find all unused media and remove them automatically
 * Added event `Shopware_Collect_MediaPositions` to collect more tables to scan for unused images. You should return a ArrayCollection of MediaPosition instances.
+* Added configuration option 'errorHandler.throwOnRecoverableError'. When set to true errors of type `E_RECOVERABLE_ERROR` will result in an exception. This is useful to test PHP 7 compatiblity.
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.

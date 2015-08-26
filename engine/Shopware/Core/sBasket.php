@@ -2080,9 +2080,12 @@ class sBasket
                 } else {
                     $getArticles[$key]['additional_details'] = $tempArticle;
                     $properties = '';
-                    foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
-                        $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
+                    if (isset($getArticles[$key]['additional_details']['sProperties'])) {
+                        foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
+                            $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
+                        }
                     }
+
                     $getArticles[$key]['additional_details']['properties'] = substr($properties, 0, -7);
                 }
             }

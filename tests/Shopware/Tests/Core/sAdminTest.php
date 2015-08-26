@@ -2291,6 +2291,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
         $user = $this->module->sGetUserData();
 
+        $date = new DateTime();
+
         // Inject demo data
         $orderData = array(
             'ordernumber' => uniqid(),
@@ -2299,7 +2301,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'invoice_amount_net' => '31.92',
             'invoice_shipping' => '0',
             'invoice_shipping_net' => '0',
-            'ordertime' => new DateTime(),
+            'ordertime' => $date->format("Y-m-d H:i:s"),
             'status' => '0',
             'cleared' => '17',
             'paymentID' => '4',

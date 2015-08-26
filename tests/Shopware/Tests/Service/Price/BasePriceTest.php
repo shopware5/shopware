@@ -2,11 +2,8 @@
 
 namespace Shopware\Tests\Service\Price;
 
-
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Tests\Service\Helper;
 use Shopware\Tests\Service\TestCase;
 
 class BasePriceTest extends TestCase
@@ -70,5 +67,4 @@ class BasePriceTest extends TestCase
         $this->assertEquals(50, $last->getCalculatedPrice());
         $this->assertEquals(10, $last->getCalculatedReferencePrice());
     }
-
 }

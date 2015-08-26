@@ -82,7 +82,7 @@ class Helper
 
     public function getProductConfigurator(
         StoreFrontBundle\Struct\ListProduct $listProduct,
-        StoreFrontBundle\Struct\Context $context,
+        StoreFrontBundle\Struct\ProductContext $context,
         array $selection = array(),
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
@@ -104,16 +104,15 @@ class Helper
 
     /**
      * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param StoreFrontBundle\Struct\Context $context
+     * @param StoreFrontBundle\Struct\ProductContext $context
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
      * @return StoreFrontBundle\Struct\Property\Set
      */
     public function getProductProperties(
         StoreFrontBundle\Struct\ListProduct $product,
-        StoreFrontBundle\Struct\Context $context,
+        StoreFrontBundle\Struct\ProductContext $context,
         StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ) {
-
         if ($productPropertyGateway === null) {
             $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
         }
@@ -124,7 +123,7 @@ class Helper
 
     /**
      * @param $number
-     * @param StoreFrontBundle\Struct\Context $context
+     * @param StoreFrontBundle\Struct\ProductContext $context
      * @param null $productGateway
      * @param null $graduatedPricesService
      * @param null $cheapestPriceService
@@ -137,7 +136,7 @@ class Helper
      */
     public function getListProduct(
         $number,
-        StoreFrontBundle\Struct\Context $context,
+        $context, // StoreFrontBundle\Struct\ProductContext
         $productGateway = null,
         $graduatedPricesService = null,
         $cheapestPriceService = null,
@@ -156,7 +155,8 @@ class Helper
             $priceCalculationService,
             $mediaService,
             $marketingService,
-            $eventManager
+            $eventManager,
+            $voteService
         );
 
         return array_shift($products);
@@ -172,7 +172,10 @@ class Helper
      * @param null $mediaService
      * @param null $marketingService
      * @param null $eventManager
+     * @param null $voteService
+     * @param null $config
      * @return StoreFrontBundle\Struct\ListProduct[]
+     * @throws \Exception
      */
     public function getListProducts(
         $numbers,
@@ -184,17 +187,36 @@ class Helper
         $mediaService = null,
         $marketingService = null,
         $eventManager = null,
-        $voteService = null
+        $voteService = null,
+        $config = null
     ) {
-
-        if ($productGateway === null)           $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
-        if ($graduatedPricesService === null)   $graduatedPricesService = Shopware()->Container()->get('shopware_storefront.graduated_prices_service');
-        if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('shopware_storefront.cheapest_price_service');
-        if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('shopware_storefront.price_calculation_service');
-        if ($mediaService === null)             $mediaService = Shopware()->Container()->get('shopware_storefront.media_service');
-        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service');
-        if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
-        if ($voteService === null)              $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
+        if ($productGateway === null) {
+            $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
+        }
+        if ($graduatedPricesService === null) {
+            $graduatedPricesService = Shopware()->Container()->get('shopware_storefront.graduated_prices_service');
+        }
+        if ($cheapestPriceService === null) {
+            $cheapestPriceService = Shopware()->Container()->get('shopware_storefront.cheapest_price_service');
+        }
+        if ($priceCalculationService === null) {
+            $priceCalculationService = Shopware()->Container()->get('shopware_storefront.price_calculation_service');
+        }
+        if ($mediaService === null) {
+            $mediaService = Shopware()->Container()->get('shopware_storefront.media_service');
+        }
+        if ($marketingService === null) {
+            $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service');
+        }
+        if ($eventManager === null) {
+            $eventManager = Shopware()->Container()->get('events');
+        }
+        if ($voteService === null) {
+            $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
+        }
+        if ($config === null) {
+            $config = Shopware()->Container()->get('config');
+        }
 
         $service = new StoreFrontBundle\Service\Core\ListProductService(
             $productGateway,
@@ -204,7 +226,8 @@ class Helper
             $mediaService,
             $marketingService,
             $voteService,
-            $eventManager
+            $eventManager,
+            $config
         );
 
         return $service->getList($numbers, $context);
@@ -222,10 +245,18 @@ class Helper
      */
     public function getSimpleProduct(
         $number,
-        Tax $tax,
+        $tax, // Either Model/Tax or Struct/Tax
         Group $customerGroup,
         $priceOffset = 0.00
     ) {
+
+        if ($customerGroup instanceof Models\Customer\Group) {
+            $struct = new Group();
+            $struct->setId($customerGroup->getId());
+            $struct->setKey($customerGroup->getKey());
+            $struct->setName($customerGroup->getName());
+        }
+
         $data = $this->getProductData(array(
             'taxId' => $tax->getId()
         ));
@@ -246,7 +277,7 @@ class Helper
 
     public function cleanUp()
     {
-        foreach($this->propertyNames as $name) {
+        foreach ($this->propertyNames as $name) {
             $this->deleteProperties($name);
         }
         $this->removePriceGroup();
@@ -325,7 +356,7 @@ class Helper
             return;
         }
 
-        foreach($detailIds as $id) {
+        foreach ($detailIds as $id) {
             $detail = $this->entityManager->find('Shopware\Models\Article\Detail', $id);
             if ($detail) {
                 $this->entityManager->remove($detail);
@@ -999,7 +1030,6 @@ class Helper
         $context = new TestContext();
 
         $context->setTaxRules($this->buildTaxRules($taxes));
-
         $context->setShop($this->converter->convertShop($shop));
 
         if ($currency == null && $shop->getCurrency()) {
@@ -1063,7 +1093,9 @@ class Helper
 
         foreach ($ids as $id) {
             $customer = $this->entityManager->find('Shopware\Models\Customer\Group', $id);
-            if (!$customer) continue;
+            if (!$customer) {
+                continue;
+            }
             $this->entityManager->remove($customer);
             $this->entityManager->flush($customer);
         }
@@ -1073,7 +1105,9 @@ class Helper
     private function deleteTax($name)
     {
         $ids = $this->db->fetchCol("SELECT id FROM s_core_tax WHERE description = ?", array($name));
-        if (empty($ids)) return;
+        if (empty($ids)) {
+            return;
+        }
 
         foreach ($ids as $id) {
             $tax = $this->entityManager->find('Shopware\Models\Tax\Tax', $id);
@@ -1086,7 +1120,9 @@ class Helper
     private function deleteCurrency($name)
     {
         $ids = $this->db->fetchCol("SELECT id FROM s_core_currencies WHERE name = ?", array($name));
-        if (empty($ids)) return;
+        if (empty($ids)) {
+            return;
+        }
 
         foreach ($ids as $id) {
             $tax = $this->entityManager->find('Shopware\Models\Shop\Currency', $id);

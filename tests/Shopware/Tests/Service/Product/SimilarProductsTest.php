@@ -2,9 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Models\Article\Article;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,7 +11,7 @@ class SimilarProductsTest extends TestCase
 {
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null
     ) {
         $data = parent::getProduct($number, $context, $category);

@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -31,7 +31,7 @@ class VoteAverageFacetTest extends TestCase
 
     protected function createProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category,
         $additionally
     ) {

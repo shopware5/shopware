@@ -16,6 +16,7 @@ class CriteriaTest extends TestCase
     public function testUniqueCondition()
     {
         $criteria = new Criteria();
+
         $criteria->addCondition(new CategoryCondition(array(1)));
         $criteria->addCondition(new CategoryCondition(array(3)));
         $this->assertCount(1, $criteria->getConditions());

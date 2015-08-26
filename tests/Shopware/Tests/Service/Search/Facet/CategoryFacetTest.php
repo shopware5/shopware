@@ -2,11 +2,9 @@
 
 namespace Shopware\Tests\Service\Search\Facet;
 
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -14,11 +12,11 @@ class CategoryFacetTest extends TestCase
 {
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $additionally
     ) {
-        return parent::getProduct($number, $context, $additionally, $additionally);
+        return parent::getProduct($number, $context, $additionally);
     }
 
     public function testSingleProductInFacet()

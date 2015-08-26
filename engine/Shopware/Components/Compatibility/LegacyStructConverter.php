@@ -507,6 +507,7 @@ class LegacyStructConverter
         $imageDir = str_replace('/media/image/', '/', $imageDir);
 
         $thumbnails = [];
+
         foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
             if ($thumbnail->hasRetinaSource()) {
@@ -949,7 +950,7 @@ class LegacyStructConverter
             'notification' => $product->allowsNotification(),
             'ean' => $product->getEan(),
             'keywords' => $product->getKeywords(),
-            'sReleasedate' => $product->getReleaseDate(),
+            'sReleasedate' => $this->dateToString($product->getReleaseDate()),
             'template' => $product->getTemplate(),
         );
 
@@ -990,5 +991,18 @@ class LegacyStructConverter
         }
 
         return $data;
+    }
+
+    /**
+     * @param mixed $date
+     * @return string
+     */
+    private function dateToString($date)
+    {
+        if ($date instanceof \DateTime) {
+            return $date->format('Y-m-d');
+        }
+
+        return '';
     }
 }

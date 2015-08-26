@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -14,7 +14,7 @@ class GraduatedPricesTest extends TestCase
         $context = parent::getContext();
 
         $context->setFallbackCustomerGroup(
-            $this->helper->createCustomerGroup(array('key'=> 'BACK'))
+            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup(array('key'=> 'BACK')))
         );
 
         return $context;
@@ -22,7 +22,7 @@ class GraduatedPricesTest extends TestCase
 
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null
     ) {
         $data = parent::getProduct($number, $context, $category);

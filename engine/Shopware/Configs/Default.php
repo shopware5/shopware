@@ -22,6 +22,9 @@ return array_replace_recursive([
         'writeToIni' => false,
         'showSnippetPlaceholder' => false,
     ],
+    'errorHandler' => [
+        'throwOnRecoverableError' => false,
+    ],
     'db' => [
         'username' => 'root',
         'password' => '',

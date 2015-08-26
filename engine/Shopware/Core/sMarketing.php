@@ -450,7 +450,7 @@ class sMarketing
         $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         return array_map(
-            function (StoreFrontBundle\Struct\Product $elem) {
+            function (StoreFrontBundle\Struct\ListProduct $elem) {
                 return array(
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional()

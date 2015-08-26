@@ -163,10 +163,15 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addManufacturerCondition(Request $request, Criteria $criteria)
     {
+        if (!$request->has('sSupplier')) {
+            return;
+        }
+
         $manufacturers = explode(
             '|',
-            $request->getParam('sSupplier', [])
+            $request->getParam('sSupplier')
         );
+
         if (!empty($manufacturers)) {
             $criteria->addCondition(new ManufacturerCondition($manufacturers));
         }

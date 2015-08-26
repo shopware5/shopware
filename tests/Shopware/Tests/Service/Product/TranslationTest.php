@@ -2,9 +2,7 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Article\Detail;
-use Shopware\Tests\Service\Helper;
 use Shopware\Tests\Service\TestCase;
 
 class TranslationTest extends TestCase
@@ -73,7 +71,6 @@ class TranslationTest extends TestCase
         $this->assertEquals('Dummy Translation', $manufacturer->getMetaTitle());
         $this->assertEquals('Dummy Translation', $manufacturer->getMetaKeywords());
         $this->assertEquals('Dummy Translation', $manufacturer->getMetaDescription());
-
     }
 
 

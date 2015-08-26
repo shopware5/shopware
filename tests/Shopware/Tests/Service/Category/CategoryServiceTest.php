@@ -24,7 +24,7 @@ class CategoryServiceTest extends TestCase
             $this->getContext()
         );
 
-        foreach($categories as $id => $category) {
+        foreach ($categories as $id => $category) {
             $this->assertEquals($id, $category->getId());
         }
 
@@ -85,5 +85,3 @@ class CategoryServiceTest extends TestCase
         $this->assertArrayHasKey($third->getId(), $categories);
     }
 }
-
-
