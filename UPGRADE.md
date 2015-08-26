@@ -133,6 +133,13 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Plugins_Core_System_Bootstrap::onInitResourceAdodb`
     * `Enlight_Components_Adodb`
     * `Enlight_Components_Adodb_Statement`
+* Removed previously deprecated search classes:
+    * `Shopware_Components_Search`
+    * `Shopware_Components_Search_Adapter_Default`
+    * `Shopware_Components_Search_Adapter_Abstract`
+    * `Shopware_Components_Search_Result_Default`
+    * `Shopware_Components_Search_Result_Abstract`
+    * `Shopware_Components_Search_Result_Interface`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
