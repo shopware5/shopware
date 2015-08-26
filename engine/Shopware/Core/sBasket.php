@@ -295,7 +295,6 @@ class sBasket
      * Used only internally in sBasket::sGetBasket()
      *
      * @deprecated
-     * @return Enlight_Components_Adodb_Statement|null
      */
     public function sInsertDiscount()
     {
