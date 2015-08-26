@@ -12,7 +12,7 @@
         init: function () {
             var me = this;
 
-            me._on(me.$el, me.getEventName('touchstart click'), $.proxy(me.onClickMenu, me));
+            me._on(me.$el, 'touchstart click', $.proxy(me.onClickMenu, me));
 
             $.publish('plugin/swDropdownMenu/onRegisterEvents', [ me ]);
         },
