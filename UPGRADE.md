@@ -147,6 +147,10 @@ In this document you will find a changelog of the important changes related to t
    * `sShopwareImport`
    * `sMappingConvert`
    * `sXmlConvert`
+* Removed previously deprecated table `s_core_multilanguage`
+      * Table: `s_core_multilanguage`
+      * `Shopware_Plugins_Core_System_Bootstrap::getSingleShopData`
+      * `sSystem::$sSubShop`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
