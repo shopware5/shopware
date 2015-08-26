@@ -140,6 +140,13 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Components_Search_Result_Default`
     * `Shopware_Components_Search_Result_Abstract`
     * `Shopware_Components_Search_Result_Interface`
+* Removed previously deprecated API `Shopware()->Api()`
+   * `Shopware_Plugins_Core_Api_Bootstrap`
+   * `sCsvConvert`
+   * `sShopwareExport`
+   * `sShopwareImport`
+   * `sMappingConvert`
+   * `sXmlConvert`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
