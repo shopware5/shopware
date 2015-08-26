@@ -248,7 +248,7 @@
             var me = this,
                 selectors = me.opts.listingSelectors.join(', ');
 
-            me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
+            me.$el.on(me.getEventName('click'), selectors, $.proxy(me.onClickProductInListing, me));
 
             $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', [ me ]);
         },
@@ -468,7 +468,7 @@
 
             StateManager.off('resize', me.checkPossibleSliding, me);
 
-            me.$el.off('click', selectors, $.proxy(me.onClickProductInListing, me));
+            me.$el.off(me.getEventName('click'), selectors);
 
             me._destroy();
         }
