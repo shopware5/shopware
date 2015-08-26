@@ -47,10 +47,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             'onInitResourceModules'
         );
         $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_Adodb',
-            'onInitResourceAdodb'
-        );
-        $this->subscribeEvent(
             'Enlight_Controller_Front_DispatchLoopShutdown',
             'onDispatchLoopShutdown'
         );
@@ -86,7 +82,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
-        $system->sDB_CONNECTION = Shopware()->Adodb();
         $system->sSMARTY = Shopware()->Template();
         $system->sCONFIG = $config;
         $system->sMailer = Shopware()->Mail();
@@ -194,22 +189,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $modules->setSystem(Shopware()->System());
 
         return $modules;
-    }
-
-    /**
-     * Event listener method
-     *
-     * @deprecated Since SW 5.0, will be removed in SW 5.1
-     * @param Enlight_Event_EventArgs $args
-     * @return \Enlight_Components_Adodb
-     */
-    public static function onInitResourceAdodb(Enlight_Event_EventArgs $args)
-    {
-        $db = new Enlight_Components_Adodb(array(
-            'db' => Shopware()->Db()
-        ));
-
-        return $db;
     }
 
     /**

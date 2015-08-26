@@ -56,14 +56,6 @@ class sSystem
     public $sSMARTY;
 
     /**
-     * Current database connection
-     *
-     * @var Enlight_Components_Adodb
-     * @deprecated Use Shopware()->Db(), will be removed in SW 5.1
-     */
-    public $sDB_CONNECTION;
-
-    /**
      * Pointer to the different modules and its inherits
      *
      * @var Shopware_Components_Modules
