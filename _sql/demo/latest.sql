@@ -5448,11 +5448,6 @@ INSERT INTO `s_core_engine_groups` (`id`, `name`, `label`, `layout`, `variantabl
 
 TRUNCATE TABLE `s_core_licenses`;
 
-TRUNCATE TABLE `s_core_multilanguage`;
-INSERT INTO `s_core_multilanguage` (`id`, `mainID`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `scoped_registration`, `fallback`, `navigation`) VALUES
-(1, NULL, '1', 1, 3, '', '', 1, 'Deutsch', 'EK', 'templates/emotion_orange', 'templates/orange', 0, '', 1, 1, '1|2', '1|2', NULL, NULL, ''),
-(2, NULL, '2', 2, 39, '', '', 0, 'Englisch', 'EK', 'templates/emotion_orange', 'templates/orange', 0, '', 1, 0, '1|2', '1|2', NULL, 2, '');
-
 TRUNCATE TABLE `s_core_paymentmeans`;
 INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`, `source`) VALUES
 (2, 'debit', 'Lastschrift', 'debit.tpl', 'debit.php', 's_user_debit', 0, 'Zusatztext', -10, 0, '', 4, 0, 0, '', 0, '', NULL, NULL),

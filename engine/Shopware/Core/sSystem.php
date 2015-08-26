@@ -144,14 +144,6 @@ class sSystem
     public $sCurrency;
 
     /**
-     * Current active subshop
-     *
-     * @var array
-     * @deprecated
-     */
-    public $sSubShop;
-
-    /**
      * Pointer to PHP-Mailer Object
      *
      * @var

@@ -699,9 +699,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $manager->persist($model);
         $manager->flush();
 
-        if ($name === 'shop') {
-            $this->fixTranslationTable();
-        }
         $this->View()->assign(array('success' => true));
     }
 
@@ -764,43 +761,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             'success' => true,
             'result' => $result
         ));
-    }
-
-    /**
-     * Fix the translation table data
-     * @deprecated s_core_multilanguage is deprecated since SW 5.0 and will be removed in SW 5.1
-     */
-    private function fixTranslationTable()
-    {
-        Shopware()->Db()->exec("TRUNCATE s_core_multilanguage;");
-        $sql = "
-            INSERT IGNORE INTO `s_core_multilanguage` (
-              `id`, `isocode`, `locale`, `parentID`, `skipbackend`,
-              `name`, `defaultcustomergroup`, `template`, `doc_template`,
-              `domainaliase`,
-              `switchCurrencies`, `switchLanguages`,
-              `defaultcurrency`, `default`,
-              `fallback`
-            )
-            SELECT
-              s.id, s.id as isocode, s.locale_id, s.category_id, s.default as skipbackend, s.name,
-              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
-              CONCAT(s.host, '\n', s.hosts) as hosts,
-              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
-              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
-              s.currency_id, s.default, s.fallback_id
-            FROM `s_core_shops` s
-            LEFT JOIN `s_core_shops` m
-            ON m.id=s.main_id
-            OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN `s_core_shop_currencies` d
-            ON d.shop_id=m.id
-            WHERE s.active=1
-            GROUP BY s.id
-        ";
-        Shopware()->Db()->exec($sql);
     }
 
     /**
