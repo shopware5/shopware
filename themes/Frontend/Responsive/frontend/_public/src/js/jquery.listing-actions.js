@@ -638,7 +638,7 @@
                 url = me.controllerURL + params;
             }
 
-            $.publish('plugin/listingActions/onApplyUrlParams', [ me, url, urlParams, encode ]);
+            $.publish('plugin/swListingActions/onGetListingUrl', [ me, url, urlParams, encode ]);
 
             return url;
         },

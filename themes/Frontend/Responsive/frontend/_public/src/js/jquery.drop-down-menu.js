@@ -12,7 +12,7 @@
         init: function () {
             var me = this;
 
-            me._on(me.$el, 'touchstart click', $.proxy(me.onClickMenu, me));
+            me._on(me.$el, me.getEventName('touchstart click'), $.proxy(me.onClickMenu, me));
 
             $.publish('plugin/swDropdownMenu/onRegisterEvents', [ me ]);
         },
@@ -32,7 +32,7 @@
 
             if (me.opts.closeOnBody) {
                 event.stopPropagation();
-                $('body').on(me.getEventName('touchstart.dropdownMenu click.dropdownMenu'), $.proxy(me.onClickBody, me));
+                $('body').on(me.getEventName('touchstart click'), $.proxy(me.onClickBody, me));
             }
 
             $.publish('plugin/swDropdownMenu/onClickMenu', [ me, event ]);
@@ -47,7 +47,7 @@
 
             event.preventDefault();
 
-            $('body').off('touchstart.dropdownMenu click.dropdownMenu');
+            $('body').off(me.getEventName('touchstart click'));
 
             me.$el.removeClass(me.opts.activeCls);
 
