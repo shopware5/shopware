@@ -1551,7 +1551,7 @@ class Repository
      * @param $column
      * @return $this
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from, \DateTime $to, $column)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from = null, \DateTime $to = null, $column = null)
     {
         if ($from instanceof \DateTime) {
             $builder->andWhere($column . ' >= :fromDate')
