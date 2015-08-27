@@ -321,7 +321,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param \DateTime $answer_date
+     * @param \DateTime|string $answer_date
      * @return Vote
      */
     public function setAnswerDate($answer_date)

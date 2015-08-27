@@ -213,7 +213,7 @@ class Partner extends ModelEntity
     /**
      * Set datum
      *
-     * @param \DateTime $date
+     * @param \DateTime|string $date
      * @return Partner
      */
     public function setDate($date)

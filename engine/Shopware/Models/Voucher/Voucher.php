@@ -352,7 +352,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validFrom field from the Model
      *
-     * @param \DateTime $validFrom
+     * @param \DateTime|string $validFrom
      * @return Voucher
      */
     public function setValidFrom($validFrom)
@@ -377,7 +377,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validTo field from the Model
      *
-     * @param \DateTime $validTo
+     * @param \DateTime|string $validTo
      * @return Voucher
      */
     public function setValidTo($validTo)

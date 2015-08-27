@@ -59,7 +59,7 @@ class Notification extends LazyFetchModelEntity
     private $articleNumber;
 
     /**
-     * @var datetime $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -112,7 +112,6 @@ class Notification extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="mail", referencedColumnName="email")
      */
     protected $customer;
-
 
     /**
      * Get id

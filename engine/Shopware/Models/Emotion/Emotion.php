@@ -363,7 +363,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime $validFrom
+     * @param \DateTime|string $validFrom
      */
     public function setValidFrom($validFrom)
     {
@@ -389,7 +389,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime $validTo
+     * @param \DateTime|string $validTo
      */
     public function setValidTo($validTo)
     {
@@ -445,7 +445,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \DateTime $modified
+     * @param \DateTime|string $modified
      */
     public function setModified($modified)
     {

@@ -518,7 +518,7 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer creates the account. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param $firstLogin
+     * @param \DateTime|string $firstLogin
      * @return Customer
      */
     public function setFirstLogin($firstLogin)
@@ -546,7 +546,7 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer last logged in. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param $lastLogin
+     * @param \DateTime|string $lastLogin
      * @return Customer
      */
     public function setLastLogin($lastLogin)

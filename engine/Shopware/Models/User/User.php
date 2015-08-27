@@ -415,7 +415,7 @@ class User extends ModelEntity
     /**
      * Set lockedUntil
      *
-     * @param $lockedUntil|string
+     * @param \DateTime|string $lockedUntil|
      * @return User
      */
     public function setLockedUntil($lockedUntil)

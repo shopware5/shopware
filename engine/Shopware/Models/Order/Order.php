@@ -530,7 +530,7 @@ class Order extends ModelEntity
     /**
      * Set orderTime
      *
-     * @param \DateTime $orderTime
+     * @param \DateTime|string $orderTime
      * @return Order
      */
     public function setOrderTime($orderTime)
@@ -731,7 +731,7 @@ class Order extends ModelEntity
     /**
      * Set clearedDate
      *
-     * @param \DateTime $clearedDate
+     * @param \DateTime|string $clearedDate
      * @return Order
      */
     public function setClearedDate($clearedDate)

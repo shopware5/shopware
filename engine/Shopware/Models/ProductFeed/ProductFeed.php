@@ -338,7 +338,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastExport
      *
-     * @param \DateTime $lastExport
+     * @param \DateTime|string $lastExport
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
@@ -451,7 +451,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set expiry
      *
-     * @param \DateTime $expiry
+     * @param \DateTime|string $expiry
      * @return ProductFeed
      */
     public function setExpiry($expiry)
