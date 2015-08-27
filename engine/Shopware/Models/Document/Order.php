@@ -42,7 +42,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Metadata of the order positions
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_positions;
     /**
@@ -356,10 +356,14 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ORDER BY od.id ASC
         ", array($this->_id)), ArrayObject::ARRAY_AS_PROPS);
 
-        foreach ($this->_positions as $position) {
+        foreach ($this->_positions as $key => $dummy) {
+            $position = $this->_positions->offsetGet($key);
+
             $position["attributes"] = Shopware()->Db()->fetchRow("
             SELECT * FROM s_order_details_attributes WHERE detailID = ?
             ", array($position["id"]));
+
+            $this->_positions->offsetSet($key, $position);
         }
     }
 
@@ -396,7 +400,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processPositions()
     {
-        foreach ($this->_positions as &$position) {
+        foreach ($this->_positions as $key => $dummy) {
+            $position = $this->_positions->offsetGet($key);
+
             $position["name"] = str_replace(array("€"), array("&euro;"), $position["name"]);
             if (empty($position["quantity"])) {
                 continue;
@@ -510,6 +516,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             if ($position["amount"] <= 0) {
                 $this->_discount += $position["amount"];
             }
+
+            $this->_positions->offsetSet($key, $position);
         }
     }
 
