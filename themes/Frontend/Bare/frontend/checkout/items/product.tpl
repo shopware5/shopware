@@ -45,7 +45,7 @@
                                                         <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:25:""}" />
 													</a>
 												{else}
-													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:25:""} />
+													<img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:25:""}" />
 												{/if}
 											{/block}
 										</div>
