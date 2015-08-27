@@ -40,7 +40,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('canceled_order');
         // read
         $this->addAclPermission('getStatistics', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getArticle', 'read', 'Insufficient Permissions');

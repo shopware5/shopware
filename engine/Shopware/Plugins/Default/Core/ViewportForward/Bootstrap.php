@@ -28,12 +28,12 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
 {
     public function install()
     {
-        $event = $this->createEvent(
+        $this->subscribeEvent(
             'Enlight_Controller_Front_PreDispatch',
             'onPreDispatch',
             10
         );
-        $this->subscribeEvent($event);
+
         return true;
     }
 

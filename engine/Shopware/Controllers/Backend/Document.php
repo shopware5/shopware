@@ -58,7 +58,6 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
                 "_preview" => $this->Request()->preview,
                 "_previewForcePagebreak" => $this->Request()->pagebreak,
                 "_previewSample" => $this->Request()->sampleData,
-                "_compatibilityMode" => $this->Request()->compatibilityMode,
                 "docComment" => utf8_decode($this->Request()->docComment),
                 "forceTaxCheck" => $this->Request()->forceTaxCheck
             )

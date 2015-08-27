@@ -201,7 +201,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         // Call dispatch as we need the Router to be available inside sCore
         $this->dispatch('/');
 
-        $baseUrl = $this->module->rewriteLink();
+        $baseUrl = $this->module->sRewriteLink();
 
         // Without arguments, we expect the base url
         $this->assertInternalType('string', $baseUrl);
@@ -219,8 +219,8 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
                 array(Shopware()->Shop()->getId(), $path)
             );
 
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->rewriteLink(array(2 => '?'.$path)));
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->rewriteLink(array(2 => '?'.$path, 3 => 'some test title')));
+            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path));
+            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path, 'some test title'));
         }
     }
 }

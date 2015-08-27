@@ -105,16 +105,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     }
 
     /**
-     * Set acl resource name - will be set in init-method to controller base - name for default
-     *
-     * @deprecated Not required any more
-     * @param $resource
-     */
-    protected function setAclResourceName($resource = null)
-    {
-    }
-
-    /**
      * Add an acl permission rule to $this->aclPermissions array
      * Permissions will be checked automatically.
      *
@@ -140,7 +130,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      * @param null|string $privilege Name of privilege
      * @param null|string|Zend_Acl_Role_Interface $resource
      * @param null|string|Zend_Acl_Resource_Interface $role
-     * @deprecated use is_allowed template plugin
      * @return boolean
      */
     protected function _isAllowed($privilege, $resource = null, $role = null)

@@ -162,23 +162,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Registers the different acl permission for the different controller actions.
-     *
-     * @return void
-     */
-    protected function initAcl()
-    {
-        //        /** @var $namespace Enlight_Components_Snippet_Namespace */
-//        $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
-//        $this->setAclResourceName('customer');
-//        $this->addAclPermission('getListAction','read', $namespace->get('no_list_rights', 'You do not have sufficient rights to view the list of customers.'));
-//        $this->addAclPermission('getDetailAction', 'detail', $namespace->get('no_detail_rights', 'You do not have sufficient rights to view the customer detail page.'));
-//        $this->addAclPermission('getOrdersAction', 'read', $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'));
-//        $this->addAclPermission('getOrderChartAction', 'read', $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'));
-//        $this->addAclPermission('deleteAction', 'delete', $namespace->get('no_delete_rights', 'You do not have sufficient rights to delete a customers.'));
-    }
-
-    /**
      * Get a list of available payment status
      */
     public function getPaymentStatusAction()
@@ -1023,8 +1006,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         foreach ($paths as $path) {
             $numPages = $pdf->setSourceFile($path);
             for ($i=1;$i<=$numPages;$i++) {
-                $template = $pdf->ImportPage($i);
-                $size = $pdf->getTemplatesize($template);
+                $template = $pdf->importPage($i);
+                $size = $pdf->getTemplateSize($template);
                 $pdf->AddPage('P', array($size['w'], $size['h']));
                 $pdf->useTemplate($template);
             }
@@ -1216,7 +1199,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 '_preview'                => $this->Request()->getParam('preview', false),
                 '_previewForcePagebreak'  => $this->Request()->getParam('pageBreak', null),
                 '_previewSample'          => $this->Request()->getParam('sampleData', null),
-                '_compatibilityMode'      => $this->Request()->getParam('compatibilityMode', null),
                 'docComment'              => $this->Request()->getParam('docComment', null),
                 'forceTaxCheck'           => $this->Request()->getParam('forceTaxCheck', false)
             )

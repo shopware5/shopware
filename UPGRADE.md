@@ -130,7 +130,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed previously deprecated `Enlight_Components_Adodb`
     * Container Key `AdoDb` / Shopware()->Adodb()
     * `sSystem::$sDB_CONNECTION`
-    * `Shopware_Plugins_Core_System_Bootstrap::onInitResourceAdodb`
+    * `Shopware_Plugins_Core_System_Bootstrap::onInitResourceAdodb()`
     * `Enlight_Components_Adodb`
     * `Enlight_Components_Adodb_Statement`
 * Removed previously deprecated search classes:
@@ -141,16 +141,33 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Components_Search_Result_Abstract`
     * `Shopware_Components_Search_Result_Interface`
 * Removed previously deprecated API `Shopware()->Api()`
-   * `Shopware_Plugins_Core_Api_Bootstrap`
-   * `sCsvConvert`
-   * `sShopwareExport`
-   * `sShopwareImport`
-   * `sMappingConvert`
-   * `sXmlConvert`
+    * `Shopware_Plugins_Core_Api_Bootstrap`
+    * `sCsvConvert`
+    * `sShopwareExport`
+    * `sShopwareImport`
+    * `sMappingConvert`
+    * `sXmlConvert`
 * Removed previously deprecated table `s_core_multilanguage`
-      * Table: `s_core_multilanguage`
-      * `Shopware_Plugins_Core_System_Bootstrap::getSingleShopData`
-      * `sSystem::$sSubShop`
+    * Table: `s_core_multilanguage`
+    * `Shopware_Plugins_Core_System_Bootstrap::getSingleShopData()`
+    * `sSystem::$sSubShop`
+* Removed previously deprecated Plugin Bootstrap methods
+    * `Shopware_Components_Plugin_Bootstrap::deleteForm()`
+    * `Shopware_Components_Plugin_Bootstrap::deleteConfig()`
+    * `Shopware_Components_Plugin_Bootstrap::createHook()`
+    * `Shopware_Components_Plugin_Bootstrap::subscribeCron()`
+    * `Shopware_Components_Plugin_Bootstrap::createEvent()`
+* Removed previously deprecated or unused classes / methods
+    * `sSystem::E_CORE_WARNING()`
+    * `sSystem::$sExtractor`
+    * `sSystem::$sPathArticleFiles`
+    * `sCore::rewriteLink()`
+    * `Shopware_Bootstrap::run()`
+    * `Shopware_Controllers_Backend_ExtJs::setAclResourceName()`
+    * `Shopware\Models\Property\Repository::getGroupsQueryBuilder`
+    * `Shopware\Models\Property\Repository::getGroupsQuery`
+    * `Shopware_Plugins_Frontend_CronRefresh_Bootstrap::onCronJobTranslation()`
+    * `Shopware_Components_DummyPlugin_Bootstrap`
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.

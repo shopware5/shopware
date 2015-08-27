@@ -61,16 +61,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     public $_config;
 
     /**
-     * compatibilityMode = true means that html2ps will be used instead of mpdf.
-     * Additionally old templatebase will be used (For pre 3.5 versions)
-     *
-     * Unsupported till shopware 4.0.0
-     * @var bool
-     * @deprecated
-     */
-    protected $_compatibilityMode = false;
-
-    /**
      * Define output
      *
      * @var string html,pdf,return
@@ -177,7 +167,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $document->setConfig($config);
 
         $document->setDocumentId($documentID);
-        $document->_compatibilityMode = false;
         if (!empty($orderID)) {
             $document->_subshop = Shopware()->Db()->fetchRow("
                 SELECT
@@ -472,7 +461,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $getVoucher = Shopware()->Db()->fetchRow($sqlVoucher, array($id));
         if ($getVoucher["id"]) {
             // Update Voucher and pass-information to template
-            $updateVoucher = Shopware()->Db()->query("
+            Shopware()->Db()->query("
             UPDATE s_emarketing_voucher_codes
             SET
                 userID = ?
@@ -482,7 +471,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if ($this->_order->currency->factor!=1) {
                 $getVoucher["value"]*=$this->_order->currency->factor;
             }
-            $getVoucher["value"] = $getVoucher["value"];
             if (!empty($getVoucher["percental"])) {
                 $getVoucher["prefix"] = "%";
             } else {
@@ -584,7 +572,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if ($typID == 4) {
                 $amount *= -1;
             }
-            $update = Shopware()->Db()->query($update, array(
+            Shopware()->Db()->query($update, array(
                     $amount,
                     $typID,
                     $this->_order->userID,
@@ -628,14 +616,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             INSERT INTO s_order_documents (`date`, `type`, `userID`, `orderID`, `amount`, `docID`,`hash`)
             VALUES ( NOW() , ? , ? , ?, ?, ?,?)
             ";
-            $insert = Shopware()->Db()->query($sql, array(
-                    $typID,
-                    $this->_order->userID,
-                    $this->_order->id,
-                    $amount,
-                    $bid,
-                    $hash
-                ));
+            Shopware()->Db()->query($sql, array(
+                $typID,
+                $this->_order->userID,
+                $this->_order->id,
+                $amount,
+                $bid,
+                $hash
+            ));
             $rowID = Shopware()->Db()->lastInsertId();
 
             // Add an entry in s_order_documents_attributes for the created document
