@@ -58,7 +58,7 @@ class LegacySearchSubscriber implements SubscriberInterface
         $args->getSubject()->View()->assign($data);
     }
 
-    public function convertSearchParameter(\Enlight_Controller_EventArgs $args)
+    public function convertSearchParameter(\Enlight_Controller_ActionEventArgs $args)
     {
         /**@var $shop Shop */
         $shop = $this->container->get('shop');
@@ -87,9 +87,9 @@ class LegacySearchSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Controller_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      */
-    public function convertSearch(\Enlight_Controller_EventArgs $args)
+    public function convertSearch(\Enlight_Controller_ActionEventArgs $args)
     {
         /**@var $shop Shop */
         $shop = $this->container->get('shop');
@@ -277,7 +277,7 @@ class LegacySearchSubscriber implements SubscriberInterface
                 $result[$index] = 1;
             }
         }
-        
+
         return $result;
     }
 
