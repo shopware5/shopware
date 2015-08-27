@@ -23,7 +23,7 @@
  */
 
 /**
- * Deprecated Shopware Class providing helper functions for post dispatch url rewriting
+ * Shopware Class providing helper functions for post dispatch url rewriting
  */
 class sCore
 {
@@ -112,18 +112,5 @@ class sCore
         $query['module'] = 'frontend';
 
         return $this->front->Router()->assemble($query);
-    }
-
-    /**
-     * @deprecated Use sRewriteLink instead
-     *
-     * Same as sRewriteLink, but with a different argument structure.
-     *
-     * @param $args
-     * @return mixed|string
-     */
-    public function rewriteLink($args = array())
-    {
-        return $this->sRewriteLink($args[2], empty($args[3]) ? null : $args[3]);
     }
 }

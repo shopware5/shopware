@@ -41,19 +41,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      */
     protected $repository = null;
 
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     * @return null
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager= Shopware()->Models();
-        }
-        return $this->manager;
-    }
-
     /**
      * Internal helper function to get access to the mail repository.
      * @return null|Shopware\Models\Mail\Repository

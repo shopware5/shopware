@@ -32,7 +32,6 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('overview');
         $this->addAclPermission('getOrderSummary', 'read');
     }
 

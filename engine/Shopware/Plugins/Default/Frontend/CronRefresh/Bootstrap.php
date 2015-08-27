@@ -83,18 +83,6 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     }
 
     /**
-     * Cleanup / Regenerate Shopware translation table used in search for example
-     *
-     * @param Shopware_Components_Cron_CronJob $job
-     * @deprecated
-     * @return void
-     */
-    public function onCronJobTranslation(Shopware_Components_Cron_CronJob $job)
-    {
-        // Translations get resolved automatically starting with v4.0
-    }
-
-    /**
      * Recreate shopware search index
      *
      * @param Shopware_Components_Cron_CronJob $job

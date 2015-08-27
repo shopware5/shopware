@@ -55,7 +55,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('newsletter_manager');
         // read
         $this->addAclPermission('getNewsletterGroups', 'read', 'Insufficient Permissions');
         $this->addAclPermission('listRecipients', 'read', 'Insufficient Permissions');
@@ -174,7 +173,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
                         GROUP BY groups.groupkey) as t
         ORDER BY $field $direction";
 
-        $data = Shopware()->Db()->fetchall($sql);
+        $data = Shopware()->Db()->fetchAll($sql);
 
         $this->View()->assign(array(
             'success' => true,

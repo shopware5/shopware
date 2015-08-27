@@ -34,29 +34,6 @@ use Shopware\Components\Model\QueryBuilder;
  */
 class Repository extends ModelRepository
 {
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object
-     *
-     * @param array $filter
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param integer $offset
-     * @param integer $limit
-     * @param integer $categoryId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getListQuery($filter = null, $filterBy = null, $orderBy = null, $offset = null, $limit = null, $categoryId = null)
-    {
-        $builder = $this->getListQueryBuilder($filter, $filterBy, $orderBy, $categoryId);
-        if ($limit !== null) {
-            $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-        }
-
-        return $builder->getQuery();
-    }
-
     /**
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.

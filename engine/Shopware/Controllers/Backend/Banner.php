@@ -71,7 +71,6 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     /**
      * Method to define acl dependencies in backend controllers
      * <code>
-     * $this->setAclResourceName("name_of_your_resource"); // Default to controller base name
      * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
      * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
      * </code>

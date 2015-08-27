@@ -115,25 +115,11 @@ class sSystem
     public $sPathBanner;
 
     /**
-     * Path to Article downloads
-     *
-     * @var string
-     */
-    public $sPathArticleFiles;
-
-    /**
      * Path to Start
      *
      * @var string
      */
     public $sPathStart;
-
-    /**
-     * Strip parts of rewritten urls and append them
-     *
-     * @var array
-     */
-    public $sExtractor;
 
     /**
      * Current active currency
@@ -206,18 +192,6 @@ class sSystem
         }
 
         return null;
-    }
-
-    /**
-     * @deprecated Throw your specific exceptions
-     *
-     * @param $WARNING_ID
-     * @param $WARNING_MESSAGE
-     * @throws Enlight_Exception
-     */
-    public function E_CORE_WARNING($WARNING_ID, $WARNING_MESSAGE)
-    {
-        throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
     }
 
     /**

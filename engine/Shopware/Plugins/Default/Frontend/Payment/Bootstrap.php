@@ -44,11 +44,10 @@ class Shopware_Plugins_Frontend_Payment_Bootstrap extends Shopware_Components_Pl
         } catch (Exception $e) {
         }
 
-        $event = $this->createEvent(
+        $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_Payments',
             'onInitResourcePayments'
         );
-        $this->subscribeEvent($event);
         return true;
     }
 
