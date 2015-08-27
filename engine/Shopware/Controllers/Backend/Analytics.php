@@ -976,7 +976,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * helper to get the from date in the right format
      *
-     * return DateTime | fromDate
+     * return \DateTime | fromDate
      */
     private function getFromDate()
     {

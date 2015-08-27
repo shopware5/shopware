@@ -5,6 +5,9 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'disableOutputBuffering' => false,
         'showException' => true,
     ),
+    'errorHandler' => array(
+        'throwOnRecoverableError' => true,
+    ),
     'session' => array(
         'unitTestEnabled' => true,
         'name' => 'SHOPWARESID',
