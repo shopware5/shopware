@@ -33,51 +33,6 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
         parent::setUp();
     }
 
-    public function testContainerInjection()
-    {
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            $this->markTestSkipped("Test case not compatible with PHP 7");
-        }
-
-        $manager = $this->getEntityManager();
-        $util = $this->getUtilClass();
-        $persister = $this->getFormPersister();
-        $template = $this->getTemplate();
-        $repo = $this->getShopRepository();
-
-        $template->expects($this->any())
-            ->method('getParent')
-            ->will($this->returnValue(true));
-
-        $manager->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($repo));
-
-        $repo->expects($this->any())
-            ->method('findOneBy')
-            ->will($this->returnValue($template));
-
-        $util->expects($this->any())
-            ->method('getThemeByTemplate')
-            ->will($this->returnValue($this->getBareTheme()));
-
-        $configurator = new \Shopware\Components\Theme\Configurator(
-            $manager,
-            $util,
-            $persister,
-            $this->getEventManager()
-        );
-
-        $container = new \Shopware\Components\Form\Container\TabContainer('test');
-
-        $this->invokeMethod($configurator, 'injectConfig', array(
-            $this->getResponsiveTheme(),
-            $container
-        ));
-
-        $this->assertCount(1, $container->getElements());
-    }
-
     public function testContainerNames()
     {
         $container = new \Shopware\Components\Form\Container\TabContainer('test1');
