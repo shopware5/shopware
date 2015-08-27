@@ -169,13 +169,18 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Plugins_Frontend_CronRefresh_Bootstrap::onCronJobTranslation()`
     * `Shopware_Components_DummyPlugin_Bootstrap`
 
+## 5.0.4
+* Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
+* Fixed jsonrenderer for backend order batchprocessing
+
+
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
 * The getList method of the articles API resource now returns additionally the attributes of an article.
 * Change event argument property `name` to `vouchername` in `Shopware_Modules_Basket_AddVoucher_FilterSql` in `sBasket.php` due to reserved word.
 * Support for batch user deleting in Backend UserManager
 * Added `createMediaField` to Emotion Component Model
-* Deprecated pre-installed import / export module in favor of the new import / export plugin, which is for free now
+* Added open graph and twitter meta tags to a new block `frontend_index_header_meta_tags_opengraph` in the `header.tpl`
 
 ## 5.0.2
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
@@ -225,27 +230,27 @@ In this document you will find a changelog of the important changes related to t
     * plugin/-PLUGIN_NAME-/destroy              => plugin/-PLUGIN_NAME-/onDestroy (PluginBase)
     * plugin/-PLUGIN_NAME-/on                   => plugin/-PLUGIN_NAME-/onRegisterEvent (PluginBase)
     * plugin/-PLUGIN_NAME-/off                  => plugin/-PLUGIN_NAME-/onRemoveEvent (PluginBase)
-    * plugin/productSlider/trackItems           => plugin/productSlider/onTrackItems
-    * plugin/productSlider/trackArrows          => plugin/productSlider/onTrackArrows
-    * plugin/productSlider/itemsLoaded          => plugin/productSlider/onLoadItemsSuccess
-    * plugin/productSlider/loadItems            => plugin/productSlider/onLoadItems
-    * plugin/productSlider/createContainer      => plugin/productSlider/onCreateContainer
-    * plugin/productSlider/createArrows         => plugin/productSlider/onCreateArrows
-    * plugin/productSlider/slideNext            => plugin/productSlider/onSlideNext
-    * plugin/productSlider/slidePrev            => plugin/productSlider/onSlidePrev
-    * plugin/productSlider/slideToElement       => plugin/productSlider/onSlideToElement
-    * plugin/productSlider/slide                => plugin/productSlider/onSlide
-    * plugin/productSlider/autoSlide            => plugin/productSlider/onAutoSlide
-    * plugin/productSlider/stopAutoSlide        => plugin/productSlider/onStopAutoSlide
-    * plugin/productSlider/scrollNext           => plugin/productSlider/onScrollNext
-    * plugin/productSlider/scrollPrev           => plugin/productSlider/onScrollPrev
-    * plugin/productSlider/autoScroll           => plugin/productSlider/onAutoScroll
-    * plugin/productSlider/stopAutoScroll       => plugin/productSlider/onStopAutoScroll
-    * plugin/productSlider/buffer               => plugin/productSlider/onBuffer
-    * plugin/rangeSlider/changeMin              => plugin/rangeSlider/onSetMin
-    * plugin/rangeSlider/changeMax              => plugin/rangeSlider/onSetMax
-    * plugin/rangeSlider/reset                  => plugin/rangeSlider/onReset
-    * plugin/rangeSlider/onChange               => plugin/rangeSlider/onEndDrag
+    * plugin/productSlider/trackItems           => plugin/swProductSlider/onTrackItems
+    * plugin/productSlider/trackArrows          => plugin/swProductSlider/onTrackArrows
+    * plugin/productSlider/itemsLoaded          => plugin/swProductSlider/onLoadItemsSuccess
+    * plugin/productSlider/loadItems            => plugin/swProductSlider/onLoadItems
+    * plugin/productSlider/createContainer      => plugin/swProductSlider/onCreateContainer
+    * plugin/productSlider/createArrows         => plugin/swProductSlider/onCreateArrows
+    * plugin/productSlider/slideNext            => plugin/swProductSlider/onSlideNext
+    * plugin/productSlider/slidePrev            => plugin/swProductSlider/onSlidePrev
+    * plugin/productSlider/slideToElement       => plugin/swProductSlider/onSlideToElement
+    * plugin/productSlider/slide                => plugin/swProductSlider/onSlide
+    * plugin/productSlider/autoSlide            => plugin/swProductSlider/onAutoSlide
+    * plugin/productSlider/stopAutoSlide        => plugin/swProductSlider/onStopAutoSlide
+    * plugin/productSlider/scrollNext           => plugin/swProductSlider/onScrollNext
+    * plugin/productSlider/scrollPrev           => plugin/swProductSlider/onScrollPrev
+    * plugin/productSlider/autoScroll           => plugin/swProductSlider/onAutoScroll
+    * plugin/productSlider/stopAutoScroll       => plugin/swProductSlider/onStopAutoScroll
+    * plugin/productSlider/buffer               => plugin/swProductSlider/onBuffer
+    * plugin/rangeSlider/changeMin              => plugin/swRangeSlider/onSetMin
+    * plugin/rangeSlider/changeMax              => plugin/swRangeSlider/onSetMax
+    * plugin/rangeSlider/reset                  => plugin/swRangeSlider/onReset
+    * plugin/rangeSlider/onChange               => plugin/swRangeSlider/onEndDrag
 * Added new validation rules for snippets
     * Use `bin/console sw:snippets:validate <your-plugin-snippets-path>` to check the validity of your snippets.
     * Defining a snippet value in multiple lines is deprecated.

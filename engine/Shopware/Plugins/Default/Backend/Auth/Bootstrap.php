@@ -388,11 +388,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
 
         if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
             $config_save_handler = array(
-               'name'           => 's_core_sessions_backend',
-               'primary'        => 'id',
-               'modifiedColumn' => 'modified',
-               'dataColumn'     => 'data',
-               'lifetimeColumn' => 'expiry'
+                'name' => 's_core_sessions_backend',
+                'primary' => 'id',
+                'modifiedColumn' => 'modified',
+                'dataColumn' => 'data',
+                'lifetimeColumn' => 'expiry',
+                'lifetime' => $options['gc_maxlifetime'] ? : PHP_INT_MAX
             );
             Enlight_Components_Session::setSaveHandler(
                new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
@@ -535,7 +536,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
         if (empty($options['gc_maxlifetime'])) {
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = $backendTimeout;
+            $options['gc_maxlifetime'] = (int) $backendTimeout;
         }
 
         unset($options['referer_check']);

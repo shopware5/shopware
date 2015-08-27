@@ -11,7 +11,7 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader && ( ({controllerName} == "checkout" && {controllerAction} != "cart") || {controllerName} == "register" ) } is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}">
+<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader && ( ({controllerName} == "checkout" && {controllerAction} != "cart") || ({controllerName} == "register" && $sTarget != "account") ) } is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}">
 
     {block name='frontend_index_after_body'}{/block}
 
