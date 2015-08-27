@@ -29,7 +29,7 @@ use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\Utils;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Slim\Slwgetim;
+use Slim\Slim;
 
 /**
  * @category  Shopware
